@@ -12,6 +12,8 @@ import TMROLocalization
 
 class NameViewController: TextInputViewController<Void> {
 
+    var onboardingType: OnboardingType?
+
     init() {
         super.init(textField: TextField(),
                    title: LocalizedString(id: "", default: "FULL NAME"),

@@ -21,7 +21,7 @@ class FeedIndicatorView: View {
     }
 
     func configure(with count: Int) {
-        
+
         self.removeAllSubviews()
         self.elements = []
 

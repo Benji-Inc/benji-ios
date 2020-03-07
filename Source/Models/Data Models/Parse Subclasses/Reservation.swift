@@ -48,42 +48,6 @@ final class Reservation: PFObject, PFSubclassing {
         get { return self.getObject(for: .user) }
         set { self.setObject(for: .user, with: newValue) }
     }
-
-    static func create() -> Future<Reservation> {
-        let promise = Promise<Reservation>()
-
-        // TODO: Instead of creating a reservation we should retrieve one.
-
-        let query = ReservationCount.query()
-        query?.getObjectInBackground(withId: "UodXr1FRNN") { (object, error) in
-            if let reservationCount = object as? ReservationCount {
-                reservationCount.incrementKey(ReservationCountKeys.currentCount.rawValue, byAmount: 1)
-                reservationCount.saveInBackground { (success, error) in
-                    if success {
-                        let reservation = Reservation()
-                        let count = NSNumber(value: reservationCount.current!)
-                        let cap = NSNumber(value: reservationCount.cap!)
-                        let position: Double = Double(truncating: count) / Double(truncating: cap)
-                        reservation.code = "123456"
-                        reservation.isClaimed = true 
-                        reservation.position = position.rounded(by: cap.intValue)
-                        reservation.saveLocalThenServer()
-                            .observeValue(with: { (updatedReservation) in
-                                promise.resolve(with: updatedReservation)
-                            })
-                    } else if let error = error {
-                        promise.reject(with: error)
-                    } else {
-                        promise.reject(with: ClientError.message(detail: "Failed to save Reservation."))
-                    }
-                }
-            } else {
-                promise.reject(with: ClientError.message(detail: "There was a problem verifying the code you entered."))
-            }
-        }
-
-        return promise
-    }
 }
 
 extension Reservation: Objectable {

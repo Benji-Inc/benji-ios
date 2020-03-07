@@ -22,7 +22,7 @@ class ReservationViewController: TextInputViewController<OnboardingType> {
 
     init() {
         let textField = TextField()
-        let title = LocalizedString(id: "", arguments: [], default: "Enter your reservation code.")
+        let title = LocalizedString(id: "", arguments: [], default: "Reservation")
         let placeholder = LocalizedString(id: "", arguments: [], default: "Code")
 
         super.init(textField: textField,
@@ -42,7 +42,7 @@ class ReservationViewController: TextInputViewController<OnboardingType> {
         self.textField.autocapitalizationType = .none
 
         self.view.addSubview(self.button)
-        self.button.set(style: .rounded(color: .blue, text: "Login"))
+        self.button.set(style: .rounded(color: .purple, text: "Login"))
         self.button.didSelect = {
             self.complete(with: .success(.login))
         }
@@ -57,10 +57,9 @@ class ReservationViewController: TextInputViewController<OnboardingType> {
 
         self.textEntry.bottom = self.view.height - 400
 
-        self.button.size = CGSize(width: 200, height: 40)
+        self.button.setSize(with: self.view.width)
         self.button.centerOnX()
         self.button.bottom = self.view.height - 50
-        self.button.roundCorners()
     }
 
     override func textFieldDidEndEditing(_ textField: UITextField) {

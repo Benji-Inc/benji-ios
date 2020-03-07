@@ -26,6 +26,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     
     unowned let delegate: OnboardingViewControllerDelegate
 
+    var currentOnboardingType: OnboardingType = .login
+
     init(with delegate: OnboardingViewControllerDelegate) {
         self.delegate = delegate
         super.init()
@@ -38,10 +40,19 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func initializeViews() {
         super.initializeViews()
 
+        self.blurView.effect = nil
+
         self.reservationVC.onDidComplete = { [unowned self] result in
             switch result {
-            case .success(_):
-                self.currentContent.value = .phone(self.phoneVC)
+            case .success(let type):
+                switch type {
+                case .existingUser:
+                    self.codeVC.onboardingType = type
+                    self.currentContent.value = .code(self.codeVC)
+                case .login, .newUser, .waitlist:
+                    self.phoneVC.onboardingType = type
+                    self.currentContent.value = .phone(self.phoneVC)
+                }
             case .failure(let error):
                 print(error)
             }
@@ -93,7 +104,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getInitialContent() -> OnboardingContent {
-        return .phone(self.phoneVC)
+        return .reservation(self.reservationVC)
     }
 
     override func getTitle() -> Localized {
@@ -107,7 +118,12 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         case .name(_):
             return "Welcome!"
         case .photo(let vc):
-            guard let state = vc.currentState.value else { return String() }
+            guard let state = vc.currentState.value else {
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "Verify Indentity")
+            }
+            
             switch state {
             case .initial:
                 return LocalizedString(id: "",
@@ -134,7 +150,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func getDescription() -> Localized {
         switch self.currentContent.value {
         case .reservation(_):
-            return "Please enter your reservation code."
+            return "Please enter your reservation code OR tap the button to login."
         case .phone(_):
             return LocalizedString(id: "",
                                    arguments: [],

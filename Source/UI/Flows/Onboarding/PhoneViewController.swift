@@ -14,6 +14,8 @@ import TMROFutures
 
 class PhoneViewController: TextInputViewController<PhoneNumber> {
 
+    var onboardingType: OnboardingType?
+
     init() {
         let phoneField = PhoneTextField()
         super.init(textField: phoneField,

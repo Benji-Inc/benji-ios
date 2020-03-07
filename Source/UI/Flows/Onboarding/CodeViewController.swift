@@ -17,6 +17,8 @@ class CodeViewController: TextInputViewController<Void> {
 
     var phoneNumber: PhoneNumber?
 
+    var onboardingType: OnboardingType?
+
     init() {
         super.init(textField: TextField(),
                    title: LocalizedString(id: "", default: "CODE"),

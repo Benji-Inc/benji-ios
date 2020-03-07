@@ -33,8 +33,11 @@ extension FeedViewController {
         FeedSupplier.shared.getItems()
             .withResultToast()
             .observeValue(with: { (items) in
-                self.items = items
-                self.showFeed()
+                runMain {
+                    self.view.layoutNow()
+                    self.items = items
+                    self.showFeed()
+                }
             })
     }
 }
