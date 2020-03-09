@@ -130,14 +130,16 @@ class FeedViewController: ViewController {
     }
 
     private func showReload() {
-        self.messageLabel.set(text: "You are all caught up!\nSee you tomorrow 🤗", alignment: .center)
-        self.view.bringSubviewToFront(self.reloadButton)
-        self.view.layoutNow()
-        UIView.animate(withDuration: Theme.animationDuration, delay: Theme.animationDuration, options: .curveEaseInOut, animations: {
-            self.reloadButton.alpha = 1
-            self.messageLabel.alpha = 1
-            self.indicatorView.alpha = 0
-        }, completion: { _ in })
+        runMain {
+            self.messageLabel.set(text: "You are all caught up!\nSee you tomorrow 🤗", alignment: .center)
+            self.view.bringSubviewToFront(self.reloadButton)
+            self.view.layoutNow()
+            UIView.animate(withDuration: Theme.animationDuration, delay: Theme.animationDuration, options: .curveEaseInOut, animations: {
+                self.reloadButton.alpha = 1
+                self.messageLabel.alpha = 1
+                self.indicatorView.alpha = 0
+            }, completion: { _ in })
+        }
     }
 
     private func reloadFeed() {
