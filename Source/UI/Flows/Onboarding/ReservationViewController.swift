@@ -59,7 +59,7 @@ class ReservationViewController: TextInputViewController<OnboardingType> {
 
         self.button.setSize(with: self.view.width)
         self.button.centerOnX()
-        self.button.bottom = self.view.height - 50
+        self.button.bottom = self.view.height
     }
 
     override func textFieldDidEndEditing(_ textField: UITextField) {
@@ -69,14 +69,19 @@ class ReservationViewController: TextInputViewController<OnboardingType> {
             .makeRequest()
             .observe { (result) in
                 switch result {
-                case .success(let reservation):
-                    //If a reservation has a user, then go to verify screen
-                    if let _ = reservation.user {
-                        self.complete(with: .success(.existingUser))
-                    } else {
-                        //If a reservation DOES NOT have a user then go to phone screen
-                        self.complete(with: .success(.newUser))
+                case .success(let reservationResult):
+                    switch reservationResult {
+                    case .found(let reservation):
+                        if let _ = reservation.user {
+                            self.complete(with: .success(.existingUser))
+                        } else {
+                            //If a reservation DOES NOT have a user then go to phone screen
+                            self.complete(with: .success(.newUser))
+                        }
+                    case .notFound:
+                        self.complete(with: .success(.waitlist))
                     }
+
                 case .failure(let error):
                     //No reservation means join the waitlist
                     self.complete(with: .failure(error))

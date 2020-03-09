@@ -44,19 +44,28 @@ class CodeViewController: TextInputViewController<Void> {
         let tf = self.textField as? TextField
         tf?.activityIndicator.startAnimating()
         VerifyCode(code: code, phoneNumber: phoneNumber).makeRequest()
-            .observeValue { (token) in
-                User.become(inBackground: token) { (user, error) in
-                    if let _ = user {
-                        self.complete(with: .success(()))
-                    } else if let error = error {
-                        self.complete(with: .failure(error))
-                    } else {
-                        self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
-                    }
-
-                    tf?.activityIndicator.stopAnimating()
+            .observeValue { (result) in
+                switch result {
+                case .success(let token):
+                    self.becomeUser(with: token)
+                case .addedToWaitlist:
+                    break
                 }
+
+                tf?.activityIndicator.stopAnimating()
                 self.textField.resignFirstResponder()
+        }
+    }
+
+    private func becomeUser(with token: String) {
+        User.become(inBackground: token) { (user, error) in
+            if let _ = user {
+                self.complete(with: .success(()))
+            } else if let error = error {
+                self.complete(with: .failure(error))
+            } else {
+                self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
+            }
         }
     }
 }

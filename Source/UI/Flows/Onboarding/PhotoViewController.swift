@@ -134,8 +134,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.avatarView.centerOnX()
         self.avatarView.roundCorners()
 
+
         let rect = self.buttonContainerRect ?? CGRect(x: Theme.contentOffset,
-                                                      y: self.view.safeAreaInsets.bottom,
+                                                      y: self.view.bottom,
                                                       width: self.view.width - (Theme.contentOffset * 2),
                                                       height: Theme.buttonHeight)
 

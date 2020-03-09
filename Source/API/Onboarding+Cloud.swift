@@ -30,13 +30,18 @@ struct SendCode: CloudFunction {
     }
 }
 
+enum VerifyCodeResult {
+    case success(String)
+    case addedToWaitlist
+}
+
 struct VerifyCode: CloudFunction {
 
     let code: String
     let phoneNumber: PhoneNumber
 
-    func makeRequest() -> Future<String> {
-        let promise = Promise<String>()
+    func makeRequest() -> Future<VerifyCodeResult> {
+        let promise = Promise<VerifyCodeResult>()
 
         let params: [String: Any] = ["authCode": self.code,
                                      "phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164)]
@@ -44,9 +49,13 @@ struct VerifyCode: CloudFunction {
         PFCloud.callFunction(inBackground: "validateCode",
                              withParameters: params) { (object, error) in
                                 if let error = error {
-                                    promise.reject(with: error)
+                                    if (error as NSError).code == 100 {
+                                        promise.resolve(with: .addedToWaitlist)
+                                    } else {
+                                        promise.reject(with: error)
+                                    }
                                 } else if let token = object as? String {
-                                    promise.resolve(with: token)
+                                    promise.resolve(with: .success(token))
                                 }
         }
 

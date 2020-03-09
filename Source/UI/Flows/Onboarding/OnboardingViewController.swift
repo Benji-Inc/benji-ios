@@ -111,12 +111,25 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         switch self.currentContent.value {
         case .reservation(_):
             return "Welcome!"
-        case .phone(_):
-            return "Welcome!"
+        case .phone(let vc):
+            if let type = vc.onboardingType {
+                switch type {
+                case .existingUser:
+                    return "Welcome Back!"
+                case .newUser:
+                    return "Welcome!"
+                case .waitlist:
+                    return "not found"
+                case .login:
+                    return "Login"
+                }
+            } else {
+                return "Verification"
+            }
         case .code(_):
-            return "Welcome!"
+            return "Vefify Code"
         case .name(_):
-            return "Welcome!"
+            return "Add your name"
         case .photo(let vc):
             guard let state = vc.currentState.value else {
                 return LocalizedString(id: "",
@@ -151,7 +164,23 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         switch self.currentContent.value {
         case .reservation(_):
             return "Please enter your reservation code OR tap the button to login."
-        case .phone(_):
+        case .phone(let vc):
+            if let type = vc.onboardingType {
+                switch type {
+                case .existingUser, .login:
+                    return LocalizedString(id: "",
+                                           arguments: [],
+                                           default: "Please verify your existing account using the mobile number for this device.")
+                case .newUser:
+                    return LocalizedString(id: "",
+                                           arguments: [],
+                                           default: "Please enter the mobile number for this device to secure your account.")
+                case .waitlist:
+                    return LocalizedString(id: "",
+                                           arguments: [],
+                                           default: "Reservation not found for the code provided. Add your phone number to be added to the waitlist.")
+                }
+            }
             return LocalizedString(id: "",
                                    arguments: [],
                                    default: "Please verify your account using the mobile number for this device.")
