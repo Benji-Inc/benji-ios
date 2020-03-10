@@ -14,19 +14,6 @@ class MainCoordinator: Coordinator<Void> {
 
     var launchOptions: [UIApplication.LaunchOptionsKey : Any]?
 
-    override init(router: Router, deepLink: DeepLinkable?) {
-        super.init(router: router, deepLink: deepLink)
-        self.initializeLogoutHandler()
-    }
-
-    private func initializeLogoutHandler() {
-        // If the user ever logs out, restart the whole flow from the beginning
-        LaunchManager.shared.onLoggedOut = { [unowned self] in
-            self.removeChild()
-            self.runLaunchFlow()
-        }
-    }
-
     override func start() {
         super.start()
 
@@ -34,14 +21,19 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func runLaunchFlow() {
-        let launchCoordinator = LaunchCoordinator(router: self.router,
-                                                  deepLink: self.deepLink,
-                                                  launchOptions: self.launchOptions)
+
+        LaunchManager.shared.launchApp(with: self.launchOptions)
+
+        let launchCoordinator = LaunchCoordinator(router: self.router, deepLink: self.deepLink)
 
         self.router.setRootModule(launchCoordinator, animated: true)
-        self.addChildAndStart(launchCoordinator, finishedHandler: { [unowned self] (result) in
+        self.addChildAndStart(launchCoordinator, finishedHandler: { (_) in })
+
+        LaunchManager.shared.status.producer.on { [weak self] (result) in
+            guard let `self` = self else { return }
             self.handle(result: result)
-        })
+        }
+        .start()
     }
 
     private func handle(result: LaunchStatus) {
@@ -63,6 +55,9 @@ class MainCoordinator: Coordinator<Void> {
             }
         case .failed(_):
             break
+        case .deeplink(let object):
+            self.deepLink = object
+            self.handle(deeplink: object)
         }
     }
 
@@ -92,6 +87,12 @@ class MainCoordinator: Coordinator<Void> {
                 self.runLaunchFlow()
             }
         })
+    }
+
+    private func handle(deeplink: DeepLinkable) {
+        guard let code = deeplink.code else { return }
+
+        //Apply code to 
     }
 }
 

@@ -31,11 +31,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         switch LaunchManager.shared.status.value {
         case .success(_):
             if let identity = User.current()?.objectId {
-                LaunchManager.shared.authenticateChatClient(with: identity, options: nil)
-            } else {
-                //LaunchManager.shared.createAnonymousUser(with: nil )
+                LaunchManager.shared.getChatToken(with: identity, buo: nil)
             }
-        case .needsOnboarding, .isLaunching, .failed(_):
+        case .needsOnboarding, .isLaunching, .failed(_), .deeplink(_):
             break
         }
     }

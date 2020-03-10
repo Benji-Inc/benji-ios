@@ -10,10 +10,12 @@ import Foundation
 import Parse
 import Branch
 import ReactiveSwift
+import TMROFutures
 
 enum LaunchStatus {
     case isLaunching
     case needsOnboarding
+    case deeplink(object: DeepLinkable)
     case success(object: DeepLinkable?, token: String)
     case failed(error: ClientError?)
 }
@@ -23,7 +25,6 @@ class LaunchManager {
     static let shared = LaunchManager()
 
     private(set) var finishedInitialFetch = false
-    var onLoggedOut: (() -> Void)?
 
     // Important - update this URL with your Twilio Function URL
     private let tokenURL = "https://topaz-booby-6355.twil.io/chat-token"
@@ -35,6 +36,9 @@ class LaunchManager {
     private let clientKey = "theStupidMasterKeyThatShouldBeSecret"
 
     var status = MutableProperty<LaunchStatus>(.isLaunching)
+
+    /// False if a branch session has already been started.
+    private var shouldInitializeBranchSession = true
 
     func launchApp(with options: [UIApplication.LaunchOptionsKey: Any]?) {
 
@@ -51,42 +55,28 @@ class LaunchManager {
             }))
         }
 
-        if let user = User.current(), let identity = user.objectId {
-            self.authenticateChatClient(with: identity, options: options)
-        } else {
-            self.status.value = .needsOnboarding
-        }
+        // We initialize branch first so we can pass any attributes into the create user call that it might have
+        self.initializeBranchIfNeeded(with: options)
+            .observe(with: { (result) in
+                switch result {
+                case .success(let buo):
+                    self.initializeUserData(with: buo)
+                case .failure(_):
+                    self.initializeUserData(with: nil)
+                }
+            })
     }
 
-    func authenticateChatClient(with identity: String, options: [UIApplication.LaunchOptionsKey: Any]?) {
+    private func initializeBranchIfNeeded(with launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Future<BranchUniversalObject?> {
 
-        Branch.getInstance().setIdentity(identity)
-        // Fetch Access Token from the server and initialize Chat Client - this assumes you are running
-        // the PHP starter app on your local machine, as instructed in the quick start guide
-        let deviceId = UIDevice.current.identifierForVendor!.uuidString
-        let urlString = "\(self.tokenURL)?identity=\(identity)&device=\(deviceId)"
+        let promise = Promise<BranchUniversalObject?>()
 
-        TokenUtils.retrieveToken(url: urlString) { (token, identity, error) in
-            if let tkn = token {
-                // Set up Twilio Chat client
-                self.finishedInitialFetch = true
-                
-                //Initialize Branch
-                self.initializeBranch(with: options, token: tkn)
-            } else {
-                self.status.value = .failed(error: ClientError.apiError(detail: error.debugDescription))
-            }
+        // There's no need to initialize the branch session multiple times per app session.
+        guard self.shouldInitializeBranchSession else {
+            promise.resolve(with: nil)
+            return promise
         }
-    }
 
-    func logout() {
-        if let client = ChannelManager.shared.client  {
-            client.delegate = nil
-            client.shutdown()
-        }
-    }
-
-    private func initializeBranch(with launchOptions: [UIApplication.LaunchOptionsKey: Any]?, token: String) {
         let branch: Branch = Branch.getInstance()
 
         let notificationInfo = launchOptions?[.remoteNotification] as? [String : Any]
@@ -100,21 +90,56 @@ class LaunchManager {
                             properties,
                             error) in
 
-                            guard error == nil else {
-                                // IMPORTANT: Allow the launch sequence to continue even if branch fails.
-                                // We don't want issues with the branch api to block our app from launching.
-                                self.status.value = .success(object: nil, token: token)
-                                return
-                            }
-
                             // Use for testing
                             //let buo = self.createTestBUO()
 
-                            let buo: BranchUniversalObject? = branchObject
-                                ?? Branch.getInstance().getLatestReferringBranchUniversalObject()
+                            if let buo = branchObject {
+                                promise.resolve(with: buo)
+                            } else if let buo = Branch.getInstance().getLatestReferringBranchUniversalObject() {
+                                promise.resolve(with: buo)
+                            } else {
+                                promise.resolve(with: nil)
+                            }
 
-                            self.status.value = .success(object: buo, token: token)
+                            if let _ = error {
+                                // IMPORTANT: Allow the launch sequence to continue even if branch fails.
+                                // We don't want issues with the branch api to block our app from launching.
+                            } else {
+                                self.shouldInitializeBranchSession = false
+                            }
         })
+
+        return promise
+    }
+
+    private func initializeUserData(with buo: BranchUniversalObject?) {
+        if let identity = User.current()?.objectId {
+            Branch.getInstance().setIdentity(identity)
+            self.getChatToken(with: identity, buo: buo)
+        } else if let deeplink = buo {
+            self.status.value = .deeplink(object: deeplink)
+        } else {
+            self.status.value = .needsOnboarding
+        }
+    }
+
+    func getChatToken(with identity: String, buo: BranchUniversalObject?) {
+
+        // Fetch Access Token from the server and initialize Chat Client - this assumes you are running
+        // the PHP starter app on your local machine, as instructed in the quick start guide
+        let deviceId = UIDevice.current.identifierForVendor!.uuidString
+        let urlString = "\(self.tokenURL)?identity=\(identity)&device=\(deviceId)"
+
+        TokenUtils.retrieveToken(url: urlString) { (token, identity, error) in
+            if let tkn = token {
+                // Set up Twilio Chat client
+                self.finishedInitialFetch = true
+
+                self.status.value = .success(object: buo, token: tkn)
+            } else {
+                self.status.value = .failed(error: ClientError.apiError(detail: error.debugDescription))
+            }
+        }
     }
 
     private func createTestBUO() -> BranchUniversalObject {
