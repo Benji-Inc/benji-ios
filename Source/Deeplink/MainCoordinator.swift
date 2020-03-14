@@ -90,9 +90,15 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func handle(deeplink: DeepLinkable) {
-        guard let code = deeplink.code else { return }
+        guard let _ = deeplink.code else { return }
 
-        //Apply code to 
+        if User.current() == nil {
+            self.removeChild()
+            self.runOnboardingFlow()
+        } else if let user = User.current(), user.isAuthenticated {
+            self.removeChild()
+            self.runOnboardingFlow()
+        }
     }
 }
 

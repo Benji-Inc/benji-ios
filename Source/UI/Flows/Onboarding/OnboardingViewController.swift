@@ -27,8 +27,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     unowned let delegate: OnboardingViewControllerDelegate
 
     var currentOnboardingType: OnboardingType = .login
+    let deeplink: DeepLinkable?
 
-    init(with delegate: OnboardingViewControllerDelegate) {
+    init(with deeplink: DeepLinkable?, delegate: OnboardingViewControllerDelegate) {
+        self.deeplink = deeplink
         self.delegate = delegate
         super.init()
     }
@@ -41,6 +43,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         super.initializeViews()
 
         self.blurView.effect = nil
+
+        if let code = self.deeplink?.code {
+            self.reservationVC.textField.text = code
+            self.reservationVC.verify(code: code)
+        }
 
         self.reservationVC.onDidComplete = { [unowned self] result in
             switch result {

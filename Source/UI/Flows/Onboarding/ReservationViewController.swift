@@ -65,6 +65,11 @@ class ReservationViewController: TextInputViewController<OnboardingType> {
     override func textFieldDidEndEditing(_ textField: UITextField) {
         guard let code = textField.text, !code.isEmpty else { return }
 
+        self.verify(code: code)
+    }
+
+    func verify(code: String) {
+
         VerifyReservation(code: code)
             .makeRequest()
             .observe { (result) in

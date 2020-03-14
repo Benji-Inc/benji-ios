@@ -12,7 +12,7 @@ import Parse
 
 class OnboardingCoordinator: PresentableCoordinator<Void> {
 
-    lazy var onboardingVC = OnboardingViewController(with: self)
+    lazy var onboardingVC = OnboardingViewController(with: self.deepLink, delegate: self)
 
     override func toPresentable() -> DismissableVC {
         return self.onboardingVC

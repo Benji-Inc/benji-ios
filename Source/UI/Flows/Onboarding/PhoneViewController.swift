@@ -49,7 +49,12 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
             let phone = try? PhoneKit.shared.parse(text, withRegion: "US") else {
                 return
         }
-        self.sendCode(to: phone)
+
+        if let type = self.onboardingType, type == .waitlist {
+            self.addToWaitlist(to: phone)
+        } else {
+            self.sendCode(to: phone)
+        }
     }
 
     private func isPhoneNumberValid() -> Bool {
@@ -57,6 +62,19 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
             return true
         }
         return false
+    }
+
+    private func addToWaitlist(to phone: PhoneNumber) {
+        AddToWaitlist(phoneNumber: phone).makeRequest()
+            .withResultToast()
+            .observe(with: { (result) in
+                switch result {
+                case .success:
+                    self.complete(with: .success(phone))
+                case .failure(let error):
+                    self.complete(with: .failure(error))
+                }
+            })
     }
 
     private func sendCode(to phone: PhoneNumber) {
