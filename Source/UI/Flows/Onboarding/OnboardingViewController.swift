@@ -14,6 +14,7 @@ import TMROLocalization
 
 protocol OnboardingViewControllerDelegate: class {
     func onboardingView(_ controller: OnboardingViewController, didVerify user: PFUser)
+    func onboardingView(_ controller: OnboardingViewController, wasAddedToWaitlist position: Int)
 }
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent> {
@@ -78,8 +79,12 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.codeVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
+
+                if self.currentOnboardingType == .waitlist {
+                    //Show welcome screen
+                }
                 //Skip name, and photo if they have an existing account
-                if let current = User.current(), current.isOnboarded {
+                else if let current = User.current(), current.isOnboarded {
                     self.delegate.onboardingView(self, didVerify: current)
                 } else {
                     self.currentContent.value = .name(self.nameVC)

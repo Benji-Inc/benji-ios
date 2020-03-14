@@ -233,6 +233,7 @@
 		D6B2607222E80FE000143CF0 /* SmallBoldLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2607122E80FE000143CF0 /* SmallBoldLabel.swift */; };
 		D6BD933F23F8824D00C5660D /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D6BD933E23F8824D00C5660D /* face_scan.json */; };
 		D6BF68D7239CBF74008E79A1 /* FeedInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */; };
+		D6C17366241D6ACF00422482 /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C17365241D6ACF00422482 /* WaitlistViewController.swift */; };
 		D6C65E9E230CD07400259F7A /* LaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C65E9D230CD07400259F7A /* LaunchCoordinator.swift */; };
 		D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */; };
 		D6CD4F3923F3A5BB004818B6 /* Reservation+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3823F3A5BB004818B6 /* Reservation+Cloud.swift */; };
@@ -557,6 +558,7 @@
 		D6B2607122E80FE000143CF0 /* SmallBoldLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallBoldLabel.swift; sourceTree = "<group>"; };
 		D6BD933E23F8824D00C5660D /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedInviteView.swift; sourceTree = "<group>"; };
+		D6C17365241D6ACF00422482 /* WaitlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistViewController.swift; sourceTree = "<group>"; };
 		D6C65E9D230CD07400259F7A /* LaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinator.swift; sourceTree = "<group>"; };
 		D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Onboarding+Cloud.swift"; sourceTree = "<group>"; };
 		D6CD4F3823F3A5BB004818B6 /* Reservation+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Reservation+Cloud.swift"; sourceTree = "<group>"; };
@@ -1212,6 +1214,7 @@
 				D67896BE2302683C0059BA75 /* PhotoViewController.swift */,
 				D64DD8AD23CE31160039DC5A /* ReservationViewController.swift */,
 				D67896AC22FF60190059BA75 /* TextInputViewController.swift */,
+				D6C17365241D6ACF00422482 /* WaitlistViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -1963,6 +1966,7 @@
 				D67896A922FF51170059BA75 /* PhoneViewController.swift in Sources */,
 				D642738822C9AF690088256B /* ModalViewController.swift in Sources */,
 				D642737422C99D6A0088256B /* ContactsViewController.swift in Sources */,
+				D6C17366241D6ACF00422482 /* WaitlistViewController.swift in Sources */,
 				D6D145F421D5493000CD8CE4 /* HomeViewController.swift in Sources */,
 				D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */,
 				D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */,

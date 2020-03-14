@@ -69,14 +69,19 @@ struct AddToWaitlist: CloudFunction {
     func makeRequest() -> Future<Void> {
         let promise = Promise<Void>()
 
-        PFCloud.callFunction(inBackground: "addToWaitlist",
-                             withParameters: ["phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164)]) { (object, error) in
-                                if let error = error {
-                                    promise.reject(with: error)
-                                } else {
-                                    promise.resolve(with: ())
-                                }
-        }
+        //Create ghost user??
+        //Save position???
+
+        promise.resolve(with: ())
+
+//        PFCloud.callFunction(inBackground: "addToWaitlist",
+//                             withParameters: ["phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164)]) { (object, error) in
+//                                if let error = error {
+//                                    promise.reject(with: error)
+//                                } else {
+//                                    promise.resolve(with: ())
+//                                }
+//        }
 
         return promise.withResultToast()
     }
