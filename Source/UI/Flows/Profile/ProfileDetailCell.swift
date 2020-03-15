@@ -43,9 +43,6 @@ class ProfileDetailCell: UICollectionViewCell {
         case .name:
             self.titleLabel.set(text: "Name")
             self.label.set(text: user.fullName)
-        case .handle:
-            self.titleLabel.set(text: "Handle")
-            self.label.set(text: String(optional: user.handle))
         case .localTime:
             self.titleLabel.set(text: "Local Time")
             self.label.set(text: Date.nowInLocalFormat)
@@ -90,6 +87,10 @@ class ProfileDetailCell: UICollectionViewCell {
 
     private func getRoutine(for user: User) {
 
+        self.label.set(text: "NO ROUTINE SET")
+        self.button.set(style: .normal(color: .lightPurple, text: "Set"))
+        self.button.isHidden = false
+
         user.routine?.fetchIfNeededInBackground(block: { (object, error) in
             if let routine = object as? Routine, let date = routine.date {
                 let formatter = DateFormatter()
@@ -97,11 +98,8 @@ class ProfileDetailCell: UICollectionViewCell {
                 let string = formatter.string(from: date)
                 self.label.set(text: string)
                 self.button.set(style: .normal(color: .lightPurple, text: "Update"))
-            } else {
-                self.label.set(text: "NO ROUTINE SET")
-                self.button.set(style: .normal(color: .lightPurple, text: "Set"))
             }
-            self.button.isHidden = false
+
             self.contentView.layoutNow()
         })
     }

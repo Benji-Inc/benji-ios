@@ -12,7 +12,6 @@ import TMROLocalization
 enum ProfileItem {
     case picture
     case name
-    case handle
     case localTime
     case routine
     case invites

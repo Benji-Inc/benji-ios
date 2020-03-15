@@ -59,7 +59,6 @@ class ProfileViewController: ViewController {
 
         items.append(.picture)
         items.append(.name)
-        items.append(.handle)
         items.append(.localTime)
         items.append(.routine)
         items.append(.invites)
