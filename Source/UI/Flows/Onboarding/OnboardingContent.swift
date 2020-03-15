@@ -10,7 +10,6 @@ import Foundation
 
 enum OnboardingContent: Switchable {
 
-    case reservation(ReservationViewController)
     case phone(PhoneViewController)
     case code(CodeViewController)
     case name(NameViewController)
@@ -18,8 +17,6 @@ enum OnboardingContent: Switchable {
 
     var viewController: UIViewController & Sizeable {
         switch self {
-        case .reservation(let vc):
-            return vc
         case .phone(let vc):
             return vc
         case .code(let vc):
@@ -33,8 +30,6 @@ enum OnboardingContent: Switchable {
 
     var shouldShowBackButton: Bool {
         switch self {
-        case .reservation(_):
-            return false
         case .phone(_):
             return false
         case .code(_):

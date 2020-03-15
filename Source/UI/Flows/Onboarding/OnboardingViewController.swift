@@ -14,12 +14,10 @@ import TMROLocalization
 
 protocol OnboardingViewControllerDelegate: class {
     func onboardingView(_ controller: OnboardingViewController, didVerify user: PFUser)
-    func onboardingView(_ controller: OnboardingViewController, wasAddedToWaitlist position: Int)
 }
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent> {
 
-    lazy var reservationVC = ReservationViewController()
     lazy var phoneVC = PhoneViewController()
     lazy var codeVC = CodeViewController()
     lazy var nameVC = NameViewController()
@@ -27,7 +25,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     
     unowned let delegate: OnboardingViewControllerDelegate
 
-    var currentOnboardingType: OnboardingType = .login
     let deeplink: DeepLinkable?
 
     init(with deeplink: DeepLinkable?, delegate: OnboardingViewControllerDelegate) {
@@ -45,27 +42,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.blurView.effect = nil
 
-        if let code = self.deeplink?.code {
-            self.reservationVC.textField.text = code
-            self.reservationVC.verify(code: code)
-        }
-
-        self.reservationVC.onDidComplete = { [unowned self] result in
-            switch result {
-            case .success(let type):
-                switch type {
-                case .existingUser:
-                    self.codeVC.onboardingType = type
-                    self.currentContent.value = .code(self.codeVC)
-                case .login, .newUser, .waitlist:
-                    self.phoneVC.onboardingType = type
-                    self.currentContent.value = .phone(self.phoneVC)
-                }
-            case .failure(let error):
-                print(error)
-            }
-        }
-
         self.phoneVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success(let phone):
@@ -79,12 +55,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.codeVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-
-                if self.currentOnboardingType == .waitlist {
-                    //Show welcome screen
-                }
-                //Skip name, and photo if they have an existing account
-                else if let current = User.current(), current.isOnboarded {
+                if let current = User.current(), current.isOnboarded {
                     self.delegate.onboardingView(self, didVerify: current)
                 } else {
                     self.currentContent.value = .name(self.nameVC)
@@ -116,28 +87,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getInitialContent() -> OnboardingContent {
-        return .reservation(self.reservationVC)
+        return .phone(self.phoneVC)
     }
 
     override func getTitle() -> Localized {
         switch self.currentContent.value {
-        case .reservation(_):
+        case .phone(_):
             return "Welcome!"
-        case .phone(let vc):
-            if let type = vc.onboardingType {
-                switch type {
-                case .existingUser:
-                    return "Welcome Back!"
-                case .newUser:
-                    return "Welcome!"
-                case .waitlist:
-                    return "not found"
-                case .login:
-                    return "Login"
-                }
-            } else {
-                return "Verification"
-            }
         case .code(_):
             return "Vefify Code"
         case .name(_):
@@ -174,25 +130,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     override func getDescription() -> Localized {
         switch self.currentContent.value {
-        case .reservation(_):
-            return "Please enter your reservation code OR tap the button to login."
-        case .phone(let vc):
-            if let type = vc.onboardingType {
-                switch type {
-                case .existingUser, .login:
-                    return LocalizedString(id: "",
-                                           arguments: [],
-                                           default: "Please verify your existing account using the mobile number for this device.")
-                case .newUser:
-                    return LocalizedString(id: "",
-                                           arguments: [],
-                                           default: "Please enter the mobile number for this device to secure your account.")
-                case .waitlist:
-                    return LocalizedString(id: "",
-                                           arguments: [],
-                                           default: "Reservation not found for the code provided. Add your phone number to be added to the waitlist.")
-                }
-            }
+        case .phone(_):
             return LocalizedString(id: "",
                                    arguments: [],
                                    default: "Please verify your account using the mobile number for this device.")
@@ -214,10 +152,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func didSelectBackButton() {
 
         switch self.currentContent.value {
-        case .reservation(_):
-            break
         case .phone(_):
-            self.currentContent.value = .reservation(self.reservationVC)
+            break
         case .code(_):
             self.currentContent.value = .phone(self.phoneVC)
         case .name(_):

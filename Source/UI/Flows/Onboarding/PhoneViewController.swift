@@ -14,8 +14,6 @@ import TMROFutures
 
 class PhoneViewController: TextInputViewController<PhoneNumber> {
 
-    var onboardingType: OnboardingType?
-
     init() {
         let phoneField = PhoneTextField()
         super.init(textField: phoneField,
@@ -50,11 +48,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
                 return
         }
 
-        if let type = self.onboardingType, type == .waitlist {
-            self.addToWaitlist(to: phone)
-        } else {
-            self.sendCode(to: phone)
-        }
+        self.sendCode(to: phone)
     }
 
     private func isPhoneNumberValid() -> Bool {
@@ -62,19 +56,6 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
             return true
         }
         return false
-    }
-
-    private func addToWaitlist(to phone: PhoneNumber) {
-        AddToWaitlist(phoneNumber: phone).makeRequest()
-            .withResultToast()
-            .observe(with: { (result) in
-                switch result {
-                case .success:
-                    self.complete(with: .success(phone))
-                case .failure(let error):
-                    self.complete(with: .failure(error))
-                }
-            })
     }
 
     private func sendCode(to phone: PhoneNumber) {

@@ -21,7 +21,8 @@ extension User: Avatar {
     }
 
     var isOnboarded: Bool {
-        if self.handle == nil {
+
+        if self.fullName.isEmpty {
             return false
         } else if self.smallImage == nil {
             return false
@@ -59,19 +60,6 @@ extension User {
         }
 
         return promise.withResultToast()
-    }
-
-    func createHandle() {
-        guard let current = User.current(),
-            !current.givenName.isEmpty,
-            let last = current.familyName.first,
-            let position = self.reservation?.position else { return } 
-        var positionString = String(position)
-        let start = positionString.startIndex
-        let end = positionString.index(positionString.startIndex, offsetBy: 1)
-        positionString = positionString.replacingCharacters(in: start...end, with: "")
-        let handleString = String(current.givenName) + String(last) + "_" + positionString
-        self.handle = handleString.lowercased()
     }
 }
 

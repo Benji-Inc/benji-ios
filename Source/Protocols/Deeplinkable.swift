@@ -12,7 +12,6 @@ protocol DeepLinkable {
     var customMetadata: NSMutableDictionary { get set }
     var deepLinkTarget: DeepLinkTarget? { get set }
     var channelId: String? { get set }
-    var code: String? { get set }
 }
 
 extension DeepLinkable {

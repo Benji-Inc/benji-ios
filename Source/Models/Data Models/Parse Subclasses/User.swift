@@ -20,7 +20,6 @@ enum UserKey: String {
     case email
     case reservation
     case connections
-    case handle
     case phoneNumber
     case givenName
     case familyName
@@ -30,22 +29,9 @@ enum UserKey: String {
 
 final class User: PFUser {
 
-    var handle: String? {
-        get {
-            guard let handle: String = self.getObject(for: .handle) else { return nil }
-            return "@" + handle.lowercased()
-        }
-        set { self.setObject(for: .handle, with: newValue) }
-    }
-
     var phoneNumber: String? {
         get { return self.getObject(for: .phoneNumber) }
         set { self.setObject(for: .phoneNumber, with: newValue)}
-    }
-
-    var reservation: Reservation? {
-        get { return self.getObject(for: .reservation) }
-        set { self.setObject(for: .reservation, with: newValue) }
     }
 
     var connections: [Connection] {

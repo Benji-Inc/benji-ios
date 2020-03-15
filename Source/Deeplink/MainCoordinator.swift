@@ -66,17 +66,20 @@ class MainCoordinator: Coordinator<Void> {
             .withResultToast()
             .observeValue(with: { (_) in
                 runMain {
+                    guard let user = User.current(), user.isOnboarded else { return }
                     self.runHomeFlow()
                 }
             })
     }
 
     private func runHomeFlow() {
-        let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
-        self.router.setRootModule(homeCoordinator, animated: true)
-        self.addChildAndStart(homeCoordinator, finishedHandler: { _ in
-            // If the home coordinator ever finishes, put handling logic here.
-        })
+        runMain {
+            let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
+            self.router.setRootModule(homeCoordinator, animated: true)
+            self.addChildAndStart(homeCoordinator, finishedHandler: { _ in
+                // If the home coordinator ever finishes, put handling logic here.
+            })
+        }
     }
 
     private func runOnboardingFlow() {
