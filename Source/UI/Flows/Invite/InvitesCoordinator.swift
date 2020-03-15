@@ -37,7 +37,7 @@ extension InvitesCoordinator: ContactsViewControllerDelegate {
 
     private func askForAuthorization(status: CNAuthorizationStatus, source: ContactsViewController) {
 
-        let contactModal = ContactAuthorizationAlertController(status: status)
+        let contactModal = ContactAuthorizationController(status: status)
         contactModal.onAuthorization = { (result) in
             switch result {
             case .denied:
@@ -49,7 +49,7 @@ extension InvitesCoordinator: ContactsViewControllerDelegate {
             }
         }
 
-        self.router.present(contactModal, source: source)
+        self.router.present(contactModal, source: self.invitesVC)
     }
 }
 

@@ -7,42 +7,124 @@
 //
 
 import Foundation
+import TMROLocalization
 
-class AlertViewController: ViewController, PagingModalPresentable {
-    var onTappedToDismiss: (() -> ())?
+class AlertViewController: ModalViewController {
 
-    let content: AlertView = UINib.loadView()
-    private(set) var childViewController: UIViewController
+    private(set) var alertView: AlertView = UINib.loadView()
+    private let label = MediumLabel()
+    private let text: Localized
+    private let buttons: [Button]
+    private lazy var alertTransitionDelegate = AlertControllerTransitioningDelegate()
+    var alertViewBottomSpace: CGFloat?
 
-    init(childViewController: UIViewController,
-         buttons: [LoadingButton]) {
-
-        self.childViewController = childViewController
-
+    init(text: Localized, buttons: [LoadingButton]) {
+        self.text = text
+        self.buttons = buttons
         super.init()
-
-        self.content.dismissHitArea.onTap { [unowned self] (tapGesture) in
-            self.onTappedToDismiss?()
-        }
-
-        self.addChild(viewController: childViewController, toView: self.content.contentView)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func loadView() {
-        self.view = self.content
+    override func initializeViews() {
+        super.initializeViews()
+
+        self.label.set(text: self.text,
+                       color: .white,
+                       alignment: .center)
+
+        self.view.addSubview(self.alertView)
+        self.alertView.containerView.addSubview(self.getAlertContainerContentView())
     }
 
-    func configure(buttons: [LoadingButton]) {
-        self.content.configure(buttons: buttons)
+    func configure(text: Localized, buttons: [LoadingButton]) {
+        self.alertView.configure(buttons: buttons)
     }
+
+    /// How far down the buttons are offset from the main content.
+    private func getButtonsOffset() -> CGFloat {
+        return 64
+    }
+
+    // MARK: Functions to Override
+
+    /// Returns the view that should be put inside the container view: the main content of the alert. By default this is the basic text view,
+    /// but subclasses can override this to provide their own custom content.
+    func getAlertContainerContentView() -> UIView {
+        return self.label
+    }
+
+    /// The height of the alert's main content. Sublcasses should override this if they provide their own custom content.
+    func getAlertContainerHeight(with width: CGFloat) -> CGFloat {
+        return self.label.getSize(withWidth: width).height
+    }
+
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.childViewController.view.frame = self.content.contentView.bounds
+        self.alertView.width = self.view.width * 0.9
+        self.alertView.containerView.width = self.alertView.width - 30
+        self.alertView.buttonsContainer.width = self.alertView.containerView.width
+
+        var yOffset: CGFloat = 0
+        for (index, subview) in self.alertView.buttonsContainer.subviews.enumerated() {
+            guard let button = subview as? UIButton else { return }
+            button.frame = CGRect(x: 0,
+                                  y: yOffset,
+                                  width: self.alertView.buttonsContainer.width,
+                                  height: 40)
+            button.layer.cornerRadius = button.halfHeight
+            yOffset += button.height
+            if index + 1 < self.alertView.buttons.count {
+                yOffset += 10
+            }
+        }
+
+        self.alertView.buttonsContainer.height = yOffset
+        let containerHeight = self.getAlertContainerHeight(with: self.alertView.containerView.width)
+        let height = containerHeight + self.getButtonsOffset() + yOffset + 25
+        self.alertView.height = height
+
+        self.alertView.containerView.height = containerHeight
+        self.alertView.containerView.width = self.alertView.width - 20
+        self.alertView.containerView.centerOnXAndY()
+
+        let content = self.getAlertContainerContentView()
+        content.size = self.alertView.containerView.size
+        content.centerOnXAndY()
+
+        self.alertView.buttonsContainer.top = self.alertView.containerView.bottom + self.getButtonsOffset()
+        self.alertView.buttonsContainer.centerOnX()
+
+        self.alertView.layer.cornerRadius = 50
+        self.alertView.centerOnX()
+
+        let bottomSpace
+             = self.alertViewBottomSpace ?? self.view.safeAreaInsets.bottom + self.view.width * 0.05
+        self.alertView.pin(.bottom, padding: bottomSpace)
+
+    }
+}
+
+private class AlertControllerTransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
+
+    let transitionController = AlertControllerAnimatedTransitioning()
+
+    func animationController(forPresented presented: UIViewController,
+                             presenting: UIViewController,
+                             source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+
+        self.transitionController.isPresenting = true
+        return self.transitionController
+    }
+
+    func animationController(forDismissed dismissed: UIViewController)
+        -> UIViewControllerAnimatedTransitioning? {
+
+            self.transitionController.isPresenting = false
+            return self.transitionController
     }
 }

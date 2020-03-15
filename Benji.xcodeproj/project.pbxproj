@@ -53,6 +53,8 @@
 		D62C635422BE9CBB00F4D097 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C635322BE9CBB00F4D097 /* FeedViewController.swift */; };
 		D62C635622BE9E5C00F4D097 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C635522BE9E5C00F4D097 /* CollectionViewController.swift */; };
 		D6347392241EAA840071E9DA /* Invitee.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6347391241EAA840071E9DA /* Invitee.swift */; };
+		D6347394241EB2C30071E9DA /* AlertControllerAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6347393241EB2C30071E9DA /* AlertControllerAnimatedTransitioning.swift */; };
+		D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6347395241EBF6F0071E9DA /* UIView+Layout.swift */; };
 		D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */; };
 		D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63752C5231258DA00214F63 /* PreviewMessageView.swift */; };
 		D63752F92313833B00214F63 /* ProfileAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63752F82313833B00214F63 /* ProfileAvatarView.swift */; };
@@ -81,14 +83,10 @@
 		D642737A22C99DD20088256B /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642737922C99DD20088256B /* ContactCell.swift */; };
 		D642737F22C9A7EC0088256B /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642737E22C9A7EC0088256B /* ContactsManager.swift */; };
 		D642738322C9AEA30088256B /* ContactAuthorizationAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642738222C9AEA30088256B /* ContactAuthorizationAlertController.swift */; };
-		D642738622C9AF1C0088256B /* PagingModalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642738522C9AF1C0088256B /* PagingModalController.swift */; };
 		D642738822C9AF690088256B /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642738722C9AF690088256B /* ModalViewController.swift */; };
-		D642738A22C9B0170088256B /* ModalControllerAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642738922C9B0170088256B /* ModalControllerAnimatedTransitioning.swift */; };
 		D642738C22C9B24E0088256B /* LoadingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642738B22C9B24E0088256B /* LoadingButton.swift */; };
-		D642738F22C9BE330088256B /* TextAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642738E22C9BE330088256B /* TextAlertViewController.swift */; };
 		D642739122C9BFA10088256B /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739022C9BFA10088256B /* AlertViewController.swift */; };
 		D642739322C9C0110088256B /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739222C9C0110088256B /* AlertView.swift */; };
-		D642739522C9C0850088256B /* AlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D642739422C9C0850088256B /* AlertView.xib */; };
 		D642739722CA6E1F0088256B /* CommonWord.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739622CA6E1F0088256B /* CommonWord.swift */; };
 		D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739822CA79B60088256B /* UIWindow+Extensions.swift */; };
 		D642739F22CAFD680088256B /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739E22CAFD680088256B /* MessageTextView.swift */; };
@@ -373,6 +371,8 @@
 		D62C635322BE9CBB00F4D097 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		D62C635522BE9E5C00F4D097 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		D6347391241EAA840071E9DA /* Invitee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invitee.swift; sourceTree = "<group>"; };
+		D6347393241EB2C30071E9DA /* AlertControllerAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertControllerAnimatedTransitioning.swift; sourceTree = "<group>"; };
+		D6347395241EBF6F0071E9DA /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 		D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extensions.swift"; sourceTree = "<group>"; };
 		D63752C5231258DA00214F63 /* PreviewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewMessageView.swift; sourceTree = "<group>"; };
 		D63752F82313833B00214F63 /* ProfileAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAvatarView.swift; sourceTree = "<group>"; };
@@ -401,14 +401,10 @@
 		D642737922C99DD20088256B /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		D642737E22C9A7EC0088256B /* ContactsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsManager.swift; sourceTree = "<group>"; };
 		D642738222C9AEA30088256B /* ContactAuthorizationAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactAuthorizationAlertController.swift; sourceTree = "<group>"; };
-		D642738522C9AF1C0088256B /* PagingModalController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingModalController.swift; sourceTree = "<group>"; };
 		D642738722C9AF690088256B /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
-		D642738922C9B0170088256B /* ModalControllerAnimatedTransitioning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalControllerAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		D642738B22C9B24E0088256B /* LoadingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingButton.swift; sourceTree = "<group>"; };
-		D642738E22C9BE330088256B /* TextAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextAlertViewController.swift; sourceTree = "<group>"; };
 		D642739022C9BFA10088256B /* AlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
 		D642739222C9C0110088256B /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
-		D642739422C9C0850088256B /* AlertView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlertView.xib; sourceTree = "<group>"; };
 		D642739622CA6E1F0088256B /* CommonWord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonWord.swift; sourceTree = "<group>"; };
 		D642739822CA79B60088256B /* UIWindow+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+Extensions.swift"; sourceTree = "<group>"; };
 		D642739E22CAFD680088256B /* MessageTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTextView.swift; sourceTree = "<group>"; };
@@ -1017,11 +1013,9 @@
 			isa = PBXGroup;
 			children = (
 				D642738222C9AEA30088256B /* ContactAuthorizationAlertController.swift */,
-				D642738522C9AF1C0088256B /* PagingModalController.swift */,
-				D642738E22C9BE330088256B /* TextAlertViewController.swift */,
 				D642739022C9BFA10088256B /* AlertViewController.swift */,
 				D642739222C9C0110088256B /* AlertView.swift */,
-				D642739422C9C0850088256B /* AlertView.xib */,
+				D6347393241EB2C30071E9DA /* AlertControllerAnimatedTransitioning.swift */,
 			);
 			path = Alerts;
 			sourceTree = "<group>";
@@ -1356,7 +1350,6 @@
 			isa = PBXGroup;
 			children = (
 				D6B2606622E80A4100143CF0 /* Toast */,
-				D642738922C9B0170088256B /* ModalControllerAnimatedTransitioning.swift */,
 				D642738722C9AF690088256B /* ModalViewController.swift */,
 				D642738422C9AEAB0088256B /* Alerts */,
 			);
@@ -1485,6 +1478,7 @@
 				D6D1503F21DAFB8300CD8CE4 /* UITextField+Extensions.swift */,
 				D6D1503821D7F46F00CD8CE4 /* UITextView+Extensions.swift */,
 				D61EC0EB21D312B600204BEE /* UIView+Extensions.swift */,
+				D6347395241EBF6F0071E9DA /* UIView+Layout.swift */,
 				D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */,
 				D6D1503621D7E74500CD8CE4 /* UIViewController+Extensions.swift */,
 				D642739822CA79B60088256B /* UIWindow+Extensions.swift */,
@@ -1633,7 +1627,6 @@
 				D6EEE7B12383A70F00F9D446 /* Benji.entitlements in Resources */,
 				D6B2607022E80E6500143CF0 /* ToastView.xib in Resources */,
 				D6ACA0B823D4248100844923 /* FaceDetection.storyboard in Resources */,
-				D642739522C9C0850088256B /* AlertView.xib in Resources */,
 				D629410223F8351D0088777E /* search-to-x.json in Resources */,
 				D6CD4F4123F46689004818B6 /* arrow.json in Resources */,
 				D637532B2316172700214F63 /* Roboto-Bold.ttf in Resources */,
@@ -1691,6 +1684,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6347394241EB2C30071E9DA /* AlertControllerAnimatedTransitioning.swift in Sources */,
 				D6EAB68823E6211200B90D5A /* ProfilePhotoViewController.swift in Sources */,
 				D62C635622BE9E5C00F4D097 /* CollectionViewController.swift in Sources */,
 				D6486DD023EF15A2007ED680 /* Inviteable.swift in Sources */,
@@ -1720,7 +1714,6 @@
 				D6A82B6F2325BEA2003E0A8B /* FavoritesViewController.swift in Sources */,
 				D6EE715023B704F2000ED221 /* HomeNewChannellButton.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */,
-				D642738622C9AF1C0088256B /* PagingModalController.swift in Sources */,
 				D6D1501C21D5F8AD00CD8CE4 /* MessageCell.swift in Sources */,
 				D65B0CE7234929440041A176 /* NewChannelCoordinator.swift in Sources */,
 				D6D1504F21E304D800CD8CE4 /* BouncyCollectionViewLayout.swift in Sources */,
@@ -1856,7 +1849,6 @@
 				D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */,
 				D642737F22C9A7EC0088256B /* ContactsManager.swift in Sources */,
 				D6347392241EAA840071E9DA /* Invitee.swift in Sources */,
-				D642738A22C9B0170088256B /* ModalControllerAnimatedTransitioning.swift in Sources */,
 				D6BF68D7239CBF74008E79A1 /* FeedInviteView.swift in Sources */,
 				D65B0CE5234928620041A176 /* ProfileCoordinator.swift in Sources */,
 				D68483FF22CD0A1A00362AC3 /* TableView.swift in Sources */,
@@ -1875,6 +1867,7 @@
 				D645996523EF199600BE3F0B /* InviteableContentView.swift in Sources */,
 				D6D14D8F21D5893600CD8CE4 /* NSNumber+IGListDiffable.m in Sources */,
 				D6740D4823AEA5BD009D5702 /* ChannelsCoordiantor.swift in Sources */,
+				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,
 				D6E0ED53239CBDA40073B33E /* FeedUnreadView.swift in Sources */,
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
 				D64273A722CC2D280088256B /* ChannelViewController+Extensions.swift in Sources */,
@@ -1902,7 +1895,6 @@
 				D642739122C9BFA10088256B /* AlertViewController.swift in Sources */,
 				D61EC0E621D30EB300204BEE /* View.swift in Sources */,
 				D6EE715F23B84DC6000ED221 /* OrbCollectionView.swift in Sources */,
-				D642738F22C9BE330088256B /* TextAlertViewController.swift in Sources */,
 				D66F0FC722BF004300BA277D /* FeedType.swift in Sources */,
 				D6E4C8012394391A002B1330 /* RoutineTimeOfDayLabel.swift in Sources */,
 				D6DADF742207E0E2007D9EB1 /* TCHChannel+Extensions.swift in Sources */,

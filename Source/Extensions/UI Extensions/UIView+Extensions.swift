@@ -10,178 +10,6 @@ import Foundation
 
 extension UIView {
 
-    var top: CGFloat {
-        get {
-            return self.frame.origin.y
-        }
-
-        set {
-            var frame = self.frame
-            frame.origin.y = newValue
-            self.frame = frame
-        }
-    }
-
-    var x: CGFloat {
-        get {
-            return self.frame.origin.x
-        }
-
-        set {
-            var frame = self.frame
-            frame.origin.x = newValue
-            self.frame = frame
-        }
-    }
-
-    var y: CGFloat {
-        get {
-            return self.frame.origin.y
-        }
-
-        set {
-            var frame = self.frame
-            frame.origin.y = newValue
-            self.frame = frame
-        }
-    }
-
-    var left: CGFloat {
-        get {
-            return self.frame.origin.x
-        }
-
-        set {
-            var frame = self.frame
-            frame.origin.x = newValue
-            self.frame = frame
-        }
-    }
-
-    var right: CGFloat {
-        get {
-            return self.frame.origin.x + self.frame.size.width
-        }
-
-        set {
-            var frame = self.frame
-            frame.origin.x = newValue - frame.size.width
-            self.frame = frame
-        }
-    }
-
-    var bottom: CGFloat {
-        get {
-            return self.frame.origin.y + self.frame.size.height
-        }
-
-        set {
-            var frame = self.frame
-            frame.origin.y = newValue - frame.size.height
-            self.frame = frame
-        }
-    }
-
-    var centerX: CGFloat {
-        get {
-            return self.center.x
-        }
-
-        set {
-            self.center = CGPoint(x: newValue, y: self.center.y)
-        }
-    }
-
-    var centerY: CGFloat {
-        get {
-            return self.center.y
-        }
-
-        set {
-            self.center = CGPoint(x: self.center.x, y: newValue)
-        }
-    }
-
-    var proportionalWidth: CGFloat {
-        return self.width * 0.8
-    }
-
-    func centerOnXAndY() {
-        self.centerOnY()
-        self.centerOnX()
-    }
-
-    func centerOnY() {
-        if let theSuperView = self.superview {
-            self.centerY = theSuperView.halfHeight
-        }
-    }
-
-    func centerOnX() {
-        if let theSuperView = self.superview {
-            self.centerX = theSuperView.halfWidth
-        }
-    }
-
-    var width: CGFloat {
-        get {
-            return self.frame.size.width
-        }
-
-        set {
-            var frame = self.frame
-            frame.size.width = newValue
-            self.frame = frame
-        }
-    }
-
-    var height: CGFloat {
-        get {
-            return self.frame.size.height
-        }
-
-        set {
-            var frame = self.frame
-            frame.size.height = newValue
-            self.frame = frame
-        }
-    }
-
-    var halfWidth: CGFloat {
-        get {
-            return 0.5*self.frame.size.width
-        }
-    }
-
-    var halfHeight: CGFloat {
-        get {
-            return 0.5*self.frame.size.height
-        }
-    }
-
-    var origin: CGPoint {
-        get {
-            return self.frame.origin
-        }
-
-        set {
-            var frame = self.frame
-            frame.origin = newValue
-            self.frame = frame
-        }
-    }
-
-    var size: CGSize {
-        get {
-            return CGSize(width: self.width, height: self.height)
-        }
-
-        set {
-            self.width = newValue.width
-            self.height = newValue.height
-        }
-    }
-
     var isVisible: Bool {
         get {
             return !self.isHidden
@@ -265,11 +93,6 @@ extension UIView {
         return nil
     }
 
-    func layoutNow() {
-        self.setNeedsLayout()
-        self.layoutIfNeeded()
-    }
-
     func set(backgroundColor: Color) {
         self.backgroundColor = backgroundColor.color
     }
@@ -293,12 +116,6 @@ extension UIView {
         }
 
         return matchingViews
-    }
-
-    /// Completely fills the superview
-    func expandToSuperviewSize() {
-        guard let superview = self.superview else { return }
-        self.frame = superview.bounds
     }
 }
 

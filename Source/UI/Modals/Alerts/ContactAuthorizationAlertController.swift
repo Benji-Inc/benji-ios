@@ -10,33 +10,31 @@ import Foundation
 import Contacts
 import TMROLocalization
 
-class ContactAuthorizationAlertController: PagingModalController {
+class ContactAuthorizationController: AlertViewController {
 
     enum Result {
         case denied
         case authorized
     }
     var onAuthorization: ((Result) -> Void)?
+    private var authorizationStatus: CNAuthorizationStatus
 
     init(status: CNAuthorizationStatus) {
-
-        super.init(contentViewControllers: [])
-
-        if let textController = self.createTextCard(with: status) {
-            self.configure(contentViewControllers: [textController])
-        }
+        self.authorizationStatus = status
+        super.init(text: String(), buttons: [])
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func createTextCard(with status: CNAuthorizationStatus) -> TextAlertViewController? {
+    override func initializeViews() {
+        super.initializeViews()
 
         var text: Localized = ""
         var buttons: [LoadingButton] = []
 
-        switch status {
+        switch self.authorizationStatus {
         case .denied:
             text = LocalizedString(id: "alert.contactauthorizationdenied.text",
                                    default: "You can change address book permissions in your settings.")
@@ -55,7 +53,6 @@ class ContactAuthorizationAlertController: PagingModalController {
             nevermindButton.set(style: .rounded(color: .clear,
                                                 text: CommonWord.nevermind(.uppercase).localizedString)) { [weak self] in
                 guard let `self` = self else { return }
-
                  self.onAuthorization?(.denied)
             }
 
@@ -76,7 +73,7 @@ class ContactAuthorizationAlertController: PagingModalController {
             }
 
             let notNowButton = LoadingButton()
-            notNowButton.set(style: .rounded(color: .clear, text: CommonWord.maybelater(.uppercase).localizedString)) { [weak self] in
+            notNowButton.set(style: .rounded(color: .background3, text: CommonWord.maybelater(.uppercase).localizedString)) { [weak self] in
                 guard let `self` = self else { return }
 
                 self.onAuthorization?(.denied)
@@ -85,10 +82,9 @@ class ContactAuthorizationAlertController: PagingModalController {
             buttons = [allowButton, notNowButton]
 
         case .authorized:
-            return nil
-
+            break
         case .restricted:
-            
+
             text = LocalizedString(id: "alert.contactauthorizationrestricted.text",
                                    default: "Tomorrow can't access your contacts because of a parental setting.")
 
@@ -102,10 +98,9 @@ class ContactAuthorizationAlertController: PagingModalController {
             buttons = [okButton]
 
         @unknown default:
-            return nil
+            break
         }
 
-        return TextAlertViewController(localizedText: text,
-                                       buttons: buttons)
+        self.configure(text: text, buttons: buttons)
     }
 }
