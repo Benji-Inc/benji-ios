@@ -13,7 +13,6 @@ protocol Avatar: ImageDisplayable {
     var givenName: String { get }
     var familyName: String { get }
     var fullName: String { get }
-    var handle: String? { get }
     var firstAndLastInitial: String? { get }
 }
 
@@ -27,10 +26,6 @@ extension Avatar {
         let firstInitial = String(optional: self.givenName.first?.uppercased())
         let lastInitial = String(optional: self.familyName.first?.uppercased())
         return firstInitial + lastInitial
-    }
-
-    var handle: String? {
-        return nil
     }
 
     var firstAndLastInitial: String? {

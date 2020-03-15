@@ -14,13 +14,13 @@ class AlertConfirmationView: TextInputAccessoryView {
     func setAlertMessage(for avatars: [Avatar]) {
         var arguments = String()
         for (index, avatar) in avatars.enumerated() {
-            if avatar.userObjectID != User.current()?.objectId, let handle = avatar.handle, !handle.isEmpty {
+            if avatar.userObjectID != User.current()?.objectId {
                 if avatars.count == 1 {
-                    arguments.append(handle + " ")
+                    arguments.append(avatar.givenName + " ")
                 } else if index + 1 == avatars.count, arguments.count > 1 {
-                    arguments.append(" and" + handle + " ")
+                    arguments.append(" and" + avatar.givenName + " ")
                 } else {
-                    arguments.append(handle + ", ")
+                    arguments.append(avatar.givenName + ", ")
                 }
             }
         }

@@ -174,22 +174,7 @@ extension Future where Value == TCHChannel {
                 if let error = result.error {
                     promise.reject(with: error)
                 } else {
-                    if let handle = user.handle {
-                        let formatter = DateFormatter()
-                        formatter.dateFormat = "h:mm a"
-
-                        let monthDayFormatter = DateFormatter()
-                        monthDayFormatter.dateFormat = "MMMM d"
-
-                        let message = "Invite sent at \(formatter.string(from: Date())) on \(monthDayFormatter.string(from: Date())) to: [\(handle)](\(identity))"
-
-                        ChannelManager.shared.sendMessage(to: channel, with: message, context: .status)
-                            .observeValue(with: { (_) in
-                                promise.resolve(with: channel)
-                            })
-                    } else {
-                        promise.resolve(with: channel)
-                    }
+                    promise.resolve(with: channel)
                 }
             }
 

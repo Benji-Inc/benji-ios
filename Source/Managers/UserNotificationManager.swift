@@ -169,8 +169,8 @@ class UserNotificationManager: NSObject {
 
     func notify(channel: TCHChannel, messageWasRead message: Messageable) {
         let body = LocalizedString(id: "",
-                                   arguments: [channel.friendlyName!, User.current()!.handle!],
-                                   default: "Your message in @(channelname) was read by @(handle)")
+                                   arguments: [channel.friendlyName!, User.current()!.givenName],
+                                   default: "Your message in @(channelname) was read by @(name)")
 
         let params: [String: Any] = ["identity": [message.authorID],
                                      "body" : localized(body),

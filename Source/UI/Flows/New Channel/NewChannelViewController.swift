@@ -203,12 +203,7 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
             .invite(users: users)
             .ignoreUserInteractionEventsUntilDone(for: self.view)
             .observeValue(with: { (channel) in
-                guard let handle = User.current()?.handle else { return }
-                let message = "[\(handle)](\(String(optional: User.current()?.objectId))) set the conversation purpose to: \(channel.channelDescription)"
-                ChannelManager.shared.sendMessage(to: channel, with: message, context: .status)
-                    .observe { (result) in
-                        self.delegate.newChannelView(self, didCreate: .channel(channel))
-                }
+                self.delegate.newChannelView(self, didCreate: .channel(channel))
             })
     }
 }

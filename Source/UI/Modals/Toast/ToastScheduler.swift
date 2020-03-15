@@ -83,19 +83,17 @@ class ToastScheduler {
     private func createUserInChannelToast(for user: User,
                                           status: ChannelMemberUpdate.Status,
                                           channel: TCHChannel) -> Toast? {
-        guard let id = user.objectId,
-            let handle = user.handle,
-            let channelName = channel.friendlyName else { return nil }
+        guard let id = user.objectId, let channelName = channel.friendlyName else { return nil }
 
         var message: Localized = ""
         switch status {
         case .joined:
-            let first = user.isCurrentUser ? "You" : handle
+            let first = user.isCurrentUser ? "You" : user.givenName
             message = LocalizedString(id: "",
                                       arguments: [first, channelName],
                                       default: "@() joined @()")
         case .left:
-            let first = user.isCurrentUser ? "You" : handle
+            let first = user.isCurrentUser ? "You" : user.givenName
             message = LocalizedString(id: "",
                                       arguments: [first, channelName],
                                       default: "@() left @()")
@@ -103,7 +101,7 @@ class ToastScheduler {
             break
         case .typingStarted:
             message = LocalizedString(id: "",
-                                      arguments: [handle, channelName],
+                                      arguments: [user.givenName, channelName],
                                       default: "@() started typing in @()")
         }
 
