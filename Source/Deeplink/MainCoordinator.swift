@@ -21,19 +21,14 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func runLaunchFlow() {
-
-        LaunchManager.shared.launchApp(with: self.launchOptions)
-
-        let launchCoordinator = LaunchCoordinator(router: self.router, deepLink: self.deepLink)
+        let launchCoordinator = LaunchCoordinator(with: self.launchOptions,
+                                                  router: self.router,
+                                                  deepLink: self.deepLink)
 
         self.router.setRootModule(launchCoordinator, animated: true)
-        self.addChildAndStart(launchCoordinator, finishedHandler: { (_) in })
-
-        LaunchManager.shared.status.producer.on { [weak self] (result) in
-            guard let `self` = self else { return }
+        self.addChildAndStart(launchCoordinator, finishedHandler: { (result) in
             self.handle(result: result)
-        }
-        .start()
+        })
     }
 
     private func handle(result: LaunchStatus) {
@@ -73,13 +68,11 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func runHomeFlow() {
-        runMain {
-            let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
-            self.router.setRootModule(homeCoordinator, animated: true)
-            self.addChildAndStart(homeCoordinator, finishedHandler: { _ in
-                // If the home coordinator ever finishes, put handling logic here.
-            })
-        }
+        let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
+        self.router.setRootModule(homeCoordinator, animated: true)
+        self.addChildAndStart(homeCoordinator, finishedHandler: { _ in
+            // If the home coordinator ever finishes, put handling logic here.
+        })
     }
 
     private func runOnboardingFlow() {

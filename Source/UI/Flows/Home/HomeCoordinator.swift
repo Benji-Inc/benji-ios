@@ -50,19 +50,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             }
         }.start()
 
-        LaunchManager.shared.status.producer.on { [weak self] (options) in
-            guard let `self` = self else { return }
-            switch options {
-            case .success(let object, _):
-                if let deeplink = object {
-                    self.handle(deeplink: deeplink)
-                }
-            default:
-                break
-            }
-        }
-        .start()
-
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
         }

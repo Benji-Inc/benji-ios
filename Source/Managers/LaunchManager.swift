@@ -20,6 +20,10 @@ enum LaunchStatus {
     case failed(error: ClientError?)
 }
 
+protocol LaunchManagerDelegate: class {
+    func launchManager(_ manager: LaunchManager, didFinishWith status: LaunchStatus)
+}
+
 class LaunchManager {
 
     static let shared = LaunchManager()
@@ -35,7 +39,7 @@ class LaunchManager {
     private let appID = "BenjiApp"
     private let clientKey = "theStupidMasterKeyThatShouldBeSecret"
 
-    var status = MutableProperty<LaunchStatus>(.isLaunching)
+    weak var delegate: LaunchManagerDelegate?
 
     /// False if a branch session has already been started.
     private var shouldInitializeBranchSession = true
@@ -117,9 +121,9 @@ class LaunchManager {
             Branch.getInstance().setIdentity(identity)
             self.getChatToken(with: identity, buo: buo)
         } else if let deeplink = buo {
-            self.status.value = .deeplink(object: deeplink)
+            self.delegate?.launchManager(self, didFinishWith: .deeplink(object: deeplink))
         } else {
-            self.status.value = .needsOnboarding
+            self.delegate?.launchManager(self, didFinishWith: .needsOnboarding)
         }
     }
 
@@ -134,10 +138,9 @@ class LaunchManager {
             if let tkn = token {
                 // Set up Twilio Chat client
                 self.finishedInitialFetch = true
-
-                self.status.value = .success(object: buo, token: tkn)
+                self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: tkn))
             } else {
-                self.status.value = .failed(error: ClientError.apiError(detail: error.debugDescription))
+                self.delegate?.launchManager(self, didFinishWith: .failed(error: ClientError.apiError(detail: error.debugDescription)))
             }
         }
     }

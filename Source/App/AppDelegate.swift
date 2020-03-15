@@ -26,16 +26,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
 
-        guard !ChannelManager.shared.isConnected else { return }
+        guard !ChannelManager.shared.isConnected, let identity = User.current()?.objectId else { return }
 
-        switch LaunchManager.shared.status.value {
-        case .success(_):
-            if let identity = User.current()?.objectId {
-                LaunchManager.shared.getChatToken(with: identity, buo: nil)
-            }
-        case .needsOnboarding, .isLaunching, .failed(_), .deeplink(_):
-            break
-        }
+        LaunchManager.shared.getChatToken(with: identity, buo: nil)
     }
 
     func application(_ application: UIApplication,

@@ -13,22 +13,35 @@ import Parse
 // user data. Once the data is retrieved, it checks if the app needs to be updated, and presents the
 // update flow if needed.
 
-class LaunchCoordinator: PresentableCoordinator<Void> {
+class LaunchCoordinator: PresentableCoordinator<LaunchStatus> {
 
     private lazy var splashVC = SplashViewController()
+    private let launchOptions: [UIApplication.LaunchOptionsKey : Any]?
 
     override func toPresentable() -> DismissableVC {
         return self.splashVC
     }
 
+    init(with launchOptions: [UIApplication.LaunchOptionsKey : Any]?,
+         router: Router,
+         deepLink: DeepLinkable?) {
+
+        self.launchOptions = launchOptions
+        super.init(router: router, deepLink: deepLink)
+    }
+
     override func start() {
         super.start()
 
-        LaunchManager.shared.status.producer.on { [weak self] (result) in
-            guard let `self` = self else { return }
-            self.finishFlow(with: ())
-        }
-        .start()
+        LaunchManager.shared.delegate = self
+        LaunchManager.shared.launchApp(with: self.launchOptions)
+    }
+}
+
+extension LaunchCoordinator: LaunchManagerDelegate {
+
+    func launchManager(_ manager: LaunchManager, didFinishWith status: LaunchStatus) {
+        self.finishFlow(with: status)
     }
 }
 
