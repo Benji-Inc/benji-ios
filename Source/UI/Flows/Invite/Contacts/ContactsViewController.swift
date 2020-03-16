@@ -34,8 +34,6 @@ class ContactsViewController: CollectionViewController<ContactCell, ContactsColl
         self.registerKeyboardEvents()
 
         self.view.set(backgroundColor: .background2)
-
-        self.getAuthorizationStatus()
     }
 
     func getAuthorizationStatus() {

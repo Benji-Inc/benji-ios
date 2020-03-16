@@ -14,6 +14,8 @@ class MainCoordinator: Coordinator<Void> {
 
     var launchOptions: [UIApplication.LaunchOptionsKey : Any]?
 
+    var isInitializingChat: Bool = false
+
     override func start() {
         super.start()
 
@@ -57,9 +59,14 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func initializeChat(with token: String) {
+        // Fixes double loading. 
+        guard !self.isInitializingChat else { return }
+
+        self.isInitializingChat = true
         ChannelManager.initialize(token: token)
             .withResultToast()
             .observeValue(with: { (_) in
+                self.isInitializingChat = false
                 runMain {
                     guard let user = User.current(), user.isOnboarded else { return }
                     self.runHomeFlow()
@@ -68,6 +75,7 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func runHomeFlow() {
+        self.removeChild()
         let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
         self.router.setRootModule(homeCoordinator, animated: true)
         self.addChildAndStart(homeCoordinator, finishedHandler: { _ in

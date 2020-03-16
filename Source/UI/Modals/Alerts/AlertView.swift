@@ -31,8 +31,6 @@ class AlertView: View {
         self.buttons.forEach { button in
             self.buttonsContainer.addSubview(button)
         }
-
-        self.setNeedsLayout()
     }
 
     override func layoutSubviews() {

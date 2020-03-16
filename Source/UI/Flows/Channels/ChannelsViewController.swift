@@ -17,6 +17,8 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
 
     weak var delegate: ChannelsViewControllerDelegate?
 
+    var isSearching: Bool = false
+
     init() {
         let collectionView = ChannelsCollectionView()
 
@@ -43,9 +45,12 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
 
 extension ChannelsViewController: SearchBarDelegate {
 
-    func searchBarDidBeginEditing(_ searchBar: SearchBar) {}
+    func searchBarDidBeginEditing(_ searchBar: SearchBar) {
+        self.isSearching = true
+    }
 
     func searchBarDidFinishEditing(_ searchBar: SearchBar) {
+        self.isSearching = false 
         self.collectionViewManager.loadAllChannels()
     }
 

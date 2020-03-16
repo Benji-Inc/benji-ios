@@ -106,6 +106,8 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
     }
 
     func insert(item: CellType.ItemType, at index: Int) {
+        guard !self.items.value.contains(item) else { return }
+        
         self.items.value.insert(item, at: index)
         self.collectionView.insertItems(at: [IndexPath(item: index, section: 0)])
     }

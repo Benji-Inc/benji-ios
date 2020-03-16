@@ -11,12 +11,11 @@ import TMROLocalization
 
 class AlertViewController: ModalViewController {
 
-    private(set) var alertView: AlertView = UINib.loadView()
+    private(set) var alertView = AlertView()
     private let label = MediumLabel()
     private let text: Localized
     private let buttons: [Button]
     private lazy var alertTransitionDelegate = AlertControllerTransitioningDelegate()
-    var alertViewBottomSpace: CGFloat?
 
     init(text: Localized, buttons: [LoadingButton]) {
         self.text = text
@@ -61,13 +60,12 @@ class AlertViewController: ModalViewController {
         return self.label.getSize(withWidth: width).height
     }
 
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
         self.alertView.width = self.view.width * 0.9
         self.alertView.containerView.width = self.alertView.width - 30
-        self.alertView.buttonsContainer.width = self.alertView.containerView.width
+        self.alertView.buttonsContainer.width = self.alertView.width
 
         var yOffset: CGFloat = 0
         for (index, subview) in self.alertView.buttonsContainer.subviews.enumerated() {
@@ -75,8 +73,8 @@ class AlertViewController: ModalViewController {
             button.frame = CGRect(x: 0,
                                   y: yOffset,
                                   width: self.alertView.buttonsContainer.width,
-                                  height: 40)
-            button.layer.cornerRadius = button.halfHeight
+                                  height: Theme.buttonHeight)
+            button.layer.cornerRadius = Theme.cornerRadius
             yOffset += button.height
             if index + 1 < self.alertView.buttons.count {
                 yOffset += 10
@@ -96,16 +94,14 @@ class AlertViewController: ModalViewController {
         content.size = self.alertView.containerView.size
         content.centerOnXAndY()
 
-        self.alertView.buttonsContainer.top = self.alertView.containerView.bottom + self.getButtonsOffset()
+        self.alertView.buttonsContainer.top = self.alertView.bottom + self.getButtonsOffset()
         self.alertView.buttonsContainer.centerOnX()
 
-        self.alertView.layer.cornerRadius = 50
+        self.alertView.layer.cornerRadius = Theme.cornerRadius
         self.alertView.centerOnX()
 
-        let bottomSpace
-             = self.alertViewBottomSpace ?? self.view.safeAreaInsets.bottom + self.view.width * 0.05
+        let bottomSpace = self.view.safeAreaInsets.bottom + self.view.width * 0.05
         self.alertView.pin(.bottom, padding: bottomSpace)
-
     }
 }
 

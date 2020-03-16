@@ -18,8 +18,9 @@ extension ChannelsViewController {
 
             switch channelsUpdate.status {
             case .added:
-                // Do nothing. We only want to show channels that are being searched for.
-                break
+                guard !self.isSearching else { return }
+                let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
+                self.collectionViewManager.insert(item: displayable, at: 0)
             case .changed:
                 let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
                 self.collectionViewManager.update(item: displayable)

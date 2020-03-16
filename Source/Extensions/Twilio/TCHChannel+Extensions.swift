@@ -125,30 +125,12 @@ extension Future where Value == TCHChannel {
                 if let error = result.error {
                     promise.reject(with: error)
                 } else {
-                    self.sendJoinedMessage()
-                        .observe { (messageResult) in
-                            promise.resolve(with: channel)
-                    }
+                     promise.resolve(with: channel)
                 }
             })
 
             return promise.withResultToast()
         })
-    }
-
-    func sendJoinedMessage() -> Future<TCHChannel> {
-        return self.then { (channel) in
-            let promise = Promise<TCHChannel>()
-
-            let message = "joined: \(String(optional: channel.friendlyName))"
-
-            ChannelManager.shared.sendMessage(to: channel, with: message, context: .status)
-                .observeValue(with: { (_) in
-                    promise.resolve(with: channel)
-                })
-
-            return promise
-        }
     }
 
     func invite(users: [User]) -> Future<TCHChannel> {
