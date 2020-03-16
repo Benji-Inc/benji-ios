@@ -14,7 +14,8 @@ class AlertViewController: ModalViewController {
     private(set) var alertView = AlertView()
     private let label = MediumLabel()
     private let text: Localized
-    private let buttons: [Button]
+    private(set) var buttonsContainer = UIView()
+    private(set) var buttons: [Button] = []
     private lazy var alertTransitionDelegate = AlertControllerTransitioningDelegate()
 
     init(text: Localized, buttons: [LoadingButton]) {
@@ -30,21 +31,80 @@ class AlertViewController: ModalViewController {
     override func initializeViews() {
         super.initializeViews()
 
+        self.transitioningDelegate = self.alertTransitionDelegate
+
         self.label.set(text: self.text,
                        color: .white,
                        alignment: .center)
 
         self.view.addSubview(self.alertView)
+        self.view.addSubview(self.buttonsContainer)
+        self.buttonsContainer.set(backgroundColor: .clear)
         self.alertView.containerView.addSubview(self.getAlertContainerContentView())
     }
 
     func configure(text: Localized, buttons: [LoadingButton]) {
-        self.alertView.configure(buttons: buttons)
+
+        self.label.set(text: text,
+                       color: .white,
+                       alignment: .center)
+
+        self.buttons.removeAllFromSuperview(andRemoveAll: true)
+        self.buttons = buttons
+        self.buttons.forEach { button in
+            self.buttonsContainer.addSubview(button)
+        }
+        
+        self.view.layoutNow()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.alertView.width = self.view.width * 0.9
+        self.alertView.containerView.width = self.alertView.width - 30
+        self.buttonsContainer.width = self.alertView.width
+
+        var yOffset: CGFloat = 0
+        for (index, subview) in self.buttonsContainer.subviews.enumerated() {
+            guard let button = subview as? UIButton else { return }
+            button.frame = CGRect(x: 0,
+                                  y: yOffset,
+                                  width: self.alertView.width,
+                                  height: Theme.buttonHeight)
+            button.layer.cornerRadius = Theme.cornerRadius
+            yOffset += button.height
+            if index + 1 < self.buttons.count {
+                yOffset += 10
+            }
+        }
+
+        self.buttonsContainer.height = yOffset
+        let containerHeight = self.getAlertContainerHeight(with: self.alertView.containerView.width)
+        let height = 20 + containerHeight + yOffset + 25
+        self.alertView.height = height
+
+        self.alertView.containerView.height = containerHeight
+        self.alertView.containerView.width = self.alertView.width - 20
+        self.alertView.containerView.centerOnXAndY()
+
+        let content = self.getAlertContainerContentView()
+        content.size = self.alertView.containerView.size
+        content.centerOnXAndY()
+
+        self.buttonsContainer.top = self.alertView.bottom + self.getButtonsOffset()
+        self.buttonsContainer.centerOnX()
+
+        self.alertView.layer.cornerRadius = Theme.cornerRadius
+        self.alertView.centerOnX()
+
+        let bottomSpace = self.view.safeAreaInsets.bottom + self.view.width * 0.05
+        self.alertView.bottom = self.view.height - bottomSpace - self.buttonsContainer.height
     }
 
     /// How far down the buttons are offset from the main content.
     private func getButtonsOffset() -> CGFloat {
-        return 64
+        return 10
     }
 
     // MARK: Functions to Override
@@ -58,50 +118,6 @@ class AlertViewController: ModalViewController {
     /// The height of the alert's main content. Sublcasses should override this if they provide their own custom content.
     func getAlertContainerHeight(with width: CGFloat) -> CGFloat {
         return self.label.getSize(withWidth: width).height
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        self.alertView.width = self.view.width * 0.9
-        self.alertView.containerView.width = self.alertView.width - 30
-        self.alertView.buttonsContainer.width = self.alertView.width
-
-        var yOffset: CGFloat = 0
-        for (index, subview) in self.alertView.buttonsContainer.subviews.enumerated() {
-            guard let button = subview as? UIButton else { return }
-            button.frame = CGRect(x: 0,
-                                  y: yOffset,
-                                  width: self.alertView.buttonsContainer.width,
-                                  height: Theme.buttonHeight)
-            button.layer.cornerRadius = Theme.cornerRadius
-            yOffset += button.height
-            if index + 1 < self.alertView.buttons.count {
-                yOffset += 10
-            }
-        }
-
-        self.alertView.buttonsContainer.height = yOffset
-        let containerHeight = self.getAlertContainerHeight(with: self.alertView.containerView.width)
-        let height = containerHeight + self.getButtonsOffset() + yOffset + 25
-        self.alertView.height = height
-
-        self.alertView.containerView.height = containerHeight
-        self.alertView.containerView.width = self.alertView.width - 20
-        self.alertView.containerView.centerOnXAndY()
-
-        let content = self.getAlertContainerContentView()
-        content.size = self.alertView.containerView.size
-        content.centerOnXAndY()
-
-        self.alertView.buttonsContainer.top = self.alertView.bottom + self.getButtonsOffset()
-        self.alertView.buttonsContainer.centerOnX()
-
-        self.alertView.layer.cornerRadius = Theme.cornerRadius
-        self.alertView.centerOnX()
-
-        let bottomSpace = self.view.safeAreaInsets.bottom + self.view.width * 0.05
-        self.alertView.pin(.bottom, padding: bottomSpace)
     }
 }
 

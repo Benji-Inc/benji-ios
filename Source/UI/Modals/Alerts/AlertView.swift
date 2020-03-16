@@ -11,26 +11,12 @@ import Foundation
 class AlertView: View {
 
     private(set) var containerView = UIView()
-    private(set) var buttonsContainer = UIView()
-    private(set) var buttons: [Button] = []
 
     override func initializeSubviews() {
-
         super.initializeSubviews()
 
+        self.set(backgroundColor: .background3)
         self.addSubview(self.containerView)
-        self.addSubview(self.buttonsContainer)
-        self.set(backgroundColor: .background2)
-        self.buttonsContainer.set(backgroundColor: .clear)
-    }
-
-    func configure(buttons: [Button]) {
-
-        self.buttons.removeAllFromSuperview(andRemoveAll: true)
-        self.buttons = buttons
-        self.buttons.forEach { button in
-            self.buttonsContainer.addSubview(button)
-        }
     }
 
     override func layoutSubviews() {

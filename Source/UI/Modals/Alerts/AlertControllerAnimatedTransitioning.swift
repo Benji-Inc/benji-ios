@@ -34,7 +34,7 @@ class AlertControllerAnimatedTransitioning: NSObject, UIViewControllerAnimatedTr
 
         // Add blur view
         let blurView = self.addBlurViewIfNeeded(to: containerView)
-        blurView.effect = self.isPresenting ? nil : UIBlurEffect(style: .light)
+        blurView.effect = self.isPresenting ? nil : UIBlurEffect(style: .dark)
 
         // Add view to present
         containerView.addSubview(alertVC.view)
@@ -43,6 +43,8 @@ class AlertControllerAnimatedTransitioning: NSObject, UIViewControllerAnimatedTr
         if self.isPresenting {
             alertVC.alertView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
             alertVC.alertView.alpha = 0
+            alertVC.buttonsContainer.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            alertVC.buttonsContainer.alpha = 0
         }
 
         self.animator = UIViewPropertyAnimator(duration: 0.5, dampingRatio: 5) {
@@ -50,10 +52,12 @@ class AlertControllerAnimatedTransitioning: NSObject, UIViewControllerAnimatedTr
                 UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.5,
                                    animations: {
                                     if self.isPresenting {
-                                        blurView.effect = UIBlurEffect(style: .light)
+                                        blurView.effect = UIBlurEffect(style: .dark)
                                     } else {
                                         alertVC.alertView.alpha = 0
                                         alertVC.alertView.top = alertVC.view.bottom
+                                        alertVC.buttonsContainer.alpha = 0
+                                        alertVC.view.setNeedsLayout()
                                     }
                 })
 
@@ -61,9 +65,12 @@ class AlertControllerAnimatedTransitioning: NSObject, UIViewControllerAnimatedTr
                     if self.isPresenting {
                         alertVC.alertView.alpha = 1
                         alertVC.alertView.transform = .identity
+                        alertVC.buttonsContainer.transform = .identity
+                        alertVC.buttonsContainer.alpha = 1 
                     } else {
                         blurView.effect = nil
                     }
+                    alertVC.view.setNeedsLayout()
                 })
             }, completion: nil)
         }

@@ -73,7 +73,7 @@ class ContactAuthorizationController: AlertViewController {
             }
 
             let notNowButton = LoadingButton()
-            notNowButton.set(style: .rounded(color: .background3, text: CommonWord.maybelater(.uppercase).localizedString)) { [weak self] in
+            notNowButton.set(style: .rounded(color: .background4, text: CommonWord.maybelater(.uppercase).localizedString)) { [weak self] in
                 guard let `self` = self else { return }
 
                 self.onAuthorization?(.denied)
@@ -86,7 +86,7 @@ class ContactAuthorizationController: AlertViewController {
         case .restricted:
 
             text = LocalizedString(id: "alert.contactauthorizationrestricted.text",
-                                   default: "Tomorrow can't access your contacts because of a parental setting.")
+                                   default: "We can't access your contacts because of a parental setting.")
 
             let okButton = LoadingButton()
             okButton.set(style: .rounded(color: .blue, text: CommonWord.ok(.uppercase).localizedString)) { [weak self] in
