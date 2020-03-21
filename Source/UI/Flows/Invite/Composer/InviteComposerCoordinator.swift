@@ -66,12 +66,19 @@ class InviteComposerCoordinator: Coordinator<Void> {
 
         self.createInvite(with: phoneNumber)
             .ignoreUserInteractionEventsUntilDone(for: self.source.view)
-            .observeValue { [unowned self] (message) in
-                vc.body = message
-                vc.recipients = [phoneNumber]
-                vc.messageComposeDelegate = self.composerDelegate
-                self.router.present(vc, source: self.source)
-        }
+            .observe(with: { (result) in
+                switch result {
+                case .success(let message):
+                    runMain {
+                        vc.body = message
+                        vc.recipients = [phoneNumber]
+                        vc.messageComposeDelegate = self.composerDelegate
+                        self.router.present(vc, source: self.source)
+                    }
+                case .failure(_):
+                    self.finishFlow(with: ())
+                }
+            })
     }
 
     private func createInvite(with phoneNumber: String) -> Future<String> {

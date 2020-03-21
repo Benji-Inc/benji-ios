@@ -15,7 +15,7 @@ extension PFInstallation {
     func saveToken() -> Future<Void> {
         let promise = Promise<Void>()
         if let current = User.current() {
-            self["user"] = current
+            self["userId"] = current.id
             self.saveInBackground { (success, error) in
                 if success {
                     promise.resolve(with: ())
