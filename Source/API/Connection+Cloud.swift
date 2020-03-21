@@ -9,16 +9,17 @@
 import Foundation
 import Parse
 import TMROFutures
+import PhoneNumberKit
 
 struct CreateConnection: CloudFunction {
 
-    var phoneNumber: String
+    var phoneNumber: PhoneNumber
 
     func makeRequest() -> Future<Connection> {
         let promise = Promise<Connection>()
 
         var params: [String: Any] = [:]
-        params["phoneNumber"] = self.phoneNumber
+        params["phoneNumber"] = PhoneKit.shared.format(self.phoneNumber, toType: .e164)
 
         PFCloud.callFunction(inBackground: "createConnection",
                              withParameters: params) { (object, error) in

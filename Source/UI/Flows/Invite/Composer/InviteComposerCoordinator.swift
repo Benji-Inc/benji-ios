@@ -12,6 +12,7 @@ import MessageUI
 import Branch
 import TMROLocalization
 import TMROFutures
+import PhoneNumberKit
 
 // Creating a delegate object for the message composer because MFMessageComposeViewControllerDelegate
 // must conform to NSObjectProtocol and I don't want to force coordinators to be NSObjects.
@@ -60,7 +61,9 @@ class InviteComposerCoordinator: Coordinator<Void> {
 
     private func presentMessageComposer(with contact: CNContact) {
         // The message composer won't initialize properly if texts aren't enabled on the device
-        guard MessageComposerViewController.canSendText(), let phoneNumber = contact.primaryPhoneNumber else { return }
+        guard MessageComposerViewController.canSendText(),
+            let phone = contact.primaryPhoneNumber,
+            let phoneNumber = try? PhoneKit.shared.parse(phone, withRegion: "US") else { return }
 
         let vc = MessageComposerViewController()
 
@@ -71,7 +74,7 @@ class InviteComposerCoordinator: Coordinator<Void> {
                 case .success(let message):
                     runMain {
                         vc.body = message
-                        vc.recipients = [phoneNumber]
+                        vc.recipients = [phone]
                         vc.messageComposeDelegate = self.composerDelegate
                         self.router.present(vc, source: self.source)
                     }
@@ -81,18 +84,18 @@ class InviteComposerCoordinator: Coordinator<Void> {
             })
     }
 
-    private func createInvite(with phoneNumber: String) -> Future<String> {
+    private func createInvite(with phoneNumber: PhoneNumber) -> Future<String> {
         self.createLink(with: phoneNumber).then { (link) in
             let promise = Promise<String>()
             let message = LocalizedString(id: "",
                                           arguments: [link],
-                                          default: "Because you mean a lot to me, I saved you a spot on this app that will help us communicate better. Claim it here: @(link)")
+                                          default: "Because you mean a lot to me, I want to have meaningful communication with you. Benji can help: @(link)")
             promise.resolve(with: localized(message))
             return promise
         }
     }
 
-    private func createLink(with phoneNumber: String) -> Future<String> {
+    private func createLink(with phoneNumber: PhoneNumber) -> Future<String> {
         CreateConnection(phoneNumber: phoneNumber).makeRequest()
             .transform { (connection) -> String in
                 let canonicalIdentifier = UUID().uuidString

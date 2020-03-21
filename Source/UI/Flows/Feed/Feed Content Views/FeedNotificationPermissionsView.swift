@@ -41,13 +41,15 @@ class FeedNotificationPermissionsView: View {
     private func handleNotificationPermissions() {
         self.button.isLoading = true
         UserNotificationManager.shared.register(application: UIApplication.shared) { (success, error) in
-            self.button.isLoading = false
-            if success {
-                self.didGivePermission?()
-            } else if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
-                UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                    print("Settings opened: \(success)") // Prints true
-                })
+            runMain {
+                self.button.isLoading = false
+                if success {
+                    self.didGivePermission?()
+                } else if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                        print("Settings opened: \(success)") // Prints true
+                    })
+                }
             }
         }
     }
