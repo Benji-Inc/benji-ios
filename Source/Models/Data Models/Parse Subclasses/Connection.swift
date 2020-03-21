@@ -8,12 +8,12 @@
 
 import Foundation
 import Parse
+import TMROFutures
 
 enum ConnectionKey: String {
     case status
     case to
     case from
-    case toPhoneNumber
 }
 
 final class Connection: PFObject, PFSubclassing {
@@ -29,28 +29,17 @@ final class Connection: PFObject, PFSubclassing {
         case declined
     }
 
-    //TODO: Remove the setters once the cloud functions are enabled. 
     var status: Status? {
-        get {
-            guard let string: String = self.getObject(for: .status) else { return nil }
-            return Status(rawValue: string)
-        }
-        set { self.setObject(for: .status, with: newValue?.rawValue) }
+        guard let string: String = self.getObject(for: .status) else { return nil }
+        return Status(rawValue: string)
     }
 
     var to: User? {
-        get { return self.getRelationalObject(for: .to) }
-        set { self.setObject(for: .to, with: newValue) }
-    }
-
-    var toPhoneNumber: String? {
-        get { return self.getObject(for: .toPhoneNumber) }
-        set { self.setObject(for: .toPhoneNumber, with: newValue) }
+        return self.getRelationalObject(for: .to)
     }
 
     var from: User? {
-        get { return self.getRelationalObject(for: .from) }
-        set { self.setObject(for: .from, with: newValue) }
+        return self.getRelationalObject(for: .from)
     }
 }
 

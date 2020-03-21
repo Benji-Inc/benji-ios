@@ -19,7 +19,7 @@ protocol NewChannelViewControllerDelegate: class {
 
 enum NewChannelContent: Switchable {
     case purpose(PurposeViewController)
-    case favorites(FavoritesViewController)
+    case favorites(ConnectionsViewController)
 
     var viewController: UIViewController & Sizeable {
         switch self {
@@ -43,7 +43,7 @@ enum NewChannelContent: Switchable {
 class NewChannelViewController: SwitchableContentViewController<NewChannelContent> {
 
     lazy var purposeVC = PurposeViewController()
-    lazy var favoritesVC = FavoritesViewController()
+    lazy var favoritesVC = ConnectionsViewController()
 
     let button = NewChannelButton()
 

@@ -9,7 +9,7 @@
 import Foundation
 import Parse 
 
-class FavoritesViewController: OrbCollectionViewController, Sizeable {
+class ConnectionsViewController: OrbCollectionViewController, Sizeable {
 
     override func initializeViews() {
         super.initializeViews()
