@@ -153,4 +153,21 @@ extension Objectable where Self: PFObject {
 
         return promise.withResultToast()
     }
+
+
+    func retrieveDataIfNeeded() -> Future<Self> {
+        let promise = Promise<Self>()
+
+        self.fetchIfNeededInBackground { (object, error) in
+            if let e = error {
+                promise.reject(with: e)
+            } else if let objectWithData = object as? Self {
+                promise.resolve(with: objectWithData)
+            } else {
+                promise.reject(with: ClientError.generic)
+            }
+        }
+
+        return promise
+    }
 }

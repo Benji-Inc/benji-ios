@@ -18,8 +18,6 @@ enum ObjectKey: String {
 
 enum UserKey: String {
     case email
-    case reservation
-    case connections
     case phoneNumber
     case givenName
     case familyName
@@ -32,10 +30,6 @@ final class User: PFUser {
     var phoneNumber: String? {
         get { return self.getObject(for: .phoneNumber) }
         set { self.setObject(for: .phoneNumber, with: newValue)}
-    }
-
-    var connections: [Connection] {
-        return self.getObject(for: .connections) ?? []
     }
 
     var givenName: String {
@@ -56,17 +50,5 @@ final class User: PFUser {
     var smallImage: PFFileObject? {
         get { return self.getObject(for: .smallImage) }
         set { self.setObject(for: .smallImage, with: newValue) }
-    }
-
-    func add(conneciton: Connection) -> Future<Connection> {
-        self.addUniqueObject(conneciton, forKey: UserKey.connections.rawValue)
-        return self.saveLocalThenServer().transform { (_) in
-            return conneciton
-        }
-    }
-
-    func remove(conneciton: Connection) -> Future<Void> {
-        self.remove(conneciton, forKey: UserKey.connections.rawValue)
-        return self.saveLocalThenServer().asVoid()
     }
 }

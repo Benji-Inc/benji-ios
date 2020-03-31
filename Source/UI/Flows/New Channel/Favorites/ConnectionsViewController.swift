@@ -7,31 +7,33 @@
 //
 
 import Foundation
-import Parse 
+import Parse
+import TMROFutures
 
 class ConnectionsViewController: OrbCollectionViewController, Sizeable {
 
     override func initializeViews() {
         super.initializeViews()
 
-        guard let objectId = User.current()?.objectId else { return }
-
-        User.localThenNetworkArrayQuery(where: [objectId], isEqual: false, container: .favorites)
-            .observeValue { (users) in
-                self.setItems(from: users)
+        GetAllConnections().makeRequest()
+            .observeValue { (connections) in
+                let accepted = connections.filter { (connection) -> Bool in
+                    return connection.status == .accepted
+                }
+                self.setItems(from: accepted)
         }
 
         self.collectionViewManager.allowMultipleSelection = true 
     }
 
-    private func setItems(from users: [User]) {
+    private func setItems(from connections: [Connection]) {
 
-        let orbItems = users.map { (user) in
-            return OrbCellItem(id: String(optional: user.userObjectID),
-                               avatar: AnyHashableDisplayable(user))
-        }
-
-        self.collectionViewManager.set(newItems: orbItems)
+//        let orbItems = connections.map { (connection) in
+//            return OrbCellItem(id: String(optional: connection.objectId),
+//                               avatar: AnyHashableDisplayable(connection.to!getConnectionsgetConnections))
+//        }
+//
+//        self.collectionViewManager.set(newItems: orbItems)
     }
 
     func getHeight(for width: CGFloat) -> CGFloat {

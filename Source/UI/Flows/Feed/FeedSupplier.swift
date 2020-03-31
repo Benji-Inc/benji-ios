@@ -36,6 +36,7 @@ class FeedSupplier {
         var promises: [Future<Void>] = []
         promises.append(self.getNotificationPermissions())
         promises.append(self.getUnreadMessages())
+        promises.append(self.getConnections())
 
         return waitForAll(futures: promises)
             .transform { (_) in
@@ -98,25 +99,21 @@ class FeedSupplier {
 
     private func getConnections() -> Future<Void> {
         let promise = Promise<Void>()
-        if let query = Connection.query() {
-            query.whereKey(ConnectionKey.to.rawValue, equalTo: User.current()!)
-            query.whereKey(ConnectionKey.status.rawValue, equalTo: Connection.Status.pending.rawValue)
-            query.includeKey(ConnectionKey.from.rawValue)
-            query.findObjectsInBackground { ( objects, error) in
-                if let connections = objects as? [Connection] {
+        GetAllConnections(direction: .incoming).makeRequest()
+            .observe { (result) in
+                switch result {
+                case .success(let connections):
                     connections.forEach { (connection) in
-                        self.items.append(.connectionRequest(connection))
+                        if connection.status == .invited {
+                            self.items.append(.connectionRequest(connection))
+                        }
                     }
                     promise.resolve(with: ())
-                } else if let error = error {
+                case .failure(let error):
                     promise.reject(with: error)
-                } else {
-                    promise.resolve(with: ())
                 }
-            }
-        } else {
-            promise.reject(with: ClientError.message(detail: "Failed to retrieve connections."))
         }
+
         return promise
     }
 }
