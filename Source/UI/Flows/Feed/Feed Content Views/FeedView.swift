@@ -19,6 +19,7 @@ class FeedView: View {
     lazy var unreadView = FeedUnreadView()
     lazy var needInvitesView = FeedInviteView()
     lazy var notificationsView = FeedNotificationPermissionsView()
+    lazy var connectionView = FeedConnectionView()
 
     var didComplete: CompletionOptional = nil
 
@@ -66,8 +67,12 @@ class FeedView: View {
             self.notificationsView.didGivePermission = { [unowned self] in
                 self.didComplete?()
             }
-        case .connectionRequest(_):
-            break 
+        case .connectionRequest(let connection):
+            self.container.addSubview(self.connectionView)
+            self.connectionView.connection = connection
+            self.connectionView.didComplete = { [unowned self] in
+                self.didComplete?()
+            }
         }
 
         self.container.layoutNow()

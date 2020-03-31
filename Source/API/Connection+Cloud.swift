@@ -39,13 +39,14 @@ struct CreateConnection: CloudFunction {
 struct UpdateConnection: CloudFunction {
 
     var connection: Connection
+    var status: Connection.Status
 
     func makeRequest() -> Future<Void> {
         let promise = Promise<Void>()
 
         PFCloud.callFunction(inBackground: "updateConnection",
                              withParameters: ["connectionID": self.connection.objectId!,
-                                              "status": self.connection.status!.rawValue]) { (object, error) in
+                                              "status": self.status.rawValue]) { (object, error) in
                                                 if let error = error {
                                                     promise.reject(with: error)
                                                 } else {
