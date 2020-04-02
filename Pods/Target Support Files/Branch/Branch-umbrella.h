@@ -15,6 +15,7 @@
 #import "BNCAppleSearchAds.h"
 #import "BNCApplication.h"
 #import "BNCAvailability.h"
+#import "BNCCallbackMap.h"
 #import "BNCCallbacks.h"
 #import "BNCCommerceEvent.h"
 #import "BNCConfig.h"

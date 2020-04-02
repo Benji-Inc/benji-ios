@@ -1,8 +1,8 @@
 PODS:
   - Bolts/Tasks (1.9.0)
-  - Branch (0.31.4):
-    - Branch/Core (= 0.31.4)
-  - Branch/Core (0.31.4)
+  - Branch (0.32.0):
+    - Branch/Core (= 0.32.0)
+  - Branch/Core (0.32.0)
   - GestureRecognizerClosures (5.0.0)
   - Koloda (5.0):
     - pop (~> 1.0)
@@ -23,7 +23,7 @@ PODS:
   - TMROExtensionObject (0.0.1)
   - TMROFutures (0.0.6)
   - TMROLocalization (0.0.2)
-  - TwilioChatClient (3.0.0)
+  - TwilioChatClient (3.0.1)
 
 DEPENDENCIES:
   - Branch
@@ -58,7 +58,7 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  Branch: 5180bca89b8942dd0fe8175d7ecb8a8a451cf5b0
+  Branch: 770a23c04d3f5410cf9231db099a444dd3060784
   GestureRecognizerClosures: 0dcafb45e669e7a775c840383e54b3d16983037b
   Koloda: 75302d21882cc3e274c1561b1155805ea5919dab
   lottie-ios: 85ce835dd8c53e02509f20729fc7d6a4e6645a0a
@@ -70,7 +70,7 @@ SPEC CHECKSUMS:
   TMROExtensionObject: 08ab13fbe9226deeeff0738ca7ca8d06f0019e0d
   TMROFutures: 644772c28f997ce292e9b67985eca927efaa5d7a
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
-  TwilioChatClient: 5e319bd5dd30a677e17bec5b76762492aa6e7d96
+  TwilioChatClient: 2a26ce3a86b4190e2e939ddbe5b0da9927846f66
 
 PODFILE CHECKSUM: f519453cecdd8527219117d514b7207b003bc0b2
 
