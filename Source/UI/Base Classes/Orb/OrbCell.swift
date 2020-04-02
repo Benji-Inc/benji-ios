@@ -11,7 +11,7 @@ import TMROLocalization
 
 class OrbCell: CollectionViewManagerCell, ManageableCell {
 
-    typealias ItemType = OrbCellItem
+    typealias ItemType = User
 
     let label = RegularBoldLabel()
     let imageView = AvatarView()
@@ -39,17 +39,21 @@ class OrbCell: CollectionViewManagerCell, ManageableCell {
         self.label.centerOnX()
     }
 
-    func configure(with item: OrbCellItem?) {
-        guard let orbItem = item else { return }
+    func configure(with item: User?) {
+        guard let user = item else { return }
 
-        self.imageView.set(avatar: orbItem.avatar.value)
+        user.fetchIfNeededInBackground { (object, error) in
+            guard let fullUser = object as? User else { return }
 
-        let displayName: Localized = orbItem.avatar.value.firstAndLastInitial ?? orbItem.avatar.value.fullName
-        self.label.set(text: displayName,
-                       color: .white,
-                       alignment: .center,
-                       stringCasing: .lowercase)
-        self.setNeedsLayout()
+            self.imageView.set(avatar: fullUser)
+
+            let displayName: Localized = fullUser.firstAndLastInitial ?? fullUser.fullName
+            self.label.set(text: displayName,
+                           color: .white,
+                           alignment: .center,
+                           stringCasing: .lowercase)
+            self.setNeedsLayout()
+        }
     }
 
     func update(isSelected: Bool) {

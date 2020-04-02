@@ -89,7 +89,7 @@ class InviteComposerCoordinator: Coordinator<Void> {
             let promise = Promise<String>()
             let message = LocalizedString(id: "",
                                           arguments: [link],
-                                          default: "Because you mean a lot to me, I want to have meaningful communication with you. Benji can help: @(link)")
+                                          default: "This beta will make you betta. Benji: @(link)")
             promise.resolve(with: localized(message))
             return promise
         }
@@ -98,14 +98,7 @@ class InviteComposerCoordinator: Coordinator<Void> {
     private func createLink(with phoneNumber: PhoneNumber) -> Future<String> {
         CreateConnection(phoneNumber: phoneNumber).makeRequest()
             .transform { (connection) -> String in
-                let canonicalIdentifier = UUID().uuidString
-                let buo = BranchUniversalObject(canonicalIdentifier: canonicalIdentifier)
-                buo.title = localized(LocalizedString(id: "", default: "Benji"))
-                buo.contentDescription = localized(LocalizedString(id: "", default: "Private message"))
-                buo.contentMetadata.customMetadata["connection_id"] = connection.objectId
-                let properties = BranchLinkProperties()
-                properties.channel = "iOS"
-                return buo.getShortUrl(with: properties)!
+                return "https://testflight.apple.com/join/w3CExYsD"
         } 
     }
 

@@ -35,11 +35,19 @@ final class Connection: PFObject, PFSubclassing {
     }
 
     var to: User? {
-        return self.getRelationalObject(for: .to)
+        return self.getObject(for: .to)
     }
 
     var from: User? {
-        return self.getRelationalObject(for: .from)
+        return self.getObject(for: .from)
+    }
+
+    var nonMeUser: User? {
+        if self.to?.objectId == User.current()?.objectId {
+            return self.from
+        } else {
+            return self.to
+        }
     }
 }
 

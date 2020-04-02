@@ -17,23 +17,22 @@ class ConnectionsViewController: OrbCollectionViewController, Sizeable {
 
         GetAllConnections().makeRequest()
             .observeValue { (connections) in
-                let accepted = connections.filter { (connection) -> Bool in
+                let items = connections.filter { (connection) -> Bool in
                     return connection.status == .accepted
                 }
-                self.setItems(from: accepted)
+
+                var users: [User] = []
+
+                items.forEach { (connection) in
+                    if let user = connection.nonMeUser {
+                        users.append(user)
+                    }
+                }
+
+                self.collectionViewManager.set(newItems: users)
         }
 
         self.collectionViewManager.allowMultipleSelection = true 
-    }
-
-    private func setItems(from connections: [Connection]) {
-
-//        let orbItems = connections.map { (connection) in
-//            return OrbCellItem(id: String(optional: connection.objectId),
-//                               avatar: AnyHashableDisplayable(connection.to!getConnectionsgetConnections))
-//        }
-//
-//        self.collectionViewManager.set(newItems: orbItems)
     }
 
     func getHeight(for width: CGFloat) -> CGFloat {
