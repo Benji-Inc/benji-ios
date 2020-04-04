@@ -28,11 +28,24 @@ class InviteableContentView: View {
 
     func configure(with inviteable: Inviteable) {
 
-        self.nameLabel.set(text: inviteable.fullName, stringCasing: .capitalized)
-        if let phone = inviteable.phoneNumber {
+        switch inviteable {
+        case .contact(_):
+            self.set(phoneNumber: inviteable.phoneNumber, avatar: inviteable)
+        case .connection(let connection):
+            connection.nonMeUser?.fetchIfNeededInBackground { (object, error) in
+                guard let nonMeUser = object as? User else { return }
+                self.set(phoneNumber: nonMeUser.phoneNumber, avatar: nonMeUser)
+            }
+        }
+    }
+
+    private func set(phoneNumber: String?, avatar: Avatar) {
+
+        self.nameLabel.set(text: avatar.fullName, stringCasing: .capitalized)
+        if let phone = phoneNumber {
             self.phoneNumberLabel.set(text: PhoneKit.formatter.formatPartial(phone), color: .background4)
         }
-        self.avatarView.set(avatar: inviteable)
+        self.avatarView.set(avatar: avatar)
 
         self.layoutNow()
     }

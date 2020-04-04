@@ -8,6 +8,7 @@
 
 import Foundation
 import Contacts
+import TMROFutures
 
 class PendingCollectionViewController: CollectionViewController<PendingInviteCell, PendingCollectionViewManager>, Sizeable  {
 
@@ -20,24 +21,15 @@ class PendingCollectionViewController: CollectionViewController<PendingInviteCel
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        self.loadConnections()
-    }
-
     func loadConnections() {
-        /// Grab pending connections
-        guard let query = Connection.query() else { return }
+        GetAllConnections(direction: .all)
+            .makeRequest()
+            .observeValue(with: { (connections) in
+                let items = connections.map { (connection) -> Inviteable in
+                    return .connection(connection)
+                }
 
-        query.whereKey(ConnectionKey.from.rawValue, equalTo: User.current()!)
-        query.whereKey(ConnectionKey.status.rawValue, equalTo: Connection.Status.invited.rawValue)
-        query.findObjectsInBackground { (objects, error) in
-            if let connections = objects as? [Connection] {
-                print(connections.count)
-            } else if let error = error {
-                print(error)
-            }
-        }
+                self.collectionViewManager.set(newItems: items)
+            })
     }
 }

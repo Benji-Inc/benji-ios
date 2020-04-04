@@ -45,9 +45,9 @@ class FeedConnectionView: View {
         if let user = connection.nonMeUser {
             user.fetchIfNeededInBackground { (object, error) in
                 guard let nonMeUser = object as? User else { return }
-                self.avatarView.set(avatar: user)
+                self.avatarView.set(avatar: nonMeUser)
 
-                let text = LocalizedString(id: "", arguments: [user.givenName], default: "@(first) would like to connect with you.")
+                let text = LocalizedString(id: "", arguments: [nonMeUser.givenName], default: "@(first) would like to connect with you.")
                 self.textView.set(localizedText: text)
                 self.layoutNow()
             }

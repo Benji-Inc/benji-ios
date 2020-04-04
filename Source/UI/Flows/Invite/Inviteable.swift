@@ -11,14 +11,14 @@ import Contacts
 
 enum Inviteable: ManageableCellItem {
     case contact(CNContact)
-    case user(User)
+    case connection(Connection)
 
     var id: String {
         switch self {
         case .contact(let contact):
             return contact.identifier
-        case .user(let user):
-            return user.objectId!
+        case .connection(let connection):
+            return connection.objectId!
         }
     }
 }
@@ -29,8 +29,8 @@ extension Inviteable: Avatar {
         switch self {
         case .contact(let contact):
             return contact.givenName
-        case .user(let user):
-            return user.givenName
+        case .connection(let connection):
+            return connection.nonMeUser?.givenName ?? String()
         }
     }
 
@@ -38,8 +38,8 @@ extension Inviteable: Avatar {
         switch self {
         case .contact(let contact):
             return contact.familyName
-        case .user(let user):
-            return user.familyName
+        case .connection(let connection):
+            return connection.nonMeUser?.familyName ?? String()
         }
     }
 
@@ -47,8 +47,8 @@ extension Inviteable: Avatar {
         switch self {
         case .contact(_):
             return nil
-        case .user(let user):
-            return user.objectId!
+        case .connection(let connection):
+            return connection.nonMeUser?.objectId
         }
     }
 
@@ -56,8 +56,8 @@ extension Inviteable: Avatar {
         switch self {
         case .contact(let contact):
             return contact.image
-        case .user(let user):
-            return user.image
+        case .connection(let connection):
+            return connection.nonMeUser?.image
         }
     }
 
@@ -65,8 +65,8 @@ extension Inviteable: Avatar {
         switch self {
         case .contact(let contact):
             return contact.primaryPhoneNumber
-        case .user(let user):
-            return user.phoneNumber
+        case .connection(let connection):
+            return connection.nonMeUser?.phoneNumber
         }
     }
 }
