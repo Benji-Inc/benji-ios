@@ -8,8 +8,7 @@
 
 import Foundation
 
-class PendingInviteCell: UICollectionViewCell, ManageableCell {
-    typealias ItemType = Inviteable
+class PendingConnectionCell: UICollectionViewCell {
 
     var onLongPress: (() -> Void)?
 
@@ -28,14 +27,10 @@ class PendingInviteCell: UICollectionViewCell, ManageableCell {
         self.contentView.addSubview(self.content)
     }
 
-    func configure(with item: Inviteable?) {
-        guard let inviteable = item else { return }
+    func configure(with item: Connection) {
 
-        self.content.configure(with: inviteable)
+       // self.content.configure(with: inviteable)
     }
-
-    func collectionViewManagerWillDisplay() {}
-    func collectionViewManagerDidEndDisplaying() {}
 
     override func layoutSubviews() {
         super.layoutSubviews()

@@ -61,7 +61,7 @@ extension InvitesCoordinator: InvitesViewControllerDelegate {
                                             contacts: contacts,
                                             source: controller)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
-            controller.reset()
+            //controller.reset()
         })
     }
 }

@@ -16,19 +16,13 @@ protocol InvitesViewControllerDelegate: class {
     func invitesView(_ controller: InvitesViewController, didSelect contacts: [CNContact])
 }
 
-class InvitesViewController: SwitchableContentViewController<InvitesContentType> {
-
-    lazy var contactsVC = ContactsViewController(with: self.delegate)
-    lazy var pendingVC = PendingCollectionViewController()
+class InvitesViewController: NavigationBarViewController {
 
     unowned let delegate: InvitesViewControllerDelegates
     private let button = Button()
     private let gradientView = GradientView(with: .background2)
     var buttonOffset: CGFloat?
 
-    var selectedContacts: [CNContact] {
-        return self.contactsVC.collectionViewManager.selectedItems
-    }
 
     init(with delegate: InvitesViewControllerDelegates) {
         self.delegate = delegate
@@ -45,79 +39,14 @@ class InvitesViewController: SwitchableContentViewController<InvitesContentType>
         self.view.addSubview(self.gradientView)
         self.view.addSubview(self.button)
         self.button.didSelect = { [unowned self] in
-            switch self.currentContent.value {
-            case .contacts(_):
-                self.delegate.invitesView(self, didSelect: self.selectedContacts)
-            case .pending(_):
-                self.currentContent.value = .contacts(self.contactsVC)
-            }
-        }
-        
-        self.currentContent.signal.observeValues { (_) in
-            self.updateButton()
+//            switch self.currentContent.value {
+//            case .contacts(_):
+//                self.delegate.invitesView(self, didSelect: self.selectedContacts)
+//            case .pending(_):
+//                self.currentContent.value = .contacts(self.contactsVC)
+//            }
         }
 
-        self.contactsVC.collectionViewManager.onSelectedItem.signal.observeValues { [unowned self] (_) in
-            self.updateNavigationBar(animateBackButton: false)
-            self.updateButton()
-        }
-
-        self.contactsVC.getAuthorizationStatus()
-    }
-
-    func reset() {
-        switch self.currentContent.value {
-        case .contacts(_):
-            self.buttonOffset = nil
-            self.animateButton(with: self.view.height + 100)
-            self.contactsVC.collectionViewManager.reset()
-            self.contactsVC.getContacts()
-        case .pending(_):
-            break
-        }
-    }
-
-    override func getTitle() -> Localized {
-        switch self.currentContent.value {
-        case .contacts(_):
-            return "Send Invites"
-        case .pending(_):
-            return "Pending Invites"
-        }
-    }
-
-    override func getDescription() -> Localized {
-        switch self.currentContent.value {
-        case .contacts(_):
-            return "Select the people you want to invite."
-        case .pending(let vc):
-            let count = String(vc.collectionViewManager.items.value.count)
-            let description = LocalizedString(id: "",
-                                              arguments: [count],
-                                              default: "You have @(count) pending invites.")
-            return description
-        }
-    }
-
-    override func getInitialContent() -> InvitesContentType {
-        return .pending(self.pendingVC)
-    }
-
-    override func didSelectBackButton() {
-        self.currentContent.value = .pending(self.pendingVC)
-    }
-
-    override func willUpdateContent() {
-        self.view.bringSubviewToFront(self.gradientView)
-        self.view.bringSubviewToFront(self.button)
-        switch self.currentContent.value {
-        case .contacts(let vc):
-            vc.getAuthorizationStatus()
-        case .pending(let vc):
-            vc.loadConnections()
-        }
-
-        self.updateButton()
     }
 
     override func viewDidLayoutSubviews() {
@@ -134,12 +63,12 @@ class InvitesViewController: SwitchableContentViewController<InvitesContentType>
     }
 
     private func updateButton() {
-        switch self.currentContent.value {
-        case .contacts(_):
-            self.updateButtonForContacts()
-        case .pending(_):
-            self.updateButtonForPending()
-        }
+//        switch self.currentContent.value {
+//        case .contacts(_):
+//            self.updateButtonForContacts()
+//        case .pending(_):
+//            self.updateButtonForPending()
+//        }
     }
 
     private func updateButtonForPending() {
@@ -149,25 +78,25 @@ class InvitesViewController: SwitchableContentViewController<InvitesContentType>
     }
 
     private func updateButtonForContacts() {
-        let buttonText: LocalizedString
-        if self.selectedContacts.count > 1 {
-            buttonText = LocalizedString(id: "",
-                                         arguments: [String(self.selectedContacts.count)],
-                                         default: "SEND @(count) INVITES")
-        } else {
-            buttonText = LocalizedString(id: "", default: "SEND INVITE")
-        }
-
-        self.button.set(style: .normal(color: .purple, text: buttonText))
-
-        var newOffset: CGFloat
-        if self.selectedContacts.count >= 1 {
-            newOffset = self.view.height - self.view.safeAreaInsets.bottom
-        } else {
-            newOffset = self.view.height + 100
-        }
-
-        self.animateButton(with: newOffset)
+//        let buttonText: LocalizedString
+//        if self.selectedContacts.count > 1 {
+//            buttonText = LocalizedString(id: "",
+//                                         arguments: [String(self.selectedContacts.count)],
+//                                         default: "SEND @(count) INVITES")
+//        } else {
+//            buttonText = LocalizedString(id: "", default: "SEND INVITE")
+//        }
+//
+//        self.button.set(style: .normal(color: .purple, text: buttonText))
+//
+//        var newOffset: CGFloat
+//        if self.selectedContacts.count >= 1 {
+//            newOffset = self.view.height - self.view.safeAreaInsets.bottom
+//        } else {
+//            newOffset = self.view.height + 100
+//        }
+//
+//        self.animateButton(with: newOffset)
     }
 
     private func animateButton(with newOffset: CGFloat) {
@@ -180,5 +109,21 @@ class InvitesViewController: SwitchableContentViewController<InvitesContentType>
                        animations: {
                         self.view.layoutNow()
         }) { (completed) in }
+    }
+
+    func loadPendingConnections() {
+        GetAllConnections(direction: .all)
+            .makeRequest()
+            .observeValue(with: { (connections) in
+                let items = connections.compactMap { (connection) -> Inviteable? in
+                    if let status = connection.status, status == .invited {
+                        return .connection(connection)
+                    }
+
+                    return nil
+                }
+
+                //self.collectionViewManager.set(newItems: items)
+            })
     }
 }
