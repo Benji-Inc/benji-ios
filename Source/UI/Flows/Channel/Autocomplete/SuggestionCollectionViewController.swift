@@ -24,7 +24,7 @@ class SuggestionCollectionViewController: CollectionViewController<SuggestionCel
 
     init(parentController: UIViewController) {
 
-        let collectionView = ContactsCollectionView()
+        let collectionView = CollectionView(layout: UICollectionViewFlowLayout())
         super.init(with: collectionView)
         parentController.addChild(self)
     }

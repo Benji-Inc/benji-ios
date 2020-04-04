@@ -10,21 +10,20 @@ import Foundation
 import TMROLocalization
 import Contacts
 
-typealias InvitesViewControllerDelegates = InvitesViewControllerDelegate & ContactsViewControllerDelegate
-
 protocol InvitesViewControllerDelegate: class {
     func invitesView(_ controller: InvitesViewController, didSelect contacts: [CNContact])
 }
 
 class InvitesViewController: NavigationBarViewController {
 
-    unowned let delegate: InvitesViewControllerDelegates
+    unowned let delegate: InvitesViewControllerDelegate
     private let button = Button()
     private let gradientView = GradientView(with: .background2)
     var buttonOffset: CGFloat?
+    lazy var collectionView = InvitesCollectionView()
+    lazy var collectionViewManager = InvitesCollectionViewManager(with: self.collectionView)
 
-
-    init(with delegate: InvitesViewControllerDelegates) {
+    init(with delegate: InvitesViewControllerDelegate) {
         self.delegate = delegate
         super.init()
     }
@@ -125,5 +124,25 @@ class InvitesViewController: NavigationBarViewController {
 
                 //self.collectionViewManager.set(newItems: items)
             })
+    }
+
+    func getAuthorizationStatus() {
+        ContactsManager.shared.getAuthorizationStatus { [unowned self] (authorizationStatus) in
+            //self.delegate.contactsView(self, didGetAuthorization: authorizationStatus)
+        }
+    }
+
+    func getContacts() {
+        runMain {
+            self.collectionView.activityIndicator.startAnimating()
+        }
+
+        ContactsManager.shared.getContacts { [weak self] (contacts: [CNContact]) in
+            guard let `self` = self else { return }
+
+            self.collectionView.activityIndicator.stopAnimating()
+            //self.sort(contacts: contacts)
+            self.collectionView.reloadDataAndKeepOffset()
+        }
     }
 }

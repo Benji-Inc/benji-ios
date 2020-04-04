@@ -9,8 +9,7 @@
 import Foundation
 import Contacts
 
-class ContactCell: UICollectionViewCell, ManageableCell {
-    typealias ItemType = CNContact
+class ContactCell: UICollectionViewCell {
 
     var onLongPress: (() -> Void)?
 
@@ -50,9 +49,6 @@ class ContactCell: UICollectionViewCell, ManageableCell {
     func update(isSelected: Bool) {
         self.showSelected = isSelected
     }
-
-    func collectionViewManagerWillDisplay() {}
-    func collectionViewManagerDidEndDisplaying() {}
 
     override func layoutSubviews() {
         super.layoutSubviews()
