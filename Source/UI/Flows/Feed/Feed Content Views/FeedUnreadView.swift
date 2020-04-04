@@ -44,7 +44,7 @@ class FeedUnreadView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.avatarView.size = CGSize(width: 100, height: 100)
+        self.avatarView.size = CGSize(width: 80, height: 100)
         self.avatarView.centerOnX()
         self.avatarView.top = self.height * 0.3
 

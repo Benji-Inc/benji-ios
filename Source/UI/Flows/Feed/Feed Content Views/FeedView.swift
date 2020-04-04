@@ -69,7 +69,7 @@ class FeedView: View {
             }
         case .connectionRequest(let connection):
             self.container.addSubview(self.connectionView)
-            self.connectionView.connection = connection
+            self.connectionView.configure(connection: connection)
             self.connectionView.didComplete = { [unowned self] in
                 self.didComplete?()
             }

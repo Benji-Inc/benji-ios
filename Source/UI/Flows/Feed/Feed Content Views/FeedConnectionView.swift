@@ -7,22 +7,26 @@
 //
 
 import Foundation
+import TMROLocalization
 
 class FeedConnectionView: View {
 
+    private let avatarView = AvatarView()
     private let textView = FeedTextView()
     private let acceptButton = LoadingButton()
     private let declineButton = LoadingButton()
     var didComplete: () -> Void = {}
 
-    var connection: Connection?
+    private var connection: Connection?
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        self.addSubview(self.avatarView)
         self.addSubview(self.textView)
         self.addSubview(self.acceptButton)
         self.addSubview(self.declineButton)
+
         self.textView.set(localizedText: "Connection request.")
         self.acceptButton.set(style: .rounded(color: .blue, text: "Accept"))
         self.acceptButton.didSelect = { [unowned self] in
@@ -35,11 +39,30 @@ class FeedConnectionView: View {
         }
     }
 
+    func configure(connection: Connection) {
+        self.connection = connection
+
+        if let user = connection.nonMeUser {
+            user.fetchIfNeededInBackground { (object, error) in
+                guard let nonMeUser = object as? User else { return }
+                self.avatarView.set(avatar: user)
+
+                let text = LocalizedString(id: "", arguments: [user.givenName], default: "@(first) would like to connect with you.")
+                self.textView.set(localizedText: text)
+                self.layoutNow()
+            }
+        }
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        self.avatarView.size = CGSize(width: 80, height: 100)
+        self.avatarView.centerOnX()
+        self.avatarView.top = self.height * 0.3
+
         self.textView.setSize(withWidth: self.width)
-        self.textView.bottom = self.centerY - 10
+        self.textView.top = self.avatarView.bottom + 10
         self.textView.centerOnX()
 
         self.acceptButton.setSize(with: self.width * 0.4)

@@ -45,7 +45,7 @@ struct UpdateConnection: CloudFunction {
         let promise = Promise<Void>()
 
         PFCloud.callFunction(inBackground: "updateConnection",
-                             withParameters: ["connectionID": self.connection.objectId!,
+                             withParameters: ["connectionId": self.connection.objectId!,
                                               "status": self.status.rawValue]) { (object, error) in
                                                 if let error = error {
                                                     promise.reject(with: error)
