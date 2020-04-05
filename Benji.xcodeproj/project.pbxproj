@@ -100,7 +100,6 @@
 		D646DB3E22CFCF330055CC7C /* TwilioChatClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3D22CFCF330055CC7C /* TwilioChatClient+Extensions.swift */; };
 		D646DB4022CFCFDB0055CC7C /* Future+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3F22CFCFDB0055CC7C /* Future+Extensions.swift */; };
 		D646DB4422CFDE0C0055CC7C /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB4322CFDE0C0055CC7C /* LoadingView.swift */; };
-		D6486DCC23EF14C2007ED680 /* PendingConnectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6486DCB23EF14C2007ED680 /* PendingConnectionCell.swift */; };
 		D6486DD023EF15A2007ED680 /* Inviteable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6486DCF23EF15A2007ED680 /* Inviteable.swift */; };
 		D64932D723FE460200986335 /* FeedIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64932D623FE460200986335 /* FeedIndicatorView.swift */; };
 		D64932FD2402EBA600986335 /* RoutineCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64932FC2402EBA600986335 /* RoutineCoordinator.swift */; };
@@ -190,9 +189,6 @@
 		D68540DC235FED41006F666C /* SuggestionCollectionViewLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68540DB235FED41006F666C /* SuggestionCollectionViewLayoutAttributes.swift */; };
 		D68540DE235FEE96006F666C /* SuggestionCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68540DD235FEE96006F666C /* SuggestionCellAttributesConfigurer.swift */; };
 		D68540E1235FF056006F666C /* TextSuggestionCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68540E0235FF056006F666C /* TextSuggestionCellAttributesConfigurer.swift */; };
-		D685CE9324393E140018F3E3 /* InvitesCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9224393E140018F3E3 /* InvitesCollectionViewManager.swift */; };
-		D685CE9524393E6D0018F3E3 /* InvitesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9424393E6D0018F3E3 /* InvitesCollectionView.swift */; };
-		D685CE9924396BA30018F3E3 /* InviteSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9824396BA30018F3E3 /* InviteSectionHeader.swift */; };
 		D685CE9B243976860018F3E3 /* InviteableCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9A243976860018F3E3 /* InviteableCollectionViewController.swift */; };
 		D685CE9D2439769E0018F3E3 /* InviteableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9C2439769E0018F3E3 /* InviteableCell.swift */; };
 		D685CE9F243976C60018F3E3 /* InviteableCollectionViewManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9E243976C60018F3E3 /* InviteableCollectionViewManger.swift */; };
@@ -419,7 +415,6 @@
 		D646DB3D22CFCF330055CC7C /* TwilioChatClient+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TwilioChatClient+Extensions.swift"; sourceTree = "<group>"; };
 		D646DB3F22CFCFDB0055CC7C /* Future+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Future+Extensions.swift"; sourceTree = "<group>"; };
 		D646DB4322CFDE0C0055CC7C /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
-		D6486DCB23EF14C2007ED680 /* PendingConnectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PendingConnectionCell.swift; sourceTree = "<group>"; };
 		D6486DCF23EF15A2007ED680 /* Inviteable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inviteable.swift; sourceTree = "<group>"; };
 		D64932D623FE460200986335 /* FeedIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedIndicatorView.swift; sourceTree = "<group>"; };
 		D64932FC2402EBA600986335 /* RoutineCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineCoordinator.swift; sourceTree = "<group>"; };
@@ -510,9 +505,6 @@
 		D68540DB235FED41006F666C /* SuggestionCollectionViewLayoutAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionCollectionViewLayoutAttributes.swift; sourceTree = "<group>"; };
 		D68540DD235FEE96006F666C /* SuggestionCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionCellAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D68540E0235FF056006F666C /* TextSuggestionCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSuggestionCellAttributesConfigurer.swift; sourceTree = "<group>"; };
-		D685CE9224393E140018F3E3 /* InvitesCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitesCollectionViewManager.swift; sourceTree = "<group>"; };
-		D685CE9424393E6D0018F3E3 /* InvitesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitesCollectionView.swift; sourceTree = "<group>"; };
-		D685CE9824396BA30018F3E3 /* InviteSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteSectionHeader.swift; sourceTree = "<group>"; };
 		D685CE9A243976860018F3E3 /* InviteableCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCollectionViewController.swift; sourceTree = "<group>"; };
 		D685CE9C2439769E0018F3E3 /* InviteableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCell.swift; sourceTree = "<group>"; };
 		D685CE9E243976C60018F3E3 /* InviteableCollectionViewManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCollectionViewManger.swift; sourceTree = "<group>"; };
@@ -1474,12 +1466,8 @@
 				D642737922C99DD20088256B /* ContactCell.swift */,
 				D6486DCF23EF15A2007ED680 /* Inviteable.swift */,
 				D645996423EF199600BE3F0B /* InviteableContentView.swift */,
-				D685CE9424393E6D0018F3E3 /* InvitesCollectionView.swift */,
-				D685CE9224393E140018F3E3 /* InvitesCollectionViewManager.swift */,
 				D690965723EE6E77008864B6 /* InvitesCoordinator.swift */,
-				D685CE9824396BA30018F3E3 /* InviteSectionHeader.swift */,
 				D6D87E8A23E69F8400D6A7ED /* InvitesViewController.swift */,
-				D6486DCB23EF14C2007ED680 /* PendingConnectionCell.swift */,
 				D685CE9A243976860018F3E3 /* InviteableCollectionViewController.swift */,
 				D685CE9C2439769E0018F3E3 /* InviteableCell.swift */,
 				D685CE9E243976C60018F3E3 /* InviteableCollectionViewManger.swift */,
@@ -1692,7 +1680,6 @@
 				D6D14D9121D5893600CD8CE4 /* IGListIndexSetResult.m in Sources */,
 				D642735522C87CCA0088256B /* ImageViewButton.swift in Sources */,
 				D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */,
-				D685CE9924396BA30018F3E3 /* InviteSectionHeader.swift in Sources */,
 				D67934DB23DC011D00536B44 /* CharacterCountView.swift in Sources */,
 				D67896BD23025FEC0059BA75 /* NameViewController.swift in Sources */,
 				D6D14FFB21D5893700CD8CE4 /* DiffableBox.swift in Sources */,
@@ -1725,7 +1712,6 @@
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
 				D642736622C971FD0088256B /* FeedTextView.swift in Sources */,
 				D6DADF6C2207DCA8007D9EB1 /* ChannelsViewController.swift in Sources */,
-				D685CE9524393E6D0018F3E3 /* InvitesCollectionView.swift in Sources */,
 				D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */,
 				D6D1503321D7E5F800CD8CE4 /* UIDynamicAnimator+Extensions.swift in Sources */,
 				D6D6D57223A6D43100D2B5BF /* CancelButton.swift in Sources */,
@@ -1814,7 +1800,6 @@
 				D6D1461121D583D200CD8CE4 /* RootNavigationController.swift in Sources */,
 				D61EC0EC21D312B600204BEE /* UIView+Extensions.swift in Sources */,
 				D6D1504021DAFB8300CD8CE4 /* UITextField+Extensions.swift in Sources */,
-				D685CE9324393E140018F3E3 /* InvitesCollectionViewManager.swift in Sources */,
 				D67896CA23039E680059BA75 /* ScrolledModalControllerPresentable.swift in Sources */,
 				D60C814622092F6B00A127A3 /* Button.swift in Sources */,
 				D64F5F1F23B670C300216D99 /* PurposeInputAccessoryView.swift in Sources */,
@@ -1846,7 +1831,6 @@
 				D64932FD2402EBA600986335 /* RoutineCoordinator.swift in Sources */,
 				D64C6A99232D6C0200DB7257 /* TypingBubbleView.swift in Sources */,
 				D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */,
-				D6486DCC23EF14C2007ED680 /* PendingConnectionCell.swift in Sources */,
 				D646DB4022CFCFDB0055CC7C /* Future+Extensions.swift in Sources */,
 				D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */,
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
