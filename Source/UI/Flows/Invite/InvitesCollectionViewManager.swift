@@ -176,6 +176,34 @@ class InvitesCollectionViewManager: NSObject, UICollectionViewDataSource, UIColl
         //cell.update(isSelected: self.selectedIndexPaths.contains(indexPath))
     }
 
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            return self.header(for: collectionView, at: indexPath)
+        case UICollectionView.elementKindSectionFooter:
+            fatalError("UNRECOGNIZED SECTION KIND")
+        default:
+            fatalError("UNRECOGNIZED SECTION KIND")
+        }
+    }
+
+    private func header(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let invitesCollectionView = collectionView as? InvitesCollectionView else { fatalError() }
+
+        let header = invitesCollectionView.dequeueReusableHeaderView(InviteSectionHeader.self, for: indexPath)
+
+        return header
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.width, height: 60)
+    }
+
     // MARK: CollectionView Delegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

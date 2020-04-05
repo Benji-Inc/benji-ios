@@ -25,5 +25,6 @@ class InvitesCollectionView: CollectionView {
 
         self.register(PendingConnectionCell.self)
         self.register(ContactCell.self)
+        self.register(InviteSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
     }
 }
