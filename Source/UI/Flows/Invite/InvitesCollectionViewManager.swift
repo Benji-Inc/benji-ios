@@ -55,6 +55,11 @@ class InvitesCollectionViewManager: NSObject, UICollectionViewDataSource, UIColl
         self.collectionView.dataSource = self
     }
 
+    func set(items: [[Inviteable]]) {
+        self.items.value = items
+        self.collectionView.reloadData()
+    }
+
     func reset() {
         self.selectedIndexPaths = []
         self.items.value = []

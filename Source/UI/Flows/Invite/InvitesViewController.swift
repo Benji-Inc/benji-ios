@@ -130,6 +130,7 @@ class InvitesViewController: NavigationBarViewController {
         waitForAll(futures: [pendingPromise, contactsPromise])
             .observeValue { (allItems) in
                 //load these
+                self.collectionViewManager.set(items: allItems)
                 runMain {
                     self.collectionView.activityIndicator.stopAnimating()
                 }
