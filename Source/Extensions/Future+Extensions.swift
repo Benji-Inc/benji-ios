@@ -86,8 +86,10 @@ extension Future {
 
 private let waitSyncQueue = DispatchQueue(label: "When.SyncQueue", attributes: [])
 
-func waitForAll<Value>(futures: [Future<Value>]) -> Future<[Value]> {
+func waitForAll<Value>(futures: [Future<Value>], queue: DispatchQueue? = nil) -> Future<[Value]> {
     let masterPromise = Promise<[Value]>()
+
+    let waitQueue = queue ?? waitSyncQueue
 
     let totalFutures = futures.count
     var resolvedFutures = 0
@@ -98,7 +100,7 @@ func waitForAll<Value>(futures: [Future<Value>]) -> Future<[Value]> {
     } else {
         futures.forEach { promise in
             promise.observe(with: { (result) in
-                waitSyncQueue.sync {
+                waitQueue.sync {
                     switch result {
                     case .success(let value):
                         resolvedFutures += 1

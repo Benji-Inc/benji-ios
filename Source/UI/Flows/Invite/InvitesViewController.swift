@@ -28,6 +28,9 @@ class InvitesViewController: NavigationBarViewController {
     private var connections: [Connection] = []
     private var contacts: [CNContact] = []
 
+    private let firstSyncQueue = DispatchQueue(label: "First.SyncQueue", attributes: [])
+    private let secondSyncQueue = DispatchQueue(label: "Second.SyncQueue", attributes: [])
+
     private var selectedContacts: [CNContact] {
         return self.inviteablVC.collectionViewManager.selectedItems.compactMap { (inviteable) -> CNContact? in
             switch inviteable {
@@ -139,7 +142,7 @@ class InvitesViewController: NavigationBarViewController {
         let pendingPromise = self.loadPendingConnections()
         let contactsPromise = self.getContacts()
 
-        waitForAll(futures: [pendingPromise, contactsPromise])
+        waitForAll(futures: [pendingPromise, contactsPromise], queue: self.firstSyncQueue)
             .observeValue { (_) in
 
                 self.replaceDuplicates(from: self.connections, and: self.contacts)
@@ -162,7 +165,7 @@ class InvitesViewController: NavigationBarViewController {
             }
         }
 
-        waitForAll(futures: connectionPromises)
+        waitForAll(futures: connectionPromises, queue: self.secondSyncQueue)
             .observeValue { (users) in
                 var finalItems: [Inviteable] = []
 
@@ -171,7 +174,7 @@ class InvitesViewController: NavigationBarViewController {
                         if self.shouldAddConneciton(from: user, contact: contact),
                             let connection = connections[safe: index] {
                             finalItems.append(.connection(connection))
-                        } else {
+                        } else if !finalItems.contains(.contact(contact)) {
                             finalItems.append(.contact(contact))
                         }
                     }
