@@ -52,7 +52,7 @@ class ContactsManager: NSObject {
     fileprivate let contactStoreQueue = DispatchQueue(label: Bundle.main.bundleIdentifier!+".MGCContactStore",
                                                       attributes: DispatchQueue.Attributes.concurrent)
 
-    func getContacts(withCompletion completion: @escaping(_ contacts: [CNContact]) -> Void) {
+    func getContacts(removeMe: Bool = true, withCompletion completion: @escaping(_ contacts: [CNContact]) -> Void) {
 
         let authorizationStatus = CNContactStore.authorizationStatus(for: CNEntityType.contacts)
 
@@ -95,7 +95,19 @@ class ContactsManager: NSObject {
 
                 // Once the contacts are retrieved, call the completion block on the main thread to avoid up updating UI off main
                 runMain {
-                    completion(results)
+                    var finalResults: [CNContact] = []
+                    if removeMe, let phone = User.current()?.phoneNumber?.formatPhoneNumber() {
+                        finalResults = results.filter { (contact) -> Bool in
+                            if let contactPhone = contact.primaryPhoneNumber, contactPhone == phone {
+                                return false
+                            } else {
+                                return true
+                            }
+                        }
+                    } else {
+                        finalResults = results
+                    }
+                    completion(finalResults)
                 }
             }
         @unknown default:

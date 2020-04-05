@@ -21,11 +21,11 @@ class InvitesViewController: NavigationBarViewController {
     private let button = Button()
     private let gradientView = GradientView(with: .background2)
     var buttonOffset: CGFloat?
-    lazy var collectionView = InvitesCollectionView()
-    lazy var collectionViewManager = InvitesCollectionViewManager(with: self.collectionView)
 
-    private var connections: [Inviteable] = []
-    private var contacts: [Inviteable] = []
+    lazy var inviteablVC = InviteableCollectionViewController()
+
+    private var connections: [Connection] = []
+    private var contacts: [CNContact] = []
 
     init(with delegate: InvitesViewControllerDelegate) {
         self.delegate = delegate
@@ -39,7 +39,7 @@ class InvitesViewController: NavigationBarViewController {
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.addSubview(self.collectionView)
+        self.addChild(viewController: self.inviteablVC)
         self.view.addSubview(self.gradientView)
         self.view.addSubview(self.button)
         self.backButton.isVisible = false
@@ -64,9 +64,9 @@ class InvitesViewController: NavigationBarViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.collectionView.size = CGSize(width: self.view.width, height: self.view.height - self.lineView.bottom)
-        self.collectionView.top = self.lineView.bottom
-        self.collectionView.centerOnX()
+        self.inviteablVC.view.size = CGSize(width: self.view.width, height: self.view.height - self.lineView.bottom)
+        self.inviteablVC.view.top = self.lineView.bottom
+        self.inviteablVC.view.centerOnX()
 
         self.button.setSize(with: self.view.width)
         self.button.centerOnX()
@@ -137,31 +137,63 @@ class InvitesViewController: NavigationBarViewController {
 
     func loadItems() {
 
-        self.collectionView.activityIndicator.startAnimating()
+        self.inviteablVC.collectionView.activityIndicator.startAnimating()
         let pendingPromise = self.loadPendingConnections()
         let contactsPromise = self.getContacts()
 
         waitForAll(futures: [pendingPromise, contactsPromise])
             .observeValue { (_) in
-                var allItems: [[Inviteable]] = []
-                allItems.append(self.connections)
-                allItems.append(self.contacts)
-                self.collectionViewManager.set(items: allItems)
-                runMain {
-                    self.collectionView.activityIndicator.stopAnimating()
+
+                self.replaceDuplicates(from: self.connections, and: self.contacts)
+                    .observeValue { (allItems) in
+                        runMain {
+                            self.inviteablVC.collectionViewManager.set(newItems: allItems)
+                            self.inviteablVC.collectionView.activityIndicator.stopAnimating()
+                        }
                 }
         }
+    }
+
+    private func replaceDuplicates(from connections: [Connection], and contacts: [CNContact]) -> Future<[Inviteable]> {
+        let promise = Promise<[Inviteable]>()
+
+        var connectionPromises: [Future<User>] = []
+        connections.forEach { (connection) in
+            if let user = connection.nonMeUser {
+                connectionPromises.append(user.fetchUserIfNeeded())
+            }
+        }
+
+        waitForAll(futures: connectionPromises)
+            .observeValue { (users) in
+                var finalItems: [Inviteable] = []
+
+                for (index, user) in users.enumerated() {
+                    if let phone = user.phoneNumber?.formatPhoneNumber() {
+                        for contact in contacts {
+                            if let contactPhone = contact.primaryPhoneNumber?.formatPhoneNumber(),
+                                phone == contactPhone,
+                                let connection = connections[safe: index] {
+                                finalItems.append(.connection(connection))
+                            } else {
+                                finalItems.append(.contact(contact))
+                            }
+                        }
+                    }
+                }
+
+                promise.resolve(with: finalItems)
+        }
+
+        return promise
     }
 
     private func loadPendingConnections() -> Future<Void> {
         let promise = Promise<Void>()
         GetAllConnections(direction: .all)
             .makeRequest()
-            .observeValue(with: { (connections) in
-                let items = connections.map { (connection) -> Inviteable in
-                    return .connection(connection)
-                }
-                self.connections = items
+            .observeValue(with: { [unowned self] (connections) in
+                self.connections = connections
                 promise.resolve(with: ())
             })
 
@@ -171,12 +203,8 @@ class InvitesViewController: NavigationBarViewController {
     private func getContacts() -> Future<Void> {
         let promise = Promise<Void>()
 
-        ContactsManager.shared.getContacts { (contacts: [CNContact]) in
-            let items = contacts.compactMap { (contact) -> Inviteable? in
-                return .contact(contact)
-            }
-
-            self.contacts = items
+        ContactsManager.shared.getContacts { [unowned self] (contacts: [CNContact]) in
+            self.contacts = contacts
             promise.resolve(with: ())
         }
 

@@ -28,8 +28,7 @@ class PendingConnectionCell: UICollectionViewCell {
     }
 
     func configure(with item: Connection) {
-
-       // self.content.configure(with: inviteable)
+        self.content.configure(with: .connection(item))
     }
 
     override func layoutSubviews() {

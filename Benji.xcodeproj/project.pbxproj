@@ -193,6 +193,10 @@
 		D685CE9324393E140018F3E3 /* InvitesCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9224393E140018F3E3 /* InvitesCollectionViewManager.swift */; };
 		D685CE9524393E6D0018F3E3 /* InvitesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9424393E6D0018F3E3 /* InvitesCollectionView.swift */; };
 		D685CE9924396BA30018F3E3 /* InviteSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9824396BA30018F3E3 /* InviteSectionHeader.swift */; };
+		D685CE9B243976860018F3E3 /* InviteableCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9A243976860018F3E3 /* InviteableCollectionViewController.swift */; };
+		D685CE9D2439769E0018F3E3 /* InviteableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9C2439769E0018F3E3 /* InviteableCell.swift */; };
+		D685CE9F243976C60018F3E3 /* InviteableCollectionViewManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9E243976C60018F3E3 /* InviteableCollectionViewManger.swift */; };
+		D685CEA1243978AB0018F3E3 /* InviteableCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEA0243978AB0018F3E3 /* InviteableCollectionView.swift */; };
 		D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685E9262331177100CC1BAB /* UserNotificationManager.swift */; };
 		D68DC7FC22EE5D9000BEAF80 /* FeedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */; };
 		D690965023E7B835008864B6 /* MessageComposerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D690964F23E7B835008864B6 /* MessageComposerViewController.swift */; };
@@ -509,6 +513,10 @@
 		D685CE9224393E140018F3E3 /* InvitesCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitesCollectionViewManager.swift; sourceTree = "<group>"; };
 		D685CE9424393E6D0018F3E3 /* InvitesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitesCollectionView.swift; sourceTree = "<group>"; };
 		D685CE9824396BA30018F3E3 /* InviteSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteSectionHeader.swift; sourceTree = "<group>"; };
+		D685CE9A243976860018F3E3 /* InviteableCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCollectionViewController.swift; sourceTree = "<group>"; };
+		D685CE9C2439769E0018F3E3 /* InviteableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCell.swift; sourceTree = "<group>"; };
+		D685CE9E243976C60018F3E3 /* InviteableCollectionViewManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCollectionViewManger.swift; sourceTree = "<group>"; };
+		D685CEA0243978AB0018F3E3 /* InviteableCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCollectionView.swift; sourceTree = "<group>"; };
 		D685E9262331177100CC1BAB /* UserNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
 		D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedOverlayView.swift; sourceTree = "<group>"; };
 		D690964F23E7B835008864B6 /* MessageComposerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposerViewController.swift; sourceTree = "<group>"; };
@@ -1472,6 +1480,10 @@
 				D685CE9824396BA30018F3E3 /* InviteSectionHeader.swift */,
 				D6D87E8A23E69F8400D6A7ED /* InvitesViewController.swift */,
 				D6486DCB23EF14C2007ED680 /* PendingConnectionCell.swift */,
+				D685CE9A243976860018F3E3 /* InviteableCollectionViewController.swift */,
+				D685CE9C2439769E0018F3E3 /* InviteableCell.swift */,
+				D685CE9E243976C60018F3E3 /* InviteableCollectionViewManger.swift */,
+				D685CEA0243978AB0018F3E3 /* InviteableCollectionView.swift */,
 			);
 			path = Invite;
 			sourceTree = "<group>";
@@ -1761,6 +1773,7 @@
 				D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */,
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
+				D685CE9D2439769E0018F3E3 /* InviteableCell.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,
 				D64C055B23C2A34E00F6DCC1 /* ChannelCellContentView.swift in Sources */,
@@ -1785,6 +1798,7 @@
 				D6EE715D23B84DAC000ED221 /* OrbCollectionViewLayout.swift in Sources */,
 				D6A82B732325C2FD003E0A8B /* NewChannelViewController.swift in Sources */,
 				D61EC0F921D317AB00204BEE /* Theme.swift in Sources */,
+				D685CE9F243976C60018F3E3 /* InviteableCollectionViewManger.swift in Sources */,
 				D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */,
 				D6432BF322D828480016001A /* ChannelDataSource.swift in Sources */,
@@ -1820,6 +1834,7 @@
 				D6ACA0B623D41A3D00844923 /* CGSize+Extensions.swift in Sources */,
 				D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */,
 				D68540CF235FDE35006F666C /* SuggestionCollectionViewController.swift in Sources */,
+				D685CE9B243976860018F3E3 /* InviteableCollectionViewController.swift in Sources */,
 				D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */,
 				D642737F22C9A7EC0088256B /* ContactsManager.swift in Sources */,
 				D6347392241EAA840071E9DA /* Invitee.swift in Sources */,
@@ -1899,6 +1914,7 @@
 				D66F0FC922BF006D00BA277D /* SystemMessage.swift in Sources */,
 				D67896B422FF75640059BA75 /* OnboardingCoordinator.swift in Sources */,
 				D642738C22C9B24E0088256B /* LoadingButton.swift in Sources */,
+				D685CEA1243978AB0018F3E3 /* InviteableCollectionView.swift in Sources */,
 				D68DC7FC22EE5D9000BEAF80 /* FeedOverlayView.swift in Sources */,
 				80D4A21A23039FA5007CB5F1 /* RoutineManager.swift in Sources */,
 				D67896BF2302683C0059BA75 /* PhotoViewController.swift in Sources */,
