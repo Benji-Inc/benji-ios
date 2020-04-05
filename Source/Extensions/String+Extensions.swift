@@ -92,9 +92,11 @@ extension String {
     }
 
     func formatPhoneNumber() -> String? {
-        guard self.isValidPhoneNumber() else { return nil }
-        let number = self.filter("0123456789".contains)
-        return number
+        return try? PhoneKit.shared.parse(self, withRegion: PhoneKit.formatter.currentRegion).numberString
+    }
+
+    func removeAllNonNumbers() -> String {
+        return self.filter("0123456789".contains)
     }
 }
 

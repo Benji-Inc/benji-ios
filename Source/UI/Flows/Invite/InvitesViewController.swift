@@ -176,15 +176,12 @@ class InvitesViewController: NavigationBarViewController {
                 var finalItems: [Inviteable] = []
 
                 for (index, user) in users.enumerated() {
-                    if let phone = user.phoneNumber?.formatPhoneNumber() {
-                        for contact in contacts {
-                            if let contactPhone = contact.primaryPhoneNumber?.formatPhoneNumber(),
-                                phone == contactPhone,
-                                let connection = connections[safe: index] {
-                                finalItems.append(.connection(connection))
-                            } else {
-                                finalItems.append(.contact(contact))
-                            }
+                    for contact in contacts {
+                        if self.shouldAddConneciton(from: user, contact: contact),
+                            let connection = connections[safe: index] {
+                            finalItems.append(.connection(connection))
+                        } else {
+                            finalItems.append(.contact(contact))
                         }
                     }
                 }
@@ -195,6 +192,17 @@ class InvitesViewController: NavigationBarViewController {
         return promise
     }
 
+    func shouldAddConneciton(from user: User, contact: CNContact) -> Bool {
+        guard let userPhone = user.phoneNumber?.formatPhoneNumber()?.removeAllNonNumbers(),
+            var contactPhone = contact.primaryPhoneNumber?.formatPhoneNumber()?.removeAllNonNumbers() else { return false}
+
+        if contactPhone.first != "1" {
+            contactPhone.insert("1", at: contactPhone.startIndex)
+        }
+
+        return userPhone == contactPhone
+    }
+    
     private func loadPendingConnections() -> Future<Void> {
         let promise = Promise<Void>()
         GetAllConnections(direction: .all)

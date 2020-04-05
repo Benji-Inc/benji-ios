@@ -13,6 +13,8 @@ class InviteableCollectionViewManger: CollectionViewManager<InviteableCell> {
     private let selectionImpact = UIImpactFeedbackGenerator(style: .light)
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = self.items.value[safe: indexPath.row], case Inviteable.contact(_) = item else { return }
+
         super.collectionView(collectionView, didSelectItemAt: indexPath)
 
         self.selectionImpact.impactOccurred()
