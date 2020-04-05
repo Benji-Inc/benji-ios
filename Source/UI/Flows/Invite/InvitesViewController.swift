@@ -13,6 +13,7 @@ import TMROFutures
 
 protocol InvitesViewControllerDelegate: class {
     func invitesView(_ controller: InvitesViewController, didSelect contacts: [CNContact])
+    func invitesView(_ controller: InvitesViewController, didGetAuthorization status: CNAuthorizationStatus)
 }
 
 class InvitesViewController: NavigationBarViewController {
@@ -59,24 +60,15 @@ class InvitesViewController: NavigationBarViewController {
             self.delegate.invitesView(self, didSelect: self.selectedContacts)
         }
 
-        self.inviteablVC.collectionViewManager.allowMultipleSelection = true 
+        self.inviteablVC.collectionViewManager.allowMultipleSelection = true
 
         self.inviteablVC.collectionViewManager.onSelectedItem.signal.observeValues { [unowned self] (_) in
             self.updateButtonForContacts()
         }
-    }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.loadItems()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        self.contacts = []
-        self.connections = []
+        ContactsManager.shared.getAuthorizationStatus { [unowned self] (status) in
+            self.delegate.invitesView(self, didGetAuthorization: status)
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -139,6 +131,9 @@ class InvitesViewController: NavigationBarViewController {
     }
 
     func loadItems() {
+
+        self.connections = []
+        self.contacts = []
 
         self.inviteablVC.collectionView.activityIndicator.startAnimating()
         let pendingPromise = self.loadPendingConnections()
@@ -220,5 +215,37 @@ class InvitesViewController: NavigationBarViewController {
         }
 
         return promise
+    }
+
+    func didGetAuthorization(status: CNAuthorizationStatus) {
+        switch status {
+        case .notDetermined, .restricted, .denied:
+            runMain {
+                self.askForAuthorization(status: status)
+            }
+        case .authorized:
+            runMain {
+                self.loadItems()
+            }
+        @unknown default:
+            runMain {
+                self.askForAuthorization(status: status)
+            }
+        }
+    }
+
+    private func askForAuthorization(status: CNAuthorizationStatus) {
+
+        let contactModal = ContactAuthorizationController(status: status)
+        contactModal.onAuthorization = { (result) in
+            switch result {
+            case .denied:
+                contactModal.dismiss(animated: true, completion: nil)
+            case .authorized:
+                contactModal.dismiss(animated: true) {
+                    //source.getContacts()
+                }
+            }
+        }
     }
 }

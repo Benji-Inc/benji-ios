@@ -43,15 +43,15 @@ class InviteableCell: UICollectionViewCell, ManageableCell {
         guard let inviteable = item else { return }
 
         self.content.configure(with: inviteable)
+        self.layoutNow()
     }
 
     func update(isSelected: Bool) {
-           self.showSelected = isSelected
-       }
+        self.showSelected = isSelected
+    }
 
     func collectionViewManagerWillDisplay() {}
     func collectionViewManagerDidEndDisplaying() {}
-
 
     override func layoutSubviews() {
         super.layoutSubviews()

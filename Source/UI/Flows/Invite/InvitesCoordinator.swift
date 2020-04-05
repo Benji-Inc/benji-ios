@@ -18,42 +18,48 @@ class InvitesCoordinator: PresentableCoordinator<Void> {
     }
 }
 
-//extension InvitesCoordinator: ContactsViewControllerDelegate {
-
-//    func contactsView(_ controller: ContactsViewController, didGetAuthorization status: CNAuthorizationStatus) {
-//        switch status {
-//        case .notDetermined, .restricted, .denied:
-//            runMain {
-//                self.askForAuthorization(status: status, source: controller)
-//            }
-//        case .authorized:
-//            controller.getContacts()
-//        @unknown default:
-//            runMain {
-//                self.askForAuthorization(status: status, source: controller)
-//            }
-//        }
-//    }
-//
-//    private func askForAuthorization(status: CNAuthorizationStatus, source: ContactsViewController) {
-//
-//        let contactModal = ContactAuthorizationController(status: status)
-//        contactModal.onAuthorization = { (result) in
-//            switch result {
-//            case .denied:
-//                contactModal.dismiss(animated: true, completion: nil)
-//            case .authorized:
-//                contactModal.dismiss(animated: true) {
-//                    source.getContacts()
-//                }
-//            }
-//        }
-//
-//        self.router.present(contactModal, source: self.invitesVC)
-//    }
-//}
-
 extension InvitesCoordinator: InvitesViewControllerDelegate {
+
+    func invitesView(_ controller: InvitesViewController, didGetAuthorization status: CNAuthorizationStatus) {
+        switch status {
+        case .notDetermined, .restricted, .denied:
+            runMain {
+                self.askForAuthorization(status: status)
+            }
+        case .authorized:
+            runMain {
+                self.invitesVC.loadItems()
+            }
+        @unknown default:
+            runMain {
+                self.askForAuthorization(status: status)
+            }
+        }
+    }
+
+    private func askForAuthorization(status: CNAuthorizationStatus) {
+
+        let contactModal = ContactAuthorizationController(status: status)
+        contactModal.onAuthorization = { (result) in
+            switch result {
+            case .denied:
+                contactModal.dismiss(animated: true, completion: nil)
+            case .authorized:
+                contactModal.dismiss(animated: true) {
+                    ContactsManager.shared.requestForAccess { [unowned self] (success, error) in
+                        if success {
+                            runMain {
+                                self.invitesVC.loadItems()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        self.router.present(contactModal, source: self.invitesVC)
+    }
+
     func invitesView(_ controller: InvitesViewController, didSelect contacts: [CNContact]) {
         // go to invite coordinator
         let coordinator = InviteComposerCoordinator(router: self.router,
@@ -61,7 +67,9 @@ extension InvitesCoordinator: InvitesViewControllerDelegate {
                                             contacts: contacts,
                                             source: controller)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
-            //controller.reset()
+            runMain {
+                self.invitesVC.loadItems()
+            }
         })
     }
 }
