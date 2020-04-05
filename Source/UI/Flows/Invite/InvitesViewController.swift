@@ -24,6 +24,9 @@ class InvitesViewController: NavigationBarViewController {
     lazy var collectionView = InvitesCollectionView()
     lazy var collectionViewManager = InvitesCollectionViewManager(with: self.collectionView)
 
+    private var connections: [Inviteable] = []
+    private var contacts: [Inviteable] = []
+
     init(with delegate: InvitesViewControllerDelegate) {
         self.delegate = delegate
         super.init()
@@ -39,13 +42,16 @@ class InvitesViewController: NavigationBarViewController {
         self.view.addSubview(self.collectionView)
         self.view.addSubview(self.gradientView)
         self.view.addSubview(self.button)
+        self.backButton.isVisible = false
+
+
         self.button.didSelect = { [unowned self] in
-//            switch self.currentContent.value {
-//            case .contacts(_):
-//                self.delegate.invitesView(self, didSelect: self.selectedContacts)
-//            case .pending(_):
-//                self.currentContent.value = .contacts(self.contactsVC)
-//            }
+            //            switch self.currentContent.value {
+            //            case .contacts(_):
+            //                self.delegate.invitesView(self, didSelect: self.selectedContacts)
+            //            case .pending(_):
+            //                self.currentContent.value = .contacts(self.contactsVC)
+            //            }
         }
     }
 
@@ -72,13 +78,21 @@ class InvitesViewController: NavigationBarViewController {
         self.gradientView.top = self.button.top
     }
 
+    override func getTitle() -> Localized {
+        return "Invites"
+    }
+
+    override func getDescription() -> Localized {
+        return "Select contacts you would like to invite."
+    }
+
     private func updateButton() {
-//        switch self.currentContent.value {
-//        case .contacts(_):
-//            self.updateButtonForContacts()
-//        case .pending(_):
-//            self.updateButtonForPending()
-//        }
+        //        switch self.currentContent.value {
+        //        case .contacts(_):
+        //            self.updateButtonForContacts()
+        //        case .pending(_):
+        //            self.updateButtonForPending()
+        //        }
     }
 
     private func updateButtonForPending() {
@@ -88,25 +102,25 @@ class InvitesViewController: NavigationBarViewController {
     }
 
     private func updateButtonForContacts() {
-//        let buttonText: LocalizedString
-//        if self.selectedContacts.count > 1 {
-//            buttonText = LocalizedString(id: "",
-//                                         arguments: [String(self.selectedContacts.count)],
-//                                         default: "SEND @(count) INVITES")
-//        } else {
-//            buttonText = LocalizedString(id: "", default: "SEND INVITE")
-//        }
-//
-//        self.button.set(style: .normal(color: .purple, text: buttonText))
-//
-//        var newOffset: CGFloat
-//        if self.selectedContacts.count >= 1 {
-//            newOffset = self.view.height - self.view.safeAreaInsets.bottom
-//        } else {
-//            newOffset = self.view.height + 100
-//        }
-//
-//        self.animateButton(with: newOffset)
+        //        let buttonText: LocalizedString
+        //        if self.selectedContacts.count > 1 {
+        //            buttonText = LocalizedString(id: "",
+        //                                         arguments: [String(self.selectedContacts.count)],
+        //                                         default: "SEND @(count) INVITES")
+        //        } else {
+        //            buttonText = LocalizedString(id: "", default: "SEND INVITE")
+        //        }
+        //
+        //        self.button.set(style: .normal(color: .purple, text: buttonText))
+        //
+        //        var newOffset: CGFloat
+        //        if self.selectedContacts.count >= 1 {
+        //            newOffset = self.view.height - self.view.safeAreaInsets.bottom
+        //        } else {
+        //            newOffset = self.view.height + 100
+        //        }
+        //
+        //        self.animateButton(with: newOffset)
     }
 
     private func animateButton(with newOffset: CGFloat) {
@@ -128,8 +142,10 @@ class InvitesViewController: NavigationBarViewController {
         let contactsPromise = self.getContacts()
 
         waitForAll(futures: [pendingPromise, contactsPromise])
-            .observeValue { (allItems) in
-                //load these
+            .observeValue { (_) in
+                var allItems: [[Inviteable]] = []
+                allItems.append(self.connections)
+                allItems.append(self.contacts)
                 self.collectionViewManager.set(items: allItems)
                 runMain {
                     self.collectionView.activityIndicator.stopAnimating()
@@ -137,28 +153,31 @@ class InvitesViewController: NavigationBarViewController {
         }
     }
 
-    private func loadPendingConnections() -> Future<[Inviteable]> {
-        return GetAllConnections(direction: .all)
-        .makeRequest()
-            .transform { (connections) -> [Inviteable] in
-                return connections.compactMap { (connection) -> Inviteable? in
-                    if let status = connection.status, status == .invited {
-                        return .connection(connection)
-                    } else {
-                        return nil
-                    }
+    private func loadPendingConnections() -> Future<Void> {
+        let promise = Promise<Void>()
+        GetAllConnections(direction: .all)
+            .makeRequest()
+            .observeValue(with: { (connections) in
+                let items = connections.map { (connection) -> Inviteable in
+                    return .connection(connection)
                 }
-        }
+                self.connections = items
+                promise.resolve(with: ())
+            })
+
+        return promise
     }
 
-    private func getContacts() -> Future<[Inviteable]> {
-        let promise = Promise<[Inviteable]>()
+    private func getContacts() -> Future<Void> {
+        let promise = Promise<Void>()
 
         ContactsManager.shared.getContacts { (contacts: [CNContact]) in
             let items = contacts.compactMap { (contact) -> Inviteable? in
                 return .contact(contact)
             }
-            promise.resolve(with: items)
+
+            self.contacts = items
+            promise.resolve(with: ())
         }
 
         return promise
