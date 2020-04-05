@@ -14,6 +14,18 @@ class InviteableCell: UICollectionViewCell, ManageableCell {
     var onLongPress: (() -> Void)?
     private let content = InviteableContentView()
 
+    var showSelected: Bool? {
+        didSet {
+            guard let showSelected = self.showSelected, showSelected != oldValue else { return }
+
+            if showSelected {
+                self.content.animateToChecked()
+            } else {
+                self.content.animateToUnchecked()
+            }
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.intializeViews()
@@ -32,6 +44,10 @@ class InviteableCell: UICollectionViewCell, ManageableCell {
 
         self.content.configure(with: inviteable)
     }
+
+    func update(isSelected: Bool) {
+           self.showSelected = isSelected
+       }
 
     func collectionViewManagerWillDisplay() {}
     func collectionViewManagerDidEndDisplaying() {}

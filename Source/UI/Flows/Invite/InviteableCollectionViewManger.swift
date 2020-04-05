@@ -10,6 +10,14 @@ import Foundation
 
 class InviteableCollectionViewManger: CollectionViewManager<InviteableCell> {
 
+    private let selectionImpact = UIImpactFeedbackGenerator(style: .light)
+
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        super.collectionView(collectionView, didSelectItemAt: indexPath)
+
+        self.selectionImpact.impactOccurred()
+    }
+
     override func collectionView(_ collectionView: UICollectionView,
                                  layout collectionViewLayout: UICollectionViewLayout,
                                  sizeForItemAt indexPath: IndexPath) -> CGSize {

@@ -61,6 +61,13 @@ class InvitesViewController: NavigationBarViewController {
         self.loadItems()
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        self.contacts = []
+        self.connections = []
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
