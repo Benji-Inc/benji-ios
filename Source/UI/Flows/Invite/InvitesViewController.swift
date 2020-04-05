@@ -27,6 +27,17 @@ class InvitesViewController: NavigationBarViewController {
     private var connections: [Connection] = []
     private var contacts: [CNContact] = []
 
+    private var selectedContacts: [CNContact] {
+        return self.inviteablVC.collectionViewManager.selectedItems.compactMap { (inviteable) -> CNContact? in
+            switch inviteable {
+            case .contact(let contact):
+                return contact
+            case .connection(_):
+                return nil
+            }
+        }
+    }
+
     init(with delegate: InvitesViewControllerDelegate) {
         self.delegate = delegate
         super.init()
@@ -44,14 +55,14 @@ class InvitesViewController: NavigationBarViewController {
         self.view.addSubview(self.button)
         self.backButton.isVisible = false
 
-
         self.button.didSelect = { [unowned self] in
-            //            switch self.currentContent.value {
-            //            case .contacts(_):
-            //                self.delegate.invitesView(self, didSelect: self.selectedContacts)
-            //            case .pending(_):
-            //                self.currentContent.value = .contacts(self.contactsVC)
-            //            }
+            self.delegate.invitesView(self, didSelect: self.selectedContacts)
+        }
+
+        self.inviteablVC.collectionViewManager.allowMultipleSelection = true 
+
+        self.inviteablVC.collectionViewManager.onSelectedItem.signal.observeValues { [unowned self] (_) in
+            self.updateButtonForContacts()
         }
     }
 
@@ -93,41 +104,26 @@ class InvitesViewController: NavigationBarViewController {
         return "Select contacts you would like to invite."
     }
 
-    private func updateButton() {
-        //        switch self.currentContent.value {
-        //        case .contacts(_):
-        //            self.updateButtonForContacts()
-        //        case .pending(_):
-        //            self.updateButtonForPending()
-        //        }
-    }
-
-    private func updateButtonForPending() {
-        self.button.set(style: .normal(color: .purple, text: "Invite Others"))
-        let offset = self.view.height - self.view.safeAreaInsets.bottom
-        self.animateButton(with: offset)
-    }
-
     private func updateButtonForContacts() {
-        //        let buttonText: LocalizedString
-        //        if self.selectedContacts.count > 1 {
-        //            buttonText = LocalizedString(id: "",
-        //                                         arguments: [String(self.selectedContacts.count)],
-        //                                         default: "SEND @(count) INVITES")
-        //        } else {
-        //            buttonText = LocalizedString(id: "", default: "SEND INVITE")
-        //        }
-        //
-        //        self.button.set(style: .normal(color: .purple, text: buttonText))
-        //
-        //        var newOffset: CGFloat
-        //        if self.selectedContacts.count >= 1 {
-        //            newOffset = self.view.height - self.view.safeAreaInsets.bottom
-        //        } else {
-        //            newOffset = self.view.height + 100
-        //        }
-        //
-        //        self.animateButton(with: newOffset)
+        let buttonText: LocalizedString
+        if self.selectedContacts.count > 1 {
+            buttonText = LocalizedString(id: "",
+                                         arguments: [String(self.selectedContacts.count)],
+                                         default: "SEND @(count) INVITES")
+        } else {
+            buttonText = LocalizedString(id: "", default: "SEND INVITE")
+        }
+
+        self.button.set(style: .normal(color: .purple, text: buttonText))
+
+        var newOffset: CGFloat
+        if self.selectedContacts.count >= 1 {
+            newOffset = self.view.height - self.view.safeAreaInsets.bottom
+        } else {
+            newOffset = self.view.height + 100
+        }
+
+        self.animateButton(with: newOffset)
     }
 
     private func animateButton(with newOffset: CGFloat) {

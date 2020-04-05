@@ -96,9 +96,9 @@ class ContactsManager: NSObject {
                 // Once the contacts are retrieved, call the completion block on the main thread to avoid up updating UI off main
                 runMain {
                     var finalResults: [CNContact] = []
-                    if removeMe, let phone = User.current()?.phoneNumber?.formatPhoneNumber() {
+                    if removeMe, let phone = User.current()?.phoneNumber?.formatPhoneNumber()?.removeAllNonNumbers() {
                         finalResults = results.filter { (contact) -> Bool in
-                            if let contactPhone = contact.primaryPhoneNumber, contactPhone == phone {
+                            if let contactPhone = contact.primaryPhoneNumber?.removeAllNonNumbers(), contactPhone == phone {
                                 return false
                             } else {
                                 return true
