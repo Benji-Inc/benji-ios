@@ -9,6 +9,7 @@
 import Foundation
 import TMROLocalization
 import Contacts
+import TMROFutures
 
 protocol InvitesViewControllerDelegate: class {
     func invitesView(_ controller: InvitesViewController, didSelect contacts: [CNContact])
@@ -35,6 +36,7 @@ class InvitesViewController: NavigationBarViewController {
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.addSubview(self.collectionView)
         self.view.addSubview(self.gradientView)
         self.view.addSubview(self.button)
         self.button.didSelect = { [unowned self] in
@@ -45,11 +47,20 @@ class InvitesViewController: NavigationBarViewController {
 //                self.currentContent.value = .contacts(self.contactsVC)
 //            }
         }
+    }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.loadItems()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        self.collectionView.size = CGSize(width: self.view.width, height: self.view.height - self.lineView.bottom)
+        self.collectionView.top = self.lineView.bottom
+        self.collectionView.centerOnX()
 
         self.button.setSize(with: self.view.width)
         self.button.centerOnX()
@@ -110,39 +121,45 @@ class InvitesViewController: NavigationBarViewController {
         }) { (completed) in }
     }
 
-    func loadPendingConnections() {
-        GetAllConnections(direction: .all)
-            .makeRequest()
-            .observeValue(with: { (connections) in
-                let items = connections.compactMap { (connection) -> Inviteable? in
+    func loadItems() {
+
+        self.collectionView.activityIndicator.startAnimating()
+        let pendingPromise = self.loadPendingConnections()
+        let contactsPromise = self.getContacts()
+
+        waitForAll(futures: [pendingPromise, contactsPromise])
+            .observeValue { (allItems) in
+                //load these
+                runMain {
+                    self.collectionView.activityIndicator.stopAnimating()
+                }
+        }
+    }
+
+    private func loadPendingConnections() -> Future<[Inviteable]> {
+        return GetAllConnections(direction: .all)
+        .makeRequest()
+            .transform { (connections) -> [Inviteable] in
+                return connections.compactMap { (connection) -> Inviteable? in
                     if let status = connection.status, status == .invited {
                         return .connection(connection)
+                    } else {
+                        return nil
                     }
-
-                    return nil
                 }
-
-                //self.collectionViewManager.set(newItems: items)
-            })
-    }
-
-    func getAuthorizationStatus() {
-        ContactsManager.shared.getAuthorizationStatus { [unowned self] (authorizationStatus) in
-            //self.delegate.contactsView(self, didGetAuthorization: authorizationStatus)
         }
     }
 
-    func getContacts() {
-        runMain {
-            self.collectionView.activityIndicator.startAnimating()
+    private func getContacts() -> Future<[Inviteable]> {
+        let promise = Promise<[Inviteable]>()
+
+        ContactsManager.shared.getContacts { (contacts: [CNContact]) in
+            let items = contacts.compactMap { (contact) -> Inviteable? in
+                return .contact(contact)
+            }
+            promise.resolve(with: items)
         }
 
-        ContactsManager.shared.getContacts { [weak self] (contacts: [CNContact]) in
-            guard let `self` = self else { return }
-
-            self.collectionView.activityIndicator.stopAnimating()
-            //self.sort(contacts: contacts)
-            self.collectionView.reloadDataAndKeepOffset()
-        }
+        return promise
     }
 }

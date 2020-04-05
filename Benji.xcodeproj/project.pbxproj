@@ -190,7 +190,6 @@
 		D68540DC235FED41006F666C /* SuggestionCollectionViewLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68540DB235FED41006F666C /* SuggestionCollectionViewLayoutAttributes.swift */; };
 		D68540DE235FEE96006F666C /* SuggestionCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68540DD235FEE96006F666C /* SuggestionCellAttributesConfigurer.swift */; };
 		D68540E1235FF056006F666C /* TextSuggestionCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68540E0235FF056006F666C /* TextSuggestionCellAttributesConfigurer.swift */; };
-		D685CE9124393DF00018F3E3 /* InvitesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9024393DF00018F3E3 /* InvitesCollectionViewController.swift */; };
 		D685CE9324393E140018F3E3 /* InvitesCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9224393E140018F3E3 /* InvitesCollectionViewManager.swift */; };
 		D685CE9524393E6D0018F3E3 /* InvitesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9424393E6D0018F3E3 /* InvitesCollectionView.swift */; };
 		D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685E9262331177100CC1BAB /* UserNotificationManager.swift */; };
@@ -506,7 +505,6 @@
 		D68540DB235FED41006F666C /* SuggestionCollectionViewLayoutAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionCollectionViewLayoutAttributes.swift; sourceTree = "<group>"; };
 		D68540DD235FEE96006F666C /* SuggestionCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionCellAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D68540E0235FF056006F666C /* TextSuggestionCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextSuggestionCellAttributesConfigurer.swift; sourceTree = "<group>"; };
-		D685CE9024393DF00018F3E3 /* InvitesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitesCollectionViewController.swift; sourceTree = "<group>"; };
 		D685CE9224393E140018F3E3 /* InvitesCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitesCollectionViewManager.swift; sourceTree = "<group>"; };
 		D685CE9424393E6D0018F3E3 /* InvitesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitesCollectionView.swift; sourceTree = "<group>"; };
 		D685E9262331177100CC1BAB /* UserNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
@@ -1466,7 +1464,6 @@
 				D6486DCF23EF15A2007ED680 /* Inviteable.swift */,
 				D645996423EF199600BE3F0B /* InviteableContentView.swift */,
 				D685CE9424393E6D0018F3E3 /* InvitesCollectionView.swift */,
-				D685CE9024393DF00018F3E3 /* InvitesCollectionViewController.swift */,
 				D685CE9224393E140018F3E3 /* InvitesCollectionViewManager.swift */,
 				D690965723EE6E77008864B6 /* InvitesCoordinator.swift */,
 				D6D87E8A23E69F8400D6A7ED /* InvitesViewController.swift */,
@@ -1834,7 +1831,6 @@
 				D646DB4022CFCFDB0055CC7C /* Future+Extensions.swift in Sources */,
 				D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */,
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
-				D685CE9124393DF00018F3E3 /* InvitesCollectionViewController.swift in Sources */,
 				D642739322C9C0110088256B /* AlertView.swift in Sources */,
 				D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */,
 				D645996523EF199600BE3F0B /* InviteableContentView.swift in Sources */,

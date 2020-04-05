@@ -24,5 +24,6 @@ class InvitesCollectionView: CollectionView {
         super.initialize()
 
         self.register(PendingConnectionCell.self)
+        self.register(ContactCell.self)
     }
 }
