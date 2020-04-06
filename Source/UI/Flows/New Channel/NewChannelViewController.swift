@@ -76,8 +76,7 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
                 self.titleLabel.alpha = 0.2
                 self.descriptionLabel.alpha = 0.2
                 self.lineView.alpha = 0.2
-                self.purposeVC.textViewTitleLabel.alpha = 0.2
-                self.purposeVC.textView.alpha = 0.2
+                self.purposeVC.contextVC.view.alpha = 0.2
             }
         }
 
@@ -86,28 +85,7 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
                 self.titleLabel.alpha = 1
                 self.descriptionLabel.alpha = 1
                 self.lineView.alpha = 1
-                self.purposeVC.textViewTitleLabel.alpha = 1
-                self.purposeVC.textView.alpha = 1
-            }
-        }
-
-        self.purposeVC.textViewDidBegin = { [unowned self] in
-            UIView.animate(withDuration: Theme.animationDuration) {
-                self.titleLabel.alpha = 0.2
-                self.descriptionLabel.alpha = 0.2
-                self.lineView.alpha = 0.2
-                self.purposeVC.textFieldTitleLabel.alpha = 0.2
-                self.purposeVC.textField.alpha = 0.2
-            }
-        }
-
-        self.purposeVC.textViewDidEnd = { [unowned self] in
-            UIView.animate(withDuration: Theme.animationDuration) {
-                self.titleLabel.alpha = 1
-                self.descriptionLabel.alpha = 1
-                self.lineView.alpha = 1
-                self.purposeVC.textFieldTitleLabel.alpha = 1
-                self.purposeVC.textField.alpha = 1
+                self.purposeVC.contextVC.view.alpha = 1
             }
         }
 
@@ -173,16 +151,16 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
         case .purpose(_):
             self.currentContent.value = .favorites(self.favoritesVC)
         case .favorites(_):
-            guard let title = self.purposeVC.textField.text,
-                let description = self.purposeVC.textView.text else { return }
+            guard let title = self.purposeVC.textField.text else { return }
 
             let users = self.favoritesVC.collectionViewManager.selectedItems.compactMap { (orbItem) -> User? in
                 return orbItem.nonMeUser
             }
 
+            // TODO: Add context to channel
             self.createChannel(with: users,
                                title: title,
-                               description: description)
+                               description: "")
         }
     }
 

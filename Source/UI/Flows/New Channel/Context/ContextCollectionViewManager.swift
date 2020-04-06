@@ -22,7 +22,8 @@ class ContextCollectionViewManager: CollectionViewManager<ContextCell> {
         let label = SmallBoldLabel()
         label.set(text: context.title)
         var size = label.getSize(withWidth: collectionView.width)
-        size.width += 10
+        size.width += 50
+        size.height = 40
         return size
     }
 }

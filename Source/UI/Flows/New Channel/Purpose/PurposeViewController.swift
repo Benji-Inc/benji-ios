@@ -11,13 +11,12 @@ import TMROLocalization
 
 class PurposeViewController: ViewController, Sizeable {
 
-    let offset: CGFloat = 20
+    let offset: CGFloat = Theme.contentOffset
 
     let textFieldTitleLabel = RegularBoldLabel()
     let textField = PurposeTitleTextField()
 
-    let textViewTitleLabel = RegularBoldLabel()
-    let textView = PurposeDescriptionTextView()
+    lazy var contextVC = ContextCollectionViewController()
 
     let purposeAccessoryView = PurposeInputAccessoryView()
 
@@ -25,9 +24,6 @@ class PurposeViewController: ViewController, Sizeable {
 
     var textFieldDidBegin: CompletionOptional = nil
     var textFieldDidEnd: CompletionOptional = nil
-
-    var textViewDidBegin: CompletionOptional = nil
-    var textViewDidEnd: CompletionOptional = nil
 
     var textFieldTextDidChange: ((String) -> Void)?
 
@@ -40,13 +36,6 @@ class PurposeViewController: ViewController, Sizeable {
         self.textField.set(backgroundColor: .background3)
         self.textField.roundCorners()
 
-        self.view.addSubview(self.textViewTitleLabel)
-        self.textViewTitleLabel.set(text: "Purpose", stringCasing: .unchanged)
-        self.view.addSubview(self.textView)
-        self.textView.set(backgroundColor: .background3)
-        self.textView.roundCorners()
-        self.textView.delegate = self
-
         self.textField.onTextChanged = { [unowned self] in
             guard let text = self.textField.text else { return }
             self.textFieldTextDidChange?(text)
@@ -54,6 +43,11 @@ class PurposeViewController: ViewController, Sizeable {
         }
 
         self.textField.delegate = self
+
+        self.addChild(viewController: self.contextVC)
+        self.contextVC.collectionViewManager.onSelectedItem.signal.observeValues { [unowned self] (selectedItem) in
+            guard let item = selectedItem else { return }
+        }
     }
 
     func getHeight(for width: CGFloat) -> CGFloat {
@@ -67,43 +61,16 @@ class PurposeViewController: ViewController, Sizeable {
         self.textField.left = self.offset
         self.textField.top = self.textFieldTitleLabel.bottom + 10
 
-        self.textViewTitleLabel.setSize(withWidth: newWidth)
-        self.textViewTitleLabel.top = self.textField.bottom + 30
-        self.textViewTitleLabel.left = self.offset
+        let height = self.view.height - self.textField.bottom
+        self.contextVC.view.size = CGSize(width: self.view.width, height: height)
+        self.contextVC.view.top = self.textField.bottom
+        self.contextVC.view.centerOnX()
 
-        self.textView.size = CGSize(width: newWidth, height: 120)
-        self.textView.top = self.textViewTitleLabel.bottom + 10
-        self.textView.left = self.offset
-
-        return self.textView.bottom
+        return .zero
     }
 
     func getWidth(for height: CGFloat) -> CGFloat {
         return .zero 
-    }
-}
-
-extension PurposeViewController: UITextViewDelegate {
-
-    func textView(_ textView: UITextView,
-                  shouldChangeTextIn range: NSRange,
-                  replacementText text: String) -> Bool {
-
-        if text == "\n" {
-            textView.resignFirstResponder()
-            return false
-        }
-
-        return true
-    }
-
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        self.purposeAccessoryView.showAccessoryForDescription(textView: textView)
-        self.textViewDidBegin?()
-    }
-
-    func textViewDidEndEditing(_ textView: UITextView) {
-        self.textViewDidEnd?()
     }
 }
 

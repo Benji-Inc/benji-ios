@@ -16,4 +16,12 @@ class ContextCollectionViewController: CollectionViewController<ContextCell, Con
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.collectionViewManager.set(newItems: ConversationContext.allCases) { [unowned self] (_) in
+            self.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
+        }
+    }
 }

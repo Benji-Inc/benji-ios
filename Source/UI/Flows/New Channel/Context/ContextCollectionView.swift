@@ -15,6 +15,11 @@ class ContextCollectionView: CollectionView {
         flowLayout.scrollDirection = .vertical
         flowLayout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         super.init(layout: flowLayout)
+
+        self.contentInset = UIEdgeInsets(top: Theme.contentOffset * 2,
+                                         left: Theme.contentOffset,
+                                         bottom: Theme.contentOffset,
+                                         right: Theme.contentOffset)
     }
 
     required init?(coder aDecoder: NSCoder) {
