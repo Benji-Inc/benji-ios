@@ -196,6 +196,11 @@
 		D685CEA5243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEA4243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift */; };
 		D685CEA7243ACA060018F3E3 /* ConnectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEA6243ACA060018F3E3 /* ConnectionCell.swift */; };
 		D685CEA9243ACA800018F3E3 /* ConnectionContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEA8243ACA800018F3E3 /* ConnectionContentView.swift */; };
+		D685CEAC243B7B1B0018F3E3 /* ContextCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEAB243B7B1B0018F3E3 /* ContextCollectionViewController.swift */; };
+		D685CEAE243B7B3C0018F3E3 /* ContextCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEAD243B7B3C0018F3E3 /* ContextCollectionViewManager.swift */; };
+		D685CEB0243B7B550018F3E3 /* ContextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEAF243B7B550018F3E3 /* ContextCell.swift */; };
+		D685CEB2243B7BFA0018F3E3 /* ConversationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEB1243B7BFA0018F3E3 /* ConversationContext.swift */; };
+		D685CEB4243B7F5E0018F3E3 /* ContextCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEB3243B7F5E0018F3E3 /* ContextCollectionView.swift */; };
 		D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685E9262331177100CC1BAB /* UserNotificationManager.swift */; };
 		D68DC7FC22EE5D9000BEAF80 /* FeedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */; };
 		D690965023E7B835008864B6 /* MessageComposerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D690964F23E7B835008864B6 /* MessageComposerViewController.swift */; };
@@ -515,6 +520,11 @@
 		D685CEA4243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionsCollectionViewManager.swift; sourceTree = "<group>"; };
 		D685CEA6243ACA060018F3E3 /* ConnectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionCell.swift; sourceTree = "<group>"; };
 		D685CEA8243ACA800018F3E3 /* ConnectionContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionContentView.swift; sourceTree = "<group>"; };
+		D685CEAB243B7B1B0018F3E3 /* ContextCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCollectionViewController.swift; sourceTree = "<group>"; };
+		D685CEAD243B7B3C0018F3E3 /* ContextCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCollectionViewManager.swift; sourceTree = "<group>"; };
+		D685CEAF243B7B550018F3E3 /* ContextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCell.swift; sourceTree = "<group>"; };
+		D685CEB1243B7BFA0018F3E3 /* ConversationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationContext.swift; sourceTree = "<group>"; };
+		D685CEB3243B7F5E0018F3E3 /* ContextCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCollectionView.swift; sourceTree = "<group>"; };
 		D685E9262331177100CC1BAB /* UserNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
 		D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedOverlayView.swift; sourceTree = "<group>"; };
 		D690964F23E7B835008864B6 /* MessageComposerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposerViewController.swift; sourceTree = "<group>"; };
@@ -903,11 +913,12 @@
 		D63753182316112E00214F63 /* New Channel */ = {
 			isa = PBXGroup;
 			children = (
+				D6A82B702325C105003E0A8B /* Connections */,
+				D685CEAA243B7AFE0018F3E3 /* Context */,
+				D6849CBC23B5BCAA006799F6 /* NewChannelButton.swift */,
 				D65B0CE6234929440041A176 /* NewChannelCoordinator.swift */,
 				D6A82B722325C2FD003E0A8B /* NewChannelViewController.swift */,
-				D6849CBC23B5BCAA006799F6 /* NewChannelButton.swift */,
 				D6A82B712325C2DA003E0A8B /* Purpose */,
-				D6A82B702325C105003E0A8B /* Connections */,
 			);
 			path = "New Channel";
 			sourceTree = "<group>";
@@ -1238,6 +1249,17 @@
 			path = Configurer;
 			sourceTree = "<group>";
 		};
+		D685CEAA243B7AFE0018F3E3 /* Context */ = {
+			isa = PBXGroup;
+			children = (
+				D685CEAB243B7B1B0018F3E3 /* ContextCollectionViewController.swift */,
+				D685CEAD243B7B3C0018F3E3 /* ContextCollectionViewManager.swift */,
+				D685CEB3243B7F5E0018F3E3 /* ContextCollectionView.swift */,
+				D685CEAF243B7B550018F3E3 /* ContextCell.swift */,
+			);
+			path = Context;
+			sourceTree = "<group>";
+		};
 		D6A82B702325C105003E0A8B /* Connections */ = {
 			isa = PBXGroup;
 			children = (
@@ -1433,6 +1455,7 @@
 				D64C6A7D23294A8600DB7257 /* ChannelKey.swift */,
 				D66F0FF122C1D86800BA277D /* ChannelsType.swift */,
 				D646DB3B22CFCCD80055CC7C /* ClientError.swift */,
+				D685CEB1243B7BFA0018F3E3 /* ConversationContext.swift */,
 				D66F0FC622BF004300BA277D /* FeedType.swift */,
 				D642735022C857760088256B /* MessageContext.swift */,
 				D6405B65236E001A00FAA06B /* Parse Subclasses */,
@@ -1710,6 +1733,7 @@
 				D6E4C7FB238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift in Sources */,
 				D66A0B942351821200A0FFEA /* Completeable.swift in Sources */,
 				D64C6AA2232EA06800DB7257 /* TypingCellAttributesConfigurer.swift in Sources */,
+				D685CEB4243B7F5E0018F3E3 /* ContextCollectionView.swift in Sources */,
 				D64273A522CC05DD0088256B /* InputTextView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
@@ -1724,6 +1748,7 @@
 				D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */,
 				D6D1503321D7E5F800CD8CE4 /* UIDynamicAnimator+Extensions.swift in Sources */,
 				D6D6D57223A6D43100D2B5BF /* CancelButton.swift in Sources */,
+				D685CEAE243B7B3C0018F3E3 /* ContextCollectionViewManager.swift in Sources */,
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,
 				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
 				D696A8E92308D5C900DAFED4 /* MessageInputView.swift in Sources */,
@@ -1760,6 +1785,7 @@
 				D691794222F6418700340AA3 /* Router.swift in Sources */,
 				D64DD8B223CE403D0039DC5A /* SwitchableContentViewController.swift in Sources */,
 				D6D1501821D5F40F00CD8CE4 /* UICollectionView+Extensions.swift in Sources */,
+				D685CEB0243B7B550018F3E3 /* ContextCell.swift in Sources */,
 				D64C6A97232D5C0400DB7257 /* TCHMember+Extensions.swift in Sources */,
 				D6815DBB22EE1F1400E71251 /* FeedCollectionViewManager.swift in Sources */,
 				D63C67DE23D415A700EA373A /* FaceView.swift in Sources */,
@@ -1854,6 +1880,7 @@
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
 				D64273A722CC2D280088256B /* ChannelViewController+Extensions.swift in Sources */,
 				D66F0FDE22BF2C5D00BA277D /* HomeSegmentControl.swift in Sources */,
+				D685CEB2243B7BFA0018F3E3 /* ConversationContext.swift in Sources */,
 				D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */,
 				D6B2603D22E6B8EA00143CF0 /* ProfileViewController.swift in Sources */,
 				D6D1460521D5524C00CD8CE4 /* StringCasing.swift in Sources */,
@@ -1900,6 +1927,7 @@
 				D68540D1235FDE69006F666C /* SuggestionCollectionView.swift in Sources */,
 				80C7C6062316112400643A14 /* TimeHumpView.swift in Sources */,
 				D61EC0D921D30C8E00204BEE /* DispatchQue+Extensions.swift in Sources */,
+				D685CEAC243B7B1B0018F3E3 /* ContextCollectionViewController.swift in Sources */,
 				D6D1503921D7F46F00CD8CE4 /* UITextView+Extensions.swift in Sources */,
 				D6DADF702207DF60007D9EB1 /* ChannelCell.swift in Sources */,
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
