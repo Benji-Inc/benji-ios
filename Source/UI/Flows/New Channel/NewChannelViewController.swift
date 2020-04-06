@@ -181,7 +181,12 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
                 let description = self.purposeVC.textView.text else { return }
 
             let users = self.favoritesVC.collectionViewManager.selectedItems.compactMap { (orbItem) -> User? in
-                return orbItem
+                switch orbItem {
+                case .contact(_, _):
+                    return nil
+                case .connection(let connection):
+                    return connection.nonMeUser
+                }
             }
 
             self.createChannel(with: users,

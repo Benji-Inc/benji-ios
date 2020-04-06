@@ -193,6 +193,7 @@
 		D685CE9D2439769E0018F3E3 /* InviteableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9C2439769E0018F3E3 /* InviteableCell.swift */; };
 		D685CE9F243976C60018F3E3 /* InviteableCollectionViewManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9E243976C60018F3E3 /* InviteableCollectionViewManger.swift */; };
 		D685CEA1243978AB0018F3E3 /* InviteableCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEA0243978AB0018F3E3 /* InviteableCollectionView.swift */; };
+		D685CEA5243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEA4243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift */; };
 		D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685E9262331177100CC1BAB /* UserNotificationManager.swift */; };
 		D68DC7FC22EE5D9000BEAF80 /* FeedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */; };
 		D690965023E7B835008864B6 /* MessageComposerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D690964F23E7B835008864B6 /* MessageComposerViewController.swift */; };
@@ -509,6 +510,7 @@
 		D685CE9C2439769E0018F3E3 /* InviteableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCell.swift; sourceTree = "<group>"; };
 		D685CE9E243976C60018F3E3 /* InviteableCollectionViewManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCollectionViewManger.swift; sourceTree = "<group>"; };
 		D685CEA0243978AB0018F3E3 /* InviteableCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCollectionView.swift; sourceTree = "<group>"; };
+		D685CEA4243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionsCollectionViewManager.swift; sourceTree = "<group>"; };
 		D685E9262331177100CC1BAB /* UserNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
 		D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedOverlayView.swift; sourceTree = "<group>"; };
 		D690964F23E7B835008864B6 /* MessageComposerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposerViewController.swift; sourceTree = "<group>"; };
@@ -901,7 +903,7 @@
 				D6A82B722325C2FD003E0A8B /* NewChannelViewController.swift */,
 				D6849CBC23B5BCAA006799F6 /* NewChannelButton.swift */,
 				D6A82B712325C2DA003E0A8B /* Purpose */,
-				D6A82B702325C105003E0A8B /* Favorites */,
+				D6A82B702325C105003E0A8B /* Connections */,
 			);
 			path = "New Channel";
 			sourceTree = "<group>";
@@ -1232,12 +1234,13 @@
 			path = Configurer;
 			sourceTree = "<group>";
 		};
-		D6A82B702325C105003E0A8B /* Favorites */ = {
+		D6A82B702325C105003E0A8B /* Connections */ = {
 			isa = PBXGroup;
 			children = (
 				D6A82B6E2325BEA2003E0A8B /* ConnectionsViewController.swift */,
+				D685CEA4243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift */,
 			);
-			path = Favorites;
+			path = Connections;
 			sourceTree = "<group>";
 		};
 		D6A82B712325C2DA003E0A8B /* Purpose */ = {
@@ -1820,6 +1823,7 @@
 				D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */,
 				D68540CF235FDE35006F666C /* SuggestionCollectionViewController.swift in Sources */,
 				D685CE9B243976860018F3E3 /* InviteableCollectionViewController.swift in Sources */,
+				D685CEA5243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift in Sources */,
 				D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */,
 				D642737F22C9A7EC0088256B /* ContactsManager.swift in Sources */,
 				D6347392241EAA840071E9DA /* Invitee.swift in Sources */,

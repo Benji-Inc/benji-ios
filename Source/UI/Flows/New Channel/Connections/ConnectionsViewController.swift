@@ -10,7 +10,15 @@ import Foundation
 import Parse
 import TMROFutures
 
-class ConnectionsViewController: OrbCollectionViewController, Sizeable {
+class ConnectionsViewController: CollectionViewController<InviteableCell, ConnectionsCollectionViewManager>, Sizeable {
+
+    init() {
+        super.init(with: InviteableCollectionView())
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func initializeViews() {
         super.initializeViews()
@@ -19,17 +27,11 @@ class ConnectionsViewController: OrbCollectionViewController, Sizeable {
             .observeValue { (connections) in
                 let items = connections.filter { (connection) -> Bool in
                     return connection.status == .accepted
+                }.map { (connection) -> Inviteable in
+                    return .connection(connection)
                 }
 
-                var users: [User] = []
-
-                items.forEach { (connection) in
-                    if let user = connection.nonMeUser {
-                        users.append(user)
-                    }
-                }
-
-                self.collectionViewManager.set(newItems: users)
+                self.collectionViewManager.set(newItems: items)
         }
 
         self.collectionViewManager.allowMultipleSelection = true 
