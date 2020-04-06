@@ -9,12 +9,13 @@
 import Foundation
 import Lottie
 import PhoneNumberKit
+import TMROLocalization
 
 class ConnectionContentView: View {
 
     private let avatarView = AvatarView()
     private let nameLabel = RegularBoldLabel()
-    private let phoneNumberLabel = SmallLabel()
+    private let routineLabel = SmallLabel()
     private(set) var animationView = AnimationView(name: "checkbox")
 
     override func initializeSubviews() {
@@ -22,7 +23,7 @@ class ConnectionContentView: View {
 
         self.addSubview(self.avatarView)
         self.addSubview(self.nameLabel)
-        self.addSubview(self.phoneNumberLabel)
+        self.addSubview(self.routineLabel)
         self.addSubview(self.animationView)
     }
 
@@ -30,17 +31,25 @@ class ConnectionContentView: View {
 
         connection.nonMeUser?.fetchIfNeededInBackground { (object, error) in
             guard let nonMeUser = object as? User else { return }
-            self.set(phoneNumber: nonMeUser.phoneNumber, avatar: nonMeUser)
+            self.set(user: nonMeUser)
         }
     }
 
-    private func set(phoneNumber: String?, avatar: Avatar) {
+    private func set(user: User) {
 
-        self.nameLabel.set(text: avatar.fullName, stringCasing: .capitalized)
-        if let phone = phoneNumber {
-            self.phoneNumberLabel.set(text: PhoneKit.formatter.formatPartial(phone), color: .background4)
-        }
-        self.avatarView.set(avatar: avatar)
+        self.nameLabel.set(text: user.fullName, stringCasing: .capitalized)
+        self.routineLabel.set(text: "No routine set yet.")
+        user.routine?.fetchIfNeededInBackground(block: { (object, error) in
+            if let routine = object as? Routine, let date = routine.date {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "h:mm a"
+                let string = formatter.string(from: date)
+                let routineText = LocalizedString(id: "", arguments: [user.givenName, string], default: "@(name)'s routine is: @(routine)")
+                self.routineLabel.set(text: routineText)
+            }
+        })
+
+        self.avatarView.set(avatar: user)
 
         self.layoutNow()
     }
@@ -57,9 +66,9 @@ class ConnectionContentView: View {
         self.nameLabel.bottom = self.avatarView.centerY
         self.nameLabel.left = self.avatarView.right + Theme.contentOffset
 
-        self.phoneNumberLabel.size = CGSize(width: width, height: 30)
-        self.phoneNumberLabel.top = self.avatarView.centerY
-        self.phoneNumberLabel.left = self.avatarView.right + Theme.contentOffset
+        self.routineLabel.size = CGSize(width: width, height: 30)
+        self.routineLabel.top = self.avatarView.centerY
+        self.routineLabel.left = self.avatarView.right + Theme.contentOffset
 
         self.animationView.size = CGSize(width: 20, height: 20)
         self.animationView.centerOnY()
