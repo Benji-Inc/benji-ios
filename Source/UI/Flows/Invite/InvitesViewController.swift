@@ -34,7 +34,7 @@ class InvitesViewController: NavigationBarViewController {
     private var selectedContacts: [CNContact] {
         return self.inviteablVC.collectionViewManager.selectedItems.compactMap { (inviteable) -> CNContact? in
             switch inviteable {
-            case .contact(let contact):
+            case .contact(let contact, _):
                 return contact
             case .connection(_):
                 return nil
@@ -68,6 +68,10 @@ class InvitesViewController: NavigationBarViewController {
         self.inviteablVC.collectionViewManager.onSelectedItem.signal.observeValues { [unowned self] (_) in
             self.updateButtonForContacts()
         }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
 
         ContactsManager.shared.getAuthorizationStatus { [unowned self] (status) in
             self.delegate.invitesView(self, didGetAuthorization: status)
@@ -161,21 +165,21 @@ class InvitesViewController: NavigationBarViewController {
         var connectionPromises: [Future<User>] = []
         connections.forEach { (connection) in
             if let user = connection.nonMeUser {
-                connectionPromises.append(user.fetchUserIfNeeded())
+                connectionPromises.append((user.fetchUserIfNeeded()))
             }
         }
 
         waitForAll(futures: connectionPromises, queue: self.secondSyncQueue)
             .observeValue { (users) in
-                var finalItems: [Inviteable] = []
+                var finalItems: [Inviteable] = contacts.compactMap { (contact) -> Inviteable? in
+                    return .contact(contact, .pending)
+                }
 
-                for (index, user) in users.enumerated() {
-                    for contact in contacts {
+                for (i, contact) in contacts.enumerated() {
+                    for (index, user) in users.enumerated() {
                         if self.shouldAddConneciton(from: user, contact: contact),
                             let connection = connections[safe: index] {
-                            finalItems.append(.connection(connection))
-                        } else if !finalItems.contains(.contact(contact)) {
-                            finalItems.append(.contact(contact))
+                            finalItems[i] = .contact(contact, connection.status!)
                         }
                     }
                 }

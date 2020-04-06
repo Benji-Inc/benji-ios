@@ -10,12 +10,12 @@ import Foundation
 import Contacts
 
 enum Inviteable: ManageableCellItem {
-    case contact(CNContact)
+    case contact(CNContact, Connection.Status)
     case connection(Connection)
 
     var id: String {
         switch self {
-        case .contact(let contact):
+        case .contact(let contact, _):
             return contact.identifier
         case .connection(let connection):
             return connection.objectId!
@@ -27,7 +27,7 @@ extension Inviteable: Avatar {
 
     var givenName: String {
         switch self {
-        case .contact(let contact):
+        case .contact(let contact, _):
             return contact.givenName
         case .connection(let connection):
             return connection.nonMeUser?.givenName ?? String()
@@ -36,7 +36,7 @@ extension Inviteable: Avatar {
 
     var familyName: String {
         switch self {
-        case .contact(let contact):
+        case .contact(let contact, _):
             return contact.familyName
         case .connection(let connection):
             return connection.nonMeUser?.familyName ?? String()
@@ -45,7 +45,7 @@ extension Inviteable: Avatar {
 
     var userObjectID: String? {
         switch self {
-        case .contact(_):
+        case .contact(_, _):
             return nil
         case .connection(let connection):
             return connection.nonMeUser?.objectId
@@ -54,7 +54,7 @@ extension Inviteable: Avatar {
 
     var image: UIImage? {
         switch self {
-        case .contact(let contact):
+        case .contact(let contact, _):
             return contact.image
         case .connection(let connection):
             return connection.nonMeUser?.image
@@ -63,7 +63,7 @@ extension Inviteable: Avatar {
 
     var phoneNumber: String? {
         switch self {
-        case .contact(let contact):
+        case .contact(let contact, _):
             return contact.primaryPhoneNumber
         case .connection(let connection):
             return connection.nonMeUser?.phoneNumber

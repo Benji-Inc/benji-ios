@@ -31,10 +31,18 @@ class InviteableContentView: View {
     func configure(with inviteable: Inviteable) {
 
         switch inviteable {
-        case .contact(_):
+        case .contact(_, let status):
             self.set(phoneNumber: inviteable.phoneNumber, avatar: inviteable)
-            self.animationView.isVisible = true
-            self.statusLabel.isVisible = false
+
+            if status == .accepted || status == .invited {
+                self.statusLabel.isVisible = true
+                self.statusLabel.set(text: status.rawValue.uppercased(), color: .white, alignment: .right)
+                self.animationView.isVisible = false 
+            } else {
+                self.animationView.isVisible = true
+                self.statusLabel.isVisible = false
+            }
+
         case .connection(let connection):
             connection.nonMeUser?.fetchIfNeededInBackground { (object, error) in
                 guard let nonMeUser = object as? User else { return }
@@ -47,8 +55,6 @@ class InviteableContentView: View {
             }
 
             self.animationView.isVisible = false
-
-            self.layoutNow()
         }
     }
 

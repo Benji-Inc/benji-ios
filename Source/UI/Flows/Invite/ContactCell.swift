@@ -43,7 +43,7 @@ class ContactCell: UICollectionViewCell {
     func configure(with item: CNContact?) {
         guard let contact = item else { return }
 
-        self.content.configure(with: .contact(contact))
+        self.content.configure(with: .contact(contact, .accepted))
     }
 
     func update(isSelected: Bool) {

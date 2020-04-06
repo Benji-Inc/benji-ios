@@ -195,6 +195,7 @@ class AvatarView: DisplayableImageView {
         self.displayable = avatar
         guard avatar.image == nil, avatar.userObjectID == nil else { return }
         self.initials = avatar.initials
+        self.layoutNow()
     }
 
     func setCorner(radius: CGFloat?) {
