@@ -10,10 +10,10 @@ import Foundation
 import Parse
 import TMROFutures
 
-class ConnectionsViewController: CollectionViewController<InviteableCell, ConnectionsCollectionViewManager>, Sizeable {
+class ConnectionsViewController: CollectionViewController<ConnectionCell, ConnectionsCollectionViewManager>, Sizeable {
 
     init() {
-        super.init(with: InviteableCollectionView())
+        super.init(with: VerticalCollectionView())
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -27,8 +27,6 @@ class ConnectionsViewController: CollectionViewController<InviteableCell, Connec
             .observeValue { (connections) in
                 let items = connections.filter { (connection) -> Bool in
                     return connection.status == .accepted
-                }.map { (connection) -> Inviteable in
-                    return .connection(connection)
                 }
 
                 self.collectionViewManager.set(newItems: items)

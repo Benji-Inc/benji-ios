@@ -66,3 +66,9 @@ extension Connection: Objectable {
         return self.relation(forKey: key.rawValue) as? PFRelation
     }
 }
+
+extension Connection: ManageableCellItem {
+    var id: String {
+        return self.objectId!
+    }
+}

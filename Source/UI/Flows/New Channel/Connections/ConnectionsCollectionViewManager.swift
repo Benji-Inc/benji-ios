@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConnectionsCollectionViewManager: CollectionViewManager<InviteableCell> {
+class ConnectionsCollectionViewManager: CollectionViewManager<ConnectionCell> {
 
     private let selectionImpact = UIImpactFeedbackGenerator(style: .light)
 

@@ -11,7 +11,7 @@ import Foundation
 class InviteableCollectionViewController: CollectionViewController<InviteableCell, InviteableCollectionViewManger> {
 
     init() {
-        super.init(with: InviteableCollectionView())
+        super.init(with: VerticalCollectionView())
     }
 
     required init?(coder aDecoder: NSCoder) {

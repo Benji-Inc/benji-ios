@@ -192,8 +192,10 @@
 		D685CE9B243976860018F3E3 /* InviteableCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9A243976860018F3E3 /* InviteableCollectionViewController.swift */; };
 		D685CE9D2439769E0018F3E3 /* InviteableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9C2439769E0018F3E3 /* InviteableCell.swift */; };
 		D685CE9F243976C60018F3E3 /* InviteableCollectionViewManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CE9E243976C60018F3E3 /* InviteableCollectionViewManger.swift */; };
-		D685CEA1243978AB0018F3E3 /* InviteableCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEA0243978AB0018F3E3 /* InviteableCollectionView.swift */; };
+		D685CEA1243978AB0018F3E3 /* VerticalCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEA0243978AB0018F3E3 /* VerticalCollectionView.swift */; };
 		D685CEA5243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEA4243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift */; };
+		D685CEA7243ACA060018F3E3 /* ConnectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEA6243ACA060018F3E3 /* ConnectionCell.swift */; };
+		D685CEA9243ACA800018F3E3 /* ConnectionContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEA8243ACA800018F3E3 /* ConnectionContentView.swift */; };
 		D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685E9262331177100CC1BAB /* UserNotificationManager.swift */; };
 		D68DC7FC22EE5D9000BEAF80 /* FeedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */; };
 		D690965023E7B835008864B6 /* MessageComposerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D690964F23E7B835008864B6 /* MessageComposerViewController.swift */; };
@@ -509,8 +511,10 @@
 		D685CE9A243976860018F3E3 /* InviteableCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCollectionViewController.swift; sourceTree = "<group>"; };
 		D685CE9C2439769E0018F3E3 /* InviteableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCell.swift; sourceTree = "<group>"; };
 		D685CE9E243976C60018F3E3 /* InviteableCollectionViewManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCollectionViewManger.swift; sourceTree = "<group>"; };
-		D685CEA0243978AB0018F3E3 /* InviteableCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteableCollectionView.swift; sourceTree = "<group>"; };
+		D685CEA0243978AB0018F3E3 /* VerticalCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerticalCollectionView.swift; sourceTree = "<group>"; };
 		D685CEA4243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionsCollectionViewManager.swift; sourceTree = "<group>"; };
+		D685CEA6243ACA060018F3E3 /* ConnectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionCell.swift; sourceTree = "<group>"; };
+		D685CEA8243ACA800018F3E3 /* ConnectionContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionContentView.swift; sourceTree = "<group>"; };
 		D685E9262331177100CC1BAB /* UserNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
 		D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedOverlayView.swift; sourceTree = "<group>"; };
 		D690964F23E7B835008864B6 /* MessageComposerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposerViewController.swift; sourceTree = "<group>"; };
@@ -1239,6 +1243,8 @@
 			children = (
 				D6A82B6E2325BEA2003E0A8B /* ConnectionsViewController.swift */,
 				D685CEA4243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift */,
+				D685CEA6243ACA060018F3E3 /* ConnectionCell.swift */,
+				D685CEA8243ACA800018F3E3 /* ConnectionContentView.swift */,
 			);
 			path = Connections;
 			sourceTree = "<group>";
@@ -1474,7 +1480,7 @@
 				D685CE9A243976860018F3E3 /* InviteableCollectionViewController.swift */,
 				D685CE9C2439769E0018F3E3 /* InviteableCell.swift */,
 				D685CE9E243976C60018F3E3 /* InviteableCollectionViewManger.swift */,
-				D685CEA0243978AB0018F3E3 /* InviteableCollectionView.swift */,
+				D685CEA0243978AB0018F3E3 /* VerticalCollectionView.swift */,
 			);
 			path = Invite;
 			sourceTree = "<group>";
@@ -1863,6 +1869,7 @@
 				D657955C239CA01100A01338 /* FeedRoutineView.swift in Sources */,
 				D6DADF722207DF83007D9EB1 /* ChannelsCollectionView.swift in Sources */,
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,
+				D685CEA7243ACA060018F3E3 /* ConnectionCell.swift in Sources */,
 				D607400C23400FA6009633EB /* ChannelsSearchBar.swift in Sources */,
 				D66A0B9823526A4E00A0FFEA /* CarmeraButton.swift in Sources */,
 				D6EE715523B84B2D000ED221 /* OrbCell.swift in Sources */,
@@ -1902,7 +1909,7 @@
 				D66F0FC922BF006D00BA277D /* SystemMessage.swift in Sources */,
 				D67896B422FF75640059BA75 /* OnboardingCoordinator.swift in Sources */,
 				D642738C22C9B24E0088256B /* LoadingButton.swift in Sources */,
-				D685CEA1243978AB0018F3E3 /* InviteableCollectionView.swift in Sources */,
+				D685CEA1243978AB0018F3E3 /* VerticalCollectionView.swift in Sources */,
 				D68DC7FC22EE5D9000BEAF80 /* FeedOverlayView.swift in Sources */,
 				80D4A21A23039FA5007CB5F1 /* RoutineManager.swift in Sources */,
 				D67896BF2302683C0059BA75 /* PhotoViewController.swift in Sources */,
@@ -1943,6 +1950,7 @@
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
 				D6B2604522E6C09700143CF0 /* RegularLabel.swift in Sources */,
+				D685CEA9243ACA800018F3E3 /* ConnectionContentView.swift in Sources */,
 				D67896A722FF4D9B0059BA75 /* NavigationBarView.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				D6A301AC2380E102006655E0 /* FeedSupplier.swift in Sources */,

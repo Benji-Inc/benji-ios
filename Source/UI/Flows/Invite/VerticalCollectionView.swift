@@ -8,7 +8,7 @@
 
 import Foundation
 
-class InviteableCollectionView: CollectionView {
+class VerticalCollectionView: CollectionView {
 
     init() {
         let flowLayout = UICollectionViewFlowLayout()

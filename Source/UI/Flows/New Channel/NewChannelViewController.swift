@@ -145,20 +145,16 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
         case .favorites(_):
             return LocalizedString(id: "",
                                    arguments: [self.purposeVC.textField.text!],
-                                   default: "ADD FAVORITES TO:\n@(foo)")
+                                   default: "ADD PEOPLE TO:\n@(foo)")
         }
     }
 
     override func getDescription() -> Localized {
         switch self.currentContent.value {
         case .purpose(_):
-            return "Add a name and description to help frame the conversation."
+            return "Add a name and some context to help frame the conversation."
         case .favorites(_):
-            if let text = self.purposeVC.textView.text, !text.isEmpty {
-                return text
-            } else {
-                return "No description given."
-            }
+            return "Add people to the converstion."
         }
     }
 
@@ -181,12 +177,7 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
                 let description = self.purposeVC.textView.text else { return }
 
             let users = self.favoritesVC.collectionViewManager.selectedItems.compactMap { (orbItem) -> User? in
-                switch orbItem {
-                case .contact(_, _):
-                    return nil
-                case .connection(let connection):
-                    return connection.nonMeUser
-                }
+                return orbItem.nonMeUser
             }
 
             self.createChannel(with: users,
