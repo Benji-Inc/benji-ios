@@ -11,6 +11,7 @@ import Foundation
 enum FontType {
 
     case display
+    case displayUnderlined
     case displayThin
     case medium
     case mediumBold
@@ -21,7 +22,7 @@ enum FontType {
 
     var font: UIFont {
         switch self {
-        case .display:
+        case .display, .displayUnderlined:
             return UIFont.systemFont(ofSize: self.size, weight: .heavy)
         case .displayThin:
             return UIFont.systemFont(ofSize: self.size, weight: .ultraLight)
@@ -52,7 +53,7 @@ enum FontType {
 
     var size: CGFloat {
         switch self {
-        case .display:
+        case .display, .displayUnderlined:
             return 40
         case .displayThin:
             return 54
@@ -71,6 +72,15 @@ enum FontType {
             return 0
         default:
             return 1
+        }
+    }
+
+    var underlineStyle: NSUnderlineStyle {
+        switch self {
+        case .displayUnderlined:
+            return .single
+        default:
+            return []
         }
     }
 }

@@ -21,7 +21,6 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
     override func initializeViews() {
         super.initializeViews()
 
-        self.registerKeyboardEvents()
         // Need to call prepare before switchContent so content doesnt flicker on first load
         self.prepareForPresentation()
 

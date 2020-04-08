@@ -13,7 +13,6 @@ class PurposeViewController: ViewController, Sizeable {
 
     let offset: CGFloat = Theme.contentOffset
 
-    let textFieldTitleLabel = RegularBoldLabel()
     let textField = PurposeTitleTextField()
 
     lazy var contextVC = ContextCollectionViewController()
@@ -30,8 +29,6 @@ class PurposeViewController: ViewController, Sizeable {
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.addSubview(self.textFieldTitleLabel)
-        self.textFieldTitleLabel.set(text: "Name", stringCasing: .unchanged)
         self.view.addSubview(self.textField)
         self.textField.set(backgroundColor: .background3)
         self.textField.roundCorners()
@@ -45,28 +42,23 @@ class PurposeViewController: ViewController, Sizeable {
         self.textField.delegate = self
 
         self.addChild(viewController: self.contextVC)
-        self.contextVC.collectionViewManager.onSelectedItem.signal.observeValues { [unowned self] (selectedItem) in
-            guard let item = selectedItem else { return }
-        }
+        self.contextVC.view.alpha = 0 
     }
 
     func getHeight(for width: CGFloat) -> CGFloat {
 
         let newWidth = width - (self.offset * 2)
-        self.textFieldTitleLabel.setSize(withWidth: newWidth)
-        self.textFieldTitleLabel.top = 30
-        self.textFieldTitleLabel.left = self.offset
 
-        self.textField.size = CGSize(width: newWidth, height: 40)
+        self.textField.size = CGSize(width: newWidth, height: 72)
         self.textField.left = self.offset
-        self.textField.top = self.textFieldTitleLabel.bottom + 10
+        self.textField.top = 50
 
         let height = self.view.height - self.textField.bottom
         self.contextVC.view.size = CGSize(width: self.view.width, height: height)
         self.contextVC.view.top = self.textField.bottom
         self.contextVC.view.centerOnX()
 
-        return .zero
+        return 0
     }
 
     func getWidth(for height: CGFloat) -> CGFloat {

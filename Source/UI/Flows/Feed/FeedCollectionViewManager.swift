@@ -80,7 +80,7 @@ extension FeedCollectionViewManager: KolodaViewDelegate {
     func koloda(_ koloda: KolodaView, didSwipeCardAt index: Int, in direction: SwipeResultDirection) { }
 
     func kolodaShouldApplyAppearAnimation(_ koloda: KolodaView) -> Bool {
-        return true
+        return false
     }
 
     func kolodaDidRunOutOfCards(_ koloda: KolodaView) {

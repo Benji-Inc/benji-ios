@@ -76,7 +76,12 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
                 self.titleLabel.alpha = 0.2
                 self.descriptionLabel.alpha = 0.2
                 self.lineView.alpha = 0.2
-                self.purposeVC.contextVC.view.alpha = 0.2
+
+                if let text = self.purposeVC.textField.text, !text.isEmpty {
+                    self.purposeVC.contextVC.view.alpha = 0.2
+                } else {
+                    self.purposeVC.contextVC.view.alpha = 0
+                }
             }
         }
 
@@ -85,8 +90,23 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
                 self.titleLabel.alpha = 1
                 self.descriptionLabel.alpha = 1
                 self.lineView.alpha = 1
-                self.purposeVC.contextVC.view.alpha = 1
+
+                if let text = self.purposeVC.textField.text, !text.isEmpty {
+                    self.purposeVC.contextVC.view.alpha = 1
+                } else {
+                    self.purposeVC.contextVC.view.alpha = 0
+                }
             }
+
+            if let text = self.purposeVC.textField.text, !text.isEmpty {
+                self.purposeVC.contextVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
+            }
+        }
+
+        self.purposeVC.contextVC.collectionViewManager.onSelectedItem.signal.observeValues { [unowned self] (selectedItem) in
+            guard let selectedItem = selectedItem else { return }
+
+            self.purposeVC.textField.updateColor(for: selectedItem.item)
         }
 
         self.purposeVC.textFieldTextDidChange = { [unowned self] text in
@@ -157,21 +177,22 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
                 return orbItem.nonMeUser
             }
 
-            // TODO: Add context to channel
+            guard let context = self.purposeVC.contextVC.collectionViewManager.onSelectedItem.value?.item else { return }
+
             self.createChannel(with: users,
                                title: title,
-                               description: "")
+                               context: context)
         }
     }
 
     private func createChannel(with users: [User],
                                title: String,
-                               description: String) {
+                               context: ConversationContext) {
 
         self.button.isLoading = true
 
         ChannelSupplier.createChannel(channelName: title,
-                                      channelDescription: description,
+                                      context: context,
                                       type: .private)
             .joinIfNeeded()
             .invite(users: users)

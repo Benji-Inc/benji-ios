@@ -22,7 +22,9 @@ struct StringStyle {
     var attributes: [NSAttributedString.Key: Any] {
         return [NSAttributedString.Key.font: self.fontType.font,
                 NSAttributedString.Key.kern: self.fontType.kern,
-                NSAttributedString.Key.foregroundColor: self.color.color]
+                NSAttributedString.Key.foregroundColor: self.color.color,
+                NSAttributedString.Key.underlineStyle: self.fontType.underlineStyle.rawValue,
+                NSAttributedString.Key.underlineColor: self.color.color]
     }
 
     var rawValueAttributes: [String : Any] {

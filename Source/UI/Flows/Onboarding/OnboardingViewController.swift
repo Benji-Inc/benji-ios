@@ -40,6 +40,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func initializeViews() {
         super.initializeViews()
 
+         self.registerKeyboardEvents()
+
         self.blurView.effect = nil
 
         self.phoneVC.onDidComplete = { [unowned self] result in

@@ -22,6 +22,13 @@ extension TCHChannel: Diffable, ManageableCellItem {
         return .blue
     }
 
+    var context: ConversationContext? {
+        guard let dict = self.attributes()?.dictionary,
+            let contextString = dict[ChannelKey.context.rawValue] as? String,
+            let context = ConversationContext(rawValue: contextString) else { return nil }
+        return context
+    }
+
     func diffIdentifier() -> NSObjectProtocol {
         return String(optional: self.sid) as NSObjectProtocol
     }
@@ -222,12 +229,5 @@ extension TCHChannel: ImageDisplayable {
     
     var userObjectID: String? {
         return self.createdBy
-    }
-
-    var context: MessageContext? {
-        guard let attributes = self.attributes(),
-            let contextString = attributes.dictionary?["context"] as? String,
-            let context = MessageContext(rawValue: contextString) else { return nil }
-        return context
     }
 }

@@ -10,4 +10,5 @@ import Foundation
 
 enum ChannelKey: String {
     case description
+    case context 
 }

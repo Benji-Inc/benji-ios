@@ -11,7 +11,7 @@ import Foundation
 class TextField: UITextField {
 
     let activityIndicator = UIActivityIndicatorView(style: .medium)
-    let padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+    var padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
     override var text: String? {
         get {

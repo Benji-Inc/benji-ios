@@ -20,8 +20,6 @@ class ContextCollectionViewController: CollectionViewController<ContextCell, Con
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.collectionViewManager.set(newItems: ConversationContext.allCases) { [unowned self] (_) in
-            self.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
-        }
+        self.collectionViewManager.set(newItems: ConversationContext.allCases) { (_) in }
     }
 }

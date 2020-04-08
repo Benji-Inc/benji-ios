@@ -16,7 +16,7 @@ class ChannelSupplier {
     // MARK: CREATION
 
     static func createChannel(channelName: String,
-                              channelDescription: String,
+                              context: ConversationContext,
                               type: TCHChannelType,
                               attributes: NSMutableDictionary = [:]) -> Future<TCHChannel> {
 
@@ -25,7 +25,7 @@ class ChannelSupplier {
             return Promise<TCHChannel>(error: ClientError.apiError(detail: errorMessage))
         }
 
-        attributes[ChannelKey.description.rawValue] = channelDescription
+        attributes[ChannelKey.context.rawValue] = context.rawValue
 
         return client.createChannel(channelName: channelName,
                                     uniqueName: UUID().uuidString,
