@@ -201,6 +201,7 @@
 		D685CEB0243B7B550018F3E3 /* ContextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEAF243B7B550018F3E3 /* ContextCell.swift */; };
 		D685CEB2243B7BFA0018F3E3 /* ConversationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEB1243B7BFA0018F3E3 /* ConversationContext.swift */; };
 		D685CEB4243B7F5E0018F3E3 /* ContextCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEB3243B7F5E0018F3E3 /* ContextCollectionView.swift */; };
+		D685CEB6243D8DCF0018F3E3 /* DisplayUnderlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEB5243D8DCF0018F3E3 /* DisplayUnderlinedLabel.swift */; };
 		D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685E9262331177100CC1BAB /* UserNotificationManager.swift */; };
 		D68DC7FC22EE5D9000BEAF80 /* FeedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */; };
 		D690965023E7B835008864B6 /* MessageComposerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D690964F23E7B835008864B6 /* MessageComposerViewController.swift */; };
@@ -525,6 +526,7 @@
 		D685CEAF243B7B550018F3E3 /* ContextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCell.swift; sourceTree = "<group>"; };
 		D685CEB1243B7BFA0018F3E3 /* ConversationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationContext.swift; sourceTree = "<group>"; };
 		D685CEB3243B7F5E0018F3E3 /* ContextCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextCollectionView.swift; sourceTree = "<group>"; };
+		D685CEB5243D8DCF0018F3E3 /* DisplayUnderlinedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayUnderlinedLabel.swift; sourceTree = "<group>"; };
 		D685E9262331177100CC1BAB /* UserNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
 		D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedOverlayView.swift; sourceTree = "<group>"; };
 		D690964F23E7B835008864B6 /* MessageComposerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposerViewController.swift; sourceTree = "<group>"; };
@@ -999,12 +1001,13 @@
 			children = (
 				D6B2603922E6ABCA00143CF0 /* DisplayLabel.swift */,
 				D6B2604022E6B9C600143CF0 /* DisplayThinLabel.swift */,
+				D685CEB5243D8DCF0018F3E3 /* DisplayUnderlinedLabel.swift */,
 				D61EC0E121D30E6000204BEE /* Label.swift */,
 				D6815DB022ECAEC700E71251 /* MediumLabel.swift */,
 				D6B2604222E6BAE400143CF0 /* RegularBoldLabel.swift */,
 				D6B2604422E6C09700143CF0 /* RegularLabel.swift */,
-				D64C6A7B23288FB300DB7257 /* SmallLabel.swift */,
 				D6B2607122E80FE000143CF0 /* SmallBoldLabel.swift */,
+				D64C6A7B23288FB300DB7257 /* SmallLabel.swift */,
 			);
 			path = Labels;
 			sourceTree = "<group>";
@@ -1870,6 +1873,7 @@
 				D646DB4022CFCFDB0055CC7C /* Future+Extensions.swift in Sources */,
 				D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */,
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
+				D685CEB6243D8DCF0018F3E3 /* DisplayUnderlinedLabel.swift in Sources */,
 				D642739322C9C0110088256B /* AlertView.swift in Sources */,
 				D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */,
 				D645996523EF199600BE3F0B /* InviteableContentView.swift in Sources */,

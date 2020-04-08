@@ -49,6 +49,7 @@ class SearchBar: View {
         super.initializeSubviews()
 
         self.addSubview(self.lineView)
+        self.textField.padding = .zero
         self.addSubview(self.textField)
         self.addSubview(self.animationView)
         self.addSubview(self.button)
@@ -79,7 +80,7 @@ class SearchBar: View {
         self.button.right = self.width
         self.button.top = 0
 
-        self.animationView.size = CGSize(width: 20, height: 20)
+        self.animationView.size = CGSize(width: 26, height: 26)
         self.animationView.centerOnY()
         self.animationView.right = self.width
 
@@ -102,7 +103,7 @@ class SearchBar: View {
 
         UIView.animate(withDuration: Theme.animationDuration, delay: 0, options: .curveEaseIn, animations: {
             self.textField.alpha = 1
-            self.lineWidth = self.width - 10
+            self.lineWidth = self.width
             self.layoutNow()
         }, completion: nil)
     }

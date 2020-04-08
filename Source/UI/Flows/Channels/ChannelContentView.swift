@@ -11,8 +11,7 @@ import Foundation
 class ChannelContentView: View {
 
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    private(set) var titleLabel = RegularBoldLabel()
-    private let purposeLabel = SmallLabel()
+    private(set) var titleLabel = DisplayUnderlinedLabel()
     private let stackedAvatarView = StackedAvatarView()
 
     override func initializeSubviews() {
@@ -21,7 +20,6 @@ class ChannelContentView: View {
         self.addSubview(self.blurView)
         self.addSubview(self.stackedAvatarView)
         self.addSubview(self.titleLabel)
-        self.addSubview(self.purposeLabel)
         self.set(backgroundColor: .clear)
     }
 
@@ -42,11 +40,15 @@ class ChannelContentView: View {
                         self.layoutNow()
                     }
                 })
-        }
 
-        self.titleLabel.set(text: type.displayName)
-        self.purposeLabel.set(text: type.purpose, color: .background4)
-        self.layoutNow()
+            if let context = channel.context {
+                self.titleLabel.set(text: type.displayName, color: context.color)
+            } else {
+                self.titleLabel.set(text: type.displayName, color: .white)
+            }
+
+            self.layoutNow()
+        }
     }
 
     override func layoutSubviews() {
@@ -54,21 +56,16 @@ class ChannelContentView: View {
 
         self.blurView.expandToSuperviewSize()
 
-        self.stackedAvatarView.left = Theme.contentOffset
+        self.stackedAvatarView.right = self.width - Theme.contentOffset
         self.stackedAvatarView.centerOnY()
 
         self.titleLabel.setSize(withWidth: self.width * 0.7)
-        self.titleLabel.left = self.stackedAvatarView.right + 10
-        self.titleLabel.top = self.stackedAvatarView.top
-
-        self.purposeLabel.setSize(withWidth: self.width * 0.7)
-        self.purposeLabel.left = self.titleLabel.left
-        self.purposeLabel.top = self.titleLabel.bottom + 4
+        self.titleLabel.left = Theme.contentOffset + 4
+        self.titleLabel.bottom = self.stackedAvatarView.bottom
     }
 
     func reset() {
         self.titleLabel.text = nil
-        self.purposeLabel.text = nil
         self.stackedAvatarView.set(items: [])
     }
 }

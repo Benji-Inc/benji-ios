@@ -136,7 +136,7 @@ extension Future where Value == TCHChannel {
                 }
             })
 
-            return promise.withResultToast()
+            return promise
         })
     }
 
@@ -167,7 +167,7 @@ extension Future where Value == TCHChannel {
                 }
             }
 
-            return promise.withResultToast()
+            return promise
         })
     }
 

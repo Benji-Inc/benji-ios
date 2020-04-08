@@ -94,7 +94,7 @@ class HomeViewController: FullScreenViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.searchBar.size = CGSize(width: self.contentContainer.width - (Theme.contentOffset * 2), height: 44)
+        self.searchBar.size = CGSize(width: self.contentContainer.width - (16 * 2), height: 44)
         self.searchBar.centerOnX()
         self.searchBar.top = 50
 

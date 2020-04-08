@@ -53,7 +53,7 @@ class ChannelDetailBar: View {
         super.layoutSubviews()
 
         self.content.expandToSuperviewSize()
-        self.titleButton.frame = self.content.titleLabel.bounds
+        self.titleButton.frame = self.content.titleLabel.frame
     }
 
     private func subscribeToUpdates() {
