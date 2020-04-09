@@ -12,7 +12,7 @@ import Parse
 
 enum FeedType: Comparable {
 
-    case intro
+    case timeSaved(Int)
     case rountine
     case system(SystemMessage)
     case unreadMessages(TCHChannel, Int)
@@ -23,7 +23,7 @@ enum FeedType: Comparable {
 
     var id: String {
         switch self {
-        case .intro:
+        case .timeSaved(_):
             return "intro"
         case .rountine:
             return "routine"
@@ -44,7 +44,7 @@ enum FeedType: Comparable {
 
     var priority: Int {
         switch self {
-        case .intro:
+        case .timeSaved(_):
             return 0
         case .rountine:
             return 1

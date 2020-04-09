@@ -88,6 +88,9 @@ extension FeedCollectionViewManager: KolodaViewDelegate {
     }
 
     func koloda(_ koloda: KolodaView, didShowCardAt index: Int) {
+        if let view = koloda.viewForCard(at: index) {
+            view.layoutNow()
+        }
         self.didShowCardAtIndex?(index)
     }
 

@@ -37,7 +37,7 @@ extension FeedCoordinator: FeedViewControllerDelegate {
     private func handle(item: FeedType) {
 
         switch item {
-        case .intro, .system(_):
+        case .timeSaved, .system(_):
             break
         case .rountine:
             self.startRoutineFlow()

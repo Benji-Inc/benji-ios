@@ -19,7 +19,6 @@ class FeedSupplier {
 
     func getItems() -> Future<[FeedType]> {
 
-        self.items.append(.intro)
         self.items.append(.inviteAsk)
 
         ChannelManager.shared.subscribedChannels.forEach { (channel) in
@@ -77,14 +76,17 @@ class FeedSupplier {
         var disposable: Disposable?
         disposable = allProducers
             .on(value: { (channelItems) in
+                var totalCount: Int = 0
                 let items = channelItems.filter { (feedType) -> Bool in
                     switch feedType {
                     case .unreadMessages(_,let count):
+                        totalCount += count
                         return count > 0
                     default:
                         return false
                     }
                 }
+                self.items.append(.timeSaved(totalCount))
                 self.items.append(contentsOf: items)
             })
             .on(failed: { (error) in

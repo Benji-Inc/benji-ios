@@ -56,7 +56,7 @@ enum FontType {
         case .display, .displayUnderlined:
             return 40
         case .displayThin:
-            return 54
+            return 60
         case .medium, .mediumBold:
             return 24
         case .regular, .regularBold:
