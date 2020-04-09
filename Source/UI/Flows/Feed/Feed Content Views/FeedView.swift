@@ -38,7 +38,7 @@ class FeedView: View {
         switch feedItem {
         case .timeSaved(let count):
             self.container.addSubview(self.introView)
-            self.introView.set(count: 10)
+            self.introView.set(count: count)
         case .system(_):
             break
         case .unreadMessages(let channel, let count):

@@ -71,6 +71,10 @@ class FeedSupplier {
             }
         }
 
+        if channelProducers.count == 0 {
+            self.items.append(.timeSaved(0))
+        }
+
         allProducers = SignalProducer.combineLatest(channelProducers)
 
         var disposable: Disposable?
