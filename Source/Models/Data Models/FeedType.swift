@@ -20,6 +20,7 @@ enum FeedType: Comparable {
     case connectionRequest(Connection)
     case inviteAsk
     case notificationPermissions
+    case meditation
 
     var id: String {
         switch self {
@@ -39,6 +40,8 @@ enum FeedType: Comparable {
             return "notificationPermissions"
         case .connectionRequest:
             return "connecitonRequest"
+        case .meditation:
+            return "meditation"
         }
     }
 
@@ -60,6 +63,8 @@ enum FeedType: Comparable {
             return 6
         case .connectionRequest(_):
             return 7
+        case .meditation:
+            return 10
         }
     }
 

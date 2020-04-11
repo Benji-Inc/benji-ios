@@ -126,6 +126,7 @@
 		D6579557239C8B4000A01338 /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579556239C8B4000A01338 /* FeedCoordinator.swift */; };
 		D657955A239C8DA000A01338 /* FeedIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579559239C8DA000A01338 /* FeedIntroView.swift */; };
 		D657955C239CA01100A01338 /* FeedRoutineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657955B239CA01100A01338 /* FeedRoutineView.swift */; };
+		D658C7D2244226A00027D12E /* FeedMeditationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D1244226A00027D12E /* FeedMeditationView.swift */; };
 		D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */; };
 		D65B0CE5234928620041A176 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CE4234928620041A176 /* ProfileCoordinator.swift */; };
 		D65B0CE7234929440041A176 /* NewChannelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CE6234929440041A176 /* NewChannelCoordinator.swift */; };
@@ -451,6 +452,7 @@
 		D6579556239C8B4000A01338 /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
 		D6579559239C8DA000A01338 /* FeedIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedIntroView.swift; sourceTree = "<group>"; };
 		D657955B239CA01100A01338 /* FeedRoutineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRoutineView.swift; sourceTree = "<group>"; };
+		D658C7D1244226A00027D12E /* FeedMeditationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMeditationView.swift; sourceTree = "<group>"; };
 		D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelsViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D65B0CE4234928620041A176 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		D65B0CE6234929440041A176 /* NewChannelCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCoordinator.swift; sourceTree = "<group>"; };
@@ -1087,6 +1089,7 @@
 				D60B0BE72432F88D004784CD /* FeedConnectionView.swift */,
 				D6579559239C8DA000A01338 /* FeedIntroView.swift */,
 				D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */,
+				D658C7D1244226A00027D12E /* FeedMeditationView.swift */,
 				D6E80C8A23B2D1180012D438 /* FeedNotificationPermissionsView.swift */,
 				D657955B239CA01100A01338 /* FeedRoutineView.swift */,
 				D642736522C971FD0088256B /* FeedTextView.swift */,
@@ -1844,6 +1847,7 @@
 				D6D1503721D7E74500CD8CE4 /* UIViewController+Extensions.swift in Sources */,
 				80D4A21623039B22007CB5F1 /* RoutineInputViewController.swift in Sources */,
 				D6090E5A2377D5CF00833DA7 /* ChannelCellAttributesConfigurer.swift in Sources */,
+				D658C7D2244226A00027D12E /* FeedMeditationView.swift in Sources */,
 				D6090E582377D2CA00833DA7 /* ChannelSectionable.swift in Sources */,
 				D6B2606822E80A7900143CF0 /* ToastQueue.swift in Sources */,
 				D66F0FEA22C0695E00BA277D /* CNContact+Extensions.swift in Sources */,

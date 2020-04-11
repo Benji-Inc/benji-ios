@@ -20,6 +20,7 @@ class FeedSupplier {
     func getItems() -> Future<[FeedType]> {
 
         self.items.append(.inviteAsk)
+        self.items.append(.meditation)
 
         ChannelManager.shared.subscribedChannels.forEach { (channel) in
             switch channel.channelType {

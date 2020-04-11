@@ -50,6 +50,8 @@ extension FeedCoordinator: FeedViewControllerDelegate {
         case .notificationPermissions:
             break
         case .connectionRequest(_):
+            break
+        case .meditation:
             break 
         }
     }
