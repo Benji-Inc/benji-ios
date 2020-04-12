@@ -25,16 +25,18 @@ class LoadingButton: Button {
 
     var isLoading: Bool = false {
         didSet {
-            guard self.canShowLoading else { return }
+            runMain {
+                guard self.canShowLoading else { return }
 
-            if self.isLoading {
-                self.showLoading()
-            } else {
-                self.hideLoading()
+                if self.isLoading {
+                    self.showLoading()
+                } else {
+                    self.hideLoading()
+                }
+
+                self.isUserInteractionEnabled = !self.isLoading
+                self.isEnabled = !self.isLoading
             }
-
-            self.isUserInteractionEnabled = !self.isLoading
-            self.isEnabled = !self.isLoading
         }
     }
 

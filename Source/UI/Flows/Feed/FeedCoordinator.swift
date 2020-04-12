@@ -52,7 +52,7 @@ extension FeedCoordinator: FeedViewControllerDelegate {
         case .connectionRequest(_):
             break
         case .meditation:
-            break 
+            self.showMeditation()
         }
     }
 
@@ -72,6 +72,14 @@ extension FeedCoordinator: FeedViewControllerDelegate {
 
     private func startChannelFlow(for type: ChannelType) {
         let coordinator = ChannelCoordinator(router: self.router, channelType: type)
+        self.addChildAndStart(coordinator) { (_) in
+            self.router.dismiss(source: coordinator.toPresentable())
+        }
+        self.router.present(coordinator, source: self.feedVC)
+    }
+
+    private func showMeditation() {
+        let coordinator = MeditationCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { (_) in
             self.router.dismiss(source: coordinator.toPresentable())
         }

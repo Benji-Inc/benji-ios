@@ -18,8 +18,8 @@ class FeedMeditationView: View {
 
         self.addSubview(self.textView)
         self.addSubview(self.button)
-        self.textView.set(localizedText: "Take a minute to think about those who love you.")
-        self.button.set(style: .rounded(color: .blue, text: "BEGIN"))
+        self.textView.set(localizedText: "Begin a mindful minute?")
+        self.button.set(style: .rounded(color: .blue, text: "Yes"))
         self.button.isEnabled = true
     }
 

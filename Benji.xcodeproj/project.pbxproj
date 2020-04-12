@@ -127,6 +127,10 @@
 		D657955A239C8DA000A01338 /* FeedIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579559239C8DA000A01338 /* FeedIntroView.swift */; };
 		D657955C239CA01100A01338 /* FeedRoutineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657955B239CA01100A01338 /* FeedRoutineView.swift */; };
 		D658C7D2244226A00027D12E /* FeedMeditationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D1244226A00027D12E /* FeedMeditationView.swift */; };
+		D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D4244229D20027D12E /* MeditationViewController.swift */; };
+		D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */; };
+		D658C7DD24425E410027D12E /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D658C7DC24425E410027D12E /* HealthKit.framework */; };
+		D658C7DF24425E5A0027D12E /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7DE24425E5A0027D12E /* HealthKitManager.swift */; };
 		D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */; };
 		D65B0CE5234928620041A176 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CE4234928620041A176 /* ProfileCoordinator.swift */; };
 		D65B0CE7234929440041A176 /* NewChannelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CE6234929440041A176 /* NewChannelCoordinator.swift */; };
@@ -453,6 +457,10 @@
 		D6579559239C8DA000A01338 /* FeedIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedIntroView.swift; sourceTree = "<group>"; };
 		D657955B239CA01100A01338 /* FeedRoutineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRoutineView.swift; sourceTree = "<group>"; };
 		D658C7D1244226A00027D12E /* FeedMeditationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMeditationView.swift; sourceTree = "<group>"; };
+		D658C7D4244229D20027D12E /* MeditationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationViewController.swift; sourceTree = "<group>"; };
+		D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationCoordinator.swift; sourceTree = "<group>"; };
+		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
+		D658C7DE24425E5A0027D12E /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelsViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D65B0CE4234928620041A176 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		D65B0CE6234929440041A176 /* NewChannelCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCoordinator.swift; sourceTree = "<group>"; };
@@ -674,6 +682,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D61EC0FC21D437C100204BEE /* Pods_Benji.framework in Frameworks */,
+				D658C7DD24425E410027D12E /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -692,6 +701,7 @@
 		AB1A79B62F263B1E788E3AB0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D658C7DC24425E410027D12E /* HealthKit.framework */,
 				D61EC0FB21D437C100204BEE /* Pods_Benji.framework */,
 				B0D58BAEEF651AA0027FE108 /* Pods_Benji.framework */,
 			);
@@ -1099,6 +1109,15 @@
 			path = "Feed Content Views";
 			sourceTree = "<group>";
 		};
+		D658C7D3244229C00027D12E /* Meditation */ = {
+			isa = PBXGroup;
+			children = (
+				D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */,
+				D658C7D4244229D20027D12E /* MeditationViewController.swift */,
+			);
+			path = Meditation;
+			sourceTree = "<group>";
+		};
 		D66656BB23D13C83009E4BDF /* Switchable */ = {
 			isa = PBXGroup;
 			children = (
@@ -1342,6 +1361,7 @@
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				D658C7D3244229C00027D12E /* Meditation */,
 				D6432BF122D8282E0016001A /* Channel */,
 				D6DADF6A2207DC90007D9EB1 /* Channels */,
 				D62C634F22BE9C4600F4D097 /* Feed */,
@@ -1451,6 +1471,7 @@
 				80D4A21923039FA5007CB5F1 /* RoutineManager.swift */,
 				D685E9262331177100CC1BAB /* UserNotificationManager.swift */,
 				D6E4C7FC23930675002B1330 /* UserNotificationManager+Extensions.swift */,
+				D658C7DE24425E5A0027D12E /* HealthKitManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1800,6 +1821,8 @@
 				D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */,
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
+				D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */,
+				D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */,
 				D685CE9D2439769E0018F3E3 /* InviteableCell.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,
@@ -1823,6 +1846,7 @@
 				D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */,
 				D6849CBF23B65E2B006799F6 /* PurposeViewController.swift in Sources */,
 				D6EE715D23B84DAC000ED221 /* OrbCollectionViewLayout.swift in Sources */,
+				D658C7DF24425E5A0027D12E /* HealthKitManager.swift in Sources */,
 				D6A82B732325C2FD003E0A8B /* NewChannelViewController.swift in Sources */,
 				D61EC0F921D317AB00204BEE /* Theme.swift in Sources */,
 				D685CE9F243976C60018F3E3 /* InviteableCollectionViewManger.swift in Sources */,
