@@ -59,8 +59,16 @@ class CodeViewController: TextInputViewController<Void> {
     private func becomeUser(with token: String) {
         User.become(inBackground: token) { (user, error) in
             if let identity = user?.objectId {
+                CompleteOnboarding().makeRequest()
+                    .observe { (result) in
+                        switch result {
+                        case .success():
+                            self.complete(with: .success(()))
+                        case .failure(let e):
+                            self.complete(with: .failure(e))
+                        }
+                }
                 Branch.getInstance().setIdentity(identity)
-                self.complete(with: .success(()))
             } else if let error = error {
                 self.complete(with: .failure(error))
             } else {

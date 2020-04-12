@@ -62,3 +62,23 @@ struct VerifyCode: CloudFunction {
         return promise.withResultToast()
     }
 }
+
+struct CompleteOnboarding: CloudFunction {
+
+    func makeRequest() -> Future<Void> {
+        let promise = Promise<Void>()
+
+        PFCloud.callFunction(inBackground: "handleUserRegistered",
+                             withParameters: [:]) { (object, error) in
+                                if let error = error {
+                                    promise.reject(with: error)
+                                } else {
+                                    promise.resolve(with: ())
+                                }
+        }
+
+        return promise.withResultToast()
+    }
+}
+
+
