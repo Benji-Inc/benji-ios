@@ -67,9 +67,13 @@ class MainCoordinator: Coordinator<Void> {
             .withResultToast()
             .observeValue(with: { (_) in
                 self.isInitializingChat = false
-                runMain {
-                    guard let user = User.current(), user.isOnboarded else { return }
-                    self.runHomeFlow()
+
+                CompleteOnboarding().makeRequest()
+                    .observe { (_) in
+                        runMain {
+                            guard let user = User.current(), user.isOnboarded else { return }
+                            self.runHomeFlow()
+                        }
                 }
             })
     }
