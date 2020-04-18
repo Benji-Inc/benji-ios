@@ -96,7 +96,6 @@ class HomeViewController: FullScreenViewController {
 
         self.searchBar.size = CGSize(width: self.contentContainer.width - (16 * 2), height: 44)
         self.searchBar.centerOnX()
-        self.searchBar.top = 50
 
         let height = 70 + self.view.safeAreaInsets.bottom
         self.tabView.size = CGSize(width: self.contentContainer.width, height: height)
@@ -111,6 +110,8 @@ class HomeViewController: FullScreenViewController {
                                            height: self.contentContainer.height - 156)
         self.centerContainer.bottom = self.tabView.top
         self.centerContainer.centerOnX()
+
+        self.searchBar.bottom = self.centerContainer.top
 
         self.currentCenterVC?.view.frame = self.centerContainer.bounds
     }
