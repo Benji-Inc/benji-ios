@@ -225,7 +225,7 @@
 		D6AF02FD220153F5002D5C75 /* LaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF02FC220153F5002D5C75 /* LaunchManager.swift */; };
 		D6AF0301220154E3002D5C75 /* ChannelManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AF0300220154E3002D5C75 /* ChannelManager.swift */; };
 		D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */; };
-		D6B2601822E4208900143CF0 /* ChannelHeaderDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601722E4208900143CF0 /* ChannelHeaderDateLabel.swift */; };
+		D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */; };
 		D6B2603822E6AB5E00143CF0 /* ChannelDetailBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2603722E6AB5E00143CF0 /* ChannelDetailBar.swift */; };
 		D6B2603A22E6ABCA00143CF0 /* DisplayLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2603922E6ABCA00143CF0 /* DisplayLabel.swift */; };
 		D6B2603D22E6B8EA00143CF0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */; };
@@ -555,7 +555,7 @@
 		D6AF02FC220153F5002D5C75 /* LaunchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchManager.swift; sourceTree = "<group>"; };
 		D6AF0300220154E3002D5C75 /* ChannelManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelManager.swift; sourceTree = "<group>"; };
 		D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSectionHeader.swift; sourceTree = "<group>"; };
-		D6B2601722E4208900143CF0 /* ChannelHeaderDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderDateLabel.swift; sourceTree = "<group>"; };
+		D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDateLabel.swift; sourceTree = "<group>"; };
 		D6B2603722E6AB5E00143CF0 /* ChannelDetailBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDetailBar.swift; sourceTree = "<group>"; };
 		D6B2603922E6ABCA00143CF0 /* DisplayLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayLabel.swift; sourceTree = "<group>"; };
 		D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -960,7 +960,7 @@
 			isa = PBXGroup;
 			children = (
 				D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */,
-				D6B2601722E4208900143CF0 /* ChannelHeaderDateLabel.swift */,
+				D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */,
 				D63844112337C3CD0072227B /* LoadMoreSectionHeader.swift */,
 			);
 			path = Headers;
@@ -1727,7 +1727,7 @@
 				D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */,
 				D657175C2378C78500F8F96C /* MessageCellAttributesConfigurer.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
-				D6B2601822E4208900143CF0 /* ChannelHeaderDateLabel.swift in Sources */,
+				D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
 				80D4A21823039B82007CB5F1 /* RoutineInputContentView.swift in Sources */,
 				D642735122C857760088256B /* MessageContext.swift in Sources */,

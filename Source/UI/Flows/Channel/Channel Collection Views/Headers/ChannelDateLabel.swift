@@ -8,14 +8,17 @@
 
 import Foundation
 
-class ChannelHeaderDateLabel: Label {
+class ChannelDateLabel: Label {
 
-    func set(date: Date) {
+    func set(date: Date,
+             color: Color = .white,
+             alignment: NSTextAlignment = .left) {
+
         let attributed = AttributedString(self.getString(for: date),
                                           fontType: .smallBold,
-                                          color: .white)
+                                          color: color)
         self.set(attributed: attributed,
-                 alignment: .left,
+                 alignment: alignment,
                  lineCount: 1,
                  stringCasing: .uppercase)
     }

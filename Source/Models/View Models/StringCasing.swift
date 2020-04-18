@@ -27,3 +27,25 @@ enum StringCasing {
         }
     }
 }
+
+extension UILabel {
+
+    func fade(toText text: String, layoutReady: CompletionOptional) {
+        // Move our fade out code from earlier
+        UIView.animate(withDuration: Theme.animationDuration, delay: 0.0, options: .curveEaseOut, animations: {
+            self.alpha = 0.0
+        }, completion: { finished in
+
+            if finished {
+                //Once the label is completely invisible, set the text and fade it back in
+                self.attributedText = NSAttributedString(string: text, attributes: self.attributedText?.existingAttributes)
+                layoutReady?()
+
+                // Fade in
+                UIView.animate(withDuration: Theme.animationDuration, delay: 0.0, options: .curveEaseIn, animations: {
+                    self.alpha = 1.0
+                }, completion: nil)
+            }
+        })
+    }
+}

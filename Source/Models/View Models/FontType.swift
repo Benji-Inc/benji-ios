@@ -53,8 +53,10 @@ enum FontType {
 
     var size: CGFloat {
         switch self {
-        case .display, .displayUnderlined:
+        case .display:
             return 40
+        case .displayUnderlined:
+            return 32
         case .displayThin:
             return 60
         case .medium, .mediumBold:

@@ -65,5 +65,9 @@ extension NSAttributedString {
                                                     context: nil).size
         return size
     }
+
+    var existingAttributes: [NSAttributedString.Key : Any]? {
+        return self.attributes(at: 0, effectiveRange: nil)
+    }
 }
 

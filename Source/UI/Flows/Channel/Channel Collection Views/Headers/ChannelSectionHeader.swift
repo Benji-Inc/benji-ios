@@ -10,7 +10,7 @@ import Foundation
 
 class ChannelSectionHeader: UICollectionReusableView {
 
-    let label = ChannelHeaderDateLabel()
+    let label = ChannelDateLabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
