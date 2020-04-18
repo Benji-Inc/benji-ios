@@ -62,7 +62,7 @@ class MeditationViewController: NavigationBarViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.circleView.size = CGSize(width: self.view.height * 1.5, height: self.view.height * 1.5)
+        self.circleView.size = CGSize(width: self.view.width * 0.8, height: self.view.width * 0.8)
         self.circleView.centerOnXAndY()
         self.circleView.layer.cornerRadius = self.circleView.halfHeight
 
