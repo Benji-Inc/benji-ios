@@ -11,7 +11,11 @@ import TMROLocalization
 
 class ChannelContentView: View {
 
-    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
+    private lazy var blurEffect = UIBlurEffect(style: .systemThinMaterialDark)
+    private lazy var blurView = UIVisualEffectView(effect: self.blurEffect)
+    private lazy var vibrancyEffect = UIVibrancyEffect(blurEffect: self.blurEffect)
+    private lazy var vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
+
     private(set) var titleLabel = DisplayUnderlinedLabel()
     private let stackedAvatarView = StackedAvatarView()
     private let descriptionLabel = SmallLabel()
@@ -40,7 +44,8 @@ class ChannelContentView: View {
         self.addSubview(self.stackedAvatarView)
         self.addSubview(self.titleLabel)
         self.addSubview(self.descriptionLabel)
-        self.addSubview(self.dateLabel)
+        self.vibrancyEffectView.contentView.addSubview(self.dateLabel)
+        self.blurView.contentView.addSubview(self.vibrancyEffectView)
         self.set(backgroundColor: .clear)
     }
 
@@ -93,6 +98,7 @@ class ChannelContentView: View {
         super.layoutSubviews()
 
         self.blurView.expandToSuperviewSize()
+        self.vibrancyEffectView.expandToSuperviewSize()
 
         self.stackedAvatarView.left = Theme.contentOffset
         self.stackedAvatarView.top = Theme.contentOffset
