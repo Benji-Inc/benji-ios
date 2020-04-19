@@ -20,7 +20,8 @@ enum ToastState {
 
 class ToastView: UIView {
 
-    @IBOutlet weak var titleLabel: SmallBoldLabel!
+    @IBOutlet weak var titleLabel: RegularBoldLabel!
+    @IBOutlet weak var descriptionLabel: SmallLabel!
     @IBOutlet weak var displayableImageView: DisplayableImageView!
     @IBOutlet weak var effectView: UIVisualEffectView!
 
@@ -49,7 +50,7 @@ class ToastView: UIView {
     private var startY: CGFloat?
 
     var screenOffset: CGFloat = 50
-    var presentationDuration: TimeInterval = 6.0
+    var presentationDuration: TimeInterval = 10.0
     //Used to present the toast from the top OR bottom of the screen
     private let position: ToastPosition = .top
 
@@ -65,8 +66,16 @@ class ToastView: UIView {
         didSet {
             guard let text = self.title else { return }
             self.titleLabel.set(text: text,
-                                color: .white,
-                                lineBreakMode: .byTruncatingTail)
+                                color: .white)
+        }
+    }
+
+    private var descriptionText: Localized? {
+        didSet {
+            guard let text = self.descriptionText else { return }
+            self.descriptionLabel.set(text: text,
+                                      color: .white,
+                                      lineBreakMode: .byTruncatingTail)
         }
     }
 
@@ -87,6 +96,7 @@ class ToastView: UIView {
         self.displayableImageView.layer.masksToBounds = true
         self.displayableImageView.layer.cornerRadius = 5
 
+        self.descriptionLabel.alpha = 0
         self.titleLabel.alpha = 0
 
         self.addShadow(withOffset: 5)
@@ -104,6 +114,7 @@ class ToastView: UIView {
     func configure(toast: Toast) {
         self.toast = toast
         self.title = toast.title
+        self.descriptionText = toast.description
 
         self.onTap { [unowned self] (tap) in
             toast.didTap()
@@ -200,8 +211,8 @@ class ToastView: UIView {
             } else {
                 self.top = superView.bottom + self.screenOffset + superView.safeAreaInsets.bottom
             }
-            self.width = 60
-            self.height = 60
+            self.width = self.displayableImageView.width + (Theme.contentOffset * 2)
+            self.height = 84
             self.centerOnX()
         case .present:
             if self.position == .top {
@@ -222,6 +233,7 @@ class ToastView: UIView {
                 self.width = superView.width * Theme.iPadPortraitWidthRatio
             }
         case .alphaIn:
+            self.descriptionLabel.alpha = 1
             self.titleLabel.alpha = 1
         case .dismiss, .gone:
             if self.position == .top {
@@ -268,18 +280,26 @@ class ToastView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.height = 60
-
-        self.displayableImageView.size = CGSize(width: 40, height: 40)
-        self.displayableImageView.left = 10
-        self.displayableImageView.centerOnY()
+        self.displayableImageView.size = CGSize(width: 60 * 0.74, height: 60)
+        self.displayableImageView.left = Theme.contentOffset
+        self.displayableImageView.top = Theme.contentOffset
 
         let maxTitleWidth = self.width - (self.displayableImageView.right + 22)
+
         self.titleLabel.setSize(withWidth: maxTitleWidth)
-        self.titleLabel.left = self.displayableImageView.right + 10
+        self.titleLabel.left = self.displayableImageView.right + Theme.contentOffset
         self.titleLabel.top = self.displayableImageView.top
-        self.titleLabel.height = self.displayableImageView.height
-        self.titleLabel.centerOnY()
+
+        self.descriptionLabel.setSize(withWidth: maxTitleWidth)
+        self.descriptionLabel.left = self.displayableImageView.right + Theme.contentOffset
+        self.descriptionLabel.top = self.titleLabel.bottom + 4
+        self.descriptionLabel.height = self.displayableImageView.height
+
+        if self.descriptionLabel.bottom + Theme.contentOffset < 84 {
+            self.height = 84
+        } else {
+            self.height = self.descriptionLabel.bottom + Theme.contentOffset
+        }
 
         self.effectView.roundCorners()
     }

@@ -58,7 +58,8 @@ class ToastScheduler {
         return Toast(id: systemMessage.id + "system_message",
                      analyticsID: "ToastSystemMessage",
                      priority: 1,
-                     title: systemMessage.text,
+                     title: systemMessage.avatar.fullName,
+                     description: systemMessage.text,
                      displayable: UIImage(),
                      didTap: { [unowned self] in
                         self.delegate?.didInteractWith(type: .systemMessage(systemMessage))
@@ -73,7 +74,8 @@ class ToastScheduler {
         return Toast(id: sid + "message",
                      analyticsID: "ToastMessage",
                      priority: 1,
-                     title: body,
+                     title: "New Message",
+                     description: body,
                      displayable: message,
                      didTap: { [unowned self] in
                         self.delegate?.didInteractWith(type: .message(message, channel))
@@ -108,7 +110,8 @@ class ToastScheduler {
         return Toast(id: id + "userInChannel",
                      analyticsID: "ToastMessage",
                      priority: 1,
-                     title: message,
+                     title: "Update",
+                     description: message,
                      displayable: user,
                      didTap: { [unowned self] in
                         self.delegate?.didInteractWith(type: .userStatusUpdateInChannel(user, status, channel))
@@ -118,11 +121,12 @@ class ToastScheduler {
     private func createChannelToast(for channel: TCHChannel) -> Toast? {
         guard let sid = channel.sid, let friendlyName = channel.friendlyName else { return nil }
 
-        let title = LocalizedString(id: "", arguments: [friendlyName], default: "New conversaton added: @(friendlyName)")
+        let description = LocalizedString(id: "", arguments: [friendlyName], default: "New conversaton added: @(friendlyName)")
         return Toast(id: sid + "channel",
                      analyticsID: "ToastMessage",
                      priority: 1,
-                     title: title,
+                     title: "New",
+                     description: description,
                      displayable: channel,
                      didTap: {
                         self.delegate?.didInteractWith(type: .channel(channel))
@@ -135,7 +139,8 @@ class ToastScheduler {
         return Toast(id: error.localizedDescription + "error",
                      analyticsID: "ToastSystemMessage",
                      priority: 1,
-                     title: error.localizedDescription,
+                     title: "Error",
+                     description: error.localizedDescription,
                      displayable: image,
                      didTap: {
                         self.delegate?.didInteractWith(type: .error(error))
@@ -148,7 +153,8 @@ class ToastScheduler {
         return Toast(id: text.identifier + "success",
                      analyticsID: "ToastSystemMessage",
                      priority: 1,
-                     title: localized(text),
+                     title: "Success",
+                     description: localized(text),
                      displayable: image,
                      didTap: {
                         self.delegate?.didInteractWith(type: .success(text))
