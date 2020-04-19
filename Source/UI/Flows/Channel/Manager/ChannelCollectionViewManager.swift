@@ -108,10 +108,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         cell.didTapMessage = { [weak self] in
             guard let `self` = self, let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed else { return }
 
-            if message.context == .emergency, !message.isConsumed {
-                self.notifyAuthorOfReadStatus(for: message)
-            }
-
             self.updateConsumers(with: current, for: message)
             self.selectionFeedback.impactOccurred()
         }
@@ -127,18 +123,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         self.updateItem(with: messageCopy, completion: nil)
         //call update on the actual message and update on callback
         message.udpateConsumers(with: consumer)
-    }
-
-    private func notifyAuthorOfReadStatus(for message: Messageable) {
-
-        if let activeChannel = self.activeChannel {
-            switch activeChannel.channelType {
-            case .system(_):
-                break
-            case .channel(let channel):
-                UserNotificationManager.shared.notify(channel: channel, messageWasRead: message)
-            }
-        }
     }
 
     func collectionView(_ collectionView: UICollectionView,

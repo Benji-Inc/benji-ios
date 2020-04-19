@@ -309,13 +309,8 @@
 		D6EDD19B2355DC2900FDA5D6 /* ProfileCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDD19A2355DC2900FDA5D6 /* ProfileCollectionViewManager.swift */; };
 		D6EE715023B704F2000ED221 /* HomeNewChannellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE714F23B704F2000ED221 /* HomeNewChannellButton.swift */; };
 		D6EE715223B7C854000ED221 /* UICollectionViewLayout+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715123B7C854000ED221 /* UICollectionViewLayout+Extensions.swift */; };
-		D6EE715523B84B2D000ED221 /* OrbCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715423B84B2D000ED221 /* OrbCell.swift */; };
-		D6EE715723B84B3C000ED221 /* OrbCellItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715623B84B3C000ED221 /* OrbCellItem.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
 		D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */; };
-		D6EE715D23B84DAC000ED221 /* OrbCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715C23B84DAC000ED221 /* OrbCollectionViewLayout.swift */; };
-		D6EE715F23B84DC6000ED221 /* OrbCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715E23B84DC6000ED221 /* OrbCollectionView.swift */; };
-		D6EE716523B84F8B000ED221 /* OrbCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE716423B84F8B000ED221 /* OrbCollectionViewController.swift */; };
 		D6EEE7B12383A70F00F9D446 /* Benji.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = D64C6AA523307DB300DB7257 /* Benji.entitlements */; };
 		D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */; };
@@ -656,13 +651,8 @@
 		D6EDD19A2355DC2900FDA5D6 /* ProfileCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewManager.swift; sourceTree = "<group>"; };
 		D6EE714F23B704F2000ED221 /* HomeNewChannellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNewChannellButton.swift; sourceTree = "<group>"; };
 		D6EE715123B7C854000ED221 /* UICollectionViewLayout+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewLayout+Extensions.swift"; sourceTree = "<group>"; };
-		D6EE715423B84B2D000ED221 /* OrbCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbCell.swift; sourceTree = "<group>"; };
-		D6EE715623B84B3C000ED221 /* OrbCellItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbCellItem.swift; sourceTree = "<group>"; };
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
 		D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashableDisplayable.swift; sourceTree = "<group>"; };
-		D6EE715C23B84DAC000ED221 /* OrbCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbCollectionViewLayout.swift; sourceTree = "<group>"; };
-		D6EE715E23B84DC6000ED221 /* OrbCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbCollectionView.swift; sourceTree = "<group>"; };
-		D6EE716423B84F8B000ED221 /* OrbCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrbCollectionViewController.swift; sourceTree = "<group>"; };
 		D6F733D923D37C6300FBC7BC /* TextEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryField.swift; sourceTree = "<group>"; };
 		D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionViewManager+Animations.swift"; sourceTree = "<group>"; };
 		D6FA622123F067A300048C4A /* AnimationDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDuration.swift; sourceTree = "<group>"; };
@@ -777,7 +767,6 @@
 			children = (
 				D63C67DA23D4147C00EA373A /* Face Detection */,
 				D66656BB23D13C83009E4BDF /* Switchable */,
-				D6EE715323B84AEB000ED221 /* Orb */,
 				D6E65F17237791450061AA67 /* Generic CollectionView */,
 				D66F0FE022C0413300BA277D /* View Controllers */,
 				D66F0FDF22C0412300BA277D /* Views */,
@@ -1576,18 +1565,6 @@
 			path = Routine;
 			sourceTree = "<group>";
 		};
-		D6EE715323B84AEB000ED221 /* Orb */ = {
-			isa = PBXGroup;
-			children = (
-				D6EE715423B84B2D000ED221 /* OrbCell.swift */,
-				D6EE715623B84B3C000ED221 /* OrbCellItem.swift */,
-				D6EE715E23B84DC6000ED221 /* OrbCollectionView.swift */,
-				D6EE716423B84F8B000ED221 /* OrbCollectionViewController.swift */,
-				D6EE715C23B84DAC000ED221 /* OrbCollectionViewLayout.swift */,
-			);
-			path = Orb;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1791,7 +1768,6 @@
 				D6EDD1972355DBC500FDA5D6 /* ProfileAvatarCell.swift in Sources */,
 				D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */,
 				D61EC0F721D316F100204BEE /* Color.swift in Sources */,
-				D6EE716523B84F8B000ED221 /* OrbCollectionViewController.swift in Sources */,
 				D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */,
 				D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */,
 				D64F5F2123B6713800216D99 /* TextInputAccessoryView.swift in Sources */,
@@ -1802,7 +1778,6 @@
 				D66F0FD622BF28A100BA277D /* AppDelegate+Initialization.swift in Sources */,
 				D66F102822C7D1D200BA277D /* ChannelContentView.swift in Sources */,
 				D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */,
-				D6EE715723B84B3C000ED221 /* OrbCellItem.swift in Sources */,
 				D6D1502921D6085200CD8CE4 /* ResourceObject.swift in Sources */,
 				D6D145FF21D5510400CD8CE4 /* StringStyle.swift in Sources */,
 				D64C6A9C232D6C9200DB7257 /* BubbleCircleView.swift in Sources */,
@@ -1842,7 +1817,6 @@
 				D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */,
 				D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */,
 				D6849CBF23B65E2B006799F6 /* PurposeViewController.swift in Sources */,
-				D6EE715D23B84DAC000ED221 /* OrbCollectionViewLayout.swift in Sources */,
 				D658C7DF24425E5A0027D12E /* HealthKitManager.swift in Sources */,
 				D6A82B732325C2FD003E0A8B /* NewChannelViewController.swift in Sources */,
 				D61EC0F921D317AB00204BEE /* Theme.swift in Sources */,
@@ -1928,12 +1902,10 @@
 				D685CEA7243ACA060018F3E3 /* ConnectionCell.swift in Sources */,
 				D607400C23400FA6009633EB /* ChannelsSearchBar.swift in Sources */,
 				D66A0B9823526A4E00A0FFEA /* CarmeraButton.swift in Sources */,
-				D6EE715523B84B2D000ED221 /* OrbCell.swift in Sources */,
 				D66E7C14239DC14C002A363C /* AlertType.swift in Sources */,
 				D6815DB122ECAEC700E71251 /* MediumLabel.swift in Sources */,
 				D642739122C9BFA10088256B /* AlertViewController.swift in Sources */,
 				D61EC0E621D30EB300204BEE /* View.swift in Sources */,
-				D6EE715F23B84DC6000ED221 /* OrbCollectionView.swift in Sources */,
 				D66F0FC722BF004300BA277D /* FeedType.swift in Sources */,
 				D6E4C8012394391A002B1330 /* RoutineTimeOfDayLabel.swift in Sources */,
 				D6DADF742207E0E2007D9EB1 /* TCHChannel+Extensions.swift in Sources */,

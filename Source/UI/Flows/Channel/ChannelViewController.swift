@@ -206,14 +206,9 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             break
         case .channel(let channel):
             ChannelManager.shared.sendMessage(to: channel,
-                                          with: message,
-                                          context: context,
-                                          attributes: mutableAttributes)
-            .observeValue(with: { (sentMessage) in
-                if context == .emergency {
-                    UserNotificationManager.shared.notify(channel: channel, message: sentMessage)
-                }
-            })
+                                              with: message,
+                                              context: context,
+                                              attributes: mutableAttributes)
         }
 
         self.messageInputView.reset()
