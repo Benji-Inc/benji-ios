@@ -11,15 +11,16 @@ import TMROLocalization
 
 class ChannelCoordinator: PresentableCoordinator<Void> {
 
-    let channelType: ChannelType
-    lazy var channelVC = ChannelViewController(channelType: self.channelType, delegate: self)
+    lazy var channelVC = ChannelViewController(delegate: self)
 
-    init(router: Router, channelType: ChannelType) {
-        self.channelType = channelType
+    init(router: Router,
+         deepLink: DeepLinkable?,
+         channelType: ChannelType?) {
+
         if case let .channel(channel) = channelType {
-            ChannelManager.shared.activeChannel.value = channel
+            ChannelSupplier.shared.set(activeChannel: DisplayableChannel(channelType: .channel(channel)))
         }
-        super.init(router: router, deepLink: nil)
+        super.init(router: router, deepLink: deepLink)
     }
 
     override func toPresentable() -> DismissableVC {

@@ -15,9 +15,15 @@ import TMROFutures
 class ChannelManager: NSObject {
 
     static let shared = ChannelManager()
-    var client: TwilioChatClient?
+    private(set) var client: TwilioChatClient? {
+        didSet {
+            guard let _ = self.client else { return }
 
-    var activeChannel = MutableProperty<TCHChannel?>(nil)
+            // Initializing the ChannelSupplier as soon as the client is so it can receive udpates.
+            _ = ChannelSupplier.shared
+        }
+    }
+
     var clientSyncUpdate = MutableProperty<TCHClientSynchronizationStatus?>(nil)
     var clientUpdate = MutableProperty<ChatClientUpdate?>(nil)
     var channelSyncUpdate = MutableProperty<ChannelSyncUpdate?>(nil)
@@ -46,6 +52,10 @@ class ChannelManager: NSObject {
     var isConnected: Bool {
         guard let client = self.client else { return false }
         return client.connectionState == .connected
+    }
+
+    deinit {
+        self.client?.shutdown() // This was recommended in the docs.
     }
 
     static func initialize(token: String) -> Future<Void> {

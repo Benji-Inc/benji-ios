@@ -10,8 +10,129 @@ import Foundation
 import TwilioChatClient
 import TMROFutures
 import TMROLocalization
+import ReactiveSwift
+
+protocol ActiveChannelAccessor: class {
+    var activeChannel: DisplayableChannel? { get }
+}
+
+extension ActiveChannelAccessor {
+    var activeChannel: DisplayableChannel? {
+        return ChannelSupplier.shared.activeChannel.value
+    }
+}
 
 class ChannelSupplier {
+
+    static let shared = ChannelSupplier()
+
+    let disposables = CompositeDisposable()
+
+    private var allChannels: [DisplayableChannel] = [] {
+        didSet {
+            self.allChannelsSorted = self.allChannels.sorted()
+        }
+    }
+
+    private(set) var allChannelsSorted: [DisplayableChannel] = []
+
+    private(set) var activeChannel = MutableProperty<DisplayableChannel?>(nil)
+
+    init() {
+        self.subscribeToUpdates()
+    }
+
+    deinit {
+        self.disposables.dispose()
+    }
+
+    func set(activeChannel: DisplayableChannel?) {
+        self.activeChannel.value = activeChannel
+    }
+
+    private func subscribeToUpdates() {
+
+        self.disposables.add(ChannelManager.shared.clientSyncUpdate.producer.on { [weak self] (update) in
+            guard let `self` = self else { return }
+
+            guard let clientUpdate = update else { return }
+
+            switch clientUpdate {
+            case .started:
+                break
+            case .channelsListCompleted:
+                break
+            case .completed:
+                self.allChannels = ChannelManager.shared.subscribedChannels.filter({ (displayableChannel) -> Bool in
+                    switch displayableChannel.channelType {
+                    case .channel(let channel):
+                        return channel.status == .joined
+                    default:
+                        return false 
+                    }
+                })
+            case .failed:
+                break
+            @unknown default:
+                break
+            }
+        }.start())
+
+        self.disposables.add(ChannelManager.shared.channelsUpdate.producer.on { [weak self] (update) in
+            guard let `self` = self, let channelsUpdate = update else { return }
+
+            switch channelsUpdate.status {
+            case .added:
+                self.allChannels = ChannelManager.shared.subscribedChannels
+            case .deleted:
+                // We pre-emptivley delete a channel from the client, so we dont have a delay, and a user doesn't select a deleted channel and cause a crash.
+                self.allChannels = ChannelManager.shared.subscribedChannels.filter { (channel) -> Bool in
+                    return channel.id != channelsUpdate.channel.id
+                }
+
+                if let activeChannel = self.activeChannel.value {
+                    switch activeChannel.channelType {
+                    case .channel(let channel):
+                        if channelsUpdate.channel == channel {
+                            self.activeChannel.value = nil
+                        }
+                    default:
+                        break
+                    }
+                }
+            default:
+                break
+            }
+        }.start())
+
+        self.disposables.add(ChannelManager.shared.memberUpdate.producer.on { [weak self] (update) in
+            guard let `self` = self, let memberUpdate = update else { return }
+
+            switch memberUpdate.status {
+            case .left:
+                // We pre-emptivley leave a channel from the client, so we dont have a delay, and a user doesn't still see a channel they left.
+                self.allChannels = ChannelManager.shared.subscribedChannels.filter { (channel) -> Bool in
+                    return channel.id != memberUpdate.channel.id
+                }
+                if let activeChannel = self.activeChannel.value {
+                    switch activeChannel.channelType {
+                    case .channel(let channel):
+                        if memberUpdate.channel == channel {
+                            self.activeChannel.value = nil
+                        }
+                    default:
+                        break
+                    }
+                }
+            default:
+                break
+            }
+        }.start())
+    }
+
+    func isChannelEqualToActiveChannel(channel: TCHChannel) -> Bool {
+        return false
+    }
 
     // MARK: CREATION
 

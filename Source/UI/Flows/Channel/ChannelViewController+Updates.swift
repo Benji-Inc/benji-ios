@@ -10,27 +10,19 @@ import Foundation
 
 extension ChannelViewController {
 
-    func loadMessages() {
+    func loadMessages(for channelType: ChannelType) {
         self.collectionViewManager.reset()
 
-        switch self.channelType {
+        switch channelType {
         case .system(let channel):
             self.loadSystem(channel: channel)
         case .channel(_):
-            self.loadTwilioMessages()
+            MessageSupplier.shared.getLastMessages()
         }
     }
 
-    private func loadTwilioMessages() {
-        guard let channel = ChannelManager.shared.activeChannel.value else { return }
-
-        MessageSupplier.shared.getLastMessages(for: channel)
-    }
-
     private func loadSystem(channel: SystemChannel) {
-
         let sections = MessageSupplier.shared.mapMessagesToSections(for: channel.messages, in: .system(channel))
-
         self.collectionViewManager.set(newSections: sections) { [weak self] in
             guard let `self` = self else { return }
             self.collectionView.scrollToEnd()
@@ -60,8 +52,7 @@ extension ChannelViewController {
         ChannelManager.shared.messageUpdate.producer.on { [weak self] (update) in
             guard let `self` = self else { return }
 
-            guard let channelUpdate = update,
-                channelUpdate.channel == ChannelManager.shared.activeChannel.value else { return }
+            guard let channelUpdate = update, ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: channelUpdate.channel) else { return }
 
             switch channelUpdate.status {
             case .added:
@@ -89,8 +80,7 @@ extension ChannelViewController {
         ChannelManager.shared.memberUpdate.producer.on { [weak self] (update) in
             guard let `self` = self else { return }
 
-            guard let memberUpdate = update,
-                memberUpdate.channel == ChannelManager.shared.activeChannel.value else { return }
+            guard let memberUpdate = update, ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: memberUpdate.channel) else { return }
 
             switch memberUpdate.status {
             case .joined, .left:
@@ -98,7 +88,8 @@ extension ChannelViewController {
                     self.collectionViewManager.numberOfMembers = Int(count)
                 }
             case .changed:
-                self.loadMessages()
+                break
+                //self.loadMessages()
             case .typingEnded:
                 if let memberID = memberUpdate.member.identity, memberID != User.current()?.objectId {
                     self.collectionViewManager.userTyping = nil
@@ -126,7 +117,8 @@ extension ChannelViewController {
                 case .none, .identifier, .metadata, .failed:
                     break
                 case .all:
-                    self.loadMessages()
+                    break
+                    //self.loadMessages()
                 @unknown default:
                     break
             }

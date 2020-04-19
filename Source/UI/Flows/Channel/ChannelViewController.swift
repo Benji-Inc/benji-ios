@@ -18,12 +18,12 @@ protocol ChannelViewControllerDelegate: class {
     func channelView(_ controller: ChannelViewController, didTapShare message: Messageable)
 }
 
-class ChannelViewController: FullScreenViewController {
+class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    lazy var detailBar = ChannelDetailBar(with: self.channelType, delegate: self.delegate)
+    lazy var detailBar = ChannelDetailBar(delegate: self.delegate)
     lazy var collectionView = ChannelCollectionView()
-    lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView, for: self.channelType)
+    lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView)
     private(set) var messageInputView = MessageInputView()
 
     let disposables = CompositeDisposable()
@@ -46,12 +46,10 @@ class ChannelViewController: FullScreenViewController {
     var previewView: PreviewMessageView?
     var interactiveStartingPoint: CGPoint?
 
-    let channelType: ChannelType
     unowned let delegate: ChannelViewControllerDelegates
 
-    init(channelType: ChannelType, delegate: ChannelViewControllerDelegates) {
+    init(delegate: ChannelViewControllerDelegates) {
         self.delegate = delegate
-        self.channelType = channelType
         super.init()
     }
 
@@ -92,37 +90,36 @@ class ChannelViewController: FullScreenViewController {
             }
         }
 
-        self.disposables += ChannelManager.shared.activeChannel.producer
-            .on { [unowned self] (channel) in
+        if let activeChannel = self.activeChannel {
+            self.load(activeChannel: activeChannel)
+        }
 
-                guard let strongChannel = channel else {
-                    self.collectionView.activityIndicator.startAnimating()
-                    self.collectionViewManager.reset()
-                    return
-                }
+        ChannelSupplier.shared.activeChannel.signal.observeValues { [unowned self] (channel) in
+            guard let activeChannel = channel else {
+                self.collectionView.activityIndicator.startAnimating()
+                self.collectionViewManager.reset()
+                return
+            }
 
-                strongChannel.delegate = self
-                self.loadMessages()
-
-                strongChannel.getMembersAsUsers()
-                    .observeValue { (users) in
-                        runMain {
-                            let notMeUsers = users.filter { (user) -> Bool in
-                                return user.objectId != User.current()?.objectId
-                            }
-
-                            self.messageInputView.textView.setPlaceholder(for: notMeUsers)
-                        }
-                }
-
-                self.view.setNeedsLayout()
-        }.start()
+            self.load(activeChannel: activeChannel)
+        }
 
         self.collectionViewManager.didTapShare = { [unowned self] message in
             self.delegate.channelView(self, didTapShare: message)
         }
 
         self.subscribeToClient()
+    }
+
+    private func load(activeChannel: DisplayableChannel) {
+        switch activeChannel.channelType {
+        case .system(_):
+            break
+        case .channel(let channel):
+            channel.delegate = self
+            self.loadMessages(for: activeChannel.channelType)
+            self.messageInputView.setPlaceholder(with: channel)
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -174,19 +171,17 @@ class ChannelViewController: FullScreenViewController {
     override func viewWasDismissed() {
         super.viewWasDismissed()
 
-        ChannelManager.shared.activeChannel.value = nil
+        ChannelSupplier.shared.set(activeChannel: nil)
         self.collectionViewManager.reset()
     }
 
-    @discardableResult
     func send(message: String,
               context: MessageContext = .casual,
-              attributes: [String : Any]) -> Future<Void> {
-        let promise = Promise<Void>()
+              attributes: [String : Any]) {
 
-        guard let channel = ChannelManager.shared.activeChannel.value,
+        guard let channelDisplayable = ChannelSupplier.shared.activeChannel.value,
             let current = User.current(),
-            let objectId = current.objectId else { return promise }
+            let objectId = current.objectId else { return }
 
         var mutableAttributes = attributes
         mutableAttributes["updateId"] = UUID().uuidString
@@ -205,7 +200,12 @@ class ChannelViewController: FullScreenViewController {
         self.collectionViewManager.append(item: systemMessage) { [unowned self] in
             self.collectionView.scrollToEnd()
         }
-        ChannelManager.shared.sendMessage(to: channel,
+
+        switch channelDisplayable.channelType {
+        case .system(_):
+            break
+        case .channel(let channel):
+            ChannelManager.shared.sendMessage(to: channel,
                                           with: message,
                                           context: context,
                                           attributes: mutableAttributes)
@@ -213,12 +213,10 @@ class ChannelViewController: FullScreenViewController {
                 if context == .emergency {
                     UserNotificationManager.shared.notify(channel: channel, message: sentMessage)
                 }
-                promise.resolve(with: ())
             })
+        }
 
         self.messageInputView.reset()
-
-        return promise
     }
 }
 

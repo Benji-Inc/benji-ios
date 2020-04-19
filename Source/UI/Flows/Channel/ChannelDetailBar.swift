@@ -10,6 +10,7 @@ import Foundation
 import TwilioChatClient
 import Parse
 import TMROLocalization
+import ReactiveSwift
 
 protocol ChannelDetailBarDelegate: class {
     func channelDetailBarDidTapMenu(_ view: ChannelDetailBar)
@@ -19,14 +20,12 @@ class ChannelDetailBar: View {
 
     private let titleButton = Button()
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
-    let channelType: ChannelType
     private let content = ChannelContentView()
 
     unowned let delegate: ChannelDetailBarDelegate
 
-    init(with channelType: ChannelType, delegate: ChannelDetailBarDelegate) {
+    init( delegate: ChannelDetailBarDelegate) {
         self.delegate = delegate
-        self.channelType = channelType
         super.init()
     }
 
@@ -43,8 +42,7 @@ class ChannelDetailBar: View {
         self.titleButton.didSelect = { [unowned self] in
             self.delegate.channelDetailBarDidTapMenu(self)
         }
-
-        self.content.configure(with: self.channelType)
+        
 
         self.subscribeToUpdates()
     }
@@ -58,17 +56,27 @@ class ChannelDetailBar: View {
 
     private func subscribeToUpdates() {
 
+        ChannelSupplier.shared.activeChannel.signal.observeValues { [unowned self] (channel) in
+            guard let activeChannel = channel else { return }
+            self.content.configure(with: activeChannel.channelType)
+        }
+
         ChannelManager.shared.channelSyncUpdate.producer.on { [weak self] (update) in
             guard let `self` = self else { return }
 
-            guard let channelsUpdate = update,
-                channelsUpdate.channel == ChannelManager.shared.activeChannel.value else { return }
+            guard let channelsUpdate = update, let activeChannel = ChannelSupplier.shared.activeChannel.value else { return }
 
-            switch channelsUpdate.status {
-            case .all:
-                self.content.configure(with: .channel(channelsUpdate.channel))
-            default:
+            switch activeChannel.channelType {
+            case .system(_):
                 break
+            case .channel(let channel):
+                guard channelsUpdate.channel == channel else { return }
+                switch channelsUpdate.status {
+                case .all:
+                    self.content.configure(with: .channel(channelsUpdate.channel))
+                default:
+                    break
+                }
             }
         }.start()
     }

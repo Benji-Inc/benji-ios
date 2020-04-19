@@ -7,8 +7,9 @@
 //
 
 import Foundation
+import TwilioChatClient
 
-class MessageInputView: View {
+class MessageInputView: View, ActiveChannelAccessor {
 
     var onPanned: ((UIPanGestureRecognizer) -> Void)?
 
@@ -90,6 +91,19 @@ class MessageInputView: View {
         self.blurView.frame = self.bounds
 
         self.layer.borderColor = self.messageContext.color.color.cgColor
+    }
+
+    func setPlaceholder(with channel: TCHChannel) {
+        channel.getMembersAsUsers()
+            .observeValue { (users) in
+                runMain {
+                    let notMeUsers = users.filter { (user) -> Bool in
+                        return user.objectId != User.current()?.objectId
+                    }
+
+                    self.textView.setPlaceholder(for: notMeUsers)
+                }
+        }
     }
 
     private func handle(longPress: UILongPressGestureRecognizer) {
@@ -179,17 +193,24 @@ class MessageInputView: View {
         self.textView.inputAccessoryView = self.alertConfirmation
         self.textView.reloadInputViews()
 
-        ChannelManager.shared.activeChannel.value?.getMembersAsUsers()
-            .observe(with: { (result) in
-                runMain {
-                    switch result {
-                    case .success(let users):
-                        self.alertConfirmation.setAlertMessage(for: users)
-                    case .failure(_):
-                        break
+        if let activeChannel = self.activeChannel {
+            switch activeChannel.channelType {
+            case .system(_):
+                break
+            case .channel(let channel):
+                channel.getMembersAsUsers()
+                .observe(with: { (result) in
+                    runMain {
+                        switch result {
+                        case .success(let users):
+                            self.alertConfirmation.setAlertMessage(for: users)
+                        case .failure(_):
+                            break
+                        }
                     }
-                }
-            })
+                })
+            }
+        }
 
         self.alertProgressView.size = CGSize(width: self.width, height: self.height)
     }
@@ -202,10 +223,16 @@ extension MessageInputView: GrowingTextViewDelegate {
     func textViewTextDidChange(_ textView: GrowingTextView) {
         self.countView.udpate(with: self.textView.text.count, max: self.textView.maxLength)
 
-        guard let channel = ChannelManager.shared.activeChannel.value,
+        guard let channelDisplayable = ChannelSupplier.shared.activeChannel.value,
             self.textView.text.count > 0 else { return }
-        // Twilio throttles this call to every 5 seconds
-        channel.typing()
+
+        switch channelDisplayable.channelType {
+        case .system(_):
+            break
+        case .channel(let channel):
+            // Twilio throttles this call to every 5 seconds
+            channel.typing()
+        }
     }
 
     func textViewDidChangeHeight(_ textView: GrowingTextView, height: CGFloat) {

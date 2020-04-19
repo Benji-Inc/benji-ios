@@ -23,10 +23,21 @@ class MessageSupplier {
     //MARK: GET MESSAGES
 
     @discardableResult
-    func getLastMessages(for channel: TCHChannel, batchAmount: UInt = 20) -> Future<[ChannelSectionable]> {
+    func getLastMessages(batchAmount: UInt = 20) -> Future<[ChannelSectionable]> {
         let promise = Promise<[ChannelSectionable]>()
 
-        if let messagesObject = channel.messages {
+        var tchChannel: TCHChannel?
+
+        if let activeChannel = ChannelSupplier.shared.activeChannel.value {
+            switch activeChannel.channelType {
+            case .system(_):
+                break
+            case .channel(let channel):
+                tchChannel = channel
+            }
+        }
+
+        if let channel = tchChannel, let messagesObject = channel.messages {
             messagesObject.getLastWithCount(batchAmount) { (result, messages) in
                 if let msgs = messages {
                     self.allMessages = msgs

@@ -231,3 +231,10 @@ extension TCHChannel: ImageDisplayable {
         return self.createdBy
     }
 }
+
+extension TCHChannel: Comparable {
+    public static func < (lhs: TCHChannel, rhs: TCHChannel) -> Bool {
+        guard let lhsDate = lhs.dateUpdatedAsDate, let rhsDate = rhs.dateUpdatedAsDate else { return false }
+        return lhsDate > rhsDate
+    }
+}

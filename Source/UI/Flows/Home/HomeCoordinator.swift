@@ -95,11 +95,11 @@ extension HomeCoordinator: HomeViewControllerDelegate {
     func homeViewDidTapAdd(_ controller: HomeViewController) {
         self.removeChild()
         
-        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
+        let coordinator = ChannelCoordinator(router: self.router, deepLink: self.deepLink, channelType: nil)
         self.addChildAndStart(coordinator) { (result) in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
-                guard let channel = result else { return }
-                self.startChannelFlow(for: channel)
+//                guard let channel = result else { return }
+//                self.startChannelFlow(for: channel)
             }
         }
         self.router.present(coordinator, source: self.homeVC, animated: true)
@@ -107,7 +107,7 @@ extension HomeCoordinator: HomeViewControllerDelegate {
 
     func startChannelFlow(for type: ChannelType) {
         self.removeChild()
-        let coordinator = ChannelCoordinator(router: self.router, channelType: type)
+        let coordinator = ChannelCoordinator(router: self.router, deepLink: self.deepLink, channelType: type)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 self.finishFlow(with: ())

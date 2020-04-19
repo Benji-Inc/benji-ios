@@ -11,7 +11,7 @@ import ReactiveSwift
 import TwilioChatClient
 
 class ChannelCollectionViewManager: NSObject, UITextViewDelegate, ChannelDataSource,
-UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ActiveChannelAccessor {
 
     var numberOfMembers: Int = 0 {
         didSet {
@@ -34,18 +34,22 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .heavy)
     var userTyping: User? 
 
-    init(with collectionView: ChannelCollectionView, for channelType: ChannelType) {
+    init(with collectionView: ChannelCollectionView) {
         self.collectionView = collectionView
         super.init()
         self.updateLayoutDataSource()
 
-        switch channelType {
-        case .channel(let channel):
-            channel.getMembersCount { (result, count) in
-                self.numberOfMembers = Int(count)
+        ChannelSupplier.shared.activeChannel.signal.observeValues { [unowned self] (channel) in
+            guard let activeChannel = channel else { return }
+
+            switch activeChannel.channelType {
+            case .channel(let channel):
+                channel.getMembersCount { (result, count) in
+                    self.numberOfMembers = Int(count)
+                }
+            default:
+                break
             }
-        default:
-            break
         }
     }
 
@@ -121,9 +125,15 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     }
 
     private func notifyAuthorOfReadStatus(for message: Messageable) {
-        guard let channel = ChannelManager.shared.activeChannel.value else { return }
 
-        UserNotificationManager.shared.notify(channel: channel, messageWasRead: message)
+        if let activeChannel = self.activeChannel {
+            switch activeChannel.channelType {
+            case .system(_):
+                break
+            case .channel(let channel):
+                UserNotificationManager.shared.notify(channel: channel, messageWasRead: message)
+            }
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -228,13 +238,18 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     }
 
     func didSelectLoadMore(for messageIndex: Int) {
-        guard let channel = ChannelManager.shared.activeChannel.value else { return }
+        guard let channelDisplayable = ChannelSupplier.shared.activeChannel.value else { return }
 
-        MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1), for: channel)
-            .observeValue(with: { (sections) in
-                self.set(newSections: sections,
-                         keepOffset: true,
-                         completion: nil)
-            })
+        switch channelDisplayable.channelType {
+        case .system(_):
+            break
+        case .channel(let channel):
+            MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1), for: channel)
+                       .observeValue(with: { (sections) in
+                           self.set(newSections: sections,
+                                    keepOffset: true,
+                                    completion: nil)
+                       })
+        }
     }
 }

@@ -152,7 +152,7 @@ extension ChannelManager: TwilioChatClientDelegate {
                 case .left:
                     ToastScheduler.shared.schedule(toastType: .userStatusUpdateInChannel(user, status, channel))
                 case .typingStarted:
-                    if channel != ChannelManager.shared.activeChannel.value {
+                    if !ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: channel) {
                         ToastScheduler.shared.schedule(toastType: .userStatusUpdateInChannel(user, status, channel))
                     }
                 default:
@@ -166,7 +166,7 @@ extension ChannelManager: TwilioChatClientDelegate {
     func chatClient(_ client: TwilioChatClient, channel: TCHChannel, messageAdded message: TCHMessage) {
         self.messageUpdate.value = MessageUpdate(channel: channel, message: message, status: .added)
 
-        if ChannelManager.shared.activeChannel.value == nil {
+        if ChannelSupplier.shared.activeChannel == nil {
             if message.isFromCurrentUser, message.context == .status {
                 // Don't send toast for status messages from current user
             } else {
