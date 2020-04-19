@@ -107,22 +107,5 @@ extension ChannelViewController {
                 }
             }
         }.start()
-
-        ChannelManager.shared.channelSyncUpdate.producer.on { [weak self] (update) in
-            guard let `self` = self else { return }
-
-            guard let syncUpdate = update else { return }
-
-            switch syncUpdate.status {
-                case .none, .identifier, .metadata, .failed:
-                    break
-                case .all:
-                    break
-                    //self.loadMessages()
-                @unknown default:
-                    break
-            }
-
-        }.start()
     }
 }
