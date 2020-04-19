@@ -191,13 +191,14 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
 
         self.button.isLoading = true
 
-        ChannelSupplier.createChannel(channelName: title,
-                                      context: context,
-                                      type: .private)
+        ChannelSupplier.shared.createChannel(channelName: title,
+                                             context: context,
+                                             type: .private)
             .joinIfNeeded()
             .invite(users: users)
             .ignoreUserInteractionEventsUntilDone(for: self.view)
             .observeValue(with: { (channel) in
+                ChannelSupplier.shared.set(activeChannel: DisplayableChannel(channelType: .channel(channel)))
                 self.delegate.newChannelView(self, didCreate: .channel(channel))
             })
     }

@@ -94,7 +94,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             self.load(activeChannel: activeChannel)
         }
 
-        ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
+        self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
             guard let activeChannel = channel else {
                 self.collectionView.activityIndicator.startAnimating()
                 self.collectionViewManager.reset()
@@ -102,7 +102,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             }
 
             self.load(activeChannel: activeChannel)
-        }.start()
+        }.start())
 
         self.collectionViewManager.didTapShare = { [unowned self] message in
             self.delegate.channelView(self, didTapShare: message)

@@ -26,6 +26,7 @@ class ChannelDetailBar: View {
     private let titleButton = Button()
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
     private let content = ChannelContentView()
+    let disposables = CompositeDisposable()
 
     unowned let delegate: ChannelDetailBarDelegate
 
@@ -38,6 +39,10 @@ class ChannelDetailBar: View {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        self.disposables.dispose()
     }
 
     override func initializeSubviews() {
@@ -64,10 +69,10 @@ class ChannelDetailBar: View {
 
     private func subscribeToUpdates() {
 
-        ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
+        self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
             guard let activeChannel = channel else { return }
             self.content.configure(with: activeChannel.channelType)
-        }.start()
+        }.start())
 
         ChannelManager.shared.channelSyncUpdate.producer.on { [weak self] (update) in
             guard let `self` = self else { return }

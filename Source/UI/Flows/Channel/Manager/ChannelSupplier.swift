@@ -160,7 +160,7 @@ class ChannelSupplier {
 
     // MARK: CREATION
 
-    static func createChannel(channelName: String,
+    func createChannel(channelName: String,
                               context: ConversationContext,
                               type: TCHChannelType,
                               attributes: NSMutableDictionary = [:]) -> Future<TCHChannel> {
@@ -171,7 +171,6 @@ class ChannelSupplier {
         }
 
         attributes[ChannelKey.context.rawValue] = context.rawValue
-
         return client.createChannel(channelName: channelName,
                                     uniqueName: UUID().uuidString,
                                     type: type,

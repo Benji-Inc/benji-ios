@@ -32,14 +32,15 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     var didTapShare: ((Messageable) -> Void)? 
     var willDisplayCell: ((Messageable, IndexPath) -> Void)?
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .heavy)
-    var userTyping: User? 
+    var userTyping: User?
+    let disposables = CompositeDisposable()
 
     init(with collectionView: ChannelCollectionView) {
         self.collectionView = collectionView
         super.init()
         self.updateLayoutDataSource()
 
-        ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
+        self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
             guard let activeChannel = channel else { return }
 
             switch activeChannel.channelType {
@@ -50,7 +51,11 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
             default:
                 break
             }
-        }.start()
+        }.start())
+    }
+
+    deinit {
+        self.disposables.dispose()
     }
 
     private func updateLayoutDataSource() {
