@@ -32,7 +32,7 @@ class ProfileAvatarCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.avatarView.size = CGSize(width: 110, height: 140)
+        self.avatarView.setSize(for: 140)
         self.avatarView.top = 0
         self.avatarView.left = 0 
     }

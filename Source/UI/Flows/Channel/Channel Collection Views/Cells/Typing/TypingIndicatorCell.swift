@@ -54,7 +54,7 @@ class TypingIndicatorCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.avatarView.size = CGSize(width: 30, height: 36)
+        self.avatarView.setSize(for: 36)
         self.avatarView.left = Theme.contentOffset
 
         let insets = UIEdgeInsets(top: 4, left: self.avatarView.right + 4, bottom: 2, right: 0)

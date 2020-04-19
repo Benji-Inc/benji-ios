@@ -58,7 +58,6 @@
 		D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6347395241EBF6F0071E9DA /* UIView+Layout.swift */; };
 		D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */; };
 		D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63752C5231258DA00214F63 /* PreviewMessageView.swift */; };
-		D63752F92313833B00214F63 /* ProfileAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63752F82313833B00214F63 /* ProfileAvatarView.swift */; };
 		D637532A2316172700214F63 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753272316172700214F63 /* Roboto-Regular.ttf */; };
 		D637532B2316172700214F63 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753282316172700214F63 /* Roboto-Bold.ttf */; };
 		D637532C2316172700214F63 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753292316172700214F63 /* Roboto-Medium.ttf */; };
@@ -387,7 +386,6 @@
 		D6347395241EBF6F0071E9DA /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 		D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extensions.swift"; sourceTree = "<group>"; };
 		D63752C5231258DA00214F63 /* PreviewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewMessageView.swift; sourceTree = "<group>"; };
-		D63752F82313833B00214F63 /* ProfileAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAvatarView.swift; sourceTree = "<group>"; };
 		D63753272316172700214F63 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
 		D63753282316172700214F63 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		D63753292316172700214F63 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
@@ -1335,7 +1333,6 @@
 			isa = PBXGroup;
 			children = (
 				D6EDD1962355DBC500FDA5D6 /* ProfileAvatarCell.swift */,
-				D63752F82313833B00214F63 /* ProfileAvatarView.swift */,
 				D6EDD1942355DB9B00FDA5D6 /* ProfileCollectionView.swift */,
 				D6EDD19A2355DC2900FDA5D6 /* ProfileCollectionViewManager.swift */,
 				D65B0CE4234928620041A176 /* ProfileCoordinator.swift */,
@@ -1999,7 +1996,6 @@
 				D6D14FF921D5893700CD8CE4 /* NSString+IGListDiffable.m in Sources */,
 				D690965023E7B835008864B6 /* MessageComposerViewController.swift in Sources */,
 				D63826D22274C8C0001D4B8B /* ChannelManager+Extensions.swift in Sources */,
-				D63752F92313833B00214F63 /* ProfileAvatarView.swift in Sources */,
 				D61EC0E221D30E6000204BEE /* Label.swift in Sources */,
 				D68540D5235FDECC006F666C /* SuggestionCollectionViewFlowLayout.swift in Sources */,
 				D61EC0E021D30E3F00204BEE /* FullScreenViewController.swift in Sources */,

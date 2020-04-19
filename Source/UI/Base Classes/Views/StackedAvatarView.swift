@@ -12,7 +12,7 @@ class StackedAvatarView: View {
 
     private var imageViews: [AvatarView] = []
     private let maxItems: Int = 3
-    var itemSize: CGSize = CGSize(width: 44, height: 60)
+    var itemHeight: CGFloat = 60
     var offsetMultiplier: CGFloat = 0.5
 
     func set(items: [Avatar]) {
@@ -39,8 +39,9 @@ class StackedAvatarView: View {
 
         self.setSize()
         for (index, imageView) in self.imageViews.enumerated() {
-            let offset = CGFloat(index) * self.itemSize.width * self.offsetMultiplier
-            imageView.size = self.itemSize
+            let size = imageView.getSize(for: self.itemHeight)
+            let offset = CGFloat(index) * size.width * self.offsetMultiplier
+            imageView.size = size
             imageView.right = self.width - offset
             imageView.centerOnY()
         }
@@ -48,18 +49,21 @@ class StackedAvatarView: View {
 
     private func setSize() {
         var totalWidth: CGFloat = 0
-        for (index, _) in self.imageViews.enumerated() {
-            let offset = CGFloat(index) * self.itemSize.width * self.offsetMultiplier
+
+        var size: CGSize = .zero
+        for (index, imageView) in self.imageViews.enumerated() {
+            size = imageView.getSize(for: self.itemHeight)
+            let offset = CGFloat(index) * size.width * self.offsetMultiplier
             totalWidth += offset
         }
 
         if totalWidth == 0 {
-            totalWidth += self.itemSize.width
+            totalWidth += size.width
         } else {
-            totalWidth += (self.itemSize.width * self.offsetMultiplier)
+            totalWidth += (size.width * self.offsetMultiplier)
         }
 
-        self.size = CGSize(width: totalWidth, height: self.itemSize.height)
+        self.size = CGSize(width: totalWidth, height: self.itemHeight)
     }
 }
 

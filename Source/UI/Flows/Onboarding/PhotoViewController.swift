@@ -128,8 +128,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.cameraVC.view.expandToSuperviewSize()
 
         let height = self.view.height * 0.6
-        let width = height * 0.7
-        self.avatarView.size = CGSize(width: width, height: height)
+        self.avatarView.setSize(for: height)
         self.avatarView.top = 30
         self.avatarView.centerOnX()
         self.avatarView.roundCorners()

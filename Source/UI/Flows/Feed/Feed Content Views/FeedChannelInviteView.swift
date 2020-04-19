@@ -60,7 +60,7 @@ class FeedChannelInviteView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.avatarView.size = CGSize(width: 100, height: 100)
+        self.avatarView.setSize(for: 100)
         self.avatarView.centerOnX()
         self.avatarView.top = self.height * 0.3
 

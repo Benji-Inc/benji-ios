@@ -57,7 +57,7 @@ class ConnectionContentView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.avatarView.size = CGSize(width: 44, height: 60)
+        self.avatarView.setSize(for: 60)
         self.avatarView.left = Theme.contentOffset
         self.avatarView.centerOnY()
 
