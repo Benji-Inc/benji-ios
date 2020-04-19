@@ -94,7 +94,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             self.load(activeChannel: activeChannel)
         }
 
-        ChannelSupplier.shared.activeChannel.signal.observeValues { [unowned self] (channel) in
+        ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
             guard let activeChannel = channel else {
                 self.collectionView.activityIndicator.startAnimating()
                 self.collectionViewManager.reset()
@@ -102,7 +102,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             }
 
             self.load(activeChannel: activeChannel)
-        }
+        }.start()
 
         self.collectionViewManager.didTapShare = { [unowned self] message in
             self.delegate.channelView(self, didTapShare: message)
@@ -147,8 +147,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         guard let handler = self.keyboardHandler else { return }
 
-        self.detailBar.size = CGSize(width: self.view.width, height: 80)
-        self.detailBar.top = 0
+        self.detailBar.size = CGSize(width: self.view.width - (Theme.contentOffset * 2), height: 84)
+        self.detailBar.top = Theme.contentOffset
         self.detailBar.centerOnX()
 
         let keyboardHeight = handler.currentKeyboardHeight

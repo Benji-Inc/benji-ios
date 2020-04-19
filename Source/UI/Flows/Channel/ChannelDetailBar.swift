@@ -18,11 +18,18 @@ protocol ChannelDetailBarDelegate: class {
 
 class ChannelDetailBar: View {
 
+    enum State {
+        case collapsed
+        case expanded
+    }
+
     private let titleButton = Button()
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
     private let content = ChannelContentView()
 
     unowned let delegate: ChannelDetailBarDelegate
+
+    var currentState = MutableProperty<State>(.collapsed)
 
     init( delegate: ChannelDetailBarDelegate) {
         self.delegate = delegate
@@ -42,7 +49,8 @@ class ChannelDetailBar: View {
         self.titleButton.didSelect = { [unowned self] in
             self.delegate.channelDetailBarDidTapMenu(self)
         }
-        
+
+        self.roundCorners()
 
         self.subscribeToUpdates()
     }
@@ -56,10 +64,10 @@ class ChannelDetailBar: View {
 
     private func subscribeToUpdates() {
 
-        ChannelSupplier.shared.activeChannel.signal.observeValues { [unowned self] (channel) in
+        ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
             guard let activeChannel = channel else { return }
             self.content.configure(with: activeChannel.channelType)
-        }
+        }.start()
 
         ChannelManager.shared.channelSyncUpdate.producer.on { [weak self] (update) in
             guard let `self` = self else { return }

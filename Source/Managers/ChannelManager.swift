@@ -31,15 +31,6 @@ class ChannelManager: NSObject {
     var messageUpdate = MutableProperty<MessageUpdate?>(nil)
     var memberUpdate = MutableProperty<ChannelMemberUpdate?>(nil)
 
-    var subscribedChannels: [DisplayableChannel] {
-        get {
-            guard let client = self.client, let channels = client.channelsList() else { return [] }
-            return channels.subscribedChannels().map { (channel) -> DisplayableChannel in
-                return DisplayableChannel.init(channelType: .channel(channel))
-            }
-        }
-    }
-
     var isSynced: Bool {
         guard let client = self.client else { return false }
         if client.synchronizationStatus == .completed || client.synchronizationStatus == .channelsListCompleted {

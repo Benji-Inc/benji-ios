@@ -36,6 +36,37 @@ class ChannelSupplier {
 
     private(set) var allChannelsSorted: [DisplayableChannel] = []
 
+    var allJoinedChannels: [DisplayableChannel] {
+        return self.allChannelsSorted.filter({ (displayableChannel) -> Bool in
+            switch displayableChannel.channelType {
+            case .channel(let channel):
+                return channel.status == .joined
+            default:
+                return false
+            }
+        })
+    }
+
+    var allInvitedChannels: [DisplayableChannel] {
+        return self.allChannelsSorted.filter({ (displayableChannel) -> Bool in
+            switch displayableChannel.channelType {
+            case .channel(let channel):
+                return channel.status == .invited
+            default:
+                return false
+            }
+        })
+    }
+
+    private var subscribedChannels: [DisplayableChannel] {
+        get {
+            guard let client = ChannelManager.shared.client, let channels = client.channelsList() else { return [] }
+            return channels.subscribedChannels().map { (channel) -> DisplayableChannel in
+                return DisplayableChannel.init(channelType: .channel(channel))
+            }
+        }
+    }
+
     private(set) var activeChannel = MutableProperty<DisplayableChannel?>(nil)
 
     init() {
@@ -63,14 +94,7 @@ class ChannelSupplier {
             case .channelsListCompleted:
                 break
             case .completed:
-                self.allChannels = ChannelManager.shared.subscribedChannels.filter({ (displayableChannel) -> Bool in
-                    switch displayableChannel.channelType {
-                    case .channel(let channel):
-                        return channel.status == .joined
-                    default:
-                        return false 
-                    }
-                })
+                self.allChannels = self.subscribedChannels
             case .failed:
                 break
             @unknown default:
@@ -83,10 +107,10 @@ class ChannelSupplier {
 
             switch channelsUpdate.status {
             case .added:
-                self.allChannels = ChannelManager.shared.subscribedChannels
+                self.allChannels = self.subscribedChannels
             case .deleted:
                 // We pre-emptivley delete a channel from the client, so we dont have a delay, and a user doesn't select a deleted channel and cause a crash.
-                self.allChannels = ChannelManager.shared.subscribedChannels.filter { (channel) -> Bool in
+                self.allChannels = self.subscribedChannels.filter { (channel) -> Bool in
                     return channel.id != channelsUpdate.channel.id
                 }
 
@@ -111,7 +135,7 @@ class ChannelSupplier {
             switch memberUpdate.status {
             case .left:
                 // We pre-emptivley leave a channel from the client, so we dont have a delay, and a user doesn't still see a channel they left.
-                self.allChannels = ChannelManager.shared.subscribedChannels.filter { (channel) -> Bool in
+                self.allChannels = self.subscribedChannels.filter { (channel) -> Bool in
                     return channel.id != memberUpdate.channel.id
                 }
                 if let activeChannel = self.activeChannel.value {
@@ -190,14 +214,14 @@ class ChannelSupplier {
 
     // MARK: GETTERS
 
-    static func getChannel(withSID channelSID: String) -> DisplayableChannel? {
-        return ChannelManager.shared.subscribedChannels.first(where: { (channel) in
+    func getChannel(withSID channelSID: String) -> DisplayableChannel? {
+        return self.subscribedChannels.first(where: { (channel) in
             return channel.id == channelSID
         })
     }
 
     /// Channels can only be found by user if they have already joined or are invited
-    static func findChannel(with channelId: String) -> Future<TCHChannel> {
+    func findChannel(with channelId: String) -> Future<TCHChannel> {
 
         let promise = Promise<TCHChannel>()
         ChannelManager.shared.client?.findChannel(with: channelId)
@@ -213,8 +237,8 @@ class ChannelSupplier {
         return promise
     }
 
-    static func getChannel(containingMember userID: String) -> DisplayableChannel? {
-        return ChannelManager.shared.subscribedChannels.first(where: { (channel) -> Bool in
+    func getChannel(containingMember userID: String) -> DisplayableChannel? {
+        return self.subscribedChannels.first(where: { (channel) -> Bool in
             switch channel.channelType {
             case .channel(let tchChannel):
                 return tchChannel.member(withIdentity: userID) != nil

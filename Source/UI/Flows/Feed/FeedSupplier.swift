@@ -22,12 +22,10 @@ class FeedSupplier {
         self.items.append(.inviteAsk)
         self.items.append(.meditation)
 
-        ChannelManager.shared.subscribedChannels.forEach { (channel) in
+        ChannelSupplier.shared.allInvitedChannels.forEach { (channel) in
             switch channel.channelType {
             case .channel(let tchChannel):
-                if tchChannel.status == .invited {
-                    self.items.append(.channelInvite(tchChannel))
-                }
+                self.items.append(.channelInvite(tchChannel))
             default:
                 break
             }
@@ -61,12 +59,10 @@ class FeedSupplier {
         var allProducers: SignalProducer<[FeedType], Error>
 
         var channelProducers: [SignalProducer<FeedType, Error>] = []
-        for channel in ChannelManager.shared.subscribedChannels {
+        for channel in ChannelSupplier.shared.allJoinedChannels {
             switch channel.channelType {
             case .channel(let tchChannel):
-                if tchChannel.status == .joined {
-                    channelProducers.append(tchChannel.getUnconsumedCount())
-                }
+                channelProducers.append(tchChannel.getUnconsumedCount())
             default:
                 break
             }

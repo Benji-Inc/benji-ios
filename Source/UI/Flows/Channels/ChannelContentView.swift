@@ -11,7 +11,7 @@ import TMROLocalization
 
 class ChannelContentView: View {
 
-    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThinMaterialDark))
     private(set) var titleLabel = DisplayUnderlinedLabel()
     private let stackedAvatarView = StackedAvatarView()
     private let descriptionLabel = SmallLabel()

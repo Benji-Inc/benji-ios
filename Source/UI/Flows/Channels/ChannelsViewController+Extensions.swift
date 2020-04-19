@@ -30,7 +30,7 @@ extension ChannelsViewController {
             }
 
             // Reload the cache because changes to the channel list have occurred.
-            self.collectionViewManager.channelCache = self.getChannelsSortedByUpdateDate()
+            self.collectionViewManager.channelCache = ChannelSupplier.shared.allJoinedChannels
             }.start()
 
         ChannelManager.shared.clientSyncUpdate.producer.on { [weak self] (update) in
@@ -44,7 +44,7 @@ extension ChannelsViewController {
             case .channelsListCompleted:
                 break
             case .completed:
-                self.collectionViewManager.channelCache = self.getChannelsSortedByUpdateDate()
+                self.collectionViewManager.channelCache = ChannelSupplier.shared.allJoinedChannels
                 self.collectionViewManager.loadAllChannels()
             case .failed:
                 break
@@ -74,12 +74,5 @@ extension ChannelsViewController {
             }
         }
         .start()
-    }
-
-    private func getChannelsSortedByUpdateDate() -> [DisplayableChannel] {
-        let channelTypes = ChannelManager.shared.subscribedChannels
-        return channelTypes.sorted { (channel1, channel2) -> Bool in
-            channel1.channelType.dateUpdated > channel2.channelType.dateUpdated
-        }
     }
 }

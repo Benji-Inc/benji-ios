@@ -39,7 +39,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         super.init()
         self.updateLayoutDataSource()
 
-        ChannelSupplier.shared.activeChannel.signal.observeValues { [unowned self] (channel) in
+        ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
             guard let activeChannel = channel else { return }
 
             switch activeChannel.channelType {
@@ -50,7 +50,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
             default:
                 break
             }
-        }
+        }.start()
     }
 
     private func updateLayoutDataSource() {
