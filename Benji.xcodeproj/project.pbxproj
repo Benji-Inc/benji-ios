@@ -51,6 +51,10 @@
 		D623BC4F23EF5157007358CB /* ProfileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D623BC4E23EF5157007358CB /* ProfileItem.swift */; };
 		D624296723A9EF4F00322ABE /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D624296623A9EF4F00322ABE /* HomeTabView.swift */; };
 		D629410223F8351D0088777E /* search-to-x.json in Resources */ = {isa = PBXBuildFile; fileRef = D629410123F8351D0088777E /* search-to-x.json */; };
+		D62BB73D244D3AEF00607677 /* UserNotificationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73C244D3AEF00607677 /* UserNotificationFactory.swift */; };
+		D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
+		D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */; };
+		D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
 		D62C635422BE9CBB00F4D097 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C635322BE9CBB00F4D097 /* FeedViewController.swift */; };
 		D62C635622BE9E5C00F4D097 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C635522BE9E5C00F4D097 /* CollectionViewController.swift */; };
 		D6347392241EAA840071E9DA /* Invitee.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6347391241EAA840071E9DA /* Invitee.swift */; };
@@ -374,6 +378,10 @@
 		D623BC4E23EF5157007358CB /* ProfileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileItem.swift; sourceTree = "<group>"; };
 		D624296623A9EF4F00322ABE /* HomeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabView.swift; sourceTree = "<group>"; };
 		D629410123F8351D0088777E /* search-to-x.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "search-to-x.json"; sourceTree = "<group>"; };
+		D62BB73C244D3AEF00607677 /* UserNotificationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationFactory.swift; sourceTree = "<group>"; };
+		D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotificationContent+Extensions.swift"; sourceTree = "<group>"; };
+		D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotification+Extensions.swift"; sourceTree = "<group>"; };
+		D62BB742244DEEA400607677 /* Optional+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extensions.swift"; sourceTree = "<group>"; };
 		D62C635322BE9CBB00F4D097 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		D62C635522BE9E5C00F4D097 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		D6347391241EAA840071E9DA /* Invitee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Invitee.swift; sourceTree = "<group>"; };
@@ -845,6 +853,9 @@
 				D61EC0E921D3111600204BEE /* String+Extensions.swift */,
 				D64C6A7F23294ED700DB7257 /* Twilio */,
 				D6D1503A21D7F47600CD8CE4 /* UI Extensions */,
+				D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */,
+				D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */,
+				D62BB742244DEEA400607677 /* Optional+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -882,6 +893,16 @@
 				D690964F23E7B835008864B6 /* MessageComposerViewController.swift */,
 			);
 			path = Composer;
+			sourceTree = "<group>";
+		};
+		D62BB73B244D3AAD00607677 /* UserNotifications */ = {
+			isa = PBXGroup;
+			children = (
+				D685E9262331177100CC1BAB /* UserNotificationManager.swift */,
+				D6E4C7FC23930675002B1330 /* UserNotificationManager+Extensions.swift */,
+				D62BB73C244D3AEF00607677 /* UserNotificationFactory.swift */,
+			);
+			name = UserNotifications;
 			sourceTree = "<group>";
 		};
 		D62C634F22BE9C4600F4D097 /* Feed */ = {
@@ -1455,8 +1476,7 @@
 				D642737E22C9A7EC0088256B /* ContactsManager.swift */,
 				D6AF02FC220153F5002D5C75 /* LaunchManager.swift */,
 				80D4A21923039FA5007CB5F1 /* RoutineManager.swift */,
-				D685E9262331177100CC1BAB /* UserNotificationManager.swift */,
-				D6E4C7FC23930675002B1330 /* UserNotificationManager+Extensions.swift */,
+				D62BB73B244D3AAD00607677 /* UserNotifications */,
 				D658C7DE24425E5A0027D12E /* HealthKitManager.swift */,
 			);
 			path = Managers;
@@ -1694,6 +1714,7 @@
 			files = (
 				D6347394241EB2C30071E9DA /* AlertControllerAnimatedTransitioning.swift in Sources */,
 				D6EAB68823E6211200B90D5A /* ProfilePhotoViewController.swift in Sources */,
+				D62BB73D244D3AEF00607677 /* UserNotificationFactory.swift in Sources */,
 				D62C635622BE9E5C00F4D097 /* CollectionViewController.swift in Sources */,
 				D6486DD023EF15A2007ED680 /* Inviteable.swift in Sources */,
 				D6E4C7FD23930675002B1330 /* UserNotificationManager+Extensions.swift in Sources */,
@@ -1762,6 +1783,7 @@
 				D657175E2378CEBA00F8F96C /* ChannelCollectionViewManager.swift in Sources */,
 				D68540D3235FDE96006F666C /* SuggestionCollectionViewManager.swift in Sources */,
 				D609AE3C236F913F004FA89A /* Objectable.swift in Sources */,
+				D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */,
 				D64C6A7E23294A8600DB7257 /* ChannelKey.swift in Sources */,
 				D6384414233834380072227B /* Symbols.swift in Sources */,
 				D6DADF692207D246007D9EB1 /* TCHMessage+Extensions.swift in Sources */,
@@ -1979,6 +2001,7 @@
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
 				D6B2604522E6C09700143CF0 /* RegularLabel.swift in Sources */,
 				D685CEA9243ACA800018F3E3 /* ConnectionContentView.swift in Sources */,
+				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D67896A722FF4D9B0059BA75 /* NavigationBarView.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				D6A301AC2380E102006655E0 /* FeedSupplier.swift in Sources */,
@@ -1988,6 +2011,7 @@
 				D6D14FFC21D5893700CD8CE4 /* IGListBatchUpdateData.mm in Sources */,
 				D6EDD1952355DB9B00FDA5D6 /* ProfileCollectionView.swift in Sources */,
 				D6FC8096237A64650089AACC /* MessageSupplier.swift in Sources */,
+				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
 				D6B2606A22E80AB000143CF0 /* Toast.swift in Sources */,
 				D6D1500721D5E73D00CD8CE4 /* ChannelViewController.swift in Sources */,
 				D6D14FFD21D5893700CD8CE4 /* IGListIndexPathResult.m in Sources */,

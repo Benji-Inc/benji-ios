@@ -113,6 +113,16 @@ class UserNotificationManager: NSObject {
         UIApplication.shared.applicationIconBadgeNumber = count
     }
 
+    @discardableResult
+    func handle(userInfo: [AnyHashable: Any]) -> Bool {
+        guard let data = userInfo["data"] as? [String: Any],
+            let note = UserNotificationFactory.createNote(from: data) else { return false }
+
+        self.schedule(note: note)
+        return true
+    }
+
+    @discardableResult
     func schedule(note: UNNotificationRequest) -> Future<Void> {
         let promise = Promise<Void>()
         self.center.add(note, withCompletionHandler: { (error) in
@@ -127,7 +137,7 @@ class UserNotificationManager: NSObject {
     }
 
     func registerPush(from deviceToken: Data) {
-        guard let installation = PFInstallation.current() else { return }
+        guard let installation = PFInstallation.current(), installation.deviceToken.isNil else { return }
 
         installation.setDeviceTokenFrom(deviceToken)
         installation.saveToken()

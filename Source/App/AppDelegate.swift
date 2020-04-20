@@ -41,5 +41,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return LaunchManager.shared.continueUser(activity: userActivity)
     }
+
+    func application(_ application: UIApplication,
+                 didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+                 fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+
+        guard application.applicationState == .active || application.applicationState == .inactive else {
+            completionHandler(.noData)
+            return
+        }
+
+        if UserNotificationManager.shared.handle(userInfo: userInfo) {
+            completionHandler(.newData)
+        } else {
+            completionHandler(.noData)
+        }
+    }
 }
 

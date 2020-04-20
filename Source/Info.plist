@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSHealthShareUsageDescription</key>
-	<string>To help show the connection between your body mind when you are communicating.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>To help track the mindful mintues you make. </string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -56,6 +52,10 @@
 	<string>Select contacts to message. Contact information never leaves this device. </string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>You can use FaceID to securely access your account</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>To help show the connection between your body mind when you are communicating.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>To help track the mindful mintues you make. </string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>You can use the microphone to send audio with your messages. </string>
 	<key>NSPhotoLibraryUsageDescription</key>
@@ -65,6 +65,12 @@
 		<string>Roboto-Bold.ttf</string>
 		<string>Roboto-Medium.ttf</string>
 		<string>Roboto-Regular.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>processing</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
