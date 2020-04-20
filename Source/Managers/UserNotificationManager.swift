@@ -17,7 +17,13 @@ class UserNotificationManager: NSObject {
 
     static let shared = UserNotificationManager()
 
-    let center = UNUserNotificationCenter.current()
+    private let center = UNUserNotificationCenter.current()
+
+    override init() {
+        super.init()
+
+        self.center.delegate = self
+    }
 
     // NOTE: Retrieves the notification settings synchronously.
     // WARNING: Use with caution as it will block whatever thread it is
@@ -52,6 +58,35 @@ class UserNotificationManager: NSObject {
         }
     }
 
+    func getNotificationSettings() -> Future<UNNotificationSettings> {
+        let promise = Promise<UNNotificationSettings>()
+        self.center.getNotificationSettings { (settings) in
+            promise.resolve(with: settings)
+        }
+
+        return promise
+    }
+
+    func silentRegister(withApplication application: UIApplication) {
+
+        self.center.getNotificationSettings() { (settings) in
+            switch settings.authorizationStatus {
+            case .authorized:
+                runMain {
+                    application.registerForRemoteNotifications()  // To update our token
+                }
+            case .notDetermined:
+                return
+            case .denied:
+                return
+            case .provisional:
+                return 
+            @unknown default:
+                return
+            }
+        }
+    }
+
     func register(with options: UNAuthorizationOptions = [.alert, .sound, .badge],
                   application: UIApplication,
                   completion: @escaping ((Bool, Error?) -> Void)) {
@@ -66,8 +101,10 @@ class UserNotificationManager: NSObject {
             }
             completion(granted, error)
         }
+    }
 
-        self.center.delegate = self
+    func removeAllPendingNotificationRequests() {
+        self.center.removeAllPendingNotificationRequests()
     }
 
     func clearNotificationCenter() {

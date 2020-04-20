@@ -36,7 +36,7 @@ class RoutineManager {
         let identifier = self.messageReminderID + routine.timeDescription
 
         // Replace any previous notifications
-        UserNotificationManager.shared.center.removeAllPendingNotificationRequests()
+        UserNotificationManager.shared.removeAllPendingNotificationRequests()
 
         let content = UNMutableNotificationContent()
         content.title = "Feed Unlocked"

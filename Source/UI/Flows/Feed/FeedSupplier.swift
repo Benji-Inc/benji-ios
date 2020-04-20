@@ -44,11 +44,12 @@ class FeedSupplier {
 
     private func getNotificationPermissions() -> Future<Void>  {
         let promise = Promise<Void>()
-        UserNotificationManager.shared.center.getNotificationSettings { (settings) in
-            if settings.authorizationStatus != .authorized {
-                self.items.append(.notificationPermissions)
-            }
-            promise.resolve(with: ())
+        UserNotificationManager.shared.getNotificationSettings()
+            .observeValue { (settings) in
+                if settings.authorizationStatus != .authorized {
+                    self.items.append(.notificationPermissions)
+                }
+                promise.resolve(with: ())
         }
 
         return promise
