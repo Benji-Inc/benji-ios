@@ -20,10 +20,11 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
-        
+
+        if let target = response.notification.deepLinkTarget {
+            self.delegate?.userNotificationManager(willHandle: DeepLinkObject(target: target))
+        }
     }
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {
-
-    }
+    func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {}
 }

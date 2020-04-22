@@ -31,6 +31,8 @@ class MainCoordinator: Coordinator<Void> {
         self.addChildAndStart(launchCoordinator, finishedHandler: { (result) in
             self.handle(result: result)
         })
+
+        UserNotificationManager.shared.delegate = self
     }
 
     private func handle(result: LaunchStatus) {
@@ -109,6 +111,12 @@ class MainCoordinator: Coordinator<Void> {
             self.removeChild()
             self.runOnboardingFlow()
         }
+    }
+}
+
+extension MainCoordinator: UserNotificationManagerDelegate {
+    func userNotificationManager(willHandle deeplink: DeepLinkable) {
+        self.start(with: deeplink)
     }
 }
 

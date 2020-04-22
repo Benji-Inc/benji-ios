@@ -13,9 +13,14 @@ import TwilioChatClient
 import Parse
 import TMROFutures
 
+protocol UserNotificationManagerDelegate: class {
+    func userNotificationManager(willHandle: DeepLinkable)
+}
+
 class UserNotificationManager: NSObject {
 
     static let shared = UserNotificationManager()
+    weak var delegate: UserNotificationManagerDelegate?
 
     private let center = UNUserNotificationCenter.current()
 

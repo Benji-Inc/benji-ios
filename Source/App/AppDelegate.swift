@@ -25,9 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-
+        UserNotificationManager.shared.clearNotificationCenter()
         guard !ChannelManager.shared.isConnected, let identity = User.current()?.objectId else { return }
-
         LaunchManager.shared.getChatToken(with: identity, buo: nil)
     }
 
