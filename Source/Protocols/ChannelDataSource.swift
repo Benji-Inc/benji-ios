@@ -118,19 +118,27 @@ extension ChannelDataSource {
                     replaceTypingIndicator: Bool = false,
                     completion: CompletionOptional = nil) {
 
-        guard let updateId = updatedItem.updateId else { return }
+        // If there is no update id and it's from the current user,
+        // then we've already displayed this message and can safely return.
+        if updatedItem.updateId == nil && updatedItem.isFromCurrentUser {
+            return
+        }
 
         var indexPath: IndexPath?
 
-        for (sectionIndex, section) in self.sections.enumerated() {
-            for (itemIndex, item) in section.items.enumerated() {
-                if item.updateId == updateId {
-                    indexPath = IndexPath(item: itemIndex, section: sectionIndex)
-                    break
+        // If the new message matches an existing message's id, then replace the old one.
+        if let updateId = updatedItem.updateId {
+            for (sectionIndex, section) in self.sections.enumerated() {
+                for (itemIndex, item) in section.items.enumerated() {
+                    if item.updateId == updateId {
+                        indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+                        break
+                    }
                 }
             }
         }
 
+        // If the new message isn't replacing an old one, append it to the end.
         if indexPath == nil {
             if replaceTypingIndicator, let lastSection = self.sections.last {
                 let section = self.sections.count - 1

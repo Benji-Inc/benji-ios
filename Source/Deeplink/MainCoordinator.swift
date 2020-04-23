@@ -71,14 +71,6 @@ class MainCoordinator: Coordinator<Void> {
                 self.isInitializingChat = false
                 guard let user = User.current(), user.isOnboarded else { return }
                 self.runHomeFlow()
-
-//                CompleteOnboarding().makeRequest()
-//                    .observe { (_) in
-//                        runMain {
-//                            guard let user = User.current(), user.isOnboarded else { return }
-//                            self.runHomeFlow()
-//                        }
-//                }
             })
     }
 
@@ -102,21 +94,23 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func handle(deeplink: DeepLinkable) {
-        guard let _ = deeplink.code else { return }
+        guard let target = deeplink.deepLinkTarget else { return }
 
-        if User.current() == nil {
-            self.removeChild()
-            self.runOnboardingFlow()
-        } else if let user = User.current(), user.isAuthenticated {
-            self.removeChild()
-            self.runOnboardingFlow()
+        switch target {
+        case .home, .channel, .channels, .routine, .profile, .feed:
+            if let user = User.current(), user.isAuthenticated {
+                self.runHomeFlow()
+            }
+        case .login:
+            break
         }
     }
 }
 
 extension MainCoordinator: UserNotificationManagerDelegate {
     func userNotificationManager(willHandle deeplink: DeepLinkable) {
-        self.start(with: deeplink)
+        self.deepLink = deeplink
+        self.handle(deeplink: deeplink)
     }
 }
 

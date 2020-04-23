@@ -19,6 +19,8 @@ enum NotificationContentKey: String {
     case trigger = "trigger"
     case category = "categoryIdentifier"
     case thread = "threadIdentifier"
+    case channelId = "channelId"
+    case messageId = "messageId"
 }
 
 extension UNNotificationContent {
@@ -64,6 +66,8 @@ extension UNMutableNotificationContent {
         if let thread: String = self.valueFrom(data: data, for: .thread) {
             self.threadIdentifier = thread
         }
+
+        self.userInfo = data
     }
 
     func setValue(for key: NotificationContentKey, from data: [String: Any]) {
