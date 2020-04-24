@@ -55,7 +55,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-    private func handle(deeplink: DeepLinkable) {
+    func handle(deeplink: DeepLinkable) {
         self.deepLink = deeplink
 
         guard let target = deeplink.deepLinkTarget else { return }

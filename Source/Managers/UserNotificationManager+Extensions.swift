@@ -24,6 +24,8 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
         if let target = response.notification.deepLinkTarget {
             self.delegate?.userNotificationManager(willHandle: DeepLinkObject(target: target))
         }
+
+        completionHandler()
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {}

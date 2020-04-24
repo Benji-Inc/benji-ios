@@ -75,12 +75,16 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func runHomeFlow() {
-        self.removeChild()
-        let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
-        self.router.setRootModule(homeCoordinator, animated: true)
-        self.addChildAndStart(homeCoordinator, finishedHandler: { _ in
-            // If the home coordinator ever finishes, put handling logic here.
-        })
+        if let homeCoordinator = self.childCoordinator as? HomeCoordinator, let deepLink = self.deepLink {
+            homeCoordinator.handle(deeplink: deepLink)
+        } else {
+            self.removeChild()
+            let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
+            self.router.setRootModule(homeCoordinator, animated: true)
+            self.addChildAndStart(homeCoordinator, finishedHandler: { _ in
+                // If the home coordinator ever finishes, put handling logic here.
+            })
+        }
     }
 
     private func runOnboardingFlow() {
