@@ -108,7 +108,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             self.delegate.channelView(self, didTapShare: message)
         }
 
-        self.subscribeToClient()
+        self.subscribeToUpdates()
     }
 
     private func load(activeChannel: DisplayableChannel) {

@@ -28,28 +28,10 @@ extension ChannelViewController {
             self.collectionView.scrollToEnd()
         }
     }
+    
+    func subscribeToUpdates() {
 
-    func subscribeToClient() {
-        ChannelManager.shared.clientSyncUpdate.producer.on { [weak self] (update) in
-            guard let `self` = self, let clientUpdate = update else { return }
-
-            switch clientUpdate {
-            case .started, .channelsListCompleted:
-                break
-            case .completed:
-                self.subscribeToUpdates()
-            case .failed:
-                break
-            @unknown default:
-                break
-            }
-        }
-        .start()
-    }
-
-    private func subscribeToUpdates() {
-
-        ChannelManager.shared.messageUpdate.producer.on { [weak self] (update) in
+        self.disposables.add(ChannelManager.shared.messageUpdate.producer.on { [weak self] (update) in
             guard let `self` = self else { return }
 
             guard let channelUpdate = update, ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: channelUpdate.channel) else { return }
@@ -75,9 +57,9 @@ extension ChannelViewController {
             case .toastReceived:
                 break
             }
-            }.start()
+        }.start())
 
-        ChannelManager.shared.memberUpdate.producer.on { [weak self] (update) in
+        self.disposables.add(ChannelManager.shared.memberUpdate.producer.on { [weak self] (update) in
             guard let `self` = self else { return }
 
             guard let memberUpdate = update, ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: memberUpdate.channel) else { return }
@@ -89,7 +71,6 @@ extension ChannelViewController {
                 }
             case .changed:
                 break
-                //self.loadMessages()
             case .typingEnded:
                 if let memberID = memberUpdate.member.identity, memberID != User.current()?.objectId {
                     self.collectionViewManager.userTyping = nil
@@ -106,6 +87,6 @@ extension ChannelViewController {
                     }
                 }
             }
-        }.start()
+        }.start())
     }
 }

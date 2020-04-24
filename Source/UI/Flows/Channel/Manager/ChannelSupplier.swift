@@ -155,7 +155,14 @@ class ChannelSupplier {
     }
 
     func isChannelEqualToActiveChannel(channel: TCHChannel) -> Bool {
-        return false
+        guard let activeChannel = self.activeChannel.value else { return false }
+        
+        switch activeChannel.channelType {
+        case .channel(let currentChannel):
+            return currentChannel == channel
+        default:
+            return false
+        }
     }
 
     // MARK: CREATION
