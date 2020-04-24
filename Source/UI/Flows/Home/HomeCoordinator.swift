@@ -66,7 +66,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         case .login:
             break
         case .channel:
-            if let channelId = deeplink.channelId, let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
+            if let channelId = deeplink.customMetadata["channelId"] as? String,
+                let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
                 self.startChannelFlow(for: channel.channelType)
             }
         case .routine:
@@ -117,9 +118,9 @@ extension HomeCoordinator: HomeViewControllerDelegate {
 //        ToastScheduler.shared.schedule(toastType: .systemMessage(message))
     }
 
-    func startChannelFlow(for type: ChannelType) {
+    func startChannelFlow(for type: ChannelType?) {
         self.removeChild()
-        let coordinator = ChannelCoordinator(router: self.router, deepLink: self.deepLink, channelType: nil)
+        let coordinator = ChannelCoordinator(router: self.router, deepLink: self.deepLink, channelType: type)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 self.finishFlow(with: ())

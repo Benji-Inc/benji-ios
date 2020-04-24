@@ -17,4 +17,8 @@ extension UNNotification {
     var deeplinkURL: URL? {
         return self.request.content.deeplinkURL
     }
+
+    var customMetadata: NSMutableDictionary {
+        return NSMutableDictionary(dictionary: self.request.content.userInfo)
+    }
 }

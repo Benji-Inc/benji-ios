@@ -22,7 +22,9 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
 
         if let target = response.notification.deepLinkTarget {
-            self.delegate?.userNotificationManager(willHandle: DeepLinkObject(target: target))
+            var deepLink = DeepLinkObject(target: target)
+            deepLink.customMetadata = response.notification.customMetadata
+            self.delegate?.userNotificationManager(willHandle: deepLink)
         }
 
         completionHandler()

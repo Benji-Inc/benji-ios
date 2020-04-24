@@ -30,10 +30,10 @@ extension DeepLinkable {
 
     var channelId: String? {
         get {
-            return self.customMetadata.value(forKey: "channel_id") as? String
+            return self.customMetadata.value(forKey: "channeId") as? String
         }
         set {
-            self.customMetadata.setValue(newValue, forKey: "channel_id")
+            self.customMetadata.setValue(newValue, forKey: "channelId")
         }
     }
 
