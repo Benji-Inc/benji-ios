@@ -14,7 +14,6 @@ class MessageCell: UICollectionViewCell {
     let avatarView = AvatarView()
     let bubbleView = View()
     let textView = MessageTextView()
-    let overlayView = View()
     var didTapMessage: () -> Void = {}
     private(set) var currentMessage: Messageable?
     private(set) var attributes: ChannelCollectionViewLayoutAttributes? 
@@ -36,17 +35,8 @@ class MessageCell: UICollectionViewCell {
         self.contentView.addSubview(self.avatarView)
         self.contentView.addSubview(self.bubbleView)
         self.contentView.addSubview(self.textView)
-        self.contentView.addSubview(self.overlayView)
-        self.overlayView.set(backgroundColor: .clear)
 
-        let view = UIView(frame: self.bounds)
-        view.set(backgroundColor: .clear)
-        self.backgroundView = view
-        self.selectedBackgroundView = view
-
-        //TODO: REMOVE SELECTED STATE FROM CELL 
-
-        self.overlayView.onTap { [unowned self] (tap) in
+        self.bubbleView.onTap { [unowned self] (tap) in
             self.didTapMessage()
         }
     }
@@ -128,7 +118,6 @@ class MessageCell: UICollectionViewCell {
         self.avatarView.frame = attributes.attributes.avatarFrame
         self.textView.frame = attributes.attributes.textViewFrame
         self.bubbleView.frame = attributes.attributes.bubbleViewFrame
-        self.overlayView.frame = attributes.attributes.bubbleViewFrame
         self.bubbleView.layer.maskedCorners = attributes.attributes.maskedCorners
         self.bubbleView.roundCorners()
     }

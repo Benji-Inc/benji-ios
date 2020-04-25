@@ -36,13 +36,15 @@ class CodeViewController: TextInputViewController<Void> {
     // True if we're in the process of verifying the code
     var verifying: Bool = false
     private func verify(code: String) {
-        guard !self.verifying, let phoneNumber = self.phoneNumber else { return }
+        guard !self.verifying, let phoneNumber = self.phoneNumber, let installationId = PFInstallation.current()?.installationId else { return }
 
         self.verifying = true
 
         let tf = self.textField as? TextField
         tf?.activityIndicator.startAnimating()
-        VerifyCode(code: code, phoneNumber: phoneNumber).makeRequest()
+        
+        VerifyCode(code: code, phoneNumber: phoneNumber, installationId: installationId)
+            .makeRequest()
             .observeValue { (result) in
                 switch result {
                 case .success(let token):

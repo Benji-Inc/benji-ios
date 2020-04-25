@@ -76,16 +76,14 @@ class UserNotificationManager: NSObject {
 
         self.center.getNotificationSettings() { (settings) in
             switch settings.authorizationStatus {
-            case .authorized:
+            case .authorized, .provisional:
                 runMain {
                     application.registerForRemoteNotifications()  // To update our token
                 }
             case .notDetermined:
-                return
+                self.register(with: [.alert, .sound, .badge, .provisional], application: application) { (_, _) in}
             case .denied:
                 return
-            case .provisional:
-                return 
             @unknown default:
                 return
             }

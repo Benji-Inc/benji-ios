@@ -59,11 +59,12 @@ class LaunchManager {
             }))
         }
 
+        // Make sure we set this up each launch
+        UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+
         // We initialize branch first so we can pass any attributes into the create user call that it might have
         self.initializeBranchIfNeeded(with: options)
             .observe(with: { (result) in
-                // Make sure we set this up each launch
-                UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
                 switch result {
                 case .success(let buo):
                     self.initializeUserData(with: buo)
@@ -92,9 +93,7 @@ class LaunchManager {
         }
 
         branch.initSession(launchOptions: launchOptions,
-                           andRegisterDeepLinkHandlerUsingBranchUniversalObject: { (branchObject,
-                            properties,
-                            error) in
+                           andRegisterDeepLinkHandlerUsingBranchUniversalObject: { (branchObject, properties, error) in
 
                             // Use for testing
                             //let buo = self.createTestBUO()

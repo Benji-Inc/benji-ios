@@ -39,11 +39,13 @@ struct VerifyCode: CloudFunction {
 
     let code: String
     let phoneNumber: PhoneNumber
+    let installationId: String
 
     func makeRequest() -> Future<VerifyCodeResult> {
         let promise = Promise<VerifyCodeResult>()
 
         let params: [String: Any] = ["authCode": self.code,
+                                     "installationId": self.installationId,
                                      "phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164)]
 
         PFCloud.callFunction(inBackground: "validateCode",

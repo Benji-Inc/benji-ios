@@ -48,6 +48,8 @@ extension ChannelCollectionViewManager {
         }
 
         let confirm = UIAction(title: "Confirm", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
+
+            //Actually delete the message
             self.delete(item: message, in: indexPath.section)
         }
 
