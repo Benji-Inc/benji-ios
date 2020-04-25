@@ -43,14 +43,11 @@ extension ChannelCollectionViewManager {
             // Show rename UI
         }
 
-        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in
-
-        }
+        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in}
 
         let confirm = UIAction(title: "Confirm", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
-
-            //Actually delete the message
             self.delete(item: message, in: indexPath.section)
+            MessageSupplier.shared.delete(message: message)
         }
 
         let deleteMenu = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [confirm, neverMind])

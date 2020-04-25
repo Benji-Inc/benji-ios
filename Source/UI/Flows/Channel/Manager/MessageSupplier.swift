@@ -17,6 +17,7 @@ class MessageSupplier {
     /// To paginate and keep messages sorted we need to maintain a list
     private(set) var allMessages: [Messageable] = []
     private(set) var sections: [ChannelSectionable] = []
+    private var messagesObject: TCHMessages?
 
     var didGetLastSections: (([ChannelSectionable]) -> Void)?
 
@@ -38,6 +39,7 @@ class MessageSupplier {
         }
 
         if let channel = tchChannel, let messagesObject = channel.messages {
+            self.messagesObject = messagesObject
             messagesObject.getLastWithCount(batchAmount) { (result, messages) in
                 if let msgs = messages {
                     self.allMessages = msgs
@@ -63,6 +65,7 @@ class MessageSupplier {
         let promise = Promise<[ChannelSectionable]>()
 
         if let messagesObject = channel.messages {
+            self.messagesObject = messagesObject
             messagesObject.getBefore(index, withCount: batchAmount) { (result, messages) in
                 if let msgs = messages {
                     self.allMessages.insert(contentsOf: msgs, at: 0)
@@ -116,5 +119,10 @@ class MessageSupplier {
         }
 
         return promise
+    }
+
+    func delete(message: Messageable) {
+        guard let tchMessage = message as? TCHMessage, let messagesObject = self.messagesObject else { return }
+        messagesObject.remove(tchMessage, completion: nil)
     }
 }
