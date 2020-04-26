@@ -12,7 +12,7 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
     var avatarSize = CGSize(width: 30, height: 36)
     var textViewVerticalPadding: CGFloat = 10
-    var textViewHorizontalPadding: CGFloat = 20
+    var textViewHorizontalPadding: CGFloat = 14
     var bubbleViewHorizontalPadding: CGFloat = 14
     private let widthRatio: CGFloat = 0.8
 
@@ -22,22 +22,15 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
                             for layout: ChannelCollectionViewFlowLayout,
                             attributes: ChannelCollectionViewLayoutAttributes) {
 
+        let textViewSize = self.getTextViewSize(with: message, for: layout)
+        let bubbleViewFrame = self.getBubbleViewFrame(with: message, textViewSize: textViewSize, for: layout)
+        attributes.attributes.bubbleViewFrame = bubbleViewFrame
 
         let avatarFrame = self.getAvatarFrame(with: message, layout: layout)
         attributes.attributes.avatarFrame = avatarFrame
 
-        let textViewFrame = self.getTextViewFrame(with: message, for: layout)
-        attributes.attributes.textViewFrame = textViewFrame
+        attributes.attributes.textViewFrame = self.getTextViewFrame(with: bubbleViewFrame.size, textViewSize: textViewSize)
 
-        let bubbleHeight = textViewFrame.height + (self.textViewVerticalPadding * 2)
-        let bubbleWidth = textViewFrame.width + (self.bubbleViewHorizontalPadding * 2)
-
-        let bubbleXOffset = textViewFrame.minX - self.bubbleViewHorizontalPadding
-        let bubbleYOffset = textViewFrame.minY - self.textViewVerticalPadding
-        attributes.attributes.bubbleViewFrame = CGRect(x: bubbleXOffset,
-                                                       y: bubbleYOffset,
-                                                       width: bubbleWidth,
-                                                       height: bubbleHeight)
         //Determine masked corners
         if message.isFromCurrentUser {
             if let previous = previousMessage, previous.authorID == message.authorID {
@@ -66,9 +59,8 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
     private func cellContentHeight(with message: Messageable,
                                    for layout: ChannelCollectionViewFlowLayout) -> CGFloat {
-
-        return self.getTextViewSize(with: message, for: layout).height
-            + (self.textViewVerticalPadding * 2)
+        let size = self.getTextViewSize(with: message, for: layout)
+        return self.getBubbleViewFrame(with: message, textViewSize: size, for: layout).height
     }
 
     private func getAvatarFrame(with message: Messageable, layout: ChannelCollectionViewFlowLayout) -> CGRect {
@@ -85,19 +77,28 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
                       height: size.height)
     }
 
-    private func getTextViewFrame(with message: Messageable,
-                                  for layout: ChannelCollectionViewFlowLayout) -> CGRect {
-        let size = self.getTextViewSize(with: message, for: layout)
+    private func getTextViewFrame(with bubbleViewSize: CGSize, textViewSize: CGSize) -> CGRect {
+        return CGRect(x: self.bubbleViewHorizontalPadding,
+                      y: self.textViewVerticalPadding,
+                      width: textViewSize.width,
+                      height: textViewSize.height)
+    }
+
+    private func getBubbleViewFrame(with message: Messageable,
+                                    textViewSize: CGSize,
+                                    for layout: ChannelCollectionViewFlowLayout) -> CGRect {
+
         var xOffset: CGFloat = 0
         if message.isFromCurrentUser {
-            xOffset = layout.itemWidth - size.width - self.textViewHorizontalPadding - 6
+            xOffset = layout.itemWidth - textViewSize.width - self.textViewHorizontalPadding - 6
         } else {
             xOffset = self.getAvatarFrame(with: message, layout: layout).width + (self.getAvatarPadding(for: layout) * 2) + Theme.contentOffset
         }
-        return CGRect(x: xOffset,
-                      y: self.textViewVerticalPadding,
-                      width: size.width,
-                      height: size.height)
+
+        return CGRect(x: xOffset - self.bubbleViewHorizontalPadding,
+                      y: 0,
+                      width: textViewSize.width + (self.bubbleViewHorizontalPadding * 2),
+                      height: textViewSize.height + (self.textViewVerticalPadding * 2))
     }
 
     private func getTextViewSize(with message: Messageable,

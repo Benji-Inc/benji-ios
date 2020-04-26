@@ -34,7 +34,7 @@ class MessageCell: UICollectionViewCell {
 
         self.contentView.addSubview(self.avatarView)
         self.contentView.addSubview(self.bubbleView)
-        self.contentView.addSubview(self.textView)
+        self.bubbleView.addSubview(self.textView)
 
         self.bubbleView.onTap { [unowned self] (tap) in
             self.didTapMessage()
