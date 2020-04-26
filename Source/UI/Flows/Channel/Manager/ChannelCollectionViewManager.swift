@@ -222,8 +222,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                   shouldInteractWith URL: URL,
                   in characterRange: NSRange,
                   interaction: UITextItemInteraction) -> Bool {
-        self.didSelectURL?(URL)
-        return false
+        return true
     }
 
     func didSelectLoadMore(for messageIndex: Int) {
