@@ -12,7 +12,7 @@ import TwilioChatClient
 class MessageCell: UICollectionViewCell {
 
     let avatarView = AvatarView()
-    let bubbleView = View()
+    let bubbleView = MessageBubbleView()
     let textView = MessageTextView()
     var didTapMessage: () -> Void = {}
     private(set) var currentMessage: Messageable?
@@ -120,5 +120,10 @@ class MessageCell: UICollectionViewCell {
         self.bubbleView.frame = attributes.attributes.bubbleViewFrame
         self.bubbleView.layer.maskedCorners = attributes.attributes.maskedCorners
         self.bubbleView.roundCorners()
+        self.bubbleView.indexPath = attributes.indexPath
     }
+}
+
+class MessageBubbleView: View {
+    var indexPath: IndexPath?
 }

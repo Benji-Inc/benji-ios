@@ -103,8 +103,10 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
 
         let cell = channelCollectionView.dequeueReusableCell(MessageCell.self, for: indexPath)
 
+        let interaction = UIContextMenuInteraction(delegate: self)
         cell.configure(with: message)
         cell.textView.delegate = self
+        cell.bubbleView.addInteraction(interaction)
         cell.didTapMessage = { [weak self] in
             guard let `self` = self, let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed else { return }
 

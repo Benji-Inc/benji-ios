@@ -10,26 +10,20 @@ import Foundation
 import TMROLocalization
 import TwilioChatClient
 
-extension ChannelCollectionViewManager {
+extension ChannelCollectionViewManager: UIContextMenuInteractionDelegate {
+
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        guard let view = interaction.view as? MessageBubbleView,
+            let indexPath = view.indexPath,
+            let message = self.item(at: indexPath) else { return nil }
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+            return self.makeContextMenu(for: message, at: indexPath)
+        })
+    }
 
     func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
         return false
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        contextMenuConfigurationForItemAt indexPath: IndexPath,
-                        point: CGPoint) -> UIContextMenuConfiguration? {
-        guard let message = self.item(at: indexPath),
-            let cell = collectionView.cellForItem(at: indexPath) as? MessageCell,
-            let attributes = cell.attributes else { return nil }
-
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
-            return MessagePreviewViewController(with: message,
-                                                attributes: attributes)
-        }, actionProvider: { suggestedActions in
-
-            return self.makeContextMenu(for: message, at: indexPath)
-        })
     }
 
     private func makeContextMenu(for message: Messageable, at indexPath: IndexPath) -> UIMenu {
@@ -62,11 +56,11 @@ extension ChannelCollectionViewManager {
         let readMenu = UIMenu(title: "Set messages to read", image: UIImage(systemName: "eyeglasses"), children: [readCancel, readOk])
 
         if message.isFromCurrentUser {
-            return UIMenu(title: "Options", children: [deleteMenu, share, editMessage])
+            return UIMenu(title: "", children: [deleteMenu, share, editMessage])
         }
 
         // Create and return a UIMenu with the share action
-        return UIMenu(title: "Options", children: [share, readMenu])
+        return UIMenu(title: "", children: [share, readMenu])
     }
 
     private func setToRead(message: Messageable) {

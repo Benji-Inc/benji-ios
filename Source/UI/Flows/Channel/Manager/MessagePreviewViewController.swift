@@ -20,7 +20,6 @@ class MessagePreviewViewController: ViewController {
 
         self.message = message
         self.channelAttributes = attributes
-
         super.init()
     }
 
@@ -32,32 +31,22 @@ class MessagePreviewViewController: ViewController {
         self.view = self.bubbleView
     }
 
-    override func initializeViews() {
-        super.initializeViews()
-
-        self.view.addSubview(self.messageTextView)
-        self.messageTextView.set(text: self.message.text, messageContext: self.message.context)
-        self.handleIsConsumed(for: self.message)
-
-        self.messageTextView.size = self.channelAttributes.attributes.textViewFrame.size
-
-        self.preferredContentSize = self.channelAttributes.attributes.bubbleViewFrame.size
+    override var preferredContentSize: CGSize {
+        get {
+            return self.channelAttributes.attributes.bubbleViewFrame.size
+        }
+        set {
+            self.preferredContentSize = .zero 
+        }
     }
 
-    private func handleIsConsumed(for message: Messageable) {
+    override func initializeViews() {
+        super.initializeViews()
+        
+        self.view.addSubview(self.messageTextView)
+        self.messageTextView.set(text: self.message.text, messageContext: self.message.context)
+        self.messageTextView.size = self.channelAttributes.attributes.textViewFrame.size
 
-        self.bubbleView.set(backgroundColor: message.color)
-
-        if !message.isFromCurrentUser, !message.isConsumed, message.context != .status {
-
-            if !message.isFromCurrentUser, message.context == .casual {
-                self.bubbleView.layer.borderColor = Color.purple.color.cgColor
-            } else {
-                self.bubbleView.layer.borderColor = message.context.color.color.cgColor
-            }
-
-            self.bubbleView.layer.borderWidth = 2
-        }
     }
 
     override func viewDidLayoutSubviews() {
