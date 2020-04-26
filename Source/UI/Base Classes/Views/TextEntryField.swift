@@ -15,6 +15,7 @@ class TextEntryField: View, Sizeable {
     private let titleLabel = SmallBoldLabel()
     private let title: Localized
     private let placeholder: Localized?
+    private let lineView = View()
 
     init(with textField: UITextField,
          title: Localized,
@@ -37,8 +38,8 @@ class TextEntryField: View, Sizeable {
         self.addSubview(self.titleLabel)
         self.titleLabel.set(text: self.title, stringCasing: .unchanged)
         self.addSubview(self.textField)
-        self.textField.set(backgroundColor: .background2)
-        self.textField.roundCorners()
+        self.addSubview(self.lineView)
+        self.lineView.set(backgroundColor: .background2)
 
         self.textField.returnKeyType = .done
         self.textField.adjustsFontSizeToFitWidth = true
@@ -61,6 +62,10 @@ class TextEntryField: View, Sizeable {
         self.textField.left = 0
         self.textField.top = self.titleLabel.bottom + 10
 
-        return self.textField.bottom
+        self.lineView.size = CGSize(width: width, height: 2)
+        self.lineView.top = self.textField.bottom
+        self.lineView.centerOnX()
+
+        return self.lineView.bottom
     }
 }

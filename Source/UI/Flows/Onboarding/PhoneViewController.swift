@@ -16,9 +16,13 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
 
     init() {
         let phoneField = PhoneTextField()
+        phoneField.withFlag = true
+        phoneField.withDefaultPickerUI = true
+        phoneField.withExamplePlaceholder = true
+
         super.init(textField: phoneField,
                    title: LocalizedString(id: "", default: "MOBILE NUMBER"),
-                   placeholder: LocalizedString(id: "", default: "000-000-0000"))
+                   placeholder: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -44,11 +48,12 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     @objc func editingDidEnd() {
         guard let text = self.textField.text,
             text.isValidPhoneNumber(),
-            let phone = try? PhoneKit.shared.parse(text, withRegion: "US") else {
+            let phoneTextField = self.textField as? PhoneTextField,
+            let phone = try? PhoneKit.shared.parse(text, withRegion: phoneTextField.currentRegion) else {
                 return
         }
 
-        self.sendCode(to: phone)
+        self.sendCode(to: phone, region: phoneTextField.currentRegion)
     }
 
     private func isPhoneNumberValid() -> Bool {
@@ -58,8 +63,8 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         return false
     }
 
-    private func sendCode(to phone: PhoneNumber) {
-        SendCode(phoneNumber: phone).makeRequest()
+    private func sendCode(to phone: PhoneNumber, region: String) {
+        SendCode(phoneNumber: phone, region: region).makeRequest()
             .withResultToast()
             .observe(with: { (result) in
                 switch result {

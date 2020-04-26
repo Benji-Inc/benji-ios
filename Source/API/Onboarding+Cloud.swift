@@ -13,12 +13,13 @@ import PhoneNumberKit
 
 struct SendCode: CloudFunction {
     let phoneNumber: PhoneNumber
-
+    let region: String
     func makeRequest() -> Future<Void> {
         let promise = Promise<Void>()
-
+        let params = ["phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164),
+                      "region": region]
         PFCloud.callFunction(inBackground: "sendCode",
-                             withParameters: ["phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164)]) { (object, error) in
+                             withParameters: params) { (object, error) in
                                 if let error = error {
                                     promise.reject(with: error)
                                 } else {
