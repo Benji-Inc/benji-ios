@@ -32,6 +32,11 @@ class MessageTextView: TextView {
                  stringCasing: .unchanged,
                  isEditable: false,
                  linkColor: .blue)
+
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 2
+
+        self.addTextAttributes([NSAttributedString.Key.paragraphStyle: style])
     }
 
     // Allows us to interact with links if they exist or pass the touch to the next receiver if they do not

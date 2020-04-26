@@ -169,4 +169,14 @@ class TextView: UITextView {
 
         return size
     }
+
+    /// Adds the provided attributes to all the text in the view.
+    func addTextAttributes(_ attributes: [NSAttributedString.Key : Any]) {
+        guard let current = self.attributedText else { return }
+
+        let newString = NSMutableAttributedString(current)
+        let range = NSMakeRange(0, newString.string.count)
+        newString.addAttributes(attributes, range: range)
+        self.attributedText = newString
+    }
 }

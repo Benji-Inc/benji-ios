@@ -109,6 +109,10 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
                                           color: .white)
 
         let attributedString = attributed.string
+
+        let style = NSMutableParagraphStyle()
+        style.lineSpacing = 2
+        attributedString.addAttributes([NSAttributedString.Key.paragraphStyle: style])
         let maxWidth = (layout.itemWidth * self.widthRatio) - self.getAvatarPadding(for: layout) - self.avatarSize.width
         let size = attributedString.getSize(withWidth: maxWidth)
         return size
