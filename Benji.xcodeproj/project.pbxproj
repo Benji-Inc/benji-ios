@@ -239,7 +239,6 @@
 		D6B2606A22E80AB000143CF0 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2606922E80AB000143CF0 /* Toast.swift */; };
 		D6B2606C22E80B6A00143CF0 /* ToastScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2606B22E80B6A00143CF0 /* ToastScheduler.swift */; };
 		D6B2606E22E80E4000143CF0 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2606D22E80E4000143CF0 /* ToastView.swift */; };
-		D6B2607022E80E6500143CF0 /* ToastView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D6B2606F22E80E6500143CF0 /* ToastView.xib */; };
 		D6B2607222E80FE000143CF0 /* SmallBoldLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2607122E80FE000143CF0 /* SmallBoldLabel.swift */; };
 		D6BD933F23F8824D00C5660D /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D6BD933E23F8824D00C5660D /* face_scan.json */; };
 		D6BF68D7239CBF74008E79A1 /* FeedInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */; };
@@ -567,7 +566,6 @@
 		D6B2606922E80AB000143CF0 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		D6B2606B22E80B6A00143CF0 /* ToastScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastScheduler.swift; sourceTree = "<group>"; };
 		D6B2606D22E80E4000143CF0 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
-		D6B2606F22E80E6500143CF0 /* ToastView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToastView.xib; sourceTree = "<group>"; };
 		D6B2607122E80FE000143CF0 /* SmallBoldLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallBoldLabel.swift; sourceTree = "<group>"; };
 		D6BD933E23F8824D00C5660D /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedInviteView.swift; sourceTree = "<group>"; };
@@ -1360,7 +1358,6 @@
 				D6B2606722E80A7900143CF0 /* ToastQueue.swift */,
 				D6B2606B22E80B6A00143CF0 /* ToastScheduler.swift */,
 				D6B2606D22E80E4000143CF0 /* ToastView.swift */,
-				D6B2606F22E80E6500143CF0 /* ToastView.xib */,
 			);
 			path = Toast;
 			sourceTree = "<group>";
@@ -1653,7 +1650,6 @@
 			files = (
 				D668893423F2789A00FD2764 /* loading.json in Resources */,
 				D6EEE7B12383A70F00F9D446 /* Benji.entitlements in Resources */,
-				D6B2607022E80E6500143CF0 /* ToastView.xib in Resources */,
 				D6ACA0B823D4248100844923 /* FaceDetection.storyboard in Resources */,
 				D629410223F8351D0088777E /* search-to-x.json in Resources */,
 				D6CD4F4123F46689004818B6 /* arrow.json in Resources */,

@@ -18,12 +18,15 @@ enum ToastState {
     case hidden, present, left, expanded, alphaIn, dismiss, gone
 }
 
-class ToastView: UIView {
+class ToastView: View {
 
-    @IBOutlet weak var titleLabel: RegularBoldLabel!
-    @IBOutlet weak var descriptionLabel: SmallBoldLabel!
-    @IBOutlet weak var displayableImageView: DisplayableImageView!
-    @IBOutlet weak var effectView: UIVisualEffectView!
+    private lazy var blurEffect = UIBlurEffect(style: .systemThinMaterialDark)
+    private lazy var blurView = UIVisualEffectView(effect: self.blurEffect)
+    private lazy var vibrancyEffect = UIVibrancyEffect(blurEffect: self.blurEffect)
+    private lazy var vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
+    private let titleLabel = RegularBoldLabel()
+    private let descriptionLabel = SmallBoldLabel()
+    private let displayableImageView = DisplayableImageView()
 
     var didDismiss: () -> Void = {}
     var didTap: () -> Void = {}
@@ -81,15 +84,17 @@ class ToastView: UIView {
         }
     }
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        self.initializeViews()
-    }
-
-    private func initializeViews() {
+    override func initializeSubviews() {
+        super.initializeSubviews()
 
         guard let superview = UIWindow.topWindow() else { return }
         superview.addSubview(self)
+
+        self.addSubview(self.blurView)
+        self.addSubview(self.displayableImageView)
+        self.addSubview(self.descriptionLabel)
+        self.vibrancyEffectView.contentView.addSubview(self.titleLabel)
+        self.blurView.contentView.addSubview(self.vibrancyEffectView)
 
         self.isUserInteractionEnabled = true
         self.layer.masksToBounds = true
@@ -109,14 +114,12 @@ class ToastView: UIView {
         } else {
             self.screenOffset = superview.safeAreaInsets.bottom
         }
-
-        self.setNeedsLayout()
     }
 
     func configure(toast: Toast) {
         self.toast = toast
         self.title = toast.title
-        self.descriptionText = toast.description
+        self.descriptionText = localized(toast.description)
 
         self.onTap { [unowned self] (tap) in
             toast.didTap()
@@ -127,6 +130,7 @@ class ToastView: UIView {
     }
 
     func reveal() {
+        self.layoutNow()
         self.revealAnimator.stopAnimation(true)
         self.revealAnimator.addAnimations { [unowned self] in
             self.toastState = .present
@@ -141,6 +145,8 @@ class ToastView: UIView {
     }
 
     private func moveLeft() {
+        self.layoutNow()
+
         self.leftAnimator.stopAnimation(true)
         self.leftAnimator.addAnimations { [unowned self] in
             self.toastState = .left
@@ -155,6 +161,8 @@ class ToastView: UIView {
     }
 
     private func expand() {
+        self.layoutNow()
+
         self.expandAnimator.stopAnimation(true)
         self.expandAnimator.addAnimations { [unowned self] in
             self.toastState = .expanded
@@ -162,7 +170,7 @@ class ToastView: UIView {
 
         self.expandAnimator.addAnimations({ [unowned self] in
             self.toastState = .alphaIn
-            }, delayFactor: 0.1)
+        }, delayFactor: 0.5)
 
         self.expandAnimator.addCompletion({ [unowned self] (position) in
             if position == .end {
@@ -213,7 +221,7 @@ class ToastView: UIView {
             } else {
                 self.top = superView.bottom + self.screenOffset + superView.safeAreaInsets.bottom
             }
-            self.width = self.displayableImageView.width + (Theme.contentOffset * 2)
+            self.width =  (60 * 0.74) + (Theme.contentOffset * 2)
             self.maxHeight = 84
             self.centerOnX()
         case .present:
@@ -287,6 +295,10 @@ class ToastView: UIView {
 
         guard let superView = UIWindow.topWindow() else { return }
 
+        self.blurView.expandToSuperviewSize()
+        self.vibrancyEffectView.expandToSuperviewSize()
+        self.blurView.roundCorners()
+
         self.displayableImageView.size = CGSize(width: 60 * 0.74, height: 60)
         self.displayableImageView.left = Theme.contentOffset
         self.displayableImageView.top = Theme.contentOffset
@@ -298,6 +310,7 @@ class ToastView: UIView {
             maxTitleWidth = (superView.width * Theme.iPadPortraitWidthRatio) - (self.displayableImageView.right + 22)
         }
 
+        print(maxTitleWidth)
         self.titleLabel.setSize(withWidth: maxTitleWidth)
         self.titleLabel.left = self.displayableImageView.right + Theme.contentOffset
         self.titleLabel.top = self.displayableImageView.top
@@ -305,6 +318,9 @@ class ToastView: UIView {
         self.descriptionLabel.setSize(withWidth: maxTitleWidth)
         self.descriptionLabel.left = self.displayableImageView.right + Theme.contentOffset
         self.descriptionLabel.top = self.titleLabel.bottom + 4
+        if self.descriptionLabel.height > 84 {
+            self.descriptionLabel.height = 84
+        }
 
         if let height = self.maxHeight {
             self.height = height
@@ -313,7 +329,5 @@ class ToastView: UIView {
         } else {
             self.height = self.descriptionLabel.bottom + Theme.contentOffset
         }
-
-        self.effectView.roundCorners()
     }
 }

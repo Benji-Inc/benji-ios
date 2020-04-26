@@ -55,7 +55,7 @@ fileprivate class TomorrowToaster {
 
     func add(toast: Toast) {
 
-        let toastView: ToastView = UINib.loadView()
+        let toastView = ToastView()
         toastView.configure(toast: toast)
 
         if let current = self.items.first {
