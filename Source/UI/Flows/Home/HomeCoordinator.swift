@@ -104,18 +104,6 @@ extension HomeCoordinator: HomeViewControllerDelegate {
             }
         }
         self.router.present(coordinator, source: self.homeVC, animated: true)
-
-//        let message = SystemMessage(avatar: User.current()!,
-//                                    context: Lorem.context(),
-//                                    text: Lorem.text(),
-//                                    isFromCurrentUser: false,
-//                                    createdAt: Date(),
-//                                    authorId: "testAuther",
-//                                    messageIndex: nil,
-//                                    status: .sent,
-//                                    id: UUID().uuidString,
-//                                    attributes: [:])
-//        ToastScheduler.shared.schedule(toastType: .systemMessage(message))
     }
 
     func startChannelFlow(for type: ChannelType?) {

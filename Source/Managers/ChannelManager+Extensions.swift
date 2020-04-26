@@ -101,7 +101,6 @@ extension ChannelManager: TwilioChatClientDelegate {
     //MARK: CHANNEL UPDATES
 
     func chatClient(_ client: TwilioChatClient, channelAdded channel: TCHChannel) {
-        ToastScheduler.shared.schedule(toastType: .channel(channel))
         self.channelsUpdate.value = ChannelUpdate(channel: channel, status: .added)
     }
 
@@ -143,22 +142,11 @@ extension ChannelManager: TwilioChatClientDelegate {
     }
 
     private func handle(member: TCHMember, in channel: TCHChannel, status: ChannelMemberUpdate.Status) {
-
+        guard ChannelSupplier.shared.activeChannel.value == nil else { return }
         member.getMemberAsUser()
             .observeValue { (user) in
                 runMain {
-                    switch status {
-                    case .joined:
-                        ToastScheduler.shared.schedule(toastType: .userStatusUpdateInChannel(user, status, channel))
-                    case .left:
-                        ToastScheduler.shared.schedule(toastType: .userStatusUpdateInChannel(user, status, channel))
-                    case .typingStarted:
-                        if !ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: channel) {
-                            ToastScheduler.shared.schedule(toastType: .userStatusUpdateInChannel(user, status, channel))
-                        }
-                    default:
-                        break
-                    }
+                    ToastScheduler.shared.schedule(toastType: .userStatusUpdateInChannel(user, status, channel))
                 }
         }
     }
@@ -168,12 +156,8 @@ extension ChannelManager: TwilioChatClientDelegate {
     func chatClient(_ client: TwilioChatClient, channel: TCHChannel, messageAdded message: TCHMessage) {
         self.messageUpdate.value = MessageUpdate(channel: channel, message: message, status: .added)
 
-        if ChannelSupplier.shared.activeChannel.value == nil {
-            if message.isFromCurrentUser, message.context == .status {
-                // Don't send toast for status messages from current user
-            } else {
-                ToastScheduler.shared.schedule(toastType: .message(message, channel))
-            }
+        if ChannelSupplier.shared.activeChannel.value == nil, !message.isFromCurrentUser {
+            ToastScheduler.shared.schedule(toastType: .message(message, channel))
         }
     }
 

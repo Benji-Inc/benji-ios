@@ -87,31 +87,35 @@ class ToastScheduler {
                                           channel: TCHChannel) -> Toast? {
         guard let id = user.objectId, let channelName = channel.friendlyName else { return nil }
 
-        var message: Localized = ""
+        var title: Localized = ""
+        var description: Localized = ""
         switch status {
         case .joined:
+            title = "Joined"
             let first = user.isCurrentUser ? "You" : user.givenName
-            message = LocalizedString(id: "",
-                                      arguments: [first, channelName],
-                                      default: "@() joined @()")
+            description = LocalizedString(id: "toast.joined",
+                                          arguments: [first, channelName],
+                                          default: "@(name) joined @(channel)")
         case .left:
+            title = "User Left"
             let first = user.isCurrentUser ? "You" : user.givenName
-            message = LocalizedString(id: "",
-                                      arguments: [first, channelName],
-                                      default: "@() left @()")
+            description = LocalizedString(id: "toast.left",
+                                          arguments: [first, channelName],
+                                          default: "@(name) left @(channel)")
         case .changed, .typingEnded:
             break
         case .typingStarted:
-            message = LocalizedString(id: "",
-                                      arguments: [user.givenName, channelName],
-                                      default: "@() started typing in @()")
+            title = "Typing"
+            description = LocalizedString(id: "",
+                                          arguments: [user.givenName, channelName],
+                                          default: "@(name) started typing in @(channel)")
         }
 
         return Toast(id: id + "userInChannel",
                      analyticsID: "ToastMessage",
                      priority: 1,
-                     title: "Update",
-                     description: message,
+                     title: title,
+                     description: description,
                      displayable: user,
                      didTap: { [unowned self] in
                         self.delegate?.didInteractWith(type: .userStatusUpdateInChannel(user, status, channel))

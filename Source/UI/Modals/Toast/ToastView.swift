@@ -21,7 +21,7 @@ enum ToastState {
 class ToastView: UIView {
 
     @IBOutlet weak var titleLabel: RegularBoldLabel!
-    @IBOutlet weak var descriptionLabel: SmallLabel!
+    @IBOutlet weak var descriptionLabel: SmallBoldLabel!
     @IBOutlet weak var displayableImageView: DisplayableImageView!
     @IBOutlet weak var effectView: UIVisualEffectView!
 
@@ -49,6 +49,7 @@ class ToastView: UIView {
     private var panStart: CGPoint?
     private var startY: CGFloat?
 
+    var maxHeight: CGFloat?
     var screenOffset: CGFloat = 50
     var presentationDuration: TimeInterval = 10.0
     //Used to present the toast from the top OR bottom of the screen
@@ -66,7 +67,8 @@ class ToastView: UIView {
         didSet {
             guard let text = self.title else { return }
             self.titleLabel.set(text: text,
-                                color: .white)
+                                color: .white,
+                                stringCasing: .unchanged)
         }
     }
 
@@ -212,7 +214,7 @@ class ToastView: UIView {
                 self.top = superView.bottom + self.screenOffset + superView.safeAreaInsets.bottom
             }
             self.width = self.displayableImageView.width + (Theme.contentOffset * 2)
-            self.height = 84
+            self.maxHeight = 84
             self.centerOnX()
         case .present:
             if self.position == .top {
@@ -227,6 +229,7 @@ class ToastView: UIView {
                 self.left = superView.width * 0.175
             }
         case .expanded:
+            self.maxHeight = nil 
             if UIScreen.main.isSmallerThan(screenSize: .tablet) {
                 self.width = superView.width * 0.95
             } else {
@@ -242,6 +245,8 @@ class ToastView: UIView {
                 self.top = superView.bottom - 10
             }
         }
+
+        self.layoutNow()
     }
 
     private func handle(panRecognizer: UIPanGestureRecognizer) {
@@ -280,11 +285,18 @@ class ToastView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        guard let superView = UIWindow.topWindow() else { return }
+
         self.displayableImageView.size = CGSize(width: 60 * 0.74, height: 60)
         self.displayableImageView.left = Theme.contentOffset
         self.displayableImageView.top = Theme.contentOffset
 
-        let maxTitleWidth = self.width - (self.displayableImageView.right + 22)
+        let maxTitleWidth: CGFloat
+        if UIScreen.main.isSmallerThan(screenSize: .tablet) {
+            maxTitleWidth = (superView.width * 0.95) - (self.displayableImageView.right + 22)
+        } else {
+            maxTitleWidth = (superView.width * Theme.iPadPortraitWidthRatio) - (self.displayableImageView.right + 22)
+        }
 
         self.titleLabel.setSize(withWidth: maxTitleWidth)
         self.titleLabel.left = self.displayableImageView.right + Theme.contentOffset
@@ -293,9 +305,10 @@ class ToastView: UIView {
         self.descriptionLabel.setSize(withWidth: maxTitleWidth)
         self.descriptionLabel.left = self.displayableImageView.right + Theme.contentOffset
         self.descriptionLabel.top = self.titleLabel.bottom + 4
-        self.descriptionLabel.height = self.displayableImageView.height
 
-        if self.descriptionLabel.bottom + Theme.contentOffset < 84 {
+        if let height = self.maxHeight {
+            self.height = height
+        } else if self.descriptionLabel.bottom + Theme.contentOffset < 84 {
             self.height = 84
         } else {
             self.height = self.descriptionLabel.bottom + Theme.contentOffset

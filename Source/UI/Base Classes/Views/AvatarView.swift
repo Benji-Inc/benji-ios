@@ -28,7 +28,7 @@ class AvatarView: DisplayableImageView {
         }
     }
 
-    var borderColor: Color = .lightPurple {
+    var borderColor: Color = .purple {
         didSet {
             self.setBorder(color: self.borderColor)
         }
@@ -192,9 +192,9 @@ class AvatarView: DisplayableImageView {
         self.layer.masksToBounds = true
         self.clipsToBounds = true
         self.setCorner(radius: 5)
-        self.layer.borderColor = Color.purple.color.cgColor
+        self.layer.borderColor = self.borderColor.color.cgColor
         self.layer.borderWidth = 3
-        self.backgroundColor = Color.purple.color.withAlphaComponent(0.4)
+        self.backgroundColor = self.borderColor.color.withAlphaComponent(0.4)
     }
 
     // MARK: - Open setters
