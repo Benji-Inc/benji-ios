@@ -140,9 +140,10 @@ class UserNotificationManager: NSObject {
     }
 
     func registerPush(from deviceToken: Data) {
-        let installation = PFInstallation.current()
-        installation?.setDeviceTokenFrom(deviceToken)
-        installation?.saveToken()
+        guard let installation = PFInstallation.current(), installation.deviceToken.isNil else { return }
+
+        installation.setDeviceTokenFrom(deviceToken)
+        installation.saveToken()
             .observeValue { (_) in }
     }
 }
