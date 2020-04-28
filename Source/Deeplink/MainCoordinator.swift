@@ -20,7 +20,7 @@ class MainCoordinator: Coordinator<Void> {
         super.start()
 
         SessionManager.shared.didReceiveInvalidSessionError = { [unowned self] _ in
-            self.logOut()
+            self.showLogOutAlert()
         }
 
         UserNotificationManager.shared.delegate = self
@@ -113,8 +113,24 @@ class MainCoordinator: Coordinator<Void> {
         }
     }
 
-    private func logOut() {
+    private func showLogOutAlert() {
+        let alert = UIAlertController(title: "🙀",
+                                      message: "Someone tripped over a 🐈 and ☠️ the mainframe.",
+                                      preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Ok", style: .default) { (_) in
+            self.logOut()
+        }
 
+        alert.addAction(ok)
+
+        self.router.topmostViewController.present(alert, animated: true, completion: nil)
+    }
+
+    private func logOut() {
+        ChannelManager.shared.client?.shutdown()
+        self.deepLink = nil
+        self.removeChild()
+        self.runOnboardingFlow()
     }
 }
 

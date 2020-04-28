@@ -23,4 +23,21 @@ extension UIViewController {
         self.view.removeFromSuperview()
         self.removeFromParent()
     }
+
+    func topmostViewController() -> UIViewController {
+        if let presentedViewController = self.presentedViewController {
+            return presentedViewController.topmostViewController()
+        }
+
+        if let navController = self as? UINavigationController,
+            let topVC = navController.topViewController {
+            return topVC
+        } else if let tabBarController = self as? UITabBarController {
+            if let currentVC = tabBarController.selectedViewController {
+                return currentVC
+            }
+        }
+
+        return self
+    }
 }

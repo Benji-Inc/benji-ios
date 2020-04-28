@@ -24,6 +24,10 @@ extension ViewController: Presentable {
 
 class Router: NSObject, UINavigationControllerDelegate {
 
+    var topmostViewController: UIViewController {
+        return self.navController.topmostViewController()
+    }
+
     private var completions: [UIViewController : () -> Void]
     unowned let navController: UINavigationController
     // True if the router is currently in the process of dismissing a module.
