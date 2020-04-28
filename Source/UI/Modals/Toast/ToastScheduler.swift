@@ -13,6 +13,7 @@ import TMROLocalization
 enum ToastType {
     case systemMessage(SystemMessage)
     case message(TCHMessage, TCHChannel)
+    case messageConsumed(TCHMessage, User)
     case userStatusUpdateInChannel(User, ChannelMemberUpdate.Status, TCHChannel)
     case channel(TCHChannel)
     case error(Error)
@@ -29,12 +30,15 @@ class ToastScheduler {
     weak var delegate: ToastSchedulerDelegate?
 
     func schedule(toastType: ToastType) {
+
         var toast: Toast?
         switch toastType {
         case .systemMessage(let message):
             toast = self.createSystemMessageToast(for: message)
         case .message(let message, let channel):
             toast = self.createMessageToast(for: message, channel: channel)
+        case .messageConsumed(let message, let author):
+            toast = self.createMessageConsumedToast(for: message, author: author)
         case .userStatusUpdateInChannel(let user, let status, let channel):
             toast = self.createUserInChannelToast(for: user, status: status, channel: channel)
         case .channel(let channel):
@@ -46,7 +50,9 @@ class ToastScheduler {
         }
 
         if let toast = toast {
-            ToastQueue.shared.add(toast: toast)
+            runMain {
+                ToastQueue.shared.add(toast: toast)
+            }
         }
     }
 
@@ -80,6 +86,21 @@ class ToastScheduler {
                      didTap: { [unowned self] in
                         self.delegate?.didInteractWith(type: .message(message, channel))
         })
+    }
+
+    private func createMessageConsumedToast(for message: TCHMessage, author: User) -> Toast? {
+        guard let sid = message.sid, message.context == .emergency else { return nil }
+
+        let title = LocalizedString(id: "", arguments: [author.givenName.capitalized], default: "@(name) Notified")
+        let body = LocalizedString(id: "", arguments: [author.givenName.capitalized], default: "@(name) has been notified that you read thier important message.")
+
+        return Toast(id: sid + "messageRead",
+                     analyticsID: "ToastMessageRead",
+                     priority: 1,
+                     title: title,
+                     description: body,
+                     displayable: message,
+                     didTap: {})
     }
 
     private func createUserInChannelToast(for user: User,

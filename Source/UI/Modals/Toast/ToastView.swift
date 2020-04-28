@@ -310,7 +310,6 @@ class ToastView: View {
             maxTitleWidth = (superView.width * Theme.iPadPortraitWidthRatio) - (self.displayableImageView.right + 22)
         }
 
-        print(maxTitleWidth)
         self.titleLabel.setSize(withWidth: maxTitleWidth)
         self.titleLabel.left = self.displayableImageView.right + Theme.contentOffset
         self.titleLabel.top = self.displayableImageView.top

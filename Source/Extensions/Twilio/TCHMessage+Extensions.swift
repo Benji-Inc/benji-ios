@@ -96,7 +96,12 @@ extension TCHMessage: Messageable {
         var consumers = self.hasBeenConsumedBy
         consumers.append(identity)
         self.appendAttributes(with: ["consumers": consumers])
-            .observeValue(with: { (_) in })
+            .observeValue(with: { (_) in
+                self.getAuthorAsUser()
+                    .observeValue { (author) in
+                        ToastScheduler.shared.schedule(toastType: .messageConsumed(self, author))
+                }
+            })
     }
 
     func appendAttributes(with attributes: [String: Any]) -> Future<Void> {
