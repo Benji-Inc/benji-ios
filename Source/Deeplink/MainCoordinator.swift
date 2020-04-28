@@ -19,6 +19,11 @@ class MainCoordinator: Coordinator<Void> {
     override func start() {
         super.start()
 
+        SessionManager.shared.didReceiveInvalidSessionError = { [unowned self] _ in
+            self.logOut()
+        }
+
+        UserNotificationManager.shared.delegate = self
         self.runLaunchFlow()
     }
 
@@ -31,8 +36,6 @@ class MainCoordinator: Coordinator<Void> {
         self.addChildAndStart(launchCoordinator, finishedHandler: { (result) in
             self.handle(result: result)
         })
-
-        UserNotificationManager.shared.delegate = self
     }
 
     private func handle(result: LaunchStatus) {
@@ -108,6 +111,10 @@ class MainCoordinator: Coordinator<Void> {
         case .login:
             break
         }
+    }
+
+    private func logOut() {
+
     }
 }
 

@@ -165,7 +165,7 @@ class InvitesViewController: NavigationBarViewController {
         var connectionPromises: [Future<User>] = []
         connections.forEach { (connection) in
             if let user = connection.nonMeUser {
-                connectionPromises.append((user.fetchUserIfNeeded()))
+                connectionPromises.append((user.retrieveDataIfNeeded()))
             }
         }
 

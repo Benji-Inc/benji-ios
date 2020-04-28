@@ -24,6 +24,7 @@ struct CreateConnection: CloudFunction {
         PFCloud.callFunction(inBackground: "createConnection",
                              withParameters: params) { (object, error) in
                                 if let error = error {
+                                    SessionManager.shared.handleParse(error: error)
                                     promise.reject(with: error)
                                 } else if let connection = object as? Connection {
                                     promise.resolve(with: connection)
@@ -48,6 +49,7 @@ struct UpdateConnection: CloudFunction {
                              withParameters: ["connectionId": self.connection.objectId!,
                                               "status": self.status.rawValue]) { (object, error) in
                                                 if let error = error {
+                                                    SessionManager.shared.handleParse(error: error)
                                                     promise.reject(with: error)
                                                 } else {
                                                     promise.resolve(with: ())
@@ -72,6 +74,7 @@ struct GetAllConnections: CloudFunction {
         let promise = Promise<[Connection]>()
         PFCloud.callFunction(inBackground: "getConnections", withParameters: nil) { (object, error) in
             if let error = error {
+                SessionManager.shared.handleParse(error: error)
                 promise.reject(with: error)
             } else if let dict = object as? [String: [Connection]] {
                 var all: [Connection] = []

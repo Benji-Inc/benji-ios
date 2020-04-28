@@ -54,8 +54,9 @@ extension Objectable where Self: PFObject {
     func saveLocalThenServer() -> Future<Self> {
         let promise = Promise<Self>()
         self.saveEventually { (success, error) in
-            if let error = error {
-                promise.reject(with: error)
+            if let e = error {
+                SessionManager.shared.handleParse(error: e)
+                promise.reject(with: e)
             } else {
                 promise.resolve(with: self)
             }
@@ -67,8 +68,9 @@ extension Objectable where Self: PFObject {
     func saveToServer() -> Future<Self> {
         let promise = Promise<Self>()
         self.saveInBackground { (success, error) in
-            if let error = error {
-                promise.reject(with: error)
+            if let e = error {
+                SessionManager.shared.handleParse(error: e)
+                promise.reject(with: e)
             } else {
                 promise.resolve(with: self)
             }
@@ -90,14 +92,16 @@ extension Objectable where Self: PFObject {
                     nonCacheQuery.getFirstObjectInBackground { (object, error) in
                         if let nonCachedObject = object as? Self, let identifier = nonCachedObject.objectId {
                             nonCachedObject.pinInBackground(withName: identifier) { (success, error) in
-                                if let error = error {
-                                    promise.reject(with: error)
+                                if let e = error {
+                                    SessionManager.shared.handleParse(error: e)
+                                    promise.reject(with: e)
                                 } else {
                                     promise.resolve(with: nonCachedObject)
                                 }
                             }
-                        } else if let error = error {
-                            promise.reject(with: error)
+                        } else if let e = error {
+                            SessionManager.shared.handleParse(error: e)
+                            promise.reject(with: e)
                         } else {
                             promise.reject(with: ClientError.message(detail: ClientError.genericErrorString))
                         }
@@ -134,8 +138,9 @@ extension Objectable where Self: PFObject {
                     }
                     nonCacheQuery.findObjectsInBackground { (objects, error) in
                         PFObject.pinAll(inBackground: objects, withName: container.name) { (success, error) in
-                            if let error = error {
-                                promise.reject(with: error)
+                            if let e = error {
+                                SessionManager.shared.handleParse(error: e)
+                                promise.reject(with: e)
                             } else if let objectsForType = objects as? [Self] {
                                 promise.resolve(with: objectsForType)
                             } else {
@@ -160,6 +165,7 @@ extension Objectable where Self: PFObject {
 
         self.fetchIfNeededInBackground { (object, error) in
             if let e = error {
+                SessionManager.shared.handleParse(error: e)
                 promise.reject(with: e)
             } else if let objectWithData = object as? Self {
                 promise.resolve(with: objectWithData)

@@ -51,20 +51,4 @@ final class User: PFUser {
         get { return self.getObject(for: .smallImage) }
         set { self.setObject(for: .smallImage, with: newValue) }
     }
-
-    func fetchUserIfNeeded() -> Future<User> {
-        let promise = Promise<User>()
-
-        self.fetchIfNeededInBackground { (object, error) in
-            if let user = object as? User {
-                promise.resolve(with: user)
-            } else if let e = error {
-                promise.reject(with: e)
-            } else {
-                promise.reject(with: ClientError.generic)
-            }
-        }
-
-        return promise
-    }
 }

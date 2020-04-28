@@ -45,14 +45,19 @@ extension User {
             if routine.isDataAvailable {
                 promise.resolve(with: routine)
             } else {
-                self.routine?.fetchInBackground(block: { (object, error) in
-                    runMain {
-                        if let routine = object as? Routine {
-                            promise.resolve(with: routine)
-                        } else if let error = error {
+                self.routine?.retrieveDataIfNeeded()
+                    .observe(with: { (result) in
+                        switch result {
+                        case .success(let routine):
+                            runMain {
+                                promise.resolve(with: routine)
+                            }
+                        case .failure(let error):
                             promise.reject(with: error)
                         }
-                    }
+                    })
+                self.routine?.fetchInBackground(block: { (object, error) in
+
                 })
             }
         } else {

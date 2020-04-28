@@ -21,6 +21,7 @@ struct SendCode: CloudFunction {
         PFCloud.callFunction(inBackground: "sendCode",
                              withParameters: params) { (object, error) in
                                 if let error = error {
+                                    SessionManager.shared.handleParse(error: error)
                                     promise.reject(with: error)
                                 } else {
                                     promise.resolve(with: ())
@@ -55,6 +56,7 @@ struct VerifyCode: CloudFunction {
                                     if (error as NSError).code == 100 {
                                         promise.resolve(with: .addedToWaitlist)
                                     } else {
+                                        SessionManager.shared.handleParse(error: error)
                                         promise.reject(with: error)
                                     }
                                 } else if let token = object as? String {
