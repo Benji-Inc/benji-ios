@@ -12,12 +12,16 @@ import TMROFutures
 import PhoneNumberKit
 
 struct SendCode: CloudFunction {
+
     let phoneNumber: PhoneNumber
     let region: String
+    let installationId: String
+
     func makeRequest() -> Future<Void> {
         let promise = Promise<Void>()
         let params = ["phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164),
-                      "region": region]
+                      "installationId": self.installationId,
+                      "region": self.region]
         PFCloud.callFunction(inBackground: "sendCode",
                              withParameters: params) { (object, error) in
                                 if let error = error {

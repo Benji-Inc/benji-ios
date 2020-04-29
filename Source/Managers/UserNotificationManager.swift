@@ -24,6 +24,10 @@ class UserNotificationManager: NSObject {
 
     private let center = UNUserNotificationCenter.current()
 
+    var installationId: String? {
+        return PFInstallation.current()?.installationId
+    }
+
     override init() {
         super.init()
 

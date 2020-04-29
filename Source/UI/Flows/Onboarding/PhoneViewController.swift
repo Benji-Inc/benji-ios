@@ -64,7 +64,12 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     }
 
     private func sendCode(to phone: PhoneNumber, region: String) {
-        SendCode(phoneNumber: phone, region: region).makeRequest()
+        guard let installationId = UserNotificationManager.shared.installationId else { return }
+
+        SendCode(phoneNumber: phone,
+                 region: region,
+                 installationId: installationId)
+            .makeRequest()
             .withResultToast()
             .observe(with: { (result) in
                 switch result {
