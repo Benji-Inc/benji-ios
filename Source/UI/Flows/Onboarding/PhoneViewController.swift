@@ -22,7 +22,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
 
         super.init(textField: phoneField,
                    title: LocalizedString(id: "", default: "MOBILE NUMBER"),
-                   placeholder: nil)
+                   placeholder: phoneField.placeholder)
     }
 
     required init?(coder aDecoder: NSCoder) {

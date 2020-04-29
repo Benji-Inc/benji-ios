@@ -50,6 +50,10 @@ class TextEntryField: View, Sizeable {
             self.textField.setPlaceholder(attributed: attributed)
             self.textField.setDefaultAttributes(style: StringStyle(font: .medium, color: .white))
         }
+
+        if let tf = self.textField as? TextField {
+            tf.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }
     }
 
     func getHeight(for width: CGFloat) -> CGFloat {
