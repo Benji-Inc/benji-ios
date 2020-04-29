@@ -217,14 +217,22 @@ extension Future where Value == TCHChannel {
     }
 }
 
-extension TCHChannel: ImageDisplayable {
+extension TCHChannel: Avatar {
+
+    var givenName: String {
+        return String()
+    }
+
+    var familyName: String {
+        return String()
+    }
 
     var user: User? {
         return nil
     }
 
     var image: UIImage? {
-        return UIImage(systemName: "text.bubble.fill")
+        return nil
     }
     
     var userObjectID: String? {

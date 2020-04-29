@@ -13,15 +13,15 @@ class DisplayableImageView: View {
 
     private(set) var imageView = UIImageView()
 
-    var displayable: ImageDisplayable {
+    var displayable: ImageDisplayable? {
         didSet {
-            self.updateImageView()
+            guard let displayable = self.displayable else { return }
+            self.updateImageView(with: displayable)
             self.setNeedsLayout()
         }
     }
 
-    init(displayable: ImageDisplayable = UIImage()) {
-        self.displayable = displayable
+    override init() {
         super.init()
     }
 
@@ -36,7 +36,6 @@ class DisplayableImageView: View {
         self.set(backgroundColor: .clear)
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFill
-        self.updateImageView()
     }
 
     override func layoutSubviews() {
@@ -45,10 +44,10 @@ class DisplayableImageView: View {
         self.imageView.frame = self.bounds
     }
 
-    private func updateImageView() {
-        if let photo = self.displayable.image {
+    private func updateImageView(with displayable: ImageDisplayable) {
+        if let photo = displayable.image {
             self.imageView.image = photo
-        } else if let objectID = self.displayable.userObjectID {
+        } else if let objectID = displayable.userObjectID {
             self.findUser(with: objectID)
         }
     }

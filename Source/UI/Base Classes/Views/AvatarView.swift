@@ -76,7 +76,7 @@ class AvatarView: DisplayableImageView {
 
     // MARK: - Initializers
 
-    init() {
+    override init() {
         super.init()
         self.prepareView()
     }

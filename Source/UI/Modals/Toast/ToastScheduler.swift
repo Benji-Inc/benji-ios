@@ -49,9 +49,9 @@ class ToastScheduler {
             toast = self.createSuccessToast(for: text)
         }
 
-        if let toast = toast {
+        if let t = toast {
             runMain {
-                ToastQueue.shared.add(toast: toast)
+                ToastQueue.shared.add(toast: t)
             }
         }
     }
@@ -66,7 +66,7 @@ class ToastScheduler {
                      priority: 1,
                      title: systemMessage.avatar.fullName,
                      description: systemMessage.text,
-                     displayable: UIImage(),
+                     avatar: UIImage(),
                      didTap: { [unowned self] in
                         self.delegate?.didInteractWith(type: .systemMessage(systemMessage))
         })
@@ -82,7 +82,7 @@ class ToastScheduler {
                      priority: 1,
                      title: "New Message",
                      description: body,
-                     displayable: message,
+                     avatar: message,
                      didTap: { [unowned self] in
                         self.delegate?.didInteractWith(type: .message(message, channel))
         })
@@ -99,7 +99,7 @@ class ToastScheduler {
                      priority: 1,
                      title: title,
                      description: body,
-                     displayable: message,
+                     avatar: message,
                      didTap: {})
     }
 
@@ -137,7 +137,7 @@ class ToastScheduler {
                      priority: 1,
                      title: title,
                      description: description,
-                     displayable: user,
+                     avatar: user,
                      didTap: { [unowned self] in
                         self.delegate?.didInteractWith(type: .userStatusUpdateInChannel(user, status, channel))
         })
@@ -152,7 +152,7 @@ class ToastScheduler {
                      priority: 1,
                      title: "New",
                      description: description,
-                     displayable: channel,
+                     avatar: channel,
                      didTap: {
                         self.delegate?.didInteractWith(type: .channel(channel))
         })
@@ -166,7 +166,7 @@ class ToastScheduler {
                      priority: 1,
                      title: "Error",
                      description: error.localizedDescription,
-                     displayable: image,
+                     avatar: image,
                      didTap: {
                         self.delegate?.didInteractWith(type: .error(error))
         })
@@ -180,7 +180,7 @@ class ToastScheduler {
                      priority: 1,
                      title: "Success",
                      description: localized(text),
-                     displayable: image,
+                     avatar: image,
                      didTap: {
                         self.delegate?.didInteractWith(type: .success(text))
         })

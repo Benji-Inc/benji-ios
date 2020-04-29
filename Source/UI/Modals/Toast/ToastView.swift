@@ -26,7 +26,7 @@ class ToastView: View {
     private lazy var vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
     private let titleLabel = RegularBoldLabel()
     private let descriptionLabel = SmallBoldLabel()
-    private let displayableImageView = DisplayableImageView()
+    private let avatarView = AvatarView()
 
     var didDismiss: () -> Void = {}
     var didTap: () -> Void = {}
@@ -72,6 +72,7 @@ class ToastView: View {
             self.titleLabel.set(text: text,
                                 color: .white,
                                 stringCasing: .unchanged)
+            self.layoutNow()
         }
     }
 
@@ -79,8 +80,8 @@ class ToastView: View {
         didSet {
             guard let text = self.descriptionText else { return }
             self.descriptionLabel.set(text: text,
-                                      color: .white,
-                                      lineBreakMode: .byTruncatingTail)
+                                      color: .white)
+            self.layoutNow()
         }
     }
 
@@ -91,7 +92,7 @@ class ToastView: View {
         superview.addSubview(self)
 
         self.addSubview(self.blurView)
-        self.addSubview(self.displayableImageView)
+        self.addSubview(self.avatarView)
         self.addSubview(self.descriptionLabel)
         self.vibrancyEffectView.contentView.addSubview(self.titleLabel)
         self.blurView.contentView.addSubview(self.vibrancyEffectView)
@@ -100,8 +101,8 @@ class ToastView: View {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 10
 
-        self.displayableImageView.layer.masksToBounds = true
-        self.displayableImageView.layer.cornerRadius = 5
+        self.avatarView.layer.masksToBounds = true
+        self.avatarView.layer.cornerRadius = 5
 
         self.descriptionLabel.alpha = 0
         self.titleLabel.alpha = 0
@@ -126,7 +127,7 @@ class ToastView: View {
             self.dismiss()
         }
 
-        self.displayableImageView.displayable = toast.displayable
+        self.avatarView.set(avatar: toast.avatar)
     }
 
     func reveal() {
@@ -166,6 +167,7 @@ class ToastView: View {
         self.expandAnimator.stopAnimation(true)
         self.expandAnimator.addAnimations { [unowned self] in
             self.toastState = .expanded
+            self.layoutNow()
         }
 
         self.expandAnimator.addAnimations({ [unowned self] in
@@ -299,23 +301,23 @@ class ToastView: View {
         self.vibrancyEffectView.expandToSuperviewSize()
         self.blurView.roundCorners()
 
-        self.displayableImageView.size = CGSize(width: 60 * 0.74, height: 60)
-        self.displayableImageView.left = Theme.contentOffset
-        self.displayableImageView.top = Theme.contentOffset
+        self.avatarView.size = CGSize(width: 60 * 0.74, height: 60)
+        self.avatarView.left = Theme.contentOffset
+        self.avatarView.top = Theme.contentOffset
 
         let maxTitleWidth: CGFloat
         if UIScreen.main.isSmallerThan(screenSize: .tablet) {
-            maxTitleWidth = (superView.width * 0.95) - (self.displayableImageView.right + 22)
+            maxTitleWidth = (superView.width * 0.95) - (self.avatarView.right + 22)
         } else {
-            maxTitleWidth = (superView.width * Theme.iPadPortraitWidthRatio) - (self.displayableImageView.right + 22)
+            maxTitleWidth = (superView.width * Theme.iPadPortraitWidthRatio) - (self.avatarView.right + 22)
         }
 
         self.titleLabel.setSize(withWidth: maxTitleWidth)
-        self.titleLabel.left = self.displayableImageView.right + Theme.contentOffset
-        self.titleLabel.top = self.displayableImageView.top
+        self.titleLabel.left = self.avatarView.right + Theme.contentOffset
+        self.titleLabel.top = self.avatarView.top
 
         self.descriptionLabel.setSize(withWidth: maxTitleWidth)
-        self.descriptionLabel.left = self.displayableImageView.right + Theme.contentOffset
+        self.descriptionLabel.left = self.avatarView.right + Theme.contentOffset
         self.descriptionLabel.top = self.titleLabel.bottom + 4
         if self.descriptionLabel.height > 84 {
             self.descriptionLabel.height = 84
