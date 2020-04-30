@@ -92,33 +92,19 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 extension HomeCoordinator: HomeViewControllerDelegate {
 
     func homeViewDidTapAdd(_ controller: HomeViewController) {
-//        self.removeChild()
-//
-//        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
-//
-//        //let coordinator = ChannelCoordinator(router: self.router, deepLink: self.deepLink, channelType: nil)
-//        self.addChildAndStart(coordinator) { (result) in
-//            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
-//                guard let channel = result else { return }
-//                self.startChannelFlow(for: channel)
-//            }
-//        }
+        self.removeChild()
 
-        let image = UIImage(named: "Profile1")!
-        let message = SystemMessage(avatar: image,
-                                            context: Lorem.context(),
-                                            text: Lorem.text(),
-                                            isFromCurrentUser: false,
-                                            createdAt: Date(),
-                                            authorId: "testAuther",
-                                            messageIndex: nil,
-                                            status: .sent,
-                                            id: UUID().uuidString,
-                                            attributes: [:])
-                ToastScheduler.shared.schedule(toastType: .systemMessage(message))
+        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
 
+        //let coordinator = ChannelCoordinator(router: self.router, deepLink: self.deepLink, channelType: nil)
+        self.addChildAndStart(coordinator) { (result) in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+                guard let channel = result else { return }
+                self.startChannelFlow(for: channel)
+            }
+        }
 
-       // self.router.present(coordinator, source: self.homeVC, animated: true)
+        self.router.present(coordinator, source: self.homeVC, animated: true)
     }
 
     func startChannelFlow(for type: ChannelType?) {

@@ -59,8 +59,10 @@ class LaunchManager {
             }))
         }
 
-        // Make sure we set this up each launch
-        UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+        if let user = User.current(), user.isAuthenticated {
+            // Make sure we set this up each launch
+            UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+        }
 
         // We initialize branch first so we can pass any attributes into the create user call that it might have
         self.initializeBranchIfNeeded(with: options)

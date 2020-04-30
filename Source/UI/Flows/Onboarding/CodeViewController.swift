@@ -62,6 +62,7 @@ class CodeViewController: TextInputViewController<Void> {
         User.become(inBackground: token) { (user, error) in
             if let identity = user?.objectId {
                 Branch.getInstance().setIdentity(identity)
+                UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
                 self.complete(with: .success(()))
             } else if let error = error {
                 self.complete(with: .failure(error))
