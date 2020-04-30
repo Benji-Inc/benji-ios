@@ -90,7 +90,7 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
         var xOffset: CGFloat = 0
         if message.isFromCurrentUser {
-            xOffset = layout.itemWidth - textViewSize.width - self.textViewHorizontalPadding - 6
+            xOffset = layout.itemWidth - textViewSize.width - (self.textViewHorizontalPadding * 2)
         } else {
             xOffset = self.getAvatarFrame(with: message, layout: layout).width + (self.getAvatarPadding(for: layout) * 2) + Theme.contentOffset
         }
