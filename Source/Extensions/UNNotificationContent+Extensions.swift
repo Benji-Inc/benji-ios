@@ -40,7 +40,8 @@ extension UNNotificationContent {
     }
 
     func value<Type>(for key: NotificationContentKey) -> Type? {
-        return self.userInfo[key.rawValue] as? Type
+        guard let data = self.userInfo["data"] as? [String: Any] else { return nil }
+        return data[key.rawValue] as? Type
     }
 
     func valueFrom<Type>(data: [String: Any], for key: NotificationContentKey) -> Type? {
