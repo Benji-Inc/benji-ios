@@ -19,6 +19,7 @@ extension UNNotification {
     }
 
     var customMetadata: NSMutableDictionary {
-        return NSMutableDictionary(dictionary: self.request.content.userInfo)
+        guard let data = self.request.content.userInfo["data"] as? [String: Any] else { return [:] }
+        return NSMutableDictionary(dictionary: data)
     }
 }
