@@ -53,23 +53,17 @@ class ChannelCell: UICollectionViewCell, ManageableCell {
 
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
-        if let touch = touches.first, let view = touch.view {
-            self.selectionFeedback.impactOccurred()
-            view.scaleDown()
-        }
+        self.selectionFeedback.impactOccurred()
+        self.scaleDown()
     }
 
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        if let touch = touches.first, let view = touch.view {
-            view.scaleUp()
-        }
+        self.scaleUp()
     }
 
     override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
-        if let touch = touches.first, let view = touch.view {
-            view.scaleUp()
-        }
+        self.scaleUp()
     }
 }
