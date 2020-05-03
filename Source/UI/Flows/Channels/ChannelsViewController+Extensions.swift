@@ -18,7 +18,9 @@ extension ChannelsViewController {
 
             switch channelsUpdate.status {
             case .added:
-                guard !self.isSearching, channelsUpdate.channel.status == .joined else { return }
+                guard !self.isSearching else { return }
+                guard channelsUpdate.channel.isOwnedByMe || channelsUpdate.channel.status == .joined else { return }
+
                 let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
                 self.collectionViewManager.insert(item: displayable, at: 0)
             case .changed:

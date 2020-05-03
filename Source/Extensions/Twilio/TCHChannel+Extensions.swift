@@ -22,6 +22,11 @@ extension TCHChannel: Diffable, ManageableCellItem {
         return .blue
     }
 
+    var isOwnedByMe: Bool {
+        guard let currentUser = User.current() else { return false }
+        return self.createdBy == currentUser.objectId
+    }
+
     var context: ConversationContext? {
         guard let dict = self.attributes()?.dictionary,
             let contextString = dict[ChannelKey.context.rawValue] as? String,
