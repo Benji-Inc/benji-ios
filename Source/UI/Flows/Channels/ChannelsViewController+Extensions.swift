@@ -60,7 +60,11 @@ extension ChannelsViewController {
 
             switch memberUpdate.status {
             case .joined:
-                self.collectionViewManager.update(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)))
+                if memberUpdate.member.identity == User.current()?.objectId {
+                    self.collectionViewManager.insert(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)), at: 0)
+                } else {
+                    self.collectionViewManager.update(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)))
+                }
             case .left:
                 if memberUpdate.member.identity == User.current()?.objectId {
                     self.collectionViewManager.delete(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)))

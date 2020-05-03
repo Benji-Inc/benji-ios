@@ -114,9 +114,47 @@ extension TCHChannel: Diffable, ManageableCellItem {
             }
         }
     }
+
+    func invite(users: [User]) -> Future<TCHChannel> {
+        var promises: [Future<Void>] = []
+
+        users.forEach { (user) in
+            promises.append(self.invite(user: user))
+        }
+
+        return waitForAll(futures: promises)
+            .transform { (channels) -> TCHChannel in
+                return self
+        }
+    }
+
+    func invite(user: User) -> Future<Void> {
+
+        let promise = Promise<Void>()
+        let identity = String(optional: user.objectId)
+        if let members = self.members {
+            members.invite(byIdentity: identity) { (result) in
+                if let error = result.error {
+                    promise.reject(with: error)
+                } else {
+                    promise.resolve(with: ())
+                }
+            }
+        } else {
+             promise.resolve(with: ())
+        }
+
+        return promise
+    }
 }
 
 extension Future where Value == TCHChannel {
+
+    func invite(users: [User]) -> Future<TCHChannel> {
+        return self.then { (channel) -> Future<TCHChannel> in
+            return channel.invite(users: users)
+        }
+    }
 
     func joinIfNeeded() -> Future<TCHChannel> {
 
@@ -135,37 +173,6 @@ extension Future where Value == TCHChannel {
                      promise.resolve(with: channel)
                 }
             })
-
-            return promise
-        })
-    }
-
-    func invite(users: [User]) -> Future<TCHChannel> {
-        var promises: [Future<TCHChannel>] = []
-
-        users.forEach { (user) in
-            promises.append(self.invite(user: user))
-        }
-
-        return waitForAll(futures: promises)
-            .transform { (channels) -> TCHChannel in
-                return channels.first!
-        }
-    }
-
-    func invite(user: User) -> Future<TCHChannel> {
-
-        return self.then(with: { (channel) in
-
-            let promise = Promise<TCHChannel>()
-            let identity = String(optional: user.objectId)
-            channel.members!.invite(byIdentity: identity) { (result) in
-                if let error = result.error {
-                    promise.reject(with: error)
-                } else {
-                    promise.resolve(with: channel)
-                }
-            }
 
             return promise
         })

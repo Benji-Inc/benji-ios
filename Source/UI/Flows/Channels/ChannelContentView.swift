@@ -71,8 +71,12 @@ class ChannelContentView: View {
                                     formatter.dateFormat = "h:mm a"
                                     let string = formatter.string(from: date)
                                     self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s routine is: @(routine)")
+                                } else {
+                                    self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine set for @(name).")
                                 }
                             })
+                        } else {
+                            self.descriptionText = "Waiting for others to join."
                         }
 
                         self.stackedAvatarView.set(items: notMeUsers)
@@ -105,7 +109,8 @@ class ChannelContentView: View {
 
         let width = self.width - self.stackedAvatarView.right - Theme.contentOffset * 2
         self.titleLabel.setSize(withWidth: width)
-        self.titleLabel.left = self.stackedAvatarView.right + Theme.contentOffset
+        let titleOffset: CGFloat = self.stackedAvatarView.width == 0 ? Theme.contentOffset : Theme.contentOffset + self.stackedAvatarView.right
+        self.titleLabel.left = titleOffset
         self.titleLabel.top = 6
 
         self.descriptionLabel.setSize(withWidth: width)
