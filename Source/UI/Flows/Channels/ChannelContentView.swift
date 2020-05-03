@@ -76,7 +76,7 @@ class ChannelContentView: View {
                                 }
                             })
                         } else {
-                            self.descriptionText = "Waiting for others to join."
+                            self.descriptionText = "It's just you in here."
                         }
 
                         self.stackedAvatarView.set(items: notMeUsers)
