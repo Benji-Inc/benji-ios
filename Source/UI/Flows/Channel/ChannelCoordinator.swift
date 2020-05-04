@@ -28,9 +28,9 @@ class ChannelCoordinator: PresentableCoordinator<Void> {
     }
 }
 
-extension ChannelCoordinator: ChannelDetailBarDelegate {
+extension ChannelCoordinator: ChannelDetailViewControllerDelegate {
 
-    func channelDetailBarDidTapMenu(_ view: ChannelDetailBar) {
+    func channelDetailViewControllerDidTapMenu(_ view: ChannelDetailViewController) {
         //Present channel menu
     }
 }

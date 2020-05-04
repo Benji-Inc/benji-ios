@@ -12,7 +12,7 @@ import Parse
 import TwilioChatClient
 import TMROFutures
 
-typealias ChannelViewControllerDelegates = ChannelDetailBarDelegate & ChannelViewControllerDelegate
+typealias ChannelViewControllerDelegates = ChannelDetailViewControllerDelegate & ChannelViewControllerDelegate
 
 protocol ChannelViewControllerDelegate: class {
     func channelView(_ controller: ChannelViewController, didTapShare message: Messageable)
@@ -21,7 +21,7 @@ protocol ChannelViewControllerDelegate: class {
 class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    lazy var detailBar = ChannelDetailBar(delegate: self.delegate)
+    lazy var detailVC = ChannelDetailViewController(delegate: self.delegate)
     lazy var collectionView = ChannelCollectionView()
     lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView)
     private(set) var messageInputView = MessageInputView()
@@ -72,10 +72,9 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.collectionView)
-        self.view.addSubview(self.detailBar)
-
         self.view.addSubview(self.messageInputView)
         self.messageInputView.height = self.messageInputView.minHeight
+        self.addChild(viewController: self.detailVC, toView: self.view)
 
         self.collectionView.dataSource = self.collectionViewManager
         self.collectionView.delegate = self.collectionViewManager
@@ -107,6 +106,15 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         self.collectionViewManager.didTapShare = { [unowned self] message in
             self.delegate.channelView(self, didTapShare: message)
         }
+
+        self.detailVC.currentState.producer
+            .skipRepeats()
+            .on { [unowned self] (state) in
+                UIView.animate(withDuration: Theme.animationDuration) {
+                    self.messageInputView.alpha = state == .expanded ? 0 : 1.0
+                    self.view.layoutNow()
+                }
+        }.start()
 
         self.subscribeToUpdates()
     }
@@ -147,12 +155,17 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         guard let handler = self.keyboardHandler else { return }
 
-        self.detailBar.size = CGSize(width: self.view.width - (Theme.contentOffset * 2), height: 84)
-        self.detailBar.top = Theme.contentOffset
-        self.detailBar.centerOnX()
-
         let keyboardHeight = handler.currentKeyboardHeight
         let height = self.view.height - keyboardHeight
+
+        var detailHeight: CGFloat = self.detailVC.collapsedHeight 
+        if self.detailVC.currentState.value == .expanded {
+            detailHeight = height - (Theme.contentOffset * 2) - self.view.safeAreaInsets.bottom
+
+        }
+        self.detailVC.view.size = CGSize(width: self.view.width - (Theme.contentOffset * 2), height: detailHeight)
+        self.detailVC.view.top = Theme.contentOffset
+        self.detailVC.view.centerOnX()
 
         self.collectionView.size = CGSize(width: self.view.width, height: height)
         self.collectionView.top = 0
@@ -161,7 +174,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         self.messageInputView.width = self.view.width - Theme.contentOffset * 2
         var messageBottomOffset: CGFloat = 10
         if keyboardHeight == 0, let window = UIWindow.topWindow() {
-            messageBottomOffset += window.safeAreaInsets.bottom
+            messageBottomOffset += window.safeAreaInsets.bottom + 2
         }
 
         self.messageInputView.bottom = self.collectionView.bottom - messageBottomOffset

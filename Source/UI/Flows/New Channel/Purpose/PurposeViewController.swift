@@ -58,7 +58,7 @@ class PurposeViewController: ViewController, Sizeable {
         self.contextVC.view.top = self.textField.bottom
         self.contextVC.view.centerOnX()
 
-        return 0
+        return self.contextVC.view.bottom
     }
 
     func getWidth(for height: CGFloat) -> CGFloat {

@@ -12,27 +12,32 @@ import Parse
 import TMROLocalization
 import ReactiveSwift
 
-protocol ChannelDetailBarDelegate: class {
-    func channelDetailBarDidTapMenu(_ view: ChannelDetailBar)
+protocol ChannelDetailViewControllerDelegate: class {
+    func channelDetailViewControllerDidTapMenu(_ vc: ChannelDetailViewController)
 }
 
-class ChannelDetailBar: View {
+class ChannelDetailViewController: ViewController {
 
     enum State {
         case collapsed
         case expanded
     }
 
+    private lazy var blurEffect = UIBlurEffect(style: .systemThinMaterialDark)
+    private lazy var blurView = UIVisualEffectView(effect: self.blurEffect)
+    let collapsedHeight: CGFloat = 84
     private let titleButton = Button()
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
     private let content = ChannelContentView()
     let disposables = CompositeDisposable()
+    private let scrollView = UIScrollView()
+    private lazy var purposeVC = PurposeViewController()
 
-    unowned let delegate: ChannelDetailBarDelegate
+    unowned let delegate: ChannelDetailViewControllerDelegate
 
     var currentState = MutableProperty<State>(.collapsed)
 
-    init( delegate: ChannelDetailBarDelegate) {
+    init(delegate: ChannelDetailViewControllerDelegate) {
         self.delegate = delegate
         super.init()
     }
@@ -45,26 +50,52 @@ class ChannelDetailBar: View {
         self.disposables.dispose()
     }
 
-    override func initializeSubviews() {
-        super.initializeSubviews()
+    override func initializeViews() {
+        super.initializeViews()
 
-        self.addSubview(self.content)
+        self.view.addSubview(self.content)
         self.content.addSubview(self.titleButton)
+        self.view.addSubview(self.blurView)
+        self.view.addSubview(self.scrollView)
+        self.addChild(viewController: self.purposeVC, toView: self.scrollView)
 
         self.titleButton.didSelect = { [unowned self] in
-            self.delegate.channelDetailBarDidTapMenu(self)
+            if self.currentState.value == .expanded {
+                self.currentState.value = .collapsed
+            } else {
+                self.currentState.value = .expanded
+            }
         }
 
-        self.roundCorners()
+        self.view.roundCorners()
 
         self.subscribeToUpdates()
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
-        self.content.expandToSuperviewSize()
+        self.content.expandToSuperviewWidth()
+        self.content.top = 0
+        self.content.centerOnX()
+        self.content.height = self.collapsedHeight
+
         self.titleButton.frame = self.content.titleLabel.frame
+
+        self.scrollView.expandToSuperviewWidth()
+        self.scrollView.top = self.content.bottom
+        self.scrollView.height = self.view.height - self.content.height
+
+        let purposeHeight = self.purposeVC.getHeight(for: self.scrollView.width)
+        self.scrollView.contentSize = CGSize(width: self.scrollView.width,
+                                             height: purposeHeight)
+
+        self.purposeVC.view.frame = CGRect(x: 0,
+                                           y: 0,
+                                           width: self.scrollView.contentSize.width,
+                                           height: purposeHeight)
+
+        self.blurView.frame = self.scrollView.frame
     }
 
     private func subscribeToUpdates() {
