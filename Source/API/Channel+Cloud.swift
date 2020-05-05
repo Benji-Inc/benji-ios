@@ -12,25 +12,25 @@ import TMROFutures
 
 struct CreateChannel: CloudFunction {
 
+    var uniqueName: String
     var friendlyName: String
     var context: ConversationContext
     var members: [String]
 
-    func makeRequest() -> Future<String> {
-        let promise = Promise<String>()
+    func makeRequest() -> Future<Void> {
+        let promise = Promise<Void>()
 
-        let uniqueName = UUID().uuidString
-
-        PFCloud.callFunction(inBackground: "createChatChannel",
-                             withParameters: ["uniqueName": uniqueName,
+        PFCloud.callFunction(inBackground: "createChannel",
+                             withParameters: ["uniqueName": self.uniqueName,
                                               "friendlyName": self.friendlyName,
+                                              "type": "private", 
                                               "context": self.context.rawValue,
                                               "members": self.members]) { (object, error) in
                                                 if let error = error {
                                                     SessionManager.shared.handleParse(error: error)
                                                     promise.reject(with: error)
                                                 } else {
-                                                    promise.resolve(with: uniqueName)
+                                                    promise.resolve(with: ())
                                                 }
         }
 

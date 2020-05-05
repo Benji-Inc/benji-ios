@@ -233,6 +233,8 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         switch channelDisplayable.channelType {
         case .system(_):
             break
+        case .pending(_):
+            break 
         case .channel(let channel):
             MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1), for: channel)
                        .observeValue(with: { (sections) in

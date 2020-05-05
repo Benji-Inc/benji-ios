@@ -123,6 +123,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         switch activeChannel.channelType {
         case .system(_):
             break
+        case .pending(_):
+            break 
         case .channel(let channel):
             channel.delegate = self
             self.loadMessages(for: activeChannel.channelType)
@@ -212,6 +214,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         switch channelDisplayable.channelType {
         case .system(_):
             break
+        case .pending(_):
+            break 
         case .channel(let channel):
             ChannelManager.shared.sendMessage(to: channel,
                                               with: message,

@@ -56,6 +56,8 @@ class ChannelContentView: View {
         switch type {
         case .system(let channel):
             self.stackedAvatarView.set(items: channel.avatars)
+        case .pending(_):
+            break 
         case .channel(let channel):
             channel.getMembersAsUsers()
                 .observeValue(with: { (users) in

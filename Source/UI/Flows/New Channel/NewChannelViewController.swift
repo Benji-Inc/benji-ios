@@ -171,36 +171,36 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
         case .purpose(_):
             self.currentContent.value = .favorites(self.favoritesVC)
         case .favorites(_):
-            guard let title = self.purposeVC.textField.text else { return }
+            guard let friendlyName = self.purposeVC.textField.text else { return }
 
-            let users = self.favoritesVC.collectionViewManager.selectedItems.compactMap { (orbItem) -> User? in
-                return orbItem.nonMeUser
+            let members = self.favoritesVC.collectionViewManager.selectedItems.compactMap { (orbItem) -> String? in
+                return orbItem.nonMeUser?.objectId!
             }
 
             guard let context = self.purposeVC.contextVC.collectionViewManager.onSelectedItem.value?.item else { return }
 
-            self.createChannel(with: users,
-                               title: title,
+            self.createChannel(with: members,
+                               friendlyName: friendlyName,
                                context: context)
         }
     }
 
-    private func createChannel(with users: [User],
-                               title: String,
+    private func createChannel(with members: [String],
+                               friendlyName: String,
                                context: ConversationContext) {
 
         self.button.isLoading = true
 
-        ChannelSupplier.shared.createChannel(channelName: title,
-                                             context: context,
-                                             type: .private)
-            .joinIfNeeded()
-            .invite(users: users)
+        let uniqueName = UUID().uuidString
+
+        CreateChannel(uniqueName: uniqueName, friendlyName: friendlyName, context: context, members: members)
+            .makeRequest()
             .ignoreUserInteractionEventsUntilDone(for: self.view)
-            .observeValue(with: { (channel) in
-                ChannelSupplier.shared.set(activeChannel: DisplayableChannel(channelType: .channel(channel)))
-                self.delegate.newChannelView(self, didCreate: .channel(channel))
-            })
+            .observeValue { (_) in
+                let channel = DisplayableChannel(channelType: .pending(uniqueName))
+                ChannelSupplier.shared.set(activeChannel: channel)
+                self.delegate.newChannelView(self, didCreate: channel.channelType)
+        }
     }
 }
 

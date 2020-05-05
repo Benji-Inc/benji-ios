@@ -14,6 +14,7 @@ enum ChannelType: ManageableCellItem {
 
     case system(SystemChannel)
     case channel(TCHChannel)
+    case pending(String)
 
     var uniqueName: String {
         switch self {
@@ -21,6 +22,8 @@ enum ChannelType: ManageableCellItem {
             return channel.uniqueName
         case .channel(let channel):
             return String(optional: channel.friendlyName)
+        case .pending(let uniqueName):
+            return uniqueName
         }
     }
 
@@ -30,6 +33,8 @@ enum ChannelType: ManageableCellItem {
             return channel.displayName
         case .channel(let channel):
             return String(optional: channel.friendlyName)
+        case .pending(_):
+            return String()
         }
     }
 
@@ -39,6 +44,8 @@ enum ChannelType: ManageableCellItem {
             return localized(channel.context.text)
         case .channel(let channel):
             return String(optional: channel.channelDescription)
+        case .pending(_):
+            return String()
         }
     }
 
@@ -48,6 +55,8 @@ enum ChannelType: ManageableCellItem {
             return systemMessage.timeStampAsDate
         case .channel(let channel):
             return channel.dateUpdatedAsDate ?? Date.distantPast
+        case .pending(_):
+            return Date()
         }
     }
 
@@ -57,6 +66,8 @@ enum ChannelType: ManageableCellItem {
             return systemMessage.id
         case .channel(let channel):
             return channel.id
+        case .pending(let uniqueName):
+            return uniqueName
         }
     }
 
@@ -66,6 +77,8 @@ enum ChannelType: ManageableCellItem {
             return true
         case .channel(let channel):
             return channel.createdBy == User.current()?.objectId
+        case .pending(_):
+            return true 
         }
     }
 }

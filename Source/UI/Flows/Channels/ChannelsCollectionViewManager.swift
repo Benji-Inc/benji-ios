@@ -103,6 +103,8 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
             switch channel.channelType {
             case .system(_):
                 self.delete(item: channel)
+            case .pending(_):
+                break 
             case .channel(let tchChannel):
                 ChannelSupplier.delete(channel: tchChannel)
                     .ignoreUserInteractionEventsUntilDone(for: self.collectionView)
@@ -128,6 +130,8 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
             switch channel.channelType {
             case .system(_):
                 self.delete(item: channel)
+            case .pending(_):
+                break 
             case .channel(let tchChannel):
                 ChannelSupplier.leave(channel: tchChannel)
                     .ignoreUserInteractionEventsUntilDone(for: self.collectionView)

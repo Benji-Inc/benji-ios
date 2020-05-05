@@ -71,7 +71,7 @@ extension FeedCoordinator: FeedViewControllerDelegate {
     }
 
     private func startChannelFlow(for type: ChannelType) {
-        let coordinator = ChannelCoordinator(router: self.router, deepLink: self.deepLink, channelType: type)
+        let coordinator = ChannelCoordinator(router: self.router, deepLink: self.deepLink, channel: DisplayableChannel(channelType: type))
         self.addChildAndStart(coordinator) { (_) in
             self.router.dismiss(source: coordinator.toPresentable())
         }

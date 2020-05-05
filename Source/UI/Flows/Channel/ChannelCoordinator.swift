@@ -15,11 +15,12 @@ class ChannelCoordinator: PresentableCoordinator<Void> {
 
     init(router: Router,
          deepLink: DeepLinkable?,
-         channelType: ChannelType?) {
+         channel: DisplayableChannel?) {
 
-        if case let .channel(channel) = channelType {
-            ChannelSupplier.shared.set(activeChannel: DisplayableChannel(channelType: .channel(channel)))
+        if let c = channel {
+            ChannelSupplier.shared.set(activeChannel: c)
         }
+
         super.init(router: router, deepLink: deepLink)
     }
 

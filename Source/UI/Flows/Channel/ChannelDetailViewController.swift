@@ -83,6 +83,8 @@ class ChannelDetailViewController: ViewController {
             switch activeChannel.channelType {
             case .system(_):
                 break
+            case .pending(_):
+                break 
             case .channel(let channel):
                 guard channelsUpdate.channel == channel else { return }
                 switch channelsUpdate.status {

@@ -18,6 +18,8 @@ extension ChannelViewController {
             self.loadSystem(channel: channel)
         case .channel(_):
             MessageSupplier.shared.getLastMessages()
+        case .pending(_):
+            break 
         }
     }
 

@@ -197,6 +197,8 @@ class MessageInputView: View, ActiveChannelAccessor {
             switch activeChannel.channelType {
             case .system(_):
                 break
+            case .pending(_):
+                break 
             case .channel(let channel):
                 channel.getMembersAsUsers()
                 .observe(with: { (result) in
@@ -228,6 +230,8 @@ extension MessageInputView: GrowingTextViewDelegate {
 
         switch channelDisplayable.channelType {
         case .system(_):
+            break
+        case .pending(_):
             break
         case .channel(let channel):
             // Twilio throttles this call to every 5 seconds

@@ -31,7 +31,7 @@ extension ChannelsCoordinator: ChannelsViewControllerDelegate {
     }
 
     func startChannelFlow(for type: ChannelType, with source: UIViewController) {
-        let coordinator = ChannelCoordinator(router: self.router, deepLink: self.deepLink, channelType: type)
+        let coordinator = ChannelCoordinator(router: self.router, deepLink: self.deepLink, channel: DisplayableChannel(channelType: type))
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 self.finishFlow(with: ())

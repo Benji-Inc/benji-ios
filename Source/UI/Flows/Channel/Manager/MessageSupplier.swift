@@ -33,6 +33,8 @@ class MessageSupplier {
             switch activeChannel.channelType {
             case .system(_):
                 break
+            case .pending(_):
+                break 
             case .channel(let channel):
                 tchChannel = channel
             }
