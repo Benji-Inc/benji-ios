@@ -158,12 +158,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         let keyboardHeight = handler.currentKeyboardHeight
         let height = self.view.height - keyboardHeight
 
-        var detailHeight: CGFloat = self.detailVC.collapsedHeight 
-        if self.detailVC.currentState.value == .expanded {
-            detailHeight = height - (Theme.contentOffset * 2) - self.view.safeAreaInsets.bottom
-
-        }
-        self.detailVC.view.size = CGSize(width: self.view.width - (Theme.contentOffset * 2), height: detailHeight)
+        self.detailVC.view.size = CGSize(width: self.view.width - (Theme.contentOffset * 2), height: self.detailVC.collapsedHeight )
         self.detailVC.view.top = Theme.contentOffset
         self.detailVC.view.centerOnX()
 

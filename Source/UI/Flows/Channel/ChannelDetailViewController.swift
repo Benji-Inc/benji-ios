@@ -23,15 +23,11 @@ class ChannelDetailViewController: ViewController {
         case expanded
     }
 
-    private lazy var blurEffect = UIBlurEffect(style: .systemThinMaterialDark)
-    private lazy var blurView = UIVisualEffectView(effect: self.blurEffect)
     let collapsedHeight: CGFloat = 84
     private let titleButton = Button()
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
     private let content = ChannelContentView()
     let disposables = CompositeDisposable()
-    private let scrollView = UIScrollView()
-    private lazy var purposeVC = PurposeViewController()
 
     unowned let delegate: ChannelDetailViewControllerDelegate
 
@@ -55,17 +51,6 @@ class ChannelDetailViewController: ViewController {
 
         self.view.addSubview(self.content)
         self.content.addSubview(self.titleButton)
-        self.view.addSubview(self.blurView)
-        self.view.addSubview(self.scrollView)
-        self.addChild(viewController: self.purposeVC, toView: self.scrollView)
-
-        self.titleButton.didSelect = { [unowned self] in
-            if self.currentState.value == .expanded {
-                self.currentState.value = .collapsed
-            } else {
-                self.currentState.value = .expanded
-            }
-        }
 
         self.view.roundCorners()
 
@@ -81,21 +66,6 @@ class ChannelDetailViewController: ViewController {
         self.content.height = self.collapsedHeight
 
         self.titleButton.frame = self.content.titleLabel.frame
-
-        self.scrollView.expandToSuperviewWidth()
-        self.scrollView.top = self.content.bottom
-        self.scrollView.height = self.view.height - self.content.height
-
-        let purposeHeight = self.purposeVC.getHeight(for: self.scrollView.width)
-        self.scrollView.contentSize = CGSize(width: self.scrollView.width,
-                                             height: purposeHeight)
-
-        self.purposeVC.view.frame = CGRect(x: 0,
-                                           y: 0,
-                                           width: self.scrollView.contentSize.width,
-                                           height: purposeHeight)
-
-        self.blurView.frame = self.scrollView.frame
     }
 
     private func subscribeToUpdates() {
