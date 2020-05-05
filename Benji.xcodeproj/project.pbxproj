@@ -106,6 +106,7 @@
 		D6486DD023EF15A2007ED680 /* Inviteable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6486DCF23EF15A2007ED680 /* Inviteable.swift */; };
 		D64932D723FE460200986335 /* FeedIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64932D623FE460200986335 /* FeedIndicatorView.swift */; };
 		D64932FD2402EBA600986335 /* RoutineCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64932FC2402EBA600986335 /* RoutineCoordinator.swift */; };
+		D64B6D94246108750015827C /* Channel+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64B6D93246108750015827C /* Channel+Cloud.swift */; };
 		D64C055B23C2A34E00F6DCC1 /* ChannelCellContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C055A23C2A34E00F6DCC1 /* ChannelCellContentView.swift */; };
 		D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D64C6A7C23288FB300DB7257 /* SmallLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A7B23288FB300DB7257 /* SmallLabel.swift */; };
@@ -433,6 +434,7 @@
 		D6486DCF23EF15A2007ED680 /* Inviteable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inviteable.swift; sourceTree = "<group>"; };
 		D64932D623FE460200986335 /* FeedIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedIndicatorView.swift; sourceTree = "<group>"; };
 		D64932FC2402EBA600986335 /* RoutineCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineCoordinator.swift; sourceTree = "<group>"; };
+		D64B6D93246108750015827C /* Channel+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Channel+Cloud.swift"; sourceTree = "<group>"; };
 		D64C055A23C2A34E00F6DCC1 /* ChannelCellContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCellContentView.swift; sourceTree = "<group>"; };
 		D64C6A79232883FE00DB7257 /* CloudFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudFunction.swift; sourceTree = "<group>"; };
 		D64C6A7B23288FB300DB7257 /* SmallLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallLabel.swift; sourceTree = "<group>"; };
@@ -828,6 +830,7 @@
 				D64C6A79232883FE00DB7257 /* CloudFunction.swift */,
 				D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */,
 				D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */,
+				D64B6D93246108750015827C /* Channel+Cloud.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -1854,6 +1857,7 @@
 				D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */,
 				D6432BF322D828480016001A /* ChannelDataSource.swift in Sources */,
 				D61EC0C221D3071400204BEE /* ViewController.swift in Sources */,
+				D64B6D94246108750015827C /* Channel+Cloud.swift in Sources */,
 				D67934D523D956BB00536B44 /* ChannelPreviewViewController.swift in Sources */,
 				D653F6B023588F8E00A03EEE /* RoutineViewController.swift in Sources */,
 				D6D14D9021D5893600CD8CE4 /* IGListMoveIndex.m in Sources */,
