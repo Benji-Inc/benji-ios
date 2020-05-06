@@ -25,6 +25,8 @@ class FeedIndicatorView: View {
         self.removeAllSubviews()
         self.elements = []
 
+        guard count > 0 else { return }
+        
         for _ in 1...count {
             let element = View()
             element.set(backgroundColor: .background2)

@@ -53,7 +53,7 @@ class FeedViewController: ViewController {
         return UserDefaults.standard.value(forKey: Routine.currentRoutineKey) as? Date
     }
 
-    private let shouldShowFeed: Bool = true
+    private let shouldShowFeed: Bool = false
 
     override func initializeViews() {
         super.initializeViews()
