@@ -20,12 +20,13 @@ struct CreateChannel: CloudFunction {
     func makeRequest() -> Future<Void> {
         let promise = Promise<Void>()
 
+        let params: [String: Any] = ["uniqueName": self.uniqueName,
+                                     "friendlyName": self.friendlyName,
+                                     "type": "private",
+                                     "attributes": self.attributes,
+                                     "members": self.members]
         PFCloud.callFunction(inBackground: "createChannel",
-                             withParameters: ["uniqueName": self.uniqueName,
-                                              "friendlyName": self.friendlyName,
-                                              "type": "private", 
-                                              "attributes": self.attributes,
-                                              "members": self.members]) { (object, error) in
+                             withParameters: params) { (object, error) in
                                                 if let error = error {
                                                     SessionManager.shared.handleParse(error: error)
                                                     promise.reject(with: error)
