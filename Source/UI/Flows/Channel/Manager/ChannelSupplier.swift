@@ -98,7 +98,9 @@ class ChannelSupplier {
 
         let uniqueName = UUID().uuidString
 
-        CreateChannel(uniqueName: uniqueName, friendlyName: friendlyName, context: context, members: members)
+        var attributes: [String: Any] = [:]
+        attributes[ChannelKey.context.rawValue] = context.rawValue
+        CreateChannel(uniqueName: uniqueName, friendlyName: friendlyName, attributes: attributes, members: members)
             .makeRequest()
             .observeValue { (_) in
                 self.set(activeChannel: DisplayableChannel(channelType: .pending(uniqueName)))

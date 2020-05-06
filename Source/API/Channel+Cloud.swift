@@ -14,7 +14,7 @@ struct CreateChannel: CloudFunction {
 
     var uniqueName: String
     var friendlyName: String
-    var context: ConversationContext
+    var attributes: [String: Any]
     var members: [String]
 
     func makeRequest() -> Future<Void> {
@@ -24,7 +24,7 @@ struct CreateChannel: CloudFunction {
                              withParameters: ["uniqueName": self.uniqueName,
                                               "friendlyName": self.friendlyName,
                                               "type": "private", 
-                                              "context": self.context.rawValue,
+                                              "attributes": self.attributes,
                                               "members": self.members]) { (object, error) in
                                                 if let error = error {
                                                     SessionManager.shared.handleParse(error: error)
