@@ -67,6 +67,7 @@ class ChannelSupplier {
         }
     }
 
+    private(set) var pendingChannelUniqueName: String?
     private(set) var activeChannel = MutableProperty<DisplayableChannel?>(nil)
 
     init() {
@@ -78,7 +79,19 @@ class ChannelSupplier {
     }
 
     func set(activeChannel: DisplayableChannel?) {
+
         self.activeChannel.value = activeChannel
+
+        self.pendingChannelUniqueName = nil
+
+        if let displayable = activeChannel {
+            switch displayable.channelType {
+            case .pending(let uniqueName):
+                self.pendingChannelUniqueName = uniqueName
+            default:
+                break
+            }
+        }
     }
 
     private func subscribeToUpdates() {
@@ -108,6 +121,9 @@ class ChannelSupplier {
             switch channelsUpdate.status {
             case .added:
                 self.allChannels = self.subscribedChannels
+                if let uniqueName = self.pendingChannelUniqueName, channelsUpdate.channel.uniqueName == uniqueName {
+                    self.set(activeChannel: DisplayableChannel(channelType: .channel(channelsUpdate.channel)))
+                }
             case .deleted:
                 // We pre-emptivley delete a channel from the client, so we dont have a delay, and a user doesn't select a deleted channel and cause a crash.
                 self.allChannels = self.subscribedChannels.filter { (channel) -> Bool in
@@ -223,6 +239,17 @@ class ChannelSupplier {
     func getChannel(withSID channelSID: String) -> DisplayableChannel? {
         return self.subscribedChannels.first(where: { (channel) in
             return channel.id == channelSID
+        })
+    }
+
+    func getChannel(withUniqueName name: String) -> DisplayableChannel? {
+        return self.subscribedChannels.first(where: { (channel) in
+            switch channel.channelType {
+            case .channel(let tchChannel):
+                return tchChannel.uniqueName == name
+            default:
+                return false 
+            }
         })
     }
 
