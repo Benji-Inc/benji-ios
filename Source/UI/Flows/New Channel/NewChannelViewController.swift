@@ -13,8 +13,7 @@ import TMROLocalization
 import ReactiveSwift
 
 protocol NewChannelViewControllerDelegate: class {
-    func newChannelView(_ controller: NewChannelViewController,
-                        didCreate channel: ChannelType)
+    func newChannelViewControllerDidCreateChannel(_ controller: NewChannelViewController)
 }
 
 enum NewChannelContent: Switchable {
@@ -179,27 +178,9 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
 
             guard let context = self.purposeVC.contextVC.collectionViewManager.onSelectedItem.value?.item else { return }
 
-            self.createChannel(with: members,
-                               friendlyName: friendlyName,
-                               context: context)
-        }
-    }
+            ChannelSupplier.shared.createChannel(friendlyName: friendlyName, context: context, members: members)
 
-    private func createChannel(with members: [String],
-                               friendlyName: String,
-                               context: ConversationContext) {
-
-        self.button.isLoading = true
-
-        let uniqueName = UUID().uuidString
-
-        CreateChannel(uniqueName: uniqueName, friendlyName: friendlyName, context: context, members: members)
-            .makeRequest()
-            .ignoreUserInteractionEventsUntilDone(for: self.view)
-            .observeValue { (_) in
-                let channel = DisplayableChannel(channelType: .pending(uniqueName))
-                ChannelSupplier.shared.set(activeChannel: channel)
-                self.delegate.newChannelView(self, didCreate: channel.channelType)
+            self.delegate.newChannelViewControllerDidCreateChannel(self)
         }
     }
 }

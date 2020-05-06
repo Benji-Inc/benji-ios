@@ -8,7 +8,7 @@
 
 import Foundation
 
-class NewChannelCoordinator: PresentableCoordinator<ChannelType?> {
+class NewChannelCoordinator: PresentableCoordinator<Void> {
 
     lazy var newChannelVC = NewChannelViewController(delegate: self)
 
@@ -19,7 +19,7 @@ class NewChannelCoordinator: PresentableCoordinator<ChannelType?> {
 
 extension NewChannelCoordinator: NewChannelViewControllerDelegate {
 
-    func newChannelView(_ controller: NewChannelViewController, didCreate channel: ChannelType) {
-        self.finishFlow(with: channel)
+    func newChannelViewControllerDidCreateChannel(_ controller: NewChannelViewController) {
+        self.finishFlow(with: ())
     }
 }

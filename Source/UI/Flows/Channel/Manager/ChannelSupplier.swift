@@ -94,6 +94,17 @@ class ChannelSupplier {
         }
     }
 
+    func createChannel(friendlyName: String, context: ConversationContext, members: [String]) {
+
+        let uniqueName = UUID().uuidString
+
+        CreateChannel(uniqueName: uniqueName, friendlyName: friendlyName, context: context, members: members)
+            .makeRequest()
+            .observeValue { (_) in
+                self.set(activeChannel: DisplayableChannel(channelType: .pending(uniqueName)))
+        }
+    }
+
     private func subscribeToUpdates() {
 
         self.disposables.add(ChannelManager.shared.clientSyncUpdate.producer.on { [weak self] (update) in
@@ -179,25 +190,6 @@ class ChannelSupplier {
         default:
             return false
         }
-    }
-
-    // MARK: CREATION
-
-    func createChannel(channelName: String,
-                              context: ConversationContext,
-                              type: TCHChannelType,
-                              attributes: NSMutableDictionary = [:]) -> Future<TCHChannel> {
-
-        guard let client = ChannelManager.shared.client else {
-            let errorMessage = "Unable to create channel. Twilio client uninitialized"
-            return Promise<TCHChannel>(error: ClientError.apiError(detail: errorMessage))
-        }
-
-        attributes[ChannelKey.context.rawValue] = context.rawValue
-        return client.createChannel(channelName: channelName,
-                                    uniqueName: UUID().uuidString,
-                                    type: type,
-                                    attributes: attributes)
     }
 
     @discardableResult
