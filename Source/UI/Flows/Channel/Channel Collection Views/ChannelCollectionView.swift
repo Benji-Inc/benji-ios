@@ -37,6 +37,7 @@ class ChannelCollectionView: CollectionView {
     }
 
     private func registerReusableViews() {
+        self.activityIndicator.isHidden = true 
         self.register(MessageCell.self)
         self.register(TypingIndicatorCell.self)
         self.register(ChannelSectionHeader.self,

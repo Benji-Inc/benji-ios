@@ -15,14 +15,14 @@ class CollectionView: UICollectionView {
     init(layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: layout)
         self.set(backgroundColor: .clear)
-        self.initialize()
+        self.initializeViews()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func initialize() {
+    func initializeViews() {
         self.addSubview(self.activityIndicator)
     }
 
