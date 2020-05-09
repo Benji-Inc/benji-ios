@@ -156,7 +156,8 @@ class InvitesViewController: NavigationBarViewController, KeyboardObservable {
                     .observeValue { (allItems) in
                         runMain {
                             self.inviteablVC.collectionViewManager.allCache = allItems
-                            self.inviteablVC.collectionViewManager.set(newItems: allItems)
+                            let animationCylce = AnimationCycle(inFromPosition: .down, outToPosition: .down, shouldConcatenate: true, scrollToEnd: false)
+                            self.inviteablVC.collectionViewManager.set(newItems: allItems, animationCycle: animationCylce, completion: nil)
                             self.inviteablVC.collectionView.activityIndicator.stopAnimating()
                         }
                 }

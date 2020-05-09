@@ -65,12 +65,12 @@ extension Inviteable: Avatar {
         }
     }
 
-    var phoneNumber: String? {
+    var phoneNumber: String {
         switch self {
         case .contact(let contact, _):
-            return contact.primaryPhoneNumber
+            return String(optional: contact.primaryPhoneNumber)
         case .connection(let connection):
-            return connection.nonMeUser?.phoneNumber
+            return String(optional: connection.nonMeUser?.phoneNumber)
         }
     }
 }

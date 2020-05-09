@@ -98,14 +98,24 @@ class ContactsManager: NSObject {
                     var finalResults: [CNContact] = []
                     if removeMe, let phone = User.current()?.phoneNumber?.formatPhoneNumber()?.removeAllNonNumbers() {
                         finalResults = results.filter { (contact) -> Bool in
-                            if let contactPhone = contact.primaryPhoneNumber?.removeAllNonNumbers(), contactPhone == phone {
-                                return false
+                            if let contactPhone = contact.primaryPhoneNumber?.removeAllNonNumbers() {
+                                if contactPhone == phone {
+                                    return false
+                                } else {
+                                    return true
+                                }
                             } else {
-                                return true
+                                return false
                             }
                         }
                     } else {
-                        finalResults = results
+                        finalResults = results.filter({ (contact) -> Bool in
+                            if let _ = contact.primaryPhoneNumber {
+                                return true
+                            } else {
+                                return false
+                            }
+                        })
                     }
                     completion(finalResults)
                 }

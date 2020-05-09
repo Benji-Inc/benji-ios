@@ -9,6 +9,7 @@
 import Foundation
 
 class InviteableCell: UICollectionViewCell, ManageableCell {
+
     typealias ItemType = Inviteable
 
     var onLongPress: (() -> Void)?
@@ -44,24 +45,24 @@ class InviteableCell: UICollectionViewCell, ManageableCell {
         guard let inviteable = item else { return }
         self.inviteable = inviteable
         self.content.configure(with: inviteable)
-        self.layoutNow()
     }
 
     func update(isSelected: Bool) {
         self.showSelected = isSelected
     }
 
-    func collectionViewManagerWillDisplay() {
-        guard let inviteable = self.inviteable else { return }
-        self.content.configure(with: inviteable)
-        self.layoutNow()
-    }
-
     func collectionViewManagerDidEndDisplaying() {}
+    func collectionViewManagerWillDisplay() {}
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.content.expandToSuperviewSize()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.content.reset()
     }
 }

@@ -46,7 +46,8 @@ class InviteableContentView: View {
         case .connection(let connection):
             connection.nonMeUser?.fetchIfNeededInBackground { (object, error) in
                 guard let nonMeUser = object as? User else { return }
-                self.set(phoneNumber: nonMeUser.phoneNumber, avatar: nonMeUser)
+                self.set(phoneNumber: String(optional: nonMeUser.phoneNumber), avatar: nonMeUser)
+                self.layoutNow()
             }
 
             if let status = connection.status {
@@ -58,12 +59,11 @@ class InviteableContentView: View {
         }
     }
 
-    private func set(phoneNumber: String?, avatar: Avatar) {
+    private func set(phoneNumber: String, avatar: Avatar) {
 
         self.nameLabel.set(text: avatar.fullName, stringCasing: .capitalized)
-        if let phone = phoneNumber {
-            self.phoneNumberLabel.set(text: PhoneKit.formatter.formatPartial(phone), color: .background4)
-        }
+        let formattedPhone = PhoneKit.formatter.formatPartial(phoneNumber)
+        self.phoneNumberLabel.set(text: formattedPhone, color: .background4)
         self.avatarView.set(avatar: avatar)
 
         self.layoutNow()
@@ -100,5 +100,11 @@ class InviteableContentView: View {
 
     func animateToUnchecked() {
         self.animationView.play(fromFrame: 30, toFrame: 0, loopMode: nil, completion: nil)
+    }
+
+    func reset() {
+        self.nameLabel.text = nil
+        self.phoneNumberLabel.text = nil
+        self.statusLabel.text = nil
     }
 }
