@@ -43,6 +43,10 @@ extension Inviteable: Avatar {
         }
     }
 
+    var fullName: String {
+        return self.givenName + " " + self.familyName
+    }
+
     var userObjectID: String? {
         switch self {
         case .contact(_, _):

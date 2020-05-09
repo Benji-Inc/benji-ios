@@ -23,8 +23,8 @@ class ProfileCollectionView: CollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func initialize() {
-        super.initialize()
+    override func initializeViews() {
+        super.initializeViews()
 
         self.register(ProfileAvatarCell.self)
         self.register(ProfileDetailCell.self)

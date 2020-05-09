@@ -16,7 +16,7 @@ protocol InvitesViewControllerDelegate: class {
     func invitesView(_ controller: InvitesViewController, didGetAuthorization status: CNAuthorizationStatus)
 }
 
-class InvitesViewController: NavigationBarViewController {
+class InvitesViewController: NavigationBarViewController, KeyboardObservable {
 
     unowned let delegate: InvitesViewControllerDelegate
     private let button = Button()
@@ -54,6 +54,8 @@ class InvitesViewController: NavigationBarViewController {
     override func initializeViews() {
         super.initializeViews()
 
+        self.registerKeyboardEvents()
+        self.showSearch = true 
         self.addChild(viewController: self.inviteablVC)
         self.view.addSubview(self.gradientView)
         self.view.addSubview(self.button)
@@ -89,7 +91,7 @@ class InvitesViewController: NavigationBarViewController {
         self.button.centerOnX()
         self.button.bottom = self.buttonOffset ?? self.view.height + 100
 
-        let height = self.view.height - self.button.top + 10
+        let height = self.button.height + self.view.safeAreaInsets.bottom + 10
         self.gradientView.size = CGSize(width: self.view.width, height: height)
         self.gradientView.centerOnX()
         self.gradientView.top = self.button.top
@@ -117,7 +119,8 @@ class InvitesViewController: NavigationBarViewController {
 
         var newOffset: CGFloat
         if self.selectedContacts.count >= 1 {
-            newOffset = self.view.height - self.view.safeAreaInsets.bottom
+            let keyboardHeight = self.keyboardHandler?.currentKeyboardHeight ?? 0
+            newOffset = self.view.height - self.view.safeAreaInsets.bottom - keyboardHeight
         } else {
             newOffset = self.view.height + 100
         }
@@ -152,6 +155,7 @@ class InvitesViewController: NavigationBarViewController {
                 self.replaceDuplicates(from: self.connections, and: self.contacts)
                     .observeValue { (allItems) in
                         runMain {
+                            self.inviteablVC.collectionViewManager.allCache = allItems
                             self.inviteablVC.collectionViewManager.set(newItems: allItems)
                             self.inviteablVC.collectionView.activityIndicator.stopAnimating()
                         }
@@ -254,5 +258,19 @@ class InvitesViewController: NavigationBarViewController {
                 }
             }
         }
+    }
+
+    override func searchBarDidFinishEditing(_ searchBar: SearchBar) {
+        super.searchBarDidFinishEditing(searchBar)
+        self.loadItems()
+    }
+
+    override func searchBar(_ searchBar: SearchBar, didUpdate text: String?) {
+        let searchText = String(optional: text)
+        self.inviteablVC.collectionViewManager.contactFilter = SearchFilter(text: searchText)
+    }
+
+    func handleKeyboard(frame: CGRect, with animationDuration: TimeInterval, timingCurve: UIView.AnimationCurve) {
+        self.updateButtonForContacts()
     }
 }
