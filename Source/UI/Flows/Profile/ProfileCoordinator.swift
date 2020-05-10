@@ -8,6 +8,7 @@
 
 import Foundation
 import Parse
+import Branch
 
 class ProfileCoordinator: Coordinator<Void> {
 
@@ -43,6 +44,7 @@ class ProfileCoordinator: Coordinator<Void> {
     }
 
     private func presentShare(for reservation: Reservation) {
+
         if let _ = reservation.metadata {
             let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
             self.router.navController.present(ac, animated: true)
@@ -51,6 +53,9 @@ class ProfileCoordinator: Coordinator<Void> {
                 .observeValue { (_) in
                     runMain {
                         let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
+                        ac.completionWithItemsHandler = { activityType, completed, items, error in
+                            // do stuff
+                        }
                         self.router.navController.present(ac, animated: true)
                     }
             }

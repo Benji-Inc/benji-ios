@@ -10,6 +10,7 @@ import Foundation
 import Parse
 import TMROFutures
 import LinkPresentation
+import Branch
 
 enum ReservationKey: String {
     case user
@@ -85,8 +86,6 @@ final class Reservation: PFObject, PFSubclassing {
 
         return promise
     }
-
-
 }
 
 extension Reservation: Objectable {
@@ -112,6 +111,7 @@ extension Reservation: ManageableCellItem {
 }
 
 private var reservationMetadataKey: UInt8 = 0
+private var linkKey: UInt8 = 0
 extension Reservation: UIActivityItemSource {
 
     private(set) var metadata: LPLinkMetadata? {
@@ -123,10 +123,21 @@ extension Reservation: UIActivityItemSource {
         }
     }
 
+    private(set) var link: String? {
+        get {
+            return self.getAssociatedObject(&linkKey)
+        }
+        set {
+            self.setAssociatedObject(key: &linkKey, value: newValue)
+        }
+    }
+
     func prepareMetaData() -> Future<Void> {
         let promise = Promise<Void>()
         let metadataProvider = LPMetadataProvider()
-        if let url = URL(string: "https://testflight.apple.com/join/w3CExYsD") {
+
+        self.link = self.generateBranchLink().getShortUrl(with: self.generateBranchProperties())
+        if let linkString = self.link, let url = URL(string: linkString) {
             metadataProvider.startFetchingMetadata(for: url) { (metadata, error) in
                 if let e = error {
                     promise.reject(with: e)
@@ -142,12 +153,33 @@ extension Reservation: UIActivityItemSource {
         return promise
     }
 
+    func generateBranchLink() -> BranchUniversalObject {
+
+        let canonicalIdentifier = UUID().uuidString
+        let buo = BranchUniversalObject(canonicalIdentifier: canonicalIdentifier)
+        buo.canonicalUrl = "https://testflight.apple.com/join/w3CExYsD"
+        buo.title = "Join the Benji beta"
+        buo.contentDescription = "Available on iOS"
+        buo.imageUrl = "https://is5-ssl.mzstatic.com/image/thumb/Purple123/v4/51/ca/70/51ca7064-0f75-9e7c-dfc3-1d3afaf9eaa3/AppIcon-0-1x_U007emarketing-0-7-0-85-220.png/1920x1080bb-80.png"
+        buo.contentMetadata.customMetadata[ReservationKey.code.rawValue] = self.code
+
+        return buo
+    }
+
+    func generateBranchProperties() -> BranchLinkProperties {
+        let properties = BranchLinkProperties()
+        properties.addControlParam("$ios_url", withValue: "https://testflight.apple.com/join/w3CExYsD")
+        properties.addControlParam("$canonical_url", withValue: "https://testflight.apple.com/join/w3CExYsD")
+        return properties
+    }
+
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return URL(string: "https://testflight.apple.com/join/w3CExYsD")!
+        return URL(string: self.link!)!
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-        return "Claim your reservation by entering: \(self.code) after tapping on this link: https://testflight.apple.com/join/w3CExYsD"
+        guard let link = self.link else { return nil }
+        return "Claim your reservation by tapping 👇\n\(link)"
     }
 
     func activityViewControllerLinkMetadata(_: UIActivityViewController) -> LPLinkMetadata? {
