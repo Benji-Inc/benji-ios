@@ -136,7 +136,6 @@
 		D65B0CE5234928620041A176 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CE4234928620041A176 /* ProfileCoordinator.swift */; };
 		D65B0CE7234929440041A176 /* NewChannelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CE6234929440041A176 /* NewChannelCoordinator.swift */; };
 		D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66656BC23D13C9A009E4BDF /* Switchable.swift */; };
-		D668893423F2789A00FD2764 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = D668893323F2789A00FD2764 /* loading.json */; };
 		D66A0B942351821200A0FFEA /* Completeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A0B932351821200A0FFEA /* Completeable.swift */; };
 		D66A0B9823526A4E00A0FFEA /* CarmeraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A0B9723526A4E00A0FFEA /* CarmeraButton.swift */; };
 		D66E7C14239DC14C002A363C /* AlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66E7C13239DC14C002A363C /* AlertType.swift */; };
@@ -236,6 +235,7 @@
 		D6B2606E22E80E4000143CF0 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2606D22E80E4000143CF0 /* ToastView.swift */; };
 		D6B2607222E80FE000143CF0 /* SmallBoldLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2607122E80FE000143CF0 /* SmallBoldLabel.swift */; };
 		D6BD933F23F8824D00C5660D /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D6BD933E23F8824D00C5660D /* face_scan.json */; };
+		D6BEB24A246887830076DCC2 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = D6BEB249246887830076DCC2 /* loading.json */; };
 		D6BF68D7239CBF74008E79A1 /* FeedInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */; };
 		D6C65E9E230CD07400259F7A /* LaunchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C65E9D230CD07400259F7A /* LaunchCoordinator.swift */; };
 		D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */; };
@@ -456,7 +456,6 @@
 		D65B0CE4234928620041A176 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		D65B0CE6234929440041A176 /* NewChannelCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCoordinator.swift; sourceTree = "<group>"; };
 		D66656BC23D13C9A009E4BDF /* Switchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switchable.swift; sourceTree = "<group>"; };
-		D668893323F2789A00FD2764 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		D66A0B932351821200A0FFEA /* Completeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Completeable.swift; sourceTree = "<group>"; };
 		D66A0B9723526A4E00A0FFEA /* CarmeraButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarmeraButton.swift; sourceTree = "<group>"; };
 		D66E7C13239DC14C002A363C /* AlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertType.swift; sourceTree = "<group>"; };
@@ -556,6 +555,7 @@
 		D6B2606D22E80E4000143CF0 /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
 		D6B2607122E80FE000143CF0 /* SmallBoldLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallBoldLabel.swift; sourceTree = "<group>"; };
 		D6BD933E23F8824D00C5660D /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
+		D6BEB249246887830076DCC2 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = loading.json; path = ../../../../Desktop/loading.json; sourceTree = "<group>"; };
 		D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedInviteView.swift; sourceTree = "<group>"; };
 		D6C65E9D230CD07400259F7A /* LaunchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchCoordinator.swift; sourceTree = "<group>"; };
 		D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Onboarding+Cloud.swift"; sourceTree = "<group>"; };
@@ -1116,11 +1116,11 @@
 		D668893023F2741500FD2764 /* Animations */ = {
 			isa = PBXGroup;
 			children = (
+				D6BEB249246887830076DCC2 /* loading.json */,
 				D6BD933E23F8824D00C5660D /* face_scan.json */,
 				D629410123F8351D0088777E /* search-to-x.json */,
 				D6CD4F4023F46689004818B6 /* arrow.json */,
 				D6CD4F3E23F3BA89004818B6 /* checkbox.json */,
-				D668893323F2789A00FD2764 /* loading.json */,
 			);
 			path = Animations;
 			sourceTree = "<group>";
@@ -1619,11 +1619,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D668893423F2789A00FD2764 /* loading.json in Resources */,
 				D6EEE7B12383A70F00F9D446 /* Benji.entitlements in Resources */,
 				D6ACA0B823D4248100844923 /* FaceDetection.storyboard in Resources */,
 				D629410223F8351D0088777E /* search-to-x.json in Resources */,
 				D6CD4F4123F46689004818B6 /* arrow.json in Resources */,
+				D6BEB24A246887830076DCC2 /* loading.json in Resources */,
 				D637532B2316172700214F63 /* Roboto-Bold.ttf in Resources */,
 				D637532C2316172700214F63 /* Roboto-Medium.ttf in Resources */,
 				D6BD933F23F8824D00C5660D /* face_scan.json in Resources */,
