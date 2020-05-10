@@ -25,7 +25,7 @@ final class Reservation: PFObject, PFSubclassing {
     }
 
     var code: String {
-        return self.getObject(for: .code) ?? String()
+        return self.getObject(for: .code) ?? "123456"
     }
 
     var isClaimed: Bool {
@@ -64,6 +64,21 @@ extension Reservation: Objectable {
 extension Reservation: ManageableCellItem {
     var id: String {
         return self.objectId!
+    }
+}
+
+extension Reservation: UIActivityItemSource {
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        return ["This beta will make you betta.", URL(string: "https://testflight.apple.com/join/w3CExYsD")!]
+
+    }
+
+    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+        return ""
+    }
+
+    func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
+        return "Code: \(self.code)"
     }
 }
 

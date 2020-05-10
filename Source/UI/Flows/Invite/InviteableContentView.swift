@@ -28,35 +28,35 @@ class InviteableContentView: View {
         self.addSubview(self.animationView)
     }
 
-    func configure(with inviteable: Inviteable) {
+    func configure(with inviteable: Reservation) {
 
-        switch inviteable {
-        case .contact(_, let status):
-            self.set(phoneNumber: inviteable.phoneNumber, avatar: inviteable)
-
-            if status == .accepted || status == .invited {
-                self.statusLabel.isVisible = true
-                self.statusLabel.set(text: status.rawValue.uppercased(), color: .white, alignment: .right)
-                self.animationView.isVisible = false 
-            } else {
-                self.animationView.isVisible = true
-                self.statusLabel.isVisible = false
-            }
-
-        case .connection(let connection):
-            connection.nonMeUser?.fetchIfNeededInBackground { (object, error) in
-                guard let nonMeUser = object as? User else { return }
-                self.set(phoneNumber: String(optional: nonMeUser.phoneNumber), avatar: nonMeUser)
-                self.layoutNow()
-            }
-
-            if let status = connection.status {
-                self.statusLabel.isVisible = true
-                self.statusLabel.set(text: status.rawValue.uppercased(), color: .white, alignment: .right)
-            }
-
-            self.animationView.isVisible = false
-        }
+//        switch inviteable {
+//        case .contact(_, let status):
+//            self.set(phoneNumber: inviteable.phoneNumber, avatar: inviteable)
+//
+//            if status == .accepted || status == .invited {
+//                self.statusLabel.isVisible = true
+//                self.statusLabel.set(text: status.rawValue.uppercased(), color: .white, alignment: .right)
+//                self.animationView.isVisible = false 
+//            } else {
+//                self.animationView.isVisible = true
+//                self.statusLabel.isVisible = false
+//            }
+//
+//        case .connection(let connection):
+//            connection.nonMeUser?.fetchIfNeededInBackground { (object, error) in
+//                guard let nonMeUser = object as? User else { return }
+//                self.set(phoneNumber: String(optional: nonMeUser.phoneNumber), avatar: nonMeUser)
+//                self.layoutNow()
+//            }
+//
+//            if let status = connection.status {
+//                self.statusLabel.isVisible = true
+//                self.statusLabel.set(text: status.rawValue.uppercased(), color: .white, alignment: .right)
+//            }
+//
+//            self.animationView.isVisible = false
+//        }
     }
 
     private func set(phoneNumber: String, avatar: Avatar) {

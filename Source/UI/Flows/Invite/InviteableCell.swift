@@ -10,23 +10,10 @@ import Foundation
 
 class InviteableCell: UICollectionViewCell, ManageableCell {
 
-    typealias ItemType = Inviteable
+    typealias ItemType = Reservation
 
     var onLongPress: (() -> Void)?
     private let content = InviteableContentView()
-    private var inviteable: Inviteable?
-
-    var showSelected: Bool? {
-        didSet {
-            guard let showSelected = self.showSelected, showSelected != oldValue else { return }
-
-            if showSelected {
-                self.content.animateToChecked()
-            } else {
-                self.content.animateToUnchecked()
-            }
-        }
-    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,14 +28,9 @@ class InviteableCell: UICollectionViewCell, ManageableCell {
         self.contentView.addSubview(self.content)
     }
 
-    func configure(with item: Inviteable?) {
+    func configure(with item: Reservation?) {
         guard let inviteable = item else { return }
-        self.inviteable = inviteable
         self.content.configure(with: inviteable)
-    }
-
-    func update(isSelected: Bool) {
-        self.showSelected = isSelected
     }
 
     func collectionViewManagerDidEndDisplaying() {}

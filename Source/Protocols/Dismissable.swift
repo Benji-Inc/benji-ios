@@ -19,3 +19,11 @@ extension Dismissable where Self: UIViewController {
             self.navigationController?.isBeingDismissed ?? false
     }
 }
+
+extension Dismissable where Self: UIActivityViewController {
+    var isBeingClosed: Bool {
+        return self.isBeingDismissed ||
+            self.isMovingFromParent ||
+            self.navigationController?.isBeingDismissed ?? false
+    }
+}
