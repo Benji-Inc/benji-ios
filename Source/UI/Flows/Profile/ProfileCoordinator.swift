@@ -43,8 +43,6 @@ class ProfileCoordinator: Coordinator<Void> {
     }
 
     private func presentShare(for reservation: Reservation) {
-        //let items: [Any] = ["This beta will make you betta.", URL(string: "https://testflight.apple.com/join/w3CExYsD")!]
-        let items = [URL(string: "https://www.apple.com")!]
         if let _ = reservation.metadata {
             let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
             self.router.navController.present(ac, animated: true)
@@ -71,10 +69,11 @@ extension ProfileCoordinator: ProfileViewControllerDelegate {
         case .picture:
             self.presentPhoto()
         case .invites:
-            guard let query = Reservation.query() else { return }
-            query.getFirstObjectInBackground { (object, error) in
-                guard let reservation = object as? Reservation else { return }
-                self.presentShare(for: reservation)
+            Reservation.getFirstUnclaimed(for: user)
+                .observeValue { (reservation) in
+                    runMain {
+                        self.presentShare(for: reservation)
+                    }
             }
         default:
             break 

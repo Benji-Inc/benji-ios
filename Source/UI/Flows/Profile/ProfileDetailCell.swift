@@ -51,7 +51,7 @@ class ProfileDetailCell: UICollectionViewCell {
             self.getRoutine(for: user)
         case .invites:
             self.titleLabel.set(text: "Invites")
-            self.getInvites(for: user)
+            self.getReservations(for: user)
         }
 
         self.contentView.layoutNow()
@@ -104,9 +104,28 @@ class ProfileDetailCell: UICollectionViewCell {
         })
     }
 
-    private func getInvites(for user: User) {
-        self.label.set(text: "Show number of invites")
-        self.button.set(style: .normal(color: .lightPurple, text: "View"))
-        self.button.isHidden = false
+    private func getReservations(for user: User) {
+        Reservation.getReservations(for: user)
+            .observeValue { (reservations) in
+                var numberOfUnclaimed: Int = 0
+
+                reservations.forEach { (reservation) in
+                    if !reservation.isClaimed {
+                        numberOfUnclaimed += 1
+                    }
+                }
+
+                var text = ""
+                if numberOfUnclaimed == 0 {
+                    text = "You have no reservations left."
+                    self.button.isHidden = true
+                } else {
+                    text = "You have \(String(numberOfUnclaimed)) left."
+                    self.button.isHidden = false
+                }
+
+                self.label.set(text: text)
+                self.button.set(style: .normal(color: .lightPurple, text: "SHARE"))
+        }
     }
 }

@@ -44,6 +44,49 @@ final class Reservation: PFObject, PFSubclassing {
     var createdBy: User? {
         return self.getObject(for: .createdBy)
     }
+
+    static func getReservations(for user: User) -> Future<[Reservation]> {
+        let promise = Promise<[Reservation]>()
+        if let query = Reservation.query() {
+            query.whereKey(ReservationKey.createdBy.rawValue, equalTo: user)
+            query.findObjectsInBackground { (objects, error) in
+                if let reservations = objects as? [Reservation] {
+                    promise.resolve(with: reservations)
+                } else if let e = error {
+                    promise.reject(with: e)
+                } else {
+                    promise.reject(with: ClientError.generic)
+                }
+            }
+        } else {
+            promise.reject(with: ClientError.generic)
+        }
+        
+        return promise
+    }
+
+    static func getFirstUnclaimed(for user: User) -> Future<Reservation> {
+        let promise = Promise<Reservation>()
+        if let query = Reservation.query() {
+            query.whereKey(ReservationKey.createdBy.rawValue, equalTo: user)
+            query.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
+            query.findObjectsInBackground { (objects, error) in
+                if let reservations = objects as? [Reservation], let first = reservations.first {
+                    promise.resolve(with: first)
+                } else if let e = error {
+                    promise.reject(with: e)
+                } else {
+                    promise.reject(with: ClientError.generic)
+                }
+            }
+        } else {
+            promise.reject(with: ClientError.generic)
+        }
+
+        return promise
+    }
+
+
 }
 
 extension Reservation: Objectable {

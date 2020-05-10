@@ -16,5 +16,3 @@ enum ProfileItem {
     case routine
     case invites
 }
-
-
