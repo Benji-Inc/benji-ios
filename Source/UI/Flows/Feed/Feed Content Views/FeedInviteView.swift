@@ -12,6 +12,7 @@ class FeedInviteView: View {
 
     let textView = FeedTextView()
     let button = Button()
+    var reservation: Reservation?
 
     override func initializeSubviews() {
         super.initializeSubviews()

@@ -54,8 +54,9 @@ class FeedView: View {
             self.inviteView.didComplete = { [unowned self] in
                 self.didComplete?()
             }
-        case .inviteAsk:
+        case .inviteAsk(let reservation):
             self.container.addSubview(self.needInvitesView)
+            self.needInvitesView.reservation = reservation
             self.needInvitesView.button.didSelect = { [unowned self] in
                 self.didComplete?()
             }

@@ -19,7 +19,6 @@ class FeedSupplier {
 
     func getItems() -> Future<[FeedType]> {
 
-        self.items.append(.inviteAsk)
         self.items.append(.meditation)
 
         ChannelSupplier.shared.allInvitedChannels.forEach { (channel) in
@@ -32,6 +31,7 @@ class FeedSupplier {
         }
 
         var promises: [Future<Void>] = []
+        promises.append(self.getInviteAsk())
         promises.append(self.getNotificationPermissions())
         promises.append(self.getUnreadMessages())
         promises.append(self.getConnections())
@@ -40,6 +40,32 @@ class FeedSupplier {
             .transform { (_) in
                 return self.items.sorted()
         }
+    }
+
+    private func getInviteAsk() -> Future<Void> {
+        let promise = Promise<Void>()
+        Reservation.getReservations(for: User.current()!)
+            .observe { (result) in
+                switch result {
+                case .success(let reservations):
+                    var firstUnclaimed: Reservation? = nil
+                    for reservation in reservations {
+                        if !reservation.isClaimed {
+                            firstUnclaimed = reservation
+                            break
+                        }
+                    }
+
+                    if let reservation = firstUnclaimed {
+                        self.items.append(.inviteAsk(reservation))
+                    }
+
+                    promise.resolve(with: ())
+                case .failure(_):
+                    promise.reject(with: ClientError.generic)
+                }
+        }
+        return promise
     }
 
     private func getNotificationPermissions() -> Future<Void>  {

@@ -18,7 +18,7 @@ enum FeedType: Comparable {
     case unreadMessages(TCHChannel, Int)
     case channelInvite(TCHChannel)
     case connectionRequest(Connection)
-    case inviteAsk
+    case inviteAsk(Reservation)
     case notificationPermissions
     case meditation
 
@@ -34,7 +34,7 @@ enum FeedType: Comparable {
             return "unreadMessages"
         case .channelInvite(_):
             return "channelInvite"
-        case .inviteAsk:
+        case .inviteAsk(_):
             return "inviteAsk"
         case .notificationPermissions:
             return "notificationPermissions"
@@ -55,7 +55,7 @@ enum FeedType: Comparable {
             return 2
         case .unreadMessages(_, _):
             return 3
-        case .inviteAsk:
+        case .inviteAsk(_):
             return 4
         case .notificationPermissions:
             return 5
