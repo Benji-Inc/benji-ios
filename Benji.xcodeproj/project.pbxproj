@@ -290,6 +290,7 @@
 		D6D87E8923E69EC400D6A7ED /* InviteComposerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D87E8823E69EC400D6A7ED /* InviteComposerCoordinator.swift */; };
 		D6D87E8B23E69F8400D6A7ED /* InvitesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D87E8A23E69F8400D6A7ED /* InvitesViewController.swift */; };
 		D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
+		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6DADF692207D246007D9EB1 /* TCHMessage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF682207D246007D9EB1 /* TCHMessage+Extensions.swift */; };
 		D6DADF6C2207DCA8007D9EB1 /* ChannelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF6B2207DCA8007D9EB1 /* ChannelsViewController.swift */; };
 		D6DADF6E2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF6D2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift */; };
@@ -637,6 +638,7 @@
 		D6D87E8823E69EC400D6A7ED /* InviteComposerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteComposerCoordinator.swift; sourceTree = "<group>"; };
 		D6D87E8A23E69F8400D6A7ED /* InvitesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitesViewController.swift; sourceTree = "<group>"; };
 		D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
+		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		D6DADF682207D246007D9EB1 /* TCHMessage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHMessage+Extensions.swift"; sourceTree = "<group>"; };
 		D6DADF6B2207DCA8007D9EB1 /* ChannelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsViewController.swift; sourceTree = "<group>"; };
 		D6DADF6D2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionViewManager.swift; sourceTree = "<group>"; };
@@ -992,11 +994,12 @@
 			isa = PBXGroup;
 			children = (
 				D6405B6A236E0E7900FAA06B /* Connection.swift */,
+				D6347391241EAA840071E9DA /* Invitee.swift */,
+				D6D8BB6C24677B5D00937581 /* Reservation.swift */,
 				80D4A21B2303A005007CB5F1 /* Routine.swift */,
 				D6405B66236E002E00FAA06B /* User.swift */,
 				D609AE39236F44A8004FA89A /* User+Extensions.swift */,
 				D609AE35236F3F81004FA89A /* User+Objectable.swift */,
-				D6347391241EAA840071E9DA /* Invitee.swift */,
 			);
 			path = "Parse Subclasses";
 			sourceTree = "<group>";
@@ -1868,6 +1871,7 @@
 				D6FC809A237A68F50089AACC /* ChannelViewController+Updates.swift in Sources */,
 				D6D1461121D583D200CD8CE4 /* RootNavigationController.swift in Sources */,
 				D61EC0EC21D312B600204BEE /* UIView+Extensions.swift in Sources */,
+				D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */,
 				D6D1504021DAFB8300CD8CE4 /* UITextField+Extensions.swift in Sources */,
 				D67896CA23039E680059BA75 /* ScrolledModalControllerPresentable.swift in Sources */,
 				D60C814622092F6B00A127A3 /* Button.swift in Sources */,
