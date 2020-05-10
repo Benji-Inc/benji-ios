@@ -42,12 +42,21 @@ class ProfileCoordinator: Coordinator<Void> {
         self.router.present(vc, source: self.profileVC)
     }
 
-    private func presentInvites() {
-        let coordinator = InvitesCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { (result) in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {}
+    private func presentShare(for reservation: Reservation) {
+        //let items: [Any] = ["This beta will make you betta.", URL(string: "https://testflight.apple.com/join/w3CExYsD")!]
+        let items = [URL(string: "https://www.apple.com")!]
+        if let _ = reservation.metadata {
+            let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
+            self.router.navController.present(ac, animated: true)
+        } else {
+            reservation.prepareMetaData()
+                .observeValue { (_) in
+                    runMain {
+                        let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
+                        self.router.navController.present(ac, animated: true)
+                    }
+            }
         }
-        self.router.present(coordinator, source: self.profileVC)
     }
 }
 
@@ -62,7 +71,11 @@ extension ProfileCoordinator: ProfileViewControllerDelegate {
         case .picture:
             self.presentPhoto()
         case .invites:
-            self.presentInvites()
+            guard let query = Reservation.query() else { return }
+            query.getFirstObjectInBackground { (object, error) in
+                guard let reservation = object as? Reservation else { return }
+                self.presentShare(for: reservation)
+            }
         default:
             break 
         }

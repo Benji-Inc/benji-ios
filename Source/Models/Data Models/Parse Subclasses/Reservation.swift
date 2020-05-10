@@ -9,6 +9,7 @@
 import Foundation
 import Parse
 import TMROFutures
+import LinkPresentation
 
 enum ReservationKey: String {
     case user
@@ -67,18 +68,47 @@ extension Reservation: ManageableCellItem {
     }
 }
 
+private var reservationMetadataKey: UInt8 = 0
 extension Reservation: UIActivityItemSource {
-    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return ["This beta will make you betta.", URL(string: "https://testflight.apple.com/join/w3CExYsD")!]
 
+    private(set) var metadata: LPLinkMetadata? {
+        get {
+            return self.getAssociatedObject(&reservationMetadataKey)
+        }
+        set {
+            self.setAssociatedObject(key: &reservationMetadataKey, value: newValue)
+        }
+    }
+
+    func prepareMetaData() -> Future<Void> {
+        let promise = Promise<Void>()
+        let metadataProvider = LPMetadataProvider()
+        if let url = URL(string: "https://testflight.apple.com/join/w3CExYsD") {
+            metadataProvider.startFetchingMetadata(for: url) { (metadata, error) in
+                if let e = error {
+                    promise.reject(with: e)
+                } else {
+                    self.metadata = metadata
+                    promise.resolve(with: ())
+                }
+            }
+        } else {
+            promise.reject(with: ClientError.generic)
+        }
+
+        return promise
+    }
+
+    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+        return URL(string: "https://testflight.apple.com/join/w3CExYsD")!
     }
 
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-        return ""
+        return "Claim your reservation by entering: \(self.code) after tapping on this link: https://testflight.apple.com/join/w3CExYsD"
     }
 
-    func activityViewController(_ activityViewController: UIActivityViewController, subjectForActivityType activityType: UIActivity.ActivityType?) -> String {
-        return "Code: \(self.code)"
+    func activityViewControllerLinkMetadata(_: UIActivityViewController) -> LPLinkMetadata? {
+        return self.metadata
     }
 }
 
