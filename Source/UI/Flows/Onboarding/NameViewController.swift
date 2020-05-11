@@ -44,11 +44,11 @@ class NameViewController: TextInputViewController<Void> {
         }
 
         let tf = self.textField as? TextField
-        tf?.activityIndicator.startAnimating()
+        tf?.animationView.play()
         User.current()?.formatName(from: text)
         User.current()?.saveLocalThenServer()
             .observe { (result) in
-                tf?.activityIndicator.stopAnimating()
+                tf?.animationView.stop()
                 self.complete(with: .success(()))
         }
     }

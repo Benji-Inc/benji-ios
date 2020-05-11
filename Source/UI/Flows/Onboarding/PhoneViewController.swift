@@ -15,7 +15,7 @@ import TMROFutures
 class PhoneViewController: TextInputViewController<PhoneNumber> {
 
     init() {
-        let phoneField = PhoneTextField()
+        let phoneField = PhoneTextField(frame: .zero)
         phoneField.withFlag = true
         phoneField.withDefaultPickerUI = true
         phoneField.withExamplePlaceholder = true
@@ -66,12 +66,16 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     private func sendCode(to phone: PhoneNumber, region: String) {
         guard let installationId = UserNotificationManager.shared.installationId else { return }
 
+        let tf = self.textField as? PhoneTextField
+        tf?.animationView.play()
         SendCode(phoneNumber: phone,
                  region: region,
-                 installationId: installationId)
+                 installationId: installationId,
+                 code: "reservationCode")
             .makeRequest()
             .withResultToast()
             .observe(with: { (result) in
+                tf?.animationView.stop()
                 switch result {
                 case .success:
                     self.complete(with: .success(phone))

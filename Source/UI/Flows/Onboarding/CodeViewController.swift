@@ -41,7 +41,7 @@ class CodeViewController: TextInputViewController<Void> {
         self.verifying = true
 
         let tf = self.textField as? TextField
-        tf?.activityIndicator.startAnimating()
+        tf?.animationView.play()
         
         VerifyCode(code: code, phoneNumber: phoneNumber, installationId: installationId)
             .makeRequest()
@@ -53,7 +53,7 @@ class CodeViewController: TextInputViewController<Void> {
                     break
                 }
 
-                tf?.activityIndicator.stopAnimating()
+                tf?.animationView.stop()
                 self.textField.resignFirstResponder()
         }
     }

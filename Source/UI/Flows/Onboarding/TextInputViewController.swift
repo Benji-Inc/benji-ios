@@ -15,7 +15,7 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
     var onDidComplete: ((Result<ResultType, Error>) -> Void)?
 
     var textField: UITextField {
-        return textEntry.textField
+        return self.textEntry.textField
     }
 
     lazy var textInputAccessory = TextInputAccessoryView()

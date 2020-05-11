@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import Lottie
 
 class TextField: UITextField {
 
-    let activityIndicator = UIActivityIndicatorView(style: .medium)
+    let animationView = AnimationView(name: "loading")
     var padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
     override var text: String? {
@@ -50,7 +51,9 @@ class TextField: UITextField {
                        action: #selector(handleEditingEnded),
                        for: [.editingDidEnd, .editingDidEndOnExit])
 
-        self.addSubview(self.activityIndicator)
+        self.addSubview(self.animationView)
+        self.animationView.contentMode = .scaleAspectFit
+        self.animationView.loopMode = .loop
     }
 
     @objc private func handleTextChanged() {
@@ -70,8 +73,9 @@ class TextField: UITextField {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.activityIndicator.right = self.width - self.padding.right 
-        self.activityIndicator.centerOnY()
+        self.animationView.size = CGSize(width: 18, height: 18)
+        self.animationView.pin(.right, padding: self.padding.right)
+        self.animationView.centerOnY()
     }
 
     override func textRect(forBounds bounds: CGRect) -> CGRect {

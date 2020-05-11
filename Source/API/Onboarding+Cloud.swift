@@ -16,11 +16,13 @@ struct SendCode: CloudFunction {
     let phoneNumber: PhoneNumber
     let region: String
     let installationId: String
+    let code: String
 
     func makeRequest() -> Future<Void> {
         let promise = Promise<Void>()
         let params = ["phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164),
                       "installationId": self.installationId,
+                      "code": self.code,
                       "region": self.region]
         PFCloud.callFunction(inBackground: "sendCode",
                              withParameters: params) { (object, error) in
