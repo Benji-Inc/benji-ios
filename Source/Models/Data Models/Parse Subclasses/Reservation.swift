@@ -15,19 +15,15 @@ import Branch
 enum ReservationKey: String {
     case user
     case createdBy
-    case code
     case position
     case isClaimed
+    case reservationId
 }
 
 final class Reservation: PFObject, PFSubclassing {
 
     static func parseClassName() -> String {
         return String(describing: self)
-    }
-
-    var code: String {
-        return self.getObject(for: .code) ?? "123456"
     }
 
     var isClaimed: Bool {
@@ -161,7 +157,7 @@ extension Reservation: UIActivityItemSource {
         buo.title = "Join the Benji beta"
         buo.contentDescription = "Available on iOS"
         buo.imageUrl = "https://is5-ssl.mzstatic.com/image/thumb/Purple123/v4/51/ca/70/51ca7064-0f75-9e7c-dfc3-1d3afaf9eaa3/AppIcon-0-1x_U007emarketing-0-7-0-85-220.png/1920x1080bb-80.png"
-        buo.contentMetadata.customMetadata[ReservationKey.code.rawValue] = self.code
+        buo.contentMetadata.customMetadata[ReservationKey.reservationId.rawValue] = self.id
 
         return buo
     }

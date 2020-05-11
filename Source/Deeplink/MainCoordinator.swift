@@ -91,13 +91,31 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func runOnboardingFlow() {
-        let coordinator = OnboardingCoordinator(router: self.router, deepLink: self.deepLink)
-        self.router.setRootModule(coordinator, animated: true)
-        self.addChildAndStart(coordinator, finishedHandler: { (_) in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
-                self.runLaunchFlow()
+
+        func presentOnboarding(with reservation: Reservation?) {
+            let coordinator = OnboardingCoordinator(reservation: reservation, router: self.router, deepLink: self.deepLink)
+            self.router.setRootModule(coordinator, animated: true)
+            self.addChildAndStart(coordinator, finishedHandler: { (_) in
+                self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+                    self.runLaunchFlow()
+                }
+            })
+        }
+
+        if let reservationId = self.deepLink?.reservationId {
+            Reservation.localThenNetworkQuery(for: reservationId)
+                .observe { (result) in
+                    switch result {
+                    case .success(let reservation):
+                        presentOnboarding(with: reservation)
+                    case .failure(let error):
+                        print(error)
+                    }
             }
-        })
+
+        } else {
+            presentOnboarding(with: nil)
+        }
     }
 
     private func handle(deeplink: DeepLinkable) {

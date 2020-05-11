@@ -14,7 +14,10 @@ import TMROFutures
 
 class PhoneViewController: TextInputViewController<PhoneNumber> {
 
-    init() {
+    private let reservation: Reservation?
+
+    init(with reservation: Reservation?) {
+        self.reservation = reservation
         let phoneField = PhoneTextField(frame: .zero)
         phoneField.withFlag = true
         phoneField.withDefaultPickerUI = true
@@ -71,7 +74,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         SendCode(phoneNumber: phone,
                  region: region,
                  installationId: installationId,
-                 code: "reservationCode")
+                 reservationId: self.reservation?.id)
             .makeRequest()
             .withResultToast()
             .observe(with: { (result) in

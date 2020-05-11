@@ -12,6 +12,7 @@ protocol DeepLinkable {
     var customMetadata: NSMutableDictionary { get set }
     var deepLinkTarget: DeepLinkTarget? { get set }
     var channelId: String? { get set }
+    var reservationId: String? { get set }
 }
 
 extension DeepLinkable {
@@ -37,12 +38,12 @@ extension DeepLinkable {
         }
     }
 
-    var code: String? {
+    var reservationId: String? {
         get {
-            return self.customMetadata.value(forKey: "code") as? String
+            return self.customMetadata.value(forKey: ReservationKey.reservationId.rawValue) as? String
         }
         set {
-            self.customMetadata.setValue(newValue, forKey: "code")
+            self.customMetadata.setValue(newValue, forKey: ReservationKey.reservationId.rawValue)
         }
     }
 }
