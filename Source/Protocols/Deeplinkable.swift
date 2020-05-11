@@ -13,6 +13,7 @@ protocol DeepLinkable {
     var deepLinkTarget: DeepLinkTarget? { get set }
     var channelId: String? { get set }
     var reservationId: String? { get set }
+    var reservationCreatorId: String? { get set }
 }
 
 extension DeepLinkable {
@@ -44,6 +45,15 @@ extension DeepLinkable {
         }
         set {
             self.customMetadata.setValue(newValue, forKey: ReservationKey.reservationId.rawValue)
+        }
+    }
+
+    var reservationCreatorId: String? {
+        get {
+            return self.customMetadata.value(forKey: ReservationKey.createdBy.rawValue) as? String
+        }
+        set {
+            self.customMetadata.setValue(newValue, forKey: ReservationKey.createdBy.rawValue)
         }
     }
 }

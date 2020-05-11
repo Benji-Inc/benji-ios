@@ -12,14 +12,20 @@ import Parse
 
 class OnboardingCoordinator: PresentableCoordinator<Void> {
 
-    lazy var onboardingVC = OnboardingViewController(with: self.reservation, deeplink: self.deepLink, delegate: self)
-    let reservation: Reservation?
+    lazy var onboardingVC = OnboardingViewController(with: self.reservationId,
+                                                     reservationCreatorId: self.reservationCreatorId,
+                                                     deeplink: self.deepLink,
+                                                     delegate: self)
+    let reservationId: String?
+    let reservationCreatorId: String?
 
-    init(reservation: Reservation?,
+    init(reservationId: String?,
+         reservationCreatorId: String?,
          router: Router,
          deepLink: DeepLinkable?) {
 
-        self.reservation = reservation
+        self.reservationId = reservationId
+        self.reservationCreatorId = reservationCreatorId
 
         super.init(router: router, deepLink: deepLink)
     }

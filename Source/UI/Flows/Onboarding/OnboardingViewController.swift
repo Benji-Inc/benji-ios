@@ -18,7 +18,7 @@ protocol OnboardingViewControllerDelegate: class {
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent> {
 
-    lazy var phoneVC = PhoneViewController(with: self.reservation)
+    lazy var phoneVC = PhoneViewController(with: self.reservationId, reservationCreatorId: self.reservationCreatorId)
     lazy var codeVC = CodeViewController()
     lazy var nameVC = NameViewController()
     lazy var photoVC = PhotoViewController()
@@ -26,14 +26,17 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     unowned let delegate: OnboardingViewControllerDelegate
 
     let deeplink: DeepLinkable?
-    let reservation: Reservation?
+    let reservationId: String?
+    let reservationCreatorId: String?
 
-    init(with reservation: Reservation?,
+    init(with reservationId: String?,
+         reservationCreatorId: String?,
          deeplink: DeepLinkable?,
          delegate: OnboardingViewControllerDelegate) {
 
         self.deeplink = deeplink
-        self.reservation = reservation
+        self.reservationId = reservationId
+        self.reservationCreatorId = reservationCreatorId
         self.delegate = delegate
         super.init()
     }
