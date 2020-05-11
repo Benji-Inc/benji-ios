@@ -8,11 +8,20 @@
 
 import Foundation
 import Lottie
+import TMROLocalization
 
 class SplashViewController: FullScreenViewController {
 
     let animationView = AnimationView(name: "loading")
     let label = SmallLabel()
+
+    var text: Localized? {
+        didSet {
+            guard let text = self.text else { return }
+            self.label.set(text: text, color: .background4)
+            self.view.layoutNow()
+        }
+    }
     
     override func initializeViews() {
         super.initializeViews()
@@ -24,7 +33,9 @@ class SplashViewController: FullScreenViewController {
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
 
-        self.label.set(text: "Loading", color: .background4)
+        LaunchManager.shared.statusUpdate.signal.observeValues { (update) in
+            self.text = update
+        }
     }
 
     override func viewDidLayoutSubviews() {
