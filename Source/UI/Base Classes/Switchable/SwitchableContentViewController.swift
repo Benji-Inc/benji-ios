@@ -34,7 +34,7 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        let yOffset = self.lineView.bottom
+        let yOffset = self.lineView.bottom 
         var vcHeight = self.currentContent.value.viewController.getHeight(for: self.scrollView.width)
         if vcHeight <= .zero {
             vcHeight = self.scrollView.height - self.lineView.bottom - self.view.safeAreaInsets.top - self.view.safeAreaInsets.bottom

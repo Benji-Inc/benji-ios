@@ -38,7 +38,6 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.set(backgroundColor: .background1)
         self.view.addSubview(self.textEntry)
 
         self.textEntry.textField.keyboardType = .numberPad

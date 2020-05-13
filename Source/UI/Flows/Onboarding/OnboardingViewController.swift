@@ -22,12 +22,19 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var codeVC = CodeViewController(with: self.reservationId)
     lazy var nameVC = NameViewController()
     lazy var photoVC = PhotoViewController()
+    let avatarView = AvatarView()
     
     unowned let delegate: OnboardingViewControllerDelegate
 
     var deeplink: DeepLinkable?
     var reservationId: String?
-    var reservationCreatorId: String?
+    var reservationUser: User? 
+    var reservationCreatorId: String? {
+        didSet {
+            guard let userId = self.reservationCreatorId else { return }
+            self.updateReservationCreator(with: userId)
+        }
+    }
 
     init(with reservationId: String?,
          reservationCreatorId: String?,
@@ -51,6 +58,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
          self.registerKeyboardEvents()
 
         self.blurView.effect = nil
+        self.scrollView.addSubview(self.avatarView)
 
         self.phoneVC.onDidComplete = { [unowned self] result in
             switch result {
@@ -93,6 +101,29 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             case .failure(let error):
                 print(error)
             }
+        }
+
+        if let userId = self.reservationCreatorId {
+            self.updateReservationCreator(with: userId)
+        }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.avatarView.setSize(for: 100)
+        self.avatarView.centerOnX()
+        self.avatarView.top = self.lineView.bottom + 20
+    }
+
+    func updateReservationCreator(with userId: String) {
+        User.localThenNetworkQuery(for: userId)
+            .observeValue { (user) in
+                runMain {
+                    self.reservationUser = user
+                    self.avatarView.set(avatar: user)
+                    self.updateNavigationBar()
+                }
         }
     }
 
@@ -138,16 +169,41 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         }
     }
 
+    override func willUpdateContent() {
+        super.willUpdateContent()
+
+        switch self.currentContent.value {
+        case .phone(_), .code(_):
+            self.avatarView.isHidden = false
+        default:
+            self.avatarView.isHidden = true 
+        }
+    }
+
     override func getDescription() -> Localized {
         switch self.currentContent.value {
         case .phone(_):
-            return LocalizedString(id: "",
-                                   arguments: [],
-                                   default: "ResevationId: \(String(optional: self.reservationId)), Creator: \(String(optional: self.reservationCreatorId))")//"Please verify your account using the mobile number for this device.")
+            if let user = self.reservationUser {
+                return LocalizedString(id: "",
+                                       arguments: [user.givenName],
+                                       default: "Please verify your mobile number, to accept @(fullname)'s reservation.")
+            } else {
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "Please verify your account using the mobile number for this device.")
+            }
+
         case .code(_):
-            return LocalizedString(id: "",
-                                   arguments: [],
-                                   default: "Enter the 4 digit code from the text message.")
+            if let user = self.reservationUser {
+                return LocalizedString(id: "",
+                                       arguments: [user.givenName],
+                                       default: "Enter the 4 digit code from the text message, to accept your reservation from @(name).")
+            } else {
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "Enter the 4 digit code from the text message.")
+            }
+
         case .name(_):
             return LocalizedString(id: "",
                                    arguments: [],
