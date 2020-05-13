@@ -33,6 +33,13 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
     override func toPresentable() -> DismissableVC {
         return self.onboardingVC
     }
+
+    func handle(deeplink: DeepLinkable) {
+        self.onboardingVC.deeplink = deeplink
+        self.onboardingVC.reservationId = deeplink.reservationId
+        self.onboardingVC.reservationCreatorId = deeplink.reservationCreatorId
+        self.onboardingVC.updateNavigationBar()
+    }
 }
 
 extension OnboardingCoordinator: OnboardingViewControllerDelegate {

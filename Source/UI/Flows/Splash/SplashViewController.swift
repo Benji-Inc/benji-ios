@@ -15,6 +15,8 @@ class SplashViewController: FullScreenViewController {
     let animationView = AnimationView(name: "loading")
     let label = SmallLabel()
 
+    private let messages = ["Booting up", "Getting coffee", "Connecting", "Saving a tree", "Finding purpose", "Doing math"]
+
     var text: Localized? {
         didSet {
             guard let text = self.text else { return }
@@ -33,9 +35,7 @@ class SplashViewController: FullScreenViewController {
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
 
-        LaunchManager.shared.statusUpdate.signal.observeValues { (update) in
-            self.text = update
-        }
+        self.text = self.messages.random()
     }
 
     override func viewDidLayoutSubviews() {
@@ -43,7 +43,7 @@ class SplashViewController: FullScreenViewController {
 
         self.animationView.size = CGSize(width: 18, height: 18)
         self.animationView.pin(.right, padding: Theme.contentOffset)
-        self.animationView.pinToSafeArea(.bottom, padding: 0)
+        self.animationView.pinToSafeArea(.bottom, padding: 5)
 
         let max = self.view.width - (Theme.contentOffset * 3) - self.animationView.width
         self.label.setSize(withWidth: max)

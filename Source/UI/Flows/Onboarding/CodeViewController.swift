@@ -17,8 +17,9 @@ import Branch
 class CodeViewController: TextInputViewController<Void> {
 
     var phoneNumber: PhoneNumber?
-
-    init() {
+    let reservationId: String?
+    init(with reservationId: String?) {
+        self.reservationId = reservationId
         super.init(textField: TextField(),
                    title: LocalizedString(id: "", default: "CODE"),
                    placeholder: LocalizedString(id: "", default: "0000"))
@@ -43,7 +44,10 @@ class CodeViewController: TextInputViewController<Void> {
         let tf = self.textField as? TextField
         tf?.animationView.play()
         
-        VerifyCode(code: code, phoneNumber: phoneNumber, installationId: installationId)
+        VerifyCode(code: code,
+                   phoneNumber: phoneNumber,
+                   installationId: installationId,
+                   reservationId: String(optional: self.reservationId))
             .makeRequest()
             .observeValue { (result) in
                 switch result {

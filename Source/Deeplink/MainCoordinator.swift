@@ -16,6 +16,8 @@ class MainCoordinator: Coordinator<Void> {
 
     var isInitializingChat: Bool = false
 
+    private lazy var splashVC = SplashViewController()
+
     override func start() {
         super.start()
 
@@ -24,21 +26,17 @@ class MainCoordinator: Coordinator<Void> {
         }
 
         UserNotificationManager.shared.delegate = self
+        LaunchManager.shared.delegate = self
+
         self.runLaunchFlow()
     }
 
     private func runLaunchFlow() {
-        let launchCoordinator = LaunchCoordinator(with: self.launchOptions,
-                                                  router: self.router,
-                                                  deepLink: self.deepLink)
-
-        self.router.setRootModule(launchCoordinator, animated: true)
-        self.addChildAndStart(launchCoordinator, finishedHandler: { (result) in
-            self.handle(result: result)
-        })
+        LaunchManager.shared.launchApp(with: self.launchOptions)
+        self.router.setRootModule(self.splashVC, animated: true)
     }
 
-    private func handle(result: LaunchStatus) {
+    func handle(result: LaunchStatus) {
 
         switch result {
         case .isLaunching:
@@ -91,21 +89,25 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func runOnboardingFlow() {
-
-        let coordinator = OnboardingCoordinator(reservationId: self.deepLink?.reservationId,
-                                                reservationCreatorId: self.deepLink?.reservationCreatorId,
-                                                router: self.router,
-                                                deepLink: self.deepLink)
-        self.router.setRootModule(coordinator, animated: true)
-        self.addChildAndStart(coordinator, finishedHandler: { (_) in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
-                self.runLaunchFlow()
-            }
-        })
+        if let onboardingCoordinator = self.childCoordinator as? OnboardingCoordinator, let deepLink = self.deepLink {
+            onboardingCoordinator.handle(deeplink: deepLink)
+        } else {
+            let coordinator = OnboardingCoordinator(reservationId: self.deepLink?.reservationId,
+                                                    reservationCreatorId: self.deepLink?.reservationCreatorId,
+                                                    router: self.router,
+                                                    deepLink: self.deepLink)
+            self.router.setRootModule(coordinator, animated: true)
+            self.addChildAndStart(coordinator, finishedHandler: { (_) in
+                self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+                    self.runHomeFlow()
+                }
+            })
+        }
     }
 
     private func handle(deeplink: DeepLinkable) {
-        guard let target = deeplink.deepLinkTarget else { return }
+        guard let string = deeplink.customMetadata["target"] as? String,
+            let target = DeepLinkTarget(rawValue: string)  else { return }
 
         switch target {
         case .home, .channel, .channels, .routine, .profile, .feed:
@@ -113,7 +115,11 @@ class MainCoordinator: Coordinator<Void> {
                 self.runHomeFlow()
             }
         case .login:
-            break
+            if let user = User.current(), user.isAuthenticated {
+                self.runHomeFlow()
+            } else {
+                self.runOnboardingFlow()
+            }
         }
     }
 
@@ -142,6 +148,12 @@ extension MainCoordinator: UserNotificationManagerDelegate {
     func userNotificationManager(willHandle deeplink: DeepLinkable) {
         self.deepLink = deeplink
         self.handle(deeplink: deeplink)
+    }
+}
+
+extension MainCoordinator: LaunchManagerDelegate {
+    func launchManager(_ manager: LaunchManager, didFinishWith status: LaunchStatus) {
+        self.handle(result: status)
     }
 }
 

@@ -44,11 +44,7 @@ class LaunchManager {
     /// False if a branch session has already been started.
     private var shouldInitializeBranchSession = true
 
-    var statusUpdate = MutableProperty<String?>(nil)
-
     func launchApp(with options: [UIApplication.LaunchOptionsKey: Any]?) {
-
-        self.statusUpdate.value = "Launching"
 
         if !Parse.isLocalDatastoreEnabled {
             Parse.enableLocalDatastore()
@@ -82,7 +78,6 @@ class LaunchManager {
 
     private func initializeBranchIfNeeded(with launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Future<BranchUniversalObject?> {
 
-        self.statusUpdate.value = "Checking for links"
         let promise = Promise<BranchUniversalObject?>()
 
         // There's no need to initialize the branch session multiple times per app session.
@@ -137,7 +132,6 @@ class LaunchManager {
 
     func getChatToken(with identity: String, buo: BranchUniversalObject?) {
 
-        self.statusUpdate.value = "Powering up"
         // Fetch Access Token from the server and initialize Chat Client - this assumes you are running
         // the PHP starter app on your local machine, as instructed in the quick start guide
         let deviceId = UIDevice.current.identifierForVendor!.uuidString

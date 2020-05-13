@@ -19,15 +19,15 @@ protocol OnboardingViewControllerDelegate: class {
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent> {
 
     lazy var phoneVC = PhoneViewController(with: self.reservationId, reservationCreatorId: self.reservationCreatorId)
-    lazy var codeVC = CodeViewController()
+    lazy var codeVC = CodeViewController(with: self.reservationId)
     lazy var nameVC = NameViewController()
     lazy var photoVC = PhotoViewController()
     
     unowned let delegate: OnboardingViewControllerDelegate
 
-    let deeplink: DeepLinkable?
-    let reservationId: String?
-    let reservationCreatorId: String?
+    var deeplink: DeepLinkable?
+    var reservationId: String?
+    var reservationCreatorId: String?
 
     init(with reservationId: String?,
          reservationCreatorId: String?,
@@ -143,7 +143,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         case .phone(_):
             return LocalizedString(id: "",
                                    arguments: [],
-                                   default: "Please verify your account using the mobile number for this device.")
+                                   default: "ResevationId: \(String(optional: self.reservationId)), Creator: \(String(optional: self.reservationCreatorId))")//"Please verify your account using the mobile number for this device.")
         case .code(_):
             return LocalizedString(id: "",
                                    arguments: [],
