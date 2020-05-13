@@ -174,9 +174,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         switch self.currentContent.value {
         case .phone(_), .code(_):
-            self.avatarView.isHidden = false
+            if !self.reservationUser.isNil {
+                self.avatarView.isHidden = false
+            } else {
+                self.avatarView.isHidden = true 
+            }
         default:
-            self.avatarView.isHidden = true 
+            self.avatarView.isHidden = true
         }
     }
 
