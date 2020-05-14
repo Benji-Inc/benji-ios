@@ -115,6 +115,8 @@ class MainCoordinator: Coordinator<Void> {
                 self.runHomeFlow()
             }
         case .login:
+            break
+        case .reservation:
             if let user = User.current(), user.isAuthenticated {
                 self.runHomeFlow()
             } else {

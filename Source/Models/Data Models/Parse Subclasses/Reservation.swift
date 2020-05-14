@@ -159,6 +159,7 @@ extension Reservation: UIActivityItemSource {
         buo.imageUrl = "https://is5-ssl.mzstatic.com/image/thumb/Purple123/v4/51/ca/70/51ca7064-0f75-9e7c-dfc3-1d3afaf9eaa3/AppIcon-0-1x_U007emarketing-0-7-0-85-220.png/1920x1080bb-80.png"
         buo.contentMetadata.customMetadata[ReservationKey.reservationId.rawValue] = self.id
         buo.contentMetadata.customMetadata[ReservationKey.createdBy.rawValue] = self.createdBy?.id
+        buo.contentMetadata.customMetadata["target"] = DeepLinkTarget.reservation.rawValue
 
         return buo
     }

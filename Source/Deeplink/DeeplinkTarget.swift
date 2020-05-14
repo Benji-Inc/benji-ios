@@ -16,7 +16,8 @@ enum DeepLinkTarget : String, CaseIterable, Diffable {
     case channels
     case routine
     case profile
-    case feed 
+    case feed
+    case reservation
 
     func diffIdentifier() -> NSObjectProtocol {
         return self.rawValue as NSObjectProtocol

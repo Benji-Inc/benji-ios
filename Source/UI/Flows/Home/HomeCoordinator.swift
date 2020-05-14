@@ -61,6 +61,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         guard let target = deeplink.deepLinkTarget else { return }
 
         switch target {
+        case .reservation:
+            break // show a reservation alert. 
         case .home:
             break
         case .login:
