@@ -34,6 +34,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private let animationView = AnimationView(name: "face_scan")
     private let avatarView = AvatarView()
+    private let borderView = View()
 
     private let beginButton = Button()
     private let confirmButton = LoadingButton()
@@ -52,6 +53,11 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animationView.loopMode = .loop
 
         self.view.set(backgroundColor: .background1)
+        self.view.addSubview(self.borderView)
+        self.borderView.roundCorners()
+        self.borderView.layer.borderColor = Color.purple.color.cgColor
+        self.borderView.layer.borderWidth = 3
+        self.borderView.set(backgroundColor: .clear)
 
         self.view.addSubview(self.animationView)
         self.animationView.alpha = 0
@@ -133,6 +139,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.avatarView.centerOnX()
         self.avatarView.roundCorners()
 
+        let borderHeight = self.view.height * 0.8
+        self.borderView.size = CGSize(width: borderHeight * 0.74, height: borderHeight)
+        self.borderView.centerOnXAndY()
 
         let rect = self.buttonContainerRect ?? CGRect(x: Theme.contentOffset,
                                                       y: self.view.bottom,

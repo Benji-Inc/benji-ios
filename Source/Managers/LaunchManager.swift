@@ -131,20 +131,16 @@ class LaunchManager {
     }
 
     func getChatToken(with identity: String, buo: BranchUniversalObject?) {
-
-        // Fetch Access Token from the server and initialize Chat Client - this assumes you are running
-        // the PHP starter app on your local machine, as instructed in the quick start guide
-        let deviceId = UIDevice.current.identifierForVendor!.uuidString
-        let urlString = "\(self.tokenURL)?identity=\(identity)&device=\(deviceId)"
-
-        TokenUtils.retrieveToken(url: urlString) { [unowned self] (token, identity, error) in
-            if let tkn = token {
-                // Set up Twilio Chat client
-                self.finishedInitialFetch = true
-                self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: tkn))
-            } else {
-                self.delegate?.launchManager(self, didFinishWith: .failed(error: ClientError.apiError(detail: error.debugDescription)))
-            }
+        GetChatToken()
+            .makeRequest()
+            .observe { (result) in
+                switch result {
+                case .success(let token):
+                    self.finishedInitialFetch = true
+                    self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: token))
+                case .failure(_):
+                    self.delegate?.launchManager(self, didFinishWith: .failed(error: ClientError.generic))
+                }
         }
     }
 
@@ -157,31 +153,5 @@ class LaunchManager {
 
     func continueUser(activity: NSUserActivity) -> Bool {
         return Branch.getInstance().continue(activity)
-    }
-}
-
-fileprivate struct TokenUtils {
-
-    static func retrieveToken(url: String, completion: @escaping (String?, String?, Error?) -> Void) {
-        if let requestURL = URL(string: url) {
-            let session = URLSession(configuration: URLSessionConfiguration.default)
-            let task = session.dataTask(with: requestURL, completionHandler: { (data, response, error) in
-                if let data = data {
-                    do {
-                        let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String:String]
-                        let token = json["token"]
-                        let identity = json["identity"]
-                        completion(token, identity, error)
-                    }
-                    catch let error as NSError {
-                        completion(nil, nil, error)
-                    }
-
-                } else {
-                    completion(nil, nil, error)
-                }
-            })
-            task.resume()
-        }
     }
 }
