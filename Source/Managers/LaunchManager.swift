@@ -137,7 +137,7 @@ class LaunchManager {
         let deviceId = UIDevice.current.identifierForVendor!.uuidString
         let urlString = "\(self.tokenURL)?identity=\(identity)&device=\(deviceId)"
 
-        TokenUtils.retrieveToken(url: urlString) { (token, identity, error) in
+        TokenUtils.retrieveToken(url: urlString) { [unowned self] (token, identity, error) in
             if let tkn = token {
                 // Set up Twilio Chat client
                 self.finishedInitialFetch = true
