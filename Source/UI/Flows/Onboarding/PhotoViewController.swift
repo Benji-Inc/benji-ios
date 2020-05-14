@@ -56,8 +56,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.view.addSubview(self.borderView)
         self.borderView.roundCorners()
         self.borderView.layer.borderColor = Color.purple.color.cgColor
-        self.borderView.layer.borderWidth = 3
+        self.borderView.layer.borderWidth = 4
         self.borderView.set(backgroundColor: .clear)
+        self.borderView.alpha = 0
 
         self.view.addSubview(self.animationView)
         self.animationView.alpha = 0
@@ -131,17 +132,13 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animationView.centerY = self.view.halfHeight * 0.8
         self.animationView.centerOnX()
 
-        self.cameraVC.view.expandToSuperviewSize()
-
-        let height = self.view.height * 0.6
-        self.avatarView.setSize(for: height)
-        self.avatarView.top = 30
-        self.avatarView.centerOnX()
-        self.avatarView.roundCorners()
-
-        let borderHeight = self.view.height * 0.8
+        let borderHeight = self.view.height * 0.7
         self.borderView.size = CGSize(width: borderHeight * 0.74, height: borderHeight)
-        self.borderView.centerOnXAndY()
+        self.borderView.centerOnX()
+        self.borderView.top = 30
+
+        self.cameraVC.view.expandToSuperviewSize()
+        self.avatarView.frame = self.borderView.frame
 
         let rect = self.buttonContainerRect ?? CGRect(x: Theme.contentOffset,
                                                       y: self.view.bottom,
@@ -200,6 +197,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             //Hide animation view
             UIView.animate(withDuration: 0.2, animations: {
                 self.animationView.alpha = 0
+                self.borderView.alpha = 1
                 self.beginButton.set(style: .normal(color: .blue, text: "Capture"))
             }) { (completed) in
                 // Begin capture
@@ -277,6 +275,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                         self.avatarView.transform = .identity
                         self.avatarView.alpha = 1
                         self.cameraVC.view.alpha = 0
+                        self.borderView.alpha = 0
                         self.view.setNeedsLayout()
         }) { (completed) in }
     }
