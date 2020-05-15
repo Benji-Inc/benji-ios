@@ -30,14 +30,7 @@ class ChannelCollectionView: CollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func animateEmptyView(shouldShow: Bool) {
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.backgroundView?.alpha = shouldShow ? 1 : 0
-        }
-    }
-
     private func registerReusableViews() {
-        self.activityIndicator.isHidden = true 
         self.register(MessageCell.self)
         self.register(TypingIndicatorCell.self)
         self.register(ChannelSectionHeader.self,

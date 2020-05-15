@@ -95,7 +95,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
             guard let activeChannel = channel else {
-                self.collectionView.activityIndicator.startAnimating()
                 self.collectionViewManager.reset()
                 return
             }

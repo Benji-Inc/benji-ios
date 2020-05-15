@@ -10,7 +10,6 @@ import Foundation
 
 class CollectionView: UICollectionView {
 
-    let activityIndicator = UIActivityIndicatorView(style: .large)
 
     init(layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: layout)
@@ -23,13 +22,11 @@ class CollectionView: UICollectionView {
     }
 
     func initializeViews() {
-        self.addSubview(self.activityIndicator)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.activityIndicator.centerOnXAndY()
     }
 
     func scrollToEnd(animated: Bool = true, completion: CompletionOptional = nil) {
