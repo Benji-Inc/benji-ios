@@ -76,8 +76,10 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func runHomeFlow() {
-        if let homeCoordinator = self.childCoordinator as? HomeCoordinator, let deepLink = self.deepLink {
-            homeCoordinator.handle(deeplink: deepLink)
+        if let homeCoordinator = self.childCoordinator as? HomeCoordinator {
+            if let deepLink = self.deepLink {
+                homeCoordinator.handle(deeplink: deepLink)
+            }
         } else {
             self.removeChild()
             let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
