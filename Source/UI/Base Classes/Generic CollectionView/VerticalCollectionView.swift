@@ -13,6 +13,7 @@ class VerticalCollectionView: CollectionView {
     init() {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
+        flowLayout.minimumLineSpacing = 0 
         super.init(layout: flowLayout)
     }
     

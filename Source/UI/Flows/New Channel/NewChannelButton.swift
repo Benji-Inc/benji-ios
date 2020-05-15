@@ -21,9 +21,9 @@ class NewChannelButton: LoadingButton {
         }) { (completed) in
             switch contentType {
             case .purpose(_):
-                self.set(style: .normal(color: .purple, text: "Add People"))
+                self.set(style: .normal(color: .purple, text: "CREATE"))
             case .favorites(_):
-                self.set(style: .normal(color: .purple, text: "Begin"))
+                self.set(style: .normal(color: .purple, text: "CREATE"))
             }
 
             self.layoutNow()

@@ -32,9 +32,9 @@ enum NewChannelContent: Switchable {
     var shouldShowBackButton: Bool {
         switch self {
         case .purpose(_):
-            return false
-        case .favorites(_):
             return true
+        case .favorites(_):
+            return false
         }
     }
 }
@@ -64,7 +64,6 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
     override func initializeViews() {
         super.initializeViews()
 
-        self.button.isEnabled = false 
         self.view.addSubview(self.button)
         self.button.didSelect = { [unowned self] in
             self.buttonTapped()
@@ -107,10 +106,6 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
 
             self.purposeVC.textField.updateColor(for: selectedItem.item)
         }
-
-        self.purposeVC.textFieldTextDidChange = { [unowned self] text in
-            self.button.isEnabled = !text.isEmpty
-        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -132,17 +127,15 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
     }
 
     override func getInitialContent() -> NewChannelContent {
-        return .purpose(self.purposeVC)
+        return .favorites(self.favoritesVC)
     }
 
     override func getTitle() -> Localized {
         switch self.currentContent.value {
         case .purpose(_):
-            return "NEW CONVERSATION"
+            return "ADD CONTEXT"
         case .favorites(_):
-            return LocalizedString(id: "",
-                                   arguments: [self.purposeVC.textField.text!],
-                                   default: "ADD PEOPLE TO:\n@(foo)")
+            return LocalizedString(id: "", default: "ADD PEOPLE")
         }
     }
 
@@ -156,7 +149,7 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
     }
 
     override func didSelectBackButton() {
-        self.currentContent.value = .purpose(self.purposeVC)
+        self.currentContent.value = .favorites(self.favoritesVC)
     }
 
     override func willUpdateContent() {
@@ -166,22 +159,19 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
 
     func buttonTapped() {
 
-        switch self.currentContent.value {
-        case .purpose(_):
-            self.currentContent.value = .favorites(self.favoritesVC)
-        case .favorites(_):
-            guard let friendlyName = self.purposeVC.textField.text else { return }
-
-            let members = self.favoritesVC.collectionViewManager.selectedItems.compactMap { (orbItem) -> String? in
-                return orbItem.nonMeUser?.objectId!
-            }
-
-            guard let context = self.purposeVC.contextVC.collectionViewManager.onSelectedItem.value?.item else { return }
-
-            ChannelSupplier.shared.createChannel(friendlyName: friendlyName, context: context, members: members)
-
-            self.delegate.newChannelViewControllerDidCreateChannel(self)
+        let users = self.favoritesVC.collectionViewManager.selectedItems.compactMap { (orbItem) -> User? in
+            return orbItem.to
         }
+
+        let members = users.compactMap { (user) -> String? in
+            return user.id
+        }
+
+        let friendlyName = users.first?.givenName.lowercased() ?? "you"
+
+        ChannelSupplier.shared.createChannel(friendlyName: friendlyName, context: .casual, members: members)
+
+        self.delegate.newChannelViewControllerDidCreateChannel(self)
     }
 }
 
