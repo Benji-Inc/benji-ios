@@ -21,6 +21,12 @@ class MessageSupplier {
 
     var didGetLastSections: (([ChannelSectionable]) -> Void)?
 
+    func reset() {
+        self.allMessages = []
+        self.sections = []
+        self.messagesObject = nil 
+    }
+
     //MARK: GET MESSAGES
 
     @discardableResult

@@ -180,6 +180,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     override func viewWasDismissed() {
         super.viewWasDismissed()
 
+        MessageSupplier.shared.reset()
         ChannelSupplier.shared.set(activeChannel: nil)
         self.collectionViewManager.reset()
     }
