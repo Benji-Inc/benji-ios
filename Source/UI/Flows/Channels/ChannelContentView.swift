@@ -98,6 +98,8 @@ class ChannelContentView: View {
 
             self.layoutNow()
         }
+
+        self.layoutNow()
     }
 
     override func layoutSubviews() {

@@ -128,7 +128,7 @@ extension Objectable where Self: PFObject {
             query.fromPin(withName: container.name)
             query.findObjectsInBackground()
                 .continueWith { (task) -> Any? in
-                if let objects = task.result as? [Self], !objects.isEmpty {
+                if let objects = task.result as? [Self], !objects.isEmpty, objects.count == identifiers.count {
                     promise.resolve(with: objects)
                 } else if let nonCacheQuery = self.query() {
                     if isEqual {
