@@ -21,7 +21,7 @@ extension Date {
     static var nowInLocalFormat: String {
         let now = Date()
         let formatter = DateFormatter()
-        formatter.dateFormat = "EEEE, h:mm a"
+        formatter.dateFormat = "EE, h:mm a"
         return formatter.string(from: now)
     }
 

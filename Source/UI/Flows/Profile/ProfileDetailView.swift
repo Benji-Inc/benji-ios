@@ -8,29 +8,18 @@
 
 import Foundation
 
-class ProfileDetailCell: UICollectionViewCell {
-
+class ProfileDetailView: View {
+    
     let titleLabel = SmallLabel()
     let label = SmallBoldLabel()
-    let lineView = View()
     let button = Button()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.initializeSubviews()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func initializeSubviews() {
-        self.contentView.addSubview(self.titleLabel)
-        self.contentView.addSubview(self.label)
-        self.contentView.addSubview(self.lineView)
-        self.contentView.addSubview(self.button)
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        self.addSubview(self.titleLabel)
+        self.addSubview(self.label)
+        self.addSubview(self.button)
         self.button.isHidden = true
-        self.lineView.set(backgroundColor: .background3)
     }
 
     func configure(with item: ProfileItem, for user: User) {
@@ -54,13 +43,13 @@ class ProfileDetailCell: UICollectionViewCell {
             self.getReservations(for: user)
         }
 
-        self.contentView.layoutNow()
+        self.layoutNow()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.titleLabel.size = CGSize(width: self.contentView.width - Theme.contentOffset, height: 20)
+        self.titleLabel.size = CGSize(width: self.width - Theme.contentOffset, height: 20)
         self.titleLabel.left = 0
         self.titleLabel.top = 0
 
@@ -68,21 +57,9 @@ class ProfileDetailCell: UICollectionViewCell {
         self.label.left = self.titleLabel.left
         self.label.top = self.titleLabel.bottom + 5
 
-        self.lineView.size = CGSize(width: self.contentView.width, height: 2)
-        self.lineView.left = self.titleLabel.left
-        self.lineView.top = self.label.bottom + 5
-
         self.button.size = CGSize(width: 100, height: 40)
-        self.button.centerOnY()
-        self.button.right = self.contentView.right
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-
-        self.titleLabel.text = nil
-        self.label.text = nil
-        self.button.isHidden = true
+        self.button.bottom = self.label.bottom
+        self.button.pin(.right)
     }
 
     private func getRoutine(for user: User) {
@@ -100,7 +77,7 @@ class ProfileDetailCell: UICollectionViewCell {
                 self.button.set(style: .normal(color: .lightPurple, text: "Update"))
             }
 
-            self.contentView.layoutNow()
+            self.layoutNow()
         })
     }
 

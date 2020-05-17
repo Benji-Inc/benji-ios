@@ -18,9 +18,14 @@ protocol ProfileViewControllerDelegate: class {
 class ProfileViewController: ViewController {
 
     private let user: User
-    lazy var collectionView = ProfileCollectionView()
-    lazy var manager = ProfileCollectionViewManager(with: self.collectionView, user: self.user)
     weak var delegate: ProfileViewControllerDelegate?
+
+    private let scrollView = UIScrollView()
+    private let avatarView = AvatarView()
+    private let nameView = ProfileDetailView()
+    private let localTimeView = ProfileDetailView()
+    private let routineView = ProfileDetailView()
+    private let reservationsView = ProfileDetailView()
 
     init(with user: User) {
         self.user = user
@@ -32,37 +37,72 @@ class ProfileViewController: ViewController {
     }
 
     override func loadView() {
-        self.view = self.collectionView
+        self.view = self.scrollView
     }
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.set(backgroundColor: .background1)
+        self.view.addSubview(self.avatarView)
+        self.avatarView.set(avatar: self.user)
+        self.avatarView.didSelect = { [unowned self] in
+            self.delegate?.profileView(self, didSelect: .picture, for: self.user)
+        }
 
-        self.collectionView.delegate = self.manager
-        self.collectionView.dataSource = self.manager
+        self.view.addSubview(self.nameView)
+        self.view.addSubview(self.localTimeView)
+        self.view.addSubview(self.routineView)
+        self.routineView.button.isVisible = true 
+        self.routineView.button.didSelect = { [unowned self] in
+            self.delegate?.profileView(self, didSelect: .routine, for: self.user)
+        }
 
-        self.manager.didTapButtonAt = { [unowned self] item in
-            self.delegate?.profileView(self, didSelect: item, for: self.user)
+        self.view.addSubview(self.reservationsView)
+        self.reservationsView.button.isVisible = true
+        self.reservationsView.button.didSelect = { [unowned self] in
+            self.delegate?.profileView(self, didSelect: .invites, for: self.user)
         }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.createItems()
+        self.updateItems()
     }
 
-    private func createItems() {
-        var items: [ProfileItem] = []
+    func updateItems() {
+        self.nameView.configure(with: .name, for: self.user)
+        self.localTimeView.configure(with: .localTime, for: self.user)
+        self.routineView.configure(with: .routine, for: self.user)
+        self.reservationsView.configure(with: .invites, for: self.user)
+    }
 
-        items.append(.picture)
-        items.append(.name)
-        items.append(.localTime)
-        items.append(.routine)
-        items.append(.invites)
-        self.manager.items = items
-        self.collectionView.reloadData()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.avatarView.setSize(for: self.view.width * 0.4)
+        self.avatarView.pin(.top)
+        self.avatarView.pin(.left, padding: Theme.contentOffset)
+
+        let itemSize = CGSize(width: self.view.width - (Theme.contentOffset * 2), height: 60)
+
+        self.nameView.size = itemSize
+        self.nameView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset)
+        self.nameView.pin(.left, padding: Theme.contentOffset)
+
+        self.localTimeView.size = itemSize
+        self.localTimeView.match(.top, to: .bottom, of: self.nameView, offset: Theme.contentOffset)
+        self.localTimeView.pin(.left, padding: Theme.contentOffset)
+
+        self.routineView.size = itemSize
+        self.routineView.match(.top, to: .bottom, of: self.localTimeView, offset: Theme.contentOffset)
+        self.routineView.pin(.left, padding: Theme.contentOffset)
+
+        self.reservationsView.size = itemSize
+        self.reservationsView.match(.top, to: .bottom, of: self.routineView, offset: Theme.contentOffset)
+        self.reservationsView.pin(.left, padding: Theme.contentOffset)
+
+
+        self.scrollView.contentSize = CGSize(width: self.view.width, height: self.reservationsView.bottom)
     }
 }

@@ -299,10 +299,7 @@
 		D6EAB68A23E63DB900B90D5A /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAB68923E63DB900B90D5A /* SearchBar.swift */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
 		D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
-		D6EDD1952355DB9B00FDA5D6 /* ProfileCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDD1942355DB9B00FDA5D6 /* ProfileCollectionView.swift */; };
-		D6EDD1972355DBC500FDA5D6 /* ProfileAvatarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDD1962355DBC500FDA5D6 /* ProfileAvatarCell.swift */; };
-		D6EDD1992355DBFA00FDA5D6 /* ProfileDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDD1982355DBFA00FDA5D6 /* ProfileDetailCell.swift */; };
-		D6EDD19B2355DC2900FDA5D6 /* ProfileCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDD19A2355DC2900FDA5D6 /* ProfileCollectionViewManager.swift */; };
+		D6EDD1992355DBFA00FDA5D6 /* ProfileDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDD1982355DBFA00FDA5D6 /* ProfileDetailView.swift */; };
 		D6EE715023B704F2000ED221 /* HomeNewChannellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE714F23B704F2000ED221 /* HomeNewChannellButton.swift */; };
 		D6EE715223B7C854000ED221 /* UICollectionViewLayout+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715123B7C854000ED221 /* UICollectionViewLayout+Extensions.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
@@ -637,10 +634,7 @@
 		D6EAB68923E63DB900B90D5A /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		D6EAC95423D145350028DAA2 /* Sizeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sizeable.swift; sourceTree = "<group>"; };
 		D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionViewController.swift; sourceTree = "<group>"; };
-		D6EDD1942355DB9B00FDA5D6 /* ProfileCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionView.swift; sourceTree = "<group>"; };
-		D6EDD1962355DBC500FDA5D6 /* ProfileAvatarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAvatarCell.swift; sourceTree = "<group>"; };
-		D6EDD1982355DBFA00FDA5D6 /* ProfileDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailCell.swift; sourceTree = "<group>"; };
-		D6EDD19A2355DC2900FDA5D6 /* ProfileCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectionViewManager.swift; sourceTree = "<group>"; };
+		D6EDD1982355DBFA00FDA5D6 /* ProfileDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailView.swift; sourceTree = "<group>"; };
 		D6EE714F23B704F2000ED221 /* HomeNewChannellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNewChannellButton.swift; sourceTree = "<group>"; };
 		D6EE715123B7C854000ED221 /* UICollectionViewLayout+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewLayout+Extensions.swift"; sourceTree = "<group>"; };
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
@@ -1327,11 +1321,8 @@
 		D6B2603B22E6B8CD00143CF0 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
-				D6EDD1962355DBC500FDA5D6 /* ProfileAvatarCell.swift */,
-				D6EDD1942355DB9B00FDA5D6 /* ProfileCollectionView.swift */,
-				D6EDD19A2355DC2900FDA5D6 /* ProfileCollectionViewManager.swift */,
 				D65B0CE4234928620041A176 /* ProfileCoordinator.swift */,
-				D6EDD1982355DBFA00FDA5D6 /* ProfileDetailCell.swift */,
+				D6EDD1982355DBFA00FDA5D6 /* ProfileDetailView.swift */,
 				D6EAB68623E615B500B90D5A /* ProfilePhotoViewController.swift */,
 				D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */,
 				D623BC4E23EF5157007358CB /* ProfileItem.swift */,
@@ -1753,7 +1744,6 @@
 				D64C6A7E23294A8600DB7257 /* ChannelKey.swift in Sources */,
 				D6384414233834380072227B /* Symbols.swift in Sources */,
 				D6DADF692207D246007D9EB1 /* TCHMessage+Extensions.swift in Sources */,
-				D6EDD1972355DBC500FDA5D6 /* ProfileAvatarCell.swift in Sources */,
 				D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */,
 				D61EC0F721D316F100204BEE /* Color.swift in Sources */,
 				D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */,
@@ -1897,13 +1887,12 @@
 				D684840A22CD48D000362AC3 /* GradientView.swift in Sources */,
 				D68540D9235FE089006F666C /* Suggestion.swift in Sources */,
 				D646DB3E22CFCF330055CC7C /* TwilioChatClient+Extensions.swift in Sources */,
-				D6EDD19B2355DC2900FDA5D6 /* ProfileCollectionViewManager.swift in Sources */,
 				D6FC8098237A66220089AACC /* ChannelSupplier.swift in Sources */,
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,
 				D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */,
 				D646DB4422CFDE0C0055CC7C /* LoadingView.swift in Sources */,
 				D6405B67236E002E00FAA06B /* User.swift in Sources */,
-				D6EDD1992355DBFA00FDA5D6 /* ProfileDetailCell.swift in Sources */,
+				D6EDD1992355DBFA00FDA5D6 /* ProfileDetailView.swift in Sources */,
 				D6830222234AA35C006145FE /* DisplayableChannel.swift in Sources */,
 				D6A82B772325C48F003E0A8B /* PurposeDescriptionTextView.swift in Sources */,
 				D60B0BE82432F88D004784CD /* FeedConnectionView.swift in Sources */,
@@ -1969,7 +1958,6 @@
 				D66F0FDC22BF2ADC00BA277D /* HomeCoordinator.swift in Sources */,
 				D6A301AE2381B8D7006655E0 /* FeedCollectionView.swift in Sources */,
 				D6D14FFC21D5893700CD8CE4 /* IGListBatchUpdateData.mm in Sources */,
-				D6EDD1952355DB9B00FDA5D6 /* ProfileCollectionView.swift in Sources */,
 				D6FC8096237A64650089AACC /* MessageSupplier.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
 				D6B2606A22E80AB000143CF0 /* Toast.swift in Sources */,

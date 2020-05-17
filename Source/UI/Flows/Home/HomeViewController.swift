@@ -102,7 +102,7 @@ class HomeViewController: FullScreenViewController {
         self.tabView.centerOnX()
         self.tabView.bottom = self.contentContainer.height + self.view.safeAreaInsets.bottom
 
-        self.gradientView.size = CGSize(width: self.view.width, height: 40)
+        self.gradientView.size = CGSize(width: self.view.width, height: 80)
         self.gradientView.centerOnX()
         self.gradientView.bottom = self.tabView.top
 
@@ -130,12 +130,15 @@ class HomeViewController: FullScreenViewController {
             case .feed(let vc):
                 newContentVC = vc
                 self.searchBar.isHidden = true
+                self.gradientView.isHidden = true
             case .channels(let vc):
                 newContentVC = vc
                 self.searchBar.isHidden = false
+                self.gradientView.isHidden = false
             case .profile(let vc):
                 newContentVC = vc
                 self.searchBar.isHidden = true
+                self.gradientView.isHidden = true
             }
 
             self.currentCenterVC = newContentVC
