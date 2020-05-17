@@ -14,7 +14,7 @@ class HomeTabView: View {
     private(set) var feedItem = ImageViewButton()
     private(set) var channelsItem = ImageViewButton()
     private(set) var newChannelButton = HomeNewChannellButton()
-
+    private(set) var lineView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     private let flashLightView = View()
 
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
@@ -25,8 +25,9 @@ class HomeTabView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .clear)
+        self.set(backgroundColor: .background2)
 
+        self.addSubview(self.lineView)
         self.addSubview(self.flashLightView)
         self.flashLightView.set(backgroundColor: .purple)
         self.addSubview(self.profileItem)
@@ -37,6 +38,10 @@ class HomeTabView: View {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+
+        self.lineView.expandToSuperviewWidth()
+        self.lineView.height = 1
+        self.lineView.pin(.top)
 
         let itemWidth = (self.width - (self.newChannelButton.width + 40)) * 0.25
         let itemSize = CGSize(width: itemWidth, height: self.newChannelButton.height)
@@ -53,7 +58,7 @@ class HomeTabView: View {
         self.channelsItem.left = self.feedItem.right
 
         self.newChannelButton.size = CGSize(width: 60, height: 60)
-        self.newChannelButton.top = 0
+        self.newChannelButton.top = 10
         self.newChannelButton.right = self.width - Theme.contentOffset
 
         self.flashLightView.size = CGSize(width: itemWidth * 0.55, height: 2)
@@ -66,9 +71,7 @@ class HomeTabView: View {
 
     func updateTabItems(for contentType: HomeContent) {
         self.selectionFeedback.impactOccurred()
-
         self.currentContent = contentType
-
         self.animateIndicator(for: contentType)
     }
 

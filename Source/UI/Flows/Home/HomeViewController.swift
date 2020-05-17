@@ -34,7 +34,6 @@ class HomeViewController: FullScreenViewController {
 
     let centerContainer = View()
     let tabView = HomeTabView()
-    let gradientView = GradientView()
 
     lazy var currentContent = MutableProperty<HomeContent>(.feed(self.feedVC))
     private(set) var currentCenterVC: UIViewController?
@@ -62,14 +61,12 @@ class HomeViewController: FullScreenViewController {
         self.view.set(backgroundColor: .background1)
 
         self.contentContainer.addSubview(self.centerContainer)
-        self.contentContainer.addSubview(self.gradientView)
 
         self.tabView.newChannelButton.didSelect = { [unowned self] in
             self.delegate.homeViewDidTapAdd(self)
         }
 
         self.contentContainer.addSubview(self.tabView)
-        self.tabView.set(backgroundColor: .background1)
 
         self.currentContent.producer
             .skipRepeats()
@@ -102,10 +99,6 @@ class HomeViewController: FullScreenViewController {
         self.tabView.centerOnX()
         self.tabView.bottom = self.contentContainer.height + self.view.safeAreaInsets.bottom
 
-        self.gradientView.size = CGSize(width: self.view.width, height: 80)
-        self.gradientView.centerOnX()
-        self.gradientView.bottom = self.tabView.top
-
         self.centerContainer.size = CGSize(width: self.contentContainer.width,
                                            height: self.contentContainer.height - 156)
         self.centerContainer.bottom = self.tabView.top
@@ -130,15 +123,12 @@ class HomeViewController: FullScreenViewController {
             case .feed(let vc):
                 newContentVC = vc
                 self.searchBar.isHidden = true
-                self.gradientView.isHidden = true
             case .channels(let vc):
                 newContentVC = vc
                 self.searchBar.isHidden = false
-                self.gradientView.isHidden = false
             case .profile(let vc):
                 newContentVC = vc
                 self.searchBar.isHidden = true
-                self.gradientView.isHidden = true
             }
 
             self.currentCenterVC = newContentVC
