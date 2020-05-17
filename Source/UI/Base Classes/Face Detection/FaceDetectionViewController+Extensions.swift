@@ -23,7 +23,7 @@ extension FaceDetectionViewController: AVCaptureVideoDataOutputSampleBufferDeleg
         do {
             try self.sequenceHandler.perform([detectFaceRequest],
                                              on: imageBuffer,
-                                             orientation: .leftMirrored)
+                                             orientation: .left)
         } catch {
             print(error.localizedDescription)
         }

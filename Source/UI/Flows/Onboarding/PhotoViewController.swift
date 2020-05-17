@@ -137,7 +137,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.borderView.centerOnX()
         self.borderView.top = 30
 
-        self.cameraVC.view.expandToSuperviewSize()
+        self.cameraVC.view.frame = self.borderView.frame
         self.avatarView.frame = self.borderView.frame
 
         let rect = self.buttonContainerRect ?? CGRect(x: Theme.contentOffset,
