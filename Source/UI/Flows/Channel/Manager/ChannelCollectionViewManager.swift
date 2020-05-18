@@ -302,7 +302,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         guard let footerView = self.footerView, let channelCollectionView = scrollView as? ChannelCollectionView else { return }
 
-        let threshold = 50
+        let threshold = 60
         let contentOffset = channelCollectionView.contentOffset.y
         let contentHeight = channelCollectionView.contentSize.height + channelCollectionView.contentInset.top + footerView.height
         let diffHeight = contentHeight - contentOffset
@@ -332,9 +332,9 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                 self.setAllMessagesToRead()
                     .observe { (_) in
                         runMain {
-                            scrollView.isScrollEnabled = true
+                            footerView.stop()
                         }
-                        footerView.stop()
+
                         self.isSettingReadAll = false
                 }
             } else {

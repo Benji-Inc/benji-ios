@@ -40,4 +40,31 @@ class ChannelCollectionView: CollectionView {
         self.register(ReadAllFooterView.self,
                       forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
     }
+
+    // Subtracts the read all footer height
+    override func scrollToEnd(animated: Bool = true, completion: CompletionOptional = nil) {
+        var rect: CGRect = .zero
+        
+        if let flowLayout = self.collectionViewLayout as? ChannelCollectionViewFlowLayout,
+            flowLayout.scrollDirection == .vertical {
+
+            let contentHeight = flowLayout.collectionViewContentSize.height - flowLayout.readFooterHeight
+            rect = CGRect(x: 0.0,
+                          y: contentHeight - 1.0,
+                          width: 1.0,
+                          height: 1.0)
+        } else {
+            let contentWidth = self.collectionViewLayout.collectionViewContentSize.width
+            rect = CGRect(x: contentWidth - 1.0,
+                          y: 0,
+                          width: 1.0,
+                          height: 1.0)
+        }
+
+        self.performBatchUpdates({
+            self.scrollRectToVisible(rect, animated: animated)
+        }) { (completed) in
+            completion?()
+        }
+    }
 }
