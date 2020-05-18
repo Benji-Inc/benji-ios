@@ -338,7 +338,11 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                         self.isSettingReadAll = false
                 }
             } else {
-                footerView.stop()
+
+                footerView.start()
+                delay(1.5) {
+                    footerView.stop()
+                }
             }
         }
     }

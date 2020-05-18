@@ -8,9 +8,11 @@
 
 import Foundation
 import TMROLocalization
+import Lottie
 
 class ReadAllFooterView: UICollectionReusableView {
 
+    let animationView = AnimationView(name: "loading")
     private let label = SmallBoldLabel()
     var isAnimatingFinal: Bool = false
     var currentTransform: CGAffineTransform?
@@ -30,6 +32,9 @@ class ReadAllFooterView: UICollectionReusableView {
         self.set(backgroundColor: .clear)
         self.addSubview(self.label)
         self.label.alpha = 0
+        self.addSubview(self.animationView)
+        self.animationView.contentMode = .scaleAspectFit
+        self.animationView.loopMode = .loop
     }
 
     func configure(hasUnreadMessages: Bool, section: Int) {
@@ -52,6 +57,10 @@ class ReadAllFooterView: UICollectionReusableView {
         self.label.setSize(withWidth: self.width)
         self.label.pin(.top, padding: 20)
         self.label.centerOnX()
+
+        self.animationView.size = CGSize(width: 18, height: 18)
+        self.animationView.match(.left, to: .right, of: self.label, offset: Theme.contentOffset)
+        self.animationView.centerY = self.label.centerY
     }
 
     func setTransform(inTransform: CGAffineTransform, scaleFactor: CGFloat) {
@@ -75,10 +84,14 @@ class ReadAllFooterView: UICollectionReusableView {
 
     func start() {
         self.isAnimatingFinal = true
+        if !self.animationView.isAnimationPlaying {
+            self.animationView.play()
+        }
     }
 
     func stop() {
         self.isAnimatingFinal = false
+        self.animationView.stop()
         self.prepareInitialAnimation()
     }
 
