@@ -12,6 +12,7 @@ class ChannelCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
     private(set) var isTypingIndicatorViewHidden: Bool = true
     private var insertingIndexPaths: [IndexPath] = []
+    let readFooterHeight: CGFloat = 40
 
     override class var layoutAttributesClass: AnyClass {
         return ChannelCollectionViewLayoutAttributes.self
@@ -49,6 +50,7 @@ class ChannelCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
         self.collectionView?.contentInset.top = 84
         self.collectionView?.contentInset.bottom = 80
+        self.footerReferenceSize = CGSize(width: self.itemWidth, height: self.readFooterHeight)
     }
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {

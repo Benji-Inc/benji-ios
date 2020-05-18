@@ -9,6 +9,7 @@
 import Foundation
 import ReactiveSwift
 import TwilioChatClient
+import TMROFutures
 
 class ChannelCollectionViewManager: NSObject, UITextViewDelegate, ChannelDataSource,
 UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ActiveChannelAccessor {
@@ -34,6 +35,8 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .heavy)
     var userTyping: User?
     let disposables = CompositeDisposable()
+    private var footerView: ReadAllFooterView?
+    private var isSettingReadAll = false
 
     init(with collectionView: ChannelCollectionView) {
         self.collectionView = collectionView
@@ -117,14 +120,19 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         return cell
     }
 
-    private func updateConsumers(with consumer: Avatar, for message: Messageable) {
+    @discardableResult
+    private func updateConsumers(with consumer: Avatar, for message: Messageable) -> Future<Void> {
         //create system message copy of current message
         let messageCopy = SystemMessage(with: message)
         messageCopy.udpateConsumers(with: consumer)
-        //update the current message with the copy
-        self.updateItem(with: messageCopy, completion: nil)
+
+        runMain {
+            //update the current message with the copy
+            self.updateItem(with: messageCopy, completion: nil)
+        }
+
         //call update on the actual message and update on callback
-        message.udpateConsumers(with: consumer)
+        return message.udpateConsumers(with: consumer)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -135,7 +143,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         case UICollectionView.elementKindSectionHeader:
             return self.header(for: collectionView, at: indexPath)
         case UICollectionView.elementKindSectionFooter:
-            fatalError("UNRECOGNIZED SECTION KIND")
+            return self.footer(for: collectionView, at: indexPath)
         default:
             fatalError("UNRECOGNIZED SECTION KIND")
         }
@@ -194,6 +202,19 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         }
     }
 
+
+    private func footer(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let channelCollectionView = collectionView as? ChannelCollectionView else { fatalError() }
+
+        guard indexPath.section == self.numberOfSections(in: collectionView) - 1 else { return UICollectionReusableView() }
+
+        let footer = channelCollectionView.dequeueReusableFooterView(ReadAllFooterView.self, for: indexPath)
+        let hasUnreadMessages = MessageSupplier.shared.unreadMessages.count > 0
+        footer.configure(hasUnreadMessages: hasUnreadMessages, section: indexPath.section)
+        self.footerView = footer
+        return footer
+    }
+
     // MARK: FLOW LAYOUT
 
     func collectionView(_ collectionView: UICollectionView,
@@ -216,6 +237,38 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         }
 
         return channelLayout.sizeForHeader(at: section, with: collectionView)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForFooterInSection section: Int) -> CGSize {
+        guard let channelLayout = collectionViewLayout as? ChannelCollectionViewFlowLayout,
+            section == self.numberOfSections(in: collectionView) - 1,
+            !self.isSettingReadAll else { return .zero }
+
+        return CGSize(width: collectionView.width, height: channelLayout.readFooterHeight)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplaySupplementaryView view: UICollectionReusableView,
+                        forElementKind elementKind: String,
+                        at indexPath: IndexPath) {
+        guard let footerView = self.footerView else { return }
+
+        if elementKind == UICollectionView.elementKindSectionFooter {
+            footerView.prepareInitialAnimation()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        didEndDisplayingSupplementaryView view: UICollectionReusableView,
+                        forElementOfKind elementKind: String,
+                        at indexPath: IndexPath) {
+        guard let footerView = self.footerView else { return }
+
+        if elementKind == UICollectionView.elementKindSectionFooter {
+            footerView.stop()
+        }
     }
 
     // MARK: TEXT VIEW DELEGATE
@@ -243,5 +296,58 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                                     completion: nil)
                        })
         }
+    }
+
+    //compute the scroll value and play witht the threshold to get desired effect
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let footerView = self.footerView, let channelCollectionView = scrollView as? ChannelCollectionView else { return }
+
+        let threshold = 50
+        let contentOffset = channelCollectionView.contentOffset.y
+        let contentHeight = channelCollectionView.contentSize.height + channelCollectionView.contentInset.top + footerView.height
+        let diffHeight = contentHeight - contentOffset
+        let frameHeight = channelCollectionView.bounds.size.height
+        var triggerThreshold = Float((diffHeight - frameHeight))/Float(threshold)
+        triggerThreshold = min(triggerThreshold, 0.0)
+        let pullRatio = min(abs(triggerThreshold), 1.0)
+        footerView.setTransform(inTransform: .identity, scaleFactor: CGFloat(pullRatio))
+        if pullRatio >= 1 {
+            footerView.animateFinal()
+        }
+    }
+
+    //compute the offset and call the load method
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard let footerView = self.footerView, let channelCollectionView = scrollView as? ChannelCollectionView else { return }
+
+        let contentOffset = channelCollectionView.contentOffset.y
+        let contentHeight = channelCollectionView.contentSize.height + channelCollectionView.contentInset.top + footerView.height
+        let diffHeight = contentHeight - contentOffset
+        let frameHeight = channelCollectionView.bounds.size.height
+        let pullHeight  = abs(diffHeight - frameHeight)
+        if pullHeight < 50 {
+            if footerView.isAnimatingFinal, MessageSupplier.shared.unreadMessages.count > 0 {
+                self.isSettingReadAll = true
+                footerView.start()
+                self.setAllMessagesToRead()
+                    .observe { (_) in
+                        runMain {
+                            scrollView.isScrollEnabled = true
+                        }
+                        footerView.stop()
+                        self.isSettingReadAll = false
+                }
+            } else {
+                footerView.stop()
+            }
+        }
+    }
+
+    func setAllMessagesToRead() -> Future<[Void]> {
+        let promises: [Future<Void>] = MessageSupplier.shared.unreadMessages.map { (message) -> Future<Void> in
+            return self.updateConsumers(with: User.current()!, for: message)
+        }
+
+        return waitForAll(futures: promises)
     }
 }

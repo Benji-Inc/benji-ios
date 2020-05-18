@@ -237,6 +237,7 @@
 		D6B2607222E80FE000143CF0 /* SmallBoldLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2607122E80FE000143CF0 /* SmallBoldLabel.swift */; };
 		D6BD933F23F8824D00C5660D /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D6BD933E23F8824D00C5660D /* face_scan.json */; };
 		D6BF68D7239CBF74008E79A1 /* FeedInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */; };
+		D6C9CD2C2471D6BE007376F7 /* ReadAllFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */; };
 		D6CAB394246D9B6000BD72CF /* ChatToken+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CAB393246D9B6000BD72CF /* ChatToken+Cloud.swift */; };
 		D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */; };
 		D6CD4F3D23F3A618004818B6 /* Connection+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */; };
@@ -554,6 +555,7 @@
 		D6B2607122E80FE000143CF0 /* SmallBoldLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallBoldLabel.swift; sourceTree = "<group>"; };
 		D6BD933E23F8824D00C5660D /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedInviteView.swift; sourceTree = "<group>"; };
+		D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadAllFooterView.swift; sourceTree = "<group>"; };
 		D6CAB393246D9B6000BD72CF /* ChatToken+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatToken+Cloud.swift"; sourceTree = "<group>"; };
 		D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Onboarding+Cloud.swift"; sourceTree = "<group>"; };
 		D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Connection+Cloud.swift"; sourceTree = "<group>"; };
@@ -1340,6 +1342,14 @@
 			path = Toast;
 			sourceTree = "<group>";
 		};
+		D6C9CD2A2471D67B007376F7 /* Footers */ = {
+			isa = PBXGroup;
+			children = (
+				D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */,
+			);
+			path = Footers;
+			sourceTree = "<group>";
+		};
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
@@ -1434,6 +1444,7 @@
 		D6D1500521D5E71E00CD8CE4 /* Channel Collection Views */ = {
 			isa = PBXGroup;
 			children = (
+				D6C9CD2A2471D67B007376F7 /* Footers */,
 				D63844102337C3900072227B /* Headers */,
 				D6B2603522E6A97400143CF0 /* Layout */,
 				D684840822CD2E1E00362AC3 /* Cells */,
@@ -1837,6 +1848,7 @@
 				D642737F22C9A7EC0088256B /* ContactsManager.swift in Sources */,
 				D6347392241EAA840071E9DA /* Invitee.swift in Sources */,
 				D6BF68D7239CBF74008E79A1 /* FeedInviteView.swift in Sources */,
+				D6C9CD2C2471D6BE007376F7 /* ReadAllFooterView.swift in Sources */,
 				D65B0CE5234928620041A176 /* ProfileCoordinator.swift in Sources */,
 				D68483FF22CD0A1A00362AC3 /* TableView.swift in Sources */,
 				D69EB4452457E33600473530 /* SessionManager.swift in Sources */,

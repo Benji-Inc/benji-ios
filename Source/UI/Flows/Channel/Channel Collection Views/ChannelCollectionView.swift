@@ -37,5 +37,7 @@ class ChannelCollectionView: CollectionView {
                       forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
         self.register(LoadMoreSectionHeader.self,
                       forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+        self.register(ReadAllFooterView.self,
+                      forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
     }
 }

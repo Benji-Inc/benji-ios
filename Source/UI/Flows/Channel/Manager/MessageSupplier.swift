@@ -19,6 +19,16 @@ class MessageSupplier {
     private(set) var sections: [ChannelSectionable] = []
     private var messagesObject: TCHMessages?
 
+    var unreadMessages: [Messageable] {
+        return self.allMessages.compactMap { (message) -> Messageable? in
+            guard !message.isFromCurrentUser,
+                let userID = User.current()?.objectId,
+                !message.hasBeenConsumedBy.contains(userID) else { return nil }
+            
+            return message
+        }
+    }
+
     var didGetLastSections: (([ChannelSectionable]) -> Void)?
 
     func reset() {

@@ -91,17 +91,31 @@ extension TCHMessage: Messageable {
         return self.attributes()?.dictionary?["consumers"] as? [String] ?? []
     }
 
-    func udpateConsumers(with consumer: Avatar) {
-        guard let identity = consumer.userObjectID else { return }
-        var consumers = self.hasBeenConsumedBy
-        consumers.append(identity)
-        self.appendAttributes(with: ["consumers": consumers])
-            .observeValue(with: { (_) in
-                self.getAuthorAsUser()
-                    .observeValue { (author) in
-                        ToastScheduler.shared.schedule(toastType: .messageConsumed(self, author))
-                }
-            })
+    @discardableResult
+    func udpateConsumers(with consumer: Avatar) -> Future<Void> {
+        let promise = Promise<Void>()
+
+        if let identity = consumer.userObjectID {
+            var consumers = self.hasBeenConsumedBy
+            consumers.append(identity)
+            self.appendAttributes(with: ["consumers": consumers])
+                .observeValue(with: { (_) in
+                    self.getAuthorAsUser()
+                        .observe(with: { (result) in
+                            switch result {
+                            case .success(let author):
+                                ToastScheduler.shared.schedule(toastType: .messageConsumed(self, author))
+                                promise.resolve(with: ())
+                            case .failure(let error):
+                                promise.reject(with: error)
+                            }
+                        })
+                    })
+        } else {
+            promise.reject(with: ClientError.generic)
+        }
+
+        return promise
     }
 
     func appendAttributes(with attributes: [String: Any]) -> Future<Void> {

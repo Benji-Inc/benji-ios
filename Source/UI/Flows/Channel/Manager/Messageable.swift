@@ -35,7 +35,7 @@ protocol Messageable: class {
     var isConsumed: Bool { get }
     var hasBeenConsumedBy: [String] { get }
     var color: Color { get }
-    func udpateConsumers(with consumer: Avatar)
+    func udpateConsumers(with consumer: Avatar) -> Future<Void>
     func appendAttributes(with attributes: [String: Any]) -> Future<Void>
 }
 

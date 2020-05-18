@@ -8,6 +8,7 @@
 
 import Foundation
 import TMROLocalization
+import TMROFutures
 
 class SystemMessage: Messageable {
 
@@ -66,9 +67,17 @@ class SystemMessage: Messageable {
                   attributes: message.attributes)
     }
 
-    func udpateConsumers(with consumer: Avatar) {
-        guard let identity = consumer.userObjectID else { return }
-        var consumers = self.hasBeenConsumedBy
-        consumers.append(identity)
+    @discardableResult
+    func udpateConsumers(with consumer: Avatar) -> Future<Void> {
+        let promise = Promise<Void>()
+        if let identity = consumer.userObjectID {
+            var consumers = self.hasBeenConsumedBy
+            consumers.append(identity)
+            promise.resolve(with: ())
+        } else {
+            promise.reject(with: ClientError.generic)
+        }
+
+        return promise
     }
 }
