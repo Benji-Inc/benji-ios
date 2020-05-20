@@ -15,14 +15,7 @@ import TMROFutures
 class ChannelManager: NSObject {
 
     static let shared = ChannelManager()
-    private(set) var client: TwilioChatClient? {
-        didSet {
-            guard let _ = self.client else { return }
-
-            // Initializing the ChannelSupplier as soon as the client is so it can receive udpates.
-            _ = ChannelSupplier.shared
-        }
-    }
+    private(set) var client: TwilioChatClient?
 
     var clientSyncUpdate = MutableProperty<TCHClientSynchronizationStatus?>(nil)
     var clientUpdate = MutableProperty<ChatClientUpdate?>(nil)
@@ -49,17 +42,17 @@ class ChannelManager: NSObject {
         self.client?.shutdown() // This was recommended in the docs.
     }
 
-    static func initialize(token: String) -> Future<Void> {
+    func initialize(token: String) -> Future<Void> {
         let promise = Promise<Void>()
         TwilioChatClient.chatClient(withToken: token,
                                     properties: nil,
-                                    delegate: shared,
+                                    delegate: self,
                                     completion: { (result, client) in
 
                                         if let error = result.error {
                                             promise.reject(with: error)
                                         } else if let strongClient = client {
-                                            shared.client = strongClient
+                                            self.client = strongClient
                                             promise.resolve(with: ())
                                         } else {
                                             promise.reject(with: ClientError.message(detail: "Failed to initialize chat client."))
