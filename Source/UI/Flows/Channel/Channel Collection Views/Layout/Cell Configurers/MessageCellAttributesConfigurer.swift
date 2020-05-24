@@ -109,7 +109,7 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
                                           color: .white)
 
         let attributedString = attributed.string
-
+        attributedString.linkItems()
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 2
         attributedString.addAttributes([NSAttributedString.Key.paragraphStyle: style])

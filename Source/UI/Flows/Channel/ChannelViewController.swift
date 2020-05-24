@@ -131,6 +131,18 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        print("WILL APPEAR")
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        print("WILL DISAPPEAR")
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
@@ -244,23 +256,23 @@ extension ChannelViewController: TCHChannelDelegate {
         self.collectionViewManager.updateItem(with: message)
     }
 
-    func chatClient(_ client: TwilioChatClient,
-                    channel: TCHChannel,
-                    synchronizationStatusUpdated status: TCHChannelSynchronizationStatus) {
-
-        switch status {
-        case .none:
-            print("SYNC STATUS: NONE")
-        case .identifier:
-            print("SYNC STATUS: ID")
-        case .metadata:
-            print("SYNC STATUS: META")
-        case .all:
-            print("SYNC STATUS: ALL")
-        case .failed:
-            print("SYNC STATUS: FAILED")
-        @unknown default:
-            break
-        }
-    }
+//    func chatClient(_ client: TwilioChatClient,
+//                    channel: TCHChannel,
+//                    synchronizationStatusUpdated status: TCHChannelSynchronizationStatus) {
+//
+//        switch status {
+//        case .none:
+//            print("SYNC STATUS: NONE")
+//        case .identifier:
+//            print("SYNC STATUS: ID")
+//        case .metadata:
+//            print("SYNC STATUS: META")
+//        case .all:
+//            print("SYNC STATUS: ALL")
+//        case .failed:
+//            print("SYNC STATUS: FAILED")
+//        @unknown default:
+//            break
+//        }
+//    }
 }

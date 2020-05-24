@@ -21,10 +21,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.initializeKeyWindow(with: rootNavController)
         self.initializeMainCoordinator(with: rootNavController, withOptions: launchOptions)
         UserDefaults.standard.set(nil, forKey: Routine.currentRoutineKey)
+        print("didFinishLaunchingWithOptions")
         return true
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        print("applicationDidBecomeActive")
         UserNotificationManager.shared.clearNotificationCenter()
         guard !ChannelManager.shared.isConnected, let identity = User.current()?.objectId else { return }
         LaunchManager.shared.getChatToken(with: identity, buo: nil)
