@@ -86,13 +86,13 @@ class MessageCell: UICollectionViewCell {
         } else {
             switch message.status {
             case .sent:
-                break
+                print("sent")
             case .delivered:
-                break
+                print("delivered")
             case .unknown:
-                break
+                print("unkown")
             case .error:
-                break
+                print("error")
             }
         }
     }

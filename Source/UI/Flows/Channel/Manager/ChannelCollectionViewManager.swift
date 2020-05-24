@@ -328,7 +328,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         if pullHeight < 50 {
             if footerView.isAnimatingFinal, MessageSupplier.shared.unreadMessages.count > 0 {
                 self.isSettingReadAll = true
-                footerView.start()
+                footerView.start(showLoading: true)
                 self.setAllMessagesToRead()
                     .observe { (_) in
                         runMain {
@@ -339,7 +339,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                 }
             } else {
 
-                footerView.start()
+                footerView.start(showLoading: false)
                 delay(1.5) {
                     footerView.stop()
                 }

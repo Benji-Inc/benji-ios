@@ -82,9 +82,9 @@ class ReadAllFooterView: UICollectionReusableView {
         self.label.transform = CGAffineTransform.init(scaleX: self.minScale, y: self.minScale)
     }
 
-    func start() {
+    func start(showLoading: Bool) {
         self.isAnimatingFinal = true
-        if !self.animationView.isAnimationPlaying {
+        if !self.animationView.isAnimationPlaying, showLoading {
             self.animationView.play()
         }
     }

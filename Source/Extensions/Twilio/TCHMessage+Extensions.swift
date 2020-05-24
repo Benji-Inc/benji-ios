@@ -72,11 +72,7 @@ extension TCHMessage: Messageable {
     }
 
     var status: MessageStatus {
-        if let statusString = self.attributes()?.dictionary?["status"] as? String, let type = MessageStatus(rawValue: statusString) {
-            return type
-        }
-
-        return .unknown
+        return .delivered
     }
 
     var context: MessageContext {
