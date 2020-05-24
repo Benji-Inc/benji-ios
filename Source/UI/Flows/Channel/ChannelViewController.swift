@@ -127,7 +127,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         case .channel(let channel):
             channel.delegate = self
             self.loadMessages(for: activeChannel.channelType)
-            self.messageInputView.setPlaceholder(with: channel)
         }
     }
 

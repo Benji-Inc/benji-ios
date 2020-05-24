@@ -8,6 +8,7 @@
 
 import Foundation
 import TwilioChatClient
+import Lottie
 
 class MessageInputView: View, ActiveChannelAccessor {
 
@@ -16,6 +17,7 @@ class MessageInputView: View, ActiveChannelAccessor {
     private(set) var minHeight: CGFloat = 44
     var oldTextViewHeight: CGFloat = 44
 
+    let animationView = AnimationView(name: "loading")
     let textView = InputTextView()
     let overlayButton = UIButton()
     private let alertProgressView = AlertProgressView()
@@ -25,6 +27,7 @@ class MessageInputView: View, ActiveChannelAccessor {
 
     private var alertAnimator: UIViewPropertyAnimator?
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .rigid)
+    private var borderColor: CGColor?
 
     private(set) var messageContext: MessageContext = .casual
 
@@ -34,6 +37,9 @@ class MessageInputView: View, ActiveChannelAccessor {
         self.set(backgroundColor: .backgroundWithAlpha)
 
         self.addSubview(self.blurView)
+        self.addSubview(self.animationView)
+        self.animationView.contentMode = .scaleAspectFit
+        self.animationView.loopMode = .loop
         self.addSubview(self.alertProgressView)
         self.alertProgressView.set(backgroundColor: .red)
         self.alertProgressView.size = .zero 
@@ -90,10 +96,14 @@ class MessageInputView: View, ActiveChannelAccessor {
         self.overlayButton.frame = self.bounds
         self.blurView.frame = self.bounds
 
-        self.layer.borderColor = self.messageContext.color.color.cgColor
+        self.layer.borderColor = self.borderColor ?? self.messageContext.color.color.cgColor
+
+        self.animationView.size = CGSize(width: 18, height: 18)
+        self.animationView.pin(.right, padding: Theme.contentOffset)
+        self.animationView.centerOnY()
     }
 
-    func setPlaceholder(with channel: TCHChannel) {
+    private func setPlaceholder(with channel: TCHChannel) {
         channel.getMembersAsUsers()
             .observeValue { (users) in
                 runMain {
@@ -159,6 +169,37 @@ class MessageInputView: View, ActiveChannelAccessor {
             })
             self.alertAnimator?.startAnimation()
         }
+    }
+
+    func handleConnection(state: TCHClientConnectionState) {
+        switch state {
+        case .unknown, .disconnected, .connecting:
+            self.textView.set(placeholder: "Connecting", color: .green)
+            self.borderColor = Color.green.color.cgColor
+            self.textView.isUserInteractionEnabled = false
+            self.animationView.play()
+        case .connected:
+            if let activeChannel = self.activeChannel, case .channel(let channel) = activeChannel.channelType {
+                self.setPlaceholder(with: channel)
+            }
+            self.textView.isUserInteractionEnabled = true
+            self.animationView.stop()
+            self.borderColor = nil
+        case .denied:
+            self.textView.set(placeholder: "Connection request denied", color: .red)
+            self.textView.isUserInteractionEnabled = false
+            self.animationView.stop()
+            self.borderColor = Color.red.color.cgColor
+        case .fatalError, .error:
+            self.textView.set(placeholder: "Error connecting", color: .red)
+            self.textView.isUserInteractionEnabled = false
+            self.animationView.stop()
+            self.borderColor = Color.red.color.cgColor
+        @unknown default:
+            break
+        }
+
+        self.layoutNow()
     }
 
     func reset() {
