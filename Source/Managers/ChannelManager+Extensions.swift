@@ -88,7 +88,7 @@ extension ChannelManager: TwilioChatClientDelegate {
         case .connected:
             print("CONNECTION STATE: CONNECTED")
         case .connecting:
-            print("CONNECTION STATE: CONNECING")
+            print("CONNECTION STATE: CONNECTING")
         case .denied:
             print("CONNECTION STATE: DENIED)")
         case .error:

@@ -7,10 +7,11 @@
 //
 
 import Foundation
+import Lottie
 
 class LoadingButton: Button {
 
-    private let loadingIndicator = UIActivityIndicatorView(style: .medium)
+    let animationView = AnimationView(name: "loading")
 
     private let alphaOutAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
                                                           curve: .linear,
@@ -62,13 +63,16 @@ class LoadingButton: Button {
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
 
-        self.addSubview(self.loadingIndicator)
+        self.addSubview(self.animationView)
+        self.animationView.contentMode = .scaleAspectFit
+        self.animationView.loopMode = .loop
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.loadingIndicator.centerOnXAndY()
+        self.animationView.size = CGSize(width: 18, height: 18)
+        self.animationView.centerOnXAndY()
     }
 
     @objc func keyboardWillShow(notification: Notification) {
@@ -91,15 +95,15 @@ class LoadingButton: Button {
         self.alphaOutAnimator.addAnimations {
             for view in self.subviews {
                 if let label = view as? UILabel {
-                    label.alpha = 0.1
+                    label.alpha = 0.0
                 }
             }
         }
         self.alphaOutAnimator.startAnimation(afterDelay: 0.1)
         self.alphaOutAnimator.addCompletion { (position) in
             if position == .end {
-                self.loadingIndicator.isHidden = !self.isLoading
-                self.loadingIndicator.startAnimating()
+                self.animationView.isHidden = !self.isLoading
+                self.animationView.play()
             }
         }
     }
@@ -114,7 +118,7 @@ class LoadingButton: Button {
             }
         }
         self.alphaInAnimator.startAnimation()
-        self.loadingIndicator.isHidden = !self.isLoading
-        self.loadingIndicator.stopAnimating()
+        self.animationView.isHidden = !self.isLoading
+        self.animationView.stop()
     }
 }
