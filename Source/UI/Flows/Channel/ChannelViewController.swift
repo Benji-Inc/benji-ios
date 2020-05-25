@@ -200,46 +200,14 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
               context: MessageContext = .casual,
               attributes: [String : Any]) {
 
-        guard let channelDisplayable = ChannelSupplier.shared.activeChannel.value,
-            let current = User.current(),
-            let objectId = current.objectId else { return }
-
-        var mutableAttributes = attributes
-        mutableAttributes["updateId"] = UUID().uuidString
-
-        let systemMessage = SystemMessage(avatar: current,
-                                          context: context,
-                                          text: message,
-                                          isFromCurrentUser: true,
-                                          createdAt: Date(),
-                                          authorId: objectId,
-                                          messageIndex: nil,
-                                          status: .sent,
-                                          id: String(),
-                                          attributes: mutableAttributes)
+        guard let systemMessage = MessageDeliveryManager.send(message: message, context: context, attributes: attributes, completion: { (success, error) in
+            if let e = error {
+                print(e)
+            }
+        }) else { return }
 
         self.collectionViewManager.append(item: systemMessage) { [unowned self] in
             self.collectionView.scrollToEnd()
-        }
-
-        switch channelDisplayable.channelType {
-        case .system(_):
-            break
-        case .pending(_):
-            break 
-        case .channel(let channel):
-            MessageDeliveryManager.sendMessage(to: channel,
-                                               with: message,
-                                               context: context,
-                                               attributes: mutableAttributes)
-                .observe { (result) in
-                    switch result {
-                    case .success(_):
-                        break
-                    case .failure(let error):
-                        print(error)
-                    }
-            }
         }
 
         self.messageInputView.reset()

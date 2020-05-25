@@ -12,13 +12,60 @@ import TMROFutures
 
 class MessageDeliveryManager {
 
+    static func send(message: String,
+                     context: MessageContext = .casual,
+                     attributes: [String: Any],
+                     completion: @escaping CompletionHandler) -> SystemMessage? {
+
+        if let channelDisplayable = ChannelSupplier.shared.activeChannel.value {
+            if let current = User.current(), let objectId = current.objectId {
+
+                var mutableAttributes = attributes
+                mutableAttributes["updateId"] = UUID().uuidString
+
+                let systemMessage = SystemMessage(avatar: current,
+                                                  context: context,
+                                                  text: message,
+                                                  isFromCurrentUser: true,
+                                                  createdAt: Date(),
+                                                  authorId: objectId,
+                                                  messageIndex: nil,
+                                                  status: .sent,
+                                                  id: String(),
+                                                  attributes: mutableAttributes)
+
+                if case .channel(let channel) = channelDisplayable.channelType {
+                    self.sendMessage(to: channel, with: message, context: context, attributes: mutableAttributes)
+                        .observe { (result) in
+                            switch result {
+                            case .success(_):
+                                completion(true, nil)
+                            case .failure(let error):
+                                completion(false, error)
+                            }
+                    }
+                } else {
+
+                }
+
+                return systemMessage
+
+            } else {
+                completion(false, ClientError.message(detail: "No id found for the current user."))
+            }
+        } else {
+            completion(false, ClientError.message(detail: "No active channel found."))
+        }
+
+        return nil
+    }
+
     //MARK: MESSAGE HELPERS
 
-    @discardableResult
-    static func sendMessage(to channel: TCHChannel,
-                            with body: String,
-                            context: MessageContext = .casual,
-                            attributes: [String : Any] = [:]) -> Future<Messageable> {
+    private static func sendMessage(to channel: TCHChannel,
+                                    with body: String,
+                                    context: MessageContext = .casual,
+                                    attributes: [String : Any] = [:]) -> Future<Messageable> {
 
         let message = body.extraWhitespaceRemoved()
         let promise = Promise<Messageable>()
