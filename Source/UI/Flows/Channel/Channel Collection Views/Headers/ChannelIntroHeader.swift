@@ -8,14 +8,14 @@
 
 import Foundation
 import TwilioChatClient
+import TMROLocalization
 
 class ChannelIntroHeader: UICollectionReusableView {
 
     let avatarView = AvatarView()
     let textView = TextView()
-    let label = DisplayLabel()
+    let label = DisplayUnderlinedLabel()
 
-    private(set) var attributes: ChannelCollectionViewLayoutAttributes?
     private(set) var channel: DisplayableChannel?
 
     override init(frame: CGRect) {
@@ -32,31 +32,59 @@ class ChannelIntroHeader: UICollectionReusableView {
         self.addSubview(self.avatarView)
         self.addSubview(self.label)
         self.addSubview(self.textView)
-        self.set(backgroundColor: .red)
     }
 
-    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.apply(layoutAttributes)
+    override func layoutSubviews() {
+        super.layoutSubviews()
 
-        guard let attributes = layoutAttributes as? ChannelCollectionViewLayoutAttributes else { return }
-        self.attributes = attributes
-        self.layoutContent(with: attributes)
+        let maxWidth = self.width - (Theme.contentOffset * 2)
+        self.textView.setSize(withWidth: maxWidth)
+        self.textView.left = Theme.contentOffset
+        self.textView.pin(.bottom, padding: Theme.contentOffset * 2)
+
+        self.label.setSize(withWidth: maxWidth)
+        self.label.match(.left, to: .left, of: self.textView)
+        self.label.match(.bottom, to: .top, of: self.textView, offset: (Theme.contentOffset * 2) * -1)
+
+        self.avatarView.setSize(for: maxWidth * 0.4)
+        self.avatarView.match(.left, to: .left, of: self.textView)
+        self.avatarView.match(.bottom, to: .top, of: self.label, offset: -4)
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        self.attributes = nil
         self.textView.text = nil
     }
 
     func configure(with channel: DisplayableChannel) {
         self.channel = channel
+
+        if case .channel(let tchChannel) = channel.channelType {
+            tchChannel.getMembersAsUsers()
+                .observeValue { (users) in
+                    runMain {
+                        let notMeUsers = users.filter { (user) -> Bool in
+                            return user.objectId != User.current()?.objectId
+                        }
+
+                        if let first = notMeUsers.first, let date = tchChannel.dateCreatedAsDate {
+                            self.avatarView.set(avatar: first)
+                            self.label.set(text: first.givenName, color: .background4)
+                            let message = self.getMessage(name: first.givenName, date: date)
+                            let attributed = AttributedString(message,
+                                                              fontType: .small,
+                                                              color: .background4)
+                            self.textView.set(attributed: attributed, linkColor: .purple)
+                        }
+
+                        self.layoutNow()
+                    }
+            }
+        }
     }
 
-    private func layoutContent(with attributes: ChannelCollectionViewLayoutAttributes) {
-
-        self.avatarView.frame = attributes.attributes.avatarFrame
-        self.textView.frame = attributes.attributes.textViewFrame
+    private func getMessage(name: String, date: Date) -> LocalizedString {
+        return LocalizedString(id: "", arguments: [name, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). You created this conversation on @(date)")
     }
 }

@@ -37,6 +37,12 @@ extension Date {
         return formatter
     }
 
+    static var monthDayYear: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d, yyyy"
+        return formatter
+    }
+
     static var weekdayMonthDayYear: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE, MMM d, yyyy"

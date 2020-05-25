@@ -177,9 +177,9 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     private func getIntroHeader(for section: ChannelSectionable,
                                 at indexPath: IndexPath,
                                 in collectionView: ChannelCollectionView) -> UICollectionReusableView? {
-
+        guard let channel = self.activeChannel else { return nil }
         let header = collectionView.dequeueReusableHeaderView(ChannelIntroHeader.self, for: indexPath)
-
+        header.configure(with: channel)
         return header
     }
 
