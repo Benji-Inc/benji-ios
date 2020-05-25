@@ -31,17 +31,21 @@ extension ChannelDataSource {
 
         for (index, cell) in visibleCells.enumerated() {
             let animationDelay: TimeInterval = duration/Double(visibleCells.count)*Double(index)
-            /// Set the initial transform and alpha for cells
-            cell.alpha = 0.0
-            cell.transform = AnimationPosition.down.getTransform(for: cell)
-            /// Reveal the collection view once cells are hidden.
-            self.collectionView.alpha = 1
+            
+            if let messageCell = cell as? MessageCell, let message = messageCell.currentMessage {
+                /// Set the initial transform and alpha for cells
+                cell.alpha = 0.0
+                let direction: AnimationPosition = message.isFromCurrentUser ? .right : .left
+                cell.transform = direction.getTransform(for: cell)
+                /// Reveal the collection view once cells are hidden.
+                self.collectionView.alpha = 1
 
-            UIView.animate(withDuration: duration, delay: animationDelay, options: .curveEaseInOut, animations: {
-                /// Animate cells now that collection view is showing
-                cell.transform = .identity
-                cell.alpha = 1.0
-            })
+                UIView.animate(withDuration: duration, delay: animationDelay, options: .curveEaseInOut, animations: {
+                    /// Animate cells now that collection view is showing
+                    cell.transform = .identity
+                    cell.alpha = 1.0
+                })
+            }
             longestDelay = animationDelay
         }
 

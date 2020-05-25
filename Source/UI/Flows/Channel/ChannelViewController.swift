@@ -130,18 +130,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        print("WILL APPEAR")
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        print("WILL DISAPPEAR")
-    }
-
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
@@ -158,6 +146,14 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
                 }
             }
         }
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        MessageSupplier.shared.reset()
+        ChannelSupplier.shared.set(activeChannel: nil)
+        self.collectionViewManager.reset()
     }
     
     override func viewDidLayoutSubviews() {
@@ -186,14 +182,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.messageInputView.bottom = self.collectionView.bottom - messageBottomOffset
         self.messageInputView.centerOnX()
-    }
-
-    override func viewWasDismissed() {
-        super.viewWasDismissed()
-
-        MessageSupplier.shared.reset()
-        ChannelSupplier.shared.set(activeChannel: nil)
-        self.collectionViewManager.reset()
     }
 
     func send(message: String,
@@ -230,24 +218,4 @@ extension ChannelViewController: TCHChannelDelegate {
         
         self.collectionViewManager.updateItem(with: message)
     }
-
-//    func chatClient(_ client: TwilioChatClient,
-//                    channel: TCHChannel,
-//                    synchronizationStatusUpdated status: TCHChannelSynchronizationStatus) {
-//
-//        switch status {
-//        case .none:
-//            print("SYNC STATUS: NONE")
-//        case .identifier:
-//            print("SYNC STATUS: ID")
-//        case .metadata:
-//            print("SYNC STATUS: META")
-//        case .all:
-//            print("SYNC STATUS: ALL")
-//        case .failed:
-//            print("SYNC STATUS: FAILED")
-//        @unknown default:
-//            break
-//        }
-//    }
 }
