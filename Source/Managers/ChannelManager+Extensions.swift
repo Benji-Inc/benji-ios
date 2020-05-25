@@ -74,6 +74,21 @@ extension ChannelManager: TwilioChatClientDelegate {
 
     //MARK: CLIENT UDPATES
 
+    func chatClientTokenExpired(_ client: TwilioChatClient) {
+        self.getNewChatTokent()
+    }
+
+    func chatClientTokenWillExpire(_ client: TwilioChatClient) {
+        self.getNewChatTokent()
+    }
+
+    private func getNewChatTokent() {
+        GetChatToken().makeRequest()
+            .observeValue { (token) in
+                self.update(token: token)
+        }
+    }
+
     func chatClient(_ client: TwilioChatClient, synchronizationStatusUpdated status: TCHClientSynchronizationStatus) {
         self.clientSyncUpdate.value = status
     }
@@ -84,6 +99,7 @@ extension ChannelManager: TwilioChatClientDelegate {
         case .unknown:
             print("CONNECTION STATE: UNKNOWN")
         case .disconnected:
+            self.getNewChatTokent()
             print("CONNECTION STATE: DISCONNECTED")
         case .connected:
             print("CONNECTION STATE: CONNECTED")

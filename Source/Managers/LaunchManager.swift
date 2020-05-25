@@ -122,7 +122,7 @@ class LaunchManager {
     private func initializeUserData(with buo: BranchUniversalObject?) {
         if let identity = User.current()?.objectId {
             Branch.getInstance().setIdentity(identity)
-            self.getChatToken(with: identity, buo: buo)
+            self.getChatToken(buo: buo)
         } else if let deeplink = buo {
             self.delegate?.launchManager(self, didFinishWith: .deeplink(object: deeplink))
         } else {
@@ -130,7 +130,7 @@ class LaunchManager {
         }
     }
 
-    func getChatToken(with identity: String, buo: BranchUniversalObject?) {
+    func getChatToken(buo: BranchUniversalObject?) {
         GetChatToken()
             .makeRequest()
             .observe { (result) in

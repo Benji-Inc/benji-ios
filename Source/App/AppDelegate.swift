@@ -26,10 +26,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        print("applicationDidBecomeActive")
         UserNotificationManager.shared.clearNotificationCenter()
-        guard !ChannelManager.shared.isConnected, let identity = User.current()?.objectId else { return }
-        LaunchManager.shared.getChatToken(with: identity, buo: nil)
+        guard !ChannelManager.shared.isConnected, let _ = User.current()?.objectId else { return }
+
+        GetChatToken()
+            .makeRequest()
+            .observeValue { (token) in
+                if ChannelManager.shared.client.isNil {
+                    ChannelManager.shared.initialize(token: token)
+                } else {
+                    ChannelManager.shared.update(token: token)
+                }
+        }
     }
 
     func application(_ application: UIApplication,

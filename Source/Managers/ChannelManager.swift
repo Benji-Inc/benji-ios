@@ -38,10 +38,7 @@ class ChannelManager: NSObject {
         return client.connectionState == .connected
     }
 
-    deinit {
-        self.client?.shutdown() // This was recommended in the docs.
-    }
-
+    @discardableResult
     func initialize(token: String) -> Future<Void> {
         let promise = Promise<Void>()
         TwilioChatClient.chatClient(withToken: token,
@@ -53,6 +50,7 @@ class ChannelManager: NSObject {
                                             promise.reject(with: error)
                                         } else if let strongClient = client {
                                             self.client = strongClient
+                                            TwilioChatClient.setLogLevel(.debug)
                                             promise.resolve(with: ())
                                         } else {
                                             promise.reject(with: ClientError.message(detail: "Failed to initialize chat client."))
@@ -62,10 +60,21 @@ class ChannelManager: NSObject {
         return promise.withResultToast(with: "Messaging Enabled.")
     }
 
-    func update(token: String, completion: @escaping CompletionHandler) {
-        guard let client = self.client else { return }
-        client.updateToken(token, completion: { (result) in
-            completion(true, nil)
-        })
+    @discardableResult
+    func update(token: String) -> Future<Void> {
+        let promise = Promise<Void>()
+        if let client = self.client {
+            client.updateToken(token, completion: { (result) in
+                if result.isSuccessful() {
+                    promise.resolve(with: ())
+                } else if let e = result.error {
+                    promise.reject(with: e)
+                } else {
+                    promise.reject(with: ClientError.message(detail: "Failed to update chat token."))
+                }
+            })
+        }
+
+        return promise
     }
 }
