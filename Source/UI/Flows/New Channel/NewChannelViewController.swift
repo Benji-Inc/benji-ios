@@ -167,10 +167,7 @@ class NewChannelViewController: SwitchableContentViewController<NewChannelConten
             return user.id
         }
 
-        let friendlyName = users.first?.givenName.lowercased() ?? "you"
-
-        ChannelSupplier.shared.createChannel(friendlyName: friendlyName, context: .casual, members: members)
-
+        ChannelSupplier.shared.createChannel(friendlyName: "", context: .casual, members: members)
         self.delegate.newChannelViewControllerDidCreateChannel(self)
     }
 }

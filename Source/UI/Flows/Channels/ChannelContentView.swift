@@ -8,6 +8,7 @@
 
 import Foundation
 import TMROLocalization
+import TwilioChatClient
 
 class ChannelContentView: View {
 
@@ -59,44 +60,7 @@ class ChannelContentView: View {
         case .pending(_):
             break 
         case .channel(let channel):
-            channel.getMembersAsUsers()
-                .observeValue(with: { (users) in
-                    runMain {
-                        let notMeUsers = users.filter { (user) -> Bool in
-                            return user.objectId != User.current()?.objectId
-                        }
-
-                        if let first = notMeUsers.first {
-                            first.routine?.fetchIfNeededInBackground(block: { (object, error) in
-                                if let routine = object as? Routine, let date = routine.date {
-                                    let formatter = DateFormatter()
-                                    formatter.dateFormat = "h:mm a"
-                                    let string = formatter.string(from: date)
-                                    self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s routine is: @(routine)")
-                                } else {
-                                    self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine set for @(name).")
-                                }
-                            })
-                        } else {
-                            self.descriptionText = "It's just you in here."
-                        }
-
-                        self.stackedAvatarView.set(items: notMeUsers)
-                        self.layoutNow()
-                    }
-                })
-
-            if let date = channel.dateUpdatedAsDate {
-                self.dateLabel.set(date: date, color: .background3, alignment: .right)
-            }
-
-            if let context = channel.context {
-                self.titleLabel.set(text: type.displayName, color: context.color)
-            } else {
-                self.titleLabel.set(text: type.displayName, color: .white)
-            }
-
-            self.layoutNow()
+            self.display(channel: channel)
         }
 
         self.layoutNow()
@@ -124,6 +88,62 @@ class ChannelContentView: View {
         self.dateLabel.setSize(withWidth: self.width)
         self.dateLabel.right = self.width - Theme.contentOffset
         self.dateLabel.top = Theme.contentOffset
+    }
+
+    private func display(channel: TCHChannel) {
+
+        channel.getMembersAsUsers()
+            .observeValue(with: { (users) in
+                runMain {
+                    let notMeUsers = users.filter { (user) -> Bool in
+                        return user.objectId != User.current()?.objectId
+                    }
+
+                    if let first = notMeUsers.first {
+                        first.routine?.fetchIfNeededInBackground(block: { (object, error) in
+                            if let routine = object as? Routine, let date = routine.date {
+                                let formatter = DateFormatter()
+                                formatter.dateFormat = "h:mm a"
+                                let string = formatter.string(from: date)
+                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s routine is: @(routine)")
+                            } else {
+                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine set for @(name).")
+                            }
+                        })
+
+                        if let context = channel.context {
+                            if channel.isOwnedByMe {
+                                self.titleLabel.set(text: first.givenName, color: context.color)
+                            } else if let author = users.first(where: { (user) -> Bool in
+                                return user.id == channel.createdBy
+                            }) {
+                                self.titleLabel.set(text: author.givenName, color: context.color)
+                            }
+                        } else {
+                            if channel.isOwnedByMe {
+                                self.titleLabel.set(text: first.givenName, color: .white)
+                            } else if let author = users.first(where: { (user) -> Bool in
+                                return user.id == channel.createdBy
+                            }) {
+                                self.titleLabel.set(text: author.givenName, color: .white)
+                            }
+                        }
+
+                    } else {
+                        self.titleLabel.set(text: "You", color: channel.context?.color ?? .white)
+                        self.descriptionText = "It's just you in here."
+                    }
+
+                    self.stackedAvatarView.set(items: notMeUsers)
+                    self.layoutNow()
+                }
+            })
+
+        if let date = channel.dateUpdatedAsDate {
+            self.dateLabel.set(date: date, color: .background3, alignment: .right)
+        }
+
+        self.layoutNow()
     }
 
     func reset() {
