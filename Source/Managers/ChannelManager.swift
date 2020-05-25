@@ -50,7 +50,7 @@ class ChannelManager: NSObject {
                                             promise.reject(with: error)
                                         } else if let strongClient = client {
                                             self.client = strongClient
-                                            TwilioChatClient.setLogLevel(.debug)
+                                            //TwilioChatClient.setLogLevel(.debug)
                                             promise.resolve(with: ())
                                         } else {
                                             promise.reject(with: ClientError.message(detail: "Failed to initialize chat client."))
