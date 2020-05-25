@@ -228,10 +228,18 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         case .pending(_):
             break 
         case .channel(let channel):
-            ChannelManager.shared.sendMessage(to: channel,
-                                              with: message,
-                                              context: context,
-                                              attributes: mutableAttributes)
+            MessageDeliveryManager.sendMessage(to: channel,
+                                               with: message,
+                                               context: context,
+                                               attributes: mutableAttributes)
+                .observe { (result) in
+                    switch result {
+                    case .success(_):
+                        break
+                    case .failure(let error):
+                        print(error)
+                    }
+            }
         }
 
         self.messageInputView.reset()

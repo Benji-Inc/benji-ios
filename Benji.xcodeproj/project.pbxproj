@@ -277,6 +277,7 @@
 		D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503D21DAF98500CD8CE4 /* TextField.swift */; };
 		D6D1504021DAFB8300CD8CE4 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503F21DAFB8300CD8CE4 /* UITextField+Extensions.swift */; };
 		D6D1504F21E304D800CD8CE4 /* BouncyCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1504E21E304D800CD8CE4 /* BouncyCollectionViewLayout.swift */; };
+		D6D627B5247C29B20046BB70 /* MessageDeliveryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D627B4247C29B20046BB70 /* MessageDeliveryManager.swift */; };
 		D6D6D57223A6D43100D2B5BF /* CancelButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57123A6D43100D2B5BF /* CancelButton.swift */; };
 		D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */; };
 		D6D6D57623A70DF100D2B5BF /* SearchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57523A70DF100D2B5BF /* SearchButton.swift */; };
@@ -613,6 +614,7 @@
 		D6D1503D21DAF98500CD8CE4 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		D6D1503F21DAFB8300CD8CE4 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		D6D1504E21E304D800CD8CE4 /* BouncyCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BouncyCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D6D627B4247C29B20046BB70 /* MessageDeliveryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDeliveryManager.swift; sourceTree = "<group>"; };
 		D6D6D57123A6D43100D2B5BF /* CancelButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelButton.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ScalingAnimation.swift"; sourceTree = "<group>"; };
 		D6D6D57523A70DF100D2B5BF /* SearchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButton.swift; sourceTree = "<group>"; };
@@ -1464,6 +1466,7 @@
 				D62BB73B244D3AAD00607677 /* UserNotifications */,
 				D658C7DE24425E5A0027D12E /* HealthKitManager.swift */,
 				D69EB4442457E33600473530 /* SessionManager.swift */,
+				D6D627B4247C29B20046BB70 /* MessageDeliveryManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1697,6 +1700,7 @@
 				D60C814422092E4700A127A3 /* PagingCollectionView.swift in Sources */,
 				D61EC0DB21D30CB300204BEE /* Dismissable.swift in Sources */,
 				D642735322C85B740088256B /* SystemAvatar.swift in Sources */,
+				D6D627B5247C29B20046BB70 /* MessageDeliveryManager.swift in Sources */,
 				D6D14FF821D5893700CD8CE4 /* IGListMoveIndexPath.m in Sources */,
 				D657955A239C8DA000A01338 /* FeedIntroView.swift in Sources */,
 				D6D14D9121D5893600CD8CE4 /* IGListIndexSetResult.m in Sources */,

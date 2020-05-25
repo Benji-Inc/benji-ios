@@ -68,41 +68,4 @@ class ChannelManager: NSObject {
             completion(true, nil)
         })
     }
-    
-    //MARK: MESSAGE HELPERS
-
-    @discardableResult
-    func sendMessage(to channel: TCHChannel,
-                     with body: String,
-                     context: MessageContext = .casual,
-                     attributes: [String : Any] = [:]) -> Future<Messageable> {
-
-        let message = body.extraWhitespaceRemoved()
-        let promise = Promise<Messageable>()
-        var mutableAttributes = attributes
-        mutableAttributes["context"] = context.rawValue
-
-        guard self.isConnected,
-                !message.isEmpty,
-                channel.status == .joined,
-                let messages = channel.messages,
-                let tchAttributes = TCHJsonAttributes.init(dictionary: mutableAttributes) else {
-                promise.reject(with: ClientError.message(detail: "Failed to send message."))
-                return promise
-        }
-
-        let messageOptions = TCHMessageOptions().withBody(body)
-        messageOptions.withAttributes(tchAttributes, completion: nil)
-        messages.sendMessage(with: messageOptions) { (result, message) in
-            if result.isSuccessful(), let msg = message {
-                promise.resolve(with: msg)
-            } else if let error = result.error {
-                promise.reject(with: error)
-            } else {
-                promise.reject(with: ClientError.message(detail: "Failed to send message."))
-            }
-        }
-
-        return promise.withResultToast()
-    }
 }
