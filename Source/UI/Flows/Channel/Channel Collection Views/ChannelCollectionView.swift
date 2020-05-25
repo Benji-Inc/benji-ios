@@ -33,6 +33,8 @@ class ChannelCollectionView: CollectionView {
     private func registerReusableViews() {
         self.register(MessageCell.self)
         self.register(TypingIndicatorCell.self)
+        self.register(ChannelIntroHeader.self,
+                      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
         self.register(ChannelSectionHeader.self,
                       forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
         self.register(LoadMoreSectionHeader.self,

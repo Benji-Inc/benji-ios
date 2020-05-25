@@ -170,6 +170,12 @@ class ChannelCollectionViewFlowLayout: UICollectionViewFlowLayout {
     }
 
     private func headerConfigurer(for section: Int) -> ChannelHeaderAttributesConfigurer? {
+        if section == 0,
+            let messageIndex = self.dataSource?.item(at: IndexPath(item: 0, section: 0))?.messageIndex,
+            messageIndex == 0 {
+            return ChannelIntroHeaderAttributesConfigurer()
+        }
+        
         return nil
     }
 

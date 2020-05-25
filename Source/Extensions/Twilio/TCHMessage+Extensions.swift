@@ -75,6 +75,17 @@ extension TCHMessage: Messageable {
         return .delivered
     }
 
+    var type: MessageType {
+        switch self.messageType {
+        case .text:
+            return .text
+        case .media:
+            return .media
+        @unknown default:
+            return .text 
+        }
+    }
+
     var context: MessageContext {
         if let statusString = self.attributes()?.dictionary?["context"] as? String, let type = MessageContext(rawValue: statusString) {
             return type

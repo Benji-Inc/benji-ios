@@ -18,6 +18,11 @@ enum MessageStatus: String {
     case error
 }
 
+enum MessageType {
+    case text
+    case media
+}
+
 protocol Messageable: class {
 
     var createdAt: Date { get }
@@ -35,6 +40,7 @@ protocol Messageable: class {
     var isConsumed: Bool { get }
     var hasBeenConsumedBy: [String] { get }
     var color: Color { get }
+    var type: MessageType { get }
     func udpateConsumers(with consumer: Avatar) -> Future<Void>
     func appendAttributes(with attributes: [String: Any]) -> Future<Void>
 }

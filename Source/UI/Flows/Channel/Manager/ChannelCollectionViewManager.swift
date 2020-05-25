@@ -158,14 +158,28 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
 
         guard let section = self.sections[safe: indexPath.section] else { fatalError() }
 
-        if indexPath.section == 0,
-            let topHeader = self.getTopHeader(for: section, at: indexPath, in: channelCollectionView) {
-            return topHeader
+        if indexPath.section == 0 {
+            if let messageIndex = self.item(at: IndexPath(item: 0, section: 0))?.messageIndex,
+                messageIndex == 0,
+                let header = self.getIntroHeader(for: section, at: indexPath, in: channelCollectionView) {
+                return header
+            } else if let topHeader = self.getTopHeader(for: section, at: indexPath, in: channelCollectionView) {
+                return topHeader
+            }
         }
 
         let header = channelCollectionView.dequeueReusableHeaderView(ChannelSectionHeader.self, for: indexPath)
         header.configure(with: section.date)
         
+        return header
+    }
+
+    private func getIntroHeader(for section: ChannelSectionable,
+                                at indexPath: IndexPath,
+                                in collectionView: ChannelCollectionView) -> UICollectionReusableView? {
+
+        let header = collectionView.dequeueReusableHeaderView(ChannelIntroHeader.self, for: indexPath)
+
         return header
     }
 

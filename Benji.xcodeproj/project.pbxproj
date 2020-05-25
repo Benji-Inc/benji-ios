@@ -278,6 +278,7 @@
 		D6D1504021DAFB8300CD8CE4 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503F21DAFB8300CD8CE4 /* UITextField+Extensions.swift */; };
 		D6D1504F21E304D800CD8CE4 /* BouncyCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1504E21E304D800CD8CE4 /* BouncyCollectionViewLayout.swift */; };
 		D6D627B5247C29B20046BB70 /* MessageDeliveryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D627B4247C29B20046BB70 /* MessageDeliveryManager.swift */; };
+		D6D627B7247C712E0046BB70 /* ChannelIntroHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D627B6247C712E0046BB70 /* ChannelIntroHeader.swift */; };
 		D6D6D57223A6D43100D2B5BF /* CancelButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57123A6D43100D2B5BF /* CancelButton.swift */; };
 		D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */; };
 		D6D6D57623A70DF100D2B5BF /* SearchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57523A70DF100D2B5BF /* SearchButton.swift */; };
@@ -289,6 +290,7 @@
 		D6DADF702207DF60007D9EB1 /* ChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF6F2207DF60007D9EB1 /* ChannelCell.swift */; };
 		D6DADF722207DF83007D9EB1 /* ChannelsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF712207DF83007D9EB1 /* ChannelsCollectionView.swift */; };
 		D6DADF742207E0E2007D9EB1 /* TCHChannel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF732207E0E2007D9EB1 /* TCHChannel+Extensions.swift */; };
+		D6DDE421247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DDE420247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift */; };
 		D6E0ED4F239CA8950073B33E /* FeedChannelInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E0ED4E239CA8950073B33E /* FeedChannelInviteView.swift */; };
 		D6E0ED53239CBDA40073B33E /* FeedUnreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E0ED52239CBDA40073B33E /* FeedUnreadView.swift */; };
 		D6E4C7FB238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */; };
@@ -615,6 +617,7 @@
 		D6D1503F21DAFB8300CD8CE4 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		D6D1504E21E304D800CD8CE4 /* BouncyCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BouncyCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6D627B4247C29B20046BB70 /* MessageDeliveryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageDeliveryManager.swift; sourceTree = "<group>"; };
+		D6D627B6247C712E0046BB70 /* ChannelIntroHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelIntroHeader.swift; sourceTree = "<group>"; };
 		D6D6D57123A6D43100D2B5BF /* CancelButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelButton.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ScalingAnimation.swift"; sourceTree = "<group>"; };
 		D6D6D57523A70DF100D2B5BF /* SearchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButton.swift; sourceTree = "<group>"; };
@@ -626,6 +629,7 @@
 		D6DADF6F2207DF60007D9EB1 /* ChannelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCell.swift; sourceTree = "<group>"; };
 		D6DADF712207DF83007D9EB1 /* ChannelsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionView.swift; sourceTree = "<group>"; };
 		D6DADF732207E0E2007D9EB1 /* TCHChannel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHChannel+Extensions.swift"; sourceTree = "<group>"; };
+		D6DDE420247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelIntroHeaderAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D6E0ED4E239CA8950073B33E /* FeedChannelInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedChannelInviteView.swift; sourceTree = "<group>"; };
 		D6E0ED52239CBDA40073B33E /* FeedUnreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUnreadView.swift; sourceTree = "<group>"; };
 		D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderAttributesConfigurer.swift; sourceTree = "<group>"; };
@@ -935,6 +939,7 @@
 			isa = PBXGroup;
 			children = (
 				D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */,
+				D6DDE420247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift */,
 			);
 			path = "Header Configurers";
 			sourceTree = "<group>";
@@ -942,6 +947,7 @@
 		D63844102337C3900072227B /* Headers */ = {
 			isa = PBXGroup;
 			children = (
+				D6D627B6247C712E0046BB70 /* ChannelIntroHeader.swift */,
 				D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */,
 				D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */,
 				D63844112337C3CD0072227B /* LoadMoreSectionHeader.swift */,
@@ -1728,6 +1734,7 @@
 				D66A0B942351821200A0FFEA /* Completeable.swift in Sources */,
 				D64C6AA2232EA06800DB7257 /* TypingCellAttributesConfigurer.swift in Sources */,
 				D685CEB4243B7F5E0018F3E3 /* ContextCollectionView.swift in Sources */,
+				D6DDE421247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift in Sources */,
 				D6CAB394246D9B6000BD72CF /* ChatToken+Cloud.swift in Sources */,
 				D64273A522CC05DD0088256B /* InputTextView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
@@ -1870,6 +1877,7 @@
 				D6D14D8F21D5893600CD8CE4 /* NSNumber+IGListDiffable.m in Sources */,
 				D6740D4823AEA5BD009D5702 /* ChannelsCoordiantor.swift in Sources */,
 				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,
+				D6D627B7247C712E0046BB70 /* ChannelIntroHeader.swift in Sources */,
 				D6E0ED53239CBDA40073B33E /* FeedUnreadView.swift in Sources */,
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
 				D64273A722CC2D280088256B /* ChannelViewController+Extensions.swift in Sources */,

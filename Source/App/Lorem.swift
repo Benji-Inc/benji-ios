@@ -111,6 +111,7 @@ class Lorem {
                                     authorId: "testMessage",
                                     messageIndex: nil,
                                     status: .sent,
+                                    type: .text,
                                     id: String(),
                                     attributes: nil)
 
@@ -127,6 +128,7 @@ class Lorem {
                                     authorId: "testMessage",
                                     messageIndex: nil,
                                     status: .sent,
+                                    type: .text,
                                     id: String(),
                                     attributes: nil)
         return message

@@ -143,4 +143,8 @@ class MessageSupplier {
         guard let tchMessage = message as? TCHMessage, let messagesObject = self.messagesObject else { return }
         messagesObject.remove(tchMessage, completion: nil)
     }
+
+    private func createIntroMessage() -> Messageable {
+        return Lorem.systemMessage()
+    }
 }

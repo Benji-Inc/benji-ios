@@ -14,6 +14,7 @@ class MessageDeliveryManager {
 
     static func send(message: String,
                      context: MessageContext = .casual,
+                     type: MessageType = .text,
                      attributes: [String: Any],
                      completion: @escaping CompletionHandler) -> SystemMessage? {
 
@@ -31,6 +32,7 @@ class MessageDeliveryManager {
                                                   authorId: objectId,
                                                   messageIndex: nil,
                                                   status: .sent,
+                                                  type: type, 
                                                   id: String(),
                                                   attributes: mutableAttributes)
 

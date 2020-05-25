@@ -28,6 +28,7 @@ class SystemMessage: Messageable {
     var hasBeenConsumedBy: [String] {
         return self.attributes?["consumers"] as? [String] ?? []
     }
+    var type: MessageType
 
     init(avatar: Avatar,
          context: MessageContext,
@@ -37,6 +38,7 @@ class SystemMessage: Messageable {
          authorId: String,
          messageIndex: NSNumber?,
          status: MessageStatus,
+         type: MessageType,
          id: String,
          attributes: [String: Any]?) {
 
@@ -50,6 +52,7 @@ class SystemMessage: Messageable {
         self.status = status
         self.id = id
         self.attributes = attributes
+        self.type = type
     }
 
     // Used for updating the read state of messages
@@ -63,6 +66,7 @@ class SystemMessage: Messageable {
                   authorId: message.authorID,
                   messageIndex: message.messageIndex,
                   status: message.status,
+                  type: message.type, 
                   id: message.id,
                   attributes: message.attributes)
     }
