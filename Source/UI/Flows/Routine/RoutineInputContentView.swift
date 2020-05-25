@@ -55,17 +55,17 @@ class RoutineInputContentView: View {
         self.timeHump.bottom = self.setRoutineButton.top - 100
         self.timeHump.centerOnX()
 
-        self.timeLabel.setSize(withWidth: 220)
+        self.timeLabel.setSize(withWidth: 240)
         self.timeLabel.centerOnX()
         self.timeLabel.bottom = self.timeHump.top - self.timeLabelYOffset
 
         self.minusButton.size = CGSize(width: 50, height: 50)
         self.minusButton.centerY = self.timeLabel.centerY
-        self.minusButton.right = self.timeLabel.left - 30
+        self.minusButton.right = self.timeLabel.left - 20
 
         self.plusButton.size = CGSize(width: 50, height: 50)
         self.plusButton.centerY = self.timeLabel.centerY
-        self.plusButton.left = self.timeLabel.right + 30
+        self.plusButton.left = self.timeLabel.right + 20
 
         self.everyDayLabel.setSize(withWidth: 200)
         self.everyDayLabel.centerOnX()
