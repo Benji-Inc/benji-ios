@@ -21,10 +21,7 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
 
     init() {
         let collectionView = ChannelsCollectionView()
-
         super.init(with: collectionView)
-
-        self.subscribeToUpdates()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -40,6 +37,8 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
             guard let item = selectedItem else { return }
             self.delegate?.channelsView(self, didSelect: item.item.channelType)
         }
+
+        self.subscribeToUpdates()
     }
 }
 

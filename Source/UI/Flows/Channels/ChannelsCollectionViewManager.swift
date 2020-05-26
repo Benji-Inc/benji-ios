@@ -147,4 +147,32 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
         // Create and return a UIMenu with the share action
         return UIMenu(title: "Options", children: [open, deleteMenu])
     }
+
+    // Footer
+
+    override func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+
+        switch kind {
+        case UICollectionView.elementKindSectionFooter:
+            return self.footer(for: collectionView, at: indexPath)
+        default:
+            fatalError("UNRECOGNIZED SECTION KIND")
+        }
+    }
+
+    override func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForFooterInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.width, height: 84)
+    }
+
+    private func footer(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
+        guard let channelsCollectionView = collectionView as? ChannelsCollectionView else { fatalError() }
+
+        let footer = channelsCollectionView.dequeueReusableFooterView(ReservationsFooter.self, for: indexPath)
+        footer.configure()
+        return footer
+    }
 }

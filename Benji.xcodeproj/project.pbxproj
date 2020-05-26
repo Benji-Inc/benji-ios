@@ -291,6 +291,7 @@
 		D6DADF722207DF83007D9EB1 /* ChannelsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF712207DF83007D9EB1 /* ChannelsCollectionView.swift */; };
 		D6DADF742207E0E2007D9EB1 /* TCHChannel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF732207E0E2007D9EB1 /* TCHChannel+Extensions.swift */; };
 		D6DDE421247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DDE420247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift */; };
+		D6DDE423247D671400436E8D /* ReservationsFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DDE422247D671400436E8D /* ReservationsFooter.swift */; };
 		D6E0ED4F239CA8950073B33E /* FeedChannelInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E0ED4E239CA8950073B33E /* FeedChannelInviteView.swift */; };
 		D6E0ED53239CBDA40073B33E /* FeedUnreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E0ED52239CBDA40073B33E /* FeedUnreadView.swift */; };
 		D6E4C7FB238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */; };
@@ -630,6 +631,7 @@
 		D6DADF712207DF83007D9EB1 /* ChannelsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionView.swift; sourceTree = "<group>"; };
 		D6DADF732207E0E2007D9EB1 /* TCHChannel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHChannel+Extensions.swift"; sourceTree = "<group>"; };
 		D6DDE420247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelIntroHeaderAttributesConfigurer.swift; sourceTree = "<group>"; };
+		D6DDE422247D671400436E8D /* ReservationsFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsFooter.swift; sourceTree = "<group>"; };
 		D6E0ED4E239CA8950073B33E /* FeedChannelInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedChannelInviteView.swift; sourceTree = "<group>"; };
 		D6E0ED52239CBDA40073B33E /* FeedUnreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUnreadView.swift; sourceTree = "<group>"; };
 		D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderAttributesConfigurer.swift; sourceTree = "<group>"; };
@@ -1534,6 +1536,7 @@
 				D6DADF6B2207DCA8007D9EB1 /* ChannelsViewController.swift */,
 				D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */,
 				D6830221234AA35C006145FE /* DisplayableChannel.swift */,
+				D6DDE422247D671400436E8D /* ReservationsFooter.swift */,
 			);
 			path = Channels;
 			sourceTree = "<group>";
@@ -1981,6 +1984,7 @@
 				D6A82B752325C39A003E0A8B /* PurposeTitleTextField.swift in Sources */,
 				D66F0FDC22BF2ADC00BA277D /* HomeCoordinator.swift in Sources */,
 				D6A301AE2381B8D7006655E0 /* FeedCollectionView.swift in Sources */,
+				D6DDE423247D671400436E8D /* ReservationsFooter.swift in Sources */,
 				D6D14FFC21D5893700CD8CE4 /* IGListBatchUpdateData.mm in Sources */,
 				D6FC8096237A64650089AACC /* MessageSupplier.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,

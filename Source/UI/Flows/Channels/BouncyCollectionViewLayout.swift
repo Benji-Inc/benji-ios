@@ -35,6 +35,11 @@ class BouncyCollectionViewLayout: UICollectionViewFlowLayout {
         self.newBehaviors(for: attributes).forEach { behavior in
             self.animator.addBehavior(behavior, self.damping, self.frequency)
         }
+
+        self.collectionView?.contentInset.bottom = 80
+        if let collectionView = self.collectionView {
+            self.footerReferenceSize = CGSize(width: collectionView.width, height: 200)
+        }
     }
 
     private func oldBehaviors(for attributes: [UICollectionViewLayoutAttributes]) -> [UIAttachmentBehavior] {

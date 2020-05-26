@@ -216,7 +216,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         }
     }
 
-
     private func footer(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let channelCollectionView = collectionView as? ChannelCollectionView else { fatalError() }
 

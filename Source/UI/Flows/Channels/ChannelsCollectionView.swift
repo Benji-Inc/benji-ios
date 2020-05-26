@@ -14,13 +14,20 @@ class ChannelsCollectionView: CollectionView {
         let flowLayout = BouncyCollectionViewLayout()
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumLineSpacing = 16
-        flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 300, right: 0)
+        flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 16, right: 0)
         super.init(layout: flowLayout)
 
-        self.bounces = true 
+        self.bounces = true
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+
+    override func initializeViews() {
+        super.initializeViews()
+
+        self.register(ReservationsFooter.self,
+                      forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
     }
 }
