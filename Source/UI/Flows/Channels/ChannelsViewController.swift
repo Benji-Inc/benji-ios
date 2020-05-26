@@ -11,6 +11,7 @@ import TwilioChatClient
 
 protocol ChannelsViewControllerDelegate: class {
     func channelsView(_ controller: ChannelsViewController, didSelect channelType: ChannelType)
+    func channelsView(_ controller: ChannelsViewController, didSelect reservation: Reservation)
 }
 
 class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsCollectionViewManager> {
@@ -36,6 +37,10 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
         self.collectionViewManager.onSelectedItem.signal.observeValues { (selectedItem) in
             guard let item = selectedItem else { return }
             self.delegate?.channelsView(self, didSelect: item.item.channelType)
+        }
+
+        self.collectionViewManager.didSelectReservation = { [unowned self] reservation in
+            self.delegate?.channelsView(self, didSelect: reservation)
         }
 
         self.subscribeToUpdates()

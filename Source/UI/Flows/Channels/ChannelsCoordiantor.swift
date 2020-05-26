@@ -39,4 +39,29 @@ extension ChannelsCoordinator: ChannelsViewControllerDelegate {
         })
         self.router.present(coordinator, source: source, animated: true)
     }
+
+    func channelsView(_ controller: ChannelsViewController, didSelect reservation: Reservation) {
+        runMain {
+            self.presentShare(for: reservation)
+        }
+    }
+
+    private func presentShare(for reservation: Reservation) {
+
+        if let _ = reservation.metadata {
+            let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
+            self.router.navController.present(ac, animated: true)
+        } else {
+            reservation.prepareMetaData()
+                .observeValue { (_) in
+                    runMain {
+                        let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
+                        ac.completionWithItemsHandler = { activityType, completed, items, error in
+                            // do stuff
+                        }
+                        self.router.navController.present(ac, animated: true)
+                    }
+            }
+        }
+    }
 }

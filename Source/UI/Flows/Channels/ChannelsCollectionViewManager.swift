@@ -25,6 +25,8 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
         }
     }
 
+    var didSelectReservation: ((Reservation) -> Void)? = nil
+
     func loadFilteredChannels() {
         guard let filter = self.channelFilter else { return }
 
@@ -173,6 +175,9 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
 
         let footer = channelsCollectionView.dequeueReusableFooterView(ReservationsFooter.self, for: indexPath)
         footer.configure()
+        footer.didSelectReservation = { [unowned self] reservation in
+            self.didSelectReservation?(reservation)
+        }
         return footer
     }
 }

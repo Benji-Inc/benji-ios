@@ -11,6 +11,8 @@ import Foundation
 class ReservationsFooter: UICollectionReusableView {
 
     let reservationsButton = LoadingButton()
+    var didSelectReservation: ((Reservation) -> Void)? = nil
+    var reservations: [Reservation] = []
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,6 +27,14 @@ class ReservationsFooter: UICollectionReusableView {
     private func initializeViews() {
         self.addSubview(self.reservationsButton)
         self.reservationsButton.set(style: .normal(color: .purple, text: "Invite"))
+
+        self.reservationsButton.didSelect = { [unowned self] in
+            guard let reservation = self.reservations.first(where: { (reservation) -> Bool in
+                return !reservation.isClaimed
+            }) else { return }
+
+            self.didSelectReservation?(reservation)
+        }
     }
 
     func configure() {
@@ -51,6 +61,8 @@ class ReservationsFooter: UICollectionReusableView {
                         numberOfUnclaimed += 1
                     }
                 }
+
+                self.reservations = reservations
 
                 var text = ""
                 if numberOfUnclaimed == 0 {
