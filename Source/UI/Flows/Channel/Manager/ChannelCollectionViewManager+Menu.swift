@@ -65,6 +65,6 @@ extension ChannelCollectionViewManager: UIContextMenuInteractionDelegate {
 
     private func setToRead(message: Messageable) {
         guard let current = User.current() else { return }
-        message.udpateConsumers(with: current)
+        _ = message.udpateConsumers(with: current)
     }
 }

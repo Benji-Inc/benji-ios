@@ -102,7 +102,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
             return cell
         }
 
-        guard let message = self.item(at: indexPath) else { fatalError("No message found for cell") }
+        guard let message = self.item(at: indexPath) else { return UICollectionViewCell() }
 
         let cell = channelCollectionView.dequeueReusableCell(MessageCell.self, for: indexPath)
 
