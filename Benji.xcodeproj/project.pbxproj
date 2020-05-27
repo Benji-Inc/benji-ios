@@ -98,7 +98,6 @@
 		D6432BF322D828480016001A /* ChannelDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6432BF222D828480016001A /* ChannelDataSource.swift */; };
 		D6432BF522D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6432BF422D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift */; };
 		D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3B22CFCCD80055CC7C /* ClientError.swift */; };
-		D646DB3E22CFCF330055CC7C /* TwilioChatClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3D22CFCF330055CC7C /* TwilioChatClient+Extensions.swift */; };
 		D646DB4022CFCFDB0055CC7C /* Future+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3F22CFCFDB0055CC7C /* Future+Extensions.swift */; };
 		D646DB4422CFDE0C0055CC7C /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB4322CFDE0C0055CC7C /* LoadingView.swift */; };
 		D64932D723FE460200986335 /* FeedIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64932D623FE460200986335 /* FeedIndicatorView.swift */; };
@@ -419,7 +418,6 @@
 		D6432BF222D828480016001A /* ChannelDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDataSource.swift; sourceTree = "<group>"; };
 		D6432BF422D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		D646DB3B22CFCCD80055CC7C /* ClientError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientError.swift; sourceTree = "<group>"; };
-		D646DB3D22CFCF330055CC7C /* TwilioChatClient+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TwilioChatClient+Extensions.swift"; sourceTree = "<group>"; };
 		D646DB3F22CFCFDB0055CC7C /* Future+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Future+Extensions.swift"; sourceTree = "<group>"; };
 		D646DB4322CFDE0C0055CC7C /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		D64932D623FE460200986335 /* FeedIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedIndicatorView.swift; sourceTree = "<group>"; };
@@ -1059,7 +1057,6 @@
 			children = (
 				D6DADF732207E0E2007D9EB1 /* TCHChannel+Extensions.swift */,
 				D6DADF682207D246007D9EB1 /* TCHMessage+Extensions.swift */,
-				D646DB3D22CFCF330055CC7C /* TwilioChatClient+Extensions.swift */,
 				D64C6A96232D5C0400DB7257 /* TCHMember+Extensions.swift */,
 			);
 			path = Twilio;
@@ -1913,7 +1910,6 @@
 				D6E80C8B23B2D1180012D438 /* FeedNotificationPermissionsView.swift in Sources */,
 				D684840A22CD48D000362AC3 /* GradientView.swift in Sources */,
 				D68540D9235FE089006F666C /* Suggestion.swift in Sources */,
-				D646DB3E22CFCF330055CC7C /* TwilioChatClient+Extensions.swift in Sources */,
 				D6FC8098237A66220089AACC /* ChannelSupplier.swift in Sources */,
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,
 				D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */,

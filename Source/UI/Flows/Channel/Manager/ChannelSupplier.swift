@@ -251,7 +251,7 @@ class ChannelSupplier {
     func findChannel(with channelId: String) -> Future<TCHChannel> {
 
         let promise = Promise<TCHChannel>()
-        ChannelManager.shared.client?.findChannel(with: channelId)
+        self.find(channelId: channelId)
             .observe(with: { (result) in
                 switch result {
                 case .success(let channel):
@@ -262,6 +262,27 @@ class ChannelSupplier {
             })
 
         return promise
+    }
+
+    private func find(channelId: String) -> Future<TCHChannel> {
+        let promise = Promise<TCHChannel>()
+
+        guard let channels = ChannelManager.shared.client?.channelsList() else {
+            promise.reject(with: ClientError.message(detail: "No channels were found."))
+            return promise
+        }
+
+        channels.channel(withSidOrUniqueName: channelId) { (result, channel) in
+            if let strongChannel = channel, result.isSuccessful() {
+                promise.resolve(with: strongChannel)
+            } else if let error = result.error {
+                promise.reject(with: error)
+            } else {
+                promise.reject(with: ClientError.message(detail: "No channel with that ID was found."))
+            }
+        }
+
+        return promise.withResultToast()
     }
 
     func getChannel(containingMember userID: String) -> DisplayableChannel? {
