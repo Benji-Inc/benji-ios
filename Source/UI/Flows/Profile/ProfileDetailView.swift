@@ -38,9 +38,6 @@ class ProfileDetailView: View {
         case .routine:
             self.titleLabel.set(text: "Routine")
             self.getRoutine(for: user)
-        case .invites:
-            self.titleLabel.set(text: "Invites")
-            self.getReservations(for: user)
         }
 
         self.layoutNow()
@@ -79,30 +76,5 @@ class ProfileDetailView: View {
 
             self.layoutNow()
         })
-    }
-
-    private func getReservations(for user: User) {
-        Reservation.getReservations(for: user)
-            .observeValue { (reservations) in
-                var numberOfUnclaimed: Int = 0
-
-                reservations.forEach { (reservation) in
-                    if !reservation.isClaimed {
-                        numberOfUnclaimed += 1
-                    }
-                }
-
-                var text = ""
-                if numberOfUnclaimed == 0 {
-                    text = "You have no reservations left."
-                    self.button.isHidden = true
-                } else {
-                    text = "You have \(String(numberOfUnclaimed)) left."
-                    self.button.isHidden = false
-                }
-
-                self.label.set(text: text)
-                self.button.set(style: .normal(color: .lightPurple, text: "SHARE"))
-        }
     }
 }

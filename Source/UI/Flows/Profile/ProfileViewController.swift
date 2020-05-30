@@ -21,11 +21,10 @@ class ProfileViewController: ViewController {
     weak var delegate: ProfileViewControllerDelegate?
 
     private let scrollView = UIScrollView()
-    private let avatarView = AvatarView()
+    private(set) var avatarView = AvatarView()
     private let nameView = ProfileDetailView()
     private let localTimeView = ProfileDetailView()
     private let routineView = ProfileDetailView()
-    private let reservationsView = ProfileDetailView()
 
     init(with user: User) {
         self.user = user
@@ -56,25 +55,18 @@ class ProfileViewController: ViewController {
         self.routineView.button.didSelect = { [unowned self] in
             self.delegate?.profileView(self, didSelect: .routine, for: self.user)
         }
-
-        self.view.addSubview(self.reservationsView)
-        self.reservationsView.button.isVisible = true
-        self.reservationsView.button.didSelect = { [unowned self] in
-            self.delegate?.profileView(self, didSelect: .invites, for: self.user)
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.updateItems()
+        self.updateItems(with: self.user)
     }
 
-    func updateItems() {
-        self.nameView.configure(with: .name, for: self.user)
-        self.localTimeView.configure(with: .localTime, for: self.user)
-        self.routineView.configure(with: .routine, for: self.user)
-        self.reservationsView.configure(with: .invites, for: self.user)
+    func updateItems(with user: User) {
+        self.nameView.configure(with: .name, for: user)
+        self.localTimeView.configure(with: .localTime, for: user)
+        self.routineView.configure(with: .routine, for: user)
     }
 
     override func viewDidLayoutSubviews() {
@@ -98,11 +90,6 @@ class ProfileViewController: ViewController {
         self.routineView.match(.top, to: .bottom, of: self.localTimeView, offset: Theme.contentOffset)
         self.routineView.pin(.left, padding: Theme.contentOffset)
 
-        self.reservationsView.size = itemSize
-        self.reservationsView.match(.top, to: .bottom, of: self.routineView, offset: Theme.contentOffset)
-        self.reservationsView.pin(.left, padding: Theme.contentOffset)
-
-
-        self.scrollView.contentSize = CGSize(width: self.view.width, height: self.reservationsView.bottom)
+        self.scrollView.contentSize = CGSize(width: self.view.width, height: self.routineView.bottom)
     }
 }

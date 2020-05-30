@@ -14,5 +14,4 @@ enum ProfileItem {
     case name
     case localTime
     case routine
-    case invites
 }

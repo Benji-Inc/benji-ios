@@ -42,25 +42,6 @@ class ProfileCoordinator: Coordinator<Void> {
         let vc = ProfilePhotoViewController(with: self)
         self.router.present(vc, source: self.profileVC)
     }
-
-    private func presentShare(for reservation: Reservation) {
-
-        if let _ = reservation.metadata {
-            let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
-            self.router.navController.present(ac, animated: true)
-        } else {
-            reservation.prepareMetaData()
-                .observeValue { (_) in
-                    runMain {
-                        let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
-                        ac.completionWithItemsHandler = { activityType, completed, items, error in
-                            // do stuff
-                        }
-                        self.router.navController.present(ac, animated: true)
-                    }
-            }
-        }
-    }
 }
 
 extension ProfileCoordinator: ProfileViewControllerDelegate {
@@ -73,13 +54,6 @@ extension ProfileCoordinator: ProfileViewControllerDelegate {
             self.presentRoutine()
         case .picture:
             self.presentPhoto()
-        case .invites:
-            Reservation.getFirstUnclaimed(for: user)
-                .observeValue { (reservation) in
-                    runMain {
-                        self.presentShare(for: reservation)
-                    }
-            }
         default:
             break 
         }
@@ -88,8 +62,9 @@ extension ProfileCoordinator: ProfileViewControllerDelegate {
 
 extension ProfileCoordinator: ProfilePhotoViewControllerDelegate {
     func profilePhotoViewControllerDidFinish(_ controller: ProfilePhotoViewController) {
-//        controller.dismiss(animated: true) {
-//            self.profileVC.collectionView.reloadData()
-//        }
+        controller.dismiss(animated: true) {
+            guard let user = User.current() else { return }
+            self.profileVC.updateItems(with: user)
+        }
     }
 }
