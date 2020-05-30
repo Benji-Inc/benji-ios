@@ -62,10 +62,6 @@ class HomeViewController: FullScreenViewController {
 
         self.contentContainer.addSubview(self.centerContainer)
 
-        self.tabView.newChannelButton.didSelect = { [unowned self] in
-            self.delegate.homeViewDidTapAdd(self)
-        }
-
         self.contentContainer.addSubview(self.tabView)
 
         self.currentContent.producer

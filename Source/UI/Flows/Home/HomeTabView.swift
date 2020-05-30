@@ -13,7 +13,6 @@ class HomeTabView: View {
     private(set) var profileItem = ImageViewButton()
     private(set) var feedItem = ImageViewButton()
     private(set) var channelsItem = ImageViewButton()
-    private(set) var newChannelButton = HomeNewChannellButton()
     private(set) var lineView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     private let flashLightView = View()
 
@@ -33,7 +32,6 @@ class HomeTabView: View {
         self.addSubview(self.profileItem)
         self.addSubview(self.feedItem)
         self.addSubview(self.channelsItem)
-        self.addSubview(self.newChannelButton)
     }
 
     override func layoutSubviews() {
@@ -43,8 +41,8 @@ class HomeTabView: View {
         self.lineView.height = 1
         self.lineView.pin(.top)
 
-        let itemWidth = (self.width - (self.newChannelButton.width + 40)) * 0.25
-        let itemSize = CGSize(width: itemWidth, height: self.newChannelButton.height)
+        let itemWidth = self.width * 0.33
+        let itemSize = CGSize(width: itemWidth, height: 60)
         self.profileItem.size = itemSize
         self.profileItem.top = 0
         self.profileItem.left = 0
@@ -57,11 +55,7 @@ class HomeTabView: View {
         self.channelsItem.top = 0
         self.channelsItem.left = self.feedItem.right
 
-        self.newChannelButton.size = CGSize(width: 60, height: 60)
-        self.newChannelButton.top = 10
-        self.newChannelButton.right = self.width - Theme.contentOffset
-
-        self.flashLightView.size = CGSize(width: itemWidth * 0.55, height: 2)
+        self.flashLightView.size = CGSize(width: itemWidth * 0.35, height: 2)
         self.flashLightView.bottom = itemSize.height
 
         guard self.indicatorCenterX == nil else { return }

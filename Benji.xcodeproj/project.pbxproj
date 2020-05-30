@@ -305,7 +305,6 @@
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
 		D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
 		D6EDD1992355DBFA00FDA5D6 /* ProfileDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDD1982355DBFA00FDA5D6 /* ProfileDetailView.swift */; };
-		D6EE715023B704F2000ED221 /* HomeNewChannellButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE714F23B704F2000ED221 /* HomeNewChannellButton.swift */; };
 		D6EE715223B7C854000ED221 /* UICollectionViewLayout+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715123B7C854000ED221 /* UICollectionViewLayout+Extensions.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
 		D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */; };
@@ -645,7 +644,6 @@
 		D6EAC95423D145350028DAA2 /* Sizeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sizeable.swift; sourceTree = "<group>"; };
 		D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionViewController.swift; sourceTree = "<group>"; };
 		D6EDD1982355DBFA00FDA5D6 /* ProfileDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailView.swift; sourceTree = "<group>"; };
-		D6EE714F23B704F2000ED221 /* HomeNewChannellButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNewChannellButton.swift; sourceTree = "<group>"; };
 		D6EE715123B7C854000ED221 /* UICollectionViewLayout+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewLayout+Extensions.swift"; sourceTree = "<group>"; };
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
 		D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashableDisplayable.swift; sourceTree = "<group>"; };
@@ -1396,7 +1394,6 @@
 				D66F0FDD22BF2C5D00BA277D /* HomeSegmentControl.swift */,
 				D642735422C87CCA0088256B /* ImageViewButton.swift */,
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
-				D6EE714F23B704F2000ED221 /* HomeNewChannellButton.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -1722,7 +1719,6 @@
 				D6E0ED4F239CA8950073B33E /* FeedChannelInviteView.swift in Sources */,
 				D607400E23401B3E009633EB /* SystemChannel.swift in Sources */,
 				D6A82B6F2325BEA2003E0A8B /* ConnectionsViewController.swift in Sources */,
-				D6EE715023B704F2000ED221 /* HomeNewChannellButton.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */,
 				D6D1501C21D5F8AD00CD8CE4 /* MessageCell.swift in Sources */,
 				D65B0CE7234929440041A176 /* NewChannelCoordinator.swift in Sources */,
