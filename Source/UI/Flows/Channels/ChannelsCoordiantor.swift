@@ -40,28 +40,39 @@ extension ChannelsCoordinator: ChannelsViewControllerDelegate {
         self.router.present(coordinator, source: source, animated: true)
     }
 
-    func channelsView(_ controller: ChannelsViewController, didSelect reservation: Reservation) {
-        runMain {
+    func channelsView(_ controller: ChannelsViewController, didSelect reservation: Reservation, channelId: String) {
+
+        if let _ = reservation.metadata {
             self.presentShare(for: reservation)
+        } else {
+            reservation.prepareMetaData(with: channelId)
+                .observeValue { [unowned self] (_) in
+                    self.presentShare(for: reservation)
+            }
         }
     }
 
     private func presentShare(for reservation: Reservation) {
-
-        if let _ = reservation.metadata {
+        runMain {
             let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
-            self.router.navController.present(ac, animated: true)
-        } else {
-            reservation.prepareMetaData()
-                .observeValue { (_) in
-                    runMain {
-                        let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
-                        ac.completionWithItemsHandler = { activityType, completed, items, error in
-                            // do stuff
-                        }
-                        self.router.navController.present(ac, animated: true)
-                    }
+            ac.completionWithItemsHandler = { activityType, completed, items, error in
+                self.showAlert()
             }
+            self.router.navController.present(ac, animated: true)
         }
+    }
+
+    private func showAlert() {
+        let alert = UIAlertController(title: "Invitation Sent",
+                                      message: "Your invation has been sent. As soon as someone register's using your link, a conversation will be created between you both and you will be able to communicate using Benji.",
+                                      preferredStyle: .alert)
+
+        let ok = UIAlertAction(title: "Ok", style: .cancel) { (_) in
+
+        }
+
+        alert.addAction(ok)
+
+        self.router.navController.present(alert, animated: true, completion: nil)
     }
 }

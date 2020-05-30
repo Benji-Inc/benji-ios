@@ -11,7 +11,7 @@ import Foundation
 class ReservationsFooter: UICollectionReusableView {
 
     let reservationsButton = LoadingButton()
-    var didSelectReservation: ((Reservation) -> Void)? = nil
+    var didSelectReservation: ((Reservation, String) -> Void)? = nil
     var reservations: [Reservation] = []
 
     override init(frame: CGRect) {
@@ -33,7 +33,7 @@ class ReservationsFooter: UICollectionReusableView {
                 return !reservation.isClaimed
             }) else { return }
 
-            self.didSelectReservation?(reservation)
+            self.prepare(reservation: reservation)
         }
     }
 
@@ -45,7 +45,7 @@ class ReservationsFooter: UICollectionReusableView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.reservationsButton.setSize(with: self.width - 32)
+        self.reservationsButton.setSize(with: self.width - 16)
         self.reservationsButton.centerOnXAndY()
     }
 
@@ -64,19 +64,19 @@ class ReservationsFooter: UICollectionReusableView {
 
                 self.reservations = reservations
 
-                var text = ""
-                if numberOfUnclaimed == 0 {
-                    text = "You have no reservations left."
-                    //self.button.isHidden = true
-                } else {
-                    text = "You have \(String(numberOfUnclaimed)) left."
-                    //self.button.isHidden = false
-                }
-
                 self.layoutNow()
+        }
+    }
 
-                //self.label.set(text: text)
-                //self.button.set(style: .normal(color: .lightPurple, text: "SHARE"))
+    func prepare(reservation: Reservation) {
+        self.reservationsButton.isLoading = true
+        let channelId = UUID().uuidString
+        reservation.prepareMetaData(with: channelId)
+            .observeValue { (_) in
+                self.didSelectReservation?(reservation, channelId)
+                runMain {
+                    self.reservationsButton.isLoading = false
+                }
         }
     }
 }

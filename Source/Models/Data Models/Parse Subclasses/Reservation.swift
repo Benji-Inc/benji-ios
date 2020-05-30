@@ -128,11 +128,11 @@ extension Reservation: UIActivityItemSource {
         }
     }
 
-    func prepareMetaData() -> Future<Void> {
+    func prepareMetaData(with channelId: String = String()) -> Future<Void> {
         let promise = Promise<Void>()
         let metadataProvider = LPMetadataProvider()
 
-        self.link = self.generateBranchLink().getShortUrl(with: self.generateBranchProperties())
+        self.link = self.generateBranchLink(with: channelId).getShortUrl(with: self.generateBranchProperties())
         if let linkString = self.link, let url = URL(string: linkString) {
             metadataProvider.startFetchingMetadata(for: url) { (metadata, error) in
                 if let e = error {
@@ -149,7 +149,7 @@ extension Reservation: UIActivityItemSource {
         return promise
     }
 
-    func generateBranchLink() -> BranchUniversalObject {
+    func generateBranchLink(with channelId: String) -> BranchUniversalObject {
 
         let canonicalIdentifier = UUID().uuidString
         let buo = BranchUniversalObject(canonicalIdentifier: canonicalIdentifier)
@@ -160,6 +160,7 @@ extension Reservation: UIActivityItemSource {
         buo.contentMetadata.customMetadata[ReservationKey.reservationId.rawValue] = self.id
         buo.contentMetadata.customMetadata[ReservationKey.createdBy.rawValue] = self.createdBy?.id
         buo.contentMetadata.customMetadata["target"] = DeepLinkTarget.reservation.rawValue
+        buo.contentMetadata.customMetadata["channelId"] = channelId
 
         return buo
     }

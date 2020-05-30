@@ -94,16 +94,20 @@ class ChannelSupplier {
         }
     }
 
-    func createChannel(friendlyName: String, context: ConversationContext, members: [String]) {
-
-        let uniqueName = UUID().uuidString
+    func createChannel(uniqueName: String = UUID().uuidString,
+                       friendlyName: String,
+                       context: ConversationContext,
+                       members: [String],
+                       setActive: Bool = true) {
 
         var attributes: [String: Any] = [:]
         attributes[ChannelKey.context.rawValue] = context.rawValue
         CreateChannel(uniqueName: uniqueName, friendlyName: friendlyName, attributes: attributes, members: members)
             .makeRequest()
             .observeValue { (_) in
-                self.set(activeChannel: DisplayableChannel(channelType: .pending(uniqueName)))
+                if setActive {
+                    self.set(activeChannel: DisplayableChannel(channelType: .pending(uniqueName)))
+                }
         }
     }
 
