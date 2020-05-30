@@ -15,7 +15,6 @@ import TMROFutures
 enum LaunchStatus {
     case isLaunching
     case needsOnboarding
-    case deeplink(object: DeepLinkable)
     case success(object: DeepLinkable?, token: String)
     case failed(error: ClientError?)
 }
@@ -101,8 +100,10 @@ class LaunchManager {
                             //let buo = self.createTestBUO()
 
                             if let buo = branchObject {
+                                self.updateUser(with: buo)
                                 promise.resolve(with: buo)
                             } else if let buo = Branch.getInstance().getLatestReferringBranchUniversalObject() {
+                                self.updateUser(with: buo)
                                 promise.resolve(with: buo)
                             } else {
                                 promise.resolve(with: nil)
@@ -119,28 +120,39 @@ class LaunchManager {
         return promise
     }
 
+    func updateUser(with deeplink: DeepLinkable) {
+        guard let _ = User.current()?.objectId,
+            let metaData = deeplink.customMetadata as? [String: Any],
+            metaData.values.count > 0 else { return }
+
+        _ = UpdateUser(attributes: metaData).makeRequest()
+    }
+
     private func initializeUserData(with buo: BranchUniversalObject?) {
         if let identity = User.current()?.objectId {
             Branch.getInstance().setIdentity(identity)
-            self.getChatToken(buo: buo)
-        } else if let deeplink = buo {
-            self.delegate?.launchManager(self, didFinishWith: .deeplink(object: deeplink))
         } else {
             self.delegate?.launchManager(self, didFinishWith: .needsOnboarding)
         }
+
+        self.getChatToken(buo: buo)
     }
 
     func getChatToken(buo: BranchUniversalObject?) {
-        GetChatToken()
-            .makeRequest()
-            .observe { (result) in
-                switch result {
-                case .success(let token):
-                    self.finishedInitialFetch = true
-                    self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: token))
-                case .failure(_):
-                    self.delegate?.launchManager(self, didFinishWith: .failed(error: ClientError.generic))
-                }
+        if ChannelManager.shared.isConnected {
+            self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: String()))
+        } else {
+            GetChatToken()
+                .makeRequest()
+                .observe { (result) in
+                    switch result {
+                    case .success(let token):
+                        self.finishedInitialFetch = true
+                        self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: token))
+                    case .failure(_):
+                        self.delegate?.launchManager(self, didFinishWith: .failed(error: ClientError.generic))
+                    }
+            }
         }
     }
 

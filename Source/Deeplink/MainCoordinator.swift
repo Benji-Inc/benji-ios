@@ -50,14 +50,13 @@ class MainCoordinator: Coordinator<Void> {
 
             if ChannelManager.shared.isConnected {
                 self.runHomeFlow()
-            } else {
+            } else if !token.isEmpty {
                 self.initializeChat(with: token)
+            } else if let deeplink = object {
+                self.handle(deeplink: deeplink)
             }
         case .failed(_):
             break
-        case .deeplink(let object):
-            self.deepLink = object
-            self.handle(deeplink: object)
         }
     }
 
@@ -71,7 +70,15 @@ class MainCoordinator: Coordinator<Void> {
             .observeValue(with: { (_) in
                 self.isInitializingChat = false
                 guard let user = User.current(), user.isOnboarded else { return }
-                self.runHomeFlow()
+                if let user = User.current(), user.isOnboarded {
+                    if let deeplink = self.deepLink {
+                        self.handle(deeplink: deeplink)
+                    } else {
+                        self.runHomeFlow()
+                    }
+                } else {
+                    self.runOnboardingFlow()
+                }
             })
     }
 
