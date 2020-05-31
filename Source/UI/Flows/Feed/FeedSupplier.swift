@@ -44,27 +44,17 @@ class FeedSupplier {
 
     private func getInviteAsk() -> Future<Void> {
         let promise = Promise<Void>()
-        Reservation.getReservations(for: User.current()!)
+        Reservation.getFirstUnclaimed(for: User.current()!)
             .observe { (result) in
                 switch result {
-                case .success(let reservations):
-                    var firstUnclaimed: Reservation? = nil
-                    for reservation in reservations {
-                        if !reservation.isClaimed {
-                            firstUnclaimed = reservation
-                            break
-                        }
-                    }
-
-                    if let reservation = firstUnclaimed {
-                        self.items.append(.inviteAsk(reservation))
-                    }
-
+                case .success(let reservation):
+                    self.items.append(.inviteAsk(reservation))
                     promise.resolve(with: ())
-                case .failure(_):
-                    promise.reject(with: ClientError.generic)
+                case .failure(let error):
+                    promise.reject(with: error)
                 }
         }
+
         return promise
     }
 
