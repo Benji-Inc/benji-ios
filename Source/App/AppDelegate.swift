@@ -21,7 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.initializeKeyWindow(with: rootNavController)
         self.initializeMainCoordinator(with: rootNavController, withOptions: launchOptions)
         UserDefaults.standard.set(nil, forKey: Routine.currentRoutineKey)
-        print("didFinishLaunchingWithOptions")
         return true
     }
 

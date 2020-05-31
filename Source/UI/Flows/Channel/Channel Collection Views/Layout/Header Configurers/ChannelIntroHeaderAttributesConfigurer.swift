@@ -12,7 +12,6 @@ class ChannelIntroHeaderAttributesConfigurer: ChannelHeaderAttributesConfigurer 
 
     override func sizeForHeader(at section: Int, for layout: ChannelCollectionViewFlowLayout) -> CGSize {
         guard let collectionView = layout.collectionView else { return .zero }
-        let height = collectionView.height - 120
-        return CGSize(width: collectionView.width, height: height)
+        return CGSize(width: collectionView.width, height: collectionView.height - 120)
     }
 }

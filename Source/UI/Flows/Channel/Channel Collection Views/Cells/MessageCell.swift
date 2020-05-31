@@ -8,6 +8,7 @@
 
 import Foundation
 import TwilioChatClient
+import Lottie
 
 class MessageCell: UICollectionViewCell {
 
@@ -16,7 +17,8 @@ class MessageCell: UICollectionViewCell {
     let textView = MessageTextView()
     var didTapMessage: () -> Void = {}
     private(set) var currentMessage: Messageable?
-    private(set) var attributes: ChannelCollectionViewLayoutAttributes? 
+    private(set) var attributes: ChannelCollectionViewLayoutAttributes?
+    private var animationView = AnimationView(name: "loading")
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,6 +33,10 @@ class MessageCell: UICollectionViewCell {
     }
 
     private func initializeViews() {
+
+        self.contentView.addSubview(self.animationView)
+        self.animationView.contentMode = .scaleAspectFit
+        self.animationView.loopMode = .loop
 
         self.contentView.addSubview(self.avatarView)
         self.contentView.addSubview(self.bubbleView)
@@ -83,18 +89,12 @@ class MessageCell: UICollectionViewCell {
             case .error:
                 break
             }
-        } else {
-            switch message.status {
-            case .sent:
-                print("sent")
-            case .delivered:
-                print("delivered")
-            case .unknown:
-                print("unkown")
-            case .error:
-                print("error")
-            }
         }
+    }
+
+    private func showError() {
+        self.animationView.forceDisplayUpdate()
+        self.animationView.play()
     }
 
     private func handleIsConsumed(for message: Messageable) {
@@ -121,6 +121,10 @@ class MessageCell: UICollectionViewCell {
         self.bubbleView.layer.maskedCorners = attributes.attributes.maskedCorners
         self.bubbleView.roundCorners()
         self.bubbleView.indexPath = attributes.indexPath
+
+        self.animationView.size = CGSize(width: 18, height: 18)
+        self.animationView.match(.right, to: .left, of: self.bubbleView, offset: -5)
+        self.animationView.match(.bottom, to: .bottom, of: self.bubbleView, offset: -8)
     }
 }
 
