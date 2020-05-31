@@ -9,6 +9,7 @@
 import Foundation
 import TwilioChatClient
 import TMROFutures
+import TMROLocalization
 
 class MessageDeliveryManager {
 
@@ -16,7 +17,7 @@ class MessageDeliveryManager {
                      context: MessageContext = .casual,
                      type: MessageType = .text,
                      attributes: [String: Any],
-                     completion: @escaping CompletionHandler) -> SystemMessage? {
+                     completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
 
         if let channelDisplayable = ChannelSupplier.shared.activeChannel.value {
             if let current = User.current(), let objectId = current.objectId {
@@ -41,9 +42,9 @@ class MessageDeliveryManager {
                         .observe { (result) in
                             switch result {
                             case .success(_):
-                                completion(true, nil)
+                                completion(systemMessage, nil)
                             case .failure(let error):
-                                completion(false, error)
+                                completion(systemMessage, error)
                             }
                     }
                 } else {
@@ -53,13 +54,50 @@ class MessageDeliveryManager {
                 return systemMessage
 
             } else {
-                completion(false, ClientError.message(detail: "No id found for the current user."))
+                completion(nil, ClientError.message(detail: "No id found for the current user."))
             }
         } else {
-            completion(false, ClientError.message(detail: "No active channel found."))
+            completion(nil, ClientError.message(detail: "No active channel found."))
         }
 
         return nil
+    }
+
+    static func resend(message: Messageable, completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
+        if let channelDisplayable = ChannelSupplier.shared.activeChannel.value {
+            let systemMessage = SystemMessage(avatar: message.avatar,
+                                              context: message.context,
+                                              text: message.text,
+                                              isFromCurrentUser: message.isFromCurrentUser,
+                                              createdAt: message.createdAt,
+                                              authorId: message.authorID,
+                                              messageIndex: message.messageIndex,
+                                              status: .sent, // Reset the status
+                                              type: message.type,
+                                              id: message.id,
+                                              attributes: message.attributes)
+
+                if case .channel(let channel) = channelDisplayable.channelType {
+                    let attributes = message.attributes ?? [:]
+                    self.sendMessage(to: channel, with: localized(message.text), context: message.context, attributes: attributes)
+                        .observe { (result) in
+                            switch result {
+                            case .success(_):
+                                completion(systemMessage, nil)
+                            case .failure(let error):
+                                completion(systemMessage, error)
+                            }
+                    }
+                } else {
+                    completion(nil, ClientError.message(detail: "No active channel found."))
+                }
+
+            return systemMessage
+        } else {
+            completion(nil, ClientError.message(detail: "No active channel found."))
+        }
+
+        return nil 
     }
 
     //MARK: MESSAGE HELPERS

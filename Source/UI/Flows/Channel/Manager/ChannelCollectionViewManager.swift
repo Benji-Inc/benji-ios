@@ -30,7 +30,8 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
 
     var collectionView: ChannelCollectionView
     var didSelectURL: ((URL) -> Void)?
-    var didTapShare: ((Messageable) -> Void)? 
+    var didTapShare: ((Messageable) -> Void)?
+    var didTapResend: ((Messageable) -> Void)?
     var willDisplayCell: ((Messageable, IndexPath) -> Void)?
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .heavy)
     var userTyping: User?
@@ -111,7 +112,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         cell.textView.delegate = self
         cell.bubbleView.addInteraction(interaction)
         cell.didTapMessage = { [weak self] in
-            guard let `self` = self, let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed else { return }
+            guard let `self` = self, let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed  else { return }
 
             self.updateConsumers(with: current, for: message)
             self.selectionFeedback.impactOccurred()

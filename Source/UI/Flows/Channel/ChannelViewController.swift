@@ -106,6 +106,10 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             self.delegate.channelView(self, didTapShare: message)
         }
 
+        self.collectionViewManager.didTapResend = { [unowned self] message in
+            self.resend(message: message)
+        }
+
         self.detailVC.currentState.producer
             .skipRepeats()
             .on { [unowned self] (state) in
@@ -188,8 +192,10 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
               context: MessageContext = .casual,
               attributes: [String : Any]) {
 
-        guard let systemMessage = MessageDeliveryManager.send(message: message, context: context, attributes: attributes, completion: { (success, error) in
-            if let e = error {
+        guard let systemMessage = MessageDeliveryManager.send(message: message, context: context, attributes: attributes, completion: { (message, error) in
+            if let msg = message, let e = error {
+                msg.status = .error
+                self.collectionViewManager.updateItem(with: msg)                
                 print(e)
             }
         }) else { return }
@@ -199,6 +205,19 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         }
 
         self.messageInputView.reset()
+    }
+
+    func resend(message: Messageable) {
+
+        guard let systemMessage = MessageDeliveryManager.resend(message: message, completion: { (newMessage, error) in
+            if let msg = newMessage, let e = error {
+                msg.status = .error
+                self.collectionViewManager.updateItem(with: msg)
+                print(e)
+            }
+        }) else { return }
+
+        self.collectionViewManager.updateItem(with: systemMessage)
     }
 }
 

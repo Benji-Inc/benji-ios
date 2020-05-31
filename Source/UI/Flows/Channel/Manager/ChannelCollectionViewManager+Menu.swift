@@ -37,6 +37,11 @@ extension ChannelCollectionViewManager: UIContextMenuInteractionDelegate {
             // Show rename UI
         }
 
+        let resend = UIAction(title: "Resend", image: UIImage(systemName: "arrow.2.circlepath")) { action in
+            // resend message
+            self.didTapResend?(message)
+        }
+
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in}
 
         let confirm = UIAction(title: "Confirm", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
@@ -56,7 +61,11 @@ extension ChannelCollectionViewManager: UIContextMenuInteractionDelegate {
         let readMenu = UIMenu(title: "Set messages to read", image: UIImage(systemName: "eyeglasses"), children: [readCancel, readOk])
 
         if message.isFromCurrentUser {
-            return UIMenu(title: "", children: [deleteMenu, share, editMessage])
+            if message.status == .error {
+                return UIMenu(title: "There was an error sending this message.", children: [resend])
+            } else {
+                return UIMenu(title: "", children: [deleteMenu, share, editMessage])
+            }
         }
 
         // Create and return a UIMenu with the share action

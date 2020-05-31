@@ -18,7 +18,7 @@ class MessageCell: UICollectionViewCell {
     var didTapMessage: () -> Void = {}
     private(set) var currentMessage: Messageable?
     private(set) var attributes: ChannelCollectionViewLayoutAttributes?
-    private var animationView = AnimationView(name: "loading")
+    private var animationView = AnimationView(name: "error")
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -63,6 +63,7 @@ class MessageCell: UICollectionViewCell {
         self.bubbleView.layer.borderWidth = 0
         self.attributes = nil 
         self.textView.text = nil
+        self.animationView.alpha = 0
     }
 
     func configure(with message: Messageable) {
@@ -72,28 +73,30 @@ class MessageCell: UICollectionViewCell {
         }
         self.textView.set(text: message.text, messageContext: message.context)
 
-        self.handleStatus(for: message)
         self.handleIsConsumed(for: message)
+        self.handleStatus(for: message)
     }
 
     private func handleStatus(for message: Messageable) {
+        self.animationView.alpha = 0
 
         if message.isFromCurrentUser {
             switch message.status {
-            case .sent:
-                break
-            case .delivered:
-                break
-            case .unknown:
-                break
             case .error:
+                self.showError()
+            default:
                 break
             }
         }
     }
 
-    private func showError() {
+    func showError() {
         self.animationView.forceDisplayUpdate()
+
+        UIView.animate(withDuration: 0.2) {
+            self.animationView.alpha = 1
+        }
+
         self.animationView.play()
     }
 
@@ -122,8 +125,8 @@ class MessageCell: UICollectionViewCell {
         self.bubbleView.roundCorners()
         self.bubbleView.indexPath = attributes.indexPath
 
-        self.animationView.size = CGSize(width: 18, height: 18)
-        self.animationView.match(.right, to: .left, of: self.bubbleView, offset: -5)
+        self.animationView.size = CGSize(width: 22, height: 22)
+        self.animationView.match(.right, to: .left, of: self.bubbleView, offset: -6)
         self.animationView.match(.bottom, to: .bottom, of: self.bubbleView, offset: -8)
     }
 }
