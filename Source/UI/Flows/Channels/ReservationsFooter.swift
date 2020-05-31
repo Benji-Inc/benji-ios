@@ -11,7 +11,7 @@ import Foundation
 class ReservationsFooter: UICollectionReusableView {
 
     let reservationsButton = LoadingButton()
-    var didSelectReservation: ((Reservation, String) -> Void)? = nil
+    var didSelectReservation: ((Reservation) -> Void)? = nil
     var reservations: [Reservation] = []
 
     override init(frame: CGRect) {
@@ -70,10 +70,9 @@ class ReservationsFooter: UICollectionReusableView {
 
     func prepare(reservation: Reservation) {
         self.reservationsButton.isLoading = true
-        let channelId = UUID().uuidString
-        reservation.prepareMetaData(with: channelId)
+        reservation.prepareMetaData()
             .observeValue { (_) in
-                self.didSelectReservation?(reservation, channelId)
+                self.didSelectReservation?(reservation)
                 runMain {
                     self.reservationsButton.isLoading = false
                 }

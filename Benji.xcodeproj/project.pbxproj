@@ -206,6 +206,7 @@
 		D685CEB6243D8DCF0018F3E3 /* DisplayUnderlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEB5243D8DCF0018F3E3 /* DisplayUnderlinedLabel.swift */; };
 		D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685E9262331177100CC1BAB /* UserNotificationManager.swift */; };
 		D68BEAD1248302E700C95D31 /* User+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEAD0248302E700C95D31 /* User+Cloud.swift */; };
+		D68BEAD424831FA000C95D31 /* ReservationsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */; };
 		D68DC7FC22EE5D9000BEAF80 /* FeedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D696A8E92308D5C900DAFED4 /* MessageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D696A8E82308D5C900DAFED4 /* MessageInputView.swift */; };
@@ -527,6 +528,7 @@
 		D685CEB5243D8DCF0018F3E3 /* DisplayUnderlinedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayUnderlinedLabel.swift; sourceTree = "<group>"; };
 		D685E9262331177100CC1BAB /* UserNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
 		D68BEAD0248302E700C95D31 /* User+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Cloud.swift"; sourceTree = "<group>"; };
+		D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsCoordinator.swift; sourceTree = "<group>"; };
 		D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedOverlayView.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D696A8E82308D5C900DAFED4 /* MessageInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputView.swift; sourceTree = "<group>"; };
@@ -1274,6 +1276,14 @@
 			path = Context;
 			sourceTree = "<group>";
 		};
+		D68BEAD224831F7C00C95D31 /* Reservations */ = {
+			isa = PBXGroup;
+			children = (
+				D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */,
+			);
+			path = Reservations;
+			sourceTree = "<group>";
+		};
 		D69EB4482457E5E500473530 /* Parse */ = {
 			isa = PBXGroup;
 			children = (
@@ -1361,14 +1371,15 @@
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
-				D658C7D3244229C00027D12E /* Meditation */,
 				D6432BF122D8282E0016001A /* Channel */,
 				D6DADF6A2207DC90007D9EB1 /* Channels */,
 				D62C634F22BE9C4600F4D097 /* Feed */,
 				D6D145F521D549A300CD8CE4 /* Home */,
+				D658C7D3244229C00027D12E /* Meditation */,
 				D63753182316112E00214F63 /* New Channel */,
 				D67896A122FF40AB0059BA75 /* Onboarding */,
 				D6B2603B22E6B8CD00143CF0 /* Profile */,
+				D68BEAD224831F7C00C95D31 /* Reservations */,
 				D6EDD1932355DB6000FDA5D6 /* Routine */,
 				D67A82D9230CCE290076152B /* Splash */,
 			);
@@ -1763,6 +1774,7 @@
 				D609AE3C236F913F004FA89A /* Objectable.swift in Sources */,
 				D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */,
 				D64C6A7E23294A8600DB7257 /* ChannelKey.swift in Sources */,
+				D68BEAD424831FA000C95D31 /* ReservationsCoordinator.swift in Sources */,
 				D6384414233834380072227B /* Symbols.swift in Sources */,
 				D6DADF692207D246007D9EB1 /* TCHMessage+Extensions.swift in Sources */,
 				D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */,
