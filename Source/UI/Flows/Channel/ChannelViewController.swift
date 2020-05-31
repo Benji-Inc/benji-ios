@@ -110,6 +110,10 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             self.resend(message: message)
         }
 
+        self.collectionViewManager.didTapEdit = { [unowned self] message in
+            self.messageInputView.edit(message: message)
+        }
+
         self.detailVC.currentState.producer
             .skipRepeats()
             .on { [unowned self] (state) in
@@ -218,6 +222,19 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         }) else { return }
 
         self.collectionViewManager.updateItem(with: systemMessage)
+    }
+
+    func update(message: Messageable, text: String) {
+        let updatedMessage = MessageSupplier.shared.update(message: message, text: text) { (msg, error) in
+            if let e = error {
+                msg.status = .error
+                self.collectionViewManager.updateItem(with: msg)
+                print(e)
+            }
+        }
+
+        self.collectionViewManager.updateItem(with: updatedMessage)
+        self.messageInputView.reset()
     }
 }
 

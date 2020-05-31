@@ -32,6 +32,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     var didSelectURL: ((URL) -> Void)?
     var didTapShare: ((Messageable) -> Void)?
     var didTapResend: ((Messageable) -> Void)?
+    var didTapEdit: ((Messageable) -> Void)?
     var willDisplayCell: ((Messageable, IndexPath) -> Void)?
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .heavy)
     var userTyping: User?

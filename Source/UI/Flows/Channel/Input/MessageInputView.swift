@@ -9,6 +9,7 @@
 import Foundation
 import TwilioChatClient
 import Lottie
+import TMROLocalization
 
 class MessageInputView: View, ActiveChannelAccessor {
 
@@ -30,6 +31,7 @@ class MessageInputView: View, ActiveChannelAccessor {
     private var borderColor: CGColor?
 
     private(set) var messageContext: MessageContext = .casual
+    var editableMessage: Messageable?
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -169,6 +171,13 @@ class MessageInputView: View, ActiveChannelAccessor {
             })
             self.alertAnimator?.startAnimation()
         }
+    }
+
+    func edit(message: Messageable) {
+        self.editableMessage = message 
+        self.textView.text = localized(message.text)
+        self.messageContext = message.context
+        self.textView.becomeFirstResponder()
     }
 
     func handleConnection(state: TCHClientConnectionState) {

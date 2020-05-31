@@ -88,17 +88,22 @@ extension ChannelViewController: KeyboardObservable, UIGestureRecognizerDelegate
 
             self.previewAnimator?.addCompletion({ (position) in
                 if position == .end {
-                    self.send(message: text,
-                              context: self.messageInputView.messageContext,
-                              attributes: ["status": MessageStatus.sent.rawValue])
+                    if let updatedMessage = self.messageInputView.editableMessage {
+                        self.update(message: updatedMessage, text: text)
+                    } else {
+                        self.send(message: text,
+                                  context: self.messageInputView.messageContext,
+                                  attributes: ["status": MessageStatus.sent.rawValue])
+                    }
+                    self.messageInputView.editableMessage = nil
                     self.previewView?.removeFromSuperview()
                 }
                 if position == .start {
                     self.previewView?.removeFromSuperview()
                 }
 
-                self.collectionView.collectionViewLayout.collectionView?.contentInset.bottom = 80
-                self.collectionView.collectionViewLayout.invalidateLayout()
+                //self.collectionView.collectionViewLayout.collectionView?.contentInset.bottom = 80
+                //self.collectionView.collectionViewLayout.invalidateLayout()
             })
             self.previewAnimator?.pauseAnimation()
         case .changed:

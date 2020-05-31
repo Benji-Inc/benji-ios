@@ -144,7 +144,22 @@ class MessageSupplier {
         messagesObject.remove(tchMessage, completion: nil)
     }
 
-    private func createIntroMessage() -> Messageable {
-        return Lorem.systemMessage()
+    func update(message: Messageable, text: String, completion: ((SystemMessage, Error?) -> Void)?) -> SystemMessage {
+
+        let updatedMessage = SystemMessage(with: message)
+        updatedMessage.text = text
+
+        if let tchMessage = message as? TCHMessage {
+            tchMessage.updateBody(text) { (result) in
+                if let error = result.error {
+                    completion?(updatedMessage, error)
+                    print(error)
+                } else {
+                    completion?(updatedMessage, nil)
+                }
+            }
+        }
+
+        return updatedMessage
     }
 }
