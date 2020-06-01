@@ -34,7 +34,10 @@ extension ChannelCollectionViewManager: UIContextMenuInteractionDelegate {
         }
 
         let editMessage = UIAction(title: "Edit", image: UIImage(systemName: "square.and.pencil")) { action in
-            self.didTapEdit?(message)
+            self.didTapEdit?(message, indexPath)
+            if let messageCell = self.collectionView.cellForItem(at: indexPath) as? MessageCell {
+                messageCell.showEditing()
+            }
         }
 
         let resend = UIAction(title: "Resend", image: UIImage(systemName: "arrow.2.circlepath")) { action in

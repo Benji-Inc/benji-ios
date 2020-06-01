@@ -45,6 +45,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     var previewAnimator: UIViewPropertyAnimator?
     var previewView: PreviewMessageView?
     var interactiveStartingPoint: CGPoint?
+    var indexPathForEditing: IndexPath?
 
     unowned let delegate: ChannelViewControllerDelegates
 
@@ -110,7 +111,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             self.resend(message: message)
         }
 
-        self.collectionViewManager.didTapEdit = { [unowned self] message in
+        self.collectionViewManager.didTapEdit = { [unowned self] message, indexPath in
+            self.indexPathForEditing = indexPath
             self.messageInputView.edit(message: message)
         }
 
@@ -233,6 +235,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             }
         }
 
+        self.indexPathForEditing = nil
         self.collectionViewManager.updateItem(with: updatedMessage)
         self.messageInputView.reset()
     }

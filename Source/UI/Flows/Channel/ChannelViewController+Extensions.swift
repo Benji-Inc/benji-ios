@@ -19,7 +19,12 @@ extension ChannelViewController: KeyboardObservable, UIGestureRecognizerDelegate
         }
 
         animator.startAnimation()
-        self.collectionView.scrollToEnd()
+
+        if let indexPath = self.indexPathForEditing {
+            self.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+        } else {
+            self.collectionView.scrollToEnd()
+        }
     }
     
     func handle(pan: UIPanGestureRecognizer) {
