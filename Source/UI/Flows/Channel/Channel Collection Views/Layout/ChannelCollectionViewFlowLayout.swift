@@ -48,8 +48,9 @@ class ChannelCollectionViewFlowLayout: UICollectionViewFlowLayout {
     override func prepare() {
         super.prepare()
 
-        self.collectionView?.contentInset.top = 84
-        self.collectionView?.contentInset.bottom = 80
+        self.collectionView?.contentInsetAdjustmentBehavior = .automatic
+//        self.collectionView?.contentInset.top = 84
+//        self.collectionView?.contentInset.bottom = 80
         self.footerReferenceSize = CGSize(width: self.itemWidth, height: self.readFooterHeight)
     }
 

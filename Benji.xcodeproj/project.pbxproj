@@ -71,6 +71,7 @@
 		D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67D823D3927500EA373A /* PhoneTextField.swift */; };
 		D63C67DE23D415A700EA373A /* FaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DD23D415A700EA373A /* FaceView.swift */; };
 		D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */; };
+		D63D63032486A9020037E046 /* MessageInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D63022486A9020037E046 /* MessageInputAccessoryView.swift */; };
 		D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B5D236BCB4D00FAA06B /* AlertConfirmationView.swift */; };
 		D6405B67236E002E00FAA06B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
 		D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B6A236E0E7900FAA06B /* Connection.swift */; };
@@ -393,6 +394,7 @@
 		D63C67D823D3927500EA373A /* PhoneTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextField.swift; sourceTree = "<group>"; };
 		D63C67DD23D415A700EA373A /* FaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceView.swift; sourceTree = "<group>"; };
 		D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FaceDetectionViewController+Extensions.swift"; sourceTree = "<group>"; };
+		D63D63022486A9020037E046 /* MessageInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputAccessoryView.swift; sourceTree = "<group>"; };
 		D6405B5D236BCB4D00FAA06B /* AlertConfirmationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertConfirmationView.swift; sourceTree = "<group>"; };
 		D6405B66236E002E00FAA06B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D6405B6A236E0E7900FAA06B /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
@@ -1337,6 +1339,7 @@
 				D63752C5231258DA00214F63 /* PreviewMessageView.swift */,
 				D6405B5D236BCB4D00FAA06B /* AlertConfirmationView.swift */,
 				D67934DA23DC011D00536B44 /* CharacterCountView.swift */,
+				D63D63022486A9020037E046 /* MessageInputAccessoryView.swift */,
 			);
 			path = Input;
 			sourceTree = "<group>";
@@ -1776,6 +1779,7 @@
 				D657175E2378CEBA00F8F96C /* ChannelCollectionViewManager.swift in Sources */,
 				D68540D3235FDE96006F666C /* SuggestionCollectionViewManager.swift in Sources */,
 				D609AE3C236F913F004FA89A /* Objectable.swift in Sources */,
+				D63D63032486A9020037E046 /* MessageInputAccessoryView.swift in Sources */,
 				D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */,
 				D64C6A7E23294A8600DB7257 /* ChannelKey.swift in Sources */,
 				D68BEAD424831FA000C95D31 /* ReservationsCoordinator.swift in Sources */,

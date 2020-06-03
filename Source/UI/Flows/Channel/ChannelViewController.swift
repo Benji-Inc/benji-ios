@@ -49,6 +49,43 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     unowned let delegate: ChannelViewControllerDelegates
 
+
+    //NEW
+    // Custom Input Accessory View
+    private let chatInputAccessoryView: MessageInputAccessoryView = {
+        let view = MessageInputAccessoryView(frame: .zero, inputViewStyle: .default)
+        //view.sendButton.addTarget(self, action: #selector(didTapSend(sender:)), for: UIControlEvents.touchUpInside)
+
+        return view
+    }()
+
+    // Wrapper view controller for the custom input accessory view
+    private let chatInputAccessoryViewController = UIInputViewController()
+
+    // MARK: - Input accessory view
+
+    override var inputAccessoryViewController: UIInputViewController? {
+        // Ensure our input accessory view controller has it's input view set
+        self.chatInputAccessoryViewController.inputView = chatInputAccessoryView
+
+        // Return our custom input accessory view controller. You could also just return a UIView with
+        // override func inputAccessoryView()
+        return self.chatInputAccessoryViewController
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Automatic keyboard dismissal
+        self.collectionView.keyboardDismissMode = UIScrollView.KeyboardDismissMode.interactive
+    }
+
+    // MARK: - UIResponder overrides and key commands
+
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+
     init(delegate: ChannelViewControllerDelegates) {
         self.delegate = delegate
         super.init()
@@ -73,7 +110,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.collectionView)
-        self.view.addSubview(self.messageInputView)
+        //self.view.addSubview(self.messageInputView)
         self.messageInputView.height = self.messageInputView.minHeight
         self.addChild(viewController: self.detailVC, toView: self.view)
 
@@ -180,18 +217,19 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         self.detailVC.view.top = Theme.contentOffset
         self.detailVC.view.centerOnX()
 
-        self.collectionView.size = CGSize(width: self.view.width, height: height)
-        self.collectionView.top = 0
-        self.collectionView.centerOnX()
+        self.collectionView.expandToSuperviewSize()
+//        self.collectionView.size = CGSize(width: self.view.width, height: height)
+//        self.collectionView.top = 0
+//        self.collectionView.centerOnX()
 
-        self.messageInputView.width = self.view.width - Theme.contentOffset * 2
-        var messageBottomOffset: CGFloat = 10
-        if keyboardHeight == 0, let window = UIWindow.topWindow() {
-            messageBottomOffset += window.safeAreaInsets.bottom + 2
-        }
-
-        self.messageInputView.bottom = self.collectionView.bottom - messageBottomOffset
-        self.messageInputView.centerOnX()
+//        self.messageInputView.width = self.view.width - Theme.contentOffset * 2
+//        var messageBottomOffset: CGFloat = 10
+//        if keyboardHeight == 0, let window = UIWindow.topWindow() {
+//            messageBottomOffset += window.safeAreaInsets.bottom + 2
+//        }
+//
+//        self.messageInputView.bottom = self.collectionView.bottom - messageBottomOffset
+//        self.messageInputView.centerOnX()
     }
 
     func send(message: String,
