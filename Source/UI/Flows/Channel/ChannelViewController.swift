@@ -29,9 +29,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     private var animateMessages: Bool = true
 
-    var previewAnimator: UIViewPropertyAnimator?
-    var previewView: PreviewMessageView?
-    var interactiveStartingPoint: CGPoint?
     var indexPathForEditing: IndexPath?
 
     unowned let delegate: ChannelViewControllerDelegates
@@ -66,7 +63,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     }
 
     // Custom Input Accessory View
-    let messageInputAccessoryView = MessageInputAccessoryView()
+    lazy var messageInputAccessoryView = MessageInputAccessoryView(with: self)
 
     override var inputAccessoryView: UIView? {
         return self.messageInputAccessoryView
@@ -138,10 +135,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         self.collectionViewManager.didTapEdit = { [unowned self] message, indexPath in
             self.indexPathForEditing = indexPath
             self.messageInputAccessoryView.edit(message: message)
-        }
-
-        self.messageInputAccessoryView.onPanned = { [unowned self] (panRecognizer) in
-            self.handle(pan: panRecognizer)
         }
 
         self.collectionView.onDoubleTap { [unowned self] (doubleTap) in

@@ -30,6 +30,7 @@
 		D61D38E3248C07F700BE457B /* MessageInputAccessoryView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E2248C07F700BE457B /* MessageInputAccessoryView+Animation.swift */; };
 		D61D38E5248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E4248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift */; };
 		D61D38E7248C494A00BE457B /* ChannelViewController+Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E6248C494A00BE457B /* ChannelViewController+Messaging.swift */; };
+		D61D38E9248C506000BE457B /* MesasgeInputAccessoryView+Panning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E8248C506000BE457B /* MesasgeInputAccessoryView+Panning.swift */; };
 		D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0BF21D3071400204BEE /* AppDelegate.swift */; };
 		D61EC0C221D3071400204BEE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0C121D3071400204BEE /* ViewController.swift */; };
 		D61EC0C721D3071500204BEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
@@ -96,7 +97,6 @@
 		D642739F22CAFD680088256B /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739E22CAFD680088256B /* MessageTextView.swift */; };
 		D64273A122CBDC870088256B /* ContextButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64273A022CBDC870088256B /* ContextButton.swift */; };
 		D64273A522CC05DD0088256B /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64273A422CC05DD0088256B /* InputTextView.swift */; };
-		D64273A722CC2D280088256B /* ChannelViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64273A622CC2D280088256B /* ChannelViewController+Extensions.swift */; };
 		D6432BF022D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6432BEF22D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift */; };
 		D6432BF322D828480016001A /* ChannelDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6432BF222D828480016001A /* ChannelDataSource.swift */; };
 		D6432BF522D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6432BF422D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift */; };
@@ -352,6 +352,7 @@
 		D61D38E2248C07F700BE457B /* MessageInputAccessoryView+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageInputAccessoryView+Animation.swift"; sourceTree = "<group>"; };
 		D61D38E4248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageInputAccessoryView+Connection.swift"; sourceTree = "<group>"; };
 		D61D38E6248C494A00BE457B /* ChannelViewController+Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelViewController+Messaging.swift"; sourceTree = "<group>"; };
+		D61D38E8248C506000BE457B /* MesasgeInputAccessoryView+Panning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MesasgeInputAccessoryView+Panning.swift"; sourceTree = "<group>"; };
 		D61EC0BC21D3071400204BEE /* Benji.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Benji.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D61EC0BF21D3071400204BEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D61EC0C121D3071400204BEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -421,7 +422,6 @@
 		D642739E22CAFD680088256B /* MessageTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTextView.swift; sourceTree = "<group>"; };
 		D64273A022CBDC870088256B /* ContextButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextButton.swift; sourceTree = "<group>"; };
 		D64273A422CC05DD0088256B /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
-		D64273A622CC2D280088256B /* ChannelViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D6432BEF22D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCollectionViewLayoutAttributes.swift; sourceTree = "<group>"; };
 		D6432BF222D828480016001A /* ChannelDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDataSource.swift; sourceTree = "<group>"; };
 		D6432BF422D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
@@ -1055,7 +1055,6 @@
 				D67896CB2304524C0059BA75 /* ChannelCoordinator.swift */,
 				D6B2603722E6AB5E00143CF0 /* ChannelDetailViewController.swift */,
 				D6D1500621D5E73D00CD8CE4 /* ChannelViewController.swift */,
-				D64273A622CC2D280088256B /* ChannelViewController+Extensions.swift */,
 				D65E3EA7248803510074E789 /* ChannelViewController+Keyboard.swift */,
 				D61D38E6248C494A00BE457B /* ChannelViewController+Messaging.swift */,
 				D6FC8099237A68F50089AACC /* ChannelViewController+Updates.swift */,
@@ -1338,14 +1337,15 @@
 		D6B2603622E6AA3800143CF0 /* Input */ = {
 			isa = PBXGroup;
 			children = (
-				D64273A422CC05DD0088256B /* InputTextView.swift */,
-				D64273A022CBDC870088256B /* ContextButton.swift */,
-				D63752C5231258DA00214F63 /* PreviewMessageView.swift */,
 				D6405B5D236BCB4D00FAA06B /* AlertConfirmationView.swift */,
 				D67934DA23DC011D00536B44 /* CharacterCountView.swift */,
+				D64273A022CBDC870088256B /* ContextButton.swift */,
+				D64273A422CC05DD0088256B /* InputTextView.swift */,
+				D61D38E8248C506000BE457B /* MesasgeInputAccessoryView+Panning.swift */,
 				D63D63022486A9020037E046 /* MessageInputAccessoryView.swift */,
 				D61D38E2248C07F700BE457B /* MessageInputAccessoryView+Animation.swift */,
 				D61D38E4248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift */,
+				D63752C5231258DA00214F63 /* PreviewMessageView.swift */,
 			);
 			path = Input;
 			sourceTree = "<group>";
@@ -1840,6 +1840,7 @@
 				D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */,
 				D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */,
 				D6849CBF23B65E2B006799F6 /* PurposeViewController.swift in Sources */,
+				D61D38E9248C506000BE457B /* MesasgeInputAccessoryView+Panning.swift in Sources */,
 				D658C7DF24425E5A0027D12E /* HealthKitManager.swift in Sources */,
 				D6A82B732325C2FD003E0A8B /* NewChannelViewController.swift in Sources */,
 				D61EC0F921D317AB00204BEE /* Theme.swift in Sources */,
@@ -1906,7 +1907,6 @@
 				D6D627B7247C712E0046BB70 /* ChannelIntroHeader.swift in Sources */,
 				D6E0ED53239CBDA40073B33E /* FeedUnreadView.swift in Sources */,
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
-				D64273A722CC2D280088256B /* ChannelViewController+Extensions.swift in Sources */,
 				D66F0FDE22BF2C5D00BA277D /* HomeSegmentControl.swift in Sources */,
 				D685CEB2243B7BFA0018F3E3 /* ConversationContext.swift in Sources */,
 				D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */,

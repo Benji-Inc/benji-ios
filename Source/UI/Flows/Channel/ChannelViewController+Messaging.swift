@@ -9,7 +9,15 @@
 import Foundation
 import TwilioChatClient
 
-extension ChannelViewController {
+extension ChannelViewController: MessageInputAccessoryViewDelegate {
+
+    func messageInputAccessory(_ view: MessageInputAccessoryView, didUpdate message: Messageable, with text: String) {
+        self.update(message: message, text: text)
+    }
+
+    func messageInputAccessory(_ view: MessageInputAccessoryView, didSend text: String, context: MessageContext, attributes: [String : Any]) {
+        self.send(message: text, context: context, attributes: attributes)
+    }
 
     func load(activeChannel: DisplayableChannel) {
         switch activeChannel.channelType {

@@ -1,19 +1,19 @@
 //
-//  ChannelViewController+Extensions.swift
+//  MesasgeInputAccessoryView+Panning.swift
 //  Benji
 //
-//  Created by Benji Dodgson on 7/2/19.
-//  Copyright © 2019 Benjamin Dodgson. All rights reserved.
+//  Created by Benji Dodgson on 6/6/20.
+//  Copyright © 2020 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
 
-extension ChannelViewController: UIGestureRecognizerDelegate {
-    
-    func handle(pan: UIPanGestureRecognizer) {
-        guard let text = self.messageInputAccessoryView.expandingTextView.text, !text.isEmpty else { return }
+extension MessageInputAccessoryView: UIGestureRecognizerDelegate {
 
-        let currentLocation = pan.location(in: self.view)
+    func handle(pan: UIPanGestureRecognizer) {
+        guard let text = self.expandingTextView.text, !text.isEmpty else { return }
+
+        let currentLocation = pan.location(in: self)
         let startingPoint: CGPoint
 
         if let point = self.interactiveStartingPoint {
@@ -23,7 +23,7 @@ extension ChannelViewController: UIGestureRecognizerDelegate {
             startingPoint = pan.location(in: nil)
             self.interactiveStartingPoint = startingPoint
         }
-        let totalOffset = self.messageInputAccessoryView.height + 10
+        let totalOffset = self.height + 10
         var diff = (startingPoint.y - currentLocation.y)
         diff -= totalOffset
         var progress = diff / 100
@@ -34,13 +34,13 @@ extension ChannelViewController: UIGestureRecognizerDelegate {
             break
         case .began:
             self.previewView = PreviewMessageView()
-            self.previewView?.set(backgroundColor: self.messageInputAccessoryView.messageContext.color)
+            self.previewView?.set(backgroundColor: self.messageContext.color)
             self.previewView?.textView.text = text
             self.previewView?.backgroundView.alpha = 0.0
-            self.messageInputAccessoryView.addSubview(self.previewView!)
-            self.previewView?.frame = self.messageInputAccessoryView.inputContainerView.frame
+            self.addSubview(self.previewView!)
+            self.previewView?.frame = self.inputContainerView.frame
             self.previewView?.layoutNow()
-            let top = self.messageInputAccessoryView.top - totalOffset
+            let top = self.top - totalOffset
 
             self.previewAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
                                                           curve: .easeInOut,
@@ -52,7 +52,7 @@ extension ChannelViewController: UIGestureRecognizerDelegate {
                                             UIView.addKeyframe(withRelativeStartTime: 0,
                                                                relativeDuration: 0.3,
                                                                animations: {
-                                                                self.messageInputAccessoryView.expandingTextView.alpha = 0
+                                                                self.expandingTextView.alpha = 0
                                                                 self.previewView?.backgroundView.alpha = 1
                                             })
 
@@ -60,7 +60,7 @@ extension ChannelViewController: UIGestureRecognizerDelegate {
                                                                relativeDuration: 1,
                                                                animations: {
                                                                 self.previewView?.top = top
-                                                                self.view.setNeedsLayout()
+                                                                self.setNeedsLayout()
                                             })
 
                 }) { (completed) in }
@@ -68,14 +68,14 @@ extension ChannelViewController: UIGestureRecognizerDelegate {
 
             self.previewAnimator?.addCompletion({ (position) in
                 if position == .end {
-                    if let updatedMessage = self.messageInputAccessoryView.editableMessage {
-                        self.update(message: updatedMessage, text: text)
+                    if let updatedMessage = self.editableMessage {
+                        self.delegate.messageInputAccessory(self, didUpdate: updatedMessage, with: text)
                     } else {
-                        self.send(message: text,
-                                  context: self.messageInputAccessoryView.messageContext,
-                                  attributes: ["status": MessageStatus.sent.rawValue])
+                        self.delegate.messageInputAccessory(self, didSend: text,
+                                                            context: self.messageContext,
+                                                            attributes: ["status": MessageStatus.sent.rawValue])
                     }
-                    self.messageInputAccessoryView.editableMessage = nil
+                    self.editableMessage = nil
                     self.previewView?.removeFromSuperview()
                 }
                 if position == .start {
@@ -88,7 +88,7 @@ extension ChannelViewController: UIGestureRecognizerDelegate {
         case .changed:
             if let preview = self.previewView {
                 let translation = pan.translation(in: preview)
-                preview.x = self.messageInputAccessoryView.x + translation.x
+                preview.x = self.x + translation.x
                 self.previewAnimator?.fractionComplete = (translation.y * -1) / 100
             }
         case .ended:
@@ -102,4 +102,22 @@ extension ChannelViewController: UIGestureRecognizerDelegate {
             break
         }
     }
+
+    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer is UILongPressGestureRecognizer {
+            return self.expandingTextView.isFirstResponder
+        }
+
+        return true
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+
+        if gestureRecognizer is UIPanGestureRecognizer {
+            return false
+        }
+
+        return true
+    }
 }
+

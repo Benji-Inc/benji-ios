@@ -10,12 +10,22 @@ import Foundation
 import Lottie
 import TMROLocalization
 
-class MessageInputAccessoryView: View, ActiveChannelAccessor {
+protocol MessageInputAccessoryViewDelegate: class {
+    func messageInputAccessory(_ view: MessageInputAccessoryView, didUpdate message: Messageable,
+                               with text: String)
+    func messageInputAccessory(_ view: MessageInputAccessoryView, didSend text: String,
+                               context: MessageContext,
+                               attributes: [String: Any])
+}
 
-    var onPanned: ((UIPanGestureRecognizer) -> Void)?
+class MessageInputAccessoryView: View, ActiveChannelAccessor {
 
     private static let preferredHeight: CGFloat = 54.0
     private static let maxHeight: CGFloat = 200.0
+
+    var previewAnimator: UIViewPropertyAnimator?
+    var previewView: PreviewMessageView?
+    var interactiveStartingPoint: CGPoint?
 
     var messageContext: MessageContext = .casual {
         didSet {
@@ -40,6 +50,17 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     let animationView = AnimationView(name: "loading")
     lazy var alertConfirmation = AlertConfirmationView()
     let overlayButton = UIButton()
+
+    unowned let delegate: MessageInputAccessoryViewDelegate
+
+    init(with delegate: MessageInputAccessoryViewDelegate) {
+        self.delegate = delegate
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         return CGSize(width: size.width, height: MessageInputAccessoryView.preferredHeight)
@@ -130,7 +151,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 
     private func setupGestures() {
         let panRecognizer = UIPanGestureRecognizer { [unowned self] (recognizer) in
-            self.onPanned?(recognizer)
+            self.handle(pan: recognizer)
         }
         panRecognizer.delegate = self
         self.overlayButton.addGestureRecognizer(panRecognizer)
@@ -199,26 +220,6 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         self.resetInputViews()
         self.alertProgressView.layer.removeAllAnimations()
         self.borderColor = self.messageContext.color.color.cgColor
-    }
-}
-
-extension MessageInputAccessoryView: UIGestureRecognizerDelegate {
-
-    override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-        if gestureRecognizer is UILongPressGestureRecognizer {
-            return self.expandingTextView.isFirstResponder
-        }
-
-        return true
-    }
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-
-        if gestureRecognizer is UIPanGestureRecognizer {
-            return false
-        }
-
-        return true
     }
 }
 
