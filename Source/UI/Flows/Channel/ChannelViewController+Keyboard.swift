@@ -15,7 +15,6 @@ extension ChannelViewController {
     func addKeyboardObservers() {
         NotificationCenter.default.addObserver(self, selector: #selector(ChannelViewController.handleKeyboardDidChangeState(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(ChannelViewController.handleTextViewDidBeginEditing(_:)), name: UITextView.textDidBeginEditingNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ChannelViewController.adjustScrollViewTopInset), name: UIDevice.orientationDidChangeNotification, object: nil)
     }
 
     func removeKeyboardObservers() {
@@ -28,11 +27,11 @@ extension ChannelViewController {
 
     @objc
     private func handleTextViewDidBeginEditing(_ notification: Notification) {
-        if scrollsToLastItemOnKeyboardBeginsEditing || scrollsToBottomOnKeyboardBeginsEditing {
+        if self.scrollsToLastItemOnKeyboardBeginsEditing || self.scrollsToBottomOnKeyboardBeginsEditing {
             guard let inputTextView = notification.object as? InputTextView,
                 inputTextView === self.messageInputAccessoryView.expandingTextView else { return }
 
-            if scrollsToLastItemOnKeyboardBeginsEditing {
+            if self.scrollsToLastItemOnKeyboardBeginsEditing {
                 self.collectionView.scrollToLastItem()
             } else {
                 self.collectionView.scrollToEnd()
@@ -73,12 +72,12 @@ extension ChannelViewController {
         // view.
 
         guard let keyboardEndFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-        let keyboardEndFrame = view.convert(keyboardEndFrameInScreenCoords, from: view.window)
+        let keyboardEndFrame = self.view.convert(keyboardEndFrameInScreenCoords, from: self.view.window)
 
-        let newBottomInset = requiredScrollViewBottomInset(forKeyboardFrame: keyboardEndFrame)
+        let newBottomInset = self.requiredScrollViewBottomInset(forKeyboardFrame: keyboardEndFrame)
         let differenceOfBottomInset = newBottomInset - self.collectionViewBottomInset
 
-        if maintainPositionOnKeyboardFrameChanged && differenceOfBottomInset != 0 {
+        if self.maintainPositionOnKeyboardFrameChanged && differenceOfBottomInset != 0 {
             let contentOffset = CGPoint(x: self.collectionView.contentOffset.x, y: self.collectionView.contentOffset.y + differenceOfBottomInset)
             self.collectionView.setContentOffset(contentOffset, animated: false)
         }
@@ -88,19 +87,6 @@ extension ChannelViewController {
 
     // MARK: - Inset Computation
 
-    @objc
-    func adjustScrollViewTopInset() {
-        if #available(iOS 11.0, *) {
-            // No need to add to the top contentInset
-        } else {
-            let navigationBarInset = navigationController?.navigationBar.frame.height ?? 0
-            let statusBarInset: CGFloat = UIApplication.shared.isStatusBarHidden ? 0 : 20
-            let topInset = navigationBarInset + statusBarInset
-            self.collectionView.contentInset.top = topInset
-            self.collectionView.scrollIndicatorInsets.top = topInset
-        }
-    }
-
     private func requiredScrollViewBottomInset(forKeyboardFrame keyboardFrame: CGRect) -> CGFloat {
         // we only need to adjust for the part of the keyboard that covers (i.e. intersects) our collection view;
         // see https://developer.apple.com/videos/play/wwdc2017/242/ for more details
@@ -109,15 +95,15 @@ extension ChannelViewController {
         if intersection.isNull || (self.collectionView.frame.maxY - intersection.maxY) > 0.001 {
             // The keyboard is hidden, is a hardware one, or is undocked and does not cover the bottom of the collection view.
             // Note: intersection.maxY may be less than messagesCollectionView.frame.maxY when dealing with undocked keyboards.
-            return max(0, additionalBottomInset - automaticallyAddedBottomInset)
+            return max(0, self.additionalBottomInset - self.automaticallyAddedBottomInset)
         } else {
-            return max(0, intersection.height + additionalBottomInset - automaticallyAddedBottomInset)
+            return max(0, intersection.height + self.additionalBottomInset - self.automaticallyAddedBottomInset)
         }
     }
 
     func requiredInitialScrollViewBottomInset() -> CGFloat {
-        let inputAccessoryViewHeight = inputAccessoryView?.frame.height ?? 0
-        return max(0, inputAccessoryViewHeight + additionalBottomInset - automaticallyAddedBottomInset)
+        let inputAccessoryViewHeight = self.inputAccessoryView?.frame.height ?? 0
+        return max(0, inputAccessoryViewHeight + self.additionalBottomInset - self.automaticallyAddedBottomInset)
     }
 
     /// iOS 11's UIScrollView can automatically add safe area insets to its contentInset,

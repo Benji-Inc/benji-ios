@@ -28,7 +28,7 @@ extension ChannelViewController: KeyboardObservable, UIGestureRecognizerDelegate
     }
     
     func handle(pan: UIPanGestureRecognizer) {
-        guard let text = self.messageInputView.textView.text, !text.isEmpty else { return }
+        guard let text = self.messageInputAccessoryView.expandingTextView.text, !text.isEmpty else { return }
 
         let currentLocation = pan.location(in: self.view)
         let startingPoint: CGPoint
@@ -52,13 +52,12 @@ extension ChannelViewController: KeyboardObservable, UIGestureRecognizerDelegate
         case .began:
             self.previewView = PreviewMessageView()
             self.previewView?.set(backgroundColor: self.messageInputView.messageContext.color)
-            self.previewView?.textView.text = self.messageInputView.textView.text
+            self.previewView?.textView.text = text
             self.previewView?.backgroundView.alpha = 0.0
-            self.view.insertSubview(self.previewView!, aboveSubview: self.messageInputView)
-            self.view.addSubview(self.previewView!)
-            self.previewView?.frame = self.messageInputView.frame
+            self.messageInputAccessoryView.addSubview(self.previewView!)
+            self.previewView?.frame = self.messageInputAccessoryView.inputContainerView.frame
             self.previewView?.layoutNow()
-            let top = self.messageInputView.top - totalOffset
+            let top = self.messageInputAccessoryView.top - totalOffset
 
             self.previewAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
                                                           curve: .easeInOut,
@@ -70,16 +69,16 @@ extension ChannelViewController: KeyboardObservable, UIGestureRecognizerDelegate
                                             UIView.addKeyframe(withRelativeStartTime: 0,
                                                                relativeDuration: 0.3,
                                                                animations: {
-                                                                self.messageInputView.textView.alpha = 0
+                                                                self.messageInputAccessoryView.expandingTextView.alpha = 0
                                                                 self.previewView?.backgroundView.alpha = 1
                                             })
 
-                                            UIView.addKeyframe(withRelativeStartTime: 0.6,
-                                                               relativeDuration: 0.4,
-                                                               animations: {
-                                                                self.collectionView.collectionViewLayout.collectionView?.contentInset.bottom += totalOffset
-                                                                self.collectionView.collectionViewLayout.invalidateLayout()
-                                            })
+//                                            UIView.addKeyframe(withRelativeStartTime: 0.6,
+//                                                               relativeDuration: 0.4,
+//                                                               animations: {
+//                                                                self.collectionView.collectionViewLayout.collectionView?.contentInset.bottom += totalOffset
+//                                                                self.collectionView.collectionViewLayout.invalidateLayout()
+//                                            })
 
                                             UIView.addKeyframe(withRelativeStartTime: 0,
                                                                relativeDuration: 1,
@@ -93,28 +92,27 @@ extension ChannelViewController: KeyboardObservable, UIGestureRecognizerDelegate
 
             self.previewAnimator?.addCompletion({ (position) in
                 if position == .end {
-                    if let updatedMessage = self.messageInputView.editableMessage {
+                    if let updatedMessage = self.messageInputAccessoryView.editableMessage {
                         self.update(message: updatedMessage, text: text)
                     } else {
                         self.send(message: text,
                                   context: self.messageInputView.messageContext,
                                   attributes: ["status": MessageStatus.sent.rawValue])
                     }
-                    self.messageInputView.editableMessage = nil
+                    self.messageInputAccessoryView.editableMessage = nil
                     self.previewView?.removeFromSuperview()
                 }
                 if position == .start {
                     self.previewView?.removeFromSuperview()
                 }
-
-                //self.collectionView.collectionViewLayout.collectionView?.contentInset.bottom = 80
-                //self.collectionView.collectionViewLayout.invalidateLayout()
             })
+
             self.previewAnimator?.pauseAnimation()
+
         case .changed:
             if let preview = self.previewView {
                 let translation = pan.translation(in: preview)
-                preview.x = self.messageInputView.x + translation.x
+                preview.x = self.messageInputAccessoryView.x + translation.x
                 self.previewAnimator?.fractionComplete = (translation.y * -1) / 100
             }
         case .ended:

@@ -52,25 +52,24 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     //NEW
     // Custom Input Accessory View
-    let messageInputAccessoryView: MessageInputAccessoryView = {
-        let view = MessageInputAccessoryView(frame: .zero, inputViewStyle: .default)
-        //view.sendButton.addTarget(self, action: #selector(didTapSend(sender:)), for: UIControlEvents.touchUpInside)
-
-        return view
-    }()
+    let messageInputAccessoryView = MessageInputAccessoryView()
 
     // Wrapper view controller for the custom input accessory view
     private let chatInputAccessoryViewController = UIInputViewController()
 
     // MARK: - Input accessory view
 
-    override var inputAccessoryViewController: UIInputViewController? {
-        // Ensure our input accessory view controller has it's input view set
-        self.chatInputAccessoryViewController.inputView = self.messageInputAccessoryView
+//    override var inputAccessoryViewController: UIInputViewController? {
+//        // Ensure our input accessory view controller has it's input view set
+//        self.chatInputAccessoryViewController.inputView = self.messageInputAccessoryView
+//        self.chatInputAccessoryViewController.view.set(backgroundColor: .clear)
+//        // Return our custom input accessory view controller. You could also just return a UIView with
+//        // override func inputAccessoryView()
+//        return self.chatInputAccessoryViewController
+//    }
 
-        // Return our custom input accessory view controller. You could also just return a UIView with
-        // override func inputAccessoryView()
-        return self.chatInputAccessoryViewController
+    override var inputAccessoryView: UIView? {
+        return self.messageInputAccessoryView
     }
 
     override func viewDidLoad() {
@@ -96,7 +95,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     var isMessagesControllerBeingDismissed: Bool = false
 
-    var collectionViewBottomInset: CGFloat = 10 {
+    var collectionViewBottomInset: CGFloat = 50 {
         didSet {
             self.collectionView.contentInset.bottom = self.collectionViewBottomInset
             self.collectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
@@ -152,19 +151,19 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.collectionView)
         //self.view.addSubview(self.messageInputView)
-        self.messageInputView.height = self.messageInputView.minHeight
+        //self.messageInputView.height = self.messageInputView.minHeight
         self.addChild(viewController: self.detailVC, toView: self.view)
 
         self.collectionView.dataSource = self.collectionViewManager
         self.collectionView.delegate = self.collectionViewManager
 
-        self.messageInputView.onPanned = { [unowned self] (panRecognizer) in
+        self.messageInputAccessoryView.onPanned = { [unowned self] (panRecognizer) in
             self.handle(pan: panRecognizer)
         }
 
         self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
-            if self.messageInputView.textView.isFirstResponder {
-                self.messageInputView.textView.resignFirstResponder()
+            if self.messageInputAccessoryView.expandingTextView.isFirstResponder {
+                self.messageInputAccessoryView.expandingTextView.resignFirstResponder()
             }
         }
 
@@ -277,12 +276,11 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 //        self.messageInputView.bottom = self.collectionView.bottom - messageBottomOffset
 //        self.messageInputView.centerOnX()
 
-        if isFirstLayout {
-            defer { isFirstLayout = false }
-            addKeyboardObservers()
+        if self.isFirstLayout {
+            defer { self.isFirstLayout = false }
+            self.addKeyboardObservers()
             self.collectionViewBottomInset = self.requiredInitialScrollViewBottomInset()
         }
-        adjustScrollViewTopInset()
     }
 
     func send(message: String,
@@ -301,7 +299,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             self.collectionView.scrollToEnd()
         }
 
-        self.messageInputView.reset()
+        self.messageInputAccessoryView.reset()
     }
 
     func resend(message: Messageable) {
@@ -328,7 +326,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.indexPathForEditing = nil
         self.collectionViewManager.updateItem(with: updatedMessage)
-        self.messageInputView.reset()
+        self.messageInputAccessoryView.reset()
     }
 }
 
