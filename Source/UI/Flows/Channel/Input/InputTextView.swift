@@ -10,6 +10,7 @@ import Foundation
 
 class InputTextView: TextView {
 
+    lazy var countView = CharacterCountView()
     var textDidChange: ((String) -> Void)?
 
     override func initialize() {
@@ -25,6 +26,9 @@ class InputTextView: TextView {
         self.textContainerInset.right = 10
         self.textContainerInset.top = 14
         self.textContainerInset.bottom = 12
+
+        self.addSubview(self.countView)
+        self.countView.isHidden = true
 
         self.set(backgroundColor: .clear)
     }
@@ -47,5 +51,13 @@ class InputTextView: TextView {
 
     override func textDidChange(notification: Notification) {
         self.textDidChange?(self.text)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.countView.size = CGSize(width: 70, height: 20)
+        self.countView.right = self.width - 5
+        self.countView.bottom = self.height - 5
     }
 }

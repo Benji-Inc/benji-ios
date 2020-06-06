@@ -29,6 +29,7 @@
 		D61BD1752382404A0028AD1E /* BranchUniversalObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61BD1742382404A0028AD1E /* BranchUniversalObject+Extension.swift */; };
 		D61D38E3248C07F700BE457B /* MessageInputAccessoryView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E2248C07F700BE457B /* MessageInputAccessoryView+Animation.swift */; };
 		D61D38E5248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E4248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift */; };
+		D61D38E7248C494A00BE457B /* ChannelViewController+Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E6248C494A00BE457B /* ChannelViewController+Messaging.swift */; };
 		D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0BF21D3071400204BEE /* AppDelegate.swift */; };
 		D61EC0C221D3071400204BEE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0C121D3071400204BEE /* ViewController.swift */; };
 		D61EC0C721D3071500204BEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
@@ -213,7 +214,6 @@
 		D68D765B24835A81009B246B /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D68D765A24835A81009B246B /* error.json */; };
 		D68DC7FC22EE5D9000BEAF80 /* FeedOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
-		D696A8E92308D5C900DAFED4 /* MessageInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D696A8E82308D5C900DAFED4 /* MessageInputView.swift */; };
 		D69EB4452457E33600473530 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4442457E33600473530 /* SessionManager.swift */; };
 		D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
 		D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */; };
@@ -351,6 +351,7 @@
 		D61BD1742382404A0028AD1E /* BranchUniversalObject+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BranchUniversalObject+Extension.swift"; sourceTree = "<group>"; };
 		D61D38E2248C07F700BE457B /* MessageInputAccessoryView+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageInputAccessoryView+Animation.swift"; sourceTree = "<group>"; };
 		D61D38E4248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageInputAccessoryView+Connection.swift"; sourceTree = "<group>"; };
+		D61D38E6248C494A00BE457B /* ChannelViewController+Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelViewController+Messaging.swift"; sourceTree = "<group>"; };
 		D61EC0BC21D3071400204BEE /* Benji.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Benji.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D61EC0BF21D3071400204BEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D61EC0C121D3071400204BEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -539,7 +540,6 @@
 		D68D765A24835A81009B246B /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
 		D68DC7FB22EE5D9000BEAF80 /* FeedOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedOverlayView.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
-		D696A8E82308D5C900DAFED4 /* MessageInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputView.swift; sourceTree = "<group>"; };
 		D69EB4442457E33600473530 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
 		D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
@@ -1057,6 +1057,7 @@
 				D6D1500621D5E73D00CD8CE4 /* ChannelViewController.swift */,
 				D64273A622CC2D280088256B /* ChannelViewController+Extensions.swift */,
 				D65E3EA7248803510074E789 /* ChannelViewController+Keyboard.swift */,
+				D61D38E6248C494A00BE457B /* ChannelViewController+Messaging.swift */,
 				D6FC8099237A68F50089AACC /* ChannelViewController+Updates.swift */,
 				D6B2603622E6AA3800143CF0 /* Input */,
 				D6090E542377CB0F00833DA7 /* Manager */,
@@ -1337,7 +1338,6 @@
 		D6B2603622E6AA3800143CF0 /* Input */ = {
 			isa = PBXGroup;
 			children = (
-				D696A8E82308D5C900DAFED4 /* MessageInputView.swift */,
 				D64273A422CC05DD0088256B /* InputTextView.swift */,
 				D64273A022CBDC870088256B /* ContextButton.swift */,
 				D63752C5231258DA00214F63 /* PreviewMessageView.swift */,
@@ -1776,9 +1776,9 @@
 				D685CEAE243B7B3C0018F3E3 /* ContextCollectionViewManager.swift in Sources */,
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,
 				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
-				D696A8E92308D5C900DAFED4 /* MessageInputView.swift in Sources */,
 				D623BC4F23EF5157007358CB /* ProfileItem.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
+				D61D38E7248C494A00BE457B /* ChannelViewController+Messaging.swift in Sources */,
 				D6579557239C8B4000A01338 /* FeedCoordinator.swift in Sources */,
 				D61EC0E421D30E9100204BEE /* TextView.swift in Sources */,
 				D6AF02FD220153F5002D5C75 /* LaunchManager.swift in Sources */,

@@ -183,7 +183,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         self.expandingTextView.alpha = 1
         self.resetInputViews()
         self.resetAlertProgress()
-        //self.countView.isHidden = true
+        self.expandingTextView.countView.isHidden = true
     }
 
     func resetInputViews() {

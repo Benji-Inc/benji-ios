@@ -11,14 +11,7 @@ import Foundation
 extension ChannelViewController: KeyboardObservable, UIGestureRecognizerDelegate {
 
     func handleKeyboard(frame: CGRect, with animationDuration: TimeInterval, timingCurve: UIView.AnimationCurve) {
-
         guard !self.maintainPositionOnKeyboardFrameChanged else { return }
-
-        let animator = UIViewPropertyAnimator(duration: animationDuration, curve: timingCurve) {
-            self.view.layoutNow()
-        }
-
-        animator.startAnimation()
 
         if let indexPath = self.indexPathForEditing {
             self.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
@@ -40,7 +33,7 @@ extension ChannelViewController: KeyboardObservable, UIGestureRecognizerDelegate
             startingPoint = pan.location(in: nil)
             self.interactiveStartingPoint = startingPoint
         }
-        let totalOffset = self.messageInputView.height + 10
+        let totalOffset = self.messageInputAccessoryView.height + 10
         var diff = (startingPoint.y - currentLocation.y)
         diff -= totalOffset
         var progress = diff / 100
@@ -51,7 +44,7 @@ extension ChannelViewController: KeyboardObservable, UIGestureRecognizerDelegate
             break
         case .began:
             self.previewView = PreviewMessageView()
-            self.previewView?.set(backgroundColor: self.messageInputView.messageContext.color)
+            self.previewView?.set(backgroundColor: self.messageInputAccessoryView.messageContext.color)
             self.previewView?.textView.text = text
             self.previewView?.backgroundView.alpha = 0.0
             self.messageInputAccessoryView.addSubview(self.previewView!)
@@ -73,13 +66,6 @@ extension ChannelViewController: KeyboardObservable, UIGestureRecognizerDelegate
                                                                 self.previewView?.backgroundView.alpha = 1
                                             })
 
-//                                            UIView.addKeyframe(withRelativeStartTime: 0.6,
-//                                                               relativeDuration: 0.4,
-//                                                               animations: {
-//                                                                self.collectionView.collectionViewLayout.collectionView?.contentInset.bottom += totalOffset
-//                                                                self.collectionView.collectionViewLayout.invalidateLayout()
-//                                            })
-
                                             UIView.addKeyframe(withRelativeStartTime: 0,
                                                                relativeDuration: 1,
                                                                animations: {
@@ -96,7 +82,7 @@ extension ChannelViewController: KeyboardObservable, UIGestureRecognizerDelegate
                         self.update(message: updatedMessage, text: text)
                     } else {
                         self.send(message: text,
-                                  context: self.messageInputView.messageContext,
+                                  context: self.messageInputAccessoryView.messageContext,
                                   attributes: ["status": MessageStatus.sent.rawValue])
                     }
                     self.messageInputAccessoryView.editableMessage = nil

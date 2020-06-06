@@ -95,25 +95,25 @@ extension ChannelManager: TwilioChatClientDelegate {
 
     func chatClient(_ client: TwilioChatClient, connectionStateUpdated state: TCHClientConnectionState) {
 
-        switch state {
-        case .unknown:
-            print("CONNECTION STATE: UNKNOWN")
-        case .disconnected:
-            self.getNewChatTokent()
-            print("CONNECTION STATE: DISCONNECTED")
-        case .connected:
-            print("CONNECTION STATE: CONNECTED")
-        case .connecting:
-            print("CONNECTION STATE: CONNECTING")
-        case .denied:
-            print("CONNECTION STATE: DENIED)")
-        case .error:
-            print("CONNECTION STATE: ERROR")
-        case .fatalError:
-            print("CONNECTION STATE: FATAL")
-        @unknown default:
-            break
-        }
+//        switch state {
+//        case .unknown:
+//            print("CONNECTION STATE: UNKNOWN")
+//        case .disconnected:
+//            self.getNewChatTokent()
+//            print("CONNECTION STATE: DISCONNECTED")
+//        case .connected:
+//            print("CONNECTION STATE: CONNECTED")
+//        case .connecting:
+//            print("CONNECTION STATE: CONNECTING")
+//        case .denied:
+//            print("CONNECTION STATE: DENIED)")
+//        case .error:
+//            print("CONNECTION STATE: ERROR")
+//        case .fatalError:
+//            print("CONNECTION STATE: FATAL")
+//        @unknown default:
+//            break
+//        }
 
         self.clientUpdate.value = ChatClientUpdate(client: client, status: .connectionState(state))
     }
