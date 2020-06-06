@@ -48,7 +48,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     ///
     /// The default value of this property is `false`.
     /// NOTE: This is related to `scrollToBottom` whereas the above flag is related to `scrollToLastItem` - check each function for differences
-    var scrollsToBottomOnKeyboardBeginsEditing: Bool = false
+    var scrollsToBottomOnKeyboardBeginsEditing: Bool = true
 
     // A Boolean value that determines whether the `MessagesCollectionView`
     /// maintains it's current position when the height of the `MessageInputBar` changes.
@@ -108,8 +108,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     override func initializeViews() {
         super.initializeViews()
-
-        self.registerKeyboardEvents()
 
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.collectionView)

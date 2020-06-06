@@ -25,7 +25,9 @@ extension ChannelViewController {
             guard let inputTextView = notification.object as? InputTextView,
                 inputTextView === self.messageInputAccessoryView.expandingTextView else { return }
 
-            if self.scrollsToLastItemOnKeyboardBeginsEditing {
+            if let indexPath = self.indexPathForEditing {
+                self.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
+            } else if self.scrollsToLastItemOnKeyboardBeginsEditing {
                 self.collectionView.scrollToLastItem()
             } else {
                 self.collectionView.scrollToEnd()

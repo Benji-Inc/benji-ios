@@ -8,17 +8,7 @@
 
 import Foundation
 
-extension ChannelViewController: KeyboardObservable, UIGestureRecognizerDelegate {
-
-    func handleKeyboard(frame: CGRect, with animationDuration: TimeInterval, timingCurve: UIView.AnimationCurve) {
-        guard !self.maintainPositionOnKeyboardFrameChanged else { return }
-
-        if let indexPath = self.indexPathForEditing {
-            self.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
-        } else {
-            self.collectionView.scrollToEnd()
-        }
-    }
+extension ChannelViewController: UIGestureRecognizerDelegate {
     
     func handle(pan: UIPanGestureRecognizer) {
         guard let text = self.messageInputAccessoryView.expandingTextView.text, !text.isEmpty else { return }
