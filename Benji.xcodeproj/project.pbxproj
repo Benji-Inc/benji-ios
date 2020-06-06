@@ -135,6 +135,7 @@
 		D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */; };
 		D65B0CE5234928620041A176 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CE4234928620041A176 /* ProfileCoordinator.swift */; };
 		D65B0CE7234929440041A176 /* NewChannelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CE6234929440041A176 /* NewChannelCoordinator.swift */; };
+		D65E3EA8248803510074E789 /* ChannelViewController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65E3EA7248803510074E789 /* ChannelViewController+Keyboard.swift */; };
 		D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66656BC23D13C9A009E4BDF /* Switchable.swift */; };
 		D66A0B942351821200A0FFEA /* Completeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A0B932351821200A0FFEA /* Completeable.swift */; };
 		D66A0B9823526A4E00A0FFEA /* CarmeraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A0B9723526A4E00A0FFEA /* CarmeraButton.swift */; };
@@ -459,6 +460,7 @@
 		D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelsViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D65B0CE4234928620041A176 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		D65B0CE6234929440041A176 /* NewChannelCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCoordinator.swift; sourceTree = "<group>"; };
+		D65E3EA7248803510074E789 /* ChannelViewController+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelViewController+Keyboard.swift"; sourceTree = "<group>"; };
 		D66656BC23D13C9A009E4BDF /* Switchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switchable.swift; sourceTree = "<group>"; };
 		D66A0B932351821200A0FFEA /* Completeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Completeable.swift; sourceTree = "<group>"; };
 		D66A0B9723526A4E00A0FFEA /* CarmeraButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarmeraButton.swift; sourceTree = "<group>"; };
@@ -1046,15 +1048,16 @@
 		D6432BF122D8282E0016001A /* Channel */ = {
 			isa = PBXGroup;
 			children = (
-				D6090E542377CB0F00833DA7 /* Manager */,
 				D68540CD235FDE18006F666C /* Autocomplete */,
+				D6D1500521D5E71E00CD8CE4 /* Channel Collection Views */,
 				D67896CB2304524C0059BA75 /* ChannelCoordinator.swift */,
+				D6B2603722E6AB5E00143CF0 /* ChannelDetailViewController.swift */,
 				D6D1500621D5E73D00CD8CE4 /* ChannelViewController.swift */,
 				D64273A622CC2D280088256B /* ChannelViewController+Extensions.swift */,
+				D65E3EA7248803510074E789 /* ChannelViewController+Keyboard.swift */,
 				D6FC8099237A68F50089AACC /* ChannelViewController+Updates.swift */,
-				D6B2603722E6AB5E00143CF0 /* ChannelDetailViewController.swift */,
 				D6B2603622E6AA3800143CF0 /* Input */,
-				D6D1500521D5E71E00CD8CE4 /* Channel Collection Views */,
+				D6090E542377CB0F00833DA7 /* Manager */,
 			);
 			path = Channel;
 			sourceTree = "<group>";
@@ -1923,6 +1926,7 @@
 				D66E7C14239DC14C002A363C /* AlertType.swift in Sources */,
 				D6815DB122ECAEC700E71251 /* MediumLabel.swift in Sources */,
 				D642739122C9BFA10088256B /* AlertViewController.swift in Sources */,
+				D65E3EA8248803510074E789 /* ChannelViewController+Keyboard.swift in Sources */,
 				D61EC0E621D30EB300204BEE /* View.swift in Sources */,
 				D66F0FC722BF004300BA277D /* FeedType.swift in Sources */,
 				D6E4C8012394391A002B1330 /* RoutineTimeOfDayLabel.swift in Sources */,

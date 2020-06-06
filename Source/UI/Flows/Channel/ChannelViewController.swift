@@ -52,7 +52,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     //NEW
     // Custom Input Accessory View
-    private let chatInputAccessoryView: MessageInputAccessoryView = {
+    let messageInputAccessoryView: MessageInputAccessoryView = {
         let view = MessageInputAccessoryView(frame: .zero, inputViewStyle: .default)
         //view.sendButton.addTarget(self, action: #selector(didTapSend(sender:)), for: UIControlEvents.touchUpInside)
 
@@ -66,7 +66,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     override var inputAccessoryViewController: UIInputViewController? {
         // Ensure our input accessory view controller has it's input view set
-        self.chatInputAccessoryViewController.inputView = chatInputAccessoryView
+        self.chatInputAccessoryViewController.inputView = self.messageInputAccessoryView
 
         // Return our custom input accessory view controller. You could also just return a UIView with
         // override func inputAccessoryView()
@@ -77,7 +77,48 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         super.viewDidLoad()
 
         // Automatic keyboard dismissal
-        self.collectionView.keyboardDismissMode = UIScrollView.KeyboardDismissMode.interactive
+        self.collectionView.keyboardDismissMode = .interactive
+    }
+
+    /// A Boolean value that determines whether the `MessagesCollectionView` scrolls to the
+    /// last item whenever the `InputTextView` begins editing.
+    ///
+    /// The default value of this property is `false`.
+    /// NOTE: This is related to `scrollToLastItem` whereas the below flag is related to `scrollToBottom` - check each function for differences
+    var scrollsToLastItemOnKeyboardBeginsEditing: Bool = false
+
+    /// A Boolean value that determines whether the `MessagesCollectionView` scrolls to the
+    /// bottom whenever the `InputTextView` begins editing.
+    ///
+    /// The default value of this property is `false`.
+    /// NOTE: This is related to `scrollToBottom` whereas the above flag is related to `scrollToLastItem` - check each function for differences
+    var scrollsToBottomOnKeyboardBeginsEditing: Bool = false
+
+    var isMessagesControllerBeingDismissed: Bool = false
+
+    var collectionViewBottomInset: CGFloat = 10 {
+        didSet {
+            self.collectionView.contentInset.bottom = self.collectionViewBottomInset
+            self.collectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
+        }
+    }
+
+    /// A CGFloat value that adds to (or, if negative, subtracts from) the automatically
+    /// computed value of `messagesCollectionView.contentInset.bottom`. Meant to be used
+    /// as a measure of last resort when the built-in algorithm does not produce the right
+    /// value for your app. Please let us know when you end up having to use this property.
+    var additionalBottomInset: CGFloat = 0 {
+        didSet {
+            let delta = self.additionalBottomInset - oldValue
+            self.collectionViewBottomInset += delta
+        }
+    }
+
+    private var isFirstLayout: Bool = true
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.isMessagesControllerBeingDismissed = true
     }
 
     // MARK: - UIResponder overrides and key commands
@@ -180,6 +221,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        isMessagesControllerBeingDismissed = false
+
         if MessageSupplier.shared.sections.count > 0 {
             self.collectionViewManager.set(newSections: MessageSupplier.shared.sections,
                                            animate: self.animateMessages) {
@@ -197,6 +240,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+
+        isMessagesControllerBeingDismissed = false
 
         MessageSupplier.shared.reset()
         ChannelSupplier.shared.set(activeChannel: nil)
@@ -217,7 +262,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         self.detailVC.view.top = Theme.contentOffset
         self.detailVC.view.centerOnX()
 
-        self.collectionView.expandToSuperviewSize()
+        self.collectionView.frame = self.view.safeAreaLayoutGuide.layoutFrame
+        //self.collectionView.expandToSuperviewSize()
 //        self.collectionView.size = CGSize(width: self.view.width, height: height)
 //        self.collectionView.top = 0
 //        self.collectionView.centerOnX()
@@ -230,6 +276,13 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 //
 //        self.messageInputView.bottom = self.collectionView.bottom - messageBottomOffset
 //        self.messageInputView.centerOnX()
+
+        if isFirstLayout {
+            defer { isFirstLayout = false }
+            addKeyboardObservers()
+            self.collectionViewBottomInset = self.requiredInitialScrollViewBottomInset()
+        }
+        adjustScrollViewTopInset()
     }
 
     func send(message: String,
