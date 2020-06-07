@@ -111,6 +111,11 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         return true
     }
 
+    // Remembers which keyboard a user uses for this conversation.
+    override var textInputContextIdentifier: String? {
+        return self.activeChannel?.id
+    }
+
     override func initializeViews() {
         super.initializeViews()
 
