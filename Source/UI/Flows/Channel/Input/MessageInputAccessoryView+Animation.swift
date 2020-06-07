@@ -51,7 +51,7 @@ extension MessageInputAccessoryView {
             fractionComplete == CGFloat(0.0) {
 
             self.alertAnimator?.stopAnimation(true)
-            self.showAlertConfirmation()
+            //self.showAlertConfirmation()
         } else {
             self.alertAnimator?.stopAnimation(true)
             self.messageContext = .casual
@@ -65,30 +65,30 @@ extension MessageInputAccessoryView {
         }
     }
 
-    private func showAlertConfirmation() {
-        guard let c = self.activeChannel, case ChannelType.channel(let channel) = c.channelType else { return }
-
-        self.alertConfirmation.frame = CGRect(x: 0,
-                                              y: 0,
-                                              width: UIScreen.main.bounds.width,
-                                              height: 60)
-        
-        self.alertConfirmation.keyboardAppearance = self.expandingTextView.keyboardAppearance
-        self.expandingTextView.inputAccessoryView = self.alertConfirmation
-        self.expandingTextView.reloadInputViews()
-
-        channel.getMembersAsUsers()
-        .observe(with: { (result) in
-            runMain {
-                switch result {
-                case .success(let users):
-                    self.alertConfirmation.setAlertMessage(for: users)
-                case .failure(_):
-                    break
-                }
-            }
-        })
-
-        self.alertProgressView.size = CGSize(width: self.width, height: self.height)
-    }
+//    private func showAlertConfirmation() {
+//        guard let c = self.activeChannel, case ChannelType.channel(let channel) = c.channelType else { return }
+//
+//        self.alertConfirmation.frame = CGRect(x: 0,
+//                                              y: 0,
+//                                              width: UIScreen.main.bounds.width,
+//                                              height: 60)
+//
+//        self.alertConfirmation.keyboardAppearance = self.expandingTextView.keyboardAppearance
+//        self.expandingTextView.inputAccessoryView = self.alertConfirmation
+//       // self.expandingTextView.reloadInputViews()
+//
+//        channel.getMembersAsUsers()
+//        .observe(with: { (result) in
+//            runMain {
+//                switch result {
+//                case .success(let users):
+//                    self.alertConfirmation.setAlertMessage(for: users)
+//                case .failure(_):
+//                    break
+//                }
+//            }
+//        })
+//
+//        self.alertProgressView.size = CGSize(width: self.width, height: self.height)
+//    }
 }

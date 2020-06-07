@@ -100,11 +100,11 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
 
-        self.inputContainerView.addSubview(self.expandingTextView)
-
         self.inputContainerView.addSubview(self.alertProgressView)
         self.alertProgressView.set(backgroundColor: .red)
         self.alertProgressView.size = .zero
+
+        self.inputContainerView.addSubview(self.expandingTextView)
 
         self.addSubview(self.overlayButton)
 
@@ -202,22 +202,22 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     func reset() {
         self.expandingTextView.text = String()
         self.expandingTextView.alpha = 1
-        self.resetInputViews()
+        //self.resetInputViews()
         self.resetAlertProgress()
         self.expandingTextView.countView.isHidden = true
     }
 
-    func resetInputViews() {
-        self.expandingTextView.inputAccessoryView = nil
-        self.expandingTextView.reloadInputViews()
-    }
+//    func resetInputViews() {
+//        self.expandingTextView.inputAccessoryView = nil
+//        self.expandingTextView.reloadInputViews()
+//    }
 
     func resetAlertProgress() {
         self.messageContext = .casual
         self.alertProgressView.width = 0
         self.alertProgressView.set(backgroundColor: .red)
         self.alertProgressView.alpha = 1
-        self.resetInputViews()
+        //self.resetInputViews()
         self.alertProgressView.layer.removeAllAnimations()
         self.borderColor = self.messageContext.color.color.cgColor
     }

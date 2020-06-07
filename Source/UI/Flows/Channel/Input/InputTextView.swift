@@ -50,6 +50,8 @@ class InputTextView: TextView {
     }
 
     override func textDidChange(notification: Notification) {
+        super.textDidChange(notification: notification)
+        self.countView.udpate(with: self.text.count, max: self.maxLength)
         self.textDidChange?(self.text)
     }
 
