@@ -53,7 +53,15 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     /// The default value of this property is `false`.
     var maintainPositionOnKeyboardFrameChanged: Bool = true
 
-    var isMessagesControllerBeingDismissed: Bool = false
+    var isMessagesControllerBeingDismissed: Bool = false {
+        didSet {
+            if self.isMessagesControllerBeingDismissed {
+                self.resignFirstResponder()
+            } else {
+                self.becomeFirstResponder()
+            }
+        }
+    }
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
