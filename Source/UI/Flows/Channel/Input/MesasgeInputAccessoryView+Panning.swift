@@ -13,7 +13,7 @@ extension MessageInputAccessoryView: UIGestureRecognizerDelegate {
     func handle(pan: UIPanGestureRecognizer) {
         guard let text = self.expandingTextView.text, !text.isEmpty else { return }
 
-        let currentLocation = pan.location(in: self)
+        let currentLocation = pan.location(in: nil)
         let startingPoint: CGPoint
 
         if let point = self.interactiveStartingPoint {
@@ -23,7 +23,7 @@ extension MessageInputAccessoryView: UIGestureRecognizerDelegate {
             startingPoint = pan.location(in: nil)
             self.interactiveStartingPoint = startingPoint
         }
-        let totalOffset = self.height + 10
+        let totalOffset: CGFloat = self.height
         var diff = (startingPoint.y - currentLocation.y)
         diff -= totalOffset
         var progress = diff / 100
@@ -81,6 +81,9 @@ extension MessageInputAccessoryView: UIGestureRecognizerDelegate {
                 if position == .start {
                     self.previewView?.removeFromSuperview()
                 }
+
+                self.selectionFeedback.impactOccurred()
+                self.interactiveStartingPoint = nil
             })
 
             self.previewAnimator?.pauseAnimation()
@@ -92,7 +95,7 @@ extension MessageInputAccessoryView: UIGestureRecognizerDelegate {
                 self.previewAnimator?.fractionComplete = (translation.y * -1) / 100
             }
         case .ended:
-            self.previewAnimator?.isReversed = progress <= 0.5
+            self.previewAnimator?.isReversed = progress <= 0.02
             self.previewAnimator?.continueAnimation(withTimingParameters: nil, durationFactor: 0)
         case .cancelled:
             self.previewAnimator?.finishAnimation(at: .end)

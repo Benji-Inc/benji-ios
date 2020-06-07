@@ -51,7 +51,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     /// maintains it's current position when the height of the `MessageInputBar` changes.
     ///
     /// The default value of this property is `false`.
-    var maintainPositionOnKeyboardFrameChanged: Bool = false
+    var maintainPositionOnKeyboardFrameChanged: Bool = true
 
     var isMessagesControllerBeingDismissed: Bool = false
 
