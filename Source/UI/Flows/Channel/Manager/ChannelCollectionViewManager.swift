@@ -44,7 +44,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         self.collectionView = collectionView
         super.init()
         self.updateLayoutDataSource()
-
         self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
             guard let activeChannel = channel else { return }
 
@@ -319,7 +318,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
 
         let threshold = 60
         let contentOffset = channelCollectionView.contentOffset.y
-        let contentHeight = channelCollectionView.contentSize.height + channelCollectionView.contentInset.top + footerView.height
+        let contentHeight = channelCollectionView.contentSize.height + channelCollectionView.contentInset.top + footerView.height - channelCollectionView.contentInset.bottom
         let diffHeight = contentHeight - contentOffset
         let frameHeight = channelCollectionView.bounds.size.height
         var triggerThreshold = Float((diffHeight - frameHeight))/Float(threshold)
@@ -340,7 +339,8 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         let diffHeight = contentHeight - contentOffset
         let frameHeight = channelCollectionView.bounds.size.height
         let pullHeight  = abs(diffHeight - frameHeight)
-        if pullHeight < 50 {
+        let minOffsetRequired = channelCollectionView.contentInset.bottom + channelCollectionView.channelLayout.readFooterHeight
+        if pullHeight <  minOffsetRequired {
             if footerView.isAnimatingFinal, MessageSupplier.shared.unreadMessages.count > 0 {
                 self.isSettingReadAll = true
                 footerView.start(showLoading: true)
@@ -353,10 +353,10 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                         self.isSettingReadAll = false
                 }
             } else {
-
                 footerView.start(showLoading: false)
                 delay(1.5) {
                     footerView.stop()
+                    channelCollectionView.scrollToLastItem()
                 }
             }
         }
@@ -370,3 +370,5 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         return waitForAll(futures: promises)
     }
 }
+
+

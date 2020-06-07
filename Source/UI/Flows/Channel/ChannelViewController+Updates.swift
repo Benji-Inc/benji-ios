@@ -96,7 +96,7 @@ extension ChannelViewController {
 
             switch clientUpdate.status {
             case .connectionState(let state):
-                self.messageInputView.handleConnection(state: state)
+                self.messageInputAccessoryView.handleConnection(state: state)
             default:
                 break
             }

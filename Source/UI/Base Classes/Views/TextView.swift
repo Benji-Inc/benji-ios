@@ -114,8 +114,8 @@ class TextView: UITextView {
     // Limit the length of text
     @objc func textDidChange(notification: Notification) {
         if let sender = notification.object as? TextView, sender == self {
-            if self.maxLength > 0 && self.text.count > maxLength {
-                let endIndex = self.text.index(self.text.startIndex, offsetBy: maxLength)
+            if self.maxLength > 0 && self.text.count > self.maxLength {
+                let endIndex = self.text.index(self.text.startIndex, offsetBy: self.maxLength)
                 self.text = String(self.text[..<endIndex])
                 self.undoManager?.removeAllActions()
             }

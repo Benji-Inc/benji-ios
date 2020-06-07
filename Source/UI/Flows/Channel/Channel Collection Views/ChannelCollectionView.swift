@@ -24,6 +24,7 @@ class ChannelCollectionView: CollectionView {
     init() {
         super.init(layout: ChannelCollectionViewFlowLayout())
         self.registerReusableViews()
+        self.keyboardDismissMode = .interactive
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -68,5 +69,18 @@ class ChannelCollectionView: CollectionView {
         }) { (completed) in
             completion?()
         }
+    }
+
+    // NOTE: It's possible for small content size this wouldn't work - https://github.com/MessageKit/MessageKit/issues/725
+    func scrollToLastItem(at pos: UICollectionView.ScrollPosition = .bottom, animated: Bool = true) {
+        guard self.numberOfSections > 0 else { return }
+
+        let lastSection = self.numberOfSections - 1
+        let lastItemIndex = self.numberOfItems(inSection: lastSection) - 1
+
+        guard lastItemIndex >= 0 else { return }
+
+        let indexPath = IndexPath(row: lastItemIndex, section: lastSection)
+        self.scrollToItem(at: indexPath, at: pos, animated: animated)
     }
 }

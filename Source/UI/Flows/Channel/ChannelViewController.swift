@@ -24,30 +24,71 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     lazy var detailVC = ChannelDetailViewController(delegate: self.delegate)
     lazy var collectionView = ChannelCollectionView()
     lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView)
-    private(set) var messageInputView = MessageInputView()
 
     let disposables = CompositeDisposable()
+
+    private var animateMessages: Bool = true
+
+    var indexPathForEditing: IndexPath?
+
+    unowned let delegate: ChannelViewControllerDelegates
+
+    /// A Boolean value that determines whether the `MessagesCollectionView` scrolls to the
+    /// last item whenever the `InputTextView` begins editing.
+    ///
+    /// The default value of this property is `false`.
+    /// NOTE: This is related to `scrollToLastItem` whereas the below flag is related to `scrollToBottom` - check each function for differences
+    var scrollsToLastItemOnKeyboardBeginsEditing: Bool = false
+
+    /// A Boolean value that determines whether the `MessagesCollectionView` scrolls to the
+    /// bottom whenever the `InputTextView` begins editing.
+    ///
+    /// The default value of this property is `false`.
+    /// NOTE: This is related to `scrollToBottom` whereas the above flag is related to `scrollToLastItem` - check each function for differences
+    var scrollsToBottomOnKeyboardBeginsEditing: Bool = true
 
     // A Boolean value that determines whether the `MessagesCollectionView`
     /// maintains it's current position when the height of the `MessageInputBar` changes.
     ///
     /// The default value of this property is `false`.
-    var maintainPositionOnKeyboardFrameChanged: Bool = false
-    private var animateMessages: Bool = true
-    private var bottomOffset: CGFloat {
-        var offset: CGFloat = 6
-        if let handler = self.keyboardHandler, handler.currentKeyboardHeight == 0 {
-            offset += self.view.safeAreaInsets.bottom
+    var maintainPositionOnKeyboardFrameChanged: Bool = true
+
+    var isMessagesControllerBeingDismissed: Bool = false {
+        didSet {
+            if self.isMessagesControllerBeingDismissed {
+                self.resignFirstResponder()
+            } else {
+                self.becomeFirstResponder()
+            }
         }
-        return offset
     }
 
-    var previewAnimator: UIViewPropertyAnimator?
-    var previewView: PreviewMessageView?
-    var interactiveStartingPoint: CGPoint?
-    var indexPathForEditing: IndexPath?
+    var collectionViewBottomInset: CGFloat = 0 {
+        didSet {
+            self.collectionView.contentInset.bottom = self.collectionViewBottomInset
+            self.collectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
+        }
+    }
 
-    unowned let delegate: ChannelViewControllerDelegates
+    // Custom Input Accessory View
+    lazy var messageInputAccessoryView = MessageInputAccessoryView(with: self)
+
+    override var inputAccessoryView: UIView? {
+        return self.messageInputAccessoryView
+    }
+
+    /// A CGFloat value that adds to (or, if negative, subtracts from) the automatically
+    /// computed value of `messagesCollectionView.contentInset.bottom`. Meant to be used
+    /// as a measure of last resort when the built-in algorithm does not produce the right
+    /// value for your app. Please let us know when you end up having to use this property.
+    var additionalBottomInset: CGFloat = 10 {
+        didSet {
+            let delta = self.additionalBottomInset - oldValue
+            self.collectionViewBottomInset += delta
+        }
+    }
+
+    private var isFirstLayout: Bool = true
 
     init(delegate: ChannelViewControllerDelegates) {
         self.delegate = delegate
@@ -66,42 +107,30 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         fatalError("init(withObject:) has not been implemented")
     }
 
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+
     override func initializeViews() {
         super.initializeViews()
 
-        self.registerKeyboardEvents()
-
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.collectionView)
-        self.view.addSubview(self.messageInputView)
-        self.messageInputView.height = self.messageInputView.minHeight
+
         self.addChild(viewController: self.detailVC, toView: self.view)
 
         self.collectionView.dataSource = self.collectionViewManager
         self.collectionView.delegate = self.collectionViewManager
 
-        self.messageInputView.onPanned = { [unowned self] (panRecognizer) in
-            self.handle(pan: panRecognizer)
-        }
-
-        self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
-            if self.messageInputView.textView.isFirstResponder {
-                self.messageInputView.textView.resignFirstResponder()
-            }
-        }
-
         if let activeChannel = self.activeChannel {
             self.load(activeChannel: activeChannel)
         }
 
-        self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
-            guard let activeChannel = channel else {
-                self.collectionViewManager.reset()
-                return
-            }
+        self.setupHandlers()
+        self.subscribeToUpdates()
+    }
 
-            self.load(activeChannel: activeChannel)
-        }.start())
+    private func setupHandlers() {
 
         self.collectionViewManager.didTapShare = { [unowned self] message in
             self.delegate.channelView(self, didTapShare: message)
@@ -113,35 +142,29 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.collectionViewManager.didTapEdit = { [unowned self] message, indexPath in
             self.indexPathForEditing = indexPath
-            self.messageInputView.edit(message: message)
+            self.messageInputAccessoryView.edit(message: message)
         }
 
-        self.detailVC.currentState.producer
-            .skipRepeats()
-            .on { [unowned self] (state) in
-                UIView.animate(withDuration: Theme.animationDuration) {
-                    self.messageInputView.alpha = state == .expanded ? 0 : 1.0
-                    self.view.layoutNow()
-                }
-        }.start()
-
-        self.subscribeToUpdates()
-    }
-
-    private func load(activeChannel: DisplayableChannel) {
-        switch activeChannel.channelType {
-        case .system(_):
-            break
-        case .pending(_):
-            break 
-        case .channel(let channel):
-            channel.delegate = self
-            self.loadMessages(for: activeChannel.channelType)
+        self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
+            if self.messageInputAccessoryView.expandingTextView.isFirstResponder {
+                self.messageInputAccessoryView.expandingTextView.resignFirstResponder()
+            }
         }
+
+        self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
+            guard let activeChannel = channel else {
+                self.collectionViewManager.reset()
+                return
+            }
+
+            self.load(activeChannel: activeChannel)
+        }.start())
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        self.isMessagesControllerBeingDismissed = false
 
         if MessageSupplier.shared.sections.count > 0 {
             self.collectionViewManager.set(newSections: MessageSupplier.shared.sections,
@@ -158,9 +181,16 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         }
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        self.isMessagesControllerBeingDismissed = true
+    }
+
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
+        self.isMessagesControllerBeingDismissed = false
         MessageSupplier.shared.reset()
         ChannelSupplier.shared.set(activeChannel: nil)
         self.collectionViewManager.reset()
@@ -171,90 +201,16 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.blurView.expandToSuperviewSize()
 
-        guard let handler = self.keyboardHandler else { return }
-
-        let keyboardHeight = handler.currentKeyboardHeight
-        let height = self.view.height - keyboardHeight
-
         self.detailVC.view.size = CGSize(width: self.view.width - (Theme.contentOffset * 2), height: self.detailVC.collapsedHeight )
         self.detailVC.view.top = Theme.contentOffset
         self.detailVC.view.centerOnX()
 
-        self.collectionView.size = CGSize(width: self.view.width, height: height)
-        self.collectionView.top = 0
-        self.collectionView.centerOnX()
+        self.collectionView.frame = self.view.safeAreaLayoutGuide.layoutFrame
 
-        self.messageInputView.width = self.view.width - Theme.contentOffset * 2
-        var messageBottomOffset: CGFloat = 10
-        if keyboardHeight == 0, let window = UIWindow.topWindow() {
-            messageBottomOffset += window.safeAreaInsets.bottom + 2
+        if self.isFirstLayout {
+            defer { self.isFirstLayout = false }
+            self.addKeyboardObservers()
+            self.collectionViewBottomInset = self.requiredInitialScrollViewBottomInset()
         }
-
-        self.messageInputView.bottom = self.collectionView.bottom - messageBottomOffset
-        self.messageInputView.centerOnX()
-    }
-
-    func send(message: String,
-              context: MessageContext = .casual,
-              attributes: [String : Any]) {
-
-        guard let systemMessage = MessageDeliveryManager.send(message: message, context: context, attributes: attributes, completion: { (message, error) in
-            if let msg = message, let e = error {
-                msg.status = .error
-                self.collectionViewManager.updateItem(with: msg)                
-                print(e)
-            }
-        }) else { return }
-
-        self.collectionViewManager.append(item: systemMessage) { [unowned self] in
-            self.collectionView.scrollToEnd()
-        }
-
-        self.messageInputView.reset()
-    }
-
-    func resend(message: Messageable) {
-
-        guard let systemMessage = MessageDeliveryManager.resend(message: message, completion: { (newMessage, error) in
-            if let msg = newMessage, let e = error {
-                msg.status = .error
-                self.collectionViewManager.updateItem(with: msg)
-                print(e)
-            }
-        }) else { return }
-
-        self.collectionViewManager.updateItem(with: systemMessage)
-    }
-
-    func update(message: Messageable, text: String) {
-        let updatedMessage = MessageSupplier.shared.update(message: message, text: text) { (msg, error) in
-            if let e = error {
-                msg.status = .error
-                self.collectionViewManager.updateItem(with: msg)
-                print(e)
-            }
-        }
-
-        self.indexPathForEditing = nil
-        self.collectionViewManager.updateItem(with: updatedMessage)
-        self.messageInputView.reset()
-    }
-}
-
-extension ChannelViewController: TCHChannelDelegate {
-
-    func chatClient(_ client: TwilioChatClient,
-                    channel: TCHChannel,
-                    member: TCHMember,
-                    updated: TCHMemberUpdate) {
-        print("Channel Member updated")
-    }
-
-    func chatClient(_ client: TwilioChatClient,
-                    channel: TCHChannel,
-                    message: TCHMessage,
-                    updated: TCHMessageUpdate) {
-        
-        self.collectionViewManager.updateItem(with: message)
     }
 }

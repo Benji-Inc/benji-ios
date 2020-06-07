@@ -13,7 +13,7 @@ protocol KeyboardObservable: NSObjectProtocol {
 }
 
 private var keyboardHandlerKey: UInt8 = 0
-extension KeyboardObservable where Self: ViewController {
+extension KeyboardObservable where Self: NSObject {
 
     private(set) var keyboardHandler: KeyboardHandler? {
         get {
@@ -42,7 +42,7 @@ extension KeyboardObservable where Self: ViewController {
 
 class KeyboardHandler: NSObject {
 
-    unowned let vc: ViewController & KeyboardObservable
+    unowned let owner: NSObject & KeyboardObservable
 
     private(set) var currentKeyboardHeight: CGFloat = 0 {
         didSet {
@@ -52,8 +52,8 @@ class KeyboardHandler: NSObject {
 
     private(set) var previousKeyboardHeight: CGFloat?
 
-    init(with vc: ViewController & KeyboardObservable) {
-        self.vc = vc
+    init(with owner: NSObject & KeyboardObservable) {
+        self.owner = owner
         super.init()
     }
 
@@ -74,7 +74,7 @@ class KeyboardHandler: NSObject {
         }
 
         self.currentKeyboardHeight = newHeight
-        self.vc.handleKeyboard(frame: frame, with: animationDuration, timingCurve: timingCurve)
+        self.owner.handleKeyboard(frame: frame, with: animationDuration, timingCurve: timingCurve)
     }
 }
 
