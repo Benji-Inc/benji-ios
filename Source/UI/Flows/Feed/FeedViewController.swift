@@ -101,8 +101,7 @@ class FeedViewController: ViewController {
                     self.items = []
                     self.determineMessage(with: routine)
                 case .failure(_):
-                    let items: [FeedType] = [.rountine]
-                    self.manager.set(items: items)
+                    self.addFirstItems()
                 }
             })
     }

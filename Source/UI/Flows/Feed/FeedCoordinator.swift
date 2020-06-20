@@ -45,6 +45,8 @@ extension FeedCoordinator: FeedViewControllerDelegate {
             self.startChannelFlow(for: .channel(channel))
         case .channelInvite(let channel):
             self.startChannelFlow(for: .channel(channel))
+        case .newChannel(let channel):
+            self.startChannelFlow(for: channel.channelType)
         case .inviteAsk(let reservation):
             self.startReservationFlow(with: reservation)
         case .notificationPermissions:

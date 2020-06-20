@@ -17,6 +17,17 @@ class FeedSupplier {
 
     private(set) var items: [FeedType] = []
 
+    func getFirstItems() -> Future<[FeedType]> {
+        var promises: [Future<Void>] = []
+        self.items.append(.rountine)
+        promises.append(self.getNewChannels())
+
+        return waitForAll(futures: promises)
+            .transform { (_) in
+                return self.items.sorted()
+        }
+    }
+
     func getItems() -> Future<[FeedType]> {
 
         self.items.append(.meditation)
@@ -126,6 +137,28 @@ class FeedSupplier {
                     connections.forEach { (connection) in
                         if connection.status == .invited {
                             self.items.append(.connectionRequest(connection))
+                        }
+                    }
+                    promise.resolve(with: ())
+                case .failure(let error):
+                    promise.reject(with: error)
+                }
+        }
+
+        return promise
+    }
+
+    private func getNewChannels() -> Future<Void> {
+        let promise = Promise<Void>()
+        GetAllConnections(direction: .incoming).makeRequest()
+            .observe { (result) in
+                switch result {
+                case .success(let connections):
+                    connections.forEach { (connection) in
+                        if connection.status == .accepted,
+                            let channelId = connection.channelId,
+                            let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
+                            self.items.append(.newChannel(channel))
                         }
                     }
                     promise.resolve(with: ())

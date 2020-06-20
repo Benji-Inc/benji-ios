@@ -123,6 +123,7 @@
 		D64F5F1F23B670C300216D99 /* PurposeInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64F5F1E23B670C300216D99 /* PurposeInputAccessoryView.swift */; };
 		D64F5F2123B6713800216D99 /* TextInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64F5F2023B6713800216D99 /* TextInputAccessoryView.swift */; };
 		D653F6B023588F8E00A03EEE /* RoutineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653F6AF23588F8E00A03EEE /* RoutineViewController.swift */; };
+		D654DC04249EBDA20072E2F3 /* FeedNewChannelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D654DC03249EBDA20072E2F3 /* FeedNewChannelView.swift */; };
 		D657175C2378C78500F8F96C /* MessageCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */; };
 		D657175E2378CEBA00F8F96C /* ChannelCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657175D2378CEBA00F8F96C /* ChannelCollectionViewManager.swift */; };
 		D6579536239A141900A01338 /* CountDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579535239A141900A01338 /* CountDownView.swift */; };
@@ -449,6 +450,7 @@
 		D64F5F1E23B670C300216D99 /* PurposeInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurposeInputAccessoryView.swift; sourceTree = "<group>"; };
 		D64F5F2023B6713800216D99 /* TextInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputAccessoryView.swift; sourceTree = "<group>"; };
 		D653F6AF23588F8E00A03EEE /* RoutineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineViewController.swift; sourceTree = "<group>"; };
+		D654DC03249EBDA20072E2F3 /* FeedNewChannelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedNewChannelView.swift; sourceTree = "<group>"; };
 		D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D657175D2378CEBA00F8F96C /* ChannelCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCollectionViewManager.swift; sourceTree = "<group>"; };
 		D6579535239A141900A01338 /* CountDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownView.swift; sourceTree = "<group>"; };
@@ -1106,6 +1108,7 @@
 				D642736522C971FD0088256B /* FeedTextView.swift */,
 				D6E0ED52239CBDA40073B33E /* FeedUnreadView.swift */,
 				D6815DB822EE1CAC00E71251 /* FeedView.swift */,
+				D654DC03249EBDA20072E2F3 /* FeedNewChannelView.swift */,
 			);
 			path = "Feed Content Views";
 			sourceTree = "<group>";
@@ -2001,6 +2004,7 @@
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
 				D6B2604522E6C09700143CF0 /* RegularLabel.swift in Sources */,
 				D685CEA9243ACA800018F3E3 /* ConnectionContentView.swift in Sources */,
+				D654DC04249EBDA20072E2F3 /* FeedNewChannelView.swift in Sources */,
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D67896A722FF4D9B0059BA75 /* NavigationBarView.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,

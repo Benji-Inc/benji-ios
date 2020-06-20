@@ -14,6 +14,7 @@ enum ConnectionKey: String {
     case status
     case to
     case from
+    case channelSid
 }
 
 final class Connection: PFObject, PFSubclassing {
@@ -40,6 +41,10 @@ final class Connection: PFObject, PFSubclassing {
 
     var from: User? {
         return self.getObject(for: .from)
+    }
+
+    var channelId: String? {
+        return self.getObject(for: .channelSid)
     }
 
     var nonMeUser: User? {

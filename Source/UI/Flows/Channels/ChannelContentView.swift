@@ -129,6 +129,9 @@ class ChannelContentView: View {
                             }
                         }
 
+                    } else if let name = channel.friendlyName {
+                        self.titleLabel.set(text: name.capitalized, color: channel.context?.color ?? .white)
+                        self.descriptionText = "Start here to learn your way around."
                     } else {
                         self.titleLabel.set(text: "You", color: channel.context?.color ?? .white)
                         self.descriptionText = "It's just you in here."

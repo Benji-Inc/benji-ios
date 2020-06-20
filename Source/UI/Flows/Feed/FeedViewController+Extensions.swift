@@ -40,4 +40,16 @@ extension FeedViewController {
                 }
             })
     }
+
+    func addFirstItems() {
+        FeedSupplier.shared.getFirstItems()
+        .withResultToast()
+        .observeValue(with: { (items) in
+            runMain {
+                self.view.layoutNow()
+                self.items = items
+                self.showFeed()
+            }
+        })
+    }
 }

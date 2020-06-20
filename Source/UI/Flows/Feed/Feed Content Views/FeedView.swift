@@ -21,6 +21,7 @@ class FeedView: View {
     lazy var notificationsView = FeedNotificationPermissionsView()
     lazy var connectionView = FeedConnectionView()
     lazy var meditationView = FeedMeditationView()
+    lazy var newChannelView = FeedNewChannelView()
 
     var didComplete: CompletionOptional = nil
 
@@ -79,6 +80,12 @@ class FeedView: View {
         case .meditation:
             self.container.addSubview(self.meditationView)
             self.meditationView.button.didSelect = { [unowned self] in
+                self.didComplete?()
+            }
+        case .newChannel(let channel):
+            self.container.addSubview(self.newChannelView)
+            self.newChannelView.configure(with: channel)
+            self.newChannelView.didSelect = { [unowned self] in
                 self.didComplete?()
             }
         }

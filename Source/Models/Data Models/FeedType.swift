@@ -14,6 +14,7 @@ enum FeedType: Comparable {
 
     case timeSaved(Int)
     case rountine
+    case newChannel(DisplayableChannel)
     case system(SystemMessage)
     case unreadMessages(TCHChannel, Int)
     case channelInvite(TCHChannel)
@@ -42,6 +43,8 @@ enum FeedType: Comparable {
             return "connecitonRequest"
         case .meditation:
             return "meditation"
+        case .newChannel(let channel):
+            return channel.id
         }
     }
 
@@ -65,6 +68,8 @@ enum FeedType: Comparable {
             return 7
         case .meditation:
             return 10
+        case .newChannel(_):
+            return 0
         }
     }
 
