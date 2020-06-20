@@ -34,10 +34,11 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
         return self.onboardingVC
     }
 
-    func handle(deeplink: DeepLinkable) {
-        self.onboardingVC.deeplink = deeplink
-        self.onboardingVC.reservationId = deeplink.reservationId
-        self.onboardingVC.reservationCreatorId = deeplink.reservationCreatorId
+    func handle(deeplink: DeepLinkable?) {
+        guard let link = deeplink else { return }
+        self.onboardingVC.deeplink = link
+        self.onboardingVC.reservationId = link.reservationId
+        self.onboardingVC.reservationCreatorId = link.reservationCreatorId
         self.onboardingVC.updateNavigationBar()
     }
 }

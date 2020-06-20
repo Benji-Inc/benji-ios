@@ -45,7 +45,7 @@ class ReservationsCoordinator: Coordinator<Void> {
 
     private func showAlert() {
         let alert = UIAlertController(title: "Invitation Sent",
-                                      message: "Your invation has been sent. As soon as someone register's using your link, a conversation will be created between you both and you will be able to communicate using Benji.",
+                                      message: "Your invation has been sent. As soon as someone accepts, using your link, a conversation will be created between the two of you.",
                                       preferredStyle: .alert)
 
         let ok = UIAlertAction(title: "Ok", style: .cancel) { (_) in

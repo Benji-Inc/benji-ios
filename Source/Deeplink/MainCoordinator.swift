@@ -39,16 +39,18 @@ class MainCoordinator: Coordinator<Void> {
     func handle(result: LaunchStatus) {
 
         switch result {
-        case .isLaunching:
-            break
-        case .needsOnboarding:
-            runMain {
-                self.runOnboardingFlow()
-            }
         case .success(let object, let token):
             self.deepLink = object
 
-            if ChannelManager.shared.isConnected {
+            if User.current().isNil {
+                runMain {
+                    self.runOnboardingFlow()
+                }
+            } else if let user = User.current(), !user.isOnboarded {
+                runMain {
+                    self.runOnboardingFlow()
+                }
+            } else if ChannelManager.shared.isConnected {
                 self.runHomeFlow()
             } else if !token.isEmpty {
                 self.initializeChat(with: token)
@@ -98,7 +100,7 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func runOnboardingFlow() {
-        if let onboardingCoordinator = self.childCoordinator as? OnboardingCoordinator, let deepLink = self.deepLink {
+        if let onboardingCoordinator = self.childCoordinator as? OnboardingCoordinator {
             onboardingCoordinator.handle(deeplink: deepLink)
         } else {
             let coordinator = OnboardingCoordinator(reservationId: self.deepLink?.reservationId,

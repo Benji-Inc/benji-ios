@@ -167,7 +167,8 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
     override func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.width, height: 84)
+        let height = (Theme.buttonHeight * 3) + (Theme.contentOffset * 4)
+        return CGSize(width: collectionView.width, height: height)
     }
 
     private func footer(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {

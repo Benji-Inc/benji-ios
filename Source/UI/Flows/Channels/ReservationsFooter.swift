@@ -10,9 +10,8 @@ import Foundation
 
 class ReservationsFooter: UICollectionReusableView {
 
-    let reservationsButton = LoadingButton()
     var didSelectReservation: ((Reservation) -> Void)? = nil
-    var reservations: [Reservation] = []
+    private var buttons: [ReservationButton] = []
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,57 +24,79 @@ class ReservationsFooter: UICollectionReusableView {
     }
 
     private func initializeViews() {
-        self.addSubview(self.reservationsButton)
-        self.reservationsButton.set(style: .normal(color: .purple, text: "Invite"))
 
-        self.reservationsButton.didSelect = { [unowned self] in
-            guard let reservation = self.reservations.first(where: { (reservation) -> Bool in
-                return !reservation.isClaimed
-            }) else { return }
-
-            self.prepare(reservation: reservation)
-        }
     }
 
     func configure() {
         self.getReservations()
-        self.layoutNow()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.reservationsButton.setSize(with: self.width - 16)
-        self.reservationsButton.centerOnXAndY()
+        var xOffset: CGFloat = Theme.contentOffset
+        self.buttons.forEach { (button) in
+            button.setSize(with: self.width - 16)
+            button.centerOnX()
+            button.top = xOffset
+
+            xOffset += button.height + Theme.contentOffset
+        }
     }
 
     private func getReservations() {
         guard let user = User.current() else { return }
 
         Reservation.getReservations(for: user)
-            .observeValue { (reservations) in
-                var numberOfUnclaimed: Int = 0
-
-                reservations.forEach { (reservation) in
-                    if !reservation.isClaimed {
-                        numberOfUnclaimed += 1
-                    }
-                }
-
-                self.reservations = reservations
-
-                self.layoutNow()
+            .observeValue { [weak self] (reservations) in
+                guard let `self` = self else { return }
+                self.layout(reservations: Array.init(reservations.prefix(3)))
         }
     }
 
-    func prepare(reservation: Reservation) {
-        self.reservationsButton.isLoading = true
-        reservation.prepareMetaData()
+    func layout(reservations: [Reservation]) {
+        self.buttons = []
+        self.removeAllSubviews()
+
+        var index = 1
+        reservations.forEach { (reservation) in
+            if !reservation.isClaimed {
+                let button = ReservationButton(with: reservation)
+                button.set(style: .normal(color: .purple, text: "Invite \(index)"))
+                button.didSelect = { [weak self] in
+                    guard let `self` = self else { return }
+                    self.didSelect(button: button)
+                }
+                self.buttons.append(button)
+                self.addSubview(button)
+                index += 1
+            }
+        }
+
+        self.layoutNow()
+    }
+
+    private func didSelect(button: ReservationButton) {
+        button.isLoading = true
+        button.reservation.prepareMetaData()
             .observeValue { (_) in
-                self.didSelectReservation?(reservation)
+                self.didSelectReservation?(button.reservation)
                 runMain {
-                    self.reservationsButton.isLoading = false
+                    button.isLoading = false
                 }
         }
+    }
+}
+
+private class ReservationButton: LoadingButton {
+    let reservation: Reservation
+
+    init(with reservation: Reservation) {
+        self.reservation = reservation
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

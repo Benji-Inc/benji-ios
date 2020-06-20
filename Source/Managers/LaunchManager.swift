@@ -13,8 +13,6 @@ import ReactiveSwift
 import TMROFutures
 
 enum LaunchStatus {
-    case isLaunching
-    case needsOnboarding
     case success(object: DeepLinkable?, token: String)
     case failed(error: ClientError?)
 }
@@ -131,11 +129,10 @@ class LaunchManager {
     private func initializeUserData(with buo: BranchUniversalObject?) {
         if let identity = User.current()?.objectId {
             Branch.getInstance().setIdentity(identity)
+            self.getChatToken(buo: buo)
         } else {
-            self.delegate?.launchManager(self, didFinishWith: .needsOnboarding)
+            self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: String()))
         }
-
-        self.getChatToken(buo: buo)
     }
 
     func getChatToken(buo: BranchUniversalObject?) {

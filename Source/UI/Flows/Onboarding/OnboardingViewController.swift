@@ -29,12 +29,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     var deeplink: DeepLinkable?
     var reservationId: String?
     var reservationUser: User? 
-    var reservationCreatorId: String? {
-        didSet {
-            guard let userId = self.reservationCreatorId else { return }
-            self.updateReservationCreator(with: userId)
-        }
-    }
+    var reservationCreatorId: String?
 
     init(with reservationId: String?,
          reservationCreatorId: String?,
@@ -55,7 +50,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func initializeViews() {
         super.initializeViews()
 
-         self.registerKeyboardEvents()
+        self.registerKeyboardEvents()
 
         self.blurView.effect = nil
         self.scrollView.addSubview(self.avatarView)
@@ -122,7 +117,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 runMain {
                     self.reservationUser = user
                     self.avatarView.set(avatar: user)
+                    self.avatarView.isHidden = false
                     self.updateNavigationBar()
+                    self.view.layoutNow()
                 }
         }
     }
@@ -174,11 +171,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         switch self.currentContent.value {
         case .phone(_), .code(_):
-            if !self.reservationUser.isNil {
-                self.avatarView.isHidden = false
-            } else {
-                self.avatarView.isHidden = true 
-            }
+            self.avatarView.isHidden = !self.reservationUser.isNil
         default:
             self.avatarView.isHidden = true
         }
