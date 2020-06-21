@@ -36,7 +36,7 @@ class FeedNewChannelView: View {
             .observeValue(with: { (user) in
                 runMain {
                     self.avatarView.set(avatar: user)
-                    let message = LocalizedString(id: "", arguments: [user.givenName], default: "You have joined a conversation with @(name) for accepting their invite. Say 👋")
+                    let message = LocalizedString(id: "", arguments: [user.givenName], default: "Congrats! 🎉 You can now chat with @(name)!")
                     self.textView.set(localizedText: message)
                     self.layoutNow()
                 }
