@@ -52,8 +52,6 @@ class ChannelContentView: View {
 
     func configure(with type: ChannelType) {
 
-        self.descriptionText = "Loading..."
-
         switch type {
         case .system(let channel):
             self.stackedAvatarView.set(items: channel.avatars)
@@ -100,16 +98,20 @@ class ChannelContentView: View {
                     }
 
                     if let first = notMeUsers.first {
-                        first.routine?.fetchIfNeededInBackground(block: { (object, error) in
-                            if let routine = object as? Routine, let date = routine.date {
-                                let formatter = DateFormatter()
-                                formatter.dateFormat = "h:mm a"
-                                let string = formatter.string(from: date)
-                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s routine is: @(routine)")
-                            } else {
-                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine set for @(name).")
-                            }
-                        })
+                        if let routine = first.routine {
+                            routine.fetchIfNeededInBackground(block: { (object, error) in
+                                if let routine = object as? Routine, let date = routine.date {
+                                    let formatter = DateFormatter()
+                                    formatter.dateFormat = "h:mm a"
+                                    let string = formatter.string(from: date)
+                                    self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s routine is: @(routine)")
+                                } else {
+                                    self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine yet for @(name).")
+                                }
+                            })
+                        } else {
+                            self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine yet for @(name).")
+                        }
 
                         if let context = channel.context {
                             if channel.isOwnedByMe {
