@@ -32,6 +32,7 @@ class ChannelIntroHeader: UICollectionReusableView {
         self.addSubview(self.avatarView)
         self.addSubview(self.label)
         self.addSubview(self.textView)
+        self.textView.isScrollEnabled = false 
     }
 
     override func layoutSubviews() {
