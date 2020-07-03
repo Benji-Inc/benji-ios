@@ -24,6 +24,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     lazy var detailVC = ChannelDetailViewController(delegate: self.delegate)
     lazy var collectionView = ChannelCollectionView()
     lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView)
+    lazy var imagePickerVC = UIImagePickerController()
 
     let disposables = CompositeDisposable()
 

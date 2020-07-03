@@ -18,15 +18,9 @@ enum MessageStatus: String {
     case error
 }
 
-enum MessageType {
-    case text
-    case media
-}
-
 protocol Messageable: class {
 
     var createdAt: Date { get }
-    var text: Localized { get }
     var isFromCurrentUser: Bool { get }
     var authorID: String { get }
     var messageIndex: NSNumber? { get }
@@ -40,7 +34,7 @@ protocol Messageable: class {
     var isConsumed: Bool { get }
     var hasBeenConsumedBy: [String] { get }
     var color: Color { get }
-    var type: MessageType { get }
+    var kind: MessageKind { get }
     func udpateConsumers(with consumer: Avatar) -> Future<Void>
     func appendAttributes(with attributes: [String: Any]) -> Future<Void>
 }
@@ -48,7 +42,7 @@ protocol Messageable: class {
 func ==(lhs: Messageable, rhs: Messageable) -> Bool {
     guard type(of: lhs) == type(of: rhs) else { return false }
     return lhs.createdAt == rhs.createdAt
-        && lhs.text == rhs.text
+        && lhs.kind == rhs.kind
         && lhs.authorID == rhs.authorID
         && lhs.messageIndex == rhs.messageIndex
         && lhs.id == rhs.id
