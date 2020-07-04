@@ -15,7 +15,7 @@ class MessageDeliveryManager {
 
     static func send(message: String,
                      context: MessageContext = .casual,
-                     type: MessageType = .text,
+                     kind: MessageKind,
                      attributes: [String: Any],
                      completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
 
@@ -27,13 +27,12 @@ class MessageDeliveryManager {
 
                 let systemMessage = SystemMessage(avatar: current,
                                                   context: context,
-                                                  text: message,
                                                   isFromCurrentUser: true,
                                                   createdAt: Date(),
                                                   authorId: objectId,
                                                   messageIndex: nil,
                                                   status: .sent,
-                                                  type: type, 
+                                                  kind: kind,
                                                   id: String(),
                                                   attributes: mutableAttributes)
 
@@ -64,22 +63,15 @@ class MessageDeliveryManager {
     }
 
     static func resend(message: Messageable, completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
-        if let channelDisplayable = ChannelSupplier.shared.activeChannel.value {
-            let systemMessage = SystemMessage(avatar: message.avatar,
-                                              context: message.context,
-                                              text: message.text,
-                                              isFromCurrentUser: message.isFromCurrentUser,
-                                              createdAt: message.createdAt,
-                                              authorId: message.authorID,
-                                              messageIndex: message.messageIndex,
-                                              status: .sent, // Reset the status
-                                              type: message.type,
-                                              id: message.id,
-                                              attributes: message.attributes)
 
-                if case .channel(let channel) = channelDisplayable.channelType {
-                    let attributes = message.attributes ?? [:]
-                    self.sendMessage(to: channel, with: localized(message.text), context: message.context, attributes: attributes)
+        if let channelDisplayable = ChannelSupplier.shared.activeChannel.value {
+            let systemMessage = SystemMessage(with: message)
+
+            if case .channel(let channel) = channelDisplayable.channelType {
+                let attributes = message.attributes ?? [:]
+                switch message.kind {
+                case .text(let text):
+                    self.sendMessage(to: channel, with: text, context: message.context, attributes: attributes)
                         .observe { (result) in
                             switch result {
                             case .success(_):
@@ -88,9 +80,12 @@ class MessageDeliveryManager {
                                 completion(systemMessage, error)
                             }
                     }
-                } else {
-                    completion(nil, ClientError.message(detail: "No active channel found."))
+                default:
+                    break
                 }
+            } else {
+                completion(nil, ClientError.message(detail: "No active channel found."))
+            }
 
             return systemMessage
         } else {

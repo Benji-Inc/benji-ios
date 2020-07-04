@@ -13,7 +13,6 @@ import TMROFutures
 class SystemMessage: Messageable {
 
     var createdAt: Date
-    var text: Localized
     var authorID: String
     var messageIndex: NSNumber?
     var attributes: [String : Any]?
@@ -28,31 +27,29 @@ class SystemMessage: Messageable {
     var hasBeenConsumedBy: [String] {
         return self.attributes?["consumers"] as? [String] ?? []
     }
-    var type: MessageType
+    var kind: MessageKind
 
     init(avatar: Avatar,
          context: MessageContext,
-         text: Localized,
          isFromCurrentUser: Bool,
          createdAt: Date,
          authorId: String,
          messageIndex: NSNumber?,
          status: MessageStatus,
-         type: MessageType,
+         kind: MessageKind,
          id: String,
          attributes: [String: Any]?) {
 
         self.avatar = avatar
         self.context = context
         self.isFromCurrentUser = isFromCurrentUser
-        self.text = text
         self.createdAt = createdAt
         self.authorID = authorId
         self.messageIndex = messageIndex
         self.status = status
         self.id = id
         self.attributes = attributes
-        self.type = type
+        self.kind = kind
     }
 
     // Used for updating the read state of messages
@@ -60,13 +57,12 @@ class SystemMessage: Messageable {
 
         self.init(avatar: message.avatar,
                   context: message.context,
-                  text: message.text,
                   isFromCurrentUser: message.isFromCurrentUser,
                   createdAt: message.createdAt,
                   authorId: message.authorID,
                   messageIndex: message.messageIndex,
                   status: message.status,
-                  type: message.type, 
+                  kind: message.kind,
                   id: message.id,
                   attributes: message.attributes)
     }

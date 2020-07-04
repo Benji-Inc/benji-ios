@@ -242,7 +242,9 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 
     func edit(message: Messageable) {
         self.editableMessage = message
-        self.expandingTextView.text = localized(message.text)
+        if case MessageKind.text(let text) = message.kind {
+            self.expandingTextView.text = text
+        }
         self.messageContext = message.context
         self.expandingTextView.becomeFirstResponder()
     }

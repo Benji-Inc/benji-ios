@@ -147,7 +147,7 @@ class MessageSupplier {
     func update(message: Messageable, text: String, completion: ((SystemMessage, Error?) -> Void)?) -> SystemMessage {
 
         let updatedMessage = SystemMessage(with: message)
-        updatedMessage.text = text
+        updatedMessage.kind = .text(text)
 
         if let tchMessage = message as? TCHMessage {
             tchMessage.updateBody(text) { (result) in

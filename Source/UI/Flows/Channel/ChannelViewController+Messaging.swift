@@ -35,7 +35,11 @@ extension ChannelViewController: MessageInputAccessoryViewDelegate {
               context: MessageContext = .casual,
               attributes: [String : Any]) {
 
-        guard let systemMessage = MessageDeliveryManager.send(message: message, context: context, attributes: attributes, completion: { (message, error) in
+        guard let systemMessage = MessageDeliveryManager.send(message: message,
+                                                              context: context,
+                                                              kind: .text(message),
+                                                              attributes: attributes,
+                                                              completion: { (message, error) in
             if let msg = message, let e = error {
                 msg.status = .error
                 self.collectionViewManager.updateItem(with: msg)

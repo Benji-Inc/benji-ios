@@ -71,7 +71,10 @@ class MessageCell: UICollectionViewCell {
         if !message.isFromCurrentUser {
             self.avatarView.set(avatar: message.avatar)
         }
-        self.textView.set(text: message.text, messageContext: message.context)
+
+        if case MessageKind.text(let text) = message.kind {
+            self.textView.set(text: text, messageContext: message.context)
+        }
 
         self.handleIsConsumed(for: message)
         self.handleStatus(for: message)

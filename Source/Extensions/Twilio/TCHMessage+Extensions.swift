@@ -75,14 +75,12 @@ extension TCHMessage: Messageable {
         return .delivered
     }
 
-    var type: MessageType {
+    var kind: MessageKind {
         switch self.messageType {
         case .text:
-            return .text
-        case .media:
-            return .media
-        @unknown default:
-            return .text 
+            return .text(String(optional: self.body))
+        default:
+            return .text(String(optional: self.body))
         }
     }
 

@@ -44,7 +44,9 @@ class MessagePreviewViewController: ViewController {
         super.initializeViews()
         
         self.view.addSubview(self.messageTextView)
-        self.messageTextView.set(text: self.message.text, messageContext: self.message.context)
+        if case MessageKind.text(let text) = self.message.kind {
+            self.messageTextView.set(text: text, messageContext: self.message.context)
+        }
         self.messageTextView.size = self.channelAttributes.attributes.textViewFrame.size
 
     }

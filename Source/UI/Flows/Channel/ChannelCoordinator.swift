@@ -39,7 +39,28 @@ extension ChannelCoordinator: ChannelDetailViewControllerDelegate {
 extension ChannelCoordinator: ChannelViewControllerDelegate {
 
     func channelView(_ controller: ChannelViewController, didTapShare message: Messageable) {
-        let items = [localized(message.text)]
+        var items: [Any] = []
+        switch message.kind {
+        case .text(let text):
+            items = [text]
+        case .attributedText(_):
+            break
+        case .photo(_):
+            break
+        case .video(_):
+            break
+        case .location(_):
+            break
+        case .emoji(_):
+            break
+        case .audio(_):
+            break
+        case .contact(_):
+            break
+        case .custom(_):
+            break
+        }
+
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         controller.present(ac, animated: true, completion: nil)
     }
