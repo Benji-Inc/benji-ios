@@ -15,6 +15,7 @@ class AudioCellAttributesConfigurer: ChannelCellAttributesConfigurer {
     }
 
     override func size(with message: Messageable?, for layout: ChannelCollectionViewFlowLayout) -> CGSize {
-        return .zero
+        guard let msg = message, case MessageKind.audio(let item) = msg.kind else { return .zero }
+        return item.size
     }
 }

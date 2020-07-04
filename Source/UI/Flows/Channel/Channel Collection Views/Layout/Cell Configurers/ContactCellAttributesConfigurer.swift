@@ -15,6 +15,6 @@ class ContactCellAttributesConfigurer: ChannelCellAttributesConfigurer {
     }
 
     override func size(with message: Messageable?, for layout: ChannelCollectionViewFlowLayout) -> CGSize {
-        return .zero
+        return .zero 
     }
 }

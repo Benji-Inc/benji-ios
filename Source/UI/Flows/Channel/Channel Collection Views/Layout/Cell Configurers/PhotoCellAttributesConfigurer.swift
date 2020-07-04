@@ -14,6 +14,7 @@ class PhotoCellAttributesConfigurer: ChannelCellAttributesConfigurer {
     }
 
     override func size(with message: Messageable?, for layout: ChannelCollectionViewFlowLayout) -> CGSize {
-        return .zero
+        guard let msg = message, case MessageKind.photo(let item) = msg.kind else { return .zero }
+        return item.size
     }
 }
