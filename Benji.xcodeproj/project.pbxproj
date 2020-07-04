@@ -317,6 +317,13 @@
 		D6EEE7B12383A70F00F9D446 /* Benji.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = D64C6AA523307DB300DB7257 /* Benji.entitlements */; };
 		D6F33C6924AFCE3F009603FF /* ChannelViewController+Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6824AFCE3F009603FF /* ChannelViewController+Context.swift */; };
 		D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
+		D6F33C6D24B14988009603FF /* PhotoCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6C24B14988009603FF /* PhotoCellAttributesConfigurer.swift */; };
+		D6F33C6F24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6E24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift */; };
+		D6F33C7124B14A3F009603FF /* LocationCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C7024B14A3F009603FF /* LocationCellAttributesConfigurer.swift */; };
+		D6F33C7324B14A5D009603FF /* AudioCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C7224B14A5D009603FF /* AudioCellAttributesConfigurer.swift */; };
+		D6F33C7524B14A7B009603FF /* VideoAttributesCellConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C7424B14A7B009603FF /* VideoAttributesCellConfigurer.swift */; };
+		D6F33C7724B14AC2009603FF /* ContactCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C7624B14AC2009603FF /* ContactCellAttributesConfigurer.swift */; };
+		D6F33C7924B14AF0009603FF /* EmojiCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C7824B14AF0009603FF /* EmojiCellAttributesConfigurer.swift */; };
 		D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */; };
 		D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA622123F067A300048C4A /* AnimationDuration.swift */; };
@@ -663,6 +670,13 @@
 		D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashableDisplayable.swift; sourceTree = "<group>"; };
 		D6F33C6824AFCE3F009603FF /* ChannelViewController+Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelViewController+Context.swift"; sourceTree = "<group>"; };
 		D6F33C6A24AFCF24009603FF /* MessageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageKind.swift; sourceTree = "<group>"; };
+		D6F33C6C24B14988009603FF /* PhotoCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCellAttributesConfigurer.swift; sourceTree = "<group>"; };
+		D6F33C6E24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedMessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
+		D6F33C7024B14A3F009603FF /* LocationCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCellAttributesConfigurer.swift; sourceTree = "<group>"; };
+		D6F33C7224B14A5D009603FF /* AudioCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioCellAttributesConfigurer.swift; sourceTree = "<group>"; };
+		D6F33C7424B14A7B009603FF /* VideoAttributesCellConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoAttributesCellConfigurer.swift; sourceTree = "<group>"; };
+		D6F33C7624B14AC2009603FF /* ContactCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCellAttributesConfigurer.swift; sourceTree = "<group>"; };
+		D6F33C7824B14AF0009603FF /* EmojiCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCellAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D6F733D923D37C6300FBC7BC /* TextEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryField.swift; sourceTree = "<group>"; };
 		D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionViewManager+Animations.swift"; sourceTree = "<group>"; };
 		D6FA622123F067A300048C4A /* AnimationDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDuration.swift; sourceTree = "<group>"; };
@@ -949,6 +963,13 @@
 				D6090E592377D5CF00833DA7 /* ChannelCellAttributesConfigurer.swift */,
 				D64C6AA1232EA06800DB7257 /* TypingCellAttributesConfigurer.swift */,
 				D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */,
+				D6F33C6C24B14988009603FF /* PhotoCellAttributesConfigurer.swift */,
+				D6F33C6E24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift */,
+				D6F33C7024B14A3F009603FF /* LocationCellAttributesConfigurer.swift */,
+				D6F33C7224B14A5D009603FF /* AudioCellAttributesConfigurer.swift */,
+				D6F33C7424B14A7B009603FF /* VideoAttributesCellConfigurer.swift */,
+				D6F33C7624B14AC2009603FF /* ContactCellAttributesConfigurer.swift */,
+				D6F33C7824B14AF0009603FF /* EmojiCellAttributesConfigurer.swift */,
 			);
 			path = "Cell Configurers";
 			sourceTree = "<group>";
@@ -1726,6 +1747,7 @@
 				D6347394241EB2C30071E9DA /* AlertControllerAnimatedTransitioning.swift in Sources */,
 				D6EAB68823E6211200B90D5A /* ProfilePhotoViewController.swift in Sources */,
 				D62BB73D244D3AEF00607677 /* UserNotificationFactory.swift in Sources */,
+				D6F33C7724B14AC2009603FF /* ContactCellAttributesConfigurer.swift in Sources */,
 				D62C635622BE9E5C00F4D097 /* CollectionViewController.swift in Sources */,
 				D6E4C7FD23930675002B1330 /* UserNotificationManager+Extensions.swift in Sources */,
 				D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */,
@@ -1871,6 +1893,7 @@
 				D61EC0EC21D312B600204BEE /* UIView+Extensions.swift in Sources */,
 				D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */,
 				D6D1504021DAFB8300CD8CE4 /* UITextField+Extensions.swift in Sources */,
+				D6F33C6D24B14988009603FF /* PhotoCellAttributesConfigurer.swift in Sources */,
 				D67896CA23039E680059BA75 /* ScrolledModalControllerPresentable.swift in Sources */,
 				D60C814622092F6B00A127A3 /* Button.swift in Sources */,
 				D64F5F1F23B670C300216D99 /* PurposeInputAccessoryView.swift in Sources */,
@@ -1885,6 +1908,7 @@
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
 				D6B2603822E6AB5E00143CF0 /* ChannelDetailViewController.swift in Sources */,
 				D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */,
+				D6F33C7924B14AF0009603FF /* EmojiCellAttributesConfigurer.swift in Sources */,
 				D6B2607222E80FE000143CF0 /* SmallBoldLabel.swift in Sources */,
 				D63844122337C3CD0072227B /* LoadMoreSectionHeader.swift in Sources */,
 				D6579536239A141900A01338 /* CountDownView.swift in Sources */,
@@ -1914,6 +1938,7 @@
 				D6D14D8F21D5893600CD8CE4 /* NSNumber+IGListDiffable.m in Sources */,
 				D6740D4823AEA5BD009D5702 /* ChannelsCoordiantor.swift in Sources */,
 				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,
+				D6F33C6F24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift in Sources */,
 				D6D627B7247C712E0046BB70 /* ChannelIntroHeader.swift in Sources */,
 				D6E0ED53239CBDA40073B33E /* FeedUnreadView.swift in Sources */,
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
@@ -1989,6 +2014,7 @@
 				D6D14FFA21D5893700CD8CE4 /* IGListDiff.mm in Sources */,
 				D61EC0F321D3146600204BEE /* UINib+Extensions.swift in Sources */,
 				D67896A922FF51170059BA75 /* PhoneViewController.swift in Sources */,
+				D6F33C7124B14A3F009603FF /* LocationCellAttributesConfigurer.swift in Sources */,
 				D642738822C9AF690088256B /* ModalViewController.swift in Sources */,
 				D6D145F421D5493000CD8CE4 /* HomeViewController.swift in Sources */,
 				D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */,
@@ -2012,6 +2038,7 @@
 				D6B2604522E6C09700143CF0 /* RegularLabel.swift in Sources */,
 				D685CEA9243ACA800018F3E3 /* ConnectionContentView.swift in Sources */,
 				D654DC04249EBDA20072E2F3 /* FeedNewChannelView.swift in Sources */,
+				D6F33C7524B14A7B009603FF /* VideoAttributesCellConfigurer.swift in Sources */,
 				D6F33C6924AFCE3F009603FF /* ChannelViewController+Context.swift in Sources */,
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D67896A722FF4D9B0059BA75 /* NavigationBarView.swift in Sources */,
@@ -2023,6 +2050,7 @@
 				D6DDE423247D671400436E8D /* ReservationsFooter.swift in Sources */,
 				D6D14FFC21D5893700CD8CE4 /* IGListBatchUpdateData.mm in Sources */,
 				D6FC8096237A64650089AACC /* MessageSupplier.swift in Sources */,
+				D6F33C7324B14A5D009603FF /* AudioCellAttributesConfigurer.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
 				D6B2606A22E80AB000143CF0 /* Toast.swift in Sources */,
 				D6D1500721D5E73D00CD8CE4 /* ChannelViewController.swift in Sources */,
