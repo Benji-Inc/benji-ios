@@ -160,19 +160,19 @@ class ChannelCollectionViewFlowLayout: UICollectionViewFlowLayout {
             case .text(_):
                 return MessageCellAttributesConfigurer()
             case .attributedText(_):
-                break
+                return AttributedMessageCellAttributesConfigurer()
             case .photo(_):
-                break
+                return PhotoCellAttributesConfigurer()
             case .video(_):
-                break
+                return VideoAttributesCellConfigurer()
             case .location(_):
-                break
+                return LocationCellAttributesConfigurer()
             case .emoji(_):
-                break
+                return EmojiCellAttributesConfigurer()
             case .audio(_):
-                break
+                return AudioCellAttributesConfigurer()
             case .contact(_):
-                break
+                return ContactCellAttributesConfigurer()
             case .custom(_):
                 break
             }
