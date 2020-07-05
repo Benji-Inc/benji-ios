@@ -324,6 +324,13 @@
 		D6F33C7524B14A7B009603FF /* VideoAttributesCellConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C7424B14A7B009603FF /* VideoAttributesCellConfigurer.swift */; };
 		D6F33C7724B14AC2009603FF /* ContactCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C7624B14AC2009603FF /* ContactCellAttributesConfigurer.swift */; };
 		D6F33C7924B14AF0009603FF /* EmojiCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C7824B14AF0009603FF /* EmojiCellAttributesConfigurer.swift */; };
+		D6F33C7C24B1504C009603FF /* PhotoMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C7B24B1504C009603FF /* PhotoMessageCell.swift */; };
+		D6F33C7E24B15063009603FF /* LocationMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C7D24B15063009603FF /* LocationMessageCell.swift */; };
+		D6F33C8024B15076009603FF /* AudioMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C7F24B15076009603FF /* AudioMessageCell.swift */; };
+		D6F33C8224B15086009603FF /* VideoMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C8124B15086009603FF /* VideoMessageCell.swift */; };
+		D6F33C8424B150A9009603FF /* ContactMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C8324B150A9009603FF /* ContactMessageCell.swift */; };
+		D6F33C8624B150C3009603FF /* EmojiMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C8524B150C3009603FF /* EmojiMessageCell.swift */; };
+		D6F33C8824B150F9009603FF /* BaseMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C8724B150F9009603FF /* BaseMessageCell.swift */; };
 		D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */; };
 		D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA622123F067A300048C4A /* AnimationDuration.swift */; };
@@ -677,6 +684,13 @@
 		D6F33C7424B14A7B009603FF /* VideoAttributesCellConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoAttributesCellConfigurer.swift; sourceTree = "<group>"; };
 		D6F33C7624B14AC2009603FF /* ContactCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCellAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D6F33C7824B14AF0009603FF /* EmojiCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCellAttributesConfigurer.swift; sourceTree = "<group>"; };
+		D6F33C7B24B1504C009603FF /* PhotoMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoMessageCell.swift; sourceTree = "<group>"; };
+		D6F33C7D24B15063009603FF /* LocationMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationMessageCell.swift; sourceTree = "<group>"; };
+		D6F33C7F24B15076009603FF /* AudioMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMessageCell.swift; sourceTree = "<group>"; };
+		D6F33C8124B15086009603FF /* VideoMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMessageCell.swift; sourceTree = "<group>"; };
+		D6F33C8324B150A9009603FF /* ContactMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactMessageCell.swift; sourceTree = "<group>"; };
+		D6F33C8524B150C3009603FF /* EmojiMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMessageCell.swift; sourceTree = "<group>"; };
+		D6F33C8724B150F9009603FF /* BaseMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMessageCell.swift; sourceTree = "<group>"; };
 		D6F733D923D37C6300FBC7BC /* TextEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryField.swift; sourceTree = "<group>"; };
 		D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionViewManager+Animations.swift"; sourceTree = "<group>"; };
 		D6FA622123F067A300048C4A /* AnimationDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDuration.swift; sourceTree = "<group>"; };
@@ -959,17 +973,17 @@
 		D638440C2336E1FA0072227B /* Cell Configurers */ = {
 			isa = PBXGroup;
 			children = (
-				D6432BEF22D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift */,
-				D6090E592377D5CF00833DA7 /* ChannelCellAttributesConfigurer.swift */,
-				D64C6AA1232EA06800DB7257 /* TypingCellAttributesConfigurer.swift */,
-				D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */,
-				D6F33C6C24B14988009603FF /* PhotoCellAttributesConfigurer.swift */,
 				D6F33C6E24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift */,
-				D6F33C7024B14A3F009603FF /* LocationCellAttributesConfigurer.swift */,
 				D6F33C7224B14A5D009603FF /* AudioCellAttributesConfigurer.swift */,
-				D6F33C7424B14A7B009603FF /* VideoAttributesCellConfigurer.swift */,
+				D6090E592377D5CF00833DA7 /* ChannelCellAttributesConfigurer.swift */,
+				D6432BEF22D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift */,
 				D6F33C7624B14AC2009603FF /* ContactCellAttributesConfigurer.swift */,
 				D6F33C7824B14AF0009603FF /* EmojiCellAttributesConfigurer.swift */,
+				D6F33C7024B14A3F009603FF /* LocationCellAttributesConfigurer.swift */,
+				D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */,
+				D6F33C6C24B14988009603FF /* PhotoCellAttributesConfigurer.swift */,
+				D64C6AA1232EA06800DB7257 /* TypingCellAttributesConfigurer.swift */,
+				D6F33C7424B14A7B009603FF /* VideoAttributesCellConfigurer.swift */,
 			);
 			path = "Cell Configurers";
 			sourceTree = "<group>";
@@ -1266,9 +1280,15 @@
 		D684840822CD2E1E00362AC3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				D6D1501B21D5F8AD00CD8CE4 /* MessageCell.swift */,
-				D642739E22CAFD680088256B /* MessageTextView.swift */,
+				D6F33C7F24B15076009603FF /* AudioMessageCell.swift */,
+				D6F33C8724B150F9009603FF /* BaseMessageCell.swift */,
+				D6F33C8324B150A9009603FF /* ContactMessageCell.swift */,
+				D6F33C8524B150C3009603FF /* EmojiMessageCell.swift */,
+				D6F33C7D24B15063009603FF /* LocationMessageCell.swift */,
+				D6F33C7A24B1502C009603FF /* Message */,
+				D6F33C7B24B1504C009603FF /* PhotoMessageCell.swift */,
 				D64C6A9A232D6C3B00DB7257 /* Typing */,
+				D6F33C8124B15086009603FF /* VideoMessageCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1617,6 +1637,15 @@
 			path = Routine;
 			sourceTree = "<group>";
 		};
+		D6F33C7A24B1502C009603FF /* Message */ = {
+			isa = PBXGroup;
+			children = (
+				D6D1501B21D5F8AD00CD8CE4 /* MessageCell.swift */,
+				D642739E22CAFD680088256B /* MessageTextView.swift */,
+			);
+			path = Message;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1789,6 +1818,7 @@
 				D66A0B942351821200A0FFEA /* Completeable.swift in Sources */,
 				D64C6AA2232EA06800DB7257 /* TypingCellAttributesConfigurer.swift in Sources */,
 				D685CEB4243B7F5E0018F3E3 /* ContextCollectionView.swift in Sources */,
+				D6F33C8224B15086009603FF /* VideoMessageCell.swift in Sources */,
 				D6DDE421247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift in Sources */,
 				D6CAB394246D9B6000BD72CF /* ChatToken+Cloud.swift in Sources */,
 				D64273A522CC05DD0088256B /* InputTextView.swift in Sources */,
@@ -1914,6 +1944,7 @@
 				D6579536239A141900A01338 /* CountDownView.swift in Sources */,
 				D6ACA0B623D41A3D00844923 /* CGSize+Extensions.swift in Sources */,
 				D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */,
+				D6F33C8624B150C3009603FF /* EmojiMessageCell.swift in Sources */,
 				D68540CF235FDE35006F666C /* SuggestionCollectionViewController.swift in Sources */,
 				D685CEA5243AAF040018F3E3 /* ConnectionsCollectionViewManager.swift in Sources */,
 				D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */,
@@ -1950,6 +1981,7 @@
 				D68540DE235FEE96006F666C /* SuggestionCellAttributesConfigurer.swift in Sources */,
 				D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
+				D6F33C7E24B15063009603FF /* LocationMessageCell.swift in Sources */,
 				D6B2604122E6B9C600143CF0 /* DisplayThinLabel.swift in Sources */,
 				D6B2604322E6BAE400143CF0 /* RegularBoldLabel.swift in Sources */,
 				D67896B222FF67650059BA75 /* CodeViewController.swift in Sources */,
@@ -1961,6 +1993,7 @@
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,
 				D685CEA7243ACA060018F3E3 /* ConnectionCell.swift in Sources */,
 				D607400C23400FA6009633EB /* ChannelsSearchBar.swift in Sources */,
+				D6F33C8024B15076009603FF /* AudioMessageCell.swift in Sources */,
 				D66A0B9823526A4E00A0FFEA /* CarmeraButton.swift in Sources */,
 				D66E7C14239DC14C002A363C /* AlertType.swift in Sources */,
 				D6815DB122ECAEC700E71251 /* MediumLabel.swift in Sources */,
@@ -2000,6 +2033,7 @@
 				D685CEA1243978AB0018F3E3 /* VerticalCollectionView.swift in Sources */,
 				D68DC7FC22EE5D9000BEAF80 /* FeedOverlayView.swift in Sources */,
 				80D4A21A23039FA5007CB5F1 /* RoutineManager.swift in Sources */,
+				D6F33C7C24B1504C009603FF /* PhotoMessageCell.swift in Sources */,
 				D67896BF2302683C0059BA75 /* PhotoViewController.swift in Sources */,
 				D6D6D57623A70DF100D2B5BF /* SearchButton.swift in Sources */,
 				D64932D723FE460200986335 /* FeedIndicatorView.swift in Sources */,
@@ -2013,9 +2047,11 @@
 				D68540D7235FE050006F666C /* SuggestionCell.swift in Sources */,
 				D6D14FFA21D5893700CD8CE4 /* IGListDiff.mm in Sources */,
 				D61EC0F321D3146600204BEE /* UINib+Extensions.swift in Sources */,
+				D6F33C8824B150F9009603FF /* BaseMessageCell.swift in Sources */,
 				D67896A922FF51170059BA75 /* PhoneViewController.swift in Sources */,
 				D6F33C7124B14A3F009603FF /* LocationCellAttributesConfigurer.swift in Sources */,
 				D642738822C9AF690088256B /* ModalViewController.swift in Sources */,
+				D6F33C8424B150A9009603FF /* ContactMessageCell.swift in Sources */,
 				D6D145F421D5493000CD8CE4 /* HomeViewController.swift in Sources */,
 				D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */,
 				D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */,

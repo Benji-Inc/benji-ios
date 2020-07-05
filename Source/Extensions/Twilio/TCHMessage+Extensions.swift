@@ -79,6 +79,8 @@ extension TCHMessage: Messageable {
         switch self.messageType {
         case .text:
             return .text(String(optional: self.body))
+        case .media:
+            return .text(String(optional: self.body))
         default:
             return .text(String(optional: self.body))
         }
