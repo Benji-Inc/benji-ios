@@ -105,12 +105,32 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
 
         guard let message = self.item(at: indexPath) else { return UICollectionViewCell() }
 
-        let cell = channelCollectionView.dequeueReusableCell(MessageCell.self, for: indexPath)
+        let cell: BaseMessageCell
+        switch message.kind {
+        case .text(_):
+            cell = channelCollectionView.dequeueReusableCell(MessageCell.self, for: indexPath)
+            if let msgCell = cell as? MessageCell {
+                msgCell.textView.delegate = self
+                let interaction = UIContextMenuInteraction(delegate: self)
+                msgCell.bubbleView.addInteraction(interaction)
+            }
+        case .attributedText(_):
+            cell = channelCollectionView.dequeueReusableCell(AttributedMessageCell.self, for: indexPath)
+        case .photo(_):
+            cell = channelCollectionView.dequeueReusableCell(PhotoMessageCell.self, for: indexPath)
+        case .video(_):
+            cell = channelCollectionView.dequeueReusableCell(VideoMessageCell.self, for: indexPath)
+        case .location(_):
+            cell = channelCollectionView.dequeueReusableCell(LocationMessageCell.self, for: indexPath)
+        case .emoji(_):
+            cell = channelCollectionView.dequeueReusableCell(EmojiMessageCell.self, for: indexPath)
+        case .audio(_):
+            cell = channelCollectionView.dequeueReusableCell(AudioMessageCell.self, for: indexPath)
+        case .contact(_):
+            cell = channelCollectionView.dequeueReusableCell(ContactMessageCell.self, for: indexPath)
+        }
 
-        let interaction = UIContextMenuInteraction(delegate: self)
         cell.configure(with: message)
-        cell.textView.delegate = self
-        cell.bubbleView.addInteraction(interaction)
         cell.didTapMessage = { [weak self] in
             guard let `self` = self, let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed  else { return }
 

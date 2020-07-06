@@ -1,5 +1,5 @@
 //
-//  AudioMessageCell.swift
+//  AttibutedMessageCell.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 7/4/20.
@@ -8,6 +8,6 @@
 
 import Foundation
 
-class AudioMessageCell: BaseMessageCell {
+class AttributedMessageCell: BaseMessageCell {
     
 }

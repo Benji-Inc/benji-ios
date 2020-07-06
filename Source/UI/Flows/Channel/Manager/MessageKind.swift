@@ -35,8 +35,6 @@ enum MessageKind {
 
     /// A contact message.
     case contact(ContactItem)
-
-    case custom(NSObject?)
 }
 
 extension MessageKind: Equatable {
@@ -58,8 +56,6 @@ extension MessageKind: Equatable {
             return lhsAudio == rhsAudio
         case (.contact(let lhsContact), .contact(let rhsContact)):
             return lhsContact == rhsContact
-        case (.custom(let lhsCustom), .custom(let rhsCustom)):
-            return lhsCustom == rhsCustom
         default:
             return false
         }

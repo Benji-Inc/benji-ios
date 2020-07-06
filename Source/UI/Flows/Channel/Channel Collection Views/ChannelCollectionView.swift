@@ -33,7 +33,14 @@ class ChannelCollectionView: CollectionView {
 
     private func registerReusableViews() {
         self.register(MessageCell.self)
+        self.register(AudioMessageCell.self)
+        self.register(LocationMessageCell.self)
+        self.register(ContactMessageCell.self)
+        self.register(EmojiMessageCell.self)
+        self.register(PhotoMessageCell.self)
+        self.register(VideoMessageCell.self)
         self.register(TypingIndicatorCell.self)
+        
         self.register(ChannelIntroHeader.self,
                       forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
         self.register(ChannelSectionHeader.self,
