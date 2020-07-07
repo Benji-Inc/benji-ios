@@ -71,7 +71,11 @@ class MessageDeliveryManager {
                 let attributes = message.attributes ?? [:]
                 switch message.kind {
                 case .text(let text):
-                    self.sendMessage(to: channel, with: text, context: message.context, attributes: attributes)
+                    self.sendMessage(to: channel,
+                                     with: text,
+                                     context: message.context,
+                                     kind: message.kind
+                                     attributes: attributes)
                         .observe { (result) in
                             switch result {
                             case .success(_):
@@ -100,9 +104,10 @@ class MessageDeliveryManager {
     private static func sendMessage(to channel: TCHChannel,
                                     with body: String,
                                     context: MessageContext = .casual,
+                                    kind: MessageKind,
                                     attributes: [String : Any] = [:]) -> Future<Messageable> {
 
-        let message = body.extraWhitespaceRemoved()
+
         let promise = Promise<Messageable>()
         var mutableAttributes = attributes
         mutableAttributes["context"] = context.rawValue
@@ -111,15 +116,41 @@ class MessageDeliveryManager {
             promise.reject(with: ClientError.message(detail: "Chat service is disconnected."))
         }
 
-        if message.isEmpty {
-            promise.reject(with: ClientError.message(detail: "Your message can not be empty."))
-        }
-
         if channel.status != .joined {
             promise.reject(with: ClientError.message(detail: "You are not a channel member."))
         }
 
-        if let tchAttributes = TCHJsonAttributes.init(dictionary: mutableAttributes) {
+        switch kind {
+        case .text(_):
+            break
+        case .attributedText(_):
+            break
+        case .photo(_):
+            break
+        case .video(_):
+            break
+        case .location(_):
+            break
+        case .emoji(_):
+            break
+        case .audio(_):
+            break
+        case .contact(_):
+            break
+        }
+
+        return promise.withResultToast()
+    }
+
+    private static func send(body: String, attributes: [String: Any], channel: TCHChannel) -> Future<Messageable> {
+
+        let promise = Promise<Messageable>()
+        let message = body.extraWhitespaceRemoved()
+        if message.isEmpty {
+            promise.reject(with: ClientError.message(detail: "Your message can not be empty."))
+        }
+
+        if let tchAttributes = TCHJsonAttributes.init(dictionary: attributes) {
             if let messages = channel.messages {
                 let messageOptions = TCHMessageOptions().withBody(body)
                 messageOptions.withAttributes(tchAttributes, completion: nil)
@@ -139,7 +170,6 @@ class MessageDeliveryManager {
             promise.reject(with: ClientError.message(detail: "Message attributes failed to initialize."))
         }
 
-
-        return promise.withResultToast()
+        return promise
     }
 }
