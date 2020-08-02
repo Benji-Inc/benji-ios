@@ -37,7 +37,11 @@ class MessageDeliveryManager {
                                                   attributes: mutableAttributes)
 
                 if case .channel(let channel) = channelDisplayable.channelType {
-                    self.sendMessage(to: channel, with: message, context: context, attributes: mutableAttributes)
+                    self.sendMessage(to: channel,
+                                     with: message,
+                                     context: context,
+                                     kind: kind,
+                                     attributes: mutableAttributes)
                         .observe { (result) in
                             switch result {
                             case .success(_):
@@ -74,7 +78,7 @@ class MessageDeliveryManager {
                     self.sendMessage(to: channel,
                                      with: text,
                                      context: message.context,
-                                     kind: message.kind
+                                     kind: message.kind,
                                      attributes: attributes)
                         .observe { (result) in
                             switch result {
