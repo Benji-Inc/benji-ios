@@ -18,6 +18,7 @@ protocol MessageInputAccessoryViewDelegate: class {
                                didSend text: String,
                                context: MessageContext,
                                attributes: [String: Any])
+    func messageInputAccessoryDidTapContext(_ view: MessageInputAccessoryView)
 }
 
 class MessageInputAccessoryView: View, ActiveChannelAccessor {
@@ -235,7 +236,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     }
 
     private func didSelectContextButton() {
-
+        self.delegate.messageInputAccessoryDidTapContext(self)
     }
 
     // MARK: PUBLIC

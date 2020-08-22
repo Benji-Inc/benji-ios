@@ -12,6 +12,7 @@ import TMROLocalization
 class ChannelCoordinator: PresentableCoordinator<Void> {
 
     lazy var channelVC = ChannelViewController(delegate: self)
+    lazy var pickerVC = PickerController()
 
     init(router: Router,
          deepLink: DeepLinkable?,
@@ -27,6 +28,15 @@ class ChannelCoordinator: PresentableCoordinator<Void> {
     override func toPresentable() -> DismissableVC {
         return self.channelVC
     }
+
+    override func start() {
+        super.start()
+
+        self.pickerVC.didSelectImage = { [unowned self] image in
+            //Send image
+            //MessageDeliveryManager.
+        }
+    }
 }
 
 extension ChannelCoordinator: ChannelDetailViewControllerDelegate {
@@ -37,6 +47,36 @@ extension ChannelCoordinator: ChannelDetailViewControllerDelegate {
 }
 
 extension ChannelCoordinator: ChannelViewControllerDelegate {
+
+    func channelViewControllerDidTapContext(_ controller: ChannelViewController) {
+        self.showCameraOptions(from: controller)
+    }
+
+    private func showCameraOptions(from controller: UIViewController) {
+        let alert = UIAlertController(title: "Choose", message: nil, preferredStyle: .actionSheet)
+
+        let action1 = UIAlertAction(title: "Camera", style: .default) { (action) in
+            alert.dismiss(animated: true) {
+                self.pickerVC.imagePickerVC.sourceType = .camera
+                controller.present(self.pickerVC.imagePickerVC, animated: true, completion: nil)
+            }
+        }
+
+        let action2 = UIAlertAction(title: "Photos", style: .default) { (action) in
+            alert.dismiss(animated: true) {
+                self.pickerVC.imagePickerVC.sourceType = .photoLibrary
+                controller.present(self.pickerVC.imagePickerVC, animated: true, completion: nil)
+            }
+        }
+
+        let action3 = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+
+        alert.addAction(action1)
+        alert.addAction(action2)
+        alert.addAction(action3)
+
+        controller.present(alert, animated: true, completion: nil)
+    }
 
     func channelView(_ controller: ChannelViewController, didTapShare message: Messageable) {
         var items: [Any] = []
@@ -61,5 +101,30 @@ extension ChannelCoordinator: ChannelViewControllerDelegate {
 
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         controller.present(ac, animated: true, completion: nil)
+    }
+}
+
+class PickerController: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+    lazy var imagePickerVC = UIImagePickerController()
+
+    var didSelectImage: ((UIImage) -> Void)? = nil
+
+    override init() {
+        super.init()
+
+        self.imagePickerVC.delegate = self
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+
+        self.imagePickerVC.dismiss(animated: true, completion: nil)
+        guard let selectedImage = info[.originalImage] as? UIImage else {
+            print("Image not found!")
+            return
+        }
+
+        self.didSelectImage?(selectedImage)
     }
 }

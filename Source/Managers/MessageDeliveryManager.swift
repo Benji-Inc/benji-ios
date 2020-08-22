@@ -13,8 +13,7 @@ import TMROLocalization
 
 class MessageDeliveryManager {
 
-    static func send(message: String,
-                     context: MessageContext = .casual,
+    static func send(context: MessageContext = .casual,
                      kind: MessageKind,
                      attributes: [String: Any],
                      completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
@@ -38,7 +37,6 @@ class MessageDeliveryManager {
 
                 if case .channel(let channel) = channelDisplayable.channelType {
                     self.sendMessage(to: channel,
-                                     with: message,
                                      context: context,
                                      kind: kind,
                                      attributes: mutableAttributes)
@@ -73,23 +71,17 @@ class MessageDeliveryManager {
 
             if case .channel(let channel) = channelDisplayable.channelType {
                 let attributes = message.attributes ?? [:]
-                switch message.kind {
-                case .text(let text):
-                    self.sendMessage(to: channel,
-                                     with: text,
-                                     context: message.context,
-                                     kind: message.kind,
-                                     attributes: attributes)
-                        .observe { (result) in
-                            switch result {
-                            case .success(_):
-                                completion(systemMessage, nil)
-                            case .failure(let error):
-                                completion(systemMessage, error)
-                            }
-                    }
-                default:
-                    break
+                self.sendMessage(to: channel,
+                                 context: message.context,
+                                 kind: message.kind,
+                                 attributes: attributes)
+                    .observe { (result) in
+                        switch result {
+                        case .success(_):
+                            completion(systemMessage, nil)
+                        case .failure(let error):
+                            completion(systemMessage, error)
+                        }
                 }
             } else {
                 completion(nil, ClientError.message(detail: "No active channel found."))
@@ -106,27 +98,50 @@ class MessageDeliveryManager {
     //MARK: MESSAGE HELPERS
 
     private static func sendMessage(to channel: TCHChannel,
-                                    with body: String,
                                     context: MessageContext = .casual,
                                     kind: MessageKind,
                                     attributes: [String : Any] = [:]) -> Future<Messageable> {
-
-
         let promise = Promise<Messageable>()
-        var mutableAttributes = attributes
-        mutableAttributes["context"] = context.rawValue
 
-        if !ChannelManager.shared.isConnected {
-            promise.reject(with: ClientError.message(detail: "Chat service is disconnected."))
+        if let messagesObject = channel.messages {
+
+            var mutableAttributes = attributes
+            mutableAttributes["context"] = context.rawValue
+
+            if !ChannelManager.shared.isConnected {
+                promise.reject(with: ClientError.message(detail: "Chat service is disconnected."))
+            }
+
+            if channel.status != .joined {
+                promise.reject(with: ClientError.message(detail: "You are not a channel member."))
+            }
+
+            let options = self.getOptions(for: kind, attributes: attributes)
+
+            messagesObject.sendMessage(with: options, completion: { (result, message) in
+                if result.isSuccessful(), let msg = message {
+                    promise.resolve(with: msg)
+                } else if let e = result.error {
+                    promise.reject(with: e)
+                } else {
+                    promise.reject(with: ClientError.message(detail: "Failed to send message."))
+                }
+            })
+
+        } else {
+            promise.reject(with: ClientError.message(detail: "No messages object on channel"))
         }
 
-        if channel.status != .joined {
-            promise.reject(with: ClientError.message(detail: "You are not a channel member."))
-        }
+        return promise.withResultToast()
+    }
 
+    private static func getOptions(for kind: MessageKind, attributes: [String : Any] = [:]) -> TCHMessageOptions {
+
+        let messageOptions = TCHMessageOptions()
         switch kind {
-        case .text(_):
-            break
+        case .text(let body):
+            let msg = body.extraWhitespaceRemoved()
+            //messageOptions.withBody(body: msg, attributes: attributes)
         case .attributedText(_):
             break
         case .photo(_):
@@ -142,38 +157,28 @@ class MessageDeliveryManager {
         case .contact(_):
             break
         }
-
-        return promise.withResultToast()
+        return messageOptions
     }
 
-    private static func send(body: String, attributes: [String: Any], channel: TCHChannel) -> Future<Messageable> {
-
-        let promise = Promise<Messageable>()
-        let message = body.extraWhitespaceRemoved()
-        if message.isEmpty {
-            promise.reject(with: ClientError.message(detail: "Your message can not be empty."))
-        }
-
-        if let tchAttributes = TCHJsonAttributes.init(dictionary: attributes) {
-            if let messages = channel.messages {
-                let messageOptions = TCHMessageOptions().withBody(body)
-                messageOptions.withAttributes(tchAttributes, completion: nil)
-                messages.sendMessage(with: messageOptions) { (result, message) in
-                    if result.isSuccessful(), let msg = message {
-                        promise.resolve(with: msg)
-                    } else if let error = result.error {
-                        promise.reject(with: error)
-                    } else {
-                        promise.reject(with: ClientError.message(detail: "Failed to send message."))
-                    }
-                }
-            } else {
-                promise.reject(with: ClientError.message(detail: "No messages object found on channel."))
-            }
-        } else {
-            promise.reject(with: ClientError.message(detail: "Message attributes failed to initialize."))
-        }
-
-        return promise
-    }
+//    // The data for the image you would like to send
+//    let data = Data()
+//
+//    // Prepare the upload stream and parameters
+//
+//    let inputStream = InputStream(data: data)
+//    messageOptions.withMediaStream(inputStream,
+//                                   contentType: "image/jpeg",
+//                                   defaultFilename: "image.jpg",
+//                                   onStarted: {
+//                                    // Called when upload of media begins.
+//                                    print("Media upload started")
+//    },
+//                                   onProgress: { (bytes) in
+//                                    // Called as upload progresses, with the current byte count.
+//                                    print("Media upload progress: \(bytes)")
+//    }) { (mediaSid) in
+//        // Called when upload is completed, with the new mediaSid if successful.
+//        // Full failure details will be provided through sendMessage's completion.
+//        print("Media upload completed")
+//    }
 }
