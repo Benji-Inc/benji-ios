@@ -118,15 +118,15 @@ class MessageDeliveryManager {
 
             let options = self.getOptions(for: kind, attributes: attributes)
 
-            messagesObject.sendMessage(with: options, completion: { (result, message) in
-                if result.isSuccessful(), let msg = message {
-                    promise.resolve(with: msg)
-                } else if let e = result.error {
-                    promise.reject(with: e)
-                } else {
-                    promise.reject(with: ClientError.message(detail: "Failed to send message."))
-                }
-            })
+//            messagesObject.sendMessage(with: options, completion: { (result, message) in
+//                if result.isSuccessful(), let msg = message {
+//                    promise.resolve(with: msg)
+//                } else if let e = result.error {
+//                    promise.reject(with: e)
+//                } else {
+//                    promise.reject(with: ClientError.message(detail: "Failed to send message."))
+//                }
+//            })
 
         } else {
             promise.reject(with: ClientError.message(detail: "No messages object on channel"))
@@ -135,13 +135,12 @@ class MessageDeliveryManager {
         return promise.withResultToast()
     }
 
-    private static func getOptions(for kind: MessageKind, attributes: [String : Any] = [:]) -> TCHMessageOptions {
+    private static func getOptions(for kind: MessageKind, attributes: [String : Any] = [:]) -> Future<TCHMessageOptions> {
 
-        let messageOptions = TCHMessageOptions()
+        let options = TCHMessageOptions()
         switch kind {
         case .text(let body):
-            let msg = body.extraWhitespaceRemoved()
-            //messageOptions.withBody(body: msg, attributes: attributes)
+            return options.with(body: body, attributes: TCHJsonAttributes.init(dictionary: attributes))
         case .attributedText(_):
             break
         case .photo(_):
@@ -157,28 +156,9 @@ class MessageDeliveryManager {
         case .contact(_):
             break
         }
-        return messageOptions
+
+        return Promise(value: TCHMessageOptions())
     }
 
-//    // The data for the image you would like to send
-//    let data = Data()
-//
-//    // Prepare the upload stream and parameters
-//
-//    let inputStream = InputStream(data: data)
-//    messageOptions.withMediaStream(inputStream,
-//                                   contentType: "image/jpeg",
-//                                   defaultFilename: "image.jpg",
-//                                   onStarted: {
-//                                    // Called when upload of media begins.
-//                                    print("Media upload started")
-//    },
-//                                   onProgress: { (bytes) in
-//                                    // Called as upload progresses, with the current byte count.
-//                                    print("Media upload progress: \(bytes)")
-//    }) { (mediaSid) in
-//        // Called when upload is completed, with the new mediaSid if successful.
-//        // Full failure details will be provided through sendMessage's completion.
-//        print("Media upload completed")
-//    }
+
 }

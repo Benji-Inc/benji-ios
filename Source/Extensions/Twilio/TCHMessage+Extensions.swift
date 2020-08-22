@@ -48,7 +48,7 @@ extension TCHMessage: Messageable {
     }
 
     var createdAt: Date {
-        return self.timestampAsDate ?? Date()
+        return self.dateCreatedAsDate ?? Date()
     }
 
     var text: Localized {

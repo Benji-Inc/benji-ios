@@ -221,6 +221,7 @@
 		D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */; };
 		D6A301AC2380E102006655E0 /* FeedSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301AB2380E102006655E0 /* FeedSupplier.swift */; };
 		D6A301AE2381B8D7006655E0 /* FeedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301AD2381B8D7006655E0 /* FeedCollectionView.swift */; };
+		D6A401AB24F1952C00D78F1C /* TCHMessageOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A401AA24F1952C00D78F1C /* TCHMessageOptions.swift */; };
 		D6A82B6F2325BEA2003E0A8B /* ConnectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A82B6E2325BEA2003E0A8B /* ConnectionsViewController.swift */; };
 		D6A82B732325C2FD003E0A8B /* NewChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A82B722325C2FD003E0A8B /* NewChannelViewController.swift */; };
 		D6A82B752325C39A003E0A8B /* PurposeTitleTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A82B742325C39A003E0A8B /* PurposeTitleTextField.swift */; };
@@ -565,6 +566,7 @@
 		D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
 		D6A301AB2380E102006655E0 /* FeedSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSupplier.swift; sourceTree = "<group>"; };
 		D6A301AD2381B8D7006655E0 /* FeedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCollectionView.swift; sourceTree = "<group>"; };
+		D6A401AA24F1952C00D78F1C /* TCHMessageOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TCHMessageOptions.swift; sourceTree = "<group>"; };
 		D6A82B6E2325BEA2003E0A8B /* ConnectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionsViewController.swift; sourceTree = "<group>"; };
 		D6A82B722325C2FD003E0A8B /* NewChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelViewController.swift; sourceTree = "<group>"; };
 		D6A82B742325C39A003E0A8B /* PurposeTitleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurposeTitleTextField.swift; sourceTree = "<group>"; };
@@ -1115,6 +1117,7 @@
 				D6DADF732207E0E2007D9EB1 /* TCHChannel+Extensions.swift */,
 				D6DADF682207D246007D9EB1 /* TCHMessage+Extensions.swift */,
 				D64C6A96232D5C0400DB7257 /* TCHMember+Extensions.swift */,
+				D6A401AA24F1952C00D78F1C /* TCHMessageOptions.swift */,
 			);
 			path = Twilio;
 			sourceTree = "<group>";
@@ -1778,6 +1781,7 @@
 			files = (
 				D6347394241EB2C30071E9DA /* AlertControllerAnimatedTransitioning.swift in Sources */,
 				D6EAB68823E6211200B90D5A /* ProfilePhotoViewController.swift in Sources */,
+				D6A401AB24F1952C00D78F1C /* TCHMessageOptions.swift in Sources */,
 				D62BB73D244D3AEF00607677 /* UserNotificationFactory.swift in Sources */,
 				D6F33C7724B14AC2009603FF /* ContactCellAttributesConfigurer.swift in Sources */,
 				D62C635622BE9E5C00F4D097 /* CollectionViewController.swift in Sources */,

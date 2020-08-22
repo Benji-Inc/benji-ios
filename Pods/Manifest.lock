@@ -1,16 +1,14 @@
 PODS:
-  - Bolts/Tasks (1.9.0)
-  - Branch (0.32.0):
-    - Branch/Core (= 0.32.0)
-  - Branch/Core (0.32.0)
+  - Bolts/Tasks (1.9.1)
+  - Branch (0.34.0)
   - GestureRecognizerClosures (5.0.0)
-  - Koloda (5.0):
+  - Koloda (5.0.1):
     - pop (~> 1.0)
-  - lottie-ios (3.1.6)
-  - Parse (1.17.3):
-    - Parse/Core (= 1.17.3)
-  - Parse/Core (1.17.3):
-    - Bolts/Tasks (~> 1.9)
+  - lottie-ios (3.1.8)
+  - Parse (1.18.0):
+    - Parse/Core (= 1.18.0)
+  - Parse/Core (1.18.0):
+    - Bolts/Tasks (= 1.9.1)
   - PhoneNumberKit (3.2.0):
     - PhoneNumberKit/PhoneNumberKitCore (= 3.2.0)
     - PhoneNumberKit/UIKit (= 3.2.0)
@@ -18,12 +16,12 @@ PODS:
   - PhoneNumberKit/UIKit (3.2.0):
     - PhoneNumberKit/PhoneNumberKitCore
   - pop (1.0.12)
-  - ReactiveSwift (6.2.1)
+  - ReactiveSwift (6.3.0)
   - TMROCoordinator (0.0.3)
   - TMROExtensionObject (0.0.1)
   - TMROFutures (0.0.6)
   - TMROLocalization (0.0.2)
-  - TwilioChatClient (3.0.1)
+  - TwilioChatClient (4.0.0)
 
 DEPENDENCIES:
   - Branch
@@ -57,20 +55,20 @@ SPEC REPOS:
     - TwilioChatClient
 
 SPEC CHECKSUMS:
-  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
-  Branch: 770a23c04d3f5410cf9231db099a444dd3060784
+  Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
+  Branch: 446aeb832102f56f04edf5fa7cb0a752dc392ca7
   GestureRecognizerClosures: 0dcafb45e669e7a775c840383e54b3d16983037b
-  Koloda: 75302d21882cc3e274c1561b1155805ea5919dab
-  lottie-ios: 85ce835dd8c53e02509f20729fc7d6a4e6645a0a
-  Parse: c1ad2a04d2cab2b54b6fb7da05f741abf2cf57d1
+  Koloda: d07b9199a383abc5898b62aa945a599f5e7c0c4b
+  lottie-ios: 48fac6be217c76937e36e340e2d09cf7b10b7f5f
+  Parse: 79bdda34fdb7eb2a707a43a951c8aae236cb3e34
   PhoneNumberKit: df411d46177d1492da84e10b6c093846dd861452
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
-  ReactiveSwift: 07ddf579f4eb3ee3bd656214f0461aaf2c0fd639
+  ReactiveSwift: 7937f26ec18d555e2a99352bd0a8b2817d1f042d
   TMROCoordinator: 8e675e45c895feafdd548e1dd2de35430d3ea146
   TMROExtensionObject: 08ab13fbe9226deeeff0738ca7ca8d06f0019e0d
   TMROFutures: 644772c28f997ce292e9b67985eca927efaa5d7a
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
-  TwilioChatClient: 2a26ce3a86b4190e2e939ddbe5b0da9927846f66
+  TwilioChatClient: 72fad6bd1fcff3bb13d90a5a5c873509072d859a
 
 PODFILE CHECKSUM: f519453cecdd8527219117d514b7207b003bc0b2
 

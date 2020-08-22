@@ -125,20 +125,6 @@ class MessageSupplier {
         return sections
     }
 
-    private func getMembersArray(from members: TCHMembers) -> Future<[TCHMember]> {
-        let promise = Promise<[TCHMember]>()
-
-        members.members { (result, pag) in
-            if let channelMembers = pag?.items() {
-                promise.resolve(with: channelMembers)
-            } else {
-                promise.reject(with: ClientError.message(detail: "Failed to retrieve members of this channel."))
-            }
-        }
-
-        return promise
-    }
-
     func delete(message: Messageable) {
         guard let tchMessage = message as? TCHMessage, let messagesObject = self.messagesObject else { return }
         messagesObject.remove(tchMessage, completion: nil)

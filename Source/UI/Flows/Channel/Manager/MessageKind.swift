@@ -62,6 +62,11 @@ extension MessageKind: Equatable {
     }
 }
 
+enum MediaType: String {
+    case photo
+    case video
+}
+
 /// A protocol used to represent the data for a media message.
 protocol MediaItem {
 
@@ -76,6 +81,12 @@ protocol MediaItem {
 
     /// The size of the media item.
     var size: CGSize { get }
+
+    var fileName: String { get }
+
+    var type: MediaType { get }
+
+    var data: Data { get }
 }
 
 private func ==(lhs: MediaItem, rhs: MediaItem) -> Bool {
