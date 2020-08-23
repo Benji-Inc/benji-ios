@@ -13,10 +13,13 @@ import TMROLocalization
 
 class MessageDeliveryManager {
 
-    static func send(context: MessageContext = .casual,
-                     kind: MessageKind,
-                     attributes: [String: Any],
-                     completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
+    static let shared = MessageDeliveryManager()
+    private var options: TCHMessageOptions?
+
+    func send(context: MessageContext = .casual,
+              kind: MessageKind,
+              attributes: [String: Any],
+              completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
 
         if let channelDisplayable = ChannelSupplier.shared.activeChannel.value {
             if let current = User.current(), let objectId = current.objectId {
@@ -64,7 +67,7 @@ class MessageDeliveryManager {
         return nil
     }
 
-    static func resend(message: Messageable, completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
+    func resend(message: Messageable, completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
 
         if let channelDisplayable = ChannelSupplier.shared.activeChannel.value {
             let systemMessage = SystemMessage(with: message)
@@ -97,10 +100,10 @@ class MessageDeliveryManager {
 
     //MARK: MESSAGE HELPERS
 
-    private static func sendMessage(to channel: TCHChannel,
-                                    context: MessageContext = .casual,
-                                    kind: MessageKind,
-                                    attributes: [String : Any] = [:]) -> Future<Messageable> {
+    private func sendMessage(to channel: TCHChannel,
+                             context: MessageContext = .casual,
+                             kind: MessageKind,
+                             attributes: [String : Any] = [:]) -> Future<Messageable> {
         let promise = Promise<Messageable>()
 
         if let messagesObject = channel.messages {
@@ -135,16 +138,16 @@ class MessageDeliveryManager {
         return promise.withResultToast()
     }
 
-    private static func getOptions(for kind: MessageKind, attributes: [String : Any] = [:]) -> Future<TCHMessageOptions> {
+    private func getOptions(for kind: MessageKind, attributes: [String : Any] = [:]) -> Future<TCHMessageOptions> {
 
-        let options = TCHMessageOptions()
+        self.options = TCHMessageOptions()
         switch kind {
         case .text(let body):
-            return options.with(body: body, attributes: TCHJsonAttributes.init(dictionary: attributes))
+            return self.options!.with(body: body, attributes: TCHJsonAttributes.init(dictionary: attributes))
         case .attributedText(_):
             break
         case .photo(let item):
-            return options.with(mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: attributes))
+            return self.options!.with(mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: attributes))
         case .video(_):
             break
         case .location(_):
@@ -159,6 +162,4 @@ class MessageDeliveryManager {
 
         return Promise(value: TCHMessageOptions())
     }
-
-
 }

@@ -63,7 +63,7 @@ extension MessageKind: Equatable {
 }
 
 enum MediaType: String {
-    case photo
+    case photo = "image/jpeg"
     case video
 }
 
@@ -92,7 +92,7 @@ protocol MediaItem {
 private func ==(lhs: MediaItem, rhs: MediaItem) -> Bool {
     return lhs.url == rhs.url &&
         lhs.image == rhs.image &&
-        lhs.placeholderImage == rhs.placeholderImage &&
+        //lhs.placeholderImage == rhs.placeholderImage &&
         lhs.size == rhs.size
 }
 
