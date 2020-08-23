@@ -33,8 +33,8 @@ class ChannelCoordinator: PresentableCoordinator<Void> {
         super.start()
 
         self.pickerVC.didSelectImage = { [unowned self] image in
-            //Send image
-            //MessageDeliveryManager.
+            let kind = MessageKind.photo(image)
+            self.channelVC.send(messageKind: kind, attributes: ["udpateId": image.fileName])
         }
     }
 }

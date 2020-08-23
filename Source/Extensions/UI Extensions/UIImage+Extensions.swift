@@ -128,3 +128,25 @@ extension UIImage: Avatar {
         return nil
     }
 }
+
+extension UIImage: MediaItem {
+    var url: URL? {
+        return nil
+    }
+
+    var placeholderImage: UIImage {
+        return self
+    }
+
+    var fileName: String {
+        return Lorem.randomString()
+    }
+
+    var type: MediaType {
+        .photo
+    }
+
+    var data: Data {
+        return self.jpegData(compressionQuality: 100.0) ?? Data()
+    }
+}

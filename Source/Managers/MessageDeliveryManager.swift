@@ -116,18 +116,18 @@ class MessageDeliveryManager {
                 promise.reject(with: ClientError.message(detail: "You are not a channel member."))
             }
 
-            let options = self.getOptions(for: kind, attributes: attributes)
-
-//            messagesObject.sendMessage(with: options, completion: { (result, message) in
-//                if result.isSuccessful(), let msg = message {
-//                    promise.resolve(with: msg)
-//                } else if let e = result.error {
-//                    promise.reject(with: e)
-//                } else {
-//                    promise.reject(with: ClientError.message(detail: "Failed to send message."))
-//                }
-//            })
-
+            self.getOptions(for: kind, attributes: attributes)
+                .observeValue { (options) in
+                    messagesObject.sendMessage(with: options, completion: { (result, message) in
+                        if result.isSuccessful(), let msg = message {
+                            promise.resolve(with: msg)
+                        } else if let e = result.error {
+                            promise.reject(with: e)
+                        } else {
+                            promise.reject(with: ClientError.message(detail: "Failed to send message."))
+                        }
+                    })
+            }
         } else {
             promise.reject(with: ClientError.message(detail: "No messages object on channel"))
         }
@@ -143,8 +143,8 @@ class MessageDeliveryManager {
             return options.with(body: body, attributes: TCHJsonAttributes.init(dictionary: attributes))
         case .attributedText(_):
             break
-        case .photo(_):
-            break
+        case .photo(let item):
+            return options.with(mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: attributes))
         case .video(_):
             break
         case .location(_):
