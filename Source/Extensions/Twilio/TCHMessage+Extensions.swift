@@ -86,7 +86,7 @@ extension TCHMessage: Messageable {
 
             switch mediaType {
             case .photo:
-                return .photo(UIImage())
+                return .photo(EmptyMediaItem(mediaType: mediaType))
             case .video:
                 fatalError()
             }

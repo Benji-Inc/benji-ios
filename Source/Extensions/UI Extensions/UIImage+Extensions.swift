@@ -130,12 +130,9 @@ extension UIImage: Avatar {
 }
 
 extension UIImage: MediaItem {
+
     var url: URL? {
         return nil
-    }
-
-    var placeholderImage: UIImage {
-        return self
     }
 
     var fileName: String {
@@ -146,7 +143,7 @@ extension UIImage: MediaItem {
         .photo
     }
 
-    var data: Data {
-        return self.jpegData(compressionQuality: 100.0) ?? Data()
+    var data: Data? {
+        return self.jpegData(compressionQuality: 100.0)
     }
 }

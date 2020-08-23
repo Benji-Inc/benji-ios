@@ -17,6 +17,9 @@ PODS:
     - PhoneNumberKit/PhoneNumberKitCore
   - pop (1.0.12)
   - ReactiveSwift (6.3.0)
+  - SDWebImage (4.4.8):
+    - SDWebImage/Core (= 4.4.8)
+  - SDWebImage/Core (4.4.8)
   - TMROCoordinator (0.0.3)
   - TMROExtensionObject (0.0.1)
   - TMROFutures (0.0.6)
@@ -31,6 +34,7 @@ DEPENDENCIES:
   - Parse
   - PhoneNumberKit
   - ReactiveSwift
+  - SDWebImage (~> 4.2)
   - TMROCoordinator
   - TMROExtensionObject
   - TMROFutures
@@ -48,6 +52,7 @@ SPEC REPOS:
     - PhoneNumberKit
     - pop
     - ReactiveSwift
+    - SDWebImage
     - TMROCoordinator
     - TMROExtensionObject
     - TMROFutures
@@ -64,12 +69,13 @@ SPEC CHECKSUMS:
   PhoneNumberKit: df411d46177d1492da84e10b6c093846dd861452
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   ReactiveSwift: 7937f26ec18d555e2a99352bd0a8b2817d1f042d
+  SDWebImage: 783af2c3fa36291a250030c4752ee370a9a51d13
   TMROCoordinator: 8e675e45c895feafdd548e1dd2de35430d3ea146
   TMROExtensionObject: 08ab13fbe9226deeeff0738ca7ca8d06f0019e0d
   TMROFutures: 644772c28f997ce292e9b67985eca927efaa5d7a
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
   TwilioChatClient: 72fad6bd1fcff3bb13d90a5a5c873509072d859a
 
-PODFILE CHECKSUM: f519453cecdd8527219117d514b7207b003bc0b2
+PODFILE CHECKSUM: 581cafd9ba76be50120f791de80f5fabb29eeb79
 
 COCOAPODS: 1.8.4

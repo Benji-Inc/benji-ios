@@ -27,7 +27,7 @@ class PhotoMessageCell: BaseMessageCell {
         self.avatarView.set(avatar: message.avatar)
         if let image = item.image {
             self.imageView.displayable = image
-        } else if let tchMessage = item as? TCHMessage {
+        } else if let tchMessage = message as? TCHMessage {
             self.loadImage(from: tchMessage)
         }
 
@@ -40,8 +40,8 @@ class PhotoMessageCell: BaseMessageCell {
 
     private func loadImage(from message: TCHMessage) {
         message.getMediaContentTemporaryUrl { (result, url) in
-            if result.isSuccessful(), let imageURL = url {
-                //self.imageView.displayable = 
+            if result.isSuccessful(), let urlString = url {
+                self.imageView.displayable = PhotoItem(imageURLString: urlString)
             }
         }
     }
@@ -50,5 +50,22 @@ class PhotoMessageCell: BaseMessageCell {
         super.layoutContent(with: attributes)
 
         self.imageView.frame = attributes.attributes.imageFrame
+    }
+}
+
+private struct PhotoItem: ImageDisplayable {
+
+    var imageURLString: String
+
+    var userObjectID: String? {
+        return nil
+    }
+
+    var image: UIImage? {
+        return nil
+    }
+
+    var url: URL? {
+        return URL(string: self.imageURLString)
     }
 }

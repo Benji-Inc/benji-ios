@@ -67,6 +67,35 @@ enum MediaType: String {
     case video
 }
 
+struct EmptyMediaItem: MediaItem {
+
+    var mediaType: MediaType
+
+    var url: URL? {
+        return nil
+    }
+
+    var image: UIImage? {
+        return nil
+    }
+
+    var size: CGSize {
+        return .zero
+    }
+
+    var fileName: String {
+        return String()
+    }
+
+    var type: MediaType{
+        return self.mediaType
+    }
+
+    var data: Data? {
+        return nil
+    }
+}
+
 /// A protocol used to represent the data for a media message.
 protocol MediaItem {
 
@@ -76,9 +105,6 @@ protocol MediaItem {
     /// The image.
     var image: UIImage? { get }
 
-    /// A placeholder image for when the image is obtained asychronously.
-    var placeholderImage: UIImage { get }
-
     /// The size of the media item.
     var size: CGSize { get }
 
@@ -86,13 +112,12 @@ protocol MediaItem {
 
     var type: MediaType { get }
 
-    var data: Data { get }
+    var data: Data? { get }
 }
 
 private func ==(lhs: MediaItem, rhs: MediaItem) -> Bool {
     return lhs.url == rhs.url &&
         lhs.image == rhs.image &&
-        //lhs.placeholderImage == rhs.placeholderImage &&
         lhs.size == rhs.size
 }
 

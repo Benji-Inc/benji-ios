@@ -35,26 +35,8 @@ extension TCHMessageOptions {
 
         self.withAttributes(attributes) { (result) in
             if result.isSuccessful() {
-                let inputStream = InputStream(data: mediaItem.data)
-                self.withMediaStream(inputStream,
-                                     contentType: mediaItem.type.rawValue,
-                                     defaultFilename: mediaItem.fileName,
-                                     onStarted: {
-                                        // Handle started
-                                        print("Media upload started")
-                },
-                                     onProgress: { (progress) in
-                                        // Handle progress
-                                        print("Media upload progress: \(progress)")
-                }) { (mediaSid) in
-                    // Handle completion
-                    print("Media upload completed: \(mediaSid)")
-                }
+                self.with(mediaItem: mediaItem)
                 promise.resolve(with: self)
-//                self.with(mediaItem: mediaItem)
-//                    .observeValue { (options) in
-//                        promise.resolve(with: options)
-//                }
             } else if let error = result.error {
                 promise.reject(with: error)
             } else {
@@ -65,28 +47,23 @@ extension TCHMessageOptions {
         return promise
     }
 
-    private func with(mediaItem: MediaItem) -> Future<TCHMessageOptions> {
-        let promise = Promise<TCHMessageOptions>()
+    private func with(mediaItem: MediaItem) {
+        guard let data = mediaItem.data else { return }
 
-        let inputStream = InputStream(data: mediaItem.data)
+        let inputStream = InputStream(data: data)
         self.withMediaStream(inputStream,
                              contentType: mediaItem.type.rawValue,
                              defaultFilename: mediaItem.fileName,
                              onStarted: {
                                 // Handle started
                                 print("Media upload started")
-                                promise.resolve(with: self)
         },
-                             onProgress: { (progress) in
+                             onProgress: { (bytes) in
                                 // Handle progress
-                                print("Media upload progress: \(progress)")
-                                promise.resolve(with: self)
+                                print("Media upload progress: \(bytes)")
         }) { (mediaSid) in
             // Handle completion
             print("Media upload completed: \(mediaSid)")
-            promise.resolve(with: self)
         }
-
-        return promise
     }
 }
