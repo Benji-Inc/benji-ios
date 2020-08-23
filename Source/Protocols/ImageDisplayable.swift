@@ -12,4 +12,11 @@ import Parse
 protocol ImageDisplayable {
     var userObjectID: String? { get }
     var image: UIImage? { get }
+    var url: URL? { get }
+}
+
+extension ImageDisplayable {
+    var url: URL? {
+        return nil 
+    }
 }

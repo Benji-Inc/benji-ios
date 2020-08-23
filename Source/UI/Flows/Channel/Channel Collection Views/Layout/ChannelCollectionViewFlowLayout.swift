@@ -157,7 +157,10 @@ class ChannelCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
         if let kind = message?.kind {
             switch kind {
-            case .text(_):
+            case .text(let text):
+                if text.isEmpty {
+                    return ChannelCellAttributesConfigurer()
+                }
                 return MessageCellAttributesConfigurer()
             case .attributedText(_):
                 return AttributedMessageCellAttributesConfigurer()

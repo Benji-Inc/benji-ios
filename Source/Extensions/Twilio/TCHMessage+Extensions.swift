@@ -80,7 +80,16 @@ extension TCHMessage: Messageable {
         case .text:
             return .text(String(optional: self.body))
         case .media:
-            return .text(String(optional: self.body))
+            guard let type = self.mediaType, let mediaType = MediaType(rawValue: type) else {
+                return .text(String(optional: self.body))
+            }
+
+            switch mediaType {
+            case .photo:
+                return .photo(UIImage())
+            case .video:
+                fatalError()
+            }
         default:
             return .text(String(optional: self.body))
         }

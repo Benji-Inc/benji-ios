@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import TwilioChatClient
 
 class PhotoMessageCell: BaseMessageCell {
 
@@ -24,11 +25,25 @@ class PhotoMessageCell: BaseMessageCell {
         guard case MessageKind.photo(let item) = message.kind else { return }
 
         self.avatarView.set(avatar: message.avatar)
+        if let image = item.image {
+            self.imageView.displayable = image
+        } else if let tchMessage = item as? TCHMessage {
+            self.loadImage(from: tchMessage)
+        }
+
         self.imageView.displayable = item.image
         self.imageView.imageView.contentMode = .scaleAspectFill
         self.imageView.imageView.clipsToBounds = true
         self.imageView.layer.cornerRadius = 5
         self.imageView.layer.masksToBounds = true 
+    }
+
+    private func loadImage(from message: TCHMessage) {
+        message.getMediaContentTemporaryUrl { (result, url) in
+            if result.isSuccessful(), let imageURL = url {
+                //self.imageView.displayable = 
+            }
+        }
     }
 
     override func layoutContent(with attributes: ChannelCollectionViewLayoutAttributes) {

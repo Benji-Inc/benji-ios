@@ -14,7 +14,7 @@ import TMROLocalization
 class MessageDeliveryManager {
 
     static let shared = MessageDeliveryManager()
-    private var options: TCHMessageOptions?
+    //private var options: TCHMessageOptions?
 
     func send(context: MessageContext = .casual,
               kind: MessageKind,
@@ -140,14 +140,32 @@ class MessageDeliveryManager {
 
     private func getOptions(for kind: MessageKind, attributes: [String : Any] = [:]) -> Future<TCHMessageOptions> {
 
-        self.options = TCHMessageOptions()
+        let options = TCHMessageOptions()
+        let promise = Promise<TCHMessageOptions>()
+
         switch kind {
         case .text(let body):
-            return self.options!.with(body: body, attributes: TCHJsonAttributes.init(dictionary: attributes))
+            options.with(body: body, attributes: TCHJsonAttributes.init(dictionary: attributes))
+                .observe { (result) in
+                    switch result {
+                    case .success(let newOptions):
+                        promise.resolve(with: newOptions)
+                    case .failure(let error):
+                        promise.reject(with: error)
+                    }
+            }
         case .attributedText(_):
             break
         case .photo(let item):
-            return self.options!.with(mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: attributes))
+            options.with(mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: attributes))
+                .observe { (result) in
+                    switch result {
+                    case .success(let newOptions):
+                        promise.resolve(with: newOptions)
+                    case .failure(let error):
+                        promise.reject(with: error)
+                    }
+            }
         case .video(_):
             break
         case .location(_):
@@ -160,6 +178,6 @@ class MessageDeliveryManager {
             break
         }
 
-        return Promise(value: TCHMessageOptions())
+        return promise
     }
 }

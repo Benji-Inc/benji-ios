@@ -35,10 +35,26 @@ extension TCHMessageOptions {
 
         self.withAttributes(attributes) { (result) in
             if result.isSuccessful() {
-                self.with(mediaItem: mediaItem)
-                    .observeValue { (options) in
-                        promise.resolve(with: options)
+                let inputStream = InputStream(data: mediaItem.data)
+                self.withMediaStream(inputStream,
+                                     contentType: mediaItem.type.rawValue,
+                                     defaultFilename: mediaItem.fileName,
+                                     onStarted: {
+                                        // Handle started
+                                        print("Media upload started")
+                },
+                                     onProgress: { (progress) in
+                                        // Handle progress
+                                        print("Media upload progress: \(progress)")
+                }) { (mediaSid) in
+                    // Handle completion
+                    print("Media upload completed: \(mediaSid)")
                 }
+                promise.resolve(with: self)
+//                self.with(mediaItem: mediaItem)
+//                    .observeValue { (options) in
+//                        promise.resolve(with: options)
+//                }
             } else if let error = result.error {
                 promise.reject(with: error)
             } else {
