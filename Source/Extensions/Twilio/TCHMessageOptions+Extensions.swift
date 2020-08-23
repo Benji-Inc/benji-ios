@@ -59,10 +59,12 @@ extension TCHMessageOptions {
                              onStarted: {
                                 // Handle started
                                 print("Media upload started")
+                                promise.resolve(with: self)
         },
                              onProgress: { (progress) in
                                 // Handle progress
                                 print("Media upload progress: \(progress)")
+                                promise.resolve(with: self)
         }) { (mediaSid) in
             // Handle completion
             print("Media upload completed: \(mediaSid)")

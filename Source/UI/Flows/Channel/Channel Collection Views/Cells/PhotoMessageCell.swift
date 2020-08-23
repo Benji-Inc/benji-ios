@@ -15,21 +15,25 @@ class PhotoMessageCell: BaseMessageCell {
     override func initializeViews() {
         super.initializeViews()
 
-        self.contentView.addSubview(self.imageView)
-        self.contentView.set(backgroundColor: .red)
+        self.contentView.insertSubview(self.imageView, belowSubview: self.avatarView)
     }
 
     override func configure(with message: Messageable) {
         super.configure(with: message)
 
-        guard let displayable = message.kind as? ImageDisplayable else { return }
+        guard case MessageKind.photo(let item) = message.kind else { return }
 
-        self.imageView.displayable = displayable
+        self.avatarView.set(avatar: message.avatar)
+        self.imageView.displayable = item.image
+        self.imageView.imageView.contentMode = .scaleAspectFill
+        self.imageView.imageView.clipsToBounds = true
+        self.imageView.layer.cornerRadius = 5
+        self.imageView.layer.masksToBounds = true 
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func layoutContent(with attributes: ChannelCollectionViewLayoutAttributes) {
+        super.layoutContent(with: attributes)
 
-        self.imageView.expandToSuperviewSize()
+        self.imageView.frame = attributes.attributes.imageFrame
     }
 }
