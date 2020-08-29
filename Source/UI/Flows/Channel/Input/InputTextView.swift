@@ -13,7 +13,8 @@ class InputTextView: TextView {
     lazy var countView = CharacterCountView()
     var textDidChange: ((String) -> Void)?
 
-    lazy var test = TestView()
+    lazy var attachmentInputVC = AttachmentViewController()
+    var isShowingAttachments: Bool = false
 
     override func initialize() {
         super.initialize()
@@ -66,25 +67,15 @@ class InputTextView: TextView {
     }
 
     func toggleInputView() {
-
-        if self.inputView is TestView {
+        
+        if self.isShowingAttachments {
             self.inputView = nil
         } else {
-            self.inputView = self.test
+            self.inputView = self.attachmentInputVC.view
         }
 
+        self.isShowingAttachments.toggle()
+
         self.reloadInputViews()
-    }
-}
-
-class TestView: View {
-
-    override func initializeSubviews() {
-        super.initializeSubviews()
-
-        guard let window = UIWindow.topWindow() else { return }
-        self.size = CGSize(width: window.width, height: window.height * 0.33)
-
-        self.set(backgroundColor: .green)
     }
 }
