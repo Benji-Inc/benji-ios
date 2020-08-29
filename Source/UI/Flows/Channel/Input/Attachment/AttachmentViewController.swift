@@ -11,6 +11,8 @@ import Photos
 
 class AttachmentViewController: CollectionViewController<AttachementCell, AttachmentCollectionViewManager> {
 
+    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
+
     init() {
         super.init(with: AttachmentCollectionView())
     }
@@ -22,10 +24,21 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
     override func initializeViews() {
         super.initializeViews()
 
+        guard let window = UIWindow.topWindow() else { return }
+        self.view.size = CGSize(width: window.width, height: window.height * 0.4)
+
         self.checkPhotoAuthorizationStatus { [weak self] (authorized) in
             guard let `self` = self else { return }
-            self.collectionViewManager.set(newItems: [])
+            self.fetchAssets()
         }
+
+        self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.blurView.expandToSuperviewSize()
     }
 
     private func checkPhotoAuthorizationStatus(completion: @escaping (_ authorized: Bool) -> Void) {
@@ -46,7 +59,7 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
 
     private func fetchAssets() {
         let photosOptions = PHFetchOptions()
-        photosOptions.fetchLimit = 100
+        photosOptions.fetchLimit = 20
         photosOptions.predicate = NSPredicate(format: "mediaType == %d || mediaType == %d",
                                               PHAssetMediaType.image.rawValue)
         photosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
@@ -54,7 +67,7 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
 
         var attachments: [Attachement] = []
 
-        for index in 0...result.count {
+        for index in 0...result.count - 1 {
             let asset = result.object(at: index)
             let attachement = Attachement(with: asset)
             attachments.append(attachement)

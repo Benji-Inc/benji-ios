@@ -13,7 +13,13 @@ class AttachmentCollectionView: CollectionView {
     init() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
         super.init(layout: layout)
+
+        self.bounces = false 
+
+        self.set(backgroundColor: .clear)
     }
 
     required init?(coder aDecoder: NSCoder) {

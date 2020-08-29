@@ -67,6 +67,11 @@ class InputTextView: TextView {
     }
 
     func toggleInputView() {
+        defer {
+            if !self.isFirstResponder {
+                self.becomeFirstResponder()
+            }
+        }
         
         if self.isShowingAttachments {
             self.inputView = nil

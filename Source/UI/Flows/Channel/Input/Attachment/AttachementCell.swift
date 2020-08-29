@@ -53,6 +53,8 @@ class AttachementCell: UICollectionViewCell, ManageableCell {
 
     func initializeViews() {
         self.contentView.addSubview(self.imageView)
+        self.imageView.imageView.contentMode = .scaleToFill
+        self.imageView.clipsToBounds = true 
     }
 
     func configure(with item: Attachement?) {
@@ -73,7 +75,7 @@ class AttachementCell: UICollectionViewCell, ManageableCell {
     func loadImage(for attachment: Attachement) {
         let options = PHImageRequestOptions()
         options.deliveryMode = .highQualityFormat
-        options.resizeMode = .fast
+        options.resizeMode = .exact
         options.isSynchronous = false
         options.isNetworkAccessAllowed = true
         self.imageManager.requestImage(for: attachment.asset,
@@ -84,5 +86,11 @@ class AttachementCell: UICollectionViewCell, ManageableCell {
                                             self.imageView.displayable = img
                                         }
         }
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.imageView.displayable = nil
     }
 }
