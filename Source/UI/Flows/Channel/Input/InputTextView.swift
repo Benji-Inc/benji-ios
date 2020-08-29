@@ -13,6 +13,8 @@ class InputTextView: TextView {
     lazy var countView = CharacterCountView()
     var textDidChange: ((String) -> Void)?
 
+    lazy var test = TestView()
+
     override func initialize() {
         super.initialize()
 
@@ -61,5 +63,28 @@ class InputTextView: TextView {
         self.countView.size = CGSize(width: 70, height: 20)
         self.countView.right = self.width - 5
         self.countView.bottom = self.height - 5
+    }
+
+    func toggleInputView() {
+
+        if self.inputView is TestView {
+            self.inputView = nil
+        } else {
+            self.inputView = self.test
+        }
+
+        self.reloadInputViews()
+    }
+}
+
+class TestView: View {
+
+    override func initializeSubviews() {
+        super.initializeSubviews()
+
+        guard let window = UIWindow.topWindow() else { return }
+        self.size = CGSize(width: window.width, height: window.height * 0.33)
+
+        self.set(backgroundColor: .green)
     }
 }

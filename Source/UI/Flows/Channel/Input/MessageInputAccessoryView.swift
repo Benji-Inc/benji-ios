@@ -93,7 +93,6 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-
         self.set(backgroundColor: .clear)
 
         self.messageContext = .casual
@@ -200,7 +199,8 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         }
 
         self.contextButton.didSelect = { [unowned self] in
-            self.didSelectContextButton()
+            self.expandingTextView.toggleInputView()
+            //self.didSelectContextButton()
         }
     }
 
