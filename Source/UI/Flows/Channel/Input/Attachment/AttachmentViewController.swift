@@ -9,11 +9,20 @@
 import Foundation
 import Photos
 
-class AttachmentViewController: CollectionViewController<AttachementCell, AttachmentCollectionViewManager> {
+protocol AttachmentViewControllerDelegate: class {
+    func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachement)
+}
+
+class AttachmentViewController: CollectionViewController<AttachementCell, AttachmentCollectionViewManager>, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
 
-    init() {
+    unowned let delegate: AttachmentViewControllerDelegate
+
+    private lazy var imagePickerVC = UIImagePickerController()
+
+    init(with delegate: AttachmentViewControllerDelegate) {
+        self.delegate = delegate
         super.init(with: AttachmentCollectionView())
     }
 
@@ -32,8 +41,19 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
             self.fetchAssets()
         }
 
-        self.view.set(backgroundColor: .background1)
+        let color = Color.background1.color.withAlphaComponent(0.9)
+        self.view.backgroundColor = color
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
+
+        self.imagePickerVC.delegate = self
+
+        self.collectionViewManager.didSelectPhotoOption = { [unowned self] in
+            self.presentPicker(for: .camera)
+        }
+
+        self.collectionViewManager.didSelectLibraryOption = { [unowned self] in
+            self.presentPicker(for: .photoLibrary)
+        }
     }
 
     private func checkPhotoAuthorizationStatus(completion: @escaping (_ authorized: Bool) -> Void) {
@@ -79,5 +99,28 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.pin(.top)
         self.collectionView.height = self.view.height - self.view.safeAreaInsets.bottom
+    }
+
+    private func presentPicker(for type: UIImagePickerController.SourceType) {
+        self.imagePickerVC.sourceType = type
+        self.present(self.imagePickerVC, animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+
+        self.imagePickerVC.dismiss(animated: true, completion: nil)
+        guard let asset = info[.phAsset] as? PHAsset else {
+            print("Image not found!")
+            return
+        }
+
+        if let asst = info[.phAsset] as? PHAsset {
+            self.delegate.attachmentView(self, didSelect: Attachement(with: asset))
+        } else if let image = info[.originalImage] {
+
+        }
+
+        self.delegate.attachmentView(self, didSelect: Attachement(with: asset))
     }
 }
