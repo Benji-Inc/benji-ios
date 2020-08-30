@@ -39,6 +39,7 @@ class AttachementCell: UICollectionViewCell, ManageableCell {
 
     private let imageView = DisplayableImageView()
     private let imageManager = PHImageManager()
+    private let selectedView = View()
 
     var onLongPress: (() -> Void)?
 
@@ -54,7 +55,11 @@ class AttachementCell: UICollectionViewCell, ManageableCell {
     func initializeViews() {
         self.contentView.addSubview(self.imageView)
         self.imageView.imageView.contentMode = .scaleToFill
-        self.imageView.clipsToBounds = true 
+        self.imageView.clipsToBounds = true
+
+        self.contentView.addSubview(self.selectedView)
+        self.selectedView.backgroundColor = Color.lightPurple.color.withAlphaComponent(0.5)
+        self.selectedView.alpha = 0
     }
 
     func configure(with item: Attachement?) {
@@ -70,6 +75,13 @@ class AttachementCell: UICollectionViewCell, ManageableCell {
         super.layoutSubviews()
 
         self.imageView.expandToSuperviewSize()
+        self.selectedView.expandToSuperviewSize()
+    }
+
+    func update(isSelected: Bool) {
+        UIView.animate(withDuration: 0.2) {
+            self.selectedView.alpha = isSelected ? 1.0 : 0.0
+        }
     }
 
     func loadImage(for attachment: Attachement) {

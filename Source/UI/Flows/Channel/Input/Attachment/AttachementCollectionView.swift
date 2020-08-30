@@ -13,13 +13,9 @@ class AttachmentCollectionView: CollectionView {
     init() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 4
+        layout.minimumLineSpacing = 4
         super.init(layout: layout)
-
-        self.bounces = false 
-
-        self.set(backgroundColor: .clear)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -29,6 +25,10 @@ class AttachmentCollectionView: CollectionView {
     override func initializeViews() {
         super.initializeViews()
 
-        
+        self.bounces = false
+        self.set(backgroundColor: .clear)
+        self.showsHorizontalScrollIndicator = false
+
+        self.register(AttachementHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
     }
 }

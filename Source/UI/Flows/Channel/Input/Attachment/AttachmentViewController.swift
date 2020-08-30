@@ -11,7 +11,7 @@ import Photos
 
 class AttachmentViewController: CollectionViewController<AttachementCell, AttachmentCollectionViewManager> {
 
-    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
+    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
 
     init() {
         super.init(with: AttachmentCollectionView())
@@ -32,13 +32,8 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
             self.fetchAssets()
         }
 
+        self.view.set(backgroundColor: .background1)
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        self.blurView.expandToSuperviewSize()
     }
 
     private func checkPhotoAuthorizationStatus(completion: @escaping (_ authorized: Bool) -> Void) {
@@ -74,5 +69,15 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
         }
 
         self.collectionViewManager.set(newItems: attachments)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.blurView.expandToSuperviewSize()
+
+        self.collectionView.expandToSuperviewWidth()
+        self.collectionView.pin(.top)
+        self.collectionView.height = self.view.height - self.view.safeAreaInsets.bottom
     }
 }
