@@ -54,6 +54,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.blurView.effect = nil
         self.scrollView.addSubview(self.avatarView)
+        self.avatarView.isHidden = true 
 
         self.phoneVC.onDidComplete = { [unowned self] result in
             switch result {
@@ -171,7 +172,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         switch self.currentContent.value {
         case .phone(_), .code(_):
-            self.avatarView.isHidden = !self.reservationUser.isNil
+            self.avatarView.isHidden = self.reservationUser.isNil
         default:
             self.avatarView.isHidden = true
         }
