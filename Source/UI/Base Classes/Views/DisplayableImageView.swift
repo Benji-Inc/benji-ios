@@ -8,6 +8,7 @@
 
 import Foundation
 import Parse
+import SDWebImage
 
 class DisplayableImageView: View {
 
@@ -49,6 +50,8 @@ class DisplayableImageView: View {
             self.imageView.image = photo
         } else if let objectID = displayable.userObjectID {
             self.findUser(with: objectID)
+        } else if let url = displayable.url {
+            self.downloadAndSetImage(url: url)
         }
     }
 
@@ -65,5 +68,12 @@ class DisplayableImageView: View {
             .observeValue(with: { (user) in
                 self.downloadAndSetImage(for: user)
             })
+    }
+
+    private func downloadAndSetImage(url: URL) {
+        self.imageView.sd_setImage(with: url, completed: { [weak self] (image, error, imageCacheType, imageUrl) in
+            guard let `self` = self, let downloadedImage = image else { return }
+            self.imageView.image = downloadedImage
+        })
     }
 }

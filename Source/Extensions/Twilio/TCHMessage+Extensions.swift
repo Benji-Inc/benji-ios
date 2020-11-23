@@ -48,7 +48,7 @@ extension TCHMessage: Messageable {
     }
 
     var createdAt: Date {
-        return self.timestampAsDate ?? Date()
+        return self.dateCreatedAsDate ?? Date()
     }
 
     var text: Localized {
@@ -75,14 +75,23 @@ extension TCHMessage: Messageable {
         return .delivered
     }
 
-    var type: MessageType {
+    var kind: MessageKind {
         switch self.messageType {
         case .text:
-            return .text
+            return .text(String(optional: self.body))
         case .media:
-            return .media
-        @unknown default:
-            return .text 
+            guard let type = self.mediaType, let mediaType = MediaType(rawValue: type) else {
+                return .text(String(optional: self.body))
+            }
+
+            switch mediaType {
+            case .photo:
+                return .photo(EmptyMediaItem(mediaType: mediaType))
+            case .video:
+                fatalError()
+            }
+        default:
+            return .text(String(optional: self.body))
         }
     }
 

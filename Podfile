@@ -20,4 +20,6 @@ target 'Benji' do
 
   pod 'Branch'
 
+  pod 'SDWebImage', '~> 4.2'
+
 end

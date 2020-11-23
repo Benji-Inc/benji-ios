@@ -205,6 +205,16 @@ extension UIView {
         }
     }
 
+    var squaredSize: CGFloat {
+        get {
+            return self.size.height
+        }
+        set {
+            self.width = newValue
+            self.height = newValue
+        }
+    }
+
     /// The rect, in this view's coordinate space, that is within the bounds of the safe area.
     var safeAreaRect: CGRect  {
         get {

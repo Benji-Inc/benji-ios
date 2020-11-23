@@ -50,22 +50,15 @@ extension TCHChannel: Diffable, ManageableCellItem {
     func getNonMeMembers() -> Future<[TCHMember]> {
 
         let promise = Promise<[TCHMember]>()
-        if let members = self.members {
-            members.members { (result, paginator) in
-                if let error = result.error {
-                    promise.reject(with: error)
-                } else if let pag = paginator {
-                    var nonMeMembers: [TCHMember] = []
-                    pag.items().forEach { (member) in
-                        if member.identity != User.current()?.objectId {
-                            nonMeMembers.append(member)
-                        }
-                    }
-                    promise.resolve(with: nonMeMembers)
-                } else {
-                    promise.reject(with: ClientError.message(detail: "There was a problem fetching other members."))
+        if let members = self.members?.membersList() {
+            var nonMeMembers: [TCHMember] = []
+            members.forEach { (member) in
+                if member.identity != User.current()?.objectId {
+                    nonMeMembers.append(member)
                 }
             }
+        } else {
+            promise.reject(with: ClientError.message(detail: "There was a problem fetching other members."))
         }
 
         return promise.withResultToast()
@@ -202,26 +195,21 @@ extension Future where Value == TCHChannel {
     func getUsers() -> Future<[User]> {
         return self.then { (channel) in
             let promise = Promise<[User]>()
-            if let members = channel.members {
-                members.members { (result, paginator) in
-                    if result.isSuccessful(), let pag = paginator {
-                        var identifiers: [String] = []
-                        pag.items().forEach { (member) in
-                            if let identifier = member.identity {
-                                identifiers.append(identifier)
-                            }
-                        }
+            if let members = channel.members?.membersList() {
 
-                        User.localThenNetworkArrayQuery(where: identifiers,
-                                                        isEqual: true, 
-                                                        container: .channel(identifier: channel.sid!))
-                            .observeValue(with: { (users) in
-                                promise.resolve(with: users)
-                            })
-                    } else {
-                        promise.reject(with: ClientError.message(detail: "Failed to retrieve channel members."))
+                var identifiers: [String] = []
+                members.forEach { (member) in
+                    if let identifier = member.identity {
+                        identifiers.append(identifier)
                     }
                 }
+
+                User.localThenNetworkArrayQuery(where: identifiers,
+                                            isEqual: true,
+                                            container: .channel(identifier: channel.sid!))
+                .observeValue(with: { (users) in
+                    promise.resolve(with: users)
+                })
             }
 
             return promise

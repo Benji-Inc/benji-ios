@@ -20,6 +20,9 @@ struct ChannelLayoutAttributes: Equatable {
     var bubbleViewFrame: CGRect = .zero
     var textViewFrame: CGRect = .zero
     var maskedCorners: CACornerMask = []
+
+    //Photo
+    var imageFrame: CGRect = .zero 
 }
 
 class ChannelCollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {

@@ -13,11 +13,13 @@ import TMROLocalization
 
 class MessageDeliveryManager {
 
-    static func send(message: String,
-                     context: MessageContext = .casual,
-                     type: MessageType = .text,
-                     attributes: [String: Any],
-                     completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
+    static let shared = MessageDeliveryManager()
+    //private var options: TCHMessageOptions?
+
+    func send(context: MessageContext = .casual,
+              kind: MessageKind,
+              attributes: [String: Any],
+              completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
 
         if let channelDisplayable = ChannelSupplier.shared.activeChannel.value {
             if let current = User.current(), let objectId = current.objectId {
@@ -27,18 +29,20 @@ class MessageDeliveryManager {
 
                 let systemMessage = SystemMessage(avatar: current,
                                                   context: context,
-                                                  text: message,
                                                   isFromCurrentUser: true,
                                                   createdAt: Date(),
                                                   authorId: objectId,
                                                   messageIndex: nil,
                                                   status: .sent,
-                                                  type: type, 
+                                                  kind: kind,
                                                   id: String(),
                                                   attributes: mutableAttributes)
 
                 if case .channel(let channel) = channelDisplayable.channelType {
-                    self.sendMessage(to: channel, with: message, context: context, attributes: mutableAttributes)
+                    self.sendMessage(to: channel,
+                                     context: context,
+                                     kind: kind,
+                                     attributes: mutableAttributes)
                         .observe { (result) in
                             switch result {
                             case .success(_):
@@ -63,34 +67,28 @@ class MessageDeliveryManager {
         return nil
     }
 
-    static func resend(message: Messageable, completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
-        if let channelDisplayable = ChannelSupplier.shared.activeChannel.value {
-            let systemMessage = SystemMessage(avatar: message.avatar,
-                                              context: message.context,
-                                              text: message.text,
-                                              isFromCurrentUser: message.isFromCurrentUser,
-                                              createdAt: message.createdAt,
-                                              authorId: message.authorID,
-                                              messageIndex: message.messageIndex,
-                                              status: .sent, // Reset the status
-                                              type: message.type,
-                                              id: message.id,
-                                              attributes: message.attributes)
+    func resend(message: Messageable, completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
 
-                if case .channel(let channel) = channelDisplayable.channelType {
-                    let attributes = message.attributes ?? [:]
-                    self.sendMessage(to: channel, with: localized(message.text), context: message.context, attributes: attributes)
-                        .observe { (result) in
-                            switch result {
-                            case .success(_):
-                                completion(systemMessage, nil)
-                            case .failure(let error):
-                                completion(systemMessage, error)
-                            }
-                    }
-                } else {
-                    completion(nil, ClientError.message(detail: "No active channel found."))
+        if let channelDisplayable = ChannelSupplier.shared.activeChannel.value {
+            let systemMessage = SystemMessage(with: message)
+
+            if case .channel(let channel) = channelDisplayable.channelType {
+                let attributes = message.attributes ?? [:]
+                self.sendMessage(to: channel,
+                                 context: message.context,
+                                 kind: message.kind,
+                                 attributes: attributes)
+                    .observe { (result) in
+                        switch result {
+                        case .success(_):
+                            completion(systemMessage, nil)
+                        case .failure(let error):
+                            completion(systemMessage, error)
+                        }
                 }
+            } else {
+                completion(nil, ClientError.message(detail: "No active channel found."))
+            }
 
             return systemMessage
         } else {
@@ -102,49 +100,84 @@ class MessageDeliveryManager {
 
     //MARK: MESSAGE HELPERS
 
-    private static func sendMessage(to channel: TCHChannel,
-                                    with body: String,
-                                    context: MessageContext = .casual,
-                                    attributes: [String : Any] = [:]) -> Future<Messageable> {
-
-        let message = body.extraWhitespaceRemoved()
+    private func sendMessage(to channel: TCHChannel,
+                             context: MessageContext = .casual,
+                             kind: MessageKind,
+                             attributes: [String : Any] = [:]) -> Future<Messageable> {
         let promise = Promise<Messageable>()
-        var mutableAttributes = attributes
-        mutableAttributes["context"] = context.rawValue
 
-        if !ChannelManager.shared.isConnected {
-            promise.reject(with: ClientError.message(detail: "Chat service is disconnected."))
-        }
+        if let messagesObject = channel.messages {
 
-        if message.isEmpty {
-            promise.reject(with: ClientError.message(detail: "Your message can not be empty."))
-        }
+            var mutableAttributes = attributes
+            mutableAttributes["context"] = context.rawValue
 
-        if channel.status != .joined {
-            promise.reject(with: ClientError.message(detail: "You are not a channel member."))
-        }
+            if !ChannelManager.shared.isConnected {
+                promise.reject(with: ClientError.message(detail: "Chat service is disconnected."))
+            }
 
-        if let tchAttributes = TCHJsonAttributes.init(dictionary: mutableAttributes) {
-            if let messages = channel.messages {
-                let messageOptions = TCHMessageOptions().withBody(body)
-                messageOptions.withAttributes(tchAttributes, completion: nil)
-                messages.sendMessage(with: messageOptions) { (result, message) in
-                    if result.isSuccessful(), let msg = message {
-                        promise.resolve(with: msg)
-                    } else if let error = result.error {
-                        promise.reject(with: error)
-                    } else {
-                        promise.reject(with: ClientError.message(detail: "Failed to send message."))
-                    }
-                }
-            } else {
-                promise.reject(with: ClientError.message(detail: "No messages object found on channel."))
+            if channel.status != .joined {
+                promise.reject(with: ClientError.message(detail: "You are not a channel member."))
+            }
+
+            self.getOptions(for: kind, attributes: attributes)
+                .observeValue { (options) in
+                    messagesObject.sendMessage(with: options, completion: { (result, message) in
+                        if result.isSuccessful(), let msg = message {
+                            promise.resolve(with: msg)
+                        } else if let e = result.error {
+                            promise.reject(with: e)
+                        } else {
+                            promise.reject(with: ClientError.message(detail: "Failed to send message."))
+                        }
+                    })
             }
         } else {
-            promise.reject(with: ClientError.message(detail: "Message attributes failed to initialize."))
+            promise.reject(with: ClientError.message(detail: "No messages object on channel"))
         }
 
-
         return promise.withResultToast()
+    }
+
+    private func getOptions(for kind: MessageKind, attributes: [String : Any] = [:]) -> Future<TCHMessageOptions> {
+
+        let options = TCHMessageOptions()
+        let promise = Promise<TCHMessageOptions>()
+
+        switch kind {
+        case .text(let body):
+            options.with(body: body, attributes: TCHJsonAttributes.init(dictionary: attributes))
+                .observe { (result) in
+                    switch result {
+                    case .success(let newOptions):
+                        promise.resolve(with: newOptions)
+                    case .failure(let error):
+                        promise.reject(with: error)
+                    }
+            }
+        case .attributedText(_):
+            break
+        case .photo(let item):
+            options.with(mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: attributes))
+                .observe { (result) in
+                    switch result {
+                    case .success(let newOptions):
+                        promise.resolve(with: newOptions)
+                    case .failure(let error):
+                        promise.reject(with: error)
+                    }
+            }
+        case .video(_):
+            break
+        case .location(_):
+            break
+        case .emoji(_):
+            break
+        case .audio(_):
+            break
+        case .contact(_):
+            break
+        }
+
+        return promise
     }
 }

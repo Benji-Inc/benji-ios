@@ -10,12 +10,15 @@ import Foundation
 import Lottie
 import TMROLocalization
 
-protocol MessageInputAccessoryViewDelegate: class {
-    func messageInputAccessory(_ view: MessageInputAccessoryView, didUpdate message: Messageable,
+protocol MessageInputAccessoryViewDelegate: AttachmentViewControllerDelegate {
+    func messageInputAccessory(_ view: MessageInputAccessoryView,
+                               didUpdate message: Messageable,
                                with text: String)
-    func messageInputAccessory(_ view: MessageInputAccessoryView, didSend text: String,
+    func messageInputAccessory(_ view: MessageInputAccessoryView,
+                               didSend text: String,
                                context: MessageContext,
                                attributes: [String: Any])
+    func messageInputAccessoryDidTapContext(_ view: MessageInputAccessoryView)
 }
 
 class MessageInputAccessoryView: View, ActiveChannelAccessor {
@@ -45,11 +48,14 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 
     let inputContainerView = View()
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
-    let expandingTextView = InputTextView()
+    lazy var expandingTextView = MessageInputTextView(with: self.delegate)
     let alertProgressView = AlertProgressView()
     let animationView = AnimationView(name: "loading")
     lazy var alertConfirmation = AlertConfirmationView()
     let overlayButton = UIButton()
+
+    let contextButton = Button()
+    private(set)var inputLeadingContstaint: NSLayoutConstraint?
 
     unowned let delegate: MessageInputAccessoryViewDelegate
 
@@ -91,6 +97,9 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 
         self.messageContext = .casual
 
+        self.addSubview(self.contextButton)
+        self.contextButton.set(style: .normal(color: .red, text: "H"))
+
         self.addSubview(self.inputContainerView)
         self.inputContainerView.set(backgroundColor: .clear)
 
@@ -106,7 +115,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 
         self.inputContainerView.addSubview(self.expandingTextView)
 
-        self.addSubview(self.overlayButton)
+        self.inputContainerView.addSubview(self.overlayButton)
 
         self.inputContainerView.layer.masksToBounds = true
         self.inputContainerView.layer.borderWidth = Theme.borderWidth
@@ -120,6 +129,8 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+
+        self.contextButton.makeRound()
 
         self.blurView.expandToSuperviewSize()
         self.overlayButton.expandToSuperviewSize()
@@ -135,11 +146,19 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     private func setupConstraints() {
         self.translatesAutoresizingMaskIntoConstraints = false
 
-        let guide = layoutMarginsGuide
+        let guide = self.layoutMarginsGuide
+
+        self.contextButton.translatesAutoresizingMaskIntoConstraints = false
+        self.contextButton.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
+        self.contextButton.heightAnchor.constraint(equalToConstant: 43).isActive = true
+        self.contextButton.widthAnchor.constraint(equalToConstant: 43).isActive = true
+        self.contextButton.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
+
         self.inputContainerView.translatesAutoresizingMaskIntoConstraints = false
         self.inputContainerView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
         self.inputContainerView.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -10).isActive = true
-        self.inputContainerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
+        self.inputLeadingContstaint = self.inputContainerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 53)
+        self.inputLeadingContstaint?.isActive = true
         self.inputContainerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
 
         self.expandingTextView.leadingAnchor.constraint(equalTo: self.inputContainerView.leadingAnchor).isActive = true
@@ -178,11 +197,18 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         self.alertConfirmation.didCancel = { [unowned self] in
             self.resetAlertProgress()
         }
+
+        self.contextButton.didSelect = { [unowned self] in
+            self.expandingTextView.toggleInputView()
+            //self.didSelectContextButton()
+        }
     }
 
     // MARK: HANDLERS
 
     private func handleTextChange(_ text: String) {
+        self.animateInputViews(with: text)
+
         guard let channelDisplayable = self.activeChannel,
             text.count > 0,
             case ChannelType.channel(let channel) = channelDisplayable.channelType else { return }
@@ -190,11 +216,36 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         channel.typing()
     }
 
+    private func animateInputViews(with text: String) {
+
+        let inputOffset: CGFloat
+        if text.count > 0 {
+            inputOffset = 0
+        } else {
+            inputOffset = 53
+        }
+
+        guard let constraint = self.inputLeadingContstaint, inputOffset != constraint.constant else { return }
+
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.contextButton.transform = inputOffset == 0 ? CGAffineTransform(scaleX: 0.5, y: 0.5) : .identity
+            self.contextButton.alpha = inputOffset == 0 ? 0.0 : 1.0
+            self.inputLeadingContstaint?.constant = inputOffset
+            self.layoutNow()
+        }
+    }
+
+    private func didSelectContextButton() {
+        self.delegate.messageInputAccessoryDidTapContext(self)
+    }
+
     // MARK: PUBLIC
 
     func edit(message: Messageable) {
         self.editableMessage = message
-        self.expandingTextView.text = localized(message.text)
+        if case MessageKind.text(let text) = message.kind {
+            self.expandingTextView.text = text
+        }
         self.messageContext = message.context
         self.expandingTextView.becomeFirstResponder()
     }

@@ -100,7 +100,7 @@ func waitForAll<Value>(futures: [Future<Value>], queue: DispatchQueue? = nil) ->
     } else {
         futures.forEach { promise in
             promise.observe(with: { (result) in
-                waitQueue.sync {
+                waitQueue.mainSyncSafe {
                     switch result {
                     case .success(let value):
                         resolvedFutures += 1
@@ -117,4 +117,22 @@ func waitForAll<Value>(futures: [Future<Value>], queue: DispatchQueue? = nil) ->
     }
 
     return masterPromise
+}
+
+extension DispatchQueue {
+    func mainSyncSafe(execute work: () -> Void) {
+        if Thread.isMainThread {
+            work()
+        } else {
+            DispatchQueue.main.sync(execute: work)
+        }
+    }
+
+    func mainSyncSafe<T>(execute work: () throws -> T) rethrows -> T {
+        if Thread.isMainThread {
+            return try work()
+        } else {
+            return try DispatchQueue.main.sync(execute: work)
+        }
+    }
 }

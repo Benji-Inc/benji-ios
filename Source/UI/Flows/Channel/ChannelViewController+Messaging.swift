@@ -11,12 +11,21 @@ import TwilioChatClient
 
 extension ChannelViewController: MessageInputAccessoryViewDelegate {
 
+    func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachement) {
+        // add attachment to the message input view
+        self.messageInputAccessoryView.expandingTextView.toggleInputView()
+    }
+
+    func messageInputAccessoryDidTapContext(_ view: MessageInputAccessoryView) {
+        self.delegate.channelViewControllerDidTapContext(self)
+    }
+
     func messageInputAccessory(_ view: MessageInputAccessoryView, didUpdate message: Messageable, with text: String) {
         self.update(message: message, text: text)
     }
 
     func messageInputAccessory(_ view: MessageInputAccessoryView, didSend text: String, context: MessageContext, attributes: [String : Any]) {
-        self.send(message: text, context: context, attributes: attributes)
+        self.send(messageKind: .text(text), context: context, attributes: attributes)
     }
 
     func load(activeChannel: DisplayableChannel) {
@@ -31,16 +40,19 @@ extension ChannelViewController: MessageInputAccessoryViewDelegate {
         }
     }
 
-    func send(message: String,
+    func send(messageKind: MessageKind,
               context: MessageContext = .casual,
               attributes: [String : Any]) {
 
-        guard let systemMessage = MessageDeliveryManager.send(message: message, context: context, attributes: attributes, completion: { (message, error) in
-            if let msg = message, let e = error {
-                msg.status = .error
-                self.collectionViewManager.updateItem(with: msg)
-                print(e)
-            }
+        guard let systemMessage = MessageDeliveryManager.shared.send(context: context,
+                                                                     kind: messageKind,
+                                                                     attributes: attributes,
+                                                                     completion: { (message, error) in
+                                                                        if let msg = message, let e = error {
+                                                                            msg.status = .error
+                                                                            self.collectionViewManager.updateItem(with: msg)
+                                                                            print(e)
+                                                                        }
         }) else { return }
 
         self.collectionViewManager.append(item: systemMessage) { [unowned self] in
@@ -52,7 +64,7 @@ extension ChannelViewController: MessageInputAccessoryViewDelegate {
 
     func resend(message: Messageable) {
         
-        guard let systemMessage = MessageDeliveryManager.resend(message: message, completion: { (newMessage, error) in
+        guard let systemMessage = MessageDeliveryManager.shared.resend(message: message, completion: { (newMessage, error) in
             if let msg = newMessage, let e = error {
                 msg.status = .error
                 self.collectionViewManager.updateItem(with: msg)

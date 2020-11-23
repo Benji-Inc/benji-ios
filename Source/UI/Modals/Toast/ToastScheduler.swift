@@ -57,6 +57,7 @@ class ToastScheduler {
     }
 
     private func createSystemMessageToast(for systemMessage: SystemMessage) -> Toast? {
+        guard case MessageKind.text(let text) = systemMessage.kind else { return nil }
         let button = LoadingButton()
         button.set(style: .rounded(color: .background3, text: "VIEW")) {
 
@@ -65,7 +66,7 @@ class ToastScheduler {
                      analyticsID: "ToastSystemMessage",
                      priority: 1,
                      title: systemMessage.avatar.fullName,
-                     description: systemMessage.text,
+                     description: text,
                      avatar: UIImage(),
                      didTap: { [unowned self] in
                         self.delegate?.didInteractWith(type: .systemMessage(systemMessage))

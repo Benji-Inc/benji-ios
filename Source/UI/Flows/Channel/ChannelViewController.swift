@@ -16,6 +16,7 @@ typealias ChannelViewControllerDelegates = ChannelDetailViewControllerDelegate &
 
 protocol ChannelViewControllerDelegate: class {
     func channelView(_ controller: ChannelViewController, didTapShare message: Messageable)
+    func channelViewControllerDidTapContext(_ controller: ChannelViewController)
 }
 
 class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
@@ -24,6 +25,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     lazy var detailVC = ChannelDetailViewController(delegate: self.delegate)
     lazy var collectionView = ChannelCollectionView()
     lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView)
+    lazy var imagePickerVC = UIImagePickerController()
 
     let disposables = CompositeDisposable()
 
@@ -130,6 +132,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         if let activeChannel = self.activeChannel {
             self.load(activeChannel: activeChannel)
         }
+
+        self.addChild(self.messageInputAccessoryView.expandingTextView.attachmentInputVC)
 
         self.setupHandlers()
         self.subscribeToUpdates()

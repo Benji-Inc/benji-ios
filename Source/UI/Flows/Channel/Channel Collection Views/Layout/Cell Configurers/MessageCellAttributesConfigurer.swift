@@ -103,8 +103,8 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
     private func getTextViewSize(with message: Messageable,
                                  for layout: ChannelCollectionViewFlowLayout) -> CGSize {
-
-        let attributed = AttributedString(message.text,
+        guard case MessageKind.text(let text) = message.kind else { return .zero }
+        let attributed = AttributedString(text,
                                           fontType: .smallBold,
                                           color: .white)
 

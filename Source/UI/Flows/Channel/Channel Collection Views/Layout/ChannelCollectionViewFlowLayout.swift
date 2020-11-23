@@ -155,7 +155,31 @@ class ChannelCollectionViewFlowLayout: UICollectionViewFlowLayout {
             return TypingCellAttributesConfigurer()
         }
 
-        return MessageCellAttributesConfigurer()
+        if let kind = message?.kind {
+            switch kind {
+            case .text(let text):
+                if text.isEmpty {
+                    return ChannelCellAttributesConfigurer()
+                }
+                return MessageCellAttributesConfigurer()
+            case .attributedText(_):
+                return AttributedMessageCellAttributesConfigurer()
+            case .photo(_):
+                return PhotoCellAttributesConfigurer()
+            case .video(_):
+                return VideoAttributesCellConfigurer()
+            case .location(_):
+                return LocationCellAttributesConfigurer()
+            case .emoji(_):
+                return EmojiCellAttributesConfigurer()
+            case .audio(_):
+                return AudioCellAttributesConfigurer()
+            case .contact(_):
+                return ContactCellAttributesConfigurer()
+            }
+        }
+
+        return ChannelCellAttributesConfigurer()
     }
 
     private func getAdjacentMessages(for indexPath: IndexPath) -> AdjacectMessages {

@@ -105,13 +105,12 @@ class Lorem {
 
         let message = SystemMessage(avatar: self.avatar(),
                                     context: self.context(),
-                                    text: self.sentence(),
                                     isFromCurrentUser: self.isFromCurrentUserList.random(),
                                     createdAt: self.dates.random(),
                                     authorId: "testMessage",
                                     messageIndex: nil,
                                     status: .sent,
-                                    type: .text,
+                                    kind: .text(self.sentence()),
                                     id: String(),
                                     attributes: nil)
 
@@ -122,13 +121,12 @@ class Lorem {
 
         let message = SystemMessage(avatar: self.avatar(),
                                     context: self.context(),
-                                    text: self.paragraph(),
                                     isFromCurrentUser: self.isFromCurrentUserList.random(),
                                     createdAt: self.dates.random(),
                                     authorId: "testMessage",
                                     messageIndex: nil,
                                     status: .sent,
-                                    type: .text,
+                                    kind: .text(self.paragraph()),
                                     id: String(),
                                     attributes: nil)
         return message
