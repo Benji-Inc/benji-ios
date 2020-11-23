@@ -18,7 +18,6 @@ extension ChannelsViewController {
             
             switch channelsUpdate.status {
             case .added:
-                guard !self.isSearching else { return }
                 guard channelsUpdate.channel.isOwnedByMe || channelsUpdate.channel.status == .joined else { return }
                 
                 let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
@@ -30,9 +29,6 @@ extension ChannelsViewController {
                 let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
                 self.collectionViewManager.delete(item: displayable)
             }
-            
-            // Reload the cache because changes to the channel list have occurred.
-            self.collectionViewManager.channelCache = ChannelSupplier.shared.allJoinedChannels
         }).start()
 
         ChannelManager.shared.clientSyncUpdate.producer.on(value:  { [weak self] (update) in
@@ -41,16 +37,9 @@ extension ChannelsViewController {
             guard let clientUpdate = update else { return }
             
             switch clientUpdate {
-            case .started:
-                break
-            case .channelsListCompleted:
-                break
             case .completed:
-                self.collectionViewManager.channelCache = ChannelSupplier.shared.allJoinedChannels
                 self.collectionViewManager.loadAllChannels()
-            case .failed:
-                break
-            @unknown default:
+            default:
                 break
             }
         }).start()

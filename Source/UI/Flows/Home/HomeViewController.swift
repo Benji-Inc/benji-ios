@@ -30,7 +30,6 @@ class HomeViewController: FullScreenViewController {
     lazy var feedVC = FeedViewController()
     lazy var channelsVC = ChannelsViewController()
     lazy var profileVC = ProfileViewController(with: User.current()!)
-    lazy var searchBar = SearchBar()
 
     let centerContainer = View()
     let tabView = HomeTabView()
@@ -53,10 +52,6 @@ class HomeViewController: FullScreenViewController {
 
     override func initializeViews() {
         super.initializeViews()
-
-        self.searchBar.isHidden = true
-        self.searchBar.delegate = self.channelsVC
-        self.contentContainer.addSubview(self.searchBar)
 
         self.view.set(backgroundColor: .background1)
 
@@ -87,9 +82,6 @@ class HomeViewController: FullScreenViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.searchBar.size = CGSize(width: self.contentContainer.width - (16 * 2), height: 44)
-        self.searchBar.centerOnX()
-
         let height = 70 + self.view.safeAreaInsets.bottom
         self.tabView.size = CGSize(width: self.contentContainer.width, height: height)
         self.tabView.centerOnX()
@@ -99,8 +91,6 @@ class HomeViewController: FullScreenViewController {
                                            height: self.contentContainer.height - 156)
         self.centerContainer.bottom = self.tabView.top
         self.centerContainer.centerOnX()
-
-        self.searchBar.bottom = self.centerContainer.top
 
         self.currentCenterVC?.view.frame = self.centerContainer.bounds
     }
@@ -118,13 +108,10 @@ class HomeViewController: FullScreenViewController {
             switch self.currentContent.value {
             case .feed(let vc):
                 newContentVC = vc
-                self.searchBar.isHidden = true
             case .channels(let vc):
                 newContentVC = vc
-                self.searchBar.isHidden = false
             case .profile(let vc):
                 newContentVC = vc
-                self.searchBar.isHidden = true
             }
 
             self.currentCenterVC = newContentVC

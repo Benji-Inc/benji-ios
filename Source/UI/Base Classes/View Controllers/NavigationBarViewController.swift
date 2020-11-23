@@ -10,7 +10,7 @@ import Foundation
 import TMROLocalization
 import Lottie
 
-class NavigationBarViewController: ViewController, SearchBarDelegate {
+class NavigationBarViewController: ViewController {
 
     private(set) var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private(set) var animationView = AnimationView(name: "arrow")
@@ -20,12 +20,6 @@ class NavigationBarViewController: ViewController, SearchBarDelegate {
     /// Place all views under the lineView 
     private(set) var lineView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     let scrollView = UIScrollView()
-    lazy var searchBar = SearchBar()
-    var showSearch: Bool = false {
-        didSet {
-            self.searchBar.isVisible = self.showSearch
-        }
-    }
 
     override func loadView() {
         self.view = self.scrollView
@@ -47,10 +41,6 @@ class NavigationBarViewController: ViewController, SearchBarDelegate {
         self.view.addSubview(self.descriptionLabel)
         self.view.addSubview(self.lineView)
         self.lineView.set(backgroundColor: .background3)
-
-        self.searchBar.isHidden = true
-        self.searchBar.delegate = self
-        self.view.addSubview(self.searchBar)
 
         self.updateNavigationBar()
     }
@@ -92,10 +82,6 @@ class NavigationBarViewController: ViewController, SearchBarDelegate {
         self.lineView.top = self.descriptionLabel.bottom + 20
         self.lineView.centerOnX()
 
-        self.searchBar.size = CGSize(width: self.view.width - (16 * 2), height: 44)
-        self.searchBar.centerOnX()
-        self.searchBar.centerY = self.titleLabel.centerY
-
         self.blurView.expandToSuperviewSize()
     }
 
@@ -110,24 +96,4 @@ class NavigationBarViewController: ViewController, SearchBarDelegate {
     }
 
     func didSelectBackButton() { }
-
-    func searchBarDidBeginEditing(_ searchBar: SearchBar) {
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.titleLabel.alpha = 0
-            self.lineView.alpha = 0
-            self.descriptionLabel.alpha = 0
-        }
-    }
-
-    func searchBarDidFinishEditing(_ searchBar: SearchBar) {
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.titleLabel.alpha = 1
-            self.lineView.alpha = 1
-            self.descriptionLabel.alpha = 1
-        }
-    }
-
-    func searchBar(_ searchBar: SearchBar, didUpdate text: String?) {
-        
-    }
 }

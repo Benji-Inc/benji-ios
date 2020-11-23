@@ -9,48 +9,9 @@
 import Foundation
 import TwilioChatClient
 
-struct SearchFilter {
-    var text: String
-}
-
 class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
 
-    // A cache of the all the user's current channels and system messages,
-    // sorted by date updated, with newer channels at the beginning.
-    lazy var channelCache: [DisplayableChannel] = []
-    
-    var channelFilter: SearchFilter? {
-        didSet {
-            self.loadFilteredChannels()
-        }
-    }
-
     var didSelectReservation: ((Reservation) -> Void)? = nil
-
-    func loadFilteredChannels() {
-        guard let filter = self.channelFilter else { return }
-
-        let allChannels = !filter.text.isEmpty ? self.channelCache : ChannelSupplier.shared.allJoinedChannels
-        var filteredChannels: [DisplayableChannel] = []
-
-        filteredChannels = allChannels.filter { (channel) in
-            if channel.channelType.uniqueName.contains(filter.text) {
-                return true
-            } else {
-                return false
-            }
-        }
-
-        let highlightedChannels = filteredChannels.map { (channel) -> DisplayableChannel in
-            let displayable = DisplayableChannel(channelType: channel.channelType)
-            displayable.highlightText = filter.text
-            return displayable
-        }
-
-        let sortedChannels = highlightedChannels.sorted()
-
-        self.set(newItems: sortedChannels) { (_) in }
-    }
 
     override func collectionView(_ collectionView: UICollectionView,
                                  layout collectionViewLayout: UICollectionViewLayout,
@@ -59,19 +20,13 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
         return CGSize(width: collectionView.width, height: 84)
     }
 
-    override func managerDidConfigure(cell: ChannelCell, for indexPath: IndexPath) {
-        if let filter = self.channelFilter {
-            cell.content.highlight(text: filter.text)
-        }
-    }
-
     func loadAllChannels() {
         let cycle = AnimationCycle(inFromPosition: .down,
                                    outToPosition: .down,
                                    shouldConcatenate: true,
                                    scrollToEnd: false)
 
-        self.set(newItems: self.channelCache,
+        self.set(newItems: ChannelSupplier.shared.allChannelsSorted,
                  animationCycle: cycle,
                  completion: nil)
     }

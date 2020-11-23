@@ -11,7 +11,7 @@ import Foundation
 class ChannelsCollectionView: CollectionView {
 
     init() {
-        let flowLayout = BouncyCollectionViewLayout()
+        let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumLineSpacing = 16
         flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 16, right: 0)

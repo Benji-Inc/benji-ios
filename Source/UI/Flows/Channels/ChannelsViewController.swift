@@ -18,8 +18,6 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
 
     weak var delegate: ChannelsViewControllerDelegate?
 
-    var isSearching: Bool = false
-
     init() {
         let collectionView = ChannelsCollectionView()
         super.init(with: collectionView)
@@ -44,22 +42,5 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
         }
 
         self.subscribeToUpdates()
-    }
-}
-
-extension ChannelsViewController: SearchBarDelegate {
-
-    func searchBarDidBeginEditing(_ searchBar: SearchBar) {
-        self.isSearching = true
-    }
-
-    func searchBarDidFinishEditing(_ searchBar: SearchBar) {
-        self.isSearching = false 
-        self.collectionViewManager.loadAllChannels()
-    }
-
-    func searchBar(_ searchBar: SearchBar, didUpdate text: String?) {
-        let searchText = String(optional: text).lowercased()
-        self.collectionViewManager.channelFilter = SearchFilter(text: searchText)
     }
 }
