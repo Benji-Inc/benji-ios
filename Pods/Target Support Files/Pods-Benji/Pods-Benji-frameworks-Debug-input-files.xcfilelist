@@ -11,6 +11,5 @@ ${BUILT_PRODUCTS_DIR}/TMROExtensionObject/TMROExtensionObject.framework
 ${BUILT_PRODUCTS_DIR}/TMROFutures/TMROFutures.framework
 ${BUILT_PRODUCTS_DIR}/TMROLocalization/TMROLocalization.framework
 ${PODS_ROOT}/TwilioChatClient/TwilioChatClient.framework
-${PODS_ROOT}/TwilioChatClient/TwilioChatClient.framework.dSYM
 ${BUILT_PRODUCTS_DIR}/lottie-ios/Lottie.framework
 ${BUILT_PRODUCTS_DIR}/pop/pop.framework
