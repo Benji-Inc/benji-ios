@@ -77,17 +77,17 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         self.currentState.producer
             .skipRepeats()
-            .on { [unowned self] (state) in
+            .on(value:  { [unowned self] (state) in
                 guard let currentState = state else { return }
                 self.handle(state: currentState)
-        }.start()
+            }).start()
 
         self.cameraVC.hasDetectedFace.producer
             .skipRepeats()
-            .on { [unowned self] (hasFace) in
+            .on(value:  { [unowned self] (hasFace) in
                 runMain {
                     self.beginButton.isEnabled = hasFace
-
+                    
                     guard let state = self.currentState.value, state == .scan else { return }
                     if hasFace {
                         self.beginButton.set(style: .normal(color: .blue, text: "Capture"))
@@ -95,7 +95,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                         self.beginButton.set(style: .normal(color: .red, text: "NO face detected"))
                     }
                 }
-        }.start()
+            }).start()
 
         self.beginButton.didSelect = { [unowned self] in
             guard let state = self.currentState.value else { return }

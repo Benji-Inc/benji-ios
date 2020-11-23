@@ -39,9 +39,9 @@ class TimeHumpView: View {
             self.handlePan(panRecognizer)
         }
 
-        self.percentage.producer.on { [unowned self] (percentage) in
+        self.percentage.producer.on(value:  { [unowned self] (percentage) in
             self.setNeedsLayout()
-        }.start()
+        }).start()
     }
 
     // MARK: Layout

@@ -86,7 +86,7 @@ class UserNotificationManager: NSObject {
                 }
             case .notDetermined:
                 self.register(with: [.alert, .sound, .badge, .provisional], application: application) { (_, _) in}
-            case .denied:
+            case .denied, .ephemeral:
                 return
             @unknown default:
                 return

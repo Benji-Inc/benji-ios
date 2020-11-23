@@ -64,9 +64,9 @@ class ProfilePhotoViewController: SwitchableContentViewController<PhotoContentTy
 
         self.photoVC.currentState.producer
             .skipRepeats()
-            .on { [unowned self] (state) in
+            .on(value:  { [unowned self] (state) in
                 self.updateNavigationBar(animateBackButton: false)
-        }.start()
+            }).start()
     }
 
     override func getInitialContent() -> PhotoContentType {

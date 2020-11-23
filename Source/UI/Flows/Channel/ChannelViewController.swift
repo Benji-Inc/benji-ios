@@ -160,14 +160,14 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             }
         }
 
-        self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
+        self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on(value:  { [unowned self] (channel) in
             guard let activeChannel = channel else {
                 self.collectionViewManager.reset()
                 return
             }
-
+            
             self.load(activeChannel: activeChannel)
-        }.start())
+        }).start())
     }
 
     override func viewDidAppear(_ animated: Bool) {

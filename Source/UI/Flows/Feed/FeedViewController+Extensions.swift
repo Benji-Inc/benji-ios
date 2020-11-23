@@ -12,9 +12,9 @@ extension FeedViewController {
 
     func subscribeToUpdates() {
 
-        ChannelManager.shared.clientSyncUpdate.producer.on { [weak self] (update) in
+        ChannelManager.shared.clientSyncUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self, let clientUpdate = update else { return }
-
+            
             switch clientUpdate {
             case .started, .channelsListCompleted:
                 break
@@ -25,7 +25,7 @@ extension FeedViewController {
             @unknown default:
                 break
             }
-        }
+        })
         .start()
     }
 

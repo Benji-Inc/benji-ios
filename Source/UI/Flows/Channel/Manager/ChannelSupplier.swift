@@ -113,11 +113,11 @@ class ChannelSupplier {
 
     private func subscribeToUpdates() {
 
-        self.disposables.add(ChannelManager.shared.clientSyncUpdate.producer.on { [weak self] (update) in
+        self.disposables.add(ChannelManager.shared.clientSyncUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
-
+            
             guard let clientUpdate = update else { return }
-
+            
             switch clientUpdate {
             case .started:
                 break
@@ -130,11 +130,11 @@ class ChannelSupplier {
             @unknown default:
                 break
             }
-        }.start())
+        }).start())
 
-        self.disposables.add(ChannelManager.shared.channelsUpdate.producer.on { [weak self] (update) in
+        self.disposables.add(ChannelManager.shared.channelsUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self, let channelsUpdate = update else { return }
-
+            
             switch channelsUpdate.status {
             case .added:
                 self.allChannels = self.subscribedChannels
@@ -146,7 +146,7 @@ class ChannelSupplier {
                 self.allChannels = self.subscribedChannels.filter { (channel) -> Bool in
                     return channel.id != channelsUpdate.channel.id
                 }
-
+                
                 if let activeChannel = self.activeChannel.value {
                     switch activeChannel.channelType {
                     case .channel(let channel):
@@ -160,11 +160,11 @@ class ChannelSupplier {
             default:
                 break
             }
-        }.start())
+        }).start())
 
-        self.disposables.add(ChannelManager.shared.memberUpdate.producer.on { [weak self] (update) in
+        self.disposables.add(ChannelManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self, let memberUpdate = update else { return }
-
+            
             switch memberUpdate.status {
             case .left:
                 // We pre-emptivley leave a channel from the client, so we dont have a delay, and a user doesn't still see a channel they left.
@@ -184,7 +184,7 @@ class ChannelSupplier {
             default:
                 break
             }
-        }.start())
+        }).start())
     }
 
     func isChannelEqualToActiveChannel(channel: TCHChannel) -> Bool {

@@ -26,9 +26,9 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
 
         self.currentContent.producer
             .skipRepeats()
-            .on { [unowned self] (contentType) in
+            .on(value:  { [unowned self] (contentType) in
                 self.switchContent()
-        }.start()
+            }).start()
     }
 
     override func viewDidLayoutSubviews() {

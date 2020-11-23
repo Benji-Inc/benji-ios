@@ -22,15 +22,15 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         ToastScheduler.shared.delegate = self
 
-        self.homeVC.currentContent.producer.on { [unowned self] (contentType) in
+        self.homeVC.currentContent.producer.on(value:  { [unowned self] (contentType) in
             self.removeChild()
-
+            
             // Only use the deeplink once so that we don't repeatedly try
             // to deeplink whenever content changes.
             defer {
                 self.deepLink = nil
             }
-
+            
             switch contentType {
             case .feed(let vc):
                 let coordinator = FeedCoordinator(router: self.router,
@@ -48,7 +48,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                                                      profileVC: vc)
                 self.addChildAndStart(coordinator) { (_) in }
             }
-        }.start()
+        }).start()
 
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)

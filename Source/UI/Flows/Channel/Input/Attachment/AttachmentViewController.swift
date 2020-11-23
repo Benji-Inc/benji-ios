@@ -67,6 +67,8 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
             PHPhotoLibrary.requestAuthorization({ (status) in
                 completion(status == .authorized)
             })
+        case .limited:
+            completion(true)
         @unknown default:
             fatalError()
         }
@@ -116,8 +118,8 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
         }
 
         if let asst = info[.phAsset] as? PHAsset {
-            self.delegate.attachmentView(self, didSelect: Attachement(with: asset))
-        } else if let image = info[.originalImage] {
+            self.delegate.attachmentView(self, didSelect: Attachement(with: asst))
+        } else if let _ = info[.originalImage] {
 
         }
 

@@ -66,10 +66,10 @@ class HomeViewController: FullScreenViewController {
 
         self.currentContent.producer
             .skipRepeats()
-            .on { [unowned self] (contentType) in
+            .on(value:  { [unowned self] (contentType) in
                 self.switchContent()
                 self.tabView.updateTabItems(for: contentType)
-        }.start()
+            }).start()
 
         self.tabView.profileItem.didSelect = { [unowned self] in
             self.currentContent.value = .profile(self.profileVC)

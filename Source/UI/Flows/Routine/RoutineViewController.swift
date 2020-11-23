@@ -40,9 +40,9 @@ class RoutineViewController: NavigationBarViewController {
 
         self.routineInputVC.currentState.producer
             .skipRepeats()
-            .on { [unowned self] (_) in
+            .on(value:  { [unowned self] (_) in
                 self.updateNavigationBar()
-        }.start()
+            }).start()
     }
 
     override func getTitle() -> Localized {

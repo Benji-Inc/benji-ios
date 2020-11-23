@@ -43,9 +43,9 @@ class RoutineInputViewController: ViewController {
 
         self.currentState.producer
             .skipRepeats()
-            .on { [unowned self] (_) in
+            .on(value:  { [unowned self] (_) in
                 self.updateForStateChange()
-        }.start()
+            }).start()
 
         if UserNotificationManager.shared.getNotificationSettingsSynchronously().authorizationStatus != .authorized {
             self.currentState.value = .needsAuthorization

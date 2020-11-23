@@ -44,9 +44,9 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         self.collectionView = collectionView
         super.init()
         self.updateLayoutDataSource()
-        self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on { [unowned self] (channel) in
+        self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on(value:  { [unowned self] (channel) in
             guard let activeChannel = channel else { return }
-
+            
             switch activeChannel.channelType {
             case .channel(let channel):
                 channel.getMembersCount { (result, count) in
@@ -55,7 +55,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
             default:
                 break
             }
-        }.start())
+        }).start())
     }
 
     deinit {

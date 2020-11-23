@@ -11,16 +11,16 @@ import Foundation
 extension ChannelsViewController {
 
     func subscribeToUpdates() {
-        ChannelManager.shared.channelsUpdate.producer.on { [weak self] (update) in
+        ChannelManager.shared.channelsUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
-
+            
             guard let channelsUpdate = update else { return }
-
+            
             switch channelsUpdate.status {
             case .added:
                 guard !self.isSearching else { return }
                 guard channelsUpdate.channel.isOwnedByMe || channelsUpdate.channel.status == .joined else { return }
-
+                
                 let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
                 self.collectionViewManager.insert(item: displayable, at: 0)
             case .changed:
@@ -30,16 +30,16 @@ extension ChannelsViewController {
                 let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
                 self.collectionViewManager.delete(item: displayable)
             }
-
+            
             // Reload the cache because changes to the channel list have occurred.
             self.collectionViewManager.channelCache = ChannelSupplier.shared.allJoinedChannels
-            }.start()
+        }).start()
 
-        ChannelManager.shared.clientSyncUpdate.producer.on { [weak self] (update) in
+        ChannelManager.shared.clientSyncUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
-
+            
             guard let clientUpdate = update else { return }
-
+            
             switch clientUpdate {
             case .started:
                 break
@@ -53,13 +53,13 @@ extension ChannelsViewController {
             @unknown default:
                 break
             }
-            }.start()
+        }).start()
 
-        ChannelManager.shared.memberUpdate.producer.on { [weak self] (update) in
+        ChannelManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
-
+            
             guard let memberUpdate = update else { return }
-
+            
             switch memberUpdate.status {
             case .joined:
                 if memberUpdate.member.identity == User.current()?.objectId {
@@ -78,7 +78,7 @@ extension ChannelsViewController {
             default:
                 break
             }
-        }
+        })
         .start()
     }
 }

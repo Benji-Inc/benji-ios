@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '13.0'
+platform :ios, '14.0'
 
 target 'Benji' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
@@ -20,6 +20,6 @@ target 'Benji' do
 
   pod 'Branch'
 
-  pod 'SDWebImage', '~> 4.2'
+  pod 'SDWebImage'
 
 end

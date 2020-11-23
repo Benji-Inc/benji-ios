@@ -33,11 +33,11 @@ extension ChannelViewController {
     
     func subscribeToUpdates() {
 
-        self.disposables.add(ChannelManager.shared.messageUpdate.producer.on { [weak self] (update) in
+        self.disposables.add(ChannelManager.shared.messageUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
-
+            
             guard let channelUpdate = update, ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: channelUpdate.channel) else { return }
-
+            
             switch channelUpdate.status {
             case .added:
                 if self.collectionView.isTypingIndicatorHidden {
@@ -59,13 +59,13 @@ extension ChannelViewController {
             case .toastReceived:
                 break
             }
-        }.start())
+        }).start())
 
-        self.disposables.add(ChannelManager.shared.memberUpdate.producer.on { [weak self] (update) in
+        self.disposables.add(ChannelManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
-
+            
             guard let memberUpdate = update, ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: memberUpdate.channel) else { return }
-
+            
             switch memberUpdate.status {
             case .joined, .left:
                 memberUpdate.channel.getMembersCount { [unowned self] (result, count) in
@@ -86,20 +86,20 @@ extension ChannelViewController {
                                 self.collectionViewManager.userTyping = user
                                 self.collectionViewManager.setTypingIndicatorViewHidden(false, performUpdates: nil)
                             }
-                    }
+                        }
                 }
             }
-        }.start())
+        }).start())
 
-        self.disposables.add(ChannelManager.shared.clientUpdate.producer.on { [weak self] (update) in
+        self.disposables.add(ChannelManager.shared.clientUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self, let clientUpdate = update else { return }
-
+            
             switch clientUpdate.status {
             case .connectionState(let state):
                 self.messageInputAccessoryView.handleConnection(state: state)
             default:
                 break
             }
-        }.start())
+        }).start())
     }
 }
