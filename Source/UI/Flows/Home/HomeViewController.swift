@@ -99,7 +99,10 @@ class HomeViewController: ViewController {
         self.centerContainer.layer.shadowRadius = 10
         self.centerContainer.layer.masksToBounds = false
 
-        self.currentCenterVC?.view.frame = self.centerContainer.bounds
+        self.currentCenterVC?.view.frame = CGRect(x: 5,
+                                                  y: 0,
+                                                  width: self.centerContainer.width - 10,
+                                                  height: self.centerContainer.height)
     }
 
     private func switchContent() {
