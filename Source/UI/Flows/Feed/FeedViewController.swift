@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Koloda
 import TMROLocalization
 
 protocol FeedViewControllerDelegate: class {
@@ -16,10 +15,8 @@ protocol FeedViewControllerDelegate: class {
 
 class FeedViewController: ViewController {
 
-    private let collectionView = FeedCollectionView()
-
-    lazy var manager: FeedCollectionViewManager = {
-        let manager = FeedCollectionViewManager(with: self.collectionView)
+    lazy var manager: FeedManager = {
+        let manager = FeedManager()
         manager.didComplete = { [unowned self] feedType in
             self.delegate?.feedView(self, didSelect: feedType)
         }
@@ -58,13 +55,19 @@ class FeedViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
 
+        // Remove collection view
+        // Add 5 second timer/progress to each bar
+        // Add tap to move foward
+        // Add User photo to top right with time/date
+        // Add zoom fade to transition views. 
+
         self.view.addSubview(self.messageLabel)
         self.view.addSubview(self.reloadButton)
         self.messageLabel.alpha = 0
         self.reloadButton.alpha = 0
         self.view.addSubview(self.countDownView)
         self.view.addSubview(self.indicatorView)
-        self.view.addSubview(self.collectionView)
+        //self.view.addSubview(self.collectionView)
         self.indicatorView.alpha = 0
 
         self.countDownView.didExpire = { [unowned self] in
@@ -75,9 +78,6 @@ class FeedViewController: ViewController {
         self.reloadButton.didSelect = { [unowned self] in
             self.reloadFeed()
         }
-
-        self.collectionView.dataSource = self.manager
-        self.collectionView.delegate = self.manager
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -121,7 +121,7 @@ class FeedViewController: ViewController {
         self.countDownView.centerY = self.view.halfHeight * 0.8
         self.countDownView.centerOnX()
 
-        self.collectionView.expandToSuperviewSize()
+        //self.collectionView.expandToSuperviewSize()
 
         self.indicatorView.size = CGSize(width: self.view.width - 40, height: 2)
         self.indicatorView.top = 5

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Koloda
 
 class FeedView: View {
 

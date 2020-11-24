@@ -9,7 +9,6 @@ target 'Benji' do
   pod 'TwilioChatClient'
   pod 'GestureRecognizerClosures'
   pod 'ReactiveSwift'
-  pod 'Koloda'
   pod 'PhoneNumberKit'
   pod 'lottie-ios'
 
