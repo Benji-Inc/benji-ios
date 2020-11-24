@@ -23,7 +23,7 @@ protocol HomeViewControllerDelegate: class {
 
 typealias HomeDelegate = HomeViewControllerDelegate
 
-class HomeViewController: FullScreenViewController {
+class HomeViewController: ViewController {
 
     unowned let delegate: HomeDelegate
 
@@ -54,10 +54,9 @@ class HomeViewController: FullScreenViewController {
         super.initializeViews()
 
         self.view.set(backgroundColor: .background1)
-
-        self.contentContainer.addSubview(self.centerContainer)
-
-        self.contentContainer.addSubview(self.tabView)
+        self.view.addSubview(self.tabView)
+        self.view.addSubview(self.centerContainer)
+        self.centerContainer.set(backgroundColor: .background1)
 
         self.currentContent.producer
             .skipRepeats()
@@ -83,14 +82,22 @@ class HomeViewController: FullScreenViewController {
         super.viewDidLayoutSubviews()
 
         let height = 70 + self.view.safeAreaInsets.bottom
-        self.tabView.size = CGSize(width: self.contentContainer.width, height: height)
+        self.tabView.size = CGSize(width: self.view.width, height: height)
         self.tabView.centerOnX()
-        self.tabView.bottom = self.contentContainer.height + self.view.safeAreaInsets.bottom
+        self.tabView.pin(.bottom)
 
-        self.centerContainer.size = CGSize(width: self.contentContainer.width,
-                                           height: self.contentContainer.height - 156)
-        self.centerContainer.bottom = self.tabView.top
+        self.centerContainer.size = CGSize(width: self.view.width + 10,
+                                           height: self.view.safeAreaRect.height - self.tabView.height)
+        self.centerContainer.match(.bottom, to: .top, of: self.tabView, offset: 20)
         self.centerContainer.centerOnX()
+
+        self.centerContainer.layer.cornerRadius = 25
+        self.centerContainer.layer.cornerCurve = CALayerCornerCurve.continuous
+        self.centerContainer.layer.shadowColor = UIColor.black.cgColor
+        self.centerContainer.layer.shadowOpacity = 0.6
+        self.centerContainer.layer.shadowOffset = CGSize(width: 0, height: 5)
+        self.centerContainer.layer.shadowRadius = 10
+        self.centerContainer.layer.masksToBounds = false
 
         self.currentCenterVC?.view.frame = self.centerContainer.bounds
     }
@@ -98,8 +105,7 @@ class HomeViewController: FullScreenViewController {
     private func switchContent() {
 
         UIView.animate(withDuration: Theme.animationDuration, animations: {
-            self.centerContainer.alpha = 0
-            self.centerContainer.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            self.currentCenterVC?.view.alpha = 0
         }) { (completed) in
 
             self.currentCenterVC?.removeFromParentSuperview()
@@ -123,8 +129,7 @@ class HomeViewController: FullScreenViewController {
             self.view.setNeedsLayout()
 
             UIView.animate(withDuration: Theme.animationDuration) {
-                self.centerContainer.alpha = 1
-                self.centerContainer.transform = .identity
+                self.currentCenterVC?.view.alpha = 1
             }
         }
     }

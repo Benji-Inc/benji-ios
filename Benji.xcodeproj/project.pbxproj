@@ -190,7 +190,6 @@
 		D6815DB922EE1CAC00E71251 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6815DB822EE1CAC00E71251 /* FeedView.swift */; };
 		D6815DBB22EE1F1400E71251 /* FeedCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6815DBA22EE1F1400E71251 /* FeedCollectionViewManager.swift */; };
 		D6830222234AA35C006145FE /* DisplayableChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6830221234AA35C006145FE /* DisplayableChannel.swift */; };
-		D68483FF22CD0A1A00362AC3 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68483FE22CD0A1A00362AC3 /* TableView.swift */; };
 		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D6849CBD23B5BCAA006799F6 /* NewChannelButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6849CBC23B5BCAA006799F6 /* NewChannelButton.swift */; };
@@ -537,7 +536,6 @@
 		D6815DB822EE1CAC00E71251 /* FeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		D6815DBA22EE1F1400E71251 /* FeedCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCollectionViewManager.swift; sourceTree = "<group>"; };
 		D6830221234AA35C006145FE /* DisplayableChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableChannel.swift; sourceTree = "<group>"; };
-		D68483FE22CD0A1A00362AC3 /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D6849CBC23B5BCAA006799F6 /* NewChannelButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelButton.swift; sourceTree = "<group>"; };
@@ -1243,7 +1241,6 @@
 				D60C814122092D5300A127A3 /* PagingCollectionViewFlowLayout.swift */,
 				D684840B22CD48FA00362AC3 /* PassThroughView.swift */,
 				D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */,
-				D68483FE22CD0A1A00362AC3 /* TableView.swift */,
 				D6F733D923D37C6300FBC7BC /* TextEntryField.swift */,
 				D67896B022FF63EF0059BA75 /* TextFields */,
 				D64F5F2023B6713800216D99 /* TextInputAccessoryView.swift */,
@@ -1974,7 +1971,6 @@
 				D6BF68D7239CBF74008E79A1 /* FeedInviteView.swift in Sources */,
 				D6C9CD2C2471D6BE007376F7 /* ReadAllFooterView.swift in Sources */,
 				D65B0CE5234928620041A176 /* ProfileCoordinator.swift in Sources */,
-				D68483FF22CD0A1A00362AC3 /* TableView.swift in Sources */,
 				D69EB4452457E33600473530 /* SessionManager.swift in Sources */,
 				D67896B622FF86AB0059BA75 /* FeedViewController+Extensions.swift in Sources */,
 				D6AF0301220154E3002D5C75 /* ChannelManager.swift in Sources */,

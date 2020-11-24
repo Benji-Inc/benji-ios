@@ -13,7 +13,6 @@ class HomeTabView: View {
     private(set) var profileItem = ImageViewButton()
     private(set) var feedItem = ImageViewButton()
     private(set) var channelsItem = ImageViewButton()
-    private(set) var lineView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     private let flashLightView = View()
 
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
@@ -24,9 +23,8 @@ class HomeTabView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .background2)
+        self.set(backgroundColor: .lightPurple)
 
-        self.addSubview(self.lineView)
         self.addSubview(self.flashLightView)
         self.flashLightView.set(backgroundColor: .purple)
         self.addSubview(self.profileItem)
@@ -37,26 +35,24 @@ class HomeTabView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.lineView.expandToSuperviewWidth()
-        self.lineView.height = 1
-        self.lineView.pin(.top)
+        let topPadding: CGFloat = 20
 
         let itemWidth = self.width * 0.33
         let itemSize = CGSize(width: itemWidth, height: 60)
         self.profileItem.size = itemSize
-        self.profileItem.top = 0
+        self.profileItem.pin(.top, padding: topPadding)
         self.profileItem.left = 0
 
         self.feedItem.size = itemSize
-        self.feedItem.top = 0
+        self.feedItem.pin(.top, padding: topPadding)
         self.feedItem.left = self.profileItem.right
 
         self.channelsItem.size = itemSize
-        self.channelsItem.top = 0
+        self.channelsItem.pin(.top, padding: topPadding)
         self.channelsItem.left = self.feedItem.right
 
         self.flashLightView.size = CGSize(width: itemWidth * 0.35, height: 2)
-        self.flashLightView.bottom = itemSize.height
+        self.flashLightView.bottom = itemSize.height + topPadding
 
         guard self.indicatorCenterX == nil else { return }
 

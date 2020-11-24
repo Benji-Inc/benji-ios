@@ -65,10 +65,9 @@ extension ChannelViewController: MessageInputAccessoryViewDelegate {
     func resend(message: Messageable) {
         
         guard let systemMessage = MessageDeliveryManager.shared.resend(message: message, completion: { (newMessage, error) in
-            if let msg = newMessage, let e = error {
+            if let msg = newMessage, let _ = error {
                 msg.status = .error
                 self.collectionViewManager.updateItem(with: msg)
-                print(e)
             }
         }) else { return }
 
@@ -77,10 +76,9 @@ extension ChannelViewController: MessageInputAccessoryViewDelegate {
 
     func update(message: Messageable, text: String) {
         let updatedMessage = MessageSupplier.shared.update(message: message, text: text) { (msg, error) in
-            if let e = error {
+            if let _ = error {
                 msg.status = .error
                 self.collectionViewManager.updateItem(with: msg)
-                print(e)
             }
         }
 
