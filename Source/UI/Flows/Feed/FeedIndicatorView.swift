@@ -64,12 +64,19 @@ class FeedIndicatorView: View {
 
         element.animateProgress(with: 5.0, completion: completion)
     }
+
+    func resetAllIndicators() {
+        self.elements.forEach { (view) in
+            view.progressWidth = 0
+            view.layoutNow()
+        }
+    }
 }
 
 private class IndicatorView: View {
 
     let progressView = View()
-    private var progressWidth: CGFloat = 0
+    var progressWidth: CGFloat = 0
 
     override func initializeSubviews() {
         super.initializeSubviews()

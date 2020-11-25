@@ -87,7 +87,7 @@ class HomeViewController: ViewController {
         self.tabView.pin(.bottom)
 
         self.centerContainer.size = CGSize(width: self.view.width + 10,
-                                           height: self.view.safeAreaRect.height - self.tabView.height)
+                                           height: self.view.height - self.tabView.height - 20)
         self.centerContainer.match(.bottom, to: .top, of: self.tabView, offset: 20)
         self.centerContainer.centerOnX()
 

@@ -56,10 +56,6 @@ class FeedViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
 
-        // Add Views
-        // Add zoom fade to transition views.
-
-        // Add 5 second timer/progress to each bar
         // Add tap to move foward
         // Add User photo to top right with time/date
 
@@ -121,7 +117,7 @@ class FeedViewController: ViewController {
         self.countDownView.centerOnX()
 
         self.indicatorView.size = CGSize(width: self.view.width - 40, height: 2)
-        self.indicatorView.top = 5
+        self.indicatorView.pin(.top)
         self.indicatorView.centerOnX()
     }
 
@@ -143,7 +139,8 @@ class FeedViewController: ViewController {
         UIView.animate(withDuration: Theme.animationDuration, delay: 0, options: .curveEaseInOut, animations: {
             self.reloadButton.alpha = 0
             self.messageLabel.alpha = 0
-            self.indicatorView.alpha = 1 
+            self.indicatorView.alpha = 1
+            self.indicatorView.resetAllIndicators()
         }, completion: { completed in
             self.manager.showFirst()
         })
