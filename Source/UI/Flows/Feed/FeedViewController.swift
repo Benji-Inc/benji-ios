@@ -55,11 +55,12 @@ class FeedViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
 
-        // Remove collection view
+        // Add Views
+        // Add zoom fade to transition views.
+
         // Add 5 second timer/progress to each bar
         // Add tap to move foward
         // Add User photo to top right with time/date
-        // Add zoom fade to transition views. 
 
         self.view.addSubview(self.messageLabel)
         self.view.addSubview(self.reloadButton)
@@ -93,7 +94,6 @@ class FeedViewController: ViewController {
     }
 
     private func loadFeed() {
-
         User.current()?.getRoutine()
             .observe(with: { (result) in
                 switch result {
@@ -201,7 +201,6 @@ class FeedViewController: ViewController {
     }
 
     private func showMessage() {
-
         self.countDownView.alpha = 0
         self.messageLabel.alpha = 0
         self.view.layoutNow()

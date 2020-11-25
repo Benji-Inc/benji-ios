@@ -23,7 +23,7 @@ class HomeTabView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .lightPurple)
+        self.set(backgroundColor: .background2)
 
         self.addSubview(self.flashLightView)
         self.flashLightView.set(backgroundColor: .purple)
@@ -100,23 +100,23 @@ class HomeTabView: View {
             self.feedItem.imageView.image = UIImage(systemName: "square.stack.fill")
             self.feedItem.imageView.tintColor = Color.purple.color
             self.profileItem.imageView.image = UIImage(systemName: "person.crop.circle")
-            self.profileItem.imageView.tintColor = Color.white.color
+            self.profileItem.imageView.tintColor = Color.background3.color
             self.channelsItem.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right")
-            self.channelsItem.imageView.tintColor = Color.white.color
+            self.channelsItem.imageView.tintColor = Color.background3.color
         case .channels:
             self.feedItem.imageView.image = UIImage(systemName: "square.stack")
-            self.feedItem.imageView.tintColor = Color.white.color
+            self.feedItem.imageView.tintColor = Color.background3.color
             self.profileItem.imageView.image = UIImage(systemName: "person.crop.circle")
-            self.profileItem.imageView.tintColor = Color.white.color
+            self.profileItem.imageView.tintColor = Color.background3.color
             self.channelsItem.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right.fill")
             self.channelsItem.imageView.tintColor = Color.purple.color
         case .profile:
             self.feedItem.imageView.image = UIImage(systemName: "square.stack")
-            self.feedItem.imageView.tintColor = Color.white.color
+            self.feedItem.imageView.tintColor = Color.background3.color
             self.profileItem.imageView.image = UIImage(systemName: "person.crop.circle.fill")
             self.profileItem.imageView.tintColor = Color.purple.color
             self.channelsItem.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right")
-            self.channelsItem.imageView.tintColor = Color.white.color
+            self.channelsItem.imageView.tintColor = Color.background3.color
         }
     }
 }
