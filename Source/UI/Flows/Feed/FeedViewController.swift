@@ -16,25 +16,24 @@ protocol FeedViewControllerDelegate: class {
 class FeedViewController: ViewController {
 
     lazy var manager: FeedManager = {
-        let manager = FeedManager()
+        let manager = FeedManager(with: self.view)
         manager.didComplete = { [unowned self] feedType in
             self.delegate?.feedView(self, didSelect: feedType)
         }
         manager.didFinish = { [unowned self] in
             self.showReload()
         }
-        manager.didShowCardAtIndex = { [unowned self] index in
+        manager.didShowViewAtIndex = { [unowned self] index in
             self.indicatorView.update(to: index)
+        }
+        manager.didSetItems = { [unowned self] in
+            self.indicatorView.configure(with: manager.feedViews.count)
         }
         return manager
     }()
 
     weak var delegate: FeedViewControllerDelegate?
-    var items: [FeedType] = [] {
-        didSet {
-            self.indicatorView.configure(with: self.items.count)
-        }
-    }
+
     private let countDownView = CountDownView()
     private let messageLabel = MediumLabel()
     private let reloadButton = Button()
@@ -68,7 +67,6 @@ class FeedViewController: ViewController {
         self.reloadButton.alpha = 0
         self.view.addSubview(self.countDownView)
         self.view.addSubview(self.indicatorView)
-        //self.view.addSubview(self.collectionView)
         self.indicatorView.alpha = 0
 
         self.countDownView.didExpire = { [unowned self] in
@@ -98,7 +96,6 @@ class FeedViewController: ViewController {
             .observe(with: { (result) in
                 switch result {
                 case .success(let routine):
-                    self.items = []
                     self.determineMessage(with: routine)
                 case .failure(_):
                     self.addFirstItems()
@@ -120,8 +117,6 @@ class FeedViewController: ViewController {
         self.countDownView.size = CGSize(width: 200, height: 60)
         self.countDownView.centerY = self.view.halfHeight * 0.8
         self.countDownView.centerOnX()
-
-        //self.collectionView.expandToSuperviewSize()
 
         self.indicatorView.size = CGSize(width: self.view.width - 40, height: 2)
         self.indicatorView.top = 5
@@ -148,8 +143,7 @@ class FeedViewController: ViewController {
             self.messageLabel.alpha = 0
             self.indicatorView.alpha = 1 
         }, completion: { completed in
-            self.manager.reload()
-            self.indicatorView.update(to: 0)
+            self.manager.showFirst()
         })
     }
 
@@ -158,8 +152,6 @@ class FeedViewController: ViewController {
             self.currentTriggerDate != triggerDate,
             let anHourAfter = triggerDate.add(component: .hour, amount: 1),
             let anHourUntil = triggerDate.subtract(component: .hour, amount: 1) else { return }
-
-        self.items = []
 
         //Set the current trigger date so we dont reload for duplicates
         UserDefaults.standard.set(triggerDate, forKey: Routine.currentRoutineKey)
@@ -219,8 +211,6 @@ class FeedViewController: ViewController {
                 self.countDownView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
                 self.indicatorView.alpha = 1
             }, completion: nil)
-
-            self.manager.set(items: self.items)
         }
     }
 }

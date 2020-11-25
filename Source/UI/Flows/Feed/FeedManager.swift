@@ -10,88 +10,74 @@ import Foundation
 
 class FeedManager: NSObject {
 
-    private var items: [FeedType] = []
-
+    var didSetItems: CompletionOptional = nil
     var didComplete: (FeedType) -> Void = { _ in }
     var didFinish: CompletionOptional = nil
-    var didShowCardAtIndex: ((Int) -> Void)?
-    private var currentCard: FeedView?
+    var didShowViewAtIndex: ((Int) -> Void)?
+    private var currentView: FeedView?
+    private(set) var feedViews: [FeedView] = []
+    private let containerView: UIView
 
-    override init() {
+    init(with container: UIView) {
+        self.containerView = container
         super.init()
-        self.initialize()
-    }
-
-    private func initialize() {
-
     }
 
     func set(items: [FeedType]) {
-        self.items = items
-//        self.collectionView.reloadData()
-//        self.collectionView.layoutNow()
+        self.feedViews = items.map({ (type) -> FeedView in
+            let view = FeedView(with: type)
+            view.didComplete = { [unowned self] in
+                self.didComplete(type)
+            }
+            return view
+        })
+        
+        self.didSetItems?()
+        self.showFirst()
     }
 
-    func reload() {
-//        self.collectionView.resetCurrentCardIndex()
-//        self.collectionView.reloadData()
+    func showFirst() {
+        if let first = self.feedViews.first {
+            self.show(view: first, at: 0)
+        }
+    }
+
+    private func show(view: FeedView, at index: Int) {
+        let duration: TimeInterval = self.currentView.isNil ? 0 : 0.2
+        UIView.animate(withDuration: duration) {
+            self.currentView?.alpha = 0
+        } completion: { (completed) in
+            self.currentView?.removeFromSuperview()
+            self.currentView = view
+            view.alpha = 0
+            self.containerView.addSubview(view)
+            view.expandToSuperviewSize()
+            view.layoutNow()
+            UIView.animate(withDuration: 0.2) {
+                view.alpha = 1
+            } completion: { (completed) in
+                self.set(delay: 5, at: index)
+                self.didShowViewAtIndex?(index)
+            }
+        }
+    }
+
+    private func set(delay duration: TimeInterval, at index: Int) {
+
+        delay(duration) { [unowned self] in
+            if let nextView = self.feedViews[safe: index + 1]  {
+                self.show(view: nextView, at: index + 1)
+            } else {
+                self.finishFeed()
+            }
+        }
+    }
+
+    func finishFeed() {
+        UIView.animate(withDuration: 0.2) {
+            self.currentView?.alpha = 0
+        } completion: { (completed) in
+            self.didFinish?()
+        }
     }
 }
-
-//extension FeedManager: KolodaViewDataSource {
-
-//    func kolodaNumberOfCards(_ koloda: KolodaView) -> Int {
-//        return self.items.count
-//    }
-//
-//    func kolodaSpeedThatCardShouldDrag(_ koloda: KolodaView) -> DragSpeed {
-//        return .slow
-//    }
-//
-//    func koloda(_ koloda: KolodaView, viewForCardAt index: Int) -> UIView {
-//        guard let item = self.items[safe: index] else { return UIView() }
-//
-//        let feedView = FeedView()
-//        feedView.configure(with: item)
-//
-//        feedView.didComplete = {
-//            koloda.swipe(.right)
-//            self.didComplete(item)
-//        }
-//        return feedView
-//    }
-//}
-
-//extension FeedManager: KolodaViewDelegate {
-
-//    func koloda(_ koloda: KolodaView, allowedDirectionsForIndex index: Int) -> [SwipeResultDirection] {
-//        return [.left, .right]
-//    }
-//
-//    func koloda(_ koloda: KolodaView, didSelectCardAt index: Int) {}
-//
-//    func koloda(_ koloda: KolodaView, didSwipeCardAt index: Int, in direction: SwipeResultDirection) { }
-//
-//    func kolodaShouldApplyAppearAnimation(_ koloda: KolodaView) -> Bool {
-//        return false
-//    }
-//
-//    func kolodaDidRunOutOfCards(_ koloda: KolodaView) {
-//        self.didFinish?()
-//    }
-//
-//    func koloda(_ koloda: KolodaView, didShowCardAt index: Int) {
-//        if let view = koloda.viewForCard(at: index) {
-//            view.layoutNow()
-//        }
-//        self.didShowCardAtIndex?(index)
-//    }
-//
-//    func koloda(_ koloda: KolodaView, viewForCardOverlayAt index: Int) -> OverlayView? {
-//        return nil
-//    }
-//
-//    func kolodaShouldTransparentizeNextCard(_ koloda: KolodaView) -> Bool {
-//        return false
-//    }
-//}

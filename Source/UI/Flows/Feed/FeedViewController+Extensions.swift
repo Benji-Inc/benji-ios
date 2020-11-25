@@ -16,13 +16,9 @@ extension FeedViewController {
             guard let `self` = self, let clientUpdate = update else { return }
             
             switch clientUpdate {
-            case .started, .channelsListCompleted:
-                break
             case .completed:
                 self.addItems()
-            case .failed:
-                break
-            @unknown default:
+            default:
                 break
             }
         })
@@ -35,7 +31,7 @@ extension FeedViewController {
             .observeValue(with: { (items) in
                 runMain {
                     self.view.layoutNow()
-                    self.items = items
+                    self.manager.set(items: items)
                     self.showFeed()
                 }
             })
@@ -46,8 +42,7 @@ extension FeedViewController {
         .withResultToast()
         .observeValue(with: { (items) in
             runMain {
-                self.view.layoutNow()
-                self.items = items
+                self.manager.set(items: items)
                 self.showFeed()
             }
         })

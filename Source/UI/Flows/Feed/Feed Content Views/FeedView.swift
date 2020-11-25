@@ -23,20 +23,22 @@ class FeedView: View {
     lazy var newChannelView = FeedNewChannelView()
 
     var didComplete: CompletionOptional = nil
+    private(set) var feedType: FeedType
+
+    init(with type: FeedType) {
+        self.feedType = type
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func initializeSubviews() {
         super.initializeSubviews()
-
         self.addSubview(self.container)
-        self.set(backgroundColor: .background2)
-        self.roundCorners()
-        self.addShadow(withOffset: 20)
-    }
 
-    func configure(with item: FeedType?) {
-        guard let feedItem = item else { return }
-
-        switch feedItem {
+        switch self.feedType {
         case .timeSaved(let count):
             self.container.addSubview(self.introView)
             self.introView.set(count: count)
@@ -88,8 +90,6 @@ class FeedView: View {
                 self.didComplete?()
             }
         }
-
-        self.container.layoutNow()
     }
 
     override func layoutSubviews() {
