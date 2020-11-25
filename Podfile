@@ -13,7 +13,6 @@ target 'Benji' do
   pod 'lottie-ios'
 
   pod 'TMROFutures'
-  pod 'TMROExtensionObject'
   pod 'TMROCoordinator'
   pod 'TMROLocalization'
 
