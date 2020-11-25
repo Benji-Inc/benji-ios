@@ -77,6 +77,7 @@ private class IndicatorView: View {
 
     let progressView = View()
     var progressWidth: CGFloat = 0
+    private(set) var animator: UIViewPropertyAnimator?
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -96,11 +97,17 @@ private class IndicatorView: View {
     }
 
     func animateProgress(with duration: TimeInterval, completion: CompletionOptional) {
-        UIView.animate(withDuration: duration) {
+        self.animator = UIViewPropertyAnimator(duration: duration, curve: .linear, animations: {
             self.progressWidth = self.width
             self.layoutNow()
-        } completion: { (completed) in
+        })
+
+        self.animator?.isInterruptible = true 
+        self.animator?.addCompletion({ (position) in
+            guard position == .end else { return }
             completion?()
-        }
+        })
+
+        self.animator?.startAnimation()
     }
 }
