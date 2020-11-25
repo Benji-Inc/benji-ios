@@ -11,8 +11,7 @@ import Foundation
 class FeedIndicatorView: View {
 
     private let offset: CGFloat = 10
-    private var elements: [View] = []
-    private var indicator = View()
+    private var elements: [IndicatorView] = []
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -28,15 +27,10 @@ class FeedIndicatorView: View {
         guard count > 0 else { return }
         
         for _ in 1...count {
-            let element = View()
-            element.set(backgroundColor: .background2)
+            let element = IndicatorView()
             self.elements.append(element)
             self.addSubview(element)
         }
-
-        self.addSubview(self.indicator)
-        self.indicator.alpha = 0
-        self.indicator.set(backgroundColor: .teal)
 
         self.layoutNow()
     }
@@ -53,11 +47,6 @@ class FeedIndicatorView: View {
         
         let itemSize = CGSize(width: itemWidth, height: self.height)
 
-        self.indicator.size = itemSize
-        self.indicator.showShadow(withOffset: 2, color: Color.teal.color)
-        self.indicator.centerOnY()
-        self.indicator.makeRound()
-
         for (index, element) in self.elements.enumerated() {
             let offset = CGFloat(index) * (itemSize.width + self.offset)
             element.size = itemSize
@@ -67,15 +56,44 @@ class FeedIndicatorView: View {
         }
     }
 
-    func update(to index: Int) {
-        guard let element = self.elements[safe: index] else { return }
+    func update(to index: Int, completion: CompletionOptional) {
+        guard let element = self.elements[safe: index] else {
+            completion?()
+            return
+        }
 
-        UIView.animate(withDuration: Theme.animationDuration,
-                       delay: 0,
-                       options: .curveEaseIn,
-                       animations: {
-                        self.indicator.alpha = 1
-                        self.indicator.centerX = element.centerX
-        }, completion: nil)
+        element.animateProgress(with: 5.0, completion: completion)
+    }
+}
+
+private class IndicatorView: View {
+
+    let progressView = View()
+    private var progressWidth: CGFloat = 0
+
+    override func initializeSubviews() {
+        super.initializeSubviews()
+
+        self.set(backgroundColor: .background2)
+        self.addSubview(self.progressView)
+        self.progressView.set(backgroundColor: .teal)
+        self.progressView.showShadow(withOffset: 2, color: Color.teal.color)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.progressView.expandToSuperviewHeight()
+        self.progressView.pin(.left)
+        self.progressView.width = self.progressWidth
+    }
+
+    func animateProgress(with duration: TimeInterval, completion: CompletionOptional) {
+        UIView.animate(withDuration: duration) {
+            self.progressWidth = self.width
+            self.layoutNow()
+        } completion: { (completed) in
+            completion?()
+        }
     }
 }

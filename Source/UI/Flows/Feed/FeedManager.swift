@@ -42,6 +42,14 @@ class FeedManager: NSObject {
         }
     }
 
+    func advanceToNextView(from index: Int) {
+        if let nextView = self.feedViews[safe: index + 1]  {
+            self.show(view: nextView, at: index + 1)
+        } else {
+            self.finishFeed()
+        }
+    }
+
     private func show(view: FeedView, at index: Int) {
         let duration: TimeInterval = self.currentView.isNil ? 0 : 0.2
         UIView.animate(withDuration: duration) {
@@ -56,24 +64,12 @@ class FeedManager: NSObject {
             UIView.animate(withDuration: 0.2) {
                 view.alpha = 1
             } completion: { (completed) in
-                self.set(delay: 5, at: index)
                 self.didShowViewAtIndex?(index)
             }
         }
     }
 
-    private func set(delay duration: TimeInterval, at index: Int) {
-
-        delay(duration) { [unowned self] in
-            if let nextView = self.feedViews[safe: index + 1]  {
-                self.show(view: nextView, at: index + 1)
-            } else {
-                self.finishFeed()
-            }
-        }
-    }
-
-    func finishFeed() {
+    private func finishFeed() {
         UIView.animate(withDuration: 0.2) {
             self.currentView?.alpha = 0
         } completion: { (completed) in
