@@ -22,7 +22,8 @@ class FeedView: View {
     lazy var meditationView = FeedMeditationView()
     lazy var newChannelView = FeedNewChannelView()
 
-    var didComplete: CompletionOptional = nil
+    var didSelect: CompletionOptional = nil
+    var didSkip: CompletionOptional = nil
     private(set) var feedType: FeedType
 
     init(with type: FeedType) {
@@ -38,6 +39,10 @@ class FeedView: View {
         super.initializeSubviews()
         self.addSubview(self.container)
 
+        self.container.onTap { [unowned self] (tap) in
+            self.didSkip?()
+        }
+
         switch self.feedType {
         case .timeSaved(let count):
             self.container.addSubview(self.introView)
@@ -48,46 +53,46 @@ class FeedView: View {
             self.container.addSubview(self.unreadView)
             self.unreadView.configure(with: channel, count: count)
             self.unreadView.didSelect = { [unowned self] in
-                self.didComplete?()
+                self.didSelect?()
             }
         case .channelInvite(let channel):
             self.container.addSubview(self.inviteView)
             self.inviteView.configure(with: channel)
             self.inviteView.didComplete = { [unowned self] in
-                self.didComplete?()
+                self.didSelect?()
             }
         case .inviteAsk(let reservation):
             self.container.addSubview(self.needInvitesView)
             self.needInvitesView.reservation = reservation
             self.needInvitesView.button.didSelect = { [unowned self] in
-                self.didComplete?()
+                self.didSelect?()
             }
         case .rountine:
             self.container.addSubview(self.routineView)
             self.routineView.button.didSelect = { [unowned self] in
-                self.didComplete?()
+                self.didSelect?()
             }
         case .notificationPermissions:
             self.container.addSubview(self.notificationsView)
             self.notificationsView.didGivePermission = { [unowned self] in
-                self.didComplete?()
+                self.didSelect?()
             }
         case .connectionRequest(let connection):
             self.container.addSubview(self.connectionView)
             self.connectionView.configure(connection: connection)
             self.connectionView.didComplete = { [unowned self] in
-                self.didComplete?()
+                self.didSelect?()
             }
         case .meditation:
             self.container.addSubview(self.meditationView)
             self.meditationView.button.didSelect = { [unowned self] in
-                self.didComplete?()
+                self.didSelect?()
             }
         case .newChannel(let channel):
             self.container.addSubview(self.newChannelView)
             self.newChannelView.configure(with: channel)
             self.newChannelView.didSelect = { [unowned self] in
-                self.didComplete?()
+                self.didSelect?()
             }
         }
     }

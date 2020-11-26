@@ -71,6 +71,14 @@ class FeedIndicatorView: View {
             view.layoutNow()
         }
     }
+
+    func pauseProgress() {
+        self.elements.forEach { (view) in
+            if let animator = view.animator, animator.isRunning {
+                animator.pauseAnimation()
+            }
+        }
+    }
 }
 
 private class IndicatorView: View {
@@ -102,7 +110,7 @@ private class IndicatorView: View {
             self.layoutNow()
         })
 
-        self.animator?.isInterruptible = true 
+        self.animator?.isInterruptible = true
         self.animator?.addCompletion({ (position) in
             guard position == .end else { return }
             completion?()

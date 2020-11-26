@@ -16,21 +16,7 @@ protocol FeedViewControllerDelegate: class {
 class FeedViewController: ViewController {
 
     lazy var manager: FeedManager = {
-        let manager = FeedManager(with: self.view)
-        manager.didComplete = { [unowned self] feedType in
-            self.delegate?.feedView(self, didSelect: feedType)
-        }
-        manager.didFinish = { [unowned self] in
-            self.showReload()
-        }
-        manager.didShowViewAtIndex = { [unowned self] index in
-            self.indicatorView.update(to: index) { [unowned self] in
-                manager.advanceToNextView(from: index)
-            }
-        }
-        manager.didSetItems = { [unowned self] in
-            self.indicatorView.configure(with: manager.feedViews.count)
-        }
+        let manager = FeedManager(with: self.view, delegate: self)
         return manager
     }()
 
@@ -39,7 +25,7 @@ class FeedViewController: ViewController {
     private let countDownView = CountDownView()
     private let messageLabel = MediumLabel()
     private let reloadButton = Button()
-    private let indicatorView = FeedIndicatorView()
+    let indicatorView = FeedIndicatorView()
 
     var message: Localized? {
         didSet {
@@ -121,7 +107,7 @@ class FeedViewController: ViewController {
         self.indicatorView.centerOnX()
     }
 
-    private func showReload() {
+    func showReload() {
         runMain {
             self.messageLabel.set(text: "You are all caught up!\nSee you tomorrow 🤗", alignment: .center)
             self.view.bringSubviewToFront(self.reloadButton)

@@ -8,31 +8,48 @@
 
 import Foundation
 
+protocol FeedManagerDelegate: class {
+    func feedManagerDidSetItems(_ manager: FeedManager)
+    func feed(_ manager: FeedManager, didSelect type: FeedType)
+    func feedManagerDidFinish(_ manager: FeedManager)
+    func feed(_ manager: FeedManager, didSkip index: Int)
+    func feed(_ manager: FeedManager, didShowViewAt index: Int)
+}
+
 class FeedManager: NSObject {
 
-    var didSetItems: CompletionOptional = nil
-    var didComplete: (FeedType) -> Void = { _ in }
-    var didFinish: CompletionOptional = nil
-    var didShowViewAtIndex: ((Int) -> Void)?
     private var currentView: FeedView?
-    private(set) var feedViews: [FeedView] = []
+    private(set) var feedViews: [FeedView] = [] {
+        didSet {
+            self.delegate.feedManagerDidSetItems(self)
+        }
+    }
     private let containerView: UIView
+    private unowned let delegate: FeedManagerDelegate
 
-    init(with container: UIView) {
+    init(with container: UIView, delegate: FeedManagerDelegate) {
         self.containerView = container
+        self.delegate = delegate
         super.init()
     }
 
     func set(items: [FeedType]) {
-        self.feedViews = items.map({ (type) -> FeedView in
+
+        var views: [FeedView] = []
+
+        for (index, type) in items.enumerated() {
             let view = FeedView(with: type)
-            view.didComplete = { [unowned self] in
-                self.didComplete(type)
+            view.didSelect = { [unowned self] in
+                self.delegate.feed(self, didSelect: type)
             }
-            return view
-        })
-        
-        self.didSetItems?()
+            view.didSkip = { [unowned self] in
+                self.delegate.feed(self, didSkip: index)
+            }
+
+            views.append(view)
+        }
+
+        self.feedViews = views
         self.showFirst()
     }
 
@@ -64,7 +81,7 @@ class FeedManager: NSObject {
             UIView.animate(withDuration: 0.2) {
                 view.alpha = 1
             } completion: { (completed) in
-                self.didShowViewAtIndex?(index)
+                self.delegate.feed(self, didShowViewAt: index)
             }
         }
     }
@@ -73,7 +90,7 @@ class FeedManager: NSObject {
         UIView.animate(withDuration: 0.2) {
             self.currentView?.alpha = 0
         } completion: { (completed) in
-            self.didFinish?()
+            self.delegate.feedManagerDidFinish(self)
         }
     }
 }

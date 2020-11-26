@@ -48,3 +48,28 @@ extension FeedViewController {
         })
     }
 }
+
+extension FeedViewController: FeedManagerDelegate {
+
+    func feedManagerDidSetItems(_ manager: FeedManager) {
+        self.indicatorView.configure(with: manager.feedViews.count)
+    }
+
+    func feed(_ manager: FeedManager, didSelect type: FeedType) {
+        self.delegate?.feedView(self, didSelect: type)
+    }
+
+    func feedManagerDidFinish(_ manager: FeedManager) {
+        self.showReload()
+    }
+
+    func feed(_ manager: FeedManager, didSkip index: Int) {
+
+    }
+
+    func feed(_ manager: FeedManager, didShowViewAt index: Int) {
+        self.indicatorView.update(to: index) {
+            manager.advanceToNextView(from: index)
+        }
+    }
+}
