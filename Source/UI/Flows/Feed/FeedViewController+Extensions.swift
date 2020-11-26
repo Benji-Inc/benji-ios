@@ -64,12 +64,16 @@ extension FeedViewController: FeedManagerDelegate {
     }
 
     func feed(_ manager: FeedManager, didSkip index: Int) {
-
+        self.indicatorView.finishProgress()
     }
 
     func feed(_ manager: FeedManager, didShowViewAt index: Int) {
-        self.indicatorView.update(to: index) {
-            manager.advanceToNextView(from: index)
-        }
+        self.indicatorView.update(to: index)
+    }
+}
+
+extension FeedViewController: FeedIndicatorViewDelegate {
+    func feedIndicator(_ view: FeedIndicatorView, didFinishProgressFor index: Int) {
+        self.manager.advanceToNextView(from: index)
     }
 }

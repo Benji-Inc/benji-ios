@@ -24,6 +24,7 @@ class FeedView: View {
 
     var didSelect: CompletionOptional = nil
     var didSkip: CompletionOptional = nil
+
     private(set) var feedType: FeedType
 
     init(with type: FeedType) {

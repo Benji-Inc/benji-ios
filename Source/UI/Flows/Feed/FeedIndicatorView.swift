@@ -8,10 +8,24 @@
 
 import Foundation
 
+protocol FeedIndicatorViewDelegate: class {
+    func feedIndicator(_ view: FeedIndicatorView, didFinishProgressFor index: Int)
+}
+
 class FeedIndicatorView: View {
 
     private let offset: CGFloat = 10
     private var elements: [IndicatorView] = []
+    private unowned let delegate: FeedIndicatorViewDelegate
+
+    init(with delegate: FeedIndicatorViewDelegate) {
+        self.delegate = delegate
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -56,13 +70,15 @@ class FeedIndicatorView: View {
         }
     }
 
-    func update(to index: Int, completion: CompletionOptional) {
+    func update(to index: Int) {
         guard let element = self.elements[safe: index] else {
-            completion?()
+            self.delegate.feedIndicator(self, didFinishProgressFor: index)
             return
         }
 
-        element.animateProgress(with: 5.0, completion: completion)
+        element.animateProgress(with: 5.0) { [unowned self] in
+            self.delegate.feedIndicator(self, didFinishProgressFor: index)
+        }
     }
 
     func resetAllIndicators() {
@@ -72,10 +88,12 @@ class FeedIndicatorView: View {
         }
     }
 
-    func pauseProgress() {
-        self.elements.forEach { (view) in
+    func finishProgress() {
+        for (index, view) in self.elements.enumerated() {
             if let animator = view.animator, animator.isRunning {
-                animator.pauseAnimation()
+                animator.stopAnimation(false)
+                self.delegate.feedIndicator(self, didFinishProgressFor: index)
+                return
             }
         }
     }
@@ -105,6 +123,19 @@ private class IndicatorView: View {
     }
 
     func animateProgress(with duration: TimeInterval, completion: CompletionOptional) {
+        
+        if let current = self.animator {
+            if current.state == .active {
+                current.stopAnimation(true)
+                current.finishAnimation(at: .end)
+            } else if current.state == .stopped {
+                current.finishAnimation(at: .current)
+            } else if current.isRunning {
+                current.stopAnimation(true)
+                current.finishAnimation(at: .end)
+            }
+        }
+
         self.animator = UIViewPropertyAnimator(duration: duration, curve: .linear, animations: {
             self.progressWidth = self.width
             self.layoutNow()

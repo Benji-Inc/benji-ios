@@ -25,7 +25,7 @@ class FeedViewController: ViewController {
     private let countDownView = CountDownView()
     private let messageLabel = MediumLabel()
     private let reloadButton = Button()
-    let indicatorView = FeedIndicatorView()
+    lazy var indicatorView = FeedIndicatorView(with: self)
 
     var message: Localized? {
         didSet {
