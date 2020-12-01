@@ -32,7 +32,6 @@
 		D61592DC24FAD7B400B63412 /* AttachementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DB24FAD7B400B63412 /* AttachementCell.swift */; };
 		D61592DE24FAD7C600B63412 /* AttachementHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DD24FAD7C600B63412 /* AttachementHeaderView.swift */; };
 		D61592E024FC195D00B63412 /* MessageInputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DF24FC195D00B63412 /* MessageInputTextView.swift */; };
-		D6170BE7257698980057D00F /* ChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6170BE6257698980057D00F /* ChannelHeaderView.swift */; };
 		D61BD1752382404A0028AD1E /* BranchUniversalObject+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61BD1742382404A0028AD1E /* BranchUniversalObject+Extension.swift */; };
 		D61D38E3248C07F700BE457B /* MessageInputAccessoryView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E2248C07F700BE457B /* MessageInputAccessoryView+Animation.swift */; };
 		D61D38E5248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E4248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift */; };
@@ -373,7 +372,6 @@
 		D61592DB24FAD7B400B63412 /* AttachementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementCell.swift; sourceTree = "<group>"; };
 		D61592DD24FAD7C600B63412 /* AttachementHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementHeaderView.swift; sourceTree = "<group>"; };
 		D61592DF24FC195D00B63412 /* MessageInputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputTextView.swift; sourceTree = "<group>"; };
-		D6170BE6257698980057D00F /* ChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderView.swift; sourceTree = "<group>"; };
 		D61BD1742382404A0028AD1E /* BranchUniversalObject+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BranchUniversalObject+Extension.swift"; sourceTree = "<group>"; };
 		D61D38E2248C07F700BE457B /* MessageInputAccessoryView+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageInputAccessoryView+Animation.swift"; sourceTree = "<group>"; };
 		D61D38E4248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageInputAccessoryView+Connection.swift"; sourceTree = "<group>"; };
@@ -1622,7 +1620,6 @@
 				D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */,
 				D6830221234AA35C006145FE /* DisplayableChannel.swift */,
 				D6DDE422247D671400436E8D /* ReservationsFooter.swift */,
-				D6170BE6257698980057D00F /* ChannelHeaderView.swift */,
 			);
 			path = Channels;
 			sourceTree = "<group>";
@@ -1894,7 +1891,6 @@
 				D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */,
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
-				D6170BE7257698980057D00F /* ChannelHeaderView.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */,
 				D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */,

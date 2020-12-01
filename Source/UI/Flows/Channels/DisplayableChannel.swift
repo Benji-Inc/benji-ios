@@ -18,11 +18,6 @@ class DisplayableChannel: ManageableCellItem, Hashable, Comparable {
 
     var channelType: ChannelType
 
-    var headerModel: ChannelHeaderModel {
-        return ChannelHeaderModel(title: Lorem.randomString(),
-                                  subtitle: Lorem.randomString())
-    }
-
     init(channelType: ChannelType) {
         self.channelType = channelType
     }
