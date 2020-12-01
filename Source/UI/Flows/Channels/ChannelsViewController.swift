@@ -43,4 +43,10 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
 
         self.subscribeToUpdates()
     }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.collectionView.expandToSuperviewSize()
+    }
 }

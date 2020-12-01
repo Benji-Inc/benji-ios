@@ -14,7 +14,7 @@ class ChannelCell: UICollectionViewCell, ManageableCell {
 
     var onLongPress: (() -> Void)?
     let content = ChannelCellContentView()
-    private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
+    private let avatarView = AvatarView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,13 +26,39 @@ class ChannelCell: UICollectionViewCell, ManageableCell {
     }
 
     private func initializeViews() {
-        self.contentView.addSubview(self.content)
+        self.contentView.addSubview(self.avatarView)
     }
 
     func configure(with item: DisplayableChannel?) {
         guard let displayable = item else { return }
 
-        self.content.configure(with: displayable.channelType)
+        switch displayable.channelType {
+        case .system(_):
+            break
+        case .channel(let channel):
+            self.configure(channel: channel)
+        case .pending(_):
+            break
+        }
+
+        //self.content.configure(with: displayable.channelType)
+    }
+
+    private func configure(channel: TCHChannel) {
+
+        channel.getMembersAsUsers()
+            .observeValue(with: { (users) in
+                runMain {
+                    let notMeUsers = users.filter { (user) -> Bool in
+                        return user.objectId != User.current()?.objectId
+                    }
+
+                    if let first = notMeUsers.first {
+                        self.avatarView.set(avatar: first)
+                        self.layoutNow()
+                    }
+                }
+            })
     }
 
     func collectionViewManagerWillDisplay() {}
@@ -41,29 +67,16 @@ class ChannelCell: UICollectionViewCell, ManageableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        self.content.reset()
+        //self.content.reset()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.content.size = CGSize(width: self.contentView.width - (16 * 2), height: self.contentView.height)
-        self.content.centerOnXAndY()
-    }
+        self.avatarView.setSize(for: self.width)
+        self.avatarView.centerOnXAndY()
 
-    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        self.selectionFeedback.impactOccurred()
-        self.scaleDown()
-    }
-
-    override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        self.scaleUp()
-    }
-
-    override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-        self.scaleUp()
+        //        self.content.size = CGSize(width: self.contentView.width - (16 * 2), height: self.contentView.height)
+        //        self.content.centerOnXAndY()
     }
 }

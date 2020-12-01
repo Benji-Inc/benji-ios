@@ -8,20 +8,16 @@
 
 import Foundation
 
-class ChannelsCollectionView: CollectionView {
+class ChannelsCollectionView: PagingCollectionView {
 
     init() {
-        let flowLayout = UICollectionViewFlowLayout()
-        flowLayout.scrollDirection = .vertical
-        flowLayout.minimumLineSpacing = 16
-        flowLayout.sectionInset = UIEdgeInsets(top: 20, left: 0, bottom: 16, right: 0)
-        super.init(layout: flowLayout)
-
-        self.bounces = true
+        let layout = PagingCollectionViewFlowLayout(portraitRatio: 0.2, landscapeRatio: 0.1)
+        layout.sideItemScale = 0.95
+        super.init(pagingLayout: layout)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func initializeViews() {

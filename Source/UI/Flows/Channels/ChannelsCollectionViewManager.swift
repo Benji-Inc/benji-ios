@@ -13,12 +13,12 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
 
     var didSelectReservation: ((Reservation) -> Void)? = nil
 
-    override func collectionView(_ collectionView: UICollectionView,
-                                 layout collectionViewLayout: UICollectionViewLayout,
-                                 sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        return CGSize(width: collectionView.width, height: 84)
-    }
+//    override func collectionView(_ collectionView: UICollectionView,
+//                                 layout collectionViewLayout: UICollectionViewLayout,
+//                                 sizeForItemAt indexPath: IndexPath) -> CGSize {
+//        
+//        return CGSize(width: collectionView.width, height: 84)
+//    }
 
     func loadAllChannels() {
         let cycle = AnimationCycle(inFromPosition: .down,
@@ -107,33 +107,33 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
 
     // Footer
 
-    override func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath) -> UICollectionReusableView {
+//    override func collectionView(_ collectionView: UICollectionView,
+//                        viewForSupplementaryElementOfKind kind: String,
+//                        at indexPath: IndexPath) -> UICollectionReusableView {
+//
+//        switch kind {
+//        case UICollectionView.elementKindSectionFooter:
+//            return self.footer(for: collectionView, at: indexPath)
+//        default:
+//            fatalError("UNRECOGNIZED SECTION KIND")
+//        }
+//    }
 
-        switch kind {
-        case UICollectionView.elementKindSectionFooter:
-            return self.footer(for: collectionView, at: indexPath)
-        default:
-            fatalError("UNRECOGNIZED SECTION KIND")
-        }
-    }
-
-    override func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForFooterInSection section: Int) -> CGSize {
-        let height = (Theme.buttonHeight * 3) + (Theme.contentOffset * 4)
-        return CGSize(width: collectionView.width, height: height)
-    }
-
-    private func footer(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let channelsCollectionView = collectionView as? ChannelsCollectionView else { fatalError() }
-
-        let footer = channelsCollectionView.dequeueReusableFooterView(ReservationsFooter.self, for: indexPath)
-        footer.configure()
-        footer.didSelectReservation = { [unowned self] reservation in
-            self.didSelectReservation?(reservation)
-        }
-        return footer
-    }
+//    override func collectionView(_ collectionView: UICollectionView,
+//                        layout collectionViewLayout: UICollectionViewLayout,
+//                        referenceSizeForFooterInSection section: Int) -> CGSize {
+//        let height = (Theme.buttonHeight * 3) + (Theme.contentOffset * 4)
+//        return CGSize(width: collectionView.width, height: height)
+//    }
+//
+//    private func footer(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
+//        guard let channelsCollectionView = collectionView as? ChannelsCollectionView else { fatalError() }
+//
+//        let footer = channelsCollectionView.dequeueReusableFooterView(ReservationsFooter.self, for: indexPath)
+//        footer.configure()
+//        footer.didSelectReservation = { [unowned self] reservation in
+//            self.didSelectReservation?(reservation)
+//        }
+//        return footer
+//    }
 }

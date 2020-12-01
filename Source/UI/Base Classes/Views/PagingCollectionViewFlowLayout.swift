@@ -8,14 +8,14 @@
 
 import Foundation
 
-public enum FlowLayoutSpacingMode {
+enum FlowLayoutSpacingMode {
     case fixed(spacing: CGFloat)
     case overlap(visibleOffset: CGFloat)
 }
 
 class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
-    fileprivate struct LayoutState {
+    struct LayoutState {
         var size: CGSize
         var direction: UICollectionView.ScrollDirection
         func isEqual(_ otherState: LayoutState) -> Bool {
@@ -30,7 +30,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
     let portraitRatio: CGFloat
     let landscapeRatio: CGFloat
 
-    fileprivate var state = LayoutState(size: CGSize.zero, direction: .horizontal)
+    private var state = LayoutState(size: CGSize.zero, direction: .horizontal)
 
     init(portraitRatio: CGFloat,
          landscapeRatio: CGFloat) {
@@ -45,7 +45,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override open func prepare() {
+    override func prepare() {
         super.prepare()
 
         guard let collectionView = self.collectionView else { return }
@@ -61,7 +61,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
         }
     }
 
-    fileprivate func updateLayout() {
+    private func updateLayout() {
         guard let collectionView = self.collectionView else { return }
 
         let collectionSize = collectionView.bounds.size
@@ -69,7 +69,11 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
         let yInset = (collectionSize.height - self.itemSize.height) / 2
         let xInset = (collectionSize.width - self.itemSize.width) / 2
-        self.sectionInset = UIEdgeInsets.init(top: yInset, left: xInset, bottom: yInset, right: xInset)
+
+        self.sectionInset = UIEdgeInsets.init(top: yInset,
+                                              left: xInset,
+                                              bottom: yInset,
+                                              right: xInset)
 
         let side = isHorizontal ? self.itemSize.width : self.itemSize.height
         let scaledItemOffset =  (side - side*self.sideItemScale) / 2
@@ -98,11 +102,11 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
         }
     }
 
-    override open func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         return true
     }
 
-    override open func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+    override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         guard let attributes = super.layoutAttributesForElements(in: rect) else {
             return nil
         }
@@ -112,7 +116,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
         })
     }
 
-    fileprivate func transformLayoutAttributes(_ attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+    private func transformLayoutAttributes(_ attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         guard let collectionView = self.collectionView else { return attributes }
         let isHorizontal = (self.scrollDirection == .horizontal)
 
@@ -140,7 +144,9 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
         return attributes
     }
 
-    override open func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
+                                      withScrollingVelocity velocity: CGPoint) -> CGPoint {
+
         guard let collectionView = collectionView , !collectionView.isPagingEnabled,
             let layoutAttributes = self.layoutAttributesForElements(in: collectionView.bounds)
             else {
