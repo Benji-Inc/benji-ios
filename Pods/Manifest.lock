@@ -18,7 +18,6 @@ PODS:
     - SDWebImage/Core (= 5.10.0)
   - SDWebImage/Core (5.10.0)
   - TMROCoordinator (0.0.3)
-  - TMROExtensionObject (0.0.1)
   - TMROFutures (0.0.6)
   - TMROLocalization (0.0.2)
   - TwilioChatClient (4.0.2)
@@ -32,7 +31,6 @@ DEPENDENCIES:
   - ReactiveSwift
   - SDWebImage
   - TMROCoordinator
-  - TMROExtensionObject
   - TMROFutures
   - TMROLocalization
   - TwilioChatClient
@@ -48,7 +46,6 @@ SPEC REPOS:
     - ReactiveSwift
     - SDWebImage
     - TMROCoordinator
-    - TMROExtensionObject
     - TMROFutures
     - TMROLocalization
     - TwilioChatClient
@@ -63,11 +60,10 @@ SPEC CHECKSUMS:
   ReactiveSwift: 8d159904084e908856cde90b2e28823f3c7e485f
   SDWebImage: 9169792e9eec3e45bba2a0c02f74bf8bd922d1ee
   TMROCoordinator: 8e675e45c895feafdd548e1dd2de35430d3ea146
-  TMROExtensionObject: 08ab13fbe9226deeeff0738ca7ca8d06f0019e0d
   TMROFutures: 644772c28f997ce292e9b67985eca927efaa5d7a
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
   TwilioChatClient: bc386ab597f9fbb8e799491f15c07519d080a4f2
 
-PODFILE CHECKSUM: dd5ab646f6ca46c0d900928988c1d21432cb9524
+PODFILE CHECKSUM: d9f87bcd8c7db4900054edc141e38138ee30045a
 
 COCOAPODS: 1.10.0.rc.1
