@@ -17,10 +17,10 @@ protocol ChannelsViewControllerDelegate: class {
 class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsCollectionViewManager> {
 
     weak var delegate: ChannelsViewControllerDelegate?
+    private let headerView = ChannelHeaderView()
 
     init() {
-        let collectionView = ChannelsCollectionView()
-        super.init(with: collectionView)
+        super.init(with: ChannelsCollectionView())
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -30,7 +30,13 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.insertSubview(self.headerView, aboveSubview: self.collectionView)
+
         self.collectionViewManager.allowMultipleSelection = true
+
+        self.collectionViewManager.didFinishCenteringOnCell = { [unowned self] (item, index) in
+            self.headerView.set(model: item.headerModel)
+        }
 
         self.collectionViewManager.onSelectedItem.signal.observeValues { (selectedItem) in
             guard let item = selectedItem else { return }
@@ -48,5 +54,10 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
         super.viewDidLayoutSubviews()
 
         self.collectionView.expandToSuperviewSize()
+
+        self.headerView.expandToSuperviewWidth()
+        self.headerView.pin(.top)
+        self.headerView.pin(.left)
+        self.headerView.height = 100
     }
 }

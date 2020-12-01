@@ -16,11 +16,12 @@ extension Range: Comparable {
 
 class DisplayableChannel: ManageableCellItem, Hashable, Comparable {
 
-    var highlightText = String()
-    var highlightRange: Range<String.Index>? {
-        return self.channelType.uniqueName.range(of: self.highlightText)
-    }
     var channelType: ChannelType
+
+    var headerModel: ChannelHeaderModel {
+        return ChannelHeaderModel(title: Lorem.randomString(),
+                                  subtitle: Lorem.randomString())
+    }
 
     init(channelType: ChannelType) {
         self.channelType = channelType
@@ -39,8 +40,7 @@ class DisplayableChannel: ManageableCellItem, Hashable, Comparable {
     }
 
     static func == (lhs: DisplayableChannel, rhs: DisplayableChannel) -> Bool {
-        return lhs.channelType.uniqueName == rhs.channelType.uniqueName &&
-            lhs.highlightText == rhs.highlightText
+        return lhs.channelType.uniqueName == rhs.channelType.uniqueName 
     }
 
     func hash(into hasher: inout Hasher) {
@@ -48,9 +48,6 @@ class DisplayableChannel: ManageableCellItem, Hashable, Comparable {
     }
 
     static func < (lhs: DisplayableChannel, rhs: DisplayableChannel) -> Bool {
-        if let lhsRange = lhs.highlightRange, let rhsRange = rhs.highlightRange {
-            return lhsRange < rhsRange
-        }
-        return false
+        return lhs.channelType.dateUpdated < rhs.channelType.dateUpdated
     }
 }

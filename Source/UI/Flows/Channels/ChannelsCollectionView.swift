@@ -13,6 +13,7 @@ class ChannelsCollectionView: PagingCollectionView {
     init() {
         let layout = PagingCollectionViewFlowLayout(portraitRatio: 0.2, landscapeRatio: 0.1)
         layout.sideItemScale = 0.95
+        layout.scrollDirection = .vertical
         super.init(pagingLayout: layout)
     }
 

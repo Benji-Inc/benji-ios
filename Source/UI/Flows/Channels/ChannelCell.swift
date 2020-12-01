@@ -13,7 +13,6 @@ class ChannelCell: UICollectionViewCell, ManageableCell {
     typealias ItemType = DisplayableChannel
 
     var onLongPress: (() -> Void)?
-    let content = ChannelCellContentView()
     private let avatarView = AvatarView()
 
     override init(frame: CGRect) {
@@ -40,8 +39,6 @@ class ChannelCell: UICollectionViewCell, ManageableCell {
         case .pending(_):
             break
         }
-
-        //self.content.configure(with: displayable.channelType)
     }
 
     private func configure(channel: TCHChannel) {
@@ -67,7 +64,6 @@ class ChannelCell: UICollectionViewCell, ManageableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        //self.content.reset()
     }
 
     override func layoutSubviews() {
@@ -75,8 +71,5 @@ class ChannelCell: UICollectionViewCell, ManageableCell {
 
         self.avatarView.setSize(for: self.width)
         self.avatarView.centerOnXAndY()
-
-        //        self.content.size = CGSize(width: self.contentView.width - (16 * 2), height: self.contentView.height)
-        //        self.content.centerOnXAndY()
     }
 }

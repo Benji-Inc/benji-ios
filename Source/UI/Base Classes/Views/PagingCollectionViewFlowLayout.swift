@@ -30,7 +30,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
     let portraitRatio: CGFloat
     let landscapeRatio: CGFloat
 
-    private var state = LayoutState(size: CGSize.zero, direction: .horizontal)
+    private var state = LayoutState(size: CGSize.zero, direction: .vertical)
 
     init(portraitRatio: CGFloat,
          landscapeRatio: CGFloat) {
@@ -65,7 +65,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
         guard let collectionView = self.collectionView else { return }
 
         let collectionSize = collectionView.bounds.size
-        let isHorizontal = (self.scrollDirection == .horizontal)
+        let isHorizontal = self.scrollDirection == .horizontal
 
         let yInset = (collectionSize.height - self.itemSize.height) / 2
         let xInset = (collectionSize.width - self.itemSize.width) / 2
@@ -76,7 +76,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
                                               right: xInset)
 
         let side = isHorizontal ? self.itemSize.width : self.itemSize.height
-        let scaledItemOffset =  (side - side*self.sideItemScale) / 2
+        let scaledItemOffset =  (side - side * self.sideItemScale) / 2
 
         var ratio: CGFloat = 0
 
@@ -118,7 +118,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
     private func transformLayoutAttributes(_ attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         guard let collectionView = self.collectionView else { return attributes }
-        let isHorizontal = (self.scrollDirection == .horizontal)
+        let isHorizontal = self.scrollDirection == .horizontal
 
         let collectionCenter = isHorizontal ? collectionView.halfWidth : collectionView.halfHeight
         let offset = isHorizontal ? collectionView.contentOffset.x : collectionView.contentOffset.y
@@ -153,7 +153,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
                 return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
         }
 
-        let isHorizontal = (self.scrollDirection == .horizontal)
+        let isHorizontal = self.scrollDirection == .horizontal
 
         let midSide = (isHorizontal ? collectionView.bounds.size.width : collectionView.bounds.size.height) / 2
         let proposedContentOffsetCenterOrigin = (isHorizontal ? proposedContentOffset.x : proposedContentOffset.y) + midSide
@@ -162,8 +162,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
         if isHorizontal {
             let closest = layoutAttributes.sorted { abs($0.center.x - proposedContentOffsetCenterOrigin) < abs($1.center.x - proposedContentOffsetCenterOrigin) }.first ?? UICollectionViewLayoutAttributes()
             targetContentOffset = CGPoint(x: floor(closest.center.x - midSide), y: proposedContentOffset.y)
-        }
-        else {
+        } else {
             let closest = layoutAttributes.sorted { abs($0.center.y - proposedContentOffsetCenterOrigin) < abs($1.center.y - proposedContentOffsetCenterOrigin) }.first ?? UICollectionViewLayoutAttributes()
             targetContentOffset = CGPoint(x: proposedContentOffset.x, y: floor(closest.center.y - midSide))
         }
