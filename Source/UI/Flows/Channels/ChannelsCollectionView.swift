@@ -8,15 +8,12 @@
 
 import Foundation
 
-class ChannelsCollectionView: PagingCollectionView {
+class ChannelsCollectionView: CollectionView {
 
     init() {
-        let layout = PagingCollectionViewFlowLayout(portraitRatio: 0.2, landscapeRatio: 0.1)
-        layout.sideItemScale = 0.95
-        layout.scrollDirection = .horizontal
-
-        super.init(pagingLayout: layout)
-
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        super.init(layout: layout)
         self.clipsToBounds = true
     }
 

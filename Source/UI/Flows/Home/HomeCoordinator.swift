@@ -11,7 +11,7 @@ import Parse
 
 class HomeCoordinator: PresentableCoordinator<Void> {
 
-    private lazy var homeVC = HomeViewController(with: self)
+    private lazy var homeVC = HomeViewController()
 
     override func toPresentable() -> DismissableVC {
         return self.homeVC
@@ -88,23 +88,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         self.addChildAndStart(coordinator) { (result) in }
         let source = self.homeVC.currentCenterVC ?? self.homeVC
         self.router.present(coordinator, source: source)
-    }
-}
-
-extension HomeCoordinator: HomeViewControllerDelegate {
-
-    func homeViewDidTapAdd(_ controller: HomeViewController) {
-        self.removeChild()
-
-        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
-
-        self.addChildAndStart(coordinator) { (result) in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
-                self.startChannelFlow(for: nil)
-            }
-        }
-
-        self.router.present(coordinator, source: self.homeVC, animated: true)
     }
 
     func startChannelFlow(for type: ChannelType?) {

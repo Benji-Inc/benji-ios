@@ -13,6 +13,25 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
 
     var didSelectReservation: ((Reservation) -> Void)? = nil
 
+    override func collectionView(_ collectionView: UICollectionView,
+                                 layout collectionViewLayout: UICollectionViewLayout,
+                                 sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        guard let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout else { return .zero }
+
+        let offset: CGFloat = 20
+        let horizontalInsets = (offset * 2) + flowLayout.sectionInset.horizontal
+        let width = (collectionView.width - horizontalInsets) * 0.33
+        var verticalInsets = (offset * 3) + flowLayout.sectionInset.vertical
+        if let superview = UIWindow.topWindow() {
+            verticalInsets += superview.safeAreaInsets.vertical
+        }
+
+        let height = (collectionView.height - verticalInsets) * 0.33
+
+        return CGSize(width: width, height: height)
+    }
+
     func loadAllChannels() {
         let cycle = AnimationCycle(inFromPosition: .down,
                                    outToPosition: .down,

@@ -17,15 +17,7 @@ enum HomeContent: Equatable {
     case profile(ProfileViewController)
 }
 
-protocol HomeViewControllerDelegate: class {
-    func homeViewDidTapAdd(_ controller: HomeViewController)
-}
-
-typealias HomeDelegate = HomeViewControllerDelegate
-
 class HomeViewController: ViewController {
-
-    unowned let delegate: HomeDelegate
 
     lazy var feedVC = FeedViewController()
     lazy var channelsVC = ChannelsViewController()
@@ -36,19 +28,6 @@ class HomeViewController: ViewController {
 
     lazy var currentContent = MutableProperty<HomeContent>(.feed(self.feedVC))
     private(set) var currentCenterVC: UIViewController?
-
-    init(with delegate: HomeDelegate) {
-        self.delegate = delegate
-        super.init()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    required init?(withObject object: DeepLinkable) {
-        fatalError("init(withObject:) has not been implemented")
-    }
 
     override func initializeViews() {
         super.initializeViews()
