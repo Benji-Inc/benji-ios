@@ -32,8 +32,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
     private var state = LayoutState(size: CGSize.zero, direction: .vertical)
 
-    init(portraitRatio: CGFloat,
-         landscapeRatio: CGFloat) {
+    init(portraitRatio: CGFloat, landscapeRatio: CGFloat) {
 
         self.portraitRatio = portraitRatio
         self.landscapeRatio = landscapeRatio
@@ -64,7 +63,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
     private func updateLayout() {
         guard let collectionView = self.collectionView else { return }
 
-        let collectionSize = collectionView.bounds.size
+        let collectionSize = collectionView.size
         let isHorizontal = self.scrollDirection == .horizontal
 
         let yInset = (collectionSize.height - self.itemSize.height) / 2
@@ -117,6 +116,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
     }
 
     private func transformLayoutAttributes(_ attributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+
         guard let collectionView = self.collectionView else { return attributes }
         let isHorizontal = self.scrollDirection == .horizontal
 
@@ -147,7 +147,7 @@ class PagingCollectionViewFlowLayout: UICollectionViewFlowLayout {
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
                                       withScrollingVelocity velocity: CGPoint) -> CGPoint {
 
-        guard let collectionView = collectionView , !collectionView.isPagingEnabled,
+        guard let collectionView = self.collectionView , !collectionView.isPagingEnabled,
             let layoutAttributes = self.layoutAttributesForElements(in: collectionView.bounds)
             else {
                 return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)

@@ -219,6 +219,18 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
 
     // MARK: CollectionView Delegate
 
+    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) {
+            cell.contentView.backgroundColor = .clear
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) {
+            cell.contentView.backgroundColor = .clear
+        }
+    }
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.select(indexPath: indexPath)
     }

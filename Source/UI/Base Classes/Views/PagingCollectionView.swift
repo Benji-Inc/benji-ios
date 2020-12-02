@@ -16,7 +16,7 @@ class PagingCollectionView: CollectionView {
 
     init(pagingLayout: PagingCollectionViewFlowLayout) {
 
-        pagingLayout.scrollDirection = .horizontal
+        //pagingLayout.scrollDirection = .veri
 
         super.init(layout: pagingLayout)
 
@@ -55,7 +55,7 @@ class PagingCollectionView: CollectionView {
 
         let pointInParent = self.convert(point, to: parent).x
         // Only let subviews handle touches if they're in the middle of this view
-        if self.pageTapMargin * frame.width < pointInParent
+        if self.pageTapMargin * self.frame.width < pointInParent
             && pointInParent < (1 - self.pageTapMargin) * frame.width {
             return super.hitTest(point, with: event)
         } else {

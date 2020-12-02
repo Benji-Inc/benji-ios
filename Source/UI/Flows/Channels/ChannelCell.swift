@@ -9,22 +9,14 @@
 import Foundation
 import TwilioChatClient
 
-class ChannelCell: UICollectionViewCell, ManageableCell {
+class ChannelCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = DisplayableChannel
 
-    var onLongPress: (() -> Void)?
     private let avatarView = AvatarView()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.initializeViews()
-    }
+    override func initializeSubviews() {
+        super.initializeSubviews()
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    private func initializeViews() {
         self.contentView.addSubview(self.avatarView)
     }
 
@@ -57,9 +49,6 @@ class ChannelCell: UICollectionViewCell, ManageableCell {
                 }
             })
     }
-
-    func collectionViewManagerWillDisplay() {}
-    func collectionViewManagerDidEndDisplaying() {}
 
     override func prepareForReuse() {
         super.prepareForReuse()

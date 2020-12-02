@@ -13,18 +13,14 @@ class ChannelsCollectionView: PagingCollectionView {
     init() {
         let layout = PagingCollectionViewFlowLayout(portraitRatio: 0.2, landscapeRatio: 0.1)
         layout.sideItemScale = 0.95
-        layout.scrollDirection = .vertical
+        layout.scrollDirection = .horizontal
+
         super.init(pagingLayout: layout)
+
+        self.clipsToBounds = true
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func initializeViews() {
-        super.initializeViews()
-
-        self.register(ReservationsFooter.self,
-                      forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
     }
 }
