@@ -59,9 +59,7 @@ class ToastScheduler {
     private func createSystemMessageToast(for systemMessage: SystemMessage) -> Toast? {
         guard case MessageKind.text(let text) = systemMessage.kind else { return nil }
         let button = LoadingButton()
-        button.set(style: .rounded(color: .background3, text: "VIEW")) {
-
-        }
+        button.set(style: .rounded(color: .background3, text: "VIEW"))
         return Toast(id: systemMessage.id + "system_message",
                      analyticsID: "ToastSystemMessage",
                      priority: 1,

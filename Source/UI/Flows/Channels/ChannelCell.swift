@@ -12,53 +12,25 @@ import TwilioChatClient
 class ChannelCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = DisplayableChannel
 
-    private let avatarView = AvatarView()
+    private let channelContentView = ChannelContentView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.contentView.addSubview(self.avatarView)
+        self.contentView.addSubview(self.channelContentView)
     }
 
     func configure(with item: DisplayableChannel?) {
         guard let displayable = item else { return }
 
-        switch displayable.channelType {
-        case .system(_):
-            break
-        case .channel(let channel):
-            self.configure(channel: channel)
-        case .pending(_):
-            break
-        }
-    }
-
-    private func configure(channel: TCHChannel) {
-
-        channel.getMembersAsUsers()
-            .observeValue(with: { (users) in
-                runMain {
-                    let notMeUsers = users.filter { (user) -> Bool in
-                        return user.objectId != User.current()?.objectId
-                    }
-
-                    if let first = notMeUsers.first {
-                        self.avatarView.set(avatar: first)
-                        self.layoutNow()
-                    }
-                }
-            })
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-
+        self.channelContentView.configure(with: displayable.channelType)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.avatarView.setSize(for: self.width)
-        self.avatarView.centerOnXAndY()
+        self.channelContentView.size = CGSize(width: self.contentView.width * 0.95,
+                                              height: self.contentView.height)
+        self.channelContentView.centerOnXAndY()
     }
 }

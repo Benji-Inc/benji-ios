@@ -18,6 +18,8 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
 
     weak var delegate: ChannelsViewControllerDelegate?
 
+    private let reservationsButton = ReservationButton()
+
     init() {
         super.init(with: ChannelsCollectionView())
     }
@@ -40,6 +42,8 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
             self.delegate?.channelsView(self, didSelect: reservation)
         }
 
+        self.getReservations()
+
         self.subscribeToUpdates()
     }
 
@@ -47,5 +51,22 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
         super.viewDidLayoutSubviews()
 
         self.collectionView.expandToSuperviewSize()
+    }
+
+    private func getReservations() {
+        guard let user = User.current() else { return }
+
+        
+    }
+
+    private func didSelect(button: ReservationButton) {
+//        button.isLoading = true
+//       // button.reservation.prepareMetaData()
+//            .observeValue { (_) in
+//                //self.didSelectReservation?(button.reservation)
+//                runMain {
+//                    button.isLoading = false
+//                }
+//        }
     }
 }

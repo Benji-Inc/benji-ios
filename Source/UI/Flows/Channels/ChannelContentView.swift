@@ -48,6 +48,7 @@ class ChannelContentView: View {
         self.vibrancyEffectView.contentView.addSubview(self.dateLabel)
         self.blurView.contentView.addSubview(self.vibrancyEffectView)
         self.set(backgroundColor: .clear)
+        self.roundCorners()
     }
 
     func configure(with type: ChannelType) {
