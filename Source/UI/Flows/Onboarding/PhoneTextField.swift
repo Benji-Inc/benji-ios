@@ -13,9 +13,7 @@ import Lottie
 class PhoneTextField: PhoneNumberTextField {
     
     override var defaultRegion: String {
-        get {
-            return "US"
-        }
+        get { return "US" }
         set {}
     }
 
@@ -24,6 +22,7 @@ class PhoneTextField: PhoneNumberTextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        self.textContentType = .telephoneNumber
         self.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop

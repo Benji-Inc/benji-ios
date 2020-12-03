@@ -194,9 +194,9 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
             }
         }
 
-        self.alertConfirmation.didCancel = { [unowned self] in
-            self.resetAlertProgress()
-        }
+//        self.alertConfirmation.didCancel = { [unowned self] in
+//            self.resetAlertProgress()
+//        }
 
         self.contextButton.didSelect = { [unowned self] in
             self.expandingTextView.toggleInputView()

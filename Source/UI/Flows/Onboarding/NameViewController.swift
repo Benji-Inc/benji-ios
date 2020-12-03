@@ -39,7 +39,6 @@ class NameViewController: TextInputViewController<Void> {
         guard let text = self.textField.text, !text.isEmpty else { return }
 
         guard text.isValidPersonName else {
-            self.showAccessory()
             return
         }
 
@@ -53,9 +52,9 @@ class NameViewController: TextInputViewController<Void> {
         }
     }
 
-    override func getAccessoryText() -> Localized? {
-        guard let text = self.textField.text, !text.isEmpty, text.isValidPersonName else { return nil }
-
-        return LocalizedString(id: "", arguments: [], default: "Please enter a valid first and last name.")
-    }
+//    override func getAccessoryText() -> Localized? {
+//        guard let text = self.textField.text, !text.isEmpty, text.isValidPersonName else { return nil }
+//
+//        return LocalizedString(id: "", arguments: [], default: "Please enter a valid first and last name.")
+//    }
 }

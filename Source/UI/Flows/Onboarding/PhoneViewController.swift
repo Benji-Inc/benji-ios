@@ -40,8 +40,6 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         super.initializeViews()
 
         self.textField.autocorrectionType = .yes
-        self.textField.textContentType = .telephoneNumber
-
         self.textField.addTarget(self, action: #selector(editingDidEnd), for: .editingDidEnd)
     }
 
