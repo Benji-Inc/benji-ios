@@ -39,7 +39,6 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     override func initializeViews() {
         super.initializeViews()
 
-        self.textField.autocorrectionType = .yes
         self.textField.addTarget(self, action: #selector(editingDidEnd), for: .editingDidEnd)
     }
 

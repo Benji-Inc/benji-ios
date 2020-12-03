@@ -22,8 +22,11 @@ class PhoneTextField: PhoneNumberTextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.keyboardType = .phonePad
+        // Make sure pod is updated to use "" vs " " in shouldChangeCharacter in order to have autocomplete work
+        self.withPrefix = false
         self.textContentType = .telephoneNumber
+        self.keyboardType = .numbersAndPunctuation
+        
         self.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
