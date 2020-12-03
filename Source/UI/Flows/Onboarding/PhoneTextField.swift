@@ -22,6 +22,7 @@ class PhoneTextField: PhoneNumberTextField {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        self.keyboardType = .phonePad
         self.textContentType = .telephoneNumber
         self.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
