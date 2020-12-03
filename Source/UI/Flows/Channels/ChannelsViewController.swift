@@ -18,7 +18,8 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
 
     weak var delegate: ChannelsViewControllerDelegate?
 
-    private let reservationsButton = ReservationButton()
+    private let reservationButton = LoadingButton()
+    private var reservation: Reservation?
 
     init() {
         super.init(with: ChannelsCollectionView())
@@ -42,6 +43,8 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
             self.delegate?.channelsView(self, didSelect: reservation)
         }
 
+        self.view.insertSubview(self.reservationButton, aboveSubview: self.collectionView)
+        self.reservationButton.isHidden = true
         self.getReservations()
 
         self.subscribeToUpdates()
@@ -51,22 +54,41 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
         super.viewDidLayoutSubviews()
 
         self.collectionView.expandToSuperviewSize()
+
+        self.reservationButton.setSize(with: self.view.width)
+        self.reservationButton.pin(.bottom)
+        self.reservationButton.centerOnX()
     }
 
     private func getReservations() {
         guard let user = User.current() else { return }
 
-        
+        Reservation.getReservations(for: user)
+            .observeValue { [weak self] (reservations) in
+                guard let `self` = self else { return }
+
+                self.reservation = reservations.first(where: { (reservation) -> Bool in
+                    return !reservation.isClaimed
+                })
+
+                self.reservationButton.isHidden = self.reservation.isNil
+        }
+
+        self.reservationButton.didSelect = { [unowned self] in
+            if let reservation = self.reservation {
+                self.didSelect(reservation: reservation)
+            }
+        }
     }
 
-    private func didSelect(button: ReservationButton) {
-//        button.isLoading = true
-//       // button.reservation.prepareMetaData()
-//            .observeValue { (_) in
-//                //self.didSelectReservation?(button.reservation)
-//                runMain {
-//                    button.isLoading = false
-//                }
-//        }
+    private func didSelect(reservation: Reservation) {
+        self.reservationButton.isLoading = true
+       reservation.prepareMetaData()
+            .observeValue { (_) in
+                self.delegate?.channelsView(self, didSelect: reservation)
+                runMain {
+                    self.reservationButton.isLoading = false
+                }
+        }
     }
 }

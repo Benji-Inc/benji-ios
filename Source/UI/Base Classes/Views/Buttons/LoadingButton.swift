@@ -83,13 +83,6 @@ class LoadingButton: Button {
         self.isEnabled = true
     }
 
-//    func set(style: ButtonStyle,
-//             didSelect: @escaping () -> Void) {
-//
-//        self.didSelect = didSelect
-//        self.set(style: style)
-//    }
-
     private func showLoading() {
         self.alphaOutAnimator.stopAnimation(true)
         self.alphaOutAnimator.addAnimations {

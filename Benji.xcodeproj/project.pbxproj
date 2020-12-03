@@ -200,7 +200,6 @@
 		D685CEB2243B7BFA0018F3E3 /* ConversationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEB1243B7BFA0018F3E3 /* ConversationContext.swift */; };
 		D685CEB6243D8DCF0018F3E3 /* DisplayUnderlinedLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEB5243D8DCF0018F3E3 /* DisplayUnderlinedLabel.swift */; };
 		D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685E9262331177100CC1BAB /* UserNotificationManager.swift */; };
-		D686DA2425783A89000B4C04 /* ReservationButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA2325783A89000B4C04 /* ReservationButton.swift */; };
 		D68BEAD1248302E700C95D31 /* User+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEAD0248302E700C95D31 /* User+Cloud.swift */; };
 		D68BEAD424831FA000C95D31 /* ReservationsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */; };
 		D68D765B24835A81009B246B /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D68D765A24835A81009B246B /* error.json */; };
@@ -525,7 +524,6 @@
 		D685CEB1243B7BFA0018F3E3 /* ConversationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationContext.swift; sourceTree = "<group>"; };
 		D685CEB5243D8DCF0018F3E3 /* DisplayUnderlinedLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayUnderlinedLabel.swift; sourceTree = "<group>"; };
 		D685E9262331177100CC1BAB /* UserNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
-		D686DA2325783A89000B4C04 /* ReservationButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationButton.swift; sourceTree = "<group>"; };
 		D68BEAD0248302E700C95D31 /* User+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Cloud.swift"; sourceTree = "<group>"; };
 		D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsCoordinator.swift; sourceTree = "<group>"; };
 		D68D765A24835A81009B246B /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
@@ -1530,7 +1528,6 @@
 				D6DADF6B2207DCA8007D9EB1 /* ChannelsViewController.swift */,
 				D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */,
 				D6830221234AA35C006145FE /* DisplayableChannel.swift */,
-				D686DA2325783A89000B4C04 /* ReservationButton.swift */,
 			);
 			path = Channels;
 			sourceTree = "<group>";
@@ -1862,7 +1859,6 @@
 				D642737F22C9A7EC0088256B /* ContactsManager.swift in Sources */,
 				D6347392241EAA840071E9DA /* Invitee.swift in Sources */,
 				D6BF68D7239CBF74008E79A1 /* FeedInviteView.swift in Sources */,
-				D686DA2425783A89000B4C04 /* ReservationButton.swift in Sources */,
 				D6C9CD2C2471D6BE007376F7 /* ReadAllFooterView.swift in Sources */,
 				D65B0CE5234928620041A176 /* ProfileCoordinator.swift in Sources */,
 				D69EB4452457E33600473530 /* SessionManager.swift in Sources */,
