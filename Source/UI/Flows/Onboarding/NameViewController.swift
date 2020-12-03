@@ -25,10 +25,9 @@ class NameViewController: TextInputViewController<Void> {
     override func initializeViews() {
         super.initializeViews()
 
-        self.textField.autocapitalizationType = .words
-        self.textField.keyboardType = .default
+        self.textField.autocorrectionType = .yes
         self.textField.textContentType = .name
-        self.textField.enablesReturnKeyAutomatically = true
+        self.textField.keyboardType = .namePhonePad
     }
 
     override func textFieldDidEndEditing(_ textField: UITextField) {
