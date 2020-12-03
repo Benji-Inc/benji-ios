@@ -51,15 +51,13 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        guard let handler = self.keyboardHandler else { return }
-
         let width = self.view.width - (Theme.contentOffset * 2)
         let height = self.textEntry.getHeight(for: width)
         self.textEntry.size = CGSize(width: width, height: height)
         self.textEntry.centerOnX()
 
-        let defaultOffset = self.view.height - 30
-        self.textEntry.bottom = defaultOffset - handler.currentKeyboardHeight
+        let defaultOffset = self.view.height - 340
+        self.textEntry.bottom = defaultOffset
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -81,12 +79,10 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
 
     func textFieldDidEndEditing(_ textField: UITextField) {}
 
-    func handleKeyboard(frame: CGRect, with animationDuration: TimeInterval, timingCurve: UIView.AnimationCurve) {
-        guard let handler = self.keyboardHandler, handler.currentKeyboardHeight > 0 else { return }
-
-        UIView.animate(withDuration: animationDuration) {
-            self.view.layoutNow()
-        }
+    func handleKeyboard(frame: CGRect,
+                        with animationDuration: TimeInterval,
+                        timingCurve: UIView.AnimationCurve) {
+        self.view.layoutNow()
     }
 }
 
