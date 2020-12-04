@@ -15,6 +15,7 @@ class FaceDetectionViewController: UIViewController {
     var sequenceHandler = VNSequenceRequestHandler()
 
     @IBOutlet var faceView: FaceView!
+    @IBOutlet var liveView: UIView!
 
     let session = AVCaptureSession()
     var previewLayer: AVCaptureVideoPreviewLayer!
@@ -37,9 +38,9 @@ class FaceDetectionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.maxX = view.bounds.maxX
-        self.midY = view.bounds.midY
-        self.maxY = view.bounds.maxY
+        self.maxX = self.view.bounds.maxX
+        self.midY = self.view.bounds.midY
+        self.maxY = self.view.bounds.maxY
     }
 
     func begin() {
@@ -96,6 +97,10 @@ class FaceDetectionViewController: UIViewController {
         self.previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
         self.previewLayer.videoGravity = .resizeAspectFill
         self.previewLayer.frame = self.view.bounds
+        self.previewLayer.cornerRadius = 5
+        self.previewLayer.borderWidth = 3
+        self.previewLayer.borderColor = Color.purple.color.cgColor
+        self.liveView.layer.insertSublayer(self.previewLayer, at: 0)
     }
 
     func capturePhoto() {

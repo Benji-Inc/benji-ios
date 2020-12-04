@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,18 +15,32 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PVc-wi-uHa" customClass="FaceView" customModule="Benji" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dwe-gl-ZbC">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PVc-wi-uHa" customClass="FaceView" customModule="Benji" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="atn-5z-uHZ"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
-                        <viewLayoutGuide key="safeArea" id="atn-5z-uHZ"/>
+                        <constraints>
+                            <constraint firstItem="PVc-wi-uHa" firstAttribute="leading" secondItem="atn-5z-uHZ" secondAttribute="leading" id="EGn-LC-Usa"/>
+                            <constraint firstItem="PVc-wi-uHa" firstAttribute="trailing" secondItem="atn-5z-uHZ" secondAttribute="trailing" id="QkP-RK-aZy"/>
+                            <constraint firstAttribute="bottom" secondItem="PVc-wi-uHa" secondAttribute="bottom" id="SS1-9n-toc"/>
+                            <constraint firstItem="atn-5z-uHZ" firstAttribute="bottom" secondItem="dwe-gl-ZbC" secondAttribute="bottom" id="ScT-cB-Wkr"/>
+                            <constraint firstItem="dwe-gl-ZbC" firstAttribute="top" secondItem="atn-5z-uHZ" secondAttribute="top" id="aXn-hF-5uL"/>
+                            <constraint firstItem="atn-5z-uHZ" firstAttribute="trailing" secondItem="dwe-gl-ZbC" secondAttribute="trailing" id="kr0-gO-zGI"/>
+                            <constraint firstItem="PVc-wi-uHa" firstAttribute="top" secondItem="zPV-5F-fQv" secondAttribute="top" id="qdh-dg-FZw"/>
+                            <constraint firstItem="dwe-gl-ZbC" firstAttribute="leading" secondItem="atn-5z-uHZ" secondAttribute="leading" id="uSU-5A-gTg"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="faceView" destination="PVc-wi-uHa" id="u8F-gp-xuE"/>
+                        <outlet property="liveView" destination="dwe-gl-ZbC" id="NwG-YG-Go5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GS6-fw-PG0" userLabel="First Responder" sceneMemberID="firstResponder"/>

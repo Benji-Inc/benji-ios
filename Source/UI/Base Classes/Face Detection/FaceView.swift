@@ -50,7 +50,7 @@ class FaceView: UIView {
 
         context.strokePath()
 
-        Color.white.color.setStroke()
+        Color.white.color.withAlphaComponent(0.5).setStroke()
 
         if !self.leftEye.isEmpty {
             context.addLines(between: self.leftEye)
