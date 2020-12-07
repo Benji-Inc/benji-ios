@@ -13,7 +13,9 @@ protocol FeedManagerDelegate: class {
     func feed(_ manager: FeedManager, didSelect type: FeedType)
     func feedManagerDidFinish(_ manager: FeedManager)
     func feed(_ manager: FeedManager, didSkip index: Int)
-    func feed(_ manager: FeedManager, didShowViewAt index: Int)
+    func feed(_ manager: FeedManager,
+              didShowViewAt index: Int,
+              with duration: TimeInterval)
 }
 
 class FeedManager: NSObject {
@@ -81,7 +83,7 @@ class FeedManager: NSObject {
             UIView.animate(withDuration: 0.2) {
                 view.alpha = 1
             } completion: { (completed) in
-                self.delegate.feed(self, didShowViewAt: index)
+                self.delegate.feed(self, didShowViewAt: index, with: view.feedType.duration)
             }
         }
     }

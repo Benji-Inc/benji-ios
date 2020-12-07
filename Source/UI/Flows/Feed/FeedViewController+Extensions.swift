@@ -67,8 +67,10 @@ extension FeedViewController: FeedManagerDelegate {
         self.indicatorView.finishProgress()
     }
 
-    func feed(_ manager: FeedManager, didShowViewAt index: Int) {
-        self.indicatorView.update(to: index)
+    func feed(_ manager: FeedManager,
+              didShowViewAt index: Int,
+              with duration: TimeInterval) {
+        self.indicatorView.update(to: index, with: duration)
     }
 }
 

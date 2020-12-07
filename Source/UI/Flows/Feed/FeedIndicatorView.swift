@@ -70,13 +70,15 @@ class FeedIndicatorView: View {
         }
     }
 
-    func update(to index: Int) {
+    func update(to index: Int, with duration: TimeInterval) {
+
+        // TODO: ADD DURATION FOR EACH TYPE
         guard let element = self.elements[safe: index] else {
             self.delegate.feedIndicator(self, didFinishProgressFor: index)
             return
         }
 
-        element.animateProgress(with: 5.0) { [unowned self] in
+        element.animateProgress(with: duration) { [unowned self] in
             self.delegate.feedIndicator(self, didFinishProgressFor: index)
         }
     }
@@ -136,7 +138,9 @@ private class IndicatorView: View {
             }
         }
 
-        self.animator = UIViewPropertyAnimator(duration: duration, curve: .linear, animations: {
+        self.animator = UIViewPropertyAnimator(duration: duration,
+                                               curve: .linear,
+                                               animations: {
             self.progressWidth = self.width
             self.layoutNow()
         })

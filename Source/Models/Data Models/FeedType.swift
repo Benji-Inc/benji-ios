@@ -80,4 +80,13 @@ enum FeedType: Comparable {
     static func == (lhs: FeedType, rhs: FeedType) -> Bool {
         return lhs.id == rhs.id
     }
+
+    var duration: TimeInterval {
+        switch self {
+        case .rountine:
+            return 10.0
+        default:
+            return 5.0
+        }
+    }
 }
