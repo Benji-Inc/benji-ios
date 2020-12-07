@@ -24,7 +24,7 @@ extension Button {
             self.alphaOutAnimator.addAnimations { [unowned self] in
                 if let color = self.defaultColor {
                     self.setBackground(color: color.color, forUIControlState: .normal)
-                    //self.errorLabel.alpha = 0.0
+                    self.errorLabel.alpha = 0.0
                 }
                 for view in self.subviews {
                     if let label = view as? UILabel {
@@ -35,7 +35,8 @@ extension Button {
             self.alphaOutAnimator.startAnimation(afterDelay: 0.1)
             self.alphaOutAnimator.addCompletion { (position) in
                 if position == .end {
-                    //self.loadingIndicator.startAnimating()
+                    self.animationView.isHidden = false
+                    self.animationView.play()
                 }
                 promise.resolve(with: ())
             }
@@ -58,7 +59,7 @@ extension Button {
                 for view in self.subviews {
                     if let label = view as? UILabel {
                         // Don't show the error label while we're in the normal button state.
-                       // label.alpha = label === self.errorLabel ? 0 : 1
+                        label.alpha = label === self.errorLabel ? 0 : 1
                     }
                 }
             }
@@ -69,7 +70,7 @@ extension Button {
                 promise.resolve(with: ())
             }
 
-            //self.loadingIndicator.stopAnimating()
+            self.animationView.stop()
         }
 
         return promise
@@ -83,13 +84,10 @@ extension Button {
         self.alphaOutAnimator.stopAnimation(true)
 
         // End the loading state
-        //self.loadingIndicator.stopAnimating()
-
-        // Store the current button color so we can set it again later
-        //self.defaultColor = self.buttonColor
+        self.animationView.stop()
 
         // Update button UI for error state
-        //self.errorLabel.setText(TomorrowError.userPromptText(message: description))
+        //self.errorLabel.setText(description)
         self.isUserInteractionEnabled = true
         self.isEnabled = true
 
@@ -99,44 +97,12 @@ extension Button {
                     label.alpha = 0.0
                 }
             }
-            //self.errorLabel.alpha = 1.0
+            self.errorLabel.alpha = 1.0
             self.setBackground(color: Color.red.color, forUIControlState: .normal)
         }) { (_) in
             promise.resolve(with: ())
         }
 
         return promise
-    }
-
-    private func showLoading() {
-        self.alphaOutAnimator.stopAnimation(true)
-        self.alphaOutAnimator.addAnimations {
-            for view in self.subviews {
-                if let label = view as? UILabel {
-                    label.alpha = 0.0
-                }
-            }
-        }
-        self.alphaOutAnimator.startAnimation(afterDelay: 0.1)
-        self.alphaOutAnimator.addCompletion { (position) in
-            if position == .end {
-                //self.animationView.isHidden = !self.isLoading
-                self.animationView.play()
-            }
-        }
-    }
-
-    private func hideLoading() {
-        self.alphaInAnimator.stopAnimation(true)
-        self.alphaInAnimator.addAnimations {
-            for view in self.subviews {
-                if let label = view as? UILabel {
-                    label.alpha = 1.0
-                }
-            }
-        }
-        self.alphaInAnimator.startAnimation()
-        //self.animationView.isHidden = !self.isLoading
-        self.animationView.stop()
     }
 }

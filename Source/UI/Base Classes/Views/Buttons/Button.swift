@@ -38,6 +38,7 @@ class Button: UIButton, Statusable {
     private let selectionImpact = UIImpactFeedbackGenerator()
     var style: ButtonStyle?
     var shouldScale: Bool = true
+    lazy var errorLabel = RegularLabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,6 +59,9 @@ class Button: UIButton, Statusable {
         self.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
+
+        self.addSubview(self.errorLabel)
+        self.errorLabel.alpha = 0.0
     }
 
     //Sets text font, color and background color
@@ -66,6 +70,9 @@ class Button: UIButton, Statusable {
 
         switch style {
         case .rounded(let color, let text), .normal(let color, let text):
+
+            self.defaultColor = color
+
             var localizedString = localized(text)
 
             localizedString = casingType.format(string: localizedString)
@@ -96,7 +103,7 @@ class Button: UIButton, Statusable {
             self.layer.borderWidth = 2
 
         case .icon(let image):
-            self.setBackgroundImage(image, for: state)
+            self.setBackgroundImage(image, for: self.state)
         case .animation(let view, _):
             self.addSubview(view)
             view.expandToSuperviewSize()
@@ -113,16 +120,21 @@ class Button: UIButton, Statusable {
         self.animationView.size = CGSize(width: 18, height: 18)
         self.animationView.centerOnXAndY()
 
-        guard let style = self.style else { return }
+        self.errorLabel.height = 20
+        self.errorLabel.width = self.width - 40
+        self.errorLabel.textAlignment = .center
+        self.errorLabel.centerOnXAndY()
 
-        switch style {
-        case .animation(let view, let inset):
-            view.frame = CGRect(x: inset,
-                                y: inset,
-                                width: self.width - (inset * 2),
-                                height: self.height - (inset * 2))
-        default:
-            break
+        if let style = self.style {
+            switch style {
+            case .animation(let view, let inset):
+                view.frame = CGRect(x: inset,
+                                    y: inset,
+                                    width: self.width - (inset * 2),
+                                    height: self.height - (inset * 2))
+            default:
+                break
+            }
         }
     }
 
