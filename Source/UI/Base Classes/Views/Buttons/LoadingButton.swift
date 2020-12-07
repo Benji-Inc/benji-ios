@@ -11,35 +11,25 @@ import Lottie
 
 class LoadingButton: Button {
 
-    let animationView = AnimationView(name: "loading")
-
-    private let alphaOutAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
-                                                          curve: .linear,
-                                                          animations: nil)
-
-    private let alphaInAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
-                                                         curve: .linear,
-                                                         animations: nil)
-
     private let shouldRound: Bool = true
     var canShowLoading: Bool = true
 
-    var isLoading: Bool = false {
-        didSet {
-            runMain {
-                guard self.canShowLoading else { return }
-
-                if self.isLoading {
-                    self.showLoading()
-                } else {
-                    self.hideLoading()
-                }
-
-                self.isUserInteractionEnabled = !self.isLoading
-                self.isEnabled = !self.isLoading
-            }
-        }
-    }
+//    var isLoading: Bool = false {
+//        didSet {
+//            runMain {
+//                guard self.canShowLoading else { return }
+//
+////                if self.isLoading {
+////                    self.showLoading()
+////                } else {
+////                    self.hideLoading()
+////                }
+//
+//                self.isUserInteractionEnabled = !self.isLoading
+//                self.isEnabled = !self.isLoading
+//            }
+//        }
+//    }
 
     init() {
         super.init(frame: .zero)
@@ -81,37 +71,5 @@ class LoadingButton: Button {
 
     @objc func keyboardWillHide(notification: Notification) {
         self.isEnabled = true
-    }
-
-    private func showLoading() {
-        self.alphaOutAnimator.stopAnimation(true)
-        self.alphaOutAnimator.addAnimations {
-            for view in self.subviews {
-                if let label = view as? UILabel {
-                    label.alpha = 0.0
-                }
-            }
-        }
-        self.alphaOutAnimator.startAnimation(afterDelay: 0.1)
-        self.alphaOutAnimator.addCompletion { (position) in
-            if position == .end {
-                self.animationView.isHidden = !self.isLoading
-                self.animationView.play()
-            }
-        }
-    }
-
-    private func hideLoading() {
-        self.alphaInAnimator.stopAnimation(true)
-        self.alphaInAnimator.addAnimations {
-            for view in self.subviews {
-                if let label = view as? UILabel {
-                    label.alpha = 1.0
-                }
-            }
-        }
-        self.alphaInAnimator.startAnimation()
-        self.animationView.isHidden = !self.isLoading
-        self.animationView.stop()
     }
 }

@@ -9,6 +9,7 @@
 import Foundation
 import TMROLocalization
 import Lottie
+import TMROFutures
 
 enum ButtonStyle {
     case rounded(color: Color, text: Localized)
@@ -17,7 +18,21 @@ enum ButtonStyle {
     case animation(view: AnimationView, inset: CGFloat = 8)
 }
 
-class Button: UIButton {
+class Button: UIButton, Statusable {
+
+    let alphaOutAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
+                                                  curve: .linear,
+                                                  animations: nil)
+
+    let alphaInAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
+                                                 curve: .linear,
+                                                 animations: nil)
+
+    /// Used to store the initial color of the button to return to from error state
+    var defaultColor: Color?
+
+    let animationView = AnimationView(name: "loading")
+    var isLoading: Bool = false
 
     var didSelect: CompletionOptional = nil
     private let selectionImpact = UIImpactFeedbackGenerator()
@@ -34,10 +49,15 @@ class Button: UIButton {
     }
 
     func initializeSubviews() {
-        self.onTap { [unowned self] (tap) in
-            self.selectionImpact.impactOccurred()
-            self.didSelect?()
-        }
+
+//        self.addAction(for: UIControl.Event.touchUpInside) { [unowned self] in
+//            self.selectionImpact.impactOccurred()
+//            self.didSelect?()
+//        }
+
+        self.addSubview(self.animationView)
+        self.animationView.contentMode = .scaleAspectFit
+        self.animationView.loopMode = .loop
     }
 
     //Sets text font, color and background color
@@ -90,6 +110,9 @@ class Button: UIButton {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        self.animationView.size = CGSize(width: 18, height: 18)
+        self.animationView.centerOnXAndY()
+
         guard let style = self.style else { return }
 
         switch style {
@@ -111,6 +134,18 @@ class Button: UIButton {
         self.size = CGSize(width: width - (Theme.contentOffset * 2), height: Theme.buttonHeight)
     }
 
+    @discardableResult
+    func handleEvent(status: EventStatus) -> Future<Void> {
+        switch status {
+        case .loading, .initial:
+            return self.handleLoadingState()
+        case .complete, .saved, .invalid, .custom(_), .valid:
+            return self.handleNormalState()
+        case .error(let message):
+            return self.handleError(message)
+        }
+    }
+
     override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         guard self.shouldScale else { return }
@@ -123,7 +158,7 @@ class Button: UIButton {
     override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         guard self.shouldScale else { return }
-
+        
         if let touch = touches.first, let view = touch.view, let button = view as? UIButton {
             button.scaleUp()
         }

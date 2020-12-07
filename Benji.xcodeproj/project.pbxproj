@@ -311,6 +311,8 @@
 		D6FC8098237A66220089AACC /* ChannelSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FC8097237A66220089AACC /* ChannelSupplier.swift */; };
 		D6FC809A237A68F50089AACC /* ChannelViewController+Updates.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FC8099237A68F50089AACC /* ChannelViewController+Updates.swift */; };
 		D6FC809C237A6ED30089AACC /* ChannelCollectionViewManager+Typing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FC809B237A6ED30089AACC /* ChannelCollectionViewManager+Typing.swift */; };
+		D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF02C257EB71700F9789B /* Button+Extensions.swift */; };
+		D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -643,6 +645,8 @@
 		D6FC8097237A66220089AACC /* ChannelSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSupplier.swift; sourceTree = "<group>"; };
 		D6FC8099237A68F50089AACC /* ChannelViewController+Updates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelViewController+Updates.swift"; sourceTree = "<group>"; };
 		D6FC809B237A6ED30089AACC /* ChannelCollectionViewManager+Typing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Typing.swift"; sourceTree = "<group>"; };
+		D6FEF02C257EB71700F9789B /* Button+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Extensions.swift"; sourceTree = "<group>"; };
+		D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1021,6 +1025,7 @@
 			isa = PBXGroup;
 			children = (
 				D60C814522092F6B00A127A3 /* Button.swift */,
+				D6FEF02C257EB71700F9789B /* Button+Extensions.swift */,
 				D6D6D57123A6D43100D2B5BF /* CancelButton.swift */,
 				D642738B22C9B24E0088256B /* LoadingButton.swift */,
 				D6D6D57523A70DF100D2B5BF /* SearchButton.swift */,
@@ -1444,6 +1449,7 @@
 			children = (
 				D6D1501721D5F40F00CD8CE4 /* UICollectionView+Extensions.swift */,
 				D6EE715123B7C854000ED221 /* UICollectionViewLayout+Extensions.swift */,
+				D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */,
 				D6D1503221D7E5F800CD8CE4 /* UIDynamicAnimator+Extensions.swift */,
 				D64C6AA3232EA13300DB7257 /* UIEdgeInsets+Extensions.swift */,
 				D60C81472209314200A127A3 /* UIImage+Extensions.swift */,
@@ -1639,6 +1645,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6347394241EB2C30071E9DA /* AlertControllerAnimatedTransitioning.swift in Sources */,
+				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				D6EAB68823E6211200B90D5A /* ProfilePhotoViewController.swift in Sources */,
 				D6A401AB24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift in Sources */,
 				D62BB73D244D3AEF00607677 /* UserNotificationFactory.swift in Sources */,
@@ -1653,6 +1660,7 @@
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
 				D61D38E3248C07F700BE457B /* MessageInputAccessoryView+Animation.swift in Sources */,
 				80D4A21823039B82007CB5F1 /* RoutineInputContentView.swift in Sources */,
+				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
 				D642735122C857760088256B /* MessageContext.swift in Sources */,
 				D60C814422092E4700A127A3 /* PagingCollectionView.swift in Sources */,
 				D61EC0DB21D30CB300204BEE /* Dismissable.swift in Sources */,
