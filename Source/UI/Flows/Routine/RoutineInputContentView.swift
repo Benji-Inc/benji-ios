@@ -16,7 +16,7 @@ class RoutineInputContentView: View {
     let plusButton = Button()
     let minusButton = Button()
     let timeHump = TimeHumpView()
-    let setRoutineButton = LoadingButton()
+    let setRoutineButton = Button()
 
     var timeLabelYOffset: CGFloat = 200
 

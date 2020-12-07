@@ -10,7 +10,7 @@ import Foundation
 
 class LoadMoreSectionHeader: UICollectionReusableView {
 
-    private(set) var button = LoadingButton()
+    private(set) var button = Button()
 
     override init(frame: CGRect) {
         super.init(frame: frame)

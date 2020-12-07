@@ -13,8 +13,8 @@ class FeedConnectionView: View {
 
     private let avatarView = AvatarView()
     private let textView = FeedTextView()
-    private let acceptButton = LoadingButton()
-    private let declineButton = LoadingButton()
+    private let acceptButton = Button()
+    private let declineButton = Button()
     var didComplete: () -> Void = {}
 
     private var connection: Connection?

@@ -18,7 +18,7 @@ class MeditationViewController: NavigationBarViewController {
     private let emojiLabel = DisplayThinLabel()
     private let circleView = View()
     private let label = SmallLabel()
-    private let button = LoadingButton()
+    private let button = Button()
 
     private var startDate: Date?
     private var endDate: Date?

@@ -18,7 +18,7 @@ class AlertViewController: ModalViewController {
     private(set) var buttons: [Button] = []
     private lazy var alertTransitionDelegate = AlertControllerTransitioningDelegate()
 
-    init(text: Localized, buttons: [LoadingButton]) {
+    init(text: Localized, buttons: [Button]) {
         self.text = text
         self.buttons = buttons
         super.init()
@@ -43,7 +43,7 @@ class AlertViewController: ModalViewController {
         self.alertView.containerView.addSubview(self.getAlertContainerContentView())
     }
 
-    func configure(text: Localized, buttons: [LoadingButton]) {
+    func configure(text: Localized, buttons: [Button]) {
 
         self.label.set(text: text,
                        color: .white,

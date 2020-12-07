@@ -18,7 +18,7 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
 
     weak var delegate: ChannelsViewControllerDelegate?
 
-    private let reservationButton = LoadingButton()
+    private let reservationButton = Button()
     private var reservation: Reservation?
 
     init() {

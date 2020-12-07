@@ -11,7 +11,7 @@ import Foundation
 class FeedNotificationPermissionsView: View {
 
     let textView = FeedTextView()
-    let button = LoadingButton()
+    let button = Button()
     var didGivePermission: CompletionOptional = nil
 
     override func initializeSubviews() {

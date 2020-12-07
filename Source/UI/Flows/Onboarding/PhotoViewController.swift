@@ -37,7 +37,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private let borderView = View()
 
     private let beginButton = Button()
-    private let confirmButton = LoadingButton()
+    private let confirmButton = Button()
     private let retakeButton = Button()
 
     private let buttonContainer = View()

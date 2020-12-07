@@ -11,7 +11,7 @@ import Foundation
 class FeedRoutineView: View {
 
     let textView = FeedTextView()
-    let button = LoadingButton()
+    let button = Button()
     var didSelect: () -> Void = {}
 
     override func initializeSubviews() {
