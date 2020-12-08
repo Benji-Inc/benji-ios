@@ -75,7 +75,7 @@ class RoutineInputViewController: ViewController {
             }
         })
 
-        self.content.minusButton.didSelect = { [unowned self] in
+        self.content.minusButton.didSelect { [unowned self] in
             if let newDate = self.selectedDate.subtract(component: .minute, amount: 15) {
                 let minute = round(num: CGFloat(newDate.minute), toMultipleOf: 15)
                 var dateComponents = Calendar.current.dateComponents([.year, .month, .day,
@@ -86,7 +86,7 @@ class RoutineInputViewController: ViewController {
             }
         }
 
-        self.content.plusButton.didSelect = { [unowned self] in
+        self.content.plusButton.didSelect { [unowned self] in
             if let newDate = self.selectedDate.add(component: .minute, amount: 15) {
                 let minute = round(num: CGFloat(newDate.minute), toMultipleOf: 15)
                 var dateComponents = Calendar.current.dateComponents([.year, .month, .day,
@@ -97,7 +97,7 @@ class RoutineInputViewController: ViewController {
             }
         }
 
-        self.content.setRoutineButton.didSelect = { [unowned self] in
+        self.content.setRoutineButton.didSelect { [unowned self] in
             switch self.currentState.value {
             case .needsAuthorization:
                 self.didTapNeedsAthorization?()

@@ -58,7 +58,7 @@ class FeedViewController: ViewController {
         }
 
         self.reloadButton.set(style: .normal(color: .purple, text: "Reload"))
-        self.reloadButton.didSelect = { [unowned self] in
+        self.reloadButton.didSelect { [unowned self] in
             self.reloadFeed()
         }
     }

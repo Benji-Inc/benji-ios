@@ -74,7 +74,7 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
                 self.reservationButton.isHidden = self.reservation.isNil
         }
 
-        self.reservationButton.didSelect = { [unowned self] in
+        self.reservationButton.didSelect { [unowned self] in
             if let reservation = self.reservation {
                 self.didSelect(reservation: reservation)
             }

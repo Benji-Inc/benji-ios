@@ -53,7 +53,7 @@ class MeditationViewController: NavigationBarViewController {
 
         self.view.addSubview(self.button)
         self.button.set(style: .normal(color: .purple, text: "Record"))
-        self.button.didSelect = { [unowned self] in
+        self.button.didSelect { [unowned self] in
             self.handleButtonTap()
         }
         self.button.alpha = 0

@@ -35,11 +35,11 @@ class AttachmentCollectionViewManager: CollectionViewManager<AttachementCell> {
 
         let header = cv.dequeueReusableHeaderView(AttachementHeaderView.self, for: indexPath)
 
-        header.photoButton.didSelect = { [unowned self] in
+        header.photoButton.didSelect { [unowned self] in
             self.didSelectPhotoOption?()
         }
 
-        header.libraryButton.didSelect = { [unowned self] in
+        header.libraryButton.didSelect { [unowned self] in
             self.didSelectLibraryOption?()
         }
 

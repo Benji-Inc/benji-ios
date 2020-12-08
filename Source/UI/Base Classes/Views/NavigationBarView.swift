@@ -14,11 +14,11 @@ class NavigationBarView: View {
 
     private(set) var titleLabel = DisplayThinLabel()
 
-    let leftContainer = UIView()
+    let leftButton = Button()
     private(set) var leftItem: UIView?
     private var leftTapHandler: (() -> Void)?
 
-    let rightContainer = UIView()
+    let rightButton = Button()
     private(set) var rightItem: UIView?
     private var rightTapHandler: (() -> Void)?
 
@@ -29,15 +29,13 @@ class NavigationBarView: View {
 
         self.addSubview(self.titleLabel)
 
-        self.addSubview(self.leftContainer)
-        self.leftContainer.onTap { [unowned self] (tapRecognizer) in
-            guard self.leftItem != nil else { return }
+        self.addSubview(self.leftButton)
+        self.leftButton.didSelect { [unowned self] in
             self.leftTapHandler?()
         }
 
-        self.addSubview(self.rightContainer)
-        self.rightContainer.onTap { [unowned self] (tapRecognizer) in
-            guard self.rightItem != nil else { return }
+        self.addSubview(self.rightButton)
+        self.rightButton.didSelect { [unowned self] in
             self.rightTapHandler?()
         }
     }
@@ -45,18 +43,18 @@ class NavigationBarView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.leftContainer.left = NavigationBarView.margin
-        self.leftContainer.size = CGSize(width: 30, height: 30)
-        self.leftContainer.centerOnY()
+        self.leftButton.left = NavigationBarView.margin
+        self.leftButton.size = CGSize(width: 30, height: 30)
+        self.leftButton.centerOnY()
 
-        self.leftItem?.frame = self.leftContainer.bounds
+        self.leftItem?.frame = self.leftButton.bounds
         self.leftItem?.contentMode = .center
 
-        self.rightContainer.size = CGSize(width: 30, height: 30)
-        self.rightContainer.right = self.width - NavigationBarView.margin
-        self.rightContainer.centerOnY()
+        self.rightButton.size = CGSize(width: 30, height: 30)
+        self.rightButton.right = self.width - NavigationBarView.margin
+        self.rightButton.centerOnY()
 
-        self.rightItem?.frame = self.rightContainer.bounds
+        self.rightItem?.frame = self.rightButton.bounds
         self.rightItem?.contentMode = .center
 
         if self.leftItem == nil && self.rightItem == nil {
@@ -64,7 +62,7 @@ class NavigationBarView: View {
             self.titleLabel.width = self.width - 2 * NavigationBarView.margin
         } else {
             // Otherwise, fill the space between the item containers with the title label
-            self.titleLabel.width = self.rightContainer.left - self.leftContainer.right
+            self.titleLabel.width = self.rightButton.left - self.leftButton.right
         }
         self.titleLabel.height = self.height
         self.titleLabel.centerOnXAndY()
@@ -76,7 +74,7 @@ class NavigationBarView: View {
 
         self.leftItem = item
         if let leftItem = self.leftItem {
-            self.leftContainer.addSubview(leftItem)
+            self.leftButton.addSubview(leftItem)
         }
 
         self.leftTapHandler = tapHandler
@@ -89,7 +87,7 @@ class NavigationBarView: View {
 
         self.rightItem = item
         if let rightItem = self.rightItem {
-            self.rightContainer.addSubview(rightItem)
+            self.rightButton.addSubview(rightItem)
         }
 
         self.rightTapHandler = tapHandler

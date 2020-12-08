@@ -25,7 +25,7 @@ class FeedNewChannelView: View {
         self.addSubview(self.button)
 
         self.button.set(style: .normal(color: .blue, text: "OPEN"))
-        self.button.didSelect = { [unowned self] in
+        self.button.didSelect { [unowned self] in
             self.didSelect()
         }
     }

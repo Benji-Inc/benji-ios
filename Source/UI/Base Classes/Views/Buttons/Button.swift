@@ -34,10 +34,7 @@ class Button: UIButton, Statusable {
     let animationView = AnimationView(name: "loading")
     var isLoading: Bool = false
 
-    var didSelect: CompletionOptional = nil
-    private let selectionImpact = UIImpactFeedbackGenerator()
     var style: ButtonStyle?
-    var shouldScale: Bool = true
     lazy var errorLabel = RegularLabel()
 
     override init(frame: CGRect) {
@@ -50,11 +47,6 @@ class Button: UIButton, Statusable {
     }
 
     func initializeSubviews() {
-
-//        self.addAction(for: UIControl.Event.touchUpInside) { [unowned self] in
-//            self.selectionImpact.impactOccurred()
-//            self.didSelect?()
-//        }
 
         self.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
@@ -158,30 +150,30 @@ class Button: UIButton, Statusable {
         }
     }
 
-    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        guard self.shouldScale else { return }
-
-        if let touch = touches.first, let view = touch.view, let button = view as? UIButton {
-            button.scaleDown()
-        }
-    }
-
-    override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        guard self.shouldScale else { return }
-        
-        if let touch = touches.first, let view = touch.view, let button = view as? UIButton {
-            button.scaleUp()
-        }
-    }
-
-    override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-        guard self.shouldScale else { return }
-        
-        if let touch = touches.first, let view = touch.view, let button = view as? UIButton {
-            button.scaleUp()
-        }
-    }
+//    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        super.touchesBegan(touches, with: event)
+//        guard self.shouldScale else { return }
+//
+//        if let touch = touches.first, let view = touch.view, let button = view as? UIButton {
+//            button.scaleDown()
+//        }
+//    }
+//
+//    override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        super.touchesEnded(touches, with: event)
+//        guard self.shouldScale else { return }
+//
+//        if let touch = touches.first, let view = touch.view, let button = view as? UIButton {
+//            button.scaleUp()
+//        }
+//    }
+//
+//    override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+//        super.touchesCancelled(touches, with: event)
+//        guard self.shouldScale else { return }
+//
+//        if let touch = touches.first, let view = touch.view, let button = view as? UIButton {
+//            button.scaleUp()
+//        }
+//    }
 }

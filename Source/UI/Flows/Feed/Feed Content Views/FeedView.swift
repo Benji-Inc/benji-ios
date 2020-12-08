@@ -65,12 +65,12 @@ class FeedView: View {
         case .inviteAsk(let reservation):
             self.container.addSubview(self.needInvitesView)
             self.needInvitesView.reservation = reservation
-            self.needInvitesView.button.didSelect = { [unowned self] in
+            self.needInvitesView.button.didSelect { [unowned self] in
                 self.didSelect?()
             }
         case .rountine:
             self.container.addSubview(self.routineView)
-            self.routineView.button.didSelect = { [unowned self] in
+            self.routineView.button.didSelect { [unowned self] in
                 self.didSelect?()
             }
         case .notificationPermissions:
@@ -86,7 +86,7 @@ class FeedView: View {
             }
         case .meditation:
             self.container.addSubview(self.meditationView)
-            self.meditationView.button.didSelect = { [unowned self] in
+            self.meditationView.button.didSelect { [unowned self] in
                 self.didSelect?()
             }
         case .newChannel(let channel):

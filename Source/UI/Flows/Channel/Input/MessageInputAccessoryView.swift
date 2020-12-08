@@ -198,7 +198,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 //            self.resetAlertProgress()
 //        }
 
-        self.contextButton.didSelect = { [unowned self] in
+        self.contextButton.didSelect { [unowned self] in
             self.expandingTextView.toggleInputView()
             //self.didSelectContextButton()
         }

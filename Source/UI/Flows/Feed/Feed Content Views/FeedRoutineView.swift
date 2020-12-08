@@ -21,7 +21,7 @@ class FeedRoutineView: View {
         self.addSubview(self.button)
         self.textView.set(localizedText: "Set a time each day to check your Daily Feed.")
         self.button.set(style: .rounded(color: .blue, text: "SET"))
-        self.button.didSelect = { [unowned self] in
+        self.button.didSelect { [unowned self] in
             self.didSelect()
         }
     }

@@ -29,12 +29,12 @@ class FeedConnectionView: View {
 
         self.textView.set(localizedText: "Connection request.")
         self.acceptButton.set(style: .rounded(color: .blue, text: "Accept"))
-        self.acceptButton.didSelect = { [unowned self] in
+        self.acceptButton.didSelect { [unowned self] in
             self.updateConnection(with: .accepted)
         }
 
         self.declineButton.set(style: .rounded(color: .red, text: "Decline"))
-        self.declineButton.didSelect = { [unowned self] in
+        self.declineButton.didSelect { [unowned self] in
             self.updateConnection(with: .declined)
         }
     }

@@ -216,7 +216,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
             moreHeader.removeGestureRecognizer(recognizer)
         })
 
-        moreHeader.button.didSelect = { [weak self] in
+        moreHeader.button.didSelect { [weak self] in
             guard let `self` = self else { return }
             moreHeader.button.isLoading = true
             self.didSelectLoadMore(for: index)

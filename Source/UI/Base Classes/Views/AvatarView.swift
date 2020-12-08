@@ -14,19 +14,7 @@ class AvatarView: DisplayableImageView {
 
     private let selectionImpact = UIImpactFeedbackGenerator()
 
-    var didSelect: CompletionOptional = nil {
-        didSet {
-            guard let didSelect = self.didSelect else { return }
-            
-            self.gestureRecognizers?.forEach({ (recognizer) in
-                self.removeGestureRecognizer(recognizer)
-            })
-
-            self.onTap { (tap) in
-                didSelect()
-            }
-        }
-    }
+    var didSelect: CompletionOptional = nil
 
     var borderColor: Color = .purple {
         didSet {
@@ -188,6 +176,11 @@ class AvatarView: DisplayableImageView {
     }
 
     private func prepareView() {
+
+        self.didSelect = { [unowned self] in
+            self.didSelect?()
+        }
+
         self.imageView.contentMode = .scaleAspectFill
         self.layer.masksToBounds = true
         self.clipsToBounds = true

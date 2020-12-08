@@ -20,7 +20,25 @@ private class ClosureBox: NSObject {
     }
 }
 
+private var selectionHandlerKey: UInt8 = 0
 extension UIControl {
+
+    private(set) var selectionImpact: UIImpactFeedbackGenerator? {
+        get {
+            return self.getAssociatedObject(&selectionHandlerKey)
+        }
+        set {
+            self.setAssociatedObject(key: &selectionHandlerKey, value: newValue)
+        }
+    }
+
+    func didSelect(for event: UIControl.Event = .touchUpInside,_ completion: CompletionOptional) {
+        self.selectionImpact = UIImpactFeedbackGenerator()
+        self.addAction(for: .touchUpInside) { [unowned self] in
+            self.selectionImpact?.impactOccurred()
+            completion?()
+        }
+    }
 
     @discardableResult
     func addAction(for controlEvents: UIControl.Event, _ closure: @escaping ()->()) -> AnyObject {

@@ -97,7 +97,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 }
             }).start()
 
-        self.beginButton.didSelect = { [unowned self] in
+        self.beginButton.didSelect { [unowned self] in
             guard let state = self.currentState.value else { return }
 
             if state == .initial {
@@ -108,12 +108,12 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         }
 
         self.retakeButton.set(style: .normal(color: .red, text: "Retake"))
-        self.retakeButton.didSelect = { [unowned self] in
+        self.retakeButton.didSelect { [unowned self] in
             self.currentState.value = .scan
         }
 
         self.confirmButton.set(style: .normal(color: .green, text: "Continue"))
-        self.confirmButton.didSelect = { [unowned self] in
+        self.confirmButton.didSelect { [unowned self] in
             guard let fixed = self.image else { return }
             self.saveProfilePicture(image: fixed)
         }

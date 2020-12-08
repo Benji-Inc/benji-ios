@@ -33,7 +33,7 @@ class NavigationBarViewController: ViewController {
         self.animationView.transform = CGAffineTransform(rotationAngle: halfPi * -1)
         self.view.addSubview(self.backButton)
         self.backButton.set(style: .animation(view: self.animationView))
-        self.backButton.didSelect = { [unowned self] in
+        self.backButton.didSelect { [unowned self] in
             self.didSelectBackButton()
         }
 

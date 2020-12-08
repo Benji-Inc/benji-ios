@@ -52,7 +52,7 @@ class ProfileViewController: ViewController {
         self.view.addSubview(self.localTimeView)
         self.view.addSubview(self.routineView)
         self.routineView.button.isVisible = true 
-        self.routineView.button.didSelect = { [unowned self] in
+        self.routineView.button.didSelect { [unowned self] in
             self.delegate?.profileView(self, didSelect: .routine, for: self.user)
         }
     }
