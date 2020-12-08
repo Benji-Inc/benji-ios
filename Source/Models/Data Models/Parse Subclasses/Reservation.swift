@@ -108,7 +108,8 @@ extension Reservation: ManageableCellItem {
 
 private var reservationMetadataKey: UInt8 = 0
 private var linkKey: UInt8 = 0
-extension Reservation: UIActivityItemSource {
+extension Reservation: UIActivityItemSource, StatusableRequest {
+    typealias ReturnType = Void
 
     private(set) var metadata: LPLinkMetadata? {
         get {
@@ -128,18 +129,23 @@ extension Reservation: UIActivityItemSource {
         }
     }
 
-    func prepareMetaData() -> Future<Void> {
+    func prepareMetaData(andUpdate statusables: [Statusable]) -> Future<Void> {
         let promise = Promise<Void>()
         let metadataProvider = LPMetadataProvider()
+
+        // Trigger the loading event for all statusables
+        for statusable in statusables {
+            statusable.handleEvent(status: .loading)
+        }
 
         self.link = self.generateBranchLink().getShortUrl(with: self.generateBranchProperties())
         if let linkString = self.link, let url = URL(string: linkString) {
             metadataProvider.startFetchingMetadata(for: url) { (metadata, error) in
                 if let e = error {
-                    promise.reject(with: e)
+                    self.handleFailed(statusables: statusables, error: e, promise: promise)
                 } else {
                     self.metadata = metadata
-                    promise.resolve(with: ())
+                    self.handleValue(statusables: statusables, value: (), promise: promise)
                 }
             }
         } else {

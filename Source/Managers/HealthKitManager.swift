@@ -10,7 +10,8 @@ import Foundation
 import HealthKit
 import TMROFutures
 
-class HealthKitManager: NSObject {
+class HealthKitManager: NSObject, StatusableRequest {
+    typealias ReturnType = Bool
 
     static let shared = HealthKitManager()
     private let store = HKHealthStore()
@@ -18,10 +19,23 @@ class HealthKitManager: NSObject {
     private let allReadTypes = Set([HKObjectType.categoryType(forIdentifier: .mindfulSession)!, HKObjectType.quantityType(forIdentifier: .heartRate)!])
     private let allSetTypes = Set([HKObjectType.categoryType(forIdentifier: .mindfulSession)!])
 
-    func requestAuthorization(completion: @escaping CompletionHandler) {
-        self.store.requestAuthorization(toShare: self.allSetTypes, read: self.allReadTypes) { (success, error) in
-            completion(success, error)
+    func requestAuthorization(andUpdate statusables: [Statusable]) -> Future<Bool> {
+
+        let promise = Promise<Bool>()
+        // Trigger the loading event for all statusables
+        for statusable in statusables {
+            statusable.handleEvent(status: .loading)
         }
+
+        self.store.requestAuthorization(toShare: self.allSetTypes, read: self.allReadTypes) { (success, error) in
+            if let e = error {
+                self.handleFailed(statusables: statusables, error: e, promise: promise)
+            } else {
+                self.handleValue(statusables: statusables, value: success, promise: promise)
+            }
+        }
+
+        return promise
     }
 
     func saveMindfullAnalysis(startTime: Date, endTime: Date, completion: @escaping CompletionHandler) {

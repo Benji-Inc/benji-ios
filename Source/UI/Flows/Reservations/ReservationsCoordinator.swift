@@ -26,7 +26,7 @@ class ReservationsCoordinator: Coordinator<Void> {
         if let _ = self.reservation.metadata {
             self.presentShare(for: reservation)
         } else {
-            self.reservation.prepareMetaData()
+            self.reservation.prepareMetaData(andUpdate: [])
                 .observeValue { [unowned self] (_) in
                     self.presentShare(for: self.reservation)
             }

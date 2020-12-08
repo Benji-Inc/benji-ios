@@ -32,7 +32,6 @@ class Button: UIButton, Statusable {
     var defaultColor: Color?
 
     let animationView = AnimationView(name: "loading")
-    var isLoading: Bool = false
 
     var style: ButtonStyle?
     lazy var errorLabel = RegularLabel()

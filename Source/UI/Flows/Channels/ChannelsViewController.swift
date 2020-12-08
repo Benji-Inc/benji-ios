@@ -82,13 +82,9 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
     }
 
     private func didSelect(reservation: Reservation) {
-        self.reservationButton.isLoading = true
-       reservation.prepareMetaData()
+        reservation.prepareMetaData(andUpdate: [self.reservationButton])
             .observeValue { (_) in
                 self.delegate?.channelsView(self, didSelect: reservation)
-                runMain {
-                    self.reservationButton.isLoading = false
-                }
         }
     }
 }

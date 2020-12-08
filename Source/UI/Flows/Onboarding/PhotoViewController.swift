@@ -239,10 +239,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private func handleFinishState() {
         self.complete(with: .success(()))
-
-        //Show loading on button
-        self.confirmButton.isLoading = true
-        //Upload and dismiss
+        self.confirmButton.handleEvent(status: .loading)
     }
 
     private func showButtons() {
@@ -303,7 +300,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     func saveProfilePicture(image: UIImage) {
         guard let current = User.current() else { return }
 
-        self.confirmButton.isLoading = true
         // NOTE: Remember, we're in points not pixels. Max image size will
         // depend on image pixel density. It's okay for now.
         let maxAllowedDimension: CGFloat = 100.0
@@ -331,7 +327,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 case .failure(_):
                     self.currentState.value = .error
                 }
-                self.confirmButton.isLoading = false
         }
     }
 }
