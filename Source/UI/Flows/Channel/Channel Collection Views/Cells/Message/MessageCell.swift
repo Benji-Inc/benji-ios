@@ -19,7 +19,7 @@ class MessageCell: BaseMessageCell {
         self.contentView.addSubview(self.bubbleView)
         self.bubbleView.addSubview(self.textView)
 
-        self.bubbleView.onTap { [unowned self] (tap) in
+        self.bubbleView.didSelect { [unowned self] in
             self.didTapMessage()
         }
     }

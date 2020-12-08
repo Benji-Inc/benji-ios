@@ -11,7 +11,6 @@ import Foundation
 class ImageViewButton: View {
 
     let imageView = UIImageView()
-    private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
     var didSelect: CompletionOptional = nil
     var shouldScale: Bool = false
 
@@ -22,8 +21,7 @@ class ImageViewButton: View {
         self.imageView.tintColor = Color.white.color
         self.imageView.contentMode = .scaleAspectFit
 
-        self.onTap { [unowned self] (tap) in
-            self.selectionFeedback.impactOccurred()
+        self.didSelect { [unowned self] in
             self.didSelect?()
         }
     }

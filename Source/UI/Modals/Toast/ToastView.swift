@@ -122,7 +122,7 @@ class ToastView: View {
         self.title = toast.title
         self.descriptionText = localized(toast.description)
 
-        self.onTap { [unowned self] (tap) in
+        self.didSelect { [unowned self] in
             toast.didTap()
             self.dismiss()
         }

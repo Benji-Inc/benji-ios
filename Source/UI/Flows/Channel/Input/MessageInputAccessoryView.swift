@@ -188,7 +188,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
             self.handleTextChange(text)
         }
 
-        self.overlayButton.onTap { [unowned self] (tap) in
+        self.overlayButton.didSelect { [unowned self] in
             if !self.expandingTextView.isFirstResponder {
                 self.expandingTextView.becomeFirstResponder()
             }

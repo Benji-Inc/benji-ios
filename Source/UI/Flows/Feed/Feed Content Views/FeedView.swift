@@ -40,7 +40,7 @@ class FeedView: View {
         super.initializeSubviews()
         self.addSubview(self.container)
 
-        self.container.onTap { [unowned self] (tap) in
+        self.container.didSelect { [unowned self] in
             self.didSkip?()
         }
 

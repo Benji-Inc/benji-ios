@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension UIView {
+extension UIView: Selectable {
 
     var isVisible: Bool {
         get {

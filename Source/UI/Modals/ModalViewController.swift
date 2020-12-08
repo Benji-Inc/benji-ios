@@ -22,7 +22,7 @@ class ModalViewController: ViewController {
 
         self.view.addSubview(self.dismissView)
         // Tapping on the background dismisses the VC
-        self.dismissView.onTap { [unowned self] (tap) in
+        self.dismissView.didSelect { [unowned self] in
             self.dismiss(animated: true, completion: nil)
         }
     }
