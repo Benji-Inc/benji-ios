@@ -27,7 +27,6 @@ extension FeedViewController {
 
     func addItems() {
         FeedSupplier.shared.getItems()
-            .withResultToast()
             .observeValue(with: { (items) in
                 runMain {
                     self.view.layoutNow()
@@ -39,7 +38,6 @@ extension FeedViewController {
 
     func addFirstItems() {
         FeedSupplier.shared.getFirstItems()
-        .withResultToast()
         .observeValue(with: { (items) in
             runMain {
                 self.manager.set(items: items)

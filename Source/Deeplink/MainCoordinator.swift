@@ -68,7 +68,6 @@ class MainCoordinator: Coordinator<Void> {
 
         self.isInitializingChat = true
         ChannelManager.shared.initialize(token: token)
-            .withResultToast()
             .observeValue(with: { (_) in
                 self.isInitializingChat = false
                 guard let user = User.current(), user.isOnboarded else { return }

@@ -57,7 +57,7 @@ class ChannelManager: NSObject {
                                         }
         })
         
-        return promise.withResultToast(with: "Messaging Enabled.")
+        return promise
     }
 
     @discardableResult

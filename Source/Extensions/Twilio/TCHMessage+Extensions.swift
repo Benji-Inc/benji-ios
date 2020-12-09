@@ -151,7 +151,7 @@ extension TCHMessage: Messageable {
             promise.reject(with: ClientError.generic)
         }
 
-        return promise.withResultToast()
+        return promise
     }
 }
 

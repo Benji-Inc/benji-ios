@@ -61,7 +61,7 @@ extension TCHChannel: Diffable, ManageableCellItem {
             promise.reject(with: ClientError.message(detail: "There was a problem fetching other members."))
         }
 
-        return promise.withResultToast()
+        return promise
     }
 
     func getAuthorAsUser() -> Future<User> {

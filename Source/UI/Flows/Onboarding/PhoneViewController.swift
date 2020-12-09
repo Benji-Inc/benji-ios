@@ -77,7 +77,6 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
                  installationId: installationId,
                  reservationId: self.reservationId)
             .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .withResultToast()
             .observe(with: { (result) in
                 tf?.animationView.stop()
                 switch result {

@@ -114,7 +114,6 @@ class RoutineInputViewController: ViewController {
         routine.create(with: self.selectedDate)
         routine.saveEventually()
         .ignoreUserInteractionEventsUntilDone(for: [self.view])
-        .withResultToast(with: "Routine saved")
             .observe { (result) in
                 switch result {
                 case .success(_):

@@ -64,7 +64,7 @@ extension User {
             promise.reject(with: ClientError.message(detail: "Failed to retrieve your routine."))
         }
 
-        return promise.withResultToast()
+        return promise
     }
 }
 

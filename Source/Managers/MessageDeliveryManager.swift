@@ -135,7 +135,7 @@ class MessageDeliveryManager {
             promise.reject(with: ClientError.message(detail: "No messages object on channel"))
         }
 
-        return promise.withResultToast()
+        return promise
     }
 
     private func getOptions(for kind: MessageKind, attributes: [String : Any] = [:]) -> Future<TCHMessageOptions> {
