@@ -39,6 +39,7 @@ class Button: UIButton, Statusable, UIGestureRecognizerDelegate {
          = StationaryPressGestureRecognizer(cancelsTouchesInView: false,
                                             target: self,
                                             action: #selector(self.handleStationaryPress))
+    private let selectionImpact = UIImpactFeedbackGenerator()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -164,6 +165,7 @@ class Button: UIButton, Statusable, UIGestureRecognizerDelegate {
         case .possible, .changed:
             break
         case .began:
+            self.selectionImpact.impactOccurred()
             self.scaleDown()
         case .ended, .cancelled, .failed:
             self.scaleUp()
