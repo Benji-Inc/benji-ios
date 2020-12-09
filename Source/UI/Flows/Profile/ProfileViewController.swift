@@ -44,7 +44,7 @@ class ProfileViewController: ViewController {
 
         self.view.addSubview(self.avatarView)
         self.avatarView.set(avatar: self.user)
-        self.avatarView.didSelect = { [unowned self] in
+        self.avatarView.didSelect { [unowned self] in
             self.delegate?.profileView(self, didSelect: .picture, for: self.user)
         }
 

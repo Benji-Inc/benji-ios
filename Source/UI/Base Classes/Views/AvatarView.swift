@@ -12,10 +12,6 @@ class AvatarView: DisplayableImageView {
 
     // MARK: - Properties
 
-    private let selectionImpact = UIImpactFeedbackGenerator()
-
-    var didSelect: CompletionOptional = nil
-
     var borderColor: Color = .purple {
         didSet {
             self.setBorder(color: self.borderColor)
@@ -176,10 +172,7 @@ class AvatarView: DisplayableImageView {
     }
 
     private func prepareView() {
-
-        self.didSelect = { [unowned self] in
-            self.didSelect?()
-        }
+        //self.pressHandler = StationaryPressHandler(with: self)
 
         self.imageView.contentMode = .scaleAspectFill
         self.layer.masksToBounds = true
@@ -213,28 +206,6 @@ class AvatarView: DisplayableImageView {
     func setBorder(color: Color) {
         self.layer.borderColor = color.color.cgColor
         self.layer.borderWidth = 2
-    }
-
-    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        if let touch = touches.first, let view = touch.view, let _ = self.didSelect {
-            self.selectionImpact.impactOccurred()
-            view.scaleDown()
-        }
-    }
-
-    override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        if let touch = touches.first, let view = touch.view, let _ = self.didSelect {
-            view.scaleUp()
-        }
-    }
-
-    override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-        if let touch = touches.first, let view = touch.view, let _ = self.didSelect {
-            view.scaleUp()
-        }
     }
 }
 

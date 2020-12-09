@@ -18,7 +18,7 @@ enum ButtonStyle {
     case animation(view: AnimationView, inset: CGFloat = 8)
 }
 
-class Button: UIButton, Statusable, UIGestureRecognizerDelegate {
+class Button: UIButton, Statusable {
 
     let alphaOutAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
                                                   curve: .linear,
@@ -35,11 +35,6 @@ class Button: UIButton, Statusable, UIGestureRecognizerDelegate {
 
     var style: ButtonStyle?
     lazy var errorLabel = RegularLabel()
-    private lazy var stationaryPressRecognizer
-         = StationaryPressGestureRecognizer(cancelsTouchesInView: false,
-                                            target: self,
-                                            action: #selector(self.handleStationaryPress))
-    private let selectionImpact = UIImpactFeedbackGenerator()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,9 +53,6 @@ class Button: UIButton, Statusable, UIGestureRecognizerDelegate {
 
         self.addSubview(self.errorLabel)
         self.errorLabel.alpha = 0.0
-
-        self.addGestureRecognizer(self.stationaryPressRecognizer)
-        self.stationaryPressRecognizer.delegate = self
     }
 
     //Sets text font, color and background color
@@ -155,27 +147,5 @@ class Button: UIButton, Statusable, UIGestureRecognizerDelegate {
         case .error(let message):
             return self.handleError(message)
         }
-    }
-
-    // MARK: Touch Handling
-
-    @objc private func handleStationaryPress(_ gestureRecognizer: StationaryPressGestureRecognizer) {
-        // Scale down the cell when pressed, and scale back up on release.
-        switch gestureRecognizer.state {
-        case .possible, .changed:
-            break
-        case .began:
-            self.selectionImpact.impactOccurred()
-            self.scaleDown()
-        case .ended, .cancelled, .failed:
-            self.scaleUp()
-        @unknown default:
-            break
-        }
-    }
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return false
     }
 }

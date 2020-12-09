@@ -25,6 +25,10 @@ extension Selectable where Self: UIControl {
         }
     }
 
+    var isActive: Bool {
+        return !self.selectionImpact.isNil
+    }
+
     func didSelect(_ completion: CompletionOptional) {
         self.didSelect(for: .touchUpInside, completion)
     }

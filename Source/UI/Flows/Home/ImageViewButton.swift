@@ -12,7 +12,6 @@ class ImageViewButton: View {
 
     let imageView = UIImageView()
     var didSelect: CompletionOptional = nil
-    var shouldScale: Bool = false
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -33,32 +32,5 @@ class ImageViewButton: View {
 
         self.imageView.size = CGSize(width: self.width * 0.55, height: self.height * 0.55)
         self.imageView.centerOnXAndY()
-    }
-
-    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        guard self.shouldScale else { return }
-
-        if let touch = touches.first, let view = touch.view {
-            view.scaleDown()
-        }
-    }
-
-    override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        guard self.shouldScale else { return }
-
-        if let touch = touches.first, let view = touch.view {
-            view.scaleUp()
-        }
-    }
-
-    override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-        guard self.shouldScale else { return }
-        
-        if let touch = touches.first, let view = touch.view {
-            view.scaleUp()
-        }
     }
 }
