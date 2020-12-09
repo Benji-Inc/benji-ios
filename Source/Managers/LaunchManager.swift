@@ -123,7 +123,8 @@ class LaunchManager {
             let metaData = deeplink.customMetadata as? [String: Any],
             metaData.values.count > 0 else { return }
 
-        _ = UpdateUser(attributes: metaData).makeRequest()
+        _ = UpdateUser(attributes: metaData)
+            .makeRequest(andUpdate: [], viewsToIgnore: [])
     }
 
     private func initializeUserData(with buo: BranchUniversalObject?) {
@@ -140,7 +141,7 @@ class LaunchManager {
             self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: String()))
         } else {
             GetChatToken()
-                .makeRequest()
+                .makeRequest(andUpdate: [], viewsToIgnore: [])
                 .observe { (result) in
                     switch result {
                     case .success(let token):

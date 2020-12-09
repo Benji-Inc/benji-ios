@@ -65,7 +65,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
                 break 
             case .channel(let tchChannel):
                 ChannelSupplier.delete(channel: tchChannel)
-                    .ignoreUserInteractionEventsUntilDone(for: self.collectionView)
+                    .ignoreUserInteractionEventsUntilDone(for: [self.collectionView])
             }
         }
 
@@ -92,7 +92,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
                 break 
             case .channel(let tchChannel):
                 ChannelSupplier.leave(channel: tchChannel)
-                    .ignoreUserInteractionEventsUntilDone(for: self.collectionView)
+                    .ignoreUserInteractionEventsUntilDone(for: [self.collectionView])
             }
         }
 

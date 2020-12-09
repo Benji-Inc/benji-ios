@@ -29,7 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         guard !ChannelManager.shared.isConnected, let _ = User.current()?.objectId else { return }
 
         GetChatToken()
-            .makeRequest()
+            .makeRequest(andUpdate: [], viewsToIgnore: [])
             .observeValue { (token) in
                 if ChannelManager.shared.client.isNil {
                     ChannelManager.shared.initialize(token: token)

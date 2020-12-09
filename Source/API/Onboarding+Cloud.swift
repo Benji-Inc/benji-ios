@@ -12,29 +12,23 @@ import TMROFutures
 import PhoneNumberKit
 
 struct SendCode: CloudFunction {
+    typealias ReturnType = Void
 
     let phoneNumber: PhoneNumber
     let region: String
     let installationId: String
     let reservationId: String?
 
-    func makeRequest() -> Future<Void> {
-        let promise = Promise<Void>()
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> Future<ReturnType> {
         let params = ["phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164),
                       "installationId": self.installationId,
                       "reservationId": String(optional: self.reservationId),
                       "region": self.region]
-        PFCloud.callFunction(inBackground: "sendCode",
-                             withParameters: params) { (object, error) in
-                                if let error = error {
-                                    SessionManager.shared.handleParse(error: error)
-                                    promise.reject(with: error)
-                                } else {
-                                    promise.resolve(with: ())
-                                }
-        }
-
-        return promise.withResultToast()
+        
+        return self.makeRequest(andUpdate: statusables,
+                                params: params,
+                                callName: "sendCode",
+                                viewsToIgnore: viewsToIgnore)
     }
 }
 
@@ -44,34 +38,22 @@ enum VerifyCodeResult {
 }
 
 struct VerifyCode: CloudFunction {
+    typealias ReturnType = VerifyCodeResult
 
     let code: String
     let phoneNumber: PhoneNumber
     let installationId: String
     let reservationId: String
 
-    func makeRequest() -> Future<VerifyCodeResult> {
-        let promise = Promise<VerifyCodeResult>()
-
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> Future<VerifyCodeResult> {
         let params: [String: Any] = ["authCode": self.code,
                                      "installationId": self.installationId,
                                      "reservationId": self.reservationId,
                                      "phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164)]
 
-        PFCloud.callFunction(inBackground: "validateCode",
-                             withParameters: params) { (object, error) in
-                                if let error = error {
-                                    if (error as NSError).code == 100 {
-                                        promise.resolve(with: .addedToWaitlist)
-                                    } else {
-                                        SessionManager.shared.handleParse(error: error)
-                                        promise.reject(with: error)
-                                    }
-                                } else if let token = object as? String {
-                                    promise.resolve(with: .success(token))
-                                }
-        }
-
-        return promise.withResultToast()
+        return self.makeRequest(andUpdate: statusables,
+                                params: params,
+                                callName: "validateCode",
+                                viewsToIgnore: viewsToIgnore)
     }
 }

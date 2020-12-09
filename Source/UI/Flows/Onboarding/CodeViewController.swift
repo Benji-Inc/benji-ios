@@ -48,7 +48,7 @@ class CodeViewController: TextInputViewController<Void> {
                    phoneNumber: phoneNumber,
                    installationId: installationId,
                    reservationId: String(optional: self.reservationId))
-            .makeRequest()
+            .makeRequest(andUpdate: [], viewsToIgnore: [])
             .observeValue { (result) in
                 switch result {
                 case .success(let token):

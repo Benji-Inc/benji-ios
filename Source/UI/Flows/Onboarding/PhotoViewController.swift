@@ -319,7 +319,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         }
 
         current.saveToServer()
-            .ignoreUserInteractionEventsUntilDone(for: self.view)
+            .ignoreUserInteractionEventsUntilDone(for: [self.view])
             .observe { (result) in
                 switch result {
                 case .success(_):

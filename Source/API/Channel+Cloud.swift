@@ -11,30 +11,23 @@ import Parse
 import TMROFutures
 
 struct CreateChannel: CloudFunction {
+    typealias ReturnType = Void
 
     var uniqueName: String
     var friendlyName: String
     var attributes: [String: Any]
     var members: [String]
 
-    func makeRequest() -> Future<Void> {
-        let promise = Promise<Void>()
-
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> Future<ReturnType> {
         let params: [String: Any] = ["uniqueName": self.uniqueName,
                                      "friendlyName": self.friendlyName,
                                      "type": "private",
                                      "attributes": self.attributes,
                                      "members": self.members]
-        PFCloud.callFunction(inBackground: "createChannel",
-                             withParameters: params) { (object, error) in
-                                                if let error = error {
-                                                    SessionManager.shared.handleParse(error: error)
-                                                    promise.reject(with: error)
-                                                } else {
-                                                    promise.resolve(with: ())
-                                                }
-        }
 
-        return promise.withResultToast()
+        return self.makeRequest(andUpdate: statusables,
+                                params: params,
+                                callName: "createChannel",
+                                viewsToIgnore: viewsToIgnore)
     }
 }

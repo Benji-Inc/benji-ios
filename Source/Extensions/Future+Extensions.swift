@@ -59,10 +59,14 @@ extension Future {
     }
 
     @discardableResult
-    func ignoreUserInteractionEventsUntilDone(for view: UIView) -> Future<Value> {
-        view.isUserInteractionEnabled = false
+    func ignoreUserInteractionEventsUntilDone(for views: [UIView]) -> Future<Value> {
+        views.forEach { (view) in
+            view.isUserInteractionEnabled = false
+        }
         self.observe { (result) in
-            view.isUserInteractionEnabled = true
+            views.forEach { (view) in
+                view.isUserInteractionEnabled = true
+            }
         }
 
         return self

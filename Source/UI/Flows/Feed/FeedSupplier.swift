@@ -130,7 +130,8 @@ class FeedSupplier {
 
     private func getConnections() -> Future<Void> {
         let promise = Promise<Void>()
-        GetAllConnections(direction: .incoming).makeRequest()
+        GetAllConnections(direction: .incoming)
+            .makeRequest(andUpdate: [], viewsToIgnore: [])
             .observe { (result) in
                 switch result {
                 case .success(let connections):
@@ -150,7 +151,8 @@ class FeedSupplier {
 
     private func getNewChannels() -> Future<Void> {
         let promise = Promise<Void>()
-        GetAllConnections(direction: .incoming).makeRequest()
+        GetAllConnections(direction: .incoming)
+            .makeRequest(andUpdate: [], viewsToIgnore: [])
             .observe { (result) in
                 switch result {
                 case .success(let connections):

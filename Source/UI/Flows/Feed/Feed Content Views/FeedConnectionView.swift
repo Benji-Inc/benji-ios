@@ -78,8 +78,8 @@ class FeedConnectionView: View {
         guard let connection = self.connection else { return }
 
         UpdateConnection(connection: connection, status: status)
-            .makeRequest()
-            .ignoreUserInteractionEventsUntilDone(for: self)
+            .makeRequest(andUpdate: [], viewsToIgnore: [])
+            .ignoreUserInteractionEventsUntilDone(for: [self])
             .observeValue { (_) in
                 self.didComplete()
         }

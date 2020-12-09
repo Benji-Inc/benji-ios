@@ -103,7 +103,7 @@ class ChannelSupplier {
         var attributes: [String: Any] = [:]
         attributes[ChannelKey.context.rawValue] = context.rawValue
         CreateChannel(uniqueName: uniqueName, friendlyName: friendlyName, attributes: attributes, members: members)
-            .makeRequest()
+            .makeRequest(andUpdate: [], viewsToIgnore: [])
             .observeValue { (_) in
                 if setActive {
                     self.set(activeChannel: DisplayableChannel(channelType: .pending(uniqueName)))

@@ -83,7 +83,8 @@ extension ChannelManager: TwilioChatClientDelegate {
     }
 
     private func getNewChatTokent() {
-        GetChatToken().makeRequest()
+        GetChatToken()
+            .makeRequest(andUpdate: [], viewsToIgnore: [])
             .observeValue { (token) in
                 self.update(token: token)
         }

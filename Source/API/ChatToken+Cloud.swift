@@ -11,20 +11,12 @@ import Parse
 import TMROFutures
 
 struct GetChatToken: CloudFunction {
+    typealias ReturnType = String
 
-    func makeRequest() -> Future<String> {
-        let promise = Promise<String>()
-
-        PFCloud.callFunction(inBackground: "getChatToken",
-                             withParameters: [:]) { (object, error) in
-                                                if let error = error {
-                                                    SessionManager.shared.handleParse(error: error)
-                                                    promise.reject(with: error)
-                                                } else if let token = object as? String {
-                                                    promise.resolve(with: token)
-                                                }
-        }
-
-        return promise.withResultToast()
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> Future<ReturnType> {
+        return self.makeRequest(andUpdate: statusables,
+                                params: [:],
+                                callName: "getChatToken",
+                                viewsToIgnore: viewsToIgnore)
     }
 }
