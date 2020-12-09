@@ -18,7 +18,7 @@ enum ButtonStyle {
     case animation(view: AnimationView, inset: CGFloat = 8)
 }
 
-class Button: UIButton, Statusable {
+class Button: UIButton, Statusable, UIGestureRecognizerDelegate {
 
     let alphaOutAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
                                                   curve: .linear,
@@ -35,6 +35,10 @@ class Button: UIButton, Statusable {
 
     var style: ButtonStyle?
     lazy var errorLabel = RegularLabel()
+    private lazy var stationaryPressRecognizer
+         = StationaryPressGestureRecognizer(cancelsTouchesInView: false,
+                                            target: self,
+                                            action: #selector(self.handleStationaryPress))
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -53,6 +57,9 @@ class Button: UIButton, Statusable {
 
         self.addSubview(self.errorLabel)
         self.errorLabel.alpha = 0.0
+
+        self.addGestureRecognizer(self.stationaryPressRecognizer)
+        self.stationaryPressRecognizer.delegate = self
     }
 
     //Sets text font, color and background color
@@ -149,30 +156,24 @@ class Button: UIButton, Statusable {
         }
     }
 
-//    override open func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        super.touchesBegan(touches, with: event)
-//        guard self.shouldScale else { return }
-//
-//        if let touch = touches.first, let view = touch.view, let button = view as? UIButton {
-//            button.scaleDown()
-//        }
-//    }
-//
-//    override open func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        super.touchesEnded(touches, with: event)
-//        guard self.shouldScale else { return }
-//
-//        if let touch = touches.first, let view = touch.view, let button = view as? UIButton {
-//            button.scaleUp()
-//        }
-//    }
-//
-//    override open func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        super.touchesCancelled(touches, with: event)
-//        guard self.shouldScale else { return }
-//
-//        if let touch = touches.first, let view = touch.view, let button = view as? UIButton {
-//            button.scaleUp()
-//        }
-//    }
+    // MARK: Touch Handling
+
+    @objc private func handleStationaryPress(_ gestureRecognizer: StationaryPressGestureRecognizer) {
+        // Scale down the cell when pressed, and scale back up on release.
+        switch gestureRecognizer.state {
+        case .possible, .changed:
+            break
+        case .began:
+            self.scaleDown()
+        case .ended, .cancelled, .failed:
+            self.scaleUp()
+        @unknown default:
+            break
+        }
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return false
+    }
 }
