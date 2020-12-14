@@ -190,6 +190,13 @@
 		D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685E9262331177100CC1BAB /* UserNotificationManager.swift */; };
 		D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
 		D6884AC825800FC600DA380E /* StatusableRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6884AC725800FC600DA380E /* StatusableRequest.swift */; };
+		D6884B112587D25C00DA380E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6884B102587D25C00DA380E /* AppDelegate.swift */; };
+		D6884B132587D25C00DA380E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6884B122587D25C00DA380E /* SceneDelegate.swift */; };
+		D6884B152587D25C00DA380E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6884B142587D25C00DA380E /* ViewController.swift */; };
+		D6884B182587D25C00DA380E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6884B162587D25C00DA380E /* Main.storyboard */; };
+		D6884B1A2587D25D00DA380E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6884B192587D25D00DA380E /* Assets.xcassets */; };
+		D6884B1D2587D25D00DA380E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6884B1B2587D25D00DA380E /* LaunchScreen.storyboard */; };
+		D6884B222587D25D00DA380E /* BenjiAppClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = D6884B0E2587D25C00DA380E /* BenjiAppClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D68BEAD1248302E700C95D31 /* User+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEAD0248302E700C95D31 /* User+Cloud.swift */; };
 		D68BEAD424831FA000C95D31 /* ReservationsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */; };
 		D68D765B24835A81009B246B /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D68D765A24835A81009B246B /* error.json */; };
@@ -313,6 +320,30 @@
 		D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF02C257EB71700F9789B /* Button+Extensions.swift */; };
 		D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D6884B202587D25D00DA380E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D61EC0B421D3071400204BEE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D6884B0D2587D25C00DA380E;
+			remoteInfo = BenjiAppClip;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D6884B262587D25D00DA380E /* Embed App Clips */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/AppClips";
+			dstSubfolderSpec = 16;
+			files = (
+				D6884B222587D25D00DA380E /* BenjiAppClip.app in Embed App Clips */,
+			);
+			name = "Embed App Clips";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		80C7C6052316112400643A14 /* TimeHumpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeHumpView.swift; sourceTree = "<group>"; };
@@ -505,6 +536,15 @@
 		D685E9262331177100CC1BAB /* UserNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
 		D686DA5C25799EB6000B4C04 /* Statusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statusable.swift; sourceTree = "<group>"; };
 		D6884AC725800FC600DA380E /* StatusableRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusableRequest.swift; sourceTree = "<group>"; };
+		D6884B0E2587D25C00DA380E /* BenjiAppClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BenjiAppClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6884B102587D25C00DA380E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D6884B122587D25C00DA380E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		D6884B142587D25C00DA380E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		D6884B172587D25C00DA380E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D6884B192587D25D00DA380E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D6884B1C2587D25D00DA380E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D6884B1E2587D25D00DA380E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D6884B1F2587D25D00DA380E /* BenjiAppClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BenjiAppClip.entitlements; sourceTree = "<group>"; };
 		D68BEAD0248302E700C95D31 /* User+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Cloud.swift"; sourceTree = "<group>"; };
 		D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsCoordinator.swift; sourceTree = "<group>"; };
 		D68D765A24835A81009B246B /* error.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = error.json; sourceTree = "<group>"; };
@@ -657,6 +697,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D6884B0B2587D25C00DA380E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -711,6 +758,7 @@
 			isa = PBXGroup;
 			children = (
 				D61EC0BE21D3071400204BEE /* Source */,
+				D6884B0F2587D25C00DA380E /* BenjiAppClip */,
 				D61EC0BD21D3071400204BEE /* Products */,
 				856FD9BFAD8BA46208226C85 /* Pods */,
 				AB1A79B62F263B1E788E3AB0 /* Frameworks */,
@@ -722,6 +770,7 @@
 			isa = PBXGroup;
 			children = (
 				D61EC0BC21D3071400204BEE /* Benji.app */,
+				D6884B0E2587D25C00DA380E /* BenjiAppClip.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1230,6 +1279,21 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		D6884B0F2587D25C00DA380E /* BenjiAppClip */ = {
+			isa = PBXGroup;
+			children = (
+				D6884B102587D25C00DA380E /* AppDelegate.swift */,
+				D6884B122587D25C00DA380E /* SceneDelegate.swift */,
+				D6884B142587D25C00DA380E /* ViewController.swift */,
+				D6884B162587D25C00DA380E /* Main.storyboard */,
+				D6884B192587D25D00DA380E /* Assets.xcassets */,
+				D6884B1B2587D25D00DA380E /* LaunchScreen.storyboard */,
+				D6884B1E2587D25D00DA380E /* Info.plist */,
+				D6884B1F2587D25D00DA380E /* BenjiAppClip.entitlements */,
+			);
+			path = BenjiAppClip;
+			sourceTree = "<group>";
+		};
 		D68BEAD224831F7C00C95D31 /* Reservations */ = {
 			isa = PBXGroup;
 			children = (
@@ -1528,15 +1592,34 @@
 				D61EC0B921D3071400204BEE /* Frameworks */,
 				D61EC0BA21D3071400204BEE /* Resources */,
 				630DD94C61DCB0E9192335E4 /* [CP] Embed Pods Frameworks */,
+				D6884B262587D25D00DA380E /* Embed App Clips */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				D6884B212587D25D00DA380E /* PBXTargetDependency */,
 			);
 			name = Benji;
 			productName = Benji;
 			productReference = D61EC0BC21D3071400204BEE /* Benji.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D6884B0D2587D25C00DA380E /* BenjiAppClip */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D6884B232587D25D00DA380E /* Build configuration list for PBXNativeTarget "BenjiAppClip" */;
+			buildPhases = (
+				D6884B0A2587D25C00DA380E /* Sources */,
+				D6884B0B2587D25C00DA380E /* Frameworks */,
+				D6884B0C2587D25C00DA380E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BenjiAppClip;
+			productName = BenjiAppClip;
+			productReference = D6884B0E2587D25C00DA380E /* BenjiAppClip.app */;
+			productType = "com.apple.product-type.application.on-demand-install-capable";
 		};
 /* End PBXNativeTarget section */
 
@@ -1544,7 +1627,7 @@
 		D61EC0B421D3071400204BEE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1010;
+				LastSwiftUpdateCheck = 1220;
 				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = "Benjamin Dodgson";
 				TargetAttributes = {
@@ -1556,6 +1639,9 @@
 								enabled = 1;
 							};
 						};
+					};
+					D6884B0D2587D25C00DA380E = {
+						CreatedOnToolsVersion = 12.2;
 					};
 				};
 			};
@@ -1573,6 +1659,7 @@
 			projectRoot = "";
 			targets = (
 				D61EC0BB21D3071400204BEE /* Benji */,
+				D6884B0D2587D25C00DA380E /* BenjiAppClip */,
 			);
 		};
 /* End PBXProject section */
@@ -1593,6 +1680,16 @@
 				D6CD4F3F23F3BA89004818B6 /* checkbox.json in Resources */,
 				D61EC0CA21D3071500204BEE /* LaunchScreen.storyboard in Resources */,
 				D61EC0C721D3071500204BEE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D6884B0C2587D25C00DA380E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D6884B1D2587D25D00DA380E /* LaunchScreen.storyboard in Resources */,
+				D6884B1A2587D25D00DA380E /* Assets.xcassets in Resources */,
+				D6884B182587D25C00DA380E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1936,13 +2033,47 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D6884B0A2587D25C00DA380E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D6884B152587D25C00DA380E /* ViewController.swift in Sources */,
+				D6884B112587D25C00DA380E /* AppDelegate.swift in Sources */,
+				D6884B132587D25C00DA380E /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D6884B212587D25D00DA380E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D6884B0D2587D25C00DA380E /* BenjiAppClip */;
+			targetProxy = D6884B202587D25D00DA380E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D61EC0C821D3071500204BEE /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				D61EC0C921D3071500204BEE /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		D6884B162587D25C00DA380E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D6884B172587D25C00DA380E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		D6884B1B2587D25D00DA380E /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D6884B1C2587D25D00DA380E /* Base */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -2072,6 +2203,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8D57EE102F30EFF6827543EB /* Pods-Benji.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Benji.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -2095,6 +2227,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B8144E2A6499F243C0C3F7C9 /* Pods-Benji.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Benji.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -2110,6 +2243,50 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "./Source/Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D6884B242587D25D00DA380E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BenjiAppClip/BenjiAppClip.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LSXDX8B86V;
+				INFOPLIST_FILE = BenjiAppClip/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.8.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Benji.Clip;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D6884B252587D25D00DA380E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = BenjiAppClip/BenjiAppClip.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LSXDX8B86V;
+				INFOPLIST_FILE = BenjiAppClip/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.8.7;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Benji.Clip;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2132,6 +2309,15 @@
 			buildConfigurations = (
 				D61EC0CF21D3071500204BEE /* Debug */,
 				D61EC0D021D3071500204BEE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D6884B232587D25D00DA380E /* Build configuration list for PBXNativeTarget "BenjiAppClip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D6884B242587D25D00DA380E /* Debug */,
+				D6884B252587D25D00DA380E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

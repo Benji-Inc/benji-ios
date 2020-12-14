@@ -162,6 +162,14 @@ class LaunchManager {
     }
 
     func continueUser(activity: NSUserActivity) -> Bool {
-        return Branch.getInstance().continue(activity)
+        if activity.activityType == NSUserActivityTypeBrowsingWeb,
+           let incomingURL = activity.webpageURL,
+           let components = NSURLComponents(url: incomingURL, resolvingAgainstBaseURL: true) {
+            // do something
+            print(components)
+            return true
+        } else {
+            return Branch.getInstance().continue(activity)
+        }
     }
 }
