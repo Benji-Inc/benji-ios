@@ -13,8 +13,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+
+        if let activity = self.userActivity {
+            print(activity)
+        }
     }
-
-
 }
 

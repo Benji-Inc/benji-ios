@@ -162,14 +162,20 @@ class LaunchManager {
     }
 
     func continueUser(activity: NSUserActivity) -> Bool {
+
+        #if !APPCLIP
+        // Code you don't want to use in your App Clip.
+        return Branch.getInstance().continue(activity)
+        #else
+        // Code your App Clip may access.
         if activity.activityType == NSUserActivityTypeBrowsingWeb,
            let incomingURL = activity.webpageURL,
            let components = NSURLComponents(url: incomingURL, resolvingAgainstBaseURL: true) {
             // do something
             print(components)
-            return true
-        } else {
-            return Branch.getInstance().continue(activity)
         }
+
+        return true
+        #endif
     }
 }
