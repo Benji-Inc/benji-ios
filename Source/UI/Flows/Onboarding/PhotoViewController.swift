@@ -12,6 +12,7 @@ import TMROFutures
 import TMROLocalization
 import Lottie
 import ReactiveSwift
+import UIKit
 
 enum PhotoState {
     case initial
