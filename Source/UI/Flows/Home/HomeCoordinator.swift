@@ -20,8 +20,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
-        ToastScheduler.shared.delegate = self
-
         self.homeVC.currentContent.producer.on(value:  { [unowned self] (contentType) in
             self.removeChild()
             
@@ -103,25 +101,5 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             }
         })
         self.router.present(coordinator, source: self.homeVC, animated: true)
-    }
-}
-
-extension HomeCoordinator: ToastSchedulerDelegate {
-
-    func didInteractWith(type: ToastType) {
-        switch type {
-//        case .systemMessage(_):
-//            break
-//        case .message(_, let channel), .channel(let channel):
-//            self.startChannelFlow(for: .channel(channel))
-        case .error(_):
-            break
-        case .success(_):
-            break
-//        case .userStatusUpdateInChannel(_, _, let channel):
-//            self.startChannelFlow(for: .channel(channel))
-//        case .messageConsumed(_, _):
-//            break 
-        }
     }
 }

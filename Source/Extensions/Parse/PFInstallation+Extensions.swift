@@ -29,6 +29,6 @@ extension PFInstallation {
             promise.reject(with: ClientError.message(detail: "You don't appear to be logged in."))
         }
 
-        return promise.withResultToast()
+        return promise
     }
 }

@@ -120,7 +120,7 @@ extension TCHMessage: Messageable {
                         .observe(with: { (result) in
                             switch result {
                             case .success(_):
-//                                ToastScheduler.shared.schedule(toastType: .messageConsumed(self, author))
+                                //Do something
                                 promise.resolve(with: ())
                             case .failure(let error):
                                 promise.reject(with: error)

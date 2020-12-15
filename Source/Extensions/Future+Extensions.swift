@@ -71,21 +71,6 @@ extension Future {
 
         return self
     }
-
-    func withResultToast(with successMessage: Localized? = nil) -> Future<Value> {
-        self.observe { (result) in
-            switch result {
-            case .success(_):
-                if let message = successMessage {
-                    ToastScheduler.shared.schedule(toastType: .success(message))
-                }
-            case .failure(let error):
-                ToastScheduler.shared.schedule(toastType: .error(error))
-            }
-        }
-
-        return self
-    }
 }
 
 private let waitSyncQueue = DispatchQueue(label: "When.SyncQueue", attributes: [])

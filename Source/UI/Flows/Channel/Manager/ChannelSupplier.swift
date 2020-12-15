@@ -286,7 +286,7 @@ class ChannelSupplier {
             }
         }
 
-        return promise.withResultToast()
+        return promise
     }
 
     func getChannel(containingMember userID: String) -> DisplayableChannel? {

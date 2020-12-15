@@ -46,12 +46,7 @@ class FeedChannelInviteView: View {
     }
 
     private func join(channel: TCHChannel) {
-
-        let text = LocalizedString(id: "join.channel",
-                                   arguments: [channel.friendlyName!],
-                                   default: "You have joined @1")
         channel.joinIfNeeded()
-            .withResultToast(with: text)
             .observeValue(with: { (_) in
                 self.didComplete?()
             })
