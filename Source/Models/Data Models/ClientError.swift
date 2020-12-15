@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Parse
 
 enum ClientError: Swift.Error {
     public static let genericErrorString = "We're having some difficulty, please try again later"

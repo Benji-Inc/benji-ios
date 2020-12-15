@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 enum NotificationContentKey: String {
     case target = "target"

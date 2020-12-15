@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 private class ClosureBox: NSObject {
     let closure: ()->()

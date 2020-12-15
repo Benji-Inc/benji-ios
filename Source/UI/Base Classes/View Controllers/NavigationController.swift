@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class NavigationController: UINavigationController, Dismissable {
     var dismissHandlers: [() -> Void] = []

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol KeyboardObservable: NSObjectProtocol {
     func handleKeyboard(frame: CGRect, with animationDuration: TimeInterval, timingCurve: UIView.AnimationCurve)

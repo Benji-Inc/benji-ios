@@ -7,8 +7,7 @@
 //
 
 import Foundation
-import Parse
-import TMROFutures
+import UIKit
 
 class MainCoordinator: Coordinator<Void> {
 
@@ -62,8 +61,13 @@ class MainCoordinator: Coordinator<Void> {
         }
     }
 
+    func handleAppClip(result: )
+
+    #if !APPCLIP
+    // Code you don't want to use in your App Clip.
+
     private func initializeChat(with token: String) {
-        // Fixes double loading. 
+        // Fixes double loading.
         guard !self.isInitializingChat else { return }
 
         self.isInitializingChat = true
@@ -97,6 +101,7 @@ class MainCoordinator: Coordinator<Void> {
             })
         }
     }
+    #endif
 
     private func runOnboardingFlow() {
         if let onboardingCoordinator = self.childCoordinator as? OnboardingCoordinator {
@@ -109,7 +114,13 @@ class MainCoordinator: Coordinator<Void> {
             self.router.setRootModule(coordinator, animated: true)
             self.addChildAndStart(coordinator, finishedHandler: { (_) in
                 self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+                    #if !APPCLIP
+                    // Code you don't want to use in your App Clip.
                     self.runHomeFlow()
+                    #else
+                    // Code your App Clip may access.
+
+                    #endif
                 }
             })
         }
@@ -122,13 +133,25 @@ class MainCoordinator: Coordinator<Void> {
         switch target {
         case .home, .channel, .channels, .routine, .profile, .feed:
             if let user = User.current(), user.isAuthenticated {
+                #if !APPCLIP
+                // Code you don't want to use in your App Clip.
                 self.runHomeFlow()
+                #else
+                // Code your App Clip may access.
+
+                #endif
             }
         case .login:
             break
         case .reservation:
             if let user = User.current(), user.isAuthenticated {
+                #if !APPCLIP
+                // Code you don't want to use in your App Clip.
                 self.runHomeFlow()
+                #else
+                // Code your App Clip may access.
+
+                #endif
             } else {
                 self.runOnboardingFlow()
             }
@@ -149,7 +172,9 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func logOut() {
+        #if !APPCLIP
         ChannelManager.shared.client?.shutdown()
+        #endif
         self.deepLink = nil
         self.removeChild()
         self.runOnboardingFlow()

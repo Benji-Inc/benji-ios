@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Parse
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,12 +19,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let rootNavController = RootNavigationController()
         self.initializeKeyWindow(with: rootNavController)
         self.initializeMainCoordinator(with: rootNavController, withOptions: launchOptions)
+        #if !APPCLIP
+        // Code you don't want to use in your App Clip.
         UserDefaults.standard.set(nil, forKey: Routine.currentRoutineKey)
+        #endif
         return true
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         UserNotificationManager.shared.clearNotificationCenter()
+        #if !APPCLIP
         guard !ChannelManager.shared.isConnected, let _ = User.current()?.objectId else { return }
 
         GetChatToken()
@@ -37,6 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     ChannelManager.shared.update(token: token)
                 }
         }
+        #endif
     }
 
     func application(_ application: UIApplication,

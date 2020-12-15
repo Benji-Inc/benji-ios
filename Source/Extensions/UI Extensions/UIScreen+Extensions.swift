@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension UIScreen {
     static var currentSize: ScreenSize {

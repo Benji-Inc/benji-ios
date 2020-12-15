@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol Dismissable {
     var dismissHandlers: [() -> Void] { get set }

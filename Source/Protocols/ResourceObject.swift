@@ -8,9 +8,18 @@
 
 import Foundation
 
+
+
+#if !APPCLIP
 protocol ResourceObject: Diffable {
     var id: String { get set }
 }
+#else
+protocol ResourceObject {
+    var id: String { get set }
+}
+#endif
+
 
 extension ResourceObject {
     var hashValue: Int {

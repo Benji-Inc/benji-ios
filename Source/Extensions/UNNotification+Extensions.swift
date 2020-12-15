@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 extension UNNotification {
 

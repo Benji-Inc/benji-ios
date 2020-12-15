@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum DeepLinkTarget : String, CaseIterable, Diffable {
+enum DeepLinkTarget : String, CaseIterable {
     
     case home
     case login

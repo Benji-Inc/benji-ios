@@ -9,7 +9,6 @@
 import Foundation
 import UserNotifications
 import TMROLocalization
-import TwilioChatClient
 import Parse
 import TMROFutures
 

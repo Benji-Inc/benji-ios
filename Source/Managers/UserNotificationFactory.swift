@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UserNotifications
 
 /// Class responsible for parsing remote notification payload and creating a local notification for presentation.
 class UserNotificationFactory {
