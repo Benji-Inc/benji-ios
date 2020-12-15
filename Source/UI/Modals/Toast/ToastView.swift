@@ -107,7 +107,7 @@ class ToastView: View {
         self.descriptionLabel.alpha = 0
         self.titleLabel.alpha = 0
 
-        self.addShadow(withOffset: 5)
+        self.showShadow(withOffset: 5)
         self.updateFor(state: self.toastState)
 
         if self.position == .top {

@@ -9,6 +9,7 @@
 import Foundation
 import AVFoundation
 import Vision
+import UIKit
 
 extension FaceDetectionViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
 
@@ -128,5 +129,11 @@ extension FaceDetectionViewController {
 
         self.updateFaceView(for: result)
         self.hasDetectedFace.value = true 
+    }
+}
+
+private extension CGSize {
+    var cgPoint: CGPoint {
+        return CGPoint(x: self.width, y: self.height)
     }
 }

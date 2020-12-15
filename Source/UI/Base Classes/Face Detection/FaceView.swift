@@ -8,6 +8,7 @@
 
 import Foundation
 import Vision
+import UIKit
 
 class FaceView: UIView {
 

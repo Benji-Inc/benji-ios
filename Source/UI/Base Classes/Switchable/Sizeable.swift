@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 protocol Sizeable: class {
     func getHeight(for width: CGFloat) -> CGFloat

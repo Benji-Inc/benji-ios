@@ -9,8 +9,6 @@
 import Foundation
 import TMROLocalization
 
-typealias CompletionOptional = (() -> Void)?
-
 protocol ChannelDataSource: AnyObject {
 
     var numberOfMembers: Int { get set }

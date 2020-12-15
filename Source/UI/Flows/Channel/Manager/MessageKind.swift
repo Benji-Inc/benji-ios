@@ -8,6 +8,7 @@
 
 import Foundation
 import class CoreLocation.CLLocation
+import UIKit
 
 /// An enum representing the kind of message and its underlying kind.
 enum MessageKind {

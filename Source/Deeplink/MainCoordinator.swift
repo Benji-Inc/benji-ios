@@ -35,6 +35,9 @@ class MainCoordinator: Coordinator<Void> {
         self.router.setRootModule(self.splashVC, animated: true)
     }
 
+    #if !APPCLIP
+    // Code you don't want to use in your App Clip.
+
     func handle(result: LaunchStatus) {
 
         switch result {
@@ -60,11 +63,6 @@ class MainCoordinator: Coordinator<Void> {
             break
         }
     }
-
-    func handleAppClip(result: )
-
-    #if !APPCLIP
-    // Code you don't want to use in your App Clip.
 
     private func initializeChat(with token: String) {
         // Fixes double loading.
@@ -190,7 +188,36 @@ extension MainCoordinator: UserNotificationManagerDelegate {
 
 extension MainCoordinator: LaunchManagerDelegate {
     func launchManager(_ manager: LaunchManager, didFinishWith status: LaunchStatus) {
+        #if !APPCLIP
+        // Code you don't want to use in your App Clip.
         self.handle(result: status)
+        #else
+        // Code your App Clip may access.
+        self.handleAppClip(result: status)
+        #endif
     }
+
+    #if APPCLIP
+    func handleAppClip(result: LaunchStatus) {
+        switch result {
+        case .success(let object, _):
+            self.deepLink = object
+
+            if User.current().isNil {
+                runMain {
+                    self.runOnboardingFlow()
+                }
+            } else if let user = User.current(), !user.isOnboarded {
+                runMain {
+                    self.runOnboardingFlow()
+                }
+            } else {
+                // Show reservation status screen
+            }
+        case .failed(_):
+            break
+        }
+    }
+    #endif
 }
 

@@ -7,8 +7,11 @@
 //
 
 import Foundation
+import UIKit
 
 extension UICollectionView {
+
+    #if !APPCLIP
 
     func reload<T: Diffable>(previousItems: [T],
                              newItems: [T],
@@ -126,6 +129,8 @@ extension UICollectionView {
             completion?(completed)
         })
     }
+
+    #endif
 
     func centerMostIndexPath() -> IndexPath? {
         let point = CGPoint(x: self.halfWidth + self.contentOffset.x,

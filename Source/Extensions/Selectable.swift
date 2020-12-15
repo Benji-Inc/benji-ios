@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import UIKit
+import GestureRecognizerClosures
 
 protocol Selectable {
     func didSelect(_ completion: CompletionOptional)

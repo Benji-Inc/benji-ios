@@ -129,6 +129,8 @@ extension UIImage: Avatar {
     }
 }
 
+#if !APPCLIP
+// Code you don't want to use in your App Clip.
 extension UIImage: MediaItem {
 
     var url: URL? {
@@ -136,7 +138,7 @@ extension UIImage: MediaItem {
     }
 
     var fileName: String {
-        return Lorem.randomString()
+        return ""
     }
 
     var type: MediaType {
@@ -147,3 +149,4 @@ extension UIImage: MediaItem {
         return self.jpegData(compressionQuality: 100.0)
     }
 }
+#endif

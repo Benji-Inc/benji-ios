@@ -162,7 +162,7 @@ extension ChannelManager: TwilioChatClientDelegate {
         member.getMemberAsUser()
             .observeValue { (user) in
                 runMain {
-                    ToastScheduler.shared.schedule(toastType: .userStatusUpdateInChannel(user, status, channel))
+//                    ToastScheduler.shared.schedule(toastType: .userStatusUpdateInChannel(user, status, channel))
                 }
         }
     }
@@ -173,7 +173,7 @@ extension ChannelManager: TwilioChatClientDelegate {
         self.messageUpdate.value = MessageUpdate(channel: channel, message: message, status: .added)
 
         if ChannelSupplier.shared.activeChannel.value == nil, !message.isFromCurrentUser, message.context != .emergency {
-            ToastScheduler.shared.schedule(toastType: .message(message, channel))
+//            ToastScheduler.shared.schedule(toastType: .message(message, channel))
         }
     }
 

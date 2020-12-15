@@ -119,8 +119,8 @@ extension TCHMessage: Messageable {
                     self.getAuthorAsUser()
                         .observe(with: { (result) in
                             switch result {
-                            case .success(let author):
-                                ToastScheduler.shared.schedule(toastType: .messageConsumed(self, author))
+                            case .success(_):
+//                                ToastScheduler.shared.schedule(toastType: .messageConsumed(self, author))
                                 promise.resolve(with: ())
                             case .failure(let error):
                                 promise.reject(with: error)

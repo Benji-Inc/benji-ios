@@ -130,12 +130,16 @@ class LaunchManager {
     private func initializeUserData(with buo: BranchUniversalObject?) {
         if let identity = User.current()?.objectId {
             Branch.getInstance().setIdentity(identity)
+            #if !APPCLIP
             self.getChatToken(buo: buo)
+            #endif
         } else {
             self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: String()))
         }
     }
 
+    #if !APPCLIP
+    // Code you don't want to use in your App Clip.
     func getChatToken(buo: BranchUniversalObject?) {
         if ChannelManager.shared.isConnected {
             self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: String()))
@@ -153,6 +157,7 @@ class LaunchManager {
             }
         }
     }
+    #endif
 
     private func createTestBUO() -> BranchUniversalObject {
         var buo = BranchUniversalObject()

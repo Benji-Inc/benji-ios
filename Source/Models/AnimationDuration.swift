@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 /// Helper for easily setting/animating the transform coordinates of a UIView
 enum AnimationPosition {

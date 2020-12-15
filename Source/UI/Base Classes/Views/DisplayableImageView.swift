@@ -9,6 +9,7 @@
 import Foundation
 import Parse
 import SDWebImage
+import UIKit
 
 class DisplayableImageView: View {
 

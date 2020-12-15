@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 func pow(_ lhs: Int, _ rhs: Int) -> Int {
     return Int(powf(Float(lhs), Float(rhs)))

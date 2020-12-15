@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class View: UIView {
 
@@ -21,12 +22,4 @@ class View: UIView {
     }
 
     func initializeSubviews() { }
-
-    func showShadow(withOffset offset: CGFloat, color: UIColor = .black) {
-        self.layer.shadowColor = color.cgColor
-        self.layer.shadowOpacity = 0.2
-        self.layer.shadowOffset = CGSize(width: 0, height: offset)
-        self.layer.shadowRadius = 10
-        self.layer.masksToBounds = false
-    }
 }

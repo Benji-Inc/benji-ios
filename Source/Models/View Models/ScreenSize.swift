@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum ScreenSize: Int, CaseIterable {
     case phoneSmall = 651 // 4 inches iPhone 5 and SE

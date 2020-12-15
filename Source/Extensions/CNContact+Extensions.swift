@@ -55,13 +55,6 @@ extension CNContact {
     }
 }
 
-extension CNContact: ManageableCellItem {
-
-    var id: String {
-        return self.identifier
-    }
-}
-
 extension CNContact: Avatar {
 
     var image: UIImage? {
