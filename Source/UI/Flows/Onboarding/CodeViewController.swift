@@ -12,7 +12,6 @@ import ReactiveSwift
 import Parse
 import TMROLocalization
 import TMROFutures
-import Branch
 
 class CodeViewController: TextInputViewController<Void> {
 
@@ -64,8 +63,7 @@ class CodeViewController: TextInputViewController<Void> {
 
     private func becomeUser(with token: String) {
         User.become(inBackground: token) { (user, error) in
-            if let identity = user?.objectId {
-                Branch.getInstance().setIdentity(identity)
+            if let _ = user?.objectId {
                 UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
                 self.complete(with: .success(()))
             } else if let error = error {

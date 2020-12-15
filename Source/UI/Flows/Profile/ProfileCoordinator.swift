@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import Branch
 
 class ProfileCoordinator: Coordinator<Void> {
 

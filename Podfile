@@ -12,7 +12,6 @@ def shared_pods
   pod 'TMROCoordinator'
   pod 'TMROLocalization'
 
-  pod 'Branch'
   pod 'SDWebImage'
 end
 

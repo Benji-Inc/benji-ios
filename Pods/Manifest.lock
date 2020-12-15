@@ -1,6 +1,5 @@
 PODS:
   - Bolts/Tasks (1.9.1)
-  - Branch (0.36.0)
   - GestureRecognizerClosures (5.0.0)
   - lottie-ios (3.1.9)
   - Parse (1.19.1):
@@ -23,7 +22,6 @@ PODS:
   - TwilioChatClient (4.0.2)
 
 DEPENDENCIES:
-  - Branch
   - GestureRecognizerClosures
   - lottie-ios
   - Parse
@@ -38,7 +36,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - Bolts
-    - Branch
     - GestureRecognizerClosures
     - lottie-ios
     - Parse
@@ -52,7 +49,6 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
-  Branch: 8aebcb7a6465f19f9f4d315acced369ae078d3f2
   GestureRecognizerClosures: 0dcafb45e669e7a775c840383e54b3d16983037b
   lottie-ios: 3a3758ef5a008e762faec9c9d50a39842f26d124
   Parse: e40fdb9c7d665823b7fe9865949cac9a53eb2ce7
@@ -64,6 +60,6 @@ SPEC CHECKSUMS:
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
   TwilioChatClient: bc386ab597f9fbb8e799491f15c07519d080a4f2
 
-PODFILE CHECKSUM: d0477c0296cbf10189e1f56c9dcc9c3ef1cbe59e
+PODFILE CHECKSUM: 33055c5fe11aab3edf86e28ba254f09566f9be04
 
 COCOAPODS: 1.10.0.rc.1

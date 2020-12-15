@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import Branch
 import ReactiveSwift
 import TMROFutures
 
@@ -61,61 +60,7 @@ class LaunchManager {
             UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
         }
 
-        // We initialize branch first so we can pass any attributes into the create user call that it might have
-        self.initializeBranchIfNeeded(with: options)
-            .observe(with: { (result) in
-                switch result {
-                case .success(let buo):
-                    self.initializeUserData(with: buo)
-                case .failure(_):
-                    self.initializeUserData(with: nil)
-                }
-            })
-    }
-
-    private func initializeBranchIfNeeded(with launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Future<BranchUniversalObject?> {
-
-        let promise = Promise<BranchUniversalObject?>()
-
-        // There's no need to initialize the branch session multiple times per app session.
-        guard self.shouldInitializeBranchSession else {
-            promise.resolve(with: nil)
-            return promise
-        }
-
-        let branch: Branch = Branch.getInstance()
-
-        let notificationInfo = launchOptions?[.remoteNotification] as? [String : Any]
-        if let data = notificationInfo?["data"] as? [String : Any],
-            let branchLink = data["branch"] as? String {
-            branch.handleDeepLink(URL(string: branchLink))
-        }
-
-        branch.initSession(launchOptions: launchOptions,
-                           andRegisterDeepLinkHandlerUsingBranchUniversalObject: { (branchObject, properties, error) in
-
-                            // Use for testing
-                            //let buo = self.createTestBUO()
-
-                            if let buo = branchObject {
-                                self.updateUser(with: buo)
-                                promise.resolve(with: buo)
-                            } else if let buo = Branch.getInstance().getLatestReferringBranchUniversalObject() {
-                                self.updateUser(with: buo)
-                                promise.resolve(with: buo)
-                            } else {
-                                promise.resolve(with: nil)
-                            }
-
-                            if let _ = error {
-                                // IMPORTANT: Allow the launch sequence to continue even if branch fails.
-                                // We don't want issues with the branch api to block our app from launching.
-                            } else {
-                                self.shouldInitializeBranchSession = false
-                            }
-        })
-
-        return promise
+        self.initializeUserData(with: nil)
     }
 
     func updateUser(with deeplink: DeepLinkable) {
@@ -127,22 +72,21 @@ class LaunchManager {
             .makeRequest(andUpdate: [], viewsToIgnore: [])
     }
 
-    private func initializeUserData(with buo: BranchUniversalObject?) {
-        if let identity = User.current()?.objectId {
-            Branch.getInstance().setIdentity(identity)
+    private func initializeUserData(with deeplink: DeepLinkable?) {
+        if let _ = User.current()?.objectId {
             #if !APPCLIP
-            self.getChatToken(buo: buo)
+            self.getChatToken(with: deeplink)
             #endif
         } else {
-            self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: String()))
+            self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: String()))
         }
     }
 
     #if !APPCLIP
     // Code you don't want to use in your App Clip.
-    func getChatToken(buo: BranchUniversalObject?) {
+    func getChatToken(with deeplink: DeepLinkable?) {
         if ChannelManager.shared.isConnected {
-            self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: String()))
+            self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: String()))
         } else {
             GetChatToken()
                 .makeRequest(andUpdate: [], viewsToIgnore: [])
@@ -150,7 +94,7 @@ class LaunchManager {
                     switch result {
                     case .success(let token):
                         self.finishedInitialFetch = true
-                        self.delegate?.launchManager(self, didFinishWith: .success(object: buo, token: token))
+                        self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: token))
                     case .failure(_):
                         self.delegate?.launchManager(self, didFinishWith: .failed(error: ClientError.generic))
                     }
@@ -159,28 +103,13 @@ class LaunchManager {
     }
     #endif
 
-    private func createTestBUO() -> BranchUniversalObject {
-        var buo = BranchUniversalObject()
-        buo.deepLinkTarget = .feed
-        buo.channelId = "CH489170e8675049048bf3179e48d2a47a"
-        return buo
-    }
-
     func continueUser(activity: NSUserActivity) -> Bool {
-
-        #if !APPCLIP
-        // Code you don't want to use in your App Clip.
-        return Branch.getInstance().continue(activity)
-        #else
-        // Code your App Clip may access.
         if activity.activityType == NSUserActivityTypeBrowsingWeb,
            let incomingURL = activity.webpageURL,
            let components = NSURLComponents(url: incomingURL, resolvingAgainstBaseURL: true) {
             // do something
             print(components)
         }
-
         return true
-        #endif
     }
 }
