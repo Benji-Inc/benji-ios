@@ -28,6 +28,6 @@ struct CreateChannel: CloudFunction {
         return self.makeRequest(andUpdate: statusables,
                                 params: params,
                                 callName: "createChannel",
-                                viewsToIgnore: viewsToIgnore)
+                                viewsToIgnore: viewsToIgnore).asVoid()
     }
 }

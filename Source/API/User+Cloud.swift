@@ -19,6 +19,6 @@ struct UpdateUser: CloudFunction {
         return self.makeRequest(andUpdate: statusables,
                                 params: self.attributes,
                                 callName: "updateUser",
-                                viewsToIgnore: viewsToIgnore)
+                                viewsToIgnore: viewsToIgnore).asVoid()
     }
 }

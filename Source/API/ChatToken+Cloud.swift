@@ -17,6 +17,8 @@ struct GetChatToken: CloudFunction {
         return self.makeRequest(andUpdate: statusables,
                                 params: [:],
                                 callName: "getChatToken",
-                                viewsToIgnore: viewsToIgnore)
+                                viewsToIgnore: viewsToIgnore).transform { (value) -> String in
+                                    return value as? String ?? String()
+                                }
     }
 }

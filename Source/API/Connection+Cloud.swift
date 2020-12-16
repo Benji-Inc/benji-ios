@@ -24,7 +24,7 @@ struct UpdateConnection: CloudFunction {
         return self.makeRequest(andUpdate: statusables,
                                 params: params,
                                 callName: "updateConnection",
-                                viewsToIgnore: viewsToIgnore)
+                                viewsToIgnore: viewsToIgnore).asVoid()
     }
 }
 

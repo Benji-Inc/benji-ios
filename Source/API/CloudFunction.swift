@@ -17,11 +17,11 @@ protocol CloudFunction: StatusableRequest {
 extension CloudFunction {
 
     func makeRequest(andUpdate statusables: [Statusable],
-                     params: [String: Any],
-                     callName: String,
-                     viewsToIgnore: [UIView]) -> Future<ReturnType> {
+                        params: [String: Any],
+                        callName: String,
+                        viewsToIgnore: [UIView]) -> Future<Any> {
 
-        let promise = Promise<ReturnType>()
+        let promise = Promise<Any>()
 
         // Trigger the loading event for all statusables
         for statusable in statusables {
@@ -42,7 +42,7 @@ extension CloudFunction {
                     statusable.value?.handleEvent(status: .error(error.localizedDescription))
                 }
                 promise.reject(with: error)
-            } else if let value = object as? ReturnType {
+            } else if let value = object {
                 weakStatusables.forEach { (statusable) in
                     statusable.value?.handleEvent(status: .saved)
                 }

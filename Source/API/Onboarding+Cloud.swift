@@ -19,7 +19,7 @@ struct SendCode: CloudFunction {
     let installationId: String
     let reservationId: String?
 
-    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> Future<ReturnType> {
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> Future<Void> {
         let params = ["phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164),
                       "installationId": self.installationId,
                       "reservationId": String(optional: self.reservationId),
@@ -28,7 +28,7 @@ struct SendCode: CloudFunction {
         return self.makeRequest(andUpdate: statusables,
                                 params: params,
                                 callName: "sendCode",
-                                viewsToIgnore: viewsToIgnore)
+                                viewsToIgnore: viewsToIgnore).asVoid()
     }
 }
 
@@ -54,6 +54,12 @@ struct VerifyCode: CloudFunction {
         return self.makeRequest(andUpdate: statusables,
                                 params: params,
                                 callName: "validateCode",
-                                viewsToIgnore: viewsToIgnore)
+                                viewsToIgnore: viewsToIgnore).transform { (value) -> VerifyCodeResult in
+                                    if let dict = value as? [String: String] {
+                                        return .success("Foo")
+                                    } else {
+                                        return .addedToWaitlist
+                                    }
+                                }
     }
 }
