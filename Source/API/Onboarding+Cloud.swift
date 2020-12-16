@@ -55,8 +55,8 @@ struct VerifyCode: CloudFunction {
                                 params: params,
                                 callName: "validateCode",
                                 viewsToIgnore: viewsToIgnore).transform { (value) -> VerifyCodeResult in
-                                    if let dict = value as? [String: String] {
-                                        return .success("Foo")
+                                    if let token = value as? String, !token.isEmpty {
+                                        return .success(token)
                                     } else {
                                         return .addedToWaitlist
                                     }
