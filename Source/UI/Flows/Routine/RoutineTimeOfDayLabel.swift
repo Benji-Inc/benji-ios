@@ -8,15 +8,20 @@
 
 import Foundation
 
-class RoutineTimeOfDayLabel: SmallLabel {
+class RoutineTimeOfDayLabel: newLabel {
+
+    override func initializeLabel() {
+        super.initializeLabel()
+
+        self.stringCasing = .uppercase
+        self.setTextColor(.lightPurple)
+        self.textAlignment = .left
+    }
 
     func set(date: Date) {
         let formatter = DateFormatter()
         formatter.dateFormat = "a"
         let string = formatter.string(from: date)
-        self.set(text: string,
-                 color: .lightPurple,
-                 alignment: .left,
-                 stringCasing: .uppercase)
+        self.setText(string)
     }
 }

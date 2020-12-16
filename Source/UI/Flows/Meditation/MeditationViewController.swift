@@ -15,9 +15,9 @@ protocol MeditationViewControllerDelegate: class {
 
 class MeditationViewController: NavigationBarViewController {
 
-    private let emojiLabel = DisplayThinLabel()
+    private let emojiLabel = newLabel(font: .displayThin)
     private let circleView = View()
-    private let label = SmallLabel()
+    private let label = newLabel(font: .small)
     private let button = Button()
 
     private var startDate: Date?
@@ -46,9 +46,11 @@ class MeditationViewController: NavigationBarViewController {
         self.circleView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
         self.circleView.alpha = 0
 
+        self.emojiLabel.textAlignment = .center
         self.view.addSubview(self.emojiLabel)
         self.view.addSubview(self.label)
-        self.label.set(text: "Well done.", color: .white, alignment: .center)
+        self.label.textAlignment = .center
+        self.label.setText("Well done.")
         self.label.alpha = 0
 
         self.view.addSubview(self.button)
@@ -81,7 +83,7 @@ class MeditationViewController: NavigationBarViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        self.emojiLabel.set(text: "🧘‍♀️", color: .clear, alignment: .center)
+        self.emojiLabel.setText("🧘‍♀️")
 
         self.runAnimation()
 
@@ -130,7 +132,7 @@ class MeditationViewController: NavigationBarViewController {
         UIView.animate(withDuration: Theme.animationDuration, delay: 0, options: .curveEaseInOut, animations: {
             self.emojiLabel.alpha = 0
         }) { (_) in
-            self.emojiLabel.set(text: "😌", color: .clear, alignment: .center)
+            self.emojiLabel.setText("😌")
             UIView.animate(withDuration: Theme.animationDuration) {
                 self.emojiLabel.alpha = 1
                 self.label.alpha = 1 

@@ -23,14 +23,14 @@ class FeedViewController: ViewController {
     weak var delegate: FeedViewControllerDelegate?
 
     private let countDownView = CountDownView()
-    private let messageLabel = MediumLabel()
+    private let messageLabel = newLabel(font: .medium)
     private let reloadButton = Button()
     lazy var indicatorView = FeedIndicatorView(with: self)
 
     var message: Localized? {
         didSet {
             guard let text = self.message else { return }
-            self.messageLabel.set(text: text, alignment: .center)
+            self.messageLabel.setText(text)
         }
     }
     private var currentTriggerDate: Date? {
@@ -48,6 +48,7 @@ class FeedViewController: ViewController {
         self.view.addSubview(self.messageLabel)
         self.view.addSubview(self.reloadButton)
         self.messageLabel.alpha = 0
+        self.messageLabel.textAlignment = .center
         self.reloadButton.alpha = 0
         self.view.addSubview(self.countDownView)
         self.view.addSubview(self.indicatorView)
@@ -109,7 +110,7 @@ class FeedViewController: ViewController {
 
     func showReload() {
         runMain {
-            self.messageLabel.set(text: "You are all caught up!\nSee you tomorrow 🤗", alignment: .center)
+            self.messageLabel.setText("You are all caught up!\nSee you tomorrow 🤗")
             self.view.bringSubviewToFront(self.reloadButton)
             self.view.layoutNow()
             UIView.animate(withDuration: Theme.animationDuration, delay: Theme.animationDuration, options: .curveEaseInOut, animations: {

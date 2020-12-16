@@ -13,7 +13,7 @@ import Lottie
 class ReadAllFooterView: UICollectionReusableView {
 
     let animationView = AnimationView(name: "loading")
-    private let label = SmallBoldLabel()
+    private let label = newLabel(font: .smallBold)
     var isAnimatingFinal: Bool = false
     var currentTransform: CGAffineTransform?
     private let minScale: CGFloat = 0.8
@@ -32,6 +32,7 @@ class ReadAllFooterView: UICollectionReusableView {
         self.set(backgroundColor: .clear)
         self.addSubview(self.label)
         self.label.alpha = 0
+        self.label.textAlignment = .center
         self.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
@@ -46,7 +47,7 @@ class ReadAllFooterView: UICollectionReusableView {
             text = "You're up to date."
         }
 
-        self.label.set(text: text, color: .white, alignment: .center, stringCasing: .unchanged)
+        self.label.setText(text)
         self.prepareInitialAnimation()
         self.layoutNow()
     }

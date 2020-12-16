@@ -13,14 +13,15 @@ import TMROLocalization
 class SplashViewController: FullScreenViewController {
 
     let animationView = AnimationView(name: "loading")
-    let label = SmallLabel()
+    let label = newLabel(font: .small)
 
     private let messages = ["Booting up", "Getting coffee", "Connecting", "Saving a tree", "Finding purpose", "Doing math"]
 
     var text: Localized? {
         didSet {
             guard let text = self.text else { return }
-            self.label.set(text: text, color: .background4)
+            self.label.setText(text)
+            self.label.setTextColor(.background4)
             self.view.layoutNow()
         }
     }

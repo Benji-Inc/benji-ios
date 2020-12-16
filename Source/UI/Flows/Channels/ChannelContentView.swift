@@ -17,9 +17,9 @@ class ChannelContentView: View {
     private lazy var vibrancyEffect = UIVibrancyEffect(blurEffect: self.blurEffect)
     private lazy var vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
 
-    private(set) var titleLabel = DisplayUnderlinedLabel()
+    private(set) var titleLabel = newLabel(font: .displayUnderlined)
     private let stackedAvatarView = StackedAvatarView()
-    private let descriptionLabel = SmallLabel()
+    private let descriptionLabel = newLabel(font: .small, textColor: .background4)
     private let dateLabel = ChannelDateLabel()
 
     var descriptionText: Localized? {
@@ -33,7 +33,7 @@ class ChannelContentView: View {
                     }
                 }
             } else {
-                self.descriptionLabel.set(text: text, color: .background4)
+                self.descriptionLabel.setText(text)
             }
         }
     }
@@ -116,27 +116,33 @@ class ChannelContentView: View {
 
                         if let context = channel.context {
                             if channel.isOwnedByMe {
-                                self.titleLabel.set(text: first.givenName, color: context.color)
+                                self.titleLabel.setText(first.givenName)
+                                self.titleLabel.setTextColor(context.color)
                             } else if let author = users.first(where: { (user) -> Bool in
                                 return user.id == channel.createdBy
                             }) {
-                                self.titleLabel.set(text: author.givenName, color: context.color)
+                                self.titleLabel.setText(author.givenName)
+                                self.titleLabel.setTextColor(context.color)
                             }
                         } else {
                             if channel.isOwnedByMe {
-                                self.titleLabel.set(text: first.givenName, color: .white)
+                                self.titleLabel.setText(first.givenName)
+                                self.titleLabel.setTextColor(.white)
                             } else if let author = users.first(where: { (user) -> Bool in
                                 return user.id == channel.createdBy
                             }) {
-                                self.titleLabel.set(text: author.givenName, color: .white)
+                                self.titleLabel.setText(author.givenName)
+                                self.titleLabel.setTextColor(.white)
                             }
                         }
 
                     } else if let name = channel.friendlyName {
-                        self.titleLabel.set(text: name.capitalized, color: channel.context?.color ?? .white)
+                        self.titleLabel.setText(name.capitalized)
+                        self.titleLabel.setTextColor(channel.context?.color ?? .white)
                         self.descriptionText = "Start here to learn your way around."
                     } else {
-                        self.titleLabel.set(text: "You", color: channel.context?.color ?? .white)
+                        self.titleLabel.setText("You")
+                        self.titleLabel.setTextColor(channel.context?.color ?? .white)
                         self.descriptionText = "It's just you in here."
                     }
 
@@ -146,7 +152,7 @@ class ChannelContentView: View {
             })
 
         if let date = channel.dateUpdatedAsDate {
-            self.dateLabel.set(date: date, color: .background3, alignment: .right)
+            self.dateLabel.set(date: date)
         }
 
         self.layoutNow()

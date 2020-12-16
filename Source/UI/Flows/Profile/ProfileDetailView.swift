@@ -10,8 +10,8 @@ import Foundation
 
 class ProfileDetailView: View {
     
-    let titleLabel = SmallLabel()
-    let label = SmallBoldLabel()
+    let titleLabel = newLabel(font: .small)
+    let label = newLabel(font: .smallBold)
     let button = Button()
 
     override func initializeSubviews() {
@@ -30,13 +30,13 @@ class ProfileDetailView: View {
         case .picture:
             break
         case .name:
-            self.titleLabel.set(text: "Name")
-            self.label.set(text: user.fullName)
+            self.titleLabel.setText("Name")
+            self.label.setText(user.fullName)
         case .localTime:
-            self.titleLabel.set(text: "Local Time")
-            self.label.set(text: Date.nowInLocalFormat)
+            self.titleLabel.setText("Local Time")
+            self.label.setText(Date.nowInLocalFormat)
         case .routine:
-            self.titleLabel.set(text: "Routine")
+            self.titleLabel.setText("Routine")
             self.getRoutine(for: user)
         }
 
@@ -61,7 +61,7 @@ class ProfileDetailView: View {
 
     private func getRoutine(for user: User) {
 
-        self.label.set(text: "NO ROUTINE SET")
+        self.label.setText("NO ROUTINE SET")
         self.button.set(style: .normal(color: .lightPurple, text: "Set"))
         self.button.isHidden = false
 
@@ -70,7 +70,7 @@ class ProfileDetailView: View {
                 let formatter = DateFormatter()
                 formatter.dateFormat = "h:mm a"
                 let string = formatter.string(from: date)
-                self.label.set(text: string)
+                self.label.setText(string)
                 self.button.set(style: .normal(color: .lightPurple, text: "Update"))
             }
 

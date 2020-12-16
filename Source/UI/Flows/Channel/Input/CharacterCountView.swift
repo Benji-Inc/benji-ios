@@ -10,12 +10,13 @@ import Foundation
 
 class CharacterCountView: View {
 
-    let label = SmallLabel()
+    let label = newLabel(font: .small)
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.addSubview(self.label)
+        self.label.textAlignment = .center
     }
 
     override func layoutSubviews() {
@@ -29,17 +30,18 @@ class CharacterCountView: View {
     func udpate(with count: Int, max: Int) {
         if count >= max {
             self.isHidden = false
-            self.label.set(text: self.getText(from: count, max: max), color: .red, alignment: .center)
+            self.label.setText(self.getText(from: count, max: max))
+            self.label.setTextColor(.red)
         } else if count >= max - 20 {
             self.isHidden = false
-            self.label.set(text: self.getText(from: count, max: max), color: .orange, alignment: .center)
+            self.label.setText(self.getText(from: count, max: max))
+            self.label.setTextColor(.orange)
         } else {
             self.isHidden = true
         }
     }
 
     private func getText(from count: Int, max: Int) -> String {
-
         return String("\(String(count))/\(String(max))")
     }
 }

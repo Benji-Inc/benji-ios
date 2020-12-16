@@ -15,8 +15,8 @@ class NavigationBarViewController: ViewController {
     private(set) var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private(set) var animationView = AnimationView(name: "arrow")
     private(set) var backButton = Button()
-    private(set) var titleLabel = RegularBoldLabel()
-    private(set) var descriptionLabel = SmallLabel()
+    private(set) var titleLabel = newLabel(font: .regularBold)
+    private(set) var descriptionLabel = newLabel(font: .small)
     /// Place all views under the lineView 
     private(set) var lineView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     let scrollView = UIScrollView()
@@ -46,13 +46,12 @@ class NavigationBarViewController: ViewController {
     }
 
     func updateNavigationBar(animateBackButton: Bool = true) {
-        self.titleLabel.set(text: self.getTitle(),
-                            alignment: .center,
-                            stringCasing: .uppercase)
-        self.descriptionLabel.set(text: self.getDescription(),
-                                  color: .white,
-                                  alignment: .center,
-                                  stringCasing: .unchanged)
+        self.titleLabel.setText(self.getTitle())
+        self.titleLabel.textAlignment = .center
+        self.titleLabel.stringCasing = .uppercase
+
+        self.descriptionLabel.setText(self.getDescription())
+        self.descriptionLabel.textAlignment = .center
 
         if animateBackButton {
             delay(1.5) {

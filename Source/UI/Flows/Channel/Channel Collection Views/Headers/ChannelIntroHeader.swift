@@ -14,7 +14,7 @@ class ChannelIntroHeader: UICollectionReusableView {
 
     let avatarView = AvatarView()
     let textView = TextView()
-    let label = DisplayUnderlinedLabel()
+    let label = newLabel(font: .displayUnderlined, textColor: .background4)
 
     private(set) var channel: DisplayableChannel?
 
@@ -71,7 +71,7 @@ class ChannelIntroHeader: UICollectionReusableView {
 
                         if let first = notMeUsers.first, let date = tchChannel.dateCreatedAsDate {
                             self.avatarView.set(avatar: first)
-                            self.label.set(text: first.givenName, color: .background4)
+                            self.label.setText(first.givenName)
                             let message = self.getMessage(name: first.givenName, date: date)
                             let attributed = AttributedString(message,
                                                               fontType: .small,

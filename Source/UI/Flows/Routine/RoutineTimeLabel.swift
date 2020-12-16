@@ -8,8 +8,16 @@
 
 import Foundation
 
-class RoutineTimeLabel: Label {
+class RoutineTimeLabel: newLabel {
 
+    init() {
+        super.init(font: .displayThin)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func set(date: Date) {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mm a"

@@ -8,17 +8,29 @@
 
 import Foundation
 
-class ChannelDateLabel: Label {
+class ChannelDateLabel: newLabel {
 
-    func set(date: Date,
-             color: Color = .white,
-             alignment: NSTextAlignment = .left) {
+    init() {
+        super.init(font: .smallBold)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func initializeLabel() {
+        super.initializeLabel()
+
+        self.textAlignment = .right
+    }
+
+    func set(date: Date) {
 
         let attributed = AttributedString(self.getString(for: date),
                                           fontType: .smallBold,
-                                          color: color)
+                                          color: .background3)
         self.set(attributed: attributed,
-                 alignment: alignment,
+                 alignment: .right,
                  lineCount: 1,
                  stringCasing: .uppercase)
     }

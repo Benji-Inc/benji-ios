@@ -10,7 +10,7 @@ import Foundation
 
 class CountDownView: View {
 
-    private let timeLabel = ComponentLabel()
+    private let timeLabel = newLabel(font: .displayThin)
     private(set) var timer: Timer?
     private var referenceDate: Date?
 
@@ -19,6 +19,7 @@ class CountDownView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        self.timeLabel.textAlignment = .center
         self.addSubview(self.timeLabel)
     }
 
@@ -50,7 +51,7 @@ class CountDownView: View {
         // If the present time is greater than the referenceDate than the countdown is expired.
         if now > refDate {
             self.timer?.invalidate()
-            self.timeLabel.set(value: "00 : 00")
+            self.timeLabel.setText("00 : 00")
             self.didExpire()
         } else {
             // Otherwise get the differnce in DateComponents
@@ -59,7 +60,7 @@ class CountDownView: View {
                               components.minute ?? 00,
                               components.second ?? 00)
 
-            self.timeLabel.set(value: time)
+            self.timeLabel.setText(time)
         }
     }
 
@@ -67,12 +68,5 @@ class CountDownView: View {
         return Calendar.current.dateComponents([.minute, .second],
                                                from: now,
                                                to: reference)
-    }
-}
-
-private class ComponentLabel: DisplayThinLabel {
-
-    func set(value: String) {
-        self.set(text: value, color: .white, alignment: .center)
     }
 }

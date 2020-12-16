@@ -11,7 +11,7 @@ import Foundation
 class RoutineInputContentView: View {
 
     let timeLabel = RoutineTimeLabel()
-    let everyDayLabel = SmallBoldLabel()
+    let everyDayLabel = newLabel(font: .smallBold)
 
     let plusButton = Button()
     let minusButton = Button()
@@ -25,10 +25,9 @@ class RoutineInputContentView: View {
         
         self.addSubview(self.timeLabel)
         self.addSubview(self.everyDayLabel)
-        self.everyDayLabel.set(text: "EVERY DAY",
-                               color: .white,
-                               alignment: .center,
-                               stringCasing: .uppercase)
+        self.everyDayLabel.setText("EVERY DAY")
+        self.everyDayLabel.textAlignment = .center
+        self.everyDayLabel.stringCasing = .uppercase
 
         self.addSubview(self.plusButton)
         self.plusButton.setImage(UIImage(systemName: "plus"), for: .normal)
