@@ -15,9 +15,9 @@ protocol MeditationViewControllerDelegate: class {
 
 class MeditationViewController: NavigationBarViewController {
 
-    private let emojiLabel = newLabel(font: .displayThin)
+    private let emojiLabel = Label(font: .displayThin)
     private let circleView = View()
-    private let label = newLabel(font: .small)
+    private let label = Label(font: .small)
     private let button = Button()
 
     private var startDate: Date?

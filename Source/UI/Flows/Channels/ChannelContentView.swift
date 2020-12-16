@@ -17,9 +17,9 @@ class ChannelContentView: View {
     private lazy var vibrancyEffect = UIVibrancyEffect(blurEffect: self.blurEffect)
     private lazy var vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
 
-    private(set) var titleLabel = newLabel(font: .displayUnderlined)
+    private(set) var titleLabel = Label(font: .displayUnderlined)
     private let stackedAvatarView = StackedAvatarView()
-    private let descriptionLabel = newLabel(font: .small, textColor: .background4)
+    private let descriptionLabel = Label(font: .small, textColor: .background4)
     private let dateLabel = ChannelDateLabel()
 
     var descriptionText: Localized? {

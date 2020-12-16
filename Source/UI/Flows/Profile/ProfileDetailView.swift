@@ -10,8 +10,8 @@ import Foundation
 
 class ProfileDetailView: View {
     
-    let titleLabel = newLabel(font: .small)
-    let label = newLabel(font: .smallBold)
+    let titleLabel = Label(font: .small)
+    let label = Label(font: .smallBold)
     let button = Button()
 
     override func initializeSubviews() {

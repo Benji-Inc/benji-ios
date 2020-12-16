@@ -10,7 +10,7 @@ import Foundation
 
 class CharacterCountView: View {
 
-    let label = newLabel(font: .small)
+    let label = Label(font: .small)
 
     override func initializeSubviews() {
         super.initializeSubviews()

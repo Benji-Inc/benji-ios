@@ -11,7 +11,7 @@ import UIKit
 import TMROLocalization
 
 /// A custom label that automatically applies font, color and kerning attributes to text set through the standard text member variable.
-class newLabel: UILabel {
+class Label: UILabel {
 
     override var text: String? {
         get { return super.text }
@@ -160,7 +160,7 @@ class newLabel: UILabel {
     }
 }
 
-extension newLabel {
+extension Label {
 
     func setSize(withWidth width: CGFloat, height: CGFloat = .greatestFiniteMagnitude) {
         self.size = self.getSize(withWidth: width, height: height)

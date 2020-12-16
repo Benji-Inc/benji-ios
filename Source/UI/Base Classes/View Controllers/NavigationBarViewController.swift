@@ -15,8 +15,8 @@ class NavigationBarViewController: ViewController {
     private(set) var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private(set) var animationView = AnimationView(name: "arrow")
     private(set) var backButton = Button()
-    private(set) var titleLabel = newLabel(font: .regularBold)
-    private(set) var descriptionLabel = newLabel(font: .small)
+    private(set) var titleLabel = Label(font: .regularBold)
+    private(set) var descriptionLabel = Label(font: .small)
     /// Place all views under the lineView 
     private(set) var lineView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     let scrollView = UIScrollView()

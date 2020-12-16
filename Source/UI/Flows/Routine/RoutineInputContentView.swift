@@ -11,7 +11,7 @@ import Foundation
 class RoutineInputContentView: View {
 
     let timeLabel = RoutineTimeLabel()
-    let everyDayLabel = newLabel(font: .smallBold)
+    let everyDayLabel = Label(font: .smallBold)
 
     let plusButton = Button()
     let minusButton = Button()

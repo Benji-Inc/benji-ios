@@ -23,7 +23,7 @@ class FeedViewController: ViewController {
     weak var delegate: FeedViewControllerDelegate?
 
     private let countDownView = CountDownView()
-    private let messageLabel = newLabel(font: .medium)
+    private let messageLabel = Label(font: .medium)
     private let reloadButton = Button()
     lazy var indicatorView = FeedIndicatorView(with: self)
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ChannelDateLabel: newLabel {
+class ChannelDateLabel: Label {
 
     init() {
         super.init(font: .smallBold)

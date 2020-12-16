@@ -11,9 +11,9 @@ import TMROLocalization
 
 class FeedIntroView: View {
 
-    private let timeLabel = newLabel(font: .displayThin, textColor: .lightPurple)
-    private let label = newLabel(font: .regular)
-    private let descritpionLabel = newLabel(font: .small, textColor: .background3)
+    private let timeLabel = Label(font: .displayThin, textColor: .lightPurple)
+    private let label = Label(font: .regular)
+    private let descritpionLabel = Label(font: .small, textColor: .background3)
 
     override func initializeSubviews() {
         super.initializeSubviews()

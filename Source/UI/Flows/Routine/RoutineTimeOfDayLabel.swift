@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RoutineTimeOfDayLabel: newLabel {
+class RoutineTimeOfDayLabel: Label {
 
     override func initializeLabel() {
         super.initializeLabel()

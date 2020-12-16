@@ -13,7 +13,7 @@ import TMROLocalization
 class SplashViewController: FullScreenViewController {
 
     let animationView = AnimationView(name: "loading")
-    let label = newLabel(font: .small)
+    let label = Label(font: .small)
 
     private let messages = ["Booting up", "Getting coffee", "Connecting", "Saving a tree", "Finding purpose", "Doing math"]
 

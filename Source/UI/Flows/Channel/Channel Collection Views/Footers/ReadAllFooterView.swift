@@ -13,7 +13,7 @@ import Lottie
 class ReadAllFooterView: UICollectionReusableView {
 
     let animationView = AnimationView(name: "loading")
-    private let label = newLabel(font: .smallBold)
+    private let label = Label(font: .smallBold)
     var isAnimatingFinal: Bool = false
     var currentTransform: CGAffineTransform?
     private let minScale: CGFloat = 0.8

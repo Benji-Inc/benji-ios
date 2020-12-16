@@ -12,7 +12,7 @@ import TMROLocalization
 class TextEntryField: View, Sizeable {
 
     private(set) var textField: UITextField
-    private let titleLabel = newLabel(font: .smallBold)
+    private let titleLabel = Label(font: .smallBold)
     private let title: Localized
     private let placeholder: Localized?
     private let lineView = View()

@@ -14,7 +14,7 @@ class ChannelIntroHeader: UICollectionReusableView {
 
     let avatarView = AvatarView()
     let textView = TextView()
-    let label = newLabel(font: .displayUnderlined, textColor: .background4)
+    let label = Label(font: .displayUnderlined, textColor: .background4)
 
     private(set) var channel: DisplayableChannel?
 

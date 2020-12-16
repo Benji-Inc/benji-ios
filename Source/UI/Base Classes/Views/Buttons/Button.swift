@@ -34,7 +34,7 @@ class Button: UIButton, Statusable {
     let animationView = AnimationView(name: "loading")
 
     var style: ButtonStyle?
-    lazy var errorLabel = newLabel(font: .regular)
+    lazy var errorLabel = Label(font: .regular)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
