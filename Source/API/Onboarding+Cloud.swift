@@ -34,7 +34,7 @@ struct SendCode: CloudFunction {
 
 enum VerifyCodeResult {
     case success(String)
-    case addedToWaitlist
+    case error
 }
 
 struct VerifyCode: CloudFunction {
@@ -58,7 +58,7 @@ struct VerifyCode: CloudFunction {
                                     if let token = value as? String, !token.isEmpty {
                                         return .success(token)
                                     } else {
-                                        return .addedToWaitlist
+                                        return .error
                                     }
                                 }
     }

@@ -14,6 +14,7 @@ enum OnboardingContent: Switchable {
     case phone(PhoneViewController)
     case code(CodeViewController)
     case name(NameViewController)
+    case waitlist(WaitlistViewController)
     case photo(PhotoViewController)
 
     var viewController: UIViewController & Sizeable {
@@ -23,6 +24,8 @@ enum OnboardingContent: Switchable {
         case .code(let vc):
             return vc
         case .name(let vc):
+            return vc
+        case .waitlist(let vc):
             return vc
         case .photo(let vc):
             return vc
@@ -37,6 +40,8 @@ enum OnboardingContent: Switchable {
             return true
         case .name(_):
             return false
+        case .waitlist(_):
+            return false 
         case .photo(_):
             return true
         }

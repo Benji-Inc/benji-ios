@@ -52,7 +52,7 @@ class CodeViewController: TextInputViewController<Void> {
                 switch result {
                 case .success(let token):
                     self.becomeUser(with: token)
-                case .addedToWaitlist:
+                case .error:
                     break
                 }
 

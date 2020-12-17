@@ -20,6 +20,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var phoneVC = PhoneViewController(with: self.reservationId, reservationCreatorId: self.reservationCreatorId)
     lazy var codeVC = CodeViewController(with: self.reservationId)
     lazy var nameVC = NameViewController()
+    lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
     let avatarView = AvatarView()
     
@@ -68,7 +69,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.codeVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                if let current = User.current(), current.isOnboarded {
+                if let current = User.current(), current.isOnboarded { // TODO: current.status == .active {
                     self.delegate.onboardingView(self, didVerify: current)
                 } else {
                     self.currentContent.value = .name(self.nameVC)
@@ -81,7 +82,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.nameVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                self.currentContent.value = .photo(self.photoVC)
+                self.handleNameSuccess()
             case .failure(let error):
                 print(error)
             }
@@ -125,7 +126,15 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getInitialContent() -> OnboardingContent {
-        return .phone(self.phoneVC)
+        if User.current()?.status == .inactive {
+            if let name = User.current()?.fullName, name.isValidPersonName {
+                return .name(self.nameVC)
+            } else {
+                return .waitlist(self.waitlistVC)
+            }
+        } else {
+            return .phone(self.phoneVC)
+        }
     }
 
     override func getTitle() -> Localized {
@@ -136,6 +145,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             return "Vefify Code"
         case .name(_):
             return "Add your name"
+        case .waitlist(_):
+            return "Congrats! 🎉"
         case .photo(let vc):
             guard let state = vc.currentState.value else {
                 return LocalizedString(id: "",
@@ -189,7 +200,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                                        arguments: [],
                                        default: "Please verify your account using the mobile number for this device.")
             }
-
         case .code(_):
             if let user = self.reservationUser {
                 return LocalizedString(id: "",
@@ -205,6 +215,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             return LocalizedString(id: "",
                                    arguments: [],
                                    default: "Please use your legal first and last name.")
+        case .waitlist(_):
+            return LocalizedString(id: "",
+                                   arguments: [],
+                                   default: "You will receive a text once your slot opens up.")
         case .photo(_):
             return LocalizedString(id: "",
                                    arguments: [],
@@ -215,14 +229,12 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func didSelectBackButton() {
 
         switch self.currentContent.value {
-        case .phone(_):
-            break
         case .code(_):
             self.currentContent.value = .phone(self.phoneVC)
-        case .name(_):
-            break
         case .photo(_):
             self.currentContent.value = .name(self.nameVC)
+        default:
+            break
         }
     }
 
@@ -235,6 +247,16 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
         case .reservation(_):
             break
+        }
+    }
+
+    private func handleNameSuccess() {
+        // User has been allowed to continue
+        if User.current()?.status == .inactive {
+            self.currentContent.value = .photo(self.photoVC)
+        } else {
+        // User is on the waitlist
+            self.currentContent.value = .waitlist(self.waitlistVC)
         }
     }
 }
