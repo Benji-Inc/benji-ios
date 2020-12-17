@@ -225,4 +225,16 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             self.currentContent.value = .name(self.nameVC)
         }
     }
+
+    func handle(launchActivity: LaunchActivity) {
+        switch launchActivity {
+        case .onboarding(let phoneNumber):
+            if case OnboardingContent.phone(let vc) = self.currentContent.value {
+                vc.textField.text = phoneNumber
+                vc.editingDidEnd()
+            }
+        case .reservation(_):
+            break
+        }
+    }
 }

@@ -15,7 +15,7 @@ class MainCoordinator: Coordinator<Void> {
 
     var isInitializingChat: Bool = false
 
-    private lazy var splashVC = SplashViewController()
+    lazy var splashVC = SplashViewController()
 
     override func start() {
         super.start()
@@ -101,7 +101,7 @@ class MainCoordinator: Coordinator<Void> {
     }
     #endif
 
-    private func runOnboardingFlow() {
+    func runOnboardingFlow() {
         if let onboardingCoordinator = self.childCoordinator as? OnboardingCoordinator {
             onboardingCoordinator.handle(deeplink: deepLink)
         } else {
@@ -124,7 +124,7 @@ class MainCoordinator: Coordinator<Void> {
         }
     }
 
-    private func handle(deeplink: DeepLinkable) {
+    func handle(deeplink: DeepLinkable) {
         guard let string = deeplink.customMetadata["target"] as? String,
             let target = DeepLinkTarget(rawValue: string)  else { return }
 
@@ -177,47 +177,5 @@ class MainCoordinator: Coordinator<Void> {
         self.removeChild()
         self.runOnboardingFlow()
     }
-}
-
-extension MainCoordinator: UserNotificationManagerDelegate {
-    func userNotificationManager(willHandle deeplink: DeepLinkable) {
-        self.deepLink = deeplink
-        self.handle(deeplink: deeplink)
-    }
-}
-
-extension MainCoordinator: LaunchManagerDelegate {
-    func launchManager(_ manager: LaunchManager, didFinishWith status: LaunchStatus) {
-        #if !APPCLIP
-        // Code you don't want to use in your App Clip.
-        self.handle(result: status)
-        #else
-        // Code your App Clip may access.
-        self.handleAppClip(result: status)
-        #endif
-    }
-
-    #if APPCLIP
-    func handleAppClip(result: LaunchStatus) {
-        switch result {
-        case .success(let object, _):
-            self.deepLink = object
-
-            if User.current().isNil {
-                runMain {
-                    self.runOnboardingFlow()
-                }
-            } else if let user = User.current(), !user.isOnboarded {
-                runMain {
-                    self.runOnboardingFlow()
-                }
-            } else {
-                // Show reservation status screen
-            }
-        case .failed(_):
-            break
-        }
-    }
-    #endif
 }
 

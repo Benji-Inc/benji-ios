@@ -14,6 +14,7 @@ protocol CoordinatorType: class {
 
     func start()
     func removeChild()
+    func handle(launchActivity: LaunchActivity)
 }
 
 class Coordinator<Result>: CoordinatorType {
@@ -72,6 +73,8 @@ class Coordinator<Result>: CoordinatorType {
         self.removeFromParent()
         self.onFinishedFlow?(result)
     }
+
+    func handle(launchActivity: LaunchActivity) {}
 }
 
 class PresentableCoordinator<Result>: Coordinator<Result>, Presentable {

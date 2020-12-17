@@ -44,14 +44,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication,
-                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        UserNotificationManager.shared.registerPush(from: deviceToken)
-    }
-
-    func application(_ application: UIApplication,
                      continue userActivity: NSUserActivity,
                      restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         return LaunchManager.shared.continueUser(activity: userActivity)
+    }
+
+    #if !APPCLIP
+    func application(_ application: UIApplication,
+                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        UserNotificationManager.shared.registerPush(from: deviceToken)
     }
 
     func application(_ application: UIApplication,
@@ -69,5 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             completionHandler(.noData)
         }
     }
+    #endif
 }
 

@@ -101,6 +101,8 @@
 		D646DB4022CFCFDB0055CC7C /* Future+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3F22CFCFDB0055CC7C /* Future+Extensions.swift */; };
 		D64932D723FE460200986335 /* FeedIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64932D623FE460200986335 /* FeedIndicatorView.swift */; };
 		D64932FD2402EBA600986335 /* RoutineCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64932FC2402EBA600986335 /* RoutineCoordinator.swift */; };
+		D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */; };
+		D64A1EF6258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */; };
 		D64B6D94246108750015827C /* Channel+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64B6D93246108750015827C /* Channel+Cloud.swift */; };
 		D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D64C6A7E23294A8600DB7257 /* ChannelKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A7D23294A8600DB7257 /* ChannelKey.swift */; };
@@ -536,6 +538,7 @@
 		D646DB3F22CFCFDB0055CC7C /* Future+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Future+Extensions.swift"; sourceTree = "<group>"; };
 		D64932D623FE460200986335 /* FeedIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedIndicatorView.swift; sourceTree = "<group>"; };
 		D64932FC2402EBA600986335 /* RoutineCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineCoordinator.swift; sourceTree = "<group>"; };
+		D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Extensions.swift"; sourceTree = "<group>"; };
 		D64B6D93246108750015827C /* Channel+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Channel+Cloud.swift"; sourceTree = "<group>"; };
 		D64C6A79232883FE00DB7257 /* CloudFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudFunction.swift; sourceTree = "<group>"; };
 		D64C6A7D23294A8600DB7257 /* ChannelKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelKey.swift; sourceTree = "<group>"; };
@@ -1226,6 +1229,7 @@
 				D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */,
 				D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */,
 				D66F0FD922BF297F00BA277D /* MainCoordinator.swift */,
+				D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */,
 				D691794122F6418700340AA3 /* Router.swift */,
 			);
 			path = Deeplink;
@@ -1907,6 +1911,7 @@
 				D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */,
 				D6432BF322D828480016001A /* ChannelDataSource.swift in Sources */,
 				D61EC0C221D3071400204BEE /* ViewController.swift in Sources */,
+				D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
 				D64B6D94246108750015827C /* Channel+Cloud.swift in Sources */,
 				D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */,
 				D67934D523D956BB00536B44 /* ChannelPreviewViewController.swift in Sources */,
@@ -2102,6 +2107,7 @@
 				D65519792589129B00B901E4 /* Dismissable.swift in Sources */,
 				D65519632589127A00B901E4 /* SystemAvatar.swift in Sources */,
 				D655191B2589121100B901E4 /* CGPoint+Extensions.swift in Sources */,
+				D64A1EF6258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
 				D655191C2589121100B901E4 /* MathFunctions.swift in Sources */,
 				D65519122589120600B901E4 /* ClosedRange+Extensions.swift in Sources */,
 				D6551A2D25895E3C00B901E4 /* OnboardingViewController.swift in Sources */,

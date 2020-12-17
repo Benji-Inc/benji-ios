@@ -53,7 +53,12 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "_XCAppClipURL"
-            value = "https://thisisour.app/location1"
+            value = "https://thisisour.app/reservation?reservationId=123456"
+            isEnabled = "NO">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "_XCAppClipURL"
+            value = "https://thisisour.app/onboarding?phoneNumber=2068509234"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

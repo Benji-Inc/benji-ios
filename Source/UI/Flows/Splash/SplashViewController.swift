@@ -9,6 +9,7 @@
 import Foundation
 import Lottie
 import TMROLocalization
+import StoreKit
 
 class SplashViewController: FullScreenViewController {
 
@@ -25,6 +26,13 @@ class SplashViewController: FullScreenViewController {
             self.view.layoutNow()
         }
     }
+
+    lazy var skOverlay: SKOverlay = {
+        let config = SKOverlay.AppClipConfiguration(position: .bottom)
+        let overlay = SKOverlay(configuration: config)
+        overlay.delegate = self
+        return overlay
+    }()
     
     override func initializeViews() {
         super.initializeViews()
@@ -62,5 +70,23 @@ class SplashViewController: FullScreenViewController {
         super.viewWillDisappear(animated)
 
         self.animationView.stop()
+    }
+}
+
+extension SplashViewController: SKOverlayDelegate {
+
+    func displayAppUpdateOverlay() {
+        guard let window = UIWindow.topWindow(), let scene = window.windowScene else { return }
+        self.skOverlay.present(in: scene)
+    }
+
+    func storeOverlayWillStartPresentation(_ overlay: SKOverlay, transitionContext: SKOverlay.TransitionContext) {
+        self.animationView.stop()
+        self.label.alpha = 0
+    }
+
+    func storeOverlayWillStartDismissal(_ overlay: SKOverlay, transitionContext: SKOverlay.TransitionContext) {
+        self.animationView.play()
+        self.label.alpha = 1
     }
 }

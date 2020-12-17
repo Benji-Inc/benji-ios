@@ -11,6 +11,11 @@ import Parse
 import ReactiveSwift
 import TMROFutures
 
+enum LaunchActivity {
+    case onboarding(phoneNumber: String)
+    case reservation(reservationId: String)
+}
+
 enum LaunchStatus {
     case success(object: DeepLinkable?, token: String)
     case failed(error: ClientError?)
@@ -18,6 +23,7 @@ enum LaunchStatus {
 
 protocol LaunchManagerDelegate: class {
     func launchManager(_ manager: LaunchManager, didFinishWith status: LaunchStatus)
+    func launchManager(_ manager: LaunchManager, didReceive activity: LaunchActivity)
 }
 
 class LaunchManager {
@@ -76,6 +82,8 @@ class LaunchManager {
         if let _ = User.current()?.objectId {
             #if !APPCLIP
             self.getChatToken(with: deeplink)
+            #else
+            self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: String()))
             #endif
         } else {
             self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: String()))
@@ -108,7 +116,21 @@ class LaunchManager {
            let incomingURL = activity.webpageURL,
            let components = NSURLComponents(url: incomingURL, resolvingAgainstBaseURL: true) {
             // do something
-            print(components)
+            guard let path = components.path else { return true }
+            switch path {
+            case "/onboarding":
+                if let item = components.queryItems?.first,
+                   let phoneNumber = item.value {
+                    self.delegate?.launchManager(self, didReceive: .onboarding(phoneNumber: phoneNumber))
+                }
+            case "/reservation":
+                if let item = components.queryItems?.first,
+                   let reservationId = item.value {
+                    self.delegate?.launchManager(self, didReceive: .reservation(reservationId: reservationId))
+                }
+            default:
+                break
+            }
         }
         return true
     }

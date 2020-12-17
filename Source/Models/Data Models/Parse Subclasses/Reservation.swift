@@ -131,8 +131,9 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
             statusable.handleEvent(status: .loading)
         }
 
-        // TODO: Update this with app clip domain
-        self.link = ""
+        if let objectId = self.objectId {
+            self.link = "https://www.thisisour.app/reservation/data?reservationId=\(objectId)"
+        }
         if let linkString = self.link, let url = URL(string: linkString) {
             metadataProvider.startFetchingMetadata(for: url) { (metadata, error) in
                 if let e = error {
@@ -148,28 +149,6 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
 
         return promise
     }
-
-//    func generateBranchLink() -> BranchUniversalObject {
-//
-//        let canonicalIdentifier = UUID().uuidString
-//        let buo = BranchUniversalObject(canonicalIdentifier: canonicalIdentifier)
-//        buo.canonicalUrl = "https://testflight.apple.com/join/w3CExYsD"
-//        buo.title = "Join the Benji beta"
-//        buo.contentDescription = "Available on iOS"
-//        buo.imageUrl = "https://is5-ssl.mzstatic.com/image/thumb/Purple123/v4/51/ca/70/51ca7064-0f75-9e7c-dfc3-1d3afaf9eaa3/AppIcon-0-1x_U007emarketing-0-7-0-85-220.png/1920x1080bb-80.png"
-//        buo.contentMetadata.customMetadata[ReservationKey.reservationId.rawValue] = self.objectId
-//        buo.contentMetadata.customMetadata[ReservationKey.createdBy.rawValue] = self.createdBy?.objectId
-//        buo.contentMetadata.customMetadata["target"] = DeepLinkTarget.reservation.rawValue
-//
-//        return buo
-//    }
-
-//    func generateBranchProperties() -> BranchLinkProperties {
-//        let properties = BranchLinkProperties()
-//        properties.addControlParam("$ios_url", withValue: "https://testflight.apple.com/join/w3CExYsD")
-//        properties.addControlParam("$canonical_url", withValue: "https://testflight.apple.com/join/w3CExYsD")
-//        return properties
-//    }
 
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return URL(string: self.link!)!
