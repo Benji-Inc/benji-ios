@@ -69,15 +69,6 @@ class LaunchManager {
         self.initializeUserData(with: nil)
     }
 
-    func updateUser(with deeplink: DeepLinkable) {
-        guard let _ = User.current()?.objectId,
-            let metaData = deeplink.customMetadata as? [String: Any],
-            metaData.values.count > 0 else { return }
-
-        _ = UpdateUser(attributes: metaData)
-            .makeRequest(andUpdate: [], viewsToIgnore: [])
-    }
-
     private func initializeUserData(with deeplink: DeepLinkable?) {
         if let _ = User.current()?.objectId {
             #if !APPCLIP
