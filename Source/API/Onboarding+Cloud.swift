@@ -28,6 +28,7 @@ struct SendCode: CloudFunction {
         return self.makeRequest(andUpdate: statusables,
                                 params: params,
                                 callName: "sendCode",
+                                delayInterval: 0.0,
                                 viewsToIgnore: viewsToIgnore).asVoid()
     }
 }

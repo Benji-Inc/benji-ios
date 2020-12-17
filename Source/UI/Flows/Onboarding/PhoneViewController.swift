@@ -42,6 +42,10 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         self.textField.addTarget(self, action: #selector(editingDidEnd), for: .editingDidEnd)
     }
 
+    override func shouldBecomeFirstResponder() -> Bool {
+        return !self.isPhoneNumberValid()
+    }
+
     override func textFieldDidChange() {
         if self.isPhoneNumberValid() {
             // End editing because we have a valid phone number and we're ready to request a code with it

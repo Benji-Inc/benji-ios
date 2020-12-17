@@ -19,6 +19,7 @@ extension CloudFunction {
     func makeRequest(andUpdate statusables: [Statusable],
                         params: [String: Any],
                         callName: String,
+                        delayInterval: TimeInterval = 2.0,
                         viewsToIgnore: [UIView]) -> Future<Any> {
 
         let promise = Promise<Any>()
@@ -47,7 +48,7 @@ extension CloudFunction {
                     statusable.value?.handleEvent(status: .saved)
                 }
                 // A saved status is temporary so we set it to complete after a short delay
-                delay(2.0) {
+                delay(delayInterval) {
                     weakStatusables.forEach { (statusable) in
                         statusable.value?.handleEvent(status: .complete)
                     }
