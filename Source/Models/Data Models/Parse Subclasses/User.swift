@@ -23,6 +23,14 @@ enum UserKey: String {
     case familyName
     case smallImage
     case routine
+    case quePosition
+    case status
+}
+
+enum UserStatus: String {
+    case active // Has completed onboarding and has full access to the app
+    case waitlist // Has verified phone number and is waiting for access to the app
+    case inactive // Has been given access to the full app but has not completed onboarding
 }
 
 final class User: PFUser {
@@ -50,5 +58,18 @@ final class User: PFUser {
     var smallImage: PFFileObject? {
         get { return self.getObject(for: .smallImage) }
         set { self.setObject(for: .smallImage, with: newValue) }
+    }
+
+    var quePosition: Int? {
+        get { return self.getObject(for: .quePosition) }
+        set { self.setObject(for: .quePosition, with: newValue) }
+    }
+
+    var status: UserStatus? {
+        get {
+            guard let string: String = self.getObject(for: .status) else { return nil }
+            return UserStatus.init(rawValue: string)
+        }
+        set { self.setObject(for: .status, with: newValue?.rawValue) }
     }
 }

@@ -14,7 +14,6 @@ import LinkPresentation
 enum ReservationKey: String {
     case user
     case createdBy
-    case position
     case isClaimed
     case reservationId
 }
@@ -27,10 +26,6 @@ final class Reservation: PFObject, PFSubclassing {
 
     var isClaimed: Bool {
         return self.getObject(for: .isClaimed) ?? false
-    }
-
-    var position: Int? {
-        return self.getObject(for: .position)
     }
 
     var user: User? {
