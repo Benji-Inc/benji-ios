@@ -90,9 +90,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>branch_app_domain</key>
-	<string>3996z.app.link</string>
-	<key>branch_key</key>
-	<string>key_live_aiGQbiZXfhvsJ3NhDnMcSfddBuhgwlTr</string>
 </dict>
 </plist>
