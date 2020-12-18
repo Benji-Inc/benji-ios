@@ -17,12 +17,10 @@ struct SendCode: CloudFunction {
     let phoneNumber: PhoneNumber
     let region: String
     let installationId: String
-    let reservationId: String?
 
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> Future<Void> {
         let params = ["phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164),
                       "installationId": self.installationId,
-                      "reservationId": String(optional: self.reservationId),
                       "region": self.region]
         
         return self.makeRequest(andUpdate: statusables,

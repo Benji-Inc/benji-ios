@@ -78,8 +78,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         tf?.animationView.play()
         SendCode(phoneNumber: phone,
                  region: region,
-                 installationId: installationId,
-                 reservationId: self.reservationId)
+                 installationId: installationId)
             .makeRequest(andUpdate: [], viewsToIgnore: [])
             .observe(with: { (result) in
                 tf?.animationView.stop()

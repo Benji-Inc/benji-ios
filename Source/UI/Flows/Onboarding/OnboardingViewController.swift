@@ -126,13 +126,15 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getInitialContent() -> OnboardingContent {
-        if User.current()?.status == .inactive {
-            if let name = User.current()?.fullName, name.isValidPersonName {
-                return .name(self.nameVC)
-            } else {
-                return .waitlist(self.waitlistVC)
-            }
-        } else {
+        guard let status = User.current()?.status else { return .phone(self.phoneVC) }
+        switch status {
+        case .active:
+            fatalError("User status is active.")
+        case .waitlist:
+            return .waitlist(self.waitlistVC)
+        case .inactive:
+            return .name(self.nameVC)
+        case .needsVerification:
             return .phone(self.phoneVC)
         }
     }
@@ -218,7 +220,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         case .waitlist(_):
             return LocalizedString(id: "",
                                    arguments: [],
-                                   default: "You will receive a text once your slot opens up.")
+                                   default: "You are on the list. Sit tight and we will let you know when your slot opens up.")
         case .photo(_):
             return LocalizedString(id: "",
                                    arguments: [],

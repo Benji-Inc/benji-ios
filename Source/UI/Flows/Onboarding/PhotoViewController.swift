@@ -319,6 +319,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             current.smallImage = scaledImageFile
         }
 
+        // Setting the User's status to active will trigger the creation of their handle
+        current.status = .active
         current.saveToServer()
             .ignoreUserInteractionEventsUntilDone(for: [self.view])
             .observe { (result) in
