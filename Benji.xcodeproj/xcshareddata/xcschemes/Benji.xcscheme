@@ -64,7 +64,7 @@
          <EnvironmentVariable
             key = "_XCAppClipURL"
             value = "https://thisisour.app/reservationID?123456"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>
