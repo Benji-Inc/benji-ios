@@ -59,7 +59,7 @@
          <EnvironmentVariable
             key = "_XCAppClipURL"
             value = "https://thisisour.app/onboarding?phoneNumber=2068509234"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>
