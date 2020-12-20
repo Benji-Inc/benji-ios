@@ -140,8 +140,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getTitle() -> Localized {
-        guard let current = self.current else { return "" }
-        switch current {
+        guard let content = self.current else { return "" }
+        switch content {
         case .phone(_):
             return "Welcome!"
         case .code(_):
@@ -193,8 +193,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     override func getDescription() -> Localized {
         super.willUpdateContent()
-        guard let current = self.current else { return "" }
-        switch current {
+
+        guard let content = self.current else { return "" }
+
+        switch content {
         case .phone(_):
             if let user = self.reservationUser {
                 return LocalizedString(id: "",
@@ -233,8 +235,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     override func didSelectBackButton() {
         super.willUpdateContent()
-        guard let current = self.current else { return }
-        switch current {
+
+        guard let content = self.current else { return }
+
+        switch content {
         case .code(_):
             self.current = .phone(self.phoneVC)
         case .photo(_):
@@ -247,7 +251,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     func handle(launchActivity: LaunchActivity) {
         switch launchActivity {
         case .onboarding(let phoneNumber):
-            if let current = self.current, case OnboardingContent.phone(let vc) = current {
+            if let content = self.current, case OnboardingContent.phone(let vc) = content {
                 vc.textField.text = phoneNumber
                 vc.editingDidEnd()
             }

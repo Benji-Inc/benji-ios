@@ -11,10 +11,9 @@ import ReactiveSwift
 import TMROLocalization
 import Combine
 
-class SwitchableContentViewController<ContentType: Switchable>: NavigationBarViewController, KeyboardObservable {
+class SwitchableContentViewController<ContentType: Switchable>: NavigationBarViewController, KeyboardObservable, CancellableStore {
 
     @Published var current: ContentType?
-    private var cancellables = Set<AnyCancellable>()
 
     private var currentCenterVC: (UIViewController & Sizeable)?
 
@@ -24,18 +23,26 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
     override func initializeViews() {
         super.initializeViews()
 
+        // Must be called here 
         self.current = self.getInitialContent()
 
         // Need to call prepare before switchContent so content doesnt flicker on first load
         self.prepareForPresentation()
 
-        self.$current
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] (value) in
+        self.$current.mainSink { [weak self] (value) in
                 guard let `self` = self else { return }
                 guard let content = value else { return }
                 self.switchTo(content)
-            }.store(in: &self.cancellables)
+            }
+            .store(in: &self.cancellables)
+//        self.$current
+//            .receive(on: DispatchQueue.main)
+//            .removeDuplicates()
+//            .sink { [weak self] (value) in
+//                guard let `self` = self else { return }
+//                guard let content = value else { return }
+//                self.switchTo(content)
+//            }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
