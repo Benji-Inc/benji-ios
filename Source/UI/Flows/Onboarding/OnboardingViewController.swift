@@ -52,7 +52,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.registerKeyboardEvents()
 
-        self.blurView.effect = nil
         self.scrollView.addSubview(self.avatarView)
         self.avatarView.isHidden = true 
 
@@ -61,8 +60,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             case .success(let phone):
                 self.codeVC.phoneNumber = phone
                 self.current = .code(self.codeVC)
-            case .failure(let error):
-                print(error)
+            case .failure(_):
+                break 
             }
         }
 
@@ -74,8 +73,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 } else {
                     self.current = .name(self.nameVC)
                 }
-            case .failure(let error):
-                print(error)
+            case .failure(_):
+                break
             }
         }
 
@@ -83,8 +82,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             switch result {
             case .success:
                 self.handleNameSuccess()
-            case .failure(let error):
-                print(error)
+            case .failure(_):
+                break
             }
         }
 
@@ -94,8 +93,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 if let user = User.current() {
                     self.delegate.onboardingView(self, didVerify: user)
                 }
-            case .failure(let error):
-                print(error)
+            case .failure(_):
+                break
             }
         }
 

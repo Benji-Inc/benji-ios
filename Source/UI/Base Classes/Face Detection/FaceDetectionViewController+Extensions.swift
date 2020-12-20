@@ -26,7 +26,7 @@ extension FaceDetectionViewController: AVCaptureVideoDataOutputSampleBufferDeleg
                                              on: imageBuffer,
                                              orientation: .leftMirrored)
         } catch {
-            print(error.localizedDescription)
+            
         }
     }
 }

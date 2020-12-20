@@ -37,7 +37,6 @@ extension ChannelViewController: UIImagePickerControllerDelegate {
 
         self.imagePickerVC.dismiss(animated: true, completion: nil)
         guard let selectedImage = info[.originalImage] as? UIImage else {
-            print("Image not found!")
             return
         }
 

@@ -50,7 +50,7 @@ extension NSMutableAttributedString {
                 self.removeAttribute(attribute.key, range: range)
             }
         } else {
-            print("INVALID RANGE FOR: \(self.string)")
+            //print("INVALID RANGE FOR: \(self.string)")
         }
     }
 

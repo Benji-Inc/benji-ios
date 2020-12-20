@@ -139,7 +139,6 @@ class MessageSupplier {
             tchMessage.updateBody(text) { (result) in
                 if let error = result.error {
                     completion?(updatedMessage, error)
-                    print(error)
                 } else {
                     completion?(updatedMessage, nil)
                 }

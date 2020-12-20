@@ -118,8 +118,7 @@ class RoutineInputViewController: ViewController {
                 switch result {
                 case .success(_):
                     self.animateButton(with: .lightPurple, text: "Success")
-                case .failure(let error):
-                    print(error)
+                case .failure(_):
                     self.animateButton(with: .red, text: "Error")
                 }
 

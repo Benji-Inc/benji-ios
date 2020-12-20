@@ -48,10 +48,9 @@ extension ChannelViewController: MessageInputAccessoryViewDelegate {
                                                                      kind: messageKind,
                                                                      attributes: attributes,
                                                                      completion: { (message, error) in
-                                                                        if let msg = message, let e = error {
+                                                                        if let msg = message, let _ = error {
                                                                             msg.status = .error
                                                                             self.collectionViewManager.updateItem(with: msg)
-                                                                            print(e)
                                                                         }
         }) else { return }
 
@@ -94,7 +93,6 @@ extension ChannelViewController: TCHChannelDelegate {
                     channel: TCHChannel,
                     member: TCHMember,
                     updated: TCHMemberUpdate) {
-        print("Channel Member updated")
     }
 
     func chatClient(_ client: TwilioChatClient,

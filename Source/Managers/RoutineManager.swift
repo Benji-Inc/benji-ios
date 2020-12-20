@@ -90,8 +90,6 @@ class RoutineManager {
                                             trigger: trigger)
 
         UserNotificationManager.shared.schedule(note: request)
-            .observeValue { (_) in
-                print("successfully set last chance reminder")
-        }
+            .observeValue { (_) in }
     }
 }
