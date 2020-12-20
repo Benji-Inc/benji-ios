@@ -9,10 +9,13 @@
 import Foundation
 import ReactiveSwift
 import TMROLocalization
+import Combine
 
 class SwitchableContentViewController<ContentType: Switchable>: NavigationBarViewController, KeyboardObservable {
 
-    lazy var currentContent = MutableProperty<ContentType>(self.getInitialContent())
+    @Published var current: ContentType?
+    private var cancellables = Set<AnyCancellable>()
+
     private var currentCenterVC: (UIViewController & Sizeable)?
 
     private var prepareAnimator: UIViewPropertyAnimator?
@@ -21,21 +24,27 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
     override func initializeViews() {
         super.initializeViews()
 
+        self.current = self.getInitialContent()
+
         // Need to call prepare before switchContent so content doesnt flicker on first load
         self.prepareForPresentation()
 
-        self.currentContent.producer
-            .skipRepeats()
-            .on(value:  { [unowned self] (contentType) in
-                self.switchContent()
-            }).start()
+        self.$current
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] (value) in
+                guard let `self` = self else { return }
+                guard let content = value else { return }
+                self.switchTo(content)
+            }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        guard let current = self.current else { return }
+
         let yOffset = self.lineView.bottom 
-        var vcHeight = self.currentContent.value.viewController.getHeight(for: self.scrollView.width)
+        var vcHeight = current.viewController.getHeight(for: self.scrollView.width)
         if vcHeight <= .zero {
             vcHeight = self.scrollView.height - self.lineView.bottom - self.view.safeAreaInsets.top - self.view.safeAreaInsets.bottom
         }
@@ -43,17 +52,17 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
         let contentHeight = yOffset + vcHeight + keyboardHeight
         self.scrollView.contentSize = CGSize(width: self.scrollView.width, height: contentHeight)
 
-        self.currentContent.value.viewController.view.frame = CGRect(x: 0,
-                                                                     y: yOffset,
-                                                                     width: self.scrollView.width,
-                                                                     height: vcHeight)
+        current.viewController.view.frame = CGRect(x: 0,
+                                                   y: yOffset,
+                                                   width: self.scrollView.width,
+                                                   height: vcHeight)
     }
 
     func getInitialContent() -> ContentType {
         fatalError("No initial content type set")
     }
 
-    func switchContent() {
+    func switchTo(_ content: ContentType) {
 
         if let animator = self.prepareAnimator, animator.isRunning {
             return
@@ -67,7 +76,7 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
                                                            curve: .easeOut,
                                                            animations: {
                                                             self.prepareForPresentation()
-        })
+                                                           })
 
         self.prepareAnimator?.addCompletion({ (position) in
             if position == .end {
@@ -76,8 +85,8 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
 
                 self.updateNavigationBar()
 
-                self.currentCenterVC = self.currentContent.value.viewController
-                let showBackButton = self.currentContent.value.shouldShowBackButton
+                self.currentCenterVC = content.viewController
+                let showBackButton = content.shouldShowBackButton
 
                 if let contentVC = self.currentCenterVC {
                     self.addChild(viewController: contentVC, toView: self.scrollView)
@@ -119,8 +128,8 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
 
                                                             self.currentCenterVC?.view.alpha = 1
                                                             self.backButton.alpha = showBackButton ? 1 : 0
-        })
-
+                                                           })
+        
         self.presentAnimator?.startAnimation()
     }
 

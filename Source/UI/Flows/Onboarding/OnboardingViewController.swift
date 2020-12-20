@@ -60,7 +60,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             switch result {
             case .success(let phone):
                 self.codeVC.phoneNumber = phone
-                self.currentContent.value = .code(self.codeVC)
+                self.current = .code(self.codeVC)
             case .failure(let error):
                 print(error)
             }
@@ -72,7 +72,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 if let current = User.current(), current.isOnboarded { // TODO: current.status == .active {
                     self.delegate.onboardingView(self, didVerify: current)
                 } else {
-                    self.currentContent.value = .name(self.nameVC)
+                    self.current = .name(self.nameVC)
                 }
             case .failure(let error):
                 print(error)
@@ -140,7 +140,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getTitle() -> Localized {
-        switch self.currentContent.value {
+        guard let current = self.current else { return "" }
+        switch current {
         case .phone(_):
             return "Welcome!"
         case .code(_):
@@ -181,8 +182,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     override func willUpdateContent() {
         super.willUpdateContent()
-
-        switch self.currentContent.value {
+        guard let current = self.current else { return }
+        switch current {
         case .phone(_), .code(_):
             self.avatarView.isHidden = self.reservationUser.isNil
         default:
@@ -191,7 +192,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getDescription() -> Localized {
-        switch self.currentContent.value {
+        super.willUpdateContent()
+        guard let current = self.current else { return "" }
+        switch current {
         case .phone(_):
             if let user = self.reservationUser {
                 return LocalizedString(id: "",
@@ -229,12 +232,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func didSelectBackButton() {
-
-        switch self.currentContent.value {
+        super.willUpdateContent()
+        guard let current = self.current else { return }
+        switch current {
         case .code(_):
-            self.currentContent.value = .phone(self.phoneVC)
+            self.current = .phone(self.phoneVC)
         case .photo(_):
-            self.currentContent.value = .name(self.nameVC)
+            self.current = .name(self.nameVC)
         default:
             break
         }
@@ -243,7 +247,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     func handle(launchActivity: LaunchActivity) {
         switch launchActivity {
         case .onboarding(let phoneNumber):
-            if case OnboardingContent.phone(let vc) = self.currentContent.value {
+            if let current = self.current, case OnboardingContent.phone(let vc) = current {
                 vc.textField.text = phoneNumber
                 vc.editingDidEnd()
             }
@@ -253,12 +257,12 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     private func handleNameSuccess() {
-        // User has been allowed to continue
-        if User.current()?.status == .inactive {
-            self.currentContent.value = .photo(self.photoVC)
-        } else {
-        // User is on the waitlist
-            self.currentContent.value = .waitlist(self.waitlistVC)
-        }
+//        // User has been allowed to continue
+//        if User.current()?.status == .inactive {
+            self.current = .photo(self.photoVC)
+//        } else {
+//        // User is on the waitlist
+//            self.currentContent.value = .waitlist(self.waitlistVC)
+//        }
     }
 }

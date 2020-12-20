@@ -28,7 +28,7 @@ class FaceDetectionViewController: UIViewController {
                                         autoreleaseFrequency: .workItem)
     private var videoOutput: AVCaptureVideoDataOutput?
 
-    var hasDetectedFace = MutableProperty<Bool>(false)
+    @Published var faceDetected = false
 
     var maxX: CGFloat = 0.0
     var midY: CGFloat = 0.0

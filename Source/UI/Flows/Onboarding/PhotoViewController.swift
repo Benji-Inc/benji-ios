@@ -13,6 +13,7 @@ import TMROLocalization
 import Lottie
 import ReactiveSwift
 import UIKit
+import Combine
 
 enum PhotoState {
     case initial
@@ -47,6 +48,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private var image: UIImage?
 
     private(set) var currentState = MutableProperty<PhotoState?>(nil)
+
+    private var cancellable = Set<AnyCancellable>()
 
     override func initializeViews() {
         super.initializeViews()
@@ -83,20 +86,18 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 self.handle(state: currentState)
             }).start()
 
-        self.cameraVC.hasDetectedFace.producer
-            .skipRepeats()
-            .on(value:  { [unowned self] (hasFace) in
-                runMain {
-                    self.beginButton.isEnabled = hasFace
-                    
-                    guard let state = self.currentState.value, state == .scan else { return }
-                    if hasFace {
-                        self.beginButton.set(style: .normal(color: .blue, text: "Capture"))
-                    } else {
-                        self.beginButton.set(style: .normal(color: .red, text: "NO face detected"))
-                    }
+        self.cameraVC.$faceDetected
+            .receive(on: DispatchQueue.main)
+            .sink { (faceDetected) in
+                self.beginButton.isEnabled = faceDetected
+
+                guard let state = self.currentState.value, state == .scan else { return }
+                if faceDetected {
+                    self.beginButton.set(style: .normal(color: .blue, text: "Capture"))
+                } else {
+                    self.beginButton.set(style: .normal(color: .red, text: "NO face detected"))
                 }
-            }).start()
+            }.store(in: &self.cancellable)
 
         self.beginButton.didSelect { [unowned self] in
             guard let state = self.currentState.value else { return }
