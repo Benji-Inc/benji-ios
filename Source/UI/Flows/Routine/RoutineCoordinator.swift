@@ -23,7 +23,7 @@ extension RoutineCoordinator: RoutineViewControllerDelegate {
         UserNotificationManager.shared.register(application: UIApplication.shared) { (success, error) in
             runMain {
                 if success {
-                    controller.routineInputVC.currentState.value = .update
+                    controller.routineInputVC.state = .update
                 } else if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(settingsUrl, completionHandler: { (success) in })
                 }

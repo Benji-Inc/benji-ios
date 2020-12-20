@@ -38,15 +38,15 @@ class RoutineViewController: NavigationBarViewController {
             self.delegate.routineInputViewControllerNeedsAuthorization(self)
         }
 
-        self.routineInputVC.currentState.producer
-            .skipRepeats()
-            .on(value:  { [unowned self] (_) in
+        self.routineInputVC.$state
+            .removeDuplicates()
+            .mainSink { (state) in
                 self.updateNavigationBar()
-            }).start()
+            }.store(in: &self.cancellables)
     }
 
     override func getTitle() -> Localized {
-        switch self.routineInputVC.currentState.value {
+        switch self.routineInputVC.state {
         case .needsAuthorization:
             return "Need Permission"
         default:
@@ -55,7 +55,7 @@ class RoutineViewController: NavigationBarViewController {
     }
 
     override func getDescription() -> Localized {
-        switch self.routineInputVC.currentState.value {
+        switch self.routineInputVC.state {
         case .needsAuthorization:
             return "You will need to add notification permission to use this feature."
         default:

@@ -31,7 +31,7 @@ class RoutineInputViewController: ViewController {
     let content = RoutineInputContentView()
 
     var selectedDate = Date()
-    lazy var currentState = MutableProperty<RoutineInputState>(.edit)
+    @Published var state: RoutineInputState = .edit
 
     var didTapNeedsAthorization: CompletionOptional = nil
 
@@ -42,14 +42,14 @@ class RoutineInputViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
 
-        self.currentState.producer
-            .skipRepeats()
-            .on(value:  { [unowned self] (_) in
+        self.$state
+            .removeDuplicates()
+            .mainSink { (state) in
                 self.updateForStateChange()
-            }).start()
+            }.store(in: &self.cancellables)
 
         if UserNotificationManager.shared.getNotificationSettingsSynchronously().authorizationStatus != .authorized {
-            self.currentState.value = .needsAuthorization
+            self.state = .needsAuthorization
         }
 
         self.content.timeHump.$percentage.mainSink { [weak self] (percentage) in
@@ -100,11 +100,11 @@ class RoutineInputViewController: ViewController {
         }
 
         self.content.setRoutineButton.didSelect { [unowned self] in
-            switch self.currentState.value {
+            switch self.state {
             case .needsAuthorization:
                 self.didTapNeedsAthorization?()
             case .edit:
-                self.currentState.value = .update
+                self.state = .update
             case .update:
                 self.saveRoutine()
             }
@@ -125,13 +125,13 @@ class RoutineInputViewController: ViewController {
                 }
 
                 delay(2) {
-                    self.currentState.value = .edit
+                    self.state = .edit
                 }
         }
     }
 
     private func updateForStateChange() {
-        switch self.currentState.value {
+        switch self.state {
         case .needsAuthorization:
             self.animateButton(with: .green, text: "Authorize")
         case .edit:
