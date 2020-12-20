@@ -17,7 +17,7 @@ enum HomeContent: Equatable {
     case profile(ProfileViewController)
 }
 
-class HomeViewController: ViewController {
+class HomeViewController: ViewController, CancellableStore {
 
     lazy var feedVC = FeedViewController()
     lazy var channelsVC = ChannelsViewController()
@@ -26,34 +26,37 @@ class HomeViewController: ViewController {
     let centerContainer = View()
     let tabView = HomeTabView()
 
-    lazy var currentContent = MutableProperty<HomeContent>(.feed(self.feedVC))
+    @Published var current: HomeContent?
     private(set) var currentCenterVC: UIViewController?
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.current = .feed(self.feedVC)
 
         self.view.set(backgroundColor: .background1)
         self.view.addSubview(self.tabView)
         self.view.addSubview(self.centerContainer)
         self.centerContainer.set(backgroundColor: .background1)
 
-        self.currentContent.producer
-            .skipRepeats()
-            .on(value:  { [unowned self] (contentType) in
-                self.switchContent()
-                self.tabView.updateTabItems(for: contentType)
-            }).start()
+        self.$current
+            .removeDuplicates()
+            .mainSink { [weak self] (currentContent) in
+            guard let `self` = self, let conent = currentContent else { return }
+            self.switchTo(content: conent)
+            self.tabView.updateTabItems(for: conent)
+        }.store(in: &self.cancellables)
 
         self.tabView.profileItem.didSelect = { [unowned self] in
-            self.currentContent.value = .profile(self.profileVC)
+            self.current = .profile(self.profileVC)
         }
 
         self.tabView.feedItem.didSelect = { [unowned self] in
-            self.currentContent.value = .feed(self.feedVC)
+            self.current = .feed(self.feedVC)
         }
 
         self.tabView.channelsItem.didSelect = { [unowned self] in
-            self.currentContent.value = .channels(self.channelsVC)
+            self.current = .channels(self.channelsVC)
         }
     }
 
@@ -84,7 +87,7 @@ class HomeViewController: ViewController {
                                                   height: self.centerContainer.height)
     }
 
-    private func switchContent() {
+    private func switchTo(content: HomeContent) {
 
         UIView.animate(withDuration: Theme.animationDuration, animations: {
             self.currentCenterVC?.view.alpha = 0
@@ -93,7 +96,7 @@ class HomeViewController: ViewController {
             self.currentCenterVC?.removeFromParentSuperview()
             var newContentVC: UIViewController?
 
-            switch self.currentContent.value {
+            switch content {
             case .feed(let vc):
                 newContentVC = vc
             case .channels(let vc):

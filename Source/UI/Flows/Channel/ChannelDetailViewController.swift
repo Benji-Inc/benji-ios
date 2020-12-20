@@ -18,11 +18,6 @@ protocol ChannelDetailViewControllerDelegate: class {
 
 class ChannelDetailViewController: ViewController {
 
-    enum State {
-        case collapsed
-        case expanded
-    }
-
     let collapsedHeight: CGFloat = 84
     private let titleButton = Button()
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
@@ -30,8 +25,6 @@ class ChannelDetailViewController: ViewController {
     let disposables = CompositeDisposable()
 
     unowned let delegate: ChannelDetailViewControllerDelegate
-
-    var currentState = MutableProperty<State>(.collapsed)
 
     init(delegate: ChannelDetailViewControllerDelegate) {
         self.delegate = delegate

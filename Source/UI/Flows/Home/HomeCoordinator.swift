@@ -8,10 +8,12 @@
 
 import Foundation
 import Parse
+import Combine
 
 class HomeCoordinator: PresentableCoordinator<Void> {
 
     private lazy var homeVC = HomeViewController()
+    private var cancellable: AnyCancellable?
 
     override func toPresentable() -> DismissableVC {
         return self.homeVC
@@ -20,16 +22,20 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
-        self.homeVC.currentContent.producer.on(value:  { [unowned self] (contentType) in
+        self.cancellable = self.homeVC.$current
+            .removeDuplicates()
+            .mainSink { [weak self] (current) in
+            guard let `self` = self, let content = current else { return }
+
             self.removeChild()
-            
+
             // Only use the deeplink once so that we don't repeatedly try
             // to deeplink whenever content changes.
             defer {
                 self.deepLink = nil
             }
-            
-            switch contentType {
+
+            switch content {
             case .feed(let vc):
                 let coordinator = FeedCoordinator(router: self.router,
                                                   deepLink: self.deepLink,
@@ -46,7 +52,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                                                      profileVC: vc)
                 self.addChildAndStart(coordinator) { (_) in }
             }
-        }).start()
+        }
 
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
@@ -67,17 +73,17 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             break
         case .channel:
             if let channelId = deeplink.customMetadata["channelId"] as? String,
-                let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
+               let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
                 self.startChannelFlow(for: channel.channelType)
             }
         case .routine:
             self.startRoutineFlow()
         case .profile:
-             self.homeVC.currentContent.value = .profile(self.homeVC.profileVC)
+            self.homeVC.current = .profile(self.homeVC.profileVC)
         case .feed:
-            self.homeVC.currentContent.value = .feed(self.homeVC.feedVC)
+            self.homeVC.current = .feed(self.homeVC.feedVC)
         case .channels:
-            self.homeVC.currentContent.value = .channels(self.homeVC.channelsVC)
+            self.homeVC.current = .channels(self.homeVC.channelsVC)
         }
     }
 

@@ -31,8 +31,7 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
 
     // MARK: Events
 
-    lazy var onSelectedItem = Property(self._onSelectedItem)
-    private let _onSelectedItem = MutableProperty<(item: CellType.ItemType, indexPath: IndexPath)?>(nil)
+    @Published var onSelectedItem: (item: CellType.ItemType, indexPath: IndexPath)? = nil
     var didLongPress: ((CellType.ItemType, IndexPath) -> Void)?
     var willDisplayCell: ((CellType.ItemType, IndexPath) -> Void)?
     var didFinishCenteringOnCell: ((CellType.ItemType, IndexPath) -> Void)?
@@ -154,7 +153,7 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
 
         self.willScrollToSelected(indexPath: indexPath)
 
-        self._onSelectedItem.value = (item, indexPath)
+        self.onSelectedItem = (item, indexPath)
 
         self.updateSelected(indexPaths: self.selectedIndexPaths, and: self.oldSelectedIndexPaths)
     }

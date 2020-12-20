@@ -14,7 +14,7 @@ protocol ChannelsViewControllerDelegate: class {
     func channelsView(_ controller: ChannelsViewController, didSelect reservation: Reservation)
 }
 
-class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsCollectionViewManager> {
+class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsCollectionViewManager>, CancellableStore {
 
     weak var delegate: ChannelsViewControllerDelegate?
 
@@ -34,10 +34,10 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
 
         self.collectionViewManager.allowMultipleSelection = true
 
-        self.collectionViewManager.onSelectedItem.signal.observeValues { (selectedItem) in
-            guard let item = selectedItem else { return }
+        self.collectionViewManager.$onSelectedItem.mainSink { [weak self] (value) in
+            guard let `self` = self, let item = value else { return }
             self.delegate?.channelsView(self, didSelect: item.item.channelType)
-        }
+        }.store(in: &self.cancellables)
 
         self.collectionViewManager.didSelectReservation = { [unowned self] reservation in
             self.delegate?.channelsView(self, didSelect: reservation)
