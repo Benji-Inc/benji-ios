@@ -63,15 +63,15 @@ class ChannelDetailViewController: ViewController {
 
     private func subscribeToUpdates() {
 
-        self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on(value:  { [unowned self] (channel) in
-            guard let activeChannel = channel else { return }
+        ChannelSupplier.shared.$activeChannel.mainSink { [weak self] (channel) in
+            guard let `self` = self, let activeChannel = channel else { return }
             self.content.configure(with: activeChannel.channelType)
-        }).start())
+        }.store(in: &self.cancellables)
 
         ChannelManager.shared.channelSyncUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
             
-            guard let channelsUpdate = update, let activeChannel = ChannelSupplier.shared.activeChannel.value else { return }
+            guard let channelsUpdate = update, let activeChannel = ChannelSupplier.shared.activeChannel else { return }
             
             switch activeChannel.channelType {
             case .system(_):

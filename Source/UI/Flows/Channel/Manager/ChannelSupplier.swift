@@ -9,7 +9,6 @@
 import Foundation
 import TwilioChatClient
 import TMROFutures
-import TMROLocalization
 import ReactiveSwift
 
 protocol ActiveChannelAccessor: class {
@@ -18,7 +17,7 @@ protocol ActiveChannelAccessor: class {
 
 extension ActiveChannelAccessor {
     var activeChannel: DisplayableChannel? {
-        return ChannelSupplier.shared.activeChannel.value
+        return ChannelSupplier.shared.activeChannel
     }
 }
 
@@ -68,7 +67,7 @@ class ChannelSupplier {
     }
 
     private(set) var pendingChannelUniqueName: String?
-    private(set) var activeChannel = MutableProperty<DisplayableChannel?>(nil)
+    @Published private(set) var activeChannel: DisplayableChannel?
 
     init() {
         self.subscribeToUpdates()
@@ -80,7 +79,7 @@ class ChannelSupplier {
 
     func set(activeChannel: DisplayableChannel?) {
 
-        self.activeChannel.value = activeChannel
+        self.activeChannel = activeChannel
 
         self.pendingChannelUniqueName = nil
 
@@ -147,11 +146,11 @@ class ChannelSupplier {
                     return channel.id != channelsUpdate.channel.id
                 }
                 
-                if let activeChannel = self.activeChannel.value {
+                if let activeChannel = self.activeChannel {
                     switch activeChannel.channelType {
                     case .channel(let channel):
                         if channelsUpdate.channel == channel {
-                            self.activeChannel.value = nil
+                            self.activeChannel = nil
                         }
                     default:
                         break
@@ -171,11 +170,11 @@ class ChannelSupplier {
                 self.allChannels = self.subscribedChannels.filter { (channel) -> Bool in
                     return channel.id != memberUpdate.channel.id
                 }
-                if let activeChannel = self.activeChannel.value {
+                if let activeChannel = self.activeChannel {
                     switch activeChannel.channelType {
                     case .channel(let channel):
                         if memberUpdate.channel == channel {
-                            self.activeChannel.value = nil
+                            self.activeChannel = nil
                         }
                     default:
                         break
@@ -188,7 +187,7 @@ class ChannelSupplier {
     }
 
     func isChannelEqualToActiveChannel(channel: TCHChannel) -> Bool {
-        guard let activeChannel = self.activeChannel.value else { return false }
+        guard let activeChannel = self.activeChannel else { return false }
         
         switch activeChannel.channelType {
         case .channel(let currentChannel):
@@ -196,40 +195,6 @@ class ChannelSupplier {
         default:
             return false
         }
-    }
-
-    @discardableResult
-    static func delete(channel: TCHChannel) -> Future<Void> {
-        let promise = Promise<Void>()
-
-        channel.destroy { result in
-            if result.isSuccessful() {
-                promise.resolve(with: ())
-            } else if let error = result.error {
-                promise.reject(with: error)
-            } else {
-                promise.reject(with: ClientError.message(detail: "Failed to delete channel."))
-            }
-        }
-
-        return promise
-    }
-
-    @discardableResult
-    static func leave(channel: TCHChannel) -> Future<Void> {
-        let promise = Promise<Void>()
-
-        channel.leave { result in
-            if result.isSuccessful() {
-                promise.resolve(with: ())
-            } else if let error = result.error {
-                promise.reject(with: error)
-            } else {
-                promise.reject(with: ClientError.message(detail: "Failed to leave channel."))
-            }
-        }
-
-        return promise
     }
 
     // MARK: GETTERS
@@ -249,44 +214,6 @@ class ChannelSupplier {
                 return false 
             }
         })
-    }
-
-    /// Channels can only be found by user if they have already joined or are invited
-    func findChannel(with channelId: String) -> Future<TCHChannel> {
-
-        let promise = Promise<TCHChannel>()
-        self.find(channelId: channelId)
-            .observe(with: { (result) in
-                switch result {
-                case .success(let channel):
-                    promise.resolve(with: channel)
-                case .failure(let error):
-                    promise.reject(with: error)
-                }
-            })
-
-        return promise
-    }
-
-    private func find(channelId: String) -> Future<TCHChannel> {
-        let promise = Promise<TCHChannel>()
-
-        guard let channels = ChannelManager.shared.client?.channelsList() else {
-            promise.reject(with: ClientError.message(detail: "No channels were found."))
-            return promise
-        }
-
-        channels.channel(withSidOrUniqueName: channelId) { (result, channel) in
-            if let strongChannel = channel, result.isSuccessful() {
-                promise.resolve(with: strongChannel)
-            } else if let error = result.error {
-                promise.reject(with: error)
-            } else {
-                promise.reject(with: ClientError.message(detail: "No channel with that ID was found."))
-            }
-        }
-
-        return promise
     }
 
     func getChannel(containingMember userID: String) -> DisplayableChannel? {

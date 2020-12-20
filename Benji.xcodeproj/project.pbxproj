@@ -104,6 +104,8 @@
 		D64A1F07258C16470097817C /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1F06258C16470097817C /* WaitlistViewController.swift */; };
 		D64A1F08258C16470097817C /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1F06258C16470097817C /* WaitlistViewController.swift */; };
 		D64A1F13258D598B0097817C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C821D3071500204BEE /* LaunchScreen.storyboard */; };
+		D64A8F46259008B2002948E1 /* ChannelSupplier+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A8F45259008B2002948E1 /* ChannelSupplier+Extensions.swift */; };
+		D64A8F4C25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A8F4B25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift */; };
 		D64B6D94246108750015827C /* Channel+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64B6D93246108750015827C /* Channel+Cloud.swift */; };
 		D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D64C6A7E23294A8600DB7257 /* ChannelKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A7D23294A8600DB7257 /* ChannelKey.swift */; };
@@ -538,6 +540,8 @@
 		D64932FC2402EBA600986335 /* RoutineCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineCoordinator.swift; sourceTree = "<group>"; };
 		D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Extensions.swift"; sourceTree = "<group>"; };
 		D64A1F06258C16470097817C /* WaitlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistViewController.swift; sourceTree = "<group>"; };
+		D64A8F45259008B2002948E1 /* ChannelSupplier+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelSupplier+Extensions.swift"; sourceTree = "<group>"; };
+		D64A8F4B25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Extensions.swift"; sourceTree = "<group>"; };
 		D64B6D93246108750015827C /* Channel+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Channel+Cloud.swift"; sourceTree = "<group>"; };
 		D64C6A79232883FE00DB7257 /* CloudFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudFunction.swift; sourceTree = "<group>"; };
 		D64C6A7D23294A8600DB7257 /* ChannelKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelKey.swift; sourceTree = "<group>"; };
@@ -798,10 +802,12 @@
 			isa = PBXGroup;
 			children = (
 				D657175D2378CEBA00F8F96C /* ChannelCollectionViewManager.swift */,
+				D64A8F4B25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift */,
 				D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */,
 				D6FC809B237A6ED30089AACC /* ChannelCollectionViewManager+Typing.swift */,
 				D6090E572377D2CA00833DA7 /* ChannelSectionable.swift */,
 				D6FC8097237A66220089AACC /* ChannelSupplier.swift */,
+				D64A8F45259008B2002948E1 /* ChannelSupplier+Extensions.swift */,
 				D6090E552377CB2F00833DA7 /* Messageable.swift */,
 				D6F33C6A24AFCF24009603FF /* MessageKind.swift */,
 				D67934D623D9580F00536B44 /* MessagePreviewViewController.swift */,
@@ -1817,6 +1823,7 @@
 				D6D14D9121D5893600CD8CE4 /* IGListIndexSetResult.m in Sources */,
 				D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */,
 				D65519F32589591D00B901E4 /* Typealies.swift in Sources */,
+				D64A8F46259008B2002948E1 /* ChannelSupplier+Extensions.swift in Sources */,
 				D61592DE24FAD7C600B63412 /* AttachementHeaderView.swift in Sources */,
 				D642735522C87CCA0088256B /* ImageViewButton.swift in Sources */,
 				D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */,
@@ -2036,6 +2043,7 @@
 				D62C635422BE9CBB00F4D097 /* FeedViewController.swift in Sources */,
 				D6D14FF921D5893700CD8CE4 /* NSString+IGListDiffable.m in Sources */,
 				D63826D22274C8C0001D4B8B /* ChannelManager+Extensions.swift in Sources */,
+				D64A8F4C25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift in Sources */,
 				D61EC0E221D30E6000204BEE /* Label.swift in Sources */,
 				D61EC0E021D30E3F00204BEE /* FullScreenViewController.swift in Sources */,
 				D6FA622623F0B16F00048C4A /* ChannelDataSource+Animations.swift in Sources */,

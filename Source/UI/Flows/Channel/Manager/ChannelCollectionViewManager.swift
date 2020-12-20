@@ -9,7 +9,7 @@
 import Foundation
 import ReactiveSwift
 import TwilioChatClient
-import TMROFutures
+import Combine
 
 class ChannelCollectionViewManager: NSObject, UITextViewDelegate, ChannelDataSource,
 UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ActiveChannelAccessor {
@@ -39,14 +39,15 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     let disposables = CompositeDisposable()
     private var footerView: ReadAllFooterView?
     private var isSettingReadAll = false
+    private var cancellables = Set<AnyCancellable>()
 
     init(with collectionView: ChannelCollectionView) {
         self.collectionView = collectionView
         super.init()
         self.updateLayoutDataSource()
-        self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on(value:  { [unowned self] (channel) in
-            guard let activeChannel = channel else { return }
-            
+
+        ChannelSupplier.shared.$activeChannel.mainSink { [weak self] (channel) in
+            guard let `self` = self, let activeChannel = channel else { return }
             switch activeChannel.channelType {
             case .channel(let channel):
                 channel.getMembersCount { (result, count) in
@@ -55,7 +56,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
             default:
                 break
             }
-        }).start())
+        }.store(in: &self.cancellables)
     }
 
     deinit {
@@ -139,21 +140,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         }
 
         return cell
-    }
-
-    @discardableResult
-    private func updateConsumers(with consumer: Avatar, for message: Messageable) -> Future<Void> {
-        //create system message copy of current message
-        let messageCopy = SystemMessage(with: message)
-        messageCopy.udpateConsumers(with: consumer)
-
-        runMain {
-            //update the current message with the copy
-            self.updateItem(with: messageCopy, completion: nil)
-        }
-
-        //call update on the actual message and update on callback
-        return message.udpateConsumers(with: consumer)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -315,7 +301,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     }
 
     func didSelectLoadMore(for messageIndex: Int) {
-        guard let channelDisplayable = ChannelSupplier.shared.activeChannel.value else { return }
+        guard let channelDisplayable = ChannelSupplier.shared.activeChannel else { return }
 
         switch channelDisplayable.channelType {
         case .system(_):
@@ -380,14 +366,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                 }
             }
         }
-    }
-
-    func setAllMessagesToRead() -> Future<[Void]> {
-        let promises: [Future<Void>] = MessageSupplier.shared.unreadMessages.map { (message) -> Future<Void> in
-            return self.updateConsumers(with: User.current()!, for: message)
-        }
-
-        return waitForAll(futures: promises)
     }
 }
 

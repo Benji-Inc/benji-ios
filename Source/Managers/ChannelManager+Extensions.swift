@@ -158,7 +158,7 @@ extension ChannelManager: TwilioChatClientDelegate {
     }
 
     private func handle(member: TCHMember, in channel: TCHChannel, status: ChannelMemberUpdate.Status) {
-        guard ChannelSupplier.shared.activeChannel.value == nil else { return }
+        guard ChannelSupplier.shared.activeChannel.isNil else { return }
         member.getMemberAsUser()
             .observeValue { (user) in
                 runMain {
@@ -172,7 +172,7 @@ extension ChannelManager: TwilioChatClientDelegate {
     func chatClient(_ client: TwilioChatClient, channel: TCHChannel, messageAdded message: TCHMessage) {
         self.messageUpdate.value = MessageUpdate(channel: channel, message: message, status: .added)
 
-        if ChannelSupplier.shared.activeChannel.value == nil, !message.isFromCurrentUser, message.context != .emergency {
+        if ChannelSupplier.shared.activeChannel.isNil, !message.isFromCurrentUser, message.context != .emergency {
 //            ToastScheduler.shared.schedule(toastType: .message(message, channel))
         }
     }

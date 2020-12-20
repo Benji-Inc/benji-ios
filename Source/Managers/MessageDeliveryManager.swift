@@ -21,7 +21,7 @@ class MessageDeliveryManager {
               attributes: [String: Any],
               completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
 
-        if let channelDisplayable = ChannelSupplier.shared.activeChannel.value {
+        if let channelDisplayable = ChannelSupplier.shared.activeChannel {
             if let current = User.current(), let objectId = current.objectId {
 
                 var mutableAttributes = attributes
@@ -69,7 +69,7 @@ class MessageDeliveryManager {
 
     func resend(message: Messageable, completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
 
-        if let channelDisplayable = ChannelSupplier.shared.activeChannel.value {
+        if let channelDisplayable = ChannelSupplier.shared.activeChannel {
             let systemMessage = SystemMessage(with: message)
 
             if case .channel(let channel) = channelDisplayable.channelType {

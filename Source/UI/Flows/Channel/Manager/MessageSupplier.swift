@@ -45,7 +45,7 @@ class MessageSupplier {
 
         var tchChannel: TCHChannel?
 
-        if let activeChannel = ChannelSupplier.shared.activeChannel.value {
+        if let activeChannel = ChannelSupplier.shared.activeChannel {
             switch activeChannel.channelType {
             case .system(_):
                 break
