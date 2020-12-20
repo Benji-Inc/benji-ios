@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import Combine
 
 class ViewController: UIViewController, Dismissable {
 
     var dismissHandlers: [() -> Void] = []
+    var cancellables = Set<AnyCancellable>()
 
     init() {
         super.init(nibName: nil, bundle: nil)

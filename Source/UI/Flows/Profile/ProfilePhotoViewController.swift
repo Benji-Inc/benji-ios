@@ -35,10 +35,6 @@ class ProfilePhotoViewController: SwitchableContentViewController<PhotoContentTy
 
     unowned let delegate: ProfilePhotoViewControllerDelegate
 
-    private var currentState: PhotoState? {
-        return self.photoVC.currentState.value
-    }
-
     init(with delegate: ProfilePhotoViewControllerDelegate) {
         self.delegate = delegate
         super.init()
@@ -62,11 +58,13 @@ class ProfilePhotoViewController: SwitchableContentViewController<PhotoContentTy
             }
         }
 
-        self.photoVC.currentState.producer
-            .skipRepeats()
-            .on(value:  { [unowned self] (state) in
+        self.photoVC.$currentState
+            .removeDuplicates()
+            .mainSink { [weak self] (_) in
+            guard let `self` = self else { return }
                 self.updateNavigationBar(animateBackButton: false)
-            }).start()
+
+            }.store(in: &self.cancellables)
     }
 
     override func getInitialContent() -> PhotoContentType {
@@ -74,9 +72,7 @@ class ProfilePhotoViewController: SwitchableContentViewController<PhotoContentTy
     }
 
     override func getTitle() -> Localized {
-        guard let state = self.currentState else { return LocalizedString.empty }
-
-        switch state {
+        switch self.photoVC.currentState {
         case .initial:
             return LocalizedString(id: "",
                                    arguments: [],

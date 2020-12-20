@@ -150,13 +150,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         case .waitlist(_):
             return "Congrats! 🎉"
         case .photo(let vc):
-            guard let state = vc.currentState.value else {
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Verify Indentity")
-            }
             
-            switch state {
+            switch vc.currentState {
             case .initial:
                 return LocalizedString(id: "",
                                        arguments: [],

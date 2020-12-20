@@ -8,13 +8,14 @@
 
 import Foundation
 import TwilioChatClient
+import Combine
 
 protocol ChannelsViewControllerDelegate: class {
     func channelsView(_ controller: ChannelsViewController, didSelect channelType: ChannelType)
     func channelsView(_ controller: ChannelsViewController, didSelect reservation: Reservation)
 }
 
-class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsCollectionViewManager>, CancellableStore {
+class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsCollectionViewManager> {
 
     weak var delegate: ChannelsViewControllerDelegate?
 

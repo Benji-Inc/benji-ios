@@ -316,8 +316,8 @@
 		D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */; };
 		D6B2603822E6AB5E00143CF0 /* ChannelDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2603722E6AB5E00143CF0 /* ChannelDetailViewController.swift */; };
 		D6B2603D22E6B8EA00143CF0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */; };
-		D6B53B00258FE73D00593670 /* CancellableStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* CancellableStore.swift */; };
-		D6B53B01258FE73D00593670 /* CancellableStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* CancellableStore.swift */; };
+		D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
+		D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6BD933F23F8824D00C5660D /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D6BD933E23F8824D00C5660D /* face_scan.json */; };
 		D6BF68D7239CBF74008E79A1 /* FeedInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */; };
 		D6C9CD2C2471D6BE007376F7 /* ReadAllFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */; };
@@ -636,7 +636,7 @@
 		D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDateLabel.swift; sourceTree = "<group>"; };
 		D6B2603722E6AB5E00143CF0 /* ChannelDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDetailViewController.swift; sourceTree = "<group>"; };
 		D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
-		D6B53AFF258FE73D00593670 /* CancellableStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancellableStore.swift; sourceTree = "<group>"; };
+		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6BD933E23F8824D00C5660D /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
 		D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedInviteView.swift; sourceTree = "<group>"; };
 		D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadAllFooterView.swift; sourceTree = "<group>"; };
@@ -954,6 +954,7 @@
 				D62BB742244DEEA400607677 /* Optional+Extensions.swift */,
 				D69EB4482457E5E500473530 /* Parse */,
 				D67896AE22FF62630059BA75 /* PhoneKit.swift */,
+				D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */,
 				D6D380C3257FC18300C562E8 /* Selectable.swift */,
 				D61EC0E921D3111600204BEE /* String+Extensions.swift */,
 				D64C6A7F23294ED700DB7257 /* Twilio */,
@@ -1215,7 +1216,6 @@
 			children = (
 				D66A0B932351821200A0FFEA /* Completeable.swift */,
 				D65519F22589591D00B901E4 /* Typealies.swift */,
-				D6B53AFF258FE73D00593670 /* CancellableStore.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -2002,7 +2002,7 @@
 				D639F61824B1566B007E63B7 /* AttibutedMessageCell.swift in Sources */,
 				80C7C6062316112400643A14 /* TimeHumpView.swift in Sources */,
 				D61EC0D921D30C8E00204BEE /* DispatchQue+Extensions.swift in Sources */,
-				D6B53B00258FE73D00593670 /* CancellableStore.swift in Sources */,
+				D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
 				D6884AC825800FC600DA380E /* StatusableRequest.swift in Sources */,
 				D6DADF702207DF60007D9EB1 /* ChannelCell.swift in Sources */,
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
@@ -2165,7 +2165,7 @@
 				D65519CA258923E800B901E4 /* OnboardingCoordinator.swift in Sources */,
 				D65519C725891B1D00B901E4 /* ViewController.swift in Sources */,
 				D655194C2589124500B901E4 /* UserNotificationManager+Extensions.swift in Sources */,
-				D6B53B01258FE73D00593670 /* CancellableStore.swift in Sources */,
+				D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
 				D65519252589121C00B901E4 /* PFInstallation+Extensions.swift in Sources */,
 				D6551A3725895E6800B901E4 /* PhotoViewController.swift in Sources */,
 				D655196E2589128300B901E4 /* CommonWord.swift in Sources */,

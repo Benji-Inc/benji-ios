@@ -47,9 +47,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private var image: UIImage?
 
-    private(set) var currentState = MutableProperty<PhotoState?>(nil)
-
-    private var cancellable = Set<AnyCancellable>()
+    @Published private(set) var currentState: PhotoState = .initial
 
     override func initializeViews() {
         super.initializeViews()
@@ -79,39 +77,35 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.update(image: image)
         }
 
-        self.currentState.producer
-            .skipRepeats()
-            .on(value:  { [unowned self] (state) in
-                guard let currentState = state else { return }
-                self.handle(state: currentState)
-            }).start()
+        self.$currentState.mainSink { [weak self] (state) in
+            guard let `self` = self else { return }
+            self.handle(state: state)
+        }.store(in: &self.cancellables)
 
         self.cameraVC.$faceDetected
             .receive(on: DispatchQueue.main)
             .sink { (faceDetected) in
                 self.beginButton.isEnabled = faceDetected
 
-                guard let state = self.currentState.value, state == .scan else { return }
+                guard self.currentState == .scan else { return }
                 if faceDetected {
                     self.beginButton.set(style: .normal(color: .blue, text: "Capture"))
                 } else {
                     self.beginButton.set(style: .normal(color: .red, text: "NO face detected"))
                 }
-            }.store(in: &self.cancellable)
+            }.store(in: &self.cancellables)
 
         self.beginButton.didSelect { [unowned self] in
-            guard let state = self.currentState.value else { return }
-
-            if state == .initial {
-                self.currentState.value = .scan
-            } else if state == .scan {
-                self.currentState.value = .capture
+            if self.currentState == .initial {
+                self.currentState = .scan
+            } else if self.currentState == .scan {
+                self.currentState = .capture
             }
         }
 
         self.retakeButton.set(style: .normal(color: .red, text: "Retake"))
         self.retakeButton.didSelect { [unowned self] in
-            self.currentState.value = .scan
+            self.currentState = .scan
         }
 
         self.confirmButton.set(style: .normal(color: .green, text: "Continue"))
@@ -124,7 +118,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.currentState.value = .initial
+        self.currentState = .initial
     }
 
     override func viewDidLayoutSubviews() {
@@ -327,9 +321,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             .observe { (result) in
                 switch result {
                 case .success(_):
-                    self.currentState.value = .finish
+                    self.currentState = .finish
                 case .failure(_):
-                    self.currentState.value = .error
+                    self.currentState = .error
                 }
         }
     }

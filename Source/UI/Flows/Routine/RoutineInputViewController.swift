@@ -10,6 +10,7 @@ import Foundation
 import UserNotifications
 import TMROLocalization
 import ReactiveSwift
+import Combine
 
 private let minutesInADay: CGFloat = 1440
 
@@ -24,7 +25,7 @@ enum RoutineInputState {
     case update
 }
 
-class RoutineInputViewController: ViewController, CancellableStore {
+class RoutineInputViewController: ViewController {
 
     static let height: CGFloat = 500
     let content = RoutineInputContentView()

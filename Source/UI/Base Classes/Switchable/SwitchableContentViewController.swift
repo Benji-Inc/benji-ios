@@ -11,7 +11,7 @@ import ReactiveSwift
 import TMROLocalization
 import Combine
 
-class SwitchableContentViewController<ContentType: Switchable>: NavigationBarViewController, KeyboardObservable, CancellableStore {
+class SwitchableContentViewController<ContentType: Switchable>: NavigationBarViewController, KeyboardObservable {
 
     @Published var current: ContentType?
 
@@ -35,14 +35,6 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
                 self.switchTo(content)
             }
             .store(in: &self.cancellables)
-//        self.$current
-//            .receive(on: DispatchQueue.main)
-//            .removeDuplicates()
-//            .sink { [weak self] (value) in
-//                guard let `self` = self else { return }
-//                guard let content = value else { return }
-//                self.switchTo(content)
-//            }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {

@@ -8,8 +8,9 @@
 
 import Foundation
 import ReactiveSwift
+import Combine
 
-class TimeHumpView: View, CancellableStore {
+class TimeHumpView: View {
 
     override var alpha: CGFloat {
         didSet {
@@ -23,6 +24,7 @@ class TimeHumpView: View, CancellableStore {
     }
 
     @Published var percentage: CGFloat = 0
+    var cancellables = Set<AnyCancellable>()
 
     override func initializeSubviews() {
         super.initializeSubviews()

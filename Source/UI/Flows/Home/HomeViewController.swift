@@ -10,6 +10,7 @@ import Foundation
 import Contacts
 import Parse
 import ReactiveSwift
+import Combine
 
 enum HomeContent: Equatable {
     case feed(FeedViewController)
@@ -17,7 +18,7 @@ enum HomeContent: Equatable {
     case profile(ProfileViewController)
 }
 
-class HomeViewController: ViewController, CancellableStore {
+class HomeViewController: ViewController {
 
     lazy var feedVC = FeedViewController()
     lazy var channelsVC = ChannelsViewController()
@@ -27,6 +28,7 @@ class HomeViewController: ViewController, CancellableStore {
     let tabView = HomeTabView()
 
     @Published var current: HomeContent?
+
     private(set) var currentCenterVC: UIViewController?
 
     override func initializeViews() {
