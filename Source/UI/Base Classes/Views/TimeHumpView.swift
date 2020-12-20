@@ -9,7 +9,7 @@
 import Foundation
 import ReactiveSwift
 
-class TimeHumpView: View {
+class TimeHumpView: View, CancellableStore {
 
     override var alpha: CGFloat {
         didSet {
@@ -22,7 +22,7 @@ class TimeHumpView: View {
         return (self.height - 8) * 0.5
     }
 
-    let percentage = MutableProperty<CGFloat>(0)
+    @Published var percentage: CGFloat = 0
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -39,9 +39,10 @@ class TimeHumpView: View {
             self.handlePan(panRecognizer)
         }
 
-        self.percentage.producer.on(value:  { [unowned self] (percentage) in
+        self.$percentage.mainSink { [weak self] (_) in
+            guard let `self` = self else { return }
             self.setNeedsLayout()
-        }).start()
+        }.store(in: &self.cancellables)
     }
 
     // MARK: Layout
@@ -66,7 +67,7 @@ class TimeHumpView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let sliderCenter = self.getPoint(normalizedX: clamp(self.percentage.value, 0, 1))
+        let sliderCenter = self.getPoint(normalizedX: clamp(self.percentage, 0, 1))
         self.sliderView.center = sliderCenter
         self.sliderView.makeRound()
     }
@@ -89,11 +90,11 @@ class TimeHumpView: View {
 
         switch panRecognizer.state {
         case .began:
-            self.startPanPercentage = self.percentage.value
+            self.startPanPercentage = self.percentage
         case .changed:
             let translation = panRecognizer.translation(in: self)
             let normalizedTranslationX = translation.x/self.width
-            self.percentage.value = clamp(self.startPanPercentage + normalizedTranslationX, 0, 1)
+            self.percentage = clamp(self.startPanPercentage + normalizedTranslationX, 0, 1)
         case .ended:
             let velocity = panRecognizer.velocity(in: self)
             self.animateToFinalPosition(withCurrentVelocity: velocity.x)
@@ -105,7 +106,7 @@ class TimeHumpView: View {
     }
 
     private func animateToFinalPosition(withCurrentVelocity velocity: CGFloat) {
-        self.animateToPercentage(percentage: self.percentage.value + (velocity/1000.0) * 0.05)
+        self.animateToPercentage(percentage: self.percentage + (velocity/1000.0) * 0.05)
     }
 
     func animateToPercentage(percentage: CGFloat) {
@@ -114,7 +115,7 @@ class TimeHumpView: View {
                        delay: 0,
                        options: UIView.AnimationOptions.curveEaseOut,
                        animations: {
-                        self.percentage.value = clamp(percentage, 0, 1)
+                        self.percentage = clamp(percentage, 0, 1)
                         self.layoutIfNeeded()
         })
     }

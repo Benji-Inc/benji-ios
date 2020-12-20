@@ -24,7 +24,7 @@ enum RoutineInputState {
     case update
 }
 
-class RoutineInputViewController: ViewController {
+class RoutineInputViewController: ViewController, CancellableStore {
 
     static let height: CGFloat = 500
     let content = RoutineInputContentView()
@@ -51,7 +51,8 @@ class RoutineInputViewController: ViewController {
             self.currentState.value = .needsAuthorization
         }
 
-        self.content.timeHump.percentage.signal.observeValues { [unowned self] (percentage) in
+        self.content.timeHump.$percentage.mainSink { [weak self] (percentage) in
+            guard let `self` = self else { return }
             let calendar = Calendar.current
             var components = DateComponents()
 
@@ -63,7 +64,7 @@ class RoutineInputViewController: ViewController {
                 self.selectedDate = date
                 self.content.set(date: date)
             }
-        }
+        }.store(in: &self.cancellables)
 
         User.current()?.getRoutine()
         .observe(with: { (result) in
@@ -166,6 +167,6 @@ class RoutineInputViewController: ViewController {
         var totalSeconds = CGFloat(components.second ?? 0)
         totalSeconds += CGFloat(components.minute ?? 0) * 60
         totalSeconds += CGFloat(components.hour ?? 0) * 3600
-        self.content.timeHump.percentage.value = totalSeconds/86400
+        self.content.timeHump.percentage = totalSeconds/86400
     }
 }
