@@ -8,7 +8,7 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
 
     unowned let collectionView: CollectionView
 
-    let items = MutableProperty<[CellType.ItemType]>([])
+    private(set) var items: [CellType.ItemType] = []
 
     var allowMultipleSelection: Bool = false
 
@@ -22,7 +22,7 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
     var selectedItems: [CellType.ItemType] {
         var items: [CellType.ItemType] = []
         for indexPath in self.selectedIndexPaths {
-            if let item = self.items.value[safe: indexPath.row] {
+            if let item = self.getItem(for: indexPath.row) {
                 items.append(item)
             }
         }
@@ -51,6 +51,10 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
         self.collectionView.dataSource = self
     }
 
+    func getItem(for index: Int) -> CellType.ItemType? {
+        return self.items[safe: index]
+    }
+
     // MARK: Data Source Updating
 
     func set(newItems: [CellType.ItemType],
@@ -61,7 +65,7 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
             self.animateOut(position: cycle.outToPosition, concatenate: cycle.shouldConcatenate) { [unowned self] in
                 self.updateCollectionView(items: newItems, modify: { [weak self] in
                     guard let `self` = self else { return }
-                    self.items.value = newItems
+                    self.items = newItems
                 }) { (completed) in
                     self.animateIn(position: cycle.inFromPosition,
                                    concatenate: cycle.shouldConcatenate,
@@ -73,7 +77,7 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
         } else {
             self.updateCollectionView(items: newItems, modify: { [weak self] in
                 guard let `self` = self else { return }
-                self.items.value = newItems
+                self.items = newItems
             }) { (completed) in
                 completion?(completed)
             }
@@ -83,14 +87,14 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
     func set(newItems: [CellType.ItemType], completion: ((Bool) -> Swift.Void)? = nil) {
         self.updateCollectionView(items: newItems, modify: { [weak self] in
             guard let `self` = self else { return }
-            self.items.value = newItems
+            self.items = newItems
         }, completion: completion)
     }
 
     private func updateCollectionView(items: [CellType.ItemType],
                                       modify: @escaping () -> Void,
                                       completion: ((Bool) -> Swift.Void)? = nil) {
-        self.collectionView.reloadWithModify(previousItems: self.items.value,
+        self.collectionView.reloadWithModify(previousItems: self.items,
                                              newItems: items,
                                              equalityOption: .equality,
                                              modify: modify,
@@ -98,47 +102,47 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
     }
 
     func append(item: CellType.ItemType, in section: Int = 0) {
-        guard !self.items.value.contains(item) else { return }
+        guard !self.items.contains(item) else { return }
 
-        let indexPath = IndexPath(item: self.items.value.count, section: section)
-        self.items.value.append(item)
+        let indexPath = IndexPath(item: self.items.count, section: section)
+        self.items.append(item)
         self.collectionView.insertItems(at: [indexPath])
     }
 
     func insert(item: CellType.ItemType, at index: Int) {
-        guard !self.items.value.contains(item) else { return }
+        guard !self.items.contains(item) else { return }
         
-        self.items.value.insert(item, at: index)
+        self.items.insert(item, at: index)
         self.collectionView.insertItems(at: [IndexPath(item: index, section: 0)])
     }
 
     func update(item: CellType.ItemType, in section: Int = 0) {
 
-        guard let itemIndex = self.items.value.firstIndex(where: { (oldItem) in
+        guard let itemIndex = self.items.firstIndex(where: { (oldItem) in
             return oldItem.diffIdentifier().isEqual(item.diffIdentifier())
         }) else { return }
 
-        self.items.value[itemIndex] = item
+        self.items[itemIndex] = item
         self.collectionView.reloadItems(at: [IndexPath(row: itemIndex, section: section)])
     }
 
     func set(item: CellType.ItemType, at index: Int) {
-        self.items.value[index] = item
+        self.items[index] = item
         self.collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
     }
 
     func delete(item: CellType.ItemType, in section: Int = 0) {
 
-        guard let itemIndex = self.items.value.firstIndex(where: { (oldItem) in
+        guard let itemIndex = self.items.firstIndex(where: { (oldItem) in
             return oldItem.diffIdentifier().isEqual(item.diffIdentifier())
         }) else { return }
 
-        self.items.value.remove(at: itemIndex)
+        self.items.remove(at: itemIndex)
         self.collectionView.deleteItems(at: [IndexPath(row: itemIndex, section: section)])
     }
 
     func select(indexPath: IndexPath) {
-        guard let item = self.items.value[safe: indexPath.row] else { return }
+        guard let item = self.getItem(for: indexPath.row)else { return }
 
         if self.selectedIndexPaths.contains(indexPath) {
             self.selectedIndexPaths.remove(indexPath)
@@ -178,7 +182,7 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
 
     func reset() {
         self.selectedIndexPaths = []
-        self.items.value = []
+        self.items = []
         self.collectionView.reloadData()
     }
 
@@ -189,7 +193,7 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.items.value.count
+        return self.items.count
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -198,11 +202,11 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
         let cell: CellType = collectionView.dequeueReusableCell(withReuseIdentifier: CellType.reuseID,
                                                                 for: indexPath) as! CellType
 
-        let item = self.items.value[safe: indexPath.row]
+        let item = self.getItem(for: indexPath.row)
         cell.configure(with: item)
 
         cell.onLongPress = { [unowned self] in
-            guard let item = self.items.value[safe: indexPath.row] else { return }
+            guard let item = self.getItem(for: indexPath.row) else { return }
             self.didLongPress?(item, indexPath)
         }
 
@@ -242,7 +246,7 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
         let configurableCell: CellType = cell as! CellType
         configurableCell.collectionViewManagerWillDisplay()
 
-        guard let item = self.items.value[safe: indexPath.row] else { return }
+        guard let item = self.getItem(for: indexPath.row)else { return }
         self.willDisplayCell?(item, indexPath)
     }
 
@@ -294,13 +298,13 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         guard let indexPath = self.collectionView.centerMostIndexPath(),
-            let item = self.items.value[safe: indexPath.row] else { return }
+            let item = self.getItem(for: indexPath.row) else { return }
         self.didFinishCenteringOnCell?(item, indexPath)
     }
 
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         guard let indexPath = self.collectionView.centerMostIndexPath(),
-            let item = self.items.value[safe: indexPath.row] else { return }
+            let item = self.getItem(for: indexPath.row) else { return }
         self.didFinishCenteringOnCell?(item, indexPath)
     }
 

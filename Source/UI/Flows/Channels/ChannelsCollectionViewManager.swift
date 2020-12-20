@@ -38,7 +38,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
                                  contextMenuConfigurationForItemAt indexPath: IndexPath,
                                  point: CGPoint) -> UIContextMenuConfiguration? {
 
-        guard let channel = self.items.value[safe: indexPath.row],
+        guard let channel = self.getItem(for: indexPath.row),
             let cell = collectionView.cellForItem(at: indexPath) as? ChannelCell else { return nil }
 
         return UIContextMenuConfiguration(identifier: nil, previewProvider: {
