@@ -26,7 +26,7 @@ class PhoneTextField: PhoneNumberTextField {
         self.withPrefix = false
         self.textContentType = .telephoneNumber
         self.keyboardType = .numbersAndPunctuation
-        
+
         self.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
