@@ -18,8 +18,8 @@ class ChatClientManager: NSObject {
     var client: TwilioChatClient?
 
     @Published var clientSyncUpdate: TCHClientSynchronizationStatus? = nil
-    @Published var clientUpdate: ChatClientUpdate? = nil 
-    var channelSyncUpdate = MutableProperty<ChannelSyncUpdate?>(nil)
+    @Published var clientUpdate: ChatClientUpdate? = nil
+    @Published var channelSyncUpdate: ChannelSyncUpdate? = nil
     var channelsUpdate = MutableProperty<ChannelUpdate?>(nil)
     var messageUpdate = MutableProperty<MessageUpdate?>(nil)
     var memberUpdate = MutableProperty<ChannelMemberUpdate?>(nil)

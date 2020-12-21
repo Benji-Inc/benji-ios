@@ -170,7 +170,7 @@ extension ChatClientManager: TwilioChatClientDelegate {
     }
 
     func chatClient(_ client: TwilioChatClient, channel: TCHChannel, synchronizationStatusUpdated status: TCHChannelSynchronizationStatus) {
-        self.channelSyncUpdate.value = ChannelSyncUpdate(channel: channel, status: status)
+        self.channelSyncUpdate = ChannelSyncUpdate(channel: channel, status: status)
     }
 
     //MARK: MEMBER UDPATES
