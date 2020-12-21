@@ -11,7 +11,6 @@ import Parse
 import TMROFutures
 import TMROLocalization
 import Lottie
-import ReactiveSwift
 import UIKit
 import Combine
 

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import ReactiveSwift
 import TMROLocalization
 import Combine
 

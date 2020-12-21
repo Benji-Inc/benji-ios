@@ -8,7 +8,6 @@
 
 import Foundation
 import TwilioChatClient
-import ReactiveSwift
 import Parse
 import Combine
 

@@ -8,7 +8,6 @@
 
 import Foundation
 import PhoneNumberKit
-import ReactiveSwift
 import Parse
 import TMROLocalization
 import TMROFutures

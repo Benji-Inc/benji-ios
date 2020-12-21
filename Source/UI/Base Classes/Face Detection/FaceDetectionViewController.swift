@@ -9,7 +9,6 @@
 import Foundation
 import AVFoundation
 import Vision
-import ReactiveSwift
 import UIKit
 
 class FaceDetectionViewController: UIViewController {

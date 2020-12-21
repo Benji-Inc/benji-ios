@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import ReactiveSwift
 import TwilioChatClient
 import Combine
 
@@ -36,7 +35,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     var willDisplayCell: ((Messageable, IndexPath) -> Void)?
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .heavy)
     var userTyping: User?
-    let disposables = CompositeDisposable()
     private var footerView: ReadAllFooterView?
     private var isSettingReadAll = false
     private var cancellables = Set<AnyCancellable>()
@@ -57,10 +55,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                 break
             }
         }.store(in: &self.cancellables)
-    }
-
-    deinit {
-        self.disposables.dispose()
     }
 
     private func updateLayoutDataSource() {

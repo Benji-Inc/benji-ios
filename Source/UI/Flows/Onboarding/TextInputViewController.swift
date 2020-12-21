@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import ReactiveSwift
 import TMROLocalization
 
 class TextInputViewController<ResultType>: ViewController, Sizeable, Completable, UITextFieldDelegate, KeyboardObservable {

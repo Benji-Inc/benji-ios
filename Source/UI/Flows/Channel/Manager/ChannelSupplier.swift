@@ -9,7 +9,6 @@
 import Foundation
 import TwilioChatClient
 import Combine
-import ReactiveSwift
 
 protocol ActiveChannelAccessor: class {
     var activeChannel: DisplayableChannel? { get }
@@ -24,8 +23,6 @@ extension ActiveChannelAccessor {
 class ChannelSupplier {
 
     static let shared = ChannelSupplier()
-
-    let disposables = CompositeDisposable()
 
     private var allChannels: [DisplayableChannel] = [] {
         didSet {
@@ -79,7 +76,6 @@ class ChannelSupplier {
 
     deinit {
         self.isSynced = false 
-        self.disposables.dispose()
     }
 
     func set(activeChannel: DisplayableChannel?) {

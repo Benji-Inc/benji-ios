@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import ReactiveSwift
 import Parse
 import TwilioChatClient
 import TMROFutures
@@ -27,8 +26,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     lazy var collectionView = ChannelCollectionView()
     lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView)
     lazy var imagePickerVC = UIImagePickerController()
-
-    let disposables = CompositeDisposable()
 
     private var animateMessages: Bool = true
 
@@ -96,10 +93,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     init(delegate: ChannelViewControllerDelegates) {
         self.delegate = delegate
         super.init()
-    }
-
-    deinit {
-        self.disposables.dispose()
     }
 
     required init?(coder aDecoder: NSCoder) {

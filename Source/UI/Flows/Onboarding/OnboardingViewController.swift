@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import ReactiveSwift
 import TMROLocalization
 
 protocol OnboardingViewControllerDelegate: class {

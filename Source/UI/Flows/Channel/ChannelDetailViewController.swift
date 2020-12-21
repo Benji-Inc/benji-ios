@@ -10,7 +10,6 @@ import Foundation
 import TwilioChatClient
 import Parse
 import TMROLocalization
-import ReactiveSwift
 
 protocol ChannelDetailViewControllerDelegate: class {
     func channelDetailViewControllerDidTapMenu(_ vc: ChannelDetailViewController)
@@ -22,7 +21,6 @@ class ChannelDetailViewController: ViewController {
     private let titleButton = Button()
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
     private let content = ChannelContentView()
-    let disposables = CompositeDisposable()
 
     unowned let delegate: ChannelDetailViewControllerDelegate
 
@@ -33,10 +31,6 @@ class ChannelDetailViewController: ViewController {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        self.disposables.dispose()
     }
 
     override func initializeViews() {

@@ -1,7 +1,6 @@
 //  Copyright © 2019 Tomorrow Ideas Inc. All rights reserved.
 
 import Foundation
-import ReactiveSwift
 
 class CollectionViewManager<CellType: ManageableCell & UICollectionViewCell>: NSObject,
 UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {

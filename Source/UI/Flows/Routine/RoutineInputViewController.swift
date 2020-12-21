@@ -9,7 +9,6 @@
 import Foundation
 import UserNotifications
 import TMROLocalization
-import ReactiveSwift
 import Combine
 
 private let minutesInADay: CGFloat = 1440
