@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol ManageableCellItem: Diffable {
+protocol ManageableCellItem: Equatable {
     var id: String { get }
 }
 

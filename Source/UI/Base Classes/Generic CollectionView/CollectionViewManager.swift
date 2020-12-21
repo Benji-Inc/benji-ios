@@ -3,7 +3,7 @@
 import Foundation
 
 class CollectionViewManager<CellType: ManageableCell & UICollectionViewCell>: NSObject,
-UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+                                                                              UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     unowned let collectionView: CollectionView
 
@@ -61,43 +61,37 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
 
         if let cycle = animationCycle {
             self.animateOut(position: cycle.outToPosition, concatenate: cycle.shouldConcatenate) { [unowned self] in
-                self.updateCollectionView(items: newItems, modify: { [weak self] in
-                    guard let `self` = self else { return }
-                    self.items = newItems
-                }) { (completed) in
-                    self.animateIn(position: cycle.inFromPosition,
-                                   concatenate: cycle.shouldConcatenate,
-                                   scrollToEnd: cycle.scrollToEnd) {
-                        completion?(completed)
-                    }
+                self.items = newItems
+                self.collectionView.reloadData()
+                self.animateIn(position: cycle.inFromPosition,
+                               concatenate: cycle.shouldConcatenate,
+                               scrollToEnd: cycle.scrollToEnd) {
+                    completion?(true)
                 }
             }
         } else {
-            self.updateCollectionView(items: newItems, modify: { [weak self] in
-                guard let `self` = self else { return }
-                self.items = newItems
-            }) { (completed) in
-                completion?(completed)
-            }
+            self.items = newItems
+            self.collectionView.reloadData()
+            completion?(true)
         }
     }
 
-    func set(newItems: [CellType.ItemType], completion: ((Bool) -> Swift.Void)? = nil) {
-        self.updateCollectionView(items: newItems, modify: { [weak self] in
-            guard let `self` = self else { return }
-            self.items = newItems
-        }, completion: completion)
-    }
+//    func set(newItems: [CellType.ItemType], completion: ((Bool) -> Swift.Void)? = nil) {
+//        self.updateCollectionView(items: newItems, modify: { [weak self] in
+//            guard let `self` = self else { return }
+//            self.items = newItems
+//        }, completion: completion)
+//    }
 
-    private func updateCollectionView(items: [CellType.ItemType],
-                                      modify: @escaping () -> Void,
-                                      completion: ((Bool) -> Swift.Void)? = nil) {
-        self.collectionView.reloadWithModify(previousItems: self.items,
-                                             newItems: items,
-                                             equalityOption: .equality,
-                                             modify: modify,
-                                             completion: completion)
-    }
+//    private func updateCollectionView(items: [CellType.ItemType],
+//                                      modify: @escaping () -> Void,
+//                                      completion: ((Bool) -> Swift.Void)? = nil) {
+//        self.collectionView.reloadWithModify(previousItems: self.items,
+//                                             newItems: items,
+//                                             equalityOption: .equality,
+//                                             modify: modify,
+//                                             completion: completion)
+//    }
 
     func append(item: CellType.ItemType, in section: Int = 0) {
         guard !self.items.contains(item) else { return }
@@ -294,17 +288,9 @@ UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFl
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) { }
 
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        guard let indexPath = self.collectionView.centerMostIndexPath(),
-            let item = self.getItem(for: indexPath.row) else { return }
-        self.didFinishCenteringOnCell?(item, indexPath)
-    }
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {}
 
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        guard let indexPath = self.collectionView.centerMostIndexPath(),
-            let item = self.getItem(for: indexPath.row) else { return }
-        self.didFinishCenteringOnCell?(item, indexPath)
-    }
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {}
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView,
                                    withVelocity velocity: CGPoint,

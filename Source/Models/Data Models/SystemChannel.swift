@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SystemChannel: Diffable, Hashable {
+struct SystemChannel: Hashable {
 
     var avatars: [Avatar]
     var context: MessageContext

@@ -11,7 +11,7 @@ import TwilioChatClient
 import Parse
 import TMROFutures
 
-extension TCHChannel: Diffable, ManageableCellItem {
+extension TCHChannel: ManageableCellItem {
 
     var id: String {
         return self.sid!

@@ -337,15 +337,6 @@
 		D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460C21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift */; };
 		D6D1461121D583D200CD8CE4 /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */; };
 		D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461221D583E500CD8CE4 /* NavigationController.swift */; };
-		D6D14D8F21D5893600CD8CE4 /* NSNumber+IGListDiffable.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D14AFF21D5892F00CD8CE4 /* NSNumber+IGListDiffable.m */; };
-		D6D14D9021D5893600CD8CE4 /* IGListMoveIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D14B0221D5892F00CD8CE4 /* IGListMoveIndex.m */; };
-		D6D14D9121D5893600CD8CE4 /* IGListIndexSetResult.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D14B0621D5892F00CD8CE4 /* IGListIndexSetResult.m */; };
-		D6D14FF821D5893700CD8CE4 /* IGListMoveIndexPath.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D14D8121D5893300CD8CE4 /* IGListMoveIndexPath.m */; };
-		D6D14FF921D5893700CD8CE4 /* NSString+IGListDiffable.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D14D8221D5893300CD8CE4 /* NSString+IGListDiffable.m */; };
-		D6D14FFA21D5893700CD8CE4 /* IGListDiff.mm in Sources */ = {isa = PBXBuildFile; fileRef = D6D14D8521D5893400CD8CE4 /* IGListDiff.mm */; };
-		D6D14FFB21D5893700CD8CE4 /* DiffableBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D14D8721D5893400CD8CE4 /* DiffableBox.swift */; };
-		D6D14FFC21D5893700CD8CE4 /* IGListBatchUpdateData.mm in Sources */ = {isa = PBXBuildFile; fileRef = D6D14D8821D5893400CD8CE4 /* IGListBatchUpdateData.mm */; };
-		D6D14FFD21D5893700CD8CE4 /* IGListIndexPathResult.m in Sources */ = {isa = PBXBuildFile; fileRef = D6D14D8D21D5893500CD8CE4 /* IGListIndexPathResult.m */; };
 		D6D1500721D5E73D00CD8CE4 /* ChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1500621D5E73D00CD8CE4 /* ChannelViewController.swift */; };
 		D6D1500C21D5E7C200CD8CE4 /* CollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1500B21D5E7C200CD8CE4 /* CollectionViewManager.swift */; };
 		D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */; };
@@ -658,33 +649,6 @@
 		D6D1460C21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableAttributedString+Extensions.swift"; sourceTree = "<group>"; };
 		D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootNavigationController.swift; sourceTree = "<group>"; };
 		D6D1461221D583E500CD8CE4 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
-		D6D14AFF21D5892F00CD8CE4 /* NSNumber+IGListDiffable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+IGListDiffable.m"; sourceTree = "<group>"; };
-		D6D14B0021D5892F00CD8CE4 /* NSString+IGListDiffable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+IGListDiffable.h"; sourceTree = "<group>"; };
-		D6D14B0121D5892F00CD8CE4 /* IGListDiffable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListDiffable.h; sourceTree = "<group>"; };
-		D6D14B0221D5892F00CD8CE4 /* IGListMoveIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGListMoveIndex.m; sourceTree = "<group>"; };
-		D6D14B0321D5892F00CD8CE4 /* IGListExperiments.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListExperiments.h; sourceTree = "<group>"; };
-		D6D14B0421D5892F00CD8CE4 /* IGListBatchUpdateData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListBatchUpdateData.h; sourceTree = "<group>"; };
-		D6D14B0521D5892F00CD8CE4 /* IGListMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListMacros.h; sourceTree = "<group>"; };
-		D6D14B0621D5892F00CD8CE4 /* IGListIndexSetResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGListIndexSetResult.m; sourceTree = "<group>"; };
-		D6D14D8121D5893300CD8CE4 /* IGListMoveIndexPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGListMoveIndexPath.m; sourceTree = "<group>"; };
-		D6D14D8221D5893300CD8CE4 /* NSString+IGListDiffable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+IGListDiffable.m"; sourceTree = "<group>"; };
-		D6D14D8321D5893300CD8CE4 /* IGListCompatibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListCompatibility.h; sourceTree = "<group>"; };
-		D6D14D8421D5893300CD8CE4 /* IGListIndexPathResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListIndexPathResult.h; sourceTree = "<group>"; };
-		D6D14D8521D5893400CD8CE4 /* IGListDiff.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IGListDiff.mm; sourceTree = "<group>"; };
-		D6D14D8621D5893400CD8CE4 /* IGListDiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListDiff.h; sourceTree = "<group>"; };
-		D6D14D8721D5893400CD8CE4 /* DiffableBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiffableBox.swift; sourceTree = "<group>"; };
-		D6D14D8821D5893400CD8CE4 /* IGListBatchUpdateData.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = IGListBatchUpdateData.mm; sourceTree = "<group>"; };
-		D6D14D8921D5893400CD8CE4 /* IGListAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListAssert.h; sourceTree = "<group>"; };
-		D6D14D8A21D5893500CD8CE4 /* IGListIndexSetResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListIndexSetResult.h; sourceTree = "<group>"; };
-		D6D14D8B21D5893500CD8CE4 /* IGListMoveIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListMoveIndex.h; sourceTree = "<group>"; };
-		D6D14D8C21D5893500CD8CE4 /* IGListMoveIndexPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListMoveIndexPath.h; sourceTree = "<group>"; };
-		D6D14D8D21D5893500CD8CE4 /* IGListIndexPathResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGListIndexPathResult.m; sourceTree = "<group>"; };
-		D6D14D8E21D5893500CD8CE4 /* NSNumber+IGListDiffable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+IGListDiffable.h"; sourceTree = "<group>"; };
-		D6D14FFF21D589A300CD8CE4 /* IGListArrayUtilsInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListArrayUtilsInternal.h; sourceTree = "<group>"; };
-		D6D1500021D589A300CD8CE4 /* IGListIndexSetResultInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListIndexSetResultInternal.h; sourceTree = "<group>"; };
-		D6D1500121D589A300CD8CE4 /* IGListMoveIndexPathInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListMoveIndexPathInternal.h; sourceTree = "<group>"; };
-		D6D1500221D589A300CD8CE4 /* IGListMoveIndexInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListMoveIndexInternal.h; sourceTree = "<group>"; };
-		D6D1500321D589A300CD8CE4 /* IGListIndexPathResultInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGListIndexPathResultInternal.h; sourceTree = "<group>"; };
 		D6D1500621D5E73D00CD8CE4 /* ChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelViewController.swift; sourceTree = "<group>"; };
 		D6D1500B21D5E7C200CD8CE4 /* CollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManager.swift; sourceTree = "<group>"; };
 		D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDisplayable.swift; sourceTree = "<group>"; };
@@ -1429,51 +1393,8 @@
 		D6D14AF821D5890E00CD8CE4 /* State Management */ = {
 			isa = PBXGroup;
 			children = (
-				D6D1500421D58A3000CD8CE4 /* IGListDiff */,
 			);
 			path = "State Management";
-			sourceTree = "<group>";
-		};
-		D6D14FFE21D5898700CD8CE4 /* Internal */ = {
-			isa = PBXGroup;
-			children = (
-				D6D14FFF21D589A300CD8CE4 /* IGListArrayUtilsInternal.h */,
-				D6D1500321D589A300CD8CE4 /* IGListIndexPathResultInternal.h */,
-				D6D1500021D589A300CD8CE4 /* IGListIndexSetResultInternal.h */,
-				D6D1500221D589A300CD8CE4 /* IGListMoveIndexInternal.h */,
-				D6D1500121D589A300CD8CE4 /* IGListMoveIndexPathInternal.h */,
-			);
-			path = Internal;
-			sourceTree = "<group>";
-		};
-		D6D1500421D58A3000CD8CE4 /* IGListDiff */ = {
-			isa = PBXGroup;
-			children = (
-				D6D14FFE21D5898700CD8CE4 /* Internal */,
-				D6D14D8721D5893400CD8CE4 /* DiffableBox.swift */,
-				D6D14D8921D5893400CD8CE4 /* IGListAssert.h */,
-				D6D14B0421D5892F00CD8CE4 /* IGListBatchUpdateData.h */,
-				D6D14D8821D5893400CD8CE4 /* IGListBatchUpdateData.mm */,
-				D6D14D8321D5893300CD8CE4 /* IGListCompatibility.h */,
-				D6D14D8621D5893400CD8CE4 /* IGListDiff.h */,
-				D6D14D8521D5893400CD8CE4 /* IGListDiff.mm */,
-				D6D14B0121D5892F00CD8CE4 /* IGListDiffable.h */,
-				D6D14B0321D5892F00CD8CE4 /* IGListExperiments.h */,
-				D6D14D8421D5893300CD8CE4 /* IGListIndexPathResult.h */,
-				D6D14D8D21D5893500CD8CE4 /* IGListIndexPathResult.m */,
-				D6D14D8A21D5893500CD8CE4 /* IGListIndexSetResult.h */,
-				D6D14B0621D5892F00CD8CE4 /* IGListIndexSetResult.m */,
-				D6D14B0521D5892F00CD8CE4 /* IGListMacros.h */,
-				D6D14D8B21D5893500CD8CE4 /* IGListMoveIndex.h */,
-				D6D14B0221D5892F00CD8CE4 /* IGListMoveIndex.m */,
-				D6D14D8C21D5893500CD8CE4 /* IGListMoveIndexPath.h */,
-				D6D14D8121D5893300CD8CE4 /* IGListMoveIndexPath.m */,
-				D6D14D8E21D5893500CD8CE4 /* NSNumber+IGListDiffable.h */,
-				D6D14AFF21D5892F00CD8CE4 /* NSNumber+IGListDiffable.m */,
-				D6D14B0021D5892F00CD8CE4 /* NSString+IGListDiffable.h */,
-				D6D14D8221D5893300CD8CE4 /* NSString+IGListDiffable.m */,
-			);
-			path = IGListDiff;
 			sourceTree = "<group>";
 		};
 		D6D1500521D5E71E00CD8CE4 /* Channel Collection Views */ = {
@@ -1818,9 +1739,7 @@
 				D61EC0DB21D30CB300204BEE /* Dismissable.swift in Sources */,
 				D642735322C85B740088256B /* SystemAvatar.swift in Sources */,
 				D6D627B5247C29B20046BB70 /* MessageDeliveryManager.swift in Sources */,
-				D6D14FF821D5893700CD8CE4 /* IGListMoveIndexPath.m in Sources */,
 				D657955A239C8DA000A01338 /* FeedIntroView.swift in Sources */,
-				D6D14D9121D5893600CD8CE4 /* IGListIndexSetResult.m in Sources */,
 				D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */,
 				D65519F32589591D00B901E4 /* Typealies.swift in Sources */,
 				D64A8F46259008B2002948E1 /* ChannelSupplier+Extensions.swift in Sources */,
@@ -1829,7 +1748,6 @@
 				D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */,
 				D67934DB23DC011D00536B44 /* CharacterCountView.swift in Sources */,
 				D67896BD23025FEC0059BA75 /* NameViewController.swift in Sources */,
-				D6D14FFB21D5893700CD8CE4 /* DiffableBox.swift in Sources */,
 				D6E0ED4F239CA8950073B33E /* FeedChannelInviteView.swift in Sources */,
 				D607400E23401B3E009633EB /* SystemChannel.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */,
@@ -1922,7 +1840,6 @@
 				D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */,
 				D67934D523D956BB00536B44 /* ChannelPreviewViewController.swift in Sources */,
 				D653F6B023588F8E00A03EEE /* RoutineViewController.swift in Sources */,
-				D6D14D9021D5893600CD8CE4 /* IGListMoveIndex.m in Sources */,
 				D66F0FD822BF295A00BA277D /* Coordinator.swift in Sources */,
 				D67934E523DE66FE00536B44 /* PushPayload.swift in Sources */,
 				D66F0FD422BF074C00BA277D /* DeeplinkObject.swift in Sources */,
@@ -1963,7 +1880,6 @@
 				D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */,
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
 				D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */,
-				D6D14D8F21D5893600CD8CE4 /* NSNumber+IGListDiffable.m in Sources */,
 				D6740D4823AEA5BD009D5702 /* ChannelsCoordiantor.swift in Sources */,
 				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,
 				D6F33C6F24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift in Sources */,
@@ -2027,7 +1943,6 @@
 				D6FA622423F06AEF00048C4A /* AnimationCycle.swift in Sources */,
 				D64DD8AC23CE2C180039DC5A /* OnboardingViewController.swift in Sources */,
 				D66F0FDA22BF297F00BA277D /* MainCoordinator.swift in Sources */,
-				D6D14FFA21D5893700CD8CE4 /* IGListDiff.mm in Sources */,
 				D6F33C8824B150F9009603FF /* BaseMessageCell.swift in Sources */,
 				D67896A922FF51170059BA75 /* PhoneViewController.swift in Sources */,
 				D6F33C7124B14A3F009603FF /* LocationCellAttributesConfigurer.swift in Sources */,
@@ -2041,7 +1956,6 @@
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				80D4A21C2303A005007CB5F1 /* Routine.swift in Sources */,
 				D62C635422BE9CBB00F4D097 /* FeedViewController.swift in Sources */,
-				D6D14FF921D5893700CD8CE4 /* NSString+IGListDiffable.m in Sources */,
 				D63826D22274C8C0001D4B8B /* ChatClientManager+Extensions.swift in Sources */,
 				D64A8F4C25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift in Sources */,
 				D61EC0E221D30E6000204BEE /* Label.swift in Sources */,
@@ -2059,12 +1973,10 @@
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				D6A301AC2380E102006655E0 /* FeedSupplier.swift in Sources */,
 				D66F0FDC22BF2ADC00BA277D /* HomeCoordinator.swift in Sources */,
-				D6D14FFC21D5893700CD8CE4 /* IGListBatchUpdateData.mm in Sources */,
 				D6FC8096237A64650089AACC /* MessageSupplier.swift in Sources */,
 				D6F33C7324B14A5D009603FF /* AudioCellAttributesConfigurer.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
 				D6D1500721D5E73D00CD8CE4 /* ChannelViewController.swift in Sources */,
-				D6D14FFD21D5893700CD8CE4 /* IGListIndexPathResult.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
