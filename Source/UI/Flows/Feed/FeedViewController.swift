@@ -103,8 +103,8 @@ class FeedViewController: ViewController {
         self.countDownView.centerY = self.view.halfHeight * 0.8
         self.countDownView.centerOnX()
 
-        self.indicatorView.size = CGSize(width: self.view.width - 40, height: 2)
-        self.indicatorView.pin(.top)
+        self.indicatorView.size = CGSize(width: self.view.width - 20, height: 2)
+        self.indicatorView.pinToSafeArea(.top, padding: 0)
         self.indicatorView.centerOnX()
     }
 
