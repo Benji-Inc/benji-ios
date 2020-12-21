@@ -12,7 +12,6 @@ PODS:
   - PhoneNumberKit/PhoneNumberKitCore (3.3.1)
   - PhoneNumberKit/UIKit (3.3.1):
     - PhoneNumberKit/PhoneNumberKitCore
-  - ReactiveSwift (6.5.0)
   - SDWebImage (5.10.0):
     - SDWebImage/Core (= 5.10.0)
   - SDWebImage/Core (5.10.0)
@@ -26,7 +25,6 @@ DEPENDENCIES:
   - lottie-ios
   - Parse
   - PhoneNumberKit
-  - ReactiveSwift
   - SDWebImage
   - TMROCoordinator
   - TMROFutures
@@ -40,7 +38,6 @@ SPEC REPOS:
     - lottie-ios
     - Parse
     - PhoneNumberKit
-    - ReactiveSwift
     - SDWebImage
     - TMROCoordinator
     - TMROFutures
@@ -53,13 +50,12 @@ SPEC CHECKSUMS:
   lottie-ios: 3a3758ef5a008e762faec9c9d50a39842f26d124
   Parse: e40fdb9c7d665823b7fe9865949cac9a53eb2ce7
   PhoneNumberKit: ff153d5e299f6da566cb73c6aa71e354933b2932
-  ReactiveSwift: 8d159904084e908856cde90b2e28823f3c7e485f
   SDWebImage: 9169792e9eec3e45bba2a0c02f74bf8bd922d1ee
   TMROCoordinator: 8e675e45c895feafdd548e1dd2de35430d3ea146
   TMROFutures: 644772c28f997ce292e9b67985eca927efaa5d7a
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
   TwilioChatClient: bc386ab597f9fbb8e799491f15c07519d080a4f2
 
-PODFILE CHECKSUM: 33055c5fe11aab3edf86e28ba254f09566f9be04
+PODFILE CHECKSUM: 6af35d47d5dcd0c66f0dcd72a82e7702a383b17f
 
 COCOAPODS: 1.10.0.rc.1
