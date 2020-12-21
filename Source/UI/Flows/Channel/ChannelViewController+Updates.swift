@@ -33,11 +33,11 @@ extension ChannelViewController {
     
     func subscribeToUpdates() {
 
-        self.disposables.add(ChatClientManager.shared.messageUpdate.producer.on(value:  { [weak self] (update) in
+        ChatClientManager.shared.$messageUpdate.mainSink { [weak self] (update) in
             guard let `self` = self else { return }
-            
+
             guard let channelUpdate = update, ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: channelUpdate.channel) else { return }
-            
+
             switch channelUpdate.status {
             case .added:
                 if self.collectionView.isTypingIndicatorHidden {
@@ -59,13 +59,12 @@ extension ChannelViewController {
             case .toastReceived:
                 break
             }
-        }).start())
+        }.store(in: &self.cancellables)
 
-        self.disposables.add(ChatClientManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
+        ChatClientManager.shared.$memberUpdate.mainSink { [weak self] (update) in
             guard let `self` = self else { return }
-            
             guard let memberUpdate = update, ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: memberUpdate.channel) else { return }
-            
+
             switch memberUpdate.status {
             case .joined, .left:
                 memberUpdate.channel.getMembersCount { [unowned self] (result, count) in
@@ -89,7 +88,7 @@ extension ChannelViewController {
                         }
                 }
             }
-        }).start())
+        }.store(in: &self.cancellables)
 
         ChatClientManager.shared.$clientUpdate.mainSink { [weak self] (update) in
             guard let `self` = self, let update = update else { return }

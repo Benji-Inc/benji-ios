@@ -159,9 +159,9 @@ class ChannelSupplier {
             self.channelsUpdate = update
         }.store(in: &self.cancellables)
 
-        self.disposables.add(ChatClientManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
+        ChatClientManager.shared.$memberUpdate.mainSink { [weak self] (update) in
             guard let `self` = self, let memberUpdate = update else { return }
-            
+
             switch memberUpdate.status {
             case .left:
                 // We pre-emptivley leave a channel from the client, so we dont have a delay, and a user doesn't still see a channel they left.
@@ -181,7 +181,7 @@ class ChannelSupplier {
             default:
                 break
             }
-        }).start())
+        }.store(in: &self.cancellables)
     }
 
     func isChannelEqualToActiveChannel(channel: TCHChannel) -> Bool {

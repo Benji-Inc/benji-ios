@@ -176,25 +176,25 @@ extension ChatClientManager: TwilioChatClientDelegate {
     //MARK: MEMBER UDPATES
 
     func chatClient(_ client: TwilioChatClient, channel: TCHChannel, memberLeft member: TCHMember) {
-        self.memberUpdate.value = ChannelMemberUpdate(channel: channel, member: member, status: .left)
+        self.memberUpdate = ChannelMemberUpdate(channel: channel, member: member, status: .left)
         self.handle(member: member, in: channel, status: .left)
     }
 
     func chatClient(_ client: TwilioChatClient, channel: TCHChannel, memberJoined member: TCHMember) {
-        self.memberUpdate.value = ChannelMemberUpdate(channel: channel, member: member, status: .joined)
+        self.memberUpdate = ChannelMemberUpdate(channel: channel, member: member, status: .joined)
         self.handle(member: member, in: channel, status: .left)
     }
 
     func chatClient(_ client: TwilioChatClient!, channel: TCHChannel!, memberChanged member: TCHMember!) {
-        self.memberUpdate.value = ChannelMemberUpdate(channel: channel, member: member, status: .changed)
+        self.memberUpdate = ChannelMemberUpdate(channel: channel, member: member, status: .changed)
     }
 
     func chatClient(_ client: TwilioChatClient, typingEndedOn channel: TCHChannel, member: TCHMember) {
-        self.memberUpdate.value = ChannelMemberUpdate(channel: channel, member: member, status: .typingEnded)
+        self.memberUpdate = ChannelMemberUpdate(channel: channel, member: member, status: .typingEnded)
     }
 
     func chatClient(_ client: TwilioChatClient, typingStartedOn channel: TCHChannel, member: TCHMember) {
-        self.memberUpdate.value = ChannelMemberUpdate(channel: channel, member: member, status: .typingStarted)
+        self.memberUpdate = ChannelMemberUpdate(channel: channel, member: member, status: .typingStarted)
         self.handle(member: member, in: channel, status: .typingStarted)
     }
 
@@ -211,7 +211,7 @@ extension ChatClientManager: TwilioChatClientDelegate {
     //MARK: MESSAGE UPDATES
 
     func chatClient(_ client: TwilioChatClient, channel: TCHChannel, messageAdded message: TCHMessage) {
-        self.messageUpdate.value = MessageUpdate(channel: channel, message: message, status: .added)
+        self.messageUpdate = MessageUpdate(channel: channel, message: message, status: .added)
 
         if ChannelSupplier.shared.activeChannel.isNil, !message.isFromCurrentUser, message.context != .emergency {
 //            ToastScheduler.shared.schedule(toastType: .message(message, channel))
@@ -219,15 +219,15 @@ extension ChatClientManager: TwilioChatClientDelegate {
     }
 
     func chatClient(_ client: TwilioChatClient!, channel: TCHChannel!, messageChanged message: TCHMessage!) {
-        self.messageUpdate.value = MessageUpdate(channel: channel, message: message, status: .changed)
+        self.messageUpdate = MessageUpdate(channel: channel, message: message, status: .changed)
     }
 
     func chatClient(_ client: TwilioChatClient, channel: TCHChannel, messageDeleted message: TCHMessage) {
-        self.messageUpdate.value = MessageUpdate(channel: channel, message: message, status: .deleted)
+        self.messageUpdate = MessageUpdate(channel: channel, message: message, status: .deleted)
     }
 
     func chatClient(_ client: TwilioChatClient!, toastReceivedOn channel: TCHChannel!, message: TCHMessage!) {
-        self.messageUpdate.value = MessageUpdate(channel: channel, message: message, status: .toastReceived)
+        self.messageUpdate = MessageUpdate(channel: channel, message: message, status: .toastReceived)
     }
 }
 

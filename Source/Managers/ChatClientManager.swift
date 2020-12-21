@@ -21,8 +21,8 @@ class ChatClientManager: NSObject {
     @Published var clientUpdate: ChatClientUpdate? = nil
     @Published var channelSyncUpdate: ChannelSyncUpdate? = nil
     @Published var channelsUpdate: ChannelUpdate? = nil
-    var messageUpdate = MutableProperty<MessageUpdate?>(nil)
-    var memberUpdate = MutableProperty<ChannelMemberUpdate?>(nil)
+    @Published var messageUpdate: MessageUpdate? = nil
+    @Published var memberUpdate: ChannelMemberUpdate? = nil
 
     var isSynced: Bool {
         guard let client = self.client else { return false }

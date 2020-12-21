@@ -36,11 +36,9 @@ extension ChannelsViewController {
             self.collectionViewManager.loadAllChannels()
         }.store(in: &self.cancellables)
 
-        ChatClientManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
+        ChatClientManager.shared.$memberUpdate.mainSink { [weak self] (update) in
             guard let `self` = self else { return }
-            
             guard let memberUpdate = update else { return }
-            
             switch memberUpdate.status {
             case .joined:
                 if memberUpdate.member.identity == User.current()?.objectId {
@@ -59,7 +57,6 @@ extension ChannelsViewController {
             default:
                 break
             }
-        })
-        .start()
+        }.store(in: &self.cancellables)
     }
 }
