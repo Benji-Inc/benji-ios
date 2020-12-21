@@ -11,15 +11,15 @@ import Foundation
 extension ChannelsViewController {
 
     func subscribeToUpdates() {
-        ChatClientManager.shared.channelsUpdate.producer.on(value:  { [weak self] (update) in
+        
+        ChannelSupplier.shared.$channelsUpdate.mainSink { [weak self] (update) in
             guard let `self` = self else { return }
-            
             guard let channelsUpdate = update else { return }
-            
+
             switch channelsUpdate.status {
             case .added:
                 guard channelsUpdate.channel.isOwnedByMe || channelsUpdate.channel.status == .joined else { return }
-                
+
                 let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
                 self.collectionViewManager.insert(item: displayable, at: 0)
             case .changed:
@@ -29,7 +29,7 @@ extension ChannelsViewController {
                 let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
                 self.collectionViewManager.delete(item: displayable)
             }
-        }).start()
+        }.store(in: &self.cancellables)
 
         ChannelSupplier.shared.$isSynced.mainSink { [weak self] (isSynced) in
             guard let `self` = self, isSynced else { return }

@@ -158,15 +158,15 @@ extension ChatClientManager: TwilioChatClientDelegate {
     //MARK: CHANNEL UPDATES
 
     func chatClient(_ client: TwilioChatClient, channelAdded channel: TCHChannel) {
-        self.channelsUpdate.value = ChannelUpdate(channel: channel, status: .added)
+        self.channelsUpdate = ChannelUpdate(channel: channel, status: .added)
     }
 
     func chatClient(_ client: TwilioChatClient!, channelChanged channel: TCHChannel!) {
-        self.channelsUpdate.value = ChannelUpdate(channel: channel, status: .changed)
+        self.channelsUpdate = ChannelUpdate(channel: channel, status: .changed)
     }
 
     func chatClient(_ client: TwilioChatClient, channelDeleted channel: TCHChannel) {
-        self.channelsUpdate.value = ChannelUpdate(channel: channel, status: .deleted)
+        self.channelsUpdate = ChannelUpdate(channel: channel, status: .deleted)
     }
 
     func chatClient(_ client: TwilioChatClient, channel: TCHChannel, synchronizationStatusUpdated status: TCHChannelSynchronizationStatus) {

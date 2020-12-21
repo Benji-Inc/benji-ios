@@ -69,6 +69,8 @@ class ChannelSupplier {
     private(set) var pendingChannelUniqueName: String?
     @Published private(set) var activeChannel: DisplayableChannel?
     @Published private(set) var isSynced: Bool = false
+    @Published private(set) var channelsUpdate: ChannelUpdate?
+
     private var cancellables = Set<AnyCancellable>()
 
     init() {
@@ -126,9 +128,8 @@ class ChannelSupplier {
             }
         }.store(in: &self.cancellables)
 
-        self.disposables.add(ChatClientManager.shared.channelsUpdate.producer.on(value:  { [weak self] (update) in
+        ChatClientManager.shared.$channelsUpdate.mainSink { [weak self] (update) in
             guard let `self` = self, let channelsUpdate = update else { return }
-            
             switch channelsUpdate.status {
             case .added:
                 self.allChannels = self.subscribedChannels
@@ -140,7 +141,7 @@ class ChannelSupplier {
                 self.allChannels = self.subscribedChannels.filter { (channel) -> Bool in
                     return channel.id != channelsUpdate.channel.id
                 }
-                
+
                 if let activeChannel = self.activeChannel {
                     switch activeChannel.channelType {
                     case .channel(let channel):
@@ -154,7 +155,9 @@ class ChannelSupplier {
             default:
                 break
             }
-        }).start())
+            // Forward the update once we have handled the update.
+            self.channelsUpdate = update
+        }.store(in: &self.cancellables)
 
         self.disposables.add(ChatClientManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self, let memberUpdate = update else { return }

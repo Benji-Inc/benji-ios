@@ -20,7 +20,7 @@ class ChatClientManager: NSObject {
     @Published var clientSyncUpdate: TCHClientSynchronizationStatus? = nil
     @Published var clientUpdate: ChatClientUpdate? = nil
     @Published var channelSyncUpdate: ChannelSyncUpdate? = nil
-    var channelsUpdate = MutableProperty<ChannelUpdate?>(nil)
+    @Published var channelsUpdate: ChannelUpdate? = nil
     var messageUpdate = MutableProperty<MessageUpdate?>(nil)
     var memberUpdate = MutableProperty<ChannelMemberUpdate?>(nil)
 

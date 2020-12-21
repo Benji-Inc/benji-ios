@@ -71,7 +71,7 @@ class ChannelDetailViewController: ViewController {
         ChatClientManager.shared.$channelSyncUpdate.mainSink { [weak self] (update) in
             guard let `self` = self else { return }
 
-            guard let channelsUpdate = update, let activeChannel = ChannelSupplier.shared.activeChannel else { return }
+            guard let synUpdate = update, let activeChannel = ChannelSupplier.shared.activeChannel else { return }
 
             switch activeChannel.channelType {
             case .system(_):
@@ -79,10 +79,10 @@ class ChannelDetailViewController: ViewController {
             case .pending(_):
                 break
             case .channel(let channel):
-                guard channelsUpdate.channel == channel else { return }
-                switch channelsUpdate.status {
+                guard synUpdate.channel == channel else { return }
+                switch synUpdate.status {
                 case .all:
-                    self.content.configure(with: .channel(channelsUpdate.channel))
+                    self.content.configure(with: .channel(synUpdate.channel))
                 default:
                     break
                 }
