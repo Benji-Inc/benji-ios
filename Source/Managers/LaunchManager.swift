@@ -84,7 +84,7 @@ class LaunchManager {
     #if !APPCLIP
     // Code you don't want to use in your App Clip.
     func getChatToken(with deeplink: DeepLinkable?) {
-        if ChannelManager.shared.isConnected {
+        if ChatClientManager.shared.isConnected {
             self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: String()))
         } else {
             GetChatToken()

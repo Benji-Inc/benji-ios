@@ -12,9 +12,9 @@ import ReactiveSwift
 import Parse
 import Combine
 
-class ChannelManager: NSObject {
+class ChatClientManager: NSObject {
 
-    static let shared = ChannelManager()
+    static let shared = ChatClientManager()
     var client: TwilioChatClient?
 
     @Published var clientSyncUpdate: TCHClientSynchronizationStatus? = nil

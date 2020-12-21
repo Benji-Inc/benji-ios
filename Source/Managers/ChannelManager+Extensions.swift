@@ -71,7 +71,7 @@ struct ChannelMemberUpdate {
     }
 }
 
-extension ChannelManager: TwilioChatClientDelegate {
+extension ChatClientManager: TwilioChatClientDelegate {
 
     @discardableResult
     func initialize(token: String) -> Future<Void> {

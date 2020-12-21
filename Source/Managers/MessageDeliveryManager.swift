@@ -111,7 +111,7 @@ class MessageDeliveryManager {
             var mutableAttributes = attributes
             mutableAttributes["context"] = context.rawValue
 
-            if !ChannelManager.shared.isConnected {
+            if !ChatClientManager.shared.isConnected {
                 promise.reject(with: ClientError.message(detail: "Chat service is disconnected."))
             }
 

@@ -11,7 +11,7 @@ import Foundation
 extension ChannelsViewController {
 
     func subscribeToUpdates() {
-        ChannelManager.shared.channelsUpdate.producer.on(value:  { [weak self] (update) in
+        ChatClientManager.shared.channelsUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
             
             guard let channelsUpdate = update else { return }
@@ -36,7 +36,7 @@ extension ChannelsViewController {
             self.collectionViewManager.loadAllChannels()
         }.store(in: &self.cancellables)
 
-        ChannelManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
+        ChatClientManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
             
             guard let memberUpdate = update else { return }

@@ -33,7 +33,7 @@ extension ChannelViewController {
     
     func subscribeToUpdates() {
 
-        self.disposables.add(ChannelManager.shared.messageUpdate.producer.on(value:  { [weak self] (update) in
+        self.disposables.add(ChatClientManager.shared.messageUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
             
             guard let channelUpdate = update, ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: channelUpdate.channel) else { return }
@@ -61,7 +61,7 @@ extension ChannelViewController {
             }
         }).start())
 
-        self.disposables.add(ChannelManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
+        self.disposables.add(ChatClientManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
             
             guard let memberUpdate = update, ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: memberUpdate.channel) else { return }
@@ -91,7 +91,7 @@ extension ChannelViewController {
             }
         }).start())
 
-        ChannelManager.shared.$clientUpdate.mainSink { [weak self] (update) in
+        ChatClientManager.shared.$clientUpdate.mainSink { [weak self] (update) in
             guard let `self` = self, let update = update else { return }
 
             switch update.status {

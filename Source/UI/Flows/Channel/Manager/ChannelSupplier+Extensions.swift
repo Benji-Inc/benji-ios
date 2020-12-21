@@ -15,7 +15,7 @@ extension ChannelSupplier {
     func find(channelId: String) -> Future<TCHChannel> {
         let promise = Promise<TCHChannel>()
 
-        guard let channels = ChannelManager.shared.client?.channelsList() else {
+        guard let channels = ChatClientManager.shared.client?.channelsList() else {
             promise.reject(with: ClientError.message(detail: "No channels were found."))
             return promise
         }

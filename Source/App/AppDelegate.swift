@@ -29,15 +29,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         UserNotificationManager.shared.clearNotificationCenter()
         #if !APPCLIP
-        guard !ChannelManager.shared.isConnected, let _ = User.current()?.objectId else { return }
+        guard !ChatClientManager.shared.isConnected, let _ = User.current()?.objectId else { return }
 
         GetChatToken()
             .makeRequest(andUpdate: [], viewsToIgnore: [])
             .observeValue { (token) in
-                if ChannelManager.shared.client.isNil {
-                    ChannelManager.shared.initialize(token: token)
+                if ChatClientManager.shared.client.isNil {
+                    ChatClientManager.shared.initialize(token: token)
                 } else {
-                    ChannelManager.shared.update(token: token)
+                    ChatClientManager.shared.update(token: token)
                 }
         }
         #endif

@@ -68,7 +68,7 @@ class ChannelDetailViewController: ViewController {
             self.content.configure(with: activeChannel.channelType)
         }.store(in: &self.cancellables)
 
-        ChannelManager.shared.channelSyncUpdate.producer.on(value:  { [weak self] (update) in
+        ChatClientManager.shared.channelSyncUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
             
             guard let channelsUpdate = update, let activeChannel = ChannelSupplier.shared.activeChannel else { return }

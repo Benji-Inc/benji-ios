@@ -59,7 +59,7 @@ class ChannelSupplier {
 
     private var subscribedChannels: [DisplayableChannel] {
         get {
-            guard let client = ChannelManager.shared.client, let channels = client.channelsList() else { return [] }
+            guard let client = ChatClientManager.shared.client, let channels = client.channelsList() else { return [] }
             return channels.subscribedChannels().map { (channel) -> DisplayableChannel in
                 return DisplayableChannel.init(channelType: .channel(channel))
             }
@@ -114,7 +114,7 @@ class ChannelSupplier {
     }
 
     private func subscribeToUpdates() {
-        ChannelManager.shared.$clientSyncUpdate.mainSink { [weak self] (status) in
+        ChatClientManager.shared.$clientSyncUpdate.mainSink { [weak self] (status) in
             guard let `self` = self, let clientStatus = status else { return }
 
             switch clientStatus {
@@ -126,7 +126,7 @@ class ChannelSupplier {
             }
         }.store(in: &self.cancellables)
 
-        self.disposables.add(ChannelManager.shared.channelsUpdate.producer.on(value:  { [weak self] (update) in
+        self.disposables.add(ChatClientManager.shared.channelsUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self, let channelsUpdate = update else { return }
             
             switch channelsUpdate.status {
@@ -156,7 +156,7 @@ class ChannelSupplier {
             }
         }).start())
 
-        self.disposables.add(ChannelManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
+        self.disposables.add(ChatClientManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self, let memberUpdate = update else { return }
             
             switch memberUpdate.status {

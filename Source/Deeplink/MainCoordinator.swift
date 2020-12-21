@@ -52,7 +52,7 @@ class MainCoordinator: Coordinator<Void> {
                 runMain {
                     self.runOnboardingFlow()
                 }
-            } else if ChannelManager.shared.isConnected {
+            } else if ChatClientManager.shared.isConnected {
                 self.runHomeFlow()
             } else if !token.isEmpty {
                 self.initializeChat(with: token)
@@ -69,7 +69,7 @@ class MainCoordinator: Coordinator<Void> {
         guard !self.isInitializingChat else { return }
 
         self.isInitializingChat = true
-        ChannelManager.shared.initialize(token: token)
+        ChatClientManager.shared.initialize(token: token)
             .observeValue(with: { (_) in
                 self.isInitializingChat = false
                 guard let user = User.current(), user.isOnboarded else { return }
@@ -171,7 +171,7 @@ class MainCoordinator: Coordinator<Void> {
 
     private func logOut() {
         #if !APPCLIP
-        ChannelManager.shared.client?.shutdown()
+        ChatClientManager.shared.client?.shutdown()
         #endif
         self.deepLink = nil
         self.removeChild()
