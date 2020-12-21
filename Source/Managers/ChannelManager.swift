@@ -10,14 +10,14 @@ import Foundation
 import TwilioChatClient
 import ReactiveSwift
 import Parse
-import TMROFutures
+import Combine
 
 class ChannelManager: NSObject {
 
     static let shared = ChannelManager()
-    private(set) var client: TwilioChatClient?
+    var client: TwilioChatClient?
 
-    var clientSyncUpdate = MutableProperty<TCHClientSynchronizationStatus?>(nil)
+    @Published var clientSyncUpdate: TCHClientSynchronizationStatus? = nil
     var clientUpdate = MutableProperty<ChatClientUpdate?>(nil)
     var channelSyncUpdate = MutableProperty<ChannelSyncUpdate?>(nil)
     var channelsUpdate = MutableProperty<ChannelUpdate?>(nil)
@@ -36,45 +36,5 @@ class ChannelManager: NSObject {
     var isConnected: Bool {
         guard let client = self.client else { return false }
         return client.connectionState == .connected
-    }
-
-    @discardableResult
-    func initialize(token: String) -> Future<Void> {
-        let promise = Promise<Void>()
-        TwilioChatClient.chatClient(withToken: token,
-                                    properties: nil,
-                                    delegate: self,
-                                    completion: { (result, client) in
-
-                                        if let error = result.error {
-                                            promise.reject(with: error)
-                                        } else if let strongClient = client {
-                                            self.client = strongClient
-                                            //TwilioChatClient.setLogLevel(.debug)
-                                            promise.resolve(with: ())
-                                        } else {
-                                            promise.reject(with: ClientError.message(detail: "Failed to initialize chat client."))
-                                        }
-        })
-        
-        return promise
-    }
-
-    @discardableResult
-    func update(token: String) -> Future<Void> {
-        let promise = Promise<Void>()
-        if let client = self.client {
-            client.updateToken(token, completion: { (result) in
-                if result.isSuccessful() {
-                    promise.resolve(with: ())
-                } else if let e = result.error {
-                    promise.reject(with: e)
-                } else {
-                    promise.reject(with: ClientError.message(detail: "Failed to update chat token."))
-                }
-            })
-        }
-
-        return promise
     }
 }

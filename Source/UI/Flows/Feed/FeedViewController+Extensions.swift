@@ -12,17 +12,10 @@ extension FeedViewController {
 
     func subscribeToUpdates() {
 
-        ChannelManager.shared.clientSyncUpdate.producer.on(value:  { [weak self] (update) in
-            guard let `self` = self, let clientUpdate = update else { return }
-            
-            switch clientUpdate {
-            case .completed:
-                self.addItems()
-            default:
-                break
-            }
-        })
-        .start()
+        ChannelSupplier.shared.$isSynced.mainSink { [weak self] (isSynced) in
+            guard let `self` = self, isSynced else { return }
+            self.addItems()
+        }.store(in: &self.cancellables)
     }
 
     func addItems() {

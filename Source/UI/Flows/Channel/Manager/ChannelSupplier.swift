@@ -8,7 +8,7 @@
 
 import Foundation
 import TwilioChatClient
-import TMROFutures
+import Combine
 import ReactiveSwift
 
 protocol ActiveChannelAccessor: class {
@@ -68,12 +68,15 @@ class ChannelSupplier {
 
     private(set) var pendingChannelUniqueName: String?
     @Published private(set) var activeChannel: DisplayableChannel?
+    @Published private(set) var isSynced: Bool = false
+    private var cancellables = Set<AnyCancellable>()
 
     init() {
         self.subscribeToUpdates()
     }
 
     deinit {
+        self.isSynced = false 
         self.disposables.dispose()
     }
 
@@ -111,25 +114,17 @@ class ChannelSupplier {
     }
 
     private func subscribeToUpdates() {
+        ChannelManager.shared.$clientSyncUpdate.mainSink { [weak self] (status) in
+            guard let `self` = self, let clientStatus = status else { return }
 
-        self.disposables.add(ChannelManager.shared.clientSyncUpdate.producer.on(value:  { [weak self] (update) in
-            guard let `self` = self else { return }
-            
-            guard let clientUpdate = update else { return }
-            
-            switch clientUpdate {
-            case .started:
-                break
-            case .channelsListCompleted:
-                break
+            switch clientStatus {
             case .completed:
                 self.allChannels = self.subscribedChannels
-            case .failed:
-                break
-            @unknown default:
+                self.isSynced = true
+            default:
                 break
             }
-        }).start())
+        }.store(in: &self.cancellables)
 
         self.disposables.add(ChannelManager.shared.channelsUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self, let channelsUpdate = update else { return }

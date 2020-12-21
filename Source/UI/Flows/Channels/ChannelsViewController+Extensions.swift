@@ -31,18 +31,10 @@ extension ChannelsViewController {
             }
         }).start()
 
-        ChannelManager.shared.clientSyncUpdate.producer.on(value:  { [weak self] (update) in
-            guard let `self` = self else { return }
-            
-            guard let clientUpdate = update else { return }
-            
-            switch clientUpdate {
-            case .completed:
-                self.collectionViewManager.loadAllChannels()
-            default:
-                break
-            }
-        }).start()
+        ChannelSupplier.shared.$isSynced.mainSink { [weak self] (isSynced) in
+            guard let `self` = self, isSynced else { return }
+            self.collectionViewManager.loadAllChannels()
+        }.store(in: &self.cancellables)
 
         ChannelManager.shared.memberUpdate.producer.on(value:  { [weak self] (update) in
             guard let `self` = self else { return }
