@@ -10,7 +10,6 @@ import Foundation
 import TwilioChatClient
 import Parse
 import TMROFutures
-import ReactiveSwift
 
 extension TCHChannel: Diffable, ManageableCellItem {
 
@@ -80,37 +79,34 @@ extension TCHChannel: Diffable, ManageableCellItem {
         return text
     }
 
-    func getUnconsumedCount() -> SignalProducer<FeedType, Error> {
+    func getUnconsumedAmount() -> Future<FeedType> {
+        let promise = Promise<FeedType>()
         var totalUnread: Int = 0
+        if let messagesObject = self.messages {
+            self.getMessagesCount { (result, count) in
+                if result.isSuccessful() {
+                    messagesObject.getLastWithCount(count) { (messageResult, messages) in
 
-        return SignalProducer { [weak self] observer, lifetime in
-            guard let `self` = self else { return }
-
-            if let messagesObject = self.messages {
-                self.getMessagesCount { (result, count) in
-                    if result.isSuccessful() {
-                        messagesObject.getLastWithCount(count) { (messageResult, messages) in
-
-                            if messageResult.isSuccessful(), let msgs = messages {
-                                msgs.forEach { (message) in
-                                    if !message.isFromCurrentUser, !message.isConsumed, message.canBeConsumed {
-                                        totalUnread += 1
-                                    }
+                        if messageResult.isSuccessful(), let msgs = messages {
+                            msgs.forEach { (message) in
+                                if !message.isFromCurrentUser, !message.isConsumed, message.canBeConsumed {
+                                    totalUnread += 1
                                 }
-                                observer.send(value: .unreadMessages(self, totalUnread))
-                                observer.sendCompleted()
-                            } else {
-                                observer.send(error: ClientError.message(detail: "Unable to get messages."))
                             }
+                            promise.resolve(with: .unreadMessages(self, totalUnread))
+                        } else {
+                            promise.reject(with: ClientError.message(detail: "Unable to get messages."))
                         }
-                    } else {
-                        observer.send(error: ClientError.message(detail: "Failed to get message count."))
                     }
+                } else {
+                    promise.reject(with: ClientError.message(detail: "Failed to get message count."))
                 }
-            } else {
-                observer.send(error: ClientError.message(detail: "There were no messages."))
             }
+        } else {
+            promise.reject(with: ClientError.message(detail: "There were no messages."))
         }
+
+        return promise
     }
 
     func invite(users: [User]) -> Future<TCHChannel> {
