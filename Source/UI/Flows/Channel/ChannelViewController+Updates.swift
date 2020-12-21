@@ -91,15 +91,15 @@ extension ChannelViewController {
             }
         }).start())
 
-        self.disposables.add(ChannelManager.shared.clientUpdate.producer.on(value:  { [weak self] (update) in
-            guard let `self` = self, let clientUpdate = update else { return }
-            
-            switch clientUpdate.status {
+        ChannelManager.shared.$clientUpdate.mainSink { [weak self] (update) in
+            guard let `self` = self, let update = update else { return }
+
+            switch update.status {
             case .connectionState(let state):
                 self.messageInputAccessoryView.handleConnection(state: state)
             default:
                 break
             }
-        }).start())
+        }.store(in: &self.cancellables)
     }
 }

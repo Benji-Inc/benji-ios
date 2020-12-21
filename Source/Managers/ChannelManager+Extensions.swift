@@ -136,23 +136,23 @@ extension ChannelManager: TwilioChatClientDelegate {
     }
 
     func chatClient(_ client: TwilioChatClient, connectionStateUpdated state: TCHClientConnectionState) {
-        self.clientUpdate.value = ChatClientUpdate(client: client, status: .connectionState(state))
+        self.clientUpdate = ChatClientUpdate(client: client, status: .connectionState(state))
     }
 
     func chatClient(_ client: TwilioChatClient, user: TCHUser, updated: TCHUserUpdate) {
-        self.clientUpdate.value = ChatClientUpdate(client: client, status: .userUpdate(user, updated))
+        self.clientUpdate = ChatClientUpdate(client: client, status: .userUpdate(user, updated))
     }
 
     func chatClientToastSubscribed(_ client: TwilioChatClient!) {
-        self.clientUpdate.value = ChatClientUpdate(client: client, status: .toastSubscribed)
+        self.clientUpdate = ChatClientUpdate(client: client, status: .toastSubscribed)
     }
 
     func chatClient(_ client: TwilioChatClient!, toastRegistrationFailedWithError error: TCHError!) {
-        self.clientUpdate.value = ChatClientUpdate(client: client, status: .toastRegistrationFailed(error))
+        self.clientUpdate = ChatClientUpdate(client: client, status: .toastRegistrationFailed(error))
     }
 
     func chatClient(_ client: TwilioChatClient, errorReceived error: TCHError) {
-        self.clientUpdate.value = ChatClientUpdate(client: client, status: .error(error))
+        self.clientUpdate = ChatClientUpdate(client: client, status: .error(error))
     }
 
     //MARK: CHANNEL UPDATES
