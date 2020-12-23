@@ -45,8 +45,6 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
         self.view.backgroundColor = color
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
 
-        self.imagePickerVC.delegate = self
-
         self.collectionViewManager.didSelectPhotoOption = { [unowned self] in
             self.presentPicker(for: .camera)
         }
@@ -104,6 +102,7 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
     }
 
     private func presentPicker(for type: UIImagePickerController.SourceType) {
+        self.imagePickerVC.delegate = self
         self.imagePickerVC.sourceType = type
         self.present(self.imagePickerVC, animated: true, completion: nil)
     }

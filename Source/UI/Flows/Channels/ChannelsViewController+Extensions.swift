@@ -11,6 +11,11 @@ import Foundation
 extension ChannelsViewController {
 
     func subscribeToUpdates() {
+
+        ChannelSupplier.shared.$isSynced.mainSink { [weak self] (isSynced) in
+            guard let `self` = self, isSynced else { return }
+            self.collectionViewManager.loadAllChannels()
+        }.store(in: &self.cancellables)
         
         ChannelSupplier.shared.$channelsUpdate.mainSink { [weak self] (update) in
             guard let `self` = self else { return }
@@ -29,11 +34,6 @@ extension ChannelsViewController {
                 let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
                 self.collectionViewManager.delete(item: displayable)
             }
-        }.store(in: &self.cancellables)
-
-        ChannelSupplier.shared.$isSynced.mainSink { [weak self] (isSynced) in
-            guard let `self` = self, isSynced else { return }
-            self.collectionViewManager.loadAllChannels()
         }.store(in: &self.cancellables)
 
         ChatClientManager.shared.$memberUpdate.mainSink { [weak self] (update) in

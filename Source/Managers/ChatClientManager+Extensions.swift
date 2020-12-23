@@ -75,6 +75,8 @@ extension ChatClientManager: TwilioChatClientDelegate {
 
     @discardableResult
     func initialize(token: String) -> Future<Void> {
+        // Initialize the ChannelSupplier so it can listen to the client updates.
+        _ = ChannelSupplier.shared
         let promise = Promise<Void>()
         TwilioChatClient.chatClient(withToken: token,
                                     properties: nil,

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import TMROFutures
 
 class MainCoordinator: Coordinator<Void> {
 
@@ -86,17 +87,24 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func runHomeFlow() {
+
         if let homeCoordinator = self.childCoordinator as? HomeCoordinator {
             if let deepLink = self.deepLink {
                 homeCoordinator.handle(deeplink: deepLink)
             }
-        } else {
+        } else if ChatClientManager.shared.isSynced {
             self.removeChild()
             let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
             self.router.setRootModule(homeCoordinator, animated: true)
             self.addChildAndStart(homeCoordinator, finishedHandler: { _ in
                 // If the home coordinator ever finishes, put handling logic here.
             })
+        } else {
+            GetChatToken()
+                .makeRequest(andUpdate: [], viewsToIgnore: [])
+                .observeValue { (token) in
+                    self.initializeChat(with: token)
+                }
         }
     }
     #endif
