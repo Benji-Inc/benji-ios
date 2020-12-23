@@ -54,7 +54,6 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     lazy var alertConfirmation = AlertConfirmationView()
     let overlayButton = UIButton()
 
-    let contextButton = Button()
     private(set)var inputLeadingContstaint: NSLayoutConstraint?
 
     unowned let delegate: MessageInputAccessoryViewDelegate
@@ -97,9 +96,6 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 
         self.messageContext = .casual
 
-        self.addSubview(self.contextButton)
-        self.contextButton.set(style: .normal(color: .red, text: "H"))
-
         self.addSubview(self.inputContainerView)
         self.inputContainerView.set(backgroundColor: .clear)
 
@@ -130,8 +126,6 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.contextButton.makeRound()
-
         self.blurView.expandToSuperviewSize()
         self.overlayButton.expandToSuperviewSize()
         self.alertProgressView.height = self.inputContainerView.height
@@ -147,12 +141,6 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         self.translatesAutoresizingMaskIntoConstraints = false
 
         let guide = self.layoutMarginsGuide
-
-        self.contextButton.translatesAutoresizingMaskIntoConstraints = false
-        self.contextButton.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
-        self.contextButton.heightAnchor.constraint(equalToConstant: 43).isActive = true
-        self.contextButton.widthAnchor.constraint(equalToConstant: 43).isActive = true
-        self.contextButton.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
 
         self.inputContainerView.translatesAutoresizingMaskIntoConstraints = false
         self.inputContainerView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
@@ -197,42 +185,16 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 //        self.alertConfirmation.didCancel = { [unowned self] in
 //            self.resetAlertProgress()
 //        }
-
-        self.contextButton.didSelect { [unowned self] in
-            self.expandingTextView.toggleInputView()
-            //self.didSelectContextButton()
-        }
     }
 
     // MARK: HANDLERS
 
     private func handleTextChange(_ text: String) {
-        self.animateInputViews(with: text)
-
         guard let channelDisplayable = self.activeChannel,
             text.count > 0,
             case ChannelType.channel(let channel) = channelDisplayable.channelType else { return }
         // Twilio throttles this call to every 5 seconds
         channel.typing()
-    }
-
-    private func animateInputViews(with text: String) {
-
-        let inputOffset: CGFloat
-        if text.count > 0 {
-            inputOffset = 0
-        } else {
-            inputOffset = 53
-        }
-
-        guard let constraint = self.inputLeadingContstaint, inputOffset != constraint.constant else { return }
-
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.contextButton.transform = inputOffset == 0 ? CGAffineTransform(scaleX: 0.5, y: 0.5) : .identity
-            self.contextButton.alpha = inputOffset == 0 ? 0.0 : 1.0
-            self.inputLeadingContstaint?.constant = inputOffset
-            self.layoutNow()
-        }
     }
 
     private func didSelectContextButton() {
@@ -253,22 +215,15 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     func reset() {
         self.expandingTextView.text = String()
         self.expandingTextView.alpha = 1
-        //self.resetInputViews()
         self.resetAlertProgress()
         self.expandingTextView.countView.isHidden = true
     }
-
-//    func resetInputViews() {
-//        self.expandingTextView.inputAccessoryView = nil
-//        self.expandingTextView.reloadInputViews()
-//    }
 
     func resetAlertProgress() {
         self.messageContext = .casual
         self.alertProgressView.width = 0
         self.alertProgressView.set(backgroundColor: .red)
         self.alertProgressView.alpha = 1
-        //self.resetInputViews()
         self.alertProgressView.layer.removeAllAnimations()
         self.borderColor = self.messageContext.color.color.cgColor
     }
