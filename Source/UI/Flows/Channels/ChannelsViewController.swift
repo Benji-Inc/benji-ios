@@ -47,6 +47,7 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
         self.view.insertSubview(self.reservationButton, aboveSubview: self.collectionView)
         self.reservationButton.isHidden = true
         self.getReservations()
+        self.subscribeToUpdates()
     }
 
     override func viewDidLayoutSubviews() {

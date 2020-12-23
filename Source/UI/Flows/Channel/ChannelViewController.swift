@@ -126,7 +126,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             self.load(activeChannel: activeChannel)
         }
 
-        self.addChild(self.messageInputAccessoryView.expandingTextView.attachmentInputVC)
+        //self.addChild(self.messageInputAccessoryView.expandingTextView.attachmentInputVC)
 
         self.setupHandlers()
         self.subscribeToUpdates()
