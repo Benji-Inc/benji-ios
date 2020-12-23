@@ -53,7 +53,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         self.animationView.loopMode = .loop
 
-        self.view.set(backgroundColor: .background1)
         self.view.addSubview(self.borderView)
         self.borderView.roundCorners()
         self.borderView.layer.borderColor = Color.purple.color.cgColor
@@ -313,17 +312,19 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             current.smallImage = scaledImageFile
         }
 
-        // Setting the User's status to active will trigger the creation of their handle
-        current.status = .active
         current.saveToServer()
             .ignoreUserInteractionEventsUntilDone(for: [self.view])
             .observe { (result) in
-                switch result {
-                case .success(_):
-                    self.currentState = .finish
-                case .failure(_):
-                    self.currentState = .error
-                }
+                ActivateUser()
+                    .makeRequest(andUpdate: [], viewsToIgnore: [self.view])
+                    .observeValue { [unowned self] (_) in
+                        switch result {
+                        case .success(_):
+                            self.currentState = .finish
+                        case .failure(_):
+                            self.currentState = .error
+                        }
+                    }
         }
     }
 }

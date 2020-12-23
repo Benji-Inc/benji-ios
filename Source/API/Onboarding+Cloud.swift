@@ -62,3 +62,15 @@ struct VerifyCode: CloudFunction {
                                 }
     }
 }
+
+struct ActivateUser: CloudFunction {
+    typealias ReturnType = Void
+
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> Future<Void> {
+        return self.makeRequest(andUpdate: statusables,
+                                params: [:],
+                                callName: "setActiveStatus",
+                                delayInterval: 0.0,
+                                viewsToIgnore: viewsToIgnore).asVoid()
+    }
+}
