@@ -30,7 +30,7 @@ class StackedAvatarView: View {
                 self.imageViews.append(avatarView, toSuperview: self)
             }
 
-            self.setNeedsLayout()
+            self.layoutNow()
         }
     }
 

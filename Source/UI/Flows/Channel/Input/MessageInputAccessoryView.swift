@@ -145,7 +145,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         self.inputContainerView.translatesAutoresizingMaskIntoConstraints = false
         self.inputContainerView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
         self.inputContainerView.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -10).isActive = true
-        self.inputLeadingContstaint = self.inputContainerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 53)
+        self.inputLeadingContstaint = self.inputContainerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 0)
         self.inputLeadingContstaint?.isActive = true
         self.inputContainerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
 
