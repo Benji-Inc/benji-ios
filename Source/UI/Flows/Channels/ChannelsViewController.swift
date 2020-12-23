@@ -47,13 +47,6 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
         self.view.insertSubview(self.reservationButton, aboveSubview: self.collectionView)
         self.reservationButton.isHidden = true
         self.getReservations()
-
-        if ChatClientManager.shared.isSynced {
-            self.subscribeToUpdates()
-        } else {
-            ChatClientManager.shared
-        }
-
     }
 
     override func viewDidLayoutSubviews() {
