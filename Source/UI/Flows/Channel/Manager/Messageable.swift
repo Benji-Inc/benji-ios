@@ -78,10 +78,10 @@ extension Messageable {
                 }
             }
         } else {
-            if self.isConsumed {
-                return .purple
-            } else if self.context == .status {
+            if self.context == .status {
                 return self.context.color
+            } else if self.isConsumed {
+                return .purple
             } else {
                 return .clear
             }
