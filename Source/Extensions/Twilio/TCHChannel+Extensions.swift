@@ -26,13 +26,6 @@ extension TCHChannel: ManageableCellItem {
         return self.createdBy == currentUser.objectId
     }
 
-    var context: ConversationContext? {
-        guard let dict = self.attributes()?.dictionary,
-            let contextString = dict[ChannelKey.context.rawValue] as? String,
-            let context = ConversationContext(rawValue: contextString) else { return nil }
-        return context
-    }
-
     func diffIdentifier() -> NSObjectProtocol {
         return String(optional: self.sid) as NSObjectProtocol
     }

@@ -105,7 +105,6 @@
 		D64A1F13258D598B0097817C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C821D3071500204BEE /* LaunchScreen.storyboard */; };
 		D64A8F46259008B2002948E1 /* ChannelSupplier+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A8F45259008B2002948E1 /* ChannelSupplier+Extensions.swift */; };
 		D64A8F4C25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A8F4B25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift */; };
-		D64B6D94246108750015827C /* Channel+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64B6D93246108750015827C /* Channel+Cloud.swift */; };
 		D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D64C6A7E23294A8600DB7257 /* ChannelKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A7D23294A8600DB7257 /* ChannelKey.swift */; };
 		D64C6A97232D5C0400DB7257 /* TCHMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A96232D5C0400DB7257 /* TCHMember+Extensions.swift */; };
@@ -297,7 +296,6 @@
 		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */; };
-		D685CEB2243B7BFA0018F3E3 /* ConversationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685CEB1243B7BFA0018F3E3 /* ConversationContext.swift */; };
 		D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685E9262331177100CC1BAB /* UserNotificationManager.swift */; };
 		D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
 		D6884AC825800FC600DA380E /* StatusableRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6884AC725800FC600DA380E /* StatusableRequest.swift */; };
@@ -530,7 +528,6 @@
 		D64A1F06258C16470097817C /* WaitlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistViewController.swift; sourceTree = "<group>"; };
 		D64A8F45259008B2002948E1 /* ChannelSupplier+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelSupplier+Extensions.swift"; sourceTree = "<group>"; };
 		D64A8F4B25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Extensions.swift"; sourceTree = "<group>"; };
-		D64B6D93246108750015827C /* Channel+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Channel+Cloud.swift"; sourceTree = "<group>"; };
 		D64C6A79232883FE00DB7257 /* CloudFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudFunction.swift; sourceTree = "<group>"; };
 		D64C6A7D23294A8600DB7257 /* ChannelKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelKey.swift; sourceTree = "<group>"; };
 		D64C6A96232D5C0400DB7257 /* TCHMember+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHMember+Extensions.swift"; sourceTree = "<group>"; };
@@ -606,7 +603,6 @@
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedAvatarView.swift; sourceTree = "<group>"; };
-		D685CEB1243B7BFA0018F3E3 /* ConversationContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationContext.swift; sourceTree = "<group>"; };
 		D685E9262331177100CC1BAB /* UserNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
 		D686DA5C25799EB6000B4C04 /* Statusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statusable.swift; sourceTree = "<group>"; };
 		D6884AC725800FC600DA380E /* StatusableRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusableRequest.swift; sourceTree = "<group>"; };
@@ -897,7 +893,6 @@
 				D64C6A79232883FE00DB7257 /* CloudFunction.swift */,
 				D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */,
 				D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */,
-				D64B6D93246108750015827C /* Channel+Cloud.swift */,
 				D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */,
 			);
 			path = API;
@@ -1424,7 +1419,6 @@
 				D64C6A7D23294A8600DB7257 /* ChannelKey.swift */,
 				D66F0FF122C1D86800BA277D /* ChannelsType.swift */,
 				D646DB3B22CFCCD80055CC7C /* ClientError.swift */,
-				D685CEB1243B7BFA0018F3E3 /* ConversationContext.swift */,
 				D66F0FC622BF004300BA277D /* FeedType.swift */,
 				D642735022C857760088256B /* MessageContext.swift */,
 				D6405B65236E001A00FAA06B /* Parse Subclasses */,
@@ -1829,7 +1823,6 @@
 				D6432BF322D828480016001A /* ChannelDataSource.swift in Sources */,
 				D61EC0C221D3071400204BEE /* ViewController.swift in Sources */,
 				D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
-				D64B6D94246108750015827C /* Channel+Cloud.swift in Sources */,
 				D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */,
 				D67934D523D956BB00536B44 /* ChannelPreviewViewController.swift in Sources */,
 				D653F6B023588F8E00A03EEE /* RoutineViewController.swift in Sources */,
@@ -1880,7 +1873,6 @@
 				D6E0ED53239CBDA40073B33E /* FeedUnreadView.swift in Sources */,
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
 				D66F0FDE22BF2C5D00BA277D /* HomeSegmentControl.swift in Sources */,
-				D685CEB2243B7BFA0018F3E3 /* ConversationContext.swift in Sources */,
 				D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */,
 				D6B2603D22E6B8EA00143CF0 /* ProfileViewController.swift in Sources */,
 				D6D380C4257FC18300C562E8 /* Selectable.swift in Sources */,

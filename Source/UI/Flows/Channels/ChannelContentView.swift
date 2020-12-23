@@ -59,7 +59,13 @@ class ChannelContentView: View {
         case .pending(_):
             break 
         case .channel(let channel):
-            self.display(channel: channel)
+            if channel.friendlyName == "welcome" {
+                self.displayWelcome(channel: channel)
+            } else if channel.friendlyName == "feedback" {
+                self.displayFeedback(channel: channel)
+            } else {
+                self.display(channel: channel)
+            }
         }
 
         self.layoutNow()
@@ -78,11 +84,11 @@ class ChannelContentView: View {
         self.titleLabel.setSize(withWidth: width)
         let titleOffset: CGFloat = self.stackedAvatarView.width == 0 ? Theme.contentOffset : Theme.contentOffset + self.stackedAvatarView.right
         self.titleLabel.left = titleOffset
-        self.titleLabel.top = 6
+        self.titleLabel.pin(.top, padding: 6)
 
         self.descriptionLabel.setSize(withWidth: width)
         self.descriptionLabel.left = self.titleLabel.left
-        self.descriptionLabel.bottom = self.stackedAvatarView.bottom
+        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 8)
 
         self.dateLabel.setSize(withWidth: self.width)
         self.dateLabel.right = self.width - Theme.contentOffset
@@ -114,35 +120,23 @@ class ChannelContentView: View {
                             self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine yet for @(name).")
                         }
 
-                        if let context = channel.context {
-                            if channel.isOwnedByMe {
-                                self.titleLabel.setText(first.givenName)
-                                self.titleLabel.setTextColor(context.color)
-                            } else if let author = users.first(where: { (user) -> Bool in
-                                return user.id == channel.createdBy
-                            }) {
-                                self.titleLabel.setText(author.givenName)
-                                self.titleLabel.setTextColor(context.color)
-                            }
-                        } else {
-                            if channel.isOwnedByMe {
-                                self.titleLabel.setText(first.givenName)
-                                self.titleLabel.setTextColor(.white)
-                            } else if let author = users.first(where: { (user) -> Bool in
-                                return user.id == channel.createdBy
-                            }) {
-                                self.titleLabel.setText(author.givenName)
-                                self.titleLabel.setTextColor(.white)
-                            }
+                        if channel.isOwnedByMe {
+                            self.titleLabel.setText(first.givenName)
+                            self.titleLabel.setTextColor(.white)
+                        } else if let author = users.first(where: { (user) -> Bool in
+                            return user.id == channel.createdBy
+                        }) {
+                            self.titleLabel.setText(author.givenName)
+                            self.titleLabel.setTextColor(.white)
                         }
 
                     } else if let name = channel.friendlyName {
                         self.titleLabel.setText(name.capitalized)
-                        self.titleLabel.setTextColor(channel.context?.color ?? .white)
+                        self.titleLabel.setTextColor(.white)
                         self.descriptionText = "Start here to learn your way around."
                     } else {
                         self.titleLabel.setText("You")
-                        self.titleLabel.setTextColor(channel.context?.color ?? .white)
+                        self.titleLabel.setTextColor(.white)
                         self.descriptionText = "It's just you in here."
                     }
 
@@ -156,6 +150,22 @@ class ChannelContentView: View {
         }
 
         self.layoutNow()
+    }
+
+    private func displayWelcome(channel: TCHChannel) {
+        if let name = channel.friendlyName {
+            self.titleLabel.setText(name.capitalized)
+            self.titleLabel.setTextColor(.white)
+            self.descriptionText = "Start here to learn your way around."
+        }
+    }
+
+    private func displayFeedback(channel: TCHChannel) {
+        if let name = channel.friendlyName {
+            self.titleLabel.setText(name.capitalized)
+            self.titleLabel.setTextColor(.white)
+            self.descriptionText = "Got something to say? Say it here!"
+        }
     }
 
     func reset() {

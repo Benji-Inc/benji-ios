@@ -94,23 +94,6 @@ class ChannelSupplier {
         }
     }
 
-    func createChannel(uniqueName: String = UUID().uuidString,
-                       friendlyName: String,
-                       context: ConversationContext,
-                       members: [String],
-                       setActive: Bool = true) {
-
-        var attributes: [String: Any] = [:]
-        attributes[ChannelKey.context.rawValue] = context.rawValue
-        CreateChannel(uniqueName: uniqueName, friendlyName: friendlyName, attributes: attributes, members: members)
-            .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .observeValue { (_) in
-                if setActive {
-                    self.set(activeChannel: DisplayableChannel(channelType: .pending(uniqueName)))
-                }
-        }
-    }
-
     private func subscribeToUpdates() {
         ChatClientManager.shared.$clientSyncUpdate.mainSink { [weak self] (status) in
             guard let `self` = self, let clientStatus = status else { return }
