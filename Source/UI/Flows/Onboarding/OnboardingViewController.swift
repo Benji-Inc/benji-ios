@@ -126,10 +126,12 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func getInitialContent() -> OnboardingContent {
         guard let status = User.current()?.status else { return .phone(self.phoneVC) }
         switch status {
-        case .active:
-            fatalError("User status is active.")
-        case .waitlist:
+        case .active, .waitlist:
+            #if APPCLIP
             return .waitlist(self.waitlistVC)
+            #else
+            fatalError()
+            #endif
         case .inactive:
             return .name(self.nameVC)
         case .needsVerification:
@@ -256,7 +258,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     private func handleNameSuccess() {
         // User has been allowed to continue
         if User.current()?.status == .inactive {
+            #if APPCLIP
+            self.current = .waitlist(self.waitlistVC)
+            #else
             self.current = .photo(self.photoVC)
+            #endif
         } else {
         // User is on the waitlist
             self.current = .waitlist(self.waitlistVC)
