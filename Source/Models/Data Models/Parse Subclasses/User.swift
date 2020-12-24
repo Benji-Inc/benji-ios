@@ -25,6 +25,7 @@ enum UserKey: String {
     case routine
     case quePosition
     case status
+    case handle
 }
 
 enum UserStatus: String {
@@ -49,6 +50,11 @@ final class User: PFUser {
     var familyName: String {
         get { return String(optional: self.getObject(for: .familyName)) }
         set { self.setObject(for: .familyName, with: newValue) }
+    }
+
+    var handle: String {
+        get { return String(optional: self.getObject(for: .handle)) }
+        set { self.setObject(for: .handle, with: newValue) }
     }
 
     var routine: Routine? {

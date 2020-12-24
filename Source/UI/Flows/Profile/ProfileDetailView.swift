@@ -32,6 +32,9 @@ class ProfileDetailView: View {
         case .name:
             self.titleLabel.setText("Name")
             self.label.setText(user.fullName)
+        case .handle:
+            self.titleLabel.setText("Handle")
+            self.label.setText(user.handle)
         case .localTime:
             self.titleLabel.setText("Local Time")
             self.label.setText(Date.nowInLocalFormat)

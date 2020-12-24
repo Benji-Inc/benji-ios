@@ -33,11 +33,6 @@ class HomeViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
 
-        let button = Button()
-        button.didSelect {
-            <#code#>
-        }
-
         self.current = .feed(self.feedVC)
 
         self.view.set(backgroundColor: .background1)

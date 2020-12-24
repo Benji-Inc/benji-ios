@@ -23,6 +23,7 @@ class ProfileViewController: ViewController {
     private let scrollView = UIScrollView()
     private(set) var avatarView = AvatarView()
     private let nameView = ProfileDetailView()
+    private let handleView = ProfileDetailView()
     private let localTimeView = ProfileDetailView()
     private let routineView = ProfileDetailView()
 
@@ -49,6 +50,7 @@ class ProfileViewController: ViewController {
         }
 
         self.view.addSubview(self.nameView)
+        self.view.addSubview(self.handleView)
         self.view.addSubview(self.localTimeView)
         self.view.addSubview(self.routineView)
         self.routineView.button.isVisible = true 
@@ -65,6 +67,7 @@ class ProfileViewController: ViewController {
 
     func updateItems(with user: User) {
         self.nameView.configure(with: .name, for: user)
+        self.handleView.configure(with: .handle, for: user)
         self.localTimeView.configure(with: .localTime, for: user)
         self.routineView.configure(with: .routine, for: user)
     }
@@ -82,8 +85,12 @@ class ProfileViewController: ViewController {
         self.nameView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset)
         self.nameView.pin(.left, padding: Theme.contentOffset)
 
+        self.handleView.size = itemSize
+        self.handleView.match(.top, to: .bottom, of: self.nameView, offset: Theme.contentOffset)
+        self.handleView.pin(.left, padding: Theme.contentOffset)
+
         self.localTimeView.size = itemSize
-        self.localTimeView.match(.top, to: .bottom, of: self.nameView, offset: Theme.contentOffset)
+        self.localTimeView.match(.top, to: .bottom, of: self.handleView, offset: Theme.contentOffset)
         self.localTimeView.pin(.left, padding: Theme.contentOffset)
 
         self.routineView.size = itemSize
