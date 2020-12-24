@@ -67,7 +67,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.codeVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                if let current = User.current(), current.isOnboarded { // TODO: current.status == .active {
+                if let current = User.current(), current.isOnboarded, current.status == .active {
                     self.delegate.onboardingView(self, didVerify: current)
                 } else {
                     self.current = .name(self.nameVC)
@@ -254,12 +254,12 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     private func handleNameSuccess() {
-//        // User has been allowed to continue
-//        if User.current()?.status == .inactive {
+        // User has been allowed to continue
+        if User.current()?.status == .inactive {
             self.current = .photo(self.photoVC)
-//        } else {
-//        // User is on the waitlist
-//            self.currentContent.value = .waitlist(self.waitlistVC)
-//        }
+        } else {
+        // User is on the waitlist
+            self.current = .waitlist(self.waitlistVC)
+        }
     }
 }
