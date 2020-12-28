@@ -56,13 +56,31 @@ class TimeHumpView: View {
         let startingPoint = CGPoint(x: 2, y: self.height - 4)
         path.move(to: startingPoint)
 
+        var finalPoint: CGPoint = .zero 
         for percentage in stride(from: 0, through: 1.0, by: 0.01) {
             let point = self.getPoint(normalizedX: CGFloat(percentage))
+            finalPoint = point
             path.addLine(to: point)
         }
 
         UIColor.white.setStroke()
         path.stroke()
+
+        // Add left circle
+        let leftPoint = CGPoint(x: startingPoint.x, y: startingPoint.y - 2)
+        let leftCirclePath = UIBezierPath(arcCenter: leftPoint, radius: CGFloat(4), startAngle: CGFloat(0), endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        let leftShapeLayer = CAShapeLayer()
+        leftShapeLayer.path = leftCirclePath.cgPath
+        leftShapeLayer.fillColor = UIColor.white.cgColor
+        self.layer.addSublayer(leftShapeLayer)
+
+        // Add right circle
+        let rightPoint = CGPoint(x: finalPoint.x, y: startingPoint.y - 2)
+        let rightCirclePath = UIBezierPath(arcCenter: rightPoint, radius: CGFloat(4), startAngle: CGFloat(0), endAngle: CGFloat(Double.pi * 2), clockwise: true)
+        let rightShapeLayer = CAShapeLayer()
+        rightShapeLayer.path = rightCirclePath.cgPath
+        rightShapeLayer.fillColor = UIColor.white.cgColor
+        self.layer.addSublayer(rightShapeLayer)
     }
 
     override func layoutSubviews() {
