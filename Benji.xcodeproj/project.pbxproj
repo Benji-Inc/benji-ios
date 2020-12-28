@@ -2239,7 +2239,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				INFOPLIST_FILE = Source/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2264,7 +2264,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				INFOPLIST_FILE = Source/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -2296,7 +2296,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 3.0.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Benji.Clip;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Benji.AppClip;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG APPCLIP";
 				SWIFT_VERSION = 5.0;
@@ -2321,7 +2321,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 3.0.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Benji.Clip;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Benji.AppClip;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = APPCLIP;
 				SWIFT_VERSION = 5.0;

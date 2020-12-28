@@ -9,6 +9,8 @@
 		<string>appclips:thisisour.app</string>
 		<string>appclips:ourown.chat</string>
 		<string>applinks:ourown.chat</string>
+		<string>webcredentials:ourown.chat</string>
+		<string>applinks:thisisour.app</string>
 	</array>
 	<key>com.apple.developer.healthkit</key>
 	<true/>
