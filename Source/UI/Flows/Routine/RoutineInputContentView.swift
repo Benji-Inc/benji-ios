@@ -18,12 +18,14 @@ class RoutineInputContentView: View {
     let timeHump = TimeHumpView()
     let setRoutineButton = Button()
 
-    var timeLabelYOffset: CGFloat = 200
+    var labelOffset: CGFloat = 20
 
     override func initializeSubviews() {
         super.initializeSubviews()
         
         self.addSubview(self.timeLabel)
+        self.timeLabel.textAlignment = .center
+        
         self.addSubview(self.everyDayLabel)
         self.everyDayLabel.setText("EVERY DAY")
         self.everyDayLabel.textAlignment = .center
@@ -51,24 +53,26 @@ class RoutineInputContentView: View {
         self.setRoutineButton.centerOnX()
 
         self.timeHump.size = CGSize(width: self.width * 0.9, height: 140)
-        self.timeHump.bottom = self.setRoutineButton.top - 100
+        self.timeHump.bottom = self.setRoutineButton.top - 20
         self.timeHump.centerOnX()
-
-        self.timeLabel.setSize(withWidth: 240)
-        self.timeLabel.centerOnX()
-        self.timeLabel.bottom = self.timeHump.top - self.timeLabelYOffset
-
-        self.minusButton.size = CGSize(width: 50, height: 50)
-        self.minusButton.centerY = self.timeLabel.centerY
-        self.minusButton.right = self.timeLabel.left - 20
-
-        self.plusButton.size = CGSize(width: 50, height: 50)
-        self.plusButton.centerY = self.timeLabel.centerY
-        self.plusButton.left = self.timeLabel.right + 20
 
         self.everyDayLabel.setSize(withWidth: 200)
         self.everyDayLabel.centerOnX()
-        self.everyDayLabel.top = self.timeLabel.bottom + 10
+        self.everyDayLabel.match(.bottom, to: .top, of: self.timeHump, offset: self.labelOffset)
+
+        self.timeLabel.setSize(withWidth: 240)
+        self.timeLabel.width = 240
+        self.timeLabel.centerOnX()
+        self.timeLabel.match(.bottom, to: .top, of: self.everyDayLabel, offset: -10)
+
+        let padding: CGFloat = (self.width - self.timeLabel.width - 100) * 0.5
+        self.minusButton.size = CGSize(width: 50, height: 50)
+        self.minusButton.centerY = self.timeLabel.centerY
+        self.minusButton.pin(.left, padding: padding)
+
+        self.plusButton.size = CGSize(width: 50, height: 50)
+        self.plusButton.centerY = self.timeLabel.centerY
+        self.plusButton.pin(.right, padding: padding)
     }
 
     func set(date: Date) {
@@ -76,11 +80,11 @@ class RoutineInputContentView: View {
         self.setNeedsLayout()
     }
 
-    func animateTimeHump(shouldShow: Bool) {
+    func animateContent(shouldShow: Bool) {
         UIView.animate(withDuration: Theme.animationDuration) {
             self.minusButton.alpha = shouldShow ? 1 : 0
             self.plusButton.alpha = shouldShow ? 1 : 0
-            self.timeLabelYOffset = shouldShow ? 140 : 0
+            self.labelOffset = shouldShow ? -100 : -20
             self.timeHump.alpha = shouldShow ? 1 : 0 
             self.layoutNow()
         }

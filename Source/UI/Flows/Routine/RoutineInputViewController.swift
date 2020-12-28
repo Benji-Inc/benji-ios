@@ -133,12 +133,13 @@ class RoutineInputViewController: ViewController {
         switch self.state {
         case .needsAuthorization:
             self.animateButton(with: .green, text: "Authorize")
+            self.content.animateContent(shouldShow: false)
         case .edit:
             self.animateButton(with: .green, text: "Edit")
-            self.content.animateTimeHump(shouldShow: false)
+            self.content.animateContent(shouldShow: false)
         case .update:
             self.animateButton(with: .purple, text: "Update")
-            self.content.animateTimeHump(shouldShow: true)
+            self.content.animateContent(shouldShow: true)
         }
     }
 
