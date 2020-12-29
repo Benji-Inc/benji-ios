@@ -18,7 +18,6 @@ protocol MessageInputAccessoryViewDelegate: AttachmentViewControllerDelegate {
                                didSend text: String,
                                context: MessageContext,
                                attributes: [String: Any])
-    func messageInputAccessoryDidTapContext(_ view: MessageInputAccessoryView)
 }
 
 class MessageInputAccessoryView: View, ActiveChannelAccessor {
@@ -182,9 +181,9 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
             }
         }
 
-//        self.alertConfirmation.didCancel = { [unowned self] in
-//            self.resetAlertProgress()
-//        }
+        self.alertConfirmation.button.didSelect { [unowned self] in
+            self.resetAlertProgress()
+        }
     }
 
     // MARK: HANDLERS
@@ -195,10 +194,6 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
             case ChannelType.channel(let channel) = channelDisplayable.channelType else { return }
         // Twilio throttles this call to every 5 seconds
         channel.typing()
-    }
-
-    private func didSelectContextButton() {
-        self.delegate.messageInputAccessoryDidTapContext(self)
     }
 
     // MARK: PUBLIC

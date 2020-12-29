@@ -27,15 +27,6 @@ class ChannelCoordinator: PresentableCoordinator<Void> {
     override func toPresentable() -> DismissableVC {
         return self.channelVC
     }
-
-    override func start() {
-        super.start()
-
-       // self.pickerVC.didSelectImage = { [unowned self] image in
-//            let kind = MessageKind.photo(image)
-//            self.channelVC.send(messageKind: kind, attributes: ["udpateId": image.fileName])
-       // }
-    }
 }
 
 extension ChannelCoordinator: ChannelDetailViewControllerDelegate {
@@ -46,32 +37,6 @@ extension ChannelCoordinator: ChannelDetailViewControllerDelegate {
 }
 
 extension ChannelCoordinator: ChannelViewControllerDelegate {
-
-    func channelViewControllerDidTapContext(_ controller: ChannelViewController) {
-        self.showCameraOptions(from: controller)
-    }
-
-    private func showCameraOptions(from controller: UIViewController) {
-        let alert = UIAlertController(title: "Choose", message: nil, preferredStyle: .actionSheet)
-
-        let action1 = UIAlertAction(title: "Camera", style: .default) { (action) in
-            alert.dismiss(animated: true) {
-            }
-        }
-
-        let action2 = UIAlertAction(title: "Photos", style: .default) { (action) in
-            alert.dismiss(animated: true) {
-            }
-        }
-
-        let action3 = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-
-        alert.addAction(action1)
-        alert.addAction(action2)
-        alert.addAction(action3)
-
-        controller.present(alert, animated: true, completion: nil)
-    }
 
     func channelView(_ controller: ChannelViewController, didTapShare message: Messageable) {
         var items: [Any] = []

@@ -16,10 +16,6 @@ extension ChannelViewController: MessageInputAccessoryViewDelegate {
         self.messageInputAccessoryView.expandingTextView.toggleInputView()
     }
 
-    func messageInputAccessoryDidTapContext(_ view: MessageInputAccessoryView) {
-        self.delegate.channelViewControllerDidTapContext(self)
-    }
-
     func messageInputAccessory(_ view: MessageInputAccessoryView, didUpdate message: Messageable, with text: String) {
         self.update(message: message, text: text)
     }

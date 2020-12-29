@@ -16,7 +16,6 @@ typealias ChannelViewControllerDelegates = ChannelDetailViewControllerDelegate &
 
 protocol ChannelViewControllerDelegate: class {
     func channelView(_ controller: ChannelViewController, didTapShare message: Messageable)
-    func channelViewControllerDidTapContext(_ controller: ChannelViewController)
 }
 
 class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {

@@ -12,12 +12,16 @@ import TMROLocalization
 class AlertConfirmationView: View {
 
     private let label = Label(font: .regular)
+    let button = Button()
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.addSubview(self.label)
         self.label.textAlignment = .center
+
+        self.addSubview(self.button)
+        self.button.set(style: .normal(color: .blue, text: "Cancel"))
     }
 
     func setAlertMessage(for avatars: [Avatar]) {
@@ -46,6 +50,11 @@ class AlertConfirmationView: View {
         super.layoutSubviews()
 
         self.label.setSize(withWidth: self.width * 0.8)
-        self.label.centerOnXAndY()
+        self.label.centerOnX()
+        self.label.centerY = self.halfWidth * 0.8
+
+        self.button.setSize(with: self.width)
+        self.button.pin(.bottom, padding: 20)
+        self.button.centerOnX()
     }
 }
