@@ -31,15 +31,6 @@ class LaunchManager {
 
     private(set) var finishedInitialFetch = false
 
-    // Important - update this URL with your Twilio Function URL
-    private let tokenURL = "https://topaz-booby-6355.twil.io/chat-token"
-
-    // Important - this identity would be assigned by your app, for
-    // instance after a user logs in
-    private let url = "https://benji-backend.herokuapp.com/parse"
-    private let appID = "BenjiApp"
-    private let clientKey = "theStupidMasterKeyThatShouldBeSecret"
-
     weak var delegate: LaunchManagerDelegate?
 
     /// False if a branch session has already been started.
@@ -54,9 +45,9 @@ class LaunchManager {
         if Parse.currentConfiguration == nil  {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
                 configuration.isLocalDatastoreEnabled = true
-                configuration.server = self.url
-                configuration.clientKey = self.clientKey
-                configuration.applicationId = self.appID
+                configuration.server = Config.shared.environment.url
+                configuration.clientKey = Config.shared.environment.clientKey
+                configuration.applicationId = Config.shared.environment.appID
             }))
         }
 

@@ -354,6 +354,8 @@
 		D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */; };
 		D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
+		D6DA3192259B5B6D0078E769 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
+		D6DA3193259B5B6D0078E769 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
 		D6DADF692207D246007D9EB1 /* TCHMessage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF682207D246007D9EB1 /* TCHMessage+Extensions.swift */; };
 		D6DADF6C2207DCA8007D9EB1 /* ChannelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF6B2207DCA8007D9EB1 /* ChannelsViewController.swift */; };
 		D6DADF6E2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF6D2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift */; };
@@ -663,6 +665,7 @@
 		D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ScalingAnimation.swift"; sourceTree = "<group>"; };
 		D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
+		D6DA3191259B5B6D0078E769 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		D6DADF682207D246007D9EB1 /* TCHMessage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHMessage+Extensions.swift"; sourceTree = "<group>"; };
 		D6DADF6B2207DCA8007D9EB1 /* ChannelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsViewController.swift; sourceTree = "<group>"; };
 		D6DADF6D2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionViewManager.swift; sourceTree = "<group>"; };
@@ -897,6 +900,7 @@
 				D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */,
 				D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */,
 				D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */,
+				D6DA3191259B5B6D0078E769 /* Config.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -1962,6 +1966,7 @@
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				D6A301AC2380E102006655E0 /* FeedSupplier.swift in Sources */,
 				D66F0FDC22BF2ADC00BA277D /* HomeCoordinator.swift in Sources */,
+				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,
 				D6FC8096237A64650089AACC /* MessageSupplier.swift in Sources */,
 				D6F33C7324B14A5D009603FF /* AudioCellAttributesConfigurer.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
@@ -1989,6 +1994,7 @@
 				D6551A3A25895E6E00B901E4 /* FaceDetectionViewController.swift in Sources */,
 				D6551A1625895C8700B901E4 /* RoutineManager.swift in Sources */,
 				D655196D2589128300B901E4 /* ScreenSize.swift in Sources */,
+				D6DA3193259B5B6D0078E769 /* Config.swift in Sources */,
 				D655196B2589128300B901E4 /* AlertType.swift in Sources */,
 				D65519562589125E00B901E4 /* ClientError.swift in Sources */,
 				D65519472589123D00B901E4 /* LaunchManager.swift in Sources */,
@@ -2233,6 +2239,7 @@
 			baseConfigurationReference = 8D57EE102F30EFF6827543EB /* Pods-Benji.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				API_TARGET = DEVELOPMENT;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Benji.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -2247,6 +2254,7 @@
 				MARKETING_VERSION = 3.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Benji;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RELEASE_TYPE = DEBUG;
 				SWIFT_OBJC_BRIDGING_HEADER = "./Source/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2258,6 +2266,7 @@
 			baseConfigurationReference = B8144E2A6499F243C0C3F7C9 /* Pods-Benji.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				API_TARGET = PRODUCTION;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Benji.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -2272,6 +2281,7 @@
 				MARKETING_VERSION = 3.0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Benji;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				RELEASE_TYPE = RELEASE;
 				SWIFT_OBJC_BRIDGING_HEADER = "./Source/Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;

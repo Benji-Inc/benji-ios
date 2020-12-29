@@ -11,11 +11,6 @@ import PhoneNumberKit
 import Lottie
 
 class PhoneTextField: PhoneNumberTextField {
-    
-    override var defaultRegion: String {
-        get { return "US" }
-        set {}
-    }
 
     let animationView = AnimationView(name: "loading")
 
