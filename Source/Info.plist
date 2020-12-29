@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>RELEASE_TYPE</key>
-	<string>${RELEASE_TYPE}</string>
 	<key>API_TARGET</key>
 	<string>${API_TARGET}</string>
 	<key>CFBundleDevelopmentRegion</key>
@@ -64,6 +62,8 @@
 	<string>You can use the microphone to send audio with your messages. </string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Send photos and create a profile picture of yourself. </string>
+	<key>RELEASE_TYPE</key>
+	<string>${RELEASE_TYPE}</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Bold.ttf</string>

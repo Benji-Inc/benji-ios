@@ -10,33 +10,33 @@ import Foundation
 
 enum Environment: String {
 
-    case development = "development"
+    case staging = "staging"
     case production = "production"
 
     var url: String {
         switch self {
-        case .development: return "https://benji-backend.herokuapp.com/parse"
+        case .staging: return "https://benji-backend.herokuapp.com/parse"
         case .production: return "http://ours-backend.herokuapp.com/parse"
         }
     }
 
     var appID: String {
         switch self {
-        case .development: return "ours-development"
+        case .staging: return "ours-development"
         case .production: return "ours-production"
         }
     }
 
     var clientKey: String {
         switch self {
-        case .development: return "R7-6qsaqe9xK"
+        case .staging: return "R7-6qsaqe9xK"
         case .production: return "96744143-bd04-4343-b637-4688ff44ba44"
         }
     }
 
     var displayName: String {
         switch self {
-        case .development: return "dev"
+        case .staging: return "stag"
         case .production: return "prod"
         }
     }
