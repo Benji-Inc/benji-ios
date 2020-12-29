@@ -86,4 +86,10 @@ class Config: NSObject {
 
         return buildTypeToReturn
     }()
+
+    private(set) var appVersion: String = {
+        var version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.1"
+        version = version.trimmingCharacters(in: CharacterSet(charactersIn: "0123456789.").inverted)
+        return version
+    }()
 }

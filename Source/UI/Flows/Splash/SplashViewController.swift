@@ -15,6 +15,7 @@ class SplashViewController: FullScreenViewController {
 
     let animationView = AnimationView(name: "loading")
     let label = Label(font: .small)
+    let versionLabel = Label(frame: .zero, font: .small, textColor: .background2)
 
     private let messages = ["Booting up", "Getting coffee", "Connecting", "Saving a tree", "Finding purpose", "Doing math"]
 
@@ -44,6 +45,10 @@ class SplashViewController: FullScreenViewController {
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
 
+        self.contentContainer.addSubview(self.versionLabel)
+        let version = Config.shared.environment.displayName + " " + Config.shared.appVersion
+        self.versionLabel.setText(version)
+
         self.text = self.messages.random()
     }
 
@@ -58,6 +63,10 @@ class SplashViewController: FullScreenViewController {
         self.label.setSize(withWidth: max)
         self.label.match(.right, to: .left, of: self.animationView, offset: Theme.contentOffset * -1)
         self.label.match(.bottom, to: .bottom, of: self.animationView)
+
+        self.versionLabel.setSize(withWidth: self.view.width)
+        self.versionLabel.pin(.left, padding: Theme.contentOffset)
+        self.versionLabel.match(.bottom, to: .bottom, of: self.label)
     }
 
     override func viewWillAppear(_ animated: Bool) {
