@@ -119,7 +119,7 @@ class MessageDeliveryManager {
                 promise.reject(with: ClientError.message(detail: "You are not a channel member."))
             }
 
-            self.getOptions(for: kind, attributes: attributes)
+            self.getOptions(for: kind, attributes: mutableAttributes)
                 .observeValue { (options) in
                     messagesObject.sendMessage(with: options, completion: { (result, message) in
                         if result.isSuccessful(), let msg = message {
