@@ -50,7 +50,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     lazy var expandingTextView = MessageInputTextView(with: self.delegate)
     let alertProgressView = AlertProgressView()
     let animationView = AnimationView(name: "loading")
-    lazy var alertConfirmation = AlertConfirmationView()
+    //lazy var alertConfirmation = AlertConfirmationView()
     let overlayButton = UIButton()
 
     private(set)var inputLeadingContstaint: NSLayoutConstraint?
@@ -181,7 +181,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
             }
         }
 
-        self.alertConfirmation.button.didSelect { [unowned self] in
+        self.expandingTextView.confirmationView.button.didSelect { [unowned self] in
             self.resetAlertProgress()
         }
     }
@@ -221,6 +221,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         self.alertProgressView.alpha = 1
         self.alertProgressView.layer.removeAllAnimations()
         self.borderColor = self.messageContext.color.color.cgColor
+        self.expandingTextView.updateInputView(type: .keyboard)
     }
 }
 

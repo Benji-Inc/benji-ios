@@ -11,11 +11,13 @@ import TMROLocalization
 
 class AlertConfirmationView: View {
 
-    private let label = Label(font: .regular)
+    private let label = Label(font: .smallBold)
     let button = Button()
 
     override func initializeSubviews() {
         super.initializeSubviews()
+
+        self.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
         self.addSubview(self.label)
         self.label.textAlignment = .center
@@ -44,6 +46,7 @@ class AlertConfirmationView: View {
         let text = LocalizedString(id: "", arguments: [arguments], default: "Swipe up to alert @(handle) of this message and be notified when it is read.")
 
         self.label.setText(text)
+        self.layoutNow()
     }
 
     override func layoutSubviews() {
@@ -51,7 +54,7 @@ class AlertConfirmationView: View {
 
         self.label.setSize(withWidth: self.width * 0.8)
         self.label.centerOnX()
-        self.label.centerY = self.halfWidth * 0.8
+        self.label.centerY = self.halfWidth * 0.6
 
         self.button.setSize(with: self.width)
         self.button.pin(.bottom, padding: 20)

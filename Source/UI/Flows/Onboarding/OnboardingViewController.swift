@@ -261,7 +261,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             #if APPCLIP
             self.current = .waitlist(self.waitlistVC)
             #else
-            self.current = .photo(self.photoVC)
+            if let _ = User.current()?.smallImage {
+                self.delegate.onboardingView(self, didVerify: User.current()!)
+            } else {
+                self.current = .photo(self.photoVC)
+            }
             #endif
         } else {
         // User is on the waitlist

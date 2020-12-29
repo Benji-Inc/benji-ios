@@ -8,14 +8,23 @@
 
 import Foundation
 
+enum InputViewType {
+    case attachments
+    case confirmation
+    case keyboard
+}
+
 class MessageInputTextView: InputTextView {
 
     lazy var countView = CharacterCountView()
     lazy var attachmentInputVC = AttachmentViewController(with: self.attachmentDelegate)
+    lazy var confirmationView = AlertConfirmationView()
+
+    private(set) var currentInputView: InputViewType?
     var isShowingAttachments: Bool = false
     var textDidChange: ((String) -> Void)?
 
-    private let attachmentDelegate: AttachmentViewControllerDelegate
+    private unowned let attachmentDelegate: AttachmentViewControllerDelegate
 
     init(with attachmentDelegate: AttachmentViewControllerDelegate) {
         self.attachmentDelegate = attachmentDelegate
@@ -33,21 +42,23 @@ class MessageInputTextView: InputTextView {
         self.countView.isHidden = true
     }
 
-    func toggleInputView() {
+    func updateInputView(type: InputViewType) {
         defer {
             if !self.isFirstResponder {
                 self.becomeFirstResponder()
             }
         }
 
-        if self.isShowingAttachments {
-            self.inputView = nil
-        } else {
+        switch type {
+        case .attachments:
             self.inputView = self.attachmentInputVC.view
+        case .confirmation:
+            self.inputView = self.confirmationView
+        case .keyboard:
+            self.inputView = nil
         }
 
-        self.isShowingAttachments.toggle()
-
+        self.currentInputView = type
         self.reloadInputViews()
     }
 

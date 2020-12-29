@@ -39,6 +39,8 @@ extension KeyboardObservable where Self: NSObject {
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
     }
+
+    func handleKeyboard(frame: CGRect, with animationDuration: TimeInterval, timingCurve: UIView.AnimationCurve) {}
 }
 
 class KeyboardHandler: NSObject {
