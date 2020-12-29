@@ -126,10 +126,11 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
             statusable.handleEvent(status: .loading)
         }
 
+        let domainURL = "https://ourown.chat"
         if let objectId = self.objectId {
-            self.link = "https://ourown.chat/reservation?reservationId=\(objectId)"
+            self.link = domainURL + "/reservation?reservationId=\(objectId)"
         }
-        if let linkString = self.link, let url = URL(string: linkString) {
+        if let url = URL(string: domainURL) {
             metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
                 runMain {
                     if let e = error {

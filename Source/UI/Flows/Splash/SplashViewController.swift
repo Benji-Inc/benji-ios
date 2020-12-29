@@ -46,7 +46,7 @@ class SplashViewController: FullScreenViewController {
         self.animationView.loopMode = .loop
 
         self.contentContainer.addSubview(self.versionLabel)
-        let version = Config.shared.environment.displayName + " " + Config.shared.appVersion
+        let version = Config.shared.environment.displayName.capitalized + " " + Config.shared.appVersion
         self.versionLabel.setText(version)
 
         self.text = self.messages.random()
