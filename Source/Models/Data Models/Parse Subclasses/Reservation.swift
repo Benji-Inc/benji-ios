@@ -127,15 +127,17 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
         }
 
         if let objectId = self.objectId {
-            self.link = "https://www.thisisour.app/reservation/data?reservationId=\(objectId)"
+            self.link = "https://ourown.chat/reservation?reservationId=\(objectId)"
         }
         if let linkString = self.link, let url = URL(string: linkString) {
-            metadataProvider.startFetchingMetadata(for: url) { (metadata, error) in
-                if let e = error {
-                    self.handleFailed(statusables: statusables, error: e, promise: promise)
-                } else {
-                    self.metadata = metadata
-                    self.handleValue(statusables: statusables, value: (), promise: promise)
+            metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
+                runMain {
+                    if let e = error {
+                        self.handleFailed(statusables: statusables, error: e, promise: promise)
+                    } else {
+                        self.metadata = metadata
+                        self.handleValue(statusables: statusables, value: (), promise: promise)
+                    }
                 }
             }
         } else {
