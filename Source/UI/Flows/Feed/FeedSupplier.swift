@@ -97,7 +97,7 @@ class FeedSupplier {
             self.items.append(.timeSaved(0))
         }
 
-        return waitForAll(futures: channelFutures).then { (channelItems) -> Future<Void> in
+        return waitForAll(futures: channelFutures).transform { (channelItems) -> Void in
             var totalCount: Int = 0
             let items = channelItems.filter { (feedType) -> Bool in
                 switch feedType {
@@ -110,8 +110,7 @@ class FeedSupplier {
             }
             self.items.append(.timeSaved(totalCount))
             self.items.append(contentsOf: items)
-            return Promise<Void>()
-        }
+        }.asVoid()
     }
 
     private func getConnections() -> Future<Void> {
