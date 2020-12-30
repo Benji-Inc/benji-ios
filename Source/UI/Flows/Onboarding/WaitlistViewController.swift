@@ -30,7 +30,7 @@ class WaitlistViewController: ViewController, Sizeable {
         self.view.addSubview(self.remainingLabel)
 
         #if APPCLIP
-        if User.current()?.status == .inactive {
+        if User.current()?.status == .inactive || User.current()?.status == .active {
             self.loadUpgrade()
         } else {
             self.loadWaitlist()
@@ -59,14 +59,14 @@ class WaitlistViewController: ViewController, Sizeable {
     }
 
     private func loadUpgrade() {
-        self.positionLabel.setText("Your in!")
+        self.remainingLabel.setText("Your in! Tap 👇")
         self.displayAppUpdateOverlay()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.remainingLabel.setSize(withWidth: self.view.width)
+        self.remainingLabel.setSize(withWidth: self.view.width * 0.8)
         self.remainingLabel.centerOnX()
         self.remainingLabel.bottom = self.view.halfHeight * 0.8
 

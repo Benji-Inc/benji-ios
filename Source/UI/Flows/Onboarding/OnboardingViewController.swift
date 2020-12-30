@@ -68,7 +68,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             switch result {
             case .success:
                 if let current = User.current(), current.isOnboarded, current.status == .active {
+                    #if !APPCLIP
+                    // Code you don't want to use in your App Clip.
                     self.delegate.onboardingView(self, didVerify: current)
+                    #else
+                    // Code your App Clip may access.
+                    self.current = .waitlist(self.waitlistVC)
+                    #endif
                 } else {
                     self.current = .name(self.nameVC)
                 }
@@ -120,7 +126,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                     self.updateNavigationBar()
                     self.view.layoutNow()
                 }
-        }
+            }
     }
 
     override func getInitialContent() -> OnboardingContent {
@@ -218,9 +224,22 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                                    arguments: [],
                                    default: "Please use your legal first and last name.")
         case .waitlist(_):
+            #if APPCLIP
+            if User.current()?.status == .inactive || User.current()?.status == .active {
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "You no longer have to wait! Tap the banner below to download the full app.")
+            } else {
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "You are on the list. Sit tight and we will let you know when your slot opens up.")
+            }
+            #else
             return LocalizedString(id: "",
                                    arguments: [],
                                    default: "You are on the list. Sit tight and we will let you know when your slot opens up.")
+            #endif
+
         case .photo(_):
             return LocalizedString(id: "",
                                    arguments: [],
@@ -246,7 +265,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     func handle(launchActivity: LaunchActivity) {
         switch launchActivity {
         case .onboarding(let phoneNumber):
-            if let content = self.current, case OnboardingContent.phone(let vc) = content {
+            if let content = self.current,
+               case OnboardingContent.phone(let vc) = content,
+               !vc.isSendingCode {
                 vc.textField.text = phoneNumber
                 vc.editingDidEnd()
             }
@@ -268,7 +289,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
             #endif
         } else {
-        // User is on the waitlist
+            // User is on the waitlist
             self.current = .waitlist(self.waitlistVC)
         }
     }

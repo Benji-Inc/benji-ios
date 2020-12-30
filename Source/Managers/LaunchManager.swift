@@ -96,7 +96,6 @@ class LaunchManager {
         if activity.activityType == NSUserActivityTypeBrowsingWeb,
            let incomingURL = activity.webpageURL,
            let components = NSURLComponents(url: incomingURL, resolvingAgainstBaseURL: true) {
-            // do something
             guard let path = components.path else { return true }
             switch path {
             case "/onboarding":

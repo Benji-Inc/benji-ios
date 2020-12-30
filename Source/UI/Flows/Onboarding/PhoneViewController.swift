@@ -16,6 +16,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
 
     private let reservationId: String?
     private let reservationCreatorId: String?
+    private(set) var isSendingCode: Bool = false
 
     init(with reservationId: String?,
          reservationCreatorId: String?) {
@@ -50,11 +51,14 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         if self.isPhoneNumberValid() {
             // End editing because we have a valid phone number and we're ready to request a code with it
             self.textField.resignFirstResponder()
+        } else if let text = self.textField.text, text.isEmpty {
+            self.isSendingCode = false 
         }
     }
 
     @objc func editingDidEnd() {
-        guard let text = self.textField.text,
+        guard !self.isSendingCode,
+            let text = self.textField.text,
             text.isValidPhoneNumber(),
             let phoneTextField = self.textField as? PhoneTextField,
             let phone = try? PhoneKit.shared.parse(text, withRegion: phoneTextField.currentRegion) else {
@@ -76,6 +80,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
 
         let tf = self.textField as? PhoneTextField
         tf?.animationView.play()
+        self.isSendingCode = true
         SendCode(phoneNumber: phone,
                  region: region,
                  installationId: installationId)

@@ -16,6 +16,7 @@ class CodeViewController: TextInputViewController<Void> {
 
     var phoneNumber: PhoneNumber?
     let reservationId: String?
+    
     init(with reservationId: String?) {
         self.reservationId = reservationId
         super.init(textField: TextField(),
