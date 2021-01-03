@@ -14,14 +14,14 @@ def shared_pods
   pod 'SDWebImage'
 end
 
-target 'Benji' do
+target 'Ours' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   shared_pods
   pod 'TwilioChatClient'
 end
 
-target 'BenjiAppClip' do
+target 'OursAppClip' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   shared_pods
