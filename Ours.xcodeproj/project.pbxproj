@@ -299,7 +299,7 @@
 		D685E9272331177100CC1BAB /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D685E9262331177100CC1BAB /* UserNotificationManager.swift */; };
 		D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
 		D6884AC825800FC600DA380E /* StatusableRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6884AC725800FC600DA380E /* StatusableRequest.swift */; };
-		D6884B222587D25D00DA380E /* BenjiAppClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = D6884B0E2587D25C00DA380E /* BenjiAppClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D6884B222587D25D00DA380E /* OursAppClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = D6884B0E2587D25C00DA380E /* OursAppClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D68BEAD424831FA000C95D31 /* ReservationsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */; };
 		D68D765B24835A81009B246B /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D68D765A24835A81009B246B /* error.json */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
@@ -422,7 +422,7 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/AppClips";
 			dstSubfolderSpec = 16;
 			files = (
-				D6884B222587D25D00DA380E /* BenjiAppClip.app in Embed App Clips */,
+				D6884B222587D25D00DA380E /* OursAppClip.app in Embed App Clips */,
 			);
 			name = "Embed App Clips";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -463,7 +463,7 @@
 		D61D38E4248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageInputAccessoryView+Connection.swift"; sourceTree = "<group>"; };
 		D61D38E6248C494A00BE457B /* ChannelViewController+Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelViewController+Messaging.swift"; sourceTree = "<group>"; };
 		D61D38E8248C506000BE457B /* MesasgeInputAccessoryView+Panning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MesasgeInputAccessoryView+Panning.swift"; sourceTree = "<group>"; };
-		D61EC0BC21D3071400204BEE /* Benji.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Benji.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D61EC0BC21D3071400204BEE /* Ours.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Ours.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D61EC0BF21D3071400204BEE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D61EC0C121D3071400204BEE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		D61EC0C621D3071500204BEE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -610,7 +610,7 @@
 		D685E9262331177100CC1BAB /* UserNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
 		D686DA5C25799EB6000B4C04 /* Statusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statusable.swift; sourceTree = "<group>"; };
 		D6884AC725800FC600DA380E /* StatusableRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusableRequest.swift; sourceTree = "<group>"; };
-		D6884B0E2587D25C00DA380E /* BenjiAppClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BenjiAppClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6884B0E2587D25C00DA380E /* OursAppClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OursAppClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6884B1E2587D25D00DA380E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D6884B1F2587D25D00DA380E /* BenjiAppClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BenjiAppClip.entitlements; sourceTree = "<group>"; };
 		D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsCoordinator.swift; sourceTree = "<group>"; };
@@ -805,8 +805,8 @@
 		D61EC0BD21D3071400204BEE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				D61EC0BC21D3071400204BEE /* Benji.app */,
-				D6884B0E2587D25C00DA380E /* BenjiAppClip.app */,
+				D61EC0BC21D3071400204BEE /* Ours.app */,
+				D6884B0E2587D25C00DA380E /* OursAppClip.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1510,9 +1510,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		D61EC0BB21D3071400204BEE /* Benji */ = {
+		D61EC0BB21D3071400204BEE /* Ours */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D61EC0CE21D3071500204BEE /* Build configuration list for PBXNativeTarget "Benji" */;
+			buildConfigurationList = D61EC0CE21D3071500204BEE /* Build configuration list for PBXNativeTarget "Ours" */;
 			buildPhases = (
 				30D8572DC83E8E92F5506E42 /* [CP] Check Pods Manifest.lock */,
 				D61EC0B821D3071400204BEE /* Sources */,
@@ -1526,14 +1526,14 @@
 			dependencies = (
 				D6884B212587D25D00DA380E /* PBXTargetDependency */,
 			);
-			name = Benji;
+			name = Ours;
 			productName = Benji;
-			productReference = D61EC0BC21D3071400204BEE /* Benji.app */;
+			productReference = D61EC0BC21D3071400204BEE /* Ours.app */;
 			productType = "com.apple.product-type.application";
 		};
-		D6884B0D2587D25C00DA380E /* BenjiAppClip */ = {
+		D6884B0D2587D25C00DA380E /* OursAppClip */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = D6884B232587D25D00DA380E /* Build configuration list for PBXNativeTarget "BenjiAppClip" */;
+			buildConfigurationList = D6884B232587D25D00DA380E /* Build configuration list for PBXNativeTarget "OursAppClip" */;
 			buildPhases = (
 				D71341A6A22D249126B1B7ED /* [CP] Check Pods Manifest.lock */,
 				D6884B0A2587D25C00DA380E /* Sources */,
@@ -1545,9 +1545,9 @@
 			);
 			dependencies = (
 			);
-			name = BenjiAppClip;
+			name = OursAppClip;
 			productName = BenjiAppClip;
-			productReference = D6884B0E2587D25C00DA380E /* BenjiAppClip.app */;
+			productReference = D6884B0E2587D25C00DA380E /* OursAppClip.app */;
 			productType = "com.apple.product-type.application.on-demand-install-capable";
 		};
 /* End PBXNativeTarget section */
@@ -1574,7 +1574,7 @@
 					};
 				};
 			};
-			buildConfigurationList = D61EC0B721D3071400204BEE /* Build configuration list for PBXProject "Benji" */;
+			buildConfigurationList = D61EC0B721D3071400204BEE /* Build configuration list for PBXProject "Ours" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -1587,8 +1587,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				D61EC0BB21D3071400204BEE /* Benji */,
-				D6884B0D2587D25C00DA380E /* BenjiAppClip */,
+				D61EC0BB21D3071400204BEE /* Ours */,
+				D6884B0D2587D25C00DA380E /* OursAppClip */,
 			);
 		};
 /* End PBXProject section */
@@ -2099,7 +2099,7 @@
 /* Begin PBXTargetDependency section */
 		D6884B212587D25D00DA380E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = D6884B0D2587D25C00DA380E /* BenjiAppClip */;
+			target = D6884B0D2587D25C00DA380E /* OursAppClip */;
 			targetProxy = D6884B202587D25D00DA380E /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -2346,7 +2346,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		D61EC0B721D3071400204BEE /* Build configuration list for PBXProject "Benji" */ = {
+		D61EC0B721D3071400204BEE /* Build configuration list for PBXProject "Ours" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D61EC0CC21D3071500204BEE /* Debug */,
@@ -2355,7 +2355,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D61EC0CE21D3071500204BEE /* Build configuration list for PBXNativeTarget "Benji" */ = {
+		D61EC0CE21D3071500204BEE /* Build configuration list for PBXNativeTarget "Ours" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D61EC0CF21D3071500204BEE /* Debug */,
@@ -2364,7 +2364,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		D6884B232587D25D00DA380E /* Build configuration list for PBXNativeTarget "BenjiAppClip" */ = {
+		D6884B232587D25D00DA380E /* Build configuration list for PBXNativeTarget "OursAppClip" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				D6884B242587D25D00DA380E /* Debug */,

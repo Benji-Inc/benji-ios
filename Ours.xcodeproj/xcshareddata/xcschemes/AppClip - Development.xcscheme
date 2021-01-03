@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D61EC0BB21D3071400204BEE"
-               BuildableName = "Benji.app"
-               BlueprintName = "Benji"
-               ReferencedContainer = "container:Benji.xcodeproj">
+               BuildableName = "Ours.app"
+               BlueprintName = "Ours"
+               ReferencedContainer = "container:Ours.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -31,7 +31,7 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -45,18 +45,18 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D6884B0D2587D25C00DA380E"
-            BuildableName = "BenjiAppClip.app"
-            BlueprintName = "BenjiAppClip"
-            ReferencedContainer = "container:Benji.xcodeproj">
+            BuildableName = "OursAppClip.app"
+            BlueprintName = "OursAppClip"
+            ReferencedContainer = "container:Ours.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D61EC0BB21D3071400204BEE"
-            BuildableName = "Benji.app"
-            BlueprintName = "Benji"
-            ReferencedContainer = "container:Benji.xcodeproj">
+            BuildableName = "Ours.app"
+            BlueprintName = "Ours"
+            ReferencedContainer = "container:Ours.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </LaunchAction>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D61EC0BB21D3071400204BEE"
-            BuildableName = "Benji.app"
-            BlueprintName = "Benji"
-            ReferencedContainer = "container:Benji.xcodeproj">
+            BuildableName = "Ours.app"
+            BlueprintName = "Ours"
+            ReferencedContainer = "container:Ours.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

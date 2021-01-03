@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "D61EC0BB21D3071400204BEE"
-               BuildableName = "Benji.app"
-               BlueprintName = "Benji"
-               ReferencedContainer = "container:Benji.xcodeproj">
+               BuildableName = "Ours.app"
+               BlueprintName = "Ours"
+               ReferencedContainer = "container:Ours.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -44,21 +44,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D6884B0D2587D25C00DA380E"
-            BuildableName = "BenjiAppClip.app"
-            BlueprintName = "BenjiAppClip"
-            ReferencedContainer = "container:Benji.xcodeproj">
+            BlueprintIdentifier = "D61EC0BB21D3071400204BEE"
+            BuildableName = "Ours.app"
+            BlueprintName = "Ours"
+            ReferencedContainer = "container:Ours.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D61EC0BB21D3071400204BEE"
-            BuildableName = "Benji.app"
-            BlueprintName = "Benji"
-            ReferencedContainer = "container:Benji.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -71,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D61EC0BB21D3071400204BEE"
-            BuildableName = "Benji.app"
-            BlueprintName = "Benji"
-            ReferencedContainer = "container:Benji.xcodeproj">
+            BuildableName = "Ours.app"
+            BlueprintName = "Ours"
+            ReferencedContainer = "container:Ours.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
