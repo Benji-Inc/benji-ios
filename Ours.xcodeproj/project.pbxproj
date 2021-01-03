@@ -794,7 +794,7 @@
 			isa = PBXGroup;
 			children = (
 				D61EC0BE21D3071400204BEE /* Source */,
-				D6884B0F2587D25C00DA380E /* BenjiAppClip */,
+				D6884B0F2587D25C00DA380E /* AppClip */,
 				D61EC0BD21D3071400204BEE /* Products */,
 				856FD9BFAD8BA46208226C85 /* Pods */,
 				AB1A79B62F263B1E788E3AB0 /* Frameworks */,
@@ -1285,13 +1285,13 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		D6884B0F2587D25C00DA380E /* BenjiAppClip */ = {
+		D6884B0F2587D25C00DA380E /* AppClip */ = {
 			isa = PBXGroup;
 			children = (
 				D6884B1E2587D25D00DA380E /* Info.plist */,
 				D6884B1F2587D25D00DA380E /* BenjiAppClip.entitlements */,
 			);
-			path = BenjiAppClip;
+			path = AppClip;
 			sourceTree = "<group>";
 		};
 		D68BEAD224831F7C00C95D31 /* Reservations */ = {
@@ -2296,11 +2296,11 @@
 				API_TARGET = STAGING;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = BenjiAppClip/BenjiAppClip.entitlements;
+				CODE_SIGN_ENTITLEMENTS = AppClip/BenjiAppClip.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
-				INFOPLIST_FILE = BenjiAppClip/Info.plist;
+				INFOPLIST_FILE = AppClip/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2323,11 +2323,11 @@
 				API_TARGET = PRODUCTION;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = BenjiAppClip/BenjiAppClip.entitlements;
+				CODE_SIGN_ENTITLEMENTS = AppClip/BenjiAppClip.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
-				INFOPLIST_FILE = BenjiAppClip/Info.plist;
+				INFOPLIST_FILE = AppClip/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
