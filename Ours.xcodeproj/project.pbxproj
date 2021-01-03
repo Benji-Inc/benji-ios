@@ -12,7 +12,8 @@
 		80D4A21823039B82007CB5F1 /* RoutineInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21723039B82007CB5F1 /* RoutineInputContentView.swift */; };
 		80D4A21A23039FA5007CB5F1 /* RoutineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21923039FA5007CB5F1 /* RoutineManager.swift */; };
 		80D4A21C2303A005007CB5F1 /* Routine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21B2303A005007CB5F1 /* Routine.swift */; };
-		A7469934087ABB969CC22753 /* Pods_BenjiAppClip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD5108C494393279E3E4AABF /* Pods_BenjiAppClip.framework */; };
+		8FC6A04F2F23510867229A84 /* Pods_OursAppClip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */; };
+		D5913FD2104D7480AB2029C6 /* Pods_Ours.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */; };
 		D607400E23401B3E009633EB /* SystemChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D607400D23401B3E009633EB /* SystemChannel.swift */; };
 		D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E552377CB2F00833DA7 /* Messageable.swift */; };
 		D6090E582377D2CA00833DA7 /* ChannelSectionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E572377D2CA00833DA7 /* ChannelSectionable.swift */; };
@@ -55,7 +56,6 @@
 		D61EC0F521D3151400204BEE /* NSAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F421D3151400204BEE /* NSAttributedString+Extensions.swift */; };
 		D61EC0F721D316F100204BEE /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* Color.swift */; };
 		D61EC0F921D317AB00204BEE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F821D317AB00204BEE /* Theme.swift */; };
-		D61EC0FC21D437C100204BEE /* Pods_Benji.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D61EC0FB21D437C100204BEE /* Pods_Benji.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D623BC4F23EF5157007358CB /* ProfileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D623BC4E23EF5157007358CB /* ProfileItem.swift */; };
 		D624296723A9EF4F00322ABE /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D624296623A9EF4F00322ABE /* HomeTabView.swift */; };
 		D62BB73D244D3AEF00607677 /* UserNotificationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73C244D3AEF00607677 /* UserNotificationFactory.swift */; };
@@ -430,16 +430,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		05BF5BB389A2CBE2D99125F9 /* Pods-BenjiAppClip.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BenjiAppClip.release.xcconfig"; path = "Pods/Target Support Files/Pods-BenjiAppClip/Pods-BenjiAppClip.release.xcconfig"; sourceTree = "<group>"; };
-		4E28E456BB227109C463CFAF /* Pods-BenjiAppClip.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BenjiAppClip.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BenjiAppClip/Pods-BenjiAppClip.debug.xcconfig"; sourceTree = "<group>"; };
+		3FD1AE8358B3CA7B98B5B241 /* Pods-OursAppClip.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursAppClip.release.xcconfig"; path = "Pods/Target Support Files/Pods-OursAppClip/Pods-OursAppClip.release.xcconfig"; sourceTree = "<group>"; };
+		4811B856F63AD691A9EDA954 /* Pods-Ours.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.release.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.release.xcconfig"; sourceTree = "<group>"; };
 		80C7C6052316112400643A14 /* TimeHumpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeHumpView.swift; sourceTree = "<group>"; };
 		80D4A21523039B22007CB5F1 /* RoutineInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineInputViewController.swift; sourceTree = "<group>"; };
 		80D4A21723039B82007CB5F1 /* RoutineInputContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineInputContentView.swift; sourceTree = "<group>"; };
 		80D4A21923039FA5007CB5F1 /* RoutineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineManager.swift; sourceTree = "<group>"; };
 		80D4A21B2303A005007CB5F1 /* Routine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routine.swift; sourceTree = "<group>"; };
-		8D57EE102F30EFF6827543EB /* Pods-Benji.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Benji.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Benji/Pods-Benji.debug.xcconfig"; sourceTree = "<group>"; };
+		89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.debug.xcconfig"; sourceTree = "<group>"; };
 		B0D58BAEEF651AA0027FE108 /* Pods_Benji.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Benji.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B8144E2A6499F243C0C3F7C9 /* Pods-Benji.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Benji.release.xcconfig"; path = "Pods/Target Support Files/Pods-Benji/Pods-Benji.release.xcconfig"; sourceTree = "<group>"; };
+		BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ours.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OursAppClip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D33049F6417FECDE51BB13DB /* Pods-OursAppClip.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursAppClip.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OursAppClip/Pods-OursAppClip.debug.xcconfig"; sourceTree = "<group>"; };
 		D607400D23401B3E009633EB /* SystemChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemChannel.swift; sourceTree = "<group>"; };
 		D6090E552377CB2F00833DA7 /* Messageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messageable.swift; sourceTree = "<group>"; };
 		D6090E572377D2CA00833DA7 /* ChannelSectionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSectionable.swift; sourceTree = "<group>"; };
@@ -485,7 +487,6 @@
 		D61EC0F421D3151400204BEE /* NSAttributedString+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+Extensions.swift"; sourceTree = "<group>"; };
 		D61EC0F621D316F100204BEE /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		D61EC0F821D317AB00204BEE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		D61EC0FB21D437C100204BEE /* Pods_Benji.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Pods_Benji.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D623BC4E23EF5157007358CB /* ProfileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileItem.swift; sourceTree = "<group>"; };
 		D624296623A9EF4F00322ABE /* HomeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabView.swift; sourceTree = "<group>"; };
 		D62BB73C244D3AEF00607677 /* UserNotificationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationFactory.swift; sourceTree = "<group>"; };
@@ -713,7 +714,6 @@
 		D6FC809B237A6ED30089AACC /* ChannelCollectionViewManager+Typing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Typing.swift"; sourceTree = "<group>"; };
 		D6FEF02C257EB71700F9789B /* Button+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Extensions.swift"; sourceTree = "<group>"; };
 		D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Extensions.swift"; sourceTree = "<group>"; };
-		FD5108C494393279E3E4AABF /* Pods_BenjiAppClip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BenjiAppClip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -721,8 +721,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D61EC0FC21D437C100204BEE /* Pods_Benji.framework in Frameworks */,
 				D658C7DD24425E410027D12E /* HealthKit.framework in Frameworks */,
+				D5913FD2104D7480AB2029C6 /* Pods_Ours.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -730,7 +730,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7469934087ABB969CC22753 /* Pods_BenjiAppClip.framework in Frameworks */,
+				8FC6A04F2F23510867229A84 /* Pods_OursAppClip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -740,10 +740,10 @@
 		856FD9BFAD8BA46208226C85 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8D57EE102F30EFF6827543EB /* Pods-Benji.debug.xcconfig */,
-				B8144E2A6499F243C0C3F7C9 /* Pods-Benji.release.xcconfig */,
-				4E28E456BB227109C463CFAF /* Pods-BenjiAppClip.debug.xcconfig */,
-				05BF5BB389A2CBE2D99125F9 /* Pods-BenjiAppClip.release.xcconfig */,
+				89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */,
+				4811B856F63AD691A9EDA954 /* Pods-Ours.release.xcconfig */,
+				D33049F6417FECDE51BB13DB /* Pods-OursAppClip.debug.xcconfig */,
+				3FD1AE8358B3CA7B98B5B241 /* Pods-OursAppClip.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -753,9 +753,9 @@
 			children = (
 				D65519B02589167E00B901E4 /* UIKit.framework */,
 				D658C7DC24425E410027D12E /* HealthKit.framework */,
-				D61EC0FB21D437C100204BEE /* Pods_Benji.framework */,
 				B0D58BAEEF651AA0027FE108 /* Pods_Benji.framework */,
-				FD5108C494393279E3E4AABF /* Pods_BenjiAppClip.framework */,
+				BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */,
+				D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -1639,15 +1639,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BenjiAppClip/Pods-BenjiAppClip-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-OursAppClip/Pods-OursAppClip-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-BenjiAppClip/Pods-BenjiAppClip-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-OursAppClip/Pods-OursAppClip-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BenjiAppClip/Pods-BenjiAppClip-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OursAppClip/Pods-OursAppClip-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		30D8572DC83E8E92F5506E42 /* [CP] Check Pods Manifest.lock */ = {
@@ -1661,7 +1661,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Benji-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Ours-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1674,15 +1674,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Benji/Pods-Benji-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Ours/Pods-Ours-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Benji/Pods-Benji-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Ours/Pods-Ours-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Benji/Pods-Benji-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Ours/Pods-Ours-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D71341A6A22D249126B1B7ED /* [CP] Check Pods Manifest.lock */ = {
@@ -1700,7 +1700,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BenjiAppClip-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-OursAppClip-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2236,7 +2236,7 @@
 		};
 		D61EC0CF21D3071500204BEE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 8D57EE102F30EFF6827543EB /* Pods-Benji.debug.xcconfig */;
+			baseConfigurationReference = 89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				API_TARGET = STAGING;
@@ -2263,7 +2263,7 @@
 		};
 		D61EC0D021D3071500204BEE /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B8144E2A6499F243C0C3F7C9 /* Pods-Benji.release.xcconfig */;
+			baseConfigurationReference = 4811B856F63AD691A9EDA954 /* Pods-Ours.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				API_TARGET = PRODUCTION;
@@ -2291,7 +2291,7 @@
 		};
 		D6884B242587D25D00DA380E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4E28E456BB227109C463CFAF /* Pods-BenjiAppClip.debug.xcconfig */;
+			baseConfigurationReference = D33049F6417FECDE51BB13DB /* Pods-OursAppClip.debug.xcconfig */;
 			buildSettings = {
 				API_TARGET = STAGING;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -2318,7 +2318,7 @@
 		};
 		D6884B252587D25D00DA380E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 05BF5BB389A2CBE2D99125F9 /* Pods-BenjiAppClip.release.xcconfig */;
+			baseConfigurationReference = 3FD1AE8358B3CA7B98B5B241 /* Pods-OursAppClip.release.xcconfig */;
 			buildSettings = {
 				API_TARGET = PRODUCTION;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
