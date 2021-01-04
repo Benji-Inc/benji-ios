@@ -816,7 +816,6 @@
 		D61EC0BE21D3071400204BEE /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				D61EC0DC21D30CF700204BEE /* Bridging-Header.h */,
 				D66F0FD022BF064700BA277D /* Deeplink */,
 				D61EC0D721D30C1400204BEE /* Extensions */,
 				D66A0B92235181F400A0FFEA /* Helpers */,
@@ -1008,6 +1007,7 @@
 		D6356D8825A36B220015104F /* App */ = {
 			isa = PBXGroup;
 			children = (
+				D61EC0DC21D30CF700204BEE /* Bridging-Header.h */,
 				D61EC0BF21D3071400204BEE /* AppDelegate.swift */,
 				D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */,
 				D61EC0F821D317AB00204BEE /* Theme.swift */,
@@ -2287,7 +2287,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Ours;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
-				SWIFT_OBJC_BRIDGING_HEADER = "./Source/Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "./Shared/App/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2314,7 +2314,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Ours;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
-				SWIFT_OBJC_BRIDGING_HEADER = "./Source/Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "./Shared/App/Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
