@@ -54,7 +54,7 @@ extension Button {
             self.alphaInAnimator.stopAnimation(true)
             self.alphaInAnimator.addAnimations { [unowned self] in
                 if let color = self.defaultColor{
-                    self.setBackground(color: color.color, forUIControlState: .normal)
+                    self.setBackground(color: color.color.withAlphaComponent(0.4), forUIControlState: .normal)
                 }
                 for view in self.subviews {
                     if let label = view as? UILabel {
@@ -98,7 +98,7 @@ extension Button {
                 }
             }
             self.errorLabel.alpha = 1.0
-            self.setBackground(color: Color.red.color, forUIControlState: .normal)
+            self.setBackground(color: Color.red.color.withAlphaComponent(0.4), forUIControlState: .normal)
         }) { (_) in
             promise.resolve(with: ())
         }
