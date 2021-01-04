@@ -127,7 +127,6 @@
 		D65519062589110A00B901E4 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD722BF295A00BA277D /* Coordinator.swift */; };
 		D65519072589110A00B901E4 /* DeeplinkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */; };
 		D65519082589110A00B901E4 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
-		D655190C2589120100B901E4 /* CNContact+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE922C0695E00BA277D /* CNContact+Extensions.swift */; };
 		D655190E2589120100B901E4 /* Character+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460621D552B100CD8CE4 /* Character+Extensions.swift */; };
 		D65519112589120600B901E4 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0DD21D30DAC00204BEE /* Array+Extensions.swift */; };
 		D65519122589120600B901E4 /* ClosedRange+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642737022C991A60088256B /* ClosedRange+Extensions.swift */; };
@@ -268,7 +267,6 @@
 		D66F0FDE22BF2C5D00BA277D /* HomeSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FDD22BF2C5D00BA277D /* HomeSegmentControl.swift */; };
 		D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE122C041AF00BA277D /* AvatarView.swift */; };
 		D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* Avatar.swift */; };
-		D66F0FEA22C0695E00BA277D /* CNContact+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE922C0695E00BA277D /* CNContact+Extensions.swift */; };
 		D66F0FF222C1D86800BA277D /* ChannelsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FF122C1D86800BA277D /* ChannelsType.swift */; };
 		D66F102622C7C6A900BA277D /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
 		D66F102822C7D1D200BA277D /* ChannelContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102722C7D1D200BA277D /* ChannelContentView.swift */; };
@@ -580,7 +578,6 @@
 		D66F0FDD22BF2C5D00BA277D /* HomeSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSegmentControl.swift; sourceTree = "<group>"; };
 		D66F0FE122C041AF00BA277D /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		D66F0FE522C0640E00BA277D /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
-		D66F0FE922C0695E00BA277D /* CNContact+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CNContact+Extensions.swift"; sourceTree = "<group>"; };
 		D66F0FF122C1D86800BA277D /* ChannelsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsType.swift; sourceTree = "<group>"; };
 		D66F102522C7C6A900BA277D /* Lorem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lorem.swift; sourceTree = "<group>"; };
 		D66F102722C7D1D200BA277D /* ChannelContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelContentView.swift; sourceTree = "<group>"; };
@@ -816,7 +813,6 @@
 		D61EC0BE21D3071400204BEE /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				D66F0FD022BF064700BA277D /* Deeplink */,
 				D61EC0D721D30C1400204BEE /* Extensions */,
 				D66A0B92235181F400A0FFEA /* Helpers */,
 				D61EC0CB21D3071500204BEE /* Info.plist */,
@@ -902,7 +898,6 @@
 			isa = PBXGroup;
 			children = (
 				D6D1460621D552B100CD8CE4 /* Character+Extensions.swift */,
-				D66F0FE922C0695E00BA277D /* CNContact+Extensions.swift */,
 				D642736F22C991850088256B /* Collection Extensions */,
 				D61EC0E721D3107A00204BEE /* Date+Extensions.swift */,
 				D61EC0D821D30C8E00204BEE /* DispatchQue+Extensions.swift */,
@@ -979,8 +974,9 @@
 		D6356D7E25A369F80015104F /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				D6356D8825A36B220015104F /* App */,
 				D6356D8125A36A7D0015104F /* API */,
+				D6356D8825A36B220015104F /* App */,
+				D6356D8F25A36BD90015104F /* Coordinator */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -1013,6 +1009,19 @@
 				D61EC0F821D317AB00204BEE /* Theme.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		D6356D8F25A36BD90015104F /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				D66F0FD722BF295A00BA277D /* Coordinator.swift */,
+				D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */,
+				D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */,
+				D66F0FD922BF297F00BA277D /* MainCoordinator.swift */,
+				D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */,
+				D691794122F6418700340AA3 /* Router.swift */,
+			);
+			path = Coordinator;
 			sourceTree = "<group>";
 		};
 		D63752C723133AC700214F63 /* Fonts */ = {
@@ -1218,19 +1227,6 @@
 				D6AC90C92594F8F80032774D /* Delegated.swift */,
 			);
 			path = Helpers;
-			sourceTree = "<group>";
-		};
-		D66F0FD022BF064700BA277D /* Deeplink */ = {
-			isa = PBXGroup;
-			children = (
-				D66F0FD722BF295A00BA277D /* Coordinator.swift */,
-				D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */,
-				D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */,
-				D66F0FD922BF297F00BA277D /* MainCoordinator.swift */,
-				D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */,
-				D691794122F6418700340AA3 /* Router.swift */,
-			);
-			path = Deeplink;
 			sourceTree = "<group>";
 		};
 		D66F0FDF22C0412300BA277D /* Views */ = {
@@ -1882,7 +1878,6 @@
 				D6090E5A2377D5CF00833DA7 /* ChannelCellAttributesConfigurer.swift in Sources */,
 				D658C7D2244226A00027D12E /* FeedMeditationView.swift in Sources */,
 				D6090E582377D2CA00833DA7 /* ChannelSectionable.swift in Sources */,
-				D66F0FEA22C0695E00BA277D /* CNContact+Extensions.swift in Sources */,
 				D6DADF6E2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift in Sources */,
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
 				D6B2603822E6AB5E00143CF0 /* ChannelDetailViewController.swift in Sources */,
@@ -2075,7 +2070,6 @@
 				D655196C2589128300B901E4 /* StringCasing.swift in Sources */,
 				D65519702589128300B901E4 /* StringStyle.swift in Sources */,
 				D6551A1325895C4F00B901E4 /* Theme.swift in Sources */,
-				D655190C2589120100B901E4 /* CNContact+Extensions.swift in Sources */,
 				D6551A2525895D7700B901E4 /* AvatarView.swift in Sources */,
 				D65519322589122700B901E4 /* UIView+Layout.swift in Sources */,
 				D65519592589126800B901E4 /* Connection.swift in Sources */,
