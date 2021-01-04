@@ -855,9 +855,6 @@
 		D61EC0D421D30BF100204BEE /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				D6FA622323F06AEF00048C4A /* AnimationCycle.swift */,
-				D6FA622123F067A300048C4A /* AnimationDuration.swift */,
-				D6D1501F21D5FF1600CD8CE4 /* Data Models */,
 				D61EC0EF21D313D900204BEE /* View Models */,
 			);
 			path = Models;
@@ -929,6 +926,7 @@
 				D6356D9625A36CF30015104F /* Extensions */,
 				D66A0B92235181F400A0FFEA /* Helpers */,
 				D66379DB25A39BB000A4A3B7 /* Managers */,
+				D6637A0825A39DA500A4A3B7 /* Models */,
 				D6637A0425A39D0900A4A3B7 /* Protocols */,
 			);
 			path = Shared;
@@ -952,6 +950,7 @@
 				D61EC0D721D30C1400204BEE /* Extensions */,
 				D61EC0CB21D3071500204BEE /* Info.plist */,
 				D66379DC25A39BC200A4A3B7 /* Managers */,
+				D6637A0925A39E0C00A4A3B7 /* Models */,
 				D6637A0525A39D3700A4A3B7 /* Protocols */,
 			);
 			path = iOS;
@@ -1228,6 +1227,32 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		D6637A0825A39DA500A4A3B7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D6FA622323F06AEF00048C4A /* AnimationCycle.swift */,
+				D6FA622123F067A300048C4A /* AnimationDuration.swift */,
+				D646DB3B22CFCCD80055CC7C /* ClientError.swift */,
+				D642735222C85B740088256B /* SystemAvatar.swift */,
+				D67934E423DE66FE00536B44 /* PushPayload.swift */,
+				D6405B65236E001A00FAA06B /* Parse Subclasses */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D6637A0925A39E0C00A4A3B7 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D64C6A7D23294A8600DB7257 /* ChannelKey.swift */,
+				D66F0FF122C1D86800BA277D /* ChannelsType.swift */,
+				D66F0FC622BF004300BA277D /* FeedType.swift */,
+				D642735022C857760088256B /* MessageContext.swift */,
+				D607400D23401B3E009633EB /* SystemChannel.swift */,
+				D66F0FC822BF006D00BA277D /* SystemMessage.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		D66656BB23D13C83009E4BDF /* Switchable */ = {
 			isa = PBXGroup;
 			children = (
@@ -1463,23 +1488,6 @@
 				D6D1502C21D6A08300CD8CE4 /* ChannelCollectionView.swift */,
 			);
 			path = "Channel Collection Views";
-			sourceTree = "<group>";
-		};
-		D6D1501F21D5FF1600CD8CE4 /* Data Models */ = {
-			isa = PBXGroup;
-			children = (
-				D64C6A7D23294A8600DB7257 /* ChannelKey.swift */,
-				D66F0FF122C1D86800BA277D /* ChannelsType.swift */,
-				D646DB3B22CFCCD80055CC7C /* ClientError.swift */,
-				D66F0FC622BF004300BA277D /* FeedType.swift */,
-				D642735022C857760088256B /* MessageContext.swift */,
-				D6405B65236E001A00FAA06B /* Parse Subclasses */,
-				D67934E423DE66FE00536B44 /* PushPayload.swift */,
-				D642735222C85B740088256B /* SystemAvatar.swift */,
-				D607400D23401B3E009633EB /* SystemChannel.swift */,
-				D66F0FC822BF006D00BA277D /* SystemMessage.swift */,
-			);
-			path = "Data Models";
 			sourceTree = "<group>";
 		};
 		D6D1503A21D7F47600CD8CE4 /* UI Extensions */ = {
