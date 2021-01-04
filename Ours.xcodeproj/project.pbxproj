@@ -814,7 +814,6 @@
 			isa = PBXGroup;
 			children = (
 				D61EC0D421D30BF100204BEE /* Models */,
-				D61EC0D521D30BF900204BEE /* Protocols */,
 				D61EC0FA21D3180200204BEE /* Resources */,
 				D6D14AF821D5890E00CD8CE4 /* State Management */,
 				D61EC0D121D30B5700204BEE /* UI */,
@@ -862,23 +861,6 @@
 				D61EC0EF21D313D900204BEE /* View Models */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		D61EC0D521D30BF900204BEE /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */,
-				D66F0FE522C0640E00BA277D /* Avatar.swift */,
-				D6432BF222D828480016001A /* ChannelDataSource.swift */,
-				D6FA622523F0B16F00048C4A /* ChannelDataSource+Animations.swift */,
-				D66F0FCE22BF060500BA277D /* Deeplinkable.swift */,
-				D61EC0DA21D30CB300204BEE /* Dismissable.swift */,
-				D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */,
-				D67896B7230096620059BA75 /* KeyboardObservable.swift */,
-				D609AE3B236F913F004FA89A /* Objectable.swift */,
-				D6D1502821D6085200CD8CE4 /* ResourceObject.swift */,
-			);
-			path = Protocols;
 			sourceTree = "<group>";
 		};
 		D61EC0D621D30C0500204BEE /* API */ = {
@@ -947,6 +929,7 @@
 				D6356D9625A36CF30015104F /* Extensions */,
 				D66A0B92235181F400A0FFEA /* Helpers */,
 				D66379DB25A39BB000A4A3B7 /* Managers */,
+				D6637A0425A39D0900A4A3B7 /* Protocols */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -969,6 +952,7 @@
 				D61EC0D721D30C1400204BEE /* Extensions */,
 				D61EC0CB21D3071500204BEE /* Info.plist */,
 				D66379DC25A39BC200A4A3B7 /* Managers */,
+				D6637A0525A39D3700A4A3B7 /* Protocols */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -1218,6 +1202,30 @@
 				D66379C925A3704300A4A3B7 /* MessageDeliveryManager.swift */,
 			);
 			path = Managers;
+			sourceTree = "<group>";
+		};
+		D6637A0425A39D0900A4A3B7 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */,
+				D66F0FE522C0640E00BA277D /* Avatar.swift */,
+				D66F0FCE22BF060500BA277D /* Deeplinkable.swift */,
+				D61EC0DA21D30CB300204BEE /* Dismissable.swift */,
+				D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */,
+				D67896B7230096620059BA75 /* KeyboardObservable.swift */,
+				D609AE3B236F913F004FA89A /* Objectable.swift */,
+				D6D1502821D6085200CD8CE4 /* ResourceObject.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		D6637A0525A39D3700A4A3B7 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				D6432BF222D828480016001A /* ChannelDataSource.swift */,
+				D6FA622523F0B16F00048C4A /* ChannelDataSource+Animations.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		D66656BB23D13C83009E4BDF /* Switchable */ = {
