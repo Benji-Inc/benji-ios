@@ -815,7 +815,6 @@
 			isa = PBXGroup;
 			children = (
 				D6D145F121D548F600CD8CE4 /* Flows */,
-				D64E43692352B59400BA0619 /* Shared */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -915,7 +914,6 @@
 		D6356D8425A36AC00015104F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				D66F0FDF22C0412300BA277D /* Views */,
 				D61EC0D621D30C0500204BEE /* API */,
 				D61EC0D321D30BBF00204BEE /* App */,
 				D61EC0D721D30C1400204BEE /* Extensions */,
@@ -924,6 +922,7 @@
 				D66379DC25A39BC200A4A3B7 /* Managers */,
 				D6637A0925A39E0C00A4A3B7 /* Models */,
 				D6637A0525A39D3700A4A3B7 /* Protocols */,
+				D66F0FDF22C0412300BA277D /* Views */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -944,8 +943,6 @@
 			isa = PBXGroup;
 			children = (
 				D66F0FD722BF295A00BA277D /* Coordinator.swift */,
-				D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */,
-				D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */,
 				D66F0FD922BF297F00BA277D /* MainCoordinator.swift */,
 				D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */,
 				D691794122F6418700340AA3 /* Router.swift */,
@@ -1107,15 +1104,6 @@
 			path = Typing;
 			sourceTree = "<group>";
 		};
-		D64E43692352B59400BA0619 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				D686DA5C25799EB6000B4C04 /* Statusable.swift */,
-				D6884AC725800FC600DA380E /* StatusableRequest.swift */,
-			);
-			path = Shared;
-			sourceTree = "<group>";
-		};
 		D6579558239C8D8800A01338 /* Feed Content Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -1178,6 +1166,8 @@
 				D67896B7230096620059BA75 /* KeyboardObservable.swift */,
 				D609AE3B236F913F004FA89A /* Objectable.swift */,
 				D6D1502821D6085200CD8CE4 /* ResourceObject.swift */,
+				D686DA5C25799EB6000B4C04 /* Statusable.swift */,
+				D6884AC725800FC600DA380E /* StatusableRequest.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -1197,6 +1187,8 @@
 				D6FA622323F06AEF00048C4A /* AnimationCycle.swift */,
 				D6FA622123F067A300048C4A /* AnimationDuration.swift */,
 				D646DB3B22CFCCD80055CC7C /* ClientError.swift */,
+				D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */,
+				D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */,
 				D6405B65236E001A00FAA06B /* Parse Subclasses */,
 				D67934E423DE66FE00536B44 /* PushPayload.swift */,
 				D642735222C85B740088256B /* SystemAvatar.swift */,
