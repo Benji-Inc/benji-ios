@@ -813,7 +813,6 @@
 		D61EC0BE21D3071400204BEE /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				D66A0B92235181F400A0FFEA /* Helpers */,
 				D61EC0CB21D3071500204BEE /* Info.plist */,
 				D6D1500A21D5E79B00CD8CE4 /* Managers */,
 				D61EC0D421D30BF100204BEE /* Models */,
@@ -958,6 +957,7 @@
 				D6356D8825A36B220015104F /* App */,
 				D6356D8F25A36BD90015104F /* Coordinator */,
 				D6356D9625A36CF30015104F /* Extensions */,
+				D66A0B92235181F400A0FFEA /* Helpers */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
