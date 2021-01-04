@@ -794,6 +794,7 @@
 			isa = PBXGroup;
 			children = (
 				D6356D7E25A369F80015104F /* Shared */,
+				D6356D8425A36AC00015104F /* iOS */,
 				D61EC0BE21D3071400204BEE /* Source */,
 				D6884B0F2587D25C00DA380E /* iOS Clip */,
 				D61EC0BD21D3071400204BEE /* Products */,
@@ -815,7 +816,6 @@
 		D61EC0BE21D3071400204BEE /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				D61EC0D621D30C0500204BEE /* API */,
 				D61EC0D321D30BBF00204BEE /* App */,
 				D61EC0DC21D30CF700204BEE /* Bridging-Header.h */,
 				D66F0FD022BF064700BA277D /* Deeplink */,
@@ -897,11 +897,8 @@
 		D61EC0D621D30C0500204BEE /* API */ = {
 			isa = PBXGroup;
 			children = (
-				D64C6A79232883FE00DB7257 /* CloudFunction.swift */,
-				D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */,
 				D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */,
 				D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */,
-				D6DA3191259B5B6D0078E769 /* Config.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -987,8 +984,27 @@
 		D6356D7E25A369F80015104F /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				D6356D8125A36A7D0015104F /* API */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		D6356D8125A36A7D0015104F /* API */ = {
+			isa = PBXGroup;
+			children = (
+				D64C6A79232883FE00DB7257 /* CloudFunction.swift */,
+				D6DA3191259B5B6D0078E769 /* Config.swift */,
+				D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		D6356D8425A36AC00015104F /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				D61EC0D621D30C0500204BEE /* API */,
+			);
+			path = iOS;
 			sourceTree = "<group>";
 		};
 		D63752C723133AC700214F63 /* Fonts */ = {
