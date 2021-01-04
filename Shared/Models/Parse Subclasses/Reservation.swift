@@ -117,6 +117,11 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
         }
     }
 
+    var message: String? {
+        guard let link = self.link else { return nil }
+        return "Claim your RSVP by tapping 👇\n\(link)"
+    }
+
     func prepareMetaData(andUpdate statusables: [Statusable]) -> Future<Void> {
         let promise = Promise<Void>()
         let metadataProvider = LPMetadataProvider()

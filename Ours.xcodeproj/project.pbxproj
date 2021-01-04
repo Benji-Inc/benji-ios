@@ -1187,6 +1187,7 @@
 			children = (
 				D64C6A7D23294A8600DB7257 /* ChannelKey.swift */,
 				D66F0FF122C1D86800BA277D /* ChannelsType.swift */,
+				D6830221234AA35C006145FE /* DisplayableChannel.swift */,
 				D66F0FC622BF004300BA277D /* FeedType.swift */,
 				D642735022C857760088256B /* MessageContext.swift */,
 				D607400D23401B3E009633EB /* SystemChannel.swift */,
@@ -1477,7 +1478,6 @@
 				D6740D4723AEA5BD009D5702 /* ChannelsCoordiantor.swift */,
 				D6DADF6B2207DCA8007D9EB1 /* ChannelsViewController.swift */,
 				D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */,
-				D6830221234AA35C006145FE /* DisplayableChannel.swift */,
 			);
 			path = Channels;
 			sourceTree = "<group>";

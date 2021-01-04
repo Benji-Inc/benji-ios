@@ -17,7 +17,7 @@ protocol CoordinatorType: class {
     func handle(launchActivity: LaunchActivity)
 }
 
-class Coordinator<Result>: CoordinatorType {
+class Coordinator<Result>: NSObject, CoordinatorType {
 
     let router: Router
     var deepLink: DeepLinkable?
