@@ -807,9 +807,6 @@
 		D61EC0BE21D3071400204BEE /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				D61EC0D421D30BF100204BEE /* Models */,
-				D61EC0FA21D3180200204BEE /* Resources */,
-				D6D14AF821D5890E00CD8CE4 /* State Management */,
 				D61EC0D121D30B5700204BEE /* UI */,
 			);
 			path = Source;
@@ -844,13 +841,6 @@
 				D66F102522C7C6A900BA277D /* Lorem.swift */,
 			);
 			path = App;
-			sourceTree = "<group>";
-		};
-		D61EC0D421D30BF100204BEE /* Models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Models;
 			sourceTree = "<group>";
 		};
 		D61EC0D621D30C0500204BEE /* API */ = {
@@ -919,6 +909,7 @@
 				D66379DB25A39BB000A4A3B7 /* Managers */,
 				D6637A0825A39DA500A4A3B7 /* Models */,
 				D6637A0425A39D0900A4A3B7 /* Protocols */,
+				D61EC0FA21D3180200204BEE /* Resources */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -1461,13 +1452,6 @@
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
 			);
 			path = Home;
-			sourceTree = "<group>";
-		};
-		D6D14AF821D5890E00CD8CE4 /* State Management */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "State Management";
 			sourceTree = "<group>";
 		};
 		D6D1500521D5E71E00CD8CE4 /* Channel Collection Views */ = {
