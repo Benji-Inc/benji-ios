@@ -813,7 +813,6 @@
 		D61EC0BE21D3071400204BEE /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				D61EC0CB21D3071500204BEE /* Info.plist */,
 				D6D1500A21D5E79B00CD8CE4 /* Managers */,
 				D61EC0D421D30BF100204BEE /* Models */,
 				D61EC0D521D30BF900204BEE /* Protocols */,
@@ -975,6 +974,7 @@
 		D6356D8425A36AC00015104F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				D61EC0CB21D3071500204BEE /* Info.plist */,
 				D61EC0D621D30C0500204BEE /* API */,
 				D61EC0D321D30BBF00204BEE /* App */,
 				D61EC0D721D30C1400204BEE /* Extensions */,
@@ -2279,7 +2279,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
-				INFOPLIST_FILE = Source/Info.plist;
+				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2306,7 +2306,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
-				INFOPLIST_FILE = Source/Info.plist;
+				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
