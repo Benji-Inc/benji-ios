@@ -793,6 +793,7 @@
 		D61EC0B321D3071400204BEE = {
 			isa = PBXGroup;
 			children = (
+				D6356D7E25A369F80015104F /* Shared */,
 				D61EC0BE21D3071400204BEE /* Source */,
 				D6884B0F2587D25C00DA380E /* iOS Clip */,
 				D61EC0BD21D3071400204BEE /* Products */,
@@ -981,6 +982,13 @@
 				D64932D623FE460200986335 /* FeedIndicatorView.swift */,
 			);
 			path = Feed;
+			sourceTree = "<group>";
+		};
+		D6356D7E25A369F80015104F /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 		D63752C723133AC700214F63 /* Fonts */ = {
