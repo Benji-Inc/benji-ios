@@ -785,7 +785,6 @@
 			children = (
 				D6356D7E25A369F80015104F /* Shared */,
 				D6356D8425A36AC00015104F /* iOS */,
-				D61EC0BE21D3071400204BEE /* Source */,
 				D6884B0F2587D25C00DA380E /* iOS Clip */,
 				D61EC0BD21D3071400204BEE /* Products */,
 				856FD9BFAD8BA46208226C85 /* Pods */,
@@ -801,22 +800,6 @@
 				D6884B0E2587D25C00DA380E /* OursAppClip.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		D61EC0BE21D3071400204BEE /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				D61EC0D121D30B5700204BEE /* UI */,
-			);
-			path = Source;
-			sourceTree = "<group>";
-		};
-		D61EC0D121D30B5700204BEE /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				D6D145F121D548F600CD8CE4 /* Flows */,
-			);
-			path = UI;
 			sourceTree = "<group>";
 		};
 		D61EC0D321D30BBF00204BEE /* App */ = {
@@ -891,6 +874,7 @@
 				D6356D8825A36B220015104F /* App */,
 				D6356D8F25A36BD90015104F /* Coordinator */,
 				D6356D9625A36CF30015104F /* Extensions */,
+				D6637A3225A3AB1700A4A3B7 /* Flows */,
 				D66A0B92235181F400A0FFEA /* Helpers */,
 				D66379DB25A39BB000A4A3B7 /* Managers */,
 				D6637A0825A39DA500A4A3B7 /* Models */,
@@ -917,12 +901,13 @@
 				D61EC0D621D30C0500204BEE /* API */,
 				D61EC0D321D30BBF00204BEE /* App */,
 				D61EC0D721D30C1400204BEE /* Extensions */,
+				D6D145F121D548F600CD8CE4 /* Flows */,
 				D6E65F17237791450061AA67 /* Generic CollectionView */,
 				D61EC0CB21D3071500204BEE /* Info.plist */,
 				D66379DC25A39BC200A4A3B7 /* Managers */,
 				D6637A0925A39E0C00A4A3B7 /* Models */,
 				D6637A0525A39D3700A4A3B7 /* Protocols */,
-				D66F0FDF22C0412300BA277D /* Views */,
+				D6637A3325A3AC0500A4A3B7 /* UI */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -1213,10 +1198,10 @@
 		D6637A2325A3A75A00A4A3B7 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				D6637A2425A3A7A000A4A3B7 /* Views */,
-				D66F0FE022C0413300BA277D /* View Controllers */,
 				D63C67DA23D4147C00EA373A /* Face Detection */,
 				D66656BB23D13C83009E4BDF /* Switchable */,
+				D66F0FE022C0413300BA277D /* View Controllers */,
+				D6637A2425A3A7A000A4A3B7 /* Views */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1235,6 +1220,23 @@
 				D61EC0E521D30EB300204BEE /* View.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		D6637A3225A3AB1700A4A3B7 /* Flows */ = {
+			isa = PBXGroup;
+			children = (
+				D67896A122FF40AB0059BA75 /* Onboarding */,
+				D67A82D9230CCE290076152B /* Splash */,
+			);
+			path = Flows;
+			sourceTree = "<group>";
+		};
+		D6637A3325A3AC0500A4A3B7 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				D66F0FDF22C0412300BA277D /* Views */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 		D66656BB23D13C83009E4BDF /* Switchable */ = {
@@ -1413,11 +1415,9 @@
 				D62C634F22BE9C4600F4D097 /* Feed */,
 				D6D145F521D549A300CD8CE4 /* Home */,
 				D658C7D3244229C00027D12E /* Meditation */,
-				D67896A122FF40AB0059BA75 /* Onboarding */,
 				D6B2603B22E6B8CD00143CF0 /* Profile */,
 				D68BEAD224831F7C00C95D31 /* Reservations */,
 				D6EDD1932355DB6000FDA5D6 /* Routine */,
-				D67A82D9230CCE290076152B /* Splash */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
