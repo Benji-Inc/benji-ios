@@ -813,7 +813,6 @@
 		D61EC0BE21D3071400204BEE /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				D61EC0D721D30C1400204BEE /* Extensions */,
 				D66A0B92235181F400A0FFEA /* Helpers */,
 				D61EC0CB21D3071500204BEE /* Info.plist */,
 				D6D1500A21D5E79B00CD8CE4 /* Managers */,
@@ -897,26 +896,7 @@
 		D61EC0D721D30C1400204BEE /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				D6D1460621D552B100CD8CE4 /* Character+Extensions.swift */,
-				D642736F22C991850088256B /* Collection Extensions */,
-				D61EC0E721D3107A00204BEE /* Date+Extensions.swift */,
-				D61EC0D821D30C8E00204BEE /* DispatchQue+Extensions.swift */,
-				D69EB4492457EB4500473530 /* Error+Extensions.swift */,
-				D646DB3F22CFCFDB0055CC7C /* Future+Extensions.swift */,
-				D642735C22C90C640088256B /* Math Extensions */,
-				D61EC0F421D3151400204BEE /* NSAttributedString+Extensions.swift */,
-				D6D1460C21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift */,
-				D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */,
-				D62BB742244DEEA400607677 /* Optional+Extensions.swift */,
-				D69EB4482457E5E500473530 /* Parse */,
-				D67896AE22FF62630059BA75 /* PhoneKit.swift */,
-				D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */,
-				D6D380C3257FC18300C562E8 /* Selectable.swift */,
-				D61EC0E921D3111600204BEE /* String+Extensions.swift */,
 				D64C6A7F23294ED700DB7257 /* Twilio */,
-				D6D1503A21D7F47600CD8CE4 /* UI Extensions */,
-				D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */,
-				D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -977,6 +957,7 @@
 				D6356D8125A36A7D0015104F /* API */,
 				D6356D8825A36B220015104F /* App */,
 				D6356D8F25A36BD90015104F /* Coordinator */,
+				D6356D9625A36CF30015104F /* Extensions */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -994,8 +975,9 @@
 		D6356D8425A36AC00015104F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				D61EC0D321D30BBF00204BEE /* App */,
 				D61EC0D621D30C0500204BEE /* API */,
+				D61EC0D321D30BBF00204BEE /* App */,
+				D61EC0D721D30C1400204BEE /* Extensions */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -1022,6 +1004,32 @@
 				D691794122F6418700340AA3 /* Router.swift */,
 			);
 			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		D6356D9625A36CF30015104F /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D6D1460621D552B100CD8CE4 /* Character+Extensions.swift */,
+				D642736F22C991850088256B /* Collection Extensions */,
+				D61EC0E721D3107A00204BEE /* Date+Extensions.swift */,
+				D61EC0D821D30C8E00204BEE /* DispatchQue+Extensions.swift */,
+				D69EB4492457EB4500473530 /* Error+Extensions.swift */,
+				D646DB3F22CFCFDB0055CC7C /* Future+Extensions.swift */,
+				D642735C22C90C640088256B /* Math Extensions */,
+				D61EC0F421D3151400204BEE /* NSAttributedString+Extensions.swift */,
+				D6D1460C21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift */,
+				D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */,
+				D62BB742244DEEA400607677 /* Optional+Extensions.swift */,
+				D69EB4482457E5E500473530 /* Parse */,
+				D67896AE22FF62630059BA75 /* PhoneKit.swift */,
+				D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */,
+				D6D380C3257FC18300C562E8 /* Selectable.swift */,
+				D61EC0E921D3111600204BEE /* String+Extensions.swift */,
+				D6D1503A21D7F47600CD8CE4 /* UI Extensions */,
+				D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */,
+				D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		D63752C723133AC700214F63 /* Fonts */ = {
