@@ -816,7 +816,6 @@
 		D61EC0BE21D3071400204BEE /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				D61EC0D321D30BBF00204BEE /* App */,
 				D61EC0DC21D30CF700204BEE /* Bridging-Header.h */,
 				D66F0FD022BF064700BA277D /* Deeplink */,
 				D61EC0D721D30C1400204BEE /* Extensions */,
@@ -858,9 +857,6 @@
 		D61EC0D321D30BBF00204BEE /* App */ = {
 			isa = PBXGroup;
 			children = (
-				D61EC0BF21D3071400204BEE /* AppDelegate.swift */,
-				D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */,
-				D61EC0F821D317AB00204BEE /* Theme.swift */,
 				D66F102522C7C6A900BA277D /* Lorem.swift */,
 			);
 			path = App;
@@ -984,6 +980,7 @@
 		D6356D7E25A369F80015104F /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				D6356D8825A36B220015104F /* App */,
 				D6356D8125A36A7D0015104F /* API */,
 			);
 			path = Shared;
@@ -1002,9 +999,20 @@
 		D6356D8425A36AC00015104F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				D61EC0D321D30BBF00204BEE /* App */,
 				D61EC0D621D30C0500204BEE /* API */,
 			);
 			path = iOS;
+			sourceTree = "<group>";
+		};
+		D6356D8825A36B220015104F /* App */ = {
+			isa = PBXGroup;
+			children = (
+				D61EC0BF21D3071400204BEE /* AppDelegate.swift */,
+				D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */,
+				D61EC0F821D317AB00204BEE /* Theme.swift */,
+			);
+			path = App;
 			sourceTree = "<group>";
 		};
 		D63752C723133AC700214F63 /* Fonts */ = {
