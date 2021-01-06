@@ -1420,7 +1420,7 @@
 				D658C7D3244229C00027D12E /* Meditation */,
 				D6B2603B22E6B8CD00143CF0 /* Profile */,
 				D68BEAD224831F7C00C95D31 /* Reservations */,
-				D6EDD1932355DB6000FDA5D6 /* Routine */,
+				D6EDD1932355DB6000FDA5D6 /* Ritual */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -1497,7 +1497,7 @@
 			path = "Generic CollectionView";
 			sourceTree = "<group>";
 		};
-		D6EDD1932355DB6000FDA5D6 /* Routine */ = {
+		D6EDD1932355DB6000FDA5D6 /* Ritual */ = {
 			isa = PBXGroup;
 			children = (
 				D64932FC2402EBA600986335 /* RitualCoordinator.swift */,
@@ -1507,7 +1507,7 @@
 				D6E4C8002394391A002B1330 /* RoutineTimeOfDayLabel.swift */,
 				D653F6AF23588F8E00A03EEE /* RitualViewController.swift */,
 			);
-			path = Routine;
+			path = Ritual;
 			sourceTree = "<group>";
 		};
 		D6F33C7A24B1502C009603FF /* Message */ = {
