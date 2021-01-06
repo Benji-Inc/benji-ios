@@ -74,3 +74,20 @@ struct ActivateUser: CloudFunction {
                                 viewsToIgnore: viewsToIgnore).asVoid()
     }
 }
+
+struct ClaimReservation: CloudFunction {
+    typealias ReturnType = Void
+
+    var reservationId: String
+    var isClaimed: Bool
+
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> Future<Void> {
+        let params: [String: Any] = ["reservationId": self.reservationId,
+                                     "isClaimed": self.isClaimed]
+        return self.makeRequest(andUpdate: statusables,
+                                params: params,
+                                callName: "claimReservation",
+                                delayInterval: 0.0,
+                                viewsToIgnore: viewsToIgnore).asVoid()
+    }
+}
