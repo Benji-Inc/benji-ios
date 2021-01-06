@@ -10,7 +10,7 @@
 		80C7C6062316112400643A14 /* TimeHumpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C7C6052316112400643A14 /* TimeHumpView.swift */; };
 		80D4A21623039B22007CB5F1 /* RoutineInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21523039B22007CB5F1 /* RoutineInputViewController.swift */; };
 		80D4A21823039B82007CB5F1 /* RoutineInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21723039B82007CB5F1 /* RoutineInputContentView.swift */; };
-		80D4A21C2303A005007CB5F1 /* Routine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21B2303A005007CB5F1 /* Routine.swift */; };
+		80D4A21C2303A005007CB5F1 /* Ritual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21B2303A005007CB5F1 /* Ritual.swift */; };
 		8FC6A04F2F23510867229A84 /* Pods_OursAppClip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */; };
 		D5913FD2104D7480AB2029C6 /* Pods_Ours.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */; };
 		D607400E23401B3E009633EB /* SystemChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D607400D23401B3E009633EB /* SystemChannel.swift */; };
@@ -199,7 +199,7 @@
 		D65519FC258959CC00B901E4 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D65519FF25895A0800B901E4 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
 		D6551A0225895A2B00B901E4 /* StatusableRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6884AC725800FC600DA380E /* StatusableRequest.swift */; };
-		D6551A0525895A8800B901E4 /* Routine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21B2303A005007CB5F1 /* Routine.swift */; };
+		D6551A0525895A8800B901E4 /* Ritual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21B2303A005007CB5F1 /* Ritual.swift */; };
 		D6551A1025895C0700B901E4 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E121D30E6000204BEE /* Label.swift */; };
 		D6551A1325895C4F00B901E4 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F821D317AB00204BEE /* Theme.swift */; };
 		D6551A2525895D7700B901E4 /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE122C041AF00BA277D /* AvatarView.swift */; };
@@ -431,7 +431,7 @@
 		80C7C6052316112400643A14 /* TimeHumpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeHumpView.swift; sourceTree = "<group>"; };
 		80D4A21523039B22007CB5F1 /* RoutineInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineInputViewController.swift; sourceTree = "<group>"; };
 		80D4A21723039B82007CB5F1 /* RoutineInputContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineInputContentView.swift; sourceTree = "<group>"; };
-		80D4A21B2303A005007CB5F1 /* Routine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Routine.swift; sourceTree = "<group>"; };
+		80D4A21B2303A005007CB5F1 /* Ritual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ritual.swift; sourceTree = "<group>"; };
 		89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.debug.xcconfig"; sourceTree = "<group>"; };
 		BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ours.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OursAppClip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1026,7 +1026,7 @@
 			children = (
 				D6405B6A236E0E7900FAA06B /* Connection.swift */,
 				D6D8BB6C24677B5D00937581 /* Reservation.swift */,
-				80D4A21B2303A005007CB5F1 /* Routine.swift */,
+				80D4A21B2303A005007CB5F1 /* Ritual.swift */,
 				D6405B66236E002E00FAA06B /* User.swift */,
 				D609AE39236F44A8004FA89A /* User+Extensions.swift */,
 				D609AE35236F3F81004FA89A /* User+Objectable.swift */,
@@ -1959,7 +1959,7 @@
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,
-				80D4A21C2303A005007CB5F1 /* Routine.swift in Sources */,
+				80D4A21C2303A005007CB5F1 /* Ritual.swift in Sources */,
 				D62C635422BE9CBB00F4D097 /* FeedViewController.swift in Sources */,
 				D64A8F4C25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift in Sources */,
 				D61EC0E221D30E6000204BEE /* Label.swift in Sources */,
@@ -2080,7 +2080,7 @@
 				D6551A5325895EE000B901E4 /* TextEntryField.swift in Sources */,
 				D655197D2589129B00B901E4 /* Avatar.swift in Sources */,
 				D66379E525A39C2400A4A3B7 /* SessionManager.swift in Sources */,
-				D6551A0525895A8800B901E4 /* Routine.swift in Sources */,
+				D6551A0525895A8800B901E4 /* Ritual.swift in Sources */,
 				D65519EF2589582C00B901E4 /* View.swift in Sources */,
 				D655197C2589129B00B901E4 /* KeyboardObservable.swift in Sources */,
 				D65519302589122700B901E4 /* UIImage+Extensions.swift in Sources */,

@@ -22,7 +22,7 @@ enum UserKey: String {
     case givenName
     case familyName
     case smallImage
-    case routine
+    case ritual
     case quePosition
     case status
     case handle
@@ -57,9 +57,9 @@ final class User: PFUser {
         set { self.setObject(for: .handle, with: newValue) }
     }
 
-    var routine: Routine? {
-        get { return self.getObject(for: .routine) }
-        set { self.setObject(for: .routine, with: newValue) }
+    var ritual: Ritual? {
+        get { return self.getObject(for: .ritual) }
+        set { self.setObject(for: .ritual, with: newValue) }
     }
 
     var smallImage: PFFileObject? {

@@ -105,9 +105,9 @@ class ChannelContentView: View {
                     }
 
                     if let first = notMeUsers.first {
-                        if let routine = first.routine {
+                        if let routine = first.ritual {
                             routine.fetchIfNeededInBackground(block: { (object, error) in
-                                if let routine = object as? Routine, let date = routine.date {
+                                if let routine = object as? Ritual, let date = routine.date {
                                     let formatter = DateFormatter()
                                     formatter.dateFormat = "h:mm a"
                                     let string = formatter.string(from: date)

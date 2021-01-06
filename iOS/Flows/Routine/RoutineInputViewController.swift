@@ -66,7 +66,7 @@ class RoutineInputViewController: ViewController {
             }
         }.store(in: &self.cancellables)
 
-        User.current()?.getRoutine()
+        User.current()?.getRitual()
         .observe(with: { (result) in
             switch result {
             case .success(let routine):
@@ -111,9 +111,9 @@ class RoutineInputViewController: ViewController {
     }
 
     private func saveRoutine() {
-        let routine = Routine()
-        routine.create(with: self.selectedDate)
-        routine.saveEventually()
+        let ritual = Ritual()
+        ritual.create(with: self.selectedDate)
+        ritual.saveEventually()
         .ignoreUserInteractionEventsUntilDone(for: [self.view])
             .observe { (result) in
                 switch result {

@@ -15,9 +15,9 @@ enum RoutineKey: String {
     case minute
 }
 
-final class Routine: PFObject, PFSubclassing  {
+final class Ritual: PFObject, PFSubclassing  {
 
-    static let currentRoutineKey = "currentRoutineKey"
+    static let currentKey = "currentRitualKey"
 
     static func parseClassName() -> String {
         return String(describing: self)
@@ -76,7 +76,7 @@ final class Routine: PFObject, PFSubclassing  {
     }
 }
 
-extension Routine: Objectable {
+extension Ritual: Objectable {
     typealias KeyType = RoutineKey
 
     func getObject<Type>(for key: RoutineKey) -> Type? {
@@ -91,10 +91,10 @@ extension Routine: Objectable {
         return self.relation(forKey: key.rawValue) as? PFRelation
     }
 
-    func saveEventually() -> Future<Routine> {
-        let promise = Promise<Routine>()
+    func saveEventually() -> Future<Ritual> {
+        let promise = Promise<Ritual>()
 
-        User.current()?.routine = self
+        User.current()?.ritual = self
         User.current()?.saveLocalThenServer()
             .observe(with: { (result) in
                 switch result {

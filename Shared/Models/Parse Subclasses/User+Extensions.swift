@@ -40,25 +40,25 @@ extension User: Avatar {
 // Code you don't want to use in your App Clip.
 extension User {
 
-    func getRoutine() -> Future<Routine> {
-        let promise = Promise<Routine>()
+    func getRitual() -> Future<Ritual> {
+        let promise = Promise<Ritual>()
 
-        if let routine = self.routine {
-            if routine.isDataAvailable {
-                promise.resolve(with: routine)
+        if let ritual = self.ritual {
+            if ritual.isDataAvailable {
+                promise.resolve(with: ritual)
             } else {
-                self.routine?.retrieveDataIfNeeded()
+                self.ritual?.retrieveDataIfNeeded()
                     .observe(with: { (result) in
                         switch result {
-                        case .success(let routine):
+                        case .success(let ritual):
                             runMain {
-                                promise.resolve(with: routine)
+                                promise.resolve(with: ritual)
                             }
                         case .failure(let error):
                             promise.reject(with: error)
                         }
                     })
-                self.routine?.fetchInBackground(block: { (object, error) in
+                self.ritual?.fetchInBackground(block: { (object, error) in
 
                 })
             }

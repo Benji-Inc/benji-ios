@@ -68,8 +68,8 @@ class ProfileDetailView: View {
         self.button.set(style: .normal(color: .lightPurple, text: "Set"))
         self.button.isHidden = false
 
-        user.routine?.fetchIfNeededInBackground(block: { (object, error) in
-            if let routine = object as? Routine, let date = routine.date {
+        user.ritual?.fetchIfNeededInBackground(block: { (object, error) in
+            if let ritual = object as? Ritual, let date = ritual.date {
                 let formatter = DateFormatter()
                 formatter.dateFormat = "h:mm a"
                 let string = formatter.string(from: date)

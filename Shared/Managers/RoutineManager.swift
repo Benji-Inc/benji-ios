@@ -31,7 +31,7 @@ class RoutineManager {
         return requestsPromise
     }
 
-    func scheduleNotification(for routine: Routine) {
+    func scheduleNotification(for routine: Ritual) {
 
         let identifier = self.messageReminderID + routine.timeDescription
 
@@ -58,7 +58,7 @@ class RoutineManager {
         }
     }
 
-    func scheduleLastChanceNotification(for routine: Routine) {
+    func scheduleLastChanceNotification(for routine: Ritual) {
 
         let identifier = self.lastChanceReminderID
 

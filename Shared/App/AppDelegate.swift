@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.initializeMainCoordinator(with: rootNavController, withOptions: launchOptions)
         #if !APPCLIP
         // Code you don't want to use in your App Clip.
-        UserDefaults.standard.set(nil, forKey: Routine.currentRoutineKey)
+        UserDefaults.standard.set(nil, forKey: Ritual.currentKey)
         #endif
         return true
     }

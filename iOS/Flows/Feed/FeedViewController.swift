@@ -34,7 +34,7 @@ class FeedViewController: ViewController {
         }
     }
     private var currentTriggerDate: Date? {
-        return UserDefaults.standard.value(forKey: Routine.currentRoutineKey) as? Date
+        return UserDefaults.standard.value(forKey: Ritual.currentKey) as? Date
     }
 
     private let shouldShowFeed: Bool = false
@@ -77,7 +77,7 @@ class FeedViewController: ViewController {
     }
 
     private func loadFeed() {
-        User.current()?.getRoutine()
+        User.current()?.getRitual()
             .observe(with: { (result) in
                 switch result {
                 case .success(let routine):
@@ -133,14 +133,14 @@ class FeedViewController: ViewController {
         })
     }
 
-    private func determineMessage(with routine: Routine) {
+    private func determineMessage(with routine: Ritual) {
         guard let triggerDate = routine.date,
             self.currentTriggerDate != triggerDate,
             let anHourAfter = triggerDate.add(component: .hour, amount: 1),
             let anHourUntil = triggerDate.subtract(component: .hour, amount: 1) else { return }
 
         //Set the current trigger date so we dont reload for duplicates
-        UserDefaults.standard.set(triggerDate, forKey: Routine.currentRoutineKey)
+        UserDefaults.standard.set(triggerDate, forKey: Ritual.currentKey)
 
         let now = Date()
         
