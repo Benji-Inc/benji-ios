@@ -8,6 +8,7 @@
 
 import Foundation
 import Parse
+import ParseLiveQuery
 
 enum QuePostionsKey: String {
     case max = "maxQuePostions"
@@ -19,6 +20,14 @@ final class QuePostions: PFObject, PFSubclassing {
 
     static func parseClassName() -> String {
         return String(describing: self)
+    }
+
+    static var subscription: Subscription<PFObject> {
+        if let query = QuePostions.query() {
+            return Client.shared.subscribe(query)
+        } else {
+            fatalError()
+        }
     }
 
     var max: Int {

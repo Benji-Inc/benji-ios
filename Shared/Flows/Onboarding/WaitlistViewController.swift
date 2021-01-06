@@ -10,6 +10,7 @@ import Foundation
 import Parse
 import TMROLocalization
 import StoreKit
+import ParseLiveQuery
 
 class WaitlistViewController: ViewController, Sizeable {
 
@@ -32,29 +33,33 @@ class WaitlistViewController: ViewController, Sizeable {
         #if APPCLIP
         if User.current()?.status == .inactive || User.current()?.status == .active {
             self.loadUpgrade()
-        } else {
-            self.loadWaitlist()
         }
         #endif
+
+        QuePostions.subscription.handle(Event.entered) { [unowned self] (query, object) in
+            if let que = object as? QuePostions {
+                self.loadWaitlist(for: que)
+            }
+        }
+
+        QuePostions.subscription.handle(Event.updated) { [unowned self] (query, object) in
+            if let que = object as? QuePostions {
+                self.loadWaitlist(for: que)
+            }
+        }
     }
 
-    private func loadWaitlist() {
-        if let position = User.current()?.quePosition {
+    private func loadWaitlist(for que: QuePostions) {
+        guard let current = User.current(), current.status != .active else { return }
+
+        if let position = current.quePosition {
             let positionString = LocalizedString(id: "", arguments: [String(position)], default: "Your positon is: @(position)")
             self.positionLabel.setText(positionString)
 
-            PFConfig.getInBackground { [weak self]( config, error) in
-                guard let `self` = self else { return }
+            let remaining = (position + que.claimed) - que.max
 
-                if let max = config?.object(forKey: "maxQuePosition") as? Int,
-                   let claimed = config?.object(forKey: "claimedPositon") as? Int {
-
-                    let remaining = (position + claimed) - max
-
-                    self.remainingLabel.setText(String(remaining))
-                    self.view.layoutNow()
-                }
-            }
+            self.remainingLabel.setText(String(remaining))
+            self.view.layoutNow()
         }
     }
 
