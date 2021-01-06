@@ -8,18 +8,18 @@
 
 import Foundation
 
-class RoutineCoordinator: PresentableCoordinator<Void> {
+class RitualCoordinator: PresentableCoordinator<Void> {
 
-    lazy var routineVC = RoutineViewController(with: self)
+    lazy var routineVC = RitualViewController(with: self)
 
     override func toPresentable() -> DismissableVC {
         return self.routineVC
     }
 }
 
-extension RoutineCoordinator: RoutineViewControllerDelegate {
+extension RitualCoordinator: RitualViewControllerDelegate {
 
-    func routineInputViewControllerNeedsAuthorization(_ controller: RoutineViewController) {
+    func ritualInputViewControllerNeedsAuthorization(_ controller: RitualViewController) {
         UserNotificationManager.shared.register(application: UIApplication.shared) { (success, error) in
             runMain {
                 if success {

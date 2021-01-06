@@ -9,17 +9,17 @@
 import Foundation
 import TMROLocalization
 
-protocol RoutineViewControllerDelegate: class {
-    func routineInputViewControllerNeedsAuthorization(_ controller: RoutineViewController)
+protocol RitualViewControllerDelegate: class {
+    func ritualInputViewControllerNeedsAuthorization(_ controller: RitualViewController)
 }
 
-class RoutineViewController: NavigationBarViewController {
+class RitualViewController: NavigationBarViewController {
 
-    let routineInputVC = RoutineInputViewController()
+    let routineInputVC = RitualInputViewController()
 
-    unowned let delegate: RoutineViewControllerDelegate
+    unowned let delegate: RitualViewControllerDelegate
 
-    init(with delegate: RoutineViewControllerDelegate) {
+    init(with delegate: RitualViewControllerDelegate) {
         self.delegate = delegate
         super.init()
     }
@@ -35,7 +35,7 @@ class RoutineViewController: NavigationBarViewController {
         self.backButton.isHidden = true
 
         self.routineInputVC.didTapNeedsAthorization = {
-            self.delegate.routineInputViewControllerNeedsAuthorization(self)
+            self.delegate.ritualInputViewControllerNeedsAuthorization(self)
         }
 
         self.routineInputVC.$state
@@ -66,7 +66,7 @@ class RoutineViewController: NavigationBarViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.routineInputVC.view.size = CGSize(width: self.view.width, height: RoutineInputViewController.height)
+        self.routineInputVC.view.size = CGSize(width: self.view.width, height: RitualInputViewController.height)
         self.routineInputVC.view.centerOnX()
         self.routineInputVC.view.bottom = self.view.height - self.view.safeAreaInsets.bottom
 

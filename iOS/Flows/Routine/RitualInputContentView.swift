@@ -8,9 +8,9 @@
 
 import Foundation
 
-class RoutineInputContentView: View {
+class RitualInputContentView: View {
 
-    let timeLabel = RoutineTimeLabel()
+    let timeLabel = RitualTimeLabel()
     let everyDayLabel = Label(font: .smallBold)
 
     let plusButton = Button()

@@ -88,7 +88,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     }
 
     private func startRoutineFlow() {
-        let coordinator = RoutineCoordinator(router: self.router, deepLink: self.deepLink)
+        let coordinator = RitualCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { (result) in }
         let source = self.homeVC.currentCenterVC ?? self.homeVC
         self.router.present(coordinator, source: source)

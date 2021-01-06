@@ -8,7 +8,7 @@
 
 import Foundation
 
-class RoutineTimeLabel: Label {
+class RitualTimeLabel: Label {
 
     init() {
         super.init(font: .displayThin)

@@ -24,10 +24,10 @@ enum RoutineInputState {
     case update
 }
 
-class RoutineInputViewController: ViewController {
+class RitualInputViewController: ViewController {
 
     static let height: CGFloat = 500
-    let content = RoutineInputContentView()
+    let content = RitualInputContentView()
 
     var selectedDate = Date()
     @Published var state: RoutineInputState = .edit

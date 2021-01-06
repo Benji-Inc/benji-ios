@@ -64,7 +64,7 @@ extension FeedCoordinator: FeedViewControllerDelegate {
     }
 
     private func startRoutineFlow() {
-        let coordinator = RoutineCoordinator(router: self.router, deepLink: self.deepLink)
+        let coordinator = RitualCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { (result) in }
         self.router.present(coordinator, source: self.feedVC)
     }

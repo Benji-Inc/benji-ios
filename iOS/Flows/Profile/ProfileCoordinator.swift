@@ -32,7 +32,7 @@ class ProfileCoordinator: Coordinator<Void> {
     }
 
     private func presentRoutine() {
-        let coordinator = RoutineCoordinator(router: self.router, deepLink: self.deepLink)
+        let coordinator = RitualCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { (resutl) in }
         self.router.present(coordinator, source: self.profileVC)
     }
