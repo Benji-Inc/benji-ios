@@ -16,3 +16,7 @@ extension Publisher where Self.Failure == Never {
     }
 }
 
+func waitForAll<V, E: Error>(_ futures: [Future<V, E>]) -> AnyPublisher<[V], E> {
+    return Publishers.MergeMany(futures).collect().eraseToAnyPublisher()
+}
+

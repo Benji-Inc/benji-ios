@@ -43,10 +43,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             future1, future2, future3
         )
 
-        combine.mainSink { (value1, value2, value3) in
-            print(value1)
-            print(value2)
-            print(value3)
+        waitForAll([future1, future2, future3]).mainSink { (values) in
+            values.forEach { (value) in
+                print(value)
+            }
         }.store(in: &self.cancellables)
 
         self.cancellable = self.homeVC.$current
@@ -85,6 +85,37 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             self.handle(deeplink: deeplink)
         }
     }
+
+//    let masterPromise = Promise<[Value]>()
+
+//    let waitQueue = queue ?? waitSyncQueue
+//
+//    let totalFutures = futures.count
+//    var resolvedFutures = 0
+//    var values: [Value] = []
+//
+//    if futures.isEmpty {
+//        masterPromise.resolve(with: values)
+//    } else {
+//        futures.forEach { promise in
+//            promise.observe(with: { (result) in
+//                waitQueue.mainSyncSafe {
+//                    switch result {
+//                    case .success(let value):
+//                        resolvedFutures += 1
+//                        values.append(value)
+//                        if resolvedFutures == totalFutures {
+//                            masterPromise.resolve(with: values)
+//                        }
+//                    case .failure(let error):
+//                        masterPromise.reject(with: error)
+//                    }
+//                }
+//            })
+//        }
+//    }
+//
+//    return masterPromise
 
     func handle(deeplink: DeepLinkable) {
         self.deepLink = deeplink
