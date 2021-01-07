@@ -11,6 +11,7 @@ import Parse
 import TMROLocalization
 import StoreKit
 import ParseLiveQuery
+import Combine
 
 class WaitlistViewController: ViewController, Sizeable {
 

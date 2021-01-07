@@ -30,15 +30,6 @@ extension TCHChannel: ManageableCellItem {
         return String(optional: self.sid) as NSObjectProtocol
     }
 
-    func joinIfNeeded() -> Future<TCHChannel> {
-        let promise = Promise<TCHChannel>(value: self)
-        return promise.joinIfNeeded().then(with: { (channel) in
-            return Promise<TCHChannel>(value: channel)
-        }).then(with: { (channel) in
-            return Promise<TCHChannel>(value: channel)
-        })
-    }
-
     func getNonMeMembers() -> Future<[TCHMember]> {
 
         let promise = Promise<[TCHMember]>()
@@ -101,69 +92,9 @@ extension TCHChannel: ManageableCellItem {
 
         return promise
     }
-
-    func invite(users: [User]) -> Future<TCHChannel> {
-        var promises: [Future<Void>] = []
-
-        users.forEach { (user) in
-            promises.append(self.invite(user: user))
-        }
-
-        return waitForAll(futures: promises)
-            .transform { (channels) -> TCHChannel in
-                return self
-        }
-    }
-
-    func invite(user: User) -> Future<Void> {
-
-        let promise = Promise<Void>()
-        let identity = String(optional: user.objectId)
-        if let members = self.members {
-            members.invite(byIdentity: identity) { (result) in
-                if let error = result.error {
-                    promise.reject(with: error)
-                } else {
-                    promise.resolve(with: ())
-                }
-            }
-        } else {
-             promise.resolve(with: ())
-        }
-
-        return promise
-    }
 }
 
 extension Future where Value == TCHChannel {
-
-    func invite(users: [User]) -> Future<TCHChannel> {
-        return self.then { (channel) -> Future<TCHChannel> in
-            return channel.invite(users: users)
-        }
-    }
-
-    func joinIfNeeded() -> Future<TCHChannel> {
-
-        return self.then(with: { (channel) in
-
-            // There's no need to join the channel if the current user is already a member
-            guard let id = PFUser.current()?.objectId, channel.member(withIdentity: id) == nil else {
-                return Promise<TCHChannel>(value: channel)
-            }
-
-            let promise = Promise<TCHChannel>()
-            channel.join(completion: { (result) in
-                if let error = result.error {
-                    promise.reject(with: error)
-                } else {
-                     promise.resolve(with: channel)
-                }
-            })
-
-            return promise
-        })
-    }
 
     func getAuthorAsUser() -> Future<User> {
         return self.then(with: { (channel) in

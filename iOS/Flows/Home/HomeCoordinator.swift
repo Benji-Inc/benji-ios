@@ -15,12 +15,39 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     private lazy var homeVC = HomeViewController()
     private var cancellable: AnyCancellable?
 
+    var cancellables = Set<AnyCancellable>()
+
+
     override func toPresentable() -> DismissableVC {
         return self.homeVC
     }
 
     override func start() {
         super.start()
+
+        let future1 = Future<Int, Never> { promise in
+            promise(.success(1))
+        }
+
+        let future2 = Future<Int, Never> { promise in
+            promise(.success(2))
+        }
+
+        let future3 = Future<Int, Never> { promise in
+            delay(2.0) { [unowned self] in
+                promise(.success(3))
+            }
+        }
+
+        let combine = Publishers.Zip3 (
+            future1, future2, future3
+        )
+
+        combine.mainSink { (value1, value2, value3) in
+            print(value1)
+            print(value2)
+            print(value3)
+        }.store(in: &self.cancellables)
 
         self.cancellable = self.homeVC.$current
             .removeDuplicates()
