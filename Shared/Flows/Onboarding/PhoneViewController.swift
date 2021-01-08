@@ -85,15 +85,16 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
                  region: region,
                  installationId: installationId)
             .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .observe(with: { (result) in
-                tf?.animationView.stop()
-                switch result {
-                case .success:
-                    self.complete(with: .success(phone))
-                case .failure(let error):
-                    self.complete(with: .failure(error))
-                }
-            })
+            .mainSink(receiveValue: { (value) in },
+                      receiveCompletion: { (result) in
+                        tf?.animationView.stop()
+                        switch result {
+                        case .finished:
+                            self.complete(with: .success(phone))
+                        case .failure(let error):
+                            self.complete(with: .failure(error))
+                        }
+                      }).store(in: &self.cancellables)
     }
 }
 

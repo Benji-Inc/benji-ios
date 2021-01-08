@@ -12,7 +12,15 @@ import Combine
 extension Publisher where Self.Failure == Never {
     func mainSink(receiveValue: @escaping ((Self.Output) -> Void)) -> AnyCancellable {
         return self.receive(on: DispatchQueue.main)
-                    .sink(receiveValue: receiveValue)
+            .sink(receiveValue: receiveValue)
+    }
+}
+
+extension Publisher where Self.Failure == Error {
+    func mainSink(receiveValue: @escaping ((Self.Output) -> Void),
+                  receiveCompletion: @escaping ((Subscribers.Completion<Error>) -> Void)) -> AnyCancellable {
+        return self.receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: receiveCompletion, receiveValue: receiveValue)
     }
 }
 

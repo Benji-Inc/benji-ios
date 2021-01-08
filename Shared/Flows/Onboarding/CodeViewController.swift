@@ -10,7 +10,7 @@ import Foundation
 import PhoneNumberKit
 import Parse
 import TMROLocalization
-import TMROFutures
+import Combine
 
 class CodeViewController: TextInputViewController<Void> {
 
@@ -48,7 +48,7 @@ class CodeViewController: TextInputViewController<Void> {
                    installationId: installationId,
                    reservationId: String(optional: self.reservationId))
             .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .observeValue { (result) in
+            .mainSink(receiveValue: { (result) in
                 switch result {
                 case .success(let token):
                     self.becomeUser(with: token)
@@ -58,7 +58,7 @@ class CodeViewController: TextInputViewController<Void> {
 
                 tf?.animationView.stop()
                 self.textField.resignFirstResponder()
-        }
+            }, receiveCompletion: { (_) in }).store(in: &self.cancellables)
     }
 
     private func becomeUser(with token: String) {

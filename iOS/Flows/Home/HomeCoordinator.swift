@@ -25,30 +25,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
-        let future1 = Future<Int, Never> { promise in
-            promise(.success(1))
-        }
-
-        let future2 = Future<Int, Never> { promise in
-            promise(.success(2))
-        }
-
-        let future3 = Future<Int, Never> { promise in
-            delay(2.0) { [unowned self] in
-                promise(.success(3))
-            }
-        }
-
-        let combine = Publishers.Zip3 (
-            future1, future2, future3
-        )
-
-        waitForAll([future1, future2, future3]).mainSink { (values) in
-            values.forEach { (value) in
-                print(value)
-            }
-        }.store(in: &self.cancellables)
-
         self.cancellable = self.homeVC.$current
             .removeDuplicates()
             .mainSink { [weak self] (current) in
@@ -85,37 +61,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             self.handle(deeplink: deeplink)
         }
     }
-
-//    let masterPromise = Promise<[Value]>()
-
-//    let waitQueue = queue ?? waitSyncQueue
-//
-//    let totalFutures = futures.count
-//    var resolvedFutures = 0
-//    var values: [Value] = []
-//
-//    if futures.isEmpty {
-//        masterPromise.resolve(with: values)
-//    } else {
-//        futures.forEach { promise in
-//            promise.observe(with: { (result) in
-//                waitQueue.mainSyncSafe {
-//                    switch result {
-//                    case .success(let value):
-//                        resolvedFutures += 1
-//                        values.append(value)
-//                        if resolvedFutures == totalFutures {
-//                            masterPromise.resolve(with: values)
-//                        }
-//                    case .failure(let error):
-//                        masterPromise.reject(with: error)
-//                    }
-//                }
-//            })
-//        }
-//    }
-//
-//    return masterPromise
 
     func handle(deeplink: DeepLinkable) {
         self.deepLink = deeplink

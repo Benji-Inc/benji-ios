@@ -8,7 +8,7 @@
 
 import Foundation
 import Parse
-import TMROFutures
+import Combine
 import LinkPresentation
 
 enum ReservationKey: String {
@@ -36,45 +36,43 @@ final class Reservation: PFObject, PFSubclassing {
         return self.getObject(for: .createdBy)
     }
 
-    static func getReservations(for user: User) -> Future<[Reservation]> {
-        let promise = Promise<[Reservation]>()
-        if let query = Reservation.query() {
-            query.whereKey(ReservationKey.createdBy.rawValue, equalTo: user)
-            query.findObjectsInBackground { (objects, error) in
-                if let reservations = objects as? [Reservation] {
-                    promise.resolve(with: reservations)
-                } else if let e = error {
-                    promise.reject(with: e)
-                } else {
-                    promise.reject(with: ClientError.generic)
+    static func getReservations(for user: User) -> Future<[Reservation], Error> {
+        return Future { promise in
+            if let query = Reservation.query() {
+                query.whereKey(ReservationKey.createdBy.rawValue, equalTo: user)
+                query.findObjectsInBackground { (objects, error) in
+                    if let reservations = objects as? [Reservation] {
+                        promise(.success(reservations))
+                    } else if let e = error {
+                        promise(.failure(e))
+                    } else {
+                        promise(.failure(ClientError.generic))
+                    }
                 }
+            } else {
+                promise(.failure(ClientError.generic))
             }
-        } else {
-            promise.reject(with: ClientError.generic)
         }
-        
-        return promise
     }
 
-    static func getFirstUnclaimed(for user: User) -> Future<Reservation> {
-        let promise = Promise<Reservation>()
-        if let query = Reservation.query() {
-            query.whereKey(ReservationKey.createdBy.rawValue, equalTo: user)
-            query.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
-            query.findObjectsInBackground { (objects, error) in
-                if let reservations = objects as? [Reservation], let first = reservations.first {
-                    promise.resolve(with: first)
-                } else if let e = error {
-                    promise.reject(with: e)
-                } else {
-                    promise.reject(with: ClientError.generic)
+    static func getFirstUnclaimed(for user: User) -> Future<Reservation, Error> {
+        return Future { promise in
+            if let query = Reservation.query() {
+                query.whereKey(ReservationKey.createdBy.rawValue, equalTo: user)
+                query.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
+                query.findObjectsInBackground { (objects, error) in
+                    if let reservations = objects as? [Reservation], let first = reservations.first {
+                        promise(.success(first))
+                    } else if let e = error {
+                        promise(.failure(e))
+                    } else {
+                        promise(.failure(ClientError.generic))
+                    }
                 }
+            } else {
+                promise(.failure(ClientError.generic))
             }
-        } else {
-            promise.reject(with: ClientError.generic)
         }
-
-        return promise
     }
 }
 
@@ -122,35 +120,34 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
         return "Claim your RSVP by tapping 👇\n\(link)"
     }
 
-    func prepareMetaData(andUpdate statusables: [Statusable]) -> Future<Void> {
-        let promise = Promise<Void>()
-        let metadataProvider = LPMetadataProvider()
+    func prepareMetaData(andUpdate statusables: [Statusable]) -> Future<Void, Error> {
+        return Future { promise in
+            let metadataProvider = LPMetadataProvider()
 
-        // Trigger the loading event for all statusables
-        for statusable in statusables {
-            statusable.handleEvent(status: .loading)
-        }
+            // Trigger the loading event for all statusables
+            for statusable in statusables {
+                statusable.handleEvent(status: .loading)
+            }
 
-        let domainURL = "https://ourown.chat"
-        if let objectId = self.objectId {
-            self.link = domainURL + "/reservation?reservationId=\(objectId)"
-        }
-        if let url = URL(string: domainURL) {
-            metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
-                runMain {
-                    if let e = error {
-                        self.handleFailed(statusables: statusables, error: e, promise: promise)
-                    } else {
-                        self.metadata = metadata
-                        self.handleValue(statusables: statusables, value: (), promise: promise)
+            let domainURL = "https://ourown.chat"
+            if let objectId = self.objectId {
+                self.link = domainURL + "/reservation?reservationId=\(objectId)"
+            }
+            if let url = URL(string: domainURL) {
+                metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
+                    runMain {
+                        if let e = error {
+                            //self.handleFailed(statusables: statusables, error: e, promise: promise)
+                        } else {
+                            self.metadata = metadata
+                            //self.handleValue(statusables: statusables, value: (), promise: promise)
+                        }
                     }
                 }
+            } else {
+                promise(.failure(ClientError.generic))
             }
-        } else {
-            promise.reject(with: ClientError.generic)
         }
-
-        return promise
     }
 
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {

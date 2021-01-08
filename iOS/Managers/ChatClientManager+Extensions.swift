@@ -8,7 +8,6 @@
 
 import Foundation
 import TwilioChatClient
-import TMROFutures
 
 typealias CompletionHandler = (_ success: Bool, _ error: Error?) -> Void
 typealias ClientCompletion = (_ client: TwilioChatClient, _ error: Error?) -> Void
@@ -73,48 +72,6 @@ struct ChannelMemberUpdate {
 
 extension ChatClientManager: TwilioChatClientDelegate {
 
-    @discardableResult
-    func initialize(token: String) -> Future<Void> {
-        // Initialize the ChannelSupplier so it can listen to the client updates.
-        _ = ChannelSupplier.shared
-        let promise = Promise<Void>()
-        TwilioChatClient.chatClient(withToken: token,
-                                    properties: nil,
-                                    delegate: self,
-                                    completion: { (result, client) in
-
-                                        if let error = result.error {
-                                            promise.reject(with: error)
-                                        } else if let strongClient = client {
-                                            self.client = strongClient
-                                            //TwilioChatClient.setLogLevel(.debug)
-                                            promise.resolve(with: ())
-                                        } else {
-                                            promise.reject(with: ClientError.message(detail: "Failed to initialize chat client."))
-                                        }
-        })
-
-        return promise
-    }
-
-    @discardableResult
-    func update(token: String) -> Future<Void> {
-        let promise = Promise<Void>()
-        if let client = self.client {
-            client.updateToken(token, completion: { (result) in
-                if result.isSuccessful() {
-                    promise.resolve(with: ())
-                } else if let e = result.error {
-                    promise.reject(with: e)
-                } else {
-                    promise.reject(with: ClientError.message(detail: "Failed to update chat token."))
-                }
-            })
-        }
-
-        return promise
-    }
-
     //MARK: CLIENT UDPATES
 
     func chatClientTokenExpired(_ client: TwilioChatClient) {
@@ -128,9 +85,9 @@ extension ChatClientManager: TwilioChatClientDelegate {
     private func getNewChatTokent() {
         GetChatToken()
             .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .observeValue { (token) in
+            .mainSink(receiveValue: { [unowned self] (token) in
                 self.update(token: token)
-        }
+            }) { (_) in }.store(in: &self.cancellables)
     }
 
     func chatClient(_ client: TwilioChatClient, synchronizationStatusUpdated status: TCHClientSynchronizationStatus) {

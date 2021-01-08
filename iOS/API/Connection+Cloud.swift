@@ -8,23 +8,23 @@
 
 import Foundation
 import Parse
-import TMROFutures
 import PhoneNumberKit
+import Combine
 
 struct UpdateConnection: CloudFunction {
-    typealias ReturnType = Void
+    typealias ReturnType = Any
 
     var connection: Connection
     var status: Connection.Status
 
-    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> Future<Void> {
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
         let params = ["connectionId": self.connection.objectId!,
                       "status": self.status.rawValue]
 
         return self.makeRequest(andUpdate: statusables,
                                 params: params,
                                 callName: "updateConnection",
-                                viewsToIgnore: viewsToIgnore).asVoid()
+                                viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
     }
 }
 
@@ -39,69 +39,38 @@ struct GetAllConnections: CloudFunction {
 
     var direction: Direction = .all
 
-    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> Future<[Connection]> {
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<[Connection], Error> {
 
-        let promise = Promise<ReturnType>()
+        return self.makeRequest(andUpdate: statusables,
+                                params: [:],
+                                callName: "getConnections",
+                                viewsToIgnore: viewsToIgnore).map { (value) -> [Connection] in
+                                    if let dict = value as? [String: [Connection]] {
+                                        var all: [Connection] = []
 
-        // Trigger the loading event for all statusables
-        for statusable in statusables {
-            statusable.handleEvent(status: .loading)
-        }
+                                        switch self.direction {
+                                        case .incoming:
+                                            if let incoming = dict["incoming"] {
+                                                all = incoming
+                                            }
+                                        case .outgoing:
+                                            if let outgoing = dict["outgoing"] {
+                                                all = outgoing
+                                            }
+                                        case .all:
+                                            if let incoming = dict["incoming"] {
+                                                all.append(contentsOf: incoming)
+                                            }
+                                            if let outgoing = dict["outgoing"] {
+                                                all.append(contentsOf: outgoing)
+                                            }
+                                        }
 
-        // Reference the statusables weakly in case they are deallocated before the signal finishes.
-        let weakStatusables: [WeakAnyStatusable] = statusables.map { (statusable)  in
-            return WeakAnyStatusable(statusable)
-        }
-
-        PFCloud.callFunction(inBackground: "getConnections",
-                             withParameters: nil) { (object, error) in
-
-            if let error = error {
-                SessionManager.shared.handleParse(error: error)
-                weakStatusables.forEach { (statusable) in
-                    statusable.value?.handleEvent(status: .error(error.localizedDescription))
-                }
-                promise.reject(with: error)
-            } else if let dict = object as? [String: [Connection]] {
-                weakStatusables.forEach { (statusable) in
-                    statusable.value?.handleEvent(status: .saved)
-                }
-                // A saved status is temporary so we set it to complete after a short delay
-                delay(2.0) {
-                    weakStatusables.forEach { (statusable) in
-                        statusable.value?.handleEvent(status: .complete)
-                    }
-
-                    var all: [Connection] = []
-
-                    switch self.direction {
-                    case .incoming:
-                        if let incoming = dict["incoming"] {
-                            all = incoming
-                        }
-                    case .outgoing:
-                        if let outgoing = dict["outgoing"] {
-                            all = outgoing
-                        }
-                    case .all:
-                        if let incoming = dict["incoming"] {
-                            all.append(contentsOf: incoming)
-                        }
-                        if let outgoing = dict["outgoing"] {
-                            all.append(contentsOf: outgoing)
-                        }
-                    }
-                    promise.resolve(with: all)
-                }
-            } else {
-                weakStatusables.forEach { (statusable) in
-                    statusable.value?.handleEvent(status: .error("Request failed"))
-                }
-                promise.reject(with: ClientError.apiError(detail: "Request failed"))
-            }
-        }
-
-        return promise.ignoreUserInteractionEventsUntilDone(for: viewsToIgnore)
+                                        return all
+                                    } else {
+                                        return []
+                                    }
+                                }.eraseToAnyPublisher()
     }
 }
 

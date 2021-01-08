@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import TMROFutures
+import Combine
 
 class MainCoordinator: Coordinator<Void> {
 
@@ -17,6 +17,7 @@ class MainCoordinator: Coordinator<Void> {
     var isInitializingChat: Bool = false
 
     lazy var splashVC = SplashViewController()
+    private var cancellables = Set<AnyCancellable>()
 
     override func start() {
         super.start()
@@ -71,7 +72,7 @@ class MainCoordinator: Coordinator<Void> {
 
         self.isInitializingChat = true
         ChatClientManager.shared.initialize(token: token)
-            .observeValue(with: { (_) in
+            .mainSink(receiveValue: { (result) in }, receiveCompletion: { (_) in
                 self.isInitializingChat = false
                 guard let user = User.current(), user.isOnboarded else { return }
                 if let user = User.current(), user.isOnboarded {
@@ -83,7 +84,7 @@ class MainCoordinator: Coordinator<Void> {
                 } else {
                     self.runOnboardingFlow()
                 }
-            })
+            }).store(in: &self.cancellables)
     }
 
     private func runHomeFlow() {
@@ -102,9 +103,9 @@ class MainCoordinator: Coordinator<Void> {
         } else {
             GetChatToken()
                 .makeRequest(andUpdate: [], viewsToIgnore: [])
-                .observeValue { (token) in
+                .mainSink(receiveValue: { (token) in
                     self.initializeChat(with: token)
-                }
+                }, receiveCompletion: { (_) in }).store(in: &self.cancellables)
         }
     }
     #endif

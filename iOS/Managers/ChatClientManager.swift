@@ -36,4 +36,47 @@ class ChatClientManager: NSObject {
         guard let client = self.client else { return false }
         return client.connectionState == .connected
     }
+
+    var cancellables = Set<AnyCancellable>()
+
+    @discardableResult
+    func initialize(token: String) -> Future<Void, Error> {
+        return Future { [weak self] promise in
+            guard let `self` = self else { return }
+            // Initialize the ChannelSupplier so it can listen to the client updates.
+            _ = ChannelSupplier.shared
+            TwilioChatClient.chatClient(withToken: token,
+                                        properties: nil,
+                                        delegate: self,
+                                        completion: { (result, client) in
+
+                                            if let error = result.error {
+                                                promise(.failure(error))
+                                            } else if let strongClient = client {
+                                                self.client = strongClient
+                                                //TwilioChatClient.setLogLevel(.debug)
+                                                promise(.success(()))
+                                            } else {
+                                                promise(.failure(ClientError.message(detail: "Failed to initialize chat client.")))
+                                            }
+            })
+        }
+    }
+
+    @discardableResult
+    func update(token: String) -> Future<Void, Error> {
+        return Future { promise in
+            if let client = self.client {
+                client.updateToken(token, completion: { (result) in
+                    if result.isSuccessful() {
+                        promise(.success(()))
+                    } else if let e = result.error {
+                        promise(.failure(e))
+                    } else {
+                        promise(.failure(ClientError.message(detail: "Failed to update chat token.")))
+                    }
+                })
+            }
+        }
+    }
 }

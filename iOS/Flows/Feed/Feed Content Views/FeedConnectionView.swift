@@ -8,6 +8,7 @@
 
 import Foundation
 import TMROLocalization
+import Combine
 
 class FeedConnectionView: View {
 
@@ -16,6 +17,8 @@ class FeedConnectionView: View {
     private let acceptButton = Button()
     private let declineButton = Button()
     var didComplete: () -> Void = {}
+
+    var cancellables = Set<AnyCancellable>()
 
     private var connection: Connection?
 
@@ -79,9 +82,9 @@ class FeedConnectionView: View {
 
         UpdateConnection(connection: connection, status: status)
             .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .ignoreUserInteractionEventsUntilDone(for: [self])
-            .observeValue { (_) in
-                self.didComplete()
-        }
+            .mainSink(receiveValue: { (_) in },
+                      receiveCompletion: { (_) in
+                        self.didComplete()
+                      }).store(in: &self.cancellables)
     }
 }

@@ -31,15 +31,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #if !APPCLIP
         guard !ChatClientManager.shared.isConnected, let _ = User.current()?.objectId else { return }
 
-        GetChatToken()
-            .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .observeValue { (token) in
-                if ChatClientManager.shared.client.isNil {
-                    ChatClientManager.shared.initialize(token: token)
-                } else {
-                    ChatClientManager.shared.update(token: token)
-                }
-        }
+//        GetChatToken()
+//            .makeRequest(andUpdate: [], viewsToIgnore: [])
+//        
+//            .mainsi
+//            .observeValue { (token) in
+//                if ChatClientManager.shared.client.isNil {
+//                    ChatClientManager.shared.initialize(token: token)
+//                } else {
+//                    ChatClientManager.shared.update(token: token)
+//                }
+//        }
         #endif
     }
 

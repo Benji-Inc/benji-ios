@@ -8,7 +8,7 @@
 
 import Foundation
 import Parse
-import TMROFutures
+import Combine
 
 enum LaunchActivity {
     case onboarding(phoneNumber: String)
@@ -26,22 +26,21 @@ protocol LaunchManagerDelegate: class {
 }
 
 class LaunchManager {
-
+    
     static let shared = LaunchManager()
-
+    
     private(set) var finishedInitialFetch = false
-
+    
     weak var delegate: LaunchManagerDelegate?
 
-    /// False if a branch session has already been started.
-    private var shouldInitializeBranchSession = true
-
+    private var cancellables = Set<AnyCancellable>()
+    
     func launchApp(with options: [UIApplication.LaunchOptionsKey: Any]?) {
-
+        
         if !Parse.isLocalDatastoreEnabled {
             Parse.enableLocalDatastore()
         }
-
+        
         if Parse.currentConfiguration == nil  {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
                 configuration.isLocalDatastoreEnabled = true
@@ -50,15 +49,15 @@ class LaunchManager {
                 configuration.applicationId = Config.shared.environment.appID
             }))
         }
-
+        
         if let user = User.current(), user.isAuthenticated {
             // Make sure we set this up each launch
             UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
         }
-
+        
         self.initializeUserData(with: nil)
     }
-
+    
     private func initializeUserData(with deeplink: DeepLinkable?) {
         if let _ = User.current()?.objectId {
             #if !APPCLIP
@@ -70,7 +69,7 @@ class LaunchManager {
             self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: String()))
         }
     }
-
+    
     #if !APPCLIP
     // Code you don't want to use in your App Clip.
     func getChatToken(with deeplink: DeepLinkable?) {
@@ -79,19 +78,21 @@ class LaunchManager {
         } else {
             GetChatToken()
                 .makeRequest(andUpdate: [], viewsToIgnore: [])
-                .observe { (result) in
+                .mainSink(receiveValue: { (token) in
+                    self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: token))
+                }, receiveCompletion: { (result) in
+                    self.finishedInitialFetch = true
                     switch result {
-                    case .success(let token):
-                        self.finishedInitialFetch = true
-                        self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: token))
+                    case .finished:
+                        break 
                     case .failure(_):
                         self.delegate?.launchManager(self, didFinishWith: .failed(error: ClientError.generic))
                     }
-            }
+                }).store(in: &self.cancellables)
         }
     }
     #endif
-
+    
     func continueUser(activity: NSUserActivity) -> Bool {
         if activity.activityType == NSUserActivityTypeBrowsingWeb,
            let incomingURL = activity.webpageURL,

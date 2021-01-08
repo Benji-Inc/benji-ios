@@ -8,17 +8,17 @@
 
 import Foundation
 import Parse
-import TMROFutures
+import Combine
 
 struct GetChatToken: CloudFunction {
     typealias ReturnType = String
 
-    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> Future<ReturnType> {
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<String, Error> {
         return self.makeRequest(andUpdate: statusables,
                                 params: [:],
                                 callName: "getChatToken",
-                                viewsToIgnore: viewsToIgnore).transform { (value) -> String in
+                                viewsToIgnore: viewsToIgnore).map({ (value) -> String in
                                     return value as? String ?? String()
-                                }
+                                }).eraseToAnyPublisher()
     }
 }

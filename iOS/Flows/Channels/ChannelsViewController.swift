@@ -65,7 +65,7 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
         guard let user = User.current() else { return }
 
         Reservation.getReservations(for: user)
-            .observeValue { [weak self] (reservations) in
+            .mainSink { [weak self] (reservations) in
                 guard let `self` = self else { return }
 
                 self.reservation = reservations.first(where: { (reservation) -> Bool in
@@ -74,7 +74,7 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
 
                 self.reservationButton.isHidden = self.reservation.isNil
                 self.updateButton(with: reservations)
-        }
+            } receiveCompletion: { (_) in }.store(in: &self.cancellables)
 
         self.reservationButton.didSelect { [unowned self] in
             if let reservation = self.reservation {
@@ -85,9 +85,9 @@ class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsColl
 
     private func didSelect(reservation: Reservation) {
         reservation.prepareMetaData(andUpdate: [self.reservationButton])
-            .observeValue { (_) in
+            .mainSink(receiveValue: { (_) in
                 self.delegate?.channelsView(self, didSelect: reservation)
-        }
+            }, receiveCompletion: { (_) in }).store(in: &self.cancellables)
     }
 
     private func updateButton(with reservations: [Reservation]) {

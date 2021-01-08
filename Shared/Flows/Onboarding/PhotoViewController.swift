@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import TMROFutures
 import TMROLocalization
 import Lottie
 import UIKit
@@ -317,14 +316,15 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             .observe { (result) in
                 ActivateUser()
                     .makeRequest(andUpdate: [], viewsToIgnore: [self.view])
-                    .observeValue { [unowned self] (_) in
-                        switch result {
-                        case .success(_):
-                            self.currentState = .finish
-                        case .failure(_):
-                            self.currentState = .error
-                        }
-                    }
+                    .mainSink(receiveValue: { (_) in },
+                              receiveCompletion: { [unowned self] (result) in
+                                switch result {
+                                case .finished:
+                                    self.currentState = .finish
+                                case .failure(_):
+                                    self.currentState = .error
+                                }
+                              }).store(in: &self.cancellables)
         }
     }
 }
