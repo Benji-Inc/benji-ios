@@ -9,6 +9,7 @@
 import Foundation
 import Lottie
 import TMROLocalization
+import Combine
 
 protocol MessageInputAccessoryViewDelegate: AttachmentViewControllerDelegate {
     func messageInputAccessory(_ view: MessageInputAccessoryView,
@@ -50,8 +51,8 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     lazy var expandingTextView = MessageInputTextView(with: self.delegate)
     let alertProgressView = AlertProgressView()
     let animationView = AnimationView(name: "loading")
-    //lazy var alertConfirmation = AlertConfirmationView()
     let overlayButton = UIButton()
+    var cancellables = Set<AnyCancellable>()
 
     private(set)var inputLeadingContstaint: NSLayoutConstraint?
 

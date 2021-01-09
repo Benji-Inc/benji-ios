@@ -9,7 +9,6 @@
 import Foundation
 import Parse
 import TwilioChatClient
-import TMROFutures
 import Combine
 
 typealias ChannelViewControllerDelegates = ChannelDetailViewControllerDelegate & ChannelViewControllerDelegate

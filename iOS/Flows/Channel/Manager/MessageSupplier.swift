@@ -8,7 +8,7 @@
 
 import Foundation
 import TwilioChatClient
-import TMROFutures
+import Combine
 
 class MessageSupplier {
 
@@ -40,65 +40,60 @@ class MessageSupplier {
     //MARK: GET MESSAGES
 
     @discardableResult
-    func getLastMessages(batchAmount: UInt = 20) -> Future<[ChannelSectionable]> {
-        let promise = Promise<[ChannelSectionable]>()
+    func getLastMessages(batchAmount: UInt = 20) -> Future<[ChannelSectionable], Error> {
+        return Future { promise in
+            var tchChannel: TCHChannel?
 
-        var tchChannel: TCHChannel?
-
-        if let activeChannel = ChannelSupplier.shared.activeChannel {
-            switch activeChannel.channelType {
-            case .system(_):
-                break
-            case .pending(_):
-                break 
-            case .channel(let channel):
-                tchChannel = channel
-            }
-        }
-
-        if let channel = tchChannel, let messagesObject = channel.messages {
-            self.messagesObject = messagesObject
-            messagesObject.getLastWithCount(batchAmount) { (result, messages) in
-                if let msgs = messages {
-                    self.allMessages = msgs
-                    let sections = self.mapMessagesToSections(for: msgs, in: .channel(channel))
-                    self.sections = sections
-                    promise.resolve(with: sections)
-                } else {
-                    promise.reject(with: ClientError.message(detail: "Failed to retrieve last messages."))
+            if let activeChannel = ChannelSupplier.shared.activeChannel {
+                switch activeChannel.channelType {
+                case .system(_):
+                    break
+                case .pending(_):
+                    break
+                case .channel(let channel):
+                    tchChannel = channel
                 }
-                self.didGetLastSections?(self.sections)
             }
-        } else {
-            promise.reject(with: ClientError.message(detail: "Failed to retrieve last messages."))
-        }
 
-        return promise
+            if let channel = tchChannel, let messagesObject = channel.messages {
+                self.messagesObject = messagesObject
+                messagesObject.getLastWithCount(batchAmount) { (result, messages) in
+                    if let msgs = messages {
+                        self.allMessages = msgs
+                        let sections = self.mapMessagesToSections(for: msgs, in: .channel(channel))
+                        self.sections = sections
+                        promise(.success(sections))
+                    } else {
+                        promise(.failure(ClientError.message(detail: "Failed to retrieve last messages.")))
+                    }
+                    self.didGetLastSections?(self.sections)
+                }
+            } else {
+                promise(.failure(ClientError.message(detail: "Failed to retrieve last messages.")))
+            }
+        }
     }
 
     func getMessages(before index: UInt,
                      batchAmount: UInt = 20,
-                     for channel: TCHChannel) -> Future<[ChannelSectionable]> {
-
-        let promise = Promise<[ChannelSectionable]>()
-
-        if let messagesObject = channel.messages {
-            self.messagesObject = messagesObject
-            messagesObject.getBefore(index, withCount: batchAmount) { (result, messages) in
-                if let msgs = messages {
-                    self.allMessages.insert(contentsOf: msgs, at: 0)
-                    let sections = self.mapMessagesToSections(for: self.allMessages, in: .channel(channel))
-                    self.sections = sections
-                    promise.resolve(with: sections)
-                } else {
-                    promise.reject(with: ClientError.message(detail: "Failed to retrieve messages."))
+                     for channel: TCHChannel) -> Future<[ChannelSectionable], Error> {
+        return Future { promise in
+            if let messagesObject = channel.messages {
+                self.messagesObject = messagesObject
+                messagesObject.getBefore(index, withCount: batchAmount) { (result, messages) in
+                    if let msgs = messages {
+                        self.allMessages.insert(contentsOf: msgs, at: 0)
+                        let sections = self.mapMessagesToSections(for: self.allMessages, in: .channel(channel))
+                        self.sections = sections
+                        promise(.success(sections))
+                    } else {
+                        promise(.failure(ClientError.message(detail: "Failed to retrieve messages.")))
+                    }
                 }
+            } else {
+                promise(.failure(ClientError.message(detail: "Failed to retrieve messages.")))
             }
-        } else {
-            promise.reject(with: ClientError.message(detail: "Failed to retrieve messages."))
         }
-
-        return promise
     }
 
     func mapMessagesToSections(for messages: [Messageable], in channelable: ChannelType) -> [ChannelSectionable] {

@@ -8,7 +8,7 @@
 
 import Foundation
 import Parse
-import TMROFutures
+import Combine
 
 extension User: Avatar {
 
@@ -40,33 +40,30 @@ extension User: Avatar {
 // Code you don't want to use in your App Clip.
 extension User {
 
-    func getRitual() -> Future<Ritual> {
-        let promise = Promise<Ritual>()
+    func getRitual() -> Future<Ritual, Error> {
+        return Future { promise in
+            if let ritual = self.ritual {
+                if ritual.isDataAvailable {
+                    promise(.success(ritual))
+                } else {
+                    self.ritual?.retrieveDataIfNeeded()
+                        .mainSink(receiveResult: { (ritual, error) in
+                            if let r = ritual {
+                                r.fetchInBackground(block: { (object, error) in
 
-        if let ritual = self.ritual {
-            if ritual.isDataAvailable {
-                promise.resolve(with: ritual)
-            } else {
-                self.ritual?.retrieveDataIfNeeded()
-                    .observe(with: { (result) in
-                        switch result {
-                        case .success(let ritual):
-                            runMain {
-                                promise.resolve(with: ritual)
+                                })
+                                promise(.success(r))
+                            } else if let e = error {
+                                promise(.failure(e))
+                            } else {
+                                promise(.failure(ClientError.generic))
                             }
-                        case .failure(let error):
-                            promise.reject(with: error)
-                        }
-                    })
-                self.ritual?.fetchInBackground(block: { (object, error) in
-
-                })
+                        })
+                }
+            } else {
+                promise(.failure(ClientError.message(detail: "Failed to retrieve ritual.")))
             }
-        } else {
-            promise.reject(with: ClientError.message(detail: "Failed to retrieve your routine."))
         }
-
-        return promise
     }
 }
 

@@ -9,6 +9,7 @@
 import Foundation
 import TwilioChatClient
 import TMROLocalization
+import Combine
 
 class FeedUnreadView: View {
 
@@ -16,6 +17,7 @@ class FeedUnreadView: View {
     let avatarView = AvatarView()
     let button = Button()
     var didSelect: () -> Void = {}
+    private var cancellables = Set<AnyCancellable>()
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -32,13 +34,12 @@ class FeedUnreadView: View {
 
     func configure(with channel: TCHChannel, count: Int) {
         channel.getAuthorAsUser()
-            .observeValue(with: { (user) in
-                runMain {
-                    self.avatarView.set(avatar: user)
-                    self.textView.set(localizedText: "You have \(String(count)) unread messages in \(String(optional: channel.friendlyName))")
-                    self.layoutNow()
-                }
-            })
+            .mainSink(receiveResult: { (user, error) in
+                guard let u = user else { return }
+                self.avatarView.set(avatar: u)
+                self.textView.set(localizedText: "You have \(String(count)) unread messages in \(String(optional: channel.friendlyName))")
+                self.layoutNow()
+            }).store(in: &self.cancellables)
     }
 
     override func layoutSubviews() {

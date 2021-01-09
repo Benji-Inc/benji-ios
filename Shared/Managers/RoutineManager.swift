@@ -8,7 +8,7 @@
 
 import Foundation
 import UserNotifications
-import TMROFutures
+import Combine
 
 class RoutineManager {
 
@@ -16,19 +16,18 @@ class RoutineManager {
     let lastChanceReminderID = "LastChanceReminderID"
 
     static let shared = RoutineManager()
+    private var cancellables = Set<AnyCancellable>()
 
-    func getRoutineNotifications() -> Future<[UNNotificationRequest]> {
-        let requestsPromise = Promise<[UNNotificationRequest]>()
-
-        let notificationCenter = UNUserNotificationCenter.current()
-        notificationCenter.getPendingNotificationRequests { (requests) in
-            let routineRequests = requests.filter { (request) -> Bool in
-                return request.identifier.contains(self.messageReminderID)
+    func getRoutineNotifications() -> Future<[UNNotificationRequest], Never> {
+        return Future { promise in
+            let notificationCenter = UNUserNotificationCenter.current()
+            notificationCenter.getPendingNotificationRequests { (requests) in
+                let routineRequests = requests.filter { (request) -> Bool in
+                    return request.identifier.contains(self.messageReminderID)
+                }
+                promise(.success(routineRequests))
             }
-            requestsPromise.resolve(with: routineRequests)
         }
-
-        return requestsPromise
     }
 
     func scheduleNotification(for routine: Ritual) {
@@ -53,9 +52,9 @@ class RoutineManager {
                                             trigger: trigger)
 
         UserNotificationManager.shared.schedule(note: request)
-            .observeValue { (_) in
+            .mainSink(receiveValue: { (_) in
                 self.scheduleLastChanceNotification(for: routine)
-        }
+            }).store(in: &self.cancellables)
     }
 
     func scheduleLastChanceNotification(for routine: Ritual) {
@@ -90,6 +89,6 @@ class RoutineManager {
                                             trigger: trigger)
 
         UserNotificationManager.shared.schedule(note: request)
-            .observeValue { (_) in }
+            .mainSink(receiveValue: { (_) in }).store(in: &self.cancellables)
     }
 }

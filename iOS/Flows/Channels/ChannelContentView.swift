@@ -9,6 +9,7 @@
 import Foundation
 import TMROLocalization
 import TwilioChatClient
+import Combine
 
 class ChannelContentView: View {
 
@@ -21,6 +22,7 @@ class ChannelContentView: View {
     private let stackedAvatarView = StackedAvatarView()
     private let descriptionLabel = Label(font: .small, textColor: .background4)
     private let dateLabel = ChannelDateLabel()
+    private var cancellables = Set<AnyCancellable>()
 
     var descriptionText: Localized? {
         didSet {
@@ -97,53 +99,49 @@ class ChannelContentView: View {
 
     private func display(channel: TCHChannel) {
 
-        channel.getMembersAsUsers()
-            .observeValue(with: { (users) in
-                runMain {
-                    let notMeUsers = users.filter { (user) -> Bool in
-                        return user.objectId != User.current()?.objectId
-                    }
-
-                    if let first = notMeUsers.first {
-                        if let routine = first.ritual {
-                            routine.fetchIfNeededInBackground(block: { (object, error) in
-                                if let routine = object as? Ritual, let date = routine.date {
-                                    let formatter = DateFormatter()
-                                    formatter.dateFormat = "h:mm a"
-                                    let string = formatter.string(from: date)
-                                    self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s routine is: @(routine)")
-                                } else {
-                                    self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine yet for @(name).")
-                                }
-                            })
-                        } else {
-                            self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine yet for @(name).")
-                        }
-
-                        if channel.isOwnedByMe {
-                            self.titleLabel.setText(first.givenName)
-                            self.titleLabel.setTextColor(.white)
-                        } else if let author = users.first(where: { (user) -> Bool in
-                            return user.id == channel.createdBy
-                        }) {
-                            self.titleLabel.setText(author.givenName)
-                            self.titleLabel.setTextColor(.white)
-                        }
-
-                    } else if let name = channel.friendlyName {
-                        self.titleLabel.setText(name.capitalized)
-                        self.titleLabel.setTextColor(.white)
-                        self.descriptionText = "Start here to learn your way around."
+        channel.getUsers(excludeMe: true)
+            .mainSink(receiveResult: { (users, error) in
+                if let first = users?.first {
+                    if let routine = first.ritual {
+                        routine.fetchIfNeededInBackground(block: { (object, error) in
+                            if let routine = object as? Ritual, let date = routine.date {
+                                let formatter = DateFormatter()
+                                formatter.dateFormat = "h:mm a"
+                                let string = formatter.string(from: date)
+                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s routine is: @(routine)")
+                            } else {
+                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine yet for @(name).")
+                            }
+                        })
                     } else {
-                        self.titleLabel.setText("You")
-                        self.titleLabel.setTextColor(.white)
-                        self.descriptionText = "It's just you in here."
+                        self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine yet for @(name).")
                     }
 
-                    self.stackedAvatarView.set(items: notMeUsers)
-                    self.layoutNow()
+                    if channel.isOwnedByMe {
+                        self.titleLabel.setText(first.givenName)
+                        self.titleLabel.setTextColor(.white)
+                    } else if let author = users?.first(where: { (user) -> Bool in
+                        return user.id == channel.createdBy
+                    }) {
+                        self.titleLabel.setText(author.givenName)
+                        self.titleLabel.setTextColor(.white)
+                    }
+
+                } else if let name = channel.friendlyName {
+                    self.titleLabel.setText(name.capitalized)
+                    self.titleLabel.setTextColor(.white)
+                    self.descriptionText = "Start here to learn your way around."
+                } else {
+                    self.titleLabel.setText("You")
+                    self.titleLabel.setTextColor(.white)
+                    self.descriptionText = "It's just you in here."
                 }
-            })
+
+                if let notMeUsers = users {
+                    self.stackedAvatarView.set(items: notMeUsers)
+                }
+                self.layoutNow()
+            }).store(in: &self.cancellables)
 
         if let date = channel.dateUpdatedAsDate {
             self.dateLabel.set(date: date)

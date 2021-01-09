@@ -67,14 +67,13 @@ class RitualInputViewController: ViewController {
         }.store(in: &self.cancellables)
 
         User.current()?.getRitual()
-        .observe(with: { (result) in
-            switch result {
-            case .success(let routine):
-                self.updateHump(with: routine.timeComponents)
-            case .failure(_):
-                self.setDefault()
-            }
-        })
+            .mainSink(receiveResult: { (ritual, error) in
+                if let r = ritual {
+                    self.updateHump(with: r.timeComponents)
+                } else {
+                    self.setDefault()
+                }
+            }).store(in: &self.cancellables)
 
         self.content.minusButton.didSelect { [unowned self] in
             if let newDate = self.selectedDate.subtract(component: .minute, amount: 15) {
@@ -114,19 +113,17 @@ class RitualInputViewController: ViewController {
         let ritual = Ritual()
         ritual.create(with: self.selectedDate)
         ritual.saveEventually()
-        .ignoreUserInteractionEventsUntilDone(for: [self.view])
-            .observe { (result) in
-                switch result {
-                case .success(_):
+            .mainSink(receiveResult: { (ritual, error) in
+                if let _ = ritual {
                     self.animateButton(with: .lightPurple, text: "Success")
-                case .failure(_):
+                } else {
                     self.animateButton(with: .red, text: "Error")
                 }
 
                 delay(2) {
                     self.state = .edit
                 }
-        }
+            }).store(in: &self.cancellables)
     }
 
     private func updateForStateChange() {

@@ -10,10 +10,12 @@ import Foundation
 import Parse
 import SDWebImage
 import UIKit
+import Combine
 
 class DisplayableImageView: View {
 
     private(set) var imageView = UIImageView()
+    private var cancellables = Set<AnyCancellable>()
 
     var displayable: ImageDisplayable? {
         didSet {
@@ -66,9 +68,10 @@ class DisplayableImageView: View {
 
     private func findUser(with objectID: String) {
         User.localThenNetworkQuery(for: objectID)
-            .observeValue(with: { (user) in
-                self.downloadAndSetImage(for: user)
-            })
+            .mainSink(receiveResult: { (user, error) in
+                guard let u = user else { return }
+                self.downloadAndSetImage(for: u)
+            }).store(in: &self.cancellables)
     }
 
     private func downloadAndSetImage(url: URL) {

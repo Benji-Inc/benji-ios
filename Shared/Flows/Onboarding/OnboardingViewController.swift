@@ -118,15 +118,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     func updateReservationCreator(with userId: String) {
         User.localThenNetworkQuery(for: userId)
-            .observeValue { (user) in
-                runMain {
-                    self.reservationUser = user
-                    self.avatarView.set(avatar: user)
-                    self.avatarView.isHidden = false
-                    self.updateNavigationBar()
-                    self.view.layoutNow()
-                }
-            }
+            .mainSink(receiveResult: { (user, error) in
+                guard let u = user else { return }
+                self.reservationUser = u
+                self.avatarView.set(avatar: u)
+                self.avatarView.isHidden = false
+                self.updateNavigationBar()
+                self.view.layoutNow()
+            }).store(in: &self.cancellables)
     }
 
     override func getInitialContent() -> OnboardingContent {

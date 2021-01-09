@@ -158,13 +158,7 @@ extension ChatClientManager: TwilioChatClientDelegate {
     }
 
     private func handle(member: TCHMember, in channel: TCHChannel, status: ChannelMemberUpdate.Status) {
-        guard ChannelSupplier.shared.activeChannel.isNil else { return }
-        member.getMemberAsUser()
-            .observeValue { (user) in
-                runMain {
-//                    ToastScheduler.shared.schedule(toastType: .userStatusUpdateInChannel(user, status, channel))
-                }
-        }
+        
     }
 
     //MARK: MESSAGE UPDATES

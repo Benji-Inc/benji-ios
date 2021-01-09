@@ -137,9 +137,11 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
                 metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
                     runMain {
                         if let e = error {
+                            promise(.failure(e))
                             //self.handleFailed(statusables: statusables, error: e, promise: promise)
                         } else {
                             self.metadata = metadata
+                            promise(.success(()))
                             //self.handleValue(statusables: statusables, value: (), promise: promise)
                         }
                     }

@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import TMROFutures
 
 enum ConnectionKey: String {
     case status

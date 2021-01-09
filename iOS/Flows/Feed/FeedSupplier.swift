@@ -17,17 +17,17 @@ class FeedSupplier {
     private(set) var items: [FeedType] = []
     private var cancellables = Set<AnyCancellable>()
 
-    func getFirstItems() -> AnyPublisher<[FeedType], Never> {
-        var futures: [Future<Void, Never>] = []
+    func getFirstItems() -> AnyPublisher<[FeedType], Error> {
+        var futures: [Future<Void, Error>] = []
         self.items.append(.rountine)
-        //futures.append(self.getNewChannels())
+        futures.append(self.getNewChannels())
 
         return waitForAll(futures).map { (_) -> [FeedType] in
             return self.items.sorted()
         }.eraseToAnyPublisher()
     }
 
-    func getItems() -> AnyPublisher<[FeedType], Never> {
+    func getItems() -> AnyPublisher<[FeedType], Error> {
 
         self.items.append(.meditation)
 
@@ -40,7 +40,7 @@ class FeedSupplier {
             }
         }
 
-        var futures: [Future<Void, Never>] = []
+        var futures: [Future<Void, Error>] = []
         //futures.append(self.getInviteAsk())
         //futures.append(self.getNotificationPermissions())
         //futures.append(self.getUnreadMessages())
@@ -51,13 +51,15 @@ class FeedSupplier {
         }.eraseToAnyPublisher()
     }
 
-//    private func getInviteAsk() -> Future<Void, Never> {
+//    private func getInviteAsk() -> Future<Void, Error> {
+//        return Reservation.getFirstUnclaimed(for: User.current()!).map { (reservation) -> Void in
+//            return ()
+//        }
 //        return Reservation.getFirstUnclaimed(for: User.current()!)
 //            .flatMap({ (reservation) -> Void in
 //                self.items.append(.inviteAsk(reservation))
 //                return ()
 //            })
-//        }
 //    }
 
 //    private func getNotificationPermissions() -> Future<Void, Never>  {
@@ -123,26 +125,24 @@ class FeedSupplier {
 //        return promise
 //    }
 
-//    private func getNewChannels() -> Future<Void> {
-//        let promise = Promise<Void>()
-//        GetAllConnections(direction: .incoming)
-//            .makeRequest(andUpdate: [], viewsToIgnore: [])
-//            .observe { (result) in
-//                switch result {
-//                case .success(let connections):
-//                    connections.forEach { (connection) in
-//                        if connection.status == .accepted,
-//                            let channelId = connection.channelId,
-//                            let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
-//                            self.items.append(.newChannel(channel))
-//                        }
-//                    }
-//                    promise.resolve(with: ())
-//                case .failure(let error):
-//                    promise.reject(with: error)
-//                }
-//        }
-//
-//        return promise
-//    }
+    private func getNewChannels() -> Future<Void, Error> {
+        return Future { promise in
+            GetAllConnections(direction: .incoming)
+                .makeRequest(andUpdate: [], viewsToIgnore: [])
+                .mainSink(receiveResult: { (connections, error) in
+                    if let connections = connections {
+                        connections.forEach { (connection) in
+                            if connection.status == .accepted,
+                                let channelId = connection.channelId,
+                                let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
+                                self.items.append(.newChannel(channel))
+                            }
+                        }
+                        promise(.success(()))
+                    } else {
+                        promise(.failure(ClientError.generic))
+                    }
+                }).store(in: &self.cancellables)
+        }
+    }
 }

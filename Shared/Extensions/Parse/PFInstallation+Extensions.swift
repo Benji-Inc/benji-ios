@@ -8,27 +8,26 @@
 
 import Foundation
 import Parse
-import TMROFutures
+import Combine
 
 extension PFInstallation {
 
-    func saveToken() -> Future<Void> {
-        let promise = Promise<Void>()
-        if let current = User.current() {
-            self["userId"] = current.objectId
-            self.saveInBackground { (success, error) in
-                if success {
-                    promise.resolve(with: ())
-                } else if let error = error {
-                    promise.reject(with: error)
-                } else {
-                    promise.reject(with: ClientError.message(detail: "There was a problem saving your authorization credentials."))
+    func saveToken() -> Future<Void, Error> {
+        return Future { promise in
+            if let current = User.current() {
+                self["userId"] = current.objectId
+                self.saveInBackground { (success, error) in
+                    if success {
+                        promise(.success(()))
+                    } else if let error = error {
+                        promise(.failure(error))
+                    } else {
+                        promise(.failure(ClientError.message(detail: "There was a problem saving your authorization credentials.")))
+                    }
                 }
+            } else {
+                promise(.failure(ClientError.message(detail: "You don't appear to be logged in.")))
             }
-        } else {
-            promise.reject(with: ClientError.message(detail: "You don't appear to be logged in."))
         }
-
-        return promise
     }
 }

@@ -22,7 +22,6 @@ PODS:
   - SDWebImage/Core (5.10.0)
   - Starscream (4.0.4)
   - TMROCoordinator (0.0.3)
-  - TMROFutures (0.0.6)
   - TMROLocalization (0.0.2)
   - TwilioChatClient (4.0.2)
 
@@ -34,7 +33,6 @@ DEPENDENCIES:
   - PhoneNumberKit
   - SDWebImage
   - TMROCoordinator
-  - TMROFutures
   - TMROLocalization
   - TwilioChatClient
 
@@ -50,7 +48,6 @@ SPEC REPOS:
     - SDWebImage
     - Starscream
     - TMROCoordinator
-    - TMROFutures
     - TMROLocalization
     - TwilioChatClient
 
@@ -65,10 +62,9 @@ SPEC CHECKSUMS:
   SDWebImage: 9169792e9eec3e45bba2a0c02f74bf8bd922d1ee
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   TMROCoordinator: 8e675e45c895feafdd548e1dd2de35430d3ea146
-  TMROFutures: 644772c28f997ce292e9b67985eca927efaa5d7a
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
   TwilioChatClient: bc386ab597f9fbb8e799491f15c07519d080a4f2
 
-PODFILE CHECKSUM: befa908ed5f50fb4f802442de5c617705e60b245
+PODFILE CHECKSUM: 841ce3b4a5cd71fe8cb89ca05731bc7256dcdf68
 
 COCOAPODS: 1.10.0.rc.1

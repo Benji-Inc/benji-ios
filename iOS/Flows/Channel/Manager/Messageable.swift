@@ -9,7 +9,7 @@
 import Foundation
 import TMROLocalization
 import TwilioChatClient
-import TMROFutures
+import Combine
 
 enum MessageStatus: String {
     case sent //Message was sent as a system message
@@ -35,8 +35,8 @@ protocol Messageable: class {
     var hasBeenConsumedBy: [String] { get }
     var color: Color { get }
     var kind: MessageKind { get }
-    func udpateConsumers(with consumer: Avatar) -> Future<Void>
-    func appendAttributes(with attributes: [String: Any]) -> Future<Void>
+    func udpateConsumers(with consumer: Avatar) -> Future<Void, Error>
+    func appendAttributes(with attributes: [String: Any]) -> Future<Void, Error>
 }
 
 func ==(lhs: Messageable, rhs: Messageable) -> Bool {
@@ -62,8 +62,10 @@ extension Messageable {
         return self.hasBeenConsumedBy.count > 0 
     }
 
-    func appendAttributes(with attributes: [String: Any]) -> Future<Void>  {
-        return Promise<Void>()
+    func appendAttributes(with attributes: [String: Any]) -> Future<Void, Error>  {
+        return Future { promise in
+            promise(.success(()))
+        }
     }
 
     var color: Color {

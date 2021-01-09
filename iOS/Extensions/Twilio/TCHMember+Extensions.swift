@@ -9,7 +9,7 @@
 import Foundation
 import TwilioChatClient
 import Parse
-import TMROFutures
+import Combine
 
 extension TCHMember: Avatar {
 
@@ -35,19 +35,8 @@ extension TCHMember: Avatar {
 }
 
 extension TCHMember {
-    func getMemberAsUser() -> Future<User> {
-
-        let promise = Promise<User>()
-        if let authorID = self.identity {
-            User.localThenNetworkQuery(for: authorID)
-                .observeValue(with: { (user) in
-                    promise.resolve(with: user)
-                })
-        } else {
-            promise.reject(with: ClientError.message(detail: "Failed to find author ID."))
-        }
-
-        return promise
+    func getMemberAsUser() -> Future<User, Error> {
+        return User.localThenNetworkQuery(for: self.identity!)
     }
 }
 

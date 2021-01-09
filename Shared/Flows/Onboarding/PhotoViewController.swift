@@ -312,19 +312,14 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         }
 
         current.saveToServer()
-            .ignoreUserInteractionEventsUntilDone(for: [self.view])
-            .observe { (result) in
-                ActivateUser()
-                    .makeRequest(andUpdate: [], viewsToIgnore: [self.view])
-                    .mainSink(receiveValue: { (_) in },
-                              receiveCompletion: { [unowned self] (result) in
-                                switch result {
-                                case .finished:
-                                    self.currentState = .finish
-                                case .failure(_):
-                                    self.currentState = .error
-                                }
-                              }).store(in: &self.cancellables)
-        }
+            .flatMap({ (user) -> AnyPublisher<Any, Error> in
+                return ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
+            }).mainSink { (_, error) in
+                if error.isNil {
+                    self.currentState = .finish
+                } else {
+                    self.currentState = .error
+                }
+            }.store(in: &self.cancellables)
     }
 }

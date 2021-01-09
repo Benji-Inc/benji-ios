@@ -142,13 +142,13 @@ class MeditationViewController: NavigationBarViewController {
 
     private func handleButtonTap() {
         HealthKitManager.shared.requestAuthorization(andUpdate: [self.button])
-            .observeValue { [unowned self] (success) in
-                if success {
+            .mainSink(receiveResult: { (_, error) in
+                if let _ = error {
                     self.updateMindfulMintutes()
                 } else {
                     self.delegate.meditationViewControllerDidFinish(self)
                 }
-            }
+            }).store(in: &self.cancellables)
     }
 
     private func updateMindfulMintutes() {

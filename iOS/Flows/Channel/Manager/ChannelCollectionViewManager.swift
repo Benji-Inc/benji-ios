@@ -304,11 +304,12 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
             break 
         case .channel(let channel):
             MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1), for: channel)
-                       .observeValue(with: { (sections) in
-                           self.set(newSections: sections,
-                                    keepOffset: true,
-                                    completion: nil)
-                       })
+                .mainSink(receiveResult: { (sections, error) in
+                    guard let sections = sections else { return }
+                    self.set(newSections: sections,
+                             keepOffset: true,
+                             completion: nil)
+                }).store(in: &self.cancellables)
         }
     }
 
@@ -345,13 +346,10 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                 self.isSettingReadAll = true
                 footerView.start(showLoading: true)
                 self.setAllMessagesToRead()
-                    .observe { (_) in
-                        runMain {
-                            footerView.stop()
-                        }
-
+                    .mainSink(receiveResult: { (_, _) in
+                        footerView.stop()
                         self.isSettingReadAll = false
-                }
+                    }).store(in: &self.cancellables)
             } else {
                 footerView.start(showLoading: false)
                 delay(1.5) {

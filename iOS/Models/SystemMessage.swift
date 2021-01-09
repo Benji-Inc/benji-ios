@@ -8,7 +8,7 @@
 
 import Foundation
 import TMROLocalization
-import TMROFutures
+import Combine
 
 class SystemMessage: Messageable {
 
@@ -68,16 +68,15 @@ class SystemMessage: Messageable {
     }
 
     @discardableResult
-    func udpateConsumers(with consumer: Avatar) -> Future<Void> {
-        let promise = Promise<Void>()
-        if let identity = consumer.userObjectID {
-            var consumers = self.hasBeenConsumedBy
-            consumers.append(identity)
-            promise.resolve(with: ())
-        } else {
-            promise.reject(with: ClientError.generic)
+    func udpateConsumers(with consumer: Avatar) -> Future<Void, Error> {
+        return Future { promise in
+            if let identity = consumer.userObjectID {
+                var consumers = self.hasBeenConsumedBy
+                consumers.append(identity)
+                promise(.success(()))
+            } else {
+                promise(.failure(ClientError.generic))
+            }
         }
-
-        return promise
     }
 }

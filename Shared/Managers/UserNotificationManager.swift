@@ -10,7 +10,7 @@ import Foundation
 import UserNotifications
 import TMROLocalization
 import Parse
-import TMROFutures
+import Combine
 
 protocol UserNotificationManagerDelegate: class {
     func userNotificationManager(willHandle: DeepLinkable)
@@ -22,6 +22,8 @@ class UserNotificationManager: NSObject {
     weak var delegate: UserNotificationManagerDelegate?
 
     private let center = UNUserNotificationCenter.current()
+
+    private var cancellables = Set<AnyCancellable>()
 
     var installationId: String? {
         return PFInstallation.current()?.installationId
@@ -66,13 +68,12 @@ class UserNotificationManager: NSObject {
         }
     }
 
-    func getNotificationSettings() -> Future<UNNotificationSettings> {
-        let promise = Promise<UNNotificationSettings>()
-        self.center.getNotificationSettings { (settings) in
-            promise.resolve(with: settings)
+    func getNotificationSettings() -> Future<UNNotificationSettings, Never> {
+        return Future { promise in
+            self.center.getNotificationSettings { (settings) in
+                promise(.success(settings))
+            }
         }
-
-        return promise
     }
 
     func silentRegister(withApplication application: UIApplication) {
@@ -129,17 +130,12 @@ class UserNotificationManager: NSObject {
     }
 
     @discardableResult
-    func schedule(note: UNNotificationRequest) -> Future<Void> {
-        let promise = Promise<Void>()
-        self.center.add(note, withCompletionHandler: { (error) in
-            if let e = error {
-                promise.reject(with: e)
-            } else {
-                promise.resolve(with: ())
-            }
-        })
-
-        return promise 
+    func schedule(note: UNNotificationRequest) -> Future<Void, Never> {
+        return Future { promise in
+            self.center.add(note, withCompletionHandler: { (_) in
+                promise(.success(()))
+            })
+        }
     }
 
     func registerPush(from deviceToken: Data) {
@@ -147,6 +143,6 @@ class UserNotificationManager: NSObject {
         installation.badge = 0
         installation.setDeviceTokenFrom(deviceToken)
         installation.saveToken()
-            .observeValue { (_) in }
+            .mainSink().store(in: &self.cancellables)
     }
 }

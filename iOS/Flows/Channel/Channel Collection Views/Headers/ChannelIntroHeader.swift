@@ -9,6 +9,7 @@
 import Foundation
 import TwilioChatClient
 import TMROLocalization
+import Combine
 
 class ChannelIntroHeader: UICollectionReusableView {
 
@@ -17,6 +18,7 @@ class ChannelIntroHeader: UICollectionReusableView {
     let label = Label(font: .displayUnderlined, textColor: .background4)
 
     private(set) var channel: DisplayableChannel?
+    private var cancellables = Set<AnyCancellable>()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -62,26 +64,20 @@ class ChannelIntroHeader: UICollectionReusableView {
         self.channel = channel
 
         if case .channel(let tchChannel) = channel.channelType {
-            tchChannel.getMembersAsUsers()
-                .observeValue { (users) in
-                    runMain {
-                        let notMeUsers = users.filter { (user) -> Bool in
-                            return user.objectId != User.current()?.objectId
-                        }
-
-                        if let first = notMeUsers.first, let date = tchChannel.dateCreatedAsDate {
-                            self.avatarView.set(avatar: first)
-                            self.label.setText(first.givenName)
-                            let message = self.getMessage(name: first.givenName, date: date)
-                            let attributed = AttributedString(message,
-                                                              fontType: .small,
-                                                              color: .background4)
-                            self.textView.set(attributed: attributed, linkColor: .purple)
-                        }
-
-                        self.layoutNow()
+            tchChannel.getNonMeMembers()
+                .mainSink(receiveResult: { (members, error) in
+                    if let first = members?.first, let date = tchChannel.dateCreatedAsDate {
+                        self.avatarView.set(avatar: first)
+                        self.label.setText(first.givenName)
+                        let message = self.getMessage(name: first.givenName, date: date)
+                        let attributed = AttributedString(message,
+                                                          fontType: .small,
+                                                          color: .background4)
+                        self.textView.set(attributed: attributed, linkColor: .purple)
                     }
-            }
+
+                    self.layoutNow()
+                }).store(in: &self.cancellables)
         }
     }
 

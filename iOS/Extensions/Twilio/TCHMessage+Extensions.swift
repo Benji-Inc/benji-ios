@@ -10,7 +10,7 @@ import Foundation
 import TwilioChatClient
 import Parse
 import TMROLocalization
-import TMROFutures
+import Combine
 
 extension TCHMessage: Avatar {
 
@@ -108,66 +108,35 @@ extension TCHMessage: Messageable {
     }
 
     @discardableResult
-    func udpateConsumers(with consumer: Avatar) -> Future<Void> {
-        let promise = Promise<Void>()
-
-        if let identity = consumer.userObjectID {
-            var consumers = self.hasBeenConsumedBy
-            consumers.append(identity)
-            self.appendAttributes(with: ["consumers": consumers])
-                .observeValue(with: { (_) in
-                    self.getAuthorAsUser()
-                        .observe(with: { (result) in
-                            switch result {
-                            case .success(_):
-                                //Do something
-                                promise.resolve(with: ())
-                            case .failure(let error):
-                                promise.reject(with: error)
-                            }
-                        })
-                    })
-        } else {
-            promise.reject(with: ClientError.generic)
-        }
-
-        return promise
+    func udpateConsumers(with consumer: Avatar) -> Future<Void, Error> {
+        var consumers = self.hasBeenConsumedBy
+        consumers.append(consumer.userObjectID!)
+        return self.appendAttributes(with: ["consumers": consumers])
     }
 
-    func appendAttributes(with attributes: [String: Any]) -> Future<Void> {
-        let promise = Promise<Void>()
-        let current: [String: Any] = self.attributes()?.dictionary as? [String: Any] ?? [:]
-        let updated = current.merging(attributes, uniquingKeysWith: { (first, _) in first })
+    func appendAttributes(with attributes: [String: Any]) -> Future<Void, Error> {
+        return Future { promise in
+            let current: [String: Any] = self.attributes()?.dictionary as? [String: Any] ?? [:]
+            let updated = current.merging(attributes, uniquingKeysWith: { (first, _) in first })
 
-        if let newAttributes = TCHJsonAttributes.init(dictionary: updated) {
-            self.setAttributes(newAttributes) { (result) in
-                if let error = result.error {
-                    promise.reject(with: error)
-                } else {
-                    promise.resolve(with: ())
+            if let newAttributes = TCHJsonAttributes.init(dictionary: updated) {
+                self.setAttributes(newAttributes) { (result) in
+                    if let error = result.error {
+                        promise(.failure(error))
+                    } else {
+                        promise(.success(()))
+                    }
                 }
+            } else {
+                promise(.failure(ClientError.generic))
             }
-        } else {
-            promise.reject(with: ClientError.generic)
         }
-
-        return promise
     }
 }
 
 extension TCHMessage {
 
-    func getAuthorAsUser() -> Future<User> {
-        let promise = Promise<User>()
-        if let authorID = self.author {
-            User.localThenNetworkQuery(for: authorID)
-                .observeValue(with: { (user) in
-                    promise.resolve(with: user)
-                })
-        } else {
-            promise.reject(with: ClientError.message(detail: "Unable to retrieve author ID."))
-        }
-
-        return promise
+    func getAuthorAsUser() -> Future<User, Error> {
+        return User.localThenNetworkQuery(for: self.authorID)
     }
 }

@@ -9,6 +9,7 @@
 import Foundation
 import TwilioChatClient
 import TMROLocalization
+import Combine
 
 class FeedNewChannelView: View {
 
@@ -16,6 +17,7 @@ class FeedNewChannelView: View {
     let avatarView = AvatarView()
     let button = Button()
     var didSelect: () -> Void = {}
+    private var cancellables = Set<AnyCancellable>()
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -33,14 +35,13 @@ class FeedNewChannelView: View {
     func configure(with channel: DisplayableChannel) {
         guard case ChannelType.channel(let tchChannel) = channel.channelType else { return }
         tchChannel.getAuthorAsUser()
-            .observeValue(with: { (user) in
-                runMain {
-                    self.avatarView.set(avatar: user)
-                    let message = LocalizedString(id: "", arguments: [user.givenName], default: "Congrats! 🎉 You can now chat with @(name)!")
-                    self.textView.set(localizedText: message)
-                    self.layoutNow()
-                }
-            })
+            .mainSink(receiveResult: { (user, error) in
+                guard let u = user else { return }
+                self.avatarView.set(avatar: u)
+                let message = LocalizedString(id: "", arguments: [u.givenName], default: "Congrats! 🎉 You can now chat with @(name)!")
+                self.textView.set(localizedText: message)
+                self.layoutNow()
+            }).store(in: &self.cancellables)
     }
 
     override func layoutSubviews() {

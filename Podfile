@@ -8,7 +8,6 @@ def shared_pods
   pod 'lottie-ios'
   pod 'ParseLiveQuery'
 
-  pod 'TMROFutures'
   pod 'TMROCoordinator'
   pod 'TMROLocalization'
 

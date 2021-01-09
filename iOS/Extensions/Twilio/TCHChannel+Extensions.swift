@@ -9,7 +9,7 @@
 import Foundation
 import TwilioChatClient
 import Parse
-import TMROFutures
+import Combine
 
 extension TCHChannel: ManageableCellItem {
 
@@ -30,109 +30,76 @@ extension TCHChannel: ManageableCellItem {
         return String(optional: self.sid) as NSObjectProtocol
     }
 
-    func getNonMeMembers() -> Future<[TCHMember]> {
+    func getNonMeMembers() -> Future<[TCHMember], Error> {
+        return Future { promise in
+            if let members = self.members?.membersList() {
+                var nonMeMembers: [TCHMember] = []
+                members.forEach { (member) in
+                    if member.identity != User.current()?.objectId {
+                        nonMeMembers.append(member)
+                    }
+                }
+                promise(.success(nonMeMembers))
+            } else {
+                promise(.failure(ClientError.message(detail: "There was a problem fetching other members.")))
+            }
+        }
+    }
 
-        let promise = Promise<[TCHMember]>()
-        if let members = self.members?.membersList() {
-            var nonMeMembers: [TCHMember] = []
-            members.forEach { (member) in
-                if member.identity != User.current()?.objectId {
-                    nonMeMembers.append(member)
+    func getAuthorAsUser() -> Future<User, Error> {
+        return User.localThenNetworkQuery(for: self.createdBy!)
+    }
+
+    func getUsers(excludeMe: Bool = false) -> Future<[User], Error> {
+
+        let members = self.members!.membersList()
+
+        var identifiers: [String] = []
+        members.forEach { (member) in
+            if let identifier = member.identity {
+                if identifier == User.current()?.id, excludeMe {
+                } else {
+                    identifiers.append(identifier)
                 }
             }
-        } else {
-            promise.reject(with: ClientError.message(detail: "There was a problem fetching other members."))
         }
 
-        return promise
-    }
-
-    func getAuthorAsUser() -> Future<User> {
-        let promise = Promise<TCHChannel>(value: self)
-        return promise.getAuthorAsUser()
-    }
-
-    func getMembersAsUsers() -> Future<[User]> {
-        let promise = Promise<TCHChannel>(value: self)
-        return promise.getUsers()
+        return User.localThenNetworkArrayQuery(where: identifiers,
+                                               isEqual: true,
+                                               container: .channel(identifier: self.sid!))
     }
 
     var channelDescription: String {
         guard let attributes = self.attributes(),
-            let text = attributes.dictionary?[ChannelKey.description.rawValue] as? String else { return String() }
+              let text = attributes.dictionary?[ChannelKey.description.rawValue] as? String else { return String() }
         return text
     }
 
-    func getUnconsumedAmount() -> Future<FeedType> {
-        let promise = Promise<FeedType>()
-        var totalUnread: Int = 0
-        if let messagesObject = self.messages {
-            self.getMessagesCount { (result, count) in
-                if result.isSuccessful() {
-                    messagesObject.getLastWithCount(count) { (messageResult, messages) in
-
-                        if messageResult.isSuccessful(), let msgs = messages {
-                            msgs.forEach { (message) in
-                                if !message.isFromCurrentUser, !message.isConsumed, message.canBeConsumed {
-                                    totalUnread += 1
+    func getUnconsumedAmount() -> Future<FeedType, Error> {
+        return Future { promise in
+            var totalUnread: Int = 0
+            if let messagesObject = self.messages {
+                self.getMessagesCount { (result, count) in
+                    if result.isSuccessful() {
+                        messagesObject.getLastWithCount(count) { (messageResult, messages) in
+                            if messageResult.isSuccessful(), let msgs = messages {
+                                msgs.forEach { (message) in
+                                    if !message.isFromCurrentUser, !message.isConsumed, message.canBeConsumed {
+                                        totalUnread += 1
+                                    }
                                 }
+                                promise(.success(.unreadMessages(self, totalUnread)))
+                            } else {
+                                promise(.failure(ClientError.message(detail: "Unable to get messages.")))
                             }
-                            promise.resolve(with: .unreadMessages(self, totalUnread))
-                        } else {
-                            promise.reject(with: ClientError.message(detail: "Unable to get messages."))
                         }
+                    } else {
+                        promise(.failure(ClientError.message(detail: "Failed to get message count.")))
                     }
-                } else {
-                    promise.reject(with: ClientError.message(detail: "Failed to get message count."))
                 }
-            }
-        } else {
-            promise.reject(with: ClientError.message(detail: "There were no messages."))
-        }
-
-        return promise
-    }
-}
-
-extension Future where Value == TCHChannel {
-
-    func getAuthorAsUser() -> Future<User> {
-        return self.then(with: { (channel) in
-            let promise = Promise<User>()
-            if let authorID = channel.createdBy {
-                User.localThenNetworkQuery(for: authorID)
-                    .observeValue(with: { (user) in
-                        promise.resolve(with: user)
-                    })
             } else {
-                promise.reject(with: ClientError.message(detail: "This channel has no author ID."))
+                promise(.failure(ClientError.message(detail: "There were no messages.")))
             }
-
-            return promise
-        })
-    }
-
-    func getUsers() -> Future<[User]> {
-        return self.then { (channel) in
-            let promise = Promise<[User]>()
-            if let members = channel.members?.membersList() {
-
-                var identifiers: [String] = []
-                members.forEach { (member) in
-                    if let identifier = member.identity {
-                        identifiers.append(identifier)
-                    }
-                }
-
-                User.localThenNetworkArrayQuery(where: identifiers,
-                                            isEqual: true,
-                                            container: .channel(identifier: channel.sid!))
-                .observeValue(with: { (users) in
-                    promise.resolve(with: users)
-                })
-            }
-
-            return promise
         }
     }
 }

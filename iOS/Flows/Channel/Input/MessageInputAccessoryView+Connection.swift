@@ -43,15 +43,10 @@ extension MessageInputAccessoryView {
     }
 
     private func setPlaceholder(with channel: TCHChannel) {
-        channel.getMembersAsUsers()
-            .observeValue { (users) in
-                runMain {
-                    let notMeUsers = users.filter { (user) -> Bool in
-                        return user.objectId != User.current()?.objectId
-                    }
-
-                    self.expandingTextView.setPlaceholder(for: notMeUsers)
-                }
-        }
+        channel.getUsers(excludeMe: true)
+            .mainSink(receiveResult: { (users, error) in
+                guard let users = users else { return }
+                self.expandingTextView.setPlaceholder(for: users)
+            }).store(in: &self.cancellables)
     }
 }

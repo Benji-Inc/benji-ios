@@ -8,7 +8,7 @@
 
 import Foundation
 import Parse
-import TMROFutures
+import Combine
 
 enum RoutineKey: String {
     case hour
@@ -18,6 +18,7 @@ enum RoutineKey: String {
 final class Ritual: PFObject, PFSubclassing  {
 
     static let currentKey = "currentRitualKey"
+    private var cancellables = Set<AnyCancellable>()
 
     static func parseClassName() -> String {
         return String(describing: self)
@@ -91,21 +92,20 @@ extension Ritual: Objectable {
         return self.relation(forKey: key.rawValue) as? PFRelation
     }
 
-    func saveEventually() -> Future<Ritual> {
-        let promise = Promise<Ritual>()
-
-        User.current()?.ritual = self
-        User.current()?.saveLocalThenServer()
-            .observe(with: { (result) in
-                switch result {
-                case .success(_):
-                    RoutineManager.shared.scheduleNotification(for: self)
-                    promise.resolve(with: self)
-                case .failure(let error):
-                    promise.reject(with: error)
-                }
-            })
-
-        return promise
+    func saveEventually() -> Future<Ritual, Error> {
+        return Future { promise in
+            User.current()?.ritual = self
+            User.current()?.saveLocalThenServer()
+                .mainSink(receiveValue: { (_) in
+                    promise(.success(self))
+                }, receiveCompletion: { (result) in
+                    switch result {
+                    case .finished:
+                        break
+                    case .failure(let e):
+                        promise(.failure(e))
+                    }
+                }).store(in: &self.cancellables)
+        }
     }
 }

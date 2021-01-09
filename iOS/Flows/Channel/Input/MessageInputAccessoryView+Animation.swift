@@ -70,12 +70,11 @@ extension MessageInputAccessoryView {
 
         self.expandingTextView.updateInputView(type: .confirmation)
 
-        channel.getMembersAsUsers()
-            .observeValue(with: { (users) in
-                runMain {
-                    self.expandingTextView.confirmationView.setAlertMessage(for: users)
-                }
-            })
+        channel.getNonMeMembers()
+            .mainSink(receiveResult: { (members, error) in
+                guard let users = members else { return }
+                self.expandingTextView.confirmationView.setAlertMessage(for: users)
+            }).store(in: &self.cancellables)
 
         self.alertProgressView.size = CGSize(width: self.width, height: self.height)
     }

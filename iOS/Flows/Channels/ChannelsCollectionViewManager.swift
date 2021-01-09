@@ -8,11 +8,12 @@
 
 import Foundation
 import TwilioChatClient
+import Combine
 
 class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
 
     var didSelectReservation: ((Reservation) -> Void)? = nil
-
+    private var cancellables = Set<AnyCancellable>()
 
     override func collectionView(_ collectionView: UICollectionView,
                                  layout collectionViewLayout: UICollectionViewLayout,
@@ -65,7 +66,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
                 break 
             case .channel(let tchChannel):
                 ChannelSupplier.delete(channel: tchChannel)
-                    .ignoreUserInteractionEventsUntilDone(for: [self.collectionView])
+                    .mainSink().store(in: &self.cancellables)
             }
         }
 
@@ -92,7 +93,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
                 break 
             case .channel(let tchChannel):
                 ChannelSupplier.leave(channel: tchChannel)
-                    .ignoreUserInteractionEventsUntilDone(for: [self.collectionView])
+                    .mainSink().store(in: &self.cancellables)
             }
         }
 

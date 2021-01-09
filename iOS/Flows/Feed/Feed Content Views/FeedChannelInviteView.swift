@@ -9,6 +9,7 @@
 import Foundation
 import TwilioChatClient
 import TMROLocalization
+import Combine
 
 class FeedChannelInviteView: View {
 
@@ -17,6 +18,7 @@ class FeedChannelInviteView: View {
     let button = Button()
     var didComplete: CompletionOptional = nil
     private var channel: TCHChannel?
+    private var cancellables = Set<AnyCancellable>()
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -35,14 +37,13 @@ class FeedChannelInviteView: View {
     func configure(with channel: TCHChannel) {
         self.channel = channel 
         channel.getAuthorAsUser()
-            .observeValue(with: { (user) in
-                runMain {
-                    self.avatarView.set(avatar: user)
-                    let text = "You have been invited to join \(String(optional: channel.friendlyName)), by \(user.fullName)"
-                    self.textView.set(localizedText: text)
-                    self.layoutNow()
-                }
-            })
+            .mainSink(receiveResult: { (user, error) in
+                guard let u = user else { return }
+                self.avatarView.set(avatar: u)
+                let text = "You have been invited to join \(String(optional: channel.friendlyName)), by \(u.fullName)"
+                self.textView.set(localizedText: text)
+                self.layoutNow()
+            }).store(in: &self.cancellables)
     }
 
     override func layoutSubviews() {

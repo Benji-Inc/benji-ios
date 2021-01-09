@@ -7,12 +7,12 @@
 //
 
 import Foundation
-import TMROFutures
+import Combine
 
 extension ChannelCollectionViewManager {
 
     @discardableResult
-    func updateConsumers(with consumer: Avatar, for message: Messageable) -> Future<Void> {
+    func updateConsumers(with consumer: Avatar, for message: Messageable) -> Future<Void, Error> {
         //create system message copy of current message
         let messageCopy = SystemMessage(with: message)
         messageCopy.udpateConsumers(with: consumer)
@@ -26,11 +26,11 @@ extension ChannelCollectionViewManager {
         return message.udpateConsumers(with: consumer)
     }
 
-    func setAllMessagesToRead() -> Future<[Void]> {
-        let promises: [Future<Void>] = MessageSupplier.shared.unreadMessages.map { (message) -> Future<Void> in
+    func setAllMessagesToRead() -> AnyPublisher<[Void], Error> {
+        let futures: [Future<Void, Error>] = MessageSupplier.shared.unreadMessages.map { (message) -> Future<Void, Error> in
             return self.updateConsumers(with: User.current()!, for: message)
         }
 
-        return waitForAll(futures: promises)
+        return waitForAll(futures)
     }
 }

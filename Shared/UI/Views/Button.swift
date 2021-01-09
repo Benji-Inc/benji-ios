@@ -9,7 +9,7 @@
 import Foundation
 import TMROLocalization
 import Lottie
-import TMROFutures
+import Combine
 
 enum ButtonStyle {
     case rounded(color: Color, text: Localized)
@@ -138,7 +138,7 @@ class Button: UIButton, Statusable {
     }
 
     @discardableResult
-    func handleEvent(status: EventStatus) -> Future<Void> {
+    func handleEvent(status: EventStatus) -> Future<Void, Never> {
         switch status {
         case .loading, .initial:
             return self.handleLoadingState()

@@ -8,13 +8,14 @@
 
 import Foundation
 import TwilioChatClient
-import TMROFutures
+import Combine
 import TMROLocalization
 
 class MessageDeliveryManager {
 
     static let shared = MessageDeliveryManager()
     //private var options: TCHMessageOptions?
+    private var cancellables = Set<AnyCancellable>()
 
     func send(context: MessageContext = .casual,
               kind: MessageKind,
@@ -43,16 +44,15 @@ class MessageDeliveryManager {
                                      context: context,
                                      kind: kind,
                                      attributes: mutableAttributes)
-                        .observe { (result) in
-                            switch result {
-                            case .success(_):
+                        .mainSink(receiveResult: { (message, error) in
+                            if let _ = message {
                                 completion(systemMessage, nil)
-                            case .failure(let error):
-                                completion(systemMessage, error)
+                            } else if let e = error {
+                                completion(systemMessage, e)
+                            } else {
+                                completion(systemMessage, ClientError.generic)
                             }
-                    }
-                } else {
-
+                        }).store(in: &self.cancellables)
                 }
 
                 return systemMessage
@@ -78,14 +78,15 @@ class MessageDeliveryManager {
                                  context: message.context,
                                  kind: message.kind,
                                  attributes: attributes)
-                    .observe { (result) in
-                        switch result {
-                        case .success(_):
+                    .mainSink(receiveResult: { (message, error) in
+                        if let _ = message {
                             completion(systemMessage, nil)
-                        case .failure(let error):
-                            completion(systemMessage, error)
+                        } else if let e = error {
+                            completion(systemMessage, e)
+                        } else {
+                            completion(systemMessage, ClientError.generic)
                         }
-                }
+                    }).store(in: &self.cancellables)
             } else {
                 completion(nil, ClientError.message(detail: "No active channel found."))
             }
@@ -103,81 +104,48 @@ class MessageDeliveryManager {
     private func sendMessage(to channel: TCHChannel,
                              context: MessageContext = .casual,
                              kind: MessageKind,
-                             attributes: [String : Any] = [:]) -> Future<Messageable> {
-        let promise = Promise<Messageable>()
+                             attributes: [String : Any] = [:]) -> AnyPublisher<Messageable, Error> {
 
-        if let messagesObject = channel.messages {
+        let messagesObject = channel.messages!
+        var mutableAttributes = attributes
+        mutableAttributes["context"] = context.rawValue
 
-            var mutableAttributes = attributes
-            mutableAttributes["context"] = context.rawValue
+        return self.getOptions(for: kind, attributes: mutableAttributes).flatMap { (options) -> Future<Messageable, Error> in
+            return Future { promise in
 
-            if !ChatClientManager.shared.isConnected {
-                promise.reject(with: ClientError.message(detail: "Chat service is disconnected."))
+                if !ChatClientManager.shared.isConnected {
+                    promise(.failure(ClientError.message(detail: "Chat service is disconnected.")))
+                }
+
+                if channel.status != .joined {
+                    promise(.failure(ClientError.message(detail: "You are not a channel member.")))
+                }
+
+                messagesObject.sendMessage(with: options, completion: { (result, message) in
+                    if result.isSuccessful(), let msg = message {
+                        promise(.success(msg))
+                    } else if let e = result.error {
+                        promise(.failure(e))
+                    } else {
+                        promise(.failure(ClientError.message(detail: "Failed to send message.")))
+                    }
+                })
             }
-
-            if channel.status != .joined {
-                promise.reject(with: ClientError.message(detail: "You are not a channel member."))
-            }
-
-            self.getOptions(for: kind, attributes: mutableAttributes)
-                .observeValue { (options) in
-                    messagesObject.sendMessage(with: options, completion: { (result, message) in
-                        if result.isSuccessful(), let msg = message {
-                            promise.resolve(with: msg)
-                        } else if let e = result.error {
-                            promise.reject(with: e)
-                        } else {
-                            promise.reject(with: ClientError.message(detail: "Failed to send message."))
-                        }
-                    })
-            }
-        } else {
-            promise.reject(with: ClientError.message(detail: "No messages object on channel"))
-        }
-
-        return promise
+        }.eraseToAnyPublisher()
     }
 
-    private func getOptions(for kind: MessageKind, attributes: [String : Any] = [:]) -> Future<TCHMessageOptions> {
-
+    private func getOptions(for kind: MessageKind, attributes: [String : Any] = [:]) -> Future<TCHMessageOptions, Error> {
         let options = TCHMessageOptions()
-        let promise = Promise<TCHMessageOptions>()
 
         switch kind {
         case .text(let body):
-            options.with(body: body, attributes: TCHJsonAttributes.init(dictionary: attributes))
-                .observe { (result) in
-                    switch result {
-                    case .success(let newOptions):
-                        promise.resolve(with: newOptions)
-                    case .failure(let error):
-                        promise.reject(with: error)
-                    }
-            }
-        case .attributedText(_):
-            break
+            return options.with(body: body, attributes: TCHJsonAttributes.init(dictionary: attributes))
         case .photo(let item):
-            options.with(mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: attributes))
-                .observe { (result) in
-                    switch result {
-                    case .success(let newOptions):
-                        promise.resolve(with: newOptions)
-                    case .failure(let error):
-                        promise.reject(with: error)
-                    }
+            return options.with(mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: attributes))
+        default:
+            return Future { promise in
+                promise(.failure(ClientError.message(detail: "Unsupported MessageKind")))
             }
-        case .video(_):
-            break
-        case .location(_):
-            break
-        case .emoji(_):
-            break
-        case .audio(_):
-            break
-        case .contact(_):
-            break
         }
-
-        return promise
     }
 }

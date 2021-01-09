@@ -78,14 +78,13 @@ class FeedViewController: ViewController {
 
     private func loadFeed() {
         User.current()?.getRitual()
-            .observe(with: { (result) in
-                switch result {
-                case .success(let routine):
-                    self.determineMessage(with: routine)
-                case .failure(_):
+            .mainSink(receiveResult: { (ritual, error) in
+                if let r = ritual {
+                    self.determineMessage(with: r)
+                } else {
                     self.addFirstItems()
                 }
-            })
+            }).store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {

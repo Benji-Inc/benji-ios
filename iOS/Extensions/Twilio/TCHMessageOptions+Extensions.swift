@@ -8,43 +8,38 @@
 
 import Foundation
 import TwilioChatClient
-import TMROFutures
+import Combine
 
 extension TCHMessageOptions {
 
-    func with(body: String, attributes: TCHJsonAttributes) -> Future<TCHMessageOptions> {
-        let promise = Promise<TCHMessageOptions>()
-
-        self.withBody(body)
-        self.withAttributes(attributes) { (result) in
-            if result.isSuccessful() {
-                promise.resolve(with: self)
-            } else if let error = result.error {
-                promise.reject(with: error)
-            } else {
-                promise.reject(with: ClientError.message(detail: "Failed to create options for message."))
+    func with(body: String, attributes: TCHJsonAttributes) -> Future<TCHMessageOptions, Error> {
+        return Future { promise in
+            self.withBody(body)
+            self.withAttributes(attributes) { (result) in
+                if result.isSuccessful() {
+                    promise(.success(self))
+                } else if let error = result.error {
+                    promise(.failure(error))
+                } else {
+                    promise(.failure(ClientError.message(detail: "Failed to create options for message.")))
+                }
             }
         }
-
-        return promise
     }
 
-    func with(mediaItem: MediaItem, attributes: TCHJsonAttributes) -> Future<TCHMessageOptions> {
-
-        let promise = Promise<TCHMessageOptions>()
-
-        self.withAttributes(attributes) { (result) in
-            if result.isSuccessful() {
-                self.with(mediaItem: mediaItem)
-                promise.resolve(with: self)
-            } else if let error = result.error {
-                promise.reject(with: error)
-            } else {
-                promise.reject(with: ClientError.message(detail: "Failed to create options for message."))
+    func with(mediaItem: MediaItem, attributes: TCHJsonAttributes) -> Future<TCHMessageOptions, Error> {
+        return Future { promise in
+            self.withAttributes(attributes) { (result) in
+                if result.isSuccessful() {
+                    self.with(mediaItem: mediaItem)
+                    promise(.success(self))
+                } else if let error = result.error {
+                    promise(.failure(error))
+                } else {
+                    promise(.failure(ClientError.message(detail: "Failed to create options for message.")))
+                }
             }
         }
-
-        return promise
     }
 
     private func with(mediaItem: MediaItem) {

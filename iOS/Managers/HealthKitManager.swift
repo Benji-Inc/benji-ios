@@ -8,7 +8,7 @@
 
 import Foundation
 import HealthKit
-import TMROFutures
+import Combine
 
 class HealthKitManager: NSObject, StatusableRequest {
     typealias ReturnType = Bool
@@ -19,23 +19,23 @@ class HealthKitManager: NSObject, StatusableRequest {
     private let allReadTypes = Set([HKObjectType.categoryType(forIdentifier: .mindfulSession)!, HKObjectType.quantityType(forIdentifier: .heartRate)!])
     private let allSetTypes = Set([HKObjectType.categoryType(forIdentifier: .mindfulSession)!])
 
-    func requestAuthorization(andUpdate statusables: [Statusable]) -> Future<Bool> {
+    func requestAuthorization(andUpdate statusables: [Statusable]) -> Future<Void, Error> {
+        return Future { promise in
+            // Trigger the loading event for all statusables
+            for statusable in statusables {
+                statusable.handleEvent(status: .loading)
+            }
 
-        let promise = Promise<Bool>()
-        // Trigger the loading event for all statusables
-        for statusable in statusables {
-            statusable.handleEvent(status: .loading)
-        }
-
-        self.store.requestAuthorization(toShare: self.allSetTypes, read: self.allReadTypes) { (success, error) in
-            if let e = error {
-                self.handleFailed(statusables: statusables, error: e, promise: promise)
-            } else {
-                self.handleValue(statusables: statusables, value: success, promise: promise)
+            self.store.requestAuthorization(toShare: self.allSetTypes, read: self.allReadTypes) { (success, error) in
+                if let e = error {
+                    promise(.failure(e))
+                    //self.handleFailed(statusables: statusables, error: e, promise: promise)
+                } else {
+                    promise(.success(()))
+                    //self.handleValue(statusables: statusables, value: success, promise: promise)
+                }
             }
         }
-
-        return promise
     }
 
     func saveMindfullAnalysis(startTime: Date, endTime: Date, completion: @escaping CompletionHandler) {
