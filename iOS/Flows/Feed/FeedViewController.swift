@@ -77,7 +77,7 @@ class FeedViewController: ViewController {
     }
 
     private func loadFeed() {
-        User.current()?.getRitual()
+        User.current()?.getRitual(store: self.cancellables)
             .mainSink(receiveResult: { (ritual, error) in
                 if let r = ritual {
                     self.determineMessage(with: r)

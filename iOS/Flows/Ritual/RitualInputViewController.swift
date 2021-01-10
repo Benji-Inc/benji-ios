@@ -66,7 +66,7 @@ class RitualInputViewController: ViewController {
             }
         }.store(in: &self.cancellables)
 
-        User.current()?.getRitual()
+        User.current()?.getRitual(store: self.cancellables)
             .mainSink(receiveResult: { (ritual, error) in
                 if let r = ritual {
                     self.updateHump(with: r.timeComponents)

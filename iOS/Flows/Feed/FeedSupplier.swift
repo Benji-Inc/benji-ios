@@ -43,7 +43,7 @@ class FeedSupplier {
         var futures: [Future<Void, Error>] = []
         futures.append(self.getInviteAsk())
         futures.append(self.getNotificationPermissions())
-        //futures.append(self.getUnreadMessages())
+        futures.append(self.getUnreadMessages())
         //futures.append(self.getConnections())
 
         return waitForAll(futures).map { (_) -> [FeedType] in
@@ -75,55 +75,58 @@ class FeedSupplier {
         }
     }
 
-//    private func getUnreadMessages() -> Future<Void> {
-//
-//        var channelFutures: [Future<FeedType>] = []
-//        for channel in ChannelSupplier.shared.allJoinedChannels {
-//            switch channel.channelType {
-//            case .channel(let tchChannel):
-//                channelFutures.append(tchChannel.getUnconsumedAmount())
-//            default:
-//                break
-//            }
-//        }
-//
-//        if channelFutures.count == 0 {
-//            self.items.append(.timeSaved(0))
-//        }
+    private func getUnreadMessages() -> Future<Void, Error> {
+        var channelFutures: [Future<FeedType, Error>] = []
+        for channel in ChannelSupplier.shared.allJoinedChannels {
+            switch channel.channelType {
+            case .channel(let tchChannel):
+                channelFutures.append(tchChannel.getUnconsumedAmount())
+            default:
+                break
+            }
+        }
 
-//        return waitForAll(futures: channelFutures).transform { (channelItems) -> Void in
-//            var totalCount: Int = 0
-//            let items = channelItems.filter { (feedType) -> Bool in
-//                switch feedType {
-//                case .unreadMessages(_,let count):
-//                    totalCount += count
-//                    return count > 0
-//                default:
-//                    return false
-//                }
-//            }
-//            self.items.append(.timeSaved(totalCount))
-//            self.items.append(contentsOf: items)
-//        }.asVoid()
-//    }
-//
-//    private func getConnections() -> Future<Void> {
-//        let promise = Promise<Void>()
-//        GetAllConnections(direction: .incoming)
-//            .makeRequest(andUpdate: [], viewsToIgnore: [])
-//            .mainSink(receiveValue: { [unowned self] (connections) in
-//                connections.forEach { (connection) in
-//                    if connection.status == .invited {
-//                        self.items.append(.connectionRequest(connection))
-//                    }
-//                }
-//            }, receiveCompletion: { (_) in
-//
-//            }).store(in: &self.cancellables)
-//        }
-//
-//        return promise
-//    }
+        if channelFutures.count == 0 {
+            self.items.append(.timeSaved(0))
+        }
+
+        return Future { promise in
+            waitForAll(channelFutures).mainSink { (channelItems, error) in
+                var totalCount: Int = 0
+                let items = channelItems?.filter { (feedType) -> Bool in
+                    switch feedType {
+                    case .unreadMessages(_,let count):
+                        totalCount += count
+                        return count > 0
+                    default:
+                        return false
+                    }
+                }
+                self.items.append(.timeSaved(totalCount))
+                if let i = items {
+                    self.items.append(contentsOf: i)
+                }
+
+            }.store(in: &self.cancellables)
+        }
+    }
+
+    private func getConnections() -> Future<Void, Error> {
+        return Future { promise in
+            GetAllConnections(direction: .incoming)
+                .makeRequest(andUpdate: [], viewsToIgnore: [])
+                .mainSink(receiveResult: { (connections, error) in
+                    if let connections = connections {
+                        connections.forEach { (connection) in
+                            if connection.status == .invited {
+                                self.items.append(.connectionRequest(connection))
+                            }
+                        }
+                    }
+                    promise(.success(()))
+                }).store(in: &self.cancellables)
+        }
+    }
 
     private func getNewChannels() -> Future<Void, Error> {
         return Future { promise in
@@ -133,8 +136,8 @@ class FeedSupplier {
                     if let connections = connections {
                         connections.forEach { (connection) in
                             if connection.status == .accepted,
-                                let channelId = connection.channelId,
-                                let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
+                               let channelId = connection.channelId,
+                               let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
                                 self.items.append(.newChannel(channel))
                             }
                         }

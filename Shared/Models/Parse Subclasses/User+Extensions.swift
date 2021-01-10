@@ -40,8 +40,9 @@ extension User: Avatar {
 // Code you don't want to use in your App Clip.
 extension User {
 
-    func getRitual() -> Future<Ritual, Error> {
+    func getRitual(store: Set<AnyCancellable>) -> Future<Ritual, Error> {
         return Future { promise in
+            var cancellables = store
             if let ritual = self.ritual {
                 if ritual.isDataAvailable {
                     promise(.success(ritual))
@@ -58,7 +59,7 @@ extension User {
                             } else {
                                 promise(.failure(ClientError.generic))
                             }
-                        })
+                        }).store(in: &cancellables)
                 }
             } else {
                 promise(.failure(ClientError.message(detail: "Failed to retrieve ritual.")))
