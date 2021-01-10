@@ -33,17 +33,13 @@ class FeedViewController: ViewController {
             self.messageLabel.setText(text)
         }
     }
+
     private var currentTriggerDate: Date? {
         return UserDefaults.standard.value(forKey: Ritual.currentKey) as? Date
     }
 
-    private let shouldShowFeed: Bool = false
-
     override func initializeViews() {
         super.initializeViews()
-
-        // Add tap to move foward
-        // Add User photo to top right with time/date
 
         self.view.addSubview(self.messageLabel)
         self.view.addSubview(self.reloadButton)
@@ -55,7 +51,7 @@ class FeedViewController: ViewController {
         self.indicatorView.alpha = 0
 
         self.countDownView.didExpire = { [unowned self] in
-            self.subscribeToUpdates()
+            self.addItems()
         }
 
         self.reloadButton.set(style: .normal(color: .purple, text: "Reload"))
@@ -67,12 +63,8 @@ class FeedViewController: ViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        onceEver(token: "loadOrSubscribeToFeed") {
-            if self.shouldShowFeed {
-                self.subscribeToUpdates()
-            } else {
-                self.loadFeed()
-            }
+        if self.manager.feedViews.isEmpty {
+            self.loadFeed()
         }
     }
 
@@ -135,8 +127,8 @@ class FeedViewController: ViewController {
         })
     }
 
-    private func determineMessage(with routine: Ritual) {
-        guard let triggerDate = routine.date,
+    private func determineMessage(with ritual: Ritual) {
+        guard let triggerDate = ritual.date,
             self.currentTriggerDate != triggerDate,
             let anHourAfter = triggerDate.add(component: .hour, amount: 1),
             let anHourUntil = triggerDate.subtract(component: .hour, amount: 1) else { return }
@@ -153,7 +145,7 @@ class FeedViewController: ViewController {
 
             //If date is less than an hour ahead of current date, show feed
         } else if now.isBetween(triggerDate, and: anHourAfter) {
-            self.subscribeToUpdates()
+            self.addItems()
 
         //If date is 1 hour or more away, show "see you at (date)"
         } else if now.isBetween(Date().beginningOfDay, and: anHourUntil) {

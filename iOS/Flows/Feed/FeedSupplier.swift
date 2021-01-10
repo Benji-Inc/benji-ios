@@ -44,7 +44,7 @@ class FeedSupplier {
         futures.append(self.getInviteAsk())
         futures.append(self.getNotificationPermissions())
         futures.append(self.getUnreadMessages())
-        //futures.append(self.getConnections())
+        futures.append(self.getConnections())
 
         return waitForAll(futures).map { (_) -> [FeedType] in
             return self.items.sorted()
@@ -95,19 +95,26 @@ class FeedSupplier {
 
         return Future { promise in
             waitForAll(channelFutures)
-                .mainSink(receiveValue: { (channelItems) in
-                    var totalCount: Int = 0
-                    let items = channelItems.filter { (feedType) -> Bool in
-                        switch feedType {
-                        case .unreadMessages(_,let count):
-                            totalCount += count
-                            return count > 0
-                        default:
-                            return false
+                .mainSink(receivedResult: { (result) in
+                    switch result {
+                    case .success(let channelItems):
+                        var totalCount: Int = 0
+                        let items = channelItems.filter { (feedType) -> Bool in
+                            switch feedType {
+                            case .unreadMessages(_,let count):
+                                totalCount += count
+                                return count > 0
+                            default:
+                                return false
+                            }
                         }
+                        self.items.append(.timeSaved(totalCount))
+                        self.items.append(contentsOf: items)
+                    case .error(_):
+                        break 
                     }
-                    self.items.append(.timeSaved(totalCount))
-                    self.items.append(contentsOf: items)
+
+                    promise(.success(()))
                 }).store(in: &self.cancellables)
         }
     }

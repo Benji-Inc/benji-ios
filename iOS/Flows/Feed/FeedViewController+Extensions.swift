@@ -10,13 +10,6 @@ import Foundation
 
 extension FeedViewController {
 
-    func subscribeToUpdates() {
-        ChannelSupplier.shared.$isSynced.mainSink { [weak self] (isSynced) in
-            guard let `self` = self, isSynced else { return }
-            self.addItems()
-        }.store(in: &self.cancellables)
-    }
-
     func addItems() {
         FeedSupplier.shared.getItems()
             .mainSink(receiveValue: { (items) in

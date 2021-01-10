@@ -109,15 +109,16 @@ class RitualInputViewController: ViewController {
             case .edit:
                 self.state = .update
             case .update:
-                self.saveRoutine()
+                self.saveRitual()
             }
         }
     }
 
-    private func saveRoutine() {
+    private func saveRitual() {
         let ritual = Ritual()
         ritual.create(with: self.selectedDate)
-        ritual.saveLocalThenServer()
+        User.current()?.ritual = ritual
+        User.current()?.saveLocalThenServer()
             .mainSink(receivedResult: { (result) in
                 switch result {
                 case .success(_):
