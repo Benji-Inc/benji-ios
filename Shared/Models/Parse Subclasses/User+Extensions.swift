@@ -38,36 +38,6 @@ extension User: Avatar {
 
 #if !APPCLIP
 // Code you don't want to use in your App Clip.
-extension User {
-
-    func getRitual(store: Set<AnyCancellable>) -> Future<Ritual, Error> {
-        return Future { promise in
-            var cancellables = store
-            if let ritual = self.ritual {
-                if ritual.isDataAvailable {
-                    promise(.success(ritual))
-                } else {
-                    self.ritual?.retrieveDataIfNeeded()
-                        .mainSink(receiveResult: { (ritual, error) in
-                            if let r = ritual {
-                                r.fetchInBackground(block: { (object, error) in
-
-                                })
-                                promise(.success(r))
-                            } else if let e = error {
-                                promise(.failure(e))
-                            } else {
-                                promise(.failure(ClientError.generic))
-                            }
-                        }).store(in: &cancellables)
-                }
-            } else {
-                promise(.failure(ClientError.message(detail: "Failed to retrieve ritual.")))
-            }
-        }
-    }
-}
-
 extension User: ManageableCellItem {
     var id: String {
         return self.objectId!

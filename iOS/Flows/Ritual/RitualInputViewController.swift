@@ -66,14 +66,18 @@ class RitualInputViewController: ViewController {
             }
         }.store(in: &self.cancellables)
 
-        User.current()?.getRitual(store: self.cancellables)
-            .mainSink(receiveResult: { (ritual, error) in
-                if let r = ritual {
-                    self.updateHump(with: r.timeComponents)
-                } else {
-                    self.setDefault()
-                }
-            }).store(in: &self.cancellables)
+        if let ritual = User.current()?.ritual {
+            ritual.retrieveDataIfNeeded()
+                .mainSink { (ritualWithData, error) in
+                    if let r = ritualWithData {
+                        self.updateHump(with: r.timeComponents)
+                    } else {
+                        self.setDefault()
+                    }
+                }.store(in: &self.cancellables)
+        } else {
+            self.setDefault()
+        }
 
         self.content.minusButton.didSelect { [unowned self] in
             if let newDate = self.selectedDate.subtract(component: .minute, amount: 15) {
