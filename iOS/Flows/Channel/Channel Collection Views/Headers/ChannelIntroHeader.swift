@@ -65,8 +65,8 @@ class ChannelIntroHeader: UICollectionReusableView {
 
         if case .channel(let tchChannel) = channel.channelType {
             tchChannel.getNonMeMembers()
-                .mainSink(receiveResult: { (members, error) in
-                    if let first = members?.first, let date = tchChannel.dateCreatedAsDate {
+                .mainSink(receiveValue: { (members) in
+                    if let first = members.first, let date = tchChannel.dateCreatedAsDate {
                         self.avatarView.set(avatar: first)
                         self.label.setText(first.givenName)
                         let message = self.getMessage(name: first.givenName, date: date)

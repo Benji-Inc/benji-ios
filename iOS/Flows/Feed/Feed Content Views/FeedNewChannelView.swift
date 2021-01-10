@@ -35,10 +35,9 @@ class FeedNewChannelView: View {
     func configure(with channel: DisplayableChannel) {
         guard case ChannelType.channel(let tchChannel) = channel.channelType else { return }
         tchChannel.getAuthorAsUser()
-            .mainSink(receiveResult: { (user, error) in
-                guard let u = user else { return }
-                self.avatarView.set(avatar: u)
-                let message = LocalizedString(id: "", arguments: [u.givenName], default: "Congrats! 🎉 You can now chat with @(name)!")
+            .mainSink(receiveValue: { (user) in
+                self.avatarView.set(avatar: user)
+                let message = LocalizedString(id: "", arguments: [user.givenName], default: "Congrats! 🎉 You can now chat with @(name)!")
                 self.textView.set(localizedText: message)
                 self.layoutNow()
             }).store(in: &self.cancellables)

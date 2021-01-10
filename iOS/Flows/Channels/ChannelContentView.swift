@@ -100,8 +100,8 @@ class ChannelContentView: View {
     private func display(channel: TCHChannel) {
 
         channel.getUsers(excludeMe: true)
-            .mainSink(receiveResult: { (users, error) in
-                if let first = users?.first {
+            .mainSink(receiveValue: { (users) in
+                if let first = users.first {
                     if let routine = first.ritual {
                         routine.fetchIfNeededInBackground(block: { (object, error) in
                             if let routine = object as? Ritual, let date = routine.date {
@@ -120,7 +120,7 @@ class ChannelContentView: View {
                     if channel.isOwnedByMe {
                         self.titleLabel.setText(first.givenName)
                         self.titleLabel.setTextColor(.white)
-                    } else if let author = users?.first(where: { (user) -> Bool in
+                    } else if let author = users.first(where: { (user) -> Bool in
                         return user.id == channel.createdBy
                     }) {
                         self.titleLabel.setText(author.givenName)
@@ -137,10 +137,9 @@ class ChannelContentView: View {
                     self.descriptionText = "It's just you in here."
                 }
 
-                if let notMeUsers = users {
-                    self.stackedAvatarView.set(items: notMeUsers)
-                }
+                self.stackedAvatarView.set(items: users)
                 self.layoutNow()
+
             }).store(in: &self.cancellables)
 
         if let date = channel.dateUpdatedAsDate {

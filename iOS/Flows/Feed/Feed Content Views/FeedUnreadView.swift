@@ -34,9 +34,8 @@ class FeedUnreadView: View {
 
     func configure(with channel: TCHChannel, count: Int) {
         channel.getAuthorAsUser()
-            .mainSink(receiveResult: { (user, error) in
-                guard let u = user else { return }
-                self.avatarView.set(avatar: u)
+            .mainSink(receiveValue: { (user) in
+                self.avatarView.set(avatar: user)
                 self.textView.set(localizedText: "You have \(String(count)) unread messages in \(String(optional: channel.friendlyName))")
                 self.layoutNow()
             }).store(in: &self.cancellables)

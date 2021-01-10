@@ -16,8 +16,12 @@ extension Publisher where Self.Failure == Never {
     }
 }
 
+enum PublishedResult<V> {
+    case success(V)
+    case error(Error)
+}
+
 extension Publisher where Self.Failure == Error {
-    typealias Result = (_ value: Self.Output?, _ error: Error?) -> Void
 
     func mainSink(receiveValue: @escaping ((Self.Output) -> Void),
                   receiveCompletion: @escaping ((Subscribers.Completion<Error>) -> Void)) -> AnyCancellable {
@@ -25,17 +29,26 @@ extension Publisher where Self.Failure == Error {
             .sink(receiveCompletion: receiveCompletion, receiveValue: receiveValue)
     }
 
-    func mainSink(receiveResult: (Result)? = nil) -> AnyCancellable {
+    func mainSink(receivedResult: @escaping (PublishedResult<Self.Output>) -> Void) -> AnyCancellable {
         return self.receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { (result) in
                 switch result {
                 case .finished:
-                    receiveResult?(nil, nil)
+                    break
                 case .failure(let error):
-                    receiveResult?(nil, error)
+                    receivedResult(.error(error))
                 }
             }, receiveValue: { (value) in
-                receiveResult?(value, nil)
+                receivedResult(.success(value))
+            })
+    }
+
+    func mainSink(receiveValue: ((Self.Output) -> Void)? = nil) -> AnyCancellable {
+        return self.receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { (_) in
+                // Only listen for a value
+            }, receiveValue: { (value) in
+                receiveValue?(value)
             })
     }
 }

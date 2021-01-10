@@ -118,10 +118,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     func updateReservationCreator(with userId: String) {
         User.localThenNetworkQuery(for: userId)
-            .mainSink(receiveResult: { (user, error) in
-                guard let u = user else { return }
-                self.reservationUser = u
-                self.avatarView.set(avatar: u)
+            .mainSink(receiveValue: { (user) in
+                self.reservationUser = user
+                self.avatarView.set(avatar: user)
                 self.avatarView.isHidden = false
                 self.updateNavigationBar()
                 self.view.layoutNow()

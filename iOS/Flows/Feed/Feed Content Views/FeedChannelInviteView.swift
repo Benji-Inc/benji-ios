@@ -37,10 +37,9 @@ class FeedChannelInviteView: View {
     func configure(with channel: TCHChannel) {
         self.channel = channel 
         channel.getAuthorAsUser()
-            .mainSink(receiveResult: { (user, error) in
-                guard let u = user else { return }
-                self.avatarView.set(avatar: u)
-                let text = "You have been invited to join \(String(optional: channel.friendlyName)), by \(u.fullName)"
+            .mainSink(receiveValue: { (user) in
+                self.avatarView.set(avatar: user)
+                let text = "You have been invited to join \(String(optional: channel.friendlyName)), by \(user.fullName)"
                 self.textView.set(localizedText: text)
                 self.layoutNow()
             }).store(in: &self.cancellables)

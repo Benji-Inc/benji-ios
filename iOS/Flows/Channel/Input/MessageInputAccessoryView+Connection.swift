@@ -44,8 +44,7 @@ extension MessageInputAccessoryView {
 
     private func setPlaceholder(with channel: TCHChannel) {
         channel.getUsers(excludeMe: true)
-            .mainSink(receiveResult: { (users, error) in
-                guard let users = users else { return }
+            .mainSink(receiveValue: { (users) in
                 self.expandingTextView.setPlaceholder(for: users)
             }).store(in: &self.cancellables)
     }

@@ -19,8 +19,7 @@ extension FeedViewController {
 
     func addItems() {
         FeedSupplier.shared.getItems()
-            .mainSink(receiveResult: { (items, error) in
-                guard let items = items else { return }
+            .mainSink(receiveValue: { (items) in
                 self.view.layoutNow()
                 self.manager.set(items: items)
                 self.showFeed()
@@ -29,8 +28,7 @@ extension FeedViewController {
 
     func addFirstItems() {
         FeedSupplier.shared.getFirstItems()
-            .mainSink(receiveResult: { (items, error) in
-                guard let items = items else { return }
+            .mainSink(receiveValue: { (items) in
                 self.view.layoutNow()
                 self.manager.set(items: items)
                 self.showFeed()

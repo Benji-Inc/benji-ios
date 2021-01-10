@@ -68,9 +68,8 @@ class DisplayableImageView: View {
 
     private func findUser(with objectID: String) {
         User.localThenNetworkQuery(for: objectID)
-            .mainSink(receiveResult: { (user, error) in
-                guard let u = user else { return }
-                self.downloadAndSetImage(for: u)
+            .mainSink(receiveValue: { (user) in
+                self.downloadAndSetImage(for: user)
             }).store(in: &self.cancellables)
     }
 

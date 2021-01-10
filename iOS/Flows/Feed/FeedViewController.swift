@@ -79,13 +79,14 @@ class FeedViewController: ViewController {
     private func loadFeed() {
         if let ritual = User.current()?.ritual {
             ritual.retrieveDataIfNeeded()
-                .mainSink { (ritualWithData, error) in
-                    if let r = ritualWithData {
+                .mainSink(receivedResult: { (result) in
+                    switch result {
+                    case .success(let r):
                         self.determineMessage(with: r)
-                    } else {
+                    case .error(_):
                         self.addFirstItems()
                     }
-                }.store(in: &self.cancellables)
+                }).store(in: &self.cancellables)
         } else {
             self.addFirstItems()
         }
@@ -112,16 +113,14 @@ class FeedViewController: ViewController {
     }
 
     func showReload() {
-        runMain {
-            self.messageLabel.setText("You are all caught up!\nSee you tomorrow 🤗")
-            self.view.bringSubviewToFront(self.reloadButton)
-            self.view.layoutNow()
-            UIView.animate(withDuration: Theme.animationDuration, delay: Theme.animationDuration, options: .curveEaseInOut, animations: {
-                self.reloadButton.alpha = 1
-                self.messageLabel.alpha = 1
-                self.indicatorView.alpha = 0
-            }, completion: { _ in })
-        }
+        self.messageLabel.setText("You are all caught up!\nSee you tomorrow 🤗")
+        self.view.bringSubviewToFront(self.reloadButton)
+        self.view.layoutNow()
+        UIView.animate(withDuration: Theme.animationDuration, delay: Theme.animationDuration, options: .curveEaseInOut, animations: {
+            self.reloadButton.alpha = 1
+            self.messageLabel.alpha = 1
+            self.indicatorView.alpha = 0
+        }, completion: { _ in })
     }
 
     private func reloadFeed() {

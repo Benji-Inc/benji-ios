@@ -68,13 +68,14 @@ class RitualInputViewController: ViewController {
 
         if let ritual = User.current()?.ritual {
             ritual.retrieveDataIfNeeded()
-                .mainSink { (ritualWithData, error) in
-                    if let r = ritualWithData {
+                .mainSink(receivedResult: { (result) in
+                    switch result {
+                    case .success(let r):
                         self.updateHump(with: r.timeComponents)
-                    } else {
+                    case .error(_):
                         self.setDefault()
                     }
-                }.store(in: &self.cancellables)
+                }).store(in: &self.cancellables)
         } else {
             self.setDefault()
         }
@@ -116,14 +117,14 @@ class RitualInputViewController: ViewController {
     private func saveRoutine() {
         let ritual = Ritual()
         ritual.create(with: self.selectedDate)
-        ritual.saveEventually()
-            .mainSink(receiveResult: { (ritual, error) in
-                if let _ = ritual {
+        ritual.saveLocalThenServer()
+            .mainSink(receivedResult: { (result) in
+                switch result {
+                case .success(_):
                     self.animateButton(with: .lightPurple, text: "Success")
-                } else {
+                case .error(_):
                     self.animateButton(with: .red, text: "Error")
                 }
-
                 delay(2) {
                     self.state = .edit
                 }

@@ -45,7 +45,7 @@ class NameViewController: TextInputViewController<Void> {
         tf?.animationView.play()
         User.current()?.formatName(from: text)
         User.current()?.saveLocalThenServer()
-            .mainSink(receiveResult: { (_, _) in
+            .mainSink(receiveValue: { (user) in
                 tf?.animationView.stop()
                 self.complete(with: .success(()))
             }).store(in: &self.cancellables)

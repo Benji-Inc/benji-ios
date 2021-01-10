@@ -44,13 +44,12 @@ class MessageDeliveryManager {
                                      context: context,
                                      kind: kind,
                                      attributes: mutableAttributes)
-                        .mainSink(receiveResult: { (message, error) in
-                            if let _ = message {
+                        .mainSink(receivedResult: { (result) in
+                            switch result {
+                            case .success(_):
                                 completion(systemMessage, nil)
-                            } else if let e = error {
+                            case .error(let e):
                                 completion(systemMessage, e)
-                            } else {
-                                completion(systemMessage, ClientError.generic)
                             }
                         }).store(in: &self.cancellables)
                 }
@@ -78,13 +77,12 @@ class MessageDeliveryManager {
                                  context: message.context,
                                  kind: message.kind,
                                  attributes: attributes)
-                    .mainSink(receiveResult: { (message, error) in
-                        if let _ = message {
+                    .mainSink(receivedResult: { (result) in
+                        switch result {
+                        case .success(_):
                             completion(systemMessage, nil)
-                        } else if let e = error {
+                        case .error(let e):
                             completion(systemMessage, e)
-                        } else {
-                            completion(systemMessage, ClientError.generic)
                         }
                     }).store(in: &self.cancellables)
             } else {

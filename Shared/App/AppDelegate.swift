@@ -36,11 +36,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         GetChatToken()
             .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink(receiveResult: { (token, error) in
-                if ChatClientManager.shared.client.isNil, let tkn = token {
-                    ChatClientManager.shared.initialize(token: tkn)
-                } else if let tkn = token {
-                    ChatClientManager.shared.update(token: tkn)
+            .mainSink(receiveValue: { (token) in
+                if ChatClientManager.shared.client.isNil {
+                    ChatClientManager.shared.initialize(token: token)
+                } else {
+                    ChatClientManager.shared.update(token: token)
                 }
             }).store(in: &self.cancellables)
         #endif

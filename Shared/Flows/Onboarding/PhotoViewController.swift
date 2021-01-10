@@ -76,9 +76,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         self.$currentState
             .mainSink { [weak self] (state) in
-            guard let `self` = self else { return }
-            self.handle(state: state)
-        }.store(in: &self.cancellables)
+                guard let `self` = self else { return }
+                self.handle(state: state)
+            }.store(in: &self.cancellables)
 
         self.cameraVC.$faceDetected
             .mainSink(receiveValue: { [unowned self] (faceDetected) in
@@ -270,7 +270,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                         self.cameraVC.view.alpha = 0
                         self.borderView.alpha = 0
                         self.view.setNeedsLayout()
-        }) { (completed) in }
+                       }) { (completed) in }
     }
 
     func hideAvatar(with duration: TimeInterval = Theme.animationDuration) {
@@ -280,7 +280,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                         self.avatarView.alpha = 0
                         self.cameraVC.view.alpha = 1
                         self.view.setNeedsLayout()
-        }) { (completed) in }
+                       }) { (completed) in }
     }
 
     private func update(image: UIImage) {
@@ -317,12 +317,13 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         current.saveToServer()
             .flatMap({ (user) -> AnyPublisher<Any, Error> in
                 return ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
-            }).mainSink { (_, error) in
-                if error.isNil {
+            }).mainSink(receivedResult: { (result) in
+                switch result {
+                case .success(_):
                     self.currentState = .finish
-                } else {
+                case .error(_):
                     self.currentState = .error
                 }
-            }.store(in: &self.cancellables)
+            }).store(in: &self.cancellables)
     }
 }

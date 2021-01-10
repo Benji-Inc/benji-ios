@@ -54,12 +54,15 @@ class FeedSupplier {
     private func getInviteAsk() -> Future<Void, Error> {
         return Future { promise in
             Reservation.getFirstUnclaimed(for: User.current()!)
-                .mainSink { (reservation, error) in
-                    if let res = reservation {
-                        self.items.append(.inviteAsk(res))
+                .mainSink(receivedResult: { (result) in
+                    switch result {
+                    case .success(let reservation):
+                        self.items.append(.inviteAsk(reservation))
+                    case .error(_):
+                        break
                     }
                     promise(.success(()))
-                }.store(in: &self.cancellables)
+                }).store(in: &self.cancellables)
         }
     }
 
@@ -91,23 +94,21 @@ class FeedSupplier {
         }
 
         return Future { promise in
-            waitForAll(channelFutures).mainSink { (channelItems, error) in
-                var totalCount: Int = 0
-                let items = channelItems?.filter { (feedType) -> Bool in
-                    switch feedType {
-                    case .unreadMessages(_,let count):
-                        totalCount += count
-                        return count > 0
-                    default:
-                        return false
+            waitForAll(channelFutures)
+                .mainSink(receiveValue: { (channelItems) in
+                    var totalCount: Int = 0
+                    let items = channelItems.filter { (feedType) -> Bool in
+                        switch feedType {
+                        case .unreadMessages(_,let count):
+                            totalCount += count
+                            return count > 0
+                        default:
+                            return false
+                        }
                     }
-                }
-                self.items.append(.timeSaved(totalCount))
-                if let i = items {
-                    self.items.append(contentsOf: i)
-                }
-
-            }.store(in: &self.cancellables)
+                    self.items.append(.timeSaved(totalCount))
+                    self.items.append(contentsOf: items)
+                }).store(in: &self.cancellables)
         }
     }
 
@@ -115,14 +116,18 @@ class FeedSupplier {
         return Future { promise in
             GetAllConnections(direction: .incoming)
                 .makeRequest(andUpdate: [], viewsToIgnore: [])
-                .mainSink(receiveResult: { (connections, error) in
-                    if let connections = connections {
+                .mainSink(receivedResult: { (result) in
+                    switch result {
+                    case .success(let connections):
                         connections.forEach { (connection) in
                             if connection.status == .invited {
                                 self.items.append(.connectionRequest(connection))
                             }
                         }
+                    case .error(_):
+                        break
                     }
+
                     promise(.success(()))
                 }).store(in: &self.cancellables)
         }
@@ -132,8 +137,9 @@ class FeedSupplier {
         return Future { promise in
             GetAllConnections(direction: .incoming)
                 .makeRequest(andUpdate: [], viewsToIgnore: [])
-                .mainSink(receiveResult: { (connections, error) in
-                    if let connections = connections {
+                .mainSink(receivedResult: { (result) in
+                    switch result {
+                    case .success(let connections):
                         connections.forEach { (connection) in
                             if connection.status == .accepted,
                                let channelId = connection.channelId,
@@ -142,8 +148,8 @@ class FeedSupplier {
                             }
                         }
                         promise(.success(()))
-                    } else {
-                        promise(.failure(ClientError.generic))
+                    case .error(let e):
+                        promise(.failure(e))
                     }
                 }).store(in: &self.cancellables)
         }
