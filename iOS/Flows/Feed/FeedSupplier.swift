@@ -41,8 +41,8 @@ class FeedSupplier {
         }
 
         var futures: [Future<Void, Error>] = []
-        //futures.append(self.getInviteAsk())
-        //futures.append(self.getNotificationPermissions())
+        futures.append(self.getInviteAsk())
+        futures.append(self.getNotificationPermissions())
         //futures.append(self.getUnreadMessages())
         //futures.append(self.getConnections())
 
@@ -51,29 +51,29 @@ class FeedSupplier {
         }.eraseToAnyPublisher()
     }
 
-//    private func getInviteAsk() -> Future<Void, Error> {
-//        return Reservation.getFirstUnclaimed(for: User.current()!).map { (reservation) -> Void in
-//            return ()
-//        }
-//        return Reservation.getFirstUnclaimed(for: User.current()!)
-//            .flatMap({ (reservation) -> Void in
-//                self.items.append(.inviteAsk(reservation))
-//                return ()
-//            })
-//    }
+    private func getInviteAsk() -> Future<Void, Error> {
+        return Future { promise in
+            Reservation.getFirstUnclaimed(for: User.current()!)
+                .mainSink { (reservation, error) in
+                    if let res = reservation {
+                        self.items.append(.inviteAsk(res))
+                    }
+                    promise(.success(()))
+                }.store(in: &self.cancellables)
+        }
+    }
 
-//    private func getNotificationPermissions() -> Future<Void, Never>  {
-//        let promise = Promise<Void>()
-//        UserNotificationManager.shared.getNotificationSettings()
-//            .observeValue { (settings) in
-//                if settings.authorizationStatus != .authorized {
-//                    self.items.append(.notificationPermissions)
-//                }
-//                promise.resolve(with: ())
-//        }
-//
-//        return promise
-//    }
+    private func getNotificationPermissions() -> Future<Void, Error>  {
+        return Future { promise in
+            UserNotificationManager.shared.getNotificationSettings()
+                .mainSink { (settings) in
+                    if settings.authorizationStatus != .authorized {
+                        self.items.append(.notificationPermissions)
+                    }
+                    promise(.success(()))
+                }.store(in: &self.cancellables)
+        }
+    }
 
 //    private func getUnreadMessages() -> Future<Void> {
 //
