@@ -74,14 +74,14 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.update(image: image)
         }
 
-        self.$currentState.mainSink { [weak self] (state) in
+        self.$currentState
+            .mainSink { [weak self] (state) in
             guard let `self` = self else { return }
             self.handle(state: state)
         }.store(in: &self.cancellables)
 
         self.cameraVC.$faceDetected
-            .receive(on: DispatchQueue.main)
-            .sink { (faceDetected) in
+            .mainSink(receiveValue: { [unowned self] (faceDetected) in
                 self.beginButton.isEnabled = faceDetected
 
                 guard self.currentState == .scan else { return }
@@ -90,7 +90,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 } else {
                     self.beginButton.set(style: .normal(color: .red, text: "NO face detected"))
                 }
-            }.store(in: &self.cancellables)
+            }).store(in: &self.cancellables)
 
         self.beginButton.didSelect { [unowned self] in
             if self.currentState == .initial {
@@ -233,6 +233,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private func handleFinishState() {
         self.complete(with: .success(()))
         self.confirmButton.handleEvent(status: .loading)
+        self.cancellables.forEach { (cancellable) in
+            cancellable.cancel()
+        }
     }
 
     private func showButtons() {

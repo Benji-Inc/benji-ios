@@ -13,10 +13,7 @@ import Combine
 class HomeCoordinator: PresentableCoordinator<Void> {
 
     private lazy var homeVC = HomeViewController()
-    private var cancellable: AnyCancellable?
-
-    var cancellables = Set<AnyCancellable>()
-
+    private var cancellables = Set<AnyCancellable>()
 
     override func toPresentable() -> DismissableVC {
         return self.homeVC
@@ -25,37 +22,37 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
-        self.cancellable = self.homeVC.$current
+        self.homeVC.$current
             .removeDuplicates()
             .mainSink { [weak self] (current) in
-            guard let `self` = self, let content = current else { return }
+                guard let `self` = self, let content = current else { return }
 
-            self.removeChild()
+                self.removeChild()
 
-            // Only use the deeplink once so that we don't repeatedly try
-            // to deeplink whenever content changes.
-            defer {
-                self.deepLink = nil
-            }
+                // Only use the deeplink once so that we don't repeatedly try
+                // to deeplink whenever content changes.
+                defer {
+                    self.deepLink = nil
+                }
 
-            switch content {
-            case .feed(let vc):
-                let coordinator = FeedCoordinator(router: self.router,
-                                                  deepLink: self.deepLink,
-                                                  feedVC: vc)
-                self.addChildAndStart(coordinator) { (_) in }
-            case .channels(let vc):
-                let coordinator = ChannelsCoordinator(router: self.router,
+                switch content {
+                case .feed(let vc):
+                    let coordinator = FeedCoordinator(router: self.router,
                                                       deepLink: self.deepLink,
-                                                      channelsVC: vc)
-                self.addChildAndStart(coordinator) { (_) in }
-            case .profile(let vc):
-                let coordinator = ProfileCoordinator(router: self.router,
-                                                     deepLink: self.deepLink,
-                                                     profileVC: vc)
-                self.addChildAndStart(coordinator) { (_) in }
-            }
-        }
+                                                      feedVC: vc)
+                    self.addChildAndStart(coordinator) { (_) in }
+                case .channels(let vc):
+                    let coordinator = ChannelsCoordinator(router: self.router,
+                                                          deepLink: self.deepLink,
+                                                          channelsVC: vc)
+                    self.addChildAndStart(coordinator) { (_) in }
+                case .profile(let vc):
+                    let coordinator = ProfileCoordinator(router: self.router,
+                                                         deepLink: self.deepLink,
+                                                         profileVC: vc)
+                    self.addChildAndStart(coordinator) { (_) in }
+                }
+            }.store(in: &self.cancellables)
 
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
