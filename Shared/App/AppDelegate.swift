@@ -7,12 +7,14 @@
 //
 
 import UIKit
+import Combine
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var mainCoordinator: MainCoordinator?
+    private var cancellables = Set<AnyCancellable>()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
@@ -28,20 +30,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         UserNotificationManager.shared.clearNotificationCenter()
+
         #if !APPCLIP
         guard !ChatClientManager.shared.isConnected, let _ = User.current()?.objectId else { return }
 
-//        GetChatToken()
-//            .makeRequest(andUpdate: [], viewsToIgnore: [])
-//        
-//            .mainsi
-//            .observeValue { (token) in
-//                if ChatClientManager.shared.client.isNil {
-//                    ChatClientManager.shared.initialize(token: token)
-//                } else {
-//                    ChatClientManager.shared.update(token: token)
-//                }
-//        }
+        GetChatToken()
+            .makeRequest(andUpdate: [], viewsToIgnore: [])
+            .mainSink(receiveResult: { (token, error) in
+                if ChatClientManager.shared.client.isNil, let tkn = token {
+                    ChatClientManager.shared.initialize(token: tkn)
+                } else if let tkn = token {
+                    ChatClientManager.shared.update(token: tkn)
+                }
+            }).store(in: &self.cancellables)
         #endif
     }
 
