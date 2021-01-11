@@ -17,7 +17,7 @@ class ImageViewButton: View {
         super.initializeSubviews()
         
         self.addSubview(self.imageView)
-        self.imageView.tintColor = Color.white.color
+        self.imageView.tintColor = Color.background3.color
         self.imageView.contentMode = .scaleAspectFit
 
         self.didSelect { [unowned self] in
