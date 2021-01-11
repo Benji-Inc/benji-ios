@@ -9,6 +9,8 @@
 		<string>appclips:ourown.chat</string>
 		<string>applinks:ourown.chat</string>
 		<string>webcredentials:ourown.chat</string>
+		<string>appclips:ourown.chat/reservation</string>
+		<string>appclips:ourown.chat/onboarding</string>
 	</array>
 	<key>com.apple.developer.healthkit</key>
 	<true/>
