@@ -26,10 +26,26 @@ class ReservationsCoordinator: Coordinator<Void> {
     override func start() {
         super.start()
 
-        self.sendText()
+        self.showIntroAlert()
     }
 
-    private func showAlert() {
+    private func showIntroAlert() {
+        let alert = UIAlertController(title: "Choose wisely",
+                                      message: "Ours is designed to work best with the people you communicate with the most. Be sure to choose a contact that is highlighted in 🟦, as Ours is currently only available on iOS.",
+                                      preferredStyle: .alert)
+
+        let ok = UIAlertAction(title: "Ok", style: .cancel) { (_) in
+            alert.dismiss(animated: true) {
+                self.sendText()
+            }
+        }
+
+        alert.addAction(ok)
+
+        self.router.navController.present(alert, animated: true, completion: nil)
+    }
+
+    private func showSentAlert() {
         let alert = UIAlertController(title: "RSVP Sent",
                                       message: "Your RSVP has been sent. As soon as someone accepts, using your link, a conversation will be created between the two of you.",
                                       preferredStyle: .alert)
@@ -66,7 +82,7 @@ extension ReservationsCoordinator: MFMessageComposeViewControllerDelegate {
             }
         case .sent:
             self.messageComposer.dismiss(animated: true) {
-                self.showAlert()
+                self.showSentAlert()
             }
         @unknown default:
             break
