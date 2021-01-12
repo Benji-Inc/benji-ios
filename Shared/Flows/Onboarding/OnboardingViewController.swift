@@ -182,8 +182,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func getTitle() -> Localized {
         guard let content = self.current else { return "" }
         switch content {
-        case .phone(_):
+        case .welcome(_):
             return "Welcome!"
+        case .phone(_):
+            return "Enter Phone"
         case .code(_):
             return "Vefify Code"
         case .name(_):
@@ -232,6 +234,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         guard let content = self.current else { return "" }
 
         switch content {
+        case .welcome(_):
+            return LocalizedString(id: "",
+                                   arguments: [],
+                                   default: "Ours is a better place to be social online.")
         case .phone(_):
             if let user = self.reservationUser {
                 return LocalizedString(id: "",
