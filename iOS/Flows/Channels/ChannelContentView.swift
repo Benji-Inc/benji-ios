@@ -110,11 +110,11 @@ class ChannelContentView: View {
                                 let string = formatter.string(from: date)
                                 self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s routine is: @(routine)")
                             } else {
-                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine yet for @(name).")
+                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No ritual yet for @(name).")
                             }
                         })
                     } else {
-                        self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No routine yet for @(name).")
+                        self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No ritual yet for @(name).")
                     }
 
                     if channel.isOwnedByMe {
