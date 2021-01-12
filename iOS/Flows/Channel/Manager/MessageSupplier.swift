@@ -23,7 +23,8 @@ class MessageSupplier {
         return self.allMessages.compactMap { (message) -> Messageable? in
             guard !message.isFromCurrentUser,
                 let userID = User.current()?.objectId,
-                !message.hasBeenConsumedBy.contains(userID) else { return nil }
+                !message.hasBeenConsumedBy.contains(userID),
+                message.context != .status  else { return nil }
             
             return message
         }
