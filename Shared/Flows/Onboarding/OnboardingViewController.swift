@@ -108,7 +108,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.waitlistVC.$didShowUpgrade.mainSink { [weak self] (didShow) in
             guard let `self` = self, didShow else { return }
-            delay(0.5) { [unowned self] in
+            delay(1.0) { [unowned self] in
                 self.confettiView.startConfetti(with: 10)
             }
         }.store(in: &self.cancellables)
