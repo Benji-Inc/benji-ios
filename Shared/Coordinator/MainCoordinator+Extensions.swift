@@ -36,18 +36,8 @@ extension MainCoordinator: LaunchManagerDelegate {
         switch result {
         case .success(let object, _):
             self.deepLink = object
-
-            if User.current().isNil {
-                runMain {
-                    self.runOnboardingFlow()
-                }
-            } else if let user = User.current(), !user.isOnboarded {
-                runMain {
-                    self.runOnboardingFlow()
-                }
-            } else {
-                // User has an account but is on the app clip, prompt full download
-                self.splashVC.displayAppUpdateOverlay()
+            runMain {
+                self.runOnboardingFlow()
             }
         case .failed(_):
             break

@@ -18,6 +18,8 @@ class WaitlistViewController: ViewController, Sizeable {
     let positionLabel = Label(font: .small)
     let remainingLabel = Label(font: .display)
 
+    @Published var didShowUpgrade: Bool = false
+
     lazy var skOverlay: SKOverlay = {
         let config = SKOverlay.AppClipConfiguration(position: .bottom)
         let overlay = SKOverlay(configuration: config)
@@ -30,6 +32,10 @@ class WaitlistViewController: ViewController, Sizeable {
 
         self.view.addSubview(self.positionLabel)
         self.view.addSubview(self.remainingLabel)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
         #if APPCLIP
         if User.current()?.status == .inactive || User.current()?.status == .active {
@@ -65,8 +71,9 @@ class WaitlistViewController: ViewController, Sizeable {
     }
 
     private func loadUpgrade() {
-        self.remainingLabel.setText("Your in! Tap 👇")
+        self.remainingLabel.setText("You're in!")
         self.displayAppUpdateOverlay()
+        self.didShowUpgrade = true
     }
 
     override func viewDidLayoutSubviews() {

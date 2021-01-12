@@ -22,6 +22,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
     let avatarView = AvatarView()
+    private let confettiView = ConfettiView()
     
     unowned let delegate: OnboardingViewControllerDelegate
 
@@ -50,6 +51,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         super.initializeViews()
 
         self.registerKeyboardEvents()
+
+        self.scrollView.insertSubview(self.confettiView, aboveSubview: self.blurView)
 
         self.scrollView.addSubview(self.avatarView)
         self.avatarView.isHidden = true 
@@ -103,6 +106,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
         }
 
+        self.waitlistVC.$didShowUpgrade.mainSink { [weak self] (didShow) in
+            guard let `self` = self, didShow else { return }
+            delay(0.5) { [unowned self] in
+                self.confettiView.startConfetti(with: 10)
+            }
+        }.store(in: &self.cancellables)
+
         if let userId = self.reservationCreatorId {
             self.updateReservationCreator(with: userId)
         }
@@ -110,6 +120,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        self.confettiView.expandToSuperviewSize()
 
         self.avatarView.setSize(for: 100)
         self.avatarView.centerOnX()
@@ -137,7 +149,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             fatalError()
             #endif
         case .inactive:
+            #if APPCLIP
+            return .waitlist(self.waitlistVC)
+            #else
             return .name(self.nameVC)
+            #endif
         case .needsVerification:
             return .phone(self.phoneVC)
         }

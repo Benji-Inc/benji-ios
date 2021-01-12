@@ -34,7 +34,7 @@ class MainCoordinator: Coordinator<Void> {
 
     private func runLaunchFlow() {
         LaunchManager.shared.launchApp(with: self.launchOptions)
-        self.router.setRootModule(self.splashVC, animated: true)
+        self.router.setRootModule(self.splashVC, animated: false)
     }
 
     #if !APPCLIP
