@@ -11,6 +11,22 @@ import Parse
 import PhoneNumberKit
 import Combine
 
+struct CreateConnection: CloudFunction {
+    typealias ReturnType = Any
+
+    var to: User
+
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
+        let params = ["to": self.to.id,
+                      "status": Connection.Status.invited.rawValue]
+
+        return self.makeRequest(andUpdate: statusables,
+                                params: params,
+                                callName: "createConnection",
+                                viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
+    }
+}
+
 struct UpdateConnection: CloudFunction {
     typealias ReturnType = Any
 
