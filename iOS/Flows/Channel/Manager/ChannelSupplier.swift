@@ -68,7 +68,7 @@ class ChannelSupplier {
     @Published private(set) var isSynced: Bool = false
     @Published private(set) var channelsUpdate: ChannelUpdate?
 
-    private var cancellables = Set<AnyCancellable>()
+    var cancellables = Set<AnyCancellable>()
 
     init() {
         self.subscribeToUpdates()

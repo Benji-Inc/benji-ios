@@ -65,7 +65,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
             case .pending(_):
                 break 
             case .channel(let tchChannel):
-                ChannelSupplier.delete(channel: tchChannel)
+                ChannelSupplier.shared.delete(channel: tchChannel)
                     .mainSink().store(in: &self.cancellables)
             }
         }
@@ -92,7 +92,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelCell> {
             case .pending(_):
                 break 
             case .channel(let tchChannel):
-                ChannelSupplier.leave(channel: tchChannel)
+                ChannelSupplier.shared.leave(channel: tchChannel)
                     .mainSink().store(in: &self.cancellables)
             }
         }

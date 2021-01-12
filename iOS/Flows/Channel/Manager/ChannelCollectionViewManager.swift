@@ -351,7 +351,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                     }).store(in: &self.cancellables)
             } else {
                 footerView.start(showLoading: false)
-                delay(1.5) {
+                delay(1.0) {
                     footerView.stop()
                     channelCollectionView.scrollToLastItem()
                 }
