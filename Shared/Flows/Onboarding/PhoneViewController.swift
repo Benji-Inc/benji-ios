@@ -13,16 +13,10 @@ import TMROLocalization
 import Combine
 
 class PhoneViewController: TextInputViewController<PhoneNumber> {
-
-    private let reservationId: String?
-    private let reservationCreatorId: String?
+    
     private(set) var isSendingCode: Bool = false
 
-    init(with reservationId: String?,
-         reservationCreatorId: String?) {
-
-        self.reservationId = reservationId
-        self.reservationCreatorId = reservationCreatorId
+    init() {
         let phoneField = PhoneTextField(frame: .zero)
         phoneField.withFlag = true
         phoneField.withDefaultPickerUI = true

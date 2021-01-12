@@ -16,7 +16,8 @@ protocol OnboardingViewControllerDelegate: class {
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent> {
 
-    lazy var phoneVC = PhoneViewController(with: self.reservationId, reservationCreatorId: self.reservationCreatorId)
+    lazy var welcomeVC = WelcomeViewController()
+    lazy var phoneVC = PhoneViewController()
     lazy var codeVC = CodeViewController(with: self.reservationId)
     lazy var nameVC = NameViewController()
     lazy var waitlistVC = WaitlistViewController()
@@ -55,7 +56,26 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.scrollView.insertSubview(self.confettiView, aboveSubview: self.blurView)
 
         self.scrollView.addSubview(self.avatarView)
-        self.avatarView.isHidden = true 
+        self.avatarView.isHidden = true
+
+        self.welcomeVC.$state.mainSink { (state) in
+            switch state {
+            case .welcome:
+                break
+            case .signup:
+                self.current = .phone(self.phoneVC)
+            case .reservationInput:
+                break
+            case .loadingReservation:
+                break
+            case .foundReservation(let reservation):
+                self.reservationId = reservation.objectId
+                if let identity = reservation.createdBy?.objectId {
+                    self.updateReservationCreator(with: identity)
+                }
+                self.current = .phone(self.phoneVC)
+            }
+        }.store(in: &self.cancellables)
 
         self.phoneVC.onDidComplete = { [unowned self] result in
             switch result {
