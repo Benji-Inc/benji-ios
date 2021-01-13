@@ -64,12 +64,12 @@ class ChannelIntroHeader: UICollectionReusableView {
         self.channel = channel
 
         if case .channel(let tchChannel) = channel.channelType {
-            tchChannel.getNonMeMembers()
+            tchChannel.getUsers(excludeMe: true)
                 .mainSink(receiveValue: { (members) in
                     if let first = members.first, let date = tchChannel.dateCreatedAsDate {
                         self.avatarView.set(avatar: first)
                         self.label.setText(first.givenName)
-                        let message = self.getMessage(name: first.givenName, date: date)
+                        let message = self.getMessage(handle: first.handle, date: date)
                         let attributed = AttributedString(message,
                                                           fontType: .small,
                                                           color: .background4)
@@ -81,7 +81,7 @@ class ChannelIntroHeader: UICollectionReusableView {
         }
     }
 
-    private func getMessage(name: String, date: Date) -> LocalizedString {
-        return LocalizedString(id: "", arguments: [name, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). You created this conversation on @(date)")
+    private func getMessage(handle: String, date: Date) -> LocalizedString {
+        return LocalizedString(id: "", arguments: [handle, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). You created this conversation on @(date)")
     }
 }
