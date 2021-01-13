@@ -120,10 +120,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         self.collectionView.dataSource = self.collectionViewManager
         self.collectionView.delegate = self.collectionViewManager
 
-        if let activeChannel = self.activeChannel {
-            self.load(activeChannel: activeChannel)
-        }
-
         //self.addChild(self.messageInputAccessoryView.expandingTextView.attachmentInputVC)
 
         self.setupHandlers()
@@ -151,15 +147,15 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             }
         }
 
- //       ChannelSupplier.shared.$activeChannel.main
-//        self.disposables.add(ChannelSupplier.shared.activeChannel.producer.on(value:  { [unowned self] (channel) in
-//            guard let activeChannel = channel else {
-//                self.collectionViewManager.reset()
-//                return
-//            }
-//
-//            self.load(activeChannel: activeChannel)
-//        }).start())
+        ChannelSupplier.shared.$activeChannel.mainSink { [unowned self] (channel) in
+            guard let activeChannel = channel else {
+                self.collectionViewManager.reset()
+                return
+            }
+
+            self.load(activeChannel: activeChannel)
+
+        }.store(in: &self.cancellables)
     }
 
     override func viewDidAppear(_ animated: Bool) {
