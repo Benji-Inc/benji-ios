@@ -31,7 +31,7 @@ class MessageTextView: TextView {
                  lineBreakMode: .byWordWrapping,
                  stringCasing: .unchanged,
                  isEditable: false,
-                 linkColor: .blue)
+                 linkColor: .teal)
 
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 2

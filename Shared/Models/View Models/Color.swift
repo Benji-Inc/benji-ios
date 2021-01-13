@@ -16,7 +16,6 @@ enum Color: String, CaseIterable {
     case background3
     case background4
     case backgroundWithAlpha
-    case blue
     case purple
     case lightPurple
     case teal
@@ -39,8 +38,6 @@ enum Color: String, CaseIterable {
             return UIColor(named: "Background4")!
         case .backgroundWithAlpha:
             return UIColor(named: "BackgroundWithAlpha")!
-        case .blue:
-            return UIColor(named: "Blue")!
         case .purple:
             return UIColor(named: "Purple")!
         case .lightPurple:

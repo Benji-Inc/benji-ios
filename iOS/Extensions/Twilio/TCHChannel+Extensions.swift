@@ -16,10 +16,6 @@ extension TCHChannel: ManageableCellItem {
     var id: String {
         return self.sid!
     }
-    
-    var backgroundColor: Color {
-        return .blue
-    }
 
     var isOwnedByMe: Bool {
         guard let currentUser = User.current() else { return false }

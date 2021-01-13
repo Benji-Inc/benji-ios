@@ -14,7 +14,7 @@ class ConfettiView: View {
 
     var colors: [Color] = [
         Color.red,
-        Color.blue,
+        Color.lightPurple,
         Color.purple]
 
     var velocities:[Int] = [

@@ -86,7 +86,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
                 guard self.currentState == .scan else { return }
                 if faceDetected {
-                    self.beginButton.set(style: .normal(color: .blue, text: "Capture"))
+                    self.beginButton.set(style: .normal(color: .lightPurple, text: "Capture"))
                 } else {
                     self.beginButton.set(style: .normal(color: .red, text: "NO face detected"))
                 }
@@ -105,7 +105,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.currentState = .scan
         }
 
-        self.confirmButton.set(style: .normal(color: .green, text: "Continue"))
+        self.confirmButton.set(style: .normal(color: .purple, text: "Continue"))
         self.confirmButton.didSelect { [unowned self] in
             guard let fixed = self.image else { return }
             self.saveProfilePicture(image: fixed)
@@ -191,7 +191,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             UIView.animate(withDuration: 0.2, animations: {
                 self.animationView.alpha = 0
                 self.borderView.alpha = 1
-                self.beginButton.set(style: .normal(color: .blue, text: "Capture"))
+                self.beginButton.set(style: .normal(color: .lightPurple, text: "Capture"))
             }) { (completed) in
                 // Begin capture
                 self.cameraVC.begin()
@@ -314,6 +314,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             current.smallImage = scaledImageFile
         }
 
+        self.confirmButton.handleEvent(status: .loading)
         current.saveToServer()
             .flatMap({ (user) -> AnyPublisher<Any, Error> in
                 return ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])

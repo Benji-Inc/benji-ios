@@ -25,6 +25,6 @@ class FeedTextView: TextView {
 
         self.set(attributed: attributed,
                  alignment: .center,
-                 linkColor: .blue)
+                 linkColor: .teal)
     }
 }

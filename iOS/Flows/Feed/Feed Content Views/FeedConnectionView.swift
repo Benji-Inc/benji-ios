@@ -31,7 +31,7 @@ class FeedConnectionView: View {
         self.addSubview(self.declineButton)
 
         self.textView.set(localizedText: "Connection request.")
-        self.acceptButton.set(style: .rounded(color: .blue, text: "Accept"))
+        self.acceptButton.set(style: .rounded(color: .purple, text: "Accept"))
         self.acceptButton.didSelect { [unowned self] in
             self.updateConnection(with: .accepted)
         }

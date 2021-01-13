@@ -23,7 +23,7 @@ class SplashViewController: FullScreenViewController {
         didSet {
             guard let text = self.text else { return }
             self.label.setText(text)
-            self.label.setTextColor(.background4)
+            self.label.setTextColor(.purple)
             self.view.layoutNow()
         }
     }

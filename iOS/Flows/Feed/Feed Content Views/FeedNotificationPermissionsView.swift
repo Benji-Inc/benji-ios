@@ -19,8 +19,8 @@ class FeedNotificationPermissionsView: View {
 
         self.addSubview(self.textView)
         self.addSubview(self.button)
-        self.textView.set(localizedText: "Notifications are only sent for important messages and daily routine remiders. Nothing else.")
-        self.button.set(style: .rounded(color: .blue, text: "OK"))
+        self.textView.set(localizedText: "Notifications are only sent for important messages and daily ritual remiders. Nothing else.")
+        self.button.set(style: .rounded(color: .purple, text: "OK"))
         self.button.didSelect { [unowned self] in
             self.handleNotificationPermissions()
         }

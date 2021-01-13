@@ -20,7 +20,7 @@ class FeedInviteView: View {
         self.addSubview(self.textView)
         self.addSubview(self.button)
         self.textView.set(localizedText: "Who would you like to share Ours with?")
-        self.button.set(style: .rounded(color: .blue, text: "SHARE"))
+        self.button.set(style: .rounded(color: .purple, text: "SHARE"))
         self.button.isEnabled = true
     }
 

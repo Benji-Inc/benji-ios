@@ -27,7 +27,7 @@ class FeedChannelInviteView: View {
         self.addSubview(self.avatarView)
         self.addSubview(self.button)
 
-        self.button.set(style: .normal(color: .blue, text: "JOIN"))
+        self.button.set(style: .normal(color: .purple, text: "JOIN"))
 //        self.button.didSelect { [unowned self] in
 //            guard let channel = self.channel else { return }
 ////            self.join(channel: channel)
