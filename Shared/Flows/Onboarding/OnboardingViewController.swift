@@ -90,13 +90,18 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.codeVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                if let current = User.current(), current.isOnboarded, current.status == .active {
-                    #if !APPCLIP
-                    // Code you don't want to use in your App Clip.
-                    self.delegate.onboardingView(self, didVerify: current)
-                    #else
-                    // Code your App Clip may access.
+                guard let current = User.current() else { return }
+                if current.isOnboarded, current.status == .active {
+                    #if APPCLIP
                     self.current = .waitlist(self.waitlistVC)
+                    #else
+                    self.delegate.onboardingView(self, didVerify: current)
+                    #endif
+                } else if current.status == .inactive, current.isOnboarded {
+                    #if APPCLIP
+                    self.current = .waitlist(self.waitlistVC)
+                    #else
+                    self.delegate.onboardingView(self, didVerify: current)
                     #endif
                 } else {
                     self.current = .name(self.nameVC)

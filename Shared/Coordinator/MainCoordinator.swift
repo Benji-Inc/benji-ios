@@ -121,12 +121,9 @@ class MainCoordinator: Coordinator<Void> {
             self.router.setRootModule(coordinator, animated: true)
             self.addChildAndStart(coordinator, finishedHandler: { (_) in
                 self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
-                    #if !APPCLIP
-                    // Code you don't want to use in your App Clip.
-                    self.runHomeFlow()
+                    #if APPCLIP
                     #else
-                    // Code your App Clip may access.
-
+                    self.runHomeFlow()
                     #endif
                 }
             })
