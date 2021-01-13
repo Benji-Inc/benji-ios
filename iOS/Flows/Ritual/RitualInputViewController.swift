@@ -1,5 +1,5 @@
 //
-//  RoutineInputViewController.swift
+//  RitualInputViewController.swift
 //  Benji
 //
 //  Created by Martin Young on 8/13/19.
@@ -18,19 +18,19 @@ private func round(num: CGFloat, toMultipleOf multiple: Int) -> Int {
     return Int(rounded)
 }
 
-enum RoutineInputState {
-    case needsAuthorization
-    case edit
-    case update
-}
-
 class RitualInputViewController: ViewController {
+
+    enum State {
+        case needsAuthorization
+        case edit
+        case update
+    }
 
     static let height: CGFloat = 500
     let content = RitualInputContentView()
 
     var selectedDate = Date()
-    @Published var state: RoutineInputState = .edit
+    @Published var state: State = .edit
 
     var didTapNeedsAthorization: CompletionOptional = nil
 
@@ -102,7 +102,7 @@ class RitualInputViewController: ViewController {
             }
         }
 
-        self.content.setRoutineButton.didSelect { [unowned self] in
+        self.content.confirmButton.didSelect { [unowned self] in
             switch self.state {
             case .needsAuthorization:
                 self.didTapNeedsAthorization?()
@@ -148,13 +148,13 @@ class RitualInputViewController: ViewController {
 
     private func animateButton(with color: Color, text: Localized) {
         UIView.animate(withDuration: Theme.animationDuration, animations: {
-            self.content.setRoutineButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-            self.content.setRoutineButton.alpha = 0
+            self.content.confirmButton.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            self.content.confirmButton.alpha = 0
         }) { (completed) in
-            self.content.setRoutineButton.set(style: .normal(color: color, text: text))
+            self.content.confirmButton.set(style: .normal(color: color, text: text))
             UIView.animate(withDuration: Theme.animationDuration) {
-                self.content.setRoutineButton.transform = .identity
-                self.content.setRoutineButton.alpha = 1
+                self.content.confirmButton.transform = .identity
+                self.content.confirmButton.alpha = 1
             }
         }
     }

@@ -13,7 +13,7 @@ class FeedView: View {
     private let container = View()
 
     lazy var introView = FeedIntroView()
-    lazy var routineView = FeedRoutineView()
+    lazy var ritualView = FeedRitualView()
     lazy var inviteView = FeedChannelInviteView()
     lazy var unreadView = FeedUnreadView()
     lazy var needInvitesView = FeedInviteView()
@@ -69,8 +69,8 @@ class FeedView: View {
                 self.didSelect?()
             }
         case .rountine:
-            self.container.addSubview(self.routineView)
-            self.routineView.button.didSelect { [unowned self] in
+            self.container.addSubview(self.ritualView)
+            self.ritualView.button.didSelect { [unowned self] in
                 self.didSelect?()
             }
         case .notificationPermissions:

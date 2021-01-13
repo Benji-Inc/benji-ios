@@ -40,7 +40,7 @@ extension FeedCoordinator: FeedViewControllerDelegate {
         case .timeSaved, .system(_):
             break
         case .rountine:
-            self.startRoutineFlow()
+            self.startRitualFlow()
         case .unreadMessages(let channel, _):
             self.startChannelFlow(for: .channel(channel))
         case .channelInvite(let channel):
@@ -63,7 +63,7 @@ extension FeedCoordinator: FeedViewControllerDelegate {
         self.addChildAndStart(coordinator) { (_) in}
     }
 
-    private func startRoutineFlow() {
+    private func startRitualFlow() {
         let coordinator = RitualCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { (result) in }
         self.router.present(coordinator, source: self.feedVC)

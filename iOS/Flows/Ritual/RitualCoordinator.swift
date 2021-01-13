@@ -1,5 +1,5 @@
 //
-//  RoutineCoordinator.swift
+//  RitualCoordinator.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 2/23/20.
@@ -10,10 +10,10 @@ import Foundation
 
 class RitualCoordinator: PresentableCoordinator<Void> {
 
-    lazy var routineVC = RitualViewController(with: self)
+    lazy var ritualVC = RitualViewController(with: self)
 
     override func toPresentable() -> DismissableVC {
-        return self.routineVC
+        return self.ritualVC
     }
 }
 
@@ -23,7 +23,7 @@ extension RitualCoordinator: RitualViewControllerDelegate {
         UserNotificationManager.shared.register(application: UIApplication.shared) { (success, error) in
             runMain {
                 if success {
-                    controller.routineInputVC.state = .update
+                    controller.inputVC.state = .update
                 } else if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(settingsUrl, completionHandler: { (success) in })
                 }

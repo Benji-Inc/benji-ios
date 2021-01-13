@@ -1,5 +1,5 @@
 //
-//  Routine.swift
+//  Ritual.swift
 //  Benji
 //
 //  Created by Martin Young on 8/13/19.
@@ -10,7 +10,7 @@ import Foundation
 import Parse
 import Combine
 
-enum RoutineKey: String {
+enum RitualKey: String {
     case hour
     case minute
 }
@@ -78,17 +78,17 @@ final class Ritual: PFObject, PFSubclassing  {
 }
 
 extension Ritual: Objectable {
-    typealias KeyType = RoutineKey
+    typealias KeyType = RitualKey
 
-    func getObject<Type>(for key: RoutineKey) -> Type? {
+    func getObject<Type>(for key: RitualKey) -> Type? {
         self.object(forKey: key.rawValue) as? Type
     }
 
-    func setObject<Type>(for key: RoutineKey, with newValue: Type) {
+    func setObject<Type>(for key: RitualKey, with newValue: Type) {
         self.setObject(newValue, forKey: key.rawValue)
     }
 
-    func getRelationalObject<PFRelation>(for key: RoutineKey) -> PFRelation? {
+    func getRelationalObject<PFRelation>(for key: RitualKey) -> PFRelation? {
         return self.relation(forKey: key.rawValue) as? PFRelation
     }
 

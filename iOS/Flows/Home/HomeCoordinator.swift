@@ -76,8 +76,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
                 self.startChannelFlow(for: channel.channelType)
             }
-        case .routine:
-            self.startRoutineFlow()
+        case .ritual:
+            self.startRitualFlow()
         case .profile:
             self.homeVC.current = .profile(self.homeVC.profileVC)
         case .feed:
@@ -87,7 +87,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-    private func startRoutineFlow() {
+    private func startRitualFlow() {
         let coordinator = RitualCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { (result) in }
         let source = self.homeVC.currentCenterVC ?? self.homeVC

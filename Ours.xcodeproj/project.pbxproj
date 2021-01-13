@@ -235,7 +235,7 @@
 		D6579536239A141900A01338 /* CountDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579535239A141900A01338 /* CountDownView.swift */; };
 		D6579557239C8B4000A01338 /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579556239C8B4000A01338 /* FeedCoordinator.swift */; };
 		D657955A239C8DA000A01338 /* FeedIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579559239C8DA000A01338 /* FeedIntroView.swift */; };
-		D657955C239CA01100A01338 /* FeedRoutineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657955B239CA01100A01338 /* FeedRoutineView.swift */; };
+		D657955C239CA01100A01338 /* FeedRitualView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657955B239CA01100A01338 /* FeedRitualView.swift */; };
 		D658C7D2244226A00027D12E /* FeedMeditationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D1244226A00027D12E /* FeedMeditationView.swift */; };
 		D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D4244229D20027D12E /* MeditationViewController.swift */; };
 		D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */; };
@@ -251,7 +251,7 @@
 		D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C725A3704300A4A3B7 /* LaunchManager.swift */; };
 		D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */; };
 		D66379D325A3704300A4A3B7 /* MessageDeliveryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C925A3704300A4A3B7 /* MessageDeliveryManager.swift */; };
-		D66379D425A3704300A4A3B7 /* RoutineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CA25A3704300A4A3B7 /* RoutineManager.swift */; };
+		D66379D425A3704300A4A3B7 /* RitualManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CA25A3704300A4A3B7 /* RitualManager.swift */; };
 		D66379D525A3704300A4A3B7 /* ChatClientManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CB25A3704300A4A3B7 /* ChatClientManager.swift */; };
 		D66379D625A3704300A4A3B7 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CC25A3704300A4A3B7 /* HealthKitManager.swift */; };
 		D66379D725A3704300A4A3B7 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CD25A3704300A4A3B7 /* SessionManager.swift */; };
@@ -260,7 +260,7 @@
 		D66379E525A39C2400A4A3B7 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CD25A3704300A4A3B7 /* SessionManager.swift */; };
 		D66379E825A39C2900A4A3B7 /* UserNotificationManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */; };
 		D66379FE25A39C6000A4A3B7 /* UserNotificationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C625A3704300A4A3B7 /* UserNotificationFactory.swift */; };
-		D6637A0125A39C7000A4A3B7 /* RoutineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CA25A3704300A4A3B7 /* RoutineManager.swift */; };
+		D6637A0125A39C7000A4A3B7 /* RitualManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CA25A3704300A4A3B7 /* RitualManager.swift */; };
 		D6637A2925A3A82F00A4A3B7 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E321D30E9100204BEE /* TextView.swift */; };
 		D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66656BC23D13C9A009E4BDF /* Switchable.swift */; };
 		D66A0B942351821200A0FFEA /* Completeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A0B932351821200A0FFEA /* Completeable.swift */; };
@@ -366,7 +366,7 @@
 		D6E0ED53239CBDA40073B33E /* FeedUnreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E0ED52239CBDA40073B33E /* FeedUnreadView.swift */; };
 		D6E4C7FB238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */; };
 		D6E4C7FF23943798002B1330 /* RitualTimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E4C7FE23943798002B1330 /* RitualTimeLabel.swift */; };
-		D6E4C8012394391A002B1330 /* RoutineTimeOfDayLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E4C8002394391A002B1330 /* RoutineTimeOfDayLabel.swift */; };
+		D6E4C8012394391A002B1330 /* RitualTimeOfDayLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E4C8002394391A002B1330 /* RitualTimeOfDayLabel.swift */; };
 		D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E65F18237791650061AA67 /* ManageableCell.swift */; };
 		D6E80C8B23B2D1180012D438 /* FeedNotificationPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E80C8A23B2D1180012D438 /* FeedNotificationPermissionsView.swift */; };
 		D6EAB68823E6211200B90D5A /* ProfilePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAB68623E615B500B90D5A /* ProfilePhotoViewController.swift */; };
@@ -553,7 +553,7 @@
 		D6579535239A141900A01338 /* CountDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownView.swift; sourceTree = "<group>"; };
 		D6579556239C8B4000A01338 /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
 		D6579559239C8DA000A01338 /* FeedIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedIntroView.swift; sourceTree = "<group>"; };
-		D657955B239CA01100A01338 /* FeedRoutineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRoutineView.swift; sourceTree = "<group>"; };
+		D657955B239CA01100A01338 /* FeedRitualView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRitualView.swift; sourceTree = "<group>"; };
 		D658C7D1244226A00027D12E /* FeedMeditationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMeditationView.swift; sourceTree = "<group>"; };
 		D658C7D4244229D20027D12E /* MeditationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationViewController.swift; sourceTree = "<group>"; };
 		D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationCoordinator.swift; sourceTree = "<group>"; };
@@ -568,7 +568,7 @@
 		D66379C725A3704300A4A3B7 /* LaunchManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchManager.swift; sourceTree = "<group>"; };
 		D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserNotificationManager.swift; sourceTree = "<group>"; };
 		D66379C925A3704300A4A3B7 /* MessageDeliveryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageDeliveryManager.swift; sourceTree = "<group>"; };
-		D66379CA25A3704300A4A3B7 /* RoutineManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoutineManager.swift; sourceTree = "<group>"; };
+		D66379CA25A3704300A4A3B7 /* RitualManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualManager.swift; sourceTree = "<group>"; };
 		D66379CB25A3704300A4A3B7 /* ChatClientManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatClientManager.swift; sourceTree = "<group>"; };
 		D66379CC25A3704300A4A3B7 /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		D66379CD25A3704300A4A3B7 /* SessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
@@ -674,7 +674,7 @@
 		D6E0ED52239CBDA40073B33E /* FeedUnreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUnreadView.swift; sourceTree = "<group>"; };
 		D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D6E4C7FE23943798002B1330 /* RitualTimeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RitualTimeLabel.swift; sourceTree = "<group>"; };
-		D6E4C8002394391A002B1330 /* RoutineTimeOfDayLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineTimeOfDayLabel.swift; sourceTree = "<group>"; };
+		D6E4C8002394391A002B1330 /* RitualTimeOfDayLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RitualTimeOfDayLabel.swift; sourceTree = "<group>"; };
 		D6E65F18237791650061AA67 /* ManageableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageableCell.swift; sourceTree = "<group>"; };
 		D6E80C8A23B2D1180012D438 /* FeedNotificationPermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedNotificationPermissionsView.swift; sourceTree = "<group>"; };
 		D6EAB68623E615B500B90D5A /* ProfilePhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePhotoViewController.swift; sourceTree = "<group>"; };
@@ -1102,7 +1102,7 @@
 				D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */,
 				D658C7D1244226A00027D12E /* FeedMeditationView.swift */,
 				D6E80C8A23B2D1180012D438 /* FeedNotificationPermissionsView.swift */,
-				D657955B239CA01100A01338 /* FeedRoutineView.swift */,
+				D657955B239CA01100A01338 /* FeedRitualView.swift */,
 				D642736522C971FD0088256B /* FeedTextView.swift */,
 				D6E0ED52239CBDA40073B33E /* FeedUnreadView.swift */,
 				D6815DB822EE1CAC00E71251 /* FeedView.swift */,
@@ -1124,7 +1124,7 @@
 			isa = PBXGroup;
 			children = (
 				D66379C725A3704300A4A3B7 /* LaunchManager.swift */,
-				D66379CA25A3704300A4A3B7 /* RoutineManager.swift */,
+				D66379CA25A3704300A4A3B7 /* RitualManager.swift */,
 				D66379CD25A3704300A4A3B7 /* SessionManager.swift */,
 				D66379C625A3704300A4A3B7 /* UserNotificationFactory.swift */,
 				D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */,
@@ -1508,7 +1508,7 @@
 				80D4A21723039B82007CB5F1 /* RitualInputContentView.swift */,
 				80D4A21523039B22007CB5F1 /* RitualInputViewController.swift */,
 				D6E4C7FE23943798002B1330 /* RitualTimeLabel.swift */,
-				D6E4C8002394391A002B1330 /* RoutineTimeOfDayLabel.swift */,
+				D6E4C8002394391A002B1330 /* RitualTimeOfDayLabel.swift */,
 				D653F6AF23588F8E00A03EEE /* RitualViewController.swift */,
 			);
 			path = Ritual;
@@ -1845,7 +1845,7 @@
 				D6432BF322D828480016001A /* ChannelDataSource.swift in Sources */,
 				D61EC0C221D3071400204BEE /* ViewController.swift in Sources */,
 				D66379D525A3704300A4A3B7 /* ChatClientManager.swift in Sources */,
-				D66379D425A3704300A4A3B7 /* RoutineManager.swift in Sources */,
+				D66379D425A3704300A4A3B7 /* RitualManager.swift in Sources */,
 				D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
 				D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */,
 				D67934D523D956BB00536B44 /* ChannelPreviewViewController.swift in Sources */,
@@ -1906,7 +1906,7 @@
 				D67896B222FF67650059BA75 /* CodeViewController.swift in Sources */,
 				D60C814222092D5300A127A3 /* PagingCollectionViewFlowLayout.swift in Sources */,
 				D642737122C991A60088256B /* ClosedRange+Extensions.swift in Sources */,
-				D657955C239CA01100A01338 /* FeedRoutineView.swift in Sources */,
+				D657955C239CA01100A01338 /* FeedRitualView.swift in Sources */,
 				D66379D025A3704300A4A3B7 /* UserNotificationFactory.swift in Sources */,
 				D6DADF722207DF83007D9EB1 /* ChannelsCollectionView.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
@@ -1916,7 +1916,7 @@
 				D61EC0E621D30EB300204BEE /* View.swift in Sources */,
 				D66F0FC722BF004300BA277D /* FeedType.swift in Sources */,
 				D61592DC24FAD7B400B63412 /* AttachementCell.swift in Sources */,
-				D6E4C8012394391A002B1330 /* RoutineTimeOfDayLabel.swift in Sources */,
+				D6E4C8012394391A002B1330 /* RitualTimeOfDayLabel.swift in Sources */,
 				D6DADF742207E0E2007D9EB1 /* TCHChannel+Extensions.swift in Sources */,
 				D6E80C8B23B2D1180012D438 /* FeedNotificationPermissionsView.swift in Sources */,
 				D684840A22CD48D000362AC3 /* GradientView.swift in Sources */,
@@ -1992,7 +1992,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6637A0125A39C7000A4A3B7 /* RoutineManager.swift in Sources */,
+				D6637A0125A39C7000A4A3B7 /* RitualManager.swift in Sources */,
 				D65519A52589151000B901E4 /* SplashViewController.swift in Sources */,
 				D6551A2825895D8B00B901E4 /* DisplayableImageView.swift in Sources */,
 				D6551A4425895E9E00B901E4 /* PhoneTextField.swift in Sources */,

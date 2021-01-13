@@ -102,13 +102,13 @@ class ChannelContentView: View {
         channel.getUsers(excludeMe: true)
             .mainSink(receiveValue: { (users) in
                 if let first = users.first {
-                    if let routine = first.ritual {
-                        routine.fetchIfNeededInBackground(block: { (object, error) in
-                            if let routine = object as? Ritual, let date = routine.date {
+                    if let ritual = first.ritual {
+                        ritual.fetchIfNeededInBackground(block: { (object, error) in
+                            if let ritual = object as? Ritual, let date = ritual.date {
                                 let formatter = DateFormatter()
                                 formatter.dateFormat = "h:mm a"
                                 let string = formatter.string(from: date)
-                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s routine is: @(routine)")
+                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s ritual is: @(ritual)")
                             } else {
                                 self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No ritual yet for @(name).")
                             }

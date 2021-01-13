@@ -26,12 +26,12 @@ class ProfileCoordinator: Coordinator<Void> {
 
         self.profileVC.delegate = self
 
-        if let link = self.deepLink, let target = link.deepLinkTarget, target == .routine {
-            self.presentRoutine()
+        if let link = self.deepLink, let target = link.deepLinkTarget, target == .ritual {
+            self.presentRitual()
         }
     }
 
-    private func presentRoutine() {
+    private func presentRitual() {
         let coordinator = RitualCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { (resutl) in }
         self.router.present(coordinator, source: self.profileVC)
@@ -49,8 +49,8 @@ extension ProfileCoordinator: ProfileViewControllerDelegate {
         guard user.isCurrentUser else { return }
 
         switch item {
-        case .routine:
-            self.presentRoutine()
+        case .ritual:
+            self.presentRitual()
         case .picture:
             self.presentPhoto()
         default:

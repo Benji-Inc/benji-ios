@@ -1,5 +1,5 @@
 //
-//  RoutineInputContentView.swift
+//  RitualInputContentView.swift
 //  Benji
 //
 //  Created by Martin Young on 8/13/19.
@@ -16,7 +16,7 @@ class RitualInputContentView: View {
     let plusButton = Button()
     let minusButton = Button()
     let timeHump = TimeHumpView()
-    let setRoutineButton = Button()
+    let confirmButton = Button()
 
     var labelOffset: CGFloat = 20
 
@@ -41,19 +41,19 @@ class RitualInputContentView: View {
         self.minusButton.tintColor = Color.lightPurple.color
         self.minusButton.alpha = 0
         
-        self.addSubview(self.setRoutineButton)
+        self.addSubview(self.confirmButton)
         self.addSubview(self.timeHump)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.setRoutineButton.setSize(with: self.width)
-        self.setRoutineButton.bottom = self.height
-        self.setRoutineButton.centerOnX()
+        self.confirmButton.setSize(with: self.width)
+        self.confirmButton.bottom = self.height
+        self.confirmButton.centerOnX()
 
         self.timeHump.size = CGSize(width: self.width * 0.9, height: 140)
-        self.timeHump.bottom = self.setRoutineButton.top - 20
+        self.timeHump.bottom = self.confirmButton.top - 20
         self.timeHump.centerOnX()
 
         self.everyDayLabel.setSize(withWidth: 200)

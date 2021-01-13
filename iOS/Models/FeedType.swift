@@ -28,7 +28,7 @@ enum FeedType: Comparable {
         case .timeSaved(_):
             return "intro"
         case .rountine:
-            return "routine"
+            return "ritual"
         case .system(_):
             return "system"
         case .unreadMessages(_, _):

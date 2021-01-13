@@ -25,7 +25,7 @@ class ProfileViewController: ViewController {
     private let nameView = ProfileDetailView()
     private let handleView = ProfileDetailView()
     private let localTimeView = ProfileDetailView()
-    private let routineView = ProfileDetailView()
+    private let ritualView = ProfileDetailView()
 
     init(with user: User) {
         self.user = user
@@ -52,10 +52,10 @@ class ProfileViewController: ViewController {
         self.view.addSubview(self.nameView)
         self.view.addSubview(self.handleView)
         self.view.addSubview(self.localTimeView)
-        self.view.addSubview(self.routineView)
-        self.routineView.button.isVisible = true 
-        self.routineView.button.didSelect { [unowned self] in
-            self.delegate?.profileView(self, didSelect: .routine, for: self.user)
+        self.view.addSubview(self.ritualView)
+        self.ritualView.button.isVisible = true 
+        self.ritualView.button.didSelect { [unowned self] in
+            self.delegate?.profileView(self, didSelect: .ritual, for: self.user)
         }
     }
 
@@ -69,7 +69,7 @@ class ProfileViewController: ViewController {
         self.nameView.configure(with: .name, for: user)
         self.handleView.configure(with: .handle, for: user)
         self.localTimeView.configure(with: .localTime, for: user)
-        self.routineView.configure(with: .routine, for: user)
+        self.ritualView.configure(with: .ritual, for: user)
     }
 
     override func viewDidLayoutSubviews() {
@@ -93,10 +93,10 @@ class ProfileViewController: ViewController {
         self.localTimeView.match(.top, to: .bottom, of: self.handleView, offset: Theme.contentOffset)
         self.localTimeView.pin(.left, padding: Theme.contentOffset)
 
-        self.routineView.size = itemSize
-        self.routineView.match(.top, to: .bottom, of: self.localTimeView, offset: Theme.contentOffset)
-        self.routineView.pin(.left, padding: Theme.contentOffset)
+        self.ritualView.size = itemSize
+        self.ritualView.match(.top, to: .bottom, of: self.localTimeView, offset: Theme.contentOffset)
+        self.ritualView.pin(.left, padding: Theme.contentOffset)
 
-        self.scrollView.contentSize = CGSize(width: self.view.width, height: self.routineView.bottom)
+        self.scrollView.contentSize = CGSize(width: self.view.width, height: self.ritualView.bottom)
     }
 }

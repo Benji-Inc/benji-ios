@@ -1,5 +1,5 @@
 //
-//  FeedRoutineView.swift
+//  FeedRitualView.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 12/7/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class FeedRoutineView: View {
+class FeedRitualView: View {
 
     let textView = FeedTextView()
     let button = Button()

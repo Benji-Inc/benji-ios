@@ -14,7 +14,7 @@ enum DeepLinkTarget : String, CaseIterable {
     case login
     case channel
     case channels
-    case routine
+    case ritual
     case profile
     case feed
     case reservation

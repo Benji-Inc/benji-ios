@@ -138,7 +138,7 @@ class MainCoordinator: Coordinator<Void> {
             let target = DeepLinkTarget(rawValue: string)  else { return }
 
         switch target {
-        case .home, .channel, .channels, .routine, .profile, .feed:
+        case .home, .channel, .channels, .ritual, .profile, .feed:
             if let user = User.current(), user.isAuthenticated {
                 #if !APPCLIP
                 // Code you don't want to use in your App Clip.

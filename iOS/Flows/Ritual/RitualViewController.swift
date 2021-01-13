@@ -1,5 +1,5 @@
 //
-//  RoutineViewController.swift
+//  RitualViewController.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 10/17/19.
@@ -15,7 +15,7 @@ protocol RitualViewControllerDelegate: class {
 
 class RitualViewController: NavigationBarViewController {
 
-    let routineInputVC = RitualInputViewController()
+    let inputVC = RitualInputViewController()
 
     unowned let delegate: RitualViewControllerDelegate
 
@@ -31,14 +31,14 @@ class RitualViewController: NavigationBarViewController {
     override func initializeViews() {
         super.initializeViews()
 
-        self.addChild(viewController: self.routineInputVC)
+        self.addChild(viewController: self.inputVC)
         self.backButton.isHidden = true
 
-        self.routineInputVC.didTapNeedsAthorization = {
+        self.inputVC.didTapNeedsAthorization = {
             self.delegate.ritualInputViewControllerNeedsAuthorization(self)
         }
 
-        self.routineInputVC.$state
+        self.inputVC.$state
             .removeDuplicates()
             .mainSink { (state) in
                 self.updateNavigationBar()
@@ -46,16 +46,16 @@ class RitualViewController: NavigationBarViewController {
     }
 
     override func getTitle() -> Localized {
-        switch self.routineInputVC.state {
+        switch self.inputVC.state {
         case .needsAuthorization:
             return "Need Permission"
         default:
-            return "DAILY ROUTINE"
+            return "DAILY RITUAL"
         }
     }
 
     override func getDescription() -> Localized {
-        switch self.routineInputVC.state {
+        switch self.inputVC.state {
         case .needsAuthorization:
             return "You will need to add notification permission to use this feature."
         default:
@@ -66,10 +66,10 @@ class RitualViewController: NavigationBarViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.routineInputVC.view.size = CGSize(width: self.view.width, height: RitualInputViewController.height)
-        self.routineInputVC.view.centerOnX()
-        self.routineInputVC.view.bottom = self.view.height - self.view.safeAreaInsets.bottom
+        self.inputVC.view.size = CGSize(width: self.view.width, height: RitualInputViewController.height)
+        self.inputVC.view.centerOnX()
+        self.inputVC.view.bottom = self.view.height - self.view.safeAreaInsets.bottom
 
-        self.scrollView.contentSize = CGSize(width: self.view.width, height: self.routineInputVC.view.bottom + 20)
+        self.scrollView.contentSize = CGSize(width: self.view.width, height: self.inputVC.view.bottom + 20)
     }
 }

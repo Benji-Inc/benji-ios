@@ -1,5 +1,5 @@
 //
-//  RoutineManager.swift
+//  RitualManager.swift
 //  Benji
 //
 //  Created by Martin Young on 8/13/19.
@@ -10,29 +10,29 @@ import Foundation
 import UserNotifications
 import Combine
 
-class RoutineManager {
+class RitualManager {
 
     let messageReminderID = "MessageReminderID"
     let lastChanceReminderID = "LastChanceReminderID"
 
-    static let shared = RoutineManager()
+    static let shared = RitualManager()
     private var cancellables = Set<AnyCancellable>()
 
-    func getRoutineNotifications() -> Future<[UNNotificationRequest], Never> {
+    func getNotifications() -> Future<[UNNotificationRequest], Never> {
         return Future { promise in
             let notificationCenter = UNUserNotificationCenter.current()
             notificationCenter.getPendingNotificationRequests { (requests) in
-                let routineRequests = requests.filter { (request) -> Bool in
+                let ritualRequests = requests.filter { (request) -> Bool in
                     return request.identifier.contains(self.messageReminderID)
                 }
-                promise(.success(routineRequests))
+                promise(.success(ritualRequests))
             }
         }
     }
 
-    func scheduleNotification(for routine: Ritual) {
+    func scheduleNotification(for ritual: Ritual) {
 
-        let identifier = self.messageReminderID + routine.timeDescription
+        let identifier = self.messageReminderID + ritual.timeDescription
 
         // Replace any previous notifications
         UserNotificationManager.shared.removeAllPendingNotificationRequests()
@@ -41,10 +41,10 @@ class RoutineManager {
         content.title = "Feed Unlocked"
         content.body = "Your daily feed is unlocked for the next hour."
         content.sound = UNNotificationSound.default
-        content.threadIdentifier = "routine"
+        content.threadIdentifier = "ritual"
 
         //        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: routine.timeComponents,
+        let trigger = UNCalendarNotificationTrigger(dateMatching: ritual.timeComponents,
                                                     repeats: true)
 
         let request = UNNotificationRequest(identifier: identifier,
@@ -53,11 +53,11 @@ class RoutineManager {
 
         UserNotificationManager.shared.schedule(note: request)
             .mainSink(receiveValue: { (_) in
-                self.scheduleLastChanceNotification(for: routine)
+                self.scheduleLastChanceNotification(for: ritual)
             }).store(in: &self.cancellables)
     }
 
-    func scheduleLastChanceNotification(for routine: Ritual) {
+    func scheduleLastChanceNotification(for ritual: Ritual) {
 
         let identifier = self.lastChanceReminderID
 
@@ -65,12 +65,12 @@ class RoutineManager {
         content.title = "Last Chance"
         content.body = "You have 10 mins left to check your feed for the day."
         content.sound = UNNotificationSound.default
-        content.threadIdentifier = "routine"
+        content.threadIdentifier = "ritual"
 
-        var lastChanceTime: DateComponents = routine.timeComponents
-        if let minutes = routine.timeComponents.minute {
+        var lastChanceTime: DateComponents = ritual.timeComponents
+        if let minutes = ritual.timeComponents.minute {
             var min = minutes + 50
-            var hour = routine.timeComponents.hour ?? 0
+            var hour = ritual.timeComponents.hour ?? 0
             if min > 60 {
                 min -= 60
                 hour += 1

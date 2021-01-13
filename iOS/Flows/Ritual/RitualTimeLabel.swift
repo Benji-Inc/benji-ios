@@ -1,5 +1,5 @@
 //
-//  RoutineTimeLabel.swift
+//  RitualTimeLabel.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 12/1/19.

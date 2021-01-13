@@ -38,9 +38,9 @@ class ProfileDetailView: View {
         case .localTime:
             self.titleLabel.setText("Local Time")
             self.label.setText(Date.nowInLocalFormat)
-        case .routine:
-            self.titleLabel.setText("Routine")
-            self.getRoutine(for: user)
+        case .ritual:
+            self.titleLabel.setText("Ritual")
+            self.getRitual(for: user)
         }
 
         self.layoutNow()
@@ -62,9 +62,9 @@ class ProfileDetailView: View {
         self.button.pin(.right)
     }
 
-    private func getRoutine(for user: User) {
+    private func getRitual(for user: User) {
 
-        self.label.setText("NO ROUTINE SET")
+        self.label.setText("NO RITUAL SET")
         self.button.set(style: .normal(color: .lightPurple, text: "Set"))
         self.button.isHidden = false
 
