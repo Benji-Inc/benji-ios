@@ -21,7 +21,6 @@ class ChannelContentView: View {
     private(set) var titleLabel = Label(font: .displayUnderlined)
     private let stackedAvatarView = StackedAvatarView()
     private let descriptionLabel = Label(font: .small, textColor: .background4)
-    private let dateLabel = ChannelDateLabel()
     private var cancellables = Set<AnyCancellable>()
 
     var descriptionText: Localized? {
@@ -47,7 +46,6 @@ class ChannelContentView: View {
         self.addSubview(self.stackedAvatarView)
         self.addSubview(self.titleLabel)
         self.addSubview(self.descriptionLabel)
-        self.vibrancyEffectView.contentView.addSubview(self.dateLabel)
         self.blurView.contentView.addSubview(self.vibrancyEffectView)
         self.set(backgroundColor: .clear)
         self.roundCorners()
@@ -91,10 +89,6 @@ class ChannelContentView: View {
         self.descriptionLabel.setSize(withWidth: width)
         self.descriptionLabel.left = self.titleLabel.left
         self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 8)
-
-        self.dateLabel.setSize(withWidth: self.width)
-        self.dateLabel.right = self.width - Theme.contentOffset
-        self.dateLabel.top = Theme.contentOffset
     }
 
     private func display(channel: TCHChannel) {
@@ -141,10 +135,6 @@ class ChannelContentView: View {
                 self.layoutNow()
 
             }).store(in: &self.cancellables)
-
-        if let date = channel.dateUpdatedAsDate {
-            self.dateLabel.set(date: date)
-        }
 
         self.layoutNow()
     }
