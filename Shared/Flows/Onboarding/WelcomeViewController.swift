@@ -16,7 +16,6 @@ class WelcomeViewController: TextInputViewController<Void> {
         case welcome
         case signup
         case reservationInput
-        case loadingReservation
         case foundReservation(Reservation)
         case reservationError
     }
@@ -29,7 +28,7 @@ class WelcomeViewController: TextInputViewController<Void> {
 
     init() {
         super.init(textField: TextField(),
-                   title: LocalizedString(id: "", default: "RSVP #"),
+                   title: LocalizedString(id: "", default: "Enter RSVP #"),
                    placeholder: LocalizedString(id: "", default: ""))
     }
 
@@ -37,20 +36,24 @@ class WelcomeViewController: TextInputViewController<Void> {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func shouldBecomeFirstResponder() -> Bool {
+        return false
+    }
+
     override func initializeViews() {
         super.initializeViews()
 
-        self.textField.alpha = 0
+        self.textEntry.alpha = 0
 
         self.view.addSubview(self.signupButton)
-        self.signupButton.set(style: .normal(color: .lightPurple, text: "Sign-Up/Login"))
+        self.signupButton.set(style: .normal(color: .lightPurple, text: "Sign-Up / Login"))
 
         self.signupButton.didSelect { [unowned self] in
             self.state = .signup
         }
 
         self.view.addSubview(self.reservationButton)
-        self.reservationButton.set(style: .normal(color: .lightPurple, text: "Claim RSVP"))
+        self.reservationButton.set(style: .normal(color: .purple, text: "Claim RSVP"))
         self.reservationButton.didSelect { [unowned self] in
             self.state = .reservationInput
         }
@@ -68,7 +71,7 @@ class WelcomeViewController: TextInputViewController<Void> {
         self.reservationButton.centerOnX()
 
         self.signupButton.setSize(with: self.view.width)
-        self.signupButton.match(.bottom, to: .top, of: self.reservationButton, offset: 10)
+        self.signupButton.match(.bottom, to: .top, of: self.reservationButton, offset: -10)
         self.signupButton.centerOnX()
     }
 
@@ -83,19 +86,22 @@ class WelcomeViewController: TextInputViewController<Void> {
             case .reservationInput:
                 self.reservationButton.alpha = 0
                 self.signupButton.alpha = 0
-            case .loadingReservation:
-                break
             case .foundReservation(_):
                 break
             case .reservationError:
-                break 
+                self.reservationButton.alpha = 1
+                self.signupButton.alpha = 1
             }
         } completion: { (completed) in
             switch state {
             case .reservationInput:
                 UIView.animate(withDuration: Theme.animationDuration) {
-                    self.textField.alpha = 1
+                    self.textEntry.alpha = 1
+                } completion: { (completed) in
+                    self.textField.becomeFirstResponder()
                 }
+            case .reservationError:
+                self.textField.resignFirstResponder()
             default:
                 break
             }

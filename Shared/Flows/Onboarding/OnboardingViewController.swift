@@ -66,14 +66,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 self.current = .phone(self.phoneVC)
             case .reservationInput:
                 break
-            case .loadingReservation:
-                break
             case .foundReservation(let reservation):
                 self.reservationId = reservation.objectId
                 if let identity = reservation.createdBy?.objectId {
                     self.updateReservationCreator(with: identity)
                 }
                 self.current = .phone(self.phoneVC)
+            case .reservationError:
+                break
             }
         }.store(in: &self.cancellables)
 
@@ -160,7 +160,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getInitialContent() -> OnboardingContent {
-        guard let status = User.current()?.status else { return .phone(self.phoneVC) }
+        guard let status = User.current()?.status else { return .welcome(self.welcomeVC)}
         switch status {
         case .active, .waitlist:
             #if APPCLIP
@@ -175,7 +175,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             return .name(self.nameVC)
             #endif
         case .needsVerification:
-            return .phone(self.phoneVC)
+            return .welcome(self.welcomeVC)
         }
     }
 
@@ -291,8 +291,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         super.willUpdateContent()
 
         guard let content = self.current else { return }
-
         switch content {
+        case .phone(_):
+            self.current = .welcome(self.welcomeVC)
         case .code(_):
             self.current = .phone(self.phoneVC)
         case .photo(_):
