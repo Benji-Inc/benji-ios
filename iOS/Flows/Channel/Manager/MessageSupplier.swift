@@ -19,6 +19,8 @@ class MessageSupplier {
     private(set) var sections: [ChannelSectionable] = []
     private var messagesObject: TCHMessages?
 
+    private var cancellables = Set<AnyCancellable>()
+
     var unreadMessages: [Messageable] {
         return self.allMessages.compactMap { (message) -> Messageable? in
             guard !message.isFromCurrentUser,
@@ -31,6 +33,49 @@ class MessageSupplier {
     }
 
     var didGetLastSections: (([ChannelSectionable]) -> Void)?
+
+    init() {
+        self.subscribeToUpdates()
+    }
+
+    deinit {
+        self.cancellables.forEach { (cancellable) in
+            cancellable.cancel()
+        }
+    }
+
+    private func subscribeToUpdates() {
+        ChatClientManager.shared.$messageUpdate.mainSink { [weak self] (update) in
+            guard let `self` = self else { return }
+
+            guard let messageUpdate = update, ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: messageUpdate.channel) else { return }
+
+            switch messageUpdate.status {
+            case .added:
+                self.allMessages.append(messageUpdate.message)
+            case .changed:
+                guard let index = self.findMessageIndex(for: messageUpdate) else { return }
+                self.allMessages[index] = messageUpdate.message
+            case .deleted:
+                guard let index = self.findMessageIndex(for: messageUpdate) else { return }
+                self.allMessages.remove(at: index)
+            case .toastReceived:
+                break
+            }
+        }.store(in: &self.cancellables)
+    }
+
+    private func findMessageIndex(for messageUpdate: MessageUpdate) -> Int? {
+        var messageIndex: Int?
+        for (index, message) in self.allMessages.enumerated() {
+            if message == messageUpdate.message {
+                messageIndex = index
+                break
+            }
+        }
+
+        return messageIndex
+    }
 
     func reset() {
         self.allMessages = []
