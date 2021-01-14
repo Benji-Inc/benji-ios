@@ -202,7 +202,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         self.detailVC.view.top = Theme.contentOffset
         self.detailVC.view.centerOnX()
 
-        self.collectionView.frame = self.view.safeAreaLayoutGuide.layoutFrame
+        self.collectionView.expandToSuperviewSize()
 
         if self.isFirstLayout {
             defer { self.isFirstLayout = false }

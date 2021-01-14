@@ -22,6 +22,8 @@ class ReadAllFooterView: UICollectionReusableView {
     private var dragStartPosition: CGPoint = .zero
     private var fractionCompletedStart: CGFloat = 0
 
+    var didCompleteAnimation: CompletionOptional = nil
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initializeViews()
@@ -74,14 +76,16 @@ class ReadAllFooterView: UICollectionReusableView {
     }
 
     func createAnimator() {
-        self.animator = UIViewPropertyAnimator(duration: 2.0, curve: .linear, animations: {
+        guard self.animator.isNil else { return }
+        
+        self.animator = UIViewPropertyAnimator(duration: 2.0, curve: .linear, animations: { [weak self] in
+            guard let `self` = self else { return }
             self.label.alpha = 1
             self.label.transform = .identity
         })
 
         self.animator?.addCompletion({ (position) in
-            self.animator = nil
-            self.prepareInitialAnimation()
+            self.didCompleteAnimation?()
         })
 
         self.animator?.scrubsLinearly = true
@@ -95,29 +99,12 @@ class ReadAllFooterView: UICollectionReusableView {
         self.label.transform = CGAffineTransform.init(scaleX: self.minScale, y: self.minScale)
     }
 
-    //    func start(showLoading: Bool) {
-    //        self.isAnimatingFinal = true
-    //        if !self.animationView.isAnimationPlaying, showLoading {
-    //            self.animationView.play()
-    //        }
-    //    }
-
     func stop() {
+        self.animator?.stopAnimation(true)
+        self.animator = nil
         self.isAnimatingFinal = false
         self.animationView.stop()
         self.prepareInitialAnimation()
-    }
-
-    //final animation to display loading
-    func animateFinal() {
-        //        if self.isAnimatingFinal {
-        //            return
-        //        }
-        //        self.isAnimatingFinal = true
-        //        UIView.animate(withDuration: Theme.animationDuration) {
-        //            self.label.alpha = 1
-        //            self.label.transform = .identity
-        //        }
     }
 
     override func prepareForReuse() {
