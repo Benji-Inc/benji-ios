@@ -55,7 +55,7 @@ class ReadAllFooterView: UICollectionReusableView {
         if hasUnreadMessages {
             text = "Read all? 🤓"
         } else {
-            text = "You're up to date."
+            text = "You're up to date. 😄"
         }
 
         self.label.setText(text)
