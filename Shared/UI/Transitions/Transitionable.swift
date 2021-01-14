@@ -65,11 +65,11 @@ enum TransitionType: Equatable {
         case .move(_):
             return 0.75
         case .fade:
-            return Theme.animationDuration
+            return 0.75
         case .fill(_):
             return 0.5
         case .home:
-            return 1.0
+            return 0.5
         }
     }
 }
