@@ -17,7 +17,15 @@ enum HomeContent: Equatable {
     case profile(ProfileViewController)
 }
 
-class HomeViewController: ViewController {
+class HomeViewController: ViewController, TransitionableViewController {
+
+    var receivingPresentationType: TransitionType {
+        return .fade
+    }
+
+    var transitionColor: Color {
+        return .background1
+    }
 
     lazy var feedVC = FeedViewController()
     lazy var channelsVC = ChannelsViewController()
