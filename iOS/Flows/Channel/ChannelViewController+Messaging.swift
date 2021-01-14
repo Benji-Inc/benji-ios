@@ -30,8 +30,7 @@ extension ChannelViewController: MessageInputAccessoryViewDelegate {
             break
         case .pending(_):
             break
-        case .channel(let channel):
-            channel.delegate = self
+        case .channel(_):
             self.loadMessages(for: activeChannel.channelType)
         }
     }
@@ -80,22 +79,5 @@ extension ChannelViewController: MessageInputAccessoryViewDelegate {
         self.indexPathForEditing = nil
         self.collectionViewManager.updateItem(with: updatedMessage)
         self.messageInputAccessoryView.reset()
-    }
-}
-
-extension ChannelViewController: TCHChannelDelegate {
-
-    func chatClient(_ client: TwilioChatClient,
-                    channel: TCHChannel,
-                    member: TCHMember,
-                    updated: TCHMemberUpdate) {
-    }
-
-    func chatClient(_ client: TwilioChatClient,
-                    channel: TCHChannel,
-                    message: TCHMessage,
-                    updated: TCHMessageUpdate) {
-
-        self.collectionViewManager.updateItem(with: message)
     }
 }

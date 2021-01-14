@@ -10,7 +10,7 @@ import Foundation
 import TwilioChatClient
 import Combine
 
-class MessageSupplier {
+class MessageSupplier: NSObject {
 
     static let shared = MessageSupplier()
 
@@ -25,6 +25,7 @@ class MessageSupplier {
 
     private var cancellables = Set<AnyCancellable>()
 
+    @Published var messageUpdate: MessageUpdate? = nil
     @Published var hasUnreadMessage: Bool = false
 
     var unreadMessages: [Messageable] {
@@ -40,7 +41,8 @@ class MessageSupplier {
 
     var didGetLastSections: (([ChannelSectionable]) -> Void)?
 
-    init() {
+    override init() {
+        super.init()
         self.subscribeToUpdates()
     }
 
@@ -51,6 +53,19 @@ class MessageSupplier {
     }
 
     private func subscribeToUpdates() {
+        ChannelSupplier.shared.$activeChannel.mainSink { [unowned self] (channel) in
+            guard let activeChannel = channel else {
+                return
+            }
+
+            switch activeChannel.channelType {
+            case .channel(let channel):
+                channel.delegate = self
+            default:
+                break
+            }
+        }.store(in: &self.cancellables)
+
         ChatClientManager.shared.$messageUpdate.mainSink { [weak self] (update) in
             guard let `self` = self else { return }
 
@@ -60,21 +75,23 @@ class MessageSupplier {
             case .added:
                 self.allMessages.append(messageUpdate.message)
             case .changed:
-                guard let index = self.findMessageIndex(for: messageUpdate) else { return }
+                guard let index = self.findMessageIndex(for: messageUpdate.message) else { return }
                 self.allMessages[index] = messageUpdate.message
             case .deleted:
-                guard let index = self.findMessageIndex(for: messageUpdate) else { return }
+                guard let index = self.findMessageIndex(for: messageUpdate.message) else { return }
                 self.allMessages.remove(at: index)
             case .toastReceived:
                 break
             }
+            // Forwards the update, after the supplier responds so the supplier remains the source of truth
+            self.messageUpdate = update
         }.store(in: &self.cancellables)
     }
 
-    private func findMessageIndex(for messageUpdate: MessageUpdate) -> Int? {
+    private func findMessageIndex(for message: TCHMessage) -> Int? {
         var messageIndex: Int?
-        for (index, message) in self.allMessages.enumerated() {
-            if message == messageUpdate.message {
+        for (index, msg) in self.allMessages.enumerated() {
+            if msg == message {
                 messageIndex = index
                 break
             }
@@ -193,5 +210,25 @@ class MessageSupplier {
         }
 
         return updatedMessage
+    }
+}
+
+extension MessageSupplier: TCHChannelDelegate {
+
+    func chatClient(_ client: TwilioChatClient,
+                    channel: TCHChannel,
+                    member: TCHMember,
+                    updated: TCHMemberUpdate) {
+    }
+
+    func chatClient(_ client: TwilioChatClient,
+                    channel: TCHChannel,
+                    message: TCHMessage,
+                    updated: TCHMessageUpdate) {
+
+        guard let index = self.findMessageIndex(for: message) else { return }
+        self.allMessages[index] = message
+        self.hasUnreadMessage = self.unreadMessages.count > 0 
+        self.messageUpdate = MessageUpdate(channel: channel, message: message, status: .changed)
     }
 }

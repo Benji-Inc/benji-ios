@@ -225,6 +225,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         guard indexPath.section == self.numberOfSections(in: collectionView) - 1 else { return UICollectionReusableView() }
 
         let footer = channelCollectionView.dequeueReusableFooterView(ReadAllFooterView.self, for: indexPath)
+        footer.configure(hasUnreadMessages: MessageSupplier.shared.hasUnreadMessage) 
         self.footerView = footer
         footer.createAnimator()
         footer.didCompleteAnimation = { [unowned self] in
@@ -274,20 +275,12 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         guard let footerView = self.footerView else { return }
 
         if elementKind == UICollectionView.elementKindSectionFooter {
-            footerView.prepareInitialAnimation()
+            if footerView.animator.isNil {
+                footerView.createAnimator()
+            }
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        didEndDisplayingSupplementaryView view: UICollectionReusableView,
-                        forElementOfKind elementKind: String,
-                        at indexPath: IndexPath) {
-        guard let footerView = self.footerView else { return }
-
-        if elementKind == UICollectionView.elementKindSectionFooter {
-            footerView.stop()
-        }
-    }
 
     // MARK: TEXT VIEW DELEGATE
 

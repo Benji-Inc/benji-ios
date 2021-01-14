@@ -33,7 +33,7 @@ extension ChannelViewController {
     
     func subscribeToUpdates() {
 
-        ChatClientManager.shared.$messageUpdate.mainSink { [weak self] (update) in
+        MessageSupplier.shared.$messageUpdate.mainSink { [weak self] (update) in
             guard let `self` = self else { return }
 
             guard let channelUpdate = update, ChannelSupplier.shared.isChannelEqualToActiveChannel(channel: channelUpdate.channel) else { return }

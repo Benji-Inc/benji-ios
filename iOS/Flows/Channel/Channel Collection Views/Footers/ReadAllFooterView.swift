@@ -9,19 +9,17 @@
 import Foundation
 import TMROLocalization
 import Lottie
+import Combine
 
 class ReadAllFooterView: UICollectionReusableView {
 
     let animationView = AnimationView(name: "loading")
     private let label = Label(font: .smallBold)
     var isAnimatingFinal: Bool = false
-    var currentTransform: CGAffineTransform?
     private let minScale: CGFloat = 0.8
     
     private(set) var animator: UIViewPropertyAnimator?
-    private var dragStartPosition: CGPoint = .zero
-    private var fractionCompletedStart: CGFloat = 0
-
+    private var cancellables = Set<AnyCancellable>()
     var didCompleteAnimation: CompletionOptional = nil
 
     override init(frame: CGRect) {
@@ -47,9 +45,13 @@ class ReadAllFooterView: UICollectionReusableView {
         self.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
+
+        MessageSupplier.shared.$hasUnreadMessage.mainSink { [unowned self] (hasUnread) in
+            self.configure(hasUnreadMessages: hasUnread)
+        }.store(in: &self.cancellables)
     }
 
-    func configure(hasUnreadMessages: Bool, section: Int) {
+    func configure(hasUnreadMessages: Bool) {
 
         var text: Localized
         if hasUnreadMessages {
@@ -59,7 +61,6 @@ class ReadAllFooterView: UICollectionReusableView {
         }
 
         self.label.setText(text)
-        self.prepareInitialAnimation()
         self.layoutNow()
     }
 
@@ -86,22 +87,28 @@ class ReadAllFooterView: UICollectionReusableView {
 
         self.animator?.addCompletion({ (position) in
             self.didCompleteAnimation?()
+            self.animator = nil
         })
 
         self.animator?.scrubsLinearly = true
         self.animator?.isInterruptible = true
+        self.prepareInitialAnimation()
     }
 
     //reset the animation
-    func prepareInitialAnimation() {
+    private func prepareInitialAnimation() {
         self.isAnimatingFinal = false
         self.label.alpha = 0
         self.label.transform = CGAffineTransform.init(scaleX: self.minScale, y: self.minScale)
     }
 
     func stop() {
-        self.animator?.stopAnimation(true)
-        self.animator = nil
+        if self.animator?.isRunning == true {
+            self.animator?.stopAnimation(false)
+        } else {
+            self.animator = nil
+        }
+
         self.isAnimatingFinal = false
         self.animationView.stop()
         self.prepareInitialAnimation()
@@ -111,5 +118,9 @@ class ReadAllFooterView: UICollectionReusableView {
         super.prepareForReuse()
 
         self.label.text = nil
+        if let animator = self.animator, animator.isRunning {
+            animator.stopAnimation(true)
+            self.animator = nil 
+        }
     }
 }
