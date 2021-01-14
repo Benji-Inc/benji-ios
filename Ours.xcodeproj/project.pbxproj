@@ -280,6 +280,18 @@
 		D66F102622C7C6A900BA277D /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
 		D66F102822C7D1D200BA277D /* ChannelContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102722C7D1D200BA277D /* ChannelContentView.swift */; };
 		D6740D4823AEA5BD009D5702 /* ChannelsCoordiantor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6740D4723AEA5BD009D5702 /* ChannelsCoordiantor.swift */; };
+		D677588325B09F4D007E0184 /* Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588225B09F4D007E0184 /* Transitionable.swift */; };
+		D677588425B09F4D007E0184 /* Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588225B09F4D007E0184 /* Transitionable.swift */; };
+		D677588C25B09F9C007E0184 /* TransitionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588B25B09F9C007E0184 /* TransitionRouter.swift */; };
+		D677588D25B09F9C007E0184 /* TransitionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588B25B09F9C007E0184 /* TransitionRouter.swift */; };
+		D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */; };
+		D677589225B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */; };
+		D677589625B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */; };
+		D677589725B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */; };
+		D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */; };
+		D677589C25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */; };
+		D67758A025B0A17D007E0184 /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */; };
+		D67758A125B0A17D007E0184 /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */; };
 		D67896A922FF51170059BA75 /* PhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896A822FF51170059BA75 /* PhoneViewController.swift */; };
 		D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896AC22FF60190059BA75 /* TextInputViewController.swift */; };
 		D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896AE22FF62630059BA75 /* PhoneKit.swift */; };
@@ -589,6 +601,12 @@
 		D66F102522C7C6A900BA277D /* Lorem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lorem.swift; sourceTree = "<group>"; };
 		D66F102722C7D1D200BA277D /* ChannelContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelContentView.swift; sourceTree = "<group>"; };
 		D6740D4723AEA5BD009D5702 /* ChannelsCoordiantor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCoordiantor.swift; sourceTree = "<group>"; };
+		D677588225B09F4D007E0184 /* Transitionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transitionable.swift; sourceTree = "<group>"; };
+		D677588B25B09F9C007E0184 /* TransitionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionRouter.swift; sourceTree = "<group>"; };
+		D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+Fade.swift"; sourceTree = "<group>"; };
+		D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+Fill.swift"; sourceTree = "<group>"; };
+		D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+Move.swift"; sourceTree = "<group>"; };
+		D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
 		D67896A822FF51170059BA75 /* PhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViewController.swift; sourceTree = "<group>"; };
 		D67896AC22FF60190059BA75 /* TextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputViewController.swift; sourceTree = "<group>"; };
 		D67896AE22FF62630059BA75 /* PhoneKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneKit.swift; sourceTree = "<group>"; };
@@ -940,6 +958,7 @@
 		D6356D9625A36CF30015104F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */,
 				D6D1460621D552B100CD8CE4 /* Character+Extensions.swift */,
 				D642736F22C991850088256B /* Collection Extensions */,
 				D61EC0E721D3107A00204BEE /* Date+Extensions.swift */,
@@ -1201,6 +1220,7 @@
 		D6637A2325A3A75A00A4A3B7 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				D677588125B09F18007E0184 /* Transitions */,
 				D63C67DA23D4147C00EA373A /* Face Detection */,
 				D66656BB23D13C83009E4BDF /* Switchable */,
 				D66F0FE022C0413300BA277D /* View Controllers */,
@@ -1295,6 +1315,18 @@
 				D61EC0C121D3071400204BEE /* ViewController.swift */,
 			);
 			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		D677588125B09F18007E0184 /* Transitions */ = {
+			isa = PBXGroup;
+			children = (
+				D677588225B09F4D007E0184 /* Transitionable.swift */,
+				D677588B25B09F9C007E0184 /* TransitionRouter.swift */,
+				D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */,
+				D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */,
+				D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */,
+			);
+			path = Transitions;
 			sourceTree = "<group>";
 		};
 		D67896A122FF40AB0059BA75 /* Onboarding */ = {
@@ -1756,6 +1788,7 @@
 				D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */,
 				D67896BD23025FEC0059BA75 /* NameViewController.swift in Sources */,
 				D6E0ED4F239CA8950073B33E /* FeedChannelInviteView.swift in Sources */,
+				D677588C25B09F9C007E0184 /* TransitionRouter.swift in Sources */,
 				D607400E23401B3E009633EB /* SystemChannel.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */,
 				D6D1501C21D5F8AD00CD8CE4 /* MessageCell.swift in Sources */,
@@ -1772,6 +1805,7 @@
 				D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */,
 				D64273A522CC05DD0088256B /* InputTextView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
+				D677588325B09F4D007E0184 /* Transitionable.swift in Sources */,
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
 				D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */,
@@ -1833,6 +1867,7 @@
 				D67896CC2304524C0059BA75 /* ChannelCoordinator.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
 				D6432BF522D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift in Sources */,
+				D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */,
 				D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */,
 				D61D38E9248C506000BE457B /* MesasgeInputAccessoryView+Panning.swift in Sources */,
@@ -1913,6 +1948,7 @@
 				D61EC0E621D30EB300204BEE /* View.swift in Sources */,
 				D66F0FC722BF004300BA277D /* FeedType.swift in Sources */,
 				D61592DC24FAD7B400B63412 /* AttachementCell.swift in Sources */,
+				D67758A025B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,
 				D6DADF742207E0E2007D9EB1 /* TCHChannel+Extensions.swift in Sources */,
 				D6E80C8B23B2D1180012D438 /* FeedNotificationPermissionsView.swift in Sources */,
 				D684840A22CD48D000362AC3 /* GradientView.swift in Sources */,
@@ -1959,6 +1995,7 @@
 				D6FC809C237A6ED30089AACC /* ChannelCollectionViewManager+Typing.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
+				D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,
 				80D4A21C2303A005007CB5F1 /* Ritual.swift in Sources */,
 				D62C635422BE9CBB00F4D097 /* FeedViewController.swift in Sources */,
@@ -1974,6 +2011,7 @@
 				D6F33C7524B14A7B009603FF /* VideoAttributesCellConfigurer.swift in Sources */,
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
+				D677589625B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,
 				D6A301AC2380E102006655E0 /* FeedSupplier.swift in Sources */,
 				D66F0FDC22BF2ADC00BA277D /* HomeCoordinator.swift in Sources */,
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,
@@ -2006,6 +2044,7 @@
 				D66379E225A39C0400A4A3B7 /* UserNotificationManager.swift in Sources */,
 				D6DF870725A5214D0089B0CF /* QuePositions.swift in Sources */,
 				D655196D2589128300B901E4 /* ScreenSize.swift in Sources */,
+				D677589C25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
 				D6DA3193259B5B6D0078E769 /* Config.swift in Sources */,
 				D65519562589125E00B901E4 /* ClientError.swift in Sources */,
 				D65519F42589591D00B901E4 /* Typealies.swift in Sources */,
@@ -2040,11 +2079,13 @@
 				D6551A2D25895E3C00B901E4 /* OnboardingViewController.swift in Sources */,
 				D6551A3325895E4C00B901E4 /* PhoneViewController.swift in Sources */,
 				D655193D2589122700B901E4 /* UIWindow+Extensions.swift in Sources */,
+				D67758A125B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,
 				D6551A5F25895F1300B901E4 /* TextField.swift in Sources */,
 				D65519062589110A00B901E4 /* Coordinator.swift in Sources */,
 				D65519BE25891A0500B901E4 /* RootNavigationController.swift in Sources */,
 				D6551A4D25895EBB00B901E4 /* Sizeable.swift in Sources */,
 				D655192A2589122000B901E4 /* Selectable.swift in Sources */,
+				D677589225B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D65519202589121500B901E4 /* NSObject+Extensions.swift in Sources */,
 				D655195B2589126800B901E4 /* User+Extensions.swift in Sources */,
 				D655190E2589120100B901E4 /* Character+Extensions.swift in Sources */,
@@ -2061,6 +2102,7 @@
 				D65519592589126800B901E4 /* Connection.swift in Sources */,
 				D65519212589121500B901E4 /* NSAttributedString+Extensions.swift in Sources */,
 				D655196F2589128300B901E4 /* FontType.swift in Sources */,
+				D677588425B09F4D007E0184 /* Transitionable.swift in Sources */,
 				D655193A2589122700B901E4 /* UICollectionView+Extensions.swift in Sources */,
 				D65519082589110A00B901E4 /* Router.swift in Sources */,
 				D6551A3E25895E8C00B901E4 /* Button.swift in Sources */,
@@ -2071,6 +2113,7 @@
 				D65519172589120C00B901E4 /* Date+Extensions.swift in Sources */,
 				D65519222589121500B901E4 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D65519FF25895A0800B901E4 /* Statusable.swift in Sources */,
+				D677589725B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,
 				D65519FC258959CC00B901E4 /* CloudFunction.swift in Sources */,
 				D655193C2589122700B901E4 /* UIView+ScalingAnimation.swift in Sources */,
 				D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */,
@@ -2082,6 +2125,7 @@
 				D6551A5325895EE000B901E4 /* TextEntryField.swift in Sources */,
 				D655197D2589129B00B901E4 /* Avatar.swift in Sources */,
 				D66379E525A39C2400A4A3B7 /* SessionManager.swift in Sources */,
+				D677588D25B09F9C007E0184 /* TransitionRouter.swift in Sources */,
 				D6551A0525895A8800B901E4 /* Ritual.swift in Sources */,
 				D65519EF2589582C00B901E4 /* View.swift in Sources */,
 				D655197C2589129B00B901E4 /* KeyboardObservable.swift in Sources */,
