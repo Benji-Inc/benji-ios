@@ -58,6 +58,7 @@ enum TransitionType: Equatable {
     case move(UIView)
     case fade
     case fill(UIView)
+    case home
 
     var duration: TimeInterval {
         switch self {
@@ -67,6 +68,8 @@ enum TransitionType: Equatable {
             return Theme.animationDuration
         case .fill(_):
             return 0.5
+        case .home:
+            return 1.0
         }
     }
 }

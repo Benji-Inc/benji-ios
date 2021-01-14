@@ -292,6 +292,8 @@
 		D67758A125B0A17D007E0184 /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */; };
 		D67758A725B0A604007E0184 /* UIViewController+Presentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */; };
 		D67758A825B0A604007E0184 /* UIViewController+Presentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */; };
+		D67758AE25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67758AD25B0AFB2007E0184 /* TransitionRouter+Home.swift */; };
+		D67758AF25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67758AD25B0AFB2007E0184 /* TransitionRouter+Home.swift */; };
 		D67896A922FF51170059BA75 /* PhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896A822FF51170059BA75 /* PhoneViewController.swift */; };
 		D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896AC22FF60190059BA75 /* TextInputViewController.swift */; };
 		D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896AE22FF62630059BA75 /* PhoneKit.swift */; };
@@ -607,6 +609,7 @@
 		D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+Move.swift"; sourceTree = "<group>"; };
 		D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
 		D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Presentable.swift"; sourceTree = "<group>"; };
+		D67758AD25B0AFB2007E0184 /* TransitionRouter+Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+Home.swift"; sourceTree = "<group>"; };
 		D67896A822FF51170059BA75 /* PhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViewController.swift; sourceTree = "<group>"; };
 		D67896AC22FF60190059BA75 /* TextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputViewController.swift; sourceTree = "<group>"; };
 		D67896AE22FF62630059BA75 /* PhoneKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneKit.swift; sourceTree = "<group>"; };
@@ -1324,6 +1327,7 @@
 				D677588B25B09F9C007E0184 /* TransitionRouter.swift */,
 				D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */,
 				D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */,
+				D67758AD25B0AFB2007E0184 /* TransitionRouter+Home.swift */,
 				D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */,
 			);
 			path = Transitions;
@@ -1961,6 +1965,7 @@
 				D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */,
 				D61592DA24FAD7A300B63412 /* AttachementCollectionView.swift in Sources */,
 				D639F61824B1566B007E63B7 /* AttibutedMessageCell.swift in Sources */,
+				D67758AE25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */,
 				80C7C6062316112400643A14 /* TimeHumpView.swift in Sources */,
 				D61EC0D921D30C8E00204BEE /* DispatchQue+Extensions.swift in Sources */,
 				D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
@@ -2120,6 +2125,7 @@
 				D65519052589110A00B901E4 /* DeeplinkTarget.swift in Sources */,
 				D65519442589123200B901E4 /* Completeable.swift in Sources */,
 				D65519152589120C00B901E4 /* Error+Extensions.swift in Sources */,
+				D67758AF25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */,
 				D65519352589122700B901E4 /* UIControl+Extensions.swift in Sources */,
 				D6551A5325895EE000B901E4 /* TextEntryField.swift in Sources */,
 				D655197D2589129B00B901E4 /* Avatar.swift in Sources */,

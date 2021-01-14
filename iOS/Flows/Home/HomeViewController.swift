@@ -20,7 +20,7 @@ enum HomeContent: Equatable {
 class HomeViewController: ViewController, TransitionableViewController {
 
     var receivingPresentationType: TransitionType {
-        return .fade
+        return .home
     }
 
     var transitionColor: Color {
