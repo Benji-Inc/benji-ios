@@ -17,6 +17,10 @@ class ReadAllFooterView: UICollectionReusableView {
     var isAnimatingFinal: Bool = false
     var currentTransform: CGAffineTransform?
     private let minScale: CGFloat = 0.8
+    
+    private(set) var animator: UIViewPropertyAnimator?
+    private var dragStartPosition: CGPoint = .zero
+    private var fractionCompletedStart: CGFloat = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,6 +30,11 @@ class ReadAllFooterView: UICollectionReusableView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.initializeViews()
+    }
+
+    deinit {
+        // Because this animator is interruptable and is stopped by the completion event of another animation, we need to ensure that this gets called before the animator is cleaned up when this view is deallocated because theres no guarantee that will happen before a user dismisses the screen
+        self.animator?.stopAnimation(true)
     }
 
     private func initializeViews() {
@@ -64,16 +73,19 @@ class ReadAllFooterView: UICollectionReusableView {
         self.animationView.centerY = self.label.centerY
     }
 
-    func setTransform(inTransform: CGAffineTransform, scaleFactor: CGFloat) {
-        if self.isAnimatingFinal {
-            return
-        }
+    func createAnimator() {
+        self.animator = UIViewPropertyAnimator(duration: 2.0, curve: .linear, animations: {
+            self.label.alpha = 1
+            self.label.transform = .identity
+        })
 
-        self.currentTransform = inTransform
-        if scaleFactor >= self.minScale {
-            self.label.transform = CGAffineTransform.init(scaleX: scaleFactor, y: scaleFactor)
-        }
-        self.label.alpha = scaleFactor
+        self.animator?.addCompletion({ (position) in
+            self.animator = nil
+            self.prepareInitialAnimation()
+        })
+
+        self.animator?.scrubsLinearly = true
+        self.animator?.isInterruptible = true
     }
 
     //reset the animation
@@ -83,12 +95,12 @@ class ReadAllFooterView: UICollectionReusableView {
         self.label.transform = CGAffineTransform.init(scaleX: self.minScale, y: self.minScale)
     }
 
-    func start(showLoading: Bool) {
-        self.isAnimatingFinal = true
-        if !self.animationView.isAnimationPlaying, showLoading {
-            self.animationView.play()
-        }
-    }
+    //    func start(showLoading: Bool) {
+    //        self.isAnimatingFinal = true
+    //        if !self.animationView.isAnimationPlaying, showLoading {
+    //            self.animationView.play()
+    //        }
+    //    }
 
     func stop() {
         self.isAnimatingFinal = false
@@ -98,14 +110,14 @@ class ReadAllFooterView: UICollectionReusableView {
 
     //final animation to display loading
     func animateFinal() {
-        if self.isAnimatingFinal {
-            return
-        }
-        self.isAnimatingFinal = true
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.label.alpha = 1
-            self.label.transform = .identity
-        }
+        //        if self.isAnimatingFinal {
+        //            return
+        //        }
+        //        self.isAnimatingFinal = true
+        //        UIView.animate(withDuration: Theme.animationDuration) {
+        //            self.label.alpha = 1
+        //            self.label.transform = .identity
+        //        }
     }
 
     override func prepareForReuse() {

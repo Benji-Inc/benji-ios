@@ -55,6 +55,8 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                 break
             }
         }.store(in: &self.cancellables)
+
+        self.collectionView.panGestureRecognizer.addTarget(self, action: #selector(handle(_:)))
     }
 
     private func updateLayoutDataSource() {
@@ -312,51 +314,91 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         }
     }
 
-    //compute the scroll value and play witht the threshold to get desired effect
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        guard let footerView = self.footerView, let channelCollectionView = scrollView as? ChannelCollectionView else { return }
+    @objc func handle(_ recognizer: UIPanGestureRecognizer) {
+        guard let footer = self.footerView else { return }
 
+        if footer.animator.isNil {
+            footer.createAnimator()
+        }
+
+        guard let animator = footer.animator else { return }
+        switch recognizer.state {
+        case .began:
+            animator.pauseAnimation()
+            //self.fractionCompletedStart = animator.fractionComplete
+            //self.dragStartPosition = recognizer.location(in: view)
+        case .changed:
+            animator.pauseAnimation()
+            //let delta = recognizer.location(in: view).x - self.dragStartPosition.x
+            //animator.fractionComplete = max(0.0, min(1.0, fractionCompletedStart + delta / 300.0))
+            animator.fractionComplete = self.getProgress(for: footer)
+        case .ended:
+            animator.startAnimation()
+        default:
+            break
+        }
+    }
+
+    private func getProgress(for footer: ReadAllFooterView) -> CGFloat {
         let threshold = 60
-        let contentOffset = channelCollectionView.contentOffset.y
-        let contentHeight = channelCollectionView.contentSize.height + channelCollectionView.contentInset.top + footerView.height - channelCollectionView.contentInset.bottom
+        let contentOffset = self.collectionView.contentOffset.y
+        let contentHeight = self.collectionView.contentSize.height + self.collectionView.contentInset.top + footer.height - self.collectionView.contentInset.bottom
         let diffHeight = contentHeight - contentOffset
-        let frameHeight = channelCollectionView.bounds.size.height
+        let frameHeight = self.collectionView.bounds.size.height
         var triggerThreshold = Float((diffHeight - frameHeight))/Float(threshold)
         triggerThreshold = min(triggerThreshold, 0.0)
         let pullRatio = min(abs(triggerThreshold), 1.0)
-        footerView.setTransform(inTransform: .identity, scaleFactor: CGFloat(pullRatio))
-        if pullRatio >= 1 {
-            footerView.animateFinal()
-        }
+        print(pullRatio)
+        return CGFloat(pullRatio)
+    }
+
+    //compute the scroll value and play witht the threshold to get desired effect
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        guard let footerView = self.footerView, let channelCollectionView = scrollView as? ChannelCollectionView else { return }
+//
+//        let threshold = 60
+//        let contentOffset = channelCollectionView.contentOffset.y
+//        let contentHeight = channelCollectionView.contentSize.height + channelCollectionView.contentInset.top + footerView.height - channelCollectionView.contentInset.bottom
+//        let diffHeight = contentHeight - contentOffset
+//        let frameHeight = channelCollectionView.bounds.size.height
+//        var triggerThreshold = Float((diffHeight - frameHeight))/Float(threshold)
+//        triggerThreshold = min(triggerThreshold, 0.0)
+//        let pullRatio = min(abs(triggerThreshold), 1.0)
+//        print(pullRatio)
+        //footerView.animator.fractionComplete = CGFloat(pullRatio)
+        //footerView.setTransform(inTransform: .identity, scaleFactor: CGFloat(pullRatio))
+//        if pullRatio >= 1 {
+//            footerView.animateFinal()
+//        }
     }
 
     //compute the offset and call the load method
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        guard let footerView = self.footerView, let channelCollectionView = scrollView as? ChannelCollectionView else { return }
-
-        let contentOffset = channelCollectionView.contentOffset.y
-        let contentHeight = channelCollectionView.contentSize.height + channelCollectionView.contentInset.top + footerView.height
-        let diffHeight = contentHeight - contentOffset
-        let frameHeight = channelCollectionView.bounds.size.height
-        let pullHeight  = abs(diffHeight - frameHeight)
-        let minOffsetRequired = channelCollectionView.contentInset.bottom + channelCollectionView.channelLayout.readFooterHeight
-        if pullHeight <  minOffsetRequired {
-            if footerView.isAnimatingFinal, MessageSupplier.shared.unreadMessages.count > 0 {
-                self.isSettingReadAll = true
-                footerView.start(showLoading: true)
-                self.setAllMessagesToRead()
-                    .mainSink(receiveValue: { (_) in
-                        footerView.stop()
-                        self.isSettingReadAll = false
-                    }).store(in: &self.cancellables)
-            } else {
-                footerView.start(showLoading: false)
-                delay(1.0) {
-                    footerView.stop()
-                    channelCollectionView.scrollToLastItem()
-                }
-            }
-        }
+//        guard let footerView = self.footerView, let channelCollectionView = scrollView as? ChannelCollectionView else { return }
+//
+//        let contentOffset = channelCollectionView.contentOffset.y
+//        let contentHeight = channelCollectionView.contentSize.height + channelCollectionView.contentInset.top + footerView.height
+//        let diffHeight = contentHeight - contentOffset
+//        let frameHeight = channelCollectionView.bounds.size.height
+//        let pullHeight  = abs(diffHeight - frameHeight)
+//        let minOffsetRequired = channelCollectionView.contentInset.bottom + channelCollectionView.channelLayout.readFooterHeight
+//        if pullHeight <  minOffsetRequired {
+//            if footerView.isAnimatingFinal, MessageSupplier.shared.unreadMessages.count > 0 {
+//                self.isSettingReadAll = true
+//                footerView.start(showLoading: true)
+//                self.setAllMessagesToRead()
+//                    .mainSink(receiveValue: { (_) in
+//                        footerView.stop()
+//                        self.isSettingReadAll = false
+//                    }).store(in: &self.cancellables)
+//            } else {
+//                footerView.start(showLoading: false)
+//                delay(1.0) {
+//                    footerView.stop()
+//                    channelCollectionView.scrollToLastItem()
+//                }
+//            }
+//        }
     }
 }
 
