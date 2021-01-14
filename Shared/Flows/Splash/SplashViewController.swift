@@ -11,7 +11,15 @@ import Lottie
 import TMROLocalization
 import StoreKit
 
-class SplashViewController: FullScreenViewController {
+class SplashViewController: FullScreenViewController, TransitionableViewController {
+
+    var receivingPresentationType: TransitionType {
+        return .fade
+    }
+
+    var transitionColor: Color {
+        return .background1
+    }
 
     let animationView = AnimationView(name: "loading")
     let label = Label(font: .small)

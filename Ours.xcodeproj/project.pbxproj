@@ -41,7 +41,6 @@
 		D61EC0C721D3071500204BEE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
 		D61EC0CA21D3071500204BEE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C821D3071500204BEE /* LaunchScreen.storyboard */; };
 		D61EC0D921D30C8E00204BEE /* DispatchQue+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0D821D30C8E00204BEE /* DispatchQue+Extensions.swift */; };
-		D61EC0DB21D30CB300204BEE /* Dismissable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0DA21D30CB300204BEE /* Dismissable.swift */; };
 		D61EC0DE21D30DAC00204BEE /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0DD21D30DAC00204BEE /* Array+Extensions.swift */; };
 		D61EC0E021D30E3F00204BEE /* FullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0DF21D30E3F00204BEE /* FullScreenViewController.swift */; };
 		D61EC0E221D30E6000204BEE /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E121D30E6000204BEE /* Label.swift */; };
@@ -184,7 +183,6 @@
 		D65519762589129B00B901E4 /* Deeplinkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FCE22BF060500BA277D /* Deeplinkable.swift */; };
 		D65519772589129B00B901E4 /* AnyHashableDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */; };
 		D65519782589129B00B901E4 /* ImageDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */; };
-		D65519792589129B00B901E4 /* Dismissable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0DA21D30CB300204BEE /* Dismissable.swift */; };
 		D655197A2589129B00B901E4 /* ResourceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502821D6085200CD8CE4 /* ResourceObject.swift */; };
 		D655197C2589129B00B901E4 /* KeyboardObservable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896B7230096620059BA75 /* KeyboardObservable.swift */; };
 		D655197D2589129B00B901E4 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* Avatar.swift */; };
@@ -292,6 +290,8 @@
 		D677589C25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */; };
 		D67758A025B0A17D007E0184 /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */; };
 		D67758A125B0A17D007E0184 /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */; };
+		D67758A725B0A604007E0184 /* UIViewController+Presentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */; };
+		D67758A825B0A604007E0184 /* UIViewController+Presentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */; };
 		D67896A922FF51170059BA75 /* PhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896A822FF51170059BA75 /* PhoneViewController.swift */; };
 		D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896AC22FF60190059BA75 /* TextInputViewController.swift */; };
 		D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896AE22FF62630059BA75 /* PhoneKit.swift */; };
@@ -479,7 +479,6 @@
 		D61EC0C921D3071500204BEE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D61EC0CB21D3071500204BEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D61EC0D821D30C8E00204BEE /* DispatchQue+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQue+Extensions.swift"; sourceTree = "<group>"; };
-		D61EC0DA21D30CB300204BEE /* Dismissable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dismissable.swift; sourceTree = "<group>"; };
 		D61EC0DC21D30CF700204BEE /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		D61EC0DD21D30DAC00204BEE /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		D61EC0DF21D30E3F00204BEE /* FullScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullScreenViewController.swift; sourceTree = "<group>"; };
@@ -607,6 +606,7 @@
 		D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+Fill.swift"; sourceTree = "<group>"; };
 		D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+Move.swift"; sourceTree = "<group>"; };
 		D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
+		D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Presentable.swift"; sourceTree = "<group>"; };
 		D67896A822FF51170059BA75 /* PhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneViewController.swift; sourceTree = "<group>"; };
 		D67896AC22FF60190059BA75 /* TextInputViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextInputViewController.swift; sourceTree = "<group>"; };
 		D67896AE22FF62630059BA75 /* PhoneKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneKit.swift; sourceTree = "<group>"; };
@@ -951,6 +951,7 @@
 				D66F0FD922BF297F00BA277D /* MainCoordinator.swift */,
 				D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */,
 				D691794122F6418700340AA3 /* Router.swift */,
+				D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -1167,7 +1168,6 @@
 				D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */,
 				D66F0FE522C0640E00BA277D /* Avatar.swift */,
 				D66F0FCE22BF060500BA277D /* Deeplinkable.swift */,
-				D61EC0DA21D30CB300204BEE /* Dismissable.swift */,
 				D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */,
 				D67896B7230096620059BA75 /* KeyboardObservable.swift */,
 				D609AE3B236F913F004FA89A /* Objectable.swift */,
@@ -1775,7 +1775,6 @@
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
 				D642735122C857760088256B /* MessageContext.swift in Sources */,
 				D60C814422092E4700A127A3 /* PagingCollectionView.swift in Sources */,
-				D61EC0DB21D30CB300204BEE /* Dismissable.swift in Sources */,
 				D642735322C85B740088256B /* SystemAvatar.swift in Sources */,
 				D657955A239C8DA000A01338 /* FeedIntroView.swift in Sources */,
 				D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */,
@@ -2015,6 +2014,7 @@
 				D6A301AC2380E102006655E0 /* FeedSupplier.swift in Sources */,
 				D66F0FDC22BF2ADC00BA277D /* HomeCoordinator.swift in Sources */,
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,
+				D67758A725B0A604007E0184 /* UIViewController+Presentable.swift in Sources */,
 				D6FC8096237A64650089AACC /* MessageSupplier.swift in Sources */,
 				D6F33C7324B14A5D009603FF /* AudioCellAttributesConfigurer.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
@@ -2067,7 +2067,6 @@
 				D6551A6A25895F9400B901E4 /* FaceView.swift in Sources */,
 				D65519532589125500B901E4 /* AnimationCycle.swift in Sources */,
 				D66379DF25A39BFD00A4A3B7 /* LaunchManager.swift in Sources */,
-				D65519792589129B00B901E4 /* Dismissable.swift in Sources */,
 				D640326125AE5CD400139396 /* WelcomeViewController.swift in Sources */,
 				D65519632589127A00B901E4 /* SystemAvatar.swift in Sources */,
 				D655191B2589121100B901E4 /* CGPoint+Extensions.swift in Sources */,
@@ -2132,6 +2131,7 @@
 				D65519302589122700B901E4 /* UIImage+Extensions.swift in Sources */,
 				D65519332589122700B901E4 /* UIScreen+Extensions.swift in Sources */,
 				D6551A0225895A2B00B901E4 /* StatusableRequest.swift in Sources */,
+				D67758A825B0A604007E0184 /* UIViewController+Presentable.swift in Sources */,
 				D6551A7025895FFB00B901E4 /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D65519072589110A00B901E4 /* DeeplinkObject.swift in Sources */,
 				D65519CA258923E800B901E4 /* OnboardingCoordinator.swift in Sources */,

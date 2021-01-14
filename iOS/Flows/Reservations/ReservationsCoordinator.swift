@@ -103,14 +103,14 @@ extension ReservationsCoordinator: MFMessageComposeViewControllerDelegate {
 }
 
 private class MessageComposerViewController: MFMessageComposeViewController, Dismissable {
-    var dismissHandlers: [() -> Void] = []
+    var dismissHandlers: [DismissHandler] = []
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
         if self.isBeingClosed {
             self.dismissHandlers.forEach { (dismissHandler) in
-                dismissHandler()
+                dismissHandler.handler?()
             }
         }
     }

@@ -9,20 +9,6 @@
 import Foundation
 import UIKit
 
-protocol Presentable {
-    typealias DismissableVC = UIViewController & Dismissable
-
-    func toPresentable() -> DismissableVC
-    func removeFromParent()
-}
-
-extension ViewController: Presentable {
-
-    func toPresentable() -> DismissableVC {
-        return self
-    }
-}
-
 class Router: NSObject, UINavigationControllerDelegate {
 
     var topmostViewController: UIViewController {
@@ -43,24 +29,32 @@ class Router: NSObject, UINavigationControllerDelegate {
         self.navController.delegate = self
     }
 
-    // The cancel handler is called when the presented module is dimissed
-    // by something other than this router.
+    /// The cancel handler is called when the presented module is dimissed
+    /// by something other than this router.
     func present(_ module: Presentable,
                  source: UIViewController,
                  cancelHandler: (() -> Void)? = nil,
                  animated: Bool = true,
                  completion: (() -> Void)? = nil) {
 
-        var viewController = module.toPresentable()
+        let viewController = module.toPresentable()
 
-        viewController.dismissHandlers.append { [unowned self] in
-            module.removeFromParent()
+        // IMPORTANT: The module will have a strong reference to its viewController. To avoid a retain
+        // cycle, pass in a weak reference to the module in the capture list.
+        let dismissHandler = DismissHandler()
+        dismissHandler.handler
+            = { [unowned self, unowned dismissHandler = dismissHandler, weak module = module] in
+                module?.removeFromParent()
 
-            // If this router didn't trigger the dismiss, then the module was cancelled.
-            if !self.isDismissing {
-                cancelHandler?()
-            }
+                // If this router didn't trigger the dismiss, then the module was cancelled.
+                if !self.isDismissing {
+                    cancelHandler?()
+                }
+                // Once the cancel handler is called, remove the dismissHandler from the array
+                // so it's not called again.
+                viewController.dismissHandlers.remove(object: dismissHandler)
         }
+        viewController.dismissHandlers.append(dismissHandler)
 
         source.present(viewController,
                        animated: animated,
@@ -78,35 +72,43 @@ class Router: NSObject, UINavigationControllerDelegate {
         }
     }
 
+    // The cancel handler is called when the presented module is popped off the nav stack
+    // by something other than this router.
     func push(_ module: Presentable,
-              animated: Bool = true,
-              completion: (() -> Void)? = nil) {
+              cancelHandler: (() -> Void)? = nil,
+              animated: Bool = true) {
 
-        let controller = module.toPresentable()
-        if let completion = completion {
-            completions[controller] = completion
+        let viewController = module.toPresentable()
+
+        // IMPORTANT: The module will have a strong reference to its viewController. To avoid a retain
+        // cycle, pass in a weak reference to the module in the capture list.
+        viewController.dismissHandlers.append { [unowned self, weak module = module] in
+            module?.removeFromParent()
+
+            if !self.isDismissing {
+                cancelHandler?()
+            }
         }
-        self.navController.pushViewController(controller, animated: animated)
+
+        self.navController.pushViewController(viewController, animated: animated)
     }
 
-    func popModule(animated: Bool) {
-        guard let controller = self.navController.popViewController(animated: animated) else {
-            return
+    /// Pops the top module, can pass in a module if the one you need to pop is not on the top of the stack, but you must ensure that the instance will be the same as the one in the navigation stack (aka to presentable does not create a new instance)
+    func popModule(animated: Bool, module: Presentable? = nil) {
+        self.isDismissing = true
+        if let vc = module?.toPresentable(),
+            self.navController.viewControllers.count > 1 {
+            let array = self.navController.viewControllers
+            let slice = array.split(separator: vc)[0]
+            let stack = Array(slice)
+            self.navController.setViewControllers(stack, animated: true)
+        } else {
+            self.navController.popViewController(animated: true)
         }
-
-        self.runCompletion(for: controller)
     }
 
     func setRootModule(_ module: Presentable, animated: Bool) {
         self.navController.setViewControllers([module.toPresentable()], animated: animated)
-    }
-
-    fileprivate func runCompletion(for controller: UIViewController) {
-        guard let completion = completions[controller] else {
-            return
-        }
-        completion()
-        self.completions.removeValue(forKey: controller)
     }
 
     // MARK: UINavigationControllerDelegate
@@ -115,21 +117,16 @@ class Router: NSObject, UINavigationControllerDelegate {
                               animationControllerFor operation: UINavigationController.Operation,
                               from fromVC: UIViewController,
                               to toVC: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        //Add custom presentation classes here.
-        return nil
+
+        guard let from = fromVC as? TransitionableViewController, let to = toVC as? TransitionableViewController else { return nil }
+
+        return TransitionRouter(fromVC: from, toVC: to, operation: operation)
     }
 
     func navigationController(_ navigationController: UINavigationController,
                               didShow viewController: UIViewController,
                               animated: Bool) {
-
-        // Ensure the view controller is popping
-        guard let poppedViewController = navigationController.transitionCoordinator?.viewController(forKey: .from),
-            !navigationController.viewControllers.contains(poppedViewController) else {
-                return
-        }
-
-        self.runCompletion(for: poppedViewController)
+        self.isDismissing = false
     }
 }
 

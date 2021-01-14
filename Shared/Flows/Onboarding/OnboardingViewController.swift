@@ -14,7 +14,15 @@ protocol OnboardingViewControllerDelegate: class {
     func onboardingView(_ controller: OnboardingViewController, didVerify user: PFUser)
 }
 
-class OnboardingViewController: SwitchableContentViewController<OnboardingContent> {
+class OnboardingViewController: SwitchableContentViewController<OnboardingContent>, TransitionableViewController {
+
+    var receivingPresentationType: TransitionType {
+        return .fade
+    }
+
+    var transitionColor: Color {
+        return .background1
+    }
 
     lazy var welcomeVC = WelcomeViewController()
     lazy var phoneVC = PhoneViewController()
