@@ -15,11 +15,17 @@ class MessageSupplier {
     static let shared = MessageSupplier()
 
     /// To paginate and keep messages sorted we need to maintain a list
-    private(set) var allMessages: [Messageable] = []
+    private(set) var allMessages: [Messageable] = [] {
+        didSet {
+            self.hasUnreadMessage = self.unreadMessages.count > 0
+        }
+    }
     private(set) var sections: [ChannelSectionable] = []
     private var messagesObject: TCHMessages?
 
     private var cancellables = Set<AnyCancellable>()
+
+    @Published var hasUnreadMessage: Bool = false
 
     var unreadMessages: [Messageable] {
         return self.allMessages.compactMap { (message) -> Messageable? in

@@ -225,8 +225,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         guard indexPath.section == self.numberOfSections(in: collectionView) - 1 else { return UICollectionReusableView() }
 
         let footer = channelCollectionView.dequeueReusableFooterView(ReadAllFooterView.self, for: indexPath)
-        let hasUnreadMessages = MessageSupplier.shared.unreadMessages.count > 0
-        footer.configure(hasUnreadMessages: hasUnreadMessages, section: indexPath.section)
         self.footerView = footer
         footer.createAnimator()
         footer.didCompleteAnimation = { [unowned self] in
