@@ -47,9 +47,12 @@ class RitualInputViewController: ViewController {
                 self.updateForStateChange()
             }.store(in: &self.cancellables)
 
-        if UserNotificationManager.shared.getNotificationSettingsSynchronously().authorizationStatus != .authorized {
-            self.state = .needsAuthorization
-        }
+        UserNotificationManager.shared.getNotificationSettings()
+            .mainSink { (settings) in
+                if settings.authorizationStatus != .authorized {
+                    self.state = .needsAuthorization
+                }
+            }.store(in: &self.cancellables)
 
         self.content.timeHump.$percentage.mainSink { [weak self] (percentage) in
             guard let `self` = self else { return }

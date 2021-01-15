@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import Combine
 
 class FeedNotificationPermissionsView: View {
 
     let textView = FeedTextView()
     let button = Button()
     var didGivePermission: CompletionOptional = nil
+    private var cancellables = Set<AnyCancellable>()
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -40,18 +42,17 @@ class FeedNotificationPermissionsView: View {
 
     private func handleNotificationPermissions() {
         self.button.handleEvent(status: .loading)
-        UserNotificationManager.shared.register(application: UIApplication.shared) { (success, error) in
-            runMain {
+        UserNotificationManager.shared.register(application: UIApplication.shared)
+            .mainSink { (granted) in
                 self.button.handleEvent(status: .complete)
-                if success {
+                if granted {
                     self.didGivePermission?()
                 } else if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
                         print("Settings opened: \(success)") // Prints true
                     })
                 }
-            }
-        }
+            }.store(in: &self.cancellables)
     }
 }
 

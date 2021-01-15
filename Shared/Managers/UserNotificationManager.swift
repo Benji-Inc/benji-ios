@@ -35,39 +35,6 @@ class UserNotificationManager: NSObject {
         self.center.delegate = self
     }
 
-    // NOTE: Retrieves the notification settings synchronously.
-    // WARNING: Use with caution as it will block whatever thread it is
-    // called on until a setting is retrieved.
-    func getNotificationSettingsSynchronously() -> UNNotificationSettings {
-
-        // To avoid read/write issues inherent to multithreading, create a serial dispatch queue
-        // so that mutations to the notification setting var happening synchronously
-        let notificationSettingsQueue = DispatchQueue(label: "notificationsQueue")
-
-        var notificationSettings: UNNotificationSettings?
-
-        self.center.getNotificationSettings { (settings) in
-            notificationSettingsQueue.sync {
-                notificationSettings = settings
-            }
-        }
-
-        // Wait in a loop until we get a result back from the notification center
-        while true {
-            var result: UNNotificationSettings?
-
-            // IMPORTANT: Perform reads synchrononously to ensure the value if fully written before a read.
-            // If the sync is not performed, this function may never return.
-            notificationSettingsQueue.sync {
-                result = notificationSettings
-            }
-
-            if let strongResult = result {
-                return strongResult
-            }
-        }
-    }
-
     func getNotificationSettings() -> Future<UNNotificationSettings, Never> {
         return Future { promise in
             self.center.getNotificationSettings { (settings) in
@@ -78,35 +45,41 @@ class UserNotificationManager: NSObject {
 
     func silentRegister(withApplication application: UIApplication) {
 
-        self.center.getNotificationSettings() { (settings) in
-            switch settings.authorizationStatus {
-            case .authorized, .provisional:
-                runMain {
+        self.getNotificationSettings()
+            .mainSink { (settings) in
+                switch settings.authorizationStatus {
+                case .authorized, .provisional:
                     application.registerForRemoteNotifications()  // To update our token
+                case .notDetermined:
+                    self.register(with: [.alert, .sound, .badge, .provisional], application: application)
+                        .mainSink { (_) in }.store(in: &self.cancellables)
+                case .denied, .ephemeral:
+                    return
+                @unknown default:
+                    return
                 }
-            case .notDetermined:
-                self.register(with: [.alert, .sound, .badge, .provisional], application: application) { (_, _) in}
-            case .denied, .ephemeral:
-                return
-            @unknown default:
-                return
+            }.store(in: &self.cancellables)
+    }
+
+    private func requestAuthorization(with options: UNAuthorizationOptions = [.alert, .sound, .badge]) -> Future<Bool, Never> {
+        return Future { promise in
+            self.center.requestAuthorization(options: options) { (granted, error) in
+                promise(.success(granted))
             }
         }
     }
 
     func register(with options: UNAuthorizationOptions = [.alert, .sound, .badge],
-                  application: UIApplication,
-                  completion: @escaping ((Bool, Error?) -> Void)) {
+                  application: UIApplication) -> Future<Bool, Never> {
 
-        self.center.requestAuthorization(options: options) { (granted, error) in
-            if granted {
-                runMain {
-                    application.registerForRemoteNotifications()  // To update our token
-                }
-            } else {
-                print("User Notification permission denied: \(String(describing: error?.localizedDescription))")
-            }
-            completion(granted, error)
+        return Future { promise in
+            self.requestAuthorization(with: options)
+                .mainSink { (granted) in
+                    if granted {
+                        application.registerForRemoteNotifications()  // To update our token
+                    }
+                    promise(.success(granted))
+                }.store(in: &self.cancellables)
         }
     }
 
@@ -123,7 +96,7 @@ class UserNotificationManager: NSObject {
     @discardableResult
     func handle(userInfo: [AnyHashable: Any]) -> Bool {
         guard let data = userInfo["data"] as? [String: Any],
-            let note = UserNotificationFactory.createNote(from: data) else { return false }
+              let note = UserNotificationFactory.createNote(from: data) else { return false }
 
         self.schedule(note: note)
         return true

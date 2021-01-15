@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import Combine
 
 class RitualCoordinator: PresentableCoordinator<Void> {
 
     lazy var ritualVC = RitualViewController(with: self)
+    private var cancellables = Set<AnyCancellable>()
 
     override func toPresentable() -> DismissableVC {
         return self.ritualVC
@@ -20,14 +22,13 @@ class RitualCoordinator: PresentableCoordinator<Void> {
 extension RitualCoordinator: RitualViewControllerDelegate {
 
     func ritualInputViewControllerNeedsAuthorization(_ controller: RitualViewController) {
-        UserNotificationManager.shared.register(application: UIApplication.shared) { (success, error) in
-            runMain {
-                if success {
+        UserNotificationManager.shared.register(application: UIApplication.shared)
+            .mainSink { (granted) in
+                if granted {
                     controller.inputVC.state = .update
                 } else if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(settingsUrl, completionHandler: { (success) in })
                 }
-            }
-        }
+            }.store(in: &self.cancellables)
     }
 }
