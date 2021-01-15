@@ -102,7 +102,7 @@ class ChannelContentView: View {
                                 let formatter = DateFormatter()
                                 formatter.dateFormat = "h:mm a"
                                 let string = formatter.string(from: date)
-                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s ritual is: @(ritual)")
+                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s ritual starts at: @(ritual)")
                             } else {
                                 self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No ritual yet for @(name).")
                             }
