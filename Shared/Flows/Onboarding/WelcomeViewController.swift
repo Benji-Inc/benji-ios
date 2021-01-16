@@ -79,6 +79,7 @@ class WelcomeViewController: TextInputViewController<Void> {
         UIView.animate(withDuration: Theme.animationDuration) {
             switch state {
             case .welcome:
+                self.textEntry.alpha = 0 
                 self.reservationButton.alpha = 1
                 self.signupButton.alpha = 1
             case .signup:
@@ -109,7 +110,10 @@ class WelcomeViewController: TextInputViewController<Void> {
     }
 
     override func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let text = textField.text, !text.isEmpty else { return }
+        guard let text = textField.text, !text.isEmpty else {
+            self.state = .welcome
+            return
+        }
 
         let tf = self.textField as? TextField
         tf?.animationView.play()
