@@ -48,17 +48,18 @@ class CodeViewController: TextInputViewController<Void> {
                    installationId: installationId,
                    reservationId: String(optional: self.reservationId))
             .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink(receiveValue: { (result) in
+            .mainSink(receivedResult: { (result) in
                 switch result {
                 case .success(let token):
                     self.becomeUser(with: token)
                 case .error:
-                    break
+                    self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
+                    self.verifying = false
                 }
 
                 tf?.animationView.stop()
                 self.textField.resignFirstResponder()
-            }, receiveCompletion: { (_) in }).store(in: &self.cancellables)
+            }).store(in: &self.cancellables)
     }
 
     private func becomeUser(with token: String) {
@@ -71,6 +72,8 @@ class CodeViewController: TextInputViewController<Void> {
             } else {
                 self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
             }
+
+            self.verifying = false
         }
     }
 }

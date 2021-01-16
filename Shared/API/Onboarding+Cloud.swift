@@ -37,14 +37,14 @@ enum VerifyCodeResult {
 }
 
 struct VerifyCode: CloudFunction {
-    typealias ReturnType = VerifyCodeResult
+    typealias ReturnType = String
 
     let code: String
     let phoneNumber: PhoneNumber
     let installationId: String
     let reservationId: String
 
-    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<VerifyCodeResult, Error> {
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<String, Error> {
         let params: [String: Any] = ["authCode": self.code,
                                      "installationId": self.installationId,
                                      "reservationId": self.reservationId,
@@ -53,11 +53,11 @@ struct VerifyCode: CloudFunction {
         return self.makeRequest(andUpdate: statusables,
                                 params: params,
                                 callName: "validateCode",
-                                viewsToIgnore: viewsToIgnore).map({ (value) -> VerifyCodeResult in
+                                viewsToIgnore: viewsToIgnore).map({ (value) -> String in
                                     if let token = value as? String, !token.isEmpty {
-                                        return .success(token)
+                                        return token
                                     } else {
-                                        return .error
+                                        return ""
                                     }
                                 }).eraseToAnyPublisher()
     }
