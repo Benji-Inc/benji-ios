@@ -20,14 +20,14 @@ class ChannelDetailViewController: ViewController {
 
     enum State: CGFloat {
         case collapsed = 84
-        case expanded = 200
+        case expanded = 400
     }
 
     var state: State = .collapsed
 
     private let stackedAvatarView = StackedAvatarView()
     private let textView = TextView()
-    private let label = Label(font: .displayUnderlined, textColor: .background4)
+    private let label = Label(font: .displayUnderlined, textColor: .purple)
 
     private(set) var animator: UIViewPropertyAnimator?
 
@@ -56,6 +56,7 @@ class ChannelDetailViewController: ViewController {
         self.label.alpha = 0
 
         self.subscribeToUpdates()
+        self.createAnimator()
     }
 
     override func viewDidLayoutSubviews() {
@@ -63,7 +64,9 @@ class ChannelDetailViewController: ViewController {
 
         self.view.height = self.state.rawValue
 
-        self.stackedAvatarView.itemHeight = self.state.rawValue - 20
+        let proposedHeight = self.state.rawValue - 20
+        let stackedHeight = clamp(proposedHeight, 60, 180)
+        self.stackedAvatarView.itemHeight = stackedHeight
         self.stackedAvatarView.pin(.left, padding: Theme.contentOffset)
         self.stackedAvatarView.pin(.top, padding: Theme.contentOffset)
 
@@ -99,12 +102,12 @@ class ChannelDetailViewController: ViewController {
         channel.getUsers(excludeMe: true)
             .mainSink(receiveValue: { (members) in
                 if let first = members.first, let date = channel.dateCreatedAsDate {
-                    self.label.setText(first.givenName)
-                    let message = self.getMessage(handle: first.handle, date: date)
+                    self.label.setText(first.handle)
+                    let message = self.getMessage(handle: first.fullName, date: date)
                     let attributed = AttributedString(message,
                                                       fontType: .small,
                                                       color: .background4)
-                    self.textView.set(attributed: attributed, linkColor: .purple)
+                    self.textView.set(attributed: attributed, linkColor: .teal)
                 }
 
                 self.view.layoutNow()
@@ -136,10 +139,6 @@ class ChannelDetailViewController: ViewController {
                 }
 
                 } completion: { (completed) in}
-        })
-
-        self.animator?.addCompletion({ (position) in
-            // self.animator = nil
         })
 
         self.animator?.scrubsLinearly = true

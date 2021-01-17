@@ -163,6 +163,10 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.isMessagesControllerBeingDismissed = false
 
+        if let animator = self.detailVC.animator {
+            animator.fractionComplete = self.collectionViewManager.getDetailProgress()
+        }
+
         if MessageSupplier.shared.sections.count > 0 {
             self.collectionViewManager.set(newSections: MessageSupplier.shared.sections,
                                            animate: self.animateMessages) {

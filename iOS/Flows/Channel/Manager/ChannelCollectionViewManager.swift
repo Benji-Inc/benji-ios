@@ -173,11 +173,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         guard let section = self.sections[safe: indexPath.section] else { fatalError() }
 
         if indexPath.section == 0 {
-            if let messageIndex = self.item(at: IndexPath(item: 0, section: 0))?.messageIndex,
-                messageIndex == 0,
-                let header = self.getIntroHeader(for: section, at: indexPath, in: channelCollectionView) {
-                return header
-            } else if let topHeader = self.getTopHeader(for: section, at: indexPath, in: channelCollectionView) {
+           if let topHeader = self.getTopHeader(for: section, at: indexPath, in: channelCollectionView) {
                 return topHeader
             }
         }
@@ -185,15 +181,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         let header = channelCollectionView.dequeueReusableHeaderView(ChannelSectionHeader.self, for: indexPath)
         header.configure(with: section.date)
         
-        return header
-    }
-
-    private func getIntroHeader(for section: ChannelSectionable,
-                                at indexPath: IndexPath,
-                                in collectionView: ChannelCollectionView) -> UICollectionReusableView? {
-        guard let channel = self.activeChannel else { return nil }
-        let header = collectionView.dequeueReusableHeaderView(ChannelIntroHeader.self, for: indexPath)
-        header.configure(with: channel)
         return header
     }
 
@@ -368,7 +355,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         }
     }
 
-    private func getDetailProgress() -> CGFloat {
+    func getDetailProgress() -> CGFloat {
         let threshold = ChannelDetailViewController.State.expanded.rawValue
         let offset = self.collectionView.contentOffset.y + self.collectionView.contentInset.top
 

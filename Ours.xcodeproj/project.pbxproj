@@ -361,7 +361,6 @@
 		D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503D21DAF98500CD8CE4 /* TextField.swift */; };
 		D6D1504021DAFB8300CD8CE4 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503F21DAFB8300CD8CE4 /* UITextField+Extensions.swift */; };
 		D6D380C4257FC18300C562E8 /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D380C3257FC18300C562E8 /* Selectable.swift */; };
-		D6D627B7247C712E0046BB70 /* ChannelIntroHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D627B6247C712E0046BB70 /* ChannelIntroHeader.swift */; };
 		D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */; };
 		D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
@@ -373,7 +372,6 @@
 		D6DADF702207DF60007D9EB1 /* ChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF6F2207DF60007D9EB1 /* ChannelCell.swift */; };
 		D6DADF722207DF83007D9EB1 /* ChannelsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF712207DF83007D9EB1 /* ChannelsCollectionView.swift */; };
 		D6DADF742207E0E2007D9EB1 /* TCHChannel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF732207E0E2007D9EB1 /* TCHChannel+Extensions.swift */; };
-		D6DDE421247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DDE420247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
 		D6DF870725A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
 		D6E0ED4F239CA8950073B33E /* FeedChannelInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E0ED4E239CA8950073B33E /* FeedChannelInviteView.swift */; };
@@ -677,7 +675,6 @@
 		D6D1503D21DAF98500CD8CE4 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		D6D1503F21DAFB8300CD8CE4 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		D6D380C3257FC18300C562E8 /* Selectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
-		D6D627B6247C712E0046BB70 /* ChannelIntroHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelIntroHeader.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ScalingAnimation.swift"; sourceTree = "<group>"; };
 		D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
@@ -688,7 +685,6 @@
 		D6DADF6F2207DF60007D9EB1 /* ChannelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCell.swift; sourceTree = "<group>"; };
 		D6DADF712207DF83007D9EB1 /* ChannelsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCollectionView.swift; sourceTree = "<group>"; };
 		D6DADF732207E0E2007D9EB1 /* TCHChannel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHChannel+Extensions.swift"; sourceTree = "<group>"; };
-		D6DDE420247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelIntroHeaderAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
 		D6E0ED4E239CA8950073B33E /* FeedChannelInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedChannelInviteView.swift; sourceTree = "<group>"; };
 		D6E0ED52239CBDA40073B33E /* FeedUnreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedUnreadView.swift; sourceTree = "<group>"; };
@@ -1017,7 +1013,6 @@
 			isa = PBXGroup;
 			children = (
 				D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */,
-				D6DDE420247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift */,
 			);
 			path = "Header Configurers";
 			sourceTree = "<group>";
@@ -1025,7 +1020,6 @@
 		D63844102337C3900072227B /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				D6D627B6247C712E0046BB70 /* ChannelIntroHeader.swift */,
 				D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */,
 				D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */,
 				D63844112337C3CD0072227B /* LoadMoreSectionHeader.swift */,
@@ -1804,7 +1798,6 @@
 				D66A0B942351821200A0FFEA /* Completeable.swift in Sources */,
 				D64C6AA2232EA06800DB7257 /* TypingCellAttributesConfigurer.swift in Sources */,
 				D6F33C8224B15086009603FF /* VideoMessageCell.swift in Sources */,
-				D6DDE421247C7E0C00436E8D /* ChannelIntroHeaderAttributesConfigurer.swift in Sources */,
 				D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */,
 				D64273A522CC05DD0088256B /* InputTextView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
@@ -1926,7 +1919,6 @@
 				D6740D4823AEA5BD009D5702 /* ChannelsCoordiantor.swift in Sources */,
 				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,
 				D6F33C6F24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift in Sources */,
-				D6D627B7247C712E0046BB70 /* ChannelIntroHeader.swift in Sources */,
 				D6E0ED53239CBDA40073B33E /* FeedUnreadView.swift in Sources */,
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
 				D66F0FDE22BF2C5D00BA277D /* HomeSegmentControl.swift in Sources */,

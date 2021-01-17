@@ -49,7 +49,7 @@ class ChannelCollectionViewFlowLayout: UICollectionViewFlowLayout {
         super.prepare()
 
         self.collectionView?.contentInsetAdjustmentBehavior = .automatic
-        self.collectionView?.contentInset.top = 84
+        self.collectionView?.contentInset.top = ChannelDetailViewController.State.expanded.rawValue
         self.footerReferenceSize = CGSize(width: self.itemWidth, height: self.readFooterHeight)
     }
 
@@ -194,12 +194,6 @@ class ChannelCollectionViewFlowLayout: UICollectionViewFlowLayout {
     }
 
     private func headerConfigurer(for section: Int) -> ChannelHeaderAttributesConfigurer? {
-        if section == 0,
-            let messageIndex = self.dataSource?.item(at: IndexPath(item: 0, section: 0))?.messageIndex,
-            messageIndex == 0 {
-            return ChannelIntroHeaderAttributesConfigurer()
-        }
-        
         return nil
     }
 
