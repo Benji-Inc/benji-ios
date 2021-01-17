@@ -20,7 +20,7 @@ class ChannelDetailViewController: ViewController {
 
     enum State: CGFloat {
         case collapsed = 84
-        case expanded = 400
+        case expanded = 340
     }
 
     var state: State = .collapsed

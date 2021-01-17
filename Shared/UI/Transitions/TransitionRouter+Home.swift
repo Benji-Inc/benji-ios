@@ -40,7 +40,6 @@ extension TransitionRouter {
 
                                     // Fade out the fromVC
                                     UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                                        self.fromVC.view.transform = CGAffineTransform(scaleX: 0, y: transformOffset)
                                         self.fromVC.view.alpha = 0
                                         self.fromVC.navigationController?.navigationBar.alpha = 0
                                         containerView.set(backgroundColor: self.toVC.transitionColor)

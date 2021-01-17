@@ -413,12 +413,12 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
             self.lastScrollDirection = .noMovement
         }
 
-        if let animator = self.detailVC.animator {
-            let progress = self.getDetailProgress()
-            UIView.animate(withDuration: Theme.animationDuration) {
-                animator.fractionComplete = progress
-            }
-        }
+//        if let animator = self.detailVC.animator {
+//            let progress = self.getDetailProgress()
+//            UIView.animate(withDuration: Theme.animationDuration) {
+//                animator.fractionComplete = progress
+//            }
+//        }
     }
 }
 
