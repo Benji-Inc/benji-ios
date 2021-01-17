@@ -13,6 +13,15 @@ import Combine
 class ChannelCollectionViewManager: NSObject, UITextViewDelegate, ChannelDataSource,
 UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ActiveChannelAccessor {
 
+    enum ScrollDirection {
+        case up
+        case down
+        case noMovement
+    }
+
+    private var lastContentOffset: CGFloat = 0
+    private var lastScrollDirection: ScrollDirection = .noMovement
+
     var numberOfMembers: Int = 0 {
         didSet {
             if self.numberOfMembers != oldValue {
@@ -38,9 +47,11 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     private var footerView: ReadAllFooterView?
     private var isSettingReadAll = false
     private var cancellables = Set<AnyCancellable>()
+    private let detailVC: ChannelDetailViewController
 
-    init(with collectionView: ChannelCollectionView) {
+    init(with collectionView: ChannelCollectionView, detailVC: ChannelDetailViewController) {
         self.collectionView = collectionView
+        self.detailVC = detailVC
         super.init()
         self.updateLayoutDataSource()
 
@@ -310,6 +321,33 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     }
 
     @objc func handle(_ recognizer: UIPanGestureRecognizer) {
+        self.handleHeader(recognizer)
+        self.handleFooter(recognizer)
+    }
+
+    private func handleHeader(_ recognizer: UIPanGestureRecognizer) {
+
+        if self.detailVC.animator.isNil {
+            self.detailVC.createAnimator()
+        }
+
+        guard let animator = self.detailVC.animator else { return }
+        switch recognizer.state {
+        case .began:
+            animator.pauseAnimation()
+        case .changed:
+            animator.pauseAnimation()
+            animator.fractionComplete = self.getDetailProgress()
+        case .ended:
+            if animator.fractionComplete > 8.0 {
+                self.collectionView.setContentOffset(.zero, animated: true)
+            }
+        default:
+            break
+        }
+    }
+
+    private func handleFooter(_ recognizer: UIPanGestureRecognizer) {
         guard let footer = self.footerView else { return }
 
         if footer.animator.isNil {
@@ -330,6 +368,19 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         }
     }
 
+    private func getDetailProgress() -> CGFloat {
+        let threshold = ChannelDetailViewController.State.expanded.rawValue
+        let offset = self.collectionView.contentOffset.y + self.collectionView.contentInset.top
+
+        guard offset < threshold else { return 0 }
+
+        let diff = threshold - offset
+        let triggerThreshold = (diff / threshold)
+        let pullRatio = clamp(triggerThreshold, 0.0, 1.0)
+        print(pullRatio)
+        return pullRatio
+    }
+
     private func getProgress(for footer: ReadAllFooterView) -> CGFloat {
         let threshold = 60
         let contentOffset = self.collectionView.contentOffset.y
@@ -339,12 +390,13 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         var triggerThreshold = Float((diffHeight - frameHeight))/Float(threshold)
         triggerThreshold = min(triggerThreshold, 0.0)
         let pullRatio = min(abs(triggerThreshold), 1.0)
-        print(pullRatio)
         return CGFloat(pullRatio)
     }
 
     private func setAllMessagesToRead(for footer: ReadAllFooterView) {
-        if !self.isSettingReadAll, MessageSupplier.shared.unreadMessages.count > 0 {
+        if !self.isSettingReadAll,
+           MessageSupplier.shared.unreadMessages.count > 0,
+           self.lastScrollDirection == .up {
             self.isSettingReadAll = true
             footer.animationView.play()
             self.setAllMessagesToRead()
@@ -353,9 +405,32 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                     self.isSettingReadAll = false
                     self.collectionView.scrollToLastItem()
                 }).store(in: &self.cancellables)
-        } else {
+        } else if self.lastScrollDirection == .up {
             footer.stop()
             self.collectionView.scrollToLastItem()
+        }
+    }
+
+    // this delegate is called when the scrollView (i.e your UITableView) will start scrolling
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.lastContentOffset = scrollView.contentOffset.y
+    }
+
+    // while scrolling this delegate is being called so you may now check which direction your scrollView is being scrolled to
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if self.lastContentOffset < scrollView.contentOffset.y {
+            self.lastScrollDirection = .up
+        } else if self.lastContentOffset > scrollView.contentOffset.y {
+            self.lastScrollDirection = .down
+        } else {
+            self.lastScrollDirection = .noMovement
+        }
+
+        if let animator = self.detailVC.animator {
+            let progress = self.getDetailProgress()
+            UIView.animate(withDuration: Theme.animationDuration) {
+                animator.fractionComplete = progress
+            }
         }
     }
 }

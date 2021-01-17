@@ -12,8 +12,19 @@ class StackedAvatarView: View {
 
     private var imageViews: [AvatarView] = []
     private let maxItems: Int = 3
-    var itemHeight: CGFloat = 60
-    var offsetMultiplier: CGFloat = 0.5
+    private(set) var defaultHeight: CGFloat = 60
+
+    var itemHeight: CGFloat = 60 {
+        didSet {
+            self.setNeedsLayout()
+        }
+    }
+
+    var offsetMultiplier: CGFloat = 0.5 {
+        didSet {
+            self.setNeedsLayout()
+        }
+    }
 
     func set(items: [Avatar]) {
         runMain {

@@ -22,7 +22,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     lazy var detailVC = ChannelDetailViewController(delegate: self.delegate)
     lazy var collectionView = ChannelCollectionView()
-    lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView)
+    lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView, detailVC: self.detailVC)
 
     private var animateMessages: Bool = true
 
@@ -198,8 +198,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.blurView.expandToSuperviewSize()
 
-        self.detailVC.view.size = CGSize(width: self.view.width - (Theme.contentOffset * 2), height: self.detailVC.collapsedHeight )
-        self.detailVC.view.top = Theme.contentOffset
+        self.detailVC.view.size = CGSize(width: self.view.width, height: self.detailVC.state.rawValue )
+        self.detailVC.view.pin(.top)
         self.detailVC.view.centerOnX()
 
         self.collectionView.expandToSuperviewSize()
