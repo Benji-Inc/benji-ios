@@ -8,7 +8,7 @@
 
 import Foundation
 
-class UserProfileViewController: ViewController {
+class AvatarProfileViewController: ViewController {
 
     private let avatarView = AvatarView()
     private let localTimeLabel = Label(font: .smallBold)

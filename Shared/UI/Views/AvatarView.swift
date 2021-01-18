@@ -188,6 +188,11 @@ class AvatarView: DisplayableImageView {
 
     func set(avatar: Avatar) {
         self.displayable = avatar
+
+        self.avatar = avatar
+        let interaction = UIContextMenuInteraction(delegate: self)
+        self.addInteraction(interaction)
+
         guard avatar.image == nil, avatar.userObjectID == nil else { return }
         self.initials = avatar.initials
         self.layoutNow()
