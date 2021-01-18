@@ -14,7 +14,7 @@ extension AvatarView: AvatarContextDelegate {
         guard let avatar = self.avatar else { return nil }
 
         return UIContextMenuConfiguration(identifier: nil) { () -> UIViewController? in
-            return AvatarProfileViewController()
+            return AvatarProfileViewController(with: avatar)
         } actionProvider: { (suggestions) -> UIMenu? in
             return self.getMenu(for: avatar)
         }
