@@ -116,8 +116,8 @@ extension UIImage: Avatar {
         return "Last"
     }
 
-    var handle: String? {
-        return nil
+    var handle: String {
+        return String()
     }
 
     var image: UIImage? {

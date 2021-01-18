@@ -14,4 +14,5 @@ struct SystemAvatar: Avatar, Hashable {
     var givenName: String
     var familyName: String
     var image: UIImage?
+    var handle: String
 }

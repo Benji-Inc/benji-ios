@@ -14,6 +14,10 @@ import Combine
 
 extension TCHMessage: Avatar {
 
+    var handle: String {
+        return String()
+    }
+
     var givenName: String {
         return String()
     }

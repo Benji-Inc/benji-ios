@@ -77,7 +77,8 @@ class Lorem {
     class func avatar() -> SystemAvatar {
         return SystemAvatar(givenName: self.name(),
                             familyName: self.name(),
-                            image: self.image())
+                            image: self.image(),
+                            handle: String())
     }
 
     class func systemChannel() -> SystemChannel {

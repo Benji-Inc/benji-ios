@@ -100,29 +100,6 @@ extension TCHChannel: ManageableCellItem {
     }
 }
 
-extension TCHChannel: Avatar {
-
-    var givenName: String {
-        return String()
-    }
-
-    var familyName: String {
-        return String()
-    }
-
-    var user: User? {
-        return nil
-    }
-
-    var image: UIImage? {
-        return nil
-    }
-    
-    var userObjectID: String? {
-        return self.createdBy
-    }
-}
-
 extension TCHChannel: Comparable {
     public static func < (lhs: TCHChannel, rhs: TCHChannel) -> Bool {
         guard let lhsDate = lhs.dateUpdatedAsDate, let rhsDate = rhs.dateUpdatedAsDate else { return false }

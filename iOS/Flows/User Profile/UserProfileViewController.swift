@@ -52,10 +52,10 @@ class UserProfileViewController: ViewController {
 //        self.localTimeLabel.match(.top, to: .bottom, of: self.nameLabel, offset: Theme.contentOffset)
     }
 
-    func configure(with user: User) {
-        self.avatarView.set(avatar: user)
-        self.nameLabel.setText(user.fullName)
-        self.handleLabel.setText(user.handle)
+    func configure(with avatar: Avatar) {
+        self.avatarView.set(avatar: avatar)
+        self.nameLabel.setText(avatar.fullName)
+        self.handleLabel.setText(avatar.handle)
         self.view.layoutNow()
     }
 }

@@ -14,6 +14,7 @@ protocol Avatar: ImageDisplayable {
     var familyName: String { get }
     var fullName: String { get }
     var firstAndLastInitial: String? { get }
+    var handle: String { get }
 }
 
 extension Avatar {

@@ -21,8 +21,8 @@ extension TCHMember: Avatar {
         return String()
     }
 
-    var handle: String? {
-        return nil
+    var handle: String {
+        return String()
     }
 
     var image: UIImage? {
