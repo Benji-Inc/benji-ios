@@ -401,6 +401,9 @@
 		D6F33C8424B150A9009603FF /* ContactMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C8324B150A9009603FF /* ContactMessageCell.swift */; };
 		D6F33C8624B150C3009603FF /* EmojiMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C8524B150C3009603FF /* EmojiMessageCell.swift */; };
 		D6F33C8824B150F9009603FF /* BaseMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C8724B150F9009603FF /* BaseMessageCell.swift */; };
+		D6F37D6025B5D8610034C9C5 /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F37D5F25B5D8610034C9C5 /* UserProfileViewController.swift */; };
+		D6F37D6425B5D9D50034C9C5 /* VibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */; };
+		D6F37D6525B5D9D50034C9C5 /* VibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */; };
 		D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */; };
 		D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA622123F067A300048C4A /* AnimationDuration.swift */; };
@@ -713,6 +716,8 @@
 		D6F33C8324B150A9009603FF /* ContactMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactMessageCell.swift; sourceTree = "<group>"; };
 		D6F33C8524B150C3009603FF /* EmojiMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMessageCell.swift; sourceTree = "<group>"; };
 		D6F33C8724B150F9009603FF /* BaseMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseMessageCell.swift; sourceTree = "<group>"; };
+		D6F37D5F25B5D8610034C9C5 /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
+		D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrancyView.swift; sourceTree = "<group>"; };
 		D6F733D923D37C6300FBC7BC /* TextEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryField.swift; sourceTree = "<group>"; };
 		D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionViewManager+Animations.swift"; sourceTree = "<group>"; };
 		D6FA622123F067A300048C4A /* AnimationDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDuration.swift; sourceTree = "<group>"; };
@@ -1239,6 +1244,7 @@
 				D6D1503D21DAF98500CD8CE4 /* TextField.swift */,
 				D61EC0E321D30E9100204BEE /* TextView.swift */,
 				D61EC0E521D30EB300204BEE /* View.swift */,
+				D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1453,6 +1459,7 @@
 				D6B2603B22E6B8CD00143CF0 /* Profile */,
 				D68BEAD224831F7C00C95D31 /* Reservations */,
 				D6EDD1932355DB6000FDA5D6 /* Ritual */,
+				D6F37D5E25B5D8300034C9C5 /* User Profile */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -1548,6 +1555,14 @@
 				D642739E22CAFD680088256B /* MessageTextView.swift */,
 			);
 			path = Message;
+			sourceTree = "<group>";
+		};
+		D6F37D5E25B5D8300034C9C5 /* User Profile */ = {
+			isa = PBXGroup;
+			children = (
+				D6F37D5F25B5D8610034C9C5 /* UserProfileViewController.swift */,
+			);
+			path = "User Profile";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1778,11 +1793,13 @@
 				D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */,
 				D65519F32589591D00B901E4 /* Typealies.swift in Sources */,
 				D64A8F46259008B2002948E1 /* ChannelSupplier+Extensions.swift in Sources */,
+				D6F37D6025B5D8610034C9C5 /* UserProfileViewController.swift in Sources */,
 				D61592DE24FAD7C600B63412 /* AttachementHeaderView.swift in Sources */,
 				D642735522C87CCA0088256B /* ImageViewButton.swift in Sources */,
 				D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */,
 				D67934DB23DC011D00536B44 /* CharacterCountView.swift in Sources */,
 				D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */,
+				D6F37D6425B5D9D50034C9C5 /* VibrancyView.swift in Sources */,
 				D67896BD23025FEC0059BA75 /* NameViewController.swift in Sources */,
 				D6E0ED4F239CA8950073B33E /* FeedChannelInviteView.swift in Sources */,
 				D677588C25B09F9C007E0184 /* TransitionRouter.swift in Sources */,
@@ -2123,6 +2140,7 @@
 				D655197D2589129B00B901E4 /* Avatar.swift in Sources */,
 				D66379E525A39C2400A4A3B7 /* SessionManager.swift in Sources */,
 				D677588D25B09F9C007E0184 /* TransitionRouter.swift in Sources */,
+				D6F37D6525B5D9D50034C9C5 /* VibrancyView.swift in Sources */,
 				D6551A0525895A8800B901E4 /* Ritual.swift in Sources */,
 				D65519EF2589582C00B901E4 /* View.swift in Sources */,
 				D655197C2589129B00B901E4 /* KeyboardObservable.swift in Sources */,

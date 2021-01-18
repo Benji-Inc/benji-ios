@@ -13,10 +13,7 @@ import Combine
 
 class ChannelContentView: View {
 
-    private lazy var blurEffect = UIBlurEffect(style: .systemThinMaterialDark)
-    private lazy var blurView = UIVisualEffectView(effect: self.blurEffect)
-    private lazy var vibrancyEffect = UIVibrancyEffect(blurEffect: self.blurEffect)
-    private lazy var vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
+    private let vibrancyView = VibrancyView()
 
     private(set) var titleLabel = Label(font: .displayUnderlined)
     private let stackedAvatarView = StackedAvatarView()
@@ -42,11 +39,10 @@ class ChannelContentView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.addSubview(self.blurView)
+        self.addSubview(self.vibrancyView)
         self.addSubview(self.stackedAvatarView)
         self.addSubview(self.titleLabel)
         self.addSubview(self.descriptionLabel)
-        self.blurView.contentView.addSubview(self.vibrancyEffectView)
         self.set(backgroundColor: .clear)
         self.roundCorners()
     }
@@ -74,8 +70,7 @@ class ChannelContentView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.blurView.expandToSuperviewSize()
-        self.vibrancyEffectView.expandToSuperviewSize()
+        self.vibrancyView.expandToSuperviewSize()
 
         self.stackedAvatarView.left = Theme.contentOffset
         self.stackedAvatarView.top = Theme.contentOffset
