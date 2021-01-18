@@ -52,10 +52,9 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
 
     @objc func editingDidEnd() {
         guard !self.isSendingCode,
-            let text = self.textField.text,
-            text.isValidPhoneNumber(),
+              self.isPhoneNumberValid(),
             let phoneTextField = self.textField as? PhoneTextField,
-            let phone = try? PhoneKit.shared.parse(text, withRegion: phoneTextField.currentRegion) else {
+            let phone = try? PhoneKit.shared.parse(String(optional: self.textField.text), withRegion: phoneTextField.currentRegion) else {
                 return
         }
 
