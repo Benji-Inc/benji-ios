@@ -209,7 +209,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.blurView.expandToSuperviewSize()
 
-        self.detailVC.view.size = CGSize(width: self.view.width, height: self.detailVC.state.rawValue )
+        self.detailVC.view.expandToSuperviewWidth()
         self.detailVC.view.pin(.top)
         self.detailVC.view.centerOnX()
 
