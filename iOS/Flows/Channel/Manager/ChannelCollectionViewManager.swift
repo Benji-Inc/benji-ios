@@ -47,11 +47,9 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     private var footerView: ReadAllFooterView?
     private var isSettingReadAll = false
     private var cancellables = Set<AnyCancellable>()
-    private let detailVC: ChannelDetailViewController
 
-    init(with collectionView: ChannelCollectionView, detailVC: ChannelDetailViewController) {
+    init(with collectionView: ChannelCollectionView) {
         self.collectionView = collectionView
-        self.detailVC = detailVC
         super.init()
         self.updateLayoutDataSource()
 
@@ -279,7 +277,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         }
     }
 
-
     // MARK: TEXT VIEW DELEGATE
 
     func textView(_ textView: UITextView,
@@ -308,33 +305,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     }
 
     @objc func handle(_ recognizer: UIPanGestureRecognizer) {
-        self.handleHeader(recognizer)
-        self.handleFooter(recognizer)
-    }
-
-    private func handleHeader(_ recognizer: UIPanGestureRecognizer) {
-
-        if self.detailVC.animator.isNil {
-            self.detailVC.createAnimator()
-        }
-
-        guard let animator = self.detailVC.animator else { return }
-        switch recognizer.state {
-        case .began:
-            animator.pauseAnimation()
-        case .changed:
-            animator.pauseAnimation()
-            animator.fractionComplete = self.getDetailProgress()
-        case .ended:
-            if animator.fractionComplete > 8.0 {
-                self.collectionView.setContentOffset(.zero, animated: true)
-            }
-        default:
-            break
-        }
-    }
-
-    private func handleFooter(_ recognizer: UIPanGestureRecognizer) {
         guard let footer = self.footerView else { return }
 
         if footer.animator.isNil {
@@ -353,19 +323,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         default:
             break
         }
-    }
-
-    func getDetailProgress() -> CGFloat {
-        let threshold = ChannelDetailViewController.State.expanded.rawValue
-        let offset = self.collectionView.contentOffset.y + self.collectionView.contentInset.top
-
-        guard offset < threshold else { return 0 }
-
-        let diff = threshold - offset
-        let triggerThreshold = (diff / threshold)
-        let pullRatio = clamp(triggerThreshold, 0.0, 1.0)
-        print(pullRatio)
-        return pullRatio
     }
 
     private func getProgress(for footer: ReadAllFooterView) -> CGFloat {

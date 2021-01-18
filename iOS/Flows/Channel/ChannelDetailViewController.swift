@@ -29,7 +29,7 @@ class ChannelDetailViewController: ViewController {
     private let textView = TextView()
     private let label = Label(font: .displayUnderlined, textColor: .purple)
 
-    private(set) var animator: UIViewPropertyAnimator?
+    lazy var animator = UIViewPropertyAnimator(duration: 2.0, curve: .linear, animations: nil)
 
     unowned let delegate: ChannelDetailViewControllerDelegate
 
@@ -43,7 +43,7 @@ class ChannelDetailViewController: ViewController {
     }
     deinit {
         // Because this animator is interruptable and is stopped by the completion event of another animation, we need to ensure that this gets called before the animator is cleaned up when this view is deallocated because theres no guarantee that will happen before a user dismisses the screen
-        self.animator?.stopAnimation(true)
+        self.animator.stopAnimation(true)
     }
 
     override func initializeViews() {
@@ -56,7 +56,6 @@ class ChannelDetailViewController: ViewController {
         self.label.alpha = 0
 
         self.subscribeToUpdates()
-        self.createAnimator()
     }
 
     override func viewDidLayoutSubviews() {
@@ -115,9 +114,7 @@ class ChannelDetailViewController: ViewController {
     }
 
     func createAnimator() {
-        guard self.animator.isNil else { return }
-
-        self.animator = UIViewPropertyAnimator(duration: 2.0, curve: .linear, animations: { [weak self] in
+        self.animator.addAnimations { [weak self] in
             guard let `self` = self else { return }
             UIView.animateKeyframes(withDuration: 0.0,
                                     delay: 0.0,
@@ -139,12 +136,21 @@ class ChannelDetailViewController: ViewController {
                 }
 
                 } completion: { (completed) in}
-        })
+        }
 
-        self.animator?.scrubsLinearly = true
-        self.animator?.isInterruptible = true
+        if !self.animator.scrubsLinearly {
+            self.animator.scrubsLinearly = true
+        }
 
-        self.animator?.pausesOnCompletion = true
+        if !self.animator.isInterruptible {
+            self.animator.isInterruptible = true
+        }
+
+        if !self.animator.pausesOnCompletion {
+            self.animator.pausesOnCompletion = true
+        }
+        
+        self.animator.pauseAnimation()
     }
 
     private func getMessage(handle: String, date: Date) -> LocalizedString {

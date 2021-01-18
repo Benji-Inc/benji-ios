@@ -22,7 +22,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     lazy var detailVC = ChannelDetailViewController(delegate: self.delegate)
     lazy var collectionView = ChannelCollectionView()
-    lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView, detailVC: self.detailVC)
+    lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView)
 
     private var animateMessages: Bool = true
 
@@ -163,23 +163,30 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.isMessagesControllerBeingDismissed = false
 
-        if let animator = self.detailVC.animator {
-            animator.fractionComplete = self.collectionViewManager.getDetailProgress()
-        }
-
         if MessageSupplier.shared.sections.count > 0 {
             self.collectionViewManager.set(newSections: MessageSupplier.shared.sections,
                                            animate: self.animateMessages) {
-                                            self.animateMessages = false
+                self.animateMessages = false
+                self.setupDetailAnimator()
             }
         } else {
             MessageSupplier.shared.didGetLastSections = { [unowned self] sections in
                 self.collectionViewManager.set(newSections: sections,
                                                animate: self.animateMessages) {
-                                                self.animateMessages = false
+                    self.animateMessages = false
+                    self.setupDetailAnimator()
                 }
             }
         }
+    }
+
+    private func setupDetailAnimator() {
+        self.detailVC.createAnimator()
+        self.collectionView.publisher(for: \.contentOffset)
+            .mainSink { (contentOffset) in
+                self.detailVC.animator.fractionComplete = self.getDetailProgress()
+                self.view.layoutNow()
+            }.store(in: &self.cancellables)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -213,5 +220,17 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             self.addKeyboardObservers()
             self.collectionViewBottomInset = self.requiredInitialScrollViewBottomInset()
         }
+    }
+
+    private func getDetailProgress() -> CGFloat {
+        let threshold = ChannelDetailViewController.State.expanded.rawValue
+        let offset = self.collectionView.contentOffset.y + self.collectionView.contentInset.top
+
+        guard offset < threshold else { return 0 }
+
+        let diff = threshold - offset
+        let triggerThreshold = (diff / threshold)
+        let pullRatio = clamp(triggerThreshold, 0.0, 1.0)
+        return pullRatio
     }
 }
