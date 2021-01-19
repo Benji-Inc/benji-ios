@@ -48,8 +48,8 @@ class AttachmentCollectionView: CollectionView {
             self.didTapAuthorize?()
         }
 
-        self.publisher(for: \.numberOfSections).mainSink { (total) in
-            self.emptyView.alpha = self.numberOfItems(inSection: 0) > 0 ? 0.0 : 1.0
+        self.publisher(for: \.contentSize).mainSink { (size) in
+            self.emptyView.alpha = size.width > 0.0 ? 0.0 : 1.0
         }.store(in: &self.cancellables)
     }
 
