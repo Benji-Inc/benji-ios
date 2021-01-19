@@ -51,6 +51,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     lazy var expandingTextView = MessageInputTextView(with: self.delegate)
     let alertProgressView = AlertProgressView()
     let animationView = AnimationView(name: "loading")
+    let plusAnimationView = AnimationView(name: "plusToX")
     let overlayButton = UIButton()
     var cancellables = Set<AnyCancellable>()
 
@@ -95,6 +96,10 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         self.set(backgroundColor: .clear)
 
         self.messageContext = .casual
+
+        self.addSubview(self.plusAnimationView)
+        self.animationView.contentMode = .scaleAspectFit
+        self.animationView.loopMode = .autoReverse
 
         self.addSubview(self.inputContainerView)
         self.inputContainerView.set(backgroundColor: .clear)
@@ -142,10 +147,16 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 
         let guide = self.layoutMarginsGuide
 
+        self.plusAnimationView.translatesAutoresizingMaskIntoConstraints = false
+        self.plusAnimationView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
+        self.plusAnimationView.heightAnchor.constraint(equalToConstant: 43).isActive = true
+        self.plusAnimationView.widthAnchor.constraint(equalToConstant: 43).isActive = true
+        self.plusAnimationView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
+
         self.inputContainerView.translatesAutoresizingMaskIntoConstraints = false
         self.inputContainerView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
         self.inputContainerView.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -10).isActive = true
-        self.inputLeadingContstaint = self.inputContainerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 0)
+        self.inputLeadingContstaint = self.inputContainerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 53)
         self.inputLeadingContstaint?.isActive = true
         self.inputContainerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
 
@@ -182,6 +193,14 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
             }
         }
 
+        self.plusAnimationView.didSelect { [unowned self] in
+            let type: InputViewType = self.expandingTextView.currentInputView == .keyboard ? .attachments : .keyboard
+            let startingProgress: CGFloat = self.plusAnimationView.currentProgress
+            let toProgress: CGFloat = startingProgress == 0 ? 1.0 : 0.0
+            self.plusAnimationView.play(fromProgress: startingProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
+            self.expandingTextView.updateInputView(type: type)
+        }
+
         self.expandingTextView.confirmationView.button.didSelect { [unowned self] in
             self.resetAlertProgress()
         }
@@ -190,11 +209,32 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     // MARK: HANDLERS
 
     private func handleTextChange(_ text: String) {
+        self.animateInputViews(with: text)
+
         guard let channelDisplayable = self.activeChannel,
             text.count > 0,
             case ChannelType.channel(let channel) = channelDisplayable.channelType else { return }
         // Twilio throttles this call to every 5 seconds
         channel.typing()
+    }
+
+    private func animateInputViews(with text: String) {
+
+        let inputOffset: CGFloat
+        if text.count > 0 {
+            inputOffset = 0
+        } else {
+            inputOffset = 53
+        }
+
+        guard let constraint = self.inputLeadingContstaint, inputOffset != constraint.constant else { return }
+
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.plusAnimationView.transform = inputOffset == 0 ? CGAffineTransform(scaleX: 0.5, y: 0.5) : .identity
+            self.plusAnimationView.alpha = inputOffset == 0 ? 0.0 : 1.0
+            self.inputLeadingContstaint?.constant = inputOffset
+            self.layoutNow()
+        }
     }
 
     // MARK: PUBLIC

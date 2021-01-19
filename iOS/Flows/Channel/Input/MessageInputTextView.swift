@@ -20,8 +20,7 @@ class MessageInputTextView: InputTextView {
     lazy var attachmentInputVC = AttachmentViewController(with: self.attachmentDelegate)
     lazy var confirmationView = AlertConfirmationView()
 
-    private(set) var currentInputView: InputViewType?
-    var isShowingAttachments: Bool = false
+    private(set) var currentInputView: InputViewType = .keyboard
     var textDidChange: ((String) -> Void)?
 
     private unowned let attachmentDelegate: AttachmentViewControllerDelegate
@@ -59,7 +58,10 @@ class MessageInputTextView: InputTextView {
         }
 
         self.currentInputView = type
-        self.reloadInputViews()
+
+        UIView.animate(withDuration: 0.2) {
+            self.reloadInputViews()
+        } completion: { (completed) in }
     }
 
     override func textDidChange(notification: Notification) {
