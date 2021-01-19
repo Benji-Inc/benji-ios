@@ -8,10 +8,14 @@
 
 import Foundation
 import TMROLocalization
+import Photos
+import Combine
 
 class ChannelCoordinator: PresentableCoordinator<Void> {
 
     lazy var channelVC = ChannelViewController(delegate: self)
+    private lazy var imagePickerVC = UIImagePickerController()
+    private var cancellables = Set<AnyCancellable>()
 
     init(router: Router,
          deepLink: DeepLinkable?,
@@ -26,6 +30,20 @@ class ChannelCoordinator: PresentableCoordinator<Void> {
 
     override func toPresentable() -> DismissableVC {
         return self.channelVC
+    }
+
+    override func start() {
+        super.start()
+
+        NotificationCenter.default.publisher(for: .didTapPhotoCamera)
+            .mainSink { (note) in
+                self.presentPicker(for: .camera)
+            }.store(in: &self.cancellables)
+
+        NotificationCenter.default.publisher(for: .didTapPhotoLibrary)
+            .mainSink { (note) in
+                self.presentPicker(for: .photoLibrary)
+            }.store(in: &self.cancellables)
     }
 }
 
@@ -61,5 +79,48 @@ extension ChannelCoordinator: ChannelViewControllerDelegate {
 
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         controller.present(ac, animated: true, completion: nil)
+    }
+}
+
+extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+    @objc func didTapPhotoCamera(_ notification: Notification) {
+        self.presentPicker(for: .camera)
+    }
+
+    @objc func didTapPhotoLibrary(_ notification: Notification) {
+        self.presentPicker(for: .photoLibrary)
+    }
+
+    private func presentPicker(for type: UIImagePickerController.SourceType) {
+        print("Present called")
+        self.imagePickerVC.delegate = self
+        self.imagePickerVC.sourceType = type
+        self.channelVC.shouldEnableFirstResponder = false
+        guard self.router.topmostViewController != self.imagePickerVC else { return }
+
+        self.router.topmostViewController.present(self.imagePickerVC, animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+
+        self.imagePickerVC.dismiss(animated: true) {
+            self.channelVC.shouldEnableFirstResponder = true
+            self.channelVC.collectionView.reloadDataAndKeepOffset()
+        }
+
+        guard let asset = info[.phAsset] as? PHAsset else {
+            print("Image not found!")
+            return
+        }
+
+//        if let asst = info[.phAsset] as? PHAsset {
+//           // self.delegate.attachmentView(self, didSelect: Attachement(with: asst))
+//        } else if let _ = info[.originalImage] {
+//
+//        }
+
+       // self.delegate.attachmentView(self, didSelect: Attachement(with: asset))
     }
 }

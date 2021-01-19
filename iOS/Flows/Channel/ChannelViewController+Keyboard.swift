@@ -37,7 +37,7 @@ extension ChannelViewController {
 
     @objc
     private func handleKeyboardDidChangeState(_ notification: Notification) {
-        guard !isMessagesControllerBeingDismissed else { return }
+        guard !shouldEnableFirstResponder else { return }
 
         guard let keyboardStartFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect else { return }
         guard !keyboardStartFrameInScreenCoords.isEmpty || UIDevice.current.userInterfaceIdiom != .pad else {

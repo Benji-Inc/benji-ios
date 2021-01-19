@@ -50,9 +50,9 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     /// The default value of this property is `false`.
     var maintainPositionOnKeyboardFrameChanged: Bool = true
 
-    var isMessagesControllerBeingDismissed: Bool = false {
+    var shouldEnableFirstResponder: Bool = true {
         didSet {
-            if self.isMessagesControllerBeingDismissed {
+            if self.shouldEnableFirstResponder {
                 self.resignFirstResponder()
             } else {
                 self.becomeFirstResponder()
@@ -101,7 +101,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     }
 
     override var canBecomeFirstResponder: Bool {
-        return true
+        return self.shouldEnableFirstResponder
     }
 
     // Remembers which keyboard a user uses for this conversation.
@@ -161,7 +161,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        self.isMessagesControllerBeingDismissed = false
+        self.shouldEnableFirstResponder = false
 
         if MessageSupplier.shared.sections.count > 0 {
             self.collectionViewManager.set(newSections: MessageSupplier.shared.sections,
@@ -192,13 +192,13 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        self.isMessagesControllerBeingDismissed = true
+        self.shouldEnableFirstResponder = true
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
-        self.isMessagesControllerBeingDismissed = false
+        self.shouldEnableFirstResponder = false
         MessageSupplier.shared.reset()
         ChannelSupplier.shared.set(activeChannel: nil)
         self.collectionViewManager.reset()
