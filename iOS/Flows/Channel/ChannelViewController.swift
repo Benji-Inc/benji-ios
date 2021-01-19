@@ -60,6 +60,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         }
     }
 
+    var shouldResetOnDissappear = true
+
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
             self.collectionView.contentInset.bottom = self.collectionViewBottomInset
@@ -119,8 +121,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.collectionView.dataSource = self.collectionViewManager
         self.collectionView.delegate = self.collectionViewManager
-
-        //self.addChild(self.messageInputAccessoryView.expandingTextView.attachmentInputVC)
 
         self.setupHandlers()
         self.subscribeToUpdates()
@@ -199,6 +199,9 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         super.viewDidDisappear(animated)
 
         self.shouldEnableFirstResponder = false
+
+        guard self.shouldResetOnDissappear else { return }
+
         MessageSupplier.shared.reset()
         ChannelSupplier.shared.set(activeChannel: nil)
         self.collectionViewManager.reset()

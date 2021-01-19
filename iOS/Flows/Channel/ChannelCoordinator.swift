@@ -14,7 +14,7 @@ import Combine
 class ChannelCoordinator: PresentableCoordinator<Void> {
 
     lazy var channelVC = ChannelViewController(delegate: self)
-    private lazy var imagePickerVC = UIImagePickerController()
+    private lazy var imagePickerVC = ImagePickerViewController()
     private var cancellables = Set<AnyCancellable>()
 
     init(router: Router,
@@ -97,6 +97,7 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
         self.imagePickerVC.delegate = self
         self.imagePickerVC.sourceType = type
         self.channelVC.shouldEnableFirstResponder = false
+        self.channelVC.shouldResetOnDissappear = false
         guard self.router.topmostViewController != self.imagePickerVC else { return }
 
         self.router.topmostViewController.present(self.imagePickerVC, animated: true, completion: nil)
@@ -107,7 +108,7 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
 
         self.imagePickerVC.dismiss(animated: true) {
             self.channelVC.shouldEnableFirstResponder = true
-            self.channelVC.collectionView.reloadDataAndKeepOffset()
+            self.channelVC.shouldResetOnDissappear = true
         }
 
         guard let asset = info[.phAsset] as? PHAsset else {
@@ -122,5 +123,25 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
 //        }
 
        // self.delegate.attachmentView(self, didSelect: Attachement(with: asset))
+    }
+}
+
+private class ImagePickerViewController: UIImagePickerController, Dismissable {
+    var dismissHandlers: [DismissHandler] = []
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.modalPresentationStyle = .automatic
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        if self.isBeingClosed {
+            self.dismissHandlers.forEach { (dismissHandler) in
+                dismissHandler.handler?()
+            }
+        }
     }
 }
