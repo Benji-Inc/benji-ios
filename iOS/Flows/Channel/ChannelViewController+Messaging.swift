@@ -11,11 +11,6 @@ import TwilioChatClient
 
 extension ChannelViewController: MessageInputAccessoryViewDelegate {
 
-    func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachement) {
-        // add attachment to the message input view
-        self.messageInputAccessoryView.expandingTextView.updateInputView(type: .keyboard)
-    }
-
     func messageInputAccessory(_ view: MessageInputAccessoryView, didUpdate message: Messageable, with text: String) {
         self.update(message: message, text: text)
     }

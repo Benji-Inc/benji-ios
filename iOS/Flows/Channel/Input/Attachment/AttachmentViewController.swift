@@ -10,18 +10,11 @@ import Foundation
 import Photos
 import Combine
 
-protocol AttachmentViewControllerDelegate: class {
-    func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachement)
-}
-
 class AttachmentViewController: CollectionViewController<AttachementCell, AttachmentCollectionViewManager> {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
 
-    unowned let delegate: AttachmentViewControllerDelegate
-
-    init(with delegate: AttachmentViewControllerDelegate) {
-        self.delegate = delegate
+    init() {
         super.init(with: AttachmentCollectionView())
     }
 

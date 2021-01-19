@@ -17,22 +17,11 @@ enum InputViewType {
 class MessageInputTextView: InputTextView {
 
     lazy var countView = CharacterCountView()
-    lazy var attachmentInputVC = AttachmentViewController(with: self.attachmentDelegate)
+    lazy var attachmentInputVC = AttachmentViewController()
     lazy var confirmationView = AlertConfirmationView()
 
     private(set) var currentInputView: InputViewType = .keyboard
     var textDidChange: ((String) -> Void)?
-
-    private unowned let attachmentDelegate: AttachmentViewControllerDelegate
-
-    init(with attachmentDelegate: AttachmentViewControllerDelegate) {
-        self.attachmentDelegate = attachmentDelegate
-        super.init(frame: .zero, textContainer: nil)
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func initialize() {
         super.initialize()

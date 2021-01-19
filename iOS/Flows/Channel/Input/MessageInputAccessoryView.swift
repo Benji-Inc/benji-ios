@@ -11,7 +11,7 @@ import Lottie
 import TMROLocalization
 import Combine
 
-protocol MessageInputAccessoryViewDelegate: AttachmentViewControllerDelegate {
+protocol MessageInputAccessoryViewDelegate: class {
     func messageInputAccessory(_ view: MessageInputAccessoryView,
                                didUpdate message: Messageable,
                                with text: String)
@@ -48,7 +48,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 
     let inputContainerView = View()
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
-    lazy var expandingTextView = MessageInputTextView(with: self.delegate)
+    lazy var expandingTextView = MessageInputTextView()
     let alertProgressView = AlertProgressView()
     let animationView = AnimationView(name: "loading")
     let plusAnimationView = AnimationView(name: "plusToX")
