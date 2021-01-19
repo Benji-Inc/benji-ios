@@ -24,7 +24,7 @@ class AttachmentCollectionViewManager: CollectionViewManager<AttachementCell> {
     override func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: 60, height: collectionView.height)
+        return CGSize(width: 70, height: collectionView.height)
     }
 
     override func collectionView(_ collectionView: UICollectionView,

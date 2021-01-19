@@ -48,14 +48,14 @@ class AttachementHeaderView: UICollectionReusableView {
         self.photoButton.height = self.height * 0.5
         self.photoButton.pin(.top)
 
-        self.photoImageView.squaredSize = 20
+        self.photoImageView.squaredSize = 30
         self.photoImageView.center = self.photoButton.center
 
         self.libraryButton.expandToSuperviewWidth()
         self.libraryButton.height = self.height * 0.5
         self.libraryButton.pin(.bottom)
 
-        self.libraryImageView.squaredSize = 20
+        self.libraryImageView.squaredSize = 30
         self.libraryImageView.center = self.libraryButton.center
     }
 }
