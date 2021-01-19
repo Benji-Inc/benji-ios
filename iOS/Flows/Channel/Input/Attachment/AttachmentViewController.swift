@@ -8,6 +8,7 @@
 
 import Foundation
 import Photos
+import Combine
 
 protocol AttachmentViewControllerDelegate: class {
     func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachement)
@@ -36,11 +37,6 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
         guard let window = UIWindow.topWindow() else { return }
         self.view.size = CGSize(width: window.width, height: window.height * 0.4)
 
-        self.checkPhotoAuthorizationStatus { [weak self] (authorized) in
-            guard let `self` = self else { return }
-            self.fetchAssets()
-        }
-
         let color = Color.background1.color.withAlphaComponent(0.9)
         self.view.backgroundColor = color
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
@@ -52,23 +48,50 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
         self.collectionViewManager.didSelectLibraryOption = { [unowned self] in
             self.presentPicker(for: .photoLibrary)
         }
+
+        if let attachmentCollectionView = self.collectionView as? AttachmentCollectionView {
+            attachmentCollectionView.didTapAuthorize = { [unowned self] in
+                self.requestAuthorization()
+                    .mainSink(receivedResult: { (result) in
+                        switch result {
+                        case .success():
+                            self.fetchAssets()
+                        case .error(_):
+                            if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
+                                UIApplication.shared.open(url)
+                            }
+                        }
+                    }).store(in: &self.cancellables)
+            }
+        }
     }
 
-    private func checkPhotoAuthorizationStatus(completion: @escaping (_ authorized: Bool) -> Void) {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        self.checkPhotoAuthorizationStatus()
+    }
+
+    private func checkPhotoAuthorizationStatus() {
         let status = PHPhotoLibrary.authorizationStatus()
         switch (status) {
-        case .authorized:
-            completion(true)
-        case .denied, .restricted:
-            completion(false)
-        case .notDetermined:
+        case .authorized, .limited:
+            self.fetchAssets()
+        default:
+            break
+        }
+    }
+
+    private func requestAuthorization() -> Future<Void, Error> {
+        return Future { promise in
             PHPhotoLibrary.requestAuthorization({ (status) in
-                completion(status == .authorized)
+                switch status {
+                case .authorized, .limited:
+                    promise(.success(()))
+                default:
+                    promise(.failure(ClientError.message(detail: "Failed to authorize")))
+                }
             })
-        case .limited:
-            completion(true)
-        @unknown default:
-            fatalError()
         }
     }
 
