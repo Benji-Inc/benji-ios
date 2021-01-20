@@ -15,10 +15,6 @@ struct Attachement: ManageableCellItem, Hashable {
         return self.asset.localIdentifier
     }
 
-    var displayble: ImageDisplayable {
-        return UIImage()
-    }
-
     let asset: PHAsset
     var mediaItem: MediaItem?
     var audioItem: AudioItem?
@@ -73,7 +69,7 @@ struct Attachement: ManageableCellItem, Hashable {
 
 class AttachmentItem {
 
-    private let info: [UIImagePickerController.InfoKey : Any]
+    let info: [UIImagePickerController.InfoKey : Any]
 
     init(with info: [UIImagePickerController.InfoKey : Any]) {
         self.info = info
@@ -99,7 +95,9 @@ class MediaAttachment: AttachmentItem, MediaItem {
 
     var url: URL?
 
-    var image: UIImage?
+    var image: UIImage? {
+        return self.info[.originalImage] as? UIImage
+    }
 
     var size: CGSize {
         return .zero

@@ -93,7 +93,6 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
     }
 
     private func presentPicker(for type: UIImagePickerController.SourceType) {
-        print("Present called")
         self.imagePickerVC.delegate = self
         self.imagePickerVC.sourceType = type
         self.channelVC.shouldEnableFirstResponder = false
@@ -131,12 +130,6 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
 
 private class ImagePickerViewController: UIImagePickerController, Dismissable {
     var dismissHandlers: [DismissHandler] = []
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.modalPresentationStyle = .automatic
-    }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)

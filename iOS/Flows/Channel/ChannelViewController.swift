@@ -89,6 +89,19 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     private var isFirstLayout: Bool = true
 
+    override var canBecomeFirstResponder: Bool {
+        return self.shouldEnableFirstResponder
+    }
+
+    override var canResignFirstResponder: Bool {
+        return true
+    }
+
+    // Remembers which keyboard a user uses for this conversation.
+    override var textInputContextIdentifier: String? {
+        return self.activeChannel?.id
+    }
+
     init(delegate: ChannelViewControllerDelegates) {
         self.delegate = delegate
         super.init()
@@ -100,15 +113,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     required init?(withObject object: DeepLinkable) {
         fatalError("init(withObject:) has not been implemented")
-    }
-
-    override var canBecomeFirstResponder: Bool {
-        return self.shouldEnableFirstResponder
-    }
-
-    // Remembers which keyboard a user uses for this conversation.
-    override var textInputContextIdentifier: String? {
-        return self.activeChannel?.id
     }
 
     override func initializeViews() {
@@ -187,12 +191,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
                 self.detailVC.animator.fractionComplete = self.getDetailProgress()
                 self.view.layoutNow()
             }.store(in: &self.cancellables)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        self.shouldEnableFirstResponder = true
     }
 
     override func viewDidDisappear(_ animated: Bool) {

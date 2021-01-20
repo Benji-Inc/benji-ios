@@ -55,6 +55,10 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     let overlayButton = UIButton()
     var cancellables = Set<AnyCancellable>()
 
+    override var canResignFirstResponder: Bool {
+        return true 
+    }
+
     private(set)var inputLeadingContstaint: NSLayoutConstraint?
 
     unowned let delegate: MessageInputAccessoryViewDelegate

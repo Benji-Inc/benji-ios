@@ -23,6 +23,10 @@ class MessageInputTextView: InputTextView {
     private(set) var currentInputView: InputViewType = .keyboard
     var textDidChange: ((String) -> Void)?
 
+    override var canResignFirstResponder: Bool {
+        return false 
+    }
+
     override func initialize() {
         super.initialize()
 
