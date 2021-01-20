@@ -51,14 +51,14 @@ extension TCHMessageOptions {
                              defaultFilename: mediaItem.fileName,
                              onStarted: {
                                 // Handle started
-                                //print("Media upload started")
+                                print("Media upload started")
         },
                              onProgress: { (bytes) in
                                 // Handle progress
-                                //print("Media upload progress: \(bytes)")
+                                print("Media upload progress: \(bytes)")
         }) { (mediaSid) in
             // Handle completion
-            //print("Media upload completed: \(mediaSid)")
+            print("Media upload completed: \(mediaSid)")
         }
     }
 }

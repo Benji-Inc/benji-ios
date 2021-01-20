@@ -115,16 +115,22 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
             return
         }
 
-        let attachment = Attachement(with: asset, info: info)
+        var messageKind: MessageKind? = nil
 
-//        if let asst = info[.phAsset] as? PHAsset {
-//           // self.delegate.attachmentView(self, didSelect: Attachement(with: asst))
-//        } else if let _ = info[.originalImage] {
-//
-//        }
+        switch asset.mediaType {
+        case .image:
+            messageKind = .photo(PhotoAttachment(with: info))
+        case .video:
+            messageKind = .video(VideoAttachment(with: info))
+        case .audio:
+            messageKind = .audio(AudioAttachment(with: info))
+        default:
+            break
+        }
 
-       // let attachment = Attachement
-       // self.delegate.attachmentView(self, didSelect: Attachement(with: asset))
+        if let kind = messageKind {
+            self.channelVC.send(messageKind: kind, attributes: [:])
+        }
     }
 }
 

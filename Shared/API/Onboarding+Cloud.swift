@@ -19,7 +19,7 @@ struct SendCode: CloudFunction {
     let installationId: String
 
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
-        let params = ["phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .international),
+        let params = ["phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164),
                       "installationId": self.installationId,
                       "region": self.region]
         

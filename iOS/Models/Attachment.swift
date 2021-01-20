@@ -99,23 +99,32 @@ class AudioAttachment: AttachmentItem, AudioItem {
 }
 
 class VideoAttachment: AttachmentItem, MediaItem {
-    var url: URL?
+    
+    var url: URL? {
+        return info[.mediaURL] as? URL
+    }
 
-    var image: UIImage?
+    var image: UIImage? {
+        return info[.originalImage] as? UIImage
+    }
 
     var size: CGSize {
-        return .zero
+        guard let asset = info[.phAsset] as? PHAsset else { return .zero }
+        return CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
     }
 
     var fileName: String {
-        return String()
+        guard let asset = info[.phAsset] as? PHAsset else { return String() }
+        return asset.localIdentifier
     }
 
     var type: MediaType {
         return .video
     }
 
-    var data: Data?
+    var data: Data? {
+        return nil // Not sure how to extract this
+    }
 
 }
 
@@ -128,16 +137,21 @@ class PhotoAttachment: AttachmentItem, MediaItem {
     }
 
     var size: CGSize {
-        return .zero
+        guard let asset = info[.phAsset] as? PHAsset else { return .zero }
+        return CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
     }
 
     var fileName: String {
-        return String()
+        guard let asset = info[.phAsset] as? PHAsset else { return String() }
+        return asset.localIdentifier
     }
 
     var type: MediaType {
         return .photo
     }
 
-    var data: Data?
+    var data: Data? {
+        guard let img = self.image else { return nil }
+        return img.data
+    }
 }
