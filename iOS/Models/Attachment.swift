@@ -51,10 +51,17 @@ struct Attachement: ManageableCellItem, Hashable {
 
         self.asset = asset
 
-        if let info = info, asset.mediaType == .audio {
-            self.audioItem = AudioAttachment(with: info)
-        } else if let info = info {
-            self.mediaItem = MediaAttachment(with: info)
+        if let info = info {
+            switch asset.mediaType {
+            case .image:
+                self.mediaItem = PhotoAttachment(with: info)
+            case .video:
+                self.mediaItem = VideoAttachment(with: info)
+            case .audio:
+                self.audioItem = AudioAttachment(with: info)
+            default:
+                break
+            }
         }
     }
 
@@ -91,7 +98,28 @@ class AudioAttachment: AttachmentItem, AudioItem {
     }
 }
 
-class MediaAttachment: AttachmentItem, MediaItem {
+class VideoAttachment: AttachmentItem, MediaItem {
+    var url: URL?
+
+    var image: UIImage?
+
+    var size: CGSize {
+        return .zero
+    }
+
+    var fileName: String {
+        return String()
+    }
+
+    var type: MediaType {
+        return .video
+    }
+
+    var data: Data?
+
+}
+
+class PhotoAttachment: AttachmentItem, MediaItem {
 
     var url: URL?
 
