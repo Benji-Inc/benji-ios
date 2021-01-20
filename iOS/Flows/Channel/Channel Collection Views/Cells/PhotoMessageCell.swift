@@ -39,11 +39,10 @@ class PhotoMessageCell: BaseMessageCell {
     }
 
     private func loadImage(from message: TCHMessage) {
-        message.getMediaContentTemporaryUrl { (result, url) in
-            if result.isSuccessful(), let urlString = url {
+        message.getMediaContentURL()
+            .mainSink { (urlString) in
                 self.imageView.displayable = PhotoItem(imageURLString: urlString)
-            }
-        }
+            }.store(in: &self.cancellables)
     }
 
     override func layoutContent(with attributes: ChannelCollectionViewLayoutAttributes) {

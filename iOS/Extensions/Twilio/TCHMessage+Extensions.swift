@@ -136,6 +136,20 @@ extension TCHMessage: Messageable {
             }
         }
     }
+
+    func getMediaContentURL() -> Future<String, Error> {
+        return Future { promise in 
+            self.getMediaContentTemporaryUrl { (result, url) in
+                if let mediaURL = url {
+                    promise(.success(mediaURL))
+                } else if let e = result.error {
+                    promise(.failure(e))
+                } else {
+                    promise(.failure(ClientError.apiError(detail: "Error retrieving media content URL.")))
+                }
+            }
+        }
+    }
 }
 
 extension TCHMessage {

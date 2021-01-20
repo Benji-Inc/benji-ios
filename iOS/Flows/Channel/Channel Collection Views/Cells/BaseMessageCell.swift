@@ -9,11 +9,13 @@
 import Foundation
 import TwilioChatClient
 import Lottie
+import Combine
 
 class BaseMessageCell: UICollectionViewCell {
 
     let avatarView = AvatarView()
     var didTapMessage: () -> Void = {}
+    var cancellables = Set<AnyCancellable>()
 
     private(set) var currentMessage: Messageable?
     private(set) var attributes: ChannelCollectionViewLayoutAttributes?
