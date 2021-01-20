@@ -9,31 +9,6 @@
 import Foundation
 import Photos
 
-struct Attachement: ManageableCellItem, Hashable {
-
-    var id: String {
-        return self.asset.localIdentifier
-    }
-
-    var displayble: ImageDisplayable {
-        return UIImage()
-    }
-
-    var asset: PHAsset
-
-    init(with asset: PHAsset) {
-        self.asset = asset
-    }
-
-    static func == (lhs: Attachement, rhs: Attachement) -> Bool {
-        return lhs.id == rhs.id
-    }
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(self.id)
-    }
-}
-
 class AttachementCell: UICollectionViewCell, ManageableCell {
     typealias ItemType = Attachement
 

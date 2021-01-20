@@ -116,12 +116,15 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
             return
         }
 
+        let attachment = Attachement(with: asset, info: info)
+
 //        if let asst = info[.phAsset] as? PHAsset {
 //           // self.delegate.attachmentView(self, didSelect: Attachement(with: asst))
 //        } else if let _ = info[.originalImage] {
 //
 //        }
 
+       // let attachment = Attachement
        // self.delegate.attachmentView(self, didSelect: Attachement(with: asset))
     }
 }

@@ -14,7 +14,6 @@ import TMROLocalization
 class MessageDeliveryManager {
 
     static let shared = MessageDeliveryManager()
-    //private var options: TCHMessageOptions?
     private var cancellables = Set<AnyCancellable>()
 
     func send(context: MessageContext = .casual,
