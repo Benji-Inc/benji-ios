@@ -11,11 +11,7 @@ import Foundation
 class PhotoCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
     var avatarSize = CGSize(width: 30, height: 36)
-    var avatarOffset: CGFloat {
-        return self.avatarSize.height * 0.6
-    }
-
-    var horizontalPadding: CGFloat = 28
+    var horizontalPadding: CGFloat = Theme.contentOffset
 
     override func configure(with message: Messageable,
                             previousMessage: Messageable?,
@@ -28,9 +24,9 @@ class PhotoCellAttributesConfigurer: ChannelCellAttributesConfigurer {
         let avatarFrame = self.getAvatarFrame(with: message, layout: layout)
         attributes.attributes.avatarFrame = avatarFrame
 
-        let imageFrame = CGRect(x: self.horizontalPadding * 0.5,
-                                y: self.avatarOffset,
-                                width: cv.width - self.horizontalPadding,
+        let imageFrame = CGRect(x: self.horizontalPadding,
+                                y: 0,
+                                width: cv.width - (self.horizontalPadding * 2),
                                 height: cv.height * 0.3)
 
         attributes.attributes.imageFrame = imageFrame
@@ -39,15 +35,15 @@ class PhotoCellAttributesConfigurer: ChannelCellAttributesConfigurer {
     override func size(with message: Messageable?, for layout: ChannelCollectionViewFlowLayout) -> CGSize {
         guard let cv = layout.collectionView else { return .zero }
 
-        let size = CGSize(width: cv.width, height: (cv.height * 0.3) + self.avatarOffset)
+        let size = CGSize(width: cv.width, height: (cv.height * 0.3))
         return size
     }
 
     private func getAvatarFrame(with message: Messageable, layout: ChannelCollectionViewFlowLayout) -> CGRect {
         guard let cv = layout.collectionView else { return .zero }
-        let xOffset: CGFloat = message.isFromCurrentUser ? cv.width - self.horizontalPadding - self.avatarSize.width : self.horizontalPadding
+        let xOffset: CGFloat = message.isFromCurrentUser ? cv.width - self.horizontalPadding - self.avatarSize.width - 5 : self.horizontalPadding
         return CGRect(x: xOffset,
-                      y: 0,
+                      y: 5,
                       width: self.avatarSize.width,
                       height: self.avatarSize.height)
     }
