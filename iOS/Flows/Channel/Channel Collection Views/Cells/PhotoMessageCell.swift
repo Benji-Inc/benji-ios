@@ -14,11 +14,21 @@ class PhotoMessageCell: BaseMessageCell {
 
     private let imageView = DisplayableImageView()
     private var cachedURL: URL?
+    private var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
 
     override func initializeViews() {
         super.initializeViews()
 
         self.contentView.insertSubview(self.imageView, belowSubview: self.avatarView)
+        self.contentView.insertSubview(self.blurView, aboveSubview: self.imageView)
+        self.imageView.imageView.contentMode = .scaleAspectFill
+        self.imageView.imageView.clipsToBounds = true
+        self.imageView.layer.cornerRadius = 5
+        self.imageView.layer.masksToBounds = true
+
+        self.blurView.clipsToBounds = true
+        self.blurView.layer.cornerRadius = 5
+        self.blurView.layer.masksToBounds = true
     }
 
     override func configure(with message: Messageable) {
@@ -34,10 +44,6 @@ class PhotoMessageCell: BaseMessageCell {
         }
 
         self.imageView.displayable = item.image
-        self.imageView.imageView.contentMode = .scaleAspectFill
-        self.imageView.imageView.clipsToBounds = true
-        self.imageView.layer.cornerRadius = 5
-        self.imageView.layer.masksToBounds = true 
     }
 
     private func loadImage(from message: TCHMessage) {
@@ -66,10 +72,15 @@ class PhotoMessageCell: BaseMessageCell {
         SDWebImageManager.shared.loadImage(with: url,
                                            options: [],
                                            progress: { (received, expected, url) in
-                                            print("RECEIVED: \(received)")
-                                            print("EXPECTED: \(expected)")
+                                            let diff: CGFloat = CGFloat(received) / CGFloat(expected)
+                                            let progress = clamp(diff, 0.0, 1.0)
+                                            print("Progress: \(progress)")
+
                                            }, completed: { (image, data, error, cacheType, finished, url) in
                                             self.imageView.displayable = image
+                                            UIView.animate(withDuration: 0.5) {
+                                                self.blurView.effect = nil
+                                            }
                                            })
     }
 
@@ -77,6 +88,7 @@ class PhotoMessageCell: BaseMessageCell {
         super.layoutContent(with: attributes)
 
         self.imageView.frame = attributes.attributes.imageFrame
+        self.blurView.frame = attributes.attributes.imageFrame
     }
 
     override func prepareForReuse() {
