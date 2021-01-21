@@ -115,22 +115,7 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
             return
         }
 
-        var messageKind: MessageKind? = nil
-
-        switch asset.mediaType {
-        case .image:
-            messageKind = .photo(PhotoAttachment(with: info))
-        case .video:
-            messageKind = .video(VideoAttachment(with: info))
-        case .audio:
-            messageKind = .audio(AudioAttachment(with: info))
-        default:
-            break
-        }
-
-        if let kind = messageKind {
-            self.channelVC.send(messageKind: kind, attributes: [:])
-        }
+        self.channelVC.send(asset: asset, info: info)
     }
 }
 

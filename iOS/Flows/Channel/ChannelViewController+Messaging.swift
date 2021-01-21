@@ -8,6 +8,7 @@
 
 import Foundation
 import TwilioChatClient
+import Photos
 
 extension ChannelViewController: MessageInputAccessoryViewDelegate {
 
@@ -27,6 +28,26 @@ extension ChannelViewController: MessageInputAccessoryViewDelegate {
             break
         case .channel(_):
             self.loadMessages(for: activeChannel.channelType)
+        }
+    }
+
+    func send(asset: PHAsset, info: [UIImagePickerController.InfoKey : Any]) {
+
+        var messageKind: MessageKind? = nil
+
+        switch asset.mediaType {
+        case .image:
+            messageKind = .photo(PhotoAttachment(with: info))
+        case .video:
+            messageKind = .video(VideoAttachment(with: info))
+        case .audio:
+            messageKind = .audio(AudioAttachment(with: info))
+        default:
+            break
+        }
+
+        if let kind = messageKind {
+            self.send(messageKind: kind, attributes: [:])
         }
     }
 
