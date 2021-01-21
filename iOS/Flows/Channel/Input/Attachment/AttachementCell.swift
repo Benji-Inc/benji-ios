@@ -8,13 +8,14 @@
 
 import Foundation
 import Photos
+import Combine
 
 class AttachementCell: UICollectionViewCell, ManageableCell {
     typealias ItemType = Attachement
 
     private let imageView = DisplayableImageView()
-    private let imageManager = PHImageManager()
     private let selectedView = View()
+    private var cancellables = Set<AnyCancellable>()
 
     var onLongPress: (() -> Void)?
 
@@ -40,7 +41,10 @@ class AttachementCell: UICollectionViewCell, ManageableCell {
     func configure(with item: Attachement?) {
         guard let attachement = item else { return }
 
-        self.loadImage(for: attachement)
+        AttachmentsManager.shared.loadImage(for: attachement, size: self.size)
+            .mainSink { (image) in
+                self.imageView.displayable = image 
+            }.store(in: &self.cancellables)
     }
 
     func collectionViewManagerWillDisplay() {}
@@ -56,22 +60,6 @@ class AttachementCell: UICollectionViewCell, ManageableCell {
     func update(isSelected: Bool) {
         UIView.animate(withDuration: 0.2) {
             self.selectedView.alpha = isSelected ? 1.0 : 0.0
-        }
-    }
-
-    func loadImage(for attachment: Attachement) {
-        let options = PHImageRequestOptions()
-        options.deliveryMode = .highQualityFormat
-        options.resizeMode = .exact
-        options.isSynchronous = false
-        options.isNetworkAccessAllowed = true
-        self.imageManager.requestImage(for: attachment.asset,
-                                       targetSize: self.size,
-                                       contentMode: .aspectFill,
-                                       options: options) { [unowned self] (image, info) in
-                                        if let img = image {
-                                            self.imageView.displayable = img
-                                        }
         }
     }
 

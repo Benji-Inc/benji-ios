@@ -52,6 +52,7 @@ class ChannelDetailViewController: ViewController {
         self.view.addSubview(self.stackedAvatarView)
         self.view.addSubview(self.textView)
         self.textView.alpha = 0
+        self.textView.isScrollEnabled = false 
         self.view.addSubview(self.label)
         self.label.alpha = 0
 

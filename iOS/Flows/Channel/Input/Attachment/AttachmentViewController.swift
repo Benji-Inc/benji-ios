@@ -10,6 +10,10 @@ import Foundation
 import Photos
 import Combine
 
+protocol AttachmentViewControllerDelegate: class {
+    func attachementView(_ controller: AttachmentViewController, didSelect asset: PHAsset)
+}
+
 class AttachmentViewController: CollectionViewController<AttachementCell, AttachmentCollectionViewManager> {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
@@ -40,69 +44,26 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
             NotificationCenter.default.post(name: .didTapPhotoLibrary, object: nil)
         }
 
+        self.collectionViewManager.$onSelectedItem.mainSink { (item) in
+            guard let attachment = item?.item else { return }
+
+        }.store(in: &self.cancellables)
+
         if let attachmentCollectionView = self.collectionView as? AttachmentCollectionView {
             attachmentCollectionView.didTapAuthorize = { [unowned self] in
-                self.requestAuthorization()
-                    .mainSink(receivedResult: { (result) in
+                AttachmentsManager.shared.requestAttachements()
+                    .mainSink { (result) in
                         switch result {
-                        case .success():
-                            self.fetchAssets()
+                        case .success(let attachments):
+                            self.collectionViewManager.set(newItems: attachments)
                         case .error(_):
                             if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
                                 UIApplication.shared.open(url)
                             }
                         }
-                    }).store(in: &self.cancellables)
+                    }.store(in: &self.cancellables)
             }
         }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        self.checkPhotoAuthorizationStatus()
-    }
-
-    private func checkPhotoAuthorizationStatus() {
-        let status = PHPhotoLibrary.authorizationStatus()
-        switch (status) {
-        case .authorized, .limited:
-            self.fetchAssets()
-        default:
-            break
-        }
-    }
-
-    private func requestAuthorization() -> Future<Void, Error> {
-        return Future { promise in
-            PHPhotoLibrary.requestAuthorization({ (status) in
-                switch status {
-                case .authorized, .limited:
-                    promise(.success(()))
-                default:
-                    promise(.failure(ClientError.message(detail: "Failed to authorize")))
-                }
-            })
-        }
-    }
-
-    private func fetchAssets() {
-        let photosOptions = PHFetchOptions()
-        photosOptions.fetchLimit = 20
-        photosOptions.predicate = NSPredicate(format: "mediaType == %d || mediaType == %d",
-                                              PHAssetMediaType.image.rawValue)
-        photosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
-        let result = PHAsset.fetchAssets(with: photosOptions)
-
-        var attachments: [Attachement] = []
-
-        for index in 0...result.count - 1 {
-            let asset = result.object(at: index)
-            let attachement = Attachement(with: asset)
-            attachments.append(attachement)
-        }
-
-        self.collectionViewManager.set(newItems: attachments)
     }
 
     override func viewDidLayoutSubviews() {

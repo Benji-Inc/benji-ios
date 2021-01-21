@@ -47,22 +47,25 @@ struct Attachement: ManageableCellItem, Hashable {
         }
     }
 
-    init(with asset: PHAsset, info: [UIImagePickerController.InfoKey : Any]? = nil) {
-
-        self.asset = asset
-
-        if let info = info {
-            switch asset.mediaType {
-            case .image:
-                self.mediaItem = PhotoAttachment(with: info)
-            case .video:
-                self.mediaItem = VideoAttachment(with: info)
-            case .audio:
-                self.audioItem = AudioAttachment(with: info)
-            default:
-                break
+    var info: [UIImagePickerController.InfoKey : Any]? {
+        didSet {
+            if let info = self.info {
+                switch self.asset.mediaType {
+                case .image:
+                    self.mediaItem = PhotoAttachment(with: info)
+                case .video:
+                    self.mediaItem = VideoAttachment(with: info)
+                case .audio:
+                    self.audioItem = AudioAttachment(with: info)
+                default:
+                    break
+                }
             }
         }
+    }
+
+    init(with asset: PHAsset) {
+        self.asset = asset
     }
 
     static func == (lhs: Attachement, rhs: Attachement) -> Bool {
@@ -125,7 +128,6 @@ class VideoAttachment: AttachmentItem, MediaItem {
     var data: Data? {
         return nil // Not sure how to extract this
     }
-
 }
 
 class PhotoAttachment: AttachmentItem, MediaItem {
