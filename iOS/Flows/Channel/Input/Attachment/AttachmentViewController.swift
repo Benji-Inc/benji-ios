@@ -11,14 +11,17 @@ import Photos
 import Combine
 
 protocol AttachmentViewControllerDelegate: class {
-    func attachementView(_ controller: AttachmentViewController, didSelect asset: PHAsset)
+    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachement)
 }
 
 class AttachmentViewController: CollectionViewController<AttachementCell, AttachmentCollectionViewManager> {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
 
-    init() {
+    unowned let delegate: AttachmentViewControllerDelegate
+
+    init(with delegate: AttachmentViewControllerDelegate) {
+        self.delegate = delegate
         super.init(with: AttachmentCollectionView())
     }
 
@@ -44,9 +47,9 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
             NotificationCenter.default.post(name: .didTapPhotoLibrary, object: nil)
         }
 
-        self.collectionViewManager.$onSelectedItem.mainSink { (item) in
-            guard let attachment = item?.item else { return }
-
+        self.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
+            guard let attachment = cellItem?.item else { return }
+            self.delegate.attachementView(self, didSelect: attachment)
         }.store(in: &self.cancellables)
 
         if let attachmentCollectionView = self.collectionView as? AttachmentCollectionView {
@@ -63,6 +66,17 @@ class AttachmentViewController: CollectionViewController<AttachementCell, Attach
                         }
                     }.store(in: &self.cancellables)
             }
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if AttachmentsManager.shared.isAuthorized {
+            AttachmentsManager.shared.requestAttachements()
+                .mainSink { (attachments) in
+                    self.collectionViewManager.set(newItems: attachments)
+                }.store(in: &self.cancellables)
         }
     }
 

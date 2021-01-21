@@ -57,15 +57,37 @@ class AttachmentsManager {
         }
     }
 
-    func loadImage(for attachment: Attachement, size: CGSize) -> Future<UIImage, Error> {
+    func getMessageKind(for attachment: Attachement) -> Future<MessageKind, Error> {
+        return Future { promise in
+
+            switch attachment.asset.mediaType {
+            case .unknown:
+                promise(.failure(ClientError.message(detail: "Unknown asset type.")))
+            case .image:
+                self.imageManager.requestImageDataAndOrientation(for: attachment.asset, options: PhotoRequestOptions()) { (data, type, orientation, info) in
+                    let item = PhotoAttachment(url: nil, _data: data, info: info)
+                    promise(.success(.photo(item)))
+                }
+            case .video:
+                promise(.failure(ClientError.message(detail: "Video not supported.")))
+            case .audio:
+                promise(.failure(ClientError.message(detail: "Audio not supported")))
+            @unknown default:
+                break
+            }
+        }
+    }
+
+    func getImage(for attachment: Attachement, size: CGSize) -> Future<(UIImage, [AnyHashable: Any]?), Error> {
         return Future { promise in
             let options = PhotoRequestOptions()
+
             self.imageManager.requestImage(for: attachment.asset,
                                            targetSize: size,
                                            contentMode: .aspectFill,
                                            options: options) { (image, info) in
                 if let img = image {
-                    promise(.success(img))
+                    promise(.success((img, info)))
                 } else {
                     promise(.failure(ClientError.message(detail: "Failed to retrieve image")))
                 }
@@ -101,7 +123,7 @@ class AttachmentsManager {
         for index in 0...result.count - 1 {
             let asset = result.object(at: index)
             assets.append(asset)
-            let attachement = Attachement(with: asset)
+            let attachement = Attachement(asset: asset, info: nil)
             attachments.append(attachement)
         }
 

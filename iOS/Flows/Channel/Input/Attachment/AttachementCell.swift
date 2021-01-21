@@ -41,8 +41,8 @@ class AttachementCell: UICollectionViewCell, ManageableCell {
     func configure(with item: Attachement?) {
         guard let attachement = item else { return }
 
-        AttachmentsManager.shared.loadImage(for: attachement, size: self.size)
-            .mainSink { (image) in
+        AttachmentsManager.shared.getImage(for: attachement, size: self.size)
+            .mainSink { (image, _) in
                 self.imageView.displayable = image 
             }.store(in: &self.cancellables)
     }

@@ -16,57 +16,7 @@ struct Attachement: ManageableCellItem, Hashable {
     }
 
     let asset: PHAsset
-    var mediaItem: MediaItem?
-    var audioItem: AudioItem?
-
-    var messageKind: MessageKind? {
-
-        switch self.asset.mediaType {
-        case .unknown:
-            return nil
-        case .image:
-            if let item = self.mediaItem {
-                return .photo(item)
-            } else {
-                return nil
-            }
-        case .video:
-            if let item = self.mediaItem {
-                return .video(item)
-            } else {
-                return nil
-            }
-        case .audio:
-            if let item = self.audioItem {
-                return .audio(item)
-            } else {
-                return nil
-            }
-        @unknown default:
-            return nil
-        }
-    }
-
-    var info: [UIImagePickerController.InfoKey : Any]? {
-        didSet {
-            if let info = self.info {
-                switch self.asset.mediaType {
-                case .image:
-                    self.mediaItem = PhotoAttachment(with: info)
-                case .video:
-                    self.mediaItem = VideoAttachment(with: info)
-                case .audio:
-                    self.audioItem = AudioAttachment(with: info)
-                default:
-                    break
-                }
-            }
-        }
-    }
-
-    init(with asset: PHAsset) {
-        self.asset = asset
-    }
+    let info: [UIImagePickerController.InfoKey : Any]?
 
     static func == (lhs: Attachement, rhs: Attachement) -> Bool {
         return lhs.id == rhs.id
@@ -77,16 +27,7 @@ struct Attachement: ManageableCellItem, Hashable {
     }
 }
 
-class AttachmentItem {
-
-    let info: [UIImagePickerController.InfoKey : Any]
-
-    init(with info: [UIImagePickerController.InfoKey : Any]) {
-        self.info = info
-    }
-}
-
-class AudioAttachment: AttachmentItem, AudioItem {
+class AudioAttachment: AudioItem {
 
     var url: URL {
         return URL(string: "")!
@@ -101,50 +42,51 @@ class AudioAttachment: AttachmentItem, AudioItem {
     }
 }
 
-class VideoAttachment: AttachmentItem, MediaItem {
-    
-    var url: URL? {
-        return info[.mediaURL] as? URL
-    }
+//class VideoAttachment: MediaItem {
+//
+//    var url: URL? {
+//        return self.info[UIImagePickerController.InfoKey.mediaURL] as? URL
+//    }
+//
+//    var image: UIImage? {
+//        return self.info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+//    }
+//
+//    var size: CGSize {
+//        guard let asset = self.info[UIImagePickerController.InfoKey.phAsset] as? PHAsset else { return .zero }
+//        return CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
+//    }
+//
+//    var fileName: String {
+//        guard let asset = self.info[UIImagePickerController.InfoKey.phAsset] as? PHAsset else { return String() }
+//        return asset.localIdentifier
+//    }
+//
+//    var type: MediaType {
+//        return .video
+//    }
+//
+//    var data: Data? {
+//        return nil // Not sure how to extract this
+//    }
+//}
 
-    var image: UIImage? {
-        return info[.originalImage] as? UIImage
-    }
-
-    var size: CGSize {
-        guard let asset = info[.phAsset] as? PHAsset else { return .zero }
-        return CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
-    }
-
-    var fileName: String {
-        guard let asset = info[.phAsset] as? PHAsset else { return String() }
-        return asset.localIdentifier
-    }
-
-    var type: MediaType {
-        return .video
-    }
-
-    var data: Data? {
-        return nil // Not sure how to extract this
-    }
-}
-
-class PhotoAttachment: AttachmentItem, MediaItem {
+struct PhotoAttachment: MediaItem {
 
     var url: URL?
 
     var image: UIImage? {
-        return self.info[.originalImage] as? UIImage
+        guard let data = self.data else { return nil }
+        return UIImage(data: data)
     }
 
     var size: CGSize {
-        guard let asset = info[.phAsset] as? PHAsset else { return .zero }
+        guard let asset = self.info?[UIImagePickerController.InfoKey.phAsset] as? PHAsset else { return .zero }
         return CGSize(width: asset.pixelWidth, height: asset.pixelHeight)
     }
 
     var fileName: String {
-        guard let asset = info[.phAsset] as? PHAsset else { return String() }
+        guard let asset = self.info?[UIImagePickerController.InfoKey.phAsset] as? PHAsset else { return String() }
         return asset.localIdentifier
     }
 
@@ -153,7 +95,9 @@ class PhotoAttachment: AttachmentItem, MediaItem {
     }
 
     var data: Data? {
-        guard let img = self.image else { return nil }
-        return img.data
+        return self._data
     }
+
+    var _data: Data?
+    var info: [AnyHashable: Any]?
 }

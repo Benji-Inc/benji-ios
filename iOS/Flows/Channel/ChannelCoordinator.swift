@@ -115,7 +115,8 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
             return
         }
 
-        self.channelVC.send(asset: asset, info: info)
+        let attachment = Attachement(asset: asset, info: info)
+        self.channelVC.handle(attachment: attachment)
     }
 }
 

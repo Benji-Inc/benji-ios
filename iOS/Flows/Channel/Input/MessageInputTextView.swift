@@ -17,7 +17,7 @@ enum InputViewType {
 class MessageInputTextView: InputTextView {
 
     lazy var countView = CharacterCountView()
-    lazy var attachmentInputVC = AttachmentViewController()
+    lazy var attachmentInputVC = AttachmentViewController(with: self.attachmentDelegate)
     lazy var confirmationView = AlertConfirmationView()
 
     private(set) var currentInputView: InputViewType = .keyboard
@@ -25,6 +25,17 @@ class MessageInputTextView: InputTextView {
 
     override var canResignFirstResponder: Bool {
         return false 
+    }
+
+    unowned let attachmentDelegate: AttachmentViewControllerDelegate
+
+    init(with delegate: AttachmentViewControllerDelegate) {
+        self.attachmentDelegate = delegate
+        super.init(frame: .zero, textContainer: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func initialize() {

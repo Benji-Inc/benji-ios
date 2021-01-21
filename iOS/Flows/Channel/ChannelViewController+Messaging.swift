@@ -10,7 +10,23 @@ import Foundation
 import TwilioChatClient
 import Photos
 
-extension ChannelViewController: MessageInputAccessoryViewDelegate {
+extension ChannelViewController: InputAccessoryDelegates {
+
+    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachement) {
+        self.handle(attachment: attachment)
+    }
+
+    func handle(attachment: Attachement) {
+        AttachmentsManager.shared.getMessageKind(for: attachment)
+            .mainSink { (result) in
+                switch result {
+                case .success(let kind):
+                    self.send(messageKind: kind, attributes: [:])
+                case .error(_):
+                    break
+                }
+            }.store(in: &self.cancellables)
+    }
 
     func messageInputAccessory(_ view: MessageInputAccessoryView, didUpdate message: Messageable, with text: String) {
         self.update(message: message, text: text)
@@ -28,26 +44,6 @@ extension ChannelViewController: MessageInputAccessoryViewDelegate {
             break
         case .channel(_):
             self.loadMessages(for: activeChannel.channelType)
-        }
-    }
-
-    func send(asset: PHAsset, info: [UIImagePickerController.InfoKey : Any]) {
-
-        var messageKind: MessageKind? = nil
-
-        switch asset.mediaType {
-        case .image:
-            messageKind = .photo(PhotoAttachment(with: info))
-        case .video:
-            messageKind = .video(VideoAttachment(with: info))
-        case .audio:
-            messageKind = .audio(AudioAttachment(with: info))
-        default:
-            break
-        }
-
-        if let kind = messageKind {
-            self.send(messageKind: kind, attributes: [:])
         }
     }
 
