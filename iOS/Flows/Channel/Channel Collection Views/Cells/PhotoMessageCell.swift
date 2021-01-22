@@ -72,9 +72,8 @@ class PhotoMessageCell: BaseMessageCell {
         SDWebImageManager.shared.loadImage(with: url,
                                            options: [],
                                            progress: { (received, expected, url) in
-                                            let diff: CGFloat = CGFloat(received) / CGFloat(expected)
-                                            let progress = clamp(diff, 0.0, 1.0)
-                                            print("Progress: \(progress)")
+                                            //let diff: CGFloat = CGFloat(received) / CGFloat(expected)
+                                            //let progress = clamp(diff, 0.0, 1.0)
 
                                            }, completed: { (image, data, error, cacheType, finished, url) in
                                             self.imageView.displayable = image

@@ -49,6 +49,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     }
 
     let inputContainerView = View()
+    let attachmentView = AttachmentView()
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
     lazy var expandingTextView = MessageInputTextView(with: self.delegate)
     let alertProgressView = AlertProgressView()
@@ -83,6 +84,10 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 
         if self.expandingTextView.bounds.size.height > 0.0 {
             newSize.height = self.expandingTextView.bounds.size.height + 20.0
+        }
+
+        if self.attachmentView.height > 0 {
+            newSize.height += self.attachmentView.height + 10
         }
 
         if newSize.height < MessageInputAccessoryView.preferredHeight || newSize.height > 120.0 {
@@ -121,7 +126,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         self.alertProgressView.size = .zero
 
         self.inputContainerView.addSubview(self.expandingTextView)
-
+        self.inputContainerView.addSubview(self.attachmentView)
         self.inputContainerView.addSubview(self.overlayButton)
 
         self.inputContainerView.layer.masksToBounds = true
@@ -154,7 +159,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         let guide = self.layoutMarginsGuide
 
         self.plusAnimationView.translatesAutoresizingMaskIntoConstraints = false
-        self.plusAnimationView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
+        self.plusAnimationView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
         self.plusAnimationView.heightAnchor.constraint(equalToConstant: 43).isActive = true
         self.plusAnimationView.widthAnchor.constraint(equalToConstant: 43).isActive = true
         self.plusAnimationView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
@@ -166,9 +171,14 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         self.inputLeadingContstaint?.isActive = true
         self.inputContainerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
 
+        self.attachmentView.leadingAnchor.constraint(equalTo: self.inputContainerView.leadingAnchor).isActive = true
+        self.attachmentView.trailingAnchor.constraint(equalTo: self.inputContainerView.trailingAnchor).isActive = true
+        self.attachmentView.topAnchor.constraint(equalTo: self.inputContainerView.topAnchor).isActive = true
+        self.attachmentView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+
         self.expandingTextView.leadingAnchor.constraint(equalTo: self.inputContainerView.leadingAnchor).isActive = true
         self.expandingTextView.trailingAnchor.constraint(equalTo: self.inputContainerView.trailingAnchor).isActive = true
-        self.expandingTextView.topAnchor.constraint(equalTo: self.inputContainerView.topAnchor).isActive = true
+        self.expandingTextView.topAnchor.constraint(equalTo: self.attachmentView.bottomAnchor).isActive = true
         self.expandingTextView.bottomAnchor.constraint(equalTo: self.inputContainerView.bottomAnchor).isActive = true
         self.expandingTextView.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }

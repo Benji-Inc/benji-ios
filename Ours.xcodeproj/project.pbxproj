@@ -326,6 +326,7 @@
 		D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
 		D6884AC825800FC600DA380E /* StatusableRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6884AC725800FC600DA380E /* StatusableRequest.swift */; };
 		D6884B222587D25D00DA380E /* OursAppClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = D6884B0E2587D25C00DA380E /* OursAppClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D68B362C25BB1F86005AEB4C /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68B362B25BB1F86005AEB4C /* AttachmentView.swift */; };
 		D68BEAD424831FA000C95D31 /* ReservationsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
@@ -652,6 +653,7 @@
 		D6884B0E2587D25C00DA380E /* OursAppClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OursAppClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6884B1E2587D25D00DA380E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D6884B1F2587D25D00DA380E /* AppClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClip.entitlements; sourceTree = "<group>"; };
+		D68B362B25BB1F86005AEB4C /* AttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
 		D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsCoordinator.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
@@ -816,6 +818,7 @@
 				D61592D924FAD7A300B63412 /* AttachementCollectionView.swift */,
 				D61592DB24FAD7B400B63412 /* AttachementCell.swift */,
 				D61592DD24FAD7C600B63412 /* AttachementHeaderView.swift */,
+				D68B362B25BB1F86005AEB4C /* AttachmentView.swift */,
 			);
 			path = Attachment;
 			sourceTree = "<group>";
@@ -2064,6 +2067,7 @@
 				D677589625B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,
 				D6A301AC2380E102006655E0 /* FeedSupplier.swift in Sources */,
 				D66F0FDC22BF2ADC00BA277D /* HomeCoordinator.swift in Sources */,
+				D68B362C25BB1F86005AEB4C /* AttachmentView.swift in Sources */,
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,
 				D67758A725B0A604007E0184 /* UIViewController+Presentable.swift in Sources */,
 				D6FC8096237A64650089AACC /* MessageSupplier.swift in Sources */,
