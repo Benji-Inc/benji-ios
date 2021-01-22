@@ -78,13 +78,16 @@ class AttachmentsManager {
         }
     }
 
-    func getImage(for attachment: Attachement, size: CGSize) -> Future<(UIImage, [AnyHashable: Any]?), Error> {
+    func getImage(for attachment: Attachement,
+                  contentMode: PHImageContentMode = .aspectFill,
+                  size: CGSize) -> Future<(UIImage, [AnyHashable: Any]?), Error> {
+
         return Future { promise in
             let options = PhotoRequestOptions()
 
             self.imageManager.requestImage(for: attachment.asset,
                                            targetSize: size,
-                                           contentMode: .aspectFill,
+                                           contentMode: contentMode,
                                            options: options) { (image, info) in
                 if let img = image {
                     promise(.success((img, info)))

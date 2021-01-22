@@ -14,6 +14,8 @@ class AttachmentView: View {
     private let imageView = DisplayableImageView()
     private var cancellables = Set<AnyCancellable>()
 
+    static let expandedHeight: CGFloat = 100
+
     @Published var attachement: Attachement?
 
     override func initializeSubviews() {
@@ -24,7 +26,7 @@ class AttachmentView: View {
         self.set(backgroundColor: .red)
 
         self.addSubview(self.imageView)
-        self.imageView.imageView.contentMode = .scaleToFill
+        self.imageView.imageView.contentMode = .center
         self.imageView.clipsToBounds = true
     }
 
@@ -32,9 +34,19 @@ class AttachmentView: View {
         guard let attachement = item else { return }
 
         self.attachement = attachement
-        AttachmentsManager.shared.getImage(for: attachement, size: self.size)
+
+        AttachmentsManager.shared.getImage(for: attachement,
+                                           contentMode: .aspectFit,
+                                           size: CGSize(width: 300, height: 300))
             .mainSink { (image, _) in
                 self.imageView.displayable = image
+                self.layoutNow()
             }.store(in: &self.cancellables)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.imageView.expandToSuperviewSize()
     }
 }

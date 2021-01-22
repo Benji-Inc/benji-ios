@@ -51,7 +51,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     let inputContainerView = View()
     let attachmentView = AttachmentView()
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
-    lazy var expandingTextView = MessageInputTextView(with: self.delegate)
+    lazy var expandingTextView = MessageInputTextView(with: self)
     let alertProgressView = AlertProgressView()
     let animationView = AnimationView(name: "loading")
     let plusAnimationView = AnimationView(name: "plusToX")
@@ -63,6 +63,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     }
 
     private(set)var inputLeadingContstaint: NSLayoutConstraint?
+    private(set) var attachmentHeightAnchor: NSLayoutConstraint?
 
     unowned let delegate: InputAccessoryDelegates
 
@@ -86,7 +87,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
             newSize.height = self.expandingTextView.bounds.size.height + 20.0
         }
 
-        if self.attachmentView.height > 0 {
+        if let constraint = self.attachmentHeightAnchor, constraint.constant > 0 {
             newSize.height += self.attachmentView.height + 10
         }
 
@@ -159,7 +160,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         let guide = self.layoutMarginsGuide
 
         self.plusAnimationView.translatesAutoresizingMaskIntoConstraints = false
-        self.plusAnimationView.bottomAnchor.constraint(equalTo: guide.bottomAnchor).isActive = true
+        self.plusAnimationView.bottomAnchor.constraint(equalTo: self.expandingTextView.bottomAnchor).isActive = true
         self.plusAnimationView.heightAnchor.constraint(equalToConstant: 43).isActive = true
         self.plusAnimationView.widthAnchor.constraint(equalToConstant: 43).isActive = true
         self.plusAnimationView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
@@ -174,7 +175,8 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         self.attachmentView.leadingAnchor.constraint(equalTo: self.inputContainerView.leadingAnchor).isActive = true
         self.attachmentView.trailingAnchor.constraint(equalTo: self.inputContainerView.trailingAnchor).isActive = true
         self.attachmentView.topAnchor.constraint(equalTo: self.inputContainerView.topAnchor).isActive = true
-        self.attachmentView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        self.attachmentHeightAnchor = NSLayoutConstraint(item: self.attachmentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
+        self.attachmentHeightAnchor?.isActive = true
 
         self.expandingTextView.leadingAnchor.constraint(equalTo: self.inputContainerView.leadingAnchor).isActive = true
         self.expandingTextView.trailingAnchor.constraint(equalTo: self.inputContainerView.trailingAnchor).isActive = true
@@ -210,16 +212,17 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         }
 
         self.plusAnimationView.didSelect { [unowned self] in
-            let type: InputViewType = self.expandingTextView.currentInputView == .keyboard ? .attachments : .keyboard
-            let startingProgress: CGFloat = self.plusAnimationView.currentProgress
-            let toProgress: CGFloat = startingProgress == 0 ? 1.0 : 0.0
-            self.plusAnimationView.play(fromProgress: startingProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
-            self.expandingTextView.updateInputView(type: type)
+            self.updateInputType()
         }
 
         self.expandingTextView.confirmationView.button.didSelect { [unowned self] in
             self.resetAlertProgress()
         }
+
+        self.attachmentView.$attachement.mainSink { [unowned self] (attachment) in
+            self.attachmentHeightAnchor?.constant = self.attachmentView.attachement.isNil ? 0 : 100
+            self.layoutNow()
+        }.store(in: &self.cancellables)
     }
 
     // MARK: HANDLERS
@@ -232,6 +235,14 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
             case ChannelType.channel(let channel) = channelDisplayable.channelType else { return }
         // Twilio throttles this call to every 5 seconds
         channel.typing()
+    }
+
+    private func updateInputType() {
+        let type: InputViewType = self.expandingTextView.currentInputView == .keyboard ? .attachments : .keyboard
+        let startingProgress: CGFloat = self.plusAnimationView.currentProgress
+        let toProgress: CGFloat = startingProgress == 0 ? 1.0 : 0.0
+        self.plusAnimationView.play(fromProgress: startingProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
+        self.expandingTextView.updateInputView(type: type)
     }
 
     private func animateInputViews(with text: String) {
@@ -279,6 +290,13 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         self.alertProgressView.layer.removeAllAnimations()
         self.borderColor = self.messageContext.color.color.cgColor
         self.expandingTextView.updateInputView(type: .keyboard)
+    }
+}
+
+extension MessageInputAccessoryView: AttachmentViewControllerDelegate {
+    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachement) {
+        self.updateInputType()
+        self.attachmentView.configure(with: attachment)
     }
 }
 
