@@ -63,9 +63,9 @@ extension ChannelCoordinator: ChannelViewControllerDelegate {
             items = [text]
         case .attributedText(_):
             break
-        case .photo(_):
+        case .photo(_, _):
             break
-        case .video(_):
+        case .video(_, _):
             break
         case .location(_):
             break

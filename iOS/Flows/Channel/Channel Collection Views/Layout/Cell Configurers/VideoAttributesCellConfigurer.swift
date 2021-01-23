@@ -15,8 +15,8 @@ class VideoAttributesCellConfigurer: ChannelCellAttributesConfigurer {
     }
 
     override func size(with message: Messageable?, for layout: ChannelCollectionViewFlowLayout) -> CGSize {
-        guard let msg = message, case MessageKind.video(let item) = msg.kind else { return .zero }
-        return item.size
+        guard let msg = message, case MessageKind.video(let video, _) = msg.kind else { return .zero }
+        return video.size
     }
 }
 

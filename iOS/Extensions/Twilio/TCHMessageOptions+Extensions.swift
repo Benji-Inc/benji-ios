@@ -12,26 +12,14 @@ import Combine
 
 extension TCHMessageOptions {
 
-    func with(body: String, attributes: TCHJsonAttributes) -> Future<TCHMessageOptions, Error> {
+    func with(body: String, mediaItem: MediaItem? = nil, attributes: TCHJsonAttributes) -> Future<TCHMessageOptions, Error> {
         return Future { promise in
-            self.withBody(body)
-            self.withAttributes(attributes) { (result) in
-                if result.isSuccessful() {
-                    promise(.success(self))
-                } else if let error = result.error {
-                    promise(.failure(error))
-                } else {
-                    promise(.failure(ClientError.message(detail: "Failed to create options for message.")))
-                }
-            }
-        }
-    }
 
-    func with(mediaItem: MediaItem, attributes: TCHJsonAttributes) -> Future<TCHMessageOptions, Error> {
-        return Future { promise in
             self.withAttributes(attributes) { (result) in
                 if result.isSuccessful() {
-                    self.with(mediaItem: mediaItem)
+                    if let item = mediaItem {
+                        self.with(mediaItem: item)
+                    }
                     promise(.success(self))
                 } else if let error = result.error {
                     promise(.failure(error))

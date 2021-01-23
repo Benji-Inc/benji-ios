@@ -34,16 +34,16 @@ class PhotoMessageCell: BaseMessageCell {
     override func configure(with message: Messageable) {
         super.configure(with: message)
 
-        guard case MessageKind.photo(let item) = message.kind else { return }
+        guard case MessageKind.photo(let photo, let body) = message.kind else { return }
 
         self.avatarView.set(avatar: message.avatar)
-        if let image = item.image {
+        if let image = photo.image {
             self.imageView.displayable = image
         } else if let tchMessage = message as? TCHMessage {
             self.loadImage(from: tchMessage)
         }
 
-        self.imageView.displayable = item.image
+        self.imageView.displayable = photo.image
     }
 
     private func loadImage(from message: TCHMessage) {

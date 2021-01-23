@@ -66,7 +66,7 @@ class AttachmentsManager {
             case .image:
                 self.imageManager.requestImageDataAndOrientation(for: attachment.asset, options: PhotoRequestOptions()) { (data, type, orientation, info) in
                     let item = PhotoAttachment(url: nil, _data: data, info: info)
-                    promise(.success(.photo(item)))
+                    promise(.success(.photo(photo: item, body: String())))
                 }
             case .video:
                 promise(.failure(ClientError.message(detail: "Video not supported.")))

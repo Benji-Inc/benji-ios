@@ -149,7 +149,6 @@ class ChannelCollectionViewFlowLayout: UICollectionViewFlowLayout {
     }
 
     private func configurer(for message: Messageable?, at indexPath: IndexPath) -> ChannelCellAttributesConfigurer {
-        // Can eventually extended this to switch over different message types
 
         if self.isSectionReservedForTypingIndicator(indexPath.section) {
             return TypingCellAttributesConfigurer()
@@ -164,9 +163,9 @@ class ChannelCollectionViewFlowLayout: UICollectionViewFlowLayout {
                 return MessageCellAttributesConfigurer()
             case .attributedText(_):
                 return AttributedMessageCellAttributesConfigurer()
-            case .photo(_):
+            case .photo(_, _):
                 return PhotoCellAttributesConfigurer()
-            case .video(_):
+            case .video(_, _):
                 return VideoAttributesCellConfigurer()
             case .location(_):
                 return LocationCellAttributesConfigurer()

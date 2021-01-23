@@ -122,9 +122,9 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
             }
         case .attributedText(_):
             cell = channelCollectionView.dequeueReusableCell(AttributedMessageCell.self, for: indexPath)
-        case .photo(_):
+        case .photo(_, _):
             cell = channelCollectionView.dequeueReusableCell(PhotoMessageCell.self, for: indexPath)
-        case .video(_):
+        case .video(_, _):
             cell = channelCollectionView.dequeueReusableCell(VideoMessageCell.self, for: indexPath)
         case .location(_):
             cell = channelCollectionView.dequeueReusableCell(LocationMessageCell.self, for: indexPath)

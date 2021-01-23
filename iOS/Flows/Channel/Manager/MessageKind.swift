@@ -20,10 +20,10 @@ enum MessageKind {
     case attributedText(NSAttributedString)
 
     /// A photo message.
-    case photo(MediaItem)
+    case photo(photo: MediaItem, body: String)
 
     /// A video message.
-    case video(MediaItem)
+    case video(video: MediaItem, body: String)
 
     /// A location message.
     case location(LocationItem)
@@ -45,10 +45,10 @@ extension MessageKind: Equatable {
             return lhsText == rhsText
         case (.attributedText(let lhsText), .attributedText(let rhsText)):
             return lhsText == rhsText
-        case (.photo(let lhsMedia), .photo(let rhsMedia)):
-            return lhsMedia == rhsMedia
-        case (.video(let lhsMedia), .video(let rhsMedia)):
-            return lhsMedia == rhsMedia
+        case (.photo(let lhsMedia, let lhsText), .photo(let rhsMedia, let rhsText)):
+            return lhsMedia == rhsMedia && lhsText == rhsText
+        case (.video(let lhsMedia, let lhsText), .video(let rhsMedia, let rhsText)):
+            return lhsMedia == rhsMedia && lhsText == rhsText
         case (.location(let lhsLocation), .location(let rhsLocation)):
             return lhsLocation == rhsLocation
         case (.emoji(let lhsEmoji), .emoji(let rhsEmoji)):

@@ -137,8 +137,8 @@ class MessageDeliveryManager {
         switch kind {
         case .text(let body):
             return options.with(body: body, attributes: TCHJsonAttributes.init(dictionary: attributes))
-        case .photo(let item), .video(let item):
-            return options.with(mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: attributes))
+        case .photo(let item, let body), .video(let item, let body):
+            return options.with(body: body, mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: attributes))
         default:
             return Future { promise in
                 promise(.failure(ClientError.message(detail: "Unsupported MessageKind")))
