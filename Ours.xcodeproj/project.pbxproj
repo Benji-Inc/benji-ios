@@ -28,9 +28,9 @@
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */; };
-		D61592DA24FAD7A300B63412 /* AttachementCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachementCollectionView.swift */; };
+		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
 		D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DB24FAD7B400B63412 /* AttachmentCell.swift */; };
-		D61592DE24FAD7C600B63412 /* AttachementHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DD24FAD7C600B63412 /* AttachementHeaderView.swift */; };
+		D61592DE24FAD7C600B63412 /* AttachmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DD24FAD7C600B63412 /* AttachmentHeaderView.swift */; };
 		D61592E024FC195D00B63412 /* MessageInputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DF24FC195D00B63412 /* MessageInputTextView.swift */; };
 		D61D38E3248C07F700BE457B /* MessageInputAccessoryView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E2248C07F700BE457B /* MessageInputAccessoryView+Animation.swift */; };
 		D61D38E5248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E4248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift */; };
@@ -478,9 +478,9 @@
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewManager.swift; sourceTree = "<group>"; };
-		D61592D924FAD7A300B63412 /* AttachementCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementCollectionView.swift; sourceTree = "<group>"; };
+		D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
 		D61592DB24FAD7B400B63412 /* AttachmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
-		D61592DD24FAD7C600B63412 /* AttachementHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementHeaderView.swift; sourceTree = "<group>"; };
+		D61592DD24FAD7C600B63412 /* AttachmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeaderView.swift; sourceTree = "<group>"; };
 		D61592DF24FC195D00B63412 /* MessageInputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputTextView.swift; sourceTree = "<group>"; };
 		D61D38E2248C07F700BE457B /* MessageInputAccessoryView+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageInputAccessoryView+Animation.swift"; sourceTree = "<group>"; };
 		D61D38E4248C0BA600BE457B /* MessageInputAccessoryView+Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageInputAccessoryView+Connection.swift"; sourceTree = "<group>"; };
@@ -815,9 +815,9 @@
 			children = (
 				D61592D524FACD9200B63412 /* AttachmentViewController.swift */,
 				D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */,
-				D61592D924FAD7A300B63412 /* AttachementCollectionView.swift */,
+				D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */,
 				D61592DB24FAD7B400B63412 /* AttachmentCell.swift */,
-				D61592DD24FAD7C600B63412 /* AttachementHeaderView.swift */,
+				D61592DD24FAD7C600B63412 /* AttachmentHeaderView.swift */,
 				D68B362B25BB1F86005AEB4C /* AttachmentView.swift */,
 			);
 			path = Attachment;
@@ -1832,7 +1832,7 @@
 				D65519F32589591D00B901E4 /* Typealies.swift in Sources */,
 				D64A8F46259008B2002948E1 /* ChannelSupplier+Extensions.swift in Sources */,
 				D6F37D6025B5D8610034C9C5 /* AvatarProfileViewController.swift in Sources */,
-				D61592DE24FAD7C600B63412 /* AttachementHeaderView.swift in Sources */,
+				D61592DE24FAD7C600B63412 /* AttachmentHeaderView.swift in Sources */,
 				D642735522C87CCA0088256B /* ImageViewButton.swift in Sources */,
 				D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */,
 				D67934DB23DC011D00536B44 /* CharacterCountView.swift in Sources */,
@@ -2012,7 +2012,7 @@
 				D60B0BE82432F88D004784CD /* FeedConnectionView.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
 				D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */,
-				D61592DA24FAD7A300B63412 /* AttachementCollectionView.swift in Sources */,
+				D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */,
 				D639F61824B1566B007E63B7 /* AttibutedMessageCell.swift in Sources */,
 				D67758AE25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */,
 				80C7C6062316112400643A14 /* TimeHumpView.swift in Sources */,

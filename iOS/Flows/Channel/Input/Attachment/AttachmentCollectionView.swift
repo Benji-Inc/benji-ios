@@ -64,6 +64,6 @@ class AttachmentCollectionView: CollectionView {
         self.set(backgroundColor: .clear)
         self.showsHorizontalScrollIndicator = false
 
-        self.register(AttachementHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
+        self.register(AttachmentHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
     }
 }

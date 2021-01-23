@@ -1,5 +1,5 @@
 //
-//  AttachementHeaderView.swift
+//  AttachmentHeaderView.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 8/29/20.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class AttachementHeaderView: UICollectionReusableView {
+class AttachmentHeaderView: UICollectionReusableView {
 
     let photoButton = Button()
     let photoImageView = UIImageView()

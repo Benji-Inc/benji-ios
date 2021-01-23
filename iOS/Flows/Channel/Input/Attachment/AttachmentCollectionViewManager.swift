@@ -35,7 +35,7 @@ class AttachmentCollectionViewManager: CollectionViewManager<AttachmentCell> {
         guard let cv = collectionView as? AttachmentCollectionView,
             kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
 
-        let header = cv.dequeueReusableHeaderView(AttachementHeaderView.self, for: indexPath)
+        let header = cv.dequeueReusableHeaderView(AttachmentHeaderView.self, for: indexPath)
 
         header.photoButton.didSelect { [unowned self] in
             self.didSelectPhotoOption?()
