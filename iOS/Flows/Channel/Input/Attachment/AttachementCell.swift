@@ -11,7 +11,7 @@ import Photos
 import Combine
 
 class AttachementCell: UICollectionViewCell, ManageableCell {
-    typealias ItemType = Attachement
+    typealias ItemType = Attachment
 
     private let imageView = DisplayableImageView()
     private let selectedView = View()
@@ -38,7 +38,7 @@ class AttachementCell: UICollectionViewCell, ManageableCell {
         self.selectedView.alpha = 0
     }
 
-    func configure(with item: Attachement?) {
+    func configure(with item: Attachment?) {
         guard let attachement = item else { return }
 
         AttachmentsManager.shared.getImage(for: attachement, size: self.size)

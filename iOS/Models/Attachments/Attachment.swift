@@ -9,7 +9,7 @@
 import Foundation
 import Photos
 
-struct Attachement: ManageableCellItem, Hashable {
+struct Attachment: ManageableCellItem, Hashable {
 
     var id: String {
         return self.asset.localIdentifier
@@ -18,7 +18,7 @@ struct Attachement: ManageableCellItem, Hashable {
     let asset: PHAsset
     let info: [UIImagePickerController.InfoKey : Any]?
 
-    static func == (lhs: Attachement, rhs: Attachement) -> Bool {
+    static func == (lhs: Attachment, rhs: Attachment) -> Bool {
         return lhs.id == rhs.id
     }
 

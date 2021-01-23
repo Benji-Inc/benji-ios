@@ -11,7 +11,7 @@ import Photos
 import Combine
 
 protocol AttachmentViewControllerDelegate: class {
-    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachement)
+    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment)
 }
 
 class AttachmentViewController: CollectionViewController<AttachementCell, AttachmentCollectionViewManager> {

@@ -294,7 +294,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
 }
 
 extension MessageInputAccessoryView: AttachmentViewControllerDelegate {
-    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachement) {
+    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
         self.updateInputType()
         self.attachmentView.configure(with: attachment)
     }

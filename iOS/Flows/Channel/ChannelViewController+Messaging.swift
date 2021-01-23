@@ -12,11 +12,11 @@ import Photos
 
 extension ChannelViewController: InputAccessoryDelegates {
 
-    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachement) {
+    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
         self.handle(attachment: attachment)
     }
 
-    func handle(attachment: Attachement) {
+    func handle(attachment: Attachment) {
         AttachmentsManager.shared.getMessageKind(for: attachment)
             .mainSink { (result) in
                 switch result {

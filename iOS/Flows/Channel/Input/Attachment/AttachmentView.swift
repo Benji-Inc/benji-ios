@@ -16,7 +16,7 @@ class AttachmentView: View {
 
     static let expandedHeight: CGFloat = 100
 
-    @Published var attachement: Attachement?
+    @Published var attachement: Attachment?
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -30,7 +30,7 @@ class AttachmentView: View {
         self.imageView.clipsToBounds = true
     }
 
-    func configure(with item: Attachement?) {
+    func configure(with item: Attachment?) {
         guard let attachement = item else { return }
 
         self.attachement = attachement

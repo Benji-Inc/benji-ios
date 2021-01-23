@@ -39,7 +39,7 @@ class AttachmentsManager {
         }
     }
 
-    func requestAttachements() -> Future<[Attachement], Error> {
+    func requestAttachements() -> Future<[Attachment], Error> {
         return Future { promise in
             if self.isAuthorized {
                 promise(.success(self.fetchAttachments()))
@@ -57,7 +57,7 @@ class AttachmentsManager {
         }
     }
 
-    func getMessageKind(for attachment: Attachement) -> Future<MessageKind, Error> {
+    func getMessageKind(for attachment: Attachment) -> Future<MessageKind, Error> {
         return Future { promise in
 
             switch attachment.asset.mediaType {
@@ -78,7 +78,7 @@ class AttachmentsManager {
         }
     }
 
-    func getImage(for attachment: Attachement,
+    func getImage(for attachment: Attachment,
                   contentMode: PHImageContentMode = .aspectFill,
                   size: CGSize) -> Future<(UIImage, [AnyHashable: Any]?), Error> {
 
@@ -111,7 +111,7 @@ class AttachmentsManager {
         }
     }
 
-    private func fetchAttachments() -> [Attachement] {
+    private func fetchAttachments() -> [Attachment] {
         let photosOptions = PHFetchOptions()
         photosOptions.fetchLimit = 20
         photosOptions.predicate = NSPredicate(format: "mediaType == %d || mediaType == %d",
@@ -119,14 +119,14 @@ class AttachmentsManager {
         photosOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
         let result = PHAsset.fetchAssets(with: photosOptions)
 
-        var attachments: [Attachement] = []
+        var attachments: [Attachment] = []
 
         var assets: [PHAsset] = []
 
         for index in 0...result.count - 1 {
             let asset = result.object(at: index)
             assets.append(asset)
-            let attachement = Attachement(asset: asset, info: nil)
+            let attachement = Attachment(asset: asset, info: nil)
             attachments.append(attachement)
         }
 
