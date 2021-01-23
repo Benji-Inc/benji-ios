@@ -36,6 +36,15 @@ enum MessageKind {
 
     /// A contact message.
     case contact(ContactItem)
+
+    var isSendable: Bool {
+        switch self {
+        case .text(let body):
+            return !body.isEmpty
+        default:
+            return true
+        }
+    }
 }
 
 extension MessageKind: Equatable {

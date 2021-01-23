@@ -194,7 +194,9 @@ class MessageSupplier: NSObject {
         messagesObject.remove(tchMessage, completion: nil)
     }
 
-    func update(message: Messageable, text: String, completion: ((SystemMessage, Error?) -> Void)?) -> SystemMessage {
+    func update(message: Messageable,
+                text: String,
+                completion: ((SystemMessage, Error?) -> Void)?) -> SystemMessage {
 
         let updatedMessage = SystemMessage(with: message)
         updatedMessage.kind = .text(text)

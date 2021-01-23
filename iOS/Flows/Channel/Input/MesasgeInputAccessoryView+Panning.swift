@@ -11,7 +11,7 @@ import Foundation
 extension MessageInputAccessoryView: UIGestureRecognizerDelegate {
 
     func handle(pan: UIPanGestureRecognizer) {
-        guard let text = self.expandingTextView.text, !text.isEmpty else { return }
+        guard let sendable = self.currentSendable, sendable.isSendable else { return }
 
         let currentLocation = pan.location(in: nil)
         let startingPoint: CGPoint
@@ -35,7 +35,7 @@ extension MessageInputAccessoryView: UIGestureRecognizerDelegate {
         case .began:
             self.previewView = PreviewMessageView()
             self.previewView?.set(backgroundColor: self.messageContext.color)
-            self.previewView?.textView.text = text
+            self.previewView?.sendable = sendable
             self.previewView?.backgroundView.alpha = 0.0
             self.addSubview(self.previewView!)
             self.previewView?.frame = self.inputContainerView.frame
@@ -68,14 +68,14 @@ extension MessageInputAccessoryView: UIGestureRecognizerDelegate {
 
             self.previewAnimator?.addCompletion({ (position) in
                 if position == .end {
-                    if let updatedMessage = self.editableMessage {
-                        self.delegate.messageInputAccessory(self, didUpdate: updatedMessage, with: text)
-                    } else {
-                        self.delegate.messageInputAccessory(self, didSend: text,
-                                                            context: self.messageContext,
-                                                            attributes: ["status": MessageStatus.sent.rawValue])
-                    }
-                    self.editableMessage = nil
+//                    if let updatedMessage = self.editableMessage {
+//                        self.delegate.messageInputAccessory(self, didUpdate: updatedMessage, with: text)
+//                    } else {
+//                        self.delegate.messageInputAccessory(self, didSend: kind, context: <#T##MessageContext#>, attributes: <#T##[String : Any]#>)
+//                        self.delegate.messageInputAccessory(self, didSend: text,
+//                                                            context: self.messageContext,
+//                                                            attributes: ["status": MessageStatus.sent.rawValue])
+//                    }
                     self.previewView?.removeFromSuperview()
                 }
                 if position == .start {

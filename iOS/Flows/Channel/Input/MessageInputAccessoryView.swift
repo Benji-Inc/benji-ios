@@ -11,14 +11,14 @@ import Lottie
 import TMROLocalization
 import Combine
 
-typealias InputAccessoryDelegates = AttachmentViewControllerDelegate & MessageInputAccessoryViewDelegate
+typealias InputAccessoryDelegates = MessageInputAccessoryViewDelegate
 
 protocol MessageInputAccessoryViewDelegate: class {
     func messageInputAccessory(_ view: MessageInputAccessoryView,
                                didUpdate message: Messageable,
                                with text: String)
     func messageInputAccessory(_ view: MessageInputAccessoryView,
-                               didSend text: String,
+                               didSend kind: MessageKind,
                                context: MessageContext,
                                attributes: [String: Any])
 }
@@ -38,7 +38,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
         }
     }
 
-    var editableMessage: Messageable?
+    var currentSendable: SendableType?
 
     var alertAnimator: UIViewPropertyAnimator?
     var selectionFeedback = UIImpactFeedbackGenerator(style: .rigid)
@@ -267,11 +267,21 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     // MARK: PUBLIC
 
     func edit(message: Messageable) {
-        self.editableMessage = message
-        if case MessageKind.text(let text) = message.kind {
-            self.expandingTextView.text = text
+
+        switch message.kind {
+        case .text(let body):
+            self.expandingTextView.text = body
+        case .attributedText(let body):
+            self.expandingTextView.text = body.string
+        case .photo(photo: _, body: let body):
+            self.expandingTextView.text = body
+        case .video(video: _, body: let body):
+            self.expandingTextView.text = body
+        default:
+            return
         }
-        self.messageContext = message.context
+
+        self.currentSendable = .update(SendableObject(kind: message.kind, context: message.context))
         self.expandingTextView.becomeFirstResponder()
     }
 

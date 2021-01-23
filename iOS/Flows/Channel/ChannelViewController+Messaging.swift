@@ -12,9 +12,9 @@ import Photos
 
 extension ChannelViewController: InputAccessoryDelegates {
 
-    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
-        self.handle(attachment: attachment, body: String())
-    }
+//    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
+//        self.handle(attachment: attachment, body: String())
+//    }
 
     func handle(attachment: Attachment, body: String) {
         AttachmentsManager.shared.getMessageKind(for: attachment, body: body)
@@ -28,12 +28,18 @@ extension ChannelViewController: InputAccessoryDelegates {
             }.store(in: &self.cancellables)
     }
 
-    func messageInputAccessory(_ view: MessageInputAccessoryView, didUpdate message: Messageable, with text: String) {
+    func messageInputAccessory(_ view: MessageInputAccessoryView,
+                               didUpdate message: Messageable,
+                               with text: String) {
         self.update(message: message, text: text)
     }
 
-    func messageInputAccessory(_ view: MessageInputAccessoryView, didSend text: String, context: MessageContext, attributes: [String : Any]) {
-        self.send(messageKind: .text(text), context: context, attributes: attributes)
+    func messageInputAccessory(_ view: MessageInputAccessoryView,
+                               didSend kind: MessageKind,
+                               context: MessageContext,
+                               attributes: [String : Any]) {
+
+        self.send(messageKind: kind, context: context, attributes: attributes)
     }
 
     func load(activeChannel: DisplayableChannel) {
