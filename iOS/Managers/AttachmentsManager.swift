@@ -57,7 +57,7 @@ class AttachmentsManager {
         }
     }
 
-    func getMessageKind(for attachment: Attachment) -> Future<MessageKind, Error> {
+    func getMessageKind(for attachment: Attachment, body: String) -> Future<MessageKind, Error> {
         return Future { promise in
 
             switch attachment.asset.mediaType {
@@ -66,7 +66,7 @@ class AttachmentsManager {
             case .image:
                 self.imageManager.requestImageDataAndOrientation(for: attachment.asset, options: PhotoRequestOptions()) { (data, type, orientation, info) in
                     let item = PhotoAttachment(url: nil, _data: data, info: info)
-                    promise(.success(.photo(photo: item, body: String())))
+                    promise(.success(.photo(photo: item, body: body)))
                 }
             case .video:
                 promise(.failure(ClientError.message(detail: "Video not supported.")))
