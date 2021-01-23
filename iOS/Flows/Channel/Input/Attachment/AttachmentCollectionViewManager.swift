@@ -8,7 +8,7 @@
 
 import Foundation
 
-class AttachmentCollectionViewManager: CollectionViewManager<AttachementCell> {
+class AttachmentCollectionViewManager: CollectionViewManager<AttachmentCell> {
 
     var didSelectPhotoOption: CompletionOptional = nil
     var didSelectLibraryOption: CompletionOptional = nil

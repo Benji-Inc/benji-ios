@@ -10,7 +10,7 @@ import Foundation
 import Photos
 import Combine
 
-class AttachementCell: UICollectionViewCell, ManageableCell {
+class AttachmentCell: UICollectionViewCell, ManageableCell {
     typealias ItemType = Attachment
 
     private let imageView = DisplayableImageView()

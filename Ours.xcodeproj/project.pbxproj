@@ -29,7 +29,7 @@
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachementCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachementCollectionView.swift */; };
-		D61592DC24FAD7B400B63412 /* AttachementCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DB24FAD7B400B63412 /* AttachementCell.swift */; };
+		D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DB24FAD7B400B63412 /* AttachmentCell.swift */; };
 		D61592DE24FAD7C600B63412 /* AttachementHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DD24FAD7C600B63412 /* AttachementHeaderView.swift */; };
 		D61592E024FC195D00B63412 /* MessageInputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DF24FC195D00B63412 /* MessageInputTextView.swift */; };
 		D61D38E3248C07F700BE457B /* MessageInputAccessoryView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E2248C07F700BE457B /* MessageInputAccessoryView+Animation.swift */; };
@@ -479,7 +479,7 @@
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewManager.swift; sourceTree = "<group>"; };
 		D61592D924FAD7A300B63412 /* AttachementCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementCollectionView.swift; sourceTree = "<group>"; };
-		D61592DB24FAD7B400B63412 /* AttachementCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementCell.swift; sourceTree = "<group>"; };
+		D61592DB24FAD7B400B63412 /* AttachmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		D61592DD24FAD7C600B63412 /* AttachementHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachementHeaderView.swift; sourceTree = "<group>"; };
 		D61592DF24FC195D00B63412 /* MessageInputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputTextView.swift; sourceTree = "<group>"; };
 		D61D38E2248C07F700BE457B /* MessageInputAccessoryView+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageInputAccessoryView+Animation.swift"; sourceTree = "<group>"; };
@@ -816,7 +816,7 @@
 				D61592D524FACD9200B63412 /* AttachmentViewController.swift */,
 				D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */,
 				D61592D924FAD7A300B63412 /* AttachementCollectionView.swift */,
-				D61592DB24FAD7B400B63412 /* AttachementCell.swift */,
+				D61592DB24FAD7B400B63412 /* AttachmentCell.swift */,
 				D61592DD24FAD7C600B63412 /* AttachementHeaderView.swift */,
 				D68B362B25BB1F86005AEB4C /* AttachmentView.swift */,
 			);
@@ -1999,7 +1999,7 @@
 				D65E3EA8248803510074E789 /* ChannelViewController+Keyboard.swift in Sources */,
 				D61EC0E621D30EB300204BEE /* View.swift in Sources */,
 				D66F0FC722BF004300BA277D /* FeedType.swift in Sources */,
-				D61592DC24FAD7B400B63412 /* AttachementCell.swift in Sources */,
+				D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */,
 				D67758A025B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,
 				D6DADF742207E0E2007D9EB1 /* TCHChannel+Extensions.swift in Sources */,
 				D6E80C8B23B2D1180012D438 /* FeedNotificationPermissionsView.swift in Sources */,

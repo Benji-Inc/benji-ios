@@ -14,7 +14,7 @@ protocol AttachmentViewControllerDelegate: class {
     func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment)
 }
 
-class AttachmentViewController: CollectionViewController<AttachementCell, AttachmentCollectionViewManager> {
+class AttachmentViewController: CollectionViewController<AttachmentCell, AttachmentCollectionViewManager> {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
 
