@@ -23,8 +23,6 @@ class AttachmentView: View {
 
         self.translatesAutoresizingMaskIntoConstraints = false
 
-        self.set(backgroundColor: .red)
-
         self.addSubview(self.imageView)
         self.imageView.imageView.contentMode = .center
         self.imageView.clipsToBounds = true

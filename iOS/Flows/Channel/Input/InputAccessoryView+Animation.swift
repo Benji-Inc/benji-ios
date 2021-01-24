@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension MessageInputAccessoryView {
+extension InputAccessoryView {
 
     func handle(longPress: UILongPressGestureRecognizer) {
 

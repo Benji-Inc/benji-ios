@@ -25,7 +25,7 @@ extension ChannelViewController: InputAccessoryDelegates {
             }.store(in: &self.cancellables)
     }
 
-    func messageInputAccessory(_ view: MessageInputAccessoryView, didConfirm sendable: SendableType) {
+    func messageInputAccessory(_ view: InputAccessoryView, didConfirm sendable: SendableType) {
         switch sendable {
         case .update(let object):
             self.update(object: object)

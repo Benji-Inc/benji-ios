@@ -70,7 +70,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     }
 
     // Custom Input Accessory View
-    lazy var messageInputAccessoryView = MessageInputAccessoryView(with: self)
+    lazy var messageInputAccessoryView = InputAccessoryView(with: self)
 
     override var inputAccessoryView: UIView? {
         return self.messageInputAccessoryView

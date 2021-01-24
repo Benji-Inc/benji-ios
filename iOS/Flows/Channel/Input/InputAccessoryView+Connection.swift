@@ -9,7 +9,7 @@
 import Foundation
 import TwilioChatClient
 
-extension MessageInputAccessoryView {
+extension InputAccessoryView {
     
     func handleConnection(state: TCHClientConnectionState) {
         switch state {

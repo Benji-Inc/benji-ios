@@ -14,10 +14,10 @@ import Combine
 typealias InputAccessoryDelegates = MessageInputAccessoryViewDelegate
 
 protocol MessageInputAccessoryViewDelegate: class {
-    func messageInputAccessory(_ view: MessageInputAccessoryView, didConfirm sendable: SendableType)
+    func messageInputAccessory(_ view: InputAccessoryView, didConfirm sendable: SendableType)
 }
 
-class MessageInputAccessoryView: View, ActiveChannelAccessor {
+class InputAccessoryView: View, ActiveChannelAccessor {
 
     private static let preferredHeight: CGFloat = 54.0
     private static let maxHeight: CGFloat = 200.0
@@ -71,7 +71,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     }
 
     override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return CGSize(width: size.width, height: MessageInputAccessoryView.preferredHeight)
+        return CGSize(width: size.width, height: InputAccessoryView.preferredHeight)
     }
 
     override var intrinsicContentSize: CGSize {
@@ -85,12 +85,12 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
             newSize.height += self.attachmentView.height + 10
         }
 
-        if newSize.height < MessageInputAccessoryView.preferredHeight || newSize.height > 120.0 {
-            newSize.height = MessageInputAccessoryView.preferredHeight
+        if newSize.height < InputAccessoryView.preferredHeight || newSize.height > 120.0 {
+            newSize.height = InputAccessoryView.preferredHeight
         }
 
-        if newSize.height > MessageInputAccessoryView.maxHeight {
-            newSize.height = MessageInputAccessoryView.maxHeight
+        if newSize.height > InputAccessoryView.maxHeight {
+            newSize.height = InputAccessoryView.maxHeight
         }
 
         return newSize
@@ -297,7 +297,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
     }
 }
 
-extension MessageInputAccessoryView: AttachmentViewControllerDelegate {
+extension InputAccessoryView: AttachmentViewControllerDelegate {
     func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
         self.updateInputType()
         self.attachmentView.configure(with: attachment)

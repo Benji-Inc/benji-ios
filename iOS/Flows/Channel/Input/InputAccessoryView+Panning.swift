@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension MessageInputAccessoryView: UIGestureRecognizerDelegate {
+extension InputAccessoryView: UIGestureRecognizerDelegate {
 
     func handle(pan: UIPanGestureRecognizer) {
         guard let sendable = self.currentSendable, sendable.isSendable else { return }
