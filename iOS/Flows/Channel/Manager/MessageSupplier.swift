@@ -194,19 +194,15 @@ class MessageSupplier: NSObject {
         messagesObject.remove(tchMessage, completion: nil)
     }
 
-    func update(message: Messageable,
-                text: String,
-                completion: ((SystemMessage, Error?) -> Void)?) -> SystemMessage {
+    func update(object: ResendableObject) -> SystemMessage {
 
-        let updatedMessage = SystemMessage(with: message)
-        updatedMessage.kind = .text(text)
+        let updatedMessage = SystemMessage(with: object.previousMessage)
+        updatedMessage.kind = object.kind
 
-        if let tchMessage = message as? TCHMessage {
-            tchMessage.updateBody(text) { (result) in
+        if let tchMessage = object.previousMessage as? TCHMessage {
+            tchMessage.updateBody(object.kind.text) { (result) in
                 if let error = result.error {
-                    completion?(updatedMessage, error)
-                } else {
-                    completion?(updatedMessage, nil)
+                    print(error)
                 }
             }
         }

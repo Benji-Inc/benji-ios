@@ -45,6 +45,23 @@ enum MessageKind {
             return true
         }
     }
+
+    var text: String {
+        switch self {
+        case .text(let body):
+            return body
+        case .attributedText(let body):
+            return body.string
+        case .photo(_, body: let body):
+            return body
+        case .video(_, body: let body):
+            return body
+        case .emoji(let emoji):
+            return emoji
+        default:
+            return String()
+        }
+    }
 }
 
 extension MessageKind: Equatable {

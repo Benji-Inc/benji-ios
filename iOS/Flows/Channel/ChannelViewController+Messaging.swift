@@ -12,35 +12,41 @@ import Photos
 
 extension ChannelViewController: InputAccessoryDelegates {
 
-//    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
-//        self.handle(attachment: attachment, body: String())
-//    }
-
     func handle(attachment: Attachment, body: String) {
         AttachmentsManager.shared.getMessageKind(for: attachment, body: body)
             .mainSink { (result) in
                 switch result {
                 case .success(let kind):
-                    self.send(messageKind: kind, attributes: [:])
+                    let object = SendableObject(kind: kind, context: .casual)
+                    self.send(object: object)
                 case .error(_):
                     break
                 }
             }.store(in: &self.cancellables)
     }
 
-    func messageInputAccessory(_ view: MessageInputAccessoryView,
-                               didUpdate message: Messageable,
-                               with text: String) {
-        self.update(message: message, text: text)
+    func messageInputAccessory(_ view: MessageInputAccessoryView, didConfirm sendable: SendableType) {
+        switch sendable {
+        case .update(let object):
+            self.update(object: object)
+        case .new(let object):
+            self.send(object: object)
+        }
     }
 
-    func messageInputAccessory(_ view: MessageInputAccessoryView,
-                               didSend kind: MessageKind,
-                               context: MessageContext,
-                               attributes: [String : Any]) {
+//    func messageInputAccessory(_ view: MessageInputAccessoryView,
+//                               didUpdate message: Messageable,
+//                               with text: String) {
+//       // self.update(message: message, text: text)
+//    }
 
-        self.send(messageKind: kind, context: context, attributes: attributes)
-    }
+//    func messageInputAccessory(_ view: MessageInputAccessoryView,
+//                               didSend kind: MessageKind,
+//                               context: MessageContext,
+//                               attributes: [String : Any]) {
+//
+//        self.send(messageKind: kind, context: context, attributes: attributes)
+//    }
 
     func load(activeChannel: DisplayableChannel) {
         switch activeChannel.channelType {
@@ -53,13 +59,10 @@ extension ChannelViewController: InputAccessoryDelegates {
         }
     }
 
-    func send(messageKind: MessageKind,
-              context: MessageContext = .casual,
-              attributes: [String : Any]) {
+    func send(object: SendableObject) {
 
-        guard let systemMessage = MessageDeliveryManager.shared.send(context: context,
-                                                                     kind: messageKind,
-                                                                     attributes: attributes,
+        guard let systemMessage = MessageDeliveryManager.shared.send(object: object,
+                                                                     attributes: [:],
                                                                      completion: { (message, error) in
                                                                         if let msg = message, let _ = error {
                                                                             msg.status = .error
@@ -86,14 +89,8 @@ extension ChannelViewController: InputAccessoryDelegates {
         self.collectionViewManager.updateItem(with: systemMessage)
     }
 
-    func update(message: Messageable, text: String) {
-        let updatedMessage = MessageSupplier.shared.update(message: message, text: text) { (msg, error) in
-            if let _ = error {
-                msg.status = .error
-                self.collectionViewManager.updateItem(with: msg)
-            }
-        }
-
+    func update(object: ResendableObject) {
+        let updatedMessage = MessageSupplier.shared.update(object: object)
         self.indexPathForEditing = nil
         self.collectionViewManager.updateItem(with: updatedMessage)
         self.messageInputAccessoryView.reset()

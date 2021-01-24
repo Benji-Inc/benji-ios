@@ -16,8 +16,7 @@ class MessageDeliveryManager {
     static let shared = MessageDeliveryManager()
     private var cancellables = Set<AnyCancellable>()
 
-    func send(context: MessageContext = .casual,
-              kind: MessageKind,
+    func send(object: SendableObject,
               attributes: [String: Any],
               completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
 
@@ -28,20 +27,20 @@ class MessageDeliveryManager {
                 mutableAttributes["updateId"] = UUID().uuidString
 
                 let systemMessage = SystemMessage(avatar: current,
-                                                  context: context,
+                                                  context: object.context,
                                                   isFromCurrentUser: true,
                                                   createdAt: Date(),
                                                   authorId: objectId,
                                                   messageIndex: nil,
                                                   status: .sent,
-                                                  kind: kind,
+                                                  kind: object.kind,
                                                   id: String(),
                                                   attributes: mutableAttributes)
 
                 if case .channel(let channel) = channelDisplayable.channelType {
                     self.sendMessage(to: channel,
-                                     context: context,
-                                     kind: kind,
+                                     context: object.context,
+                                     kind: object.kind,
                                      attributes: mutableAttributes)
                         .mainSink(receivedResult: { (result) in
                             switch result {

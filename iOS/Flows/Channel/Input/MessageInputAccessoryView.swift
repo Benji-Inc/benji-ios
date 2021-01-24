@@ -14,13 +14,7 @@ import Combine
 typealias InputAccessoryDelegates = MessageInputAccessoryViewDelegate
 
 protocol MessageInputAccessoryViewDelegate: class {
-    func messageInputAccessory(_ view: MessageInputAccessoryView,
-                               didUpdate message: Messageable,
-                               with text: String)
-    func messageInputAccessory(_ view: MessageInputAccessoryView,
-                               didSend kind: MessageKind,
-                               context: MessageContext,
-                               attributes: [String: Any])
+    func messageInputAccessory(_ view: MessageInputAccessoryView, didConfirm sendable: SendableType)
 }
 
 class MessageInputAccessoryView: View, ActiveChannelAccessor {
@@ -281,7 +275,7 @@ class MessageInputAccessoryView: View, ActiveChannelAccessor {
             return
         }
 
-        self.currentSendable = .update(SendableObject(kind: message.kind, context: message.context))
+        self.currentSendable = .update(ResendableObject(previousMessage: message, kind: message.kind, context: message.context))
         self.expandingTextView.becomeFirstResponder()
     }
 

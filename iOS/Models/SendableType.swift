@@ -10,7 +10,7 @@ import Foundation
 
 enum SendableType {
     
-    case update(SendableObject)
+    case update(ResendableObject)
     case new(SendableObject)
 
     var kind: MessageKind {
@@ -42,6 +42,12 @@ enum SendableType {
 }
 
 struct SendableObject {
+    var kind: MessageKind
+    var context: MessageContext
+}
+
+struct ResendableObject {
+    var previousMessage: Messageable
     var kind: MessageKind
     var context: MessageContext
 }
