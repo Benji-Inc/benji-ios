@@ -14,7 +14,7 @@ import Combine
 typealias InputAccessoryDelegates = MessageInputAccessoryViewDelegate
 
 protocol MessageInputAccessoryViewDelegate: class {
-    func messageInputAccessory(_ view: InputAccessoryView, didConfirm sendable: SendableType)
+    func inputAccessory(_ view: InputAccessoryView, didConfirm sendable: Sendable)
 }
 
 class InputAccessoryView: View, ActiveChannelAccessor {
@@ -26,19 +26,19 @@ class InputAccessoryView: View, ActiveChannelAccessor {
     var previewView: PreviewMessageView?
     var interactiveStartingPoint: CGPoint?
 
-    var messageContext: MessageContext = .casual {
+    var currentContext: MessageContext = .casual {
         didSet {
-            self.borderColor = self.messageContext.color.color.cgColor
+            self.borderColor = self.currentContext.color.color.cgColor
         }
     }
-
-    var currentSendable: SendableType?
+    var editableMessage: Messageable?
+    var currentMessageKind: MessageKind = .text(String())
 
     var alertAnimator: UIViewPropertyAnimator?
     var selectionFeedback = UIImpactFeedbackGenerator(style: .rigid)
     var borderColor: CGColor? {
         didSet {
-            self.inputContainerView.layer.borderColor = self.borderColor ?? self.messageContext.color.color.cgColor
+            self.inputContainerView.layer.borderColor = self.borderColor ?? self.currentContext.color.color.cgColor
         }
     }
 
@@ -101,7 +101,7 @@ class InputAccessoryView: View, ActiveChannelAccessor {
 
         self.set(backgroundColor: .clear)
 
-        self.messageContext = .casual
+        self.currentContext = .casual
 
         self.addSubview(self.plusAnimationView)
         self.animationView.contentMode = .scaleAspectFit
@@ -213,8 +213,9 @@ class InputAccessoryView: View, ActiveChannelAccessor {
             self.resetAlertProgress()
         }
 
-        self.attachmentView.$attachement.mainSink { [unowned self] (attachment) in
-            self.attachmentHeightAnchor?.constant = self.attachmentView.attachement.isNil ? 0 : 100
+        self.attachmentView.$messageKind.mainSink { (kind) in
+            self.currentMessageKind = kind ?? .text(String())
+            self.attachmentHeightAnchor?.constant = self.attachmentView.messageKind.isNil ? 0 : 100
             self.layoutNow()
         }.store(in: &self.cancellables)
     }
@@ -275,7 +276,10 @@ class InputAccessoryView: View, ActiveChannelAccessor {
             return
         }
 
-        self.currentSendable = .update(ResendableObject(previousMessage: message, kind: message.kind, context: message.context))
+        self.currentContext = message.context
+        self.currentMessageKind = message.kind
+        self.editableMessage = message
+
         self.expandingTextView.becomeFirstResponder()
     }
 
@@ -287,12 +291,11 @@ class InputAccessoryView: View, ActiveChannelAccessor {
     }
 
     func resetAlertProgress() {
-        self.messageContext = .casual
+        self.currentContext = .casual
         self.alertProgressView.width = 0
         self.alertProgressView.set(backgroundColor: .red)
         self.alertProgressView.alpha = 1
         self.alertProgressView.layer.removeAllAnimations()
-        self.borderColor = self.messageContext.color.color.cgColor
         self.expandingTextView.updateInputView(type: .keyboard)
     }
 }

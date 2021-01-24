@@ -8,46 +8,29 @@
 
 import Foundation
 
-enum SendableType {
-    
-    case update(ResendableObject)
-    case new(SendableObject)
+protocol Sendable: class {
+    var kind: MessageKind { get set }
+    var context: MessageContext { get set }
+    var previousMessage: Messageable? { get set }
+    var isSendable: Bool { get }
+}
 
-    var kind: MessageKind {
-        switch self {
-        case .update(let object):
-            return object.kind
-        case .new(let object):
-            return object.kind
-        }
-    }
+class SendableObject: Sendable {
 
-    var context: MessageContext {
-        switch self {
-        case .update(let object):
-            return object.context
-        case .new(let object):
-            return object.context
-        }
-    }
+    var kind: MessageKind
+    var context: MessageContext
+    var previousMessage: Messageable?
 
     var isSendable: Bool {
-        switch self {
-        case .update(let object):
-            return object.kind.isSendable
-        case .new(let object):
-            return object.kind.isSendable
-        }
+        return self.kind.isSendable
     }
-}
 
-struct SendableObject {
-    var kind: MessageKind
-    var context: MessageContext
-}
+    init(kind: MessageKind,
+         context: MessageContext,
+         previousMessage: Messageable? = nil) {
 
-struct ResendableObject {
-    var previousMessage: Messageable
-    var kind: MessageKind
-    var context: MessageContext
+        self.kind = kind
+        self.context = context
+        self.previousMessage = previousMessage
+    }
 }

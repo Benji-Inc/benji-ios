@@ -11,7 +11,7 @@ import Foundation
 extension InputAccessoryView: UIGestureRecognizerDelegate {
 
     func handle(pan: UIPanGestureRecognizer) {
-        guard let sendable = self.currentSendable, sendable.isSendable else { return }
+        //guard let sendable = self.currentSendable, sendable.isSendable else { return }
 
         let currentLocation = pan.location(in: nil)
         let startingPoint: CGPoint
@@ -34,8 +34,8 @@ extension InputAccessoryView: UIGestureRecognizerDelegate {
             break
         case .began:
             self.previewView = PreviewMessageView()
-            self.previewView?.set(backgroundColor: self.messageContext.color)
-            self.previewView?.sendable = sendable
+            self.previewView?.set(backgroundColor: self.currentContext.color)
+            self.previewView?.messageKind = self.currentMessageKind
             self.previewView?.backgroundView.alpha = 0.0
             self.addSubview(self.previewView!)
             self.previewView?.frame = self.inputContainerView.frame

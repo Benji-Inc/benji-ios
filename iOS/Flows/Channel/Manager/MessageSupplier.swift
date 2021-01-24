@@ -31,9 +31,9 @@ class MessageSupplier: NSObject {
     var unreadMessages: [Messageable] {
         return self.allMessages.compactMap { (message) -> Messageable? in
             guard !message.isFromCurrentUser,
-                let userID = User.current()?.objectId,
-                !message.hasBeenConsumedBy.contains(userID),
-                message.context != .status  else { return nil }
+                  let userID = User.current()?.objectId,
+                  !message.hasBeenConsumedBy.contains(userID),
+                  message.context != .status  else { return nil }
             
             return message
         }
@@ -194,16 +194,15 @@ class MessageSupplier: NSObject {
         messagesObject.remove(tchMessage, completion: nil)
     }
 
-    func update(object: ResendableObject) -> SystemMessage {
+    func update(object: Sendable) -> SystemMessage? {
+        guard let previousMessage = object.previousMessage as? TCHMessage else { return nil }
 
-        let updatedMessage = SystemMessage(with: object.previousMessage)
+        let updatedMessage = SystemMessage(with: previousMessage)
         updatedMessage.kind = object.kind
 
-        if let tchMessage = object.previousMessage as? TCHMessage {
-            tchMessage.updateBody(object.kind.text) { (result) in
-                if let error = result.error {
-                    print(error)
-                }
+        previousMessage.updateBody(object.kind.text) { (result) in
+            if let error = result.error {
+                print(error)
             }
         }
 

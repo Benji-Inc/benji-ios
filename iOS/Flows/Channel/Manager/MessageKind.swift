@@ -62,6 +62,15 @@ enum MessageKind {
             return String()
         }
     }
+
+    var displayable: ImageDisplayable? {
+        switch self {
+        case .photo(photo: let photo, _):
+            return photo.image
+        default:
+            return nil
+        }
+    }
 }
 
 extension MessageKind: Equatable {

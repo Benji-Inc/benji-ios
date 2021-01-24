@@ -16,7 +16,7 @@ class AttachmentView: View {
 
     static let expandedHeight: CGFloat = 100
 
-    @Published var attachement: Attachment?
+    @Published var messageKind: MessageKind?
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -31,14 +31,16 @@ class AttachmentView: View {
     func configure(with item: Attachment?) {
         guard let attachement = item else { return }
 
-        self.attachement = attachement
-
-        AttachmentsManager.shared.getImage(for: attachement,
-                                           contentMode: .aspectFit,
-                                           size: CGSize(width: 300, height: 300))
-            .mainSink { (image, _) in
-                self.imageView.displayable = image
-                self.layoutNow()
+        AttachmentsManager.shared.getMessageKind(for: attachement, body: String())
+            .mainSink { (result) in
+                switch result {
+                case .success(let kind):
+                    self.messageKind = kind
+                    self.imageView.displayable = kind.displayable
+                    self.layoutNow()
+                case .error(_):
+                    break
+                }
             }.store(in: &self.cancellables)
     }
 

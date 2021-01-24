@@ -27,7 +27,7 @@ extension InputAccessoryView {
     }
 
     private func startAlertAnimation() {
-        self.messageContext = .emergency
+        self.currentContext = .emergency
         self.alertAnimator?.stopAnimation(true)
         self.alertAnimator?.pausesOnCompletion = true
         self.selectionFeedback.impactOccurred()
@@ -54,12 +54,12 @@ extension InputAccessoryView {
             self.showAlertConfirmation()
         } else {
             self.alertAnimator?.stopAnimation(true)
-            self.messageContext = .casual
+            self.currentContext = .casual
             self.alertAnimator = UIViewPropertyAnimator(duration: 0.5,
                                                         curve: .linear,
                                                         animations: { [unowned self] in
                                                             self.alertProgressView.size = CGSize(width: 0, height: self.height)
-                                                            self.layer.borderColor = self.messageContext.color.color.cgColor
+                                                            self.layer.borderColor = self.currentContext.color.color.cgColor
             })
             self.alertAnimator?.startAnimation()
         }

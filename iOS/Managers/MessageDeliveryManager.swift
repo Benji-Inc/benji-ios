@@ -16,7 +16,7 @@ class MessageDeliveryManager {
     static let shared = MessageDeliveryManager()
     private var cancellables = Set<AnyCancellable>()
 
-    func send(object: SendableObject,
+    func send(object: Sendable,
               attributes: [String: Any],
               completion: @escaping (SystemMessage?, Error?) -> Void) -> SystemMessage? {
 

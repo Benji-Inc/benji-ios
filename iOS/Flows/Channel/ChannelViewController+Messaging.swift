@@ -25,28 +25,14 @@ extension ChannelViewController: InputAccessoryDelegates {
             }.store(in: &self.cancellables)
     }
 
-    func messageInputAccessory(_ view: InputAccessoryView, didConfirm sendable: SendableType) {
-        switch sendable {
-        case .update(let object):
-            self.update(object: object)
-        case .new(let object):
-            self.send(object: object)
+    func inputAccessory(_ view: InputAccessoryView, didConfirm sendable: Sendable) {
+
+        if sendable.previousMessage.isNil {
+            self.send(object: sendable)
+        } else {
+            self.update(object: sendable)
         }
     }
-
-//    func messageInputAccessory(_ view: MessageInputAccessoryView,
-//                               didUpdate message: Messageable,
-//                               with text: String) {
-//       // self.update(message: message, text: text)
-//    }
-
-//    func messageInputAccessory(_ view: MessageInputAccessoryView,
-//                               didSend kind: MessageKind,
-//                               context: MessageContext,
-//                               attributes: [String : Any]) {
-//
-//        self.send(messageKind: kind, context: context, attributes: attributes)
-//    }
 
     func load(activeChannel: DisplayableChannel) {
         switch activeChannel.channelType {
@@ -59,7 +45,7 @@ extension ChannelViewController: InputAccessoryDelegates {
         }
     }
 
-    func send(object: SendableObject) {
+    func send(object: Sendable) {
 
         guard let systemMessage = MessageDeliveryManager.shared.send(object: object,
                                                                      attributes: [:],
@@ -89,10 +75,11 @@ extension ChannelViewController: InputAccessoryDelegates {
         self.collectionViewManager.updateItem(with: systemMessage)
     }
 
-    func update(object: ResendableObject) {
-        let updatedMessage = MessageSupplier.shared.update(object: object)
-        self.indexPathForEditing = nil
-        self.collectionViewManager.updateItem(with: updatedMessage)
-        self.messageInputAccessoryView.reset()
+    func update(object: Sendable) {
+        if let updatedMessage = MessageSupplier.shared.update(object: object) {
+            self.indexPathForEditing = nil
+            self.collectionViewManager.updateItem(with: updatedMessage)
+            self.messageInputAccessoryView.reset()
+        }
     }
 }

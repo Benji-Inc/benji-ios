@@ -15,7 +15,7 @@ class PreviewMessageView: View {
     private let textView = ExpandingTextView()
     private let imageView = DisplayableImageView()
     private(set) var backgroundView = View()
-    @Published var sendable: SendableType?
+    @Published var messageKind: MessageKind?
     private var cancellables = Set<AnyCancellable>()
 
     override func initializeSubviews() {
@@ -28,10 +28,10 @@ class PreviewMessageView: View {
         self.layer.cornerRadius = Theme.cornerRadius
         self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
 
-        self.$sendable.mainSink { (sendable) in
-            guard let sendableType = sendable else { return }
+        self.$messageKind.mainSink { (kind) in
+            guard let messageKind = kind else { return }
 
-            switch sendableType.kind {
+            switch messageKind {
             case .text(let body):
                 self.textView.text = body
             case .attributedText(let body):
