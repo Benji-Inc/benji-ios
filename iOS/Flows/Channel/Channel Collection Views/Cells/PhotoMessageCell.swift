@@ -15,9 +15,14 @@ class PhotoMessageCell: BaseMessageCell {
     private let imageView = DisplayableImageView()
     private var cachedURL: URL?
     private var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    let bubbleView = MessageBubbleView()
+    let textView = MessageTextView()
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.contentView.addSubview(self.bubbleView)
+        self.bubbleView.addSubview(self.textView)
 
         self.contentView.insertSubview(self.imageView, belowSubview: self.avatarView)
         self.contentView.insertSubview(self.blurView, aboveSubview: self.imageView)
@@ -35,6 +40,8 @@ class PhotoMessageCell: BaseMessageCell {
         super.configure(with: message)
 
         guard case MessageKind.photo(let photo, let body) = message.kind else { return }
+
+        self.textView.set(text: body, messageContext: message.context)
 
         self.avatarView.set(avatar: message.avatar)
         if let image = photo.image {
@@ -86,13 +93,20 @@ class PhotoMessageCell: BaseMessageCell {
     override func layoutContent(with attributes: ChannelCollectionViewLayoutAttributes) {
         super.layoutContent(with: attributes)
 
-        self.imageView.frame = attributes.attributes.imageFrame
-        self.blurView.frame = attributes.attributes.imageFrame
+        self.imageView.frame = attributes.attributes.attachmentFrame
+        self.blurView.frame = attributes.attributes.attachmentFrame
+        self.textView.frame = attributes.attributes.textViewFrame
+        self.bubbleView.frame = attributes.attributes.bubbleViewFrame
+        self.bubbleView.layer.maskedCorners = attributes.attributes.maskedCorners
+        self.bubbleView.roundCorners()
     }
 
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.bubbleView.layer.borderColor = nil
+        self.bubbleView.layer.borderWidth = 0
+        self.textView.text = nil
         self.cachedURL = nil
     }
 }

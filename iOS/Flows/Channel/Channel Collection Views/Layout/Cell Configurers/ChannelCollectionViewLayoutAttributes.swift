@@ -21,8 +21,8 @@ struct ChannelLayoutAttributes: Equatable {
     var textViewFrame: CGRect = .zero
     var maskedCorners: CACornerMask = []
 
-    //Photo
-    var imageFrame: CGRect = .zero 
+    //Attachment frame
+    var attachmentFrame: CGRect = .zero 
 }
 
 class ChannelCollectionViewLayoutAttributes: UICollectionViewLayoutAttributes {
