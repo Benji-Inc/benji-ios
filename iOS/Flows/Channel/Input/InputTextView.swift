@@ -8,7 +8,7 @@
 
 import Foundation
 
-class InputTextView: TextView {
+class ExpandingTextView: TextView {
 
     override func initialize() {
         super.initialize()

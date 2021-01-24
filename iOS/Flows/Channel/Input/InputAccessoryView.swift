@@ -45,7 +45,7 @@ class InputAccessoryView: View, ActiveChannelAccessor {
     let inputContainerView = View()
     let attachmentView = AttachmentView()
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
-    lazy var expandingTextView = MessageInputTextView(with: self)
+    lazy var expandingTextView = InputTextView(with: self)
     let alertProgressView = AlertProgressView()
     let animationView = AnimationView(name: "loading")
     let plusAnimationView = AnimationView(name: "plusToX")

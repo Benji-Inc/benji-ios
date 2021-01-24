@@ -12,7 +12,7 @@ import Combine
 class PreviewMessageView: View {
 
     private let minHeight: CGFloat = 52
-    private let textView = InputTextView()
+    private let textView = ExpandingTextView()
     private let imageView = DisplayableImageView()
     private(set) var backgroundView = View()
     @Published var sendable: SendableType?

@@ -14,7 +14,7 @@ enum InputViewType {
     case keyboard
 }
 
-class MessageInputTextView: InputTextView {
+class InputTextView: ExpandingTextView {
 
     lazy var countView = CharacterCountView()
     lazy var attachmentInputVC = AttachmentViewController(with: self.attachmentDelegate)
