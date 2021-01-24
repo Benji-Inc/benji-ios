@@ -31,7 +31,7 @@
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
 		D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DB24FAD7B400B63412 /* AttachmentCell.swift */; };
 		D61592DE24FAD7C600B63412 /* AttachmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DD24FAD7C600B63412 /* AttachmentHeaderView.swift */; };
-		D61592E024FC195D00B63412 /* MessageInputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DF24FC195D00B63412 /* MessageInputTextView.swift */; };
+		D61592E024FC195D00B63412 /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DF24FC195D00B63412 /* InputTextView.swift */; };
 		D61D38E3248C07F700BE457B /* InputAccessoryView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E2248C07F700BE457B /* InputAccessoryView+Animation.swift */; };
 		D61D38E5248C0BA600BE457B /* InputAccessoryView+Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E4248C0BA600BE457B /* InputAccessoryView+Connection.swift */; };
 		D61D38E7248C494A00BE457B /* ChannelViewController+Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E6248C494A00BE457B /* ChannelViewController+Messaging.swift */; };
@@ -97,7 +97,7 @@
 		D642737122C991A60088256B /* ClosedRange+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642737022C991A60088256B /* ClosedRange+Extensions.swift */; };
 		D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739822CA79B60088256B /* UIWindow+Extensions.swift */; };
 		D642739F22CAFD680088256B /* MessageTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739E22CAFD680088256B /* MessageTextView.swift */; };
-		D64273A522CC05DD0088256B /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64273A422CC05DD0088256B /* InputTextView.swift */; };
+		D64273A522CC05DD0088256B /* ExpandingTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64273A422CC05DD0088256B /* ExpandingTextView.swift */; };
 		D6432BF022D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6432BEF22D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift */; };
 		D6432BF322D828480016001A /* ChannelDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6432BF222D828480016001A /* ChannelDataSource.swift */; };
 		D6432BF522D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6432BF422D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift */; };
@@ -482,7 +482,7 @@
 		D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
 		D61592DB24FAD7B400B63412 /* AttachmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		D61592DD24FAD7C600B63412 /* AttachmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeaderView.swift; sourceTree = "<group>"; };
-		D61592DF24FC195D00B63412 /* MessageInputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageInputTextView.swift; sourceTree = "<group>"; };
+		D61592DF24FC195D00B63412 /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
 		D61D38E2248C07F700BE457B /* InputAccessoryView+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputAccessoryView+Animation.swift"; sourceTree = "<group>"; };
 		D61D38E4248C0BA600BE457B /* InputAccessoryView+Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputAccessoryView+Connection.swift"; sourceTree = "<group>"; };
 		D61D38E6248C494A00BE457B /* ChannelViewController+Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelViewController+Messaging.swift"; sourceTree = "<group>"; };
@@ -545,7 +545,7 @@
 		D642737022C991A60088256B /* ClosedRange+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosedRange+Extensions.swift"; sourceTree = "<group>"; };
 		D642739822CA79B60088256B /* UIWindow+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+Extensions.swift"; sourceTree = "<group>"; };
 		D642739E22CAFD680088256B /* MessageTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageTextView.swift; sourceTree = "<group>"; };
-		D64273A422CC05DD0088256B /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
+		D64273A422CC05DD0088256B /* ExpandingTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandingTextView.swift; sourceTree = "<group>"; };
 		D6432BEF22D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCollectionViewLayoutAttributes.swift; sourceTree = "<group>"; };
 		D6432BF222D828480016001A /* ChannelDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDataSource.swift; sourceTree = "<group>"; };
 		D6432BF422D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
@@ -1453,12 +1453,12 @@
 				D6405B5D236BCB4D00FAA06B /* AlertConfirmationView.swift */,
 				D61592D424FACD7700B63412 /* Attachment */,
 				D67934DA23DC011D00536B44 /* CharacterCountView.swift */,
-				D64273A422CC05DD0088256B /* InputTextView.swift */,
+				D64273A422CC05DD0088256B /* ExpandingTextView.swift */,
 				D61D38E8248C506000BE457B /* InputAccessoryView+Panning.swift */,
 				D63D63022486A9020037E046 /* InputAccessoryView.swift */,
 				D61D38E2248C07F700BE457B /* InputAccessoryView+Animation.swift */,
 				D61D38E4248C0BA600BE457B /* InputAccessoryView+Connection.swift */,
-				D61592DF24FC195D00B63412 /* MessageInputTextView.swift */,
+				D61592DF24FC195D00B63412 /* InputTextView.swift */,
 				D63752C5231258DA00214F63 /* PreviewMessageView.swift */,
 			);
 			path = Input;
@@ -1858,7 +1858,7 @@
 				D64C6AA2232EA06800DB7257 /* TypingCellAttributesConfigurer.swift in Sources */,
 				D6F33C8224B15086009603FF /* VideoMessageCell.swift in Sources */,
 				D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */,
-				D64273A522CC05DD0088256B /* InputTextView.swift in Sources */,
+				D64273A522CC05DD0088256B /* ExpandingTextView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
 				D677588325B09F4D007E0184 /* Transitionable.swift in Sources */,
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
@@ -2044,7 +2044,7 @@
 				D67896A922FF51170059BA75 /* PhoneViewController.swift in Sources */,
 				D66379D325A3704300A4A3B7 /* MessageDeliveryManager.swift in Sources */,
 				D6F33C7124B14A3F009603FF /* LocationCellAttributesConfigurer.swift in Sources */,
-				D61592E024FC195D00B63412 /* MessageInputTextView.swift in Sources */,
+				D61592E024FC195D00B63412 /* InputTextView.swift in Sources */,
 				D6F33C8424B150A9009603FF /* ContactMessageCell.swift in Sources */,
 				D6D145F421D5493000CD8CE4 /* HomeViewController.swift in Sources */,
 				D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */,
