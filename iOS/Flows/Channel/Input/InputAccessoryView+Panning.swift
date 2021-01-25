@@ -13,7 +13,7 @@ extension InputAccessoryView: UIGestureRecognizerDelegate {
     func handle(pan: UIPanGestureRecognizer) {
 
         let object = SendableObject(kind: self.currentMessageKind, context: self.currentContext, previousMessage: self.editableMessage)
-        
+
         guard object.isSendable else { return }
 
         let currentLocation = pan.location(in: nil)
@@ -71,8 +71,8 @@ extension InputAccessoryView: UIGestureRecognizerDelegate {
 
             self.previewAnimator?.addCompletion({ (position) in
                 if position == .end {
-
                     self.delegate.inputAccessory(self, didConfirm: object)
+                    self.reset()
                     self.previewView?.removeFromSuperview()
                 }
                 if position == .start {

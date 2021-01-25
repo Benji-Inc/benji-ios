@@ -100,6 +100,11 @@ class TextView: UITextView {
         self.textContainer.lineFragmentPadding = 0
     }
 
+    func reset() {
+        self.text = String()
+        self.textDidChange()
+    }
+
     // Trim white space and new line characters when end editing.
     func textDidEndEditing() {
         if self.trimWhiteSpaceWhenEndEditing {

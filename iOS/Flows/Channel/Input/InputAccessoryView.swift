@@ -295,7 +295,7 @@ class InputAccessoryView: View, ActiveChannelAccessor {
     }
 
     func reset() {
-        self.expandingTextView.text = String()
+        self.expandingTextView.reset()
         self.expandingTextView.alpha = 1
         self.resetAlertProgress()
         self.expandingTextView.countView.isHidden = true
