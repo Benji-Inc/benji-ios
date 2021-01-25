@@ -215,6 +215,7 @@ class InputAccessoryView: View, ActiveChannelAccessor {
 
         self.attachmentView.$messageKind.mainSink { (kind) in
             self.currentMessageKind = kind ?? .text(String())
+            self.expandingTextView.setPlaceholder(for: self.currentMessageKind)
             self.attachmentHeightAnchor?.constant = self.attachmentView.messageKind.isNil ? 0 : 100
             self.layoutNow()
         }.store(in: &self.cancellables)
@@ -244,11 +245,38 @@ class InputAccessoryView: View, ActiveChannelAccessor {
     }
 
     private func updateInputType() {
-        let type: InputViewType = self.expandingTextView.currentInputView == .keyboard ? .attachments : .keyboard
-        let startingProgress: CGFloat = self.plusAnimationView.currentProgress
-        let toProgress: CGFloat = startingProgress == 0 ? 1.0 : 0.0
-        self.plusAnimationView.play(fromProgress: startingProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
-        self.expandingTextView.updateInputView(type: type)
+        // If keyboard, then show attachments
+        // If attachments & currentKind != .text, Then still show x
+        // If progess is greater than 0 and pressed, reset attachment view.
+
+        let currentType = self.expandingTextView.currentInputView
+        let currentProgress = self.plusAnimationView.currentProgress
+
+        if currentType == .keyboard {
+            if self.attachmentView.attachment.isNil {
+                let newType: InputViewType = .attachments
+                self.expandingTextView.updateInputView(type: newType)
+            } else {
+                self.attachmentView.configure(with: nil)
+            }
+
+            let toProgress: CGFloat = currentProgress == 0 ? 1.0 : 0.0
+            self.plusAnimationView.play(fromProgress: currentProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
+
+        } else if currentProgress > 0 {
+
+            let newType: InputViewType = .keyboard
+
+            if self.attachmentView.attachment.isNil {
+                let toProgress: CGFloat = currentProgress == 0 ? 1.0 : 0.0
+                self.plusAnimationView.play(fromProgress: currentProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
+            }
+            self.expandingTextView.updateInputView(type: newType)
+
+        } else {
+            // progress is greater that 0 and input type is attachments
+            self.attachmentView.messageKind = nil
+        }
     }
 
     private func animateInputViews(with text: String) {
@@ -313,8 +341,8 @@ class InputAccessoryView: View, ActiveChannelAccessor {
 
 extension InputAccessoryView: AttachmentViewControllerDelegate {
     func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
-        self.updateInputType()
         self.attachmentView.configure(with: attachment)
+        self.updateInputType() // Needs to be called after configure
     }
 }
 

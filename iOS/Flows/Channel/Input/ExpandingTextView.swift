@@ -10,6 +10,8 @@ import Foundation
 
 class ExpandingTextView: TextView {
 
+    private var initialPlaceholder: String?
+
     override func initialize() {
         super.initialize()
 
@@ -40,6 +42,20 @@ class ExpandingTextView: TextView {
             }
         }
 
+        self.initialPlaceholder = placeholderText
         self.set(placeholder: placeholderText, color: .lightPurple)
+    }
+
+    func setPlaceholder(for kind: MessageKind) {
+        switch kind {
+        case .text(_):
+            if let placeholder = self.initialPlaceholder {
+                self.set(placeholder: placeholder, color: .lightPurple)
+            }
+        case .photo(_, _), .video(_, _):
+            self.set(placeholder: "Add comment", color: .lightPurple)
+        default:
+            break
+        }
     }
 }
