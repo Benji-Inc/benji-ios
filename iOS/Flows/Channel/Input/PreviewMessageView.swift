@@ -24,6 +24,7 @@ class PreviewMessageView: View {
         self.addSubview(self.backgroundView)
         self.addSubview(self.textView)
         self.addSubview(self.imageView)
+        self.imageView.clipsToBounds = true 
         self.layer.masksToBounds = true
         self.layer.cornerRadius = Theme.cornerRadius
         self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]

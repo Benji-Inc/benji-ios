@@ -55,6 +55,7 @@ extension InputAccessoryView: UIGestureRecognizerDelegate {
                                             UIView.addKeyframe(withRelativeStartTime: 0,
                                                                relativeDuration: 0.3,
                                                                animations: {
+                                                                self.attachmentView.alpha = 0 
                                                                 self.expandingTextView.alpha = 0
                                                                 self.previewView?.backgroundView.alpha = 1
                                             })

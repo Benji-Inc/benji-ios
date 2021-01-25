@@ -325,6 +325,9 @@ class InputAccessoryView: View, ActiveChannelAccessor {
     func reset() {
         self.expandingTextView.reset()
         self.expandingTextView.alpha = 1
+        self.attachmentView.alpha = 1
+        self.attachmentView.configure(with: nil)
+        self.attachmentView.messageKind = nil
         self.resetAlertProgress()
         self.expandingTextView.countView.isHidden = true
     }
