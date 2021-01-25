@@ -24,7 +24,7 @@ class AttachmentView: View {
         self.translatesAutoresizingMaskIntoConstraints = false
 
         self.addSubview(self.imageView)
-        self.imageView.imageView.contentMode = .center
+        self.imageView.imageView.contentMode = .scaleAspectFill
         self.imageView.clipsToBounds = true
     }
 
