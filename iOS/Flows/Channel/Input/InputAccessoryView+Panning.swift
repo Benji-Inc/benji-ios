@@ -68,6 +68,8 @@ extension InputAccessoryView: UIGestureRecognizerDelegate {
 
             self.previewAnimator?.addCompletion({ (position) in
                 if position == .end {
+                    let object = SendableObject(kind: self.currentMessageKind, context: self.currentContext, previousMessage: self.editableMessage)
+                    self.delegate.inputAccessory(self, didConfirm: object)
 //                    if let updatedMessage = self.editableMessage {
 //                        self.delegate.messageInputAccessory(self, didUpdate: updatedMessage, with: text)
 //                    } else {

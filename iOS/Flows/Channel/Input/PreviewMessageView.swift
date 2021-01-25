@@ -64,8 +64,9 @@ class PreviewMessageView: View {
         self.imageView.pin(.top)
         self.imageView.height = self.imageView.displayable.isNil ? 0 : 100
         self.imageView.centerOnX()
-
-        self.textView.setSize(withWidth: self.width)
+        
+        self.textView.width = self.width
+        self.textView.height = self.height - self.imageView.height
         self.textView.pin(.left)
         self.textView.match(.top, to: .bottom, of: self.imageView)
     }

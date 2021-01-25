@@ -8,6 +8,7 @@
 
 import Foundation
 import TMROLocalization
+import Combine
 
 class TextView: UITextView {
 
@@ -16,6 +17,8 @@ class TextView: UITextView {
 
     // Trim white space and newline characters when end editing. Default is true
     var trimWhiteSpaceWhenEndEditing: Bool = true
+
+    private var cancellables = Set<AnyCancellable>()
 
     override var text: String! {
         didSet {
@@ -43,10 +46,6 @@ class TextView: UITextView {
         self.initialize()
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
     func initialize() {
 
         let styleAttributes = StringStyle(font: .smallBold, color: .white).attributes
@@ -57,14 +56,15 @@ class TextView: UITextView {
         
         self.set(backgroundColor: .clear)
 
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(textDidChange),
-                                               name: UITextView.textDidChangeNotification,
-                                               object: self)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(textDidEndEditing),
-                                               name: UITextView.textDidEndEditingNotification,
-                                               object: self)
+        NotificationCenter.default.publisher(for: UITextView.textDidChangeNotification)
+            .mainSink { (text) in
+                self.textDidChange()
+            }.store(in: &self.cancellables)
+
+        NotificationCenter.default.publisher(for: UITextView.textDidEndEditingNotification)
+            .mainSink { (text) in
+                self.textDidEndEditing()
+            }.store(in: &self.cancellables)
     }
 
     func set(placeholder: Localized, color: Color = .background4) {
@@ -101,26 +101,22 @@ class TextView: UITextView {
     }
 
     // Trim white space and new line characters when end editing.
-    @objc func textDidEndEditing(notification: Notification) {
-        if let sender = notification.object as? TextView, sender == self {
-            if self.trimWhiteSpaceWhenEndEditing {
-                self.text = self.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-                self.setNeedsDisplay()
-            }
-            self.scrollToCorrectPosition()
+    func textDidEndEditing() {
+        if self.trimWhiteSpaceWhenEndEditing {
+            self.text = self.text?.trimmingCharacters(in: .whitespacesAndNewlines)
+            self.setNeedsDisplay()
         }
+        self.scrollToCorrectPosition()
     }
 
     // Limit the length of text
-    @objc func textDidChange(notification: Notification) {
-        if let sender = notification.object as? TextView, sender == self {
-            if self.maxLength > 0 && self.text.count > self.maxLength {
-                let endIndex = self.text.index(self.text.startIndex, offsetBy: self.maxLength)
-                self.text = String(self.text[..<endIndex])
-                self.undoManager?.removeAllActions()
-            }
-            self.setNeedsDisplay()
+    func textDidChange() {
+        if self.maxLength > 0 && self.text.count > self.maxLength {
+            let endIndex = self.text.index(self.text.startIndex, offsetBy: self.maxLength)
+            self.text = String(self.text[..<endIndex])
+            self.undoManager?.removeAllActions()
         }
+        self.setNeedsDisplay()
     }
 
     func scrollToCorrectPosition() {

@@ -21,7 +21,7 @@ class InputTextView: ExpandingTextView {
     lazy var confirmationView = AlertConfirmationView()
 
     private(set) var currentInputView: InputViewType = .keyboard
-    var textDidChange: ((String) -> Void)?
+    var textDidUpdate: ((String) -> Void)?
 
     override var canResignFirstResponder: Bool {
         return false 
@@ -68,8 +68,9 @@ class InputTextView: ExpandingTextView {
         } completion: { (completed) in }
     }
 
-    override func textDidChange(notification: Notification) {
-        super.textDidChange(notification: notification)
+    override func textDidChange() {
+        super.textDidChange()
+        self.textDidUpdate?(self.text)
         self.countView.udpate(with: self.text.count, max: self.maxLength)
     }
 

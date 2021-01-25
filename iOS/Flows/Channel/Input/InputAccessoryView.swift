@@ -195,7 +195,7 @@ class InputAccessoryView: View, ActiveChannelAccessor {
 
     private func setupHandlers() {
 
-        self.expandingTextView.textDidChange = { [unowned self] text in
+        self.expandingTextView.textDidUpdate = { [unowned self] text in
             self.handleTextChange(text)
         }
 
@@ -224,6 +224,17 @@ class InputAccessoryView: View, ActiveChannelAccessor {
 
     private func handleTextChange(_ text: String) {
         self.animateInputViews(with: text)
+
+        switch self.currentMessageKind {
+        case .text(_):
+            self.currentMessageKind = .text(text)
+        case .photo(photo: let photo, _):
+            self.currentMessageKind = .photo(photo: photo, body: text)
+        case .video(video: let video, _):
+            self.currentMessageKind = .video(video: video, body: text)
+        default:
+            break
+        }
 
         guard let channelDisplayable = self.activeChannel,
             text.count > 0,
