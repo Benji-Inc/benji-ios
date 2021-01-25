@@ -90,6 +90,25 @@ class PhotoMessageCell: BaseMessageCell {
                                            })
     }
 
+    override func handleIsConsumed(for message: Messageable) {
+        super.handleIsConsumed(for: message)
+
+        self.bubbleView.set(backgroundColor: message.color)
+
+        if !message.isFromCurrentUser, !message.isConsumed, message.context != .status {
+
+            if !message.isFromCurrentUser, message.context == .casual {
+                self.bubbleView.layer.borderColor = Color.purple.color.cgColor
+            } else {
+                self.bubbleView.layer.borderColor = message.context.color.color.cgColor
+            }
+
+            // TODO: Get this to work
+            //self.bubbleView.startShimmer(repeatCount: 10, isDiagonal: true)
+            self.bubbleView.layer.borderWidth = 2
+        }
+    }
+
     override func layoutContent(with attributes: ChannelCollectionViewLayoutAttributes) {
         super.layoutContent(with: attributes)
 

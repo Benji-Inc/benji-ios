@@ -90,7 +90,8 @@ extension TCHMessage: Messageable {
 
             switch mediaType {
             case .photo:
-                return .photo(photo: EmptyMediaItem(mediaType: mediaType), body: String(optional: self.body))
+                let body = self.attributes()?.dictionary?["body"] as? String
+                return .photo(photo: EmptyMediaItem(mediaType: mediaType), body: String(optional: body))
             case .video:
                 fatalError()
             }

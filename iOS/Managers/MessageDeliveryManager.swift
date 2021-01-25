@@ -137,7 +137,10 @@ class MessageDeliveryManager {
         case .text(let body):
             return options.with(body: body, attributes: TCHJsonAttributes.init(dictionary: attributes))
         case .photo(let item, let body), .video(let item, let body):
-            return options.with(body: body, mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: attributes))
+            // Twilio can't send both media and text so we add it as an attribute
+            var mutableAttributes = attributes
+            mutableAttributes["body"] = body
+            return options.with(body: body, mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: mutableAttributes))
         default:
             return Future { promise in
                 promise(.failure(ClientError.message(detail: "Unsupported MessageKind")))

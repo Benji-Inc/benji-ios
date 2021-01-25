@@ -34,11 +34,19 @@ class PhotoCellAttributesConfigurer: ChannelCellAttributesConfigurer {
         let textViewSize = self.getTextViewSize(with: message, for: layout)
         let bubbleViewFrame = self.getBubbleViewFrame(with: message,
                                                       textViewSize: textViewSize,
-                                                      yOffset: attachmentFrame.minY,
+                                                      yOffset: attachmentFrame.maxY,
                                                       for: layout)
 
         attributes.attributes.bubbleViewFrame = bubbleViewFrame
-        attributes.attributes.textViewFrame = self.getTextViewFrame(with: bubbleViewFrame.size, textViewSize: textViewSize)
+        attributes.attributes.textViewFrame = self.getTextViewFrame(with: bubbleViewFrame.size,
+                                                                    textViewSize: textViewSize)
+
+        //Determine masked corners
+        if message.isFromCurrentUser {
+            attributes.attributes.maskedCorners = [.layerMinXMaxYCorner]
+        } else {
+            attributes.attributes.maskedCorners = [.layerMaxXMaxYCorner]
+        }
     }
 
     override func size(with message: Messageable?, for layout: ChannelCollectionViewFlowLayout) -> CGSize {
@@ -74,7 +82,8 @@ class PhotoCellAttributesConfigurer: ChannelCellAttributesConfigurer {
                       height: self.avatarSize.height)
     }
 
-    private func getTextViewFrame(with bubbleViewSize: CGSize, textViewSize: CGSize) -> CGRect {
+    private func getTextViewFrame(with bubbleViewSize: CGSize,
+                                  textViewSize: CGSize) -> CGRect {
         return CGRect(x: self.bubbleViewHorizontalPadding,
                       y: self.textViewVerticalPadding,
                       width: textViewSize.width,
