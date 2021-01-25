@@ -14,7 +14,7 @@ extension TCHMessageOptions {
 
     func with(body: String, mediaItem: MediaItem? = nil, attributes: TCHJsonAttributes) -> Future<TCHMessageOptions, Error> {
         return Future { promise in
-
+            self.withBody(body)
             self.withAttributes(attributes) { (result) in
                 if result.isSuccessful() {
                     if let item = mediaItem {
