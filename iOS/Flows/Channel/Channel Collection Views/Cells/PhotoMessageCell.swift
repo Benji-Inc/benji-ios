@@ -12,9 +12,9 @@ import SDWebImage
 
 class PhotoMessageCell: BaseMessageCell {
 
-    private let imageView = DisplayableImageView()
     private var cachedURL: URL?
-    private var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    let blurView = BlurView(effect: UIBlurEffect(style: .light))
+    let imageView = IndexImageView()
     let bubbleView = MessageBubbleView()
     let textView = MessageTextView()
 
@@ -34,6 +34,14 @@ class PhotoMessageCell: BaseMessageCell {
         self.blurView.clipsToBounds = true
         self.blurView.layer.cornerRadius = 5
         self.blurView.layer.masksToBounds = true
+
+        self.bubbleView.didSelect { [unowned self] in
+            self.didTapMessage()
+        }
+
+        self.imageView.didSelect { [unowned self] in
+            self.didTapMessage()
+        }
     }
 
     override func configure(with message: Messageable) {
@@ -117,6 +125,7 @@ class PhotoMessageCell: BaseMessageCell {
         self.textView.frame = attributes.attributes.textViewFrame
         self.bubbleView.frame = attributes.attributes.bubbleViewFrame
         self.bubbleView.layer.maskedCorners = attributes.attributes.maskedCorners
+        self.imageView.indexPath = attributes.indexPath
         self.bubbleView.roundCorners()
     }
 
@@ -128,4 +137,14 @@ class PhotoMessageCell: BaseMessageCell {
         self.textView.text = nil
         self.cachedURL = nil
     }
+}
+
+class BlurView: UIVisualEffectView {
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        return false
+    }
+}
+
+class IndexImageView: DisplayableImageView, Indexable {
+    var indexPath: IndexPath?
 }

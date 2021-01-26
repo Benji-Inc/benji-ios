@@ -95,6 +95,8 @@ class PhotoCellAttributesConfigurer: ChannelCellAttributesConfigurer {
                                     yOffset: CGFloat,
                                     for layout: ChannelCollectionViewFlowLayout) -> CGRect {
 
+        guard !message.kind.text.isEmpty else { return .zero }
+
         var xOffset: CGFloat = 0
         if message.isFromCurrentUser {
             xOffset = layout.itemWidth - textViewSize.width - (self.textViewHorizontalPadding * 2)

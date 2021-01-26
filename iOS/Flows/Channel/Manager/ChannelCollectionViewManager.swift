@@ -124,6 +124,11 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
             cell = channelCollectionView.dequeueReusableCell(AttributedMessageCell.self, for: indexPath)
         case .photo(_, _):
             cell = channelCollectionView.dequeueReusableCell(PhotoMessageCell.self, for: indexPath)
+            if let photoCell = cell as? PhotoMessageCell {
+                photoCell.textView.delegate = self
+                let interaction = UIContextMenuInteraction(delegate: self)
+                photoCell.imageView.addInteraction(interaction)
+            }
         case .video(_, _):
             cell = channelCollectionView.dequeueReusableCell(VideoMessageCell.self, for: indexPath)
         case .location(_):
@@ -369,13 +374,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         } else {
             self.lastScrollDirection = .noMovement
         }
-
-//        if let animator = self.detailVC.animator {
-//            let progress = self.getDetailProgress()
-//            UIView.animate(withDuration: Theme.animationDuration) {
-//                animator.fractionComplete = progress
-//            }
-//        }
     }
 }
 

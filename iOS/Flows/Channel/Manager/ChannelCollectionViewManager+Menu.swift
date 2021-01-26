@@ -13,8 +13,8 @@ import TwilioChatClient
 extension ChannelCollectionViewManager: UIContextMenuInteractionDelegate {
 
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-        guard let view = interaction.view as? MessageBubbleView,
-            let indexPath = view.indexPath,
+        guard let indexView = interaction.view as? Indexable,
+            let indexPath = indexView.indexPath,
             let message = self.item(at: indexPath) else { return nil }
 
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
