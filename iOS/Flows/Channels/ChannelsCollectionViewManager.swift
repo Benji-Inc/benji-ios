@@ -19,6 +19,18 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
     private(set) var connections: [Connection] = []
     private(set) var reservations: [Reservation] = []
 
+    private let channelConfig = UICollectionView.CellRegistration<ChannelCell, DisplayableChannel> { (cell, indexPath, model)  in
+        cell.configure(with: model)
+    }
+
+    private let reservationConfig = UICollectionView.CellRegistration<ReservationCell, Reservation> { (cell, indexPath, model)  in
+        cell.configure(with: model)
+    }
+
+    private let connectionConfig = UICollectionView.CellRegistration<ConnectionCell, Connection> { (cell, indexPath, model)  in
+        cell.configure(with: model)
+    }
+
     enum SectionType: Int, CaseIterable {
         case channels = 0
         case connections = 1
@@ -72,37 +84,16 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let type = SectionType.init(rawValue: indexPath.section), let cv = collectionView as? ChannelCollectionView else { return UICollectionViewCell () }
+        guard let type = SectionType.init(rawValue: indexPath.section) else { return UICollectionViewCell () }
 
         switch type {
         case .channels:
-            return self.getChannelCell(for: indexPath, collectionView: cv)
+            return collectionView.dequeueConfiguredReusableCell(using: self.channelConfig, for: indexPath, item: ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row])
         case .connections:
-            return UICollectionViewCell()
+            return collectionView.dequeueConfiguredReusableCell(using: self.connectionConfig, for: indexPath, item: nil)
         case .reservations:
-            return UICollectionViewCell()
+            return collectionView.dequeueConfiguredReusableCell(using: self.reservationConfig, for: indexPath, item: nil)
         }
-    }
-
-    private func getChannelCell(for indexPath: IndexPath, collectionView: ChannelCollectionView) -> ChannelCell {
-        guard let channel = ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row] else { return ChannelCell() }
-        let cell = collectionView.dequeueReusableCell(ChannelCell.self, for: indexPath)
-        cell.configure(with: channel)
-        return cell
-    }
-
-    private func getConnectionCell(for indexPath: IndexPath, collectionView: ChannelCollectionView) -> ConnectionCell {
-        guard let connection = self.connections[safe: indexPath.row] else { return ConnectionCell() }
-        let cell = collectionView.dequeueReusableCell(ConnectionCell.self, for: indexPath)
-        cell.configure(with: connection)
-        return cell
-    }
-
-    private func getReservationCell(for indexPath: IndexPath, collectionView: ChannelCollectionView) -> ReservationCell {
-        guard let reservation = self.reservations[safe: indexPath.row] else { return ReservationCell() }
-        let cell = collectionView.dequeueReusableCell(ReservationCell.self, for: indexPath)
-        cell.configure(with: reservation)
-        return cell
     }
 
     func collectionView(_ collectionView: UICollectionView,
