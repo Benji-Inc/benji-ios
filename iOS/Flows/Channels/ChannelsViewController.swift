@@ -16,36 +16,34 @@ protocol ChannelsViewControllerDelegate: class {
     func channelsView(_ controller: ChannelsViewController, didSelect reservation: Reservation)
 }
 
-class ChannelsViewController: CollectionViewController<ChannelCell, ChannelsCollectionViewManager> {
+class ChannelsViewController: ViewController {
 
     weak var delegate: ChannelsViewControllerDelegate?
 
     private let reservationButton = Button()
     private var reservation: Reservation?
-
-    init() {
-        super.init(with: ChannelsCollectionView())
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private let collectionView = ChannelsCollectionView()
+    lazy var collectionViewManager = ChannelsCollectionViewManager(with: self.collectionView)
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.collectionViewManager.allowMultipleSelection = true
+        self.view.addSubview(self.collectionView)
 
-        self.collectionViewManager.$onSelectedItem.mainSink { [weak self] (value) in
-            guard let `self` = self, let item = value else { return }
-            self.delegate?.channelsView(self, didSelect: item.item.channelType)
-        }.store(in: &self.cancellables)
+        self.collectionView.dataSource = self.collectionViewManager
+        self.collectionView.delegate = self.collectionViewManager
 
-        self.collectionViewManager.didSelectReservation = { [unowned self] reservation in
-            self.delegate?.channelsView(self, didSelect: reservation)
-        }
 
-        self.view.insertSubview(self.reservationButton, aboveSubview: self.collectionView)
+//        self.collectionViewManager.$onSelectedItem.mainSink { [weak self] (value) in
+//            guard let `self` = self, let item = value else { return }
+//            self.delegate?.channelsView(self, didSelect: item.item.channelType)
+//        }.store(in: &self.cancellables)
+//
+//        self.collectionViewManager.didSelectReservation = { [unowned self] reservation in
+//            self.delegate?.channelsView(self, didSelect: reservation)
+//        }
+
+        //self.view.insertSubview(self.reservationButton, aboveSubview: self.collectionView)
         self.reservationButton.isHidden = true
         self.getReservations()
         self.subscribeToUpdates()

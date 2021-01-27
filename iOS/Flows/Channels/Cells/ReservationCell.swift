@@ -9,5 +9,15 @@
 import Foundation
 
 class ReservationCell: CollectionViewManagerCell {
-    
+
+    override func initializeSubviews() {
+        super.initializeSubviews()
+
+        self.contentView.set(backgroundColor: .orange)
+        
+    }
+
+    func configure(with reservation: Reservation) {
+
+    }
 }

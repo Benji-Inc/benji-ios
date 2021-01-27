@@ -9,5 +9,15 @@
 import Foundation
 
 class ConnectionCell: CollectionViewManagerCell {
+
+    override func initializeSubviews() {
+        super.initializeSubviews()
+
+        self.contentView.set(backgroundColor: .red)
+    }
+
+    func configure(with connection: Connection) {
+        
+    }
     
 }

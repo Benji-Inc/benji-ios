@@ -1569,11 +1569,11 @@
 			isa = PBXGroup;
 			children = (
 				D628425625C1B1E900603FA1 /* Cells */,
-				D628424C25C1B18000603FA1 /* ChannelsCollectionViewManager+Menu.swift */,
 				D66F102722C7D1D200BA277D /* ChannelContentView.swift */,
 				D67934D423D956BB00536B44 /* ChannelPreviewViewController.swift */,
 				D6DADF712207DF83007D9EB1 /* ChannelsCollectionView.swift */,
 				D6DADF6D2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift */,
+				D628424C25C1B18000603FA1 /* ChannelsCollectionViewManager+Menu.swift */,
 				D6740D4723AEA5BD009D5702 /* ChannelsCoordiantor.swift */,
 				D6DADF6B2207DCA8007D9EB1 /* ChannelsViewController.swift */,
 				D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */,

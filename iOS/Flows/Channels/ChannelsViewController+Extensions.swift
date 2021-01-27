@@ -26,13 +26,13 @@ extension ChannelsViewController {
                 guard channelsUpdate.channel.isOwnedByMe || channelsUpdate.channel.status == .joined else { return }
 
                 let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
-                self.collectionViewManager.insert(item: displayable, at: 0)
+               // self.collectionViewManager.insert(item: displayable, at: 0)
             case .changed:
                 let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
-                self.collectionViewManager.update(item: displayable)
+                //self.collectionViewManager.update(item: displayable)
             case .deleted:
                 let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
-                self.collectionViewManager.delete(item: displayable)
+                //self.collectionViewManager.delete(item: displayable)
             }
         }.store(in: &self.cancellables)
 
@@ -42,18 +42,19 @@ extension ChannelsViewController {
             switch memberUpdate.status {
             case .joined:
                 if memberUpdate.member.identity == User.current()?.objectId {
-                    self.collectionViewManager.insert(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)), at: 0)
+                   // self.collectionViewManager.insert(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)), at: 0)
                 } else {
-                    self.collectionViewManager.update(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)))
+                    //self.collectionViewManager.update(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)))
                 }
             case .left:
                 if memberUpdate.member.identity == User.current()?.objectId {
-                    self.collectionViewManager.delete(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)))
+                   // self.collectionViewManager.delete(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)))
                 } else {
-                    self.collectionViewManager.update(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)))
+                   // self.collectionViewManager.update(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)))
                 }
             case .changed:
-                self.collectionViewManager.update(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)))
+                break 
+                //self.collectionViewManager.update(item: DisplayableChannel(channelType: .channel(memberUpdate.channel)))
             default:
                 break
             }

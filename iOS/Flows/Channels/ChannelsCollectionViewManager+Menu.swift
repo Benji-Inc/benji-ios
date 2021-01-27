@@ -18,7 +18,8 @@ extension ChannelsCollectionViewManager {
 
             switch channel.channelType {
             case .system(_):
-                self.delete(item: channel)
+                break
+               // self.delete(item: channel)
             case .pending(_):
                 break
             case .channel(let tchChannel):
@@ -30,7 +31,7 @@ extension ChannelsCollectionViewManager {
         let deleteMenu = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [confirm, neverMind])
 
         let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { _ in
-            self.select(indexPath: indexPath)
+            //self.select(indexPath: indexPath)
         }
 
         // Create and return a UIMenu with the share action
@@ -45,7 +46,8 @@ extension ChannelsCollectionViewManager {
 
             switch channel.channelType {
             case .system(_):
-                self.delete(item: channel)
+                break 
+               // self.delete(item: channel)
             case .pending(_):
                 break
             case .channel(let tchChannel):
@@ -57,7 +59,7 @@ extension ChannelsCollectionViewManager {
         let deleteMenu = UIMenu(title: "Leave", image: UIImage(systemName: "clear"), options: .destructive, children: [confirm, neverMind])
 
         let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { _ in
-            self.select(indexPath: indexPath)
+            //self.select(indexPath: indexPath)
         }
 
         // Create and return a UIMenu with the share action
