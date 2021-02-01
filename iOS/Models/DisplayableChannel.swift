@@ -30,10 +30,6 @@ class DisplayableChannel: ManageableCellItem, Hashable, Comparable {
         return self.channelType.isFromCurrentUser
     }
 
-    func diffIdentifier() -> NSObjectProtocol {
-        return self.channelType.diffIdentifier()
-    }
-
     static func == (lhs: DisplayableChannel, rhs: DisplayableChannel) -> Bool {
         return lhs.channelType.uniqueName == rhs.channelType.uniqueName 
     }

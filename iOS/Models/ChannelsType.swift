@@ -38,16 +38,16 @@ enum ChannelType: ManageableCellItem {
         }
     }
 
-    var purpose: String {
-        switch self {
-        case .system(let channel):
-            return localized(channel.context.text)
-        case .channel(let channel):
-            return String(optional: channel.channelDescription)
-        case .pending(_):
-            return String()
-        }
-    }
+//    var purpose: String {
+//        switch self {
+//        case .system(let channel):
+//            return localized(channel.context.text)
+//        case .channel(let channel):
+//            return String(optional: channel.channelDescription)
+//        case .pending(_):
+//            return String()
+//        }
+//    }
 
     var dateUpdated: Date {
         switch self {

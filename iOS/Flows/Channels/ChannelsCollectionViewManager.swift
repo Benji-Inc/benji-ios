@@ -19,6 +19,8 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
     private(set) var connections: [Connection] = []
     private(set) var reservations: [Reservation] = []
 
+    private var hasLoaded: Bool = false
+
     private let channelConfig = UICollectionView.CellRegistration<ChannelCell, DisplayableChannel> { (cell, indexPath, model)  in
         cell.configure(with: model)
     }
@@ -29,11 +31,14 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
 
     private let connectionConfig = UICollectionView.CellRegistration<ConnectionCell, Connection> { (cell, indexPath, model)  in
         cell.configure(with: model)
+        cell.didSelectOption = { option in
+            print(option)
+        }
     }
 
     enum SectionType: Int, CaseIterable {
-        case channels = 0
-        case connections = 1
+        case connections = 0
+        case channels = 1
         case reservations = 2
     }
 
@@ -46,14 +51,40 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
     private func prepare() {
         ChannelSupplier.shared.$channelsUpdate.mainSink { (update) in
             guard let _ = update else { return }
-            self.collectionView.reloadSections(IndexSet([0]))
+            self.collectionView.reloadSections(IndexSet([SectionType.channels.rawValue]))
         }.store(in: &self.cancellables)
 
-
+        ChannelSupplier.shared.$isSynced.mainSink { (isSynced) in
+            guard isSynced, !self.hasLoaded else { return }
+            self.loadAllItems()
+        }.store(in: &self.cancellables)
     }
 
-    func loadAllItems() {
+    private func loadAllItems() {
 
+        let combined = Publishers.Zip(
+            GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []),
+            Reservation.getReservations(for: User.current()!)
+        )
+
+        combined.mainSink { (result) in
+            switch result {
+            case .success((let connections, let reservations)):
+
+                self.connections = connections.filter({ (connection) -> Bool in
+                    return connection.status == .invited && connection.to == User.current()
+                })
+
+
+                self.reservations = reservations
+
+                self.collectionView.reloadSections(IndexSet([SectionType.connections.rawValue, SectionType.reservations.rawValue]))
+            case .error(_):
+                break
+            }
+            self.hasLoaded = true
+
+        }.store(in: &self.cancellables)
     }
 
     func loadAllChannels() {
@@ -79,7 +110,7 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
         case .connections:
             return self.connections.count
         case .reservations:
-            return 0
+            return self.reservations.count
         }
     }
 
@@ -90,17 +121,27 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
         case .channels:
             return collectionView.dequeueConfiguredReusableCell(using: self.channelConfig, for: indexPath, item: ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row])
         case .connections:
-            return collectionView.dequeueConfiguredReusableCell(using: self.connectionConfig, for: indexPath, item: nil)
+            guard let connection = self.connections[safe: indexPath.row] else { return UICollectionViewCell() }
+            return collectionView.dequeueConfiguredReusableCell(using: self.connectionConfig, for: indexPath, item: connection)
         case .reservations:
-            return collectionView.dequeueConfiguredReusableCell(using: self.reservationConfig, for: indexPath, item: nil)
+            guard let reservation = self.reservations[safe: indexPath.row] else { return UICollectionViewCell() }
+            return collectionView.dequeueConfiguredReusableCell(using: self.reservationConfig, for: indexPath, item: reservation)
         }
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard let type = SectionType.init(rawValue: indexPath.section) else { return .zero }
 
-        return CGSize(width: collectionView.width, height: 84)
+        switch type {
+        case .channels:
+            return CGSize(width: collectionView.width, height: 84)
+        case .connections:
+            return CGSize(width: collectionView.width, height: 168)
+        case .reservations:
+            return CGSize(width: collectionView.width, height: 84)
+        }
     }
 
     // MARK: Menu overrides
