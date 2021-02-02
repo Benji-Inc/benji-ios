@@ -12,7 +12,10 @@ import Combine
 
 class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
+    var didSelectConnection: ((Connection, Connection.Status) -> Void)? = nil
     var didSelectReservation: ((Reservation) -> Void)? = nil
+    var didSelectChannel: ((DisplayableChannel) -> Void)? = nil
+
     var cancellables = Set<AnyCancellable>()
     private let collectionView: CollectionView
 
@@ -31,9 +34,6 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
 
     private let connectionConfig = UICollectionView.CellRegistration<ConnectionCell, Connection> { (cell, indexPath, model)  in
         cell.configure(with: model)
-        cell.didSelectOption = { option in
-            print(option)
-        }
     }
 
     enum SectionType: Int, CaseIterable {
@@ -87,17 +87,6 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
         }.store(in: &self.cancellables)
     }
 
-    func loadAllChannels() {
-//        let cycle = AnimationCycle(inFromPosition: .down,
-//                                   outToPosition: .down,
-//                                   shouldConcatenate: true,
-//                                   scrollToEnd: false)
-
-        //        self.set(newItems: ChannelSupplier.shared.allChannelsSorted,
-        //                 animationCycle: cycle,
-        //                 completion: nil)
-    }
-
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return SectionType.allCases.count
     }
@@ -122,7 +111,11 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
             return collectionView.dequeueConfiguredReusableCell(using: self.channelConfig, for: indexPath, item: ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row])
         case .connections:
             guard let connection = self.connections[safe: indexPath.row] else { return UICollectionViewCell() }
-            return collectionView.dequeueConfiguredReusableCell(using: self.connectionConfig, for: indexPath, item: connection)
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.connectionConfig, for: indexPath, item: connection)
+            cell.didSelectOption = { [unowned self] option in
+                self.didSelectConnection?(connection, option)
+            }
+            return cell
         case .reservations:
             guard let reservation = self.reservations[safe: indexPath.row] else { return UICollectionViewCell() }
             return collectionView.dequeueConfiguredReusableCell(using: self.reservationConfig, for: indexPath, item: reservation)
@@ -144,25 +137,28 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
         }
     }
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let channel = ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row] else { return }
+        self.didSelectChannel?(channel)
+    }
+
     // MARK: Menu overrides
 
     func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
 
-        return nil 
+        guard let channel = ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row],
+              let cell = collectionView.cellForItem(at: indexPath) as? ChannelCell else { return nil }
 
-//        guard let channel = self.getItem(for: indexPath.row),
-//              let cell = collectionView.cellForItem(at: indexPath) as? ChannelCell else { return nil }
-//
-//        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
-//            return ChannelPreviewViewController(with: channel, size: cell.size)
-//        }, actionProvider: { suggestedActions in
-//            if channel.isFromCurrentUser {
-//                return self.makeCurrentUsertMenu(for: channel, at: indexPath)
-//            } else {
-//                return self.makeNonCurrentUserMenu(for: channel, at: indexPath)
-//            }
-//        })
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+            return ChannelPreviewViewController(with: channel, size: cell.size)
+        }, actionProvider: { suggestedActions in
+            if channel.isFromCurrentUser {
+                return self.makeCurrentUsertMenu(for: channel, at: indexPath)
+            } else {
+                return self.makeNonCurrentUserMenu(for: channel, at: indexPath)
+            }
+        })
     }
 }

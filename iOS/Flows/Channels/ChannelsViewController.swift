@@ -33,17 +33,18 @@ class ChannelsViewController: ViewController {
         self.collectionView.dataSource = self.collectionViewManager
         self.collectionView.delegate = self.collectionViewManager
 
+        self.collectionViewManager.didSelectChannel = { [unowned self] channel in
+            self.delegate?.channelsView(self, didSelect: channel.channelType)
+        }
 
-//        self.collectionViewManager.$onSelectedItem.mainSink { [weak self] (value) in
-//            guard let `self` = self, let item = value else { return }
-//            self.delegate?.channelsView(self, didSelect: item.item.channelType)
-//        }.store(in: &self.cancellables)
-//
-//        self.collectionViewManager.didSelectReservation = { [unowned self] reservation in
-//            self.delegate?.channelsView(self, didSelect: reservation)
-//        }
+        self.collectionViewManager.didSelectReservation = { [unowned self] reservation in
+            self.didSelect(reservation: reservation)
+        }
 
-        //self.view.insertSubview(self.reservationButton, aboveSubview: self.collectionView)
+        self.collectionViewManager.didSelectConnection = { [unowned self] connection, status in
+            self.didSelect(connection: connection, status: status)
+        }
+
         self.reservationButton.isHidden = true
         self.getReservations()
         self.subscribeToUpdates()
@@ -97,5 +98,13 @@ class ChannelsViewController: ViewController {
         let text = LocalizedString(id: "", arguments: [countString], default: "You have @(count) RSVP's left")
         self.reservationButton.set(style: .normal(color: .purple, text: text))
         self.view.layoutNow()
+    }
+
+    private func didSelect(connection: Connection, status: Connection.Status) {
+
+        UpdateConnection(connection: connection, status: status).makeRequest(andUpdate: [], viewsToIgnore: [])
+            .mainSink { (result) in
+                self.collectionView.reloadSections([ChannelsCollectionViewManager.SectionType.connections.rawValue])
+            }.store(in: &self.cancellables)
     }
 }
