@@ -20,8 +20,6 @@ class ChannelsViewController: ViewController {
 
     weak var delegate: ChannelsViewControllerDelegate?
 
-    private let reservationButton = Button()
-    private var reservation: Reservation?
     private let collectionView = ChannelsCollectionView()
     lazy var collectionViewManager = ChannelsCollectionViewManager(with: self.collectionView)
 
@@ -45,8 +43,6 @@ class ChannelsViewController: ViewController {
             self.didSelect(connection: connection, status: status)
         }
 
-        self.reservationButton.isHidden = true
-        self.getReservations()
         self.subscribeToUpdates()
     }
 
@@ -54,50 +50,13 @@ class ChannelsViewController: ViewController {
         super.viewDidLayoutSubviews()
 
         self.collectionView.expandToSuperviewSize()
-
-        self.reservationButton.setSize(with: self.view.width)
-        self.reservationButton.pin(.bottom, padding: Theme.contentOffset)
-        self.reservationButton.centerOnX()
-    }
-
-    private func getReservations() {
-        guard let user = User.current() else { return }
-
-        Reservation.getReservations(for: user)
-            .mainSink { [weak self] (reservations) in
-                guard let `self` = self else { return }
-
-                self.reservation = reservations.first(where: { (reservation) -> Bool in
-                    return !reservation.isClaimed
-                })
-
-                self.reservationButton.isHidden = self.reservation.isNil
-                self.updateButton(with: reservations)
-            } receiveCompletion: { (_) in }.store(in: &self.cancellables)
-
-        self.reservationButton.didSelect { [unowned self] in
-            if let reservation = self.reservation {
-                self.didSelect(reservation: reservation)
-            }
-        }
     }
 
     private func didSelect(reservation: Reservation) {
-        reservation.prepareMetaData(andUpdate: [self.reservationButton])
+        reservation.prepareMetaData(andUpdate: [])
             .mainSink(receiveValue: { (_) in
                 self.delegate?.channelsView(self, didSelect: reservation)
             }, receiveCompletion: { (_) in }).store(in: &self.cancellables)
-    }
-
-    private func updateButton(with reservations: [Reservation]) {
-        let count = reservations.count
-        let claimed = reservations.filter { (reservation) -> Bool in
-            return reservation.isClaimed
-        }
-        let countString = String(count - claimed.count)
-        let text = LocalizedString(id: "", arguments: [countString], default: "You have @(count) RSVP's left")
-        self.reservationButton.set(style: .normal(color: .purple, text: text))
-        self.view.layoutNow()
     }
 
     private func didSelect(connection: Connection, status: Connection.Status) {

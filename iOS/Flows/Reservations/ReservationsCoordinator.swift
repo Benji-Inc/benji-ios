@@ -30,7 +30,11 @@ class ReservationsCoordinator: Coordinator<Void> {
     override func start() {
         super.start()
 
-        self.showIntroAlert()
+        if let contactId = self.reservation.contactId {
+            //Find and remind contact
+        } else {
+            self.showIntroAlert()
+        }
     }
 
     private func showIntroAlert() {
@@ -56,7 +60,7 @@ class ReservationsCoordinator: Coordinator<Void> {
         self.router.navController.present(self.contactPicker, animated: true, completion: nil)
     }
 
-    private func showSentAlert() {
+    private func showSentAlert(for contact: CNContact) {
         let alert = UIAlertController(title: "RSVP Sent",
                                       message: "Your RSVP has been sent. As soon as someone accepts, using your link, a conversation will be created between the two of you.",
                                       preferredStyle: .alert)
@@ -94,7 +98,7 @@ extension ReservationsCoordinator: MFMessageComposeViewControllerDelegate {
             }
         case .sent:
             self.messageComposer.dismiss(animated: true) {
-                self.showSentAlert()
+                //self.showSentAlert()
             }
         @unknown default:
             break
@@ -132,7 +136,11 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
             if let user = object as? User {
                 self.showReservationAlert(for: user)
             } else {
-                self.sendText(for: phone)
+                self.reservation.contactId = contact.identifier
+                self.reservation.saveLocalThenServer()
+                    .mainSink { (updatedReservation) in
+                        self.sendText(for: phone)
+                    }.store(in: &self.cancellables)
             }
         }
     }
@@ -164,7 +172,7 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
     func createConnection(with user: User) {
         CreateConnection(to: user).makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink(receiveValue: { (_) in
-                self.showSentAlert()
+                //self.showSentAlert()
             }).store(in: &self.cancellables)
     }
 }

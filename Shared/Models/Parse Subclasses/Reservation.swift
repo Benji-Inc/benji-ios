@@ -16,6 +16,7 @@ enum ReservationKey: String {
     case createdBy
     case isClaimed
     case reservationId
+    case contactId
 }
 
 final class Reservation: PFObject, PFSubclassing {
@@ -34,6 +35,15 @@ final class Reservation: PFObject, PFSubclassing {
 
     var createdBy: User? {
         return self.getObject(for: .createdBy)
+    }
+
+    var contactId: String? {
+        get {
+            return self.getObject(for: .contactId)
+        }
+        set {
+            self.setObject(for: .contactId, with: newValue)
+        }
     }
 
     static func getReservations(for user: User) -> Future<[Reservation], Error> {

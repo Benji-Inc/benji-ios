@@ -75,6 +75,9 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
                     return connection.status == .invited && connection.to == User.current()
                 })
 
+//                self.reservations = reservations.filter({ (reservation) -> Bool in
+//                    return !reservation.isClaimed
+//                })
 
                 self.reservations = reservations
 
@@ -133,13 +136,25 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
         case .connections:
             return CGSize(width: collectionView.width, height: 168)
         case .reservations:
-            return CGSize(width: collectionView.width, height: 84)
+            return CGSize(width: collectionView.width, height: 64)
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let channel = ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row] else { return }
-        self.didSelectChannel?(channel)
+        guard let type = SectionType.init(rawValue: indexPath.section) else { return }
+
+        switch type {
+        case .connections:
+            break
+        case .channels:
+            if let channel = ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row] {
+                self.didSelectChannel?(channel)
+            }
+        case .reservations:
+            if let reservation = self.reservations[safe: indexPath.row] {
+                self.didSelectReservation?(reservation)
+            }
+        }
     }
 
     // MARK: Menu overrides
