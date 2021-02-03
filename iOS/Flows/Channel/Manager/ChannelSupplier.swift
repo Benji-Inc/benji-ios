@@ -176,6 +176,15 @@ class ChannelSupplier {
 
     // MARK: GETTERS
 
+    func waitForInitialSync() -> Future<Void, Error> {
+        return Future { promise in
+            ChannelSupplier.shared.$isSynced.mainSink { (isSynced) in
+                guard isSynced else { return }
+                promise(.success(()))
+            }.store(in: &self.cancellables)
+        }
+    }
+
     func getChannel(withSID channelSID: String) -> DisplayableChannel? {
         return self.subscribedChannels.first(where: { (channel) in
             return channel.id == channelSID

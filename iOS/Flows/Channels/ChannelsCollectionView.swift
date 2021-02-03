@@ -21,12 +21,4 @@ class ChannelsCollectionView: CollectionView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override func initializeViews() {
-        super.initializeViews()
-
-        self.register(ChannelCell.self)
-        self.register(ReservationCell.self)
-        self.register(ConnectionCell.self)
-    }
 }

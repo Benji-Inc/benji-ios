@@ -28,7 +28,6 @@ class ChannelsViewController: ViewController {
 
         self.view.addSubview(self.collectionView)
 
-        self.collectionView.dataSource = self.collectionViewManager
         self.collectionView.delegate = self.collectionViewManager
 
         self.collectionViewManager.didSelectChannel = { [unowned self] channel in

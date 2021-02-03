@@ -20,7 +20,7 @@ class ConnectionCell: CollectionViewManagerCell {
     private let acceptButton = Button()
     private let declineButton = Button()
 
-    var didSelectOption: ((Connection.Status) -> Void)? = nil
+    var didSelectStatus: ((Connection.Status) -> Void)? = nil
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -32,12 +32,12 @@ class ConnectionCell: CollectionViewManagerCell {
         self.containerView.addSubview(self.acceptButton)
         self.acceptButton.set(style: .normal(color: .green, text: "Accept"))
         self.acceptButton.didSelect { [unowned self] in
-            self.didSelectOption?(.accepted)
+            self.didSelectStatus?(.accepted)
         }
         self.containerView.addSubview(self.declineButton)
         self.declineButton.set(style: .normal(color: .red, text: "Decline"))
         self.declineButton.didSelect { [unowned self] in
-            self.didSelectOption?(.declined)
+            self.didSelectStatus?(.declined)
         }
 
         self.set(backgroundColor: .clear)
