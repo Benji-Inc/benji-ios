@@ -121,7 +121,12 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
             return cell
         case .reservations:
             guard let reservation = self.reservations[safe: indexPath.row] else { return UICollectionViewCell() }
-            return collectionView.dequeueConfiguredReusableCell(using: self.reservationConfig, for: indexPath, item: reservation)
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.reservationConfig, for: indexPath, item: reservation)
+
+            cell.button.didSelect { [unowned self] in
+                self.didSelectReservation?(reservation)
+            }
+            return cell 
         }
     }
 
@@ -144,15 +149,11 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
         guard let type = SectionType.init(rawValue: indexPath.section) else { return }
 
         switch type {
-        case .connections:
+        case .connections, .reservations:
             break
         case .channels:
             if let channel = ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row] {
                 self.didSelectChannel?(channel)
-            }
-        case .reservations:
-            if let reservation = self.reservations[safe: indexPath.row] {
-                self.didSelectReservation?(reservation)
             }
         }
     }
