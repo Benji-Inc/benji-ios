@@ -19,7 +19,7 @@ extension ManageableCellItem {
     }
 }
 
-protocol ManageableCell: class {
+protocol ManageableCell: AnyObject {
     /// The type that will be used to configure this object.
     associatedtype ItemType: ManageableCellItem
 

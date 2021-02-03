@@ -12,7 +12,7 @@ import TMROLocalization
 import Parse
 import Combine
 
-protocol UserNotificationManagerDelegate: class {
+protocol UserNotificationManagerDelegate: AnyObject {
     func userNotificationManager(willHandle: DeepLinkable)
 }
 

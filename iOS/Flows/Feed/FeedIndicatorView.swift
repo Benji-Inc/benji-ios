@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol FeedIndicatorViewDelegate: class {
+protocol FeedIndicatorViewDelegate: AnyObject {
     func feedIndicator(_ view: FeedIndicatorView, didFinishProgressFor index: Int)
 }
 

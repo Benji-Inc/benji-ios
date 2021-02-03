@@ -9,7 +9,7 @@
 import Foundation
 import TMROLocalization
 
-protocol MeditationViewControllerDelegate: class {
+protocol MeditationViewControllerDelegate: AnyObject {
     func meditationViewControllerDidFinish(_ controller: MeditationViewController)
 }
 

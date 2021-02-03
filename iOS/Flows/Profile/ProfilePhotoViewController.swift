@@ -25,7 +25,7 @@ enum PhotoContentType: Switchable {
     }
 }
 
-protocol ProfilePhotoViewControllerDelegate: class {
+protocol ProfilePhotoViewControllerDelegate: AnyObject {
     func profilePhotoViewControllerDidFinish(_ controller: ProfilePhotoViewController)
 }
 

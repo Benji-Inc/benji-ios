@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol FeedManagerDelegate: class {
+protocol FeedManagerDelegate: AnyObject {
     func feedManagerDidSetItems(_ manager: FeedManager)
     func feed(_ manager: FeedManager, didSelect type: FeedType)
     func feedManagerDidFinish(_ manager: FeedManager)

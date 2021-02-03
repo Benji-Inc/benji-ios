@@ -13,7 +13,7 @@ import Combine
 
 typealias InputAccessoryDelegates = MessageInputAccessoryViewDelegate
 
-protocol MessageInputAccessoryViewDelegate: class {
+protocol MessageInputAccessoryViewDelegate: AnyObject {
     func inputAccessory(_ view: InputAccessoryView, didConfirm sendable: Sendable)
 }
 

@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Presentable: class {
+protocol Presentable: AnyObject {
 
     typealias DismissableVC = UIViewController & Dismissable
 
@@ -56,7 +56,7 @@ extension UIViewController {
     }
 }
 
-protocol Dismissable: class {
+protocol Dismissable: AnyObject {
     /// Delegate closures to be called when the dismissable is dismissed. In the case of a view controller, these should be
     /// called when the view disappears and the isBeingClosed is true.
     var dismissHandlers: [DismissHandler] { get set }

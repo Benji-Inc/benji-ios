@@ -18,7 +18,7 @@ enum MessageStatus: String {
     case error
 }
 
-protocol Messageable: class {
+protocol Messageable: AnyObject {
 
     var createdAt: Date { get }
     var isFromCurrentUser: Bool { get }

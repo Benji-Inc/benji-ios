@@ -13,12 +13,16 @@ import TMROLocalization
 class ReservationCell: CollectionViewManagerCell {
 
     let button = Button()
+    let imageView = UIImageView(image: UIImage(systemName: "person.badge.plus"))
     private var cancellables = Set<AnyCancellable>()
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.contentView.addSubview(self.button)
+        self.contentView.addSubview(self.imageView)
+        self.imageView.tintColor = Color.purple.color
+        self.imageView.contentMode = .scaleAspectFit
     }
 
     func configure(with reservation: Reservation) {
@@ -35,8 +39,10 @@ class ReservationCell: CollectionViewManagerCell {
                         break
                     }
                 }.store(in: &self.cancellables)
+            self.imageView.isHidden = true
         } else {
-            self.button.set(style: .icon(image: UIImage(systemName: "person.badge.plus")!))
+            self.button.set(style: .normal(color: .purple, text: ""))
+            self.imageView.isHidden = false
         }
 
         self.contentView.layoutNow()
@@ -48,5 +54,8 @@ class ReservationCell: CollectionViewManagerCell {
         self.button.width = self.contentView.width * 0.95
         self.button.expandToSuperviewHeight()
         self.button.centerOnX()
+
+        self.imageView.squaredSize = 24
+        self.imageView.centerOnXAndY()
     }
 }

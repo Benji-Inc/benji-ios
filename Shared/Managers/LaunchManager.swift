@@ -20,7 +20,7 @@ enum LaunchStatus {
     case failed(error: ClientError?)
 }
 
-protocol LaunchManagerDelegate: class {
+protocol LaunchManagerDelegate: AnyObject {
     func launchManager(_ manager: LaunchManager, didFinishWith status: LaunchStatus)
     func launchManager(_ manager: LaunchManager, didReceive activity: LaunchActivity)
 }

@@ -9,7 +9,7 @@
 import Foundation
 import TMROLocalization
 
-protocol RitualViewControllerDelegate: class {
+protocol RitualViewControllerDelegate: AnyObject {
     func ritualInputViewControllerNeedsAuthorization(_ controller: RitualViewController)
 }
 

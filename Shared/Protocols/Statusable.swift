@@ -11,7 +11,7 @@ import Lottie
 import TMROLocalization
 import Combine
 
-protocol Statusable: class {
+protocol Statusable: AnyObject {
     // Handles and returns the status in a future once it has been handled. Maybe async due to animations
     // This allows for API calls to be combined with animation blocks
     @discardableResult

@@ -10,7 +10,7 @@ import Foundation
 import Parse
 import TMROLocalization
 
-protocol OnboardingViewControllerDelegate: class {
+protocol OnboardingViewControllerDelegate: AnyObject {
     func onboardingView(_ controller: OnboardingViewController, didVerify user: PFUser)
 }
 

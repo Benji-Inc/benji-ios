@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol Indexable: class {
+protocol Indexable: AnyObject {
     var indexPath: IndexPath? { get set }
 }

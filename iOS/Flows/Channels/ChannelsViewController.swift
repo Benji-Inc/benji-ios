@@ -11,7 +11,7 @@ import TwilioChatClient
 import Combine
 import TMROLocalization
 
-protocol ChannelsViewControllerDelegate: class {
+protocol ChannelsViewControllerDelegate: AnyObject {
     func channelsView(_ controller: ChannelsViewController, didSelect channelType: ChannelType)
     func channelsView(_ controller: ChannelsViewController, didSelect reservation: Reservation)
 }

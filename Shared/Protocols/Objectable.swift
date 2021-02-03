@@ -24,7 +24,7 @@ enum ContainerName {
     }
 }
 
-protocol Objectable: class {
+protocol Objectable: AnyObject {
     associatedtype KeyType
 
     func getObject<Type>(for key: KeyType) -> Type?

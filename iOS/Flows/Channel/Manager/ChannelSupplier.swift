@@ -10,7 +10,7 @@ import Foundation
 import TwilioChatClient
 import Combine
 
-protocol ActiveChannelAccessor: class {
+protocol ActiveChannelAccessor: AnyObject {
     var activeChannel: DisplayableChannel? { get }
 }
 

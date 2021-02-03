@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol CoordinatorType: class {
+protocol CoordinatorType: AnyObject {
     var parentCoordinator: CoordinatorType? { set get }
     var furthestChild: CoordinatorType { get }
 

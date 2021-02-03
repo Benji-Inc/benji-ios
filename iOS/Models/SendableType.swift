@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Sendable: class {
+protocol Sendable: AnyObject {
     var kind: MessageKind { get set }
     var context: MessageContext { get set }
     var previousMessage: Messageable? { get set }

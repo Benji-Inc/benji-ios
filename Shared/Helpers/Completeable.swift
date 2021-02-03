@@ -12,7 +12,7 @@ import Foundation
 /// button is pressed. Interested parties can set a handling closure to be alerted when the completion occurs. Optionally, a closure can be
 /// assigned that returns valid if the object had valid data. For example, a name text field might return true only if a full name, first and
 /// last, is entered. If the getCompletionResult handler is not assigned, the object should assume the result is valid.
-protocol Completable: class {
+protocol Completable: AnyObject {
     associatedtype ResultType
     /// Denotes whether this completable can be skipped.
     var isSkippable: Bool { get }

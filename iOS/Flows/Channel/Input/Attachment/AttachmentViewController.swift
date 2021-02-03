@@ -10,7 +10,7 @@ import Foundation
 import Photos
 import Combine
 
-protocol AttachmentViewControllerDelegate: class {
+protocol AttachmentViewControllerDelegate: AnyObject {
     func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment)
 }
 

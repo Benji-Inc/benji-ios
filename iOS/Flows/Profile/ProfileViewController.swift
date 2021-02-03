@@ -11,7 +11,7 @@ import Parse
 import TwilioChatClient
 import TMROLocalization
 
-protocol ProfileViewControllerDelegate: class {
+protocol ProfileViewControllerDelegate: AnyObject {
     func profileView(_ controller: ProfileViewController, didSelect item: ProfileItem, for user: User)
 }
 

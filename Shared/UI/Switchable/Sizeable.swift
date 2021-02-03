@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-protocol Sizeable: class {
+protocol Sizeable: AnyObject {
     func getHeight(for width: CGFloat) -> CGFloat
     func getWidth(for height: CGFloat) -> CGFloat
 }
