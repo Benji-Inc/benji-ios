@@ -143,9 +143,8 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
 
         cell.configure(with: message)
         cell.didTapMessage = { [weak self] in
-            guard let `self` = self, let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed  else { return }
-
-            self.updateConsumers(with: current, for: message)
+            guard let `self` = self else { return }
+            self.updateConsumers(for: message)
             self.selectionFeedback.impactOccurred()
         }
 
@@ -352,11 +351,11 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                 .mainSink(receiveValue: { (_) in
                     footer.stop()
                     self.isSettingReadAll = false
-                    self.collectionView.scrollToLastItem()
+                    self.collectionView.scrollToEnd()
                 }).store(in: &self.cancellables)
         } else if self.lastScrollDirection == .up {
             footer.stop()
-            self.collectionView.scrollToLastItem()
+            self.collectionView.scrollToEnd()
         }
     }
 

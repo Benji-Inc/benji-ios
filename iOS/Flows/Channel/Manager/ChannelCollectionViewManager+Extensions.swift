@@ -12,10 +12,13 @@ import Combine
 extension ChannelCollectionViewManager {
 
     @discardableResult
-    func updateConsumers(with consumer: Avatar, for message: Messageable) -> Future<Void, Error> {
+    func updateConsumers(for message: Messageable) -> Future<Void, Error> {
+        guard let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed, !message.hasBeenConsumedBy.contains(current.id) else { return Future { promise in promise(.success(()))}
+        }
+        
         //create system message copy of current message
         let messageCopy = SystemMessage(with: message)
-        messageCopy.udpateConsumers(with: consumer)
+        messageCopy.udpateConsumers(with: current)
 
         runMain {
             //update the current message with the copy
@@ -23,12 +26,12 @@ extension ChannelCollectionViewManager {
         }
 
         //call update on the actual message and update on callback
-        return message.udpateConsumers(with: consumer)
+        return message.udpateConsumers(with: current)
     }
 
     func setAllMessagesToRead() -> AnyPublisher<[Void], Error> {
         let futures: [Future<Void, Error>] = MessageSupplier.shared.unreadMessages.map { (message) -> Future<Void, Error> in
-            return self.updateConsumers(with: User.current()!, for: message)
+            return self.updateConsumers(for: message)
         }
 
         return waitForAll(futures)

@@ -21,13 +21,7 @@ class CollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func initializeViews() {
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-    }
+    func initializeViews() {}
 
     func scrollToEnd(animated: Bool = true, completion: CompletionOptional = nil) {
 

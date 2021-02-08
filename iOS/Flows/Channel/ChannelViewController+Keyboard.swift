@@ -28,8 +28,6 @@ extension ChannelViewController {
             if let indexPath = self.indexPathForEditing {
                 self.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
             } else if self.scrollsToLastItemOnKeyboardBeginsEditing {
-                self.collectionView.scrollToLastItem()
-            } else {
                 self.collectionView.scrollToEnd()
             }
         }
@@ -99,7 +97,8 @@ extension ChannelViewController {
 
     func requiredInitialScrollViewBottomInset() -> CGFloat {
         let inputAccessoryViewHeight = self.inputAccessoryView?.frame.height ?? 0
-        return max(0, inputAccessoryViewHeight + self.additionalBottomInset - self.automaticallyAddedBottomInset)
+        let offset = (inputAccessoryViewHeight) - (self.automaticallyAddedBottomInset + self.collectionView.channelLayout.readFooterHeight)
+        return max(0, offset)
     }
 
     /// iOS 11's UIScrollView can automatically add safe area insets to its contentInset,

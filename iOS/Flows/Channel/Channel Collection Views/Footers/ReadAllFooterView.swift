@@ -79,7 +79,7 @@ class ReadAllFooterView: UICollectionReusableView {
     func createAnimator() {
         guard self.animator.isNil else { return }
         
-        self.animator = UIViewPropertyAnimator(duration: 2.0, curve: .linear, animations: { [weak self] in
+        self.animator = UIViewPropertyAnimator(duration: 1.0, curve: .linear, animations: { [weak self] in
             guard let `self` = self else { return }
             self.label.alpha = 1
             self.label.transform = .identity
