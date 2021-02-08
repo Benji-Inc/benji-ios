@@ -12,7 +12,8 @@ extension ChannelViewController {
 
     func loadMessages(for channelType: ChannelType) {
         self.collectionViewManager.reset()
-
+        MessageSupplier.shared.reset()
+        
         switch channelType {
         case .system(let channel):
             self.loadSystem(channel: channel)
