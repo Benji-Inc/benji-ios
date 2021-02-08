@@ -28,7 +28,7 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
     var didSelectChannel: ((DisplayableChannel) -> Void)? = nil
 
     var cancellables = Set<AnyCancellable>()
-    private let collectionView: CollectionView
+    private let collectionView: ChannelsCollectionView
 
     private(set) var connections: [Connection] = []
     private(set) var reservations: [Reservation] = []
@@ -83,13 +83,15 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
         case reservations = 2
     }
 
-    init(with collectionView: CollectionView) {
+    init(with collectionView: ChannelsCollectionView) {
         self.collectionView = collectionView
         super.init()
         self.loadAllItems()
     }
 
     private func loadAllItems() {
+
+        self.collectionView.animationView.play()
 
         let combined = Publishers.Zip3(
             GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []),
@@ -110,6 +112,7 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
             case .error(_):
                 break
             }
+            self.collectionView.animationView.stop()
         }.store(in: &self.cancellables)
     }
 
