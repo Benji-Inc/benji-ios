@@ -118,7 +118,7 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
         self.snapshot.appendItems(ChannelSupplier.shared.allChannelsSorted, toSection: .channels)
         self.snapshot.appendItems(self.connections, toSection: .connections)
         self.snapshot.appendItems(self.reservations, toSection: .reservations)
-        self.dataSource.apply(self.snapshot)
+        self.dataSource.apply(self.snapshot, animatingDifferences: true)
         self.collectionView.dataSource = self.dataSource
     }
 
