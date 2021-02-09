@@ -24,6 +24,7 @@ class ChannelDetailViewController: ViewController {
     }
 
     var state: State = .collapsed
+    @Published var isHandlingTouches: Bool = false
 
     private let stackedAvatarView = StackedAvatarView()
     private let textView = TextView()
@@ -157,5 +158,15 @@ class ChannelDetailViewController: ViewController {
 
     private func getMessage(handle: String, date: Date) -> LocalizedString {
         return LocalizedString(id: "", arguments: [handle, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). You created this conversation on @(date)")
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        self.isHandlingTouches = true
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        self.isHandlingTouches = false
     }
 }

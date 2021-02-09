@@ -326,10 +326,12 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         case .ended:
             animator.startAnimation()
             if animator.fractionComplete < 0.99 || self.lastScrollDirection == .down {
+                if animator.fractionComplete > 0.1, self.lastScrollDirection == .up {
+                    self.collectionView.scrollToLastItem()
+                }
                 animator.isReversed = true
                 let provider = UICubicTimingParameters(animationCurve: .linear)
                 animator.continueAnimation(withTimingParameters: provider, durationFactor: 0.25)
-                self.collectionView.scrollToLastItem()
             } else if self.lastScrollDirection == .up {
                 animator.isReversed = false
                 let provider = UICubicTimingParameters(animationCurve: .linear)
@@ -349,6 +351,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         var triggerThreshold = (diffHeight - frameHeight)/threshold
         triggerThreshold = min(triggerThreshold, 0.0)
         let pullRatio = min(abs(triggerThreshold), 1.0)
+        print(pullRatio)
         return pullRatio
     }
 
