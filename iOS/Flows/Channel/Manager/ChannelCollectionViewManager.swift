@@ -351,7 +351,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         var triggerThreshold = (diffHeight - frameHeight)/threshold
         triggerThreshold = min(triggerThreshold, 0.0)
         let pullRatio = min(abs(triggerThreshold), 1.0)
-        print(pullRatio)
         return pullRatio
     }
 
