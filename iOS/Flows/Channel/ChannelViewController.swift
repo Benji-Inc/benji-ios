@@ -53,9 +53,9 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     var shouldEnableFirstResponder: Bool = true {
         didSet {
             if self.shouldEnableFirstResponder {
-                self.resignFirstResponder()
-            } else {
                 self.becomeFirstResponder()
+            } else {
+                self.resignFirstResponder()
             }
         }
     }
@@ -86,8 +86,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             self.collectionViewBottomInset += delta
         }
     }
-
-    private var isFirstLayout: Bool = true
 
     override var canBecomeFirstResponder: Bool {
         return self.shouldEnableFirstResponder
@@ -132,6 +130,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     private func setupHandlers() {
 
+        self.addKeyboardObservers()
+
         self.collectionViewManager.didTapShare = { [unowned self] message in
             self.delegate.channelView(self, didTapShare: message)
         }
@@ -165,7 +165,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        self.shouldEnableFirstResponder = false
+        self.shouldEnableFirstResponder = true
 
         if MessageSupplier.shared.sections.count > 0 {
             self.collectionViewManager.set(newSections: MessageSupplier.shared.sections,
@@ -215,12 +215,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         self.detailVC.view.centerOnX()
 
         self.collectionView.expandToSuperviewSize()
-
-        if self.isFirstLayout {
-            defer { self.isFirstLayout = false }
-            self.addKeyboardObservers()
-            self.collectionViewBottomInset = self.requiredInitialScrollViewBottomInset()
-        }
     }
 
     private func getDetailProgress() -> CGFloat {

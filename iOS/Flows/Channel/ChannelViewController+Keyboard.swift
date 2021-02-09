@@ -35,7 +35,7 @@ extension ChannelViewController {
 
     @objc
     private func handleKeyboardDidChangeState(_ notification: Notification) {
-        guard !shouldEnableFirstResponder else { return }
+        guard self.shouldEnableFirstResponder else { return }
 
         guard let keyboardStartFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect else { return }
         guard !keyboardStartFrameInScreenCoords.isEmpty || UIDevice.current.userInterfaceIdiom != .pad else {
@@ -93,11 +93,6 @@ extension ChannelViewController {
         } else {
             return max(0, intersection.height + self.additionalBottomInset - self.automaticallyAddedBottomInset)
         }
-    }
-
-    func requiredInitialScrollViewBottomInset() -> CGFloat {
-        let offset = InputAccessoryView.preferredHeight + self.automaticallyAddedBottomInset
-        return max(0, offset)
     }
 
     /// iOS 11's UIScrollView can automatically add safe area insets to its contentInset,
