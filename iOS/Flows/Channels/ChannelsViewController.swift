@@ -41,8 +41,6 @@ class ChannelsViewController: ViewController {
         self.collectionViewManager.didSelectConnection = { [unowned self] connection, status in
             self.didSelect(connection: connection, status: status)
         }
-
-        self.subscribeToUpdates()
     }
 
     override func viewDidLayoutSubviews() {

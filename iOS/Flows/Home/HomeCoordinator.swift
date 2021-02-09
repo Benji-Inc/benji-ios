@@ -22,6 +22,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
+        self.homeVC.channelsVC.subscribeToUpdates()
+
         self.homeVC.$current
             .removeDuplicates()
             .mainSink { [weak self] (current) in

@@ -96,8 +96,7 @@ extension ChannelViewController {
     }
 
     func requiredInitialScrollViewBottomInset() -> CGFloat {
-        let inputAccessoryViewHeight = self.inputAccessoryView?.frame.height ?? 0
-        let offset = (inputAccessoryViewHeight) - (self.automaticallyAddedBottomInset + self.collectionView.channelLayout.readFooterHeight)
+        let offset = InputAccessoryView.preferredHeight + self.automaticallyAddedBottomInset
         return max(0, offset)
     }
 
