@@ -23,10 +23,6 @@ class InputTextView: ExpandingTextView {
     private(set) var currentInputView: InputViewType = .keyboard
     var textDidUpdate: ((String) -> Void)?
 
-    override var canResignFirstResponder: Bool {
-        return false 
-    }
-
     unowned let attachmentDelegate: AttachmentViewControllerDelegate
 
     init(with delegate: AttachmentViewControllerDelegate) {
