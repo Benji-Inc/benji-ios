@@ -161,8 +161,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        self.shouldEnableFirstResponder = true
-
         if MessageSupplier.shared.sections.count > 0 {
             self.collectionViewManager.set(newSections: MessageSupplier.shared.sections,
                                            animate: self.animateMessages) {
@@ -191,8 +189,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-
-        self.shouldEnableFirstResponder = false
 
         guard self.shouldResetOnDissappear else { return }
 
