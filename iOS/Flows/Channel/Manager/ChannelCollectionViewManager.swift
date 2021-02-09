@@ -323,26 +323,33 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         case .changed:
             animator.pauseAnimation()
             animator.fractionComplete = self.getProgress(for: footer)
-            print(animator.fractionComplete)
         case .ended:
-            animator.isReversed = animator.fractionComplete < 0.99
-            let provider = UICubicTimingParameters(animationCurve: .linear)
-            animator.continueAnimation(withTimingParameters: provider, durationFactor: 0.25)
+            animator.startAnimation()
+            if animator.fractionComplete < 0.99 || self.lastScrollDirection == .down {
+                animator.isReversed = true
+                let provider = UICubicTimingParameters(animationCurve: .linear)
+                animator.continueAnimation(withTimingParameters: provider, durationFactor: 0.25)
+                self.collectionView.scrollToLastItem()
+            } else if self.lastScrollDirection == .up {
+                animator.isReversed = false
+                let provider = UICubicTimingParameters(animationCurve: .linear)
+                animator.continueAnimation(withTimingParameters: provider, durationFactor: 0.25)
+            }
         default:
             break
         }
     }
 
     private func getProgress(for footer: ReadAllFooterView) -> CGFloat {
-        let threshold = 60
+        let threshold: CGFloat = 80
         let contentOffset = self.collectionView.contentOffset.y
-        let contentHeight = self.collectionView.contentSize.height + self.collectionView.contentInset.top + footer.height - self.collectionView.contentInset.bottom
+        let contentHeight = self.collectionView.contentSize.height
         let diffHeight = contentHeight - contentOffset
-        let frameHeight = self.collectionView.bounds.size.height
-        var triggerThreshold = Float((diffHeight - frameHeight))/Float(threshold)
+        let frameHeight = self.collectionView.bounds.size.height - self.collectionView.adjustedContentInset.bottom - ChannelViewController.additionalBottomInset
+        var triggerThreshold = (diffHeight - frameHeight)/threshold
         triggerThreshold = min(triggerThreshold, 0.0)
         let pullRatio = min(abs(triggerThreshold), 1.0)
-        return CGFloat(pullRatio)
+        return pullRatio
     }
 
     private func setAllMessagesToRead(for footer: ReadAllFooterView) {
@@ -355,11 +362,11 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                 .mainSink(receiveValue: { (_) in
                     footer.stop()
                     self.isSettingReadAll = false
-                    self.collectionView.scrollToEnd()
+                    self.collectionView.scrollToLastItem()
                 }).store(in: &self.cancellables)
         } else if self.lastScrollDirection == .up {
             footer.stop()
-            self.collectionView.scrollToEnd()
+            self.collectionView.scrollToLastItem()
         }
     }
 

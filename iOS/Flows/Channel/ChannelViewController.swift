@@ -76,16 +76,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         return self.messageInputAccessoryView
     }
 
-    /// A CGFloat value that adds to (or, if negative, subtracts from) the automatically
-    /// computed value of `messagesCollectionView.contentInset.bottom`. Meant to be used
-    /// as a measure of last resort when the built-in algorithm does not produce the right
-    /// value for your app. Please let us know when you end up having to use this property.
-    var additionalBottomInset: CGFloat = 10 {
-        didSet {
-            let delta = self.additionalBottomInset - oldValue
-            self.collectionViewBottomInset += delta
-        }
-    }
+    static var additionalBottomInset: CGFloat = 10
 
     override var canBecomeFirstResponder: Bool {
         return self.shouldEnableFirstResponder

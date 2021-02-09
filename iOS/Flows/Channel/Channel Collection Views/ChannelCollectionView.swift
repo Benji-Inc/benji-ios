@@ -25,6 +25,7 @@ class ChannelCollectionView: CollectionView {
         super.init(layout: ChannelCollectionViewFlowLayout())
         self.registerReusableViews()
         self.keyboardDismissMode = .interactive
+        self.automaticallyAdjustsScrollIndicatorInsets = true 
     }
 
     required init?(coder aDecoder: NSCoder) {

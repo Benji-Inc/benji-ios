@@ -89,9 +89,9 @@ extension ChannelViewController {
         if intersection.isNull || (self.collectionView.frame.maxY - intersection.maxY) > 0.001 {
             // The keyboard is hidden, is a hardware one, or is undocked and does not cover the bottom of the collection view.
             // Note: intersection.maxY may be less than messagesCollectionView.frame.maxY when dealing with undocked keyboards.
-            return max(0, self.additionalBottomInset - self.automaticallyAddedBottomInset)
+            return max(0, ChannelViewController.additionalBottomInset - self.automaticallyAddedBottomInset)
         } else {
-            return max(0, intersection.height + self.additionalBottomInset - self.automaticallyAddedBottomInset)
+            return max(0, intersection.height + ChannelViewController.additionalBottomInset - self.automaticallyAddedBottomInset)
         }
     }
 
