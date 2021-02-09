@@ -86,12 +86,15 @@ class ReadAllFooterView: UICollectionReusableView {
         })
 
         self.animator?.addCompletion({ (position) in
-            self.didCompleteAnimation?()
+            if position == .end {
+                self.didCompleteAnimation?()
+            }
             self.animator = nil
         })
 
         self.animator?.scrubsLinearly = true
         self.animator?.isInterruptible = true
+        self.animator?.pauseAnimation()
         self.prepareInitialAnimation()
     }
 

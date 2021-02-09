@@ -318,12 +318,16 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         guard let animator = footer.animator else { return }
         switch recognizer.state {
         case .began:
+            animator.isReversed = false
             animator.pauseAnimation()
         case .changed:
             animator.pauseAnimation()
             animator.fractionComplete = self.getProgress(for: footer)
+            print(animator.fractionComplete)
         case .ended:
-            animator.startAnimation()
+            animator.isReversed = animator.fractionComplete < 0.99
+            let provider = UICubicTimingParameters(animationCurve: .linear)
+            animator.continueAnimation(withTimingParameters: provider, durationFactor: 0.25)
         default:
             break
         }
