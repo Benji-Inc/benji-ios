@@ -20,8 +20,8 @@ protocol FeedManagerDelegate: AnyObject {
 
 class FeedManager: NSObject {
 
-    private var currentView: FeedView?
-    private(set) var feedViews: [FeedView] = [] {
+    private var current: FeedView?
+    private(set) var posts: [FeedView] = [] {
         didSet {
             self.delegate.feedManagerDidSetItems(self)
         }
@@ -51,18 +51,18 @@ class FeedManager: NSObject {
             views.append(view)
         }
 
-        self.feedViews = views
+        self.posts = views
         self.showFirst()
     }
 
     func showFirst() {
-        if let first = self.feedViews.first {
+        if let first = self.posts.first {
             self.show(view: first, at: 0)
         }
     }
 
     func advanceToNextView(from index: Int) {
-        if let nextView = self.feedViews[safe: index + 1]  {
+        if let nextView = self.posts[safe: index + 1]  {
             self.show(view: nextView, at: index + 1)
         } else {
             self.finishFeed()
@@ -70,12 +70,12 @@ class FeedManager: NSObject {
     }
 
     private func show(view: FeedView, at index: Int) {
-        let duration: TimeInterval = self.currentView.isNil ? 0 : 0.2
+        let duration: TimeInterval = self.current.isNil ? 0 : 0.2
         UIView.animate(withDuration: duration) {
-            self.currentView?.alpha = 0
+            self.current?.alpha = 0
         } completion: { (completed) in
-            self.currentView?.removeFromSuperview()
-            self.currentView = view
+            self.current?.removeFromSuperview()
+            self.current = view
             view.alpha = 0
             self.containerView.addSubview(view)
             view.expandToSuperviewSize()
@@ -90,7 +90,7 @@ class FeedManager: NSObject {
 
     private func finishFeed() {
         UIView.animate(withDuration: 0.2) {
-            self.currentView?.alpha = 0
+            self.current?.alpha = 0
         } completion: { (completed) in
             self.delegate.feedManagerDidFinish(self)
         }

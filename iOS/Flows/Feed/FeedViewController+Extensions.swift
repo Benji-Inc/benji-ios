@@ -32,7 +32,7 @@ extension FeedViewController {
 extension FeedViewController: FeedManagerDelegate {
 
     func feedManagerDidSetItems(_ manager: FeedManager) {
-        self.indicatorView.configure(with: manager.feedViews.count)
+        self.indicatorView.configure(with: manager.posts.count)
     }
 
     func feed(_ manager: FeedManager, didSelect type: FeedType) {

@@ -63,7 +63,7 @@ class FeedViewController: ViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        if self.manager.feedViews.isEmpty {
+        if self.manager.posts.isEmpty {
             self.loadFeed()
         }
     }
