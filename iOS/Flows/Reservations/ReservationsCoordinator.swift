@@ -15,6 +15,7 @@ import Combine
 class ReservationsCoordinator: Coordinator<Void> {
 
     let reservation: Reservation
+    private var selectedContact: CNContact?
     private lazy var messageComposer = MessageComposerViewController()
     lazy var contactPicker = CNContactPickerViewController()
     private var cancellables = Set<AnyCancellable>()
@@ -31,7 +32,19 @@ class ReservationsCoordinator: Coordinator<Void> {
         super.start()
 
         if let contactId = self.reservation.contactId {
-            //Find and remind contact
+            ContactsManger.shared.searchForContact(with: .identifier(contactId))
+                .mainSink { (result) in
+                    switch result {
+                    case .success(let contacts):
+                        if let first = contacts.first {
+                            self.findUser(for: first, sendReminder: true)
+                        } else {
+                            self.showIntroAlert()
+                        }
+                    case .error(_):
+                        self.showIntroAlert()
+                    }
+                }.store(in: &self.cancellables)
         } else {
             self.showIntroAlert()
         }
@@ -60,9 +73,11 @@ class ReservationsCoordinator: Coordinator<Void> {
         self.router.navController.present(self.contactPicker, animated: true, completion: nil)
     }
 
-    private func showSentAlert(for contact: CNContact) {
+    private func showSentAlert(for avatar: Avatar) {
+        let message = LocalizedString(id: "", arguments: [avatar.fullName], default: "Your RSVP has been sent too @(name). As soon as they accept, a conversation will be created between the two of you.")
+        let text = localized(message)
         let alert = UIAlertController(title: "RSVP Sent",
-                                      message: "Your RSVP has been sent. As soon as someone accepts, using your link, a conversation will be created between the two of you.",
+                                      message: text,
                                       preferredStyle: .alert)
 
         let ok = UIAlertAction(title: "Ok", style: .cancel) { (_) in
@@ -74,13 +89,12 @@ class ReservationsCoordinator: Coordinator<Void> {
         self.router.navController.present(alert, animated: true, completion: nil)
     }
 
-    private func sendText(for phone: String) {
+    private func sendText(with message: String?, phone: String) {
 
         self.messageComposer.recipients = [phone]
-        self.messageComposer.body = self.reservation.message
+        self.messageComposer.body = message
         self.messageComposer.messageComposeDelegate = self
 
-        // Present the view controller modally.
         if MFMessageComposeViewController.canSendText() {
             self.router.navController.present(self.messageComposer, animated: true, completion: nil)
         }
@@ -98,7 +112,9 @@ extension ReservationsCoordinator: MFMessageComposeViewControllerDelegate {
             }
         case .sent:
             self.messageComposer.dismiss(animated: true) {
-                //self.showSentAlert()
+                if let contact = self.selectedContact {
+                    self.showSentAlert(for: contact)
+                }
             }
         @unknown default:
             break
@@ -129,6 +145,11 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
     }
 
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
+        self.selectedContact = contact
+        self.findUser(for: contact, sendReminder: false)
+    }
+
+    func findUser(for contact: CNContact, sendReminder: Bool) {
         // Search for user with phone number
         guard let query = User.query(), let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
         query.whereKey("phoneNumber", contains: phone)
@@ -139,7 +160,11 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
                 self.reservation.contactId = contact.identifier
                 self.reservation.saveLocalThenServer()
                     .mainSink { (updatedReservation) in
-                        self.sendText(for: phone)
+                        if sendReminder {
+                            self.sendText(with: "A reminder message", phone: phone)
+                        } else {
+                            self.sendText(with: self.reservation.message, phone: phone)
+                        }
                     }.store(in: &self.cancellables)
             }
         }
@@ -172,7 +197,7 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
     func createConnection(with user: User) {
         CreateConnection(to: user).makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink(receiveValue: { (_) in
-                //self.showSentAlert()
+                self.showSentAlert(for: user)
             }).store(in: &self.cancellables)
     }
 }

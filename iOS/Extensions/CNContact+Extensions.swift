@@ -74,3 +74,21 @@ extension CNContact {
     }
 }
 
+extension CNContact: Avatar {
+    var handle: String {
+        return ""
+    }
+
+    var userObjectID: String? {
+        return nil
+    }
+
+    var image: UIImage? {
+        if let data = self.thumbnailImageData {
+            return UIImage(data: data)
+        }
+
+        return nil 
+    }
+}
+
