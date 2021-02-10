@@ -108,11 +108,14 @@ class Button: UIButton, Statusable {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.animationView.size = CGSize(width: 18, height: 18)
+        if self.animationView.isAnimationPlaying {
+            self.animationView.size = CGSize(width: 18, height: 18)
+        } else {
+            self.animationView.size = .zero
+        }
         self.animationView.centerOnXAndY()
 
-        self.errorLabel.height = 20
-        self.errorLabel.width = self.width - 40
+        self.errorLabel.setSize(withWidth: self.width - 40)
         self.errorLabel.textAlignment = .center
         self.errorLabel.centerOnXAndY()
 

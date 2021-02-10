@@ -32,15 +32,11 @@ extension Selectable where Self: UIControl {
     }
 
     func didSelect(_ completion: CompletionOptional) {
-        self.didSelect(for: .touchUpInside, completion)
-    }
-
-    private func didSelect(for event: UIControl.Event,_ completion: CompletionOptional) {
         self.selectionImpact = UIImpactFeedbackGenerator()
-        self.addAction(for: .touchUpInside) { [unowned self] in
-            self.selectionImpact?.impactOccurred()
+        let action = UIAction { action in
             completion?()
         }
+        self.addAction(action, for: .touchUpInside)
     }
 }
 
@@ -61,6 +57,7 @@ extension Selectable where Self: UIView {
             self.selectionImpact?.impactOccurred()
             completion?()
         }
+
         self.addGestureRecognizer(tap)
     }
 }
