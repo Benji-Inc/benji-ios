@@ -60,8 +60,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         }
     }
 
-    var shouldResetOnDissappear = true
-
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
             self.collectionView.contentInset.bottom = self.collectionViewBottomInset
@@ -102,6 +100,12 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     required init?(withObject object: DeepLinkable) {
         fatalError("init(withObject:) has not been implemented")
+    }
+
+    deinit {
+        MessageSupplier.shared.reset()
+        ChannelSupplier.shared.set(activeChannel: nil)
+        self.collectionViewManager.reset()
     }
 
     override func initializeViews() {
@@ -185,16 +189,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
                 self.detailVC.animator.fractionComplete = self.getDetailProgress()
                 self.view.layoutNow()
             }.store(in: &self.cancellables)
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        guard self.shouldResetOnDissappear else { return }
-
-        MessageSupplier.shared.reset()
-        ChannelSupplier.shared.set(activeChannel: nil)
-        self.collectionViewManager.reset()
     }
     
     override func viewDidLayoutSubviews() {

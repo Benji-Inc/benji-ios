@@ -96,7 +96,6 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
         self.imagePickerVC.delegate = self
         self.imagePickerVC.sourceType = type
         self.channelVC.shouldEnableFirstResponder = false
-        self.channelVC.shouldResetOnDissappear = false
         guard self.router.topmostViewController != self.imagePickerVC else { return }
 
         self.router.topmostViewController.present(self.imagePickerVC, animated: true, completion: nil)
@@ -107,7 +106,6 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
 
         self.imagePickerVC.dismiss(animated: true) {
             self.channelVC.shouldEnableFirstResponder = true
-            self.channelVC.shouldResetOnDissappear = true
         }
 
         guard let asset = info[.phAsset] as? PHAsset else {
