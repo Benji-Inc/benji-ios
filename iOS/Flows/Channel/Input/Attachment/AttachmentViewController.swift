@@ -32,9 +32,6 @@ class AttachmentViewController: CollectionViewController<AttachmentCell, Attachm
     override func initializeViews() {
         super.initializeViews()
 
-        guard let window = UIWindow.topWindow() else { return }
-        self.view.size = CGSize(width: window.width, height: window.height * 0.4)
-
         let color = Color.background1.color.withAlphaComponent(0.9)
         self.view.backgroundColor = color
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)

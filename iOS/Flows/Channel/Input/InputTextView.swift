@@ -25,6 +25,10 @@ class InputTextView: ExpandingTextView {
 
     unowned let attachmentDelegate: AttachmentViewControllerDelegate
 
+    override var canResignFirstResponder: Bool {
+        return false
+    }
+
     init(with delegate: AttachmentViewControllerDelegate) {
         self.attachmentDelegate = delegate
         super.init(frame: .zero, textContainer: nil)
@@ -59,10 +63,7 @@ class InputTextView: ExpandingTextView {
         }
 
         self.currentInputView = type
-
-        UIView.animate(withDuration: 0.2) {
-            self.reloadInputViews()
-        } completion: { (completed) in }
+        self.reloadInputViews()
     }
 
     override func textDidChange() {

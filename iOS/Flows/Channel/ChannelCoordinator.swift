@@ -44,6 +44,8 @@ class ChannelCoordinator: PresentableCoordinator<Void> {
             .mainSink { (note) in
                 self.presentPicker(for: .photoLibrary)
             }.store(in: &self.cancellables)
+
+        self.imagePickerVC.delegate = self
     }
 }
 
@@ -93,20 +95,16 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
     }
 
     private func presentPicker(for type: UIImagePickerController.SourceType) {
-        self.imagePickerVC.delegate = self
-        self.imagePickerVC.sourceType = type
-        self.channelVC.shouldEnableFirstResponder = false
         guard self.router.topmostViewController != self.imagePickerVC else { return }
 
-        self.router.topmostViewController.present(self.imagePickerVC, animated: true, completion: nil)
+        self.imagePickerVC.sourceType = type
+        self.channelVC.present(self.imagePickerVC, animated: true, completion: nil)
     }
 
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 
-        self.imagePickerVC.dismiss(animated: true) {
-            self.channelVC.shouldEnableFirstResponder = true
-        }
+        self.imagePickerVC.dismiss(animated: true, completion: nil)
 
         guard let asset = info[.phAsset] as? PHAsset else {
             print("Image not found!")
