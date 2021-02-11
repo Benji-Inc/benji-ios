@@ -401,6 +401,8 @@
 		D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
 		D6EDD1992355DBFA00FDA5D6 /* ProfileDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDD1982355DBFA00FDA5D6 /* ProfileDetailView.swift */; };
 		D6EDFB4C25D48F2B0034A2F6 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDFB4B25D48F2B0034A2F6 /* Post.swift */; };
+		D6EDFB5425D490130034A2F6 /* Postable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDFB5325D490130034A2F6 /* Postable.swift */; };
+		D6EDFB5825D578C60034A2F6 /* UserSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDFB5725D578C60034A2F6 /* UserSubscriber.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
 		D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */; };
 		D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
@@ -733,6 +735,8 @@
 		D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionViewController.swift; sourceTree = "<group>"; };
 		D6EDD1982355DBFA00FDA5D6 /* ProfileDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailView.swift; sourceTree = "<group>"; };
 		D6EDFB4B25D48F2B0034A2F6 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		D6EDFB5325D490130034A2F6 /* Postable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Postable.swift; sourceTree = "<group>"; };
+		D6EDFB5725D578C60034A2F6 /* UserSubscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSubscriber.swift; sourceTree = "<group>"; };
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
 		D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashableDisplayable.swift; sourceTree = "<group>"; };
 		D6F33C6A24AFCF24009603FF /* MessageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageKind.swift; sourceTree = "<group>"; };
@@ -1198,6 +1202,7 @@
 				D66379C625A3704300A4A3B7 /* UserNotificationFactory.swift */,
 				D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */,
 				D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */,
+				D6EDFB5725D578C60034A2F6 /* UserSubscriber.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1237,6 +1242,7 @@
 				D6432BF222D828480016001A /* ChannelDataSource.swift */,
 				D6FA622523F0B16F00048C4A /* ChannelDataSource+Animations.swift */,
 				D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */,
+				D6EDFB5325D490130034A2F6 /* Postable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -1939,6 +1945,7 @@
 				D6D145FF21D5510400CD8CE4 /* StringStyle.swift in Sources */,
 				D64C6A9C232D6C9200DB7257 /* BubbleCircleView.swift in Sources */,
 				D691794222F6418700340AA3 /* Router.swift in Sources */,
+				D6EDFB5425D490130034A2F6 /* Postable.swift in Sources */,
 				D64DD8B223CE403D0039DC5A /* SwitchableContentViewController.swift in Sources */,
 				D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */,
 				D6D1501821D5F40F00CD8CE4 /* UICollectionView+Extensions.swift in Sources */,
@@ -1967,6 +1974,7 @@
 				D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */,
 				D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D628425325C1B1DB00603FA1 /* ReservationCell.swift in Sources */,
+				D6EDFB5825D578C60034A2F6 /* UserSubscriber.swift in Sources */,
 				D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */,
 				D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */,
 				D61D38E9248C506000BE457B /* InputAccessoryView+Panning.swift in Sources */,

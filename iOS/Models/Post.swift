@@ -13,7 +13,7 @@ enum PostKey: String {
     case foo
 }
 
-final class Post: PFObject, PFSubclassing {
+final class Post: PFObject, PFSubclassing, Postable {
 
     static func parseClassName() -> String {
         return String(describing: self)
