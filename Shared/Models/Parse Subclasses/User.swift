@@ -8,6 +8,8 @@
 
 import Foundation
 import Parse
+import ParseLiveQuery
+import Combine
 
 enum ObjectKey: String {
     case objectId
@@ -77,5 +79,16 @@ final class User: PFUser {
             return UserStatus.init(rawValue: string)
         }
         set { self.setObject(for: .status, with: newValue?.rawValue) }
+    }
+
+    func subscribe() -> Future<Event<User>, Error> {
+        return Future { promise in
+            let query = User.query() as? PFQuery<User>
+            query?.whereKey("objectId", equalTo: self.objectId!)
+            let subscription = Client.shared.subscribe(query!)
+            subscription.handleEvent { (query, event) in
+                promise(.success(event))
+            }
+        }
     }
 }

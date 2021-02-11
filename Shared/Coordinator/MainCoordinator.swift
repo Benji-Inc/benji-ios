@@ -180,6 +180,7 @@ class MainCoordinator: Coordinator<Void> {
         #if !APPCLIP
         ChatClientManager.shared.client?.shutdown()
         #endif
+        User.logOut()
         self.deepLink = nil
         self.removeChild()
         self.runOnboardingFlow()
