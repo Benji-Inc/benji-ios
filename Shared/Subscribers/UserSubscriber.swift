@@ -29,22 +29,23 @@ class UserSubscriber {
             case deleted
         }
     }
-    
-    static let shared = UserSubscriber()
 
     @Published var update: Update?
 
     private(set) var subscription: Subscription<User>?
+    private(set) var query: PFQuery<User>?
+    private let user: User
 
-    init() {
+    init(for user: User) {
+        self.user = user
         self.addSubscriber()
         Client.shared.shouldPrintWebSocketTrace = true
     }
 
-    private func addSubscriber() {
-        let query: PFQuery<User>  = PFQuery.init(className: "User")
-        query.whereKey("objectId", equalTo: User.current()!.objectId!)
-        self.subscription = Client.shared.subscribe(query)
+    func addSubscriber() {
+        self.query = PFQuery.init(className: "User")
+        self.query?.whereKey("objectId", equalTo: self.user)
+        self.subscription = Client.shared.subscribe(self.query!)
         self.handleEvents()
     }
 

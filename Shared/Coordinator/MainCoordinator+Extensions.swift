@@ -30,11 +30,15 @@ extension MainCoordinator: LaunchManagerDelegate {
         self.handleAppClip(result: status)
         #endif
 
-        UserSubscriber.shared.$update.mainSink { (update) in
+        self.subscribeToUserUpdates()
+    }
+
+    func subscribeToUserUpdates() {
+        guard let user = User.current() else { return }
+        UserSubscriber(for: user).$update.mainSink { (update) in
             guard let update = update, update.status == .deleted else { return }
             self.showLogOutAlert()
         }.store(in: &self.cancellables)
-        
     }
 
     #if APPCLIP

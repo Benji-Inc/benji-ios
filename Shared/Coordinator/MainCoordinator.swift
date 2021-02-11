@@ -125,6 +125,7 @@ class MainCoordinator: Coordinator<Void> {
                     #else
                     self.runHomeFlow()
                     #endif
+                    self.subscribeToUserUpdates()
                 }
             })
         }
