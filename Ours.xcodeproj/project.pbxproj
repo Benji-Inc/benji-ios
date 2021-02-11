@@ -403,6 +403,7 @@
 		D6EDFB4C25D48F2B0034A2F6 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDFB4B25D48F2B0034A2F6 /* Post.swift */; };
 		D6EDFB5425D490130034A2F6 /* Postable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDFB5325D490130034A2F6 /* Postable.swift */; };
 		D6EDFB5825D578C60034A2F6 /* UserSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDFB5725D578C60034A2F6 /* UserSubscriber.swift */; };
+		D6EDFB5E25D584590034A2F6 /* UserSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDFB5725D578C60034A2F6 /* UserSubscriber.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
 		D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */; };
 		D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
@@ -956,6 +957,7 @@
 				D6637A0825A39DA500A4A3B7 /* Models */,
 				D6637A0425A39D0900A4A3B7 /* Protocols */,
 				D61EC0FA21D3180200204BEE /* Resources */,
+				D6EDFB5D25D580310034A2F6 /* Subscribers */,
 				D6637A2325A3A75A00A4A3B7 /* UI */,
 			);
 			path = Shared;
@@ -1202,7 +1204,6 @@
 				D66379C625A3704300A4A3B7 /* UserNotificationFactory.swift */,
 				D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */,
 				D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */,
-				D6EDFB5725D578C60034A2F6 /* UserSubscriber.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1627,6 +1628,14 @@
 			children = (
 			);
 			path = Post;
+			sourceTree = "<group>";
+		};
+		D6EDFB5D25D580310034A2F6 /* Subscribers */ = {
+			isa = PBXGroup;
+			children = (
+				D6EDFB5725D578C60034A2F6 /* UserSubscriber.swift */,
+			);
+			path = Subscribers;
 			sourceTree = "<group>";
 		};
 		D6F33C7A24B1502C009603FF /* Message */ = {
@@ -2180,6 +2189,7 @@
 				D655195A2589126800B901E4 /* User+Objectable.swift in Sources */,
 				D65519C425891B0A00B901E4 /* FullScreenViewController.swift in Sources */,
 				D65519162589120C00B901E4 /* DispatchQue+Extensions.swift in Sources */,
+				D6EDFB5E25D584590034A2F6 /* UserSubscriber.swift in Sources */,
 				D65519372589122700B901E4 /* UIViewController+Extensions.swift in Sources */,
 				D6551A6A25895F9400B901E4 /* FaceView.swift in Sources */,
 				D65519532589125500B901E4 /* AnimationCycle.swift in Sources */,

@@ -17,7 +17,7 @@ class MainCoordinator: Coordinator<Void> {
     var isInitializingChat: Bool = false
 
     lazy var splashVC = SplashViewController()
-    private var cancellables = Set<AnyCancellable>()
+    var cancellables = Set<AnyCancellable>()
 
     override func start() {
         super.start()
@@ -162,7 +162,7 @@ class MainCoordinator: Coordinator<Void> {
         }
     }
 
-    private func showLogOutAlert() {
+    func showLogOutAlert() {
         let alert = UIAlertController(title: "🙀",
                                       message: "Someone tripped over a 🐈 and ☠️ the mainframe.",
                                       preferredStyle: .alert)

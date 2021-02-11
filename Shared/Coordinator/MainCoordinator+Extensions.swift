@@ -29,6 +29,12 @@ extension MainCoordinator: LaunchManagerDelegate {
         // Code your App Clip may access.
         self.handleAppClip(result: status)
         #endif
+
+        UserSubscriber.shared.$update.mainSink { (update) in
+            guard let update = update, update.status == .deleted else { return }
+            self.showLogOutAlert()
+        }.store(in: &self.cancellables)
+        
     }
 
     #if APPCLIP
