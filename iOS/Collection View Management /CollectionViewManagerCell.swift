@@ -10,6 +10,12 @@ import Foundation
 
 typealias ManagerCell = CollectionViewManagerCell & ManageableCell
 
+struct ManageableCellRegistration<Cell: ManagerCell> {
+    let cellProvider = UICollectionView.CellRegistration<Cell, Cell.ItemType> { (cell, indexPath, model)  in
+        cell.configure(with: model)
+    }
+}
+
 // A base class that other cells managed by a CollectionViewManager can inherit from.
 class CollectionViewManagerCell: UICollectionViewCell {
 

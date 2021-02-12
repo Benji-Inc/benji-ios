@@ -30,20 +30,9 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
     private(set) var connections: [Connection] = []
     private(set) var reservations: [Reservation] = []
 
-    private let channelConfig = UICollectionView.CellRegistration<ChannelCell, AnyHashable> { (cell, indexPath, model)  in
-        guard let channel = model as? DisplayableChannel else { return }
-        cell.configure(with: channel)
-    }
-
-    private let reservationConfig = UICollectionView.CellRegistration<ReservationCell, AnyHashable> { (cell, indexPath, model)  in
-        guard let reservation = model as? Reservation else { return }
-        cell.configure(with: reservation)
-    }
-
-    private let connectionConfig = UICollectionView.CellRegistration<ConnectionCell, AnyHashable> { (cell, indexPath, model)  in
-        guard let connection = model as? ConnectionCell.ItemType else { return }
-        cell.configure(with: connection)
-    }
+    private let channelConfig = ManageableCellRegistration<ChannelCell>().cellProvider
+    private let reservationConfig = ManageableCellRegistration<ReservationCell>().cellProvider
+    private let connectionConfig = ManageableCellRegistration<ConnectionCell>().cellProvider
 
     override func initialize() {
         super.initialize()
@@ -73,10 +62,21 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         }.store(in: &self.cancellables)
     }
 
+    override func getItems(for section: SectionType) -> [AnyHashable] {
+        switch section {
+        case .connections:
+            return self.connections
+        case .channels:
+            return ChannelSupplier.shared.allChannelsSorted
+        case .reservations:
+            return self.reservations
+        }
+    }
+
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         switch section {
         case .connections:
-            let cell = self.collectionView.dequeueManageableCell(using: self.connectionConfig, for: indexPath, item: item)
+            let cell = self.collectionView.dequeueManageableCell(using: self.connectionConfig, for: indexPath, item: item as? Connection)
             cell.didSelectStatus = { [unowned self] status in
                 if let connection = item as? Connection {
                     self.didSelectConnection?(connection, status)
@@ -86,16 +86,14 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         case .channels:
             return self.collectionView.dequeueManageableCell(using: self.channelConfig,
                                                              for: indexPath,
-                                                             item: item)
+                                                             item: item as? DisplayableChannel)
         case .reservations:
             let cell = self.collectionView.dequeueManageableCell(using: self.reservationConfig,
                                                                  for: indexPath,
-                                                                 item: item)
-//            cell.button.didSelect { [unowned self] in
-//                if let reservation = item as? Reservation {
-//                    self.didSelectReservation?(reservation)
-//                }
-//            }
+                                                                 item: item as? Reservation)
+            cell.button.didSelect { [unowned self] in
+                self.select(indexPath: indexPath)
+            }
 
             return cell
         }
