@@ -110,7 +110,7 @@ class ChannelContentView: View {
                         self.titleLabel.setText(first.givenName)
                         self.titleLabel.setTextColor(.white)
                     } else if let author = users.first(where: { (user) -> Bool in
-                        return user.id == channel.createdBy
+                        return user.objectId! == channel.createdBy
                     }) {
                         self.titleLabel.setText(author.givenName)
                         self.titleLabel.setTextColor(.white)

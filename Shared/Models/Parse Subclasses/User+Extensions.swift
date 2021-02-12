@@ -36,15 +36,6 @@ extension User: Avatar {
     }
 }
 
-#if !APPCLIP
-// Code you don't want to use in your App Clip.
-extension User: ManageableCellItem {
-    var id: String {
-        return self.objectId!
-    }
-}
-#endif
-
 extension User {
     
     func formatName(from text: String) {

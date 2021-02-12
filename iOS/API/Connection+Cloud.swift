@@ -17,7 +17,7 @@ struct CreateConnection: CloudFunction {
     var to: User
 
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
-        let params = ["to": self.to.id,
+        let params = ["to": self.to.objectId!,
                       "status": Connection.Status.invited.rawValue]
 
         return self.makeRequest(andUpdate: statusables,

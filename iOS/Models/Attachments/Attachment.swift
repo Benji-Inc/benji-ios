@@ -9,7 +9,7 @@
 import Foundation
 import Photos
 
-struct Attachment: ManageableCellItem, Hashable {
+struct Attachment: Hashable {
 
     var id: String {
         return self.asset.localIdentifier

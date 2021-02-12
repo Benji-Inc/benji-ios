@@ -14,7 +14,7 @@ extension Range: Comparable {
     }
 }
 
-class DisplayableChannel: ManageableCellItem, Hashable, Comparable {
+class DisplayableChannel: Hashable, Comparable {
 
     var channelType: ChannelType
 

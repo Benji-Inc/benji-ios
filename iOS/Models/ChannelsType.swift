@@ -10,7 +10,7 @@ import Foundation
 import TwilioChatClient
 import TMROLocalization
 
-enum ChannelType: ManageableCellItem {
+enum ChannelType: Hashable {
 
     case system(SystemChannel)
     case channel(TCHChannel)
@@ -37,17 +37,6 @@ enum ChannelType: ManageableCellItem {
             return String()
         }
     }
-
-//    var purpose: String {
-//        switch self {
-//        case .system(let channel):
-//            return localized(channel.context.text)
-//        case .channel(let channel):
-//            return String(optional: channel.channelDescription)
-//        case .pending(_):
-//            return String()
-//        }
-//    }
 
     var dateUpdated: Date {
         switch self {

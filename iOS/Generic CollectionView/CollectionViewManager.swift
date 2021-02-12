@@ -14,9 +14,8 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     lazy var dataSource: UICollectionViewDiffableDataSource<SectionType, AnyHashable> = {
         return UICollectionViewDiffableDataSource(collectionView: self.collectionView) { (cv, indexPath, item) -> UICollectionViewCell? in
             guard let type = SectionType.init(rawValue: indexPath.section) else { return nil }
-            let cell = self.getCell(for: type, index: indexPath.row)
+            let cell = self.getCell(for: type, indexPath: indexPath, item: self.getItem(for: indexPath))
             self.managerDidConfigure(cell: cell, for: indexPath)
-
             cell?.onLongPress = { [unowned self] in
                 guard let item = self.getItem(for: indexPath) else { return }
                 self.didLongPress?(item, indexPath)
@@ -45,7 +44,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
         return items
     }
 
-    @Published var onSelectedItem: (item: AnyHashable, indexPath: IndexPath)? = nil
+    @Published var onSelectedItem: (item: AnyHashable, section: SectionType)? = nil
     var didLongPress: ((AnyHashable, IndexPath) -> Void)? = nil 
 
     unowned let collectionView: CollectionView
@@ -101,7 +100,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
         fatalError("getItems() not implemented")
     }
 
-    func getCell(for section: SectionType, index: Int) -> CollectionViewManagerCell? {
+    func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         fatalError("getCell() not implemented")
     }
 
@@ -129,7 +128,9 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
 
         self.willScrollToSelected(indexPath: indexPath)
 
-        self.onSelectedItem = (item, indexPath)
+        if let section = SectionType.init(rawValue: indexPath.section) {
+            self.onSelectedItem = (item, section)
+        }
 
         self.updateSelected(indexPaths: self.selectedIndexPaths, and: self.oldSelectedIndexPaths)
     }

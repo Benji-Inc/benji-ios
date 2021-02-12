@@ -10,19 +10,16 @@ import Foundation
 import TwilioChatClient
 import Combine
 
-class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionViewManager.SectionType> {
 
     var didSelectConnection: ((Connection, Connection.Status) -> Void)? = nil
     var didSelectReservation: ((Reservation) -> Void)? = nil
     var didSelectChannel: ((DisplayableChannel) -> Void)? = nil
 
     var cancellables = Set<AnyCancellable>()
-    private let collectionView: ChannelsCollectionView
 
     private(set) var connections: [Connection] = []
     private(set) var reservations: [Reservation] = []
-
-    private var hasLoaded: Bool = false
 
     private let channelConfig = UICollectionView.CellRegistration<ChannelCell, AnyHashable> { (cell, indexPath, model)  in
         guard let channel = model as? DisplayableChannel else { return }
@@ -39,46 +36,46 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
         cell.configure(with: connection)
     }
 
-    lazy var dataSource: UICollectionViewDiffableDataSource<SectionType, AnyHashable> = {
-        return UICollectionViewDiffableDataSource(collectionView: self.collectionView) { (cv, indexPath, item) -> UICollectionViewCell? in
-            guard let type = SectionType.init(rawValue: indexPath.section) else { return nil }
-            switch type {
-            case .connections:
-                guard let connection = self.connections[safe: indexPath.row] else { return nil }
-                let cell = cv.dequeueConfiguredReusableCell(using: self.connectionConfig, for: indexPath, item: self.connections[safe: indexPath.row])
-                cell.didSelectStatus = { [unowned self] status in
-                    self.didSelectConnection?(connection, status)
-                }
-                return cell
-            case .channels:
-                let cell = cv.dequeueConfiguredReusableCell(using: self.channelConfig, for: indexPath, item: ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row])
-                return cell
-            case .reservations:
-                guard let reservation = self.reservations[safe: indexPath.row] else { return nil }
-                let cell = cv.dequeueConfiguredReusableCell(using: self.reservationConfig, for: indexPath, item: self.reservations[safe: indexPath.row])
-                cell.button.didSelect { [unowned self] in
-                    self.didSelectReservation?(reservation)
-                }
-                return cell
-            }
+//    lazy var dataSource: UICollectionViewDiffableDataSource<SectionType, AnyHashable> = {
+//        return UICollectionViewDiffableDataSource(collectionView: self.collectionView) { (cv, indexPath, item) -> UICollectionViewCell? in
+//            guard let type = SectionType.init(rawValue: indexPath.section) else { return nil }
+//            switch type {
+//            case .connections:
+//                guard let connection = self.connections[safe: indexPath.row] else { return nil }
+//                let cell = cv.dequeueConfiguredReusableCell(using: self.connectionConfig, for: indexPath, item: self.connections[safe: indexPath.row])
+//                cell.didSelectStatus = { [unowned self] status in
+//                    self.didSelectConnection?(connection, status)
+//                }
+//                return cell
+//            case .channels:
+//                let cell = cv.dequeueConfiguredReusableCell(using: self.channelConfig, for: indexPath, item: ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row])
+//                return cell
+//            case .reservations:
+//                guard let reservation = self.reservations[safe: indexPath.row] else { return nil }
+//                let cell = cv.dequeueConfiguredReusableCell(using: self.reservationConfig, for: indexPath, item: self.reservations[safe: indexPath.row])
+//                cell.button.didSelect { [unowned self] in
+//                    self.didSelectReservation?(reservation)
+//                }
+//                return cell
+//            }
+//        }
+//    }()
+//
+//    private(set) var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
+
+    enum SectionType: Int, ManagerSectionType {
+        
+        var allCases: [ChannelsCollectionViewManager.SectionType] {
+            return SectionType.allCases
         }
-    }()
 
-    private(set) var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
-
-    enum SectionType: Int, CaseIterable {
         case connections = 0
         case channels = 1
         case reservations = 2
     }
 
-    init(with collectionView: ChannelsCollectionView) {
-        self.collectionView = collectionView
-        super.init()
-        self.loadAllItems()
-    }
-
-    private func loadAllItems() {
+    override func initialize() {
+        super.initialize()
 
         self.collectionView.animationView.play()
 
@@ -105,16 +102,18 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
         }.store(in: &self.cancellables)
     }
 
-    private func loadSnapshot() {
-        self.snapshot.appendSections(SectionType.allCases)
-        self.snapshot.appendItems(ChannelSupplier.shared.allChannelsSorted, toSection: .channels)
-        self.snapshot.appendItems(self.connections, toSection: .connections)
-        self.snapshot.appendItems(self.reservations, toSection: .reservations)
-        self.dataSource.apply(self.snapshot, animatingDifferences: true)
-        self.collectionView.dataSource = self.dataSource
+    override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
+        switch section {
+        case .connections:
+            return self.collectionView.dequeueConfiguredReusableCell(using: self.connectionConfig, for: indexPath, item: item)
+        case .channels:
+            return self.collectionView.dequeueConfiguredReusableCell(using: self.channelConfig, for: indexPath, item: item)
+        case .reservations:
+            return self.collectionView.dequeueConfiguredReusableCell(using: self.reservationConfig, for: indexPath, item: item)
+        }
     }
 
-    func collectionView(_ collectionView: UICollectionView,
+    override func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         guard let type = SectionType.init(rawValue: indexPath.section) else { return .zero }
@@ -129,22 +128,9 @@ class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UIColle
         }
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let type = SectionType.init(rawValue: indexPath.section) else { return }
-
-        switch type {
-        case .connections, .reservations:
-            break
-        case .channels:
-            if let channel = ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row] {
-                self.didSelectChannel?(channel)
-            }
-        }
-    }
-
     // MARK: Menu overrides
 
-    func collectionView(_ collectionView: UICollectionView,
+    override func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
 

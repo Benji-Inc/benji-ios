@@ -9,7 +9,9 @@
 import Foundation
 import TMROLocalization
 
-class ConnectionCell: CollectionViewManagerCell {
+class ConnectionCell: CollectionViewManagerCell, ManageableCell {
+    
+    typealias ItemType = Connection
 
     private let vibrancyView = VibrancyView()
     private let containerView = View()

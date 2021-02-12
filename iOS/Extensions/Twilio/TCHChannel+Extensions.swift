@@ -11,7 +11,7 @@ import TwilioChatClient
 import Parse
 import Combine
 
-extension TCHChannel: ManageableCellItem {
+extension TCHChannel {
 
     var id: String {
         return self.sid!
@@ -53,7 +53,7 @@ extension TCHChannel: ManageableCellItem {
         var identifiers: [String] = []
         members.forEach { (member) in
             if let identifier = member.identity {
-                if identifier == User.current()?.id, excludeMe {
+                if identifier == User.current()?.objectId, excludeMe {
                 } else {
                     identifiers.append(identifier)
                 }

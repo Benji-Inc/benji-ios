@@ -13,7 +13,7 @@ extension ChannelCollectionViewManager {
 
     @discardableResult
     func updateConsumers(for message: Messageable) -> Future<Void, Error> {
-        guard let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed, !message.hasBeenConsumedBy.contains(current.id) else { return Future { promise in promise(.success(()))}
+        guard let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed, !message.hasBeenConsumedBy.contains(current.objectId!) else { return Future { promise in promise(.success(()))}
         }
         
         //create system message copy of current message

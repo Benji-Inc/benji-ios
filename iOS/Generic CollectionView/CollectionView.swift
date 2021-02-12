@@ -7,9 +7,11 @@
 //
 
 import Foundation
+import Lottie
 
 class CollectionView: UICollectionView {
 
+    let animationView = AnimationView(name: "loading")
 
     init(layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: layout)
@@ -21,7 +23,16 @@ class CollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func initializeViews() {}
+    func initializeViews() {
+        self.addSubview(self.animationView)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.animationView.size = CGSize(width: 18, height: 18)
+        self.animationView.centerOnXAndY()
+    }
 
     func scrollToEnd(animated: Bool = true, completion: CompletionOptional = nil) {
 
