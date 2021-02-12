@@ -3,9 +3,7 @@
 import Foundation
 import Combine
 
-protocol ManagerSectionType: CaseIterable, Hashable, RawRepresentable where Self.RawValue == Int {
-    var allCases: [Self] { get }
-}
+protocol ManagerSectionType: CaseIterable, Hashable, RawRepresentable where Self.RawValue == Int {}
 
 class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 

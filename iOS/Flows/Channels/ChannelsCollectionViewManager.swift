@@ -13,14 +13,9 @@ import Combine
 class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionViewManager.SectionType> {
 
     enum SectionType: Int, ManagerSectionType {
-
         case connections = 0
         case channels = 1
         case reservations = 2
-
-        var allCases: [ChannelsCollectionViewManager.SectionType] {
-            return SectionType.allCases
-        }
     }
 
     var didSelectConnection: ((Connection, Connection.Status) -> Void)? = nil
