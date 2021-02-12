@@ -10,16 +10,7 @@ import Foundation
 import TwilioChatClient
 import Combine
 
-extension UICollectionView.CellRegistration {
-    var cellProvider: (UICollectionView, IndexPath, Item) -> Cell {
-        return { collectionView, indexPath, item in
-            collectionView.dequeueConfiguredReusableCell(using: self,
-                                                         for: indexPath,
-                                                         item: item)
-        }
-    }
-}
-
+extension UICollectionView.CellRegistration
 
 class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 

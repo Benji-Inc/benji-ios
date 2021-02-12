@@ -402,8 +402,6 @@
 		D6EDD1992355DBFA00FDA5D6 /* ProfileDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDD1982355DBFA00FDA5D6 /* ProfileDetailView.swift */; };
 		D6EDFB4C25D48F2B0034A2F6 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDFB4B25D48F2B0034A2F6 /* Post.swift */; };
 		D6EDFB5425D490130034A2F6 /* Postable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDFB5325D490130034A2F6 /* Postable.swift */; };
-		D6EDFB5825D578C60034A2F6 /* UserSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDFB5725D578C60034A2F6 /* UserSubscriber.swift */; };
-		D6EDFB5E25D584590034A2F6 /* UserSubscriber.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDFB5725D578C60034A2F6 /* UserSubscriber.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
 		D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */; };
 		D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
@@ -737,7 +735,6 @@
 		D6EDD1982355DBFA00FDA5D6 /* ProfileDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDetailView.swift; sourceTree = "<group>"; };
 		D6EDFB4B25D48F2B0034A2F6 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		D6EDFB5325D490130034A2F6 /* Postable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Postable.swift; sourceTree = "<group>"; };
-		D6EDFB5725D578C60034A2F6 /* UserSubscriber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSubscriber.swift; sourceTree = "<group>"; };
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
 		D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashableDisplayable.swift; sourceTree = "<group>"; };
 		D6F33C6A24AFCF24009603FF /* MessageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageKind.swift; sourceTree = "<group>"; };
@@ -957,7 +954,6 @@
 				D6637A0825A39DA500A4A3B7 /* Models */,
 				D6637A0425A39D0900A4A3B7 /* Protocols */,
 				D61EC0FA21D3180200204BEE /* Resources */,
-				D6EDFB5D25D580310034A2F6 /* Subscribers */,
 				D6637A2325A3A75A00A4A3B7 /* UI */,
 			);
 			path = Shared;
@@ -1630,14 +1626,6 @@
 			path = Post;
 			sourceTree = "<group>";
 		};
-		D6EDFB5D25D580310034A2F6 /* Subscribers */ = {
-			isa = PBXGroup;
-			children = (
-				D6EDFB5725D578C60034A2F6 /* UserSubscriber.swift */,
-			);
-			path = Subscribers;
-			sourceTree = "<group>";
-		};
 		D6F33C7A24B1502C009603FF /* Message */ = {
 			isa = PBXGroup;
 			children = (
@@ -1983,7 +1971,6 @@
 				D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */,
 				D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D628425325C1B1DB00603FA1 /* ReservationCell.swift in Sources */,
-				D6EDFB5825D578C60034A2F6 /* UserSubscriber.swift in Sources */,
 				D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */,
 				D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */,
 				D61D38E9248C506000BE457B /* InputAccessoryView+Panning.swift in Sources */,
@@ -2189,7 +2176,6 @@
 				D655195A2589126800B901E4 /* User+Objectable.swift in Sources */,
 				D65519C425891B0A00B901E4 /* FullScreenViewController.swift in Sources */,
 				D65519162589120C00B901E4 /* DispatchQue+Extensions.swift in Sources */,
-				D6EDFB5E25D584590034A2F6 /* UserSubscriber.swift in Sources */,
 				D65519372589122700B901E4 /* UIViewController+Extensions.swift in Sources */,
 				D6551A6A25895F9400B901E4 /* FaceView.swift in Sources */,
 				D65519532589125500B901E4 /* AnimationCycle.swift in Sources */,
