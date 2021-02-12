@@ -10,8 +10,6 @@ import Foundation
 import TwilioChatClient
 import Combine
 
-extension UICollectionView.CellRegistration
-
 class ChannelsCollectionViewManager: NSObject, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     var didSelectConnection: ((Connection, Connection.Status) -> Void)? = nil

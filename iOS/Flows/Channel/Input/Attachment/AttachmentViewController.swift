@@ -14,7 +14,7 @@ protocol AttachmentViewControllerDelegate: AnyObject {
     func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment)
 }
 
-class AttachmentViewController: CollectionViewController<AttachmentCell, AttachmentCollectionViewManager> {
+class AttachmentViewController: CollectionViewController<AttachmentCollectionViewManager.SectionType, AttachmentCollectionViewManager> {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
 
@@ -45,7 +45,7 @@ class AttachmentViewController: CollectionViewController<AttachmentCell, Attachm
         }
 
         self.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
-            guard let attachment = cellItem?.item else { return }
+            guard let attachment = cellItem?.item as? Attachment else { return }
             self.delegate.attachementView(self, didSelect: attachment)
         }.store(in: &self.cancellables)
 
@@ -54,8 +54,8 @@ class AttachmentViewController: CollectionViewController<AttachmentCell, Attachm
                 AttachmentsManager.shared.requestAttachements()
                     .mainSink { (result) in
                         switch result {
-                        case .success(let attachments):
-                            self.collectionViewManager.set(newItems: attachments)
+                        case .success(_):
+                            self.collectionViewManager.loadSnapshot()
                         case .error(_):
                             if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
                                 UIApplication.shared.open(url)
@@ -71,8 +71,8 @@ class AttachmentViewController: CollectionViewController<AttachmentCell, Attachm
 
         if AttachmentsManager.shared.isAuthorized {
             AttachmentsManager.shared.requestAttachements()
-                .mainSink { (attachments) in
-                    self.collectionViewManager.set(newItems: attachments)
+                .mainSink { (_) in
+                    self.collectionViewManager.loadSnapshot()
                 }.store(in: &self.cancellables)
         }
     }

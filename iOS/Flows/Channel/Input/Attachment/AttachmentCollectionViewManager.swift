@@ -8,7 +8,14 @@
 
 import Foundation
 
-class AttachmentCollectionViewManager: CollectionViewManager<AttachmentCell> {
+class AttachmentCollectionViewManager: CollectionViewManager<AttachmentCollectionViewManager.SectionType> {
+
+    enum SectionType: Int, ManagerSectionType {
+        case photos
+        var allCases: [AttachmentCollectionViewManager.SectionType] {
+            return SectionType.allCases
+        }
+    }
 
     var didSelectPhotoOption: CompletionOptional = nil
     var didSelectLibraryOption: CompletionOptional = nil

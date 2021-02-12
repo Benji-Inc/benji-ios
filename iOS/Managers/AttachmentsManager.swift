@@ -27,6 +27,8 @@ class AttachmentsManager {
     private var cancellables = Set<AnyCancellable>()
     private let imageManager = PHImageManager()
 
+    private(set) var attachments: [Attachment] = []
+
     var isAuthorized: Bool {
         let status = PHPhotoLibrary.authorizationStatus()
         switch (status) {
@@ -39,16 +41,18 @@ class AttachmentsManager {
         }
     }
 
-    func requestAttachements() -> Future<[Attachment], Error> {
+    func requestAttachements() -> Future<Void, Error> {
         return Future { promise in
             if self.isAuthorized {
-                promise(.success(self.fetchAttachments()))
+                self.fetchAttachments()
+                promise(.success(()))
             } else {
                 self.requestAuthorization()
                     .mainSink { (result) in
                         switch result {
                         case .success():
-                            promise(.success(self.fetchAttachments()))
+                            self.fetchAttachments()
+                            promise(.success(()))
                         case .error(let error):
                             promise(.failure(error))
                         }
@@ -111,7 +115,7 @@ class AttachmentsManager {
         }
     }
 
-    private func fetchAttachments() -> [Attachment] {
+    private func fetchAttachments() {
         let photosOptions = PHFetchOptions()
         photosOptions.fetchLimit = 20
         photosOptions.predicate = NSPredicate(format: "mediaType == %d || mediaType == %d",
@@ -130,6 +134,6 @@ class AttachmentsManager {
             attachments.append(attachement)
         }
 
-        return attachments
+        self.attachments = attachments
     }
 }

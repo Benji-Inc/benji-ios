@@ -53,4 +53,6 @@ class CollectionViewManagerCell: UICollectionViewCell {
 
     func collectionViewManagerWillDisplay() { }
     func collectionViewManagerDidEndDisplaying() { }
+
+    func update(isSelected: Bool) {}
 }
