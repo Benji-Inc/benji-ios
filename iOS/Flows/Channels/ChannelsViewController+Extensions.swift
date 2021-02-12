@@ -16,65 +16,44 @@ extension ChannelsViewController {
             guard let `self` = self else { return }
             guard let channelsUpdate = update else { return }
 
+            let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
+
             switch channelsUpdate.status {
             case .added:
                 guard channelsUpdate.channel.isOwnedByMe || channelsUpdate.channel.status == .joined else { return }
-
-                let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
-                var updatedSnapshot = self.collectionViewManager.snapshot
-                updatedSnapshot.appendItems([displayable])
-                self.collectionViewManager.dataSource.apply(updatedSnapshot, animatingDifferences: true)
+                self.collectionViewManager.append(items: [displayable], to: .channels)
             case .changed:
-                let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
-                var updatedSnapshot = self.collectionViewManager.snapshot
-                updatedSnapshot.reloadItems([displayable])
-                self.collectionViewManager.dataSource.apply(updatedSnapshot)
+                self.collectionViewManager.reload(items: [displayable])
             case .deleted:
-                let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
-                var updatedSnapshot = self.collectionViewManager.snapshot
-                updatedSnapshot.deleteItems([displayable])
-                self.collectionViewManager.dataSource.apply(updatedSnapshot)
+                self.collectionViewManager.delete(items: [displayable])
             }
         }.store(in: &self.cancellables)
 
         ChatClientManager.shared.$memberUpdate.mainSink { [weak self] (update) in
             guard let `self` = self else { return }
             guard let memberUpdate = update else { return }
+
+            let displayable = DisplayableChannel(channelType: .channel(memberUpdate.channel))
+
             switch memberUpdate.status {
             case .joined:
                 if memberUpdate.member.identity == User.current()?.objectId {
-                    let displayable = DisplayableChannel(channelType: .channel(memberUpdate.channel))
-                    var updatedSnapshot = self.collectionViewManager.snapshot
-
-                    if let first = updatedSnapshot.itemIdentifiers(inSection: .channels).first {
-                        updatedSnapshot.insertItems([displayable], beforeItem: first)
+                    if let first = self.collectionViewManager.getItem(for: .channels, index: 0) {
+                        self.collectionViewManager.insert(items: [displayable], before: first)
                     } else {
-                        updatedSnapshot.appendItems([displayable], toSection: .channels)
+                        self.collectionViewManager.append(items: [displayable], to: .channels)
                     }
-                    self.collectionViewManager.dataSource.apply(updatedSnapshot)
                 } else {
-                    let displayable = DisplayableChannel(channelType: .channel(memberUpdate.channel))
-                    var updatedSnapshot = self.collectionViewManager.snapshot
-                    updatedSnapshot.reloadItems([displayable])
-                    self.collectionViewManager.dataSource.apply(updatedSnapshot)
+                    self.collectionViewManager.reload(items: [displayable])
                 }
             case .left:
                 if memberUpdate.member.identity == User.current()?.objectId {
-                    let displayable = DisplayableChannel(channelType: .channel(memberUpdate.channel))
-                    var updatedSnapshot = self.collectionViewManager.snapshot
-                    updatedSnapshot.deleteItems([displayable])
-                    self.collectionViewManager.dataSource.apply(updatedSnapshot)
+                    self.collectionViewManager.delete(items: [displayable])
                 } else {
-                    let displayable = DisplayableChannel(channelType: .channel(memberUpdate.channel))
-                    var updatedSnapshot = self.collectionViewManager.snapshot
-                    updatedSnapshot.reloadItems([displayable])
-                    self.collectionViewManager.dataSource.apply(updatedSnapshot)
+                    self.collectionViewManager.reload(items: [displayable])
                 }
             case .changed:
-                let displayable = DisplayableChannel(channelType: .channel(memberUpdate.channel))
-                var updatedSnapshot = self.collectionViewManager.snapshot
-                updatedSnapshot.reloadItems([displayable])
-                self.collectionViewManager.dataSource.apply(updatedSnapshot)
+                self.collectionViewManager.reload(items: [displayable])
             default:
                 break
             }

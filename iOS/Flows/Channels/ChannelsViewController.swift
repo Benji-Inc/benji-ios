@@ -63,7 +63,7 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
 
         UpdateConnection(connection: connection, status: status).makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink { (result) in
-                self.collectionViewManager.snapshot.reloadItems([connection])
+                self.collectionViewManager.reload(items: [connection])
             }.store(in: &self.cancellables)
     }
 }

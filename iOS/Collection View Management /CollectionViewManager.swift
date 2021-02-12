@@ -9,8 +9,6 @@ protocol ManagerSectionType: CaseIterable, Hashable, RawRepresentable where Self
 
 class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
-    var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
-
     lazy var dataSource: UICollectionViewDiffableDataSource<SectionType, AnyHashable> = {
         return UICollectionViewDiffableDataSource(collectionView: self.collectionView) { (cv, indexPath, item) -> UICollectionViewCell? in
             guard let type = SectionType.init(rawValue: indexPath.section) else { return nil }
@@ -52,7 +50,6 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     required init(with collectionView: CollectionView) {
         self.collectionView = collectionView
         super.init()
-
         self.initialize()
     }
 
@@ -65,16 +62,18 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     func loadSnapshot(animationCycle: AnimationCycle? = nil) -> Future<Void, Never> {
         return Future { promise in
 
+            var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
+
             if let allCases = SectionType.allCases as? [SectionType] {
-                self.snapshot.appendSections(allCases)
+                snapshot.appendSections(allCases)
                 allCases.forEach { (section) in
-                    self.snapshot.appendItems(self.getItems(for: section), toSection: section)
+                    snapshot.appendItems(self.getItems(for: section), toSection: section)
                 }
             }
 
             if let cycle = animationCycle {
                 self.animateOut(position: cycle.outToPosition, concatenate: cycle.shouldConcatenate) { [unowned self] in
-                    self.dataSource.apply(self.snapshot, animatingDifferences: false)
+                    self.dataSource.apply(snapshot, animatingDifferences: false)
                     self.animateIn(position: cycle.inFromPosition,
                                    concatenate: cycle.shouldConcatenate,
                                    scrollToEnd: cycle.scrollToEnd) {
@@ -82,7 +81,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
                     }
                 }
             } else {
-                self.dataSource.apply(self.snapshot, animatingDifferences: false)
+                self.dataSource.apply(snapshot, animatingDifferences: false)
                 promise(.success(()))
             }
         }
@@ -90,8 +89,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
 
     func reset(animate: Bool = false) {
         self.selectedIndexPaths = []
-        self.snapshot.deleteAllItems()
-        self.dataSource.apply(self.snapshot, animatingDifferences: animate)
+        self.deleteAllItems(animate: animate)
     }
 
     // MARK: Item Overrides

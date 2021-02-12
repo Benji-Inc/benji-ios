@@ -10,5 +10,69 @@ import Foundation
 
 extension CollectionViewManager {
 
-    
+    func append(items: [AnyHashable], to section: SectionType, animate: Bool = true) {
+        var new = self.dataSource.snapshot()
+        new.appendItems(items, toSection: section)
+        self.dataSource.apply(new, animatingDifferences: animate)
+    }
+
+    func insert(items: [AnyHashable], before item: AnyHashable, animate: Bool = true) {
+        var new = self.dataSource.snapshot()
+        new.insertItems(items, beforeItem: item)
+        self.dataSource.apply(new, animatingDifferences: animate)
+    }
+
+    func insert(items: [AnyHashable], after item: AnyHashable, animate: Bool = true) {
+        var new = self.dataSource.snapshot()
+        new.insertItems(items, afterItem: item)
+        self.dataSource.apply(new, animatingDifferences: animate)
+    }
+
+    func delete(items: [AnyHashable], animate: Bool = true) {
+        var new = self.dataSource.snapshot()
+        new.deleteItems(items)
+        self.dataSource.apply(new, animatingDifferences: animate)
+    }
+
+    func deleteAllItems(animate: Bool = true) {
+        var new = self.dataSource.snapshot()
+        new.deleteAllItems()
+        self.dataSource.apply(new, animatingDifferences: animate)
+    }
+
+    func move(item: AnyHashable, beforeItem: AnyHashable, animate: Bool = true) {
+        var new = self.dataSource.snapshot()
+        new.moveItem(item, beforeItem: beforeItem)
+        self.dataSource.apply(new, animatingDifferences: animate)
+    }
+
+    func move(item: AnyHashable, afterItem: AnyHashable, animate: Bool = true) {
+        var new = self.dataSource.snapshot()
+        new.moveItem(item, afterItem: afterItem)
+        self.dataSource.apply(new, animatingDifferences: animate)
+    }
+
+    func reload(items: [AnyHashable], animate: Bool = true) {
+        var new = self.dataSource.snapshot()
+        new.reloadItems(items)
+        self.dataSource.apply(new, animatingDifferences: animate)
+    }
+
+    func append(sections: [SectionType], animate: Bool = true) {
+        var new = self.dataSource.snapshot()
+        new.appendSections(sections)
+        self.dataSource.apply(new, animatingDifferences: animate)
+    }
+
+    func delete(sections: [SectionType], animate: Bool = true) {
+        var new = self.dataSource.snapshot()
+        new.deleteSections(sections)
+        self.dataSource.apply(new, animatingDifferences: animate)
+    }
+
+    func reload(sections: [SectionType], animate: Bool = true) {
+        var new = self.dataSource.snapshot()
+        new.reloadSections(sections)
+        self.dataSource.apply(new, animatingDifferences: animate)
+    }
 }
