@@ -71,6 +71,7 @@
 		D637532C2316172700214F63 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753292316172700214F63 /* Roboto-Medium.ttf */; };
 		D63844122337C3CD0072227B /* LoadMoreSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63844112337C3CD0072227B /* LoadMoreSectionHeader.swift */; };
 		D639106925D72E6F00D336D7 /* UICollectionView.CellRegistration+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639106825D72E6F00D336D7 /* UICollectionView.CellRegistration+Extensions.swift */; };
+		D639106F25D7344500D336D7 /* CollectionViewManager+Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639106E25D7344500D336D7 /* CollectionViewManager+Snapshot.swift */; };
 		D639F61824B1566B007E63B7 /* AttibutedMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D639F61724B1566B007E63B7 /* AttibutedMessageCell.swift */; };
 		D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67D823D3927500EA373A /* PhoneTextField.swift */; };
 		D63C67DE23D415A700EA373A /* FaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DD23D415A700EA373A /* FaceView.swift */; };
@@ -535,6 +536,7 @@
 		D63753292316172700214F63 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		D63844112337C3CD0072227B /* LoadMoreSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreSectionHeader.swift; sourceTree = "<group>"; };
 		D639106825D72E6F00D336D7 /* UICollectionView.CellRegistration+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView.CellRegistration+Extensions.swift"; sourceTree = "<group>"; };
+		D639106E25D7344500D336D7 /* CollectionViewManager+Snapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionViewManager+Snapshot.swift"; sourceTree = "<group>"; };
 		D639F61724B1566B007E63B7 /* AttibutedMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttibutedMessageCell.swift; sourceTree = "<group>"; };
 		D63C67D823D3927500EA373A /* PhoneTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextField.swift; sourceTree = "<group>"; };
 		D63C67DD23D415A700EA373A /* FaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceView.swift; sourceTree = "<group>"; };
@@ -979,7 +981,7 @@
 				D61EC0D321D30BBF00204BEE /* App */,
 				D61EC0D721D30C1400204BEE /* Extensions */,
 				D6D145F121D548F600CD8CE4 /* Flows */,
-				D6E65F17237791450061AA67 /* Generic CollectionView */,
+				D6E65F17237791450061AA67 /* Collection View Management  */,
 				D61EC0CB21D3071500204BEE /* Info.plist */,
 				D66379DC25A39BC200A4A3B7 /* Managers */,
 				D6637A0925A39E0C00A4A3B7 /* Models */,
@@ -1596,18 +1598,19 @@
 			path = Channels;
 			sourceTree = "<group>";
 		};
-		D6E65F17237791450061AA67 /* Generic CollectionView */ = {
+		D6E65F17237791450061AA67 /* Collection View Management  */ = {
 			isa = PBXGroup;
 			children = (
 				D6D1501921D5F5D100CD8CE4 /* CollectionView.swift */,
 				D62C635522BE9E5C00F4D097 /* CollectionViewController.swift */,
 				D6D1500B21D5E7C200CD8CE4 /* CollectionViewManager.swift */,
 				D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */,
+				D639106E25D7344500D336D7 /* CollectionViewManager+Snapshot.swift */,
 				D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */,
 				D6E65F18237791650061AA67 /* ManageableCell.swift */,
 				D639106825D72E6F00D336D7 /* UICollectionView.CellRegistration+Extensions.swift */,
 			);
-			path = "Generic CollectionView";
+			path = "Collection View Management ";
 			sourceTree = "<group>";
 		};
 		D6EDD1932355DB6000FDA5D6 /* Ritual */ = {
@@ -1858,6 +1861,7 @@
 			files = (
 				D650C1E125B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
+				D639106F25D7344500D336D7 /* CollectionViewManager+Snapshot.swift in Sources */,
 				D6EAB68823E6211200B90D5A /* ProfilePhotoViewController.swift in Sources */,
 				D6A401AB24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift in Sources */,
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,

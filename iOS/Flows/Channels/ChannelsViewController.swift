@@ -23,11 +23,11 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
     init() {
         super.init(with: ChannelsCollectionView())
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func initializeViews() {
         super.initializeViews()
 
@@ -64,7 +64,6 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
         UpdateConnection(connection: connection, status: status).makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink { (result) in
                 self.collectionViewManager.snapshot.reloadItems([connection])
-                //self.collectionView.reloadSections([ChannelsCollectionViewManager.SectionType.connections.rawValue])
             }.store(in: &self.cancellables)
     }
 }
