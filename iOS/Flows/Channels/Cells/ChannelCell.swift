@@ -20,10 +20,8 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.channelContentView)
     }
 
-    func configure(with item: DisplayableChannel?) {
-        guard let displayable = item else { return }
-
-        self.channelContentView.configure(with: displayable.channelType)
+    func configure(with item: DisplayableChannel) {
+        self.channelContentView.configure(with: item.channelType)
     }
 
     override func layoutSubviews() {

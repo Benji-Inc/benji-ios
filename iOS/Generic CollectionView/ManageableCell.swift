@@ -16,7 +16,7 @@ protocol ManageableCell: AnyObject {
     var onLongPress: (() -> Void)? { get set }
 
     /// Conforming types should take in the item type and set up the cell's visual state.
-    func configure(with item: ItemType?)
+    func configure(with item: ItemType)
 
     /// Called with a managing objects selectedIndexPaths is set
     func update(isSelected: Bool)
