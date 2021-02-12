@@ -77,6 +77,10 @@ class CollectionView: UICollectionView {
         self.setContentOffset(newOffset, animated: false)
     }
 
+    func dequeueManageableCell<Cell: CollectionViewManagerCell & ManageableCell, Item: Hashable>(using registration: UICollectionView.CellRegistration<Cell, Item>, for indexPath: IndexPath, item: Item?) -> Cell {
+        return self.dequeueConfiguredReusableCell(using: registration, for: indexPath, item: item)
+    }
+
     func register<T: UICollectionViewCell>(_ cellClass: T.Type) {
         self.register(cellClass, forCellWithReuseIdentifier: String(describing: T.self))
     }

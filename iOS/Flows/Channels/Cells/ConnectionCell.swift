@@ -46,8 +46,8 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         self.containerView.roundCorners()
     }
 
-    func configure(with connection: Connection) {
-        guard let status = connection.status, status == .invited, let user = connection.nonMeUser else { return }
+    func configure(with item: Connection) {
+        guard let status = item.status, status == .invited, let user = item.nonMeUser else { return }
 
         let text = LocalizedString(id: "", arguments: [user.handle], default: "@(handle) has invited you to connect.")
         self.descriptionLabel.setText(text)

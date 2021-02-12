@@ -12,9 +12,18 @@ import Combine
 
 class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionViewManager.SectionType> {
 
+    enum SectionType: Int, ManagerSectionType {
+
+        case connections = 0
+        case channels = 1
+        case reservations = 2
+
+        var allCases: [ChannelsCollectionViewManager.SectionType] {
+            return SectionType.allCases
+        }
+    }
+
     var didSelectConnection: ((Connection, Connection.Status) -> Void)? = nil
-    var didSelectReservation: ((Reservation) -> Void)? = nil
-    var didSelectChannel: ((DisplayableChannel) -> Void)? = nil
 
     var cancellables = Set<AnyCancellable>()
 
@@ -32,46 +41,8 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
     }
 
     private let connectionConfig = UICollectionView.CellRegistration<ConnectionCell, AnyHashable> { (cell, indexPath, model)  in
-        guard let connection = model as? Connection else { return }
+        guard let connection = model as? ConnectionCell.ItemType else { return }
         cell.configure(with: connection)
-    }
-
-//    lazy var dataSource: UICollectionViewDiffableDataSource<SectionType, AnyHashable> = {
-//        return UICollectionViewDiffableDataSource(collectionView: self.collectionView) { (cv, indexPath, item) -> UICollectionViewCell? in
-//            guard let type = SectionType.init(rawValue: indexPath.section) else { return nil }
-//            switch type {
-//            case .connections:
-//                guard let connection = self.connections[safe: indexPath.row] else { return nil }
-//                let cell = cv.dequeueConfiguredReusableCell(using: self.connectionConfig, for: indexPath, item: self.connections[safe: indexPath.row])
-//                cell.didSelectStatus = { [unowned self] status in
-//                    self.didSelectConnection?(connection, status)
-//                }
-//                return cell
-//            case .channels:
-//                let cell = cv.dequeueConfiguredReusableCell(using: self.channelConfig, for: indexPath, item: ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row])
-//                return cell
-//            case .reservations:
-//                guard let reservation = self.reservations[safe: indexPath.row] else { return nil }
-//                let cell = cv.dequeueConfiguredReusableCell(using: self.reservationConfig, for: indexPath, item: self.reservations[safe: indexPath.row])
-//                cell.button.didSelect { [unowned self] in
-//                    self.didSelectReservation?(reservation)
-//                }
-//                return cell
-//            }
-//        }
-//    }()
-//
-//    private(set) var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
-
-    enum SectionType: Int, ManagerSectionType {
-        
-        var allCases: [ChannelsCollectionViewManager.SectionType] {
-            return SectionType.allCases
-        }
-
-        case connections = 0
-        case channels = 1
-        case reservations = 2
     }
 
     override func initialize() {
@@ -105,17 +76,34 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         switch section {
         case .connections:
-            return self.collectionView.dequeueConfiguredReusableCell(using: self.connectionConfig, for: indexPath, item: item)
+            let cell = self.collectionView.dequeueManageableCell(using: self.connectionConfig, for: indexPath, item: item)
+            cell.didSelectStatus = { [unowned self] status in
+                if let connection = item as? Connection {
+                    self.didSelectConnection?(connection, status)
+                }
+            }
+            return cell
         case .channels:
-            return self.collectionView.dequeueConfiguredReusableCell(using: self.channelConfig, for: indexPath, item: item)
+            return self.collectionView.dequeueManageableCell(using: self.channelConfig,
+                                                             for: indexPath,
+                                                             item: item)
         case .reservations:
-            return self.collectionView.dequeueConfiguredReusableCell(using: self.reservationConfig, for: indexPath, item: item)
+            let cell = self.collectionView.dequeueManageableCell(using: self.reservationConfig,
+                                                                 for: indexPath,
+                                                                 item: item)
+//            cell.button.didSelect { [unowned self] in
+//                if let reservation = item as? Reservation {
+//                    self.didSelectReservation?(reservation)
+//                }
+//            }
+
+            return cell
         }
     }
 
     override func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+                                 layout collectionViewLayout: UICollectionViewLayout,
+                                 sizeForItemAt indexPath: IndexPath) -> CGSize {
         guard let type = SectionType.init(rawValue: indexPath.section) else { return .zero }
 
         switch type {
@@ -131,8 +119,8 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
     // MARK: Menu overrides
 
     override func collectionView(_ collectionView: UICollectionView,
-                        contextMenuConfigurationForItemAt indexPath: IndexPath,
-                        point: CGPoint) -> UIContextMenuConfiguration? {
+                                 contextMenuConfigurationForItemAt indexPath: IndexPath,
+                                 point: CGPoint) -> UIContextMenuConfiguration? {
 
         guard let channel = ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row],
               let cell = collectionView.cellForItem(at: indexPath) as? ChannelCell else { return nil }

@@ -8,6 +8,8 @@
 
 import Foundation
 
+typealias ManagerCell = CollectionViewManagerCell & ManageableCell
+
 // A base class that other cells managed by a CollectionViewManager can inherit from.
 class CollectionViewManagerCell: UICollectionViewCell {
 

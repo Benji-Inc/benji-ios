@@ -10,7 +10,8 @@ import Foundation
 import Combine
 import TMROLocalization
 
-class ReservationCell: CollectionViewManagerCell {
+class ReservationCell: CollectionViewManagerCell, ManageableCell {
+    typealias ItemType = Reservation
 
     let button = Button()
     let imageView = UIImageView(image: UIImage(systemName: "person.badge.plus"))
@@ -25,9 +26,8 @@ class ReservationCell: CollectionViewManagerCell {
         self.imageView.contentMode = .scaleAspectFit
     }
 
-    func configure(with reservation: Reservation) {
-
-        if let contactId = reservation.contactId {
+    func configure(with item: Reservation) {
+        if let contactId = item.contactId {
             ContactsManger.shared.searchForContact(with: .identifier(contactId))
                 .mainSink { (result) in
                     switch result {

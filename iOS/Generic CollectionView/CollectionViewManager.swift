@@ -9,7 +9,7 @@ protocol ManagerSectionType: CaseIterable, Hashable, RawRepresentable where Self
 
 class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
-    private(set) var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
+    var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
 
     lazy var dataSource: UICollectionViewDiffableDataSource<SectionType, AnyHashable> = {
         return UICollectionViewDiffableDataSource(collectionView: self.collectionView) { (cv, indexPath, item) -> UICollectionViewCell? in

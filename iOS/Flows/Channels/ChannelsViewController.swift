@@ -16,37 +16,40 @@ protocol ChannelsViewControllerDelegate: AnyObject {
     func channelsView(_ controller: ChannelsViewController, didSelect reservation: Reservation)
 }
 
-class ChannelsViewController: ViewController {
+class ChannelsViewController: CollectionViewController<ChannelsCollectionViewManager.SectionType, ChannelsCollectionViewManager> {
 
     weak var delegate: ChannelsViewControllerDelegate?
 
-    private let collectionView = ChannelsCollectionView()
-    lazy var collectionViewManager = ChannelsCollectionViewManager(with: self.collectionView)
-
+    init() {
+        super.init(with: ChannelsCollectionView())
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.addSubview(self.collectionView)
-
-        self.collectionView.delegate = self.collectionViewManager
-
-        self.collectionViewManager.didSelectChannel = { [unowned self] channel in
-            self.delegate?.channelsView(self, didSelect: channel.channelType)
-        }
-
-        self.collectionViewManager.didSelectReservation = { [unowned self] reservation in
-            self.didSelect(reservation: reservation)
-        }
+        self.collectionViewManager.$onSelectedItem.mainSink { (result) in
+            guard let selection = result else { return }
+            switch selection.section {
+            case .connections:
+                break
+            case .channels:
+                if let channel = selection.item as? DisplayableChannel {
+                    self.delegate?.channelsView(self, didSelect: channel.channelType)
+                }
+            case .reservations:
+                if let reservation = selection.item as? Reservation {
+                    self.didSelect(reservation: reservation)
+                }
+            }
+        }.store(in: &self.cancellables)
 
         self.collectionViewManager.didSelectConnection = { [unowned self] connection, status in
             self.didSelect(connection: connection, status: status)
         }
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        self.collectionView.expandToSuperviewSize()
     }
 
     private func didSelect(reservation: Reservation) {
@@ -60,7 +63,8 @@ class ChannelsViewController: ViewController {
 
         UpdateConnection(connection: connection, status: status).makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink { (result) in
-                self.collectionView.reloadSections([ChannelsCollectionViewManager.SectionType.connections.rawValue])
+                self.collectionViewManager.snapshot.reloadItems([connection])
+                //self.collectionView.reloadSections([ChannelsCollectionViewManager.SectionType.connections.rawValue])
             }.store(in: &self.cancellables)
     }
 }
