@@ -8,7 +8,7 @@ protocol ManagerSectionType: CaseIterable, Hashable, RawRepresentable where Self
 class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     lazy var dataSource: UICollectionViewDiffableDataSource<SectionType, AnyHashable> = {
-        return UICollectionViewDiffableDataSource(collectionView: self.collectionView) { (cv, indexPath, item) -> UICollectionViewCell? in
+        let dataSource = UICollectionViewDiffableDataSource<SectionType, AnyHashable>(collectionView: self.collectionView) { (cv, indexPath, item) -> UICollectionViewCell? in
             guard let type = SectionType.init(rawValue: indexPath.section) else { return nil }
             let cell = self.getCell(for: type, indexPath: indexPath, item: self.getItem(for: indexPath))
             self.managerDidConfigure(cell: cell, for: indexPath)
@@ -19,6 +19,13 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
 
             return cell
         }
+
+        dataSource.supplementaryViewProvider = { cv, kind, indexPath in
+            guard let type = SectionType.init(rawValue: indexPath.section) else { return nil }
+            return self.getSupplementaryView(for: type, kind: kind, indexPath: indexPath)
+        }
+
+        return dataSource
     }()
 
     var allowMultipleSelection: Bool = false
@@ -98,6 +105,10 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
 
     func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         fatalError("getCell() not implemented")
+    }
+
+    func getSupplementaryView(for section: SectionType, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
+        return nil
     }
 
     func getItem(for indexPath: IndexPath) -> AnyHashable? {

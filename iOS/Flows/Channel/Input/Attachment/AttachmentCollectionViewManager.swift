@@ -12,13 +12,41 @@ class AttachmentCollectionViewManager: CollectionViewManager<AttachmentCollectio
 
     enum SectionType: Int, ManagerSectionType {
         case photos
-        var allCases: [AttachmentCollectionViewManager.SectionType] {
-            return SectionType.allCases
-        }
     }
 
     var didSelectPhotoOption: CompletionOptional = nil
     var didSelectLibraryOption: CompletionOptional = nil
+
+    private let cellConfig = ManageableCellRegistration<AttachmentCell>().cellProvider
+
+    private let headerConfig = UICollectionView.SupplementaryRegistration
+    <AttachmentHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { (headerView, elementKind, indexPath) in }
+
+    override func getItems(for section: SectionType) -> [AnyHashable] {
+        return AttachmentsManager.shared.attachments
+    }
+
+    override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
+        return self.collectionView.dequeueManageableCell(using: self.cellConfig,
+                                                         for: indexPath,
+                                                         item: item as? Attachment)
+    }
+
+    override func getSupplementaryView(for section: SectionType, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
+
+        let header = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+
+        header.photoButton.didSelect { [unowned self] in
+            self.didSelectPhotoOption?()
+        }
+
+        header.libraryButton.didSelect { [unowned self] in
+            self.didSelectLibraryOption?()
+        }
+
+        return header
+
+    }
 
     override func collectionView(_ collectionView: UICollectionView,
                                  layout collectionViewLayout: UICollectionViewLayout,
@@ -33,24 +61,5 @@ class AttachmentCollectionViewManager: CollectionViewManager<AttachmentCollectio
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
         guard collectionView.numberOfItems(inSection: section) > 0 else { return .zero }
         return CGSize(width: 70, height: collectionView.height)
-    }
-
-    override func collectionView(_ collectionView: UICollectionView,
-                                 viewForSupplementaryElementOfKind kind: String,
-                                 at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let cv = collectionView as? AttachmentCollectionView,
-            kind == UICollectionView.elementKindSectionHeader else { return UICollectionReusableView() }
-
-        let header = cv.dequeueReusableHeaderView(AttachmentHeaderView.self, for: indexPath)
-
-        header.photoButton.didSelect { [unowned self] in
-            self.didSelectPhotoOption?()
-        }
-
-        header.libraryButton.didSelect { [unowned self] in
-            self.didSelectLibraryOption?()
-        }
-
-        return header
     }
 }
