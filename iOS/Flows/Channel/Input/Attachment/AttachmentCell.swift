@@ -21,10 +21,12 @@ class AttachmentCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.imageView)
         self.imageView.imageView.contentMode = .scaleToFill
         self.imageView.clipsToBounds = true
+        self.imageView.layer.cornerRadius = 5
 
         self.contentView.addSubview(self.selectedView)
         self.selectedView.backgroundColor = Color.lightPurple.color.withAlphaComponent(0.5)
         self.selectedView.alpha = 0
+        self.selectedView.layer.cornerRadius = 5
     }
 
     func configure(with item: Attachment) {
@@ -39,7 +41,7 @@ class AttachmentCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
 
         self.imageView.expandToSuperviewSize()
-        self.selectedView.expandToSuperviewSize()
+        self.selectedView.frame = self.imageView.frame
     }
 
     override func update(isSelected: Bool) {

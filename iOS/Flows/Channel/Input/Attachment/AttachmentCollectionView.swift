@@ -39,6 +39,7 @@ class AttachmentCollectionView: CollectionView {
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 4
         layout.minimumLineSpacing = 4
+
         super.init(layout: layout)
 
         self.backgroundView = self.emptyView
