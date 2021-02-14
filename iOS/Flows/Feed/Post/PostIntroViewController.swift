@@ -9,19 +9,19 @@
 import Foundation
 import TMROLocalization
 
-class FeedIntroView: View {
+class PostIntroViewController: PostViewController {
 
     private let timeLabel = Label(font: .displayThin, textColor: .lightPurple)
     private let label = Label(font: .regular)
     private let descritpionLabel = Label(font: .small, textColor: .background3)
 
-    override func initializeSubviews() {
-        super.initializeSubviews()
+    override func initializeViews() {
+        super.initializeViews()
 
-        self.addSubview(self.timeLabel)
-        self.addSubview(self.label)
+        self.container.addSubview(self.timeLabel)
+        self.container.addSubview(self.label)
         self.label.textAlignment = .center
-        self.addSubview(self.descritpionLabel)
+        self.container.addSubview(self.descritpionLabel)
         self.descritpionLabel.textAlignment = .center
     }
 
@@ -39,19 +39,19 @@ class FeedIntroView: View {
         self.descritpionLabel.setText("Each notification is a 20 minute distraction to your brain.")
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
-        self.timeLabel.setSize(withWidth: self.width)
+        self.timeLabel.setSize(withWidth: self.container.width)
         self.timeLabel.centerOnX()
-        self.timeLabel.bottom = self.halfHeight - 5
+        self.timeLabel.bottom = self.container.halfHeight - 5
 
-        self.label.setSize(withWidth: self.width * 0.9)
+        self.label.setSize(withWidth: self.container.width * 0.9)
         self.label.centerOnX()
-        self.label.top = self.halfHeight + 5
+        self.label.top = self.container.halfHeight + 5
 
-        self.descritpionLabel.setSize(withWidth: self.width)
+        self.descritpionLabel.setSize(withWidth: self.container.width)
         self.descritpionLabel.centerOnX()
-        self.descritpionLabel.bottom = self.bottom
+        self.descritpionLabel.bottom = self.container.bottom
     }
 }

@@ -12,14 +12,14 @@ class FeedView: View {
 
     private let container = View()
 
-    lazy var introView = FeedIntroView()
+    //lazy var introView = PostIntroViewController()
     lazy var ritualView = FeedRitualView()
     //lazy var inviteView = PostChannelInviteViewController()
     lazy var unreadView = FeedUnreadView()
-    lazy var needInvitesView = FeedInviteView()
+    //lazy var needInvitesView = PostReservationViewController()
     lazy var notificationsView = FeedNotificationPermissionsView()
     //lazy var connectionView = PostConnectionViewController()
-    lazy var meditationView = FeedMeditationView()
+    //lazy var meditationView = PostMeditationViewController()
     lazy var newChannelView = FeedNewChannelView()
 
     var didSelect: CompletionOptional = nil
@@ -46,8 +46,9 @@ class FeedView: View {
 
         switch self.feedType {
         case .timeSaved(let count):
-            self.container.addSubview(self.introView)
-            self.introView.set(count: count)
+            break 
+//            self.container.addSubview(self.introView)
+//            self.introView.set(count: count)
         case .system(_):
             break
         case .unreadMessages(let channel, let count):
@@ -64,11 +65,12 @@ class FeedView: View {
 //                self.didSelect?()
 //            }
         case .inviteAsk(let reservation):
-            self.container.addSubview(self.needInvitesView)
-            self.needInvitesView.reservation = reservation
-            self.needInvitesView.button.didSelect { [unowned self] in
-                self.didSelect?()
-            }
+            break 
+//            self.container.addSubview(self.needInvitesView)
+//            self.needInvitesView.reservation = reservation
+//            self.needInvitesView.button.didSelect { [unowned self] in
+//                self.didSelect?()
+//            }
         case .rountine:
             self.container.addSubview(self.ritualView)
             self.ritualView.button.didSelect { [unowned self] in
@@ -87,10 +89,11 @@ class FeedView: View {
 //                self.didSelect?()
 //            }
         case .meditation:
-            self.container.addSubview(self.meditationView)
-            self.meditationView.button.didSelect { [unowned self] in
-                self.didSelect?()
-            }
+            break 
+//            self.container.addSubview(self.meditationView)
+//            self.meditationView.button.didSelect { [unowned self] in
+//                self.didSelect?()
+//            }
         case .newChannel(let channel):
             self.container.addSubview(self.newChannelView)
             self.newChannelView.configure(with: channel)

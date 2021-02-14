@@ -243,9 +243,9 @@
 		D657175E2378CEBA00F8F96C /* ChannelCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657175D2378CEBA00F8F96C /* ChannelCollectionViewManager.swift */; };
 		D6579536239A141900A01338 /* CountDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579535239A141900A01338 /* CountDownView.swift */; };
 		D6579557239C8B4000A01338 /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579556239C8B4000A01338 /* FeedCoordinator.swift */; };
-		D657955A239C8DA000A01338 /* FeedIntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579559239C8DA000A01338 /* FeedIntroView.swift */; };
+		D657955A239C8DA000A01338 /* PostIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579559239C8DA000A01338 /* PostIntroViewController.swift */; };
 		D657955C239CA01100A01338 /* FeedRitualView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657955B239CA01100A01338 /* FeedRitualView.swift */; };
-		D658C7D2244226A00027D12E /* FeedMeditationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D1244226A00027D12E /* FeedMeditationView.swift */; };
+		D658C7D2244226A00027D12E /* PostMeditationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D1244226A00027D12E /* PostMeditationViewController.swift */; };
 		D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D4244229D20027D12E /* MeditationViewController.swift */; };
 		D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */; };
 		D658C7DD24425E410027D12E /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D658C7DC24425E410027D12E /* HealthKit.framework */; };
@@ -351,7 +351,7 @@
 		D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */; };
-		D6BF68D7239CBF74008E79A1 /* FeedInviteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */; };
+		D6BF68D7239CBF74008E79A1 /* PostReservationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BF68D6239CBF74008E79A1 /* PostReservationViewController.swift */; };
 		D6C9CD2C2471D6BE007376F7 /* ReadAllFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */; };
 		D6C9EF3F25BF6CB100A14DE5 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */; };
 		D6C9EF4525BF6CF000A14DE5 /* Indexable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */; };
@@ -597,9 +597,9 @@
 		D657175D2378CEBA00F8F96C /* ChannelCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCollectionViewManager.swift; sourceTree = "<group>"; };
 		D6579535239A141900A01338 /* CountDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownView.swift; sourceTree = "<group>"; };
 		D6579556239C8B4000A01338 /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
-		D6579559239C8DA000A01338 /* FeedIntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedIntroView.swift; sourceTree = "<group>"; };
+		D6579559239C8DA000A01338 /* PostIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostIntroViewController.swift; sourceTree = "<group>"; };
 		D657955B239CA01100A01338 /* FeedRitualView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedRitualView.swift; sourceTree = "<group>"; };
-		D658C7D1244226A00027D12E /* FeedMeditationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedMeditationView.swift; sourceTree = "<group>"; };
+		D658C7D1244226A00027D12E /* PostMeditationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMeditationViewController.swift; sourceTree = "<group>"; };
 		D658C7D4244229D20027D12E /* MeditationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationViewController.swift; sourceTree = "<group>"; };
 		D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationCoordinator.swift; sourceTree = "<group>"; };
 		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
@@ -689,7 +689,7 @@
 		D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
-		D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedInviteView.swift; sourceTree = "<group>"; };
+		D6BF68D6239CBF74008E79A1 /* PostReservationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReservationViewController.swift; sourceTree = "<group>"; };
 		D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadAllFooterView.swift; sourceTree = "<group>"; };
 		D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubbleView.swift; sourceTree = "<group>"; };
 		D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Indexable.swift; sourceTree = "<group>"; };
@@ -1173,9 +1173,6 @@
 		D6579558239C8D8800A01338 /* Feed Content Views */ = {
 			isa = PBXGroup;
 			children = (
-				D6579559239C8DA000A01338 /* FeedIntroView.swift */,
-				D6BF68D6239CBF74008E79A1 /* FeedInviteView.swift */,
-				D658C7D1244226A00027D12E /* FeedMeditationView.swift */,
 				D6E80C8A23B2D1180012D438 /* FeedNotificationPermissionsView.swift */,
 				D657955B239CA01100A01338 /* FeedRitualView.swift */,
 				D642736522C971FD0088256B /* FeedTextView.swift */,
@@ -1631,6 +1628,9 @@
 				D6A714C625D969FE000A90EB /* PostViewController.swift */,
 				D6E0ED4E239CA8950073B33E /* PostChannelInviteViewController.swift */,
 				D60B0BE72432F88D004784CD /* PostConnectionViewController.swift */,
+				D6579559239C8DA000A01338 /* PostIntroViewController.swift */,
+				D6BF68D6239CBF74008E79A1 /* PostReservationViewController.swift */,
+				D658C7D1244226A00027D12E /* PostMeditationViewController.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -1882,7 +1882,7 @@
 				D642735122C857760088256B /* MessageContext.swift in Sources */,
 				D60C814422092E4700A127A3 /* PagingCollectionView.swift in Sources */,
 				D642735322C85B740088256B /* SystemAvatar.swift in Sources */,
-				D657955A239C8DA000A01338 /* FeedIntroView.swift in Sources */,
+				D657955A239C8DA000A01338 /* PostIntroViewController.swift in Sources */,
 				D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */,
 				D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */,
 				D650C1DA25B5EE3D0037C59A /* AvatarContextDelegate.swift in Sources */,
@@ -2010,7 +2010,7 @@
 				80D4A21623039B22007CB5F1 /* RitualInputViewController.swift in Sources */,
 				D64A1F07258C16470097817C /* WaitlistViewController.swift in Sources */,
 				D6090E5A2377D5CF00833DA7 /* ChannelCellAttributesConfigurer.swift in Sources */,
-				D658C7D2244226A00027D12E /* FeedMeditationView.swift in Sources */,
+				D658C7D2244226A00027D12E /* PostMeditationViewController.swift in Sources */,
 				D6090E582377D2CA00833DA7 /* ChannelSectionable.swift in Sources */,
 				D6DADF6E2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift in Sources */,
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
@@ -2024,7 +2024,7 @@
 				D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */,
 				D6F33C8624B150C3009603FF /* EmojiMessageCell.swift in Sources */,
 				D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */,
-				D6BF68D7239CBF74008E79A1 /* FeedInviteView.swift in Sources */,
+				D6BF68D7239CBF74008E79A1 /* PostReservationViewController.swift in Sources */,
 				D6C9CD2C2471D6BE007376F7 /* ReadAllFooterView.swift in Sources */,
 				D65B0CE5234928620041A176 /* ProfileCoordinator.swift in Sources */,
 				D66379CE25A3704300A4A3B7 /* ChatClientManager+Extensions.swift in Sources */,
