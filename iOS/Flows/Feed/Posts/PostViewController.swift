@@ -33,6 +33,10 @@ class PostViewController: ViewController {
         super.initializeViews()
 
         self.view.addSubview(self.container)
+        self.container.didSelect { [unowned self] in
+            self.didSkip?()
+        }
+        
         self.container.addSubview(self.textView)
         self.container.addSubview(self.avatarView)
         self.container.addSubview(self.button)

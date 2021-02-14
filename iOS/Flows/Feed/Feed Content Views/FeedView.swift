@@ -49,8 +49,6 @@ class FeedView: View {
             break 
 //            self.container.addSubview(self.introView)
 //            self.introView.set(count: count)
-        case .system(_):
-            break
         case .unreadMessages(let channel, let count):
             break 
 //            self.container.addSubview(self.unreadView)
@@ -72,7 +70,7 @@ class FeedView: View {
 //            self.needInvitesView.button.didSelect { [unowned self] in
 //                self.didSelect?()
 //            }
-        case .rountine:
+        case .ritual:
             break 
 //            self.container.addSubview(self.ritualView)
 //            self.ritualView.button.didSelect { [unowned self] in

@@ -16,7 +16,7 @@ protocol FeedViewControllerDelegate: AnyObject {
 class FeedViewController: ViewController {
 
     lazy var manager: FeedManager = {
-        let manager = FeedManager(with: self.view, delegate: self)
+        let manager = FeedManager(with: self, delegate: self)
         return manager
     }()
 

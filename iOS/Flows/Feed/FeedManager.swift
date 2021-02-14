@@ -20,17 +20,17 @@ protocol FeedManagerDelegate: AnyObject {
 
 class FeedManager: NSObject {
 
-    private var current: FeedView?
-    private(set) var posts: [FeedView] = [] {
+    private var current: PostViewController?
+    private(set) var posts: [PostViewController] = [] {
         didSet {
             self.delegate.feedManagerDidSetItems(self)
         }
     }
-    private let containerView: UIView
     private unowned let delegate: FeedManagerDelegate
+    private unowned let parentVC: ViewController
 
-    init(with container: UIView, delegate: FeedManagerDelegate) {
-        self.containerView = container
+    init(with parentVC: ViewController, delegate: FeedManagerDelegate) {
+        self.parentVC = parentVC
         self.delegate = delegate
         super.init()
     }
@@ -38,83 +38,83 @@ class FeedManager: NSObject {
     func set(items: [PostType]) {
 
         var postVCs: [PostViewController] = []
-        var views: [FeedView] = []
 
         for (index, type) in items.enumerated() {
+
+            let postVC: PostViewController
+
             switch type {
-            case .timeSaved(let count):
-                
-                postVCs.append(PostIntroViewController(with: <#T##PostType#>))
-            case .rountine:
-                <#code#>
+            case .timeSaved(_):
+                postVC = PostIntroViewController(with: type)
+            case .ritual:
+                postVC = PostRitualViewController(with: type)
             case .newChannel(_):
-                <#code#>
-            case .system(_):
-                <#code#>
+                postVC = PostNewChannelViewController(with: type)
             case .unreadMessages(_, _):
-                <#code#>
+                postVC = PostUnreadViewController(with: type)
             case .channelInvite(_):
-                <#code#>
+                postVC = PostChannelInviteViewController(with: type)
             case .connectionRequest(_):
-                <#code#>
+                postVC = PostConnectionViewController(with: type)
             case .inviteAsk(_):
-                <#code#>
+                postVC = PostConnectionViewController(with: type)
             case .notificationPermissions:
-                <#code#>
+                postVC = PostNotificationPermissionsViewController(with: type)
             case .meditation:
-                <#code#>
+                postVC = PostMeditationViewController(with: type)
             }
-            let view = FeedView(with: type)
-            view.didSelect = { [unowned self] in
+
+            postVCs.append(postVC)
+
+            postVC.didFinish = { [unowned self] in
                 self.delegate.feed(self, didSelect: type)
             }
-            view.didSkip = { [unowned self] in
+
+            postVC.didSkip = { [unowned self] in
                 self.delegate.feed(self, didSkip: index)
             }
-
-            views.append(view)
         }
 
-        self.posts = views
+        self.posts = postVCs
         self.showFirst()
     }
 
     func showFirst() {
         if let first = self.posts.first {
-            self.show(view: first, at: 0)
+            self.show(post: first, at: 0)
         }
     }
 
     func advanceToNextView(from index: Int) {
-        if let nextView = self.posts[safe: index + 1]  {
-            self.show(view: nextView, at: index + 1)
+        if let next = self.posts[safe: index + 1]  {
+            self.show(post: next, at: index + 1)
         } else {
             self.finishFeed()
         }
     }
 
-    private func show(view: FeedView, at index: Int) {
+    private func show(post: PostViewController, at index: Int) {
         let duration: TimeInterval = self.current.isNil ? 0 : 0.2
         UIView.animate(withDuration: duration) {
-            self.current?.alpha = 0
+            self.current?.view.alpha = 0
         } completion: { (completed) in
-            self.current?.removeFromSuperview()
-            self.current = view
-            view.alpha = 0
-            self.containerView.addSubview(view)
-            view.expandToSuperviewSize()
-            view.layoutNow()
+            self.current?.removeFromParent()
+            self.current = post
+            post.view.alpha = 0
+            self.parentVC.addChild(viewController: post)
+            post.view.expandToSuperviewSize()
+            post.view.layoutNow()
             UIView.animate(withDuration: 0.2) {
-                view.alpha = 1
+                post.view.alpha = 1
             } completion: { (completed) in
-                self.delegate.feed(self, didShowViewAt: index, with: view.feedType.duration)
+                self.delegate.feed(self, didShowViewAt: index, with: post.type.duration)
             }
         }
     }
 
     private func finishFeed() {
         UIView.animate(withDuration: 0.2) {
-            self.current?.alpha = 0
+            self.current?.view.alpha = 0
         } completion: { (completed) in
             self.delegate.feedManagerDidFinish(self)
         }

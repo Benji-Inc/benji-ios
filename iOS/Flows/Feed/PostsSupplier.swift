@@ -19,7 +19,7 @@ class PostsSupplier {
 
     func getFirstItems() -> AnyPublisher<[PostType], Error> {
         var futures: [Future<Void, Error>] = []
-        self.items.append(.rountine)
+        self.items.append(.ritual)
         futures.append(self.getNewChannels())
 
         return waitForAll(futures).map { (_) -> [PostType] in

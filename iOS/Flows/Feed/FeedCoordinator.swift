@@ -37,9 +37,9 @@ extension FeedCoordinator: FeedViewControllerDelegate {
     private func handle(item: PostType) {
 
         switch item {
-        case .timeSaved, .system(_):
+        case .timeSaved:
             break
-        case .rountine:
+        case .ritual:
             self.startRitualFlow()
         case .unreadMessages(let channel, _):
             self.startChannelFlow(for: .channel(channel))

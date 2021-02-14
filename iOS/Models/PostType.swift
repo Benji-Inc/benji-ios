@@ -13,9 +13,8 @@ import Parse
 enum PostType: Comparable {
 
     case timeSaved(Int)
-    case rountine
+    case ritual
     case newChannel(DisplayableChannel)
-    case system(SystemMessage)
     case unreadMessages(TCHChannel, Int)
     case channelInvite(TCHChannel)
     case connectionRequest(Connection)
@@ -27,10 +26,8 @@ enum PostType: Comparable {
         switch self {
         case .timeSaved(_):
             return "intro"
-        case .rountine:
+        case .ritual:
             return "ritual"
-        case .system(_):
-            return "system"
         case .unreadMessages(_, _):
             return "unreadMessages"
         case .channelInvite(_):
@@ -52,7 +49,7 @@ enum PostType: Comparable {
         switch self {
         case .timeSaved(_):
             return 0
-        case .rountine:
+        case .ritual:
             return 1
         case .channelInvite(_):
             return 2
@@ -62,10 +59,8 @@ enum PostType: Comparable {
             return 4
         case .notificationPermissions:
             return 5
-        case .system(_):
-            return 6
         case .connectionRequest(_):
-            return 7
+            return 6
         case .meditation:
             return 10
         case .newChannel(_):
@@ -83,7 +78,7 @@ enum PostType: Comparable {
 
     var duration: TimeInterval {
         switch self {
-        case .rountine:
+        case .ritual:
             return 10.0
         default:
             return 5.0
