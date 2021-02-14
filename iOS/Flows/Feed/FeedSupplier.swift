@@ -14,20 +14,20 @@ class FeedSupplier {
 
     static let shared = FeedSupplier()
 
-    private(set) var items: [FeedType] = []
+    private(set) var items: [PostType] = []
     private var cancellables = Set<AnyCancellable>()
 
-    func getFirstItems() -> AnyPublisher<[FeedType], Error> {
+    func getFirstItems() -> AnyPublisher<[PostType], Error> {
         var futures: [Future<Void, Error>] = []
         self.items.append(.rountine)
         futures.append(self.getNewChannels())
 
-        return waitForAll(futures).map { (_) -> [FeedType] in
+        return waitForAll(futures).map { (_) -> [PostType] in
             return self.items.sorted()
         }.eraseToAnyPublisher()
     }
 
-    func getItems() -> AnyPublisher<[FeedType], Error> {
+    func getItems() -> AnyPublisher<[PostType], Error> {
 
         self.items.append(.meditation)
 
@@ -46,7 +46,7 @@ class FeedSupplier {
         futures.append(self.getUnreadMessages())
         futures.append(self.getConnections())
 
-        return waitForAll(futures).map { (_) -> [FeedType] in
+        return waitForAll(futures).map { (_) -> [PostType] in
             return self.items.sorted()
         }.eraseToAnyPublisher()
     }
@@ -79,7 +79,7 @@ class FeedSupplier {
     }
 
     private func getUnreadMessages() -> Future<Void, Error> {
-        var channelFutures: [Future<FeedType, Error>] = []
+        var channelFutures: [Future<PostType, Error>] = []
         for channel in ChannelSupplier.shared.allJoinedChannels {
             switch channel.channelType {
             case .channel(let tchChannel):

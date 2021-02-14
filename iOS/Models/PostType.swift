@@ -10,7 +10,7 @@ import Foundation
 import TwilioChatClient
 import Parse
 
-enum FeedType: Comparable {
+enum PostType: Comparable {
 
     case timeSaved(Int)
     case rountine
@@ -73,11 +73,11 @@ enum FeedType: Comparable {
         }
     }
 
-    static func < (lhs: FeedType, rhs: FeedType) -> Bool {
+    static func < (lhs: PostType, rhs: PostType) -> Bool {
         return lhs.priority < rhs.priority
     }
 
-    static func == (lhs: FeedType, rhs: FeedType) -> Bool {
+    static func == (lhs: PostType, rhs: PostType) -> Bool {
         return lhs.id == rhs.id
     }
 

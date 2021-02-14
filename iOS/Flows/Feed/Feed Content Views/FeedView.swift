@@ -25,9 +25,9 @@ class FeedView: View {
     var didSelect: CompletionOptional = nil
     var didSkip: CompletionOptional = nil
 
-    private(set) var feedType: FeedType
+    private(set) var feedType: PostType
 
-    init(with type: FeedType) {
+    init(with type: PostType) {
         self.feedType = type
         super.init()
     }

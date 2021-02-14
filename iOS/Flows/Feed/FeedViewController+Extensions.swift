@@ -35,7 +35,7 @@ extension FeedViewController: FeedManagerDelegate {
         self.indicatorView.configure(with: manager.posts.count)
     }
 
-    func feed(_ manager: FeedManager, didSelect type: FeedType) {
+    func feed(_ manager: FeedManager, didSelect type: PostType) {
         self.delegate?.feedView(self, didSelect: type)
     }
 

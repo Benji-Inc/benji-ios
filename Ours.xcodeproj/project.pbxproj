@@ -273,7 +273,7 @@
 		D6637A2925A3A82F00A4A3B7 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E321D30E9100204BEE /* TextView.swift */; };
 		D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66656BC23D13C9A009E4BDF /* Switchable.swift */; };
 		D66A0B942351821200A0FFEA /* Completeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A0B932351821200A0FFEA /* Completeable.swift */; };
-		D66F0FC722BF004300BA277D /* FeedType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FC622BF004300BA277D /* FeedType.swift */; };
+		D66F0FC722BF004300BA277D /* PostType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FC622BF004300BA277D /* PostType.swift */; };
 		D66F0FC922BF006D00BA277D /* SystemMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FC822BF006D00BA277D /* SystemMessage.swift */; };
 		D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FCE22BF060500BA277D /* Deeplinkable.swift */; };
 		D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
@@ -339,6 +339,7 @@
 		D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */; };
 		D6A301AC2380E102006655E0 /* FeedSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301AB2380E102006655E0 /* FeedSupplier.swift */; };
 		D6A401AB24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A401AA24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift */; };
+		D6A714C725D969FE000A90EB /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A714C625D969FE000A90EB /* PostViewController.swift */; };
 		D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AC90C92594F8F80032774D /* Delegated.swift */; };
 		D6AC90CB2594F8F80032774D /* Delegated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AC90C92594F8F80032774D /* Delegated.swift */; };
 		D6ACA0B823D4248100844923 /* FaceDetection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6ACA0B723D4248100844923 /* FaceDetection.storyboard */; };
@@ -618,7 +619,7 @@
 		D66379CD25A3704300A4A3B7 /* SessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		D66656BC23D13C9A009E4BDF /* Switchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switchable.swift; sourceTree = "<group>"; };
 		D66A0B932351821200A0FFEA /* Completeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Completeable.swift; sourceTree = "<group>"; };
-		D66F0FC622BF004300BA277D /* FeedType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedType.swift; sourceTree = "<group>"; };
+		D66F0FC622BF004300BA277D /* PostType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostType.swift; sourceTree = "<group>"; };
 		D66F0FC822BF006D00BA277D /* SystemMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMessage.swift; sourceTree = "<group>"; };
 		D66F0FCE22BF060500BA277D /* Deeplinkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplinkable.swift; sourceTree = "<group>"; };
 		D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkTarget.swift; sourceTree = "<group>"; };
@@ -678,6 +679,7 @@
 		D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
 		D6A301AB2380E102006655E0 /* FeedSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSupplier.swift; sourceTree = "<group>"; };
 		D6A401AA24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHMessageOptions+Extensions.swift"; sourceTree = "<group>"; };
+		D6A714C625D969FE000A90EB /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		D6AC90C92594F8F80032774D /* Delegated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Delegated.swift; sourceTree = "<group>"; };
 		D6ACA0B723D4248100844923 /* FaceDetection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FaceDetection.storyboard; sourceTree = "<group>"; };
 		D6B230D225BC7FCE0082A41A /* SendableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableType.swift; sourceTree = "<group>"; };
@@ -1272,7 +1274,7 @@
 				D64C6A7D23294A8600DB7257 /* ChannelKey.swift */,
 				D66F0FF122C1D86800BA277D /* ChannelsType.swift */,
 				D6830221234AA35C006145FE /* DisplayableChannel.swift */,
-				D66F0FC622BF004300BA277D /* FeedType.swift */,
+				D66F0FC622BF004300BA277D /* PostType.swift */,
 				D642735022C857760088256B /* MessageContext.swift */,
 				D6B230D225BC7FCE0082A41A /* SendableType.swift */,
 				D607400D23401B3E009633EB /* SystemChannel.swift */,
@@ -1628,6 +1630,7 @@
 		D6EDFB4A25D48F1D0034A2F6 /* Post */ = {
 			isa = PBXGroup;
 			children = (
+				D6A714C625D969FE000A90EB /* PostViewController.swift */,
 			);
 			path = Post;
 			sourceTree = "<group>";
@@ -2043,6 +2046,7 @@
 				D6D380C4257FC18300C562E8 /* Selectable.swift in Sources */,
 				D6D1460521D5524C00CD8CE4 /* StringCasing.swift in Sources */,
 				D66379D725A3704300A4A3B7 /* SessionManager.swift in Sources */,
+				D6A714C725D969FE000A90EB /* PostViewController.swift in Sources */,
 				D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6F33C7E24B15063009603FF /* LocationMessageCell.swift in Sources */,
@@ -2060,7 +2064,7 @@
 				D6F33C8024B15076009603FF /* AudioMessageCell.swift in Sources */,
 				D65E3EA8248803510074E789 /* ChannelViewController+Keyboard.swift in Sources */,
 				D61EC0E621D30EB300204BEE /* View.swift in Sources */,
-				D66F0FC722BF004300BA277D /* FeedType.swift in Sources */,
+				D66F0FC722BF004300BA277D /* PostType.swift in Sources */,
 				D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */,
 				D67758A025B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,
 				D6DADF742207E0E2007D9EB1 /* TCHChannel+Extensions.swift in Sources */,

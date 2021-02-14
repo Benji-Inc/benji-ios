@@ -71,7 +71,7 @@ extension TCHChannel {
         return text
     }
 
-    func getUnconsumedAmount() -> Future<FeedType, Error> {
+    func getUnconsumedAmount() -> Future<PostType, Error> {
         return Future { promise in
             var totalUnread: Int = 0
             if let messagesObject = self.messages {

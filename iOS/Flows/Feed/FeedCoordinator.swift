@@ -30,11 +30,11 @@ class FeedCoordinator: Coordinator<Void> {
 
 extension FeedCoordinator: FeedViewControllerDelegate {
 
-    func feedView(_ controller: FeedViewController, didSelect item: FeedType) {
+    func feedView(_ controller: FeedViewController, didSelect item: PostType) {
         self.handle(item: item)
     }
 
-    private func handle(item: FeedType) {
+    private func handle(item: PostType) {
 
         switch item {
         case .timeSaved, .system(_):

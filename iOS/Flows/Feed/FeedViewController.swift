@@ -10,7 +10,7 @@ import Foundation
 import TMROLocalization
 
 protocol FeedViewControllerDelegate: AnyObject {
-    func feedView(_ controller: FeedViewController, didSelect item: FeedType)
+    func feedView(_ controller: FeedViewController, didSelect item: PostType)
 }
 
 class FeedViewController: ViewController {

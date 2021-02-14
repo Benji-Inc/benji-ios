@@ -10,7 +10,7 @@ import Foundation
 
 protocol FeedManagerDelegate: AnyObject {
     func feedManagerDidSetItems(_ manager: FeedManager)
-    func feed(_ manager: FeedManager, didSelect type: FeedType)
+    func feed(_ manager: FeedManager, didSelect type: PostType)
     func feedManagerDidFinish(_ manager: FeedManager)
     func feed(_ manager: FeedManager, didSkip index: Int)
     func feed(_ manager: FeedManager,
@@ -35,7 +35,7 @@ class FeedManager: NSObject {
         super.init()
     }
 
-    func set(items: [FeedType]) {
+    func set(items: [PostType]) {
 
         var views: [FeedView] = []
 
