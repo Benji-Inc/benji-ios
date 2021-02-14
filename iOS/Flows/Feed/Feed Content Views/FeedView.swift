@@ -14,11 +14,11 @@ class FeedView: View {
 
     lazy var introView = FeedIntroView()
     lazy var ritualView = FeedRitualView()
-    lazy var inviteView = FeedChannelInviteView()
+    //lazy var inviteView = PostChannelInviteViewController()
     lazy var unreadView = FeedUnreadView()
     lazy var needInvitesView = FeedInviteView()
     lazy var notificationsView = FeedNotificationPermissionsView()
-    lazy var connectionView = FeedConnectionView()
+    //lazy var connectionView = PostConnectionViewController()
     lazy var meditationView = FeedMeditationView()
     lazy var newChannelView = FeedNewChannelView()
 
@@ -57,11 +57,12 @@ class FeedView: View {
                 self.didSelect?()
             }
         case .channelInvite(let channel):
-            self.container.addSubview(self.inviteView)
-            self.inviteView.configure(with: channel)
-            self.inviteView.didComplete = { [unowned self] in
-                self.didSelect?()
-            }
+            break 
+//            self.container.addSubview(self.inviteView)
+//            self.inviteView.configure(with: channel)
+//            self.inviteView.didComplete = { [unowned self] in
+//                self.didSelect?()
+//            }
         case .inviteAsk(let reservation):
             self.container.addSubview(self.needInvitesView)
             self.needInvitesView.reservation = reservation
@@ -79,11 +80,12 @@ class FeedView: View {
                 self.didSelect?()
             }
         case .connectionRequest(let connection):
-            self.container.addSubview(self.connectionView)
-            self.connectionView.configure(connection: connection)
-            self.connectionView.didComplete = { [unowned self] in
-                self.didSelect?()
-            }
+            break
+//            self.container.addSubview(self.connectionView)
+//            self.connectionView.configure(connection: connection)
+//            self.connectionView.didComplete = { [unowned self] in
+//                self.didSelect?()
+//            }
         case .meditation:
             self.container.addSubview(self.meditationView)
             self.meditationView.button.didSelect { [unowned self] in

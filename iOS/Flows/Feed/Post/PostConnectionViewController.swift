@@ -10,7 +10,7 @@ import Foundation
 import TMROLocalization
 import Combine
 
-class FeedConnectionView: View {
+class PostConnectionViewController: PostViewController {
 
     private let avatarView = AvatarView()
     private let textView = FeedTextView()
@@ -18,17 +18,15 @@ class FeedConnectionView: View {
     private let declineButton = Button()
     var didComplete: () -> Void = {}
 
-    var cancellables = Set<AnyCancellable>()
-
     private var connection: Connection?
 
-    override func initializeSubviews() {
-        super.initializeSubviews()
+    override func initializeViews() {
+        super.initializeViews()
 
-        self.addSubview(self.avatarView)
-        self.addSubview(self.textView)
-        self.addSubview(self.acceptButton)
-        self.addSubview(self.declineButton)
+        self.container.addSubview(self.avatarView)
+        self.container.addSubview(self.textView)
+        self.container.addSubview(self.acceptButton)
+        self.container.addSubview(self.declineButton)
 
         self.textView.set(localizedText: "Connection request.")
         self.acceptButton.set(style: .rounded(color: .purple, text: "Accept"))
@@ -52,29 +50,29 @@ class FeedConnectionView: View {
 
                 let text = LocalizedString(id: "", arguments: [nonMeUser.givenName], default: "@(first) would like to connect with you.")
                 self.textView.set(localizedText: text)
-                self.layoutNow()
+                self.container.layoutNow()
             }
         }
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
         self.avatarView.setSize(for: 100)
         self.avatarView.centerOnX()
-        self.avatarView.top = self.height * 0.3
+        self.avatarView.top = self.container.height * 0.3
 
-        self.textView.setSize(withWidth: self.width)
+        self.textView.setSize(withWidth: self.container.width)
         self.textView.top = self.avatarView.bottom + 10
         self.textView.centerOnX()
 
-        self.acceptButton.setSize(with: self.width * 0.4)
-        self.acceptButton.centerX = self.width * 0.69
-        self.acceptButton.bottom = self.height - Theme.contentOffset
+        self.acceptButton.setSize(with: self.container.width * 0.4)
+        self.acceptButton.centerX = self.container.width * 0.69
+        self.acceptButton.bottom = self.container.height - Theme.contentOffset
 
-        self.declineButton.setSize(with: self.width * 0.4)
-        self.declineButton.centerX = self.width * 0.3
-        self.declineButton.bottom = self.height - Theme.contentOffset
+        self.declineButton.setSize(with: self.container.width * 0.4)
+        self.declineButton.centerX = self.container.width * 0.3
+        self.declineButton.bottom = self.container.height - Theme.contentOffset
     }
 
     func updateConnection(with status: Connection.Status) {
