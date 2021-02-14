@@ -37,9 +37,33 @@ class FeedManager: NSObject {
 
     func set(items: [PostType]) {
 
+        var postVCs: [PostViewController] = []
         var views: [FeedView] = []
 
         for (index, type) in items.enumerated() {
+            switch type {
+            case .timeSaved(let count):
+                
+                postVCs.append(PostIntroViewController(with: <#T##PostType#>))
+            case .rountine:
+                <#code#>
+            case .newChannel(_):
+                <#code#>
+            case .system(_):
+                <#code#>
+            case .unreadMessages(_, _):
+                <#code#>
+            case .channelInvite(_):
+                <#code#>
+            case .connectionRequest(_):
+                <#code#>
+            case .inviteAsk(_):
+                <#code#>
+            case .notificationPermissions:
+                <#code#>
+            case .meditation:
+                <#code#>
+            }
             let view = FeedView(with: type)
             view.didSelect = { [unowned self] in
                 self.delegate.feed(self, didSelect: type)

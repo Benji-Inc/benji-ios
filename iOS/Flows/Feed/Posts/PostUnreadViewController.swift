@@ -23,6 +23,11 @@ class PostUnreadViewController: PostViewController {
         self.didFinish?()
     }
 
+    override func configurePost() {
+        guard case PostType.unreadMessages(let channel, let count) = self.type else { return }
+        self.configure(with: channel, count: count)
+    }
+
     func configure(with channel: TCHChannel, count: Int) {
         channel.getAuthorAsUser()
             .mainSink(receiveValue: { (user) in

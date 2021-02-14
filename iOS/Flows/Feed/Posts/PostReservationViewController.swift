@@ -18,4 +18,8 @@ class PostReservationViewController: PostViewController {
         self.textView.set(localizedText: "Who would you like to share Ours with?")
         self.button.set(style: .rounded(color: .purple, text: "SHARE"))
     }
+
+    override func didTapButton() {
+        self.didFinish?()
+    }
 }

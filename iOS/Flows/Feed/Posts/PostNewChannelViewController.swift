@@ -19,6 +19,11 @@ class PostNewChannelViewController: PostViewController {
         self.button.set(style: .normal(color: .purple, text: "OPEN"))
     }
 
+    override func configurePost() {
+        guard case PostType.newChannel(let channel) = self.type else { return }
+        self.configure(with: channel)
+    }
+
     override func didTapButton() {
         self.didFinish?()
     }

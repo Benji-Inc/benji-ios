@@ -25,6 +25,11 @@ class PostIntroViewController: PostViewController {
         self.descritpionLabel.textAlignment = .center
     }
 
+    override func configurePost() {
+        guard case PostType.timeSaved(let count) = self.type else { return }
+        self.set(count: count)
+    }
+
     func set(count: Int) {
         if count > 0 {
             let time = count * 20

@@ -16,4 +16,8 @@ class PostMeditationViewController: PostViewController {
         self.textView.set(localizedText: "Begin a mindful minute?")
         self.button.set(style: .rounded(color: .purple, text: "Yes"))
     }
+
+    override func didTapButton() {
+        self.didFinish?()
+    }
 }

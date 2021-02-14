@@ -34,7 +34,12 @@ class PostConnectionViewController: PostViewController {
         }
     }
 
-    func configure(connection: Connection) {
+    override func configurePost() {
+        guard case PostType.connectionRequest(let connection) = self.type else { return }
+        self.configure(connection: connection)
+    }
+
+    private func configure(connection: Connection) {
         self.connection = connection
 
         if let user = connection.nonMeUser {

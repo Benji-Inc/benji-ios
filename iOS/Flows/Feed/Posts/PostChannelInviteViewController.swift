@@ -22,7 +22,12 @@ class PostChannelInviteViewController: PostViewController {
         self.button.set(style: .normal(color: .purple, text: "JOIN"))
     }
 
-    func configure(with channel: TCHChannel) {
+    override func configurePost() {
+        guard case PostType.channelInvite(let channel) = self.type else { return }
+        self.configure(with: channel)
+    }
+
+    private func configure(with channel: TCHChannel) {
         self.channel = channel 
         channel.getAuthorAsUser()
             .mainSink(receiveValue: { (user) in
