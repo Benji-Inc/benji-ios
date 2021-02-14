@@ -96,7 +96,7 @@
 		D642735322C85B740088256B /* SystemAvatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735222C85B740088256B /* SystemAvatar.swift */; };
 		D642735522C87CCA0088256B /* ImageViewButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735422C87CCA0088256B /* ImageViewButton.swift */; };
 		D642735E22C90C820088256B /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735D22C90C820088256B /* CGPoint+Extensions.swift */; };
-		D642736622C971FD0088256B /* FeedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642736522C971FD0088256B /* FeedTextView.swift */; };
+		D642736622C971FD0088256B /* PostTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642736522C971FD0088256B /* PostTextView.swift */; };
 		D642736C22C98FA00088256B /* MathFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642736B22C98FA00088256B /* MathFunctions.swift */; };
 		D642737122C991A60088256B /* ClosedRange+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642737022C991A60088256B /* ClosedRange+Extensions.swift */; };
 		D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739822CA79B60088256B /* UIWindow+Extensions.swift */; };
@@ -337,7 +337,7 @@
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
 		D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
 		D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */; };
-		D6A301AC2380E102006655E0 /* FeedSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301AB2380E102006655E0 /* FeedSupplier.swift */; };
+		D6A301AC2380E102006655E0 /* PostsSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301AB2380E102006655E0 /* PostsSupplier.swift */; };
 		D6A401AB24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A401AA24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift */; };
 		D6A714C725D969FE000A90EB /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A714C625D969FE000A90EB /* PostViewController.swift */; };
 		D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AC90C92594F8F80032774D /* Delegated.swift */; };
@@ -556,7 +556,7 @@
 		D642735222C85B740088256B /* SystemAvatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemAvatar.swift; sourceTree = "<group>"; };
 		D642735422C87CCA0088256B /* ImageViewButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewButton.swift; sourceTree = "<group>"; };
 		D642735D22C90C820088256B /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
-		D642736522C971FD0088256B /* FeedTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedTextView.swift; sourceTree = "<group>"; };
+		D642736522C971FD0088256B /* PostTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTextView.swift; sourceTree = "<group>"; };
 		D642736B22C98FA00088256B /* MathFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MathFunctions.swift; sourceTree = "<group>"; };
 		D642737022C991A60088256B /* ClosedRange+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ClosedRange+Extensions.swift"; sourceTree = "<group>"; };
 		D642739822CA79B60088256B /* UIWindow+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIWindow+Extensions.swift"; sourceTree = "<group>"; };
@@ -677,7 +677,7 @@
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
 		D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
-		D6A301AB2380E102006655E0 /* FeedSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedSupplier.swift; sourceTree = "<group>"; };
+		D6A301AB2380E102006655E0 /* PostsSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsSupplier.swift; sourceTree = "<group>"; };
 		D6A401AA24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHMessageOptions+Extensions.swift"; sourceTree = "<group>"; };
 		D6A714C625D969FE000A90EB /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		D6AC90C92594F8F80032774D /* Delegated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Delegated.swift; sourceTree = "<group>"; };
@@ -939,7 +939,7 @@
 				D6579535239A141900A01338 /* CountDownView.swift */,
 				D6815DBA22EE1F1400E71251 /* FeedManager.swift */,
 				D6579556239C8B4000A01338 /* FeedCoordinator.swift */,
-				D6A301AB2380E102006655E0 /* FeedSupplier.swift */,
+				D6A301AB2380E102006655E0 /* PostsSupplier.swift */,
 				D62C635322BE9CBB00F4D097 /* FeedViewController.swift */,
 				D67896B522FF86AB0059BA75 /* FeedViewController+Extensions.swift */,
 				D64932D623FE460200986335 /* FeedIndicatorView.swift */,
@@ -1173,7 +1173,6 @@
 		D6579558239C8D8800A01338 /* Feed Content Views */ = {
 			isa = PBXGroup;
 			children = (
-				D642736522C971FD0088256B /* FeedTextView.swift */,
 				D6815DB822EE1CAC00E71251 /* FeedView.swift */,
 			);
 			path = "Feed Content Views";
@@ -1631,6 +1630,7 @@
 				D657955B239CA01100A01338 /* PostRitualViewController.swift */,
 				D654DC03249EBDA20072E2F3 /* PostNewChannelViewController.swift */,
 				D6E0ED52239CBDA40073B33E /* PostUnreadViewController.swift */,
+				D642736522C971FD0088256B /* PostTextView.swift */,
 			);
 			path = Posts;
 			sourceTree = "<group>";
@@ -1920,7 +1920,7 @@
 				D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */,
 				D6432BF022D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift in Sources */,
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
-				D642736622C971FD0088256B /* FeedTextView.swift in Sources */,
+				D642736622C971FD0088256B /* PostTextView.swift in Sources */,
 				D6DADF6C2207DCA8007D9EB1 /* ChannelsViewController.swift in Sources */,
 				D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */,
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,
@@ -2133,7 +2133,7 @@
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
 				D677589625B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,
-				D6A301AC2380E102006655E0 /* FeedSupplier.swift in Sources */,
+				D6A301AC2380E102006655E0 /* PostsSupplier.swift in Sources */,
 				D66F0FDC22BF2ADC00BA277D /* HomeCoordinator.swift in Sources */,
 				D68B362C25BB1F86005AEB4C /* AttachmentView.swift in Sources */,
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,

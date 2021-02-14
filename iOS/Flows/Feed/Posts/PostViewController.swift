@@ -16,7 +16,7 @@ class PostViewController: ViewController {
     var didSkip: CompletionOptional = nil
 
     let container = View()
-    let textView = FeedTextView()
+    let textView = PostTextView()
     let avatarView = AvatarView()
     let button = Button()
 

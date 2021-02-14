@@ -9,7 +9,7 @@
 import Foundation
 import TMROLocalization
 
-class FeedTextView: TextView {
+class PostTextView: TextView {
 
     override func initialize() {
         super.initialize()

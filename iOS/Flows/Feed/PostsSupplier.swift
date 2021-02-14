@@ -10,9 +10,9 @@ import Foundation
 import Combine
 import Parse
 
-class FeedSupplier {
+class PostsSupplier {
 
-    static let shared = FeedSupplier()
+    static let shared = PostsSupplier()
 
     private(set) var items: [PostType] = []
     private var cancellables = Set<AnyCancellable>()

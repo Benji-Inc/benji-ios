@@ -11,7 +11,7 @@ import Foundation
 extension FeedViewController {
 
     func addItems() {
-        FeedSupplier.shared.getItems()
+        PostsSupplier.shared.getItems()
             .mainSink(receiveValue: { (items) in
                 self.view.layoutNow()
                 self.manager.set(items: items)
@@ -20,7 +20,7 @@ extension FeedViewController {
     }
 
     func addFirstItems() {
-        FeedSupplier.shared.getFirstItems()
+        PostsSupplier.shared.getFirstItems()
             .mainSink(receiveValue: { (items) in
                 self.view.layoutNow()
                 self.manager.set(items: items)
