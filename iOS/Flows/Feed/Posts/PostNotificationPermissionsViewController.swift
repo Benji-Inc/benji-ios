@@ -9,18 +9,17 @@
 import Foundation
 import Combine
 
-class FeedNotificationPermissionsView: View {
+class PostNotificationPermissionsViewController: PostViewController {
 
     let textView = FeedTextView()
     let button = Button()
     var didGivePermission: CompletionOptional = nil
-    private var cancellables = Set<AnyCancellable>()
 
-    override func initializeSubviews() {
-        super.initializeSubviews()
+    override func initializeViews() {
+        super.initializeViews()
 
-        self.addSubview(self.textView)
-        self.addSubview(self.button)
+        self.container.addSubview(self.textView)
+        self.container.addSubview(self.button)
         self.textView.set(localizedText: "Notifications are only sent for important messages and daily ritual remiders. Nothing else.")
         self.button.set(style: .rounded(color: .purple, text: "OK"))
         self.button.didSelect { [unowned self] in
@@ -28,16 +27,16 @@ class FeedNotificationPermissionsView: View {
         }
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
-        self.textView.setSize(withWidth: self.width)
-        self.textView.bottom = self.centerY - 10
+        self.textView.setSize(withWidth: self.container.width)
+        self.textView.bottom = self.container.centerY - 10
         self.textView.centerOnX()
 
-        self.button.setSize(with: self.width)
+        self.button.setSize(with: self.container.width)
         self.button.centerOnX()
-        self.button.bottom = self.height - Theme.contentOffset
+        self.button.bottom = self.container.height - Theme.contentOffset
     }
 
     private func handleNotificationPermissions() {

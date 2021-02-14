@@ -13,14 +13,14 @@ class FeedView: View {
     private let container = View()
 
     //lazy var introView = PostIntroViewController()
-    lazy var ritualView = FeedRitualView()
+    //lazy var ritualView = PostRitualViewController()
     //lazy var inviteView = PostChannelInviteViewController()
-    lazy var unreadView = FeedUnreadView()
+    //lazy var unreadView = PostUnreadViewController()
     //lazy var needInvitesView = PostReservationViewController()
-    lazy var notificationsView = FeedNotificationPermissionsView()
+    //lazy var notificationsView = PostNotificationPermissionsViewController()
     //lazy var connectionView = PostConnectionViewController()
     //lazy var meditationView = PostMeditationViewController()
-    lazy var newChannelView = FeedNewChannelView()
+    //lazy var newChannelView = PostNewChannelViewController()
 
     var didSelect: CompletionOptional = nil
     var didSkip: CompletionOptional = nil
@@ -52,11 +52,12 @@ class FeedView: View {
         case .system(_):
             break
         case .unreadMessages(let channel, let count):
-            self.container.addSubview(self.unreadView)
-            self.unreadView.configure(with: channel, count: count)
-            self.unreadView.didSelect = { [unowned self] in
-                self.didSelect?()
-            }
+            break 
+//            self.container.addSubview(self.unreadView)
+//            self.unreadView.configure(with: channel, count: count)
+//            self.unreadView.didSelect = { [unowned self] in
+//                self.didSelect?()
+//            }
         case .channelInvite(let channel):
             break 
 //            self.container.addSubview(self.inviteView)
@@ -72,15 +73,17 @@ class FeedView: View {
 //                self.didSelect?()
 //            }
         case .rountine:
-            self.container.addSubview(self.ritualView)
-            self.ritualView.button.didSelect { [unowned self] in
-                self.didSelect?()
-            }
+            break 
+//            self.container.addSubview(self.ritualView)
+//            self.ritualView.button.didSelect { [unowned self] in
+//                self.didSelect?()
+//            }
         case .notificationPermissions:
-            self.container.addSubview(self.notificationsView)
-            self.notificationsView.didGivePermission = { [unowned self] in
-                self.didSelect?()
-            }
+            break
+//            self.container.addSubview(self.notificationsView)
+//            self.notificationsView.didGivePermission = { [unowned self] in
+//                self.didSelect?()
+//            }
         case .connectionRequest(let connection):
             break
 //            self.container.addSubview(self.connectionView)
@@ -95,11 +98,12 @@ class FeedView: View {
 //                self.didSelect?()
 //            }
         case .newChannel(let channel):
-            self.container.addSubview(self.newChannelView)
-            self.newChannelView.configure(with: channel)
-            self.newChannelView.didSelect = { [unowned self] in
-                self.didSelect?()
-            }
+            break 
+//            self.container.addSubview(self.newChannelView)
+//            self.newChannelView.configure(with: channel)
+//            self.newChannelView.didSelect = { [unowned self] in
+//                self.didSelect?()
+//            }
         }
     }
 

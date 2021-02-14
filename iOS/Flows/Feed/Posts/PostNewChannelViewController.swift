@@ -11,24 +11,22 @@ import TwilioChatClient
 import TMROLocalization
 import Combine
 
-class FeedNewChannelView: View {
+class PostNewChannelViewController: PostViewController {
 
     let textView = FeedTextView()
     let avatarView = AvatarView()
     let button = Button()
-    var didSelect: () -> Void = {}
-    private var cancellables = Set<AnyCancellable>()
 
-    override func initializeSubviews() {
-        super.initializeSubviews()
+    override func initializeViews() {
+        super.initializeViews()
 
-        self.addSubview(self.textView)
-        self.addSubview(self.avatarView)
-        self.addSubview(self.button)
+        self.container.addSubview(self.textView)
+        self.container.addSubview(self.avatarView)
+        self.container.addSubview(self.button)
 
         self.button.set(style: .normal(color: .purple, text: "OPEN"))
         self.button.didSelect { [unowned self] in
-            self.didSelect()
+            self.didSelect?()
         }
     }
 
@@ -39,23 +37,23 @@ class FeedNewChannelView: View {
                 self.avatarView.set(avatar: user)
                 let message = LocalizedString(id: "", arguments: [user.givenName], default: "Congrats! 🎉 You can now chat with @(name)!")
                 self.textView.set(localizedText: message)
-                self.layoutNow()
+                self.container.layoutNow()
             }).store(in: &self.cancellables)
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
         self.avatarView.setSize(for: 100)
         self.avatarView.centerOnX()
-        self.avatarView.top = self.height * 0.3
+        self.avatarView.top = self.container.height * 0.3
 
-        self.textView.setSize(withWidth: self.width * 0.9)
+        self.textView.setSize(withWidth: self.container.width * 0.9)
         self.textView.centerOnX()
         self.textView.top = self.avatarView.bottom + Theme.contentOffset
 
-        self.button.setSize(with: self.width)
+        self.button.setSize(with: self.container.width)
         self.button.centerOnX()
-        self.button.bottom = self.height - Theme.contentOffset
+        self.button.bottom = self.container.height - Theme.contentOffset
     }
 }
