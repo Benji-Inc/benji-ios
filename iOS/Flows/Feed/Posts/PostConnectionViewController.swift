@@ -12,19 +12,13 @@ import Combine
 
 class PostConnectionViewController: PostViewController {
 
-    private let avatarView = AvatarView()
-    private let textView = FeedTextView()
     private let acceptButton = Button()
     private let declineButton = Button()
-    var didComplete: () -> Void = {}
-
     private var connection: Connection?
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.container.addSubview(self.avatarView)
-        self.container.addSubview(self.textView)
         self.container.addSubview(self.acceptButton)
         self.container.addSubview(self.declineButton)
 
@@ -58,14 +52,6 @@ class PostConnectionViewController: PostViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.avatarView.setSize(for: 100)
-        self.avatarView.centerOnX()
-        self.avatarView.top = self.container.height * 0.3
-
-        self.textView.setSize(withWidth: self.container.width)
-        self.textView.top = self.avatarView.bottom + 10
-        self.textView.centerOnX()
-
         self.acceptButton.setSize(with: self.container.width * 0.4)
         self.acceptButton.centerX = self.container.width * 0.69
         self.acceptButton.bottom = self.container.height - Theme.contentOffset
@@ -82,7 +68,7 @@ class PostConnectionViewController: PostViewController {
             .makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink(receiveValue: { (_) in },
                       receiveCompletion: { (_) in
-                        self.didComplete()
+                        self.didFinish?()
                       }).store(in: &self.cancellables)
     }
 }
