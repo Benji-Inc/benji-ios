@@ -36,7 +36,7 @@ enum UserStatus: String {
     case needsVerification // Has entered a phone number but not a verification code. 
 }
 
-final class User: PFUser {
+final class User: PFUser, Subscribeable {
 
     var phoneNumber: String? {
         get { return self.getObject(for: .phoneNumber) }
@@ -79,16 +79,5 @@ final class User: PFUser {
             return UserStatus.init(rawValue: string)
         }
         set { self.setObject(for: .status, with: newValue?.rawValue) }
-    }
-
-    func subscribe() -> Future<Event<User>, Error> {
-        return Future { promise in
-            let query = User.query() as? PFQuery<User>
-            query?.whereKey("objectId", equalTo: self.objectId!)
-            let subscription = Client.shared.subscribe(query!)
-            subscription.handleEvent { (query, event) in
-                promise(.success(event))
-            }
-        }
     }
 }

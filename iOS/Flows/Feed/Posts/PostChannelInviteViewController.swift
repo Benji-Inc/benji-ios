@@ -13,7 +13,6 @@ import Combine
 
 class PostChannelInviteViewController: PostViewController {
 
-    var didComplete: CompletionOptional = nil
     private var channel: TCHChannel?
 
     override func initializeViews() {
@@ -41,5 +40,15 @@ class PostChannelInviteViewController: PostViewController {
     override func didTapButton() {
         guard let channel = self.channel else { return }
 
+        if channel.member(withIdentity: User.current()!.objectId!).isNil {
+            channel.join()
+                .mainSink { (_) in
+                    self.textView.set(localizedText: "Success!")
+                    self.button.set(style: .normal(color: .lightPurple, text: "Open"))
+                    self.view.layoutNow()
+                }.store(in: &self.cancellables)
+        } else {
+            self.didFinish?()
+        }
     }
 }

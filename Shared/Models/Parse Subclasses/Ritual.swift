@@ -9,13 +9,14 @@
 import Foundation
 import Parse
 import Combine
+import ParseLiveQuery
 
 enum RitualKey: String {
     case hour
     case minute
 }
 
-final class Ritual: PFObject, PFSubclassing  {
+final class Ritual: PFObject, PFSubclassing, Subscribeable {
 
     static let currentKey = "currentRitualKey"
     private var cancellables = Set<AnyCancellable>()

@@ -98,6 +98,20 @@ extension TCHChannel {
             }
         }
     }
+
+    func join() -> Future<Void, Error> {
+        return Future { promise in
+            self.join { result in
+                if result.isSuccessful() {
+                    promise(.success(()))
+                } else if let e = result.error {
+                    promise(.failure(e))
+                } else {
+                    promise(.failure(ClientError.apiError(detail: "Failed to join channel")))
+                }
+            }
+        }
+    }
 }
 
 extension TCHChannel: Comparable {
