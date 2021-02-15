@@ -71,6 +71,6 @@ class PostViewController: ViewController {
 
         self.button.setSize(with: self.container.width)
         self.button.centerOnX()
-        self.button.pin(.bottom, padding: -Theme.contentOffset)
+        self.button.pin(.bottom, padding: Theme.contentOffset)
     }
 }
