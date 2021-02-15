@@ -58,18 +58,6 @@ class FeedViewController: ViewController {
         self.reloadButton.didSelect { [unowned self] in
             self.reloadFeed()
         }
-
-        User.current()?.ritual?.subscribe()
-            .mainSink(receiveValue: { (event) in
-                switch event {
-                case .created(let r), .updated(let r):
-                    self.determineMessage(with: r)
-                case .deleted(_):
-                    self.addFirstItems()
-                default:
-                    break
-                }
-            }).store(in: &self.cancellables)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -86,6 +74,7 @@ class FeedViewController: ViewController {
                 .mainSink(receivedResult: { (result) in
                     switch result {
                     case .success(let r):
+                        self.subscribeToRitualUpdates()
                         self.determineMessage(with: r)
                     case .error(_):
                         self.addFirstItems()
@@ -94,6 +83,20 @@ class FeedViewController: ViewController {
         } else {
             self.addFirstItems()
         }
+    }
+
+    private func subscribeToRitualUpdates() {
+        User.current()?.ritual?.subscribe()
+            .mainSink(receiveValue: { (event) in
+                switch event {
+                case .created(let r), .updated(let r):
+                    self.determineMessage(with: r)
+                case .deleted(_):
+                    self.addFirstItems()
+                default:
+                    break
+                }
+            }).store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {

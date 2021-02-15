@@ -48,14 +48,13 @@ class PostConnectionViewController: PostViewController {
         self.connection = connection
 
         if let user = connection.nonMeUser {
-            user.fetchIfNeededInBackground { (object, error) in
-                guard let nonMeUser = object as? User else { return }
-                self.avatarView.set(avatar: nonMeUser)
-
-                let text = LocalizedString(id: "", arguments: [nonMeUser.givenName], default: "@(first) would like to connect with you.")
-                self.textView.set(localizedText: text)
-                self.container.layoutNow()
-            }
+            user.retrieveDataIfNeeded()
+                .mainSink(receiveValue: { user in
+                    self.avatarView.set(avatar: user)
+                    let text = LocalizedString(id: "", arguments: [user.givenName], default: "@(first) would like to connect with you.")
+                    self.textView.set(localizedText: text)
+                    self.view.layoutNow()
+                }).store(in: &self.cancellables)
         }
     }
 

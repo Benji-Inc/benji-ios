@@ -13,6 +13,7 @@ protocol FeedManagerDelegate: AnyObject {
     func feed(_ manager: FeedManager, didSelect type: PostType)
     func feedManagerDidFinish(_ manager: FeedManager)
     func feed(_ manager: FeedManager, didSkip index: Int)
+    func feed(_ manager: FeedManager, didPause index: Int)
     func feed(_ manager: FeedManager,
               didShowViewAt index: Int,
               with duration: TimeInterval)
@@ -57,7 +58,7 @@ class FeedManager: NSObject {
             case .connectionRequest(_):
                 postVC = PostConnectionViewController(with: type)
             case .inviteAsk(_):
-                postVC = PostConnectionViewController(with: type)
+                postVC = PostReservationViewController(with: type)
             case .notificationPermissions:
                 postVC = PostNotificationPermissionsViewController(with: type)
             case .meditation:
@@ -72,6 +73,10 @@ class FeedManager: NSObject {
 
             postVC.didSkip = { [unowned self] in
                 self.delegate.feed(self, didSkip: index)
+            }
+
+            postVC.didPause = { [unowned self] in
+                self.delegate.feed(self, didPause: index)
             }
         }
 
@@ -98,7 +103,7 @@ class FeedManager: NSObject {
         UIView.animate(withDuration: duration) {
             self.current?.view.alpha = 0
         } completion: { (completed) in
-            self.current?.removeFromParent()
+            self.current?.removeFromParentSuperview()
             self.current = post
             post.view.alpha = 0
             self.parentVC.addChild(viewController: post)

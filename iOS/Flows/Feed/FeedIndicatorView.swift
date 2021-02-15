@@ -90,14 +90,18 @@ class FeedIndicatorView: View {
         }
     }
 
-    func finishProgress() {
-        for (index, view) in self.elements.enumerated() {
-            if let animator = view.animator, animator.isRunning {
-                animator.stopAnimation(false)
-                self.delegate.feedIndicator(self, didFinishProgressFor: index)
-                return
-            }
-        }
+    func pauseProgress(at index: Int) {
+        guard let element = self.elements[safe: index] else { return }
+        element.animator?.pauseAnimation()
+    }
+
+    func finishProgress(at index: Int) {
+        guard let element = self.elements[safe: index],
+              let animator = element.animator,
+              animator.state == .active else { return }
+
+        animator.stopAnimation(false)
+        self.delegate.feedIndicator(self, didFinishProgressFor: index)
     }
 }
 

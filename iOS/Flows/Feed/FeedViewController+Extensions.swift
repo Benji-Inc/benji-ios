@@ -44,7 +44,11 @@ extension FeedViewController: FeedManagerDelegate {
     }
 
     func feed(_ manager: FeedManager, didSkip index: Int) {
-        self.indicatorView.finishProgress()
+        self.indicatorView.finishProgress(at: index)
+    }
+
+    func feed(_ manager: FeedManager, didPause index: Int) {
+        self.indicatorView.pauseProgress(at: index)
     }
 
     func feed(_ manager: FeedManager,
