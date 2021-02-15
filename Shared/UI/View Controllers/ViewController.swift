@@ -19,6 +19,12 @@ class ViewController: UIViewController, Dismissable {
         self.initializeViews()
     }
 
+    deinit {
+        self.cancellables.forEach { (cancellable) in
+            cancellable.cancel()
+        }
+    }
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.initializeViews()

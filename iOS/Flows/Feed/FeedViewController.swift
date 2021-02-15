@@ -58,6 +58,18 @@ class FeedViewController: ViewController {
         self.reloadButton.didSelect { [unowned self] in
             self.reloadFeed()
         }
+
+        User.current()?.ritual?.subscribe()
+            .mainSink(receiveValue: { (event) in
+                switch event {
+                case .created(let r), .updated(let r):
+                    self.determineMessage(with: r)
+                case .deleted(_):
+                    self.addFirstItems()
+                default:
+                    break
+                }
+            }).store(in: &self.cancellables)
     }
 
     override func viewDidAppear(_ animated: Bool) {

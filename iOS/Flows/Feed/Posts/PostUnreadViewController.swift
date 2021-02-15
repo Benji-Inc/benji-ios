@@ -32,7 +32,12 @@ class PostUnreadViewController: PostViewController {
         channel.getAuthorAsUser()
             .mainSink(receiveValue: { (user) in
                 self.avatarView.set(avatar: user)
-                self.textView.set(localizedText: "You have \(String(count)) unread messages in \(String(optional: channel.friendlyName))")
+                if count > 0 {
+                    self.textView.set(localizedText: "You have \(String(count)) unread messages in \(String(optional: channel.friendlyName))")
+                } else {
+                    self.textView.set(localizedText: "Nice job! 🥳 You are all caught up in: \(String(optional: channel.friendlyName))")
+                }
+
                 self.container.layoutNow()
             }).store(in: &self.cancellables)
     }

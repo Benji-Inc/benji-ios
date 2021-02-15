@@ -14,20 +14,28 @@ class PostIntroViewController: PostViewController {
     private let timeLabel = Label(font: .displayThin, textColor: .lightPurple)
     private let label = Label(font: .regular)
     private let descritpionLabel = Label(font: .small, textColor: .background3)
+    private let centerView = View()
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.container.addSubview(self.timeLabel)
-        self.container.addSubview(self.label)
+        self.centerView.addSubview(self.timeLabel)
+        self.centerView.addSubview(self.label)
         self.label.textAlignment = .center
-        self.container.addSubview(self.descritpionLabel)
         self.descritpionLabel.textAlignment = .center
     }
 
     override func configurePost() {
         guard case PostType.timeSaved(let count) = self.type else { return }
         self.set(count: count)
+    }
+
+    override func getCenterContent() -> UIView {
+        return self.centerView
+    }
+
+    override func getBottomContent() -> UIView {
+        return self.descritpionLabel
     }
 
     func set(count: Int) {
@@ -47,16 +55,18 @@ class PostIntroViewController: PostViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.timeLabel.setSize(withWidth: self.container.width)
+        self.centerView.expandToSuperviewSize()
+
+        self.timeLabel.setSize(withWidth: self.centerView.width)
         self.timeLabel.centerOnX()
-        self.timeLabel.bottom = self.container.halfHeight - 5
+        self.timeLabel.bottom = self.centerView.halfHeight - 5
 
-        self.label.setSize(withWidth: self.container.width * 0.9)
+        self.label.setSize(withWidth: self.centerView.width * 0.9)
         self.label.centerOnX()
-        self.label.top = self.container.halfHeight + 5
+        self.label.top = self.centerView.halfHeight + 5
 
-        self.descritpionLabel.setSize(withWidth: self.container.width)
+        self.descritpionLabel.setSize(withWidth: self.bottomContainer.width)
         self.descritpionLabel.centerOnX()
-        self.descritpionLabel.bottom = self.container.bottom
+        self.descritpionLabel.pin(.bottom)
     }
 }

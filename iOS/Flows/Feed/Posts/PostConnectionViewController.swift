@@ -15,12 +15,13 @@ class PostConnectionViewController: PostViewController {
     private let acceptButton = Button()
     private let declineButton = Button()
     private var connection: Connection?
+    private let buttonContainer = View()
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.container.addSubview(self.acceptButton)
-        self.container.addSubview(self.declineButton)
+        self.buttonContainer.addSubview(self.acceptButton)
+        self.buttonContainer.addSubview(self.declineButton)
 
         self.textView.set(localizedText: "Connection request.")
         self.acceptButton.set(style: .rounded(color: .purple, text: "Accept"))
@@ -32,6 +33,10 @@ class PostConnectionViewController: PostViewController {
         self.declineButton.didSelect { [unowned self] in
             self.updateConnection(with: .declined)
         }
+    }
+
+    override func getCenterContent() -> UIView {
+        return self.buttonContainer
     }
 
     override func configurePost() {
@@ -57,13 +62,15 @@ class PostConnectionViewController: PostViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.acceptButton.setSize(with: self.container.width * 0.4)
-        self.acceptButton.centerX = self.container.width * 0.69
-        self.acceptButton.bottom = self.container.height - Theme.contentOffset
+        self.buttonContainer.expandToSuperviewSize()
 
-        self.declineButton.setSize(with: self.container.width * 0.4)
-        self.declineButton.centerX = self.container.width * 0.3
-        self.declineButton.bottom = self.container.height - Theme.contentOffset
+        self.acceptButton.setSize(with: self.buttonContainer.width * 0.4)
+        self.acceptButton.centerX = self.buttonContainer.width * 0.69
+        self.acceptButton.pin(.bottom)
+
+        self.declineButton.setSize(with: self.buttonContainer.width * 0.4)
+        self.declineButton.centerX = self.buttonContainer.width * 0.3
+        self.declineButton.pin(.bottom)
     }
 
     func updateConnection(with status: Connection.Status) {

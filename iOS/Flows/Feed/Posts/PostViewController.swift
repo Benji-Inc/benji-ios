@@ -48,6 +48,10 @@ class PostViewController: ViewController {
         self.button.didSelect { [unowned self] in
             self.didTapButton()
         }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
         self.configurePost()
     }
