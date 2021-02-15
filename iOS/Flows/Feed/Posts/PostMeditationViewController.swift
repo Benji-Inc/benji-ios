@@ -18,6 +18,6 @@ class PostMeditationViewController: PostViewController {
     }
 
     override func didTapButton() {
-        self.didFinish?()
+        self.didSelectPost?()
     }
 }

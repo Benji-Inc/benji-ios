@@ -48,7 +48,7 @@ class PostChannelInviteViewController: PostViewController {
                     self.view.layoutNow()
                 }.store(in: &self.cancellables)
         } else {
-            self.didFinish?()
+            self.didSelectPost?()
         }
     }
 }

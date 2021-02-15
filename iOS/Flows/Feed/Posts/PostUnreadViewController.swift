@@ -20,7 +20,7 @@ class PostUnreadViewController: PostViewController {
     }
 
     override func didTapButton() {
-        self.didFinish?()
+        self.didSelectPost?()
     }
 
     override func configurePost() {

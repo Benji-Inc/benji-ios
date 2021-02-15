@@ -12,8 +12,8 @@ protocol FeedManagerDelegate: AnyObject {
     func feedManagerDidSetItems(_ manager: FeedManager)
     func feed(_ manager: FeedManager, didSelect type: PostType)
     func feedManagerDidFinish(_ manager: FeedManager)
-    func feed(_ manager: FeedManager, didSkip index: Int)
     func feed(_ manager: FeedManager, didPause index: Int)
+    func feed(_ manager: FeedManager, didFinish index: Int)
     func feed(_ manager: FeedManager,
               didShowViewAt index: Int,
               with duration: TimeInterval)
@@ -68,11 +68,11 @@ class FeedManager: NSObject {
             postVCs.append(postVC)
 
             postVC.didFinish = { [unowned self] in
-                self.delegate.feed(self, didSelect: type)
+                self.delegate.feed(self, didFinish: index)
             }
 
-            postVC.didSkip = { [unowned self] in
-                self.delegate.feed(self, didSkip: index)
+            postVC.didSelectPost = { [unowned self] in
+                self.delegate.feed(self, didSelect: type)
             }
 
             postVC.didPause = { [unowned self] in

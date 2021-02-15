@@ -13,8 +13,8 @@ class PostViewController: ViewController {
     let type: PostType
 
     var didFinish: CompletionOptional = nil
-    var didSkip: CompletionOptional = nil
-    var didPause: CompletionOptional = nil 
+    var didPause: CompletionOptional = nil
+    var didSelectPost: CompletionOptional = nil 
 
     let container = View()
     let bottomContainer = View()
@@ -38,7 +38,7 @@ class PostViewController: ViewController {
 
         self.view.addSubview(self.container)
         self.container.didSelect { [unowned self] in
-            self.didSkip?()
+            self.didFinish?()
         }
 
         self.container.addSubview(self.getCenterContent())

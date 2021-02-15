@@ -43,7 +43,7 @@ extension FeedViewController: FeedManagerDelegate {
         self.showReload()
     }
 
-    func feed(_ manager: FeedManager, didSkip index: Int) {
+    func feed(_ manager: FeedManager, didFinish index: Int) {
         self.indicatorView.finishProgress(at: index)
     }
 

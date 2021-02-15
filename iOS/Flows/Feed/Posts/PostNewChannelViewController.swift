@@ -25,7 +25,7 @@ class PostNewChannelViewController: PostViewController {
     }
 
     override func didTapButton() {
-        self.didFinish?()
+        self.didSelectPost?()
     }
 
     func configure(with channel: DisplayableChannel) {
