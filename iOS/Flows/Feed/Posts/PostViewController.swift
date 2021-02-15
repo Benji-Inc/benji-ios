@@ -16,6 +16,9 @@ class PostViewController: ViewController {
     var didSkip: CompletionOptional = nil
 
     let container = View()
+    let bottomContainer = View()
+
+    // Common items
     let textView = PostTextView()
     let avatarView = AvatarView()
     let button = Button()
@@ -36,10 +39,12 @@ class PostViewController: ViewController {
         self.container.didSelect { [unowned self] in
             self.didSkip?()
         }
-        
-        self.container.addSubview(self.textView)
+
+        self.container.addSubview(self.getCenterContent())
+        self.container.addSubview(self.bottomContainer)
+        self.bottomContainer.addSubview(self.getBottomContent())
         self.container.addSubview(self.avatarView)
-        self.container.addSubview(self.button)
+
         self.button.didSelect { [unowned self] in
             self.didTapButton()
         }
@@ -49,6 +54,14 @@ class PostViewController: ViewController {
 
     func configurePost() {}
     func didTapButton() {}
+
+    func getCenterContent() -> UIView {
+        return self.textView
+    }
+
+    func getBottomContent() -> UIView {
+        return self.button
+    }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -64,13 +77,16 @@ class PostViewController: ViewController {
         self.avatarView.setSize(for: 100)
         self.avatarView.centerOnX()
         self.avatarView.pin(.top, padding: self.container.height * 0.3)
+        self.avatarView.isHidden = self.avatarView.avatar.isNil
+
+        self.bottomContainer.size = CGSize(width: self.container.width, height: Theme.buttonHeight)
+        self.bottomContainer.pin(.bottom, padding: Theme.contentOffset)
 
         self.textView.setSize(withWidth: self.container.width * 0.9)
         self.textView.centerOnX()
         self.textView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset)
 
-        self.button.setSize(with: self.container.width)
-        self.button.centerOnX()
-        self.button.pin(.bottom, padding: Theme.contentOffset)
+        self.button.setSize(with: self.bottomContainer.width)
+        self.button.centerOnXAndY()
     }
 }
