@@ -200,12 +200,12 @@ class FeedViewController: ViewController {
     }
 
     func showFeed() {
-        runMain {
-            UIView.animate(withDuration: Theme.animationDuration, delay: 0, options: [], animations: {
-                self.countDownView.alpha = 0
-                self.countDownView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-                self.indicatorView.alpha = 1
-            }, completion: nil)
-        }
+        UIView.animate(withDuration: Theme.animationDuration, delay: 0, options: [], animations: {
+            self.countDownView.alpha = 0
+            self.countDownView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            self.indicatorView.alpha = 1
+            self.messageLabel.alpha = 0
+            self.reloadButton.alpha = 0
+        }, completion: nil)
     }
 }

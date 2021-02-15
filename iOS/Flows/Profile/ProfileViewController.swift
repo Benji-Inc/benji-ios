@@ -57,6 +57,14 @@ class ProfileViewController: ViewController {
         self.ritualView.button.didSelect { [unowned self] in
             self.delegate?.profileView(self, didSelect: .ritual, for: self.user)
         }
+
+        self.user.subscribe()
+            .mainSink(receiveValue: { event in
+                switch event {
+                case .entered(let u), .left(let u), .created(let u), .updated(let u), .deleted(let u):
+                    self.updateItems(with: u)
+                }
+            }).store(in: &self.cancellables)
     }
 
     override func viewWillAppear(_ animated: Bool) {
