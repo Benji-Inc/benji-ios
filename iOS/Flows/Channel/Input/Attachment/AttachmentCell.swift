@@ -15,7 +15,6 @@ class AttachmentCell: CollectionViewManagerCell, ManageableCell {
 
     private let imageView = DisplayableImageView()
     private let selectedView = View()
-    private var cancellables = Set<AnyCancellable>()
 
     override func initializeSubviews() {
         self.contentView.addSubview(self.imageView)

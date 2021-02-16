@@ -15,7 +15,6 @@ class ReservationCell: CollectionViewManagerCell, ManageableCell {
 
     let button = Button()
     let imageView = UIImageView(image: UIImage(systemName: "person.badge.plus"))
-    private var cancellables = Set<AnyCancellable>()
 
     override func initializeSubviews() {
         super.initializeSubviews()

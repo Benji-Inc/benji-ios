@@ -49,11 +49,18 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: Connection) {
         guard let status = item.status, status == .invited, let user = item.nonMeUser else { return }
 
-        let text = LocalizedString(id: "", arguments: [user.handle], default: "@(handle) has invited you to connect.")
-        self.descriptionLabel.setText(text)
-        self.avatarView.set(avatar: user)
-
-        self.layoutNow()
+        user.retrieveDataIfNeeded()
+            .mainSink { result in
+                switch result {
+                case .success(let userWithData):
+                    let text = LocalizedString(id: "", arguments: [userWithData.handle], default: "@(handle) has invited you to connect.")
+                    self.descriptionLabel.setText(text)
+                    self.avatarView.set(avatar: userWithData)
+                    self.layoutNow()
+                case .error(_):
+                    break
+                }
+            }.store(in: &self.cancellables)
     }
 
     override func layoutSubviews() {

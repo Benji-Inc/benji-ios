@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 typealias ManagerCell = CollectionViewManagerCell & ManageableCell
 
@@ -20,6 +21,7 @@ struct ManageableCellRegistration<Cell: ManagerCell> {
 class CollectionViewManagerCell: UICollectionViewCell {
 
     var onLongPress: (() -> Void)?
+    var cancellables = Set<AnyCancellable>()
 
     override init(frame: CGRect) {
 
