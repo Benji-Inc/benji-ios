@@ -82,6 +82,22 @@ extension Objectable where Self: PFObject {
         }
     }
 
+    static func getObject(with objectId: String) -> Future<Self, Error> {
+        return Future { promise in
+            let query = self.query()
+            query?.whereKey("objectId", contains: objectId)
+            query?.getFirstObjectInBackground(block: { object, error in
+                if let obj = object as? Self {
+                    promise(.success(obj))
+                } else if let e = error {
+                    promise(.failure(e))
+                } else {
+                    promise(.failure(ClientError.generic))
+                }
+            })
+        }
+    }
+
     static func localThenNetworkQuery(for objectId: String) -> Future<Self, Error> {
         return Future { promise in
             if let query = self.query() {

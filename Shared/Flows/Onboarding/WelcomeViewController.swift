@@ -110,14 +110,14 @@ class WelcomeViewController: TextInputViewController<Void> {
     }
 
     override func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let text = textField.text, !text.isEmpty else {
+        guard let code = textField.text, !code.isEmpty else {
             self.state = .welcome
             return
         }
 
         let tf = self.textField as? TextField
         tf?.animationView.play()
-        Reservation.localThenNetworkQuery(for: text)
+        Reservation.getObject(with: code)
             .mainSink(receivedResult: { (result) in
                 switch result {
                 case .success(let reservation):
@@ -126,7 +126,7 @@ class WelcomeViewController: TextInputViewController<Void> {
                     } else {
                         self.state = .foundReservation(reservation)
                     }
-                case .error(_):
+                case .error(let e):
                     self.state = .reservationError
                 }
                 tf?.animationView.stop()

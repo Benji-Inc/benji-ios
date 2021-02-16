@@ -15,10 +15,9 @@ import Combine
 class CodeViewController: TextInputViewController<Void> {
 
     var phoneNumber: PhoneNumber?
-    let reservationId: String?
+    var reservationId: String?
     
-    init(with reservationId: String?) {
-        self.reservationId = reservationId
+    init() {
         super.init(textField: TextField(),
                    title: LocalizedString(id: "", default: "CODE"),
                    placeholder: LocalizedString(id: "", default: "0000"))

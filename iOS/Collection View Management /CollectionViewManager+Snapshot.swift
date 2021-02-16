@@ -11,15 +11,26 @@ import Foundation
 extension CollectionViewManager {
 
     func reloadAllSections(animate: Bool = true) {
-        var new = self.dataSource.snapshot()
-        new.reloadSections(SectionType.allCases as! [SectionType])
-        self.dataSource.apply(new, animatingDifferences: true)
+        if self.dataSource.numberOfSections(in: self.collectionView) == 0 {
+            self.loadSnapshot()
+        } else {
+            var new = self.dataSource.snapshot()
+            new.reloadSections(SectionType.allCases as! [SectionType])
+            self.dataSource.apply(new, animatingDifferences: true)
+        }
     }
 
     func append(items: [AnyHashable], to section: SectionType, animate: Bool = true) {
-        var new = self.dataSource.snapshot()
-        new.appendItems(items, toSection: section)
-        self.dataSource.apply(new, animatingDifferences: animate)
+        if self.dataSource.snapshot().sectionIdentifiers.contains(section) {
+            var new = self.dataSource.snapshot()
+            new.appendItems(items, toSection: section)
+            self.dataSource.apply(new, animatingDifferences: animate)
+        } else {
+            var new = self.dataSource.snapshot()
+            new.appendSections([section])
+            new.appendItems(items, toSection: section)
+            self.dataSource.apply(new, animatingDifferences: animate)
+        }
     }
 
     func insert(items: [AnyHashable], before item: AnyHashable, animate: Bool = true) {

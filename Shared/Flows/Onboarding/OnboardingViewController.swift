@@ -26,7 +26,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     lazy var welcomeVC = WelcomeViewController()
     lazy var phoneVC = PhoneViewController()
-    lazy var codeVC = CodeViewController(with: self.reservationId)
+    lazy var codeVC = CodeViewController()
     lazy var nameVC = NameViewController()
     lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
@@ -36,7 +36,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     unowned let delegate: OnboardingViewControllerDelegate
 
     var deeplink: DeepLinkable?
-    var reservationId: String?
+    var reservationId: String? {
+        didSet {
+            self.codeVC.reservationId = self.reservationId
+        }
+    }
     var reservationUser: User? 
     var reservationCreatorId: String?
 
