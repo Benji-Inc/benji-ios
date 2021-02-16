@@ -31,20 +31,8 @@ class ReservationsCoordinator: Coordinator<Void> {
     override func start() {
         super.start()
 
-        if let contactId = self.reservation.contactId {
-            ContactsManger.shared.searchForContact(with: .identifier(contactId))
-                .mainSink { (result) in
-                    switch result {
-                    case .success(let contacts):
-                        if let first = contacts.first {
-                            self.findUser(for: first, sendReminder: true)
-                        } else {
-                            self.showIntroAlert()
-                        }
-                    case .error(_):
-                        self.showIntroAlert()
-                    }
-                }.store(in: &self.cancellables)
+        if let contactId = self.reservation.contactId, let first = ContactsManger.shared.searchForContact(with: .identifier(contactId)).first {
+            self.findUser(for: first)
         } else {
             self.showIntroAlert()
         }
@@ -146,25 +134,23 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
 
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
         self.selectedContact = contact
-        self.findUser(for: contact, sendReminder: false)
+        self.findUser(for: contact)
     }
 
-    func findUser(for contact: CNContact, sendReminder: Bool) {
+    func findUser(for contact: CNContact) {
         // Search for user with phone number
         guard let query = User.query(), let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
         query.whereKey("phoneNumber", contains: phone)
-        query.getFirstObjectInBackground { (object, error) in
+        query.getFirstObjectInBackground { [unowned self] (object, error) in
             if let user = object as? User {
                 self.showReservationAlert(for: user)
+            } else if self.reservation.contactId == contact.identifier {
+                self.sendText(with: self.reservation.reminderMessage, phone: phone)
             } else {
                 self.reservation.contactId = contact.identifier
                 self.reservation.saveLocalThenServer()
                     .mainSink { (updatedReservation) in
-                        if sendReminder {
-                            self.sendText(with: "A reminder message", phone: phone)
-                        } else {
-                            self.sendText(with: self.reservation.message, phone: phone)
-                        }
+                        self.sendText(with: self.reservation.message, phone: phone)
                     }.store(in: &self.cancellables)
             }
         }

@@ -10,6 +10,12 @@ import Foundation
 
 extension CollectionViewManager {
 
+    func reloadAllSections(animate: Bool = true) {
+        var new = self.dataSource.snapshot()
+        new.reloadSections(SectionType.allCases as! [SectionType])
+        self.dataSource.apply(new, animatingDifferences: true)
+    }
+
     func append(items: [AnyHashable], to section: SectionType, animate: Bool = true) {
         var new = self.dataSource.snapshot()
         new.appendItems(items, toSection: section)

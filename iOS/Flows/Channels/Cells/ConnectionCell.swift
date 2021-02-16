@@ -53,7 +53,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
             .mainSink { result in
                 switch result {
                 case .success(let userWithData):
-                    let text = LocalizedString(id: "", arguments: [userWithData.handle], default: "@(handle) has invited you to connect.")
+                    let text = LocalizedString(id: "", arguments: [userWithData.handle], default: "[@(handle)](link) has invited you to connect.")
                     self.descriptionLabel.setText(text)
                     self.avatarView.set(avatar: userWithData)
                     self.layoutNow()

@@ -130,6 +130,11 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
         return "Claim your RSVP by tapping 👇\n\(link)"
     }
 
+    var reminderMessage: String? {
+        guard let link = self.link else { return nil }
+        return "This is a friendly remider that I ACTUALLY want you to join me. I saved you a spot. Tap 👇\n\(link)"
+    }
+
     func prepareMetaData(andUpdate statusables: [Statusable]) -> Future<Void, Error> {
         return Future { promise in
             let metadataProvider = LPMetadataProvider()
