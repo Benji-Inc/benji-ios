@@ -46,4 +46,9 @@ extension ChannelsCoordinator: ChannelsViewControllerDelegate {
             self.channelsVC.collectionViewManager.reloadAllSections()
         }
     }
+
+    func channelsViewControllerDidTapAdd(_ controller: ChannelsViewController) {
+        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
+        self.router.present(coordinator, source: self.channelsVC)
+    }
 }

@@ -11,6 +11,12 @@ import Foundation
 class UserCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Connection
 
+    override func initializeSubviews() {
+        super.initializeSubviews()
+
+        self.contentView.backgroundColor = .red
+    }
+
     func configure(with item: Connection) {
         guard let nonMeUser = item.nonMeUser else { return }
     }

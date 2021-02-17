@@ -10,6 +10,7 @@ import Foundation
 
 class NewChannelViewController: CollectionViewController<NewChannelCollectionViewManger.SectionType, NewChannelCollectionViewManger> {
 
+    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     var didCreateChannel: CompletionOptional = nil
 
     private let createButton = Button()
@@ -25,6 +26,8 @@ class NewChannelViewController: CollectionViewController<NewChannelCollectionVie
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
+
         self.collectionViewManager.$onSelectedItem.mainSink { _ in
             self.createButton.isEnabled = self.collectionViewManager.selectedItems.count > 0
         }.store(in: &self.cancellables)
@@ -38,6 +41,8 @@ class NewChannelViewController: CollectionViewController<NewChannelCollectionVie
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        self.blurView.expandToSuperviewSize()
 
         self.createButton.setSize(with: self.view.width)
         self.createButton.pinToSafeArea(.bottom, padding: 0)

@@ -14,6 +14,7 @@ import TMROLocalization
 protocol ChannelsViewControllerDelegate: AnyObject {
     func channelsView(_ controller: ChannelsViewController, didSelect channelType: ChannelType)
     func channelsView(_ controller: ChannelsViewController, didSelect reservation: Reservation)
+    func channelsViewControllerDidTapAdd(_ controller: ChannelsViewController)
 }
 
 class ChannelsViewController: CollectionViewController<ChannelsCollectionViewManager.SectionType, ChannelsCollectionViewManager> {
@@ -36,7 +37,7 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
         self.view.insertSubview(self.addButton, aboveSubview: self.collectionView)
         self.addButton.set(style: .normal(color: .purple, text: "+"))
         self.addButton.didSelect { [unowned self] in
-            self.didTapAddNewChannel()
+            self.delegate?.channelsViewControllerDidTapAdd(self)
         }
 
         self.collectionViewManager.$onSelectedItem.mainSink { (result) in
@@ -82,9 +83,5 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
                 self.collectionViewManager.reload(sections: ChannelsCollectionViewManager.SectionType.allCases, animate: true)
                 self.collectionViewManager.reload(items: [connection])
             }.store(in: &self.cancellables)
-    }
-
-    private func didTapAddNewChannel() {
-
     }
 }

@@ -19,6 +19,8 @@ class NewChannelCollectionViewManger: CollectionViewManager<NewChannelCollection
     private var connections: [Connection] = []
 
     private let userConfig = ManageableCellRegistration<UserCell>().cellProvider
+    private let headerConfig = UICollectionView.SupplementaryRegistration
+    <NewChannelHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { (headerView, elementKind, indexPath) in }
 
     override func initialize() {
         super.initialize()
@@ -45,5 +47,17 @@ class NewChannelCollectionViewManger: CollectionViewManager<NewChannelCollection
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         return self.collectionView.dequeueManageableCell(using: self.userConfig, for: indexPath, item: item as? Connection)
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.width, height: 80)
+    }
+
+    override func getSupplementaryView(for section: SectionType, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
+        return self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+    }
+
+    override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.width, height: 120)
     }
 }
