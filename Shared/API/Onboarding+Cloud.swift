@@ -74,20 +74,3 @@ struct ActivateUser: CloudFunction {
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
     }
 }
-
-struct ClaimReservation: CloudFunction {
-    typealias ReturnType = Any
-
-    var reservationId: String
-    var isClaimed: Bool
-
-    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
-        let params: [String: Any] = ["reservationId": self.reservationId,
-                                     "isClaimed": self.isClaimed]
-        return self.makeRequest(andUpdate: statusables,
-                                params: params,
-                                callName: "claimReservation",
-                                delayInterval: 0.0,
-                                viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
-    }
-}

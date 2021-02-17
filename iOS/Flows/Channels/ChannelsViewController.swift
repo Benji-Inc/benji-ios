@@ -20,6 +20,8 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
 
     weak var delegate: ChannelsViewControllerDelegate?
 
+    private let addButton = Button()
+
     init() {
         super.init(with: ChannelsCollectionView())
     }
@@ -30,6 +32,12 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.view.insertSubview(self.addButton, aboveSubview: self.collectionView)
+        self.addButton.set(style: .normal(color: .purple, text: "+"))
+        self.addButton.didSelect { [unowned self] in
+            self.didTapAddNewChannel()
+        }
 
         self.collectionViewManager.$onSelectedItem.mainSink { (result) in
             guard let selection = result else { return }
@@ -59,6 +67,14 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
             }, receiveCompletion: { (_) in }).store(in: &self.cancellables)
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.addButton.size = CGSize(width: 50, height: 50)
+        self.addButton.pin(.right, padding: Theme.contentOffset)
+        self.addButton.pin(.bottom, padding: Theme.contentOffset)
+    }
+
     private func didSelect(connection: Connection, status: Connection.Status) {
 
         UpdateConnection(connection: connection, status: status).makeRequest(andUpdate: [], viewsToIgnore: [])
@@ -66,5 +82,9 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
                 self.collectionViewManager.reload(sections: ChannelsCollectionViewManager.SectionType.allCases, animate: true)
                 self.collectionViewManager.reload(items: [connection])
             }.store(in: &self.cancellables)
+    }
+
+    private func didTapAddNewChannel() {
+
     }
 }

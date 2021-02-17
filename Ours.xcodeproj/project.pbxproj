@@ -274,6 +274,11 @@
 		D66A0B942351821200A0FFEA /* Completeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A0B932351821200A0FFEA /* Completeable.swift */; };
 		D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
 		D66A580125DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
+		D66A580525DD68F9001B3F64 /* NewChannelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580425DD68F9001B3F64 /* NewChannelCoordinator.swift */; };
+		D66A580725DD691A001B3F64 /* NewChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580625DD691A001B3F64 /* NewChannelViewController.swift */; };
+		D66A580925DD6954001B3F64 /* NewChannelCollectionViewManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580825DD6954001B3F64 /* NewChannelCollectionViewManger.swift */; };
+		D66A580B25DD6990001B3F64 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580A25DD6990001B3F64 /* UserCell.swift */; };
+		D66A580D25DD6B06001B3F64 /* NewChannelCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580C25DD6B06001B3F64 /* NewChannelCollectionView.swift */; };
 		D66F0FC722BF004300BA277D /* PostType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FC622BF004300BA277D /* PostType.swift */; };
 		D66F0FC922BF006D00BA277D /* SystemMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FC822BF006D00BA277D /* SystemMessage.swift */; };
 		D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FCE22BF060500BA277D /* Deeplinkable.swift */; };
@@ -623,6 +628,11 @@
 		D66656BC23D13C9A009E4BDF /* Switchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switchable.swift; sourceTree = "<group>"; };
 		D66A0B932351821200A0FFEA /* Completeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Completeable.swift; sourceTree = "<group>"; };
 		D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
+		D66A580425DD68F9001B3F64 /* NewChannelCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewChannelCoordinator.swift; sourceTree = "<group>"; };
+		D66A580625DD691A001B3F64 /* NewChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelViewController.swift; sourceTree = "<group>"; };
+		D66A580825DD6954001B3F64 /* NewChannelCollectionViewManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCollectionViewManger.swift; sourceTree = "<group>"; };
+		D66A580A25DD6990001B3F64 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
+		D66A580C25DD6B06001B3F64 /* NewChannelCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCollectionView.swift; sourceTree = "<group>"; };
 		D66F0FC622BF004300BA277D /* PostType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostType.swift; sourceTree = "<group>"; };
 		D66F0FC822BF006D00BA277D /* SystemMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMessage.swift; sourceTree = "<group>"; };
 		D66F0FCE22BF060500BA277D /* Deeplinkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplinkable.swift; sourceTree = "<group>"; };
@@ -1352,6 +1362,18 @@
 			path = Helpers;
 			sourceTree = "<group>";
 		};
+		D66A580325DD68F9001B3F64 /* New Channel */ = {
+			isa = PBXGroup;
+			children = (
+				D66A580C25DD6B06001B3F64 /* NewChannelCollectionView.swift */,
+				D66A580825DD6954001B3F64 /* NewChannelCollectionViewManger.swift */,
+				D66A580425DD68F9001B3F64 /* NewChannelCoordinator.swift */,
+				D66A580625DD691A001B3F64 /* NewChannelViewController.swift */,
+				D66A580A25DD6990001B3F64 /* UserCell.swift */,
+			);
+			path = "New Channel";
+			sourceTree = "<group>";
+		};
 		D66F0FDF22C0412300BA277D /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -1520,6 +1542,7 @@
 				D62C634F22BE9C4600F4D097 /* Feed */,
 				D6D145F521D549A300CD8CE4 /* Home */,
 				D658C7D3244229C00027D12E /* Meditation */,
+				D66A580325DD68F9001B3F64 /* New Channel */,
 				D6B2603B22E6B8CD00143CF0 /* Profile */,
 				D68BEAD224831F7C00C95D31 /* Reservations */,
 				D6EDD1932355DB6000FDA5D6 /* Ritual */,
@@ -1898,6 +1921,7 @@
 				D607400E23401B3E009633EB /* SystemChannel.swift in Sources */,
 				D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */,
+				D66A580D25DD6B06001B3F64 /* NewChannelCollectionView.swift in Sources */,
 				D6D1501C21D5F8AD00CD8CE4 /* MessageCell.swift in Sources */,
 				D61EC0F521D3151400204BEE /* NSAttributedString+Extensions.swift in Sources */,
 				D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */,
@@ -2044,6 +2068,7 @@
 				D6D1460521D5524C00CD8CE4 /* StringCasing.swift in Sources */,
 				D66379D725A3704300A4A3B7 /* SessionManager.swift in Sources */,
 				D6A714C725D969FE000A90EB /* PostViewController.swift in Sources */,
+				D66A580725DD691A001B3F64 /* NewChannelViewController.swift in Sources */,
 				D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6F33C7E24B15063009603FF /* LocationMessageCell.swift in Sources */,
@@ -2075,6 +2100,7 @@
 				D60B0BE82432F88D004784CD /* PostConnectionViewController.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
 				D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */,
+				D66A580B25DD6990001B3F64 /* UserCell.swift in Sources */,
 				D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */,
 				D639F61824B1566B007E63B7 /* AttibutedMessageCell.swift in Sources */,
 				D67758AE25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */,
@@ -2096,6 +2122,7 @@
 				D6C9EF3F25BF6CB100A14DE5 /* MessageBubbleView.swift in Sources */,
 				D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */,
 				D64932D723FE460200986335 /* FeedIndicatorView.swift in Sources */,
+				D66A580525DD68F9001B3F64 /* NewChannelCoordinator.swift in Sources */,
 				D6D1500C21D5E7C200CD8CE4 /* CollectionViewManager.swift in Sources */,
 				D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */,
 				D6FA622423F06AEF00048C4A /* AnimationCycle.swift in Sources */,
@@ -2140,6 +2167,7 @@
 				D6F33C7324B14A5D009603FF /* AudioCellAttributesConfigurer.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
 				D6D1500721D5E73D00CD8CE4 /* ChannelViewController.swift in Sources */,
+				D66A580925DD6954001B3F64 /* NewChannelCollectionViewManger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

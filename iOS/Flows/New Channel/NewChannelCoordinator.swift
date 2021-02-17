@@ -10,16 +10,17 @@ import Foundation
 
 class NewChannelCoordinator: PresentableCoordinator<Void> {
 
-    lazy var newChannelVC = NewChannelViewController(delegate: self)
+    lazy var newChannelVC = NewChannelViewController()
 
     override func toPresentable() -> DismissableVC {
         return self.newChannelVC
     }
-}
 
-extension NewChannelCoordinator: NewChannelViewControllerDelegate {
+    override func start() {
+        super.start()
 
-    func newChannelViewControllerDidCreateChannel(_ controller: NewChannelViewController) {
-        self.finishFlow(with: ())
+        self.newChannelVC.didCreateChannel = { [unowned self] in 
+            self.finishFlow(with: ())
+        }
     }
 }
