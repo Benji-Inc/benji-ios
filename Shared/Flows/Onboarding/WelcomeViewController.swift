@@ -127,6 +127,7 @@ class WelcomeViewController: TextInputViewController<Void> {
                         self.state = .foundReservation(reservation)
                     }
                 case .error(let e):
+                    print(e)
                     self.state = .reservationError
                 }
                 tf?.animationView.stop()

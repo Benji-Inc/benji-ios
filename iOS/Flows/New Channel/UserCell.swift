@@ -8,6 +8,10 @@
 
 import Foundation
 
-class UserCell: CollectionViewManagerCell {
+class UserCell: CollectionViewManagerCell, ManageableCell {
+    typealias ItemType = Connection
 
+    func configure(with item: Connection) {
+        guard let nonMeUser = item.nonMeUser else { return }
+    }
 }
