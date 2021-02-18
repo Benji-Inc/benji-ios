@@ -37,6 +37,14 @@ class NewChannelViewController: CollectionViewController<NewChannelCollectionVie
         self.createButton.didSelect { [unowned self] in
             self.createChannel()
         }
+
+        self.createButton.transform = CGAffineTransform.init(translationX: 0, y: 100)
+
+        self.collectionViewManager.didLoadSnapshot = { [unowned self] in
+            UIView.animate(withDuration: Theme.animationDuration) {
+                self.createButton.transform = .identity
+            }
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -50,6 +58,13 @@ class NewChannelViewController: CollectionViewController<NewChannelCollectionVie
     }
 
     func createChannel() {
-        // Create the channel
+
+        let members: [String] = self.collectionViewManager.selectedItems.compactMap { item in
+            guard let connection = item as? Connection else { return nil }
+            return connection.nonMeUser?.objectId
+        }
+
+        ChannelSupplier.shared.createChannel(friendlyName: "", members: members, setActive: true)
+        self.didCreateChannel?()
     }
 }

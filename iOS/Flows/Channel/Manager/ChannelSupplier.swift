@@ -213,6 +213,7 @@ class ChannelSupplier {
         })
     }
 
+    @discardableResult
     func createChannel(uniqueName: String = UUID().uuidString,
                        friendlyName: String,
                        members: [String],

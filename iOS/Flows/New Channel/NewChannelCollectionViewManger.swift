@@ -22,11 +22,14 @@ class NewChannelCollectionViewManger: CollectionViewManager<NewChannelCollection
     private let headerConfig = UICollectionView.SupplementaryRegistration
     <NewChannelHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { (headerView, elementKind, indexPath) in }
 
+    var didLoadSnapshot: CompletionOptional = nil 
+
     override func initialize() {
         super.initialize()
 
         self.allowMultipleSelection = true 
 
+        self.collectionView.animationView.play()
         GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink { result in
                 switch result {
@@ -38,6 +41,7 @@ class NewChannelCollectionViewManger: CollectionViewManager<NewChannelCollection
                 case .error(_):
                     break
                 }
+                self.collectionView.animationView.stop()
             }.store(in: &self.cancellables)
     }
 

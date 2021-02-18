@@ -8,7 +8,7 @@
 
 import Foundation
 
-class NewChannelCoordinator: PresentableCoordinator<Void> {
+class NewChannelCoordinator: PresentableCoordinator<Bool> {
 
     lazy var newChannelVC = NewChannelViewController()
 
@@ -20,7 +20,7 @@ class NewChannelCoordinator: PresentableCoordinator<Void> {
         super.start()
 
         self.newChannelVC.didCreateChannel = { [unowned self] in 
-            self.finishFlow(with: ())
+            self.finishFlow(with: true)
         }
     }
 }

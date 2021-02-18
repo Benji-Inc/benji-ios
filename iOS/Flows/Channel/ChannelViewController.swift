@@ -55,6 +55,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             if self.shouldEnableFirstResponder {
                 self.becomeFirstResponder()
             } else {
+                self.messageInputAccessoryView.expandingTextView.resignFirstResponder()
                 self.resignFirstResponder()
             }
         }
