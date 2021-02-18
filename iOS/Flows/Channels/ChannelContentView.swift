@@ -43,6 +43,7 @@ class ChannelContentView: View {
         self.addSubview(self.stackedAvatarView)
         self.addSubview(self.titleLabel)
         self.addSubview(self.descriptionLabel)
+        self.descriptionLabel.lineBreakMode = .byTruncatingTail
         self.set(backgroundColor: .clear)
         self.roundCorners()
     }
@@ -55,13 +56,7 @@ class ChannelContentView: View {
         case .pending(_):
             break 
         case .channel(let channel):
-            if channel.friendlyName == "welcome" {
-                self.displayWelcome(channel: channel)
-            } else if channel.friendlyName == "feedback" {
-                self.displayFeedback(channel: channel)
-            } else {
-                self.display(channel: channel)
-            }
+            self.display(channel: channel)
         }
 
         self.layoutNow()
@@ -81,7 +76,8 @@ class ChannelContentView: View {
         self.titleLabel.left = titleOffset
         self.titleLabel.pin(.top, padding: 6)
 
-        self.descriptionLabel.setSize(withWidth: width)
+        self.descriptionLabel.height = 17
+        self.descriptionLabel.width = width
         self.descriptionLabel.left = self.titleLabel.left
         self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 8)
     }
@@ -90,40 +86,20 @@ class ChannelContentView: View {
 
         channel.getUsers(excludeMe: true)
             .mainSink(receiveValue: { (users) in
-                if let first = users.first {
-                    if let ritual = first.ritual {
-                        ritual.fetchIfNeededInBackground(block: { (object, error) in
-                            if let ritual = object as? Ritual, let date = ritual.date {
-                                let formatter = DateFormatter()
-                                formatter.dateFormat = "h:mm a"
-                                let string = formatter.string(from: date)
-                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName, string], default: "@(name)'s ritual starts at: @(ritual)")
-                            } else {
-                                self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No ritual yet for @(name).")
-                            }
-                        })
-                    } else {
-                        self.descriptionText = LocalizedString(id: "", arguments: [first.givenName], default: "No ritual yet for @(name).")
-                    }
 
-                    if channel.isOwnedByMe {
-                        self.titleLabel.setText(first.givenName)
-                        self.titleLabel.setTextColor(.white)
-                    } else if let author = users.first(where: { (user) -> Bool in
-                        return user.objectId! == channel.createdBy
-                    }) {
-                        self.titleLabel.setText(author.givenName)
-                        self.titleLabel.setTextColor(.white)
-                    }
-
-                } else if let name = channel.friendlyName {
-                    self.titleLabel.setText(name.capitalized)
-                    self.titleLabel.setTextColor(.white)
-                    self.descriptionText = "Start here to learn your way around."
-                } else {
+                if !channel.friendlyName.isNil {
+                    self.displayCustom(channel: channel)
+                } else if users.count == 0 {
                     self.titleLabel.setText("You")
                     self.titleLabel.setTextColor(.white)
                     self.descriptionText = "It's just you in here."
+                    self.layoutNow()
+                } else if users.count == 1, let user = users.first(where: { user in
+                    return user.objectId != User.current()?.objectId
+                }) {
+                    self.displayDM(for: channel, with: user)
+                } else {
+                    self.displayGroupChat(for: channel, with: users)
                 }
 
                 self.stackedAvatarView.set(items: users)
@@ -134,19 +110,53 @@ class ChannelContentView: View {
         self.layoutNow()
     }
 
-    private func displayWelcome(channel: TCHChannel) {
-        if let name = channel.friendlyName {
-            self.titleLabel.setText(name.capitalized)
-            self.titleLabel.setTextColor(.white)
-            self.descriptionText = "Start here to learn your way around."
+    private func displayDM(for channel: TCHChannel, with user: User) {
+        if let ritual = user.ritual {
+            ritual.retrieveDataIfNeeded()
+                .mainSink { result in
+                    switch result {
+                    case .success(let ritual):
+                        let formatter = DateFormatter()
+                        formatter.dateFormat = "h:mm a"
+                        let string = formatter.string(from: ritual.date!)
+                        self.descriptionText = LocalizedString(id: "", arguments: [string], default: "Ritual: @(ritual)")
+                    case .error(_):
+                        self.descriptionText = LocalizedString(id: "", arguments:[], default: "No ritual yet.")
+                    }
+                    self.layoutNow()
+                }.store(in: &cancellables)
+        } else {
+            self.descriptionText = LocalizedString(id: "", arguments: [], default: "No ritual yet.")
         }
+
+        self.titleLabel.setText(user.handle)
+        self.titleLabel.setTextColor(.white)
+
+        self.layoutNow()
     }
 
-    private func displayFeedback(channel: TCHChannel) {
+    func displayGroupChat(for channel: TCHChannel, with users: [User]) {
+        var text = ""
+        for (index, user) in users.enumerated() {
+            if index < users.count - 1 {
+                text.append(String("\(user.handle), "))
+            } else if index == users.count - 1 && users.count > 1 {
+                text.append(String("\(user.handle)"))
+            } else {
+                text.append(user.handle)
+            }
+        }
+
+        self.titleLabel.setText("Group")
+        self.titleLabel.setTextColor(.white)
+        self.descriptionLabel.setText(text)
+    }
+
+    private func displayCustom(channel: TCHChannel) {
         if let name = channel.friendlyName {
             self.titleLabel.setText(name.capitalized)
             self.titleLabel.setTextColor(.white)
-            self.descriptionText = "Got something to say? Say it here!"
+            self.descriptionText = channel.channelDescription
         }
     }
 

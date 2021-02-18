@@ -98,22 +98,22 @@ class ChannelDetailViewController: ViewController {
     private func layoutViews(for channel: TCHChannel) {
         channel.getUsers(excludeMe: true)
             .mainSink { (users) in
-                self.stackedAvatarView.set(items: users)
+                self.layout(forNonMe: users, channel: channel)
             }.store(in: &self.cancellables)
+    }
 
-        channel.getUsers(excludeMe: true)
-            .mainSink(receiveValue: { (members) in
-                if let first = members.first, let date = channel.dateCreatedAsDate {
-                    self.label.setText(first.handle)
-                    let message = self.getMessage(handle: first.fullName, date: date)
-                    let attributed = AttributedString(message,
-                                                      fontType: .small,
-                                                      color: .background4)
-                    self.textView.set(attributed: attributed, linkColor: .teal)
-                }
+    private func layout(forNonMe users: [User], channel: TCHChannel) {
+        self.stackedAvatarView.set(items: users)
+        if let first = users.first, let date = channel.dateCreatedAsDate {
+            self.label.setText(first.handle)
+            let message = self.getMessage(handle: first.fullName, date: date)
+            let attributed = AttributedString(message,
+                                              fontType: .small,
+                                              color: .background4)
+            self.textView.set(attributed: attributed, linkColor: .teal)
+        }
 
-                self.view.layoutNow()
-            }).store(in: &self.cancellables)
+        self.view.layoutNow()
     }
 
     func createAnimator() {

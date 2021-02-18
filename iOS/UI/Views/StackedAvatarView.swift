@@ -52,6 +52,7 @@ class StackedAvatarView: View {
         for (index, imageView) in self.imageViews.enumerated() {
             let size = imageView.getSize(for: self.itemHeight)
             let offset = CGFloat(index) * size.width * self.offsetMultiplier
+            imageView.alpha = alpha
             imageView.size = size
             imageView.right = self.width - offset
             imageView.centerOnY()
@@ -71,7 +72,11 @@ class StackedAvatarView: View {
         if totalWidth == 0 {
             totalWidth += size.width
         } else {
-            totalWidth += (size.width * self.offsetMultiplier)
+            totalWidth += size.width
+            self.imageViews.forEach { _ in
+                totalWidth += size.width * self.offsetMultiplier
+            }
+            totalWidth -= size.width
         }
 
         self.size = CGSize(width: totalWidth, height: self.itemHeight)
