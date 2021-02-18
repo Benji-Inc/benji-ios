@@ -103,17 +103,28 @@ class ChannelDetailViewController: ViewController {
     }
 
     private func layout(forNonMe users: [User], channel: TCHChannel) {
+        guard let date = channel.dateCreatedAsDate else { return }
+
         self.stackedAvatarView.set(items: users)
-        if let first = users.first, let date = channel.dateCreatedAsDate {
-            self.label.setText(first.handle)
-            let message = self.getMessage(handle: first.fullName, date: date)
-            let attributed = AttributedString(message,
-                                              fontType: .small,
-                                              color: .background4)
-            self.textView.set(attributed: attributed, linkColor: .teal)
+        let message: Localized
+        if users.count == 0 {
+            message = "No one has joined yet."
+            // No one in the channel but the current user.
+        } else if users.count == 1, let user = users.first {
+            self.label.setText(user.handle)
+            message = self.getMessage(for: user, date: date, channel: channel)
+        } else {
+            // Group chat
+            message = self.getMessage(for: users, date: date, channel: channel)
         }
 
-        self.view.layoutNow()
+        let attributed = AttributedString(message,
+                                          fontType: .small,
+                                          color: .background4)
+        self.textView.set(attributed: attributed, linkColor: .teal)
+        delay(0.1) { [unowned self] in
+            self.view.layoutNow()
+        }
     }
 
     func createAnimator() {
@@ -156,8 +167,41 @@ class ChannelDetailViewController: ViewController {
         self.animator.pauseAnimation()
     }
 
-    private func getMessage(handle: String, date: Date) -> LocalizedString {
-        return LocalizedString(id: "", arguments: [handle, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). You created this conversation on @(date)")
+    private func getMessage(for user: User, date: Date, channel: TCHChannel) -> LocalizedString {
+
+        var author = ""
+        if channel.isOwnedByMe {
+            author = "You"
+        } else {
+            author = user.handle
+        }
+
+        return LocalizedString(id: "", arguments: [user.handle, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). @(author) created this conversation on @(date)")
+    }
+
+    private func getMessage(for users: [User], date: Date, channel: TCHChannel) -> LocalizedString {
+        
+        var text = ""
+        for (index, user) in users.enumerated() {
+            if index < users.count - 1 {
+                text.append(String("\(user.handle), "))
+            } else if index == users.count - 1 && users.count > 1 {
+                text.append(String("\(user.handle)"))
+            } else {
+                text.append(user.handle)
+            }
+        }
+
+        var author = ""
+        if channel.isOwnedByMe {
+            author = "You"
+        } else if let user = users.first(where: { user in
+            return user.objectId == channel.createdBy
+        }) {
+            author = user.handle
+        }
+
+        return LocalizedString(id: "", arguments: [text, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your group chat with [@(name)](userid). @(author) created this conversation on @(date)")
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
