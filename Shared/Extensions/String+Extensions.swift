@@ -67,16 +67,12 @@ extension String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    func isValidPhoneNumber() -> Bool {
-        let phoneNumberKit = PhoneKit.shared
-        let partialFormatter = PhoneKit.formatter
+    func isValidPhoneNumber(for region: String) -> Bool {
+        return !self.parsePhoneNumber(for: region).isNil
+    }
 
-        do {
-            let _ = try phoneNumberKit.parse(self, withRegion: partialFormatter.currentRegion)
-            return true
-        } catch {
-            return false
-        }
+    func parsePhoneNumber(for region: String) -> PhoneNumber? {
+        return try? PhoneKit.shared.parse(self, withRegion: region)
     }
 
     var isValidPersonName: Bool {

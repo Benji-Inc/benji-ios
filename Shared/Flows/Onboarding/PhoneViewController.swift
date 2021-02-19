@@ -16,6 +16,10 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     
     private(set) var isSendingCode: Bool = false
 
+    var phoneTextField: PhoneTextField {
+        return self.textField as! PhoneTextField
+    }
+
     init() {
         let phoneField = PhoneTextField(frame: .zero)
         phoneField.withFlag = true
@@ -53,16 +57,15 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     @objc func editingDidEnd() {
         guard !self.isSendingCode,
               self.isPhoneNumberValid(),
-            let phoneTextField = self.textField as? PhoneTextField,
-            let phone = try? PhoneKit.shared.parse(String(optional: self.textField.text), withRegion: phoneTextField.currentRegion) else {
+              let phone = self.phoneTextField.text?.parsePhoneNumber(for: self.phoneTextField.currentRegion) else {
                 return
         }
 
-        self.sendCode(to: phone, region: phoneTextField.currentRegion)
+        self.sendCode(to: phone, region: self.phoneTextField.currentRegion)
     }
 
     private func isPhoneNumberValid() -> Bool {
-        if let phoneString = self.textField.text, phoneString.isValidPhoneNumber() {
+        if let phoneString = self.textField.text, phoneString.isValidPhoneNumber(for: self.phoneTextField.currentRegion) {
             return true
         }
         return false
@@ -71,8 +74,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     private func sendCode(to phone: PhoneNumber, region: String) {
         guard let installationId = UserNotificationManager.shared.installationId else { return }
 
-        let tf = self.textField as? PhoneTextField
-        tf?.animationView.play()
+        self.phoneTextField.animationView.play()
         self.isSendingCode = true
         SendCode(phoneNumber: phone,
                  region: region,
@@ -80,7 +82,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
             .makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink(receiveValue: { (value) in },
                       receiveCompletion: { (result) in
-                        tf?.animationView.stop()
+                        self.phoneTextField.animationView.stop()
                         switch result {
                         case .finished:
                             self.complete(with: .success(phone))
