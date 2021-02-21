@@ -56,7 +56,7 @@ extension InputAccessoryView: UIGestureRecognizerDelegate {
                                                                relativeDuration: 0.3,
                                                                animations: {
                                                                 self.attachmentView.alpha = 0 
-                                                                self.expandingTextView.alpha = 0
+                                                                self.textView.alpha = 0
                                                                 self.previewView?.backgroundView.alpha = 1
                                             })
 
@@ -106,7 +106,7 @@ extension InputAccessoryView: UIGestureRecognizerDelegate {
 
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer is UILongPressGestureRecognizer {
-            return self.expandingTextView.isFirstResponder
+            return self.textView.isFirstResponder
         }
 
         return true

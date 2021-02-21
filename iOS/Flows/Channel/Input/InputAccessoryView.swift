@@ -45,7 +45,7 @@ class InputAccessoryView: View, ActiveChannelAccessor {
     let inputContainerView = View()
     let attachmentView = AttachmentView()
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
-    lazy var expandingTextView = InputTextView(with: self)
+    lazy var textView = InputTextView(with: self)
     let alertProgressView = AlertProgressView()
     let animationView = AnimationView(name: "loading")
     let plusAnimationView = AnimationView(name: "plusToX")
@@ -77,8 +77,8 @@ class InputAccessoryView: View, ActiveChannelAccessor {
     override var intrinsicContentSize: CGSize {
         var newSize = self.bounds.size
 
-        if self.expandingTextView.bounds.size.height > 0.0 {
-            newSize.height = self.expandingTextView.bounds.size.height + 20.0
+        if self.textView.bounds.size.height > 0.0 {
+            newSize.height = self.textView.bounds.size.height + 20.0
         }
 
         if let constraint = self.attachmentHeightAnchor, constraint.constant > 0 {
@@ -120,7 +120,7 @@ class InputAccessoryView: View, ActiveChannelAccessor {
         self.alertProgressView.set(backgroundColor: .red)
         self.alertProgressView.size = .zero
 
-        self.inputContainerView.addSubview(self.expandingTextView)
+        self.inputContainerView.addSubview(self.textView)
         self.inputContainerView.addSubview(self.attachmentView)
         self.inputContainerView.addSubview(self.overlayButton)
 
@@ -154,7 +154,7 @@ class InputAccessoryView: View, ActiveChannelAccessor {
         let guide = self.layoutMarginsGuide
 
         self.plusAnimationView.translatesAutoresizingMaskIntoConstraints = false
-        self.plusAnimationView.bottomAnchor.constraint(equalTo: self.expandingTextView.bottomAnchor).isActive = true
+        self.plusAnimationView.bottomAnchor.constraint(equalTo: self.textView.bottomAnchor).isActive = true
         self.plusAnimationView.heightAnchor.constraint(equalToConstant: 43).isActive = true
         self.plusAnimationView.widthAnchor.constraint(equalToConstant: 43).isActive = true
         self.plusAnimationView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
@@ -172,11 +172,11 @@ class InputAccessoryView: View, ActiveChannelAccessor {
         self.attachmentHeightAnchor = NSLayoutConstraint(item: self.attachmentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
         self.attachmentHeightAnchor?.isActive = true
 
-        self.expandingTextView.leadingAnchor.constraint(equalTo: self.inputContainerView.leadingAnchor).isActive = true
-        self.expandingTextView.trailingAnchor.constraint(equalTo: self.inputContainerView.trailingAnchor).isActive = true
-        self.expandingTextView.topAnchor.constraint(equalTo: self.attachmentView.bottomAnchor).isActive = true
-        self.expandingTextView.bottomAnchor.constraint(equalTo: self.inputContainerView.bottomAnchor).isActive = true
-        self.expandingTextView.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        self.textView.leadingAnchor.constraint(equalTo: self.inputContainerView.leadingAnchor).isActive = true
+        self.textView.trailingAnchor.constraint(equalTo: self.inputContainerView.trailingAnchor).isActive = true
+        self.textView.topAnchor.constraint(equalTo: self.attachmentView.bottomAnchor).isActive = true
+        self.textView.bottomAnchor.constraint(equalTo: self.inputContainerView.bottomAnchor).isActive = true
+        self.textView.setContentHuggingPriority(.defaultHigh, for: .vertical)
     }
 
     private func setupGestures() {
@@ -195,13 +195,24 @@ class InputAccessoryView: View, ActiveChannelAccessor {
 
     private func setupHandlers() {
 
-        self.expandingTextView.textDidUpdate = { [unowned self] text in
+        KeyboardManger.shared.$isKeyboardShowing.mainSink { isShowing in
+            print("is showing: \(isShowing)")
+            print("keyboard height: \(KeyboardManger.shared.cachedKeyboardFrame.height)")
+            if let superview = self.superview {
+                print("superview: \(superview)")
+            }
+//            if !isShowing, self.textView.isFirstResponder {
+//                self.textView.resignFirstResponder()
+//            }
+        }.store(in: &self.cancellables)
+
+        self.textView.textDidUpdate = { [unowned self] text in
             self.handleTextChange(text)
         }
 
         self.overlayButton.didSelect { [unowned self] in
-            if !self.expandingTextView.isFirstResponder {
-                self.expandingTextView.becomeFirstResponder()
+            if !self.textView.isFirstResponder {
+                self.textView.becomeFirstResponder()
             }
         }
 
@@ -209,13 +220,13 @@ class InputAccessoryView: View, ActiveChannelAccessor {
             self.updateInputType()
         }
 
-        self.expandingTextView.confirmationView.button.didSelect { [unowned self] in
+        self.textView.confirmationView.button.didSelect { [unowned self] in
             self.resetAlertProgress()
         }
 
         self.attachmentView.$messageKind.mainSink { (kind) in
             self.currentMessageKind = kind ?? .text(String())
-            self.expandingTextView.setPlaceholder(for: self.currentMessageKind)
+            self.textView.setPlaceholder(for: self.currentMessageKind)
             self.attachmentHeightAnchor?.constant = self.attachmentView.messageKind.isNil ? 0 : 100
             self.layoutNow()
         }.store(in: &self.cancellables)
@@ -249,13 +260,13 @@ class InputAccessoryView: View, ActiveChannelAccessor {
         // If attachments & currentKind != .text, Then still show x
         // If progess is greater than 0 and pressed, reset attachment view.
 
-        let currentType = self.expandingTextView.currentInputView
+        let currentType = self.textView.currentInputView
         let currentProgress = self.plusAnimationView.currentProgress
 
         if currentType == .keyboard {
             if self.attachmentView.attachment.isNil {
                 let newType: InputViewType = .attachments
-                self.expandingTextView.updateInputView(type: newType)
+                self.textView.updateInputView(type: newType)
             } else {
                 self.attachmentView.configure(with: nil)
             }
@@ -271,7 +282,7 @@ class InputAccessoryView: View, ActiveChannelAccessor {
                 let toProgress: CGFloat = currentProgress == 0 ? 1.0 : 0.0
                 self.plusAnimationView.play(fromProgress: currentProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
             }
-            self.expandingTextView.updateInputView(type: newType)
+            self.textView.updateInputView(type: newType)
 
         } else {
             // progress is greater that 0 and input type is attachments
@@ -304,13 +315,13 @@ class InputAccessoryView: View, ActiveChannelAccessor {
 
         switch message.kind {
         case .text(let body):
-            self.expandingTextView.text = body
+            self.textView.text = body
         case .attributedText(let body):
-            self.expandingTextView.text = body.string
+            self.textView.text = body.string
         case .photo(photo: _, body: let body):
-            self.expandingTextView.text = body
+            self.textView.text = body
         case .video(video: _, body: let body):
-            self.expandingTextView.text = body
+            self.textView.text = body
         default:
             return
         }
@@ -319,17 +330,17 @@ class InputAccessoryView: View, ActiveChannelAccessor {
         self.currentMessageKind = message.kind
         self.editableMessage = message
 
-        self.expandingTextView.becomeFirstResponder()
+        self.textView.becomeFirstResponder()
     }
 
     func reset() {
-        self.expandingTextView.reset()
-        self.expandingTextView.alpha = 1
+        self.textView.reset()
+        self.textView.alpha = 1
         self.attachmentView.alpha = 1
         self.attachmentView.configure(with: nil)
         self.attachmentView.messageKind = nil
         self.resetAlertProgress()
-        self.expandingTextView.countView.isHidden = true
+        self.textView.countView.isHidden = true
     }
 
     func resetAlertProgress() {
@@ -338,7 +349,7 @@ class InputAccessoryView: View, ActiveChannelAccessor {
         self.alertProgressView.set(backgroundColor: .red)
         self.alertProgressView.alpha = 1
         self.alertProgressView.layer.removeAllAnimations()
-        self.expandingTextView.updateInputView(type: .keyboard)
+        self.textView.updateInputView(type: .keyboard)
     }
 }
 

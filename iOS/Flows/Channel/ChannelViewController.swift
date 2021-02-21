@@ -55,7 +55,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             if self.shouldEnableFirstResponder {
                 self.becomeFirstResponder()
             } else {
-                self.messageInputAccessoryView.expandingTextView.resignFirstResponder()
+                self.messageInputAccessoryView.textView.resignFirstResponder()
                 self.resignFirstResponder()
             }
         }
@@ -147,8 +147,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         }
 
         self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
-            if self.messageInputAccessoryView.expandingTextView.isFirstResponder {
-                self.messageInputAccessoryView.expandingTextView.resignFirstResponder()
+            if self.messageInputAccessoryView.textView.isFirstResponder {
+                self.messageInputAccessoryView.textView.resignFirstResponder()
             }
         }
 

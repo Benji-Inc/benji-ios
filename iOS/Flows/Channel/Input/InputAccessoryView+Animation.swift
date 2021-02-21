@@ -68,11 +68,11 @@ extension InputAccessoryView {
     private func showAlertConfirmation() {
         guard let c = self.activeChannel, case ChannelType.channel(let channel) = c.channelType else { return }
 
-        self.expandingTextView.updateInputView(type: .confirmation)
+        self.textView.updateInputView(type: .confirmation)
 
         channel.getNonMeMembers()
             .mainSink(receiveValue: { (members) in
-                self.expandingTextView.confirmationView.setAlertMessage(for: members)
+                self.textView.confirmationView.setAlertMessage(for: members)
             }).store(in: &self.cancellables)
 
         self.alertProgressView.size = CGSize(width: self.width, height: self.height)
