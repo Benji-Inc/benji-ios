@@ -50,17 +50,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     /// The default value of this property is `false`.
     var maintainPositionOnKeyboardFrameChanged: Bool = true
 
-    var shouldEnableFirstResponder: Bool = true {
-        didSet {
-            if self.shouldEnableFirstResponder {
-                self.becomeFirstResponder()
-            } else {
-                self.messageInputAccessoryView.textView.resignFirstResponder()
-                self.resignFirstResponder()
-            }
-        }
-    }
-
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
             self.collectionView.contentInset.bottom = self.collectionViewBottomInset
@@ -75,15 +64,11 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         return self.messageInputAccessoryView
     }
 
-    static var additionalBottomInset: CGFloat = 10
-
     override var canBecomeFirstResponder: Bool {
-        return self.shouldEnableFirstResponder
+        return true 
     }
 
-    override var canResignFirstResponder: Bool {
-        return true
-    }
+    static var additionalBottomInset: CGFloat = 10
 
     // Remembers which keyboard a user uses for this conversation.
     override var textInputContextIdentifier: String? {
@@ -130,7 +115,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.detailVC.$isHandlingTouches
             .mainSink { [unowned self] isHandlingTouches in
-                self.shouldEnableFirstResponder = !isHandlingTouches
+                //self.shouldEnableFirstResponder = !isHandlingTouches
         }.store(in: &self.cancellables)
 
         self.collectionViewManager.didTapShare = { [unowned self] message in

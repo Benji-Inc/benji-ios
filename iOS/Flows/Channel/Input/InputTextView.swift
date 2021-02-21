@@ -25,10 +25,6 @@ class InputTextView: ExpandingTextView {
 
     unowned let attachmentDelegate: AttachmentViewControllerDelegate
 
-    override var canResignFirstResponder: Bool {
-        return true
-    }
-
     init(with delegate: AttachmentViewControllerDelegate) {
         self.attachmentDelegate = delegate
         super.init(frame: .zero, textContainer: nil)

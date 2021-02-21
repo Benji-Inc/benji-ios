@@ -46,8 +46,7 @@ extension ChannelViewController {
     }
 
     private func handleKeyboardFrameChange(_ notification: Notification) {
-        guard self.shouldEnableFirstResponder else { return }
-
+        
         guard let keyboardStartFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect else { return }
         guard !keyboardStartFrameInScreenCoords.isEmpty || UIDevice.current.userInterfaceIdiom != .pad else {
             // WORKAROUND for what seems to be a bug in iPad's keyboard handling in iOS 11: we receive an extra spurious frame change
