@@ -271,6 +271,7 @@
 		D6637A0125A39C7000A4A3B7 /* RitualManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CA25A3704300A4A3B7 /* RitualManager.swift */; };
 		D6637A2925A3A82F00A4A3B7 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E321D30E9100204BEE /* TextView.swift */; };
 		D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66656BC23D13C9A009E4BDF /* Switchable.swift */; };
+		D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */; };
 		D66A0B942351821200A0FFEA /* Completeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A0B932351821200A0FFEA /* Completeable.swift */; };
 		D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
 		D66A580125DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
@@ -628,6 +629,7 @@
 		D66379CC25A3704300A4A3B7 /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		D66379CD25A3704300A4A3B7 /* SessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
 		D66656BC23D13C9A009E4BDF /* Switchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switchable.swift; sourceTree = "<group>"; };
+		D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		D66A0B932351821200A0FFEA /* Completeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Completeable.swift; sourceTree = "<group>"; };
 		D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
 		D66A580425DD68F9001B3F64 /* NewChannelCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewChannelCoordinator.swift; sourceTree = "<group>"; };
@@ -1214,6 +1216,7 @@
 		D66379DC25A39BC200A4A3B7 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */,
 				D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */,
 				D66379CB25A3704300A4A3B7 /* ChatClientManager.swift */,
 				D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */,
@@ -2078,6 +2081,7 @@
 				D6A714C725D969FE000A90EB /* PostViewController.swift in Sources */,
 				D66A580725DD691A001B3F64 /* NewChannelViewController.swift in Sources */,
 				D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */,
+				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6F33C7E24B15063009603FF /* LocationMessageCell.swift in Sources */,
 				D67896B222FF67650059BA75 /* CodeViewController.swift in Sources */,
