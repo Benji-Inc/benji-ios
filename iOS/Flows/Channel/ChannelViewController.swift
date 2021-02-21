@@ -161,12 +161,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             self.load(activeChannel: activeChannel)
 
         }.store(in: &self.cancellables)
-
-        KeyboardManger.shared.inputAccessoryView = self.inputAccessoryView
-        KeyboardManger.shared.$isKeyboardShowing.mainSink { isShowing in
-            print("isShowing: \(isShowing)")
-            print("keyboard height: \(KeyboardManger.shared.cachedKeyboardFrame.height)")
-        }.store(in: &self.cancellables)
     }
 
     override func viewDidAppear(_ animated: Bool) {

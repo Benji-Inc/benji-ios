@@ -13,13 +13,25 @@ extension ChannelViewController {
     // MARK: - Register / Unregister Observers
 
     func addKeyboardObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(ChannelViewController.handleKeyboardDidChangeState(_:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(ChannelViewController.handleTextViewDidBeginEditing(_:)), name: UITextView.textDidBeginEditingNotification, object: nil)
+
+        KeyboardManger.shared.inputAccessoryView = self.inputAccessoryView
+        KeyboardManger.shared.$currentEvent.mainSink { event in
+            switch event {
+            case .willChangeFrame(let notification):
+                self.handleKeyboardFrameChange(notification)
+            default:
+                break
+            }
+        }.store(in: &self.cancellables)
+
+        NotificationCenter.default.publisher(for: UITextView.textDidBeginEditingNotification)
+            .mainSink { (notification) in
+                self.handleTextViewDidBeginEditing(notification)
+            }.store(in: &self.cancellables)
     }
 
     // MARK: - Notification Handlers
 
-    @objc
     private func handleTextViewDidBeginEditing(_ notification: Notification) {
         if self.scrollsToLastItemOnKeyboardBeginsEditing || self.scrollsToBottomOnKeyboardBeginsEditing {
             guard let inputTextView = notification.object as? InputTextView,
@@ -33,8 +45,7 @@ extension ChannelViewController {
         }
     }
 
-    @objc
-    private func handleKeyboardDidChangeState(_ notification: Notification) {
+    private func handleKeyboardFrameChange(_ notification: Notification) {
         guard self.shouldEnableFirstResponder else { return }
 
         guard let keyboardStartFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect else { return }
