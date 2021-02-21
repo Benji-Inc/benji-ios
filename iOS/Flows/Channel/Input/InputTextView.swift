@@ -26,7 +26,7 @@ class InputTextView: ExpandingTextView {
     unowned let attachmentDelegate: AttachmentViewControllerDelegate
 
     override var canResignFirstResponder: Bool {
-        return false
+        return true
     }
 
     init(with delegate: AttachmentViewControllerDelegate) {
@@ -45,9 +45,9 @@ class InputTextView: ExpandingTextView {
         self.countView.isHidden = true
     }
 
-    func updateInputView(type: InputViewType) {
+    func updateInputView(type: InputViewType, becomeFirstResponder: Bool = true) {
         defer {
-            if !self.isFirstResponder {
+            if becomeFirstResponder, !self.isFirstResponder {
                 self.becomeFirstResponder()
             }
         }

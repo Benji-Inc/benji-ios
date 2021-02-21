@@ -79,8 +79,9 @@ class KeyboardManger {
                 self.currentEvent = .didHide(notification)
                 self.cachedKeyboardFrame = self.getFrame(for: notification)
 
-                if let inputView = self.inputAccessoryView {
-                    self.isKeyboardShowing = self.cachedKeyboardFrame.height > inputView.height
+                // For some reason the cached frame represents the superview in this scenario. 
+                if let superview = self.inputAccessoryView?.superview {
+                    self.isKeyboardShowing = self.cachedKeyboardFrame.height > superview.height
                 } else {
                     self.isKeyboardShowing = false
                 }
@@ -100,8 +101,6 @@ class KeyboardManger {
     }
 
     private func getFrame(for notification: NotificationCenter.Publisher.Output) -> CGRect {
-        var frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect ?? .zero
-
-        return frame
+        return notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect ?? .zero
     }
 }

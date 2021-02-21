@@ -195,15 +195,15 @@ class InputAccessoryView: View, ActiveChannelAccessor {
 
     private func setupHandlers() {
 
-        KeyboardManger.shared.$isKeyboardShowing.mainSink { isShowing in
-            print("is showing: \(isShowing)")
-            print("keyboard height: \(KeyboardManger.shared.cachedKeyboardFrame.height)")
-            if let superview = self.superview {
-                print("superview: \(superview)")
+        KeyboardManger.shared.$currentEvent.mainSink { event in
+            switch event {
+            case .didHide(_):
+                // Need to check for attachment before resetting
+                self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
+                self.plusAnimationView.play(toProgress: 0.0)
+            default:
+                break
             }
-//            if !isShowing, self.textView.isFirstResponder {
-//                self.textView.resignFirstResponder()
-//            }
         }.store(in: &self.cancellables)
 
         self.textView.textDidUpdate = { [unowned self] text in
