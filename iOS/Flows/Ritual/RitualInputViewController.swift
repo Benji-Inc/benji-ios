@@ -118,11 +118,8 @@ class RitualInputViewController: ViewController {
     }
 
     private func saveRitual() {
-        let ritual = Ritual()
-        ritual.create(with: self.selectedDate)
-        User.current()?.ritual = ritual
-        User.current()?.saveLocalThenServer()
-            .mainSink(receivedResult: { (result) in
+        RitualManager.shared.createRitual(for: self.selectedDate)
+            .mainSink { result in
                 switch result {
                 case .success(_):
                     self.animateButton(with: .lightPurple, text: "Success")
@@ -132,7 +129,7 @@ class RitualInputViewController: ViewController {
                 delay(2) {
                     self.state = .edit
                 }
-            }).store(in: &self.cancellables)
+            }.store(in: &self.cancellables)
     }
 
     private func updateForStateChange() {

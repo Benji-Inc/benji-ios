@@ -30,6 +30,14 @@ class RitualManager {
         }
     }
 
+    func createRitual(for date: Date) -> Future<User, Error> {
+        let ritual = Ritual()
+        ritual.create(with: date)
+        User.current()?.ritual = ritual
+        self.scheduleNotification(for: ritual)
+        return User.current()!.saveLocalThenServer()
+    }
+
     func scheduleNotification(for ritual: Ritual) {
 
         let identifier = self.messageReminderID + ritual.timeDescription
