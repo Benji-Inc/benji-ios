@@ -113,6 +113,14 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.addKeyboardObservers()
 
+        self.detailVC.$isHandlingTouches.mainSink { isHandlingTouches in
+            if isHandlingTouches {
+                self.resignFirstResponder()
+            } else if !self.isFirstResponder {
+                self.becomeFirstResponder()
+            }
+        }.store(in: &self.cancellables)
+
         KeyboardManger.shared.$isKeyboardShowing.mainSink { isShowing in                self.detailVC.animator.fractionComplete = self.getDetailProgress()
         }.store(in: &self.cancellables)
 
@@ -146,6 +154,12 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         }.store(in: &self.cancellables)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.becomeFirstResponder()
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
@@ -164,6 +178,12 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
                 }
             }
         }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        self.resignFirstResponder()
     }
 
     private func setupDetailAnimator() {
