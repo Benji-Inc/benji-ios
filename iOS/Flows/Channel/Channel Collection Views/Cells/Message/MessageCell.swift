@@ -20,8 +20,17 @@ class MessageCell: BaseMessageCell {
         self.contentView.addSubview(self.bubbleView)
         self.bubbleView.addSubview(self.textView)
 
-        self.bubbleView.didSelect { [unowned self] in
-            self.didTapMessage()
+        self.bubbleView.onTap { [unowned self] tap in
+            
+            guard let current = User.current(), let message = self.currentMessage, !message.isFromCurrentUser, message.canBeConsumed, !message.hasBeenConsumedBy.contains(current.objectId!) else {
+                self.didTapMessage()
+                return
+            }
+
+            let location = tap.location(in: self.bubbleView)
+            self.bubbleView.startFillAnimation(at: location) { [unowned self] in
+                self.didTapMessage()
+            }
         }
     }
 
@@ -53,8 +62,6 @@ class MessageCell: BaseMessageCell {
                 self.bubbleView.layer.borderColor = message.context.color.color.cgColor
             }
 
-            // TODO: Get this to work
-            //self.bubbleView.startShimmer(repeatCount: 10, isDiagonal: true)
             self.bubbleView.layer.borderWidth = 2
         }
     }

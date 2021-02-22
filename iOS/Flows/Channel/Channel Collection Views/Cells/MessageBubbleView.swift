@@ -11,6 +11,8 @@ import Foundation
 class MessageBubbleView: View, Indexable {
 
     var indexPath: IndexPath?
+    private let circleView = View()
+    var startingPoint: CGPoint = .zero
 
     // Shimmer Animation Extensions
 
@@ -19,6 +21,38 @@ class MessageBubbleView: View, Indexable {
         case bottomToTop
         case leftToRight
         case rightToLeft
+    }
+
+    override func initializeSubviews() {
+        super.initializeSubviews()
+
+        self.circleView.set(backgroundColor: .purple)
+        self.circleView.alpha = 0
+        self.insertSubview(self.circleView, at: 0)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.circleView.height = self.height * 3
+        self.circleView.width = self.width * 3
+    }
+
+    func startFillAnimation(at startingPoint: CGPoint,
+                            completion: CompletionOptional) {
+
+        self.circleView.alpha = 0
+        self.circleView.layer.cornerRadius = self.circleView.halfHeight
+        self.circleView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
+        self.circleView.center = startingPoint
+
+        UIView.animate(withDuration: 0.5) {
+            self.circleView.transform = .identity
+            self.circleView.alpha = 0.8
+            self.setNeedsLayout()
+        } completion: { completed in
+            completion?()
+        }
     }
 
     func startShimmer(animationSpeed: Float = 1.4,

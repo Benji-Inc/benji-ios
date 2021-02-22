@@ -15,6 +15,10 @@ extension ChannelCollectionViewManager {
     func updateConsumers(for message: Messageable) -> Future<Void, Error> {
         guard let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed, !message.hasBeenConsumedBy.contains(current.objectId!) else { return Future { promise in promise(.success(()))}
         }
+
+        if message.context == .emergency {
+            UIApplication.shared.applicationIconBadgeNumber = 0
+        }
         
         //create system message copy of current message
         let messageCopy = SystemMessage(with: message)
