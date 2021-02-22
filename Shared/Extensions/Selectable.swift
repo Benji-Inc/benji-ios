@@ -16,6 +16,7 @@ protocol Selectable {
 
 private var selectionHandlerKey: UInt8 = 0
 private var didSelectHandlerKey: UInt8 = 0
+private var actionHandlerKey: UInt = 0
 extension Selectable where Self: UIControl {
 
     private(set) var selectionImpact: UIImpactFeedbackGenerator? {
@@ -26,17 +27,30 @@ extension Selectable where Self: UIControl {
             self.setAssociatedObject(key: &selectionHandlerKey, value: newValue)
         }
     }
+    private(set) var action: UIAction? {
+        get {
+            return self.getAssociatedObject(&actionHandlerKey)
+        }
+        set {
+            self.setAssociatedObject(key: &actionHandlerKey, value: newValue)
+        }
+    }
 
     var isActive: Bool {
         return !self.selectionImpact.isNil
     }
 
     func didSelect(_ completion: CompletionOptional) {
+        if let action =  self.action {
+            self.removeAction( action, for: .touchUpInside)
+        }
+        
         self.selectionImpact = UIImpactFeedbackGenerator()
-        let action = UIAction { action in
+        self.action = UIAction { action in
             completion?()
         }
-        self.addAction(action, for: .touchUpInside)
+
+        self.addAction(self.action!, for: .touchUpInside)
     }
 }
 

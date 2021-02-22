@@ -193,10 +193,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         guard let index = section.firstMessageIndex, index > 0 else { return nil }
 
         let moreHeader = collectionView.dequeueReusableHeaderView(LoadMoreSectionHeader.self, for: indexPath)
-        //Reset all gestures
-        moreHeader.gestureRecognizers?.forEach({ (recognizer) in
-            moreHeader.removeGestureRecognizer(recognizer)
-        })
 
         moreHeader.button.didSelect { [weak self] in
             guard let `self` = self else { return }
