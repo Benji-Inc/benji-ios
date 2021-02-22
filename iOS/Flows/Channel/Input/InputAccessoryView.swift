@@ -193,10 +193,11 @@ class InputAccessoryView: View, ActiveChannelAccessor {
 
         KeyboardManger.shared.$currentEvent.mainSink { event in
             switch event {
-            case .didHide(_):
-                // Need to check for attachment before resetting
+            case .willHide(_):
                 self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
                 self.plusAnimationView.play(toProgress: 0.0)
+            case .didShow(_):
+                break
             default:
                 break
             }

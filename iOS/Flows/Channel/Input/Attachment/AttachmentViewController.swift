@@ -37,7 +37,7 @@ class AttachmentViewController: CollectionViewController<AttachmentCollectionVie
         }
 
         self.collectionViewManager.didSelectLibraryOption = {
-            NotificationCenter.default.post(name: .didTapPhotoLibrary, object: nil)
+            NotificationCenter.default.post(name: .didTapPhotoLibrary, object: UUID().uuidString)
         }
 
         self.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in

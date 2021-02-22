@@ -41,6 +41,7 @@ class ChannelCoordinator: PresentableCoordinator<Void> {
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: .didTapPhotoLibrary)
+            .removeDuplicates()
             .mainSink { (note) in
                 self.presentPicker(for: .photoLibrary)
             }.store(in: &self.cancellables)
@@ -95,7 +96,7 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
     }
 
     private func presentPicker(for type: UIImagePickerController.SourceType) {
-        guard self.router.topmostViewController != self.imagePickerVC else { return }
+        guard self.router.topmostViewController != self.imagePickerVC, !self.imagePickerVC.isBeingPresented else { return }
 
         self.imagePickerVC.sourceType = type
         self.channelVC.present(self.imagePickerVC, animated: true, completion: nil)
@@ -104,7 +105,9 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 
-        self.imagePickerVC.dismiss(animated: true, completion: nil)
+        defer {
+            self.imagePickerVC.dismiss(animated: true, completion: nil)
+        }
 
         guard let asset = info[.phAsset] as? PHAsset else {
             print("Image not found!")

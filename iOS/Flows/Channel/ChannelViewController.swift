@@ -113,11 +113,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.addKeyboardObservers()
 
-        self.detailVC.$isHandlingTouches
-            .mainSink { [unowned self] isHandlingTouches in
-                //self.shouldEnableFirstResponder = !isHandlingTouches
-        }.store(in: &self.cancellables)
-
         self.collectionViewManager.didTapShare = { [unowned self] message in
             self.delegate.channelView(self, didTapShare: message)
         }
