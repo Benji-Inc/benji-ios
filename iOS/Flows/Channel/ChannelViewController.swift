@@ -113,6 +113,9 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
         self.addKeyboardObservers()
 
+        KeyboardManger.shared.$isKeyboardShowing.mainSink { isShowing in                self.detailVC.animator.fractionComplete = self.getDetailProgress()
+        }.store(in: &self.cancellables)
+
         self.collectionViewManager.didTapShare = { [unowned self] message in
             self.delegate.channelView(self, didTapShare: message)
         }
@@ -185,6 +188,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     }
 
     private func getDetailProgress() -> CGFloat {
+        guard !KeyboardManger.shared.isKeyboardShowing else { return 0 }
+
         let threshold = ChannelDetailViewController.State.expanded.rawValue
         let offset = self.collectionView.contentOffset.y + self.collectionView.contentInset.top
 
