@@ -137,7 +137,7 @@ class Button: UIButton, Statusable {
     }
 
     func setSize(with width: CGFloat) {
-        self.size = CGSize(width: width - (Theme.contentOffset * 2), height: Theme.buttonHeight)
+        self.size = CGSize(width: width - Theme.contentOffset.doubled, height: Theme.buttonHeight)
     }
 
     @discardableResult

@@ -31,14 +31,15 @@ extension Button {
                         }
                     }
                 }
-                self.alphaOutAnimator.startAnimation(afterDelay: 0.1)
+
                 self.alphaOutAnimator.addCompletion { (position) in
-                    if position == .end {
-                        self.animationView.isHidden = false
-                        self.animationView.play()
-                    }
                     promise(.success(()))
                 }
+
+                self.animationView.isHidden = false
+                self.animationView.play()
+
+                self.alphaOutAnimator.startAnimation()
             }
         }
     }

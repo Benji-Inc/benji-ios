@@ -28,6 +28,14 @@ class CodeViewController: TextInputViewController<Void> {
     }
 
     override func textFieldDidChange() {
+        if let code = self.textField.text {
+            self.textEntry.button.isEnabled = code.extraWhitespaceRemoved().count == 4
+        } else {
+            self.textEntry.button.isEnabled = false
+        }
+    }
+
+    override func didTapButton() {
         guard let code = self.textField.text, code.extraWhitespaceRemoved().count == 4 else { return }
         self.verify(code: code)
     }
@@ -39,9 +47,7 @@ class CodeViewController: TextInputViewController<Void> {
 
         self.verifying = true
 
-        let tf = self.textField as? TextField
-        tf?.animationView.play()
-        
+        self.textEntry.button.handleEvent(status: .loading)
         VerifyCode(code: code,
                    phoneNumber: phoneNumber,
                    installationId: installationId,
@@ -52,11 +58,11 @@ class CodeViewController: TextInputViewController<Void> {
                 case .success(let token):
                     self.becomeUser(with: token)
                 case .error:
+                    self.textEntry.button.handleEvent(status: .error(""))
                     self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
                     self.verifying = false
                 }
 
-                tf?.animationView.stop()
                 self.textField.resignFirstResponder()
             }).store(in: &self.cancellables)
     }
@@ -64,11 +70,14 @@ class CodeViewController: TextInputViewController<Void> {
     private func becomeUser(with token: String) {
         User.become(inBackground: token) { (user, error) in
             if let _ = user?.objectId {
+                self.textEntry.button.handleEvent(status: .complete)
                 UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
                 self.complete(with: .success(()))
             } else if let error = error {
+                self.textEntry.button.handleEvent(status: .error(error.localizedDescription))
                 self.complete(with: .failure(error))
             } else {
+                self.textEntry.button.handleEvent(status: .error(""))
                 self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
             }
 

@@ -10,7 +10,7 @@ import Foundation
 import TMROLocalization
 import Combine
 
-class SwitchableContentViewController<ContentType: Switchable>: NavigationBarViewController, KeyboardObservable {
+class SwitchableContentViewController<ContentType: Switchable>: NavigationBarViewController {
 
     @Published var current: ContentType?
 
@@ -46,8 +46,8 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
         if vcHeight <= .zero {
             vcHeight = self.scrollView.height - self.lineView.bottom - self.view.safeAreaInsets.top - self.view.safeAreaInsets.bottom
         }
-        let keyboardHeight: CGFloat = self.keyboardHandler?.currentKeyboardHeight ?? 0
-        let contentHeight = yOffset + vcHeight + keyboardHeight
+
+        let contentHeight = yOffset + vcHeight
         self.scrollView.contentSize = CGSize(width: self.scrollView.width, height: contentHeight)
 
         current.viewController.view.frame = CGRect(x: 0,

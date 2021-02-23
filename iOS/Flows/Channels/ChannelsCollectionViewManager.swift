@@ -72,7 +72,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         switch section {
         case .connections:
             let cell = self.collectionView.dequeueManageableCell(using: self.connectionConfig, for: indexPath, item: item as? Connection)
-            cell.didSelectStatus = { [unowned self] status in
+            cell?.didSelectStatus = { [unowned self] status in
                 if let connection = item as? Connection {
                     self.didSelectConnection?(connection, status)
                 }
@@ -86,7 +86,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
             let cell = self.collectionView.dequeueManageableCell(using: self.reservationConfig,
                                                                  for: indexPath,
                                                                  item: item as? Reservation)
-            cell.button.didSelect { [unowned self] in
+            cell?.button.didSelect { [unowned self] in
                 self.select(indexPath: indexPath)
             }
 

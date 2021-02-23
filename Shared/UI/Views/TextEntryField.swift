@@ -15,6 +15,7 @@ class TextEntryField: View, Sizeable {
     private let titleLabel = Label(font: .smallBold)
     private let title: Localized
     private let placeholder: Localized?
+    let button = Button()
 
     init(with textField: UITextField,
          title: Localized,
@@ -37,6 +38,7 @@ class TextEntryField: View, Sizeable {
         self.addSubview(self.titleLabel)
         self.titleLabel.setText(self.title)
         self.addSubview(self.textField)
+        self.addSubview(self.button)
 
         self.textField.returnKeyType = .done
         self.textField.adjustsFontSizeToFitWidth = true
@@ -51,18 +53,25 @@ class TextEntryField: View, Sizeable {
         if let tf = self.textField as? TextField {
             tf.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         }
+
+        self.clipsToBounds = true
     }
 
     func getHeight(for width: CGFloat) -> CGFloat {
 
         self.titleLabel.setSize(withWidth: width)
-        self.titleLabel.top = 0
-        self.titleLabel.left = 0
+        self.titleLabel.pin(.top)
+        self.titleLabel.pin(.left)
 
         self.textField.size = CGSize(width: width, height: 40)
-        self.textField.left = 0
-        self.textField.top = self.titleLabel.bottom + 10
+        self.textField.pin(.left)
+        self.textField.match(.top, to: .bottom, of: self.titleLabel, offset: 10)
 
-        return self.textField.bottom
+        self.button.height = Theme.buttonHeight
+        self.button.width = width 
+        self.button.match(.top, to: .bottom, of: self.textField, offset: 10)
+        self.button.pin(.left)
+
+        return self.button.bottom
     }
 }

@@ -12,8 +12,6 @@ import Lottie
 
 class PhoneTextField: PhoneNumberTextField {
 
-    let animationView = AnimationView(name: "loading")
-
     override init(frame: CGRect) {
         super.init(frame: frame)
 
@@ -21,22 +19,10 @@ class PhoneTextField: PhoneNumberTextField {
         self.withPrefix = false
         self.textContentType = .telephoneNumber
         self.keyboardType = .numbersAndPunctuation
-
-        self.addSubview(self.animationView)
-        self.animationView.contentMode = .scaleAspectFit
-        self.animationView.loopMode = .loop
     }
 
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.animationView.size = CGSize(width: 18, height: 18)
-        self.animationView.pin(.right, padding: 10)
-        self.animationView.centerOnY()
     }
 
     override func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

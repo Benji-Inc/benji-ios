@@ -30,7 +30,17 @@ class NameViewController: TextInputViewController<Void> {
         self.textField.keyboardType = .namePhonePad
     }
 
-    override func textFieldDidEndEditing(_ textField: UITextField) {
+    override func textFieldDidChange() {
+        super.textFieldDidChange()
+
+        if let text = self.textField.text {
+            self.textEntry.button.isEnabled = text.isValidPersonName
+        } else {
+            self.textEntry.button.isEnabled = false 
+        }
+    }
+
+    override func didTapButton() {
         self.updateUserName()
     }
 
@@ -41,12 +51,11 @@ class NameViewController: TextInputViewController<Void> {
             return
         }
 
-        let tf = self.textField as? TextField
-        tf?.animationView.play()
+        self.textEntry.button.handleEvent(status: .loading)
         User.current()?.formatName(from: text)
         User.current()?.saveLocalThenServer()
             .mainSink(receiveValue: { (user) in
-                tf?.animationView.stop()
+                self.textEntry.button.handleEvent(status: .complete)
                 self.complete(with: .success(()))
             }).store(in: &self.cancellables)
     }

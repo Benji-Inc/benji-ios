@@ -115,8 +115,7 @@ class WelcomeViewController: TextInputViewController<Void> {
             return
         }
 
-        let tf = self.textField as? TextField
-        tf?.animationView.play()
+        self.textEntry.button.handleEvent(status: .loading)
         Reservation.getObject(with: code)
             .mainSink(receivedResult: { (result) in
                 switch result {
@@ -126,11 +125,11 @@ class WelcomeViewController: TextInputViewController<Void> {
                     } else {
                         self.state = .foundReservation(reservation)
                     }
+                    self.textEntry.button.handleEvent(status: .complete)
                 case .error(let e):
-                    print(e)
+                    self.textEntry.button.handleEvent(status: .error(e.localizedDescription))
                     self.state = .reservationError
                 }
-                tf?.animationView.stop()
             }).store(in: &self.cancellables)
     }
 }

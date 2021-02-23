@@ -77,7 +77,8 @@ class CollectionView: UICollectionView {
         self.setContentOffset(newOffset, animated: false)
     }
 
-    func dequeueManageableCell<Cell: CollectionViewManagerCell & ManageableCell, Item: Hashable>(using registration: UICollectionView.CellRegistration<Cell, Item>, for indexPath: IndexPath, item: Item?) -> Cell {
+    func dequeueManageableCell<Cell: CollectionViewManagerCell & ManageableCell, Item: Hashable>(using registration: UICollectionView.CellRegistration<Cell, Item>, for indexPath: IndexPath, item: Item?) -> Cell? {
+        guard let item = item else { return nil }
         return self.dequeueConfiguredReusableCell(using: registration, for: indexPath, item: item)
     }
 

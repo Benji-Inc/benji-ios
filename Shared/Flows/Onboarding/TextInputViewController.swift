@@ -9,7 +9,7 @@
 import Foundation
 import TMROLocalization
 
-class TextInputViewController<ResultType>: ViewController, Sizeable, Completable, UITextFieldDelegate, KeyboardObservable {
+class TextInputViewController<ResultType>: ViewController, Sizeable, Completable, UITextFieldDelegate {
 
     var onDidComplete: ((Result<ResultType, Error>) -> Void)?
 
@@ -38,24 +38,35 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
 
         self.view.addSubview(self.textEntry)
 
+        self.textEntry.button.set(style: .normal(color: .purple, text: "Next"))
+        self.textEntry.button.didSelect { [unowned self] in
+            self.didTapButton()
+        }
+        self.textEntry.button.isEnabled = false
+
         self.textEntry.textField.addTarget(self,
                                            action: #selector(textFieldDidChange),
                                            for: UIControl.Event.editingChanged)
         self.textEntry.textField.delegate = self
-        self.registerKeyboardEvents()
+
+        KeyboardManger.shared.$currentEvent.mainSink { isShowing in
+            self.view.layoutNow()
+        }.store(in: &self.cancellables)
     }
+
+    func didTapButton() {}
 
     @objc func textFieldDidChange() {}
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        let width = self.view.width - (Theme.contentOffset * 2)
+        let width = self.view.width - Theme.contentOffset.doubled
         let height = self.textEntry.getHeight(for: width)
         self.textEntry.size = CGSize(width: width, height: height)
         self.textEntry.centerOnX()
 
-        let defaultOffset = self.view.height - 340
+        let defaultOffset = self.view.height - KeyboardManger.shared.cachedKeyboardFrame.height
         self.textEntry.bottom = defaultOffset
     }
 
@@ -77,11 +88,5 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {}
-
-    func handleKeyboard(frame: CGRect,
-                        with animationDuration: TimeInterval,
-                        timingCurve: UIView.AnimationCurve) {
-        self.view.layoutNow()
-    }
 }
 

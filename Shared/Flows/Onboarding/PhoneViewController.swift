@@ -35,12 +35,6 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func initializeViews() {
-        super.initializeViews()
-
-        self.textField.addTarget(self, action: #selector(editingDidEnd), for: .editingDidEnd)
-    }
-
     override func shouldBecomeFirstResponder() -> Bool {
         return !self.isPhoneNumberValid()
     }
@@ -48,13 +42,15 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     override func textFieldDidChange() {
         if self.isPhoneNumberValid() {
             // End editing because we have a valid phone number and we're ready to request a code with it
-            self.textField.resignFirstResponder()
+            self.textEntry.button.isEnabled = true
         } else if let text = self.textField.text, text.isEmpty {
-            self.isSendingCode = false 
+            self.isSendingCode = false
+            self.textEntry.button.isEnabled = false
+            
         }
     }
 
-    @objc func editingDidEnd() {
+    override func didTapButton() {
         guard !self.isSendingCode,
               self.isPhoneNumberValid(),
               let phone = self.phoneTextField.text?.parsePhoneNumber(for: self.phoneTextField.currentRegion) else {
@@ -74,7 +70,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     private func sendCode(to phone: PhoneNumber, region: String) {
         guard let installationId = UserNotificationManager.shared.installationId else { return }
 
-        self.phoneTextField.animationView.play()
+        self.textEntry.button.handleEvent(status: .loading)
         self.isSendingCode = true
         SendCode(phoneNumber: phone,
                  region: region,
@@ -82,11 +78,12 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
             .makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink(receiveValue: { (value) in },
                       receiveCompletion: { (result) in
-                        self.phoneTextField.animationView.stop()
                         switch result {
                         case .finished:
+                            self.textEntry.button.handleEvent(status: .complete)
                             self.complete(with: .success(phone))
                         case .failure(let error):
+                            self.textEntry.button.handleEvent(status: .error(""))
                             self.complete(with: .failure(error))
                         }
                       }).store(in: &self.cancellables)

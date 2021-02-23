@@ -63,8 +63,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func initializeViews() {
         super.initializeViews()
 
-        self.registerKeyboardEvents()
-
         self.scrollView.insertSubview(self.confettiView, aboveSubview: self.blurView)
 
         self.scrollView.addSubview(self.avatarView)
@@ -327,7 +325,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                case OnboardingContent.phone(let vc) = content,
                !vc.isSendingCode {
                 vc.textField.text = phoneNumber
-                vc.editingDidEnd()
+                vc.textFieldDidEndEditing(vc.textField)
             }
         case .reservation(_):
             break
