@@ -127,12 +127,12 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
 
     var message: String? {
         guard let link = self.link else { return nil }
-        return "Claim your RSVP by tapping 👇\n\(link)"
+        return "RSVP code: \(String(optional: self.objectId))\nClaim your RSVP by tapping 👇\n\(link)"
     }
 
     var reminderMessage: String? {
         guard let link = self.link else { return nil }
-        return "This is a friendly remider that I ACTUALLY want you to join me. I saved you a spot. Tap 👇\n\(link)"
+        return "RSVP code: \(String(optional: self.objectId))\nOurs an is an exclusive place to be social. I saved you a spot. Tap👇\n\(link)"
     }
 
     func prepareMetaData(andUpdate statusables: [Statusable]) -> Future<Void, Error> {
