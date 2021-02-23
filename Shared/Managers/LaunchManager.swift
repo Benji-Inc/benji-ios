@@ -45,7 +45,6 @@ class LaunchManager {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
                 configuration.isLocalDatastoreEnabled = true
                 configuration.server = Config.shared.environment.url
-                configuration.clientKey = Config.shared.environment.clientKey
                 configuration.applicationId = Config.shared.environment.appID
             }))
         }

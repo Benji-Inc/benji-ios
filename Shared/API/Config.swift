@@ -23,14 +23,7 @@ enum Environment: String {
     var appID: String {
         switch self {
         case .staging: return "ours-development"
-        case .production: return "ours-production"
-        }
-    }
-
-    var clientKey: String {
-        switch self {
-        case .staging: return "R7-6qsaqe9xK"
-        case .production: return "96744143-bd04-4343-b637-4688ff44ba44"
+        case .production: return "bd263ac3-c8d9-4145-be8a-7d8eedbd5fcf"
         }
     }
 
