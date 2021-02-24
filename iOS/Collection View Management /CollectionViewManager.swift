@@ -12,7 +12,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
             guard let type = SectionType.init(rawValue: indexPath.section) else { return nil }
             let cell = self.getCell(for: type, indexPath: indexPath, item: self.getItem(for: indexPath))
             self.managerDidConfigure(cell: cell, for: indexPath)
-            cell?.onLongPress = { [unowned self] in
+            cell.onLongPress = { [unowned self] in
                 guard let item = self.getItem(for: indexPath) else { return }
                 self.didLongPress?(item, indexPath)
             }
@@ -103,7 +103,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
         fatalError("getItems() not implemented")
     }
 
-    func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
+    func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell {
         fatalError("getCell() not implemented")
     }
 
