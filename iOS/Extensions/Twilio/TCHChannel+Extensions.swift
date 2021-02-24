@@ -48,7 +48,7 @@ extension TCHChannel {
 
     func getUsers(excludeMe: Bool = false) -> Future<[User], Error> {
 
-        let members = self.members!.membersList()
+        let members = self.members?.membersList() ?? []
 
         var identifiers: [String] = []
         members.forEach { (member) in
