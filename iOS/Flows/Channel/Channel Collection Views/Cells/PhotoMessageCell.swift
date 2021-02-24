@@ -110,9 +110,6 @@ class PhotoMessageCell: BaseMessageCell {
             } else {
                 self.bubbleView.layer.borderColor = message.context.color.color.cgColor
             }
-
-            // TODO: Get this to work
-            //self.bubbleView.startShimmer(repeatCount: 10, isDiagonal: true)
             self.bubbleView.layer.borderWidth = 2
         }
     }

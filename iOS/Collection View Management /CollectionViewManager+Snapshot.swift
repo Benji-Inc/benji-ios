@@ -21,7 +21,6 @@ extension CollectionViewManager {
     }
 
     func append(items: [AnyHashable], to section: SectionType, animate: Bool = true) {
-        // Crashes on connection request
         if self.dataSource.snapshot().sectionIdentifiers.contains(section) {
             var new = self.dataSource.snapshot()
             new.appendItems(items, toSection: section)

@@ -102,31 +102,37 @@ class MessageDeliveryManager {
                              kind: MessageKind,
                              attributes: [String : Any] = [:]) -> AnyPublisher<Messageable, Error> {
 
-        let messagesObject = channel.messages!
-        var mutableAttributes = attributes
-        mutableAttributes["context"] = context.rawValue
+        return Future { promise in
 
-        return self.getOptions(for: kind, attributes: mutableAttributes).flatMap { (options) -> Future<Messageable, Error> in
-            return Future { promise in
-
-                if !ChatClientManager.shared.isConnected {
-                    promise(.failure(ClientError.message(detail: "Chat service is disconnected.")))
-                }
-
-                if channel.status != .joined {
-                    promise(.failure(ClientError.message(detail: "You are not a channel member.")))
-                }
-
-                messagesObject.sendMessage(with: options, completion: { (result, message) in
-                    if result.isSuccessful(), let msg = message {
-                        promise(.success(msg))
-                    } else if let e = result.error {
-                        promise(.failure(e))
-                    } else {
-                        promise(.failure(ClientError.message(detail: "Failed to send message.")))
-                    }
-                })
+            if !ChatClientManager.shared.isConnected {
+                promise(.failure(ClientError.message(detail: "Chat service is disconnected.")))
             }
+
+            if channel.status != .joined {
+                promise(.failure(ClientError.message(detail: "You are not a channel member.")))
+            }
+
+            let messagesObject = channel.messages!
+            var mutableAttributes = attributes
+            mutableAttributes["context"] = context.rawValue
+
+            self.getOptions(for: kind, attributes: mutableAttributes)
+                .mainSink { result in
+                    switch result {
+                    case .success(let options):
+                        messagesObject.sendMessage(with: options, completion: { (result, message) in
+                            if result.isSuccessful(), let msg = message {
+                                promise(.success(msg))
+                            } else if let e = result.error {
+                                promise(.failure(e))
+                            } else {
+                                promise(.failure(ClientError.message(detail: "Failed to send message.")))
+                            }
+                        })
+                    case .error(let e):
+                        promise(.failure(e))
+                    }
+                }.store(in: &self.cancellables)
         }.eraseToAnyPublisher()
     }
 
