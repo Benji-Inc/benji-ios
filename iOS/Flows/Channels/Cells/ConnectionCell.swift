@@ -18,7 +18,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     private let containerView = View()
 
     private let avatarView = AvatarView()
-    private let descriptionLabel = Label(font: .regular, textColor: .white)
+    private let textView = TextView()
 
     private let acceptButton = Button()
     private let declineButton = Button()
@@ -32,7 +32,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
 
         self.contentView.addSubview(self.containerView)
         self.containerView.addSubview(self.vibrancyView)
-        self.containerView.addSubview(self.descriptionLabel)
+        self.containerView.addSubview(self.textView)
         self.containerView.addSubview(self.avatarView)
         self.containerView.addSubview(self.acceptButton)
         self.acceptButton.set(style: .normal(color: .green, text: "Accept"))
@@ -57,7 +57,10 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
                 switch result {
                 case .success(let userWithData):
                     let text = LocalizedString(id: "", arguments: [userWithData.handle], default: "[@(handle)](link) has invited you to connect.")
-                    self.descriptionLabel.setText(text)
+                    let attributedString = AttributedString(text,
+                                                            fontType: .regular,
+                                                            color: .white)
+                    self.textView.set(attributed: attributedString, linkColor: .lightPurple)
                     self.avatarView.set(avatar: userWithData)
                     self.layoutNow()
                 case .error(_):
@@ -80,9 +83,9 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         self.avatarView.setSize(for: 40)
 
         let maxLabelWidth = self.containerView.width - self.avatarView.right - (Theme.contentOffset * 2)
-        self.descriptionLabel.setSize(withWidth: maxLabelWidth)
-        self.descriptionLabel.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset)
-        self.descriptionLabel.match(.top, to: .top, of: self.avatarView)
+        self.textView.setSize(withWidth: maxLabelWidth)
+        self.textView.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset)
+        self.textView.match(.top, to: .top, of: self.avatarView)
 
         let buttonWidth = self.containerView.halfWidth - (Theme.contentOffset * 2)
 

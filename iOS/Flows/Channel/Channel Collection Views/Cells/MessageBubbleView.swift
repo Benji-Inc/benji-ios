@@ -26,7 +26,6 @@ class MessageBubbleView: View, Indexable {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.circleView.set(backgroundColor: .purple)
         self.circleView.alpha = 0
         self.insertSubview(self.circleView, at: 0)
     }
@@ -39,16 +38,27 @@ class MessageBubbleView: View, Indexable {
     }
 
     func startFillAnimation(at startingPoint: CGPoint,
+                            for message: Messageable,
                             completion: CompletionOptional) {
+
+        let color: Color
+
+        if !message.isFromCurrentUser, message.context == .casual {
+            color = .purple
+        } else {
+            color = message.context.color
+        }
 
         self.circleView.alpha = 0
         self.circleView.layer.cornerRadius = self.circleView.halfHeight
         self.circleView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
         self.circleView.center = startingPoint
+        self.circleView.set(backgroundColor: color)
 
         UIView.animate(withDuration: 0.5) {
             self.circleView.transform = .identity
-            self.circleView.alpha = 0.8
+            self.circleView.alpha = 1.0
+            self.layer.borderColor = color.color.cgColor
             self.setNeedsLayout()
         } completion: { completed in
             completion?()

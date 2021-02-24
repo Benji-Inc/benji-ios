@@ -173,7 +173,7 @@ class ChannelDetailViewController: ViewController {
         if channel.isOwnedByMe {
             author = "You"
         } else {
-            author = user.handle
+            author = user.fullName
         }
 
         return LocalizedString(id: "", arguments: [user.handle, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). @(author) created this conversation on @(date)")

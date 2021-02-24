@@ -15,8 +15,8 @@ enum Environment: String {
 
     var url: String {
         switch self {
-        case .staging: return "https://benji-backend.herokuapp.com/parse"
-        case .production: return "http://ours-backend.herokuapp.com/parse"
+        case .staging: return "https://ours-development-backend.herokuapp.com/parse"
+        case .production: return "https://ours-backend.herokuapp.com/parse"
         }
     }
 

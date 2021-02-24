@@ -46,7 +46,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     var userTyping: User?
     private var footerView: ReadAllFooterView?
     private var isSettingReadAll = false
-    private var cancellables = Set<AnyCancellable>()
+    var cancellables = Set<AnyCancellable>()
 
     init(with collectionView: ChannelCollectionView) {
         self.collectionView = collectionView

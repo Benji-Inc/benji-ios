@@ -16,21 +16,24 @@ extension ChannelCollectionViewManager {
         guard let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed, !message.hasBeenConsumedBy.contains(current.objectId!) else { return Future { promise in promise(.success(()))}
         }
 
-        if message.context == .emergency {
-            UIApplication.shared.applicationIconBadgeNumber = 0
-        }
-        
-        //create system message copy of current message
-        let messageCopy = SystemMessage(with: message)
-        messageCopy.udpateConsumers(with: current)
+        return Future { promise in 
+            //create system message copy of current message
+            let messageCopy = SystemMessage(with: message)
+            messageCopy.udpateConsumers(with: current)
+                .mainSink { _ in
+                    self.updateItem(with: messageCopy) {
+                        if message.context == .emergency {
+                            UIApplication.shared.applicationIconBadgeNumber = 0
+                        }
 
-        runMain {
-            //update the current message with the copy
-            self.updateItem(with: messageCopy, completion: nil)
+                        //call update on the actual message and update on callback
+                        message.udpateConsumers(with: current)
+                            .mainSink { _ in
+                                promise(.success(()))
+                            }.store(in: &self.cancellables)
+                    }
+                }.store(in: &self.cancellables)
         }
-
-        //call update on the actual message and update on callback
-        return message.udpateConsumers(with: current)
     }
 
     func setAllMessagesToRead() -> AnyPublisher<[Void], Error> {

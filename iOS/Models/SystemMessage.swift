@@ -70,9 +70,10 @@ class SystemMessage: Messageable {
     @discardableResult
     func udpateConsumers(with consumer: Avatar) -> Future<Void, Error> {
         return Future { promise in
-            if let identity = consumer.userObjectID {
+            if let identity = consumer.userObjectID, !self.hasBeenConsumedBy.contains(identity) {
                 var consumers = self.hasBeenConsumedBy
                 consumers.append(identity)
+                self.attributes?["consumers"] = consumers
                 promise(.success(()))
             } else {
                 promise(.failure(ClientError.generic))
