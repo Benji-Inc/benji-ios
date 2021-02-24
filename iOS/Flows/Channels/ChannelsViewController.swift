@@ -55,10 +55,6 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
                 }
             }
         }.store(in: &self.cancellables)
-
-        self.collectionViewManager.didSelectConnection = { [unowned self] connection, status in
-            self.didSelect(connection: connection, status: status)
-        }
     }
 
     private func didSelect(reservation: Reservation) {
@@ -74,14 +70,5 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
         self.addButton.size = CGSize(width: 50, height: 50)
         self.addButton.pin(.right, padding: Theme.contentOffset)
         self.addButton.pin(.bottom, padding: Theme.contentOffset)
-    }
-
-    private func didSelect(connection: Connection, status: Connection.Status) {
-
-        UpdateConnection(connection: connection, status: status).makeRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink { (result) in
-                self.collectionViewManager.reload(sections: ChannelsCollectionViewManager.SectionType.allCases, animate: true)
-                self.collectionViewManager.reload(items: [connection])
-            }.store(in: &self.cancellables)
     }
 }

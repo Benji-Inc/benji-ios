@@ -14,6 +14,7 @@ typealias ManagerCell = CollectionViewManagerCell & ManageableCell
 struct ManageableCellRegistration<Cell: ManagerCell> {
     let cellProvider = UICollectionView.CellRegistration<Cell, Cell.ItemType> { (cell, indexPath, model)  in
         cell.configure(with: model)
+        cell.currentItem = model
     }
 }
 

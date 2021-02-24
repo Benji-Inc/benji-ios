@@ -15,6 +15,7 @@ class AttachmentCell: CollectionViewManagerCell, ManageableCell {
 
     private let imageView = DisplayableImageView()
     private let selectedView = View()
+    var currentItem: Attachment?
 
     override func initializeSubviews() {
         self.contentView.addSubview(self.imageView)

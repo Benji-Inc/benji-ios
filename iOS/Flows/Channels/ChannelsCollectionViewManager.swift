@@ -18,8 +18,6 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         case reservations = 2
     }
 
-    var didSelectConnection: ((Connection, Connection.Status) -> Void)? = nil
-
     var cancellables = Set<AnyCancellable>()
 
     private(set) var connections: [Connection] = []
@@ -72,10 +70,9 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         switch section {
         case .connections:
             let cell = self.collectionView.dequeueManageableCell(using: self.connectionConfig, for: indexPath, item: item as? Connection)
-            cell.didSelectStatus = { [unowned self] status in
-                if let connection = item as? Connection {
-                    self.didSelectConnection?(connection, status)
-                }
+            cell.didUpdateConnection = { [unowned self] connection in
+                self.reload(sections: ChannelsCollectionViewManager.SectionType.allCases, animate: true)
+                self.reload(items: [connection])
             }
             return cell
         case .channels:

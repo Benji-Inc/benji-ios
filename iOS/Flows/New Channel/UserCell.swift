@@ -19,6 +19,7 @@ class UserCell: CollectionViewManagerCell, ManageableCell {
     private let animationView = AnimationView(name: "checkbox")
 
     var didTapButton: CompletionOptional = nil
+    var currentItem: Connection?
 
     override func initializeSubviews() {
         super.initializeSubviews()

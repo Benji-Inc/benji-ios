@@ -8,6 +8,7 @@
 
 import Foundation
 import TMROLocalization
+import Combine
 
 class ConnectionCell: CollectionViewManagerCell, ManageableCell {
 
@@ -22,7 +23,9 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     private let acceptButton = Button()
     private let declineButton = Button()
 
-    var didSelectStatus: ((Connection.Status) -> Void)? = nil
+    var currentItem: Connection?
+
+    var didUpdateConnection: ((Connection) -> Void)? = nil
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -34,12 +37,12 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         self.containerView.addSubview(self.acceptButton)
         self.acceptButton.set(style: .normal(color: .green, text: "Accept"))
         self.acceptButton.didSelect { [unowned self] in
-            self.didSelectStatus?(.accepted)
+            self.updateConnection(with: .accepted, button: self.acceptButton)
         }
         self.containerView.addSubview(self.declineButton)
         self.declineButton.set(style: .normal(color: .red, text: "Decline"))
         self.declineButton.didSelect { [unowned self] in
-            self.didSelectStatus?(.declined)
+            self.updateConnection(with: .declined, button: self.declineButton)
         }
 
         self.set(backgroundColor: .clear)
@@ -90,5 +93,23 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         self.declineButton.size = CGSize(width: buttonWidth, height: 40)
         self.declineButton.pin(.left, padding: Theme.contentOffset)
         self.declineButton.pin(.bottom, padding: Theme.contentOffset)
+    }
+
+    private func updateConnection(with status: Connection.Status, button: Button) {
+        button.handleEvent(status: .loading)
+        if let connection = self.currentItem {
+            UpdateConnection(connection: connection, status: status).makeRequest(andUpdate: [], viewsToIgnore: [self])
+                .mainSink { (result) in
+                    switch result {
+                    case .success(let item):
+                        button.handleEvent(status: .complete)
+                        if let updatedConnection = item as? Connection {
+                            self.didUpdateConnection?(updatedConnection)
+                        }
+                    case .error(let e):
+                        button.handleEvent(status: .error(e.localizedDescription))
+                    }
+                }.store(in: &self.cancellables)
+        }
     }
 }

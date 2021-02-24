@@ -20,5 +20,7 @@ protocol ManageableCell: AnyObject {
 
     /// Called with a managing objects selectedIndexPaths is set
     func update(isSelected: Bool)
+
+    var currentItem: Self.ItemType? { get set }
 }
 

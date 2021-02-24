@@ -13,6 +13,7 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = DisplayableChannel
 
     private let channelContentView = ChannelContentView()
+    var currentItem: DisplayableChannel?
 
     override func initializeSubviews() {
         super.initializeSubviews()
