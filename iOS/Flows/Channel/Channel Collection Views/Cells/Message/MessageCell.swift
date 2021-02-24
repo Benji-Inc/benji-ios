@@ -67,7 +67,8 @@ class MessageCell: BaseMessageCell {
     }
 
     override func layoutContent(with attributes: ChannelCollectionViewLayoutAttributes) {
-
+        super.layoutContent(with: attributes)
+        
         self.textView.frame = attributes.attributes.textViewFrame
         self.bubbleView.frame = attributes.attributes.bubbleViewFrame
         self.bubbleView.layer.maskedCorners = attributes.attributes.maskedCorners

@@ -120,6 +120,6 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
     private func getAvatarPadding(for layout: ChannelCollectionViewFlowLayout) -> CGFloat {
         guard let dataSource = layout.dataSource else { return .zero }
-        return dataSource.numberOfMembers > 2 ? .zero : 8
+        return dataSource.numberOfMembers > 2 ? 8 : 8
     }
 }
