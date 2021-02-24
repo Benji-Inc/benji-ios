@@ -198,7 +198,7 @@ class ChannelDetailViewController: ViewController {
         } else if let user = users.first(where: { user in
             return user.objectId == channel.createdBy
         }) {
-            author = user.handle
+            author = user.fullName
         }
 
         return LocalizedString(id: "", arguments: [text, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your group chat with [@(name)](userid). @(author) created this conversation on @(date)")
