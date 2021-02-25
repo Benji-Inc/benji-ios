@@ -191,9 +191,10 @@ class InputAccessoryView: View, ActiveChannelAccessor {
 
     private func setupHandlers() {
 
-        KeyboardManger.shared.$currentEvent.mainSink { event in
+        KeyboardManger.shared.$currentEvent
+            .mainSink { event in
             switch event {
-            case .willHide(_):
+            case .didHide(_):
                 self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
                 self.plusAnimationView.play(toProgress: 0.0)
             case .didShow(_):
