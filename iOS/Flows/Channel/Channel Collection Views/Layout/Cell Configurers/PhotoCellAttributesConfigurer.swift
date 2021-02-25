@@ -75,7 +75,7 @@ class PhotoCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
     private func getAvatarFrame(with message: Messageable, layout: ChannelCollectionViewFlowLayout) -> CGRect {
         guard let cv = layout.collectionView else { return .zero }
-        let xOffset: CGFloat = message.isFromCurrentUser ? cv.width - self.horizontalPadding - self.avatarSize.width - 5 : self.horizontalPadding
+        let xOffset: CGFloat = message.isFromCurrentUser ? cv.width - self.horizontalPadding - self.avatarSize.width - 5 : self.horizontalPadding + 5
         return CGRect(x: xOffset,
                       y: 5,
                       width: self.avatarSize.width,
@@ -99,15 +99,15 @@ class PhotoCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
         var xOffset: CGFloat = 0
         if message.isFromCurrentUser {
-            xOffset = layout.itemWidth - textViewSize.width - (self.textViewHorizontalPadding * 2)
+            xOffset = layout.itemWidth - textViewSize.width - self.textViewHorizontalPadding.doubled - self.bubbleViewHorizontalPadding
         } else {
-            xOffset = Theme.contentOffset
+            xOffset = Theme.contentOffset + self.bubbleViewHorizontalPadding
         }
 
-        return CGRect(x: xOffset - self.bubbleViewHorizontalPadding,
+        return CGRect(x: xOffset,
                       y: yOffset,
-                      width: textViewSize.width + (self.bubbleViewHorizontalPadding * 2),
-                      height: textViewSize.height + (self.textViewVerticalPadding * 2))
+                      width: textViewSize.width + self.bubbleViewHorizontalPadding.doubled,
+                      height: textViewSize.height + self.textViewVerticalPadding.doubled)
     }
 
     private func getTextViewSize(with message: Messageable,
