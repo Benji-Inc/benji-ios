@@ -35,7 +35,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         self.containerView.addSubview(self.textView)
         self.containerView.addSubview(self.avatarView)
         self.containerView.addSubview(self.acceptButton)
-        self.acceptButton.set(style: .normal(color: .green, text: "Accept"))
+        self.acceptButton.set(style: .normal(color: .purple, text: "Accept"))
         self.acceptButton.didSelect { [unowned self] in
             self.updateConnection(with: .accepted, button: self.acceptButton)
         }
