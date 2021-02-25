@@ -169,7 +169,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         guard let channelCollectionView = collectionView as? ChannelCollectionView else { fatalError() }
 
         if self.isSectionReservedForTypingIndicator(indexPath.section) {
-            return UICollectionReusableView()
+            return channelCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "EmptyHeader", for: indexPath)
         }
 
         guard let section = self.sections[safe: indexPath.section] else { fatalError() }
@@ -218,7 +218,9 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     private func footer(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
         guard let channelCollectionView = collectionView as? ChannelCollectionView else { fatalError() }
 
-        guard indexPath.section == self.numberOfSections(in: collectionView) - 1 else { return UICollectionReusableView() }
+        guard indexPath.section == self.numberOfSections(in: collectionView) - 1 else {
+            return channelCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "EmptyFooter", for: indexPath)
+        }
 
         let footer = channelCollectionView.dequeueReusableFooterView(ReadAllFooterView.self, for: indexPath)
         footer.configure(hasUnreadMessages: MessageSupplier.shared.hasUnreadMessage) 

@@ -46,6 +46,7 @@ func ==(lhs: Messageable, rhs: Messageable) -> Bool {
         && lhs.authorID == rhs.authorID
         && lhs.messageIndex == rhs.messageIndex
         && lhs.id == rhs.id
+        && lhs.updateId == rhs.updateId
 }
 
 extension Messageable {
