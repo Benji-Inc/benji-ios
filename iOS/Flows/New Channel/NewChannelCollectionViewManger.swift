@@ -49,7 +49,7 @@ class NewChannelCollectionViewManger: CollectionViewManager<NewChannelCollection
         return self.connections
     }
 
-    override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell {
+    override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         return self.collectionView.dequeueManageableCell(using: self.userConfig, for: indexPath, item: item as? Connection)
     }
 

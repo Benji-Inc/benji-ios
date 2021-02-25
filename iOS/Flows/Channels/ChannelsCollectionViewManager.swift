@@ -66,11 +66,11 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         }
     }
 
-    override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell {
+    override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         switch section {
         case .connections:
             let cell = self.collectionView.dequeueManageableCell(using: self.connectionConfig, for: indexPath, item: item as? Connection)
-            cell.didUpdateConnection = { [unowned self] connection in
+            cell?.didUpdateConnection = { [unowned self] connection in
                 self.reload(sections: ChannelsCollectionViewManager.SectionType.allCases, animate: true)
                 self.reload(items: [connection])
             }
@@ -83,7 +83,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
             let cell = self.collectionView.dequeueManageableCell(using: self.reservationConfig,
                                                                  for: indexPath,
                                                                  item: item as? Reservation)
-            cell.button.didSelect { [unowned self] in
+            cell?.button.didSelect { [unowned self] in
                 self.select(indexPath: indexPath)
             }
 

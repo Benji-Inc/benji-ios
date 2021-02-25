@@ -108,7 +108,7 @@ class ChannelSupplier {
         }.store(in: &self.cancellables)
 
         ChatClientManager.shared.$channelsUpdate.mainSink { [weak self] (update) in
-            guard let `self` = self, let channelsUpdate = update else { return }
+            guard let `self` = self, let channelsUpdate = update, self.isSynced else { return }
             switch channelsUpdate.status {
             case .added:
                 self.allChannels = self.subscribedChannels

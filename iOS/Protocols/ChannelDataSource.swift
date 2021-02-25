@@ -124,8 +124,6 @@ extension ChannelDataSource {
 
         var indexPath: IndexPath? = nil
 
-        print("UPDATE ID: \(updatedItem.attributes)")
-
         // If the new message matches an existing message's id, then replace the old one.
         if let updateId = updatedItem.updateId {
             for (sectionIndex, section) in self.sections.enumerated() {

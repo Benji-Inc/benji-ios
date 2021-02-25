@@ -26,7 +26,7 @@ class AttachmentCollectionViewManager: CollectionViewManager<AttachmentCollectio
         return AttachmentsManager.shared.attachments
     }
 
-    override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell {
+    override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         return self.collectionView.dequeueManageableCell(using: self.cellConfig,
                                                          for: indexPath,
                                                          item: item as? Attachment)

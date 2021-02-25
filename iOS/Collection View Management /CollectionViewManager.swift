@@ -9,8 +9,9 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
 
     lazy var dataSource: UICollectionViewDiffableDataSource<SectionType, AnyHashable> = {
         let dataSource = UICollectionViewDiffableDataSource<SectionType, AnyHashable>(collectionView: self.collectionView) { (cv, indexPath, item) -> UICollectionViewCell? in
-            guard let type = SectionType.init(rawValue: indexPath.section) else { return nil }
-            let cell = self.getCell(for: type, indexPath: indexPath, item: self.getItem(for: indexPath))
+            guard let type = SectionType.init(rawValue: indexPath.section),
+                  let cell = self.getCell(for: type, indexPath: indexPath, item: self.getItem(for: indexPath)) else { return nil }
+
             self.managerDidConfigure(cell: cell, for: indexPath)
             cell.onLongPress = { [unowned self] in
                 guard let item = self.getItem(for: indexPath) else { return }
@@ -48,7 +49,9 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     }
 
     @Published var onSelectedItem: (item: AnyHashable, section: SectionType)? = nil
-    var didLongPress: ((AnyHashable, IndexPath) -> Void)? = nil 
+    var didLongPress: ((AnyHashable, IndexPath) -> Void)? = nil
+
+    var hasLoadedInitialSnapshot: Bool = false
 
     unowned let collectionView: CollectionView
 
@@ -78,16 +81,20 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
 
             if let cycle = animationCycle {
                 self.animateOut(position: cycle.outToPosition, concatenate: cycle.shouldConcatenate) { [unowned self] in
-                    self.dataSource.apply(snapshot, animatingDifferences: false)
-                    self.animateIn(position: cycle.inFromPosition,
-                                   concatenate: cycle.shouldConcatenate,
-                                   scrollToEnd: cycle.scrollToEnd) {
-                        promise(.success(()))
+                    self.dataSource.apply(snapshot, animatingDifferences: false) {
+                        self.animateIn(position: cycle.inFromPosition,
+                                       concatenate: cycle.shouldConcatenate,
+                                       scrollToEnd: cycle.scrollToEnd) {
+                            self.hasLoadedInitialSnapshot = true
+                            promise(.success(()))
+                        }
                     }
                 }
             } else {
-                self.dataSource.apply(snapshot, animatingDifferences: false)
-                promise(.success(()))
+                self.dataSource.apply(snapshot, animatingDifferences: false) {
+                    self.hasLoadedInitialSnapshot = true 
+                    promise(.success(()))
+                }
             }
         }
     }
@@ -103,7 +110,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
         fatalError("getItems() not implemented")
     }
 
-    func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell {
+    func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         fatalError("getCell() not implemented")
     }
 

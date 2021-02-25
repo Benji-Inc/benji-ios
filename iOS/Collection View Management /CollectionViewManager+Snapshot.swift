@@ -21,13 +21,14 @@ extension CollectionViewManager {
     }
 
     func append(items: [AnyHashable], to section: SectionType, animate: Bool = true) {
+        guard self.hasLoadedInitialSnapshot else { return }
+
         if self.dataSource.snapshot().sectionIdentifiers.contains(section) {
-            var new = self.dataSource.snapshot()
-            new.appendItems(items, toSection: section)
-            self.dataSource.apply(new, animatingDifferences: animate)
+            var new = self.dataSource.snapshot(for: section)
+            new.append(items)
+            self.dataSource.apply(new, to: section, animatingDifferences: animate)
         } else {
             var new = self.dataSource.snapshot()
-            new.appendSections([section])
             new.appendItems(items, toSection: section)
             self.dataSource.apply(new, animatingDifferences: animate)
         }
@@ -46,6 +47,7 @@ extension CollectionViewManager {
     }
 
     func delete(items: [AnyHashable], animate: Bool = true) {
+        guard self.dataSource.snapshot().itemIdentifiers.contains(items) else { return }
         var new = self.dataSource.snapshot()
         new.deleteItems(items)
         self.dataSource.apply(new, animatingDifferences: animate)
@@ -70,12 +72,15 @@ extension CollectionViewManager {
     }
 
     func reload(items: [AnyHashable], animate: Bool = true) {
+        guard self.dataSource.snapshot().itemIdentifiers.contains(items) else { return }
         var new = self.dataSource.snapshot()
         new.reloadItems(items)
         self.dataSource.apply(new, animatingDifferences: animate)
     }
 
     func append(sections: [SectionType], animate: Bool = true) {
+        guard self.hasLoadedInitialSnapshot else { return }
+
         var new = self.dataSource.snapshot()
         new.appendSections(sections)
         self.dataSource.apply(new, animatingDifferences: animate)
