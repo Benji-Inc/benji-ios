@@ -83,6 +83,12 @@
 		D63DB1FE25E968C300F6B323 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63DB1FD25E968C300F6B323 /* NotificationViewController.swift */; };
 		D63DB20125E968C300F6B323 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D63DB1FF25E968C300F6B323 /* MainInterface.storyboard */; };
 		D63DB20525E968C300F6B323 /* OursNotificationContent.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D63DB1F725E968C300F6B323 /* OursNotificationContent.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D63DB20B25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63DB20A25E96E1E00F6B323 /* UserNotificationAction.swift */; };
+		D63DB20C25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63DB20A25E96E1E00F6B323 /* UserNotificationAction.swift */; };
+		D63DB20D25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63DB20A25E96E1E00F6B323 /* UserNotificationAction.swift */; };
+		D63DB20F25E96EAF00F6B323 /* NSExtensionContext+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63DB20E25E96EAF00F6B323 /* NSExtensionContext+Extensions.swift */; };
+		D63DB21025E96EAF00F6B323 /* NSExtensionContext+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63DB20E25E96EAF00F6B323 /* NSExtensionContext+Extensions.swift */; };
+		D63DB21125E96EAF00F6B323 /* NSExtensionContext+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63DB20E25E96EAF00F6B323 /* NSExtensionContext+Extensions.swift */; };
 		D640326025AE5CD400139396 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D640325F25AE5CD400139396 /* WelcomeViewController.swift */; };
 		D640326125AE5CD400139396 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D640325F25AE5CD400139396 /* WelcomeViewController.swift */; };
 		D640328E25AF3CA500139396 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328925AF3CA500139396 /* loading.json */; };
@@ -585,6 +591,8 @@
 		D63DB1FD25E968C300F6B323 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		D63DB20025E968C300F6B323 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		D63DB20225E968C300F6B323 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D63DB20A25E96E1E00F6B323 /* UserNotificationAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationAction.swift; sourceTree = "<group>"; };
+		D63DB20E25E96EAF00F6B323 /* NSExtensionContext+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSExtensionContext+Extensions.swift"; sourceTree = "<group>"; };
 		D640325F25AE5CD400139396 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		D640328925AF3CA500139396 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		D640328A25AF3CA500139396 /* face_scan.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = face_scan.json; sourceTree = "<group>"; };
@@ -1094,6 +1102,7 @@
 				D69EB4492457EB4500473530 /* Error+Extensions.swift */,
 				D642735C22C90C640088256B /* Math Extensions */,
 				D61EC0F421D3151400204BEE /* NSAttributedString+Extensions.swift */,
+				D63DB20E25E96EAF00F6B323 /* NSExtensionContext+Extensions.swift */,
 				D6D1460C21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift */,
 				D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */,
 				D62BB742244DEEA400607677 /* Optional+Extensions.swift */,
@@ -1554,6 +1563,7 @@
 				D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */,
 				D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */,
 				D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */,
+				D63DB20A25E96E1E00F6B323 /* UserNotificationAction.swift */,
 			);
 			path = Notifications;
 			sourceTree = "<group>";
@@ -2105,6 +2115,7 @@
 				D628425325C1B1DB00603FA1 /* ReservationCell.swift in Sources */,
 				D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */,
 				D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */,
+				D63DB20B25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */,
 				D61D38E9248C506000BE457B /* InputAccessoryView+Panning.swift in Sources */,
 				D61EC0F921D317AB00204BEE /* Theme.swift in Sources */,
 				D6B3329525DDB9E300211044 /* NewChannelHeaderView.swift in Sources */,
@@ -2223,6 +2234,7 @@
 				D6F33C7C24B1504C009603FF /* PhotoMessageCell.swift in Sources */,
 				D67896BF2302683C0059BA75 /* PhotoViewController.swift in Sources */,
 				D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,
+				D63DB20F25E96EAF00F6B323 /* NSExtensionContext+Extensions.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
 				D6C9EF3F25BF6CB100A14DE5 /* MessageBubbleView.swift in Sources */,
 				D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */,
@@ -2280,7 +2292,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D63DB21125E96EAF00F6B323 /* NSExtensionContext+Extensions.swift in Sources */,
 				D63DB1FE25E968C300F6B323 /* NotificationViewController.swift in Sources */,
+				D63DB20D25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2302,6 +2316,7 @@
 				D655191F2589121500B901E4 /* Optional+Extensions.swift in Sources */,
 				D65519042589110A00B901E4 /* MainCoordinator.swift in Sources */,
 				D6551A3025895E4600B901E4 /* SwitchableContentViewController.swift in Sources */,
+				D63DB21025E96EAF00F6B323 /* NSExtensionContext+Extensions.swift in Sources */,
 				D6551A3A25895E6E00B901E4 /* FaceDetectionViewController.swift in Sources */,
 				D66379E225A39C0400A4A3B7 /* UserNotificationManager.swift in Sources */,
 				D6DF870725A5214D0089B0CF /* QuePositions.swift in Sources */,
@@ -2409,6 +2424,7 @@
 				D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
 				D65519252589121C00B901E4 /* PFInstallation+Extensions.swift in Sources */,
 				D6551A3725895E6800B901E4 /* PhotoViewController.swift in Sources */,
+				D63DB20C25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */,
 				D66379FE25A39C6000A4A3B7 /* UserNotificationFactory.swift in Sources */,
 				D65518F82589109100B901E4 /* AppDelegate.swift in Sources */,
 				D6E859C325DAD56D003D1DE9 /* Subscribeable.swift in Sources */,

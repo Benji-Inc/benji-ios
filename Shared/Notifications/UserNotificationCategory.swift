@@ -16,38 +16,10 @@ enum UserNotificationCategory: String, CaseIterable {
         switch self {
         case .connectionRequest:
             return UNNotificationCategory(identifier: self.rawValue,
-                                          actions: self.actions.map({ userAction in
-                                            return userAction.action
-                                          }),
+                                          actions: [], // Actions can be better handled on the extension
                                           intentIdentifiers: [],
                                           hiddenPreviewsBodyPlaceholder: "",
                                           options: .customDismissAction)
-        }
-    }
-
-    var actions: [UserNotificationAction] {
-        switch self {
-        case .connectionRequest:
-            return [.acceptConnection, .declineConnection]
-        }
-    }
-}
-
-enum UserNotificationAction: String {
-
-    case acceptConnection
-    case declineConnection
-
-    var action: UNNotificationAction {
-        switch self {
-        case .acceptConnection:
-            return UNNotificationAction(identifier: self.rawValue,
-                                        title: "Accept",
-                                        options: [])
-        case .declineConnection:
-            return UNNotificationAction(identifier: self.rawValue,
-                                        title: "Decline",
-                                        options: UNNotificationActionOptions.destructive)
         }
     }
 }
