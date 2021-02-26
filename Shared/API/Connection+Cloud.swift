@@ -29,11 +29,11 @@ struct CreateConnection: CloudFunction {
 struct UpdateConnection: CloudFunction {
     typealias ReturnType = Any
 
-    var connection: Connection
+    var connectionId: String
     var status: Connection.Status
 
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
-        let params = ["connectionId": self.connection.objectId!,
+        let params = ["connectionId": self.connectionId,
                       "status": self.status.rawValue]
 
         return self.makeRequest(andUpdate: statusables,

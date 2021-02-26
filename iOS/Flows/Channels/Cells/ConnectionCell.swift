@@ -101,7 +101,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     private func updateConnection(with status: Connection.Status, button: Button) {
         button.handleEvent(status: .loading)
         if let connection = self.currentItem {
-            UpdateConnection(connection: connection, status: status).makeRequest(andUpdate: [], viewsToIgnore: [self])
+            UpdateConnection(connectionId: connection.objectId!, status: status).makeRequest(andUpdate: [], viewsToIgnore: [self])
                 .mainSink { (result) in
                     switch result {
                     case .success(let item):

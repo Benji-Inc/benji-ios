@@ -23,7 +23,7 @@ class UserNotificationManager: NSObject {
 
     private let center = UNUserNotificationCenter.current()
 
-    private var cancellables = Set<AnyCancellable>()
+    var cancellables = Set<AnyCancellable>()
 
     var installationId: String? {
         return PFInstallation.current()?.installationId

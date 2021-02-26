@@ -21,7 +21,9 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
 
-        if let target = response.notification.deepLinkTarget {
+        if let action = UserNotificationAction.init(rawValue: response.actionIdentifier) {
+            self.handle(action: action, for: response.notification.request.content.userInfo)
+        } else if let target = response.notification.deepLinkTarget {
             var deepLink = DeepLinkObject(target: target)
             deepLink.customMetadata = response.notification.customMetadata
             self.delegate?.userNotificationManager(willHandle: deepLink)
@@ -31,4 +33,17 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {}
+
+    private func handle(action: UserNotificationAction, for userInfo: [AnyHashable: Any]) {
+        switch action {
+        case .acceptConnection:
+            guard let connectionId = userInfo["connectionId"] as? String else { return }
+            UpdateConnection(connectionId: connectionId, status: .accepted).makeRequest(andUpdate: [], viewsToIgnore: [])
+                .mainSink().store(in: &self.cancellables)
+        case .declineConnection:
+            guard let connectionId = userInfo["connectionId"] as? String else { return }
+            UpdateConnection(connectionId: connectionId, status: .accepted).makeRequest(andUpdate: [], viewsToIgnore: [])
+                .mainSink().store(in: &self.cancellables)
+        }
+    }
 }

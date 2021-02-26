@@ -75,7 +75,7 @@ class PostConnectionViewController: PostViewController {
     func updateConnection(with status: Connection.Status) {
         guard let connection = self.connection else { return }
 
-        UpdateConnection(connection: connection, status: status)
+        UpdateConnection(connectionId: connection.objectId!, status: status)
             .makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink(receiveValue: { (_) in },
                       receiveCompletion: { (_) in

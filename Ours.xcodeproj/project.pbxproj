@@ -77,6 +77,7 @@
 		D63C67DE23D415A700EA373A /* FaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DD23D415A700EA373A /* FaceView.swift */; };
 		D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */; };
 		D63D63032486A9020037E046 /* InputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D63022486A9020037E046 /* InputAccessoryView.swift */; };
+		D63DB1F225E95CEC00F6B323 /* Connection+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */; };
 		D640326025AE5CD400139396 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D640325F25AE5CD400139396 /* WelcomeViewController.swift */; };
 		D640326125AE5CD400139396 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D640325F25AE5CD400139396 /* WelcomeViewController.swift */; };
 		D640328E25AF3CA500139396 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328925AF3CA500139396 /* loading.json */; };
@@ -902,7 +903,6 @@
 		D61EC0D621D30C0500204BEE /* API */ = {
 			isa = PBXGroup;
 			children = (
-				D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */,
 				D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */,
 				D6B3329225DD74EB00211044 /* Channel+Cloud.swift */,
 			);
@@ -993,6 +993,7 @@
 				D64C6A79232883FE00DB7257 /* CloudFunction.swift */,
 				D6DA3191259B5B6D0078E769 /* Config.swift */,
 				D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */,
+				D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -2231,6 +2232,7 @@
 				D650C1E225B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
 				D65519392589122700B901E4 /* UIEdgeInsets+Extensions.swift in Sources */,
 				D65519772589129B00B901E4 /* AnyHashableDisplayable.swift in Sources */,
+				D63DB1F225E95CEC00F6B323 /* Connection+Cloud.swift in Sources */,
 				D6F37D6C25B5EC350034C9C5 /* AvatarProfileViewController.swift in Sources */,
 				D65519762589129B00B901E4 /* Deeplinkable.swift in Sources */,
 				D655195A2589126800B901E4 /* User+Objectable.swift in Sources */,
