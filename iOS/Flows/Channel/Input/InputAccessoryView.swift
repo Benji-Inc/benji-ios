@@ -253,7 +253,7 @@ class InputAccessoryView: View, ActiveChannelAccessor {
         channel.typing()
     }
 
-    private func updateInputType() {
+    func updateInputType() {
         // If keyboard, then show attachments
         // If attachments & currentKind != .text, Then still show x
         // If progess is greater than 0 and pressed, reset attachment view.

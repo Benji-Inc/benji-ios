@@ -48,7 +48,9 @@ class UserNotificationManager: NSObject {
         self.getNotificationSettings()
             .mainSink { (settings) in
                 switch settings.authorizationStatus {
-                case .authorized, .provisional:
+                case .authorized:
+                    application.registerForRemoteNotifications()  // To update our token
+                case .provisional:
                     application.registerForRemoteNotifications()  // To update our token
                 case .notDetermined:
                     self.register(with: [.alert, .sound, .badge, .provisional], application: application)
@@ -112,7 +114,7 @@ class UserNotificationManager: NSObject {
     }
 
     func registerPush(from deviceToken: Data) {
-        guard let installation = PFInstallation.current(), installation.deviceToken.isNil else { return }
+        guard let installation = PFInstallation.current() else { return }
         installation.badge = 0
         installation.setDeviceTokenFrom(deviceToken)
         installation.saveToken()

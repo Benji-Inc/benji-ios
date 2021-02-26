@@ -30,6 +30,7 @@ class AttachmentView: View {
     }
 
     func configure(with item: Attachment?) {
+
         self.attachment = item
         
         guard let attachement = item else {

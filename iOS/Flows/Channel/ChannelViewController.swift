@@ -61,6 +61,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     lazy var messageInputAccessoryView = InputAccessoryView(with: self)
 
     override var inputAccessoryView: UIView? {
+        // This is a hack to make the input hide during the presentation of the image picker. 
+        self.messageInputAccessoryView.alpha = UIWindow.topMostController() == self ? 1.0 : 0.0
         return self.messageInputAccessoryView
     }
 
@@ -82,10 +84,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    required init?(withObject object: DeepLinkable) {
-        fatalError("init(withObject:) has not been implemented")
     }
 
     deinit {

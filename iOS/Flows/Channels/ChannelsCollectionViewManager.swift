@@ -72,6 +72,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
             let cell = self.collectionView.dequeueManageableCell(using: self.connectionConfig, for: indexPath, item: item as? Connection)
             cell?.didUpdateConnection = { [unowned self] connection in
                 self.connections.remove(object: connection)
+                self.delete(items: [connection])
                 self.reload(sections: [.channels, .connections], animate: true)
             }
             return cell

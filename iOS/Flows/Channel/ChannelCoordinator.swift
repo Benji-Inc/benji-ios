@@ -99,6 +99,11 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
         guard self.router.topmostViewController != self.imagePickerVC, !self.imagePickerVC.isBeingPresented else { return }
 
         self.imagePickerVC.sourceType = type
+        self.imagePickerVC.dismissHandlers.append { [unowned self] in
+            UIView.animate(withDuration: 0.2) {
+                self.channelVC.messageInputAccessoryView.alpha = 1.0
+            }
+        }
         self.channelVC.present(self.imagePickerVC, animated: true, completion: nil)
     }
 
@@ -115,7 +120,8 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
         }
 
         let attachment = Attachment(asset: asset, info: info)
-        self.channelVC.handle(attachment: attachment, body: String())
+        self.channelVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
+        self.channelVC.messageInputAccessoryView.updateInputType()
     }
 }
 
