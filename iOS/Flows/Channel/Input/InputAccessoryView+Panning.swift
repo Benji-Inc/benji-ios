@@ -26,7 +26,8 @@ extension InputAccessoryView: UIGestureRecognizerDelegate {
             startingPoint = pan.location(in: nil)
             self.interactiveStartingPoint = startingPoint
         }
-        let totalOffset: CGFloat = self.height
+
+        let totalOffset: CGFloat = clamp(self.halfHeight, InputAccessoryView.preferredHeight, InputAccessoryView.maxHeight * 0.5)
         var diff = (startingPoint.y - currentLocation.y)
         diff -= totalOffset
         var progress = diff / 100

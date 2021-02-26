@@ -20,7 +20,7 @@ protocol MessageInputAccessoryViewDelegate: AnyObject {
 class InputAccessoryView: View, ActiveChannelAccessor {
 
     static let preferredHeight: CGFloat = 54.0
-    private static let maxHeight: CGFloat = 200.0
+    static let maxHeight: CGFloat = 200.0
 
     var previewAnimator: UIViewPropertyAnimator?
     var previewView: PreviewMessageView?
