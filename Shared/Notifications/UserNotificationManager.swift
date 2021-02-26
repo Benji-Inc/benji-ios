@@ -66,6 +66,13 @@ class UserNotificationManager: NSObject {
     private func requestAuthorization(with options: UNAuthorizationOptions = [.alert, .sound, .badge]) -> Future<Bool, Never> {
         return Future { promise in
             self.center.requestAuthorization(options: options) { (granted, error) in
+                if granted {
+                    let userCategories = UserNotificationCategory.allCases.map { userCategory in
+                        return userCategory.category
+                    }
+                    let categories: Set<UNNotificationCategory> = Set.init(userCategories)
+                    self.center.setNotificationCategories(categories)
+                }
                 promise(.success(granted))
             }
         }
