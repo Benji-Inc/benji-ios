@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+#if !NOTIFICATION
 extension UIWindow {
 
     static func topWindow() -> UIWindow? {
@@ -49,3 +50,4 @@ extension UIWindow {
         }
     }
 }
+#endif

@@ -22,10 +22,10 @@ extension MainCoordinator: LaunchManagerDelegate {
     }
 
     func launchManager(_ manager: LaunchManager, didFinishWith status: LaunchStatus) {
-        #if !APPCLIP
+        #if !APPCLIP && !NOTIFICATION
         // Code you don't want to use in your App Clip.
         self.handle(result: status)
-        #else
+        #elseif !NOTIFICATION
         // Code your App Clip may access.
         self.handleAppClip(result: status)
         #endif

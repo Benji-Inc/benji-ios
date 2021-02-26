@@ -51,7 +51,9 @@ class LaunchManager {
         
         if let user = User.current(), user.isAuthenticated {
             // Make sure we set this up each launch
+            #if !NOTIFICATION
             UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            #endif
         }
         
         self.initializeUserData(with: nil)
@@ -59,7 +61,7 @@ class LaunchManager {
     
     private func initializeUserData(with deeplink: DeepLinkable?) {
         if let _ = User.current()?.objectId {
-            #if !APPCLIP
+            #if !APPCLIP && !NOTIFICATION
             self.getChatToken(with: deeplink)
             #else
             self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: String()))
@@ -69,7 +71,7 @@ class LaunchManager {
         }
     }
     
-    #if !APPCLIP
+    #if !APPCLIP && !NOTIFICATION
     // Code you don't want to use in your App Clip.
     func getChatToken(with deeplink: DeepLinkable?) {
         if ChatClientManager.shared.isConnected {

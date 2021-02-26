@@ -71,7 +71,9 @@ class CodeViewController: TextInputViewController<Void> {
         User.become(inBackground: token) { (user, error) in
             if let _ = user?.objectId {
                 self.textEntry.button.handleEvent(status: .complete)
+                #if !NOTIFICATION
                 UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+                #endif
                 self.complete(with: .success(()))
             } else if let error = error {
                 self.textEntry.button.handleEvent(status: .error(error.localizedDescription))

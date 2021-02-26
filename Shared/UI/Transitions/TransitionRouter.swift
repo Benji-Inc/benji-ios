@@ -43,7 +43,7 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
         case (let .fill(expandingView), .fade):
             self.fillTranstion(expandingView: expandingView, transitionContext: transitionContext)
         case (.fade, .home):
-            #if !APPCLIP
+            #if !APPCLIP && !NOTIFICATION
             self.homeTranstion(fromColor: self.fromVC.transitionColor, transitionContext: transitionContext)
             #else
             self.fadeTranstion(fromColor: self.fromVC.transitionColor, toColor: self.toVC.transitionColor, transitionContext: transitionContext)

@@ -17,6 +17,7 @@ extension AppDelegate {
         self.window?.makeKeyAndVisible()
     }
 
+    #if !NOTIFICATION
     func initializeMainCoordinator(with rootNavController: RootNavigationController,
                                    withOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) {
         
@@ -25,4 +26,5 @@ extension AppDelegate {
         self.mainCoordinator?.launchOptions = launchOptions
         self.mainCoordinator?.start()
     }
+    #endif
 }

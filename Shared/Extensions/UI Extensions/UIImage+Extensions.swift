@@ -129,7 +129,7 @@ extension UIImage: Avatar {
     }
 }
 
-#if !APPCLIP
+#if !APPCLIP && !NOTIFICATION
 // Code you don't want to use in your App Clip.
 extension UIImage: MediaItem {
 

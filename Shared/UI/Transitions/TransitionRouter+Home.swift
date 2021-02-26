@@ -8,7 +8,7 @@
 
 import Foundation
 
-#if !APPCLIP
+#if !APPCLIP && !NOTIFICATION
 extension TransitionRouter {
 
     func homeTranstion(fromColor: Color,

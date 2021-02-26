@@ -72,7 +72,9 @@ class WaitlistViewController: ViewController, Sizeable {
 
     private func loadUpgrade() {
         self.remainingLabel.setText("You're in!")
+        #if !NOTIFICATION
         self.displayAppUpdateOverlay()
+        #endif
         self.didShowUpgrade = true
     }
 
@@ -91,10 +93,13 @@ class WaitlistViewController: ViewController, Sizeable {
 
 extension WaitlistViewController: SKOverlayDelegate {
 
+    #if !NOTIFICATION
     func displayAppUpdateOverlay() {
         guard let window = UIWindow.topWindow(), let scene = window.windowScene else { return }
+
         self.skOverlay.present(in: scene)
     }
+    #endif
 
     func storeOverlayWillStartPresentation(_ overlay: SKOverlay, transitionContext: SKOverlay.TransitionContext) {
     }
