@@ -344,6 +344,8 @@
 		D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */; };
 		D6A301AC2380E102006655E0 /* PostsSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301AB2380E102006655E0 /* PostsSupplier.swift */; };
 		D6A401AB24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A401AA24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift */; };
+		D6A4A1F625E9550A007F3E15 /* UserNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */; };
+		D6A4A1F725E9550A007F3E15 /* UserNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */; };
 		D6A714C725D969FE000A90EB /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A714C625D969FE000A90EB /* PostViewController.swift */; };
 		D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AC90C92594F8F80032774D /* Delegated.swift */; };
 		D6AC90CB2594F8F80032774D /* Delegated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AC90C92594F8F80032774D /* Delegated.swift */; };
@@ -694,6 +696,7 @@
 		D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
 		D6A301AB2380E102006655E0 /* PostsSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsSupplier.swift; sourceTree = "<group>"; };
 		D6A401AA24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHMessageOptions+Extensions.swift"; sourceTree = "<group>"; };
+		D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCategory.swift; sourceTree = "<group>"; };
 		D6A714C625D969FE000A90EB /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		D6AC90C92594F8F80032774D /* Delegated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Delegated.swift; sourceTree = "<group>"; };
 		D6ACA0B723D4248100844923 /* FaceDetection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FaceDetection.storyboard; sourceTree = "<group>"; };
@@ -976,6 +979,7 @@
 				D66A0B92235181F400A0FFEA /* Helpers */,
 				D66379DB25A39BB000A4A3B7 /* Managers */,
 				D6637A0825A39DA500A4A3B7 /* Models */,
+				D6A4A1F425E954CB007F3E15 /* Notifications */,
 				D6637A0425A39D0900A4A3B7 /* Protocols */,
 				D61EC0FA21D3180200204BEE /* Resources */,
 				D6637A2325A3A75A00A4A3B7 /* UI */,
@@ -1205,9 +1209,6 @@
 				D66379C725A3704300A4A3B7 /* LaunchManager.swift */,
 				D66379CA25A3704300A4A3B7 /* RitualManager.swift */,
 				D66379CD25A3704300A4A3B7 /* SessionManager.swift */,
-				D66379C625A3704300A4A3B7 /* UserNotificationFactory.swift */,
-				D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */,
-				D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1491,6 +1492,17 @@
 				D67934DE23DDFC4200536B44 /* PFInstallation+Extensions.swift */,
 			);
 			path = Parse;
+			sourceTree = "<group>";
+		};
+		D6A4A1F425E954CB007F3E15 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				D66379C625A3704300A4A3B7 /* UserNotificationFactory.swift */,
+				D66379C825A3704300A4A3B7 /* UserNotificationManager.swift */,
+				D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */,
+				D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */,
+			);
+			path = Notifications;
 			sourceTree = "<group>";
 		};
 		D6B2603522E6A97400143CF0 /* Layout */ = {
@@ -2039,6 +2051,7 @@
 				D64A1F07258C16470097817C /* WaitlistViewController.swift in Sources */,
 				D6090E5A2377D5CF00833DA7 /* ChannelCellAttributesConfigurer.swift in Sources */,
 				D658C7D2244226A00027D12E /* PostMeditationViewController.swift in Sources */,
+				D6A4A1F625E9550A007F3E15 /* UserNotificationCategory.swift in Sources */,
 				D6090E582377D2CA00833DA7 /* ChannelSectionable.swift in Sources */,
 				D6DADF6E2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift in Sources */,
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
@@ -2244,6 +2257,7 @@
 				D65519BE25891A0500B901E4 /* RootNavigationController.swift in Sources */,
 				D6551A4D25895EBB00B901E4 /* Sizeable.swift in Sources */,
 				D655192A2589122000B901E4 /* Selectable.swift in Sources */,
+				D6A4A1F725E9550A007F3E15 /* UserNotificationCategory.swift in Sources */,
 				D677589225B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D65519202589121500B901E4 /* NSObject+Extensions.swift in Sources */,
 				D655195B2589126800B901E4 /* User+Extensions.swift in Sources */,
