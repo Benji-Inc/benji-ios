@@ -43,11 +43,11 @@ enum UserNotificationAction: String {
         case .acceptConnection:
             return UNNotificationAction(identifier: self.rawValue,
                                         title: "Accept",
-                                        options: UNNotificationActionOptions(rawValue: 0))
+                                        options: [])
         case .declineConnection:
             return UNNotificationAction(identifier: self.rawValue,
                                         title: "Decline",
-                                        options: UNNotificationActionOptions(rawValue: 0))
+                                        options: UNNotificationActionOptions.destructive)
         }
     }
 }
