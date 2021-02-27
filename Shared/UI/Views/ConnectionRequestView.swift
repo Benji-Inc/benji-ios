@@ -106,11 +106,9 @@ class ConnectionRequestView: View {
             UpdateConnection(connectionId: connection.objectId!, status: status).makeRequest(andUpdate: [], viewsToIgnore: [self])
                 .mainSink { (result) in
                     switch result {
-                    case .success(let item):
+                    case .success(_):
                         button.handleEvent(status: .complete)
-                        if let updatedConnection = item as? Connection {
-                            self.showSuccess(for: updatedConnection)
-                        }
+                        self.showSuccess(for: connection)
                     case .error(let e):
                         button.handleEvent(status: .error(e.localizedDescription))
                     }
@@ -125,7 +123,6 @@ class ConnectionRequestView: View {
         } completion: { completed in
             self.confettiView.startConfetti(with: 3.0)
             self.didUpdateConnection?(connection)
-
         }
     }
 }

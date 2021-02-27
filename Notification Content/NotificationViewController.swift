@@ -27,15 +27,13 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if !Parse.isLocalDatastoreEnabled {
-            Parse.enableLocalDatastore()
-        }
-
         if Parse.currentConfiguration == nil  {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
-                configuration.isLocalDatastoreEnabled = true
+                configuration.applicationGroupIdentifier = "group.com.BENJI"
+                configuration.containingApplicationBundleIdentifier = "com.Benji.Ours"
                 configuration.server = Config.shared.environment.url
                 configuration.applicationId = Config.shared.environment.appID
+                configuration.isLocalDatastoreEnabled = true
             }))
         }
     }

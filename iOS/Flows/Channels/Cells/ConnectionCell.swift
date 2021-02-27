@@ -33,7 +33,6 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     }
 
     func configure(with item: Connection) {
-        print(item.objectId)
         self.connectionRequestView.configure(with: item)
     }
 

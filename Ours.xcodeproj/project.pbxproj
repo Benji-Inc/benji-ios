@@ -877,6 +877,7 @@
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
+		D69972FD25EAFC18000AEE6A /* OursNotificationContent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursNotificationContent.entitlements; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
 		D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
 		D6A301AB2380E102006655E0 /* PostsSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsSupplier.swift; sourceTree = "<group>"; };
@@ -1330,6 +1331,7 @@
 		D63DB1FC25E968C300F6B323 /* Notification Content */ = {
 			isa = PBXGroup;
 			children = (
+				D69972FD25EAFC18000AEE6A /* OursNotificationContent.entitlements */,
 				D63DB1FD25E968C300F6B323 /* NotificationViewController.swift */,
 				D63DB1FF25E968C300F6B323 /* MainInterface.storyboard */,
 				D63DB20225E968C300F6B323 /* Info.plist */,
@@ -2965,6 +2967,7 @@
 			baseConfigurationReference = 69BD6F6BD1555BE5571F430F /* Pods-OursNotificationContent.debug.xcconfig */;
 			buildSettings = {
 				API_TARGET = STAGING;
+				CODE_SIGN_ENTITLEMENTS = "Notification Content/OursNotificationContent.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				INFOPLIST_FILE = "Notification Content/Info.plist";
@@ -2990,6 +2993,7 @@
 			baseConfigurationReference = 22E80A859F4294D8C5A052D8 /* Pods-OursNotificationContent.release.xcconfig */;
 			buildSettings = {
 				API_TARGET = PRODUCTION;
+				CODE_SIGN_ENTITLEMENTS = "Notification Content/OursNotificationContent.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				INFOPLIST_FILE = "Notification Content/Info.plist";
