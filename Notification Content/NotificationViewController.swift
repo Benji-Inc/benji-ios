@@ -10,46 +10,54 @@ import UIKit
 import UserNotifications
 import UserNotificationsUI
 import Combine
+import Parse
 
 class NotificationViewController: UIViewController, UNNotificationContentExtension {
 
-    @IBOutlet var label: UILabel?
-
     private var cancellables = Set<AnyCancellable>()
-    
+
+    lazy var connectionRequestView: ConnectionRequestView = {
+        let view = ConnectionRequestView()
+        view.didUpdateConnection = { [unowned self] _ in
+            self.extensionContext?.dismissNotificationContentExtension()
+        }
+        return view
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any required interface initialization here.
+
+        if !Parse.isLocalDatastoreEnabled {
+            Parse.enableLocalDatastore()
+        }
+
+        if Parse.currentConfiguration == nil  {
+            Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
+                configuration.isLocalDatastoreEnabled = true
+                configuration.server = Config.shared.environment.url
+                configuration.applicationId = Config.shared.environment.appID
+            }))
+        }
     }
     
     func didReceive(_ notification: UNNotification) {
-        self.label?.text = notification.request.content.body
+        guard let category = UserNotificationCategory.init(rawValue: notification.request.content.categoryIdentifier) else { return }
 
-        let actions: [UserNotificationAction] = [.acceptConnection, .declineConnection]
-        self.extensionContext?.notificationActions = actions.map({ userAction in
-            return userAction.action
-        })
+        switch category {
+        case .connectionRequest:
+            guard let connectionId = notification.connectionId else { return }
+            self.view.addSubview(self.connectionRequestView)
+            Connection.localThenNetworkQuery(for: connectionId)
+                .mainSink { connection in
+                    self.connectionRequestView.configure(with: connection)
+                }.store(in: &self.cancellables)
+        }
+
+        self.view.layoutNow()
     }
 
     func didReceive(_ response: UNNotificationResponse, completionHandler completion: @escaping (UNNotificationContentExtensionResponseOption) -> Void) {
 
-        if let action = UserNotificationAction.init(rawValue: response.actionIdentifier) {
-            self.handle(action: action, for: response.notification.request.content.userInfo)
-        }
-
         completion(.doNotDismiss)
-    }
-
-    private func handle(action: UserNotificationAction, for userInfo: [AnyHashable: Any]) {
-        switch action {
-        case .acceptConnection:
-            guard let connectionId = userInfo["connectionId"] as? String else { return }
-            UpdateConnection(connectionId: connectionId, status: .accepted).makeRequest(andUpdate: [], viewsToIgnore: [])
-                .mainSink().store(in: &self.cancellables)
-        case .declineConnection:
-            guard let connectionId = userInfo["connectionId"] as? String else { return }
-            UpdateConnection(connectionId: connectionId, status: .accepted).makeRequest(andUpdate: [], viewsToIgnore: [])
-                .mainSink().store(in: &self.cancellables)
-        }
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 
 enum UserNotificationCategory: String, CaseIterable {
 
-    case connectionRequest
+    case connectionRequest = "connectionRequest"
 
     var category: UNNotificationCategory {
         switch self {

@@ -11,6 +11,10 @@ import UserNotifications
 
 extension UNNotification {
 
+    var connectionId: String? {
+        return self.request.content.connectionId
+    }
+
     var deepLinkTarget: DeepLinkTarget? {
         return self.request.content.deepLinkTarget
     }

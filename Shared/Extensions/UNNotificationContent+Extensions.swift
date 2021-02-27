@@ -22,9 +22,15 @@ enum NotificationContentKey: String {
     case thread = "threadIdentifier"
     case channelId = "channelId"
     case messageId = "messageId"
+    case connectionId = "connectionId"
 }
 
 extension UNNotificationContent {
+
+    var connectionId: String? {
+        guard let value: String = self.value(for: .connectionId) else { return nil }
+        return value
+    }
 
     var deepLinkTarget: DeepLinkTarget? {
         guard let value: String = self.value(for: .target) else { return nil }

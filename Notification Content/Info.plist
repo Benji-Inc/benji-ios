@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>API_TARGET</key>
+	<string>${API_TARGET}</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -24,12 +26,16 @@
 	<dict>
 		<key>NSExtensionAttributes</key>
 		<dict>
-			<key>Connections</key>
-			<string>"connectionRequest"</string>
+			<key>UNNotificationExtensionUserInteractionEnabled</key>
+			<true/>
+			<key>UNNotificationExtensionDefaultContentHidden</key>
+			<true/>
 			<key>UNNotificationExtensionCategory</key>
-			<array/>
+			<array>
+				<string>connectionRequest</string>
+			</array>
 			<key>UNNotificationExtensionInitialContentSizeRatio</key>
-			<real>0.5</real>
+			<integer>1</integer>
 		</dict>
 		<key>NSExtensionMainStoryboard</key>
 		<string>MainInterface</string>

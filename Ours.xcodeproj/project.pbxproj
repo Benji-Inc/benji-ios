@@ -491,6 +491,10 @@
 		D68BEAD424831FA000C95D31 /* ReservationsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
+		D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
+		D69972FA25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
+		D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
+		D69972FC25EA9A22000AEE6A /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */; };
 		D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
 		D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */; };
 		D6A301AC2380E102006655E0 /* PostsSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301AB2380E102006655E0 /* PostsSupplier.swift */; };
@@ -872,6 +876,7 @@
 		D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsCoordinator.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
+		D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
 		D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
 		D6A301AB2380E102006655E0 /* PostsSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsSupplier.swift; sourceTree = "<group>"; };
@@ -1230,6 +1235,7 @@
 				D66F0FD722BF295A00BA277D /* Coordinator.swift */,
 				D66F0FD922BF297F00BA277D /* MainCoordinator.swift */,
 				D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */,
+				D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */,
 				D691794122F6418700340AA3 /* Router.swift */,
 				D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */,
 			);
@@ -1514,6 +1520,7 @@
 				D60C814522092F6B00A127A3 /* Button.swift */,
 				D6FEF02C257EB71700F9789B /* Button+Extensions.swift */,
 				D6629C7425AD254C002C3B92 /* ConfettiView.swift */,
+				D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */,
 				D60C81492209360400A127A3 /* DisplayableImageView.swift */,
 				D61EC0E121D30E6000204BEE /* Label.swift */,
 				D6F733D923D37C6300FBC7BC /* TextEntryField.swift */,
@@ -1782,7 +1789,6 @@
 			children = (
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
 				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
-				D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */,
 				D66F0FDD22BF2C5D00BA277D /* HomeSegmentControl.swift */,
 				D642735422C87CCA0088256B /* ImageViewButton.swift */,
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
@@ -2188,6 +2194,7 @@
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
 				D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
+				D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
 				D61D38E3248C07F700BE457B /* InputAccessoryView+Animation.swift in Sources */,
 				80D4A21823039B82007CB5F1 /* RitualInputContentView.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
@@ -2585,6 +2592,7 @@
 				D63DB26E25E9997F00F6B323 /* Objectable.swift in Sources */,
 				D63DB28125E9999C00F6B323 /* TransitionRouter+Home.swift in Sources */,
 				D63DB25725E9995700F6B323 /* DeeplinkTarget.swift in Sources */,
+				D69972FC25EA9A22000AEE6A /* RootNavigationController.swift in Sources */,
 				D63DB24C25E9994400F6B323 /* SplashViewController.swift in Sources */,
 				D63DB21E25E998FC00F6B323 /* CGFloat+Extensions.swift in Sources */,
 				D63DB28325E9999C00F6B323 /* TransitionRouter+Fade.swift in Sources */,
@@ -2593,6 +2601,7 @@
 				D63DB29325E999B200F6B323 /* TextField.swift in Sources */,
 				D63DB29525E999B200F6B323 /* Button+Extensions.swift in Sources */,
 				D63DB26F25E9997F00F6B323 /* Statusable.swift in Sources */,
+				D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
 				D63DB22125E9990100F6B323 /* Array+Extensions.swift in Sources */,
 				D63DB25C25E9995E00F6B323 /* Reservation.swift in Sources */,
 				D63DB28E25E999AB00F6B323 /* NavigationController.swift in Sources */,
@@ -2730,6 +2739,7 @@
 				D65519C725891B1D00B901E4 /* ViewController.swift in Sources */,
 				D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
 				D65519252589121C00B901E4 /* PFInstallation+Extensions.swift in Sources */,
+				D69972FA25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
 				D6551A3725895E6800B901E4 /* PhotoViewController.swift in Sources */,
 				D63DB20C25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */,
 				D66379FE25A39C6000A4A3B7 /* UserNotificationFactory.swift in Sources */,
@@ -2954,6 +2964,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 69BD6F6BD1555BE5571F430F /* Pods-OursNotificationContent.debug.xcconfig */;
 			buildSettings = {
+				API_TARGET = STAGING;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				INFOPLIST_FILE = "Notification Content/Info.plist";
@@ -2978,6 +2989,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22E80A859F4294D8C5A052D8 /* Pods-OursNotificationContent.release.xcconfig */;
 			buildSettings = {
+				API_TARGET = PRODUCTION;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				INFOPLIST_FILE = "Notification Content/Info.plist";
