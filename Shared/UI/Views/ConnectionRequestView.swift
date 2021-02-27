@@ -12,7 +12,6 @@ import Combine
 
 class ConnectionRequestView: View {
 
-    private let vibrancyView = VibrancyView()
     private let containerView = View()
 
     private let avatarView = AvatarView()
@@ -20,6 +19,8 @@ class ConnectionRequestView: View {
 
     private let acceptButton = Button()
     private let declineButton = Button()
+    private let confettiView = ConfettiView()
+    private let successLabel = Label(font: .display)
 
     var currentItem: Connection?
     var didUpdateConnection: ((Connection) -> Void)? = nil
@@ -29,8 +30,10 @@ class ConnectionRequestView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        self.addSubview(self.confettiView)
+        self.addSubview(self.successLabel)
         self.addSubview(self.containerView)
-        self.containerView.addSubview(self.vibrancyView)
+
         self.containerView.addSubview(self.textView)
         self.containerView.addSubview(self.avatarView)
         self.containerView.addSubview(self.acceptButton)
@@ -44,13 +47,16 @@ class ConnectionRequestView: View {
             self.updateConnection(with: .declined, button: self.declineButton)
         }
 
+        self.successLabel.setText("Success! 🥳")
+        self.successLabel.alpha = 0
+
         self.set(backgroundColor: .clear)
         self.containerView.roundCorners()
     }
 
     func configure(with item: Connection) {
-        guard let status = item.status, status == .invited, let user = item.nonMeUser else { return }
-
+        guard let status = item.status, status == .invited, let user = item.from else { return }
+        self.currentItem = item
         user.retrieveDataIfNeeded()
             .mainSink { result in
                 switch result {
@@ -72,18 +78,18 @@ class ConnectionRequestView: View {
         super.layoutSubviews()
 
         self.containerView.expandToSuperviewSize()
-        self.vibrancyView.expandToSuperviewSize()
+        self.confettiView.expandToSuperviewSize()
 
         self.avatarView.left = Theme.contentOffset
         self.avatarView.top = Theme.contentOffset
-        self.avatarView.setSize(for: 40)
+        self.avatarView.setSize(for: 100)
 
-        let maxLabelWidth = self.containerView.width - self.avatarView.right - (Theme.contentOffset * 2)
+        let maxLabelWidth = self.containerView.width - Theme.contentOffset.doubled
         self.textView.setSize(withWidth: maxLabelWidth)
-        self.textView.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset)
-        self.textView.match(.top, to: .top, of: self.avatarView)
+        self.textView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset)
+        self.textView.match(.left, to: .left, of: self.avatarView)
 
-        let buttonWidth = self.containerView.halfWidth - (Theme.contentOffset * 2)
+        let buttonWidth = self.containerView.halfWidth - Theme.contentOffset.doubled
 
         self.acceptButton.size = CGSize(width: buttonWidth, height: 40)
         self.acceptButton.pin(.right, padding: Theme.contentOffset)
@@ -103,12 +109,23 @@ class ConnectionRequestView: View {
                     case .success(let item):
                         button.handleEvent(status: .complete)
                         if let updatedConnection = item as? Connection {
-                            self.didUpdateConnection?(updatedConnection)
+                            self.showSuccess(for: updatedConnection)
                         }
                     case .error(let e):
                         button.handleEvent(status: .error(e.localizedDescription))
                     }
                 }.store(in: &self.cancellables)
+        }
+    }
+
+    private func showSuccess(for connection: Connection) {
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.containerView.alpha = 0
+            self.successLabel.alpha = 1
+        } completion: { completed in
+            self.confettiView.startConfetti(with: 3.0)
+            self.didUpdateConnection?(connection)
+
         }
     }
 }

@@ -14,6 +14,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
 
     typealias ItemType = Connection
 
+    private let vibrancyView = VibrancyView()
     private let connectionRequestView = ConnectionRequestView()
 
     var currentItem: Connection?
@@ -23,6 +24,8 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        self.contentView.addSubview(self.vibrancyView)
+        self.vibrancyView.roundCorners()
         self.contentView.addSubview(self.connectionRequestView)
         self.connectionRequestView.didUpdateConnection = { [unowned self] connection in
             self.didUpdateConnection?(connection)
@@ -30,6 +33,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     }
 
     func configure(with item: Connection) {
+        print(item.objectId)
         self.connectionRequestView.configure(with: item)
     }
 
@@ -39,5 +43,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         self.connectionRequestView.width = self.contentView.width * 0.95
         self.connectionRequestView.expandToSuperviewHeight()
         self.connectionRequestView.centerOnX()
+
+        self.vibrancyView.frame = self.connectionRequestView.frame
     }
 }
