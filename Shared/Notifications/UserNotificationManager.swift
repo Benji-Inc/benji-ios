@@ -96,11 +96,13 @@ class UserNotificationManager: NSObject {
         self.center.removeAllPendingNotificationRequests()
     }
 
+    #if !NOTIFICATION
     func clearNotificationCenter() {
         let count = UIApplication.shared.applicationIconBadgeNumber
         UIApplication.shared.applicationIconBadgeNumber = 0
         UIApplication.shared.applicationIconBadgeNumber = count
     }
+    #endif
 
     @discardableResult
     func handle(userInfo: [AnyHashable: Any]) -> Bool {

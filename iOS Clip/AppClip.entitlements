@@ -14,5 +14,9 @@
 	<array>
 		<string>$(AppIdentifierPrefix)com.Benji.Ours</string>
 	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.BENJI</string>
+	</array>
 </dict>
 </plist>

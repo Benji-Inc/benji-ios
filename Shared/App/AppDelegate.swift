@@ -18,9 +18,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        #if !NOTIFICATION
         let rootNavController = RootNavigationController()
         self.initializeKeyWindow(with: rootNavController)
         self.initializeMainCoordinator(with: rootNavController, withOptions: launchOptions)
+        #endif
+
         #if !APPCLIP
         // Code you don't want to use in your App Clip.
         UserDefaults.standard.set(nil, forKey: Ritual.currentKey)
@@ -29,9 +32,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+        #if !NOTIFICATION
         UserNotificationManager.shared.clearNotificationCenter()
-
-        #if !APPCLIP
+        #endif
+        
+        #if !APPCLIP && !NOTIFICATION
         guard !ChatClientManager.shared.isConnected, let _ = User.current()?.objectId else { return }
 
         GetChatToken()

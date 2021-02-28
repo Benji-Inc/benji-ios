@@ -37,7 +37,7 @@ class MainCoordinator: Coordinator<Void> {
         self.router.setRootModule(self.splashVC, animated: false)
     }
 
-    #if !APPCLIP
+    #if !APPCLIP && !NOTIFICATION
     // Code you don't want to use in your App Clip.
 
     func handle(result: LaunchStatus) {
@@ -121,8 +121,8 @@ class MainCoordinator: Coordinator<Void> {
             self.router.setRootModule(coordinator, animated: true)
             self.addChildAndStart(coordinator, finishedHandler: { (_) in
                 self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
-                    #if APPCLIP
-                    #else
+                    #if APPCLIP 
+                    #elseif !NOTIFICATION
                     self.runHomeFlow()
                     #endif
                     self.subscribeToUserUpdates()
@@ -138,7 +138,7 @@ class MainCoordinator: Coordinator<Void> {
         switch target {
         case .home, .channel, .channels, .ritual, .profile, .feed:
             if let user = User.current(), user.isAuthenticated {
-                #if !APPCLIP
+                #if !APPCLIP && !NOTIFICATION
                 // Code you don't want to use in your App Clip.
                 self.runHomeFlow()
                 #else
@@ -150,7 +150,7 @@ class MainCoordinator: Coordinator<Void> {
             break
         case .reservation:
             if let user = User.current(), user.isAuthenticated {
-                #if !APPCLIP
+                #if !APPCLIP && !NOTIFICATION
                 // Code you don't want to use in your App Clip.
                 self.runHomeFlow()
                 #else
@@ -177,7 +177,7 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func logOut() {
-        #if !APPCLIP
+        #if !APPCLIP && !NOTIFICATION
         ChatClientManager.shared.client?.shutdown()
         #endif
         User.logOut()

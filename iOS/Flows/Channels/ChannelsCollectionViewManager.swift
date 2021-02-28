@@ -101,7 +101,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         case .channels:
             return CGSize(width: collectionView.width, height: 84)
         case .connections:
-            return CGSize(width: collectionView.width, height: 168)
+            return CGSize(width: collectionView.width, height: 240)
         case .reservations:
             return CGSize(width: collectionView.width, height: 64)
         }

@@ -36,22 +36,21 @@ class LaunchManager {
     private var cancellables = Set<AnyCancellable>()
     
     func launchApp(with options: [UIApplication.LaunchOptionsKey: Any]?) {
-        
-        if !Parse.isLocalDatastoreEnabled {
-            Parse.enableLocalDatastore()
-        }
-        
+
         if Parse.currentConfiguration == nil  {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
-                configuration.isLocalDatastoreEnabled = true
+                configuration.applicationGroupIdentifier = "group.com.BENJI"
                 configuration.server = Config.shared.environment.url
                 configuration.applicationId = Config.shared.environment.appID
+                configuration.isLocalDatastoreEnabled = true
             }))
         }
         
         if let user = User.current(), user.isAuthenticated {
             // Make sure we set this up each launch
+            #if !NOTIFICATION
             UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            #endif
         }
         
         self.initializeUserData(with: nil)
@@ -59,7 +58,7 @@ class LaunchManager {
     
     private func initializeUserData(with deeplink: DeepLinkable?) {
         if let _ = User.current()?.objectId {
-            #if !APPCLIP
+            #if !APPCLIP && !NOTIFICATION
             self.getChatToken(with: deeplink)
             #else
             self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: String()))
@@ -69,7 +68,7 @@ class LaunchManager {
         }
     }
     
-    #if !APPCLIP
+    #if !APPCLIP && !NOTIFICATION
     // Code you don't want to use in your App Clip.
     func getChatToken(with deeplink: DeepLinkable?) {
         if ChatClientManager.shared.isConnected {
