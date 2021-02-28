@@ -19,7 +19,7 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
     lazy var connectionRequestView: ConnectionRequestView = {
         let view = ConnectionRequestView()
         view.didUpdateConnection = { [unowned self] _ in
-          //  self.extensionContext?.dismissNotificationContentExtension()
+            self.extensionContext?.dismissNotificationContentExtension()
         }
         return view
     }()

@@ -109,9 +109,11 @@ class ConnectionRequestView: View {
             UpdateConnection(connectionId: connection.objectId!, status: status).makeRequest(andUpdate: [], viewsToIgnore: [self])
                 .mainSink { (result) in
                     switch result {
-                    case .success(_):
+                    case .success(let updatedConnection):
                         button.handleEvent(status: .complete)
-                        self.showSuccess(for: connection)
+                        if let updated = updatedConnection as? Connection {
+                            self.showSuccess(for: updated)
+                        }
                     case .error(let e):
                         button.handleEvent(status: .error(e.localizedDescription))
                     }
