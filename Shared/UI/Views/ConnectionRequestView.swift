@@ -98,6 +98,9 @@ class ConnectionRequestView: View {
         self.declineButton.size = CGSize(width: buttonWidth, height: 40)
         self.declineButton.pin(.left, padding: Theme.contentOffset)
         self.declineButton.pin(.bottom, padding: Theme.contentOffset)
+
+        self.successLabel.setSize(withWidth: self.width * 0.8)
+        self.successLabel.centerOnXAndY()
     }
 
     private func updateConnection(with status: Connection.Status, button: Button) {
