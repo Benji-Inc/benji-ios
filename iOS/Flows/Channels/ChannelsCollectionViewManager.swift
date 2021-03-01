@@ -92,21 +92,6 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         }
     }
 
-    override func collectionView(_ collectionView: UICollectionView,
-                                 layout collectionViewLayout: UICollectionViewLayout,
-                                 sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let type = SectionType.init(rawValue: indexPath.section) else { return .zero }
-
-        switch type {
-        case .channels:
-            return CGSize(width: collectionView.width, height: 84)
-        case .connections:
-            return CGSize(width: collectionView.width, height: 240)
-        case .reservations:
-            return CGSize(width: collectionView.width, height: 64)
-        }
-    }
-
     // MARK: Menu overrides
 
     override func collectionView(_ collectionView: UICollectionView,

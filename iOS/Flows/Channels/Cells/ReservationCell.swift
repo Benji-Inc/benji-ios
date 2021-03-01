@@ -48,8 +48,8 @@ class ReservationCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
 
         self.button.width = self.contentView.width * 0.95
-        self.button.expandToSuperviewHeight()
-        self.button.centerOnX()
+        self.button.height = self.contentView.height - 10
+        self.button.centerOnXAndY()
 
         self.imageView.squaredSize = 24
         self.imageView.centerOnXAndY()
@@ -58,5 +58,10 @@ class ReservationCell: CollectionViewManagerCell, ManageableCell {
         self.avatarView.setSize(for: height)
         self.avatarView.match(.left, to: .left, of: self.button, offset: Theme.contentOffset)
         self.avatarView.centerOnY()
+    }
+
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        layoutAttributes.size = CGSize(width: layoutAttributes.size.width, height: 74)
+        return layoutAttributes
     }
 }

@@ -40,9 +40,14 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
 
         self.connectionRequestView.width = self.contentView.width * 0.95
-        self.connectionRequestView.expandToSuperviewHeight()
+        self.connectionRequestView.height = self.contentView.height - 10
         self.connectionRequestView.centerOnX()
 
         self.vibrancyView.frame = self.connectionRequestView.frame
+    }
+
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        layoutAttributes.size = CGSize(width: layoutAttributes.size.width, height: 240)
+        return layoutAttributes
     }
 }

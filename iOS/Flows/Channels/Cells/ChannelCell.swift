@@ -25,11 +25,16 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
         self.channelContentView.configure(with: item.channelType)
     }
 
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        layoutAttributes.size = CGSize(width: layoutAttributes.size.width, height: 94)
+        return layoutAttributes
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.channelContentView.size = CGSize(width: self.contentView.width * 0.95,
-                                              height: self.contentView.height)
+                                              height: self.contentView.height - 10)
         self.channelContentView.centerOnXAndY()
     }
 }

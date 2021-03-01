@@ -23,9 +23,31 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
 
     private let addButton = Button()
 
-    override func getCollectionView() -> CollectionView {
-        return ChannelsCollectionView()
-    }
+    private lazy var channelsCollectionView: ChannelsCollectionView = {
+
+        var listConfig = UICollectionLayoutListConfiguration(appearance: .grouped)
+
+        listConfig.showsSeparators = false
+        listConfig.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+            guard let `self` = self, let item = self.collectionViewManager.getItem(for: indexPath) else { return nil
+            }
+
+            let actionHandler: UIContextualAction.Handler = { action, view, completion in
+                //model.isDone = true
+                completion(true)
+                //self.collectionView.reloadItems(at: [indexPath])
+            }
+
+            let action = UIContextualAction(style: .normal, title: "Done!", handler: actionHandler)
+            action.image = UIImage(systemName: "checkmark")
+            action.backgroundColor = .systemGreen
+
+            return UISwipeActionsConfiguration(actions: [action])
+        }
+
+        let listLayout = UICollectionViewCompositionalLayout.list(using: listConfig)
+        return ChannelsCollectionView(with: listLayout)
+    }()
 
     override func initializeViews() {
         super.initializeViews()
@@ -51,6 +73,10 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
                 }
             }
         }.store(in: &self.cancellables)
+    }
+
+    override func getCollectionView() -> CollectionView {
+        return self.channelsCollectionView
     }
 
     private func didSelect(reservation: Reservation) {

@@ -23,6 +23,7 @@ final class Connection: PFObject, PFSubclassing {
     }
 
     enum Status: String {
+        case created 
         case invited
         case pending
         case accepted
