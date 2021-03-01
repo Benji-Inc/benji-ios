@@ -22,11 +22,15 @@ class AttachmentViewController: CollectionViewController<AttachmentCollectionVie
 
     init(with delegate: AttachmentViewControllerDelegate) {
         self.delegate = delegate
-        super.init(with: AttachmentCollectionView())
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func getCollectionView() -> CollectionView {
+        return AttachmentCollectionView()
     }
 
     override func initializeViews() {
@@ -45,7 +49,7 @@ class AttachmentViewController: CollectionViewController<AttachmentCollectionVie
             self.delegate.attachementView(self, didSelect: attachment)
         }.store(in: &self.cancellables)
 
-        if let attachmentCollectionView = self.collectionView as? AttachmentCollectionView {
+        if let attachmentCollectionView = self.collectionViewManager.collectionView as? AttachmentCollectionView {
             attachmentCollectionView.didTapAuthorize = { [unowned self] in
                 AttachmentsManager.shared.requestAttachements()
                     .mainSink { (result) in
@@ -78,9 +82,9 @@ class AttachmentViewController: CollectionViewController<AttachmentCollectionVie
 
         self.blurView.expandToSuperviewSize()
 
-        self.collectionView.expandToSuperviewWidth()
-        self.collectionView.pin(.top, padding: 10)
-        self.collectionView.height = self.view.height - self.view.safeAreaInsets.bottom - 10
+        self.collectionViewManager.collectionView.expandToSuperviewWidth()
+        self.collectionViewManager.collectionView.pin(.top, padding: 10)
+        self.collectionViewManager.collectionView.height = self.view.height - self.view.safeAreaInsets.bottom - 10
     }
 }
 

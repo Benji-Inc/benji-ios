@@ -15,24 +15,20 @@ class NewChannelViewController: CollectionViewController<NewChannelCollectionVie
 
     private let createButton = Button()
 
-    init() {
-        super.init(with: NewChannelCollectionView())
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override func getCollectionView() -> CollectionView {
+        return NewChannelCollectionView()
     }
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
+        self.view.insertSubview(self.blurView, belowSubview: self.collectionViewManager.collectionView)
 
         self.collectionViewManager.$onSelectedItem.mainSink { _ in
             self.createButton.isEnabled = self.collectionViewManager.selectedItems.count > 0
         }.store(in: &self.cancellables)
 
-        self.view.insertSubview(self.createButton, aboveSubview: self.collectionView)
+        self.view.insertSubview(self.createButton, aboveSubview: self.collectionViewManager.collectionView)
         self.createButton.set(style: .normal(color: .purple, text: "Create"))
         self.createButton.didSelect { [unowned self] in
             self.createChannel()

@@ -58,7 +58,7 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
 
     func didReceive(_ response: UNNotificationResponse, completionHandler completion: @escaping (UNNotificationContentExtensionResponseOption) -> Void) {
 
-        if let action = UserNotificationAction.init(rawValue: response.actionIdentifier) {
+        if let _ = UserNotificationAction.init(rawValue: response.actionIdentifier) {
             completion(.dismissAndForwardAction)
         } else {
             completion(.doNotDismiss)

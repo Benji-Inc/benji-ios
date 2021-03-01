@@ -23,18 +23,14 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
 
     private let addButton = Button()
 
-    init() {
-        super.init(with: ChannelsCollectionView())
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override func getCollectionView() -> CollectionView {
+        return ChannelsCollectionView()
     }
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.insertSubview(self.addButton, aboveSubview: self.collectionView)
+        self.view.insertSubview(self.addButton, aboveSubview: self.collectionViewManager.collectionView)
         self.addButton.set(style: .normal(color: .purple, text: "+"))
         self.addButton.didSelect { [unowned self] in
             self.delegate?.channelsViewControllerDidTapAdd(self)
