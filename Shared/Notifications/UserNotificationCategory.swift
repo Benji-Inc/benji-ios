@@ -11,6 +11,7 @@ import Foundation
 enum UserNotificationCategory: String, CaseIterable {
 
     case connectionRequest = "connectionRequest"
+    case connnectionConfirmed = "connectionConfirmed"
 
     var category: UNNotificationCategory {
         switch self {
@@ -20,6 +21,23 @@ enum UserNotificationCategory: String, CaseIterable {
                                           intentIdentifiers: [],
                                           hiddenPreviewsBodyPlaceholder: "",
                                           options: .customDismissAction)
+        case .connnectionConfirmed:
+            return UNNotificationCategory(identifier: self.rawValue,
+                                          actions: self.actions.map({ userAction in
+                                            return userAction.action
+                                          }),
+                                          intentIdentifiers: [],
+                                          hiddenPreviewsBodyPlaceholder: "",
+                                          options: .customDismissAction)
+        }
+    }
+
+    var actions: [UserNotificationAction] {
+        switch self {
+        case .connnectionConfirmed:
+            return [.sayHi]
+        default:
+            return []
         }
     }
 }

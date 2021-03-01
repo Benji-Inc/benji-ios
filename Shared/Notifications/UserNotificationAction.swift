@@ -10,19 +10,24 @@ import Foundation
 
 enum UserNotificationAction: String {
 
-    case acceptConnection
-    case declineConnection
+    case accept = "accept"
+    case decline = "decline"
+    case sayHi = "sayhi"
 
     var action: UNNotificationAction {
         switch self {
-        case .acceptConnection:
+        case .accept:
             return UNNotificationAction(identifier: self.rawValue,
                                         title: "Accept",
                                         options: [])
-        case .declineConnection:
+        case .decline:
             return UNNotificationAction(identifier: self.rawValue,
                                         title: "Decline",
                                         options: UNNotificationActionOptions.destructive)
+        case .sayHi:
+            return UNNotificationAction(identifier: self.rawValue,
+                                        title: "Say 👋",
+                                        options: [])
         }
     }
 }

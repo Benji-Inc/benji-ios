@@ -77,6 +77,18 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             if let channelId = deeplink.customMetadata["channelId"] as? String,
                let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
                 self.startChannelFlow(for: channel.channelType)
+            } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
+                Connection.cachedQuery(for: connectionId)
+                    .mainSink { result in
+                        switch result {
+                        case .success(let connection):
+                            if let channelId = connection.channelId, let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
+                                self.startChannelFlow(for: channel.channelType)
+                            }
+                        case .error(_):
+                            break
+                        }
+                    }.store(in: &self.cancellables)
             }
         case .ritual:
             self.startRitualFlow()

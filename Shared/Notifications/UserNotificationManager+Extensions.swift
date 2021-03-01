@@ -22,7 +22,7 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
 
         if let action = UserNotificationAction.init(rawValue: response.actionIdentifier) {
-            //self.handle(action: action, for: response.notification.request.content.userInfo)
+            self.handle(action: action, for: response)
         } else if let target = response.notification.deepLinkTarget {
             var deepLink = DeepLinkObject(target: target)
             deepLink.customMetadata = response.notification.customMetadata
@@ -33,4 +33,17 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {}
+
+    private func handle(action: UserNotificationAction, for response: UNNotificationResponse) {
+        switch action {
+        case .sayHi:
+            if let target = response.notification.deepLinkTarget {
+                var deepLink = DeepLinkObject(target: target)
+                deepLink.customMetadata = response.notification.customMetadata
+                self.delegate?.userNotificationManager(willHandle: deepLink)
+            }
+        default:
+            break
+        }
+    }
 }

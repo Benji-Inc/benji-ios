@@ -18,8 +18,8 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
 
     lazy var connectionRequestView: ConnectionRequestView = {
         let view = ConnectionRequestView()
-        view.didUpdateConnection = { [unowned self] _ in
-            self.extensionContext?.dismissNotificationContentExtension()
+        view.didUpdateConnection = { [unowned self] updatedConnection in
+            self.extensionContext?.notificationActions = [UserNotificationAction.sayHi.action]
         }
         return view
     }()
@@ -49,6 +49,8 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
                 .mainSink { connection in
                     self.connectionRequestView.configure(with: connection)
                 }.store(in: &self.cancellables)
+        case .connnectionConfirmed:
+            break
         }
 
         self.view.layoutNow()
@@ -56,7 +58,11 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
 
     func didReceive(_ response: UNNotificationResponse, completionHandler completion: @escaping (UNNotificationContentExtensionResponseOption) -> Void) {
 
-        completion(.doNotDismiss)
+        if let action = UserNotificationAction.init(rawValue: response.actionIdentifier) {
+            completion(.dismissAndForwardAction)
+        } else {
+            completion(.doNotDismiss)
+        }
     }
 
     override func viewDidLayoutSubviews() {
