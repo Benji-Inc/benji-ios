@@ -10,7 +10,12 @@ import Foundation
 
 class ChannelsCoordinator: PresentableCoordinator<Void> {
 
-    private lazy var channelsVC = ChannelsViewController()
+    private let channelsVC: ChannelsViewController
+
+    init(router: Router, deepLink: DeepLinkable?, vc: ChannelsViewController) {
+        self.channelsVC = vc
+        super.init(router: router, deepLink: deepLink)
+    }
 
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.channelsVC
@@ -18,7 +23,6 @@ class ChannelsCoordinator: PresentableCoordinator<Void> {
 
     override func start() {
         self.channelsVC.delegate = self
-        self.channelsVC.subscribeToUpdates()
     }
 }
 

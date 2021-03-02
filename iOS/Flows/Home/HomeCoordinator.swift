@@ -12,7 +12,10 @@ import Combine
 
 class HomeCoordinator: PresentableCoordinator<Void> {
 
+    private lazy var profileVC = ProfileViewController(with: User.current()!)
+    private lazy var channelsVC = ChannelsViewController()
     private lazy var homeVC = HomeViewController()
+    
     private var cancellables = Set<AnyCancellable>()
 
     override func toPresentable() -> DismissableVC {
@@ -23,6 +26,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         super.start()
 
         self.addFeedCoordinator()
+        self.channelsVC.subscribeToUpdates()
 
         self.homeVC.didTapProfile = { [unowned self] in
             self.presentProfile()
@@ -78,6 +82,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     }
 
     private func addFeedCoordinator() {
+        self.removeChild()
         let coordinator = FeedCoordinator(router: self.router,
                                           deepLink: self.deepLink,
                                           feedVC: self.homeVC.feedVC)
@@ -85,13 +90,20 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     }
 
     private func presentChannels() {
-        let coordinator = ChannelsCoordinator(router: self.router, deepLink: self.deepLink)
+        self.removeChild()
+        let coordinator = ChannelsCoordinator(router: self.router,
+                                              deepLink: self.deepLink,
+                                              vc: self.channelsVC)
         self.addChildAndStart(coordinator) { (_) in }
         self.router.present(coordinator, source: self.homeVC)
     }
 
     private func presentProfile() {
-        let coordinator = ProfileCoordinator(router: self.router, deepLink: self.deepLink)
+        self.removeChild()
+        let coordinator = ProfileCoordinator(router: self.router,
+                                             deepLink: self.deepLink,
+                                             vc: self.profileVC)
+
         self.addChildAndStart(coordinator) { (_) in }
         self.router.present(coordinator, source: self.homeVC)
     }
