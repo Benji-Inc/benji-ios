@@ -10,10 +10,9 @@ import Foundation
 
 class HomeTabView: View {
 
+    private(set) var postButtonView = PostButtonView()
     private(set) var profileItem = ImageViewButton()
-    private(set) var feedItem = ImageViewButton()
     private(set) var channelsItem = ImageViewButton()
-    private let flashLightView = View()
 
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
     private var indicatorCenterX: CGFloat?
@@ -23,12 +22,10 @@ class HomeTabView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .background2)
+        self.set(backgroundColor: .clear)
 
-        self.addSubview(self.flashLightView)
-        self.flashLightView.set(backgroundColor: .purple)
         self.addSubview(self.profileItem)
-        self.addSubview(self.feedItem)
+        self.addSubview(self.postButtonView)
         self.addSubview(self.channelsItem)
     }
 
@@ -43,76 +40,34 @@ class HomeTabView: View {
         self.profileItem.pin(.top, padding: topPadding)
         self.profileItem.left = 0
 
-        self.feedItem.size = itemSize
-        self.feedItem.pin(.top, padding: topPadding)
-        self.feedItem.left = self.profileItem.right
+        self.postButtonView.size = itemSize
+        self.postButtonView.pin(.top)
+        self.postButtonView.left = self.profileItem.right
 
         self.channelsItem.size = itemSize
         self.channelsItem.pin(.top, padding: topPadding)
-        self.channelsItem.left = self.feedItem.right
-
-        self.flashLightView.size = CGSize(width: itemWidth * 0.35, height: 2)
-        self.flashLightView.bottom = itemSize.height + topPadding
-
-        guard self.indicatorCenterX == nil else { return }
-
-        self.flashLightView.centerX = self.feedItem.centerX
+        self.channelsItem.left = self.postButtonView.right
     }
 
     func updateTabItems(for contentType: HomeContent) {
         self.selectionFeedback.impactOccurred()
         self.currentContent = contentType
-        self.animateIndicator(for: contentType)
-    }
-
-    private func animateIndicator(for contentType: HomeContent) {
-        let newCenterX: CGFloat
-
-        switch contentType {
-        case .feed(_):
-            newCenterX = self.feedItem.centerX
-        case .channels(_):
-            newCenterX = self.channelsItem.centerX
-        case .profile(_):
-            newCenterX = self.profileItem.centerX
-        }
-
-        UIView.animateKeyframes(withDuration: 0.5, delay: 0.0, options: [.calculationModeLinear], animations: {
-            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.33) {
-                self.flashLightView.transform = CGAffineTransform(scaleX: 0.2, y: 1.0)
-            }
-            UIView.addKeyframe(withRelativeStartTime: 0.33, relativeDuration: 0.33) {
-                self.flashLightView.centerX = newCenterX
-                self.setNeedsLayout()
-            }
-            UIView.addKeyframe(withRelativeStartTime: 0.66, relativeDuration: 0.33) {
-                self.flashLightView.transform = .identity
-                self.updateButtons(for: contentType)
-            }
-        }) { _ in
-            self.indicatorCenterX = newCenterX
-        }
+        self.updateButtons(for: contentType)
     }
 
     private func updateButtons(for contentType: HomeContent) {
         switch contentType {
         case .feed:
-            self.feedItem.imageView.image = UIImage(systemName: "square.stack.fill")
-            self.feedItem.imageView.tintColor = Color.purple.color
             self.profileItem.imageView.image = UIImage(systemName: "person.crop.circle")
             self.profileItem.imageView.tintColor = Color.background3.color
             self.channelsItem.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right")
             self.channelsItem.imageView.tintColor = Color.background3.color
         case .channels:
-            self.feedItem.imageView.image = UIImage(systemName: "square.stack")
-            self.feedItem.imageView.tintColor = Color.background3.color
             self.profileItem.imageView.image = UIImage(systemName: "person.crop.circle")
             self.profileItem.imageView.tintColor = Color.background3.color
             self.channelsItem.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right.fill")
             self.channelsItem.imageView.tintColor = Color.purple.color
         case .profile:
-            self.feedItem.imageView.image = UIImage(systemName: "square.stack")
-            self.feedItem.imageView.tintColor = Color.background3.color
             self.profileItem.imageView.image = UIImage(systemName: "person.crop.circle.fill")
             self.profileItem.imageView.tintColor = Color.purple.color
             self.channelsItem.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right")

@@ -44,8 +44,9 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.current = .feed(self.feedVC)
 
         self.view.set(backgroundColor: .background1)
-        self.view.addSubview(self.tabView)
         self.view.addSubview(self.centerContainer)
+        self.view.addSubview(self.tabView)
+
         self.centerContainer.set(backgroundColor: .background1)
 
         self.$current
@@ -60,7 +61,7 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.current = .profile(self.profileVC)
         }
 
-        self.tabView.feedItem.didSelect = { [unowned self] in
+        self.tabView.postButtonView.button.didSelect { [unowned self] in
             self.current = .feed(self.feedVC)
         }
 
@@ -77,23 +78,8 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.tabView.centerOnX()
         self.tabView.pin(.bottom)
 
-        self.centerContainer.size = CGSize(width: self.view.width + 10,
-                                           height: self.view.height - self.tabView.height - 20)
-        self.centerContainer.match(.bottom, to: .top, of: self.tabView, offset: 20)
-        self.centerContainer.centerOnX()
-
-        self.centerContainer.layer.cornerRadius = 25
-        self.centerContainer.layer.cornerCurve = CALayerCornerCurve.continuous
-        self.centerContainer.layer.shadowColor = UIColor.black.cgColor
-        self.centerContainer.layer.shadowOpacity = 0.6
-        self.centerContainer.layer.shadowOffset = CGSize(width: 0, height: 5)
-        self.centerContainer.layer.shadowRadius = 10
-        self.centerContainer.layer.masksToBounds = false
-
-        self.currentCenterVC?.view.frame = CGRect(x: 5,
-                                                  y: 0,
-                                                  width: self.centerContainer.width - 10,
-                                                  height: self.centerContainer.height)
+        self.centerContainer.expandToSuperviewSize()
+        self.currentCenterVC?.view.expandToSuperviewSize()
     }
 
     private func switchTo(content: HomeContent) {
