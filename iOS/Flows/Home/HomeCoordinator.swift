@@ -9,6 +9,7 @@
 import Foundation
 import Parse
 import Combine
+import SideMenu
 
 class HomeCoordinator: PresentableCoordinator<Void> {
 
@@ -39,6 +40,14 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
         }
+
+        // Define the menus
+        let leftMenuNavigationController = SideMenuNavigationController(rootViewController: self.profileVC)
+        SideMenuManager.default.leftMenuNavigationController = leftMenuNavigationController
+
+        let rightMenuNavigationController = SideMenuNavigationController(rootViewController: self.channelsVC)
+        SideMenuManager.default.rightMenuNavigationController = rightMenuNavigationController
+        SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.homeVC.view)
     }
 
     func handle(deeplink: DeepLinkable) {
@@ -95,7 +104,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                                               deepLink: self.deepLink,
                                               vc: self.channelsVC)
         self.addChildAndStart(coordinator) { (_) in }
-        self.router.present(coordinator, source: self.homeVC)
+        if let right = SideMenuManager.default.rightMenuNavigationController {
+            self.homeVC.present(right, animated: true, completion: nil)
+        }
     }
 
     private func presentProfile() {
@@ -105,7 +116,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                                              vc: self.profileVC)
 
         self.addChildAndStart(coordinator) { (_) in }
-        self.router.present(coordinator, source: self.homeVC)
+        if let left = SideMenuManager.default.leftMenuNavigationController {
+            self.homeVC.present(left, animated: true, completion: nil)
+        }
     }
 
     private func startRitualFlow() {

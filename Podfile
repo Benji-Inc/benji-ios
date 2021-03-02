@@ -19,6 +19,7 @@ target 'Ours' do
   use_frameworks!
   shared_pods
   pod 'TwilioChatClient'
+  pod 'SideMenu'
 end
 
 target 'OursAppClip' do

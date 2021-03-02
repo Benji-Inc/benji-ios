@@ -20,6 +20,7 @@ PODS:
   - SDWebImage (5.10.0):
     - SDWebImage/Core (= 5.10.0)
   - SDWebImage/Core (5.10.0)
+  - SideMenu (6.5.0)
   - Starscream (4.0.4)
   - TMROCoordinator (0.0.3)
   - TMROLocalization (0.0.2)
@@ -32,6 +33,7 @@ DEPENDENCIES:
   - ParseLiveQuery
   - PhoneNumberKit
   - SDWebImage
+  - SideMenu
   - TMROCoordinator
   - TMROLocalization
   - TwilioChatClient
@@ -46,6 +48,7 @@ SPEC REPOS:
     - ParseLiveQuery
     - PhoneNumberKit
     - SDWebImage
+    - SideMenu
     - Starscream
     - TMROCoordinator
     - TMROLocalization
@@ -60,11 +63,12 @@ SPEC CHECKSUMS:
   ParseLiveQuery: 366b5876aa20074ea7fea52446376e102447b5df
   PhoneNumberKit: ff153d5e299f6da566cb73c6aa71e354933b2932
   SDWebImage: 9169792e9eec3e45bba2a0c02f74bf8bd922d1ee
+  SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   TMROCoordinator: 8e675e45c895feafdd548e1dd2de35430d3ea146
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
   TwilioChatClient: bc386ab597f9fbb8e799491f15c07519d080a4f2
 
-PODFILE CHECKSUM: 526e7f5d0c8dc732efd7ce32a6c6e7387cf93cd2
+PODFILE CHECKSUM: c465ae04e1824d5f8857822c0b5479f62947465e
 
 COCOAPODS: 1.10.0.rc.1
