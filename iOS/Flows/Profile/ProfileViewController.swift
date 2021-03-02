@@ -15,7 +15,15 @@ protocol ProfileViewControllerDelegate: AnyObject {
     func profileView(_ controller: ProfileViewController, didSelect item: ProfileItem, for user: User)
 }
 
-class ProfileViewController: ViewController, DismissInteractableController {
+class ProfileViewController: ViewController, TransitionableViewController {
+
+    var receivingPresentationType: TransitionType {
+        return .fade
+    }
+
+    var transitionColor: Color {
+        return .background1
+    }
 
     private let user: User
     weak var delegate: ProfileViewControllerDelegate?
@@ -26,8 +34,6 @@ class ProfileViewController: ViewController, DismissInteractableController {
     private let handleView = ProfileDetailView()
     private let localTimeView = ProfileDetailView()
     private let ritualView = ProfileDetailView()
-
-    lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
     init(with user: User) {
         self.user = user
@@ -45,7 +51,7 @@ class ProfileViewController: ViewController, DismissInteractableController {
     override func initializeViews() {
         super.initializeViews()
 
-        self.dismissInteractionController.initialize(interactionView: self.view)
+        self.view.set(backgroundColor: .red)
 
         self.view.addSubview(self.avatarView)
         self.avatarView.set(avatar: self.user)

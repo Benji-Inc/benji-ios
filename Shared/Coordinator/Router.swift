@@ -20,8 +20,6 @@ class Router: NSObject, UINavigationControllerDelegate {
     // True if the router is currently in the process of dismissing a module.
     private var isDismissing = false
 
-    private let transitionRouter = ModalTransitionController()
-
     init(navController: UINavigationController) {
         self.navController = navController
         self.completions = [:]
@@ -40,11 +38,6 @@ class Router: NSObject, UINavigationControllerDelegate {
                  completion: (() -> Void)? = nil) {
 
         let viewController = module.toPresentable()
-
-        // Don't override a view controller's default transitioning delegate if it has one.
-        if viewController.transitioningDelegate.isNil {
-            viewController.transitioningDelegate = self.transitionRouter
-        }
 
         // IMPORTANT: The module will have a strong reference to its viewController. To avoid a retain
         // cycle, pass in a weak reference to the module in the capture list.
