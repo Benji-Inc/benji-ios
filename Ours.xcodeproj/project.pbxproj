@@ -431,6 +431,7 @@
 		D66A580925DD6954001B3F64 /* NewChannelCollectionViewManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580825DD6954001B3F64 /* NewChannelCollectionViewManger.swift */; };
 		D66A580B25DD6990001B3F64 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580A25DD6990001B3F64 /* UserCell.swift */; };
 		D66A580D25DD6B06001B3F64 /* NewChannelCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580C25DD6B06001B3F64 /* NewChannelCollectionView.swift */; };
+		D66B4BE925EF03B60035A2C5 /* SideNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */; };
 		D66F0FC722BF004300BA277D /* PostType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FC622BF004300BA277D /* PostType.swift */; };
 		D66F0FC922BF006D00BA277D /* SystemMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FC822BF006D00BA277D /* SystemMessage.swift */; };
 		D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FCE22BF060500BA277D /* Deeplinkable.swift */; };
@@ -823,6 +824,7 @@
 		D66A580825DD6954001B3F64 /* NewChannelCollectionViewManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCollectionViewManger.swift; sourceTree = "<group>"; };
 		D66A580A25DD6990001B3F64 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		D66A580C25DD6B06001B3F64 /* NewChannelCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCollectionView.swift; sourceTree = "<group>"; };
+		D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideNavigationController.swift; sourceTree = "<group>"; };
 		D66F0FC622BF004300BA277D /* PostType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostType.swift; sourceTree = "<group>"; };
 		D66F0FC822BF006D00BA277D /* SystemMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMessage.swift; sourceTree = "<group>"; };
 		D66F0FCE22BF060500BA277D /* Deeplinkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplinkable.swift; sourceTree = "<group>"; };
@@ -1792,11 +1794,12 @@
 			isa = PBXGroup;
 			children = (
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
-				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
 				D66F0FDD22BF2C5D00BA277D /* HomeSegmentControl.swift */,
-				D642735422C87CCA0088256B /* ImageViewButton.swift */,
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
+				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
+				D642735422C87CCA0088256B /* ImageViewButton.swift */,
 				D67C319525EE882B00289787 /* PostButtonView.swift */,
+				D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2291,6 +2294,7 @@
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */,
+				D66B4BE925EF03B60035A2C5 /* SideNavigationController.swift in Sources */,
 				D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,

@@ -42,11 +42,12 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
 
         // Define the menus
-        let leftMenuNavigationController = SideMenuNavigationController(rootViewController: self.profileVC)
+        let leftMenuNavigationController = SideNavigationController(with: self.profileVC)
         SideMenuManager.default.leftMenuNavigationController = leftMenuNavigationController
 
-        let rightMenuNavigationController = SideMenuNavigationController(rootViewController: self.channelsVC)
+        let rightMenuNavigationController = SideNavigationController(with: self.channelsVC)
         SideMenuManager.default.rightMenuNavigationController = rightMenuNavigationController
+
         SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.homeVC.view)
     }
 
