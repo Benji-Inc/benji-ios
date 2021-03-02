@@ -11,8 +11,8 @@ import Lottie
 
 class ChannelsCollectionView: CollectionView {
 
-    init(with layout: UICollectionViewCompositionalLayout) {
-        super.init(layout: layout)
+    init() {
+        super.init(layout: UICollectionViewLayout())
         self.clipsToBounds = true
     }
 

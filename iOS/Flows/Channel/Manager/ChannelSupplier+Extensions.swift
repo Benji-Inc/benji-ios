@@ -31,21 +31,6 @@ extension ChannelSupplier {
     }
 
     @discardableResult
-    func leave(channel: TCHChannel) -> Future<Void, Error> {
-        return Future { promise in
-            channel.leave { result in
-                if result.isSuccessful() {
-                    promise(.success(()))
-                } else if let error = result.error {
-                    promise(.failure(error))
-                } else {
-                    promise(.failure(ClientError.message(detail: "Failed to leave channel.")))
-                }
-            }
-        }
-    }
-
-    @discardableResult
     func delete(channel: TCHChannel) -> Future<Void, Error> {
         return Future { promise in
             channel.destroy { result in
@@ -62,6 +47,21 @@ extension ChannelSupplier {
                     }
                 } else {
                     promise(.failure(ClientError.message(detail: "Failed to delete channel.")))
+                }
+            }
+        }
+    }
+
+    @discardableResult
+    private func leave(channel: TCHChannel) -> Future<Void, Error> {
+        return Future { promise in
+            channel.leave { result in
+                if result.isSuccessful() {
+                    promise(.success(()))
+                } else if let error = result.error {
+                    promise(.failure(error))
+                } else {
+                    promise(.failure(ClientError.message(detail: "Failed to leave channel.")))
                 }
             }
         }

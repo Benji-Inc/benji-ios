@@ -30,6 +30,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
     override func initialize() {
         super.initialize()
 
+        self.collectionView.collectionViewLayout = self.createLayout()
         self.collectionView.animationView.play()
 
         let combined = Publishers.Zip3(
@@ -110,5 +111,44 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
                 return self.makeNonCurrentUserMenu(for: channel, at: indexPath)
             }
         })
+    }
+
+    func createLayout() -> UICollectionViewCompositionalLayout {
+        var listConfig = UICollectionLayoutListConfiguration(appearance: .grouped)
+
+        listConfig.showsSeparators = false
+        listConfig.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+            guard let `self` = self,
+                  let section = SectionType(rawValue: indexPath.section), section == .channels,
+                  let item = self.getItem(for: indexPath) else { return nil }
+
+            let actionHandler: UIContextualAction.Handler = { action, view, completion in
+                guard let channel = item as? DisplayableChannel else { return }
+                switch channel.channelType {
+                case .system(_):
+                    completion(true)
+                case .pending(_):
+                    completion(true)
+                case .channel(let tchChannel):
+                    ChannelSupplier.shared.delete(channel: tchChannel)
+                        .mainSink { result in
+                            switch result {
+                            case .success():
+                                completion(true)
+                            case .error(_):
+                                completion(false)
+                            }
+                        }.store(in: &self.cancellables)
+                }
+            }
+
+            let action = UIContextualAction(style: .normal, title: "", handler: actionHandler)
+            action.image = UIImage(systemName: "trash")
+            action.backgroundColor = Color.red.color
+
+            return UISwipeActionsConfiguration(actions: [action])
+        }
+
+        return UICollectionViewCompositionalLayout.list(using: listConfig)
     }
 }

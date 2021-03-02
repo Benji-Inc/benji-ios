@@ -157,6 +157,8 @@ class ChannelSupplier {
                         break
                     }
                 }
+            case .joined, .changed:
+                self.channelsUpdate = ChannelUpdate(channel: memberUpdate.channel, status: .changed)
             default:
                 break
             }
