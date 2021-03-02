@@ -431,6 +431,12 @@
 		D66A580925DD6954001B3F64 /* NewChannelCollectionViewManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580825DD6954001B3F64 /* NewChannelCollectionViewManger.swift */; };
 		D66A580B25DD6990001B3F64 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580A25DD6990001B3F64 /* UserCell.swift */; };
 		D66A580D25DD6B06001B3F64 /* NewChannelCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580C25DD6B06001B3F64 /* NewChannelCollectionView.swift */; };
+		D66B4BD425EE90550035A2C5 /* PanPresentInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66B4BD325EE90550035A2C5 /* PanPresentInteractionController.swift */; };
+		D66B4BD525EE90550035A2C5 /* PanPresentInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66B4BD325EE90550035A2C5 /* PanPresentInteractionController.swift */; };
+		D66B4BD625EE90550035A2C5 /* PanPresentInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66B4BD325EE90550035A2C5 /* PanPresentInteractionController.swift */; };
+		D66B4BD825EE90D70035A2C5 /* PanDismissInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66B4BD725EE90D70035A2C5 /* PanDismissInteractionController.swift */; };
+		D66B4BD925EE90D70035A2C5 /* PanDismissInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66B4BD725EE90D70035A2C5 /* PanDismissInteractionController.swift */; };
+		D66B4BDA25EE90D70035A2C5 /* PanDismissInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66B4BD725EE90D70035A2C5 /* PanDismissInteractionController.swift */; };
 		D66F0FC722BF004300BA277D /* PostType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FC622BF004300BA277D /* PostType.swift */; };
 		D66F0FC922BF006D00BA277D /* SystemMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FC822BF006D00BA277D /* SystemMessage.swift */; };
 		D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FCE22BF060500BA277D /* Deeplinkable.swift */; };
@@ -823,6 +829,8 @@
 		D66A580825DD6954001B3F64 /* NewChannelCollectionViewManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCollectionViewManger.swift; sourceTree = "<group>"; };
 		D66A580A25DD6990001B3F64 /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		D66A580C25DD6B06001B3F64 /* NewChannelCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCollectionView.swift; sourceTree = "<group>"; };
+		D66B4BD325EE90550035A2C5 /* PanPresentInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanPresentInteractionController.swift; sourceTree = "<group>"; };
+		D66B4BD725EE90D70035A2C5 /* PanDismissInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanDismissInteractionController.swift; sourceTree = "<group>"; };
 		D66F0FC622BF004300BA277D /* PostType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostType.swift; sourceTree = "<group>"; };
 		D66F0FC822BF006D00BA277D /* SystemMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMessage.swift; sourceTree = "<group>"; };
 		D66F0FCE22BF060500BA277D /* Deeplinkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplinkable.swift; sourceTree = "<group>"; };
@@ -1631,6 +1639,8 @@
 				D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */,
 				D67758AD25B0AFB2007E0184 /* TransitionRouter+Home.swift */,
 				D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */,
+				D66B4BD325EE90550035A2C5 /* PanPresentInteractionController.swift */,
+				D66B4BD725EE90D70035A2C5 /* PanDismissInteractionController.swift */,
 			);
 			path = Transitions;
 			sourceTree = "<group>";
@@ -2362,6 +2372,7 @@
 				D64C6A99232D6C0200DB7257 /* TypingBubbleView.swift in Sources */,
 				D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */,
 				D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */,
+				D66B4BD825EE90D70035A2C5 /* PanDismissInteractionController.swift in Sources */,
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
 				D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */,
 				D6740D4823AEA5BD009D5702 /* ChannelsCoordiantor.swift in Sources */,
@@ -2411,6 +2422,7 @@
 				D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */,
 				D66A580B25DD6990001B3F64 /* UserCell.swift in Sources */,
 				D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */,
+				D66B4BD425EE90550035A2C5 /* PanPresentInteractionController.swift in Sources */,
 				D639F61824B1566B007E63B7 /* AttibutedMessageCell.swift in Sources */,
 				D67758AE25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */,
 				80C7C6062316112400643A14 /* TimeHumpView.swift in Sources */,
@@ -2518,6 +2530,7 @@
 				D63DB29A25E999B200F6B323 /* TextView.swift in Sources */,
 				D63DB28C25E999AB00F6B323 /* ViewController.swift in Sources */,
 				D63DB25B25E9995E00F6B323 /* Ritual.swift in Sources */,
+				D66B4BDA25EE90D70035A2C5 /* PanDismissInteractionController.swift in Sources */,
 				D63DB22425E9990500F6B323 /* DispatchQue+Extensions.swift in Sources */,
 				D63DB23B25E9992600F6B323 /* UIView+Extensions.swift in Sources */,
 				D63DB26425E9997200F6B323 /* AttributedString.swift in Sources */,
@@ -2599,6 +2612,7 @@
 				D63DB28125E9999C00F6B323 /* TransitionRouter+Home.swift in Sources */,
 				D63DB25725E9995700F6B323 /* DeeplinkTarget.swift in Sources */,
 				D69972FC25EA9A22000AEE6A /* RootNavigationController.swift in Sources */,
+				D66B4BD625EE90550035A2C5 /* PanPresentInteractionController.swift in Sources */,
 				D63DB24C25E9994400F6B323 /* SplashViewController.swift in Sources */,
 				D63DB21E25E998FC00F6B323 /* CGFloat+Extensions.swift in Sources */,
 				D63DB28325E9999C00F6B323 /* TransitionRouter+Fade.swift in Sources */,
@@ -2640,6 +2654,7 @@
 				D6551A3025895E4600B901E4 /* SwitchableContentViewController.swift in Sources */,
 				D63DB21025E96EAF00F6B323 /* NSExtensionContext+Extensions.swift in Sources */,
 				D6551A3A25895E6E00B901E4 /* FaceDetectionViewController.swift in Sources */,
+				D66B4BD525EE90550035A2C5 /* PanPresentInteractionController.swift in Sources */,
 				D66379E225A39C0400A4A3B7 /* UserNotificationManager.swift in Sources */,
 				D6DF870725A5214D0089B0CF /* QuePositions.swift in Sources */,
 				D655196D2589128300B901E4 /* ScreenSize.swift in Sources */,
@@ -2715,6 +2730,7 @@
 				D6551A5925895EFA00B901E4 /* Button+Extensions.swift in Sources */,
 				D65519282589122000B901E4 /* String+Extensions.swift in Sources */,
 				D65519172589120C00B901E4 /* Date+Extensions.swift in Sources */,
+				D66B4BD925EE90D70035A2C5 /* PanDismissInteractionController.swift in Sources */,
 				D65519222589121500B901E4 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D65519FF25895A0800B901E4 /* Statusable.swift in Sources */,
 				D677589725B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,
