@@ -15,7 +15,7 @@ protocol ProfileViewControllerDelegate: AnyObject {
     func profileView(_ controller: ProfileViewController, didSelect item: ProfileItem, for user: User)
 }
 
-class ProfileViewController: ViewController {
+class ProfileViewController: ViewController, DismissInteractableController {
 
     private let user: User
     weak var delegate: ProfileViewControllerDelegate?
@@ -26,6 +26,8 @@ class ProfileViewController: ViewController {
     private let handleView = ProfileDetailView()
     private let localTimeView = ProfileDetailView()
     private let ritualView = ProfileDetailView()
+
+    lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
     init(with user: User) {
         self.user = user
@@ -42,6 +44,8 @@ class ProfileViewController: ViewController {
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.dismissInteractionController.initialize(interactionView: self.view)
 
         self.view.addSubview(self.avatarView)
         self.avatarView.set(avatar: self.user)

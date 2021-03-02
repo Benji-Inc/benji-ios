@@ -12,6 +12,10 @@ protocol DismissInteractableController where Self: ViewController {
     var dismissInteractionController: PanDismissInteractionController { get }
 }
 
+protocol PresentInteractableController where Self: ViewController {
+    var presentInteractionController: PanPresentInteractionController { get }
+}
+
 /// This class is used to handle custom present transitions for CardTransitionableControllers that are presented modally
 class ModalTransitionController: NSObject, UIViewControllerTransitioningDelegate {
 
