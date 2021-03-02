@@ -25,7 +25,7 @@ extension ChannelsViewController {
             case .changed:
                 self.collectionViewManager.reload(items: [displayable])
             case .deleted:
-                self.collectionViewManager.delete(items: [displayable])
+                self.collectionViewManager.delete(items: [displayable], section: .channels)
             }
         }.store(in: &self.cancellables)
     }

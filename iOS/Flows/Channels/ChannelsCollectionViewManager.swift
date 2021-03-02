@@ -130,15 +130,16 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
                 case .pending(_):
                     completion(true)
                 case .channel(let tchChannel):
-                    ChannelSupplier.shared.delete(channel: tchChannel)
-                        .mainSink { result in
-                            switch result {
-                            case .success():
-                                completion(true)
-                            case .error(_):
-                                completion(false)
-                            }
-                        }.store(in: &self.cancellables)
+                    self.delete(items: [item], section: .channels, animate: true)
+//                    ChannelSupplier.shared.delete(channel: tchChannel)
+//                        .mainSink { result in
+//                            switch result {
+//                            case .success():
+//                                completion(true)
+//                            case .error(_):
+//                                completion(false)
+//                            }
+//                        }.store(in: &self.cancellables)
                 }
             }
 

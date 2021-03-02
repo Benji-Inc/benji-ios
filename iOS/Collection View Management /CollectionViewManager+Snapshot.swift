@@ -46,10 +46,17 @@ extension CollectionViewManager {
         self.dataSource.apply(new, animatingDifferences: animate)
     }
 
-    func delete(items: [AnyHashable], animate: Bool = true) {
-        guard self.dataSource.snapshot().itemIdentifiers.contains(items) else { return }
+    func delete(items: [AnyHashable], section: SectionType? = nil, animate: Bool = true) {
+        guard self.hasLoadedInitialSnapshot else { return }
+
         var new = self.dataSource.snapshot()
-        new.deleteItems(items)
+
+        if let section = section {
+            new.deleteItems(items, at: section.rawValue)
+        } else {
+            new.deleteItems(items)
+        }
+
         self.dataSource.apply(new, animatingDifferences: animate)
     }
 
@@ -96,5 +103,16 @@ extension CollectionViewManager {
         var new = self.dataSource.snapshot()
         new.reloadSections(sections)
         self.dataSource.apply(new, animatingDifferences: animate)
+    }
+}
+
+extension NSDiffableDataSourceSnapshot {
+
+    mutating func deleteItems(_ items: [ItemIdentifierType], at section: Int) {
+        self.deleteItems(items)
+        let sectionIdentifier = self.sectionIdentifiers[section]
+
+        guard self.numberOfItems(inSection: sectionIdentifier) == 0 else { return }
+        self.deleteSections([sectionIdentifier])
     }
 }

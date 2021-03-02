@@ -70,14 +70,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     func loadSnapshot(animationCycle: AnimationCycle? = nil) -> Future<Void, Never> {
         return Future { promise in
 
-            var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
-
-            if let allCases = SectionType.allCases as? [SectionType] {
-                snapshot.appendSections(allCases)
-                allCases.forEach { (section) in
-                    snapshot.appendItems(self.getItems(for: section), toSection: section)
-                }
-            }
+            let snapshot = self.createSnapshot()
 
             if let cycle = animationCycle {
                 self.animateOut(position: cycle.outToPosition, concatenate: cycle.shouldConcatenate) { [unowned self] in
@@ -97,6 +90,19 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
                 }
             }
         }
+    }
+
+    func createSnapshot() -> NSDiffableDataSourceSnapshot<SectionType, AnyHashable> {
+        var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
+
+        if let allCases = SectionType.allCases as? [SectionType] {
+            snapshot.appendSections(allCases)
+            allCases.forEach { (section) in
+                snapshot.appendItems(self.getItems(for: section), toSection: section)
+            }
+        }
+
+        return snapshot
     }
 
     func reset(animate: Bool = false) {
