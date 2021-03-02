@@ -62,6 +62,7 @@ class ProfileViewController: ViewController {
             .mainSink(receiveValue: { event in
                 switch event {
                 case .entered(let u), .left(let u), .created(let u), .updated(let u), .deleted(let u):
+                    self.avatarView.set(avatar: u)
                     self.updateItems(with: u)
                 }
             }).store(in: &self.cancellables)
