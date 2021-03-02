@@ -9,17 +9,12 @@
 import Foundation
 import Parse
 
-class ProfileCoordinator: Coordinator<Void> {
+class ProfileCoordinator: PresentableCoordinator<Void> {
 
-    let profileVC: ProfileViewController
+    private lazy var profileVC = ProfileViewController(with: User.current()!)
 
-    init(router: Router,
-         deepLink: DeepLinkable?,
-         profileVC: ProfileViewController) {
-
-        self.profileVC = profileVC
-
-        super.init(router: router, deepLink: deepLink)
+    override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
+        return self.profileVC
     }
 
     override func start() {

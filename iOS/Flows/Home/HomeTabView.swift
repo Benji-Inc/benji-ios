@@ -15,10 +15,7 @@ class HomeTabView: View {
     private(set) var channelsItem = ImageViewButton()
 
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
-    private var indicatorCenterX: CGFloat?
 
-    var currentContent: HomeContent?
-    
     override func initializeSubviews() {
         super.initializeSubviews()
 
@@ -27,6 +24,11 @@ class HomeTabView: View {
         self.addSubview(self.profileItem)
         self.addSubview(self.postButtonView)
         self.addSubview(self.channelsItem)
+
+        self.profileItem.imageView.image = UIImage(systemName: "person.crop.circle")
+        self.profileItem.imageView.tintColor = Color.background3.color
+        self.channelsItem.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right")
+        self.channelsItem.imageView.tintColor = Color.background3.color
     }
 
     override func layoutSubviews() {
@@ -47,31 +49,5 @@ class HomeTabView: View {
         self.channelsItem.size = itemSize
         self.channelsItem.pin(.top, padding: topPadding)
         self.channelsItem.left = self.postButtonView.right
-    }
-
-    func updateTabItems(for contentType: HomeContent) {
-        self.selectionFeedback.impactOccurred()
-        self.currentContent = contentType
-        self.updateButtons(for: contentType)
-    }
-
-    private func updateButtons(for contentType: HomeContent) {
-        switch contentType {
-        case .feed:
-            self.profileItem.imageView.image = UIImage(systemName: "person.crop.circle")
-            self.profileItem.imageView.tintColor = Color.background3.color
-            self.channelsItem.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right")
-            self.channelsItem.imageView.tintColor = Color.background3.color
-        case .channels:
-            self.profileItem.imageView.image = UIImage(systemName: "person.crop.circle")
-            self.profileItem.imageView.tintColor = Color.background3.color
-            self.channelsItem.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right.fill")
-            self.channelsItem.imageView.tintColor = Color.purple.color
-        case .profile:
-            self.profileItem.imageView.image = UIImage(systemName: "person.crop.circle.fill")
-            self.profileItem.imageView.tintColor = Color.purple.color
-            self.channelsItem.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right")
-            self.channelsItem.imageView.tintColor = Color.background3.color
-        }
     }
 }

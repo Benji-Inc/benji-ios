@@ -11,12 +11,6 @@ import Contacts
 import Parse
 import Combine
 
-enum HomeContent: Equatable {
-    case feed(FeedViewController)
-    case channels(ChannelsViewController)
-    case profile(ProfileViewController)
-}
-
 class HomeViewController: ViewController, TransitionableViewController {
 
     var receivingPresentationType: TransitionType {
@@ -28,45 +22,34 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
 
     lazy var feedVC = FeedViewController()
-    lazy var channelsVC = ChannelsViewController()
-    lazy var profileVC = ProfileViewController(with: User.current()!)
 
     let centerContainer = View()
     let tabView = HomeTabView()
 
-    @Published var current: HomeContent?
-
-    private(set) var currentCenterVC: UIViewController?
+    var didTapProfile: CompletionOptional = nil
+    var didTapChannels: CompletionOptional = nil
 
     override func initializeViews() {
         super.initializeViews()
-
-        self.current = .feed(self.feedVC)
 
         self.view.set(backgroundColor: .background1)
         self.view.addSubview(self.centerContainer)
         self.view.addSubview(self.tabView)
 
         self.centerContainer.set(backgroundColor: .background1)
+        self.addChild(viewController: self.feedVC, toView: self.centerContainer)
 
-        self.$current
-            .removeDuplicates()
-            .mainSink { [weak self] (currentContent) in
-            guard let `self` = self, let conent = currentContent else { return }
-            self.switchTo(content: conent)
-            self.tabView.updateTabItems(for: conent)
-        }.store(in: &self.cancellables)
 
         self.tabView.profileItem.didSelect = { [unowned self] in
-            self.current = .profile(self.profileVC)
+            self.didTapProfile?()
         }
 
         self.tabView.postButtonView.button.didSelect { [unowned self] in
-            self.current = .feed(self.feedVC)
+            self.didTapPost()
         }
 
         self.tabView.channelsItem.didSelect = { [unowned self] in
-            self.current = .channels(self.channelsVC)
+            self.didTapChannels?()
         }
     }
 
@@ -79,38 +62,10 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.tabView.pin(.bottom)
 
         self.centerContainer.expandToSuperviewSize()
-        self.currentCenterVC?.view.expandToSuperviewSize()
+        self.feedVC.view.expandToSuperviewSize()
     }
 
-    private func switchTo(content: HomeContent) {
-
-        UIView.animate(withDuration: Theme.animationDuration, animations: {
-            self.currentCenterVC?.view.alpha = 0
-        }) { (completed) in
-
-            self.currentCenterVC?.removeFromParentSuperview()
-            var newContentVC: UIViewController?
-
-            switch content {
-            case .feed(let vc):
-                newContentVC = vc
-            case .channels(let vc):
-                newContentVC = vc
-            case .profile(let vc):
-                newContentVC = vc
-            }
-
-            self.currentCenterVC = newContentVC
-
-            if let contentVC = self.currentCenterVC {
-                self.addChild(viewController: contentVC, toView: self.centerContainer)
-            }
-
-            self.view.setNeedsLayout()
-
-            UIView.animate(withDuration: Theme.animationDuration) {
-                self.currentCenterVC?.view.alpha = 1
-            }
-        }
+    private func didTapPost() {
+        // do something 
     }
 }
