@@ -14,15 +14,6 @@ class MessageBubbleView: View, Indexable {
     private let circleView = View()
     var startingPoint: CGPoint = .zero
 
-    // Shimmer Animation Extensions
-
-    enum ShimmerDirection: Int {
-        case topToBottom = 0
-        case bottomToTop
-        case leftToRight
-        case rightToLeft
-    }
-
     override func initializeSubviews() {
         super.initializeSubviews()
 
