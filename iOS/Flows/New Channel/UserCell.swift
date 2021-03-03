@@ -33,9 +33,13 @@ class UserCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: Connection) {
         guard let nonMeUser = item.nonMeUser else { return }
 
-        self.avatarView.set(avatar: nonMeUser)
-        self.handleLabel.setText(nonMeUser.handle)
-        self.nameLabel.setText(nonMeUser.fullName)
+        nonMeUser.retrieveDataIfNeeded()
+            .mainSink { user in
+                self.avatarView.set(avatar: nonMeUser)
+                self.handleLabel.setText(nonMeUser.handle)
+                self.nameLabel.setText(nonMeUser.fullName)
+                self.layoutNow()
+            }.store(in: &self.cancellables)
     }
 
     override func update(isSelected: Bool) {
