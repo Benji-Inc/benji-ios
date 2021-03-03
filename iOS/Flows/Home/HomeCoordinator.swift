@@ -41,11 +41,12 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             self.handle(deeplink: deeplink)
         }
 
-        // Define the menus
         let leftMenuNavigationController = SideNavigationController(with: self.profileVC)
+        leftMenuNavigationController.sideMenuDelegate = self
         SideMenuManager.default.leftMenuNavigationController = leftMenuNavigationController
 
         let rightMenuNavigationController = SideNavigationController(with: self.channelsVC)
+        rightMenuNavigationController.sideMenuDelegate = self
         SideMenuManager.default.rightMenuNavigationController = rightMenuNavigationController
 
         SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.homeVC.view)
@@ -141,5 +142,24 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             }
         })
         self.router.present(coordinator, source: self.homeVC, animated: true)
+    }
+}
+
+extension HomeCoordinator: SideMenuNavigationControllerDelegate {
+
+    func sideMenuWillAppear(menu: SideMenuNavigationController, animated: Bool) {
+        self.homeVC.animateTabView(shouldShow: false)
+    }
+
+    func sideMenuDidAppear(menu: SideMenuNavigationController, animated: Bool) {
+
+    }
+
+    func sideMenuWillDisappear(menu: SideMenuNavigationController, animated: Bool) {
+        
+    }
+
+    func sideMenuDidDisappear(menu: SideMenuNavigationController, animated: Bool) {
+        self.homeVC.animateTabView(shouldShow: true)
     }
 }

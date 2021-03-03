@@ -34,6 +34,7 @@ class ProfileViewController: ViewController, TransitionableViewController {
     private let handleView = ProfileDetailView()
     private let localTimeView = ProfileDetailView()
     private let ritualView = ProfileDetailView()
+    let versionLabel = Label(frame: .zero, font: .small, textColor: .background2)
 
     init(with user: User) {
         self.user = user
@@ -44,14 +45,10 @@ class ProfileViewController: ViewController, TransitionableViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func loadView() {
-        self.view = self.scrollView
-    }
-
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.set(backgroundColor: .red)
+        self.view.addSubview(self.scrollView)
 
         self.view.addSubview(self.avatarView)
         self.avatarView.set(avatar: self.user)
@@ -76,6 +73,10 @@ class ProfileViewController: ViewController, TransitionableViewController {
                     self.updateItems(with: u)
                 }
             }).store(in: &self.cancellables)
+
+        let version = Config.shared.environment.displayName.capitalized + " " + Config.shared.appVersion
+        self.versionLabel.setText(version)
+        self.view.addSubview(versionLabel)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -93,6 +94,8 @@ class ProfileViewController: ViewController, TransitionableViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        self.scrollView.expandToSuperviewSize()
 
         self.avatarView.setSize(for: self.view.width * 0.4)
         self.avatarView.pin(.top, padding: 20)
@@ -115,6 +118,10 @@ class ProfileViewController: ViewController, TransitionableViewController {
         self.ritualView.size = itemSize
         self.ritualView.match(.top, to: .bottom, of: self.localTimeView, offset: Theme.contentOffset)
         self.ritualView.pin(.left, padding: Theme.contentOffset)
+
+        self.versionLabel.setSize(withWidth: self.view.width)
+        self.versionLabel.pin(.left, padding: Theme.contentOffset)
+        self.versionLabel.pinToSafeArea(.bottom, padding: 0)
 
         self.scrollView.contentSize = CGSize(width: self.view.width, height: self.ritualView.bottom)
     }

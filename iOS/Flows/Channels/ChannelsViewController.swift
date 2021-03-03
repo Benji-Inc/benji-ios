@@ -28,6 +28,8 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.set(backgroundColor: .background1)
+
         self.view.insertSubview(self.addButton, aboveSubview: self.collectionViewManager.collectionView)
         self.addButton.set(style: .normal(color: .purple, text: "+"))
         self.addButton.didSelect { [unowned self] in

@@ -12,8 +12,7 @@ import SideMenu
 class SideNavigationController: SideMenuNavigationController {
 
     init(with rootViewController: UIViewController) {
-        var settings = SideMenuSettings()
-        settings.blurEffectStyle = .dark
+        let settings = SideMenuSettings()
         super.init(rootViewController: rootViewController, settings: settings)
 
         self.view.set(backgroundColor: .background1)

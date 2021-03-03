@@ -57,7 +57,7 @@ class ProfileDetailView: View {
         self.label.left = self.titleLabel.left
         self.label.top = self.titleLabel.bottom + 5
 
-        self.button.size = CGSize(width: 140, height: 40)
+        self.button.size = CGSize(width: 100, height: 40)
         self.button.bottom = self.label.bottom
         self.button.pin(.right)
     }
@@ -74,7 +74,7 @@ class ProfileDetailView: View {
                 formatter.dateFormat = "h:mm a"
                 let string = formatter.string(from: date)
                 self.label.setText(string)
-                self.button.set(style: .normal(color: .lightPurple, text: "Update"))
+                self.button.set(style: .normal(color: .lightPurple, text: "EDIT"))
             }
 
             self.layoutNow()

@@ -29,16 +29,17 @@ class HomeViewController: ViewController, TransitionableViewController {
     var didTapProfile: CompletionOptional = nil
     var didTapChannels: CompletionOptional = nil
 
+    private let vibrancyView = VibrancyView()
+
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.set(backgroundColor: .background1)
+        self.view.addSubview(self.vibrancyView)
         self.view.addSubview(self.centerContainer)
         self.view.addSubview(self.tabView)
 
-        self.centerContainer.set(backgroundColor: .background1)
+        self.centerContainer.set(backgroundColor: .clear)
         self.addChild(viewController: self.feedVC, toView: self.centerContainer)
-
 
         self.tabView.profileItem.didSelect = { [unowned self] in
             self.didTapProfile?()
@@ -56,6 +57,8 @@ class HomeViewController: ViewController, TransitionableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        self.vibrancyView.expandToSuperviewSize()
+
         let height = 70 + self.view.safeAreaInsets.bottom
         self.tabView.size = CGSize(width: self.view.width, height: height)
         self.tabView.centerOnX()
@@ -63,6 +66,12 @@ class HomeViewController: ViewController, TransitionableViewController {
 
         self.centerContainer.expandToSuperviewSize()
         self.feedVC.view.expandToSuperviewSize()
+    }
+
+    func animateTabView(shouldShow: Bool) {
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.tabView.alpha = shouldShow ? 1.0 : 0.0
+        }
     }
 
     private func didTapPost() {

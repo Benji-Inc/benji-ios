@@ -116,6 +116,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
     func createLayout() -> UICollectionViewCompositionalLayout {
         var listConfig = UICollectionLayoutListConfiguration(appearance: .grouped)
 
+        listConfig.backgroundColor = .clear 
         listConfig.showsSeparators = false
         listConfig.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
             guard let `self` = self,
