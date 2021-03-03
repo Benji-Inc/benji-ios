@@ -47,8 +47,7 @@ class ReservationCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.button.width = self.contentView.width * 0.95
-        self.button.height = self.contentView.height - 10
+        self.button.squaredSize = self.contentView.height - 10 
         self.button.centerOnXAndY()
 
         self.imageView.squaredSize = 24

@@ -14,7 +14,7 @@ import Combine
 enum ButtonStyle {
     case rounded(color: Color, text: Localized)
     case normal(color: Color, text: Localized)
-    case icon(image: UIImage)
+    case icon(image: UIImage, color: Color)
     case animation(view: AnimationView, inset: CGFloat = 8)
 }
 
@@ -93,8 +93,15 @@ class Button: UIButton, Statusable {
             self.layer.borderColor = color.color.cgColor
             self.layer.borderWidth = 2
 
-        case .icon(let image):
-            self.setBackgroundImage(image, for: self.state)
+        case .icon(let image, let color):
+            self.defaultColor = color
+            self.setImage(image, for: .normal)
+            self.tintColor = color.color
+            self.setBackground(color: color.color.withAlphaComponent(0.4), forUIControlState: .normal)
+            self.setBackground(color: Color.clear.color, forUIControlState: .highlighted)
+            self.layer.borderColor = color.color.cgColor
+            self.layer.borderWidth = 2
+            
         case .animation(let view, _):
             self.addSubview(view)
             view.expandToSuperviewSize()

@@ -31,7 +31,7 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
         self.view.set(backgroundColor: .background1)
 
         self.view.insertSubview(self.addButton, aboveSubview: self.collectionViewManager.collectionView)
-        self.addButton.set(style: .normal(color: .purple, text: "+"))
+        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .white))
         self.addButton.didSelect { [unowned self] in
             self.delegate?.channelsViewControllerDidTapAdd(self)
         }
@@ -67,8 +67,9 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.addButton.size = CGSize(width: 50, height: 50)
+        self.addButton.squaredSize = 60
+        self.addButton.makeRound()
         self.addButton.pin(.right, padding: Theme.contentOffset)
-        self.addButton.pin(.bottom, padding: Theme.contentOffset)
+        self.addButton.pinToSafeArea(.bottom, padding: 0)
     }
 }

@@ -45,7 +45,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         leftMenuNavigationController.sideMenuDelegate = self
         SideMenuManager.default.leftMenuNavigationController = leftMenuNavigationController
 
-        let rightMenuNavigationController = SideNavigationController(with: self.channelsVC)
+        let rightMenuNavigationController = SideNavigationController(with: self.channelsVC, width: 140)
         rightMenuNavigationController.sideMenuDelegate = self
         SideMenuManager.default.rightMenuNavigationController = rightMenuNavigationController
 
@@ -156,7 +156,7 @@ extension HomeCoordinator: SideMenuNavigationControllerDelegate {
     }
 
     func sideMenuWillDisappear(menu: SideMenuNavigationController, animated: Bool) {
-        
+
     }
 
     func sideMenuDidDisappear(menu: SideMenuNavigationController, animated: Bool) {

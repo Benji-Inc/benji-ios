@@ -51,14 +51,14 @@ class ReservationsCoordinator: Coordinator<Void> {
 
         alert.addAction(ok)
 
-        self.router.navController.present(alert, animated: true, completion: nil)
+        self.router.topmostViewController.present(alert, animated: true, completion: nil)
     }
 
     private func showContacts() {
         self.contactPicker.displayedPropertyKeys = [CNContactPhoneNumbersKey, CNContactGivenNameKey, CNContactFamilyNameKey]
         self.contactPicker.predicateForEnablingContact = NSPredicate(format: "phoneNumbers.@count > 0")
         self.contactPicker.delegate = self
-        self.router.navController.present(self.contactPicker, animated: true, completion: nil)
+        self.router.topmostViewController.present(self.contactPicker, animated: true, completion: nil)
     }
 
     private func showSentAlert(for avatar: Avatar) {
@@ -74,7 +74,7 @@ class ReservationsCoordinator: Coordinator<Void> {
 
         alert.addAction(ok)
 
-        self.router.navController.present(alert, animated: true, completion: nil)
+        self.router.topmostViewController.present(alert, animated: true, completion: nil)
     }
 
     private func sendText(with message: String?, phone: String) {
@@ -84,7 +84,7 @@ class ReservationsCoordinator: Coordinator<Void> {
         self.messageComposer.messageComposeDelegate = self
 
         if MFMessageComposeViewController.canSendText() {
-            self.router.navController.present(self.messageComposer, animated: true, completion: nil)
+            self.router.topmostViewController.present(self.messageComposer, animated: true, completion: nil)
         }
     }
 }

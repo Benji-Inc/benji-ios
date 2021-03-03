@@ -11,8 +11,11 @@ import SideMenu
 
 class SideNavigationController: SideMenuNavigationController {
 
-    init(with rootViewController: UIViewController) {
-        let settings = SideMenuSettings()
+    init(with rootViewController: UIViewController, width: CGFloat? = nil) {
+        var settings = SideMenuSettings()
+        if let width = width {
+            settings.menuWidth = width
+        }
         super.init(rootViewController: rootViewController, settings: settings)
 
         self.view.set(backgroundColor: .background1)
