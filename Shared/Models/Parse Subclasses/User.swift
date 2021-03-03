@@ -27,6 +27,7 @@ enum UserKey: String {
     case quePosition
     case status
     case handle
+    case connectionPreferences
 }
 
 enum UserStatus: String {
@@ -79,5 +80,9 @@ final class User: PFUser, Subscribeable {
             return UserStatus.init(rawValue: string)
         }
         set { self.setObject(for: .status, with: newValue?.rawValue) }
+    }
+
+    var connectionPreferences: [ConnectionPreference] {
+        return self.getObject(for: .connectionPreferences) ?? []
     }
 }
