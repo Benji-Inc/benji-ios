@@ -12,7 +12,6 @@ class ChannelPreviewViewController: ViewController {
 
     let channel: DisplayableChannel
     let channelSize: CGSize
-    private let content = ChannelContentView()
 
     init(with channel: DisplayableChannel, size: CGSize) {
         self.channel = channel
@@ -26,14 +25,14 @@ class ChannelPreviewViewController: ViewController {
 
     override func initializeViews() {
         super.initializeViews()
-        self.view.addSubview(self.content)
-        self.content.configure(with: self.channel.channelType)
+       // self.view.addSubview(self.content)
+       // self.content.configure(with: self.channel.channelType)
         self.preferredContentSize = self.channelSize
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.content.expandToSuperviewSize()
+      //  self.content.expandToSuperviewSize()
     }
 }
