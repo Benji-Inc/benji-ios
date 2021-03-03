@@ -84,6 +84,9 @@
 		D63D71B925F025E8004C26F7 /* FaceDetection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D63D71B825F025E8004C26F7 /* FaceDetection.storyboard */; };
 		D63D71BA25F025E8004C26F7 /* FaceDetection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D63D71B825F025E8004C26F7 /* FaceDetection.storyboard */; };
 		D63D71BB25F025E8004C26F7 /* FaceDetection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D63D71B825F025E8004C26F7 /* FaceDetection.storyboard */; };
+		D63D71BD25F03025004C26F7 /* AnimatingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71BC25F03025004C26F7 /* AnimatingLabel.swift */; };
+		D63D71BE25F03025004C26F7 /* AnimatingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71BC25F03025004C26F7 /* AnimatingLabel.swift */; };
+		D63D71BF25F03025004C26F7 /* AnimatingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71BC25F03025004C26F7 /* AnimatingLabel.swift */; };
 		D63DB1F225E95CEC00F6B323 /* Connection+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */; };
 		D63DB1F925E968C300F6B323 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D63DB1F825E968C300F6B323 /* UserNotifications.framework */; };
 		D63DB1FB25E968C300F6B323 /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D63DB1FA25E968C300F6B323 /* UserNotificationsUI.framework */; };
@@ -737,6 +740,7 @@
 		D63D63022486A9020037E046 /* InputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputAccessoryView.swift; sourceTree = "<group>"; };
 		D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCaptureViewController.swift; sourceTree = "<group>"; };
 		D63D71B825F025E8004C26F7 /* FaceDetection.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FaceDetection.storyboard; sourceTree = "<group>"; };
+		D63D71BC25F03025004C26F7 /* AnimatingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatingLabel.swift; sourceTree = "<group>"; };
 		D63DB1F725E968C300F6B323 /* OursNotificationContent.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OursNotificationContent.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D63DB1F825E968C300F6B323 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		D63DB1FA25E968C300F6B323 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
@@ -1803,6 +1807,7 @@
 				D642735422C87CCA0088256B /* ImageViewButton.swift */,
 				D67C319525EE882B00289787 /* PostButtonView.swift */,
 				D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */,
+				D63D71BC25F03025004C26F7 /* AnimatingLabel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2457,6 +2462,7 @@
 				D6FC809C237A6ED30089AACC /* ChannelCollectionViewManager+Typing.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
+				D63D71BD25F03025004C26F7 /* AnimatingLabel.swift in Sources */,
 				D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,
 				80D4A21C2303A005007CB5F1 /* Ritual.swift in Sources */,
@@ -2518,6 +2524,7 @@
 				D63DB24825E9993F00F6B323 /* OnboardingViewController.swift in Sources */,
 				D63DB22825E9991300F6B323 /* Optional+Extensions.swift in Sources */,
 				D63DB24A25E9993F00F6B323 /* OnboardingContent.swift in Sources */,
+				D63D71BF25F03025004C26F7 /* AnimatingLabel.swift in Sources */,
 				D63DB21F25E998FC00F6B323 /* CGRect+Extensions.swift in Sources */,
 				D63DB22025E998FC00F6B323 /* Character+Extensions.swift in Sources */,
 				D63DB26925E9997800F6B323 /* UserNotificationManager.swift in Sources */,
@@ -2673,6 +2680,7 @@
 				D655195A2589126800B901E4 /* User+Objectable.swift in Sources */,
 				D65519C425891B0A00B901E4 /* FullScreenViewController.swift in Sources */,
 				D65519162589120C00B901E4 /* DispatchQue+Extensions.swift in Sources */,
+				D63D71BE25F03025004C26F7 /* AnimatingLabel.swift in Sources */,
 				D65519372589122700B901E4 /* UIViewController+Extensions.swift in Sources */,
 				D6551A6A25895F9400B901E4 /* FaceView.swift in Sources */,
 				D65519532589125500B901E4 /* AnimationCycle.swift in Sources */,

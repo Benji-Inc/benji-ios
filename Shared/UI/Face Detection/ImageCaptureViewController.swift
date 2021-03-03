@@ -77,9 +77,8 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         self.previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
         self.previewLayer.videoGravity = .resizeAspectFill
         self.previewLayer.frame = self.view.bounds
-        self.previewLayer.cornerRadius = 5
-        self.previewLayer.borderWidth = 3
-        self.previewLayer.borderColor = Color.purple.color.cgColor
+
+        self.view.layer.insertSublayer(self.previewLayer, at: 0)
     }
 
     func capturePhoto() {

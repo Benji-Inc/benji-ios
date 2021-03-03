@@ -22,6 +22,9 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
 
     lazy var feedVC = FeedViewController()
+    lazy var captureVC = ImageCaptureViewController()
+    private let vibrancyView = VibrancyView()
+    private let vibrancyLabel = Label(font: .regular, textColor: .white)
 
     let centerContainer = View()
     let tabView = HomeTabView()
@@ -29,10 +32,14 @@ class HomeViewController: ViewController, TransitionableViewController {
     var didTapProfile: CompletionOptional = nil
     var didTapChannels: CompletionOptional = nil
 
-    private let vibrancyView = VibrancyView()
-
     override func initializeViews() {
         super.initializeViews()
+
+        self.addChild(viewController: self.captureVC)
+        self.vibrancyView.vibrancyEffectView.contentView.addSubview(self.vibrancyLabel)
+
+        self.vibrancyLabel.setText("Coming soon. 👍")
+        self.vibrancyLabel.textAlignment = .center
 
         self.view.addSubview(self.vibrancyView)
         self.view.addSubview(self.centerContainer)
@@ -52,12 +59,29 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.tabView.channelsItem.didSelect = { [unowned self] in
             self.didTapChannels?()
         }
+
+        self.tabView.postButtonView.button.publisher(for: \.isHighlighted)
+            .removeDuplicates()
+            .mainSink { isHighlighted in
+                UIView.animate(withDuration: Theme.animationDuration) {
+                    //self.vibrancyView.show(blur: !isHighlighted)
+                    self.vibrancyLabel.alpha = isHighlighted ? 1.0 : 0.0
+                    self.feedVC.view.alpha = isHighlighted ? 0.0 : 1.0
+                }
+
+            }.store(in: &self.cancellables)
+
+        self.captureVC.begin()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        self.captureVC.view.expandToSuperviewSize()
         self.vibrancyView.expandToSuperviewSize()
+
+        self.vibrancyLabel.setSize(withWidth: self.view.width)
+        self.vibrancyLabel.centerOnXAndY()
 
         let height = 70 + self.view.safeAreaInsets.bottom
         self.tabView.size = CGSize(width: self.view.width, height: height)

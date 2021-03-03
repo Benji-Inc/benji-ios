@@ -29,6 +29,10 @@ class VibrancyView: View {
         self.vibrancyEffectView.expandToSuperviewSize()
     }
 
+    func show(blur: Bool) {
+        self.blurView.effect = blur ? self.blurEffect : nil
+    }
+
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         return true
     }

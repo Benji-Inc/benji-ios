@@ -92,6 +92,25 @@ class UserNotificationManager: NSObject {
         }
     }
 
+    func removeNonEssentialPendingNotifications() {
+        self.center.getPendingNotificationRequests { requests in
+
+            var identifiers: [String] = []
+
+            requests.forEach { request in
+                if let category = UserNotificationCategory(rawValue: request.content.categoryIdentifier) {
+                    if category != .connectionRequest {
+                        identifiers.append(request.identifier)
+                    }
+                } else {
+                    identifiers.append(request.identifier)
+                }
+            }
+
+            self.center.removePendingNotificationRequests(withIdentifiers: identifiers)
+        }
+    }
+
     func removeAllPendingNotificationRequests() {
         self.center.removeAllPendingNotificationRequests()
     }

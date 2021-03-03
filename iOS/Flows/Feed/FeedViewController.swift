@@ -103,8 +103,7 @@ class FeedViewController: ViewController {
         super.viewDidLayoutSubviews()
 
         self.messageLabel.setSize(withWidth: self.view.width * 0.8)
-        self.messageLabel.centerY = self.view.halfHeight * 0.8
-        self.messageLabel.centerOnX()
+        self.messageLabel.centerOnXAndY()
 
         self.reloadButton.size = CGSize(width: 140, height: 40)
         self.reloadButton.top = self.messageLabel.bottom + 40

@@ -43,7 +43,7 @@ class RitualManager {
         let identifier = self.messageReminderID + ritual.timeDescription
 
         // Replace any previous notifications
-        UserNotificationManager.shared.removeAllPendingNotificationRequests()
+        UserNotificationManager.shared.removeNonEssentialPendingNotifications()
 
         let content = UNMutableNotificationContent()
         content.title = "Feed Unlocked"

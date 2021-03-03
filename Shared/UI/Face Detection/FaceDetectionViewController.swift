@@ -15,7 +15,6 @@ class FaceDetectionViewController: ImageCaptureViewController {
     var sequenceHandler = VNSequenceRequestHandler()
 
     @IBOutlet var faceView: FaceView!
-    @IBOutlet var liveView: UIView!
 
     @Published var faceDetected = false
 
@@ -29,12 +28,6 @@ class FaceDetectionViewController: ImageCaptureViewController {
         self.maxX = self.view.bounds.maxX
         self.midY = self.view.bounds.midY
         self.maxY = self.view.bounds.maxY
-    }
-
-    override func configureCaptureSession() {
-        super.configureCaptureSession()
-
-        self.liveView.layer.insertSublayer(self.previewLayer, at: 0)
     }
 
     override func captureOutput(_ output: AVCaptureOutput,

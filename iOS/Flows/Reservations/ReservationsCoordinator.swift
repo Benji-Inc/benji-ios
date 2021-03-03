@@ -134,7 +134,9 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
 
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
         self.selectedContact = contact
-        self.findUser(for: contact)
+        picker.dismiss(animated: true) {
+            self.findUser(for: contact)
+        }
     }
 
     func findUser(for contact: CNContact) {
@@ -177,7 +179,7 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
         alert.addAction(cancel)
         alert.addAction(ok)
 
-        self.router.navController.present(alert, animated: true, completion: nil)
+        self.router.topmostViewController.present(alert, animated: true, completion: nil)
     }
 
     func createConnection(with user: User) {
