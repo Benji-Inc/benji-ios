@@ -14,24 +14,27 @@ enum Environment: String {
     case production = "production"
 
     var url: String {
-        switch self {
-        case .staging: return "https://ours-development-backend.herokuapp.com/parse"
-        case .production: return "https://ours-backend.herokuapp.com/parse"
-        }
+        return "https://ours-development-backend.herokuapp.com/parse"
+//        switch self {
+//        case .staging: return "https://ours-development-backend.herokuapp.com/parse"
+//        case .production: return "https://ours-backend.herokuapp.com/parse"
+//        }
     }
 
     var appID: String {
-        switch self {
-        case .staging: return "ours-development"
-        case .production: return "bd263ac3-c8d9-4145-be8a-7d8eedbd5fcf"
-        }
+        return "ours-development"
+//        switch self {
+//        case .staging: return "ours-development"
+//        case .production: return "bd263ac3-c8d9-4145-be8a-7d8eedbd5fcf"
+//        }
     }
 
     var displayName: String {
-        switch self {
-        case .staging: return "stag"
-        case .production: return "prod"
-        }
+        return "stag"
+//        switch self {
+//        case .staging: return "stag"
+//        case .production: return "prod"
+//        }
     }
 }
 

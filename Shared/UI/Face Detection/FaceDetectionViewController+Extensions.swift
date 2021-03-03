@@ -11,40 +11,6 @@ import AVFoundation
 import Vision
 import UIKit
 
-extension FaceDetectionViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
-
-    func captureOutput(_ output: AVCaptureOutput,
-                       didOutput sampleBuffer: CMSampleBuffer,
-                       from connection: AVCaptureConnection) {
-
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
-
-        let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: self.detectedFace)
-
-        do {
-            try self.sequenceHandler.perform([detectFaceRequest],
-                                             on: imageBuffer,
-                                             orientation: .leftMirrored)
-        } catch {
-            
-        }
-    }
-}
-
-extension FaceDetectionViewController: AVCapturePhotoCaptureDelegate {
-
-    func photoOutput(_ output: AVCapturePhotoOutput,
-                     didFinishProcessingPhoto photo: AVCapturePhoto,
-                     error: Error?) {
-
-        guard error == nil,
-            let imageData = photo.fileDataRepresentation(),
-            let image = UIImage.init(data: imageData , scale: 1.0) else { return }
-
-        self.didCapturePhoto?(image)
-    }
-}
-
 extension FaceDetectionViewController {
 
     func convert(rect: CGRect) -> CGRect {

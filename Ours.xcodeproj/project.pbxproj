@@ -78,6 +78,12 @@
 		D63C67DE23D415A700EA373A /* FaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DD23D415A700EA373A /* FaceView.swift */; };
 		D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */; };
 		D63D63032486A9020037E046 /* InputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D63022486A9020037E046 /* InputAccessoryView.swift */; };
+		D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */; };
+		D63D71B625F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */; };
+		D63D71B725F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */; };
+		D63D71B925F025E8004C26F7 /* FaceDetection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D63D71B825F025E8004C26F7 /* FaceDetection.storyboard */; };
+		D63D71BA25F025E8004C26F7 /* FaceDetection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D63D71B825F025E8004C26F7 /* FaceDetection.storyboard */; };
+		D63D71BB25F025E8004C26F7 /* FaceDetection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D63D71B825F025E8004C26F7 /* FaceDetection.storyboard */; };
 		D63DB1F225E95CEC00F6B323 /* Connection+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3C23F3A618004818B6 /* Connection+Cloud.swift */; };
 		D63DB1F925E968C300F6B323 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D63DB1F825E968C300F6B323 /* UserNotifications.framework */; };
 		D63DB1FB25E968C300F6B323 /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D63DB1FA25E968C300F6B323 /* UserNotificationsUI.framework */; };
@@ -205,7 +211,6 @@
 		D63DB28225E9999C00F6B323 /* TransitionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588B25B09F9C007E0184 /* TransitionRouter.swift */; };
 		D63DB28325E9999C00F6B323 /* TransitionRouter+Fade.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */; };
 		D63DB28425E9999C00F6B323 /* Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588225B09F4D007E0184 /* Transitionable.swift */; };
-		D63DB28525E999A100F6B323 /* FaceDetection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6ACA0B723D4248100844923 /* FaceDetection.storyboard */; };
 		D63DB28625E999A100F6B323 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
 		D63DB28725E999A100F6B323 /* FaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DD23D415A700EA373A /* FaceView.swift */; };
 		D63DB28825E999A100F6B323 /* FaceDetectionViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */; };
@@ -386,7 +391,6 @@
 		D6551A5C25895F0900B901E4 /* NameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896BC23025FEC0059BA75 /* NameViewController.swift */; };
 		D6551A5F25895F1300B901E4 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503D21DAF98500CD8CE4 /* TextField.swift */; };
 		D6551A6A25895F9400B901E4 /* FaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DD23D415A700EA373A /* FaceView.swift */; };
-		D6551A6D25895FA200B901E4 /* FaceDetection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6ACA0B723D4248100844923 /* FaceDetection.storyboard */; };
 		D6551A7025895FFB00B901E4 /* FaceDetectionViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */; };
 		D657175C2378C78500F8F96C /* MessageCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */; };
 		D657175E2378CEBA00F8F96C /* ChannelCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657175D2378CEBA00F8F96C /* ChannelCollectionViewManager.swift */; };
@@ -505,7 +509,6 @@
 		D6A714C725D969FE000A90EB /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A714C625D969FE000A90EB /* PostViewController.swift */; };
 		D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AC90C92594F8F80032774D /* Delegated.swift */; };
 		D6AC90CB2594F8F80032774D /* Delegated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AC90C92594F8F80032774D /* Delegated.swift */; };
-		D6ACA0B823D4248100844923 /* FaceDetection.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6ACA0B723D4248100844923 /* FaceDetection.storyboard */; };
 		D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B230D225BC7FCE0082A41A /* SendableType.swift */; };
 		D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */; };
 		D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */; };
@@ -732,6 +735,8 @@
 		D63C67DD23D415A700EA373A /* FaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceView.swift; sourceTree = "<group>"; };
 		D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FaceDetectionViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D63D63022486A9020037E046 /* InputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputAccessoryView.swift; sourceTree = "<group>"; };
+		D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCaptureViewController.swift; sourceTree = "<group>"; };
+		D63D71B825F025E8004C26F7 /* FaceDetection.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FaceDetection.storyboard; sourceTree = "<group>"; };
 		D63DB1F725E968C300F6B323 /* OursNotificationContent.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OursNotificationContent.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D63DB1F825E968C300F6B323 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		D63DB1FA25E968C300F6B323 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
@@ -887,7 +892,6 @@
 		D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCategory.swift; sourceTree = "<group>"; };
 		D6A714C625D969FE000A90EB /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		D6AC90C92594F8F80032774D /* Delegated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Delegated.swift; sourceTree = "<group>"; };
-		D6ACA0B723D4248100844923 /* FaceDetection.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FaceDetection.storyboard; sourceTree = "<group>"; };
 		D6B230D225BC7FCE0082A41A /* SendableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableType.swift; sourceTree = "<group>"; };
 		D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSectionHeader.swift; sourceTree = "<group>"; };
 		D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDateLabel.swift; sourceTree = "<group>"; };
@@ -1322,10 +1326,11 @@
 		D63C67DA23D4147C00EA373A /* Face Detection */ = {
 			isa = PBXGroup;
 			children = (
-				D6ACA0B723D4248100844923 /* FaceDetection.storyboard */,
+				D63D71B825F025E8004C26F7 /* FaceDetection.storyboard */,
 				D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */,
 				D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */,
 				D63C67DD23D415A700EA373A /* FaceView.swift */,
+				D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */,
 			);
 			path = "Face Detection";
 			sourceTree = "<group>";
@@ -2027,11 +2032,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D640329425AF3CA500139396 /* error.json in Resources */,
-				D6ACA0B823D4248100844923 /* FaceDetection.storyboard in Resources */,
 				D640329025AF3CA500139396 /* face_scan.json in Resources */,
 				D640328E25AF3CA500139396 /* loading.json in Resources */,
 				D637532B2316172700214F63 /* Roboto-Bold.ttf in Resources */,
 				D640329625AF3CA500139396 /* checkbox.json in Resources */,
+				D63D71B925F025E8004C26F7 /* FaceDetection.storyboard in Resources */,
 				D637532C2316172700214F63 /* Roboto-Medium.ttf in Resources */,
 				D650C1F125B741EB0037C59A /* plusToX.json in Resources */,
 				D637532A2316172700214F63 /* Roboto-Regular.ttf in Resources */,
@@ -2050,7 +2055,7 @@
 				D63DB27D25E9999300F6B323 /* Roboto-Regular.ttf in Resources */,
 				D63DB20125E968C300F6B323 /* MainInterface.storyboard in Resources */,
 				D63DB27E25E9999300F6B323 /* Roboto-Bold.ttf in Resources */,
-				D63DB28525E999A100F6B323 /* FaceDetection.storyboard in Resources */,
+				D63D71BB25F025E8004C26F7 /* FaceDetection.storyboard in Resources */,
 				D63DB27725E9998A00F6B323 /* loading.json in Resources */,
 				D63DB27A25E9998A00F6B323 /* plusToX.json in Resources */,
 				D63DB27625E9998A00F6B323 /* arrow.json in Resources */,
@@ -2069,8 +2074,8 @@
 				D640329125AF3CA500139396 /* face_scan.json in Resources */,
 				D640328F25AF3CA500139396 /* loading.json in Resources */,
 				D6551988258912AE00B901E4 /* Roboto-Regular.ttf in Resources */,
+				D63D71BA25F025E8004C26F7 /* FaceDetection.storyboard in Resources */,
 				D640329725AF3CA500139396 /* checkbox.json in Resources */,
-				D6551A6D25895FA200B901E4 /* FaceDetection.storyboard in Resources */,
 				D650C1F225B741EB0037C59A /* plusToX.json in Resources */,
 				D655198A258912AE00B901E4 /* Roboto-Bold.ttf in Resources */,
 				D65518F125890E3D00B901E4 /* Assets.xcassets in Resources */,
@@ -2194,6 +2199,7 @@
 				D6F33C7724B14AC2009603FF /* ContactCellAttributesConfigurer.swift in Sources */,
 				D62C635622BE9E5C00F4D097 /* CollectionViewController.swift in Sources */,
 				D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */,
+				D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
 				D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */,
 				D657175C2378C78500F8F96C /* MessageCellAttributesConfigurer.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
@@ -2515,6 +2521,7 @@
 				D63DB21F25E998FC00F6B323 /* CGRect+Extensions.swift in Sources */,
 				D63DB22025E998FC00F6B323 /* Character+Extensions.swift in Sources */,
 				D63DB26925E9997800F6B323 /* UserNotificationManager.swift in Sources */,
+				D63D71B725F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
 				D63DB29A25E999B200F6B323 /* TextView.swift in Sources */,
 				D63DB28C25E999AB00F6B323 /* ViewController.swift in Sources */,
 				D63DB25B25E9995E00F6B323 /* Ritual.swift in Sources */,
@@ -2753,6 +2760,7 @@
 				D6E859C325DAD56D003D1DE9 /* Subscribeable.swift in Sources */,
 				D6551A4A25895EB200B901E4 /* Switchable.swift in Sources */,
 				D65519412589122C00B901E4 /* UNNotification+Extensions.swift in Sources */,
+				D63D71B625F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
 				D655192D2589122700B901E4 /* UIScrollView+Extensions.swift in Sources */,
 				D65519402589122C00B901E4 /* UNNotificationContent+Extensions.swift in Sources */,
 			);
