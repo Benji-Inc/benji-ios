@@ -13,19 +13,16 @@ import Combine
 class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionViewManager.SectionType> {
 
     enum SectionType: Int, ManagerSectionType {
-        case connections = 0
-        case channels = 1
-        case reservations = 2
+        case channels = 0
+        case reservations = 1
     }
 
     var cancellables = Set<AnyCancellable>()
 
-    private(set) var connections: [Connection] = []
     private(set) var reservations: [Reservation] = []
 
     private let channelConfig = ManageableCellRegistration<ChannelCell>().cellProvider
     private let reservationConfig = ManageableCellRegistration<ReservationCell>().cellProvider
-    private let connectionConfig = ManageableCellRegistration<ConnectionCell>().cellProvider
 
     override func initialize() {
         super.initialize()
@@ -33,18 +30,15 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         self.collectionView.collectionViewLayout = self.createLayout()
         self.collectionView.animationView.play()
 
-        let combined = Publishers.Zip3(
-            GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []),
+        let combined = Publishers.Zip(
             Reservation.getReservations(for: User.current()!),
             ChannelSupplier.shared.waitForInitialSync()
         )
 
         combined.mainSink { (result) in
             switch result {
-            case .success((let connections, let reservations, _)):
-                self.connections = connections.filter({ (connection) -> Bool in
-                    return connection.status == .invited && connection.to == User.current()
-                })
+            case .success((let reservations, _)):
+
                 self.reservations = reservations.filter({ (reservation) -> Bool in
                     return !reservation.isClaimed
                 })
@@ -58,8 +52,6 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
         switch section {
-        case .connections:
-            return self.connections
         case .channels:
             return ChannelSupplier.shared.allChannelsSorted
         case .reservations:
@@ -69,14 +61,6 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         switch section {
-        case .connections:
-            let cell = self.collectionView.dequeueManageableCell(using: self.connectionConfig, for: indexPath, item: item as? Connection)
-            cell?.didUpdateConnection = { [unowned self] connection in
-                self.connections.remove(object: connection)
-                self.delete(items: [connection])
-                self.reload(sections: [.channels, .connections], animate: true)
-            }
-            return cell
         case .channels:
             return self.collectionView.dequeueManageableCell(using: self.channelConfig,
                                                              for: indexPath,

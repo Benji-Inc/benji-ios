@@ -39,8 +39,6 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
         self.collectionViewManager.$onSelectedItem.mainSink { (result) in
             guard let selection = result else { return }
             switch selection.section {
-            case .connections:
-                break
             case .channels:
                 if let channel = selection.item as? DisplayableChannel {
                     self.delegate?.channelsView(self, didSelect: channel.channelType)
