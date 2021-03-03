@@ -98,7 +98,7 @@ class ProfileViewController: ViewController, TransitionableViewController {
         self.scrollView.expandToSuperviewSize()
 
         self.avatarView.setSize(for: self.view.width * 0.4)
-        self.avatarView.pin(.top, padding: 20)
+        self.avatarView.pinToSafeArea(.top, padding: 10)
         self.avatarView.pin(.left, padding: Theme.contentOffset)
 
         let itemSize = CGSize(width: self.view.width - (Theme.contentOffset * 2), height: 60)

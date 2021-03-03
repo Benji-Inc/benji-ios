@@ -36,7 +36,7 @@ class HomeViewController: ViewController, TransitionableViewController {
 
         self.view.addSubview(self.vibrancyView)
         self.view.addSubview(self.centerContainer)
-        self.view.addSubview(self.tabView)
+        self.vibrancyView.vibrancyEffectView.contentView.addSubview(self.tabView)
 
         self.centerContainer.set(backgroundColor: .clear)
         self.addChild(viewController: self.feedVC, toView: self.centerContainer)
@@ -64,7 +64,10 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.tabView.centerOnX()
         self.tabView.pin(.bottom)
 
-        self.centerContainer.expandToSuperviewSize()
+        self.centerContainer.frame = CGRect(x: 0,
+                                            y: 0,
+                                            width: self.view.width,
+                                            height: self.view.height - height)
         self.feedVC.view.expandToSuperviewSize()
     }
 

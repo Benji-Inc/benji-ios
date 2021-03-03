@@ -136,12 +136,6 @@ class PhotoMessageCell: BaseMessageCell {
     }
 }
 
-class BlurView: UIVisualEffectView {
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return false
-    }
-}
-
 class IndexImageView: DisplayableImageView, Indexable {
     var indexPath: IndexPath?
 }

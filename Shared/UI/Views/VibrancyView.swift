@@ -11,9 +11,9 @@ import Foundation
 class VibrancyView: View {
 
     lazy var blurEffect = UIBlurEffect(style: .systemThinMaterialDark)
-    lazy var blurView = UIVisualEffectView(effect: self.blurEffect)
+    lazy var blurView = BlurView(effect: self.blurEffect)
     lazy var vibrancyEffect = UIVibrancyEffect(blurEffect: self.blurEffect)
-    lazy var vibrancyEffectView = UIVisualEffectView(effect: self.vibrancyEffect)
+    lazy var vibrancyEffectView = VisualEffectView(effect: self.vibrancyEffect)
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -27,5 +27,21 @@ class VibrancyView: View {
 
         self.blurView.expandToSuperviewSize()
         self.vibrancyEffectView.expandToSuperviewSize()
+    }
+
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        return true
+    }
+}
+
+class BlurView: UIVisualEffectView {
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        return true
+    }
+}
+
+class VisualEffectView: UIVisualEffectView {
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        return true
     }
 }
