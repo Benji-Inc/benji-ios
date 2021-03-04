@@ -14,7 +14,7 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: DisplayableChannel?
     private let stackedAvatarView = StackedAvatarView()
-    private let label = Label(font: .mediumThin, textColor: .background4)
+    private let label = Label(font: .largeThin, textColor: .background4)
 
     override func initializeSubviews() {
         super.initializeSubviews()

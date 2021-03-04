@@ -14,6 +14,7 @@ enum FontType {
     case display
     case displayUnderlined
     case displayThin
+    case largeThin
     case medium
     case mediumThin
     case mediumBold
@@ -26,7 +27,7 @@ enum FontType {
         switch self {
         case .display, .displayUnderlined:
             return UIFont.systemFont(ofSize: self.size, weight: .heavy)
-        case .displayThin, .mediumThin:
+        case .displayThin, .mediumThin, .largeThin:
             return UIFont.systemFont(ofSize: self.size, weight: .ultraLight)
         case .medium, .regular, .small:
             return UIFont.systemFont(ofSize: self.size, weight: .regular)
@@ -37,12 +38,14 @@ enum FontType {
 
     var size: CGFloat {
         switch self {
+        case .displayThin:
+            return 60
         case .display:
             return 40
         case .displayUnderlined:
             return 32
-        case .displayThin:
-            return 60
+        case .largeThin:
+            return 30
         case .medium, .mediumBold, .mediumThin:
             return 24
         case .regular, .regularBold:
