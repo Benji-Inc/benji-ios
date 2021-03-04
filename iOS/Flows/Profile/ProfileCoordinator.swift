@@ -25,6 +25,8 @@ class ProfileCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
+        self.profileVC.delegate = self 
+
         if let link = self.deepLink, let target = link.deepLinkTarget, target == .ritual {
             self.presentRitual()
         }

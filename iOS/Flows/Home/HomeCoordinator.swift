@@ -16,6 +16,13 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     private lazy var profileVC = ProfileViewController(with: User.current()!)
     private lazy var channelsVC = ChannelsViewController()
     private lazy var homeVC = HomeViewController()
+
+    private lazy var channelsCoordinator = ChannelsCoordinator(router: self.router,
+                                                               deepLink: self.deepLink,
+                                                               vc: self.channelsVC)
+    private lazy var profileCoordinator = ProfileCoordinator(router: self.router,
+                                                             deepLink: self.deepLink,
+                                                             vc: self.profileVC)
     
     private var cancellables = Set<AnyCancellable>()
 
@@ -30,11 +37,11 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         self.channelsVC.subscribeToUpdates()
 
         self.homeVC.didTapProfile = { [unowned self] in
-            self.presentProfile()
+            self.addProfile()
         }
 
         self.homeVC.didTapChannels = { [unowned self] in
-            self.presentChannels()
+            self.addChannels()
         }
 
         if let deeplink = self.deepLink {
@@ -84,11 +91,11 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         case .ritual:
             self.startRitualFlow()
         case .profile:
-            self.presentProfile()
+            self.addProfile()
         case .feed:
             break
         case .channels:
-            self.presentChannels()
+            self.addChannels()
         }
     }
 
@@ -100,26 +107,20 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         self.addChildAndStart(coordinator) { (_) in }
     }
 
-    private func presentChannels() {
+    private func addChannels(shouldPresent: Bool = true) {
         self.removeChild()
-        let coordinator = ChannelsCoordinator(router: self.router,
-                                              deepLink: self.deepLink,
-                                              vc: self.channelsVC)
-        self.channelsVC.delegate = coordinator
-        self.addChildAndStart(coordinator) { (_) in }
-        if let right = SideMenuManager.default.rightMenuNavigationController {
+
+        self.addChildAndStart(self.channelsCoordinator) { (_) in }
+        if let right = SideMenuManager.default.rightMenuNavigationController, shouldPresent {
             self.homeVC.present(right, animated: true, completion: nil)
         }
     }
 
-    private func presentProfile() {
+    private func addProfile(shouldPresent: Bool = true) {
         self.removeChild()
-        let coordinator = ProfileCoordinator(router: self.router,
-                                             deepLink: self.deepLink,
-                                             vc: self.profileVC)
-        self.profileVC.delegate = coordinator
-        self.addChildAndStart(coordinator) { (_) in }
-        if let left = SideMenuManager.default.leftMenuNavigationController {
+
+        self.addChildAndStart(self.profileCoordinator) { (_) in }
+        if let left = SideMenuManager.default.leftMenuNavigationController, shouldPresent {
             self.homeVC.present(left, animated: true, completion: nil)
         }
     }
@@ -153,7 +154,11 @@ extension HomeCoordinator: SideMenuNavigationControllerDelegate {
     }
 
     func sideMenuDidAppear(menu: SideMenuNavigationController, animated: Bool) {
-
+        if let _ = menu.viewControllers.first as? ProfileViewController {
+            self.addProfile(shouldPresent: false)
+        } else if let _ = menu.viewControllers.first as? ChannelsViewController {
+            self.addChannels(shouldPresent: false)
+        }
     }
 
     func sideMenuWillDisappear(menu: SideMenuNavigationController, animated: Bool) {
