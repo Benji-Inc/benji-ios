@@ -22,6 +22,16 @@ class FeedViewController: ViewController {
 
     weak var delegate: FeedViewControllerDelegate?
 
+    enum State {
+        case noRitual
+        case lessThanAnHourAway
+        case feedAvailable
+        case lessThanHourAfter
+        case moreThanHourAfter
+    }
+
+    @Published var state: State = .noRitual
+
     private let countDownView = CountDownView()
     private let messageLabel = Label(font: .medium)
     private let reloadButton = Button()
@@ -77,10 +87,12 @@ class FeedViewController: ViewController {
                         self.subscribeToRitualUpdates()
                         self.determineMessage(with: r)
                     case .error(_):
+                        self.state = .noRitual
                         self.addFirstItems()
                     }
                 }).store(in: &self.cancellables)
         } else {
+            self.state = .noRitual
             self.addFirstItems()
         }
     }
@@ -154,19 +166,23 @@ class FeedViewController: ViewController {
         
         //If date is 1 hour or less away, show countDown
         if now.isBetween(anHourUntil, and: triggerDate) {
+            self.state = .lessThanAnHourAway
             self.countDownView.startTimer(with: triggerDate)
             self.showCountDown()
 
             //If date is less than an hour ahead of current date, show feed
         } else if now.isBetween(triggerDate, and: anHourAfter) {
+            self.state = .feedAvailable
             self.addItems()
 
         //If date is 1 hour or more away, show "see you at (date)"
         } else if now.isBetween(Date().beginningOfDay, and: anHourUntil) {
+            self.state = .lessThanHourAfter
             let dateString = Date.hourMinuteTimeOfDay.string(from: triggerDate)
             self.message = "Take a break! ☕️\nSee you at \(dateString)"
             self.showMessage()
         } else {
+            self.state = .moreThanHourAfter
             let dateString = Date.hourMinuteTimeOfDay.string(from: triggerDate)
             self.message = "See you tomorrow at \n\(dateString)"
             self.showMessage()

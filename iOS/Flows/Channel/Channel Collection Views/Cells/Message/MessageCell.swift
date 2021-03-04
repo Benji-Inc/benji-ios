@@ -28,7 +28,7 @@ class MessageCell: BaseMessageCell {
             }
 
             let location = tap.location(in: self.bubbleView)
-            self.bubbleView.startFillAnimation(at: location, for: message) { [unowned self] in
+            self.bubbleView.startFillAnimation(at: location, for: message) { [unowned self] msg in
                 self.didTapMessage()
             }
         }

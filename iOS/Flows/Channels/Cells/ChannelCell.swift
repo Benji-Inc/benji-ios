@@ -38,6 +38,8 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
     private func display(channel: TCHChannel) {
         channel.getUsers(excludeMe: true)
             .mainSink(receiveValue: { (users) in
+                guard self.currentItem?.id == channel.id else { return }
+
                 if let friendlyName = channel.friendlyName {
                     self.label.setText(friendlyName.capitalized)
                 } else if users.count == 0 {
@@ -97,6 +99,7 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.currentItem = nil
         self.stackedAvatarView.reset()
         self.label.text = nil 
     }

@@ -30,7 +30,7 @@ class MessageBubbleView: View, Indexable {
 
     func startFillAnimation(at startingPoint: CGPoint,
                             for message: Messageable,
-                            completion: CompletionOptional) {
+                            completion: @escaping (Messageable) -> Void) {
 
         let color: Color
 
@@ -52,7 +52,7 @@ class MessageBubbleView: View, Indexable {
             self.layer.borderColor = color.color.cgColor
             self.setNeedsLayout()
         } completion: { completed in
-            completion?()
+            completion(message)
         }
     }
 }
