@@ -39,7 +39,7 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
         channel.getUsers(excludeMe: true)
             .mainSink(receiveValue: { (users) in
                 if let friendlyName = channel.friendlyName {
-                    self.label.setText(friendlyName)
+                    self.label.setText(friendlyName.capitalized)
                 } else if users.count == 0 {
                     self.label.setText("You")
                 } else if users.count == 1, let user = users.first(where: { user in
@@ -76,7 +76,7 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
     private func displayDM(for channel: TCHChannel, with user: User) {
         user.retrieveDataIfNeeded()
             .mainSink(receiveValue: { user in
-                self.label.setText(user.fullName)
+                self.label.setText(user.givenName)
                 self.layoutNow()
             }).store(in: &self.cancellables)
     }
@@ -92,5 +92,12 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
                 text.append(user.givenName)
             }
         }
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.stackedAvatarView.reset()
+        self.label.text = nil 
     }
 }

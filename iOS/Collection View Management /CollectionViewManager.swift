@@ -107,7 +107,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
 
     func reset(animate: Bool = false) {
         self.selectedIndexPaths = []
-        self.deleteAllItems(animate: animate)
+        self.updateUI(animate: animate)
     }
 
     // MARK: Item Overrides

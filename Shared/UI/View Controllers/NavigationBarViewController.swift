@@ -18,7 +18,7 @@ class NavigationBarViewController: ViewController {
     private(set) var titleLabel = Label(font: .regularBold)
     private(set) var descriptionLabel = Label(font: .small)
     /// Place all views under the lineView 
-    private(set) var lineView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    private(set) var lineView = View()
     let scrollView = UIScrollView()
 
     override func loadView() {

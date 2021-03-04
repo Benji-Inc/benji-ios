@@ -16,16 +16,14 @@ extension ChannelsViewController {
             guard let `self` = self else { return }
             guard let channelsUpdate = update else { return }
 
-            let displayable = DisplayableChannel(channelType: .channel(channelsUpdate.channel))
-
             switch channelsUpdate.status {
             case .added:
                 guard channelsUpdate.channel.isOwnedByMe || channelsUpdate.channel.status == .joined else { return }
-                self.collectionViewManager.append(items: [displayable], to: .channels)
+                self.collectionViewManager.updateUI(animate: true)
             case .changed:
-                self.collectionViewManager.reload(items: [displayable])
+                self.collectionViewManager.updateUI(animate: true)
             case .deleted:
-                self.collectionViewManager.delete(items: [displayable], section: .channels)
+                self.collectionViewManager.updateUI(animate: true)
             }
         }.store(in: &self.cancellables)
     }

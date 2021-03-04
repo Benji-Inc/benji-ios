@@ -13,7 +13,7 @@ class NewChannelHeaderView: UICollectionReusableView {
     let titleLabel = Label(font: .regularBold)
     let descriptionLabel = Label(font: .small)
     /// Place all views under the lineView
-    let lineView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+    let lineView = View()
 
     override init(frame: CGRect) {
         super.init(frame: frame)

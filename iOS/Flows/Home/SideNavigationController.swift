@@ -13,6 +13,7 @@ class SideNavigationController: SideMenuNavigationController {
 
     init(with rootViewController: UIViewController, width: CGFloat? = nil) {
         var settings = SideMenuSettings()
+        settings.presentationStyle = .viewSlideOutMenuPartialIn
         if let width = width {
             settings.menuWidth = width
         }

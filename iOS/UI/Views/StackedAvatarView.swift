@@ -79,5 +79,10 @@ class StackedAvatarView: View {
         
         self.size = CGSize(width: totalWidth, height: self.itemHeight)
     }
+
+    func reset() {
+        self.imageViews = []
+        self.setSize()
+    }
 }
 
