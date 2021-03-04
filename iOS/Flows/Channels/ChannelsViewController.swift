@@ -32,7 +32,7 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
         self.view.set(backgroundColor: .background1)
 
         self.view.insertSubview(self.addButton, aboveSubview: self.collectionViewManager.collectionView)
-        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .white))
+        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightPurple))
         self.addButton.didSelect { [unowned self] in
             self.delegate?.channelsViewControllerDidTapAdd(self)
         }

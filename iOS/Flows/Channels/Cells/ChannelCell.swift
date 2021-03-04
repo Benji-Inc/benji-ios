@@ -14,15 +14,16 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: DisplayableChannel?
     private let stackedAvatarView = StackedAvatarView()
-    private let label = Label(font: .small, textColor: .background4)
+    private let label = Label(font: .mediumThin, textColor: .background4)
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.contentView.addSubview(self.stackedAvatarView)
         self.contentView.addSubview(self.label)
-        self.label.textAlignment = .center
-        self.stackedAvatarView.itemHeight = 80
+        self.label.textAlignment = .left
+        self.label.lineBreakMode = .byTruncatingTail
+        self.stackedAvatarView.itemHeight = 50
     }
 
     func configure(with item: DisplayableChannel) {
@@ -56,7 +57,7 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
     }
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        layoutAttributes.size = CGSize(width: layoutAttributes.size.width, height: 110)
+        layoutAttributes.size = CGSize(width: layoutAttributes.size.width, height: 60)
         return layoutAttributes
     }
 
@@ -64,12 +65,12 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
 
         self.stackedAvatarView.setSize()
-        self.stackedAvatarView.pin(.top)
-        self.stackedAvatarView.centerOnX()
+        self.stackedAvatarView.centerOnY()
+        self.stackedAvatarView.pin(.left, padding: Theme.contentOffset)
 
         self.label.setSize(withWidth: self.contentView.width * 0.9)
-        self.label.match(.top, to: .bottom, of: self.stackedAvatarView, offset: 5)
-        self.label.centerOnX()
+        self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset)
+        self.label.centerOnY()
     }
 
     private func displayDM(for channel: TCHChannel, with user: User) {

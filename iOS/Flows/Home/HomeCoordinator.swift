@@ -52,7 +52,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         leftMenuNavigationController.sideMenuDelegate = self
         SideMenuManager.default.leftMenuNavigationController = leftMenuNavigationController
 
-        let rightMenuNavigationController = SideNavigationController(with: self.channelsVC, width: 140)
+        let rightMenuNavigationController = SideNavigationController(with: self.channelsVC)
         rightMenuNavigationController.sideMenuDelegate = self
         SideMenuManager.default.rightMenuNavigationController = rightMenuNavigationController
 
