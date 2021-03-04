@@ -13,7 +13,7 @@ class AvatarView: DisplayableImageView {
 
     // MARK: - Properties
 
-    var borderColor: Color = .purple {
+    var borderColor: Color = .background2 {
         didSet {
             self.setBorder(color: self.borderColor)
         }
@@ -180,7 +180,7 @@ class AvatarView: DisplayableImageView {
         self.clipsToBounds = true
         self.setCorner(radius: 5)
         self.layer.borderColor = self.borderColor.color.cgColor
-        self.layer.borderWidth = 3
+        self.layer.borderWidth = 2
         self.backgroundColor = self.borderColor.color.withAlphaComponent(0.4)
     }
 

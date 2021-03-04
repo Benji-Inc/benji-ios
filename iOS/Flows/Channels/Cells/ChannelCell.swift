@@ -14,7 +14,7 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: DisplayableChannel?
     private let stackedAvatarView = StackedAvatarView()
-    private let label = Label(font: .small, textColor: .background3)
+    private let label = Label(font: .small, textColor: .background4)
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -22,6 +22,7 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.stackedAvatarView)
         self.contentView.addSubview(self.label)
         self.label.textAlignment = .center
+        self.stackedAvatarView.itemHeight = 80
     }
 
     func configure(with item: DisplayableChannel) {
@@ -54,16 +55,8 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
             }).store(in: &self.cancellables)
     }
 
-    override func collectionViewManagerWillDisplay() {
-        self.layoutNow()
-    }
-
-    override func collectionViewManagerDidEndDisplaying() {
-        self.layoutNow()
-    }
-
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        layoutAttributes.size = CGSize(width: layoutAttributes.size.width, height: 94)
+        layoutAttributes.size = CGSize(width: layoutAttributes.size.width, height: 110)
         return layoutAttributes
     }
 

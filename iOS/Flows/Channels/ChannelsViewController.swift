@@ -24,6 +24,7 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
     private let addButton = Button()
 
     private lazy var channelsCollectionView = ChannelsCollectionView()
+    private let gradientView = GradientView()
 
     override func initializeViews() {
         super.initializeViews()
@@ -35,6 +36,8 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
         self.addButton.didSelect { [unowned self] in
             self.delegate?.channelsViewControllerDidTapAdd(self)
         }
+
+        self.view.insertSubview(self.gradientView, belowSubview: self.addButton)
 
         self.collectionViewManager.$onSelectedItem.mainSink { (result) in
             guard let selection = result else { return }
@@ -69,5 +72,10 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
         self.addButton.makeRound()
         self.addButton.pin(.right, padding: Theme.contentOffset)
         self.addButton.pinToSafeArea(.bottom, padding: 0)
+
+        self.gradientView.expandToSuperviewWidth()
+        self.gradientView.height = self.view.height - self.addButton.top - 20
+        self.gradientView.pin(.bottom)
+        self.gradientView.pin(.left)
     }
 }

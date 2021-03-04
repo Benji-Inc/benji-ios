@@ -105,6 +105,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         let coordinator = ChannelsCoordinator(router: self.router,
                                               deepLink: self.deepLink,
                                               vc: self.channelsVC)
+        self.channelsVC.delegate = coordinator
         self.addChildAndStart(coordinator) { (_) in }
         if let right = SideMenuManager.default.rightMenuNavigationController {
             self.homeVC.present(right, animated: true, completion: nil)
@@ -116,7 +117,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         let coordinator = ProfileCoordinator(router: self.router,
                                              deepLink: self.deepLink,
                                              vc: self.profileVC)
-
+        self.profileVC.delegate = coordinator
         self.addChildAndStart(coordinator) { (_) in }
         if let left = SideMenuManager.default.leftMenuNavigationController {
             self.homeVC.present(left, animated: true, completion: nil)

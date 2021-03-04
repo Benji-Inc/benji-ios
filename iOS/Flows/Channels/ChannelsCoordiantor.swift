@@ -20,10 +20,6 @@ class ChannelsCoordinator: PresentableCoordinator<Void> {
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.channelsVC
     }
-
-    override func start() {
-        self.channelsVC.delegate = self
-    }
 }
 
 extension ChannelsCoordinator: ChannelsViewControllerDelegate {
