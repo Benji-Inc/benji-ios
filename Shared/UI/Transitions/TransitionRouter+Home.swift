@@ -25,7 +25,7 @@ extension TransitionRouter {
 
         self.toVC.view.layoutIfNeeded()
 
-        let transformOffset = homeVC.tabView.height
+        let transformOffset = homeVC.vibrancyView.tabView.height
         self.toVC.navigationController?.navigationBar.alpha = 0
         self.toVC.view.frame = toVCFinalFrame
         self.toVC.view.alpha = 0

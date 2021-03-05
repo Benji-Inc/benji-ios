@@ -38,8 +38,10 @@ extension UILabel {
         }, completion: { finished in
 
             if finished {
-                //Once the label is completely invisible, set the text and fade it back in
-                self.attributedText = NSAttributedString(string: text, attributes: self.attributedText?.existingAttributes)
+                if let existing = self.attributedText?.existingAttributes {
+                    //Once the label is completely invisible, set the text and fade it back in
+                    self.attributedText = NSAttributedString(string: text, attributes: existing)
+                }
                 layoutReady?()
 
                 // Fade in

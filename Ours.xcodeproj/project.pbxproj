@@ -27,6 +27,7 @@
 		D60C814622092F6B00A127A3 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814522092F6B00A127A3 /* Button.swift */; };
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
+		D6116C3C25F2335000D94A09 /* HomeVibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6116C3B25F2335000D94A09 /* HomeVibrancyView.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
@@ -451,7 +452,6 @@
 		D66F0FD822BF295A00BA277D /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD722BF295A00BA277D /* Coordinator.swift */; };
 		D66F0FDA22BF297F00BA277D /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD922BF297F00BA277D /* MainCoordinator.swift */; };
 		D66F0FDC22BF2ADC00BA277D /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */; };
-		D66F0FDE22BF2C5D00BA277D /* HomeSegmentControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FDD22BF2C5D00BA277D /* HomeSegmentControl.swift */; };
 		D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE122C041AF00BA277D /* AvatarView.swift */; };
 		D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* Avatar.swift */; };
 		D66F0FF222C1D86800BA277D /* ChannelsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FF122C1D86800BA277D /* ChannelsType.swift */; };
@@ -686,6 +686,7 @@
 		D60C814522092F6B00A127A3 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
+		D6116C3B25F2335000D94A09 /* HomeVibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVibrancyView.swift; sourceTree = "<group>"; };
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewManager.swift; sourceTree = "<group>"; };
 		D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
@@ -845,7 +846,6 @@
 		D66F0FD722BF295A00BA277D /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		D66F0FD922BF297F00BA277D /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 		D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
-		D66F0FDD22BF2C5D00BA277D /* HomeSegmentControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSegmentControl.swift; sourceTree = "<group>"; };
 		D66F0FE122C041AF00BA277D /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		D66F0FE522C0640E00BA277D /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		D66F0FF122C1D86800BA277D /* ChannelsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsType.swift; sourceTree = "<group>"; };
@@ -1802,14 +1802,14 @@
 		D6D145F521D549A300CD8CE4 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				D63D71BC25F03025004C26F7 /* AnimatingLabel.swift */,
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
-				D66F0FDD22BF2C5D00BA277D /* HomeSegmentControl.swift */,
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
+				D6116C3B25F2335000D94A09 /* HomeVibrancyView.swift */,
 				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
 				D642735422C87CCA0088256B /* ImageViewButton.swift */,
 				D67C319525EE882B00289787 /* PostButtonView.swift */,
 				D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */,
-				D63D71BC25F03025004C26F7 /* AnimatingLabel.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2381,7 +2381,6 @@
 				D6F33C6F24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift in Sources */,
 				D6E0ED53239CBDA40073B33E /* PostUnreadViewController.swift in Sources */,
 				D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */,
-				D66F0FDE22BF2C5D00BA277D /* HomeSegmentControl.swift in Sources */,
 				D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */,
 				D6B2603D22E6B8EA00143CF0 /* ProfileViewController.swift in Sources */,
 				D6D380C4257FC18300C562E8 /* Selectable.swift in Sources */,
@@ -2442,6 +2441,7 @@
 				D63DB20F25E96EAF00F6B323 /* NSExtensionContext+Extensions.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
 				D6C9EF3F25BF6CB100A14DE5 /* MessageBubbleView.swift in Sources */,
+				D6116C3C25F2335000D94A09 /* HomeVibrancyView.swift in Sources */,
 				D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */,
 				D64932D723FE460200986335 /* FeedIndicatorView.swift in Sources */,
 				D66A580525DD68F9001B3F64 /* NewChannelCoordinator.swift in Sources */,

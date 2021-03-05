@@ -15,16 +15,14 @@ class AnimatingLabel: Label {
         didSet {
             guard let text = self.animatedText else { return }
 
-            if let attributedText = self.attributedText, !attributedText.string.isEmpty {
-                if attributedText.string != localized(text) {
-                    self.fade(toText: localized(text)) { [unowned self] in
-                        self.layoutNow()
-                    }
-                }
-            } else {
-                self.setText(text)
-                self.setTextColor(.white)
-            }
+            UIView.transition(with: self,
+                              duration: Theme.animationDuration,
+                              options: .transitionCrossDissolve,
+                              animations: { [weak self] in
+                                guard let `self` = self else { return }
+                                self.alpha = 1.0
+                                self.text = localized(text)
+                              }, completion: nil)
         }
     }
 

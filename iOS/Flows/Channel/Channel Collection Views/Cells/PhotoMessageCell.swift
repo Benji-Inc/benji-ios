@@ -91,6 +91,7 @@ class PhotoMessageCell: BaseMessageCell {
                                             //let progress = clamp(diff, 0.0, 1.0)
 
                                            }, completed: { (image, data, error, cacheType, finished, url) in
+                                            guard url == self.cachedURL else { return }
                                             self.imageView.displayable = image
                                             UIView.animate(withDuration: 0.5) {
                                                 self.blurView.effect = nil

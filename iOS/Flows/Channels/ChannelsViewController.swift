@@ -74,7 +74,7 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
         self.addButton.pinToSafeArea(.bottom, padding: 0)
 
         self.gradientView.expandToSuperviewWidth()
-        self.gradientView.height = self.view.height - self.addButton.top - 20
+        self.gradientView.height = self.view.height - self.addButton.top + 20
         self.gradientView.pin(.bottom)
         self.gradientView.pin(.left)
     }
