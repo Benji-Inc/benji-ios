@@ -13,7 +13,7 @@ class PostIntroViewController: PostViewController {
 
     private let timeLabel = Label(font: .displayThin, textColor: .lightPurple)
     private let label = Label(font: .regular)
-    private let descritpionLabel = Label(font: .small, textColor: .background3)
+    private let descritpionLabel = Label(font: .small, textColor: .background4)
     private let centerView = View()
 
     override func initializeViews() {

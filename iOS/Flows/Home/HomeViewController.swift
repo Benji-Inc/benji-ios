@@ -21,7 +21,6 @@ class HomeViewController: ViewController, TransitionableViewController {
         return .background1
     }
 
-    lazy var feedVC = FeedViewController()
     lazy var captureVC = ImageCaptureViewController()
     let vibrancyView = HomeVibrancyView()
 
@@ -59,6 +58,10 @@ class HomeViewController: ViewController, TransitionableViewController {
             }
         }
 
+        self.feedVC.didExit = { [unowned self] in
+            self.hideFeed()
+        }
+
         self.vibrancyView.tabView.postButtonView.button.publisher(for: \.isHighlighted)
             .removeDuplicates()
             .mainSink { isHighlighted in
@@ -77,11 +80,7 @@ class HomeViewController: ViewController, TransitionableViewController {
 
         self.captureVC.view.expandToSuperviewSize()
         self.vibrancyView.expandToSuperviewSize()
-
-        self.feedVC.view.frame = CGRect(x: 0,
-                                        y: 0,
-                                        width: self.view.width,
-                                        height: self.view.height - self.vibrancyView.tabView.height)
+        self.feedVC.view.expandToSuperviewSize()
     }
 
     func animateTabView(shouldShow: Bool) {
@@ -96,7 +95,17 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.view.layoutNow()
         }
 
+        self.vibrancyView.hideAll()
         self.feedVC.showFeed()
+    }
+
+    func hideFeed() {
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.feedVC.view.alpha = 0
+        } completion: { completed in
+            self.feedVC.removeFromParent()
+            self.vibrancyView.reset()
+        }
     }
 
     private func didTapPost() {

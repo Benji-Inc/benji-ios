@@ -21,7 +21,7 @@ class RitualManager {
     enum State {
         case noRitual
         case lessThanAnHourAway(Date)
-        case feedAvailable(Date)
+        case feedAvailable
         case lessThanHourAfter(Date)
         case moreThanHourAfter(Date)
     }
@@ -84,7 +84,7 @@ class RitualManager {
 
             //If date is less than an hour ahead of current date, show feed
         } else if now.isBetween(triggerDate, and: anHourAfter) {
-            self.state = .feedAvailable(triggerDate)
+            self.state = .feedAvailable
 
         //If date is 1 hour or more away, show "see you at (date)"
         } else if now.isBetween(Date().beginningOfDay, and: anHourUntil) {
@@ -107,7 +107,7 @@ class RitualManager {
     }
 
     func createRitual(for date: Date) -> Future<User, Error> {
-        let ritual = Ritual()
+        let ritual = User.current()?.ritual ?? Ritual()
         ritual.create(with: date)
         User.current()?.ritual = ritual
         self.scheduleNotification(for: ritual)

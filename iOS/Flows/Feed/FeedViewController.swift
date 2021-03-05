@@ -8,6 +8,7 @@
 
 import Foundation
 import TMROLocalization
+import Lottie
 
 protocol FeedViewControllerDelegate: AnyObject {
     func feedView(_ controller: FeedViewController, didSelect item: PostType)
@@ -16,14 +17,20 @@ protocol FeedViewControllerDelegate: AnyObject {
 class FeedViewController: ViewController {
 
     lazy var manager: FeedManager = {
-        let manager = FeedManager(with: self, delegate: self)
+        let manager = FeedManager(with: self, container: self.postContainerView, delegate: self)
         return manager
     }()
 
     weak var delegate: FeedViewControllerDelegate?
 
     private let reloadButton = Button()
+    private let closeButton = UIButton()
+    private let postContainerView = View()
     lazy var indicatorView = FeedIndicatorView(with: self)
+    let animationView = AnimationView(name: "loading")
+
+
+    var didExit: CompletionOptional = nil
 
     override func initializeViews() {
         super.initializeViews()
@@ -34,33 +41,28 @@ class FeedViewController: ViewController {
         self.view.addSubview(self.indicatorView)
         self.indicatorView.alpha = 0
 
-        self.reloadButton.set(style: .normal(color: .purple, text: "Reload"))
+        self.reloadButton.set(style: .normal(color: .white, text: "Reload"))
         self.reloadButton.didSelect { [unowned self] in
             self.reloadFeed()
         }
-    }
 
-    private func loadFeed() {
-//        if let ritual = User.current()?.ritual {
-//            ritual.retrieveDataIfNeeded()
-//                .mainSink(receivedResult: { (result) in
-//                    switch result {
-//                    case .success(let r):
-//                        self.subscribeToRitualUpdates()
-//                        self.determineMessage(with: r)
-//                    case .error(_):
-//                        //self.state = .noRitual
-//                        self.addFirstItems()
-//                    }
-//                }).store(in: &self.cancellables)
-//        } else {
-//           // self.state = .noRitual
-//            self.addFirstItems()
-//        }
+        self.view.addSubview(self.closeButton)
+        self.closeButton.setImage(UIImage(systemName: "xmark")!, for: .normal)
+        self.closeButton.contentMode = .center
+        self.closeButton.tintColor = Color.white.color
+        self.closeButton.didSelect { [unowned self] in
+            self.indicatorView.finishProgress(at: self.manager.currentIndex, finishAnimator: true)
+            self.didExit?()
+        }
+
+        self.view.addSubview(self.postContainerView)
+
+        self.postContainerView.addSubview(self.animationView)
+        self.animationView.contentMode = .scaleAspectFit
+        self.animationView.loopMode = .loop
     }
 
     private func subscribeToRitualUpdates() {
-
         RitualManager.shared.$state.mainSink { state in
             switch state {
             case .noRitual:
@@ -69,18 +71,6 @@ class FeedViewController: ViewController {
                 break
             }
         }.store(in: &self.cancellables)
-
-//        User.current()?.ritual?.subscribe()
-//            .mainSink(receiveValue: { (event) in
-//                switch event {
-//                case .created(let r), .updated(let r):
-//                    self.determineMessage(with: r)
-//                case .deleted(_):
-//                    self.addFirstItems()
-//                default:
-//                    break
-//                }
-//            }).store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
@@ -92,6 +82,18 @@ class FeedViewController: ViewController {
         self.indicatorView.size = CGSize(width: self.view.width - 20, height: 2)
         self.indicatorView.pinToSafeArea(.top, padding: 0)
         self.indicatorView.centerOnX()
+
+        self.closeButton.squaredSize = 44
+        self.closeButton.match(.top, to: .bottom, of: self.indicatorView)
+        self.closeButton.match(.right, to: .right, of: self.indicatorView)
+
+        self.postContainerView.height = self.view.height - self.closeButton.bottom
+        self.postContainerView.expandToSuperviewWidth()
+        self.postContainerView.centerOnX()
+        self.postContainerView.match(.top, to: .bottom, of: self.closeButton)
+
+        self.animationView.size = CGSize(width: 18, height: 18)
+        self.animationView.centerOnXAndY()
     }
 
     func showReload() {
@@ -116,9 +118,12 @@ class FeedViewController: ViewController {
     }
 
     func showFeed() {
-        UIView.animate(withDuration: Theme.animationDuration, delay: 0, options: [], animations: {
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.view.alpha = 1 
             self.indicatorView.alpha = 1
             self.reloadButton.alpha = 0
-        }, completion: nil)
+        } completion: { completed in
+            self.addItems()
+        }
     }
 }

@@ -21,6 +21,7 @@ protocol FeedManagerDelegate: AnyObject {
 
 class FeedManager: NSObject {
 
+    private(set) var currentIndex: Int = 0
     private var current: PostViewController?
     private(set) var posts: [PostViewController] = [] {
         didSet {
@@ -30,10 +31,16 @@ class FeedManager: NSObject {
     
     private unowned let delegate: FeedManagerDelegate
     private unowned let parentVC: ViewController
+    private unowned let container: View
 
-    init(with parentVC: ViewController, delegate: FeedManagerDelegate) {
+    init(with parentVC: ViewController,
+         container: View,
+         delegate: FeedManagerDelegate) {
+
         self.parentVC = parentVC
         self.delegate = delegate
+        self.container = container
+
         super.init()
     }
 
@@ -100,6 +107,7 @@ class FeedManager: NSObject {
     }
 
     private func show(post: PostViewController, at index: Int) {
+        self.currentIndex = index 
         let duration: TimeInterval = self.current.isNil ? 0 : 0.2
         UIView.animate(withDuration: duration) {
             self.current?.view.alpha = 0
@@ -107,7 +115,7 @@ class FeedManager: NSObject {
             self.current?.removeFromParentSuperview()
             self.current = post
             post.view.alpha = 0
-            self.parentVC.addChild(viewController: post)
+            self.parentVC.addChild(viewController: post, toView: self.container)
             post.view.expandToSuperviewSize()
             post.view.layoutNow()
             UIView.animate(withDuration: 0.2) {

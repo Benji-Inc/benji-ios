@@ -72,8 +72,9 @@ class PostViewController: ViewController {
         super.viewDidLayoutSubviews()
 
         let margin = Theme.contentOffset * 2
-        self.container.size = CGSize(width: self.view.width - margin, height: self.view.height - margin)
-        self.container.centerOnXAndY()
+        self.container.size = CGSize(width: self.view.width - margin, height: self.view.safeAreaRect.height)
+        self.container.pinToSafeArea(.top, padding: 0)
+        self.container.centerOnX()
 
         if let first = self.container.subviews.first {
             first.frame = self.container.bounds

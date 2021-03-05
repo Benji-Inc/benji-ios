@@ -11,11 +11,12 @@ import Foundation
 extension FeedViewController {
 
     func addItems() {
+        self.animationView.play()
         PostsSupplier.shared.getItems()
             .mainSink(receiveValue: { (items) in
                 self.view.layoutNow()
                 self.manager.set(items: items)
-                self.showFeed()
+                self.animationView.stop()
             }).store(in: &self.cancellables)
     }
 

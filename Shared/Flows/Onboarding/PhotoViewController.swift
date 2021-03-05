@@ -64,8 +64,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.view.addSubview(self.avatarView)
         self.addChild(viewController: self.cameraVC)
 
-        self.avatarView.layer.borderColor = Color.purple.color.cgColor
-        self.avatarView.layer.borderWidth = 4
         self.hideAvatar(with: 0)
         self.view.addSubview(self.buttonContainer)
 

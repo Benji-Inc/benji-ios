@@ -11,6 +11,7 @@ import Combine
 
 class HomeVibrancyView: VibrancyView {
 
+    private let darkBlur = UIBlurEffect(style: .dark)
     let tabView = HomeTabView()
     private let vibrancyLabel = AnimatingLabel()
     private let countDownView = CountDownView()
@@ -28,9 +29,8 @@ class HomeVibrancyView: VibrancyView {
         self.vibrancyEffectView.contentView.addSubview(self.button)
         self.button.alpha = 0
 
-        self.countDownView.didExpire = { [unowned self] in
-            self.button.set(style: .normal(color: .white, text: "Begin"))
-            self.showButton()
+        self.countDownView.didExpire = {
+            RitualManager.shared.state = .feedAvailable
         }
 
         RitualManager.shared.$state.mainSink { state in
@@ -69,7 +69,7 @@ class HomeVibrancyView: VibrancyView {
             self.vibrancyLabel.animatedText = ""
             self.countDownView.startTimer(with: date)
             self.showCountDown()
-        case .feedAvailable(_):
+        case .feedAvailable:
             self.vibrancyLabel.animatedText = "Are you ready?"
             self.button.set(style: .normal(color: .white, text: "Begin"))
             self.showButton()
@@ -79,6 +79,7 @@ class HomeVibrancyView: VibrancyView {
         case .moreThanHourAfter(let date):
             let dateString = Date.hourMinuteTimeOfDay.string(from: date)
             self.vibrancyLabel.animatedText = "See you tomorrow at \n\(dateString)"
+            self.button.alpha = 0 
         }
 
         self.layoutNow()
@@ -93,6 +94,10 @@ class HomeVibrancyView: VibrancyView {
             self.countDownView.alpha = 0
             self.button.transform = .identity
             self.button.alpha = 1
+            self.tabView.alpha = 1
+            if self.blurView.effect == self.darkBlur {
+                self.blurView.effect = self.blurEffect
+            }
         }, completion: nil)
     }
 
@@ -104,16 +109,25 @@ class HomeVibrancyView: VibrancyView {
             self.button.alpha = 0
             self.countDownView.transform = .identity
             self.countDownView.alpha = 1
+            self.tabView.alpha = 1
+            self.blurView.effect = self.blurEffect
         }, completion: nil)
     }
 
-    private func hideAll() {
+    func hideAll() {
         self.vibrancyLabel.animatedText = ""
 
         UIView.animate(withDuration: Theme.animationDuration, animations: {
             self.countDownView.alpha = 0
             self.button.alpha = 0
             self.tabView.alpha = 0
+            if self.blurView.effect == self.blurEffect {
+                self.blurView.effect = self.darkBlur
+            }
         }, completion: nil)
+    }
+
+    func reset() {
+        self.handle(state: .feedAvailable)
     }
 }
