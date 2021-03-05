@@ -27,6 +27,7 @@ class FeedManager: NSObject {
             self.delegate.feedManagerDidSetItems(self)
         }
     }
+    
     private unowned let delegate: FeedManagerDelegate
     private unowned let parentVC: ViewController
 

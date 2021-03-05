@@ -22,6 +22,7 @@ class AnimatingLabel: Label {
                                 guard let `self` = self else { return }
                                 self.alpha = 1.0
                                 self.text = localized(text)
+                                self.layoutNow()
                               }, completion: nil)
         }
     }

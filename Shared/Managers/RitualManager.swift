@@ -34,20 +34,37 @@ class RitualManager {
 
     init() {
         self.subscribeToUpdates()
+        self.determineState(for: User.current()!)
     }
 
     private func subscribeToUpdates() {
-        User.current()?.ritual?.subscribe()
+        User.current()!.subscribe()
             .mainSink(receiveValue: { (event) in
                 switch event {
-                case .created(let r), .updated(let r):
-                    self.determineState(for: r)
+                case .created(let u), .updated(let u), .entered(let u):
+                    self.determineState(for: u)
                 case .deleted(_):
                     self.state = .noRitual
                 default:
                     break
                 }
             }).store(in: &self.cancellables)
+    }
+
+    private func determineState(for user: User) {
+        if let ritual = user.ritual {
+            ritual.retrieveDataIfNeeded()
+                .mainSink { result in
+                    switch result {
+                    case .success(let r):
+                        self.determineState(for: r)
+                    case .error(_):
+                        self.state = .noRitual
+                    }
+                }.store(in: &self.cancellables)
+        } else {
+            self.state = .noRitual
+        }
     }
 
     private func determineState(for ritual: Ritual) {

@@ -44,6 +44,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             self.addChannels()
         }
 
+        self.homeVC.didTapAddRitual = { [unowned self] in
+            self.showRitual()
+        }
+
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
         }
@@ -97,6 +101,13 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         case .channels:
             self.addChannels()
         }
+    }
+
+    private func showRitual() {
+        self.removeChild()
+        let coordinator = RitualCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { (_) in }
+        self.router.present(coordinator, source: self.homeVC)
     }
 
     private func addFeedCoordinator() {

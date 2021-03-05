@@ -14,6 +14,7 @@ class HomeVibrancyView: VibrancyView {
     let tabView = HomeTabView()
     private let vibrancyLabel = AnimatingLabel()
     private let countDownView = CountDownView()
+    let button = Button()
     private var cancellables = Set<AnyCancellable>()
 
     override func initializeSubviews() {
@@ -24,11 +25,12 @@ class HomeVibrancyView: VibrancyView {
 
         self.vibrancyEffectView.contentView.addSubview(self.countDownView)
         self.vibrancyEffectView.contentView.addSubview(self.tabView)
+        self.vibrancyEffectView.contentView.addSubview(self.button)
+        self.button.alpha = 0
 
         self.countDownView.didExpire = { [unowned self] in
-//            if let date = self.feedVC.currentTriggerDate {
-//                self.feedVC.state = .feedAvailable(date)
-//            }
+            self.button.set(style: .normal(color: .white, text: "Begin"))
+            self.showButton()
         }
 
         RitualManager.shared.$state.mainSink { state in
@@ -40,11 +42,16 @@ class HomeVibrancyView: VibrancyView {
         super.layoutSubviews()
 
         self.vibrancyLabel.setSize(withWidth: self.width)
-        self.vibrancyLabel.centerOnXAndY()
+        self.vibrancyLabel.centerY = self.centerY * 0.8
+        self.vibrancyLabel.centerOnX()
 
         self.countDownView.size = CGSize(width: 200, height: 60)
-        self.countDownView.centerY = self.halfHeight * 0.8
+        self.countDownView.match(.top, to: .bottom, of: self.vibrancyLabel, offset: 10)
         self.countDownView.centerOnX()
+
+        self.button.size = CGSize(width: 140, height: 40)
+        self.button.match(.top, to: .bottom, of: self.vibrancyLabel, offset: 10)
+        self.button.centerOnX()
 
         let height = 70 + self.safeAreaInsets.bottom
         self.tabView.size = CGSize(width: self.width, height: height)
@@ -55,14 +62,16 @@ class HomeVibrancyView: VibrancyView {
     func handle(state: RitualManager.State) {
         switch state {
         case .noRitual:
-            break // Do something
+            self.vibrancyLabel.animatedText = "Set your ritual time."
+            self.button.set(style: .normal(color: .white, text: "set"))
+            self.showButton()
         case .lessThanAnHourAway(let date):
+            self.vibrancyLabel.animatedText = ""
             self.countDownView.startTimer(with: date)
+            self.showCountDown()
         case .feedAvailable(_):
-            break
-//            UIView.animate(withDuration: Theme.animationDuration) {
-//                self.tabView.alpha = 0
-//            }
+            self.vibrancyLabel.animatedText = "Are you ready?"
+            self.showButton()
         case .lessThanHourAfter(let date):
             let dateString = Date.hourMinuteTimeOfDay.string(from: date)
             self.vibrancyLabel.animatedText = "Take a break! ☕️\nSee you at \(dateString)"
@@ -70,6 +79,20 @@ class HomeVibrancyView: VibrancyView {
             let dateString = Date.hourMinuteTimeOfDay.string(from: date)
             self.vibrancyLabel.animatedText = "See you tomorrow at \n\(dateString)"
         }
+
+        self.layoutNow()
+    }
+
+    private func showButton() {
+        self.button.alpha = 0
+        self.button.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+
+        UIView.animate(withDuration: Theme.animationDuration, animations: {
+            self.countDownView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            self.countDownView.alpha = 0
+            self.button.transform = .identity
+            self.button.alpha = 1
+        }, completion: nil)
     }
 
     private func showCountDown() {
@@ -77,9 +100,19 @@ class HomeVibrancyView: VibrancyView {
         self.countDownView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
 
         UIView.animate(withDuration: Theme.animationDuration, animations: {
-            self.vibrancyLabel.alpha = 0
+            self.button.alpha = 0
             self.countDownView.transform = .identity
             self.countDownView.alpha = 1
+        }, completion: nil)
+    }
+
+    private func hideAll() {
+        self.vibrancyLabel.animatedText = ""
+
+        UIView.animate(withDuration: Theme.animationDuration, animations: {
+            self.countDownView.alpha = 0
+            self.button.alpha = 0
+            self.tabView.alpha = 0
         }, completion: nil)
     }
 }

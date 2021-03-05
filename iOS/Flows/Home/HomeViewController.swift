@@ -25,10 +25,9 @@ class HomeViewController: ViewController, TransitionableViewController {
     lazy var captureVC = ImageCaptureViewController()
     let vibrancyView = HomeVibrancyView()
 
-    let centerContainer = View()
-
     var didTapProfile: CompletionOptional = nil
     var didTapChannels: CompletionOptional = nil
+    var didTapAddRitual: CompletionOptional = nil
 
     override func initializeViews() {
         super.initializeViews()
@@ -36,10 +35,6 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.addChild(viewController: self.captureVC)
 
         self.view.addSubview(self.vibrancyView)
-        self.view.addSubview(self.centerContainer)
-
-        self.centerContainer.set(backgroundColor: .clear)
-        self.addChild(viewController: self.feedVC, toView: self.centerContainer)
 
         self.vibrancyView.tabView.profileItem.didSelect = { [unowned self] in
             self.didTapProfile?()
@@ -53,12 +48,22 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.didTapChannels?()
         }
 
+        self.vibrancyView.button.didSelect { [unowned self] in
+            switch RitualManager.shared.state {
+            case .noRitual:
+                self.didTapAddRitual?()
+            case .feedAvailable:
+                self.showFeed()
+            default:
+                break 
+            }
+        }
+
         self.vibrancyView.tabView.postButtonView.button.publisher(for: \.isHighlighted)
             .removeDuplicates()
             .mainSink { isHighlighted in
                 UIView.animate(withDuration: Theme.animationDuration) {
                     //self.vibrancyView.show(blur: !isHighlighted)
-                    //self.vibrancyLabel.alpha = isHighlighted ? 1.0 : 0.0
                     self.feedVC.view.alpha = isHighlighted ? 0.0 : 1.0
                 }
 
@@ -73,17 +78,25 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.captureVC.view.expandToSuperviewSize()
         self.vibrancyView.expandToSuperviewSize()
 
-        self.centerContainer.frame = CGRect(x: 0,
-                                            y: 0,
-                                            width: self.view.width,
-                                            height: self.view.height - self.vibrancyView.tabView.height)
-        self.feedVC.view.expandToSuperviewSize()
+        self.feedVC.view.frame = CGRect(x: 0,
+                                        y: 0,
+                                        width: self.view.width,
+                                        height: self.view.height - self.vibrancyView.tabView.height)
     }
 
     func animateTabView(shouldShow: Bool) {
         UIView.animate(withDuration: Theme.animationDuration) {
             self.vibrancyView.tabView.alpha = shouldShow ? 1.0 : 0.0
         }
+    }
+
+    func showFeed() {
+        if self.feedVC.parent.isNil {
+            self.addChild(viewController: self.feedVC)
+            self.view.layoutNow()
+        }
+
+        self.feedVC.showFeed()
     }
 
     private func didTapPost() {
