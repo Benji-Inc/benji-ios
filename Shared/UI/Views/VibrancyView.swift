@@ -10,7 +10,7 @@ import Foundation
 
 class VibrancyView: View {
 
-    lazy var blurEffect = UIBlurEffect(style: .systemThinMaterialDark)
+    lazy var blurEffect = UIBlurEffect(style: .systemMaterialDark)
     lazy var blurView = BlurView(effect: self.blurEffect)
     lazy var vibrancyEffect = UIVibrancyEffect(blurEffect: self.blurEffect)
     lazy var vibrancyEffectView = VisualEffectView(effect: self.vibrancyEffect)

@@ -42,15 +42,15 @@ class HomeVibrancyView: VibrancyView {
         super.layoutSubviews()
 
         self.vibrancyLabel.setSize(withWidth: self.width)
-        self.vibrancyLabel.centerY = self.centerY * 0.8
+        self.vibrancyLabel.centerY = self.centerY * 0.9
         self.vibrancyLabel.centerOnX()
 
         self.countDownView.size = CGSize(width: 200, height: 60)
-        self.countDownView.match(.top, to: .bottom, of: self.vibrancyLabel, offset: 10)
+        self.countDownView.match(.top, to: .bottom, of: self.vibrancyLabel, offset: Theme.contentOffset)
         self.countDownView.centerOnX()
 
         self.button.size = CGSize(width: 140, height: 40)
-        self.button.match(.top, to: .bottom, of: self.vibrancyLabel, offset: 10)
+        self.button.match(.top, to: .bottom, of: self.vibrancyLabel, offset: Theme.contentOffset)
         self.button.centerOnX()
 
         let height = 70 + self.safeAreaInsets.bottom
@@ -71,6 +71,7 @@ class HomeVibrancyView: VibrancyView {
             self.showCountDown()
         case .feedAvailable(_):
             self.vibrancyLabel.animatedText = "Are you ready?"
+            self.button.set(style: .normal(color: .white, text: "Begin"))
             self.showButton()
         case .lessThanHourAfter(let date):
             let dateString = Date.hourMinuteTimeOfDay.string(from: date)
