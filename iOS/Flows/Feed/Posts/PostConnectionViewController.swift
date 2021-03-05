@@ -46,33 +46,30 @@ class PostConnectionViewController: PostViewController {
     }
 
     private func configure(connection: Connection) {
-        Connection.cachedQuery(for: connection.objectId!)
-            .mainSink(receiveValue: { updatedConnection in
-                if let user = updatedConnection.nonMeUser, let status = updatedConnection.status {
-                    user.retrieveDataIfNeeded()
-                        .mainSink(receiveValue: { user in
-                            self.avatarView.set(avatar: user)
+        self.connection = connection
+        if let user = connection.nonMeUser, let status = connection.status {
+            user.retrieveDataIfNeeded()
+                .mainSink(receiveValue: { user in
+                    self.avatarView.set(avatar: user)
 
-                            let text: Localized
-                            switch status {
-                            case .created, .pending:
-                                text = ""
-                            case .invited:
-                                text = LocalizedString(id: "", arguments: [user.givenName], default: "@(first) would like to connect with you.")
-                            case .accepted:
-                                text = LocalizedString(id: "", arguments: [user.givenName], default: "You are now connected to @(first).")
-                                self.buttonContainer.alpha = 0
-                            case .declined:
-                                text = LocalizedString(id: "", arguments: [user.givenName], default: "You declined to connect to @(first).")
-                                self.buttonContainer.alpha = 0
-                            }
+                    let text: Localized
+                    switch status {
+                    case .created, .pending:
+                        text = ""
+                    case .invited:
+                        text = LocalizedString(id: "", arguments: [user.givenName], default: "@(first) would like to connect with you.")
+                    case .accepted:
+                        text = LocalizedString(id: "", arguments: [user.givenName], default: "You are now connected to @(first).")
+                        self.buttonContainer.alpha = 0
+                    case .declined:
+                        text = LocalizedString(id: "", arguments: [user.givenName], default: "You declined to connect to @(first).")
+                        self.buttonContainer.alpha = 0
+                    }
 
-                            self.textView.set(localizedText: text)
-                            self.view.layoutNow()
-                        }).store(in: &self.cancellables)
-                }
-
-            }).store(in: &self.cancellables)
+                    self.textView.set(localizedText: text)
+                    self.view.layoutNow()
+                }).store(in: &self.cancellables)
+        }
     }
 
     override func viewDidLayoutSubviews() {

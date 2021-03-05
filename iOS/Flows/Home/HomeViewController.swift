@@ -21,12 +21,15 @@ class HomeViewController: ViewController, TransitionableViewController {
         return .background1
     }
 
+    lazy var feedVC = FeedViewController()
     lazy var captureVC = ImageCaptureViewController()
     let vibrancyView = HomeVibrancyView()
 
     var didTapProfile: CompletionOptional = nil
     var didTapChannels: CompletionOptional = nil
     var didTapAddRitual: CompletionOptional = nil
+
+    var willShowFeed: CompletionOptional = nil
 
     override func initializeViews() {
         super.initializeViews()
@@ -47,6 +50,10 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.didTapChannels?()
         }
 
+        self.feedVC.didExit = { [unowned self] in
+            self.hideFeed()
+        }
+
         self.vibrancyView.button.didSelect { [unowned self] in
             switch RitualManager.shared.state {
             case .noRitual:
@@ -58,16 +65,12 @@ class HomeViewController: ViewController, TransitionableViewController {
             }
         }
 
-        self.feedVC.didExit = { [unowned self] in
-            self.hideFeed()
-        }
-
         self.vibrancyView.tabView.postButtonView.button.publisher(for: \.isHighlighted)
             .removeDuplicates()
             .mainSink { isHighlighted in
                 UIView.animate(withDuration: Theme.animationDuration) {
                     //self.vibrancyView.show(blur: !isHighlighted)
-                    self.feedVC.view.alpha = isHighlighted ? 0.0 : 1.0
+                   // self.feedVC.view.alpha = isHighlighted ? 0.0 : 1.0
                 }
 
             }.store(in: &self.cancellables)
@@ -90,11 +93,13 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
 
     func showFeed() {
+
         if self.feedVC.parent.isNil {
             self.addChild(viewController: self.feedVC)
             self.view.layoutNow()
         }
 
+        self.willShowFeed?()
         self.vibrancyView.hideAll()
         self.feedVC.showFeed()
     }

@@ -16,7 +16,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     private lazy var profileVC = ProfileViewController(with: User.current()!)
     private lazy var channelsVC = ChannelsViewController()
     private lazy var homeVC = HomeViewController()
-    lazy var feedVC = FeedViewController()
 
     private lazy var channelsCoordinator = ChannelsCoordinator(router: self.router,
                                                                deepLink: self.deepLink,
@@ -46,6 +45,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         self.homeVC.didTapAddRitual = { [unowned self] in
             self.showRitual()
+        }
+
+        self.homeVC.willShowFeed = {
+            self.addFeedCoordinator()
         }
 
         if let deeplink = self.deepLink {
@@ -114,7 +117,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         self.removeChild()
         let coordinator = FeedCoordinator(router: self.router,
                                           deepLink: self.deepLink,
-                                          feedVC: self.feedVC)
+                                          feedVC: self.homeVC.feedVC)
         self.addChildAndStart(coordinator) { (_) in }
     }
 
