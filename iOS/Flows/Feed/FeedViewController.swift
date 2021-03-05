@@ -22,24 +22,8 @@ class FeedViewController: ViewController {
 
     weak var delegate: FeedViewControllerDelegate?
 
-    enum State {
-        case noRitual
-        case lessThanAnHourAway(Date)
-        case feedAvailable(Date)
-        case lessThanHourAfter(Date)
-        case moreThanHourAfter(Date)
-        case feedComplete
-        case feedPaused
-    }
-
-    @Published var state: State = .noRitual
-
     private let reloadButton = Button()
     lazy var indicatorView = FeedIndicatorView(with: self)
-
-    var currentTriggerDate: Date? {
-        return UserDefaults.standard.value(forKey: Ritual.currentKey) as? Date
-    }
 
     override func initializeViews() {
         super.initializeViews()
@@ -56,45 +40,47 @@ class FeedViewController: ViewController {
         }
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        if self.manager.posts.isEmpty {
-            self.loadFeed()
-        }
-    }
-
     private func loadFeed() {
-        if let ritual = User.current()?.ritual {
-            ritual.retrieveDataIfNeeded()
-                .mainSink(receivedResult: { (result) in
-                    switch result {
-                    case .success(let r):
-                        self.subscribeToRitualUpdates()
-                        self.determineMessage(with: r)
-                    case .error(_):
-                        self.state = .noRitual
-                        self.addFirstItems()
-                    }
-                }).store(in: &self.cancellables)
-        } else {
-            self.state = .noRitual
-            self.addFirstItems()
-        }
+//        if let ritual = User.current()?.ritual {
+//            ritual.retrieveDataIfNeeded()
+//                .mainSink(receivedResult: { (result) in
+//                    switch result {
+//                    case .success(let r):
+//                        self.subscribeToRitualUpdates()
+//                        self.determineMessage(with: r)
+//                    case .error(_):
+//                        //self.state = .noRitual
+//                        self.addFirstItems()
+//                    }
+//                }).store(in: &self.cancellables)
+//        } else {
+//           // self.state = .noRitual
+//            self.addFirstItems()
+//        }
     }
 
     private func subscribeToRitualUpdates() {
-        User.current()?.ritual?.subscribe()
-            .mainSink(receiveValue: { (event) in
-                switch event {
-                case .created(let r), .updated(let r):
-                    self.determineMessage(with: r)
-                case .deleted(_):
-                    self.addFirstItems()
-                default:
-                    break
-                }
-            }).store(in: &self.cancellables)
+
+        RitualManager.shared.$state.mainSink { state in
+            switch state {
+            case .noRitual:
+                break
+            default:
+                break
+            }
+        }.store(in: &self.cancellables)
+
+//        User.current()?.ritual?.subscribe()
+//            .mainSink(receiveValue: { (event) in
+//                switch event {
+//                case .created(let r), .updated(let r):
+//                    self.determineMessage(with: r)
+//                case .deleted(_):
+//                    self.addFirstItems()
+//                default:
+//                    break
+//                }
+//            }).store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
@@ -127,36 +113,6 @@ class FeedViewController: ViewController {
         }, completion: { completed in
             self.manager.showFirst()
         })
-    }
-
-    private func determineMessage(with ritual: Ritual) {
-        guard let triggerDate = ritual.date,
-            self.currentTriggerDate != triggerDate,
-            let anHourAfter = triggerDate.add(component: .hour, amount: 1),
-            let anHourUntil = triggerDate.subtract(component: .hour, amount: 1) else { return }
-
-        //Set the current trigger date so we dont reload for duplicates
-        UserDefaults.standard.set(triggerDate, forKey: Ritual.currentKey)
-
-        let now = Date()
-        
-        //If date is 1 hour or less away, show countDown
-        if now.isBetween(anHourUntil, and: triggerDate) {
-            self.state = .lessThanAnHourAway(triggerDate)
-
-            //If date is less than an hour ahead of current date, show feed
-        } else if now.isBetween(triggerDate, and: anHourAfter) {
-            self.state = .feedAvailable(triggerDate)
-            self.addItems()
-
-        //If date is 1 hour or more away, show "see you at (date)"
-        } else if now.isBetween(Date().beginningOfDay, and: anHourUntil) {
-            self.state = .lessThanHourAfter(triggerDate)
-        } else {
-            self.state = .moreThanHourAfter(triggerDate)
-        }
-
-        self.view.layoutNow()
     }
 
     func showFeed() {

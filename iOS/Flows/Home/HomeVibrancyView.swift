@@ -7,12 +7,14 @@
 //
 
 import Foundation
+import Combine
 
 class HomeVibrancyView: VibrancyView {
 
     let tabView = HomeTabView()
     private let vibrancyLabel = AnimatingLabel()
     private let countDownView = CountDownView()
+    private var cancellables = Set<AnyCancellable>()
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -28,6 +30,10 @@ class HomeVibrancyView: VibrancyView {
 //                self.feedVC.state = .feedAvailable(date)
 //            }
         }
+
+        RitualManager.shared.$state.mainSink { state in
+            self.handle(state: state)
+        }.store(in: &self.cancellables)
     }
 
     override func layoutSubviews() {
@@ -46,7 +52,7 @@ class HomeVibrancyView: VibrancyView {
         self.tabView.pin(.bottom)
     }
 
-    func handle(state: FeedViewController.State) {
+    func handle(state: RitualManager.State) {
         switch state {
         case .noRitual:
             break // Do something
@@ -63,11 +69,6 @@ class HomeVibrancyView: VibrancyView {
         case .moreThanHourAfter(let date):
             let dateString = Date.hourMinuteTimeOfDay.string(from: date)
             self.vibrancyLabel.animatedText = "See you tomorrow at \n\(dateString)"
-        case .feedComplete, .feedPaused:
-            break
-//            UIView.animate(withDuration: Theme.animationDuration) {
-//                self.tabView.alpha = 1
-//            }
         }
     }
 

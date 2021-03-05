@@ -18,6 +18,65 @@ class RitualManager {
     static let shared = RitualManager()
     private var cancellables = Set<AnyCancellable>()
 
+    enum State {
+        case noRitual
+        case lessThanAnHourAway(Date)
+        case feedAvailable(Date)
+        case lessThanHourAfter(Date)
+        case moreThanHourAfter(Date)
+    }
+
+    @Published var state: State = .noRitual
+
+    var currentTriggerDate: Date? {
+        return UserDefaults.standard.value(forKey: Ritual.currentKey) as? Date
+    }
+
+    init() {
+        self.subscribeToUpdates()
+    }
+
+    private func subscribeToUpdates() {
+        User.current()?.ritual?.subscribe()
+            .mainSink(receiveValue: { (event) in
+                switch event {
+                case .created(let r), .updated(let r):
+                    self.determineState(for: r)
+                case .deleted(_):
+                    self.state = .noRitual
+                default:
+                    break
+                }
+            }).store(in: &self.cancellables)
+    }
+
+    private func determineState(for ritual: Ritual) {
+        guard let triggerDate = ritual.date,
+            self.currentTriggerDate != triggerDate,
+            let anHourAfter = triggerDate.add(component: .hour, amount: 1),
+            let anHourUntil = triggerDate.subtract(component: .hour, amount: 1) else { return }
+
+        //Set the current trigger date so we dont reload for duplicates
+        UserDefaults.standard.set(triggerDate, forKey: Ritual.currentKey)
+
+        let now = Date()
+
+        //If date is 1 hour or less away, show countDown
+        if now.isBetween(anHourUntil, and: triggerDate) {
+            self.state = .lessThanAnHourAway(triggerDate)
+
+            //If date is less than an hour ahead of current date, show feed
+        } else if now.isBetween(triggerDate, and: anHourAfter) {
+            self.state = .feedAvailable(triggerDate)
+
+        //If date is 1 hour or more away, show "see you at (date)"
+        } else if now.isBetween(Date().beginningOfDay, and: anHourUntil) {
+            self.state = .lessThanHourAfter(triggerDate)
+        } else {
+            self.state = .moreThanHourAfter(triggerDate)
+        }
+    }
+
     func getNotifications() -> Future<[UNNotificationRequest], Never> {
         return Future { promise in
             let notificationCenter = UNUserNotificationCenter.current()

@@ -41,10 +41,6 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.centerContainer.set(backgroundColor: .clear)
         self.addChild(viewController: self.feedVC, toView: self.centerContainer)
 
-        self.feedVC.$state.mainSink { state in
-            
-        }.store(in: &self.cancellables)
-
         self.vibrancyView.tabView.profileItem.didSelect = { [unowned self] in
             self.didTapProfile?()
         }

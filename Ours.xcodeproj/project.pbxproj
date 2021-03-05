@@ -875,7 +875,7 @@
 		D67934E423DE66FE00536B44 /* PushPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPayload.swift; sourceTree = "<group>"; };
 		D67A82DA230CCE3D0076152B /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		D67C319525EE882B00289787 /* PostButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostButtonView.swift; sourceTree = "<group>"; };
-		D6815DBA22EE1F1400E71251 /* FeedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedManager.swift; sourceTree = "<group>"; };
+		D6815DBA22EE1F1400E71251 /* FeedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedManager.swift; path = ../Flows/Feed/FeedManager.swift; sourceTree = "<group>"; };
 		D6830221234AA35C006145FE /* DisplayableChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableChannel.swift; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
@@ -1171,7 +1171,6 @@
 			children = (
 				D6EDFB4A25D48F1D0034A2F6 /* Posts */,
 				D6579535239A141900A01338 /* CountDownView.swift */,
-				D6815DBA22EE1F1400E71251 /* FeedManager.swift */,
 				D6579556239C8B4000A01338 /* FeedCoordinator.swift */,
 				D6A301AB2380E102006655E0 /* PostsSupplier.swift */,
 				D62C635322BE9CBB00F4D097 /* FeedViewController.swift */,
@@ -1449,6 +1448,7 @@
 				D66379CB25A3704300A4A3B7 /* ChatClientManager.swift */,
 				D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */,
 				D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */,
+				D6815DBA22EE1F1400E71251 /* FeedManager.swift */,
 				D66379CC25A3704300A4A3B7 /* HealthKitManager.swift */,
 				D66379C925A3704300A4A3B7 /* MessageDeliveryManager.swift */,
 			);
