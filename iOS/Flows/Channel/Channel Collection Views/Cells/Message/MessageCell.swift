@@ -51,7 +51,6 @@ class MessageCell: BaseMessageCell {
     }
 
     override func handleIsConsumed(for message: Messageable) {
-        print(message.attributes)
         self.bubbleView.set(backgroundColor: message.color)
 
         if !message.isFromCurrentUser, !message.isConsumed, message.context != .status {
