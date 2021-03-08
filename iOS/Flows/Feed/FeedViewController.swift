@@ -11,7 +11,7 @@ import TMROLocalization
 import Lottie
 
 protocol FeedViewControllerDelegate: AnyObject {
-    func feedView(_ controller: FeedViewController, didSelect item: PostType)
+    func feedView(_ controller: FeedViewController, didSelect post: Postable)
 }
 
 class FeedViewController: ViewController {

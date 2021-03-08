@@ -30,8 +30,8 @@ class FeedCoordinator: Coordinator<Void> {
 
 extension FeedCoordinator: FeedViewControllerDelegate {
 
-    func feedView(_ controller: FeedViewController, didSelect item: PostType) {
-        self.handle(item: item)
+    func feedView(_ controller: FeedViewController, didSelect post: Postable) {
+        self.handle(item: post.type)
     }
 
     private func handle(item: PostType) {

@@ -10,7 +10,7 @@ import Foundation
 
 protocol FeedManagerDelegate: AnyObject {
     func feedManagerDidSetItems(_ manager: FeedManager)
-    func feed(_ manager: FeedManager, didSelect type: PostType)
+    func feed(_ manager: FeedManager, didSelect post: Postable)
     func feedManagerDidFinish(_ manager: FeedManager)
     func feed(_ manager: FeedManager, didPause index: Int)
     func feed(_ manager: FeedManager, didFinish index: Int)
@@ -44,33 +44,33 @@ class FeedManager: NSObject {
         super.init()
     }
 
-    func set(items: [PostType]) {
+    func set(items: [Postable]) {
 
         var postVCs: [PostViewController] = []
 
-        for (index, type) in items.enumerated() {
+        for (index, post) in items.enumerated() {
 
             let postVC: PostViewController
 
-            switch type {
+            switch post.type {
             case .timeSaved(_):
-                postVC = PostIntroViewController(with: type)
+                postVC = PostIntroViewController(with: post)
             case .ritual:
-                postVC = PostRitualViewController(with: type)
+                postVC = PostRitualViewController(with: post)
             case .newChannel(_):
-                postVC = PostNewChannelViewController(with: type)
+                postVC = PostNewChannelViewController(with: post)
             case .unreadMessages(_, _):
-                postVC = PostUnreadViewController(with: type)
+                postVC = PostUnreadViewController(with: post)
             case .channelInvite(_):
-                postVC = PostChannelInviteViewController(with: type)
+                postVC = PostChannelInviteViewController(with: post)
             case .connectionRequest(_):
-                postVC = PostConnectionViewController(with: type)
+                postVC = PostConnectionViewController(with: post)
             case .inviteAsk(_):
-                postVC = PostReservationViewController(with: type)
+                postVC = PostReservationViewController(with: post)
             case .notificationPermissions:
-                postVC = PostNotificationPermissionsViewController(with: type)
+                postVC = PostNotificationPermissionsViewController(with: post)
             case .meditation:
-                postVC = PostMeditationViewController(with: type)
+                postVC = PostMeditationViewController(with: post)
             }
 
             postVCs.append(postVC)
@@ -80,7 +80,7 @@ class FeedManager: NSObject {
             }
 
             postVC.didSelectPost = { [unowned self] in
-                self.delegate.feed(self, didSelect: type)
+                self.delegate.feed(self, didSelect: post)
             }
 
             postVC.didPause = { [unowned self] in

@@ -51,8 +51,8 @@ final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
         set { self.setObject(for: .expirationDate, with: newValue) }
     }
 
-    var type: PostType? {
-        get { return nil }
+    var type: PostType {
+        get { .meditation }
         set { }
         //guard let string: String = self.getObject(for: .status) else { return nil }
         //return Status(rawValue: string)

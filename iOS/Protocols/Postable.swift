@@ -15,7 +15,7 @@ protocol Postable {
     var priority: Int? { get set }
     var triggerDate: Date? { get set }
     var expirationDate: Date? { get set }
-    var type: PostType? { get set }
+    var type: PostType { get set }
     var file: PFFileObject? { get set }
     var attributes: [String: Any]? { get set }
 }

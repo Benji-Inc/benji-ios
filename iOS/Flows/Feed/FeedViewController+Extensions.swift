@@ -15,7 +15,7 @@ extension FeedViewController {
         PostsSupplier.shared.getItems()
             .mainSink(receiveValue: { (items) in
                 self.view.layoutNow()
-                self.manager.set(items: items)
+                //self.manager.set(items: items)
                 self.animationView.stop()
             }).store(in: &self.cancellables)
     }
@@ -24,7 +24,7 @@ extension FeedViewController {
         PostsSupplier.shared.getFirstItems()
             .mainSink(receiveValue: { (items) in
                 self.view.layoutNow()
-                self.manager.set(items: items)
+                //self.manager.set(items: items)
                 self.showFeed()
             }).store(in: &self.cancellables)
     }
@@ -36,8 +36,8 @@ extension FeedViewController: FeedManagerDelegate {
         self.indicatorView.configure(with: manager.posts.count)
     }
 
-    func feed(_ manager: FeedManager, didSelect type: PostType) {
-        self.delegate?.feedView(self, didSelect: type)
+    func feed(_ manager: FeedManager, didSelect post: Postable) {
+        self.delegate?.feedView(self, didSelect: post)
     }
 
     func feedManagerDidFinish(_ manager: FeedManager) {
