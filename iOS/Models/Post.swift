@@ -10,13 +10,62 @@ import Foundation
 import Parse
 
 enum PostKey: String {
-    case foo
+    case author = "author"
+    case body = "body"
+    case priority = "priority"
+    case triggerDate = "triggerDate"
+    case expirationDate = "expirationDate"
+    case type = "type"
+    case file = "file"
+    case attributes = "attributes"
 }
 
-final class Post: PFObject, PFSubclassing, Postable {
+final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
 
     static func parseClassName() -> String {
         return String(describing: self)
+    }
+
+    var author: User? {
+        get { return self.getObject(for: .author) }
+        set { self.setObject(for: .author, with: newValue) }
+    }
+
+    var body: String? {
+        get { return self.getObject(for: .body) }
+        set { self.setObject(for: .body, with: newValue) }
+    }
+
+    var priority: Int? {
+        get { return self.getObject(for: .priority) }
+        set { self.setObject(for: .priority, with: newValue) }
+    }
+
+    var triggerDate: Date? {
+        get { return self.getObject(for: .triggerDate) }
+        set { self.setObject(for: .triggerDate, with: newValue) }
+    }
+
+    var expirationDate: Date? {
+        get { return self.getObject(for: .expirationDate) }
+        set { self.setObject(for: .expirationDate, with: newValue) }
+    }
+
+    var type: PostType? {
+        get { return nil }
+        set { }
+        //guard let string: String = self.getObject(for: .status) else { return nil }
+        //return Status(rawValue: string)
+    }
+
+    var file: PFFileObject? {
+        get { return self.getObject(for: .file) }
+        set { self.setObject(for: .file, with: newValue) }
+    }
+
+    var attributes: [String : Any]? {
+        get { return self.getObject(for: .attributes) }
+        set { self.setObject(for: .attributes, with: newValue) }
     }
 }
 
