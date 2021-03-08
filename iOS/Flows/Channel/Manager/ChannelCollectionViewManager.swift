@@ -225,7 +225,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         let footer = channelCollectionView.dequeueReusableFooterView(ReadAllFooterView.self, for: indexPath)
         footer.configure(hasUnreadMessages: MessageSupplier.shared.hasUnreadMessage) 
         self.footerView = footer
-        footer.createAnimator()
         footer.didCompleteAnimation = { [unowned self] in
             self.setAllMessagesToRead(for: footer)
         }

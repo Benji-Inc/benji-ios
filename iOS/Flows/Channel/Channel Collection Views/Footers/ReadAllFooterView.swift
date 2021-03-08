@@ -85,8 +85,10 @@ class ReadAllFooterView: UICollectionReusableView {
             self.label.transform = .identity
         })
 
-        self.animator?.addCompletion({ (position) in
-            if position == .end {
+        self.animator?.addCompletion({ [weak self] (position) in
+            guard let `self` = self else { return }
+            // Animator completes initially on pause, so we also need to check progress
+            if position == .end, let progress = self.animator?.fractionComplete, progress == 1.0 {
                 self.didCompleteAnimation?()
             }
             self.animator = nil
