@@ -20,7 +20,7 @@ class PostNewChannelViewController: PostViewController {
     }
 
     override func configurePost() {
-        guard case PostType.newChannel(let channel) = self.type else { return }
+        guard let channel = self.post.channel else { return }
         self.configure(with: channel)
     }
 
@@ -28,9 +28,9 @@ class PostNewChannelViewController: PostViewController {
         self.didSelectPost?()
     }
 
-    func configure(with channel: DisplayableChannel) {
-        guard case ChannelType.channel(let tchChannel) = channel.channelType else { return }
-        tchChannel.getAuthorAsUser()
+    func configure(with channel: TCHChannel) {
+        
+        channel.getAuthorAsUser()
             .mainSink(receiveValue: { (user) in
                 self.avatarView.set(avatar: user)
                 let message = LocalizedString(id: "", arguments: [user.givenName], default: "Congrats! 🎉 You can now chat with @(name)!")

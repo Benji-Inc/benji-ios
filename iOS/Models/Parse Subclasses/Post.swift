@@ -53,10 +53,11 @@ final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
     }
 
     var type: PostType {
-        get { .meditation }
-        set { }
-        //guard let string: String = self.getObject(for: .status) else { return nil }
-        //return Status(rawValue: string)
+        get {
+            guard let string: String = self.getObject(for: .type), let type = PostType(rawValue: string) else { fatalError("Unkown post type") }
+            return type
+        }
+        set { self.setObject(for: .type, with: newValue.rawValue) }
     }
 
     var file: PFFileObject? {
