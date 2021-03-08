@@ -24,8 +24,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     lazy var collectionView = ChannelCollectionView()
     lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView)
 
-    private var animateMessages: Bool = true
-
     var indexPathForEditing: IndexPath?
 
     unowned let delegate: ChannelViewControllerDelegates
@@ -84,12 +82,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        MessageSupplier.shared.reset()
-        ChannelSupplier.shared.set(activeChannel: nil)
-        self.collectionViewManager.reset()
     }
 
     override func initializeViews() {
@@ -158,33 +150,21 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         self.becomeFirstResponder()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        if MessageSupplier.shared.sections.count > 0 {
-            self.collectionViewManager.set(newSections: MessageSupplier.shared.sections,
-                                           animate: self.animateMessages) {
-                self.animateMessages = false
-                self.setupDetailAnimator()
-            }
-        } else {
-            MessageSupplier.shared.didGetLastSections = { [unowned self] sections in
-                self.collectionViewManager.set(newSections: sections,
-                                               animate: self.animateMessages) {
-                    self.animateMessages = false
-                    self.setupDetailAnimator()
-                }
-            }
-        }
-    }
-
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         self.resignFirstResponder()
     }
 
-    private func setupDetailAnimator() {
+    override func viewWasDismissed() {
+        super.viewWasDismissed()
+
+        MessageSupplier.shared.reset()
+        ChannelSupplier.shared.set(activeChannel: nil)
+        self.collectionViewManager.reset()
+    }
+
+    func setupDetailAnimator() {
         self.detailVC.createAnimator()
         self.collectionView.publisher(for: \.contentOffset)
             .mainSink { (contentOffset) in

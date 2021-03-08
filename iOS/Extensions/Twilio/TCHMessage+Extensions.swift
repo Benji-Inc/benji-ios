@@ -38,7 +38,10 @@ extension TCHMessage: Avatar {
 extension TCHMessage: Messageable {
 
     var updateId: String? {
-        return self.attributes()?.dictionary?["updateId"] as? String
+        if let updateId = self.attributes?["updateId"] as? Int {
+            return String(updateId)
+        }
+        return self.attributes?["updateId"] as? String
     }
 
     var id: String {
@@ -113,13 +116,13 @@ extension TCHMessage: Messageable {
     }
 
     @discardableResult
-    func udpateConsumers(with consumer: Avatar) -> Future<Void, Error> {
+    func udpateConsumers(with consumer: Avatar) -> Future<Messageable, Error> {
         var consumers = self.hasBeenConsumedBy
         consumers.append(consumer.userObjectID!)
         return self.appendAttributes(with: ["consumers": consumers])
     }
 
-    func appendAttributes(with attributes: [String: Any]) -> Future<Void, Error> {
+    func appendAttributes(with attributes: [String: Any]) -> Future<Messageable, Error> {
         return Future { promise in
             let current: [String: Any] = self.attributes()?.dictionary as? [String: Any] ?? [:]
             let updated = current.merging(attributes, uniquingKeysWith: { (first, _) in first })
@@ -129,7 +132,7 @@ extension TCHMessage: Messageable {
                     if let error = result.error {
                         promise(.failure(error))
                     } else {
-                        promise(.success(()))
+                        promise(.success(self))
                     }
                 }
             } else {

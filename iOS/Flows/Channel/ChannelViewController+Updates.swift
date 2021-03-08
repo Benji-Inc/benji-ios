@@ -19,6 +19,19 @@ extension ChannelViewController {
             self.loadSystem(channel: channel)
         case .channel(_):
             MessageSupplier.shared.getLastMessages()
+                .mainSink { result in
+                    switch result {
+                    case .success(let sections):
+                        self.collectionViewManager.set(newSections: sections,
+                                                       animate: true) {
+                            self.setupDetailAnimator()
+                        }
+                    case .error(_):
+                        break
+                    }
+
+
+                }.store(in: &self.cancellables)
         case .pending(_):
             break 
         }

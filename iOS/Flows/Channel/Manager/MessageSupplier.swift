@@ -39,8 +39,6 @@ class MessageSupplier: NSObject {
         }
     }
 
-    var didGetLastSections: (([ChannelSectionable]) -> Void)?
-
     override init() {
         super.init()
         self.subscribeToUpdates()
@@ -135,7 +133,6 @@ class MessageSupplier: NSObject {
                     } else {
                         promise(.failure(ClientError.message(detail: "Failed to retrieve last messages.")))
                     }
-                    self.didGetLastSections?(self.sections)
                 }
             } else {
                 promise(.failure(ClientError.message(detail: "Failed to retrieve last messages.")))

@@ -124,6 +124,8 @@ extension ChannelDataSource {
 
         var indexPath: IndexPath? = nil
 
+        print("UpdateID: \(updatedItem.updateId)")
+
         // If the new message matches an existing message's id, then replace the old one.
         if let updateId = updatedItem.updateId {
             for (sectionIndex, section) in self.sections.enumerated() {
@@ -138,7 +140,7 @@ extension ChannelDataSource {
         }
 
         // If the new message isn't replacing an old one, append it to the end.
-        if indexPath == nil {
+        if indexPath.isNil {
             if replaceTypingIndicator, let lastSection = self.sections.last {
                 let section = self.sections.count - 1
                 indexPath = IndexPath(item: lastSection.items.count - 1, section: section)

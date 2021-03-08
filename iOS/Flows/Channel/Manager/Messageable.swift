@@ -35,8 +35,8 @@ protocol Messageable: AnyObject {
     var hasBeenConsumedBy: [String] { get }
     var color: Color { get }
     var kind: MessageKind { get }
-    func udpateConsumers(with consumer: Avatar) -> Future<Void, Error>
-    func appendAttributes(with attributes: [String: Any]) -> Future<Void, Error>
+    func udpateConsumers(with consumer: Avatar) -> Future<Messageable, Error>
+    func appendAttributes(with attributes: [String: Any]) -> Future<Messageable, Error>
 }
 
 func ==(lhs: Messageable, rhs: Messageable) -> Bool {
@@ -63,9 +63,9 @@ extension Messageable {
         return self.hasBeenConsumedBy.count > 0 
     }
 
-    func appendAttributes(with attributes: [String: Any]) -> Future<Void, Error>  {
+    func appendAttributes(with attributes: [String: Any]) -> Future<Messageable, Error>  {
         return Future { promise in
-            promise(.success(()))
+            promise(.success(self))
         }
     }
 

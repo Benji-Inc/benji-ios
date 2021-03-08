@@ -22,6 +22,9 @@ class SystemMessage: Messageable {
     var status: MessageStatus
     var id: String
     var updateId: String? {
+        if let updateId = self.attributes?["updateId"] as? Int {
+            return String(updateId)
+        }
         return self.attributes?["updateId"] as? String
     }
     var hasBeenConsumedBy: [String] {
@@ -68,13 +71,13 @@ class SystemMessage: Messageable {
     }
 
     @discardableResult
-    func udpateConsumers(with consumer: Avatar) -> Future<Void, Error> {
+    func udpateConsumers(with consumer: Avatar) -> Future<Messageable, Error> {
         return Future { promise in
             if let identity = consumer.userObjectID, !self.hasBeenConsumedBy.contains(identity) {
                 var consumers = self.hasBeenConsumedBy
                 consumers.append(identity)
                 self.attributes?["consumers"] = consumers
-                promise(.success(()))
+                promise(.success(self))
             } else {
                 promise(.failure(ClientError.generic))
             }

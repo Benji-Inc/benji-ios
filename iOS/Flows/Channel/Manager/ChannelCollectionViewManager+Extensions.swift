@@ -20,8 +20,8 @@ extension ChannelCollectionViewManager {
             //create system message copy of current message
             let messageCopy = SystemMessage(with: message)
             messageCopy.udpateConsumers(with: current)
-                .mainSink { _ in
-                    self.updateItem(with: messageCopy) {
+                .mainSink { copyWithConsumers in
+                    self.updateItem(with: copyWithConsumers) {
                         if message.context == .emergency {
                             UIApplication.shared.applicationIconBadgeNumber = 0
                         }
