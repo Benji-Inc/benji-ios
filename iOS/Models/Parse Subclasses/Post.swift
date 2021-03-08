@@ -17,6 +17,7 @@ enum PostKey: String {
     case expirationDate = "expirationDate"
     case type = "type"
     case file = "file"
+    case duration = "duration"
     case attributes = "attributes"
 }
 
@@ -36,8 +37,8 @@ final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
         set { self.setObject(for: .body, with: newValue) }
     }
 
-    var priority: Int? {
-        get { return self.getObject(for: .priority) }
+    var priority: Int {
+        get { return self.getObject(for: .priority) ?? 100 }
         set { self.setObject(for: .priority, with: newValue) }
     }
 
@@ -66,6 +67,11 @@ final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
     var attributes: [String : Any]? {
         get { return self.getObject(for: .attributes) }
         set { self.setObject(for: .attributes, with: newValue) }
+    }
+
+    var duration: Int? {
+        get { return self.getObject(for: .duration) }
+        set { self.setObject(for: .duration, with: newValue) }
     }
 }
 

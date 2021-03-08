@@ -490,6 +490,7 @@
 		D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67A82DA230CCE3D0076152B /* SplashViewController.swift */; };
 		D67C319625EE882B00289787 /* PostButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C319525EE882B00289787 /* PostButtonView.swift */; };
 		D67FF5A325F6BC3C005C3E1E /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67FF5A225F6BC3C005C3E1E /* Feed.swift */; };
+		D67FF5A625F6C256005C3E1E /* Post+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67FF5A525F6C256005C3E1E /* Post+Extensions.swift */; };
 		D6815DBB22EE1F1400E71251 /* FeedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6815DBA22EE1F1400E71251 /* FeedManager.swift */; };
 		D6830222234AA35C006145FE /* DisplayableChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6830221234AA35C006145FE /* DisplayableChannel.swift */; };
 		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
@@ -877,6 +878,7 @@
 		D67A82DA230CCE3D0076152B /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		D67C319525EE882B00289787 /* PostButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostButtonView.swift; sourceTree = "<group>"; };
 		D67FF5A225F6BC3C005C3E1E /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
+		D67FF5A525F6C256005C3E1E /* Post+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Post+Extensions.swift"; sourceTree = "<group>"; };
 		D6815DBA22EE1F1400E71251 /* FeedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedManager.swift; path = ../Flows/Feed/FeedManager.swift; sourceTree = "<group>"; };
 		D6830221234AA35C006145FE /* DisplayableChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableChannel.swift; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
@@ -1503,14 +1505,12 @@
 		D6637A0925A39E0C00A4A3B7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				D67FF5A425F6C20C005C3E1E /* Parse Subclasses */,
 				D695B44125BA398400843780 /* Attachments */,
 				D64C6A7D23294A8600DB7257 /* ChannelKey.swift */,
 				D66F0FF122C1D86800BA277D /* ChannelsType.swift */,
 				D6830221234AA35C006145FE /* DisplayableChannel.swift */,
-				D67FF5A225F6BC3C005C3E1E /* Feed.swift */,
 				D642735022C857760088256B /* MessageContext.swift */,
-				D6EDFB4B25D48F2B0034A2F6 /* Post.swift */,
-				D66F0FC622BF004300BA277D /* PostType.swift */,
 				D6B230D225BC7FCE0082A41A /* SendableType.swift */,
 				D607400D23401B3E009633EB /* SystemChannel.swift */,
 				D66F0FC822BF006D00BA277D /* SystemMessage.swift */,
@@ -1673,6 +1673,17 @@
 				D67A82DA230CCE3D0076152B /* SplashViewController.swift */,
 			);
 			path = Splash;
+			sourceTree = "<group>";
+		};
+		D67FF5A425F6C20C005C3E1E /* Parse Subclasses */ = {
+			isa = PBXGroup;
+			children = (
+				D67FF5A225F6BC3C005C3E1E /* Feed.swift */,
+				D6EDFB4B25D48F2B0034A2F6 /* Post.swift */,
+				D67FF5A525F6C256005C3E1E /* Post+Extensions.swift */,
+				D66F0FC622BF004300BA277D /* PostType.swift */,
+			);
+			path = "Parse Subclasses";
 			sourceTree = "<group>";
 		};
 		D684840822CD2E1E00362AC3 /* Cells */ = {
@@ -2241,6 +2252,7 @@
 				D607400E23401B3E009633EB /* SystemChannel.swift in Sources */,
 				D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */,
+				D67FF5A625F6C256005C3E1E /* Post+Extensions.swift in Sources */,
 				D66A580D25DD6B06001B3F64 /* NewChannelCollectionView.swift in Sources */,
 				D6D1501C21D5F8AD00CD8CE4 /* MessageCell.swift in Sources */,
 				D61EC0F521D3151400204BEE /* NSAttributedString+Extensions.swift in Sources */,
