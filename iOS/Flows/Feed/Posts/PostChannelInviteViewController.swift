@@ -22,7 +22,7 @@ class PostChannelInviteViewController: PostViewController {
     }
 
     override func configurePost() {
-        guard case PostType.channelInvite(let channel) = self.type else { return }
+        guard let channel = self.channel else { return }
         self.configure(with: channel)
     }
 

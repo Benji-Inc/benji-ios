@@ -10,7 +10,15 @@ import Foundation
 
 class PostViewController: ViewController {
 
-    let type: PostType
+    let post: Postable
+
+    var type: PostType {
+        return self.post.type
+    }
+
+    var attributes: [String: Any]? {
+        return self.post.attributes
+    }
 
     var didFinish: CompletionOptional = nil
     var didPause: CompletionOptional = nil
@@ -24,8 +32,8 @@ class PostViewController: ViewController {
     let avatarView = AvatarView()
     let button = Button()
 
-    init(with type: PostType) {
-        self.type = type
+    init(with post: Postable) {
+        self.post = post
         super.init()
     }
 

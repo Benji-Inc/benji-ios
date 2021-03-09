@@ -71,34 +71,6 @@ extension TCHChannel {
         return text
     }
 
-    func getUnconsumedAmount() -> Future<PostType, Error> {
-        return Future { promise in
-            var totalUnread: Int = 0
-            if let messagesObject = self.messages {
-                self.getMessagesCount { (result, count) in
-                    if result.isSuccessful() {
-                        messagesObject.getLastWithCount(count) { (messageResult, messages) in
-                            if messageResult.isSuccessful(), let msgs = messages {
-                                msgs.forEach { (message) in
-                                    if !message.isFromCurrentUser, !message.isConsumed, message.canBeConsumed {
-                                        totalUnread += 1
-                                    }
-                                }
-                                promise(.success(.unreadMessages(self, totalUnread)))
-                            } else {
-                                promise(.failure(ClientError.message(detail: "Unable to get messages.")))
-                            }
-                        }
-                    } else {
-                        promise(.failure(ClientError.message(detail: "Failed to get message count.")))
-                    }
-                }
-            } else {
-                promise(.failure(ClientError.message(detail: "There were no messages.")))
-            }
-        }
-    }
-
     func join() -> Future<Void, Error> {
         return Future { promise in
             self.join { result in

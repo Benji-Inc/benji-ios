@@ -14,7 +14,7 @@ class PostNotificationPermissionsViewController: PostViewController {
     override func initializeViews() {
         super.initializeViews()
 
-        self.textView.set(localizedText: "Notifications are only sent for important messages and daily ritual remiders. Nothing else.")
+        self.textView.set(localizedText: String(optional: self.post.body))
         self.button.set(style: .rounded(color: .purple, text: "OK"))
     }
 

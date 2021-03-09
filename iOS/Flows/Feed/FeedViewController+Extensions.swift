@@ -14,45 +14,39 @@ extension FeedViewController {
         self.animationView.play()
         PostsSupplier.shared.getItems()
             .mainSink(receiveValue: { (items) in
-                self.view.layoutNow()
                 self.manager.set(items: items)
                 self.animationView.stop()
             }).store(in: &self.cancellables)
     }
-
-    func addFirstItems() {
-        PostsSupplier.shared.getFirstItems()
-            .mainSink(receiveValue: { (items) in
-                self.view.layoutNow()
-                self.manager.set(items: items)
-                self.showFeed()
-            }).store(in: &self.cancellables)
-    }
 }
 
-extension FeedViewController: FeedManagerDelegate {
+extension FeedViewController: PostsCollectionManger {
 
-    func feedManagerDidSetItems(_ manager: FeedManager) {
+    func postsManagerDidSetItems(_ manager: PostsCollectionManager) {
         self.indicatorView.configure(with: manager.posts.count)
     }
 
-    func feed(_ manager: FeedManager, didSelect type: PostType) {
-        self.delegate?.feedView(self, didSelect: type)
+    func posts(_ manager: PostsCollectionManager,
+               didSelect post: Postable,
+               at index: Int) {
+        
+        self.indicatorView.pauseProgress(at: index)
+        self.delegate?.feedView(self, didSelect: post)
     }
 
-    func feedManagerDidFinish(_ manager: FeedManager) {
+    func postsManagerDidEndDisplaying(_ manager: PostsCollectionManager) {
         self.showReload()
     }
 
-    func feed(_ manager: FeedManager, didFinish index: Int) {
+    func posts(_ manager: PostsCollectionManager, didFinish index: Int) {
         self.indicatorView.finishProgress(at: index)
     }
 
-    func feed(_ manager: FeedManager, didPause index: Int) {
+    func posts(_ manager: PostsCollectionManager, didPause index: Int) {
         self.indicatorView.pauseProgress(at: index)
     }
 
-    func feed(_ manager: FeedManager,
+    func posts(_ manager: PostsCollectionManager,
               didShowViewAt index: Int,
               with duration: TimeInterval) {
         self.indicatorView.update(to: index, with: duration)

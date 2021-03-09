@@ -30,29 +30,20 @@ class FeedCoordinator: Coordinator<Void> {
 
 extension FeedCoordinator: FeedViewControllerDelegate {
 
-    func feedView(_ controller: FeedViewController, didSelect item: PostType) {
-        self.handle(item: item)
-    }
-
-    private func handle(item: PostType) {
-
-        switch item {
+    func feedView(_ controller: FeedViewController, didSelect post: Postable) {
+        switch post.type {
         case .timeSaved:
             break
-        case .ritual:
-            self.startRitualFlow()
-        case .unreadMessages(let channel, _):
+        case .unreadMessages, .channelInvite:
+            guard let channel = post.channel else { return }
             self.startChannelFlow(for: .channel(channel))
-        case .channelInvite(let channel):
-            self.startChannelFlow(for: .channel(channel))
-        case .newChannel(let channel):
-            self.startChannelFlow(for: channel.channelType)
-        case .inviteAsk(let reservation):
+        case .inviteAsk:
+            guard let reservation = post.reservation else { return }
             self.startReservationFlow(with: reservation)
         case .notificationPermissions:
             break
-        case .connectionRequest(_):
-            break
+        case .connectionRequest:
+            break // maybe go to channel? 
         case .meditation:
             self.showMeditation()
         }
@@ -61,12 +52,6 @@ extension FeedCoordinator: FeedViewControllerDelegate {
     private func startReservationFlow(with reservation: Reservation) {
         let coordinator = ReservationsCoordinator(reservation: reservation, router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { (_) in}
-    }
-
-    private func startRitualFlow() {
-        let coordinator = RitualCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { (result) in }
-        self.router.present(coordinator, source: self.feedVC)
     }
 
     private func startChannelFlow(for type: ChannelType) {

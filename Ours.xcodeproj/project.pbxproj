@@ -298,7 +298,6 @@
 		D650C1F225B741EB0037C59A /* plusToX.json in Resources */ = {isa = PBXBuildFile; fileRef = D650C1F025B741EB0037C59A /* plusToX.json */; };
 		D650C21025B7D6F20037C59A /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D650C20F25B7D6F20037C59A /* Attachment.swift */; };
 		D653F6B023588F8E00A03EEE /* RitualViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653F6AF23588F8E00A03EEE /* RitualViewController.swift */; };
-		D654DC04249EBDA20072E2F3 /* PostNewChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D654DC03249EBDA20072E2F3 /* PostNewChannelViewController.swift */; };
 		D65518F125890E3D00B901E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
 		D65518F82589109100B901E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0BF21D3071400204BEE /* AppDelegate.swift */; };
 		D6551901258910D700B901E4 /* AppDelegate+Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */; };
@@ -404,7 +403,6 @@
 		D6579536239A141900A01338 /* CountDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579535239A141900A01338 /* CountDownView.swift */; };
 		D6579557239C8B4000A01338 /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579556239C8B4000A01338 /* FeedCoordinator.swift */; };
 		D657955A239C8DA000A01338 /* PostIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579559239C8DA000A01338 /* PostIntroViewController.swift */; };
-		D657955C239CA01100A01338 /* PostRitualViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657955B239CA01100A01338 /* PostRitualViewController.swift */; };
 		D658C7D2244226A00027D12E /* PostMeditationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D1244226A00027D12E /* PostMeditationViewController.swift */; };
 		D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D4244229D20027D12E /* MeditationViewController.swift */; };
 		D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */; };
@@ -489,7 +487,9 @@
 		D67934E523DE66FE00536B44 /* PushPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67934E423DE66FE00536B44 /* PushPayload.swift */; };
 		D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67A82DA230CCE3D0076152B /* SplashViewController.swift */; };
 		D67C319625EE882B00289787 /* PostButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C319525EE882B00289787 /* PostButtonView.swift */; };
-		D6815DBB22EE1F1400E71251 /* FeedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6815DBA22EE1F1400E71251 /* FeedManager.swift */; };
+		D67FF5A325F6BC3C005C3E1E /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67FF5A225F6BC3C005C3E1E /* Feed.swift */; };
+		D67FF5A825F7BD31005C3E1E /* SystemPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67FF5A725F7BD31005C3E1E /* SystemPost.swift */; };
+		D6815DBB22EE1F1400E71251 /* PostsCollectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6815DBA22EE1F1400E71251 /* PostsCollectionManager.swift */; };
 		D6830222234AA35C006145FE /* DisplayableChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6830221234AA35C006145FE /* DisplayableChannel.swift */; };
 		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
@@ -521,6 +521,12 @@
 		D6B2603D22E6B8EA00143CF0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */; };
 		D6B3329325DD74EB00211044 /* Channel+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329225DD74EB00211044 /* Channel+Cloud.swift */; };
 		D6B3329525DDB9E300211044 /* NewChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329425DDB9E300211044 /* NewChannelHeaderView.swift */; };
+		D6B37CA425F7C05200BC3145 /* MeditationPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CA325F7C05200BC3145 /* MeditationPost.swift */; };
+		D6B37CA725F7C23B00BC3145 /* ChannelInvitePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CA625F7C23B00BC3145 /* ChannelInvitePost.swift */; };
+		D6B37CA925F7C3A900BC3145 /* ReservationPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CA825F7C3A900BC3145 /* ReservationPost.swift */; };
+		D6B37CAB25F7C46000BC3145 /* NotificationPermissionsPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CAA25F7C46000BC3145 /* NotificationPermissionsPost.swift */; };
+		D6B37CAD25F7C50000BC3145 /* ConnectionRequestPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CAC25F7C50000BC3145 /* ConnectionRequestPost.swift */; };
+		D6B37CB125F7DEF900BC3145 /* FeedManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CB025F7DEF900BC3145 /* FeedManger.swift */; };
 		D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */; };
@@ -800,7 +806,6 @@
 		D650C1F025B741EB0037C59A /* plusToX.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = plusToX.json; sourceTree = "<group>"; };
 		D650C20F25B7D6F20037C59A /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		D653F6AF23588F8E00A03EEE /* RitualViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RitualViewController.swift; sourceTree = "<group>"; };
-		D654DC03249EBDA20072E2F3 /* PostNewChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNewChannelViewController.swift; sourceTree = "<group>"; };
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D65519F22589591D00B901E4 /* Typealies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealies.swift; sourceTree = "<group>"; };
 		D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
@@ -808,7 +813,6 @@
 		D6579535239A141900A01338 /* CountDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownView.swift; sourceTree = "<group>"; };
 		D6579556239C8B4000A01338 /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
 		D6579559239C8DA000A01338 /* PostIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostIntroViewController.swift; sourceTree = "<group>"; };
-		D657955B239CA01100A01338 /* PostRitualViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRitualViewController.swift; sourceTree = "<group>"; };
 		D658C7D1244226A00027D12E /* PostMeditationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMeditationViewController.swift; sourceTree = "<group>"; };
 		D658C7D4244229D20027D12E /* MeditationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationViewController.swift; sourceTree = "<group>"; };
 		D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationCoordinator.swift; sourceTree = "<group>"; };
@@ -875,7 +879,9 @@
 		D67934E423DE66FE00536B44 /* PushPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPayload.swift; sourceTree = "<group>"; };
 		D67A82DA230CCE3D0076152B /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		D67C319525EE882B00289787 /* PostButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostButtonView.swift; sourceTree = "<group>"; };
-		D6815DBA22EE1F1400E71251 /* FeedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedManager.swift; path = ../Flows/Feed/FeedManager.swift; sourceTree = "<group>"; };
+		D67FF5A225F6BC3C005C3E1E /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
+		D67FF5A725F7BD31005C3E1E /* SystemPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPost.swift; sourceTree = "<group>"; };
+		D6815DBA22EE1F1400E71251 /* PostsCollectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsCollectionManager.swift; sourceTree = "<group>"; };
 		D6830221234AA35C006145FE /* DisplayableChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableChannel.swift; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
@@ -905,6 +911,12 @@
 		D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D6B3329225DD74EB00211044 /* Channel+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Channel+Cloud.swift"; sourceTree = "<group>"; };
 		D6B3329425DDB9E300211044 /* NewChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelHeaderView.swift; sourceTree = "<group>"; };
+		D6B37CA325F7C05200BC3145 /* MeditationPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationPost.swift; sourceTree = "<group>"; };
+		D6B37CA625F7C23B00BC3145 /* ChannelInvitePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelInvitePost.swift; sourceTree = "<group>"; };
+		D6B37CA825F7C3A900BC3145 /* ReservationPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationPost.swift; sourceTree = "<group>"; };
+		D6B37CAA25F7C46000BC3145 /* NotificationPermissionsPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionsPost.swift; sourceTree = "<group>"; };
+		D6B37CAC25F7C50000BC3145 /* ConnectionRequestPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestPost.swift; sourceTree = "<group>"; };
+		D6B37CB025F7DEF900BC3145 /* FeedManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedManger.swift; sourceTree = "<group>"; };
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
 		D6BF68D6239CBF74008E79A1 /* PostReservationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReservationViewController.swift; sourceTree = "<group>"; };
@@ -1176,6 +1188,7 @@
 				D62C635322BE9CBB00F4D097 /* FeedViewController.swift */,
 				D67896B522FF86AB0059BA75 /* FeedViewController+Extensions.swift */,
 				D64932D623FE460200986335 /* FeedIndicatorView.swift */,
+				D6815DBA22EE1F1400E71251 /* PostsCollectionManager.swift */,
 			);
 			path = Feed;
 			sourceTree = "<group>";
@@ -1448,9 +1461,9 @@
 				D66379CB25A3704300A4A3B7 /* ChatClientManager.swift */,
 				D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */,
 				D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */,
-				D6815DBA22EE1F1400E71251 /* FeedManager.swift */,
 				D66379CC25A3704300A4A3B7 /* HealthKitManager.swift */,
 				D66379C925A3704300A4A3B7 /* MessageDeliveryManager.swift */,
+				D6B37CB025F7DEF900BC3145 /* FeedManger.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -1501,16 +1514,16 @@
 		D6637A0925A39E0C00A4A3B7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				D6EDFB4B25D48F2B0034A2F6 /* Post.swift */,
+				D67FF5A425F6C20C005C3E1E /* Parse Subclasses */,
 				D695B44125BA398400843780 /* Attachments */,
 				D64C6A7D23294A8600DB7257 /* ChannelKey.swift */,
 				D66F0FF122C1D86800BA277D /* ChannelsType.swift */,
 				D6830221234AA35C006145FE /* DisplayableChannel.swift */,
-				D66F0FC622BF004300BA277D /* PostType.swift */,
 				D642735022C857760088256B /* MessageContext.swift */,
 				D6B230D225BC7FCE0082A41A /* SendableType.swift */,
 				D607400D23401B3E009633EB /* SystemChannel.swift */,
 				D66F0FC822BF006D00BA277D /* SystemMessage.swift */,
+				D6B37CA525F7C05900BC3145 /* Posts */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1672,6 +1685,16 @@
 			path = Splash;
 			sourceTree = "<group>";
 		};
+		D67FF5A425F6C20C005C3E1E /* Parse Subclasses */ = {
+			isa = PBXGroup;
+			children = (
+				D67FF5A225F6BC3C005C3E1E /* Feed.swift */,
+				D6EDFB4B25D48F2B0034A2F6 /* Post.swift */,
+				D66F0FC622BF004300BA277D /* PostType.swift */,
+			);
+			path = "Parse Subclasses";
+			sourceTree = "<group>";
+		};
 		D684840822CD2E1E00362AC3 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1773,6 +1796,19 @@
 				D623BC4E23EF5157007358CB /* ProfileItem.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		D6B37CA525F7C05900BC3145 /* Posts */ = {
+			isa = PBXGroup;
+			children = (
+				D67FF5A725F7BD31005C3E1E /* SystemPost.swift */,
+				D6B37CA325F7C05200BC3145 /* MeditationPost.swift */,
+				D6B37CA625F7C23B00BC3145 /* ChannelInvitePost.swift */,
+				D6B37CA825F7C3A900BC3145 /* ReservationPost.swift */,
+				D6B37CAA25F7C46000BC3145 /* NotificationPermissionsPost.swift */,
+				D6B37CAC25F7C50000BC3145 /* ConnectionRequestPost.swift */,
+			);
+			path = Posts;
 			sourceTree = "<group>";
 		};
 		D6C9CD2A2471D67B007376F7 /* Footers */ = {
@@ -1897,8 +1933,6 @@
 				D6BF68D6239CBF74008E79A1 /* PostReservationViewController.swift */,
 				D658C7D1244226A00027D12E /* PostMeditationViewController.swift */,
 				D6E80C8A23B2D1180012D438 /* PostNotificationPermissionsViewController.swift */,
-				D657955B239CA01100A01338 /* PostRitualViewController.swift */,
-				D654DC03249EBDA20072E2F3 /* PostNewChannelViewController.swift */,
 				D6E0ED52239CBDA40073B33E /* PostUnreadViewController.swift */,
 				D642736522C971FD0088256B /* PostTextView.swift */,
 			);
@@ -2237,6 +2271,7 @@
 				D677588C25B09F9C007E0184 /* TransitionRouter.swift in Sources */,
 				D607400E23401B3E009633EB /* SystemChannel.swift in Sources */,
 				D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */,
+				D6B37CA725F7C23B00BC3145 /* ChannelInvitePost.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */,
 				D66A580D25DD6B06001B3F64 /* NewChannelCollectionView.swift in Sources */,
 				D6D1501C21D5F8AD00CD8CE4 /* MessageCell.swift in Sources */,
@@ -2295,12 +2330,13 @@
 				D6D1501821D5F40F00CD8CE4 /* UICollectionView+Extensions.swift in Sources */,
 				D61D38E5248C0BA600BE457B /* InputAccessoryView+Connection.swift in Sources */,
 				D64C6A97232D5C0400DB7257 /* TCHMember+Extensions.swift in Sources */,
-				D6815DBB22EE1F1400E71251 /* FeedManager.swift in Sources */,
+				D6815DBB22EE1F1400E71251 /* PostsCollectionManager.swift in Sources */,
 				D63C67DE23D415A700EA373A /* FaceView.swift in Sources */,
 				D64C6AA4232EA13300DB7257 /* UIEdgeInsets+Extensions.swift in Sources */,
 				D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */,
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
+				D6B37CAD25F7C50000BC3145 /* ConnectionRequestPost.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */,
 				D66B4BE925EF03B60035A2C5 /* SideNavigationController.swift in Sources */,
@@ -2324,6 +2360,7 @@
 				D61D38E9248C506000BE457B /* InputAccessoryView+Panning.swift in Sources */,
 				D61EC0F921D317AB00204BEE /* Theme.swift in Sources */,
 				D6B3329525DDB9E300211044 /* NewChannelHeaderView.swift in Sources */,
+				D6B37CA425F7C05200BC3145 /* MeditationPost.swift in Sources */,
 				D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */,
 				D6432BF322D828480016001A /* ChannelDataSource.swift in Sources */,
@@ -2341,6 +2378,7 @@
 				D6FC809A237A68F50089AACC /* ChannelViewController+Updates.swift in Sources */,
 				D6D1461121D583D200CD8CE4 /* RootNavigationController.swift in Sources */,
 				D61EC0EC21D312B600204BEE /* UIView+Extensions.swift in Sources */,
+				D6B37CA925F7C3A900BC3145 /* ReservationPost.swift in Sources */,
 				D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */,
 				D6D1504021DAFB8300CD8CE4 /* UITextField+Extensions.swift in Sources */,
 				D6E859BB25DAD4EA003D1DE9 /* Subscribeable.swift in Sources */,
@@ -2349,12 +2387,14 @@
 				D6D1503721D7E74500CD8CE4 /* UIViewController+Extensions.swift in Sources */,
 				80D4A21623039B22007CB5F1 /* RitualInputViewController.swift in Sources */,
 				D64A1F07258C16470097817C /* WaitlistViewController.swift in Sources */,
+				D6B37CAB25F7C46000BC3145 /* NotificationPermissionsPost.swift in Sources */,
 				D6090E5A2377D5CF00833DA7 /* ChannelCellAttributesConfigurer.swift in Sources */,
 				D658C7D2244226A00027D12E /* PostMeditationViewController.swift in Sources */,
 				D6A4A1F625E9550A007F3E15 /* UserNotificationCategory.swift in Sources */,
 				D6090E582377D2CA00833DA7 /* ChannelSectionable.swift in Sources */,
 				D6DADF6E2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift in Sources */,
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
+				D67FF5A825F7BD31005C3E1E /* SystemPost.swift in Sources */,
 				D6B2603822E6AB5E00143CF0 /* ChannelDetailViewController.swift in Sources */,
 				D639106925D72E6F00D336D7 /* UICollectionView.CellRegistration+Extensions.swift in Sources */,
 				D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */,
@@ -2396,7 +2436,6 @@
 				D60C814222092D5300A127A3 /* PagingCollectionViewFlowLayout.swift in Sources */,
 				D6C9EF4525BF6CF000A14DE5 /* Indexable.swift in Sources */,
 				D642737122C991A60088256B /* ClosedRange+Extensions.swift in Sources */,
-				D657955C239CA01100A01338 /* PostRitualViewController.swift in Sources */,
 				D66379D025A3704300A4A3B7 /* UserNotificationFactory.swift in Sources */,
 				D6DADF722207DF83007D9EB1 /* ChannelsCollectionView.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
@@ -2476,7 +2515,6 @@
 				D67934D723D9580F00536B44 /* MessagePreviewViewController.swift in Sources */,
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
-				D654DC04249EBDA20072E2F3 /* PostNewChannelViewController.swift in Sources */,
 				D6F33C7524B14A7B009603FF /* VideoAttributesCellConfigurer.swift in Sources */,
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
@@ -2486,7 +2524,9 @@
 				D68B362C25BB1F86005AEB4C /* AttachmentView.swift in Sources */,
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,
 				D67758A725B0A604007E0184 /* UIViewController+Presentable.swift in Sources */,
+				D67FF5A325F6BC3C005C3E1E /* Feed.swift in Sources */,
 				D6FC8096237A64650089AACC /* MessageSupplier.swift in Sources */,
+				D6B37CB125F7DEF900BC3145 /* FeedManger.swift in Sources */,
 				D63D71C125F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
 				D6F33C7324B14A5D009603FF /* AudioCellAttributesConfigurer.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,

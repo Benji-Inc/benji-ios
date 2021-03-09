@@ -26,7 +26,7 @@ class PostIntroViewController: PostViewController {
     }
 
     override func configurePost() {
-        guard case PostType.timeSaved(let count) = self.type else { return }
+        guard let count = self.post.numberOfUnread else { return }
         self.set(count: count)
     }
 
