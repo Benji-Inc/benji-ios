@@ -13,7 +13,6 @@ import Parse
 enum PostType: String {
 
     case timeSaved = "generalUnreadMessages"
-    case newChannel
     case unreadMessages = "unreadMessages"
     case channelInvite
     case connectionRequest
@@ -25,18 +24,16 @@ enum PostType: String {
         switch self {
         case .timeSaved:
             return 0
-        case .newChannel:
-            return 1
         case .unreadMessages:
-            return 2
+            return 1
         case .channelInvite:
             return 3
         case .connectionRequest:
-            return 4
+            return 2
         case .inviteAsk:
-            return 5
-        case .notificationPermissions:
             return 6
+        case .notificationPermissions:
+            return 5
         case .meditation:
             return 7
         }

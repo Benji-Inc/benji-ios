@@ -298,7 +298,6 @@
 		D650C1F225B741EB0037C59A /* plusToX.json in Resources */ = {isa = PBXBuildFile; fileRef = D650C1F025B741EB0037C59A /* plusToX.json */; };
 		D650C21025B7D6F20037C59A /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D650C20F25B7D6F20037C59A /* Attachment.swift */; };
 		D653F6B023588F8E00A03EEE /* RitualViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D653F6AF23588F8E00A03EEE /* RitualViewController.swift */; };
-		D654DC04249EBDA20072E2F3 /* PostNewChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D654DC03249EBDA20072E2F3 /* PostNewChannelViewController.swift */; };
 		D65518F125890E3D00B901E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
 		D65518F82589109100B901E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0BF21D3071400204BEE /* AppDelegate.swift */; };
 		D6551901258910D700B901E4 /* AppDelegate+Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */; };
@@ -527,7 +526,6 @@
 		D6B37CA925F7C3A900BC3145 /* ReservationPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CA825F7C3A900BC3145 /* ReservationPost.swift */; };
 		D6B37CAB25F7C46000BC3145 /* NotificationPermissionsPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CAA25F7C46000BC3145 /* NotificationPermissionsPost.swift */; };
 		D6B37CAD25F7C50000BC3145 /* ConnectionRequestPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CAC25F7C50000BC3145 /* ConnectionRequestPost.swift */; };
-		D6B37CAF25F7C5E200BC3145 /* NewChannelPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CAE25F7C5E200BC3145 /* NewChannelPost.swift */; };
 		D6B37CB125F7DEF900BC3145 /* FeedManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CB025F7DEF900BC3145 /* FeedManger.swift */; };
 		D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
@@ -808,7 +806,6 @@
 		D650C1F025B741EB0037C59A /* plusToX.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = plusToX.json; sourceTree = "<group>"; };
 		D650C20F25B7D6F20037C59A /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		D653F6AF23588F8E00A03EEE /* RitualViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RitualViewController.swift; sourceTree = "<group>"; };
-		D654DC03249EBDA20072E2F3 /* PostNewChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostNewChannelViewController.swift; sourceTree = "<group>"; };
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D65519F22589591D00B901E4 /* Typealies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealies.swift; sourceTree = "<group>"; };
 		D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
@@ -919,7 +916,6 @@
 		D6B37CA825F7C3A900BC3145 /* ReservationPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationPost.swift; sourceTree = "<group>"; };
 		D6B37CAA25F7C46000BC3145 /* NotificationPermissionsPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionsPost.swift; sourceTree = "<group>"; };
 		D6B37CAC25F7C50000BC3145 /* ConnectionRequestPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestPost.swift; sourceTree = "<group>"; };
-		D6B37CAE25F7C5E200BC3145 /* NewChannelPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelPost.swift; sourceTree = "<group>"; };
 		D6B37CB025F7DEF900BC3145 /* FeedManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedManger.swift; sourceTree = "<group>"; };
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
@@ -1811,7 +1807,6 @@
 				D6B37CA825F7C3A900BC3145 /* ReservationPost.swift */,
 				D6B37CAA25F7C46000BC3145 /* NotificationPermissionsPost.swift */,
 				D6B37CAC25F7C50000BC3145 /* ConnectionRequestPost.swift */,
-				D6B37CAE25F7C5E200BC3145 /* NewChannelPost.swift */,
 			);
 			path = Posts;
 			sourceTree = "<group>";
@@ -1938,7 +1933,6 @@
 				D6BF68D6239CBF74008E79A1 /* PostReservationViewController.swift */,
 				D658C7D1244226A00027D12E /* PostMeditationViewController.swift */,
 				D6E80C8A23B2D1180012D438 /* PostNotificationPermissionsViewController.swift */,
-				D654DC03249EBDA20072E2F3 /* PostNewChannelViewController.swift */,
 				D6E0ED52239CBDA40073B33E /* PostUnreadViewController.swift */,
 				D642736522C971FD0088256B /* PostTextView.swift */,
 			);
@@ -2493,7 +2487,6 @@
 				D6D1500C21D5E7C200CD8CE4 /* CollectionViewManager.swift in Sources */,
 				D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */,
 				D6FA622423F06AEF00048C4A /* AnimationCycle.swift in Sources */,
-				D6B37CAF25F7C5E200BC3145 /* NewChannelPost.swift in Sources */,
 				D64DD8AC23CE2C180039DC5A /* OnboardingViewController.swift in Sources */,
 				D66379CF25A3704300A4A3B7 /* UserNotificationManager+Extensions.swift in Sources */,
 				D66F0FDA22BF297F00BA277D /* MainCoordinator.swift in Sources */,
@@ -2522,7 +2515,6 @@
 				D67934D723D9580F00536B44 /* MessagePreviewViewController.swift in Sources */,
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
-				D654DC04249EBDA20072E2F3 /* PostNewChannelViewController.swift in Sources */,
 				D6F33C7524B14A7B009603FF /* VideoAttributesCellConfigurer.swift in Sources */,
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,

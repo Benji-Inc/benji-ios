@@ -18,14 +18,6 @@ extension FeedViewController {
                 self.animationView.stop()
             }).store(in: &self.cancellables)
     }
-
-    func addFirstItems() {
-        PostsSupplier.shared.getFirstItems()
-            .mainSink(receiveValue: { (items) in
-                self.manager.set(items: items)
-                self.showFeed()
-            }).store(in: &self.cancellables)
-    }
 }
 
 extension FeedViewController: PostsCollectionManger {

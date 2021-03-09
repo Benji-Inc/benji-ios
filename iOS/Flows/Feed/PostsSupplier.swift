@@ -17,18 +17,6 @@ class PostsSupplier {
     private(set) var posts: [Postable] = []
     private var cancellables = Set<AnyCancellable>()
 
-    func getFirstItems() -> AnyPublisher<[Postable], Error> {
-        self.posts = []
-        var futures: [AnyPublisher<Void, Error>] = []
-        futures.append(self.getNewChannels())
-
-        return waitForAll(futures).map { (_) -> [Postable] in
-            return self.posts.sorted { lhs, rhs in
-                return lhs.priority < rhs.priority
-            }
-        }.eraseToAnyPublisher()
-    }
-
     func getItems() -> AnyPublisher<[Postable], Error> {
         self.posts = []
         self.posts.append(MeditationPost())
@@ -108,27 +96,6 @@ class PostsSupplier {
                     }
 
                     promise(.success(()))
-                }).store(in: &self.cancellables)
-        }.eraseToAnyPublisher()
-    }
-
-    private func getNewChannels() -> AnyPublisher<Void, Error> {
-        return Future { promise in
-            GetAllConnections(direction: .incoming)
-                .makeRequest(andUpdate: [], viewsToIgnore: [])
-                .mainSink(receivedResult: { (result) in
-                    switch result {
-                    case .success(let connections):
-                        connections.forEach { (connection) in
-                            if connection.status == .accepted,
-                               let channelId = connection.channelId {
-                                self.posts.append(NewChannelPost(with: channelId))
-                            }
-                        }
-                        promise(.success(()))
-                    case .error(let e):
-                        promise(.failure(e))
-                    }
                 }).store(in: &self.cancellables)
         }.eraseToAnyPublisher()
     }

@@ -55,8 +55,6 @@ class PostsCollectionManager: NSObject {
             switch post.type {
             case .timeSaved:
                 postVC = PostIntroViewController(with: post)
-            case .newChannel:
-                postVC = PostNewChannelViewController(with: post)
             case .unreadMessages:
                 postVC = PostUnreadViewController(with: post)
             case .channelInvite:

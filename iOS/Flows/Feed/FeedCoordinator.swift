@@ -34,7 +34,7 @@ extension FeedCoordinator: FeedViewControllerDelegate {
         switch post.type {
         case .timeSaved:
             break
-        case .unreadMessages, .channelInvite, .newChannel:
+        case .unreadMessages, .channelInvite:
             guard let channel = post.channel else { return }
             self.startChannelFlow(for: .channel(channel))
         case .inviteAsk:

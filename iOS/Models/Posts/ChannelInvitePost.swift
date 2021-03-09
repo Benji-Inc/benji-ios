@@ -12,7 +12,7 @@ class ChannelInvitePost: SystemPost {
 
     init(with channelSid: String) {
         let type = PostType.channelInvite
-        let attributes = ["channelId": channelSid]
+        let attributes = ["channelSid": channelSid]
         super.init(author: User.current()!,
                    body: String(),
                    triggerDate: nil,
