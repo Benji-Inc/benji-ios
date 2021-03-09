@@ -22,7 +22,9 @@ class PostsSupplier {
         futures.append(self.getNewChannels())
 
         return waitForAll(futures).map { (_) -> [Postable] in
-            return self.items // add sorted
+            return self.items.sorted { lhs, rhs in
+                return lhs.priority < rhs.priority
+            }
         }.eraseToAnyPublisher()
     }
 
@@ -45,7 +47,9 @@ class PostsSupplier {
         futures.append(self.getConnections())
 
         return waitForAll(futures).map { (_) -> [Postable] in
-            return self.items // sort
+            return self.items.sorted { lhs, rhs in
+                return lhs.priority < rhs.priority
+            }
         }.eraseToAnyPublisher()
     }
 
