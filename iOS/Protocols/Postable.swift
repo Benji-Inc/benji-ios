@@ -19,7 +19,7 @@ protocol Postable {
     var type: PostType { get set }
     var file: PFFileObject? { get set }
     var attributes: [String: Any]? { get set }
-    var duration: Int? { get set }
+    var duration: Int { get set }
 }
 
 extension Postable {

@@ -70,8 +70,8 @@ final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
         set { self.setObject(for: .attributes, with: newValue) }
     }
 
-    var duration: Int? {
-        get { return self.getObject(for: .duration) }
+    var duration: Int {
+        get { return self.getObject(for: .duration) ?? 5 }
         set { self.setObject(for: .duration, with: newValue) }
     }
 }

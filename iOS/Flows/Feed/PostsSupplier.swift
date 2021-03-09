@@ -19,11 +19,10 @@ class PostsSupplier {
 
     func getFirstItems() -> AnyPublisher<[PostType], Error> {
         var futures: [Future<Void, Error>] = []
-        self.items.append(.ritual)
         futures.append(self.getNewChannels())
 
         return waitForAll(futures).map { (_) -> [PostType] in
-            return self.items.sorted()
+            return self.items // add sorted
         }.eraseToAnyPublisher()
     }
 
@@ -34,7 +33,8 @@ class PostsSupplier {
         ChannelSupplier.shared.allInvitedChannels.forEach { (channel) in
             switch channel.channelType {
             case .channel(let tchChannel):
-                self.items.append(.channelInvite(tchChannel))
+                break
+               // self.items.append(.channelInvite(tchChannel))
             default:
                 break
             }
@@ -43,11 +43,10 @@ class PostsSupplier {
         var futures: [Future<Void, Error>] = []
         futures.append(self.getInviteAsk())
         futures.append(self.getNotificationPermissions())
-        futures.append(self.getUnreadMessages())
         futures.append(self.getConnections())
 
         return waitForAll(futures).map { (_) -> [PostType] in
-            return self.items.sorted()
+            return self.items // sort
         }.eraseToAnyPublisher()
     }
 
@@ -57,7 +56,8 @@ class PostsSupplier {
                 .mainSink(receivedResult: { (result) in
                     switch result {
                     case .success(let reservation):
-                        self.items.append(.inviteAsk(reservation))
+                        break
+                        //self.items.append(.inviteAsk(reservation))
                     case .error(_):
                         break
                     }
@@ -78,47 +78,6 @@ class PostsSupplier {
         }
     }
 
-    private func getUnreadMessages() -> Future<Void, Error> {
-        var channelFutures: [Future<PostType, Error>] = []
-        for channel in ChannelSupplier.shared.allJoinedChannels {
-            switch channel.channelType {
-            case .channel(let tchChannel):
-                channelFutures.append(tchChannel.getUnconsumedAmount())
-            default:
-                break
-            }
-        }
-
-        if channelFutures.count == 0 {
-            self.items.append(.timeSaved(0))
-        }
-
-        return Future { promise in
-            waitForAll(channelFutures)
-                .mainSink(receivedResult: { (result) in
-                    switch result {
-                    case .success(let channelItems):
-                        var totalCount: Int = 0
-                        let items = channelItems.filter { (feedType) -> Bool in
-                            switch feedType {
-                            case .unreadMessages(_,let count):
-                                totalCount += count
-                                return count > 0
-                            default:
-                                return false
-                            }
-                        }
-                        self.items.append(.timeSaved(totalCount))
-                        self.items.append(contentsOf: items)
-                    case .error(_):
-                        break 
-                    }
-
-                    promise(.success(()))
-                }).store(in: &self.cancellables)
-        }
-    }
-
     private func getConnections() -> Future<Void, Error> {
         return Future { promise in
             GetAllConnections(direction: .incoming)
@@ -128,7 +87,7 @@ class PostsSupplier {
                     case .success(let connections):
                         connections.forEach { (connection) in
                             if connection.status == .invited {
-                                self.items.append(.connectionRequest(connection))
+                                //self.items.append(.connectionRequest(connection))
                             }
                         }
                     case .error(_):
@@ -151,7 +110,7 @@ class PostsSupplier {
                             if connection.status == .accepted,
                                let channelId = connection.channelId,
                                let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
-                                self.items.append(.newChannel(channel))
+                                //self.items.append(.newChannel(channel))
                             }
                         }
                         promise(.success(()))

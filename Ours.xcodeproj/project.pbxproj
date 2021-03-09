@@ -404,7 +404,6 @@
 		D6579536239A141900A01338 /* CountDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579535239A141900A01338 /* CountDownView.swift */; };
 		D6579557239C8B4000A01338 /* FeedCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579556239C8B4000A01338 /* FeedCoordinator.swift */; };
 		D657955A239C8DA000A01338 /* PostIntroViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6579559239C8DA000A01338 /* PostIntroViewController.swift */; };
-		D657955C239CA01100A01338 /* PostRitualViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657955B239CA01100A01338 /* PostRitualViewController.swift */; };
 		D658C7D2244226A00027D12E /* PostMeditationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D1244226A00027D12E /* PostMeditationViewController.swift */; };
 		D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D4244229D20027D12E /* MeditationViewController.swift */; };
 		D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */; };
@@ -809,7 +808,6 @@
 		D6579535239A141900A01338 /* CountDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountDownView.swift; sourceTree = "<group>"; };
 		D6579556239C8B4000A01338 /* FeedCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCoordinator.swift; sourceTree = "<group>"; };
 		D6579559239C8DA000A01338 /* PostIntroViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostIntroViewController.swift; sourceTree = "<group>"; };
-		D657955B239CA01100A01338 /* PostRitualViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRitualViewController.swift; sourceTree = "<group>"; };
 		D658C7D1244226A00027D12E /* PostMeditationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMeditationViewController.swift; sourceTree = "<group>"; };
 		D658C7D4244229D20027D12E /* MeditationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationViewController.swift; sourceTree = "<group>"; };
 		D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationCoordinator.swift; sourceTree = "<group>"; };
@@ -1908,7 +1906,6 @@
 				D6BF68D6239CBF74008E79A1 /* PostReservationViewController.swift */,
 				D658C7D1244226A00027D12E /* PostMeditationViewController.swift */,
 				D6E80C8A23B2D1180012D438 /* PostNotificationPermissionsViewController.swift */,
-				D657955B239CA01100A01338 /* PostRitualViewController.swift */,
 				D654DC03249EBDA20072E2F3 /* PostNewChannelViewController.swift */,
 				D6E0ED52239CBDA40073B33E /* PostUnreadViewController.swift */,
 				D642736522C971FD0088256B /* PostTextView.swift */,
@@ -2407,7 +2404,6 @@
 				D60C814222092D5300A127A3 /* PagingCollectionViewFlowLayout.swift in Sources */,
 				D6C9EF4525BF6CF000A14DE5 /* Indexable.swift in Sources */,
 				D642737122C991A60088256B /* ClosedRange+Extensions.swift in Sources */,
-				D657955C239CA01100A01338 /* PostRitualViewController.swift in Sources */,
 				D66379D025A3704300A4A3B7 /* UserNotificationFactory.swift in Sources */,
 				D6DADF722207DF83007D9EB1 /* ChannelsCollectionView.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,

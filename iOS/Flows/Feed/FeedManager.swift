@@ -53,19 +53,17 @@ class FeedManager: NSObject {
             let postVC: PostViewController
 
             switch post.type {
-            case .timeSaved(_):
+            case .timeSaved:
                 postVC = PostIntroViewController(with: post)
-            case .ritual:
-                postVC = PostRitualViewController(with: post)
-            case .newChannel(_):
+            case .newChannel:
                 postVC = PostNewChannelViewController(with: post)
-            case .unreadMessages(_, _):
+            case .unreadMessages:
                 postVC = PostUnreadViewController(with: post)
-            case .channelInvite(_):
+            case .channelInvite:
                 postVC = PostChannelInviteViewController(with: post)
-            case .connectionRequest(_):
+            case .connectionRequest:
                 postVC = PostConnectionViewController(with: post)
-            case .inviteAsk(_):
+            case .inviteAsk:
                 postVC = PostReservationViewController(with: post)
             case .notificationPermissions:
                 postVC = PostNotificationPermissionsViewController(with: post)
@@ -94,34 +92,34 @@ class FeedManager: NSObject {
 
     func showFirst() {
         if let first = self.posts.first {
-            self.show(post: first, at: 0)
+            self.show(postVC: first, at: 0)
         }
     }
 
     func advanceToNextView(from index: Int) {
         if let next = self.posts[safe: index + 1]  {
-            self.show(post: next, at: index + 1)
+            self.show(postVC: next, at: index + 1)
         } else {
             self.finishFeed()
         }
     }
 
-    private func show(post: PostViewController, at index: Int) {
+    private func show(postVC: PostViewController, at index: Int) {
         self.currentIndex = index 
         let duration: TimeInterval = self.current.isNil ? 0 : 0.2
         UIView.animate(withDuration: duration) {
             self.current?.view.alpha = 0
         } completion: { (completed) in
             self.current?.removeFromParentSuperview()
-            self.current = post
-            post.view.alpha = 0
-            self.parentVC.addChild(viewController: post, toView: self.container)
-            post.view.expandToSuperviewSize()
-            post.view.layoutNow()
+            self.current = postVC
+            postVC.view.alpha = 0
+            self.parentVC.addChild(viewController: postVC, toView: self.container)
+            postVC.view.expandToSuperviewSize()
+            postVC.view.layoutNow()
             UIView.animate(withDuration: 0.2) {
-                post.view.alpha = 1
+                postVC.view.alpha = 1
             } completion: { (completed) in
-                self.delegate.feed(self, didShowViewAt: index, with: post.type.duration)
+                self.delegate.feed(self, didShowViewAt: index, with: TimeInterval(postVC.post.duration))
             }
         }
     }

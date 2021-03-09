@@ -24,8 +24,7 @@ class PostUnreadViewController: PostViewController {
     }
 
     override func configurePost() {
-        guard let displayableChannel = ChannelSupplier.shared.getChannel(withSID: String(optional: self.post.channelId)),
-              case ChannelType.channel(let channel) = displayableChannel.channelType,
+        guard let channel = self.post.channel,
               let count = self.post.numberOfUnread else { return }
 
         self.configure(with: channel, count: count)
