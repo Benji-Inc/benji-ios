@@ -522,6 +522,12 @@
 		D6B2603D22E6B8EA00143CF0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */; };
 		D6B3329325DD74EB00211044 /* Channel+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329225DD74EB00211044 /* Channel+Cloud.swift */; };
 		D6B3329525DDB9E300211044 /* NewChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329425DDB9E300211044 /* NewChannelHeaderView.swift */; };
+		D6B37CA425F7C05200BC3145 /* MeditationPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CA325F7C05200BC3145 /* MeditationPost.swift */; };
+		D6B37CA725F7C23B00BC3145 /* ChannelInvitePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CA625F7C23B00BC3145 /* ChannelInvitePost.swift */; };
+		D6B37CA925F7C3A900BC3145 /* ReservationPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CA825F7C3A900BC3145 /* ReservationPost.swift */; };
+		D6B37CAB25F7C46000BC3145 /* NotificationPermissionsPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CAA25F7C46000BC3145 /* NotificationPermissionsPost.swift */; };
+		D6B37CAD25F7C50000BC3145 /* ConnectionRequestPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CAC25F7C50000BC3145 /* ConnectionRequestPost.swift */; };
+		D6B37CAF25F7C5E200BC3145 /* NewChannelPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CAE25F7C5E200BC3145 /* NewChannelPost.swift */; };
 		D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */; };
@@ -907,6 +913,12 @@
 		D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D6B3329225DD74EB00211044 /* Channel+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Channel+Cloud.swift"; sourceTree = "<group>"; };
 		D6B3329425DDB9E300211044 /* NewChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelHeaderView.swift; sourceTree = "<group>"; };
+		D6B37CA325F7C05200BC3145 /* MeditationPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationPost.swift; sourceTree = "<group>"; };
+		D6B37CA625F7C23B00BC3145 /* ChannelInvitePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelInvitePost.swift; sourceTree = "<group>"; };
+		D6B37CA825F7C3A900BC3145 /* ReservationPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationPost.swift; sourceTree = "<group>"; };
+		D6B37CAA25F7C46000BC3145 /* NotificationPermissionsPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionsPost.swift; sourceTree = "<group>"; };
+		D6B37CAC25F7C50000BC3145 /* ConnectionRequestPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestPost.swift; sourceTree = "<group>"; };
+		D6B37CAE25F7C5E200BC3145 /* NewChannelPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelPost.swift; sourceTree = "<group>"; };
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
 		D6BF68D6239CBF74008E79A1 /* PostReservationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReservationViewController.swift; sourceTree = "<group>"; };
@@ -1512,7 +1524,7 @@
 				D6B230D225BC7FCE0082A41A /* SendableType.swift */,
 				D607400D23401B3E009633EB /* SystemChannel.swift */,
 				D66F0FC822BF006D00BA277D /* SystemMessage.swift */,
-				D67FF5A725F7BD31005C3E1E /* SystemPost.swift */,
+				D6B37CA525F7C05900BC3145 /* Posts */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1785,6 +1797,20 @@
 				D623BC4E23EF5157007358CB /* ProfileItem.swift */,
 			);
 			path = Profile;
+			sourceTree = "<group>";
+		};
+		D6B37CA525F7C05900BC3145 /* Posts */ = {
+			isa = PBXGroup;
+			children = (
+				D67FF5A725F7BD31005C3E1E /* SystemPost.swift */,
+				D6B37CA325F7C05200BC3145 /* MeditationPost.swift */,
+				D6B37CA625F7C23B00BC3145 /* ChannelInvitePost.swift */,
+				D6B37CA825F7C3A900BC3145 /* ReservationPost.swift */,
+				D6B37CAA25F7C46000BC3145 /* NotificationPermissionsPost.swift */,
+				D6B37CAC25F7C50000BC3145 /* ConnectionRequestPost.swift */,
+				D6B37CAE25F7C5E200BC3145 /* NewChannelPost.swift */,
+			);
+			path = Posts;
 			sourceTree = "<group>";
 		};
 		D6C9CD2A2471D67B007376F7 /* Footers */ = {
@@ -2248,6 +2274,7 @@
 				D677588C25B09F9C007E0184 /* TransitionRouter.swift in Sources */,
 				D607400E23401B3E009633EB /* SystemChannel.swift in Sources */,
 				D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */,
+				D6B37CA725F7C23B00BC3145 /* ChannelInvitePost.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */,
 				D66A580D25DD6B06001B3F64 /* NewChannelCollectionView.swift in Sources */,
 				D6D1501C21D5F8AD00CD8CE4 /* MessageCell.swift in Sources */,
@@ -2312,6 +2339,7 @@
 				D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */,
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
+				D6B37CAD25F7C50000BC3145 /* ConnectionRequestPost.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */,
 				D66B4BE925EF03B60035A2C5 /* SideNavigationController.swift in Sources */,
@@ -2335,6 +2363,7 @@
 				D61D38E9248C506000BE457B /* InputAccessoryView+Panning.swift in Sources */,
 				D61EC0F921D317AB00204BEE /* Theme.swift in Sources */,
 				D6B3329525DDB9E300211044 /* NewChannelHeaderView.swift in Sources */,
+				D6B37CA425F7C05200BC3145 /* MeditationPost.swift in Sources */,
 				D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */,
 				D6432BF322D828480016001A /* ChannelDataSource.swift in Sources */,
@@ -2352,6 +2381,7 @@
 				D6FC809A237A68F50089AACC /* ChannelViewController+Updates.swift in Sources */,
 				D6D1461121D583D200CD8CE4 /* RootNavigationController.swift in Sources */,
 				D61EC0EC21D312B600204BEE /* UIView+Extensions.swift in Sources */,
+				D6B37CA925F7C3A900BC3145 /* ReservationPost.swift in Sources */,
 				D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */,
 				D6D1504021DAFB8300CD8CE4 /* UITextField+Extensions.swift in Sources */,
 				D6E859BB25DAD4EA003D1DE9 /* Subscribeable.swift in Sources */,
@@ -2360,6 +2390,7 @@
 				D6D1503721D7E74500CD8CE4 /* UIViewController+Extensions.swift in Sources */,
 				80D4A21623039B22007CB5F1 /* RitualInputViewController.swift in Sources */,
 				D64A1F07258C16470097817C /* WaitlistViewController.swift in Sources */,
+				D6B37CAB25F7C46000BC3145 /* NotificationPermissionsPost.swift in Sources */,
 				D6090E5A2377D5CF00833DA7 /* ChannelCellAttributesConfigurer.swift in Sources */,
 				D658C7D2244226A00027D12E /* PostMeditationViewController.swift in Sources */,
 				D6A4A1F625E9550A007F3E15 /* UserNotificationCategory.swift in Sources */,
@@ -2459,6 +2490,7 @@
 				D6D1500C21D5E7C200CD8CE4 /* CollectionViewManager.swift in Sources */,
 				D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */,
 				D6FA622423F06AEF00048C4A /* AnimationCycle.swift in Sources */,
+				D6B37CAF25F7C5E200BC3145 /* NewChannelPost.swift in Sources */,
 				D64DD8AC23CE2C180039DC5A /* OnboardingViewController.swift in Sources */,
 				D66379CF25A3704300A4A3B7 /* UserNotificationManager+Extensions.swift in Sources */,
 				D66F0FDA22BF297F00BA277D /* MainCoordinator.swift in Sources */,

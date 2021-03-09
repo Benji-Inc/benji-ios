@@ -20,5 +20,29 @@ enum PostType: String {
     case inviteAsk
     case notificationPermissions
     case meditation
-    
+
+    var defaultPriority: Int {
+        switch self {
+        case .timeSaved:
+            return 0
+        case .newChannel:
+            return 1
+        case .unreadMessages:
+            return 2
+        case .channelInvite:
+            return 3
+        case .connectionRequest:
+            return 4
+        case .inviteAsk:
+            return 5
+        case .notificationPermissions:
+            return 6
+        case .meditation:
+            return 7
+        }
+    }
+
+    var defaultDuration: Int {
+        return 5
+    }
 }

@@ -28,13 +28,12 @@ class PostsSupplier {
 
     func getItems() -> AnyPublisher<[Postable], Error> {
 
-        self.items.append(.meditation)
+        self.items.append(MeditationPost())
 
         ChannelSupplier.shared.allInvitedChannels.forEach { (channel) in
             switch channel.channelType {
             case .channel(let tchChannel):
-                break
-               // self.items.append(.channelInvite(tchChannel))
+                self.items.append(ChannelInvitePost(with: tchChannel.sid!))
             default:
                 break
             }
@@ -56,8 +55,7 @@ class PostsSupplier {
                 .mainSink(receivedResult: { (result) in
                     switch result {
                     case .success(let reservation):
-                        break
-                        //self.items.append(.inviteAsk(reservation))
+                        self.items.append(ReservationPost(with: reservation))
                     case .error(_):
                         break
                     }
@@ -71,7 +69,7 @@ class PostsSupplier {
             UserNotificationManager.shared.getNotificationSettings()
                 .mainSink { (settings) in
                     if settings.authorizationStatus != .authorized {
-                        self.items.append(.notificationPermissions)
+                        self.items.append(NotificationPermissionsPost())
                     }
                     promise(.success(()))
                 }.store(in: &self.cancellables)
@@ -87,7 +85,7 @@ class PostsSupplier {
                     case .success(let connections):
                         connections.forEach { (connection) in
                             if connection.status == .invited {
-                                //self.items.append(.connectionRequest(connection))
+                                self.items.append(ConnectionRequestPost(with: connection))
                             }
                         }
                     case .error(_):
@@ -108,9 +106,8 @@ class PostsSupplier {
                     case .success(let connections):
                         connections.forEach { (connection) in
                             if connection.status == .accepted,
-                               let channelId = connection.channelId,
-                               let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
-                                //self.items.append(.newChannel(channel))
+                               let channelId = connection.channelId {
+                                self.items.append(NewChannelPost(with: channelId))
                             }
                         }
                         promise(.success(()))
