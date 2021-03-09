@@ -12,8 +12,11 @@ import Combine
 extension ChannelCollectionViewManager {
 
     @discardableResult
-    func updateConsumers(for message: Messageable) -> Future<Void, Error> {
-        guard let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed, !message.hasBeenConsumedBy.contains(current.objectId!) else { return Future { promise in promise(.success(()))}
+    func updateConsumers(for message: Messageable) -> AnyPublisher<Void, Error> {
+        guard let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed, !message.hasBeenConsumedBy.contains(current.objectId!) else {
+            return Future { promise in
+                promise(.success(()))
+            }.eraseToAnyPublisher()
         }
 
         return Future { promise in 
@@ -33,14 +36,14 @@ extension ChannelCollectionViewManager {
                             }.store(in: &self.cancellables)
                     }
                 }.store(in: &self.cancellables)
-        }
+        }.eraseToAnyPublisher()
     }
 
     func setAllMessagesToRead() -> AnyPublisher<[Void], Error> {
-        let futures: [Future<Void, Error>] = MessageSupplier.shared.unreadMessages.map { (message) -> Future<Void, Error> in
+        let publishers: [AnyPublisher<Void, Error>] = MessageSupplier.shared.unreadMessages.map { (message) -> AnyPublisher<Void, Error> in
             return self.updateConsumers(for: message)
         }
 
-        return waitForAll(futures)
+        return waitForAll(publishers)
     }
 }

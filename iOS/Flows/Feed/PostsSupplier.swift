@@ -14,15 +14,15 @@ class PostsSupplier {
 
     static let shared = PostsSupplier()
 
-    private(set) var items: [Postable] = []
+    private(set) var posts: [Postable] = []
     private var cancellables = Set<AnyCancellable>()
 
     func getFirstItems() -> AnyPublisher<[Postable], Error> {
-        var futures: [Future<Void, Error>] = []
+        var futures: [AnyPublisher<Void, Error>] = []
         futures.append(self.getNewChannels())
 
         return waitForAll(futures).map { (_) -> [Postable] in
-            return self.items.sorted { lhs, rhs in
+            return self.posts.sorted { lhs, rhs in
                 return lhs.priority < rhs.priority
             }
         }.eraseToAnyPublisher()
@@ -30,57 +30,67 @@ class PostsSupplier {
 
     func getItems() -> AnyPublisher<[Postable], Error> {
 
-        self.items.append(MeditationPost())
+        self.posts.append(MeditationPost())
 
         ChannelSupplier.shared.allInvitedChannels.forEach { (channel) in
             switch channel.channelType {
             case .channel(let tchChannel):
-                self.items.append(ChannelInvitePost(with: tchChannel.sid!))
+                self.posts.append(ChannelInvitePost(with: tchChannel.sid!))
             default:
                 break
             }
         }
 
-        var futures: [Future<Void, Error>] = []
-        futures.append(self.getInviteAsk())
-        futures.append(self.getNotificationPermissions())
-        futures.append(self.getConnections())
+        var publishers: [AnyPublisher<Void, Error>] = []
+        publishers.append(self.getInviteAsk())
+        publishers.append(self.getNotificationPermissions())
+        publishers.append(self.getConnections())
+        publishers.append(self.getPosts())
 
-        return waitForAll(futures).map { (_) -> [Postable] in
-            return self.items.sorted { lhs, rhs in
+        return waitForAll(publishers).map { (_) -> [Postable] in
+            return self.posts.sorted { lhs, rhs in
                 return lhs.priority < rhs.priority
             }
         }.eraseToAnyPublisher()
     }
 
-    private func getInviteAsk() -> Future<Void, Error> {
+    private func getPosts() -> AnyPublisher<Void, Error> {
+        return Future { promise in
+            FeedManager.shared.$posts.mainSink { posts in
+                self.posts.append(contentsOf: posts)
+                promise(.success(()))
+            }.store(in: &self.cancellables)
+        }.eraseToAnyPublisher()
+    }
+
+    private func getInviteAsk() -> AnyPublisher<Void, Error> {
         return Future { promise in
             Reservation.getFirstUnclaimed(for: User.current()!)
                 .mainSink(receivedResult: { (result) in
                     switch result {
                     case .success(let reservation):
-                        self.items.append(ReservationPost(with: reservation))
+                        self.posts.append(ReservationPost(with: reservation))
                     case .error(_):
                         break
                     }
                     promise(.success(()))
                 }).store(in: &self.cancellables)
-        }
+        }.eraseToAnyPublisher()
     }
 
-    private func getNotificationPermissions() -> Future<Void, Error>  {
+    private func getNotificationPermissions() -> AnyPublisher<Void, Error>  {
         return Future { promise in
             UserNotificationManager.shared.getNotificationSettings()
                 .mainSink { (settings) in
                     if settings.authorizationStatus != .authorized {
-                        self.items.append(NotificationPermissionsPost())
+                        self.posts.append(NotificationPermissionsPost())
                     }
                     promise(.success(()))
                 }.store(in: &self.cancellables)
-        }
+        }.eraseToAnyPublisher()
     }
 
-    private func getConnections() -> Future<Void, Error> {
+    private func getConnections() -> AnyPublisher<Void, Error> {
         return Future { promise in
             GetAllConnections(direction: .incoming)
                 .makeRequest(andUpdate: [], viewsToIgnore: [])
@@ -89,7 +99,7 @@ class PostsSupplier {
                     case .success(let connections):
                         connections.forEach { (connection) in
                             if connection.status == .invited {
-                                self.items.append(ConnectionRequestPost(with: connection))
+                                self.posts.append(ConnectionRequestPost(with: connection))
                             }
                         }
                     case .error(_):
@@ -98,10 +108,10 @@ class PostsSupplier {
 
                     promise(.success(()))
                 }).store(in: &self.cancellables)
-        }
+        }.eraseToAnyPublisher()
     }
 
-    private func getNewChannels() -> Future<Void, Error> {
+    private func getNewChannels() -> AnyPublisher<Void, Error> {
         return Future { promise in
             GetAllConnections(direction: .incoming)
                 .makeRequest(andUpdate: [], viewsToIgnore: [])
@@ -111,7 +121,7 @@ class PostsSupplier {
                         connections.forEach { (connection) in
                             if connection.status == .accepted,
                                let channelId = connection.channelId {
-                                self.items.append(NewChannelPost(with: channelId))
+                                self.posts.append(NewChannelPost(with: channelId))
                             }
                         }
                         promise(.success(()))
@@ -119,6 +129,6 @@ class PostsSupplier {
                         promise(.failure(e))
                     }
                 }).store(in: &self.cancellables)
-        }
+        }.eraseToAnyPublisher()
     }
 }
