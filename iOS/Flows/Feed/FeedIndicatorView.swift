@@ -84,7 +84,8 @@ class FeedIndicatorView: View {
     }
 
     func resetAllIndicators() {
-        self.elements.forEach { (view) in
+        for (index, view) in self.elements.enumerated() {
+            self.finishAnimator(at: index, shouldFinish: true)
             view.progressWidth = 0
             view.layoutNow()
         }
@@ -96,15 +97,19 @@ class FeedIndicatorView: View {
     }
 
     func finishProgress(at index: Int, finishAnimator: Bool = false) {
+        self.finishAnimator(at: index, shouldFinish: finishAnimator)
+        self.delegate.feedIndicator(self, didFinishProgressFor: index)
+    }
+
+    private func finishAnimator(at index: Int, shouldFinish: Bool) {
         guard let element = self.elements[safe: index],
               let animator = element.animator,
               animator.state == .active else { return }
 
         animator.stopAnimation(false)
-        if finishAnimator {
+        if shouldFinish {
             animator.finishAnimation(at: .end)
         }
-        self.delegate.feedIndicator(self, didFinishProgressFor: index)
     }
 }
 

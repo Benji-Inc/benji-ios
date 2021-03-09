@@ -29,7 +29,6 @@ class FeedViewController: ViewController {
     lazy var indicatorView = FeedIndicatorView(with: self)
     let animationView = AnimationView(name: "loading")
 
-
     var didExit: CompletionOptional = nil
 
     override func initializeViews() {
@@ -51,7 +50,8 @@ class FeedViewController: ViewController {
         self.closeButton.contentMode = .center
         self.closeButton.tintColor = Color.white.color
         self.closeButton.didSelect { [unowned self] in
-            self.indicatorView.finishProgress(at: self.manager.currentIndex, finishAnimator: true)
+            self.indicatorView.resetAllIndicators()
+            self.manager.reset()
             self.didExit?()
         }
 
@@ -66,6 +66,8 @@ class FeedViewController: ViewController {
         RitualManager.shared.$state.mainSink { state in
             switch state {
             case .noRitual:
+                break
+            case .feedAvailable:
                 break
             default:
                 break
@@ -97,7 +99,6 @@ class FeedViewController: ViewController {
     }
 
     func showReload() {
-        //self.messageLabel.setText("You are all caught up!\nSee you tomorrow 🤗")
         self.view.bringSubviewToFront(self.reloadButton)
         self.view.layoutNow()
         UIView.animate(withDuration: Theme.animationDuration, delay: Theme.animationDuration, options: .curveEaseInOut, animations: {

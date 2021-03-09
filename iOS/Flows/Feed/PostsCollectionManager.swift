@@ -10,7 +10,7 @@ import Foundation
 
 protocol PostsCollectionManger: AnyObject {
     func postsManagerDidSetItems(_ manager: PostsCollectionManager)
-    func posts(_ manager: PostsCollectionManager, didSelect post: Postable)
+    func posts(_ manager: PostsCollectionManager, didSelect post: Postable, at index: Int)
     func postsManagerDidEndDisplaying(_ manager: PostsCollectionManager)
     func posts(_ manager: PostsCollectionManager, didPause index: Int)
     func posts(_ manager: PostsCollectionManager, didFinish index: Int)
@@ -78,7 +78,7 @@ class PostsCollectionManager: NSObject {
             }
 
             postVC.didSelectPost = { [unowned self] in
-                self.delegate.posts(self, didSelect: post)
+                self.delegate.posts(self, didSelect: post, at: index)
             }
 
             postVC.didPause = { [unowned self] in
@@ -130,5 +130,11 @@ class PostsCollectionManager: NSObject {
         } completion: { (completed) in
             self.delegate.postsManagerDidEndDisplaying(self)
         }
+    }
+
+    func reset() {
+        self.current = nil
+        self.currentIndex = 0
+        self.posts = []
     }
 }
