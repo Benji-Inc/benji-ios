@@ -18,6 +18,7 @@ class PostsSupplier {
     private var cancellables = Set<AnyCancellable>()
 
     func getFirstItems() -> AnyPublisher<[Postable], Error> {
+        self.posts = []
         var futures: [AnyPublisher<Void, Error>] = []
         futures.append(self.getNewChannels())
 
@@ -29,7 +30,7 @@ class PostsSupplier {
     }
 
     func getItems() -> AnyPublisher<[Postable], Error> {
-
+        self.posts = []
         self.posts.append(MeditationPost())
 
         ChannelSupplier.shared.allInvitedChannels.forEach { (channel) in

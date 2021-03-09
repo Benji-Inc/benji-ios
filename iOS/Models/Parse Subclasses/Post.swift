@@ -38,7 +38,7 @@ final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
     }
 
     var priority: Int {
-        get { return self.getObject(for: .priority) ?? 100 }
+        get { return self.getObject(for: .priority) ?? self.type.defaultPriority }
         set { self.setObject(for: .priority, with: newValue) }
     }
 

@@ -12,7 +12,7 @@ class NewChannelPost: SystemPost {
 
     init(with channelSid: String) {
         let type = PostType.newChannel
-        let attributes = ["channelId": channelSid]
+        let attributes = ["channelSid": channelSid]
         super.init(author: User.current()!,
                    body: String(),
                    triggerDate: nil,
