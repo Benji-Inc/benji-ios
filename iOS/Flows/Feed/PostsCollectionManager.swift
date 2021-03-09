@@ -8,34 +8,34 @@
 
 import Foundation
 
-protocol FeedManagerDelegate: AnyObject {
-    func feedManagerDidSetItems(_ manager: FeedManager)
-    func feed(_ manager: FeedManager, didSelect post: Postable)
-    func feedManagerDidFinish(_ manager: FeedManager)
-    func feed(_ manager: FeedManager, didPause index: Int)
-    func feed(_ manager: FeedManager, didFinish index: Int)
-    func feed(_ manager: FeedManager,
-              didShowViewAt index: Int,
-              with duration: TimeInterval)
+protocol PostsCollectionManger: AnyObject {
+    func postsManagerDidSetItems(_ manager: PostsCollectionManager)
+    func posts(_ manager: PostsCollectionManager, didSelect post: Postable)
+    func postsManagerDidEndDisplaying(_ manager: PostsCollectionManager)
+    func posts(_ manager: PostsCollectionManager, didPause index: Int)
+    func posts(_ manager: PostsCollectionManager, didFinish index: Int)
+    func posts(_ manager: PostsCollectionManager,
+               didShowViewAt index: Int,
+               with duration: TimeInterval)
 }
 
-class FeedManager: NSObject {
+class PostsCollectionManager: NSObject {
 
     private(set) var currentIndex: Int = 0
     private var current: PostViewController?
     private(set) var posts: [PostViewController] = [] {
         didSet {
-            self.delegate.feedManagerDidSetItems(self)
+            self.delegate.postsManagerDidSetItems(self)
         }
     }
     
-    private unowned let delegate: FeedManagerDelegate
+    private unowned let delegate: PostsCollectionManger
     private unowned let parentVC: ViewController
     private unowned let container: View
 
     init(with parentVC: ViewController,
          container: View,
-         delegate: FeedManagerDelegate) {
+         delegate: PostsCollectionManger) {
 
         self.parentVC = parentVC
         self.delegate = delegate
@@ -74,15 +74,15 @@ class FeedManager: NSObject {
             postVCs.append(postVC)
 
             postVC.didFinish = { [unowned self] in
-                self.delegate.feed(self, didFinish: index)
+                self.delegate.posts(self, didFinish: index)
             }
 
             postVC.didSelectPost = { [unowned self] in
-                self.delegate.feed(self, didSelect: post)
+                self.delegate.posts(self, didSelect: post)
             }
 
             postVC.didPause = { [unowned self] in
-                self.delegate.feed(self, didPause: index)
+                self.delegate.posts(self, didPause: index)
             }
         }
 
@@ -103,7 +103,7 @@ class FeedManager: NSObject {
             self.finishFeed()
         }
     }
-
+    
     private func show(postVC: PostViewController, at index: Int) {
         self.currentIndex = index 
         let duration: TimeInterval = self.current.isNil ? 0 : 0.2
@@ -119,7 +119,7 @@ class FeedManager: NSObject {
             UIView.animate(withDuration: 0.2) {
                 postVC.view.alpha = 1
             } completion: { (completed) in
-                self.delegate.feed(self, didShowViewAt: index, with: TimeInterval(postVC.post.duration))
+                self.delegate.posts(self, didShowViewAt: index, with: TimeInterval(postVC.post.duration))
             }
         }
     }
@@ -128,7 +128,7 @@ class FeedManager: NSObject {
         UIView.animate(withDuration: 0.2) {
             self.current?.view.alpha = 0
         } completion: { (completed) in
-            self.delegate.feedManagerDidFinish(self)
+            self.delegate.postsManagerDidEndDisplaying(self)
         }
     }
 }

@@ -30,29 +30,29 @@ extension FeedViewController {
     }
 }
 
-extension FeedViewController: FeedManagerDelegate {
+extension FeedViewController: PostsCollectionManger {
 
-    func feedManagerDidSetItems(_ manager: FeedManager) {
+    func postsManagerDidSetItems(_ manager: PostsCollectionManager) {
         self.indicatorView.configure(with: manager.posts.count)
     }
 
-    func feed(_ manager: FeedManager, didSelect post: Postable) {
+    func posts(_ manager: PostsCollectionManager, didSelect post: Postable) {
         self.delegate?.feedView(self, didSelect: post)
     }
 
-    func feedManagerDidFinish(_ manager: FeedManager) {
+    func postsManagerDidEndDisplaying(_ manager: PostsCollectionManager) {
         self.showReload()
     }
 
-    func feed(_ manager: FeedManager, didFinish index: Int) {
+    func posts(_ manager: PostsCollectionManager, didFinish index: Int) {
         self.indicatorView.finishProgress(at: index)
     }
 
-    func feed(_ manager: FeedManager, didPause index: Int) {
+    func posts(_ manager: PostsCollectionManager, didPause index: Int) {
         self.indicatorView.pauseProgress(at: index)
     }
 
-    func feed(_ manager: FeedManager,
+    func posts(_ manager: PostsCollectionManager,
               didShowViewAt index: Int,
               with duration: TimeInterval) {
         self.indicatorView.update(to: index, with: duration)
