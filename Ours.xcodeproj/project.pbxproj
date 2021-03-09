@@ -489,6 +489,7 @@
 		D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67A82DA230CCE3D0076152B /* SplashViewController.swift */; };
 		D67C319625EE882B00289787 /* PostButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C319525EE882B00289787 /* PostButtonView.swift */; };
 		D67FF5A325F6BC3C005C3E1E /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67FF5A225F6BC3C005C3E1E /* Feed.swift */; };
+		D67FF5A825F7BD31005C3E1E /* SystemPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67FF5A725F7BD31005C3E1E /* SystemPost.swift */; };
 		D6815DBB22EE1F1400E71251 /* FeedManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6815DBA22EE1F1400E71251 /* FeedManager.swift */; };
 		D6830222234AA35C006145FE /* DisplayableChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6830221234AA35C006145FE /* DisplayableChannel.swift */; };
 		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
@@ -875,6 +876,7 @@
 		D67A82DA230CCE3D0076152B /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		D67C319525EE882B00289787 /* PostButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostButtonView.swift; sourceTree = "<group>"; };
 		D67FF5A225F6BC3C005C3E1E /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
+		D67FF5A725F7BD31005C3E1E /* SystemPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPost.swift; sourceTree = "<group>"; };
 		D6815DBA22EE1F1400E71251 /* FeedManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = FeedManager.swift; path = ../Flows/Feed/FeedManager.swift; sourceTree = "<group>"; };
 		D6830221234AA35C006145FE /* DisplayableChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableChannel.swift; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
@@ -1510,6 +1512,7 @@
 				D6B230D225BC7FCE0082A41A /* SendableType.swift */,
 				D607400D23401B3E009633EB /* SystemChannel.swift */,
 				D66F0FC822BF006D00BA277D /* SystemMessage.swift */,
+				D67FF5A725F7BD31005C3E1E /* SystemPost.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2363,6 +2366,7 @@
 				D6090E582377D2CA00833DA7 /* ChannelSectionable.swift in Sources */,
 				D6DADF6E2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift in Sources */,
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
+				D67FF5A825F7BD31005C3E1E /* SystemPost.swift in Sources */,
 				D6B2603822E6AB5E00143CF0 /* ChannelDetailViewController.swift in Sources */,
 				D639106925D72E6F00D336D7 /* UICollectionView.CellRegistration+Extensions.swift in Sources */,
 				D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */,

@@ -14,19 +14,19 @@ class PostsSupplier {
 
     static let shared = PostsSupplier()
 
-    private(set) var items: [PostType] = []
+    private(set) var items: [Postable] = []
     private var cancellables = Set<AnyCancellable>()
 
-    func getFirstItems() -> AnyPublisher<[PostType], Error> {
+    func getFirstItems() -> AnyPublisher<[Postable], Error> {
         var futures: [Future<Void, Error>] = []
         futures.append(self.getNewChannels())
 
-        return waitForAll(futures).map { (_) -> [PostType] in
+        return waitForAll(futures).map { (_) -> [Postable] in
             return self.items // add sorted
         }.eraseToAnyPublisher()
     }
 
-    func getItems() -> AnyPublisher<[PostType], Error> {
+    func getItems() -> AnyPublisher<[Postable], Error> {
 
         self.items.append(.meditation)
 
@@ -45,7 +45,7 @@ class PostsSupplier {
         futures.append(self.getNotificationPermissions())
         futures.append(self.getConnections())
 
-        return waitForAll(futures).map { (_) -> [PostType] in
+        return waitForAll(futures).map { (_) -> [Postable] in
             return self.items // sort
         }.eraseToAnyPublisher()
     }
