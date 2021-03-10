@@ -7,3 +7,19 @@
 //
 
 import Foundation
+
+class FeedCollectionViewController: CollectionViewController<FeedCollectionViewManger.SectionType, FeedCollectionViewManger> {
+
+    override func getCollectionView() -> CollectionView {
+        return FeedCollectionView()
+    }
+
+    override func initializeViews() {
+        super.initializeViews()
+
+        self.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
+            guard let item = cellItem?.item as? FakeItem else { return }
+            //self.delegate.attachementView(self, didSelect: attachment)
+        }.store(in: &self.cancellables)
+    }
+}

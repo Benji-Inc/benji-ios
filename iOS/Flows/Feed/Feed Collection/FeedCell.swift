@@ -9,6 +9,7 @@
 import Foundation
 
 struct FakeItem: Hashable {
+    var identifier = UUID().uuidString
     var color: Color = .purple
 }
 
@@ -18,6 +19,6 @@ class FeedCell: ManagerCell {
     var currentItem: FakeItem?
 
     func configure(with item: FakeItem) {
-
+        self.contentView.set(backgroundColor: item.color)
     }
 }
