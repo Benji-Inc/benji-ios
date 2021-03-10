@@ -17,8 +17,6 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         case reservations = 1
     }
 
-    var cancellables = Set<AnyCancellable>()
-
     private(set) var reservations: [Reservation] = []
 
     private let channelConfig = ManageableCellRegistration<ChannelCell>().cellProvider

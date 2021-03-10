@@ -50,6 +50,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
 
     @Published var onSelectedItem: (item: AnyHashable, section: SectionType)? = nil
     var didLongPress: ((AnyHashable, IndexPath) -> Void)? = nil
+    var cancellables = Set<AnyCancellable>()
 
     var hasLoadedInitialSnapshot: Bool = false
 

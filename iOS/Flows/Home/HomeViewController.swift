@@ -34,9 +34,19 @@ class HomeViewController: ViewController, TransitionableViewController {
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.set(backgroundColor: .background1)
+
         self.addChild(viewController: self.captureVC)
 
         self.view.addSubview(self.vibrancyView)
+
+        self.self.captureVC.view.layer.cornerRadius = 20
+        self.captureVC.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        self.captureVC.view.layer.masksToBounds = true
+
+        self.vibrancyView.layer.cornerRadius = 20
+        self.vibrancyView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        self.vibrancyView.layer.masksToBounds = true
 
         self.vibrancyView.tabView.profileItem.didSelect = { [unowned self] in
             self.didTapProfile?()
@@ -81,8 +91,15 @@ class HomeViewController: ViewController, TransitionableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.captureVC.view.expandToSuperviewSize()
-        self.vibrancyView.expandToSuperviewSize()
+        var size = self.view.size
+        size.height -= 100
+
+        self.captureVC.view.size = size
+        self.captureVC.view.centerOnX()
+        self.captureVC.view.pin(.top, padding: 100)
+
+        self.vibrancyView.frame = self.captureVC.view.frame
+
         self.feedVC.view.expandToSuperviewSize()
     }
 

@@ -15,7 +15,6 @@ class NewChannelCollectionViewManger: CollectionViewManager<NewChannelCollection
         case users
     }
 
-    private var cancellables = Set<AnyCancellable>()
     private var connections: [Connection] = []
 
     private let userConfig = ManageableCellRegistration<UserCell>().cellProvider
