@@ -67,6 +67,8 @@ class PostsCollectionManager: NSObject {
                 postVC = PostNotificationPermissionsViewController(with: post)
             case .meditation:
                 postVC = PostMeditationViewController(with: post)
+            case .media:
+                postVC = PostMediaViewController(with: post)
             }
 
             postVCs.append(postVC)

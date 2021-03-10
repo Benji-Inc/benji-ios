@@ -19,6 +19,7 @@ enum PostType: String {
     case inviteAsk
     case notificationPermissions
     case meditation
+    case media
 
     var defaultPriority: Int {
         switch self {
@@ -30,6 +31,8 @@ enum PostType: String {
             return 3
         case .connectionRequest:
             return 2
+        case .media:
+            return 4
         case .inviteAsk:
             return 6
         case .notificationPermissions:

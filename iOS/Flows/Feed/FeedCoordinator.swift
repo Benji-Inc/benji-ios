@@ -46,6 +46,8 @@ extension FeedCoordinator: FeedViewControllerDelegate {
             break // maybe go to channel? 
         case .meditation:
             self.showMeditation()
+        case .media:
+            break 
         }
     }
 

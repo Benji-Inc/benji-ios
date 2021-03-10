@@ -480,6 +480,7 @@
 		D67896BD23025FEC0059BA75 /* NameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896BC23025FEC0059BA75 /* NameViewController.swift */; };
 		D67896BF2302683C0059BA75 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896BE2302683C0059BA75 /* PhotoViewController.swift */; };
 		D67896CC2304524C0059BA75 /* ChannelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896CB2304524C0059BA75 /* ChannelCoordinator.swift */; };
+		D6792CD825F95DD400B6575C /* PostMediaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CD725F95DD400B6575C /* PostMediaViewController.swift */; };
 		D67934D523D956BB00536B44 /* ChannelPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67934D423D956BB00536B44 /* ChannelPreviewViewController.swift */; };
 		D67934D723D9580F00536B44 /* MessagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67934D623D9580F00536B44 /* MessagePreviewViewController.swift */; };
 		D67934DB23DC011D00536B44 /* CharacterCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67934DA23DC011D00536B44 /* CharacterCountView.swift */; };
@@ -872,6 +873,7 @@
 		D67896BC23025FEC0059BA75 /* NameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameViewController.swift; sourceTree = "<group>"; };
 		D67896BE2302683C0059BA75 /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
 		D67896CB2304524C0059BA75 /* ChannelCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCoordinator.swift; sourceTree = "<group>"; };
+		D6792CD725F95DD400B6575C /* PostMediaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostMediaViewController.swift; sourceTree = "<group>"; };
 		D67934D423D956BB00536B44 /* ChannelPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPreviewViewController.swift; sourceTree = "<group>"; };
 		D67934D623D9580F00536B44 /* MessagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePreviewViewController.swift; sourceTree = "<group>"; };
 		D67934DA23DC011D00536B44 /* CharacterCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCountView.swift; sourceTree = "<group>"; };
@@ -1181,7 +1183,7 @@
 		D62C634F22BE9C4600F4D097 /* Feed */ = {
 			isa = PBXGroup;
 			children = (
-				D6EDFB4A25D48F1D0034A2F6 /* Posts */,
+				D6EDFB4A25D48F1D0034A2F6 /* Post VC's */,
 				D6579535239A141900A01338 /* CountDownView.swift */,
 				D6579556239C8B4000A01338 /* FeedCoordinator.swift */,
 				D6A301AB2380E102006655E0 /* PostsSupplier.swift */,
@@ -1677,6 +1679,13 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
+		D6792CD625F923B800B6575C /* Post Creation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Post Creation";
+			sourceTree = "<group>";
+		};
 		D67A82D9230CCE290076152B /* Splash */ = {
 			isa = PBXGroup;
 			children = (
@@ -1828,6 +1837,7 @@
 				D6D145F521D549A300CD8CE4 /* Home */,
 				D658C7D3244229C00027D12E /* Meditation */,
 				D66A580325DD68F9001B3F64 /* New Channel */,
+				D6792CD625F923B800B6575C /* Post Creation */,
 				D6B2603B22E6B8CD00143CF0 /* Profile */,
 				D68BEAD224831F7C00C95D31 /* Reservations */,
 				D6EDD1932355DB6000FDA5D6 /* Ritual */,
@@ -1923,7 +1933,7 @@
 			path = Ritual;
 			sourceTree = "<group>";
 		};
-		D6EDFB4A25D48F1D0034A2F6 /* Posts */ = {
+		D6EDFB4A25D48F1D0034A2F6 /* Post VC's */ = {
 			isa = PBXGroup;
 			children = (
 				D6A714C625D969FE000A90EB /* PostViewController.swift */,
@@ -1935,8 +1945,9 @@
 				D6E80C8A23B2D1180012D438 /* PostNotificationPermissionsViewController.swift */,
 				D6E0ED52239CBDA40073B33E /* PostUnreadViewController.swift */,
 				D642736522C971FD0088256B /* PostTextView.swift */,
+				D6792CD725F95DD400B6575C /* PostMediaViewController.swift */,
 			);
-			path = Posts;
+			path = "Post VC's";
 			sourceTree = "<group>";
 		};
 		D6F33C7A24B1502C009603FF /* Message */ = {
@@ -2510,6 +2521,7 @@
 				D64A8F4C25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift in Sources */,
 				D61EC0E221D30E6000204BEE /* Label.swift in Sources */,
 				D61EC0E021D30E3F00204BEE /* FullScreenViewController.swift in Sources */,
+				D6792CD825F95DD400B6575C /* PostMediaViewController.swift in Sources */,
 				D6FA622623F0B16F00048C4A /* ChannelDataSource+Animations.swift in Sources */,
 				D6D1502D21D6A08300CD8CE4 /* ChannelCollectionView.swift in Sources */,
 				D67934D723D9580F00536B44 /* MessagePreviewViewController.swift in Sources */,
