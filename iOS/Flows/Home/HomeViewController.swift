@@ -21,6 +21,9 @@ class HomeViewController: ViewController, TransitionableViewController {
         return .background1
     }
 
+    lazy var feedCollectionVC = FeedCollectionViewController()
+
+
     lazy var feedVC = FeedViewController()
     lazy var captureVC = ImageCaptureViewController()
     let vibrancyView = HomeVibrancyView()
@@ -35,6 +38,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         super.initializeViews()
 
         self.view.set(backgroundColor: .background1)
+        self.addChild(viewController: self.feedCollectionVC)
 
         self.addChild(viewController: self.captureVC)
 
@@ -91,21 +95,26 @@ class HomeViewController: ViewController, TransitionableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        self.feedCollectionVC.view.expandToSuperviewWidth()
+        self.feedCollectionVC.view.height = 100
+        self.feedCollectionVC.view.pinToSafeArea(.top, padding: 0)
+
         var size = self.view.size
-        size.height -= 100
+        size.height -= self.feedCollectionVC.view.bottom
 
         self.captureVC.view.size = size
         self.captureVC.view.centerOnX()
-        self.captureVC.view.pin(.top, padding: 100)
+        self.captureVC.view.match(.top, to: .bottom, of: self.feedCollectionVC.view)
 
         self.vibrancyView.frame = self.captureVC.view.frame
 
         self.feedVC.view.expandToSuperviewSize()
     }
 
-    func animateTabView(shouldShow: Bool) {
+    func animate(show: Bool) {
         UIView.animate(withDuration: Theme.animationDuration) {
-            self.vibrancyView.tabView.alpha = shouldShow ? 1.0 : 0.0
+            self.vibrancyView.tabView.alpha = show ? 1.0 : 0.0
+            self.feedCollectionVC.view.alpha = show ? 1.0 : 0.0
         }
     }
 

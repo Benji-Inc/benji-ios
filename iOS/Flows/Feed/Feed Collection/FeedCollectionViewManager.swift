@@ -21,7 +21,6 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
     override func initialize() {
         super.initialize()
 
-        self.collectionView.collectionViewLayout = self.createLayout()
         self.collectionView.animationView.play()
 
         for _ in 0...10 {
@@ -47,19 +46,7 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
         }
     }
 
-    func createLayout() -> UICollectionViewCompositionalLayout {
-        let fraction: CGFloat = 1 / 5
-
-        // Item
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
-        // Group
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(fraction))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-        // Section
-        let section = NSCollectionLayoutSection(group: group)
-        return UICollectionViewCompositionalLayout(section: section)
+    override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.width / 5, height: self.collectionView.height)
     }
 }

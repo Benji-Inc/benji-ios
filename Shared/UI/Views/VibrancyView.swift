@@ -32,20 +32,12 @@ class VibrancyView: View {
     func show(blur: Bool) {
         self.blurView.effect = blur ? self.blurEffect : nil
     }
-
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return true
-    }
 }
 
 class BlurView: UIVisualEffectView {
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return true
-    }
+
 }
 
 class VisualEffectView: UIVisualEffectView {
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return true
-    }
+
 }

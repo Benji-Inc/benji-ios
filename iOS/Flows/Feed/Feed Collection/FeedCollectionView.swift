@@ -34,7 +34,7 @@ class FeedCollectionView: CollectionView {
     override func initializeViews() {
         super.initializeViews()
 
-        self.bounces = false
+        self.bounces = true
         self.set(backgroundColor: .clear)
         self.showsHorizontalScrollIndicator = false
     }

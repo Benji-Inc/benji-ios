@@ -18,7 +18,28 @@ class FeedCell: ManagerCell {
 
     var currentItem: FakeItem?
 
+    let someView = View()
+
+    override func initializeSubviews() {
+        super.initializeSubviews()
+
+        self.contentView.addSubview(self.someView)
+    }
+
     func configure(with item: FakeItem) {
-        self.contentView.set(backgroundColor: item.color)
+        self.someView.set(backgroundColor: item.color)
+    }
+
+    override func update(isSelected: Bool) {
+        self.someView.alpha = isSelected ? 0.5 : 1.0
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.someView.width = self.contentView.width - Theme.contentOffset.doubled
+        self.someView.height = self.contentView.height - Theme.contentOffset.doubled
+
+        self.someView.centerOnXAndY()
     }
 }

@@ -22,10 +22,53 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
     private let channelConfig = ManageableCellRegistration<ChannelCell>().cellProvider
     private let reservationConfig = ManageableCellRegistration<ReservationCell>().cellProvider
 
+    lazy var layout = UICollectionViewCompositionalLayout() { sectionIndex, layoutEnvironment in
+
+        var listConfig = UICollectionLayoutListConfiguration(appearance: .grouped)
+
+        listConfig.backgroundColor = .clear
+        listConfig.showsSeparators = false
+        listConfig.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
+            guard let `self` = self,
+                  let section = SectionType(rawValue: indexPath.section), section == .channels,
+                  let item = self.getItem(for: indexPath) else { return nil }
+
+            let actionHandler: UIContextualAction.Handler = { action, view, completion in
+                guard let channel = item as? DisplayableChannel else { return }
+                switch channel.channelType {
+                case .system(_):
+                    completion(true)
+                case .pending(_):
+                    completion(true)
+                case .channel(let tchChannel):
+                    ChannelSupplier.shared.delete(channel: tchChannel)
+                        .mainSink { result in
+                            switch result {
+                            case .success():
+                                completion(true)
+                            case .error(_):
+                                completion(false)
+                            }
+                        }.store(in: &self.cancellables)
+                }
+            }
+
+            let action = UIContextualAction(style: .normal, title: "", handler: actionHandler)
+            action.image = UIImage(systemName: "trash")
+            action.backgroundColor = Color.red.color
+
+            return UISwipeActionsConfiguration(actions: [action])
+        }
+
+        let section = NSCollectionLayoutSection.list(using: listConfig, layoutEnvironment: layoutEnvironment)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 110, leading: 0, bottom: 0, trailing: 0)
+        return section
+    }
+
     override func initialize() {
         super.initialize()
 
-        self.collectionView.collectionViewLayout = self.createLayout()
+        self.collectionView.collectionViewLayout = self.layout
         self.collectionView.animationView.play()
 
         let combined = Publishers.Zip(
@@ -95,43 +138,10 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         })
     }
 
-    func createLayout() -> UICollectionViewCompositionalLayout {
-        var listConfig = UICollectionLayoutListConfiguration(appearance: .grouped)
-
-        listConfig.backgroundColor = .clear 
-        listConfig.showsSeparators = false
-        listConfig.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
-            guard let `self` = self,
-                  let section = SectionType(rawValue: indexPath.section), section == .channels,
-                  let item = self.getItem(for: indexPath) else { return nil }
-
-            let actionHandler: UIContextualAction.Handler = { action, view, completion in
-                guard let channel = item as? DisplayableChannel else { return }
-                switch channel.channelType {
-                case .system(_):
-                    completion(true)
-                case .pending(_):
-                    completion(true)
-                case .channel(let tchChannel):
-                    ChannelSupplier.shared.delete(channel: tchChannel)
-                        .mainSink { result in
-                            switch result {
-                            case .success():
-                                completion(true)
-                            case .error(_):
-                                completion(false)
-                            }
-                        }.store(in: &self.cancellables)
-                }
-            }
-
-            let action = UIContextualAction(style: .normal, title: "", handler: actionHandler)
-            action.image = UIImage(systemName: "trash")
-            action.backgroundColor = Color.red.color
-
-            return UISwipeActionsConfiguration(actions: [action])
-        }
-
-        return UICollectionViewCompositionalLayout.list(using: listConfig)
-    }
+//    func createLayout() -> UICollectionViewCompositionalLayout {
+//
+//
+//        let layout = UICollectionViewCompositionalLayout.list(using: listConfig)
+//        return layout
+//    }
 }

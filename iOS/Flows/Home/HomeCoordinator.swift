@@ -164,7 +164,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 extension HomeCoordinator: SideMenuNavigationControllerDelegate {
 
     func sideMenuWillAppear(menu: SideMenuNavigationController, animated: Bool) {
-        self.homeVC.animateTabView(shouldShow: false)
+        self.homeVC.animate(show: false)
     }
 
     func sideMenuDidAppear(menu: SideMenuNavigationController, animated: Bool) {
@@ -180,6 +180,6 @@ extension HomeCoordinator: SideMenuNavigationControllerDelegate {
     }
 
     func sideMenuDidDisappear(menu: SideMenuNavigationController, animated: Bool) {
-        self.homeVC.animateTabView(shouldShow: true)
+        self.homeVC.animate(show: true)
     }
 }
