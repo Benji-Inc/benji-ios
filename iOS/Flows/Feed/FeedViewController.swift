@@ -16,6 +16,8 @@ protocol FeedViewControllerDelegate: AnyObject {
 
 class FeedViewController: ViewController {
 
+    lazy var feedCollectionVC = FeedCollectionViewController()
+
     lazy var manager: PostsCollectionManager = {
         let manager = PostsCollectionManager(with: self, container: self.postContainerView, delegate: self)
         return manager
@@ -33,6 +35,8 @@ class FeedViewController: ViewController {
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.addChild(viewController: self.feedCollectionVC)
 
         self.view.addSubview(self.reloadButton)
 
@@ -78,6 +82,10 @@ class FeedViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        self.feedCollectionVC.view.expandToSuperviewWidth()
+        self.feedCollectionVC.view.height = 60
+        self.feedCollectionVC.view.pinToSafeArea(.top, padding: 0)
+
         self.reloadButton.size = CGSize(width: 140, height: 40)
         self.reloadButton.centerOnXAndY()
 
@@ -86,13 +94,13 @@ class FeedViewController: ViewController {
         self.indicatorView.centerOnX()
 
         self.closeButton.squaredSize = 44
-        self.closeButton.match(.top, to: .bottom, of: self.indicatorView)
+        self.closeButton.match(.top, to: .bottom, of: self.feedCollectionVC.view)
         self.closeButton.match(.right, to: .right, of: self.indicatorView)
 
         self.postContainerView.height = self.view.height - self.closeButton.bottom
         self.postContainerView.expandToSuperviewWidth()
         self.postContainerView.centerOnX()
-        self.postContainerView.match(.top, to: .bottom, of: self.closeButton)
+        self.postContainerView.match(.top, to: .bottom, of: self.feedCollectionVC.view)
 
         self.animationView.size = CGSize(width: 18, height: 18)
         self.animationView.centerOnXAndY()

@@ -21,9 +21,6 @@ class HomeViewController: ViewController, TransitionableViewController {
         return .background1
     }
 
-    lazy var feedCollectionVC = FeedCollectionViewController()
-
-
     lazy var feedVC = FeedViewController()
     lazy var captureVC = ImageCaptureViewController()
     let vibrancyView = HomeVibrancyView()
@@ -38,8 +35,8 @@ class HomeViewController: ViewController, TransitionableViewController {
         super.initializeViews()
 
         self.view.set(backgroundColor: .background1)
-        self.addChild(viewController: self.feedCollectionVC)
 
+        self.addChild(viewController: self.feedVC)
         self.addChild(viewController: self.captureVC)
 
         self.view.addSubview(self.vibrancyView)
@@ -95,39 +92,35 @@ class HomeViewController: ViewController, TransitionableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.feedCollectionVC.view.expandToSuperviewWidth()
-        self.feedCollectionVC.view.height = 60
-        self.feedCollectionVC.view.pinToSafeArea(.top, padding: 0)
+        self.feedVC.view.expandToSuperviewSize()
+        let topOffset = 60 + self.view.safeAreaRect.top
 
         var size = self.view.size
-        size.height -= self.feedCollectionVC.view.bottom
+        size.height -= topOffset
 
         self.captureVC.view.size = size
         self.captureVC.view.centerOnX()
-        self.captureVC.view.match(.top, to: .bottom, of: self.feedCollectionVC.view)
+        self.captureVC.view.pin(.top, padding: topOffset)
 
         self.vibrancyView.frame = self.captureVC.view.frame
-
-        self.feedVC.view.expandToSuperviewSize()
     }
 
     func animate(show: Bool) {
         UIView.animate(withDuration: Theme.animationDuration) {
             self.vibrancyView.tabView.alpha = show ? 1.0 : 0.0
-            self.feedCollectionVC.view.alpha = show ? 1.0 : 0.0
+            self.feedVC.feedCollectionVC.view.alpha = show ? 1.0 : 0.0
         }
     }
 
     func showFeed() {
 
-        if self.feedVC.parent.isNil {
-            self.addChild(viewController: self.feedVC)
-            self.view.layoutNow()
-        }
-
-        self.willShowFeed?()
-        self.feedCollectionVC.statusView?.hideAll()
-        self.feedVC.showFeed()
+//        if self.feedVC.parent.isNil {
+//            self.view.layoutNow()
+//        }
+//
+//        self.willShowFeed?()
+//        self.feedVC.feedCollectionVC.statusView?.hideAll()
+//        self.feedVC.showFeed()
     }
 
     func hideFeed() {
@@ -135,7 +128,7 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.feedVC.view.alpha = 0
         } completion: { completed in
             self.feedVC.removeFromParent()
-            self.feedCollectionVC.statusView?.reset()
+            self.feedVC.feedCollectionVC.statusView?.reset()
         }
     }
 
