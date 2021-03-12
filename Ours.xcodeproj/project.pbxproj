@@ -485,6 +485,7 @@
 		D6792CDD25F9665E00B6575C /* FeedCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CDC25F9665E00B6575C /* FeedCollectionViewManager.swift */; };
 		D6792CDF25F9666F00B6575C /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CDE25F9666F00B6575C /* FeedCell.swift */; };
 		D6792CE125F96C9600B6575C /* FeedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE025F96C9600B6575C /* FeedCollectionView.swift */; };
+		D6792CE325F99F2E00B6575C /* FeedStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE225F99F2E00B6575C /* FeedStatusView.swift */; };
 		D67934D523D956BB00536B44 /* ChannelPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67934D423D956BB00536B44 /* ChannelPreviewViewController.swift */; };
 		D67934D723D9580F00536B44 /* MessagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67934D623D9580F00536B44 /* MessagePreviewViewController.swift */; };
 		D67934DB23DC011D00536B44 /* CharacterCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67934DA23DC011D00536B44 /* CharacterCountView.swift */; };
@@ -882,6 +883,7 @@
 		D6792CDC25F9665E00B6575C /* FeedCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCollectionViewManager.swift; sourceTree = "<group>"; };
 		D6792CDE25F9666F00B6575C /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		D6792CE025F96C9600B6575C /* FeedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCollectionView.swift; sourceTree = "<group>"; };
+		D6792CE225F99F2E00B6575C /* FeedStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStatusView.swift; sourceTree = "<group>"; };
 		D67934D423D956BB00536B44 /* ChannelPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPreviewViewController.swift; sourceTree = "<group>"; };
 		D67934D623D9580F00536B44 /* MessagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePreviewViewController.swift; sourceTree = "<group>"; };
 		D67934DA23DC011D00536B44 /* CharacterCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCountView.swift; sourceTree = "<group>"; };
@@ -1702,6 +1704,7 @@
 				D6792CE025F96C9600B6575C /* FeedCollectionView.swift */,
 				D6792CD925F9661A00B6575C /* FeedCollectionViewController.swift */,
 				D6792CDC25F9665E00B6575C /* FeedCollectionViewManager.swift */,
+				D6792CE225F99F2E00B6575C /* FeedStatusView.swift */,
 			);
 			path = "Feed Collection";
 			sourceTree = "<group>";
@@ -2375,6 +2378,7 @@
 				D66B4BE925EF03B60035A2C5 /* SideNavigationController.swift in Sources */,
 				D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
+				D6792CE325F99F2E00B6575C /* FeedStatusView.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,
 				D642735E22C90C820088256B /* CGPoint+Extensions.swift in Sources */,
 				D61EC0DE21D30DAC00204BEE /* Array+Extensions.swift in Sources */,

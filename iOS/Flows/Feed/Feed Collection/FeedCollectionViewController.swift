@@ -10,6 +10,13 @@ import Foundation
 
 class FeedCollectionViewController: CollectionViewController<FeedCollectionViewManger.SectionType, FeedCollectionViewManger> {
 
+    var statusView: FeedStatusView? {
+        guard let cv = self.collectionViewManager.collectionView as? FeedCollectionView else { return nil }
+        return cv.statusView
+    }
+
+    var didSelectFeed: ((Feed) -> Void)? = nil
+
     override func getCollectionView() -> CollectionView {
         return FeedCollectionView()
     }
@@ -19,7 +26,7 @@ class FeedCollectionViewController: CollectionViewController<FeedCollectionViewM
 
         self.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
             guard let item = cellItem?.item as? FakeItem else { return }
-            //self.delegate.attachementView(self, didSelect: attachment)
+            //self.didSelectFeed?(item)
         }.store(in: &self.cancellables)
     }
 }

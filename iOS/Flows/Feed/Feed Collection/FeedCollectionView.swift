@@ -11,7 +11,7 @@ import Combine
 
 class FeedCollectionView: CollectionView {
 
-    let emptyView = FeedEmptyView()
+    let statusView = FeedStatusView()
     private var cancellables = Set<AnyCancellable>()
 
     init() {
@@ -19,12 +19,7 @@ class FeedCollectionView: CollectionView {
         layout.scrollDirection = .horizontal
         super.init(layout: layout)
 
-        self.backgroundView = self.emptyView
-        self.emptyView.alpha = 0
-
-        self.publisher(for: \.contentSize).mainSink { (size) in
-            self.emptyView.alpha = size.width > 0.0 ? 0.0 : 1.0
-        }.store(in: &self.cancellables)
+        self.backgroundView = self.statusView
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -38,8 +33,4 @@ class FeedCollectionView: CollectionView {
         self.set(backgroundColor: .clear)
         self.showsHorizontalScrollIndicator = false
     }
-}
-
-class FeedEmptyView: View {
-
 }

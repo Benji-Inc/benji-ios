@@ -137,11 +137,4 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
             }
         })
     }
-
-//    func createLayout() -> UICollectionViewCompositionalLayout {
-//
-//
-//        let layout = UICollectionViewCompositionalLayout.list(using: listConfig)
-//        return layout
-//    }
 }

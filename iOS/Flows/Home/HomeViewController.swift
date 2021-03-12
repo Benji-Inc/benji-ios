@@ -68,16 +68,16 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.hideFeed()
         }
 
-        self.vibrancyView.button.didSelect { [unowned self] in
-            switch RitualManager.shared.state {
-            case .noRitual:
-                self.didTapAddRitual?()
-            case .feedAvailable:
-                self.showFeed()
-            default:
-                break 
-            }
-        }
+//        self.vibrancyView.button.didSelect { [unowned self] in
+//            switch RitualManager.shared.state {
+//            case .noRitual:
+//                self.didTapAddRitual?()
+//            case .feedAvailable:
+//                self.showFeed()
+//            default:
+//                break
+//            }
+//        }
 
         self.vibrancyView.tabView.postButtonView.button.publisher(for: \.isHighlighted)
             .removeDuplicates()
@@ -96,7 +96,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         super.viewDidLayoutSubviews()
 
         self.feedCollectionVC.view.expandToSuperviewWidth()
-        self.feedCollectionVC.view.height = 100
+        self.feedCollectionVC.view.height = 60
         self.feedCollectionVC.view.pinToSafeArea(.top, padding: 0)
 
         var size = self.view.size
@@ -126,7 +126,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         }
 
         self.willShowFeed?()
-        self.vibrancyView.hideAll()
+        self.feedCollectionVC.statusView?.hideAll()
         self.feedVC.showFeed()
     }
 
@@ -135,7 +135,7 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.feedVC.view.alpha = 0
         } completion: { completed in
             self.feedVC.removeFromParent()
-            self.vibrancyView.reset()
+            self.feedCollectionVC.statusView?.reset()
         }
     }
 

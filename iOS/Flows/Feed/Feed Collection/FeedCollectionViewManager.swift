@@ -18,9 +18,7 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
 
     var items: [FakeItem] = []
 
-    override func initialize() {
-        super.initialize()
-
+    func loadFeeds() {
         self.collectionView.animationView.play()
 
         for _ in 0...10 {

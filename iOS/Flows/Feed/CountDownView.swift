@@ -10,7 +10,7 @@ import Foundation
 
 class CountDownView: View {
 
-    private let timeLabel = Label(font: .displayThin)
+    private let timeLabel = Label(font: .mediumThin)
     private(set) var timer: Timer?
     private var referenceDate: Date?
 
