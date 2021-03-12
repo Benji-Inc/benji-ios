@@ -10,33 +10,32 @@ import Foundation
 import QuartzCore
 
 class GradientView: PassThroughView {
-    
-    private let gradient = CAGradientLayer()
 
-    private let color: Color
+    private lazy var gradient = CAGradientLayer(start: self.start,
+                                                end: self.end,
+                                                colors: self.colors,
+                                                type: .axial)
+    private let colors: [CGColor]
+    private let start: CAGradientLayer.Point
+    private let end: CAGradientLayer.Point
 
-    init(with color: Color = .background1) {
-        self.color = color
+    init(with colors: [CGColor],
+         startPoint: CAGradientLayer.Point,
+         endPoint: CAGradientLayer.Point) {
+
+        self.colors = colors
+        self.start = startPoint
+        self.end = endPoint
+        
         super.init()
+
+        self.set(backgroundColor: .clear)
+
+        self.layer.addSublayer(self.gradient)
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func initializeSubviews() {
-        super.initializeSubviews()
-        
-        self.set(backgroundColor: .clear)
-
-        self.gradient.colors = [self.color.color.cgColor,
-                                self.color.color.cgColor,
-                                self.color.color.withAlphaComponent(0.9).cgColor,
-                                self.color.color.withAlphaComponent(0.8).cgColor,
-                                self.color.color.withAlphaComponent(0.6).cgColor,
-                                self.color.color.withAlphaComponent(0).cgColor].reversed()
-        self.gradient.type = .axial
-        self.layer.addSublayer(self.gradient)
     }
 
     override func layoutSubviews() {

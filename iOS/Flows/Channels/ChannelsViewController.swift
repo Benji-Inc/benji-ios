@@ -24,7 +24,7 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
     private let addButton = Button()
 
     private lazy var channelsCollectionView = ChannelsCollectionView()
-    private let gradientView = GradientView()
+    private let gradientView = ChannelsGradientView()
 
     override func initializeViews() {
         super.initializeViews()
