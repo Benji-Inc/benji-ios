@@ -83,7 +83,7 @@ class FeedViewController: ViewController {
         super.viewDidLayoutSubviews()
 
         self.feedCollectionVC.view.expandToSuperviewWidth()
-        self.feedCollectionVC.view.height = 60
+        self.feedCollectionVC.view.height = FeedCollectionViewController.height
         self.feedCollectionVC.view.pinToSafeArea(.top, padding: 0)
 
         self.reloadButton.size = CGSize(width: 140, height: 40)

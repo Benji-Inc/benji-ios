@@ -10,6 +10,8 @@ import Foundation
 
 class FeedCollectionViewController: CollectionViewController<FeedCollectionViewManger.SectionType, FeedCollectionViewManger> {
 
+    static let height: CGFloat = 100
+
     var statusView: FeedStatusView? {
         guard let cv = self.collectionViewManager.collectionView as? FeedCollectionView else { return nil }
         return cv.statusView

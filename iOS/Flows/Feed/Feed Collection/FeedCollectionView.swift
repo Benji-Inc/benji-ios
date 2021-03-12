@@ -18,8 +18,6 @@ class FeedCollectionView: CollectionView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         super.init(layout: layout)
-
-        self.backgroundView = self.statusView
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -28,6 +26,12 @@ class FeedCollectionView: CollectionView {
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.backgroundView = self.statusView
+
+        self.publisher(for: \.contentSize).mainSink { (size) in
+            self.statusView.alpha = size.width > 0.0 ? 0.0 : 1.0
+        }.store(in: &self.cancellables)
 
         self.bounces = true
         self.set(backgroundColor: .clear)

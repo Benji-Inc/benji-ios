@@ -25,7 +25,8 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
             self.items.append(FakeItem())
         }
 
-        self.loadSnapshot()
+        let cycle = AnimationCycle(inFromPosition: .down, outToPosition: .up, shouldConcatenate: true, scrollToEnd: false)
+        self.loadSnapshot(animationCycle: cycle)
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
