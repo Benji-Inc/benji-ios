@@ -31,6 +31,10 @@ class HomeViewController: ViewController, TransitionableViewController {
 
     var willShowFeed: CompletionOptional = nil
 
+    var minTop: CGFloat {
+        return FeedCollectionViewController.height + self.view.safeAreaRect.top
+    }
+
     private var topOffset: CGFloat?
 
     override func initializeViews() {
@@ -133,9 +137,9 @@ class HomeViewController: ViewController, TransitionableViewController {
 
     func hideFeed() {
         UIView.animate(withDuration: Theme.animationDuration) {
-            self.feedVC.view.alpha = 0
+            self.captureVC.view.top = self.minTop
+            self.view.layoutNow()
         } completion: { completed in
-            self.feedVC.removeFromParent()
             self.feedVC.feedCollectionVC.statusView?.reset()
         }
     }
@@ -149,8 +153,6 @@ class HomeViewController: ViewController, TransitionableViewController {
 
         let translation = pan.translation(in: view.superview)
 
-        let minTop = FeedCollectionViewController.height + self.view.safeAreaRect.top
-
         switch pan.state {
         case .possible:
             break
@@ -158,12 +160,12 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.topOffset = minTop
         case .changed:
             let newTop = minTop + translation.y
-            self.topOffset = clamp(newTop, minTop, self.view.height)
+            self.topOffset = clamp(newTop, self.minTop, self.view.height)
             self.captureVC.view.top = self.topOffset!
         case .ended, .cancelled, .failed:
-            let diff = (self.view.height - minTop) - self.topOffset!
-            let progress = diff / (self.view.height - minTop)
-            self.topOffset = progress < 0.65 ? self.view.height : minTop
+            let diff = (self.view.height - self.minTop) - self.topOffset!
+            let progress = diff / (self.view.height - self.minTop)
+            self.topOffset = progress < 0.65 ? self.view.height : self.minTop
             UIView.animate(withDuration: Theme.animationDuration) {
                 self.captureVC.view.top = self.topOffset!
                 self.view.layoutNow()
@@ -179,7 +181,7 @@ class HomeViewController: ViewController, TransitionableViewController {
 
     private func animateFeed(show: Bool) {
         if show {
-            self.feedVC.feedCollectionVC.collectionViewManager.loadFeeds()
+            self.feedVC.showFeed()
         } else {
             self.feedVC.feedCollectionVC.collectionViewManager.reset()
         }
