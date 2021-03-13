@@ -36,6 +36,7 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
 
     private var topOffset: CGFloat?
+    var isPanning: Bool = false
 
     override func initializeViews() {
         super.initializeViews()
@@ -56,7 +57,8 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.vibrancyView.layer.masksToBounds = true
 
         self.vibrancyView.onPan { [unowned self] pan in
-            self.handle(pan: pan)
+            pan.delegate = self
+            self.handle(pan)
         }
 
         self.vibrancyView.tabView.profileItem.didSelect = { [unowned self] in
@@ -148,21 +150,24 @@ class HomeViewController: ViewController, TransitionableViewController {
         // do something 
     }
 
-    private func handle(pan: UIPanGestureRecognizer) {
+    private func handle(_ pan: UIPanGestureRecognizer) {
         guard let view = pan.view else {return}
 
         let translation = pan.translation(in: view.superview)
 
         switch pan.state {
         case .possible:
-            break
+            self.isPanning = false
         case .began:
+            self.isPanning = false
             self.topOffset = minTop
         case .changed:
-            let newTop = minTop + translation.y
+            self.isPanning = translation.y > 0
+            let newTop = self.minTop + translation.y
             self.topOffset = clamp(newTop, self.minTop, self.view.height)
             self.captureVC.view.top = self.topOffset!
         case .ended, .cancelled, .failed:
+            self.isPanning = false
             let diff = (self.view.height - self.minTop) - self.topOffset!
             let progress = diff / (self.view.height - self.minTop)
             self.topOffset = progress < 0.65 ? self.view.height : self.minTop
@@ -185,5 +190,20 @@ class HomeViewController: ViewController, TransitionableViewController {
         } else {
             self.feedVC.feedCollectionVC.collectionViewManager.reset()
         }
+    }
+}
+
+extension HomeViewController: UIGestureRecognizerDelegate {
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let _ = gestureRecognizer as? UIPanGestureRecognizer, self.isPanning {
+            return false
+        } else if let _ = gestureRecognizer as? UIScreenEdgePanGestureRecognizer {
+            if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
+                return false
+            }
+        }
+
+        return true
     }
 }
