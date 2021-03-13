@@ -32,11 +32,12 @@ class HomeViewController: ViewController, TransitionableViewController {
     var willShowFeed: CompletionOptional = nil
 
     var minTop: CGFloat {
-        return FeedCollectionViewController.height + self.view.safeAreaRect.top
+        return 60 + self.view.safeAreaRect.top
     }
 
     private var topOffset: CGFloat?
-    var isPanning: Bool = false
+    private(set) var isPanning: Bool = false
+    var isMenuPresenting: Bool = false 
 
     override func initializeViews() {
         super.initializeViews()
@@ -105,7 +106,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         super.viewDidLayoutSubviews()
 
         self.feedVC.view.expandToSuperviewSize()
-        let topOffset = FeedCollectionViewController.height + self.view.safeAreaRect.top
+        let topOffset = self.minTop
 
         var size = self.view.size
         size.height -= topOffset
@@ -120,6 +121,7 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
 
     func animate(show: Bool) {
+        self.isMenuPresenting = !show
         UIView.animate(withDuration: Theme.animationDuration) {
             self.vibrancyView.tabView.alpha = show ? 1.0 : 0.0
             self.feedVC.feedCollectionVC.view.alpha = show ? 1.0 : 0.0
@@ -151,7 +153,7 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
 
     private func handle(_ pan: UIPanGestureRecognizer) {
-        guard let view = pan.view else {return}
+        guard let view = pan.view, !self.isMenuPresenting else {return}
 
         let translation = pan.translation(in: view.superview)
 
@@ -196,12 +198,10 @@ class HomeViewController: ViewController, TransitionableViewController {
 extension HomeViewController: UIGestureRecognizerDelegate {
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let _ = gestureRecognizer as? UIPanGestureRecognizer, self.isPanning {
+        if let _ = gestureRecognizer as? UIPanGestureRecognizer, self.isMenuPresenting {
             return false
-        } else if let _ = gestureRecognizer as? UIScreenEdgePanGestureRecognizer {
-            if gestureRecognizer.state == .began || gestureRecognizer.state == .changed {
-                return false
-            }
+        } else if let _ = gestureRecognizer as? UIScreenEdgePanGestureRecognizer, self.isPanning {
+            return false
         }
 
         return true

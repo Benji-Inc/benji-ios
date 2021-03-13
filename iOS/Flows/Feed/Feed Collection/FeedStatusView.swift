@@ -36,7 +36,7 @@ class FeedStatusView: View {
         super.layoutSubviews()
 
         self.label.setSize(withWidth: self.width)
-        self.label.centerY = self.centerY * 0.9
+        self.label.centerY = self.centerY * 0.5
         self.label.centerOnX()
 
         self.countDownView.size = CGSize(width: 200, height: 60)

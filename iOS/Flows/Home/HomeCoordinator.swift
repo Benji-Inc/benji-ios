@@ -63,7 +63,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         rightMenuNavigationController.sideMenuDelegate = self
         SideMenuManager.default.rightMenuNavigationController = rightMenuNavigationController
 
-        SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.homeVC.view)
+        let gestures = SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.homeVC.view)
+        gestures.forEach { gesture in
+            gesture.delegate = self.homeVC
+        }
     }
 
     func handle(deeplink: DeepLinkable) {
