@@ -50,6 +50,7 @@ class FeedViewController: ViewController {
         }
 
         self.view.addSubview(self.gradientView)
+        self.gradientView.alpha = 0
         self.view.addSubview(self.closeButton)
         self.closeButton.setImage(UIImage(systemName: "xmark")!, for: .normal)
         self.closeButton.contentMode = .center
@@ -60,7 +61,8 @@ class FeedViewController: ViewController {
             self.feedCollectionVC.collectionViewManager.reset()
             self.indicatorView.resetAllIndicators()
             self.manager.reset()
-            self.closeButton.alpha = 0 
+            self.closeButton.alpha = 0
+            self.gradientView.alpha = 0 
             self.didExit?()
         }
 
@@ -142,6 +144,7 @@ class FeedViewController: ViewController {
             self.indicatorView.alpha = 1
             self.closeButton.alpha = 1
             self.reloadButton.alpha = 0
+            self.gradientView.alpha = 1
         } completion: { completed in
             self.feedCollectionVC.collectionViewManager.loadFeeds()
         }

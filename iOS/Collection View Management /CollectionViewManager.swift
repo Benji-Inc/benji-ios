@@ -108,7 +108,9 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
 
     func reset(animate: Bool = false) {
         self.selectedIndexPaths = []
-        self.updateUI(animate: animate)
+        var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
+        snapshot.appendSections([])
+        self.dataSource.apply(snapshot, animatingDifferences: animate, completion: nil)
     }
 
     // MARK: Item Overrides
