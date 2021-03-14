@@ -26,11 +26,10 @@ class FeedViewController: ViewController {
     weak var delegate: FeedViewControllerDelegate?
 
     private let reloadButton = Button()
-    private let closeButton = UIButton()
+    private let closeButton = Button()
     private let postContainerView = View()
     lazy var indicatorView = FeedIndicatorView(with: self)
     let animationView = AnimationView(name: "loading")
-    let gradientView = FeedGradientView()
     var didExit: CompletionOptional = nil
 
     override func initializeViews() {
@@ -52,12 +51,8 @@ class FeedViewController: ViewController {
             self.reloadFeed()
         }
 
-        self.view.addSubview(self.gradientView)
-        self.gradientView.alpha = 0
         self.view.addSubview(self.closeButton)
-        self.closeButton.setImage(UIImage(systemName: "xmark")!, for: .normal)
-        self.closeButton.contentMode = .center
-        self.closeButton.tintColor = Color.white.color
+        self.closeButton.set(style: .icon(image: UIImage(systemName: "xmark")!, color: .white))
         self.closeButton.alpha = 0
 
         self.closeButton.didSelect { [unowned self] in
@@ -65,7 +60,6 @@ class FeedViewController: ViewController {
             self.indicatorView.resetAllIndicators()
             self.manager.reset()
             self.closeButton.alpha = 0
-            self.gradientView.alpha = 0 
             self.didExit?()
         }
 
@@ -83,11 +77,6 @@ class FeedViewController: ViewController {
         self.feedCollectionVC.view.height = FeedCollectionViewController.height
         self.feedCollectionVC.view.pinToSafeArea(.top, padding: 0)
 
-        self.gradientView.height = self.feedCollectionVC.view.height
-        self.gradientView.match(.top, to: .top, of: self.feedCollectionVC.view)
-        self.gradientView.width = self.view.width * 0.36
-        self.gradientView.pin(.right)
-
         self.reloadButton.size = CGSize(width: 140, height: 40)
         self.reloadButton.centerOnXAndY()
 
@@ -96,7 +85,7 @@ class FeedViewController: ViewController {
         self.indicatorView.centerOnX()
 
         self.closeButton.squaredSize = 44
-        self.closeButton.centerY = self.feedCollectionVC.view.centerY
+        self.closeButton.match(.top, to: .bottom, of: self.indicatorView, offset: 8)
         self.closeButton.match(.right, to: .right, of: self.indicatorView)
 
         self.postContainerView.height = self.view.height - self.feedCollectionVC.view.bottom
@@ -134,7 +123,6 @@ class FeedViewController: ViewController {
             self.indicatorView.alpha = 1
             self.closeButton.alpha = 1
             self.reloadButton.alpha = 0
-            self.gradientView.alpha = 1
         } completion: { completed in
             self.feedCollectionVC.collectionViewManager.loadFeeds()
         }
