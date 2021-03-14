@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 protocol PostsCollectionManger: AnyObject {
     func postsManagerDidSetItems(_ manager: PostsCollectionManager)
@@ -23,7 +24,7 @@ class PostsCollectionManager: NSObject {
 
     private(set) var currentIndex: Int = 0
     private var current: PostViewController?
-    private(set) var posts: [PostViewController] = [] {
+    private(set) var postVCs: [PostViewController] = [] {
         didSet {
             self.delegate.postsManagerDidSetItems(self)
         }
@@ -32,6 +33,8 @@ class PostsCollectionManager: NSObject {
     private unowned let delegate: PostsCollectionManger
     private unowned let parentVC: ViewController
     private unowned let container: View
+
+    private var cancellables = Set<AnyCancellable>()
 
     init(with parentVC: ViewController,
          container: View,
@@ -42,9 +45,17 @@ class PostsCollectionManager: NSObject {
         self.container = container
 
         super.init()
+
+        self.subscribeToUpdates()
     }
 
-    func set(items: [Postable]) {
+    private func subscribeToUpdates() {
+        PostsSupplier.shared.$posts.mainSink { posts in
+            self.set(items: posts)
+        }.store(in: &self.cancellables)
+    }
+
+    private func set(items: [Postable]) {
 
         var postVCs: [PostViewController] = []
 
@@ -86,18 +97,18 @@ class PostsCollectionManager: NSObject {
             }
         }
 
-        self.posts = postVCs
+        self.postVCs = postVCs
         self.showFirst()
     }
 
     func showFirst() {
-        if let first = self.posts.first {
+        if let first = self.postVCs.first {
             self.show(postVC: first, at: 0)
         }
     }
 
     func advanceToNextView(from index: Int) {
-        if let next = self.posts[safe: index + 1]  {
+        if let next = self.postVCs[safe: index + 1]  {
             self.show(postVC: next, at: index + 1)
         } else {
             self.finishFeed()
@@ -135,6 +146,6 @@ class PostsCollectionManager: NSObject {
     func reset() {
         self.current = nil
         self.currentIndex = 0
-        self.posts = []
+        self.postVCs = []
     }
 }

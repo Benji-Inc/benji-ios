@@ -16,23 +16,22 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
 
     private let config = ManageableCellRegistration<FeedCell>().cellProvider
 
-    var items: [FakeItem] = []
-
     func loadFeeds() {
         self.collectionView.animationView.play()
 
-        for _ in 0...10 {
-            self.items.append(FakeItem())
-        }
-
-        let cycle = AnimationCycle(inFromPosition: .down, outToPosition: .up, shouldConcatenate: true, scrollToEnd: false)
-        self.loadSnapshot(animationCycle: cycle)
+        FeedManager.shared.$feeds.mainSink { feeds in
+            let cycle = AnimationCycle(inFromPosition: .down, outToPosition: .up, shouldConcatenate: true, scrollToEnd: false)
+            self.loadSnapshot(animationCycle: cycle)
+                .mainSink { _ in
+                    self.select(indexPath: IndexPath(item: 0, section: 0))
+                }.store(in: &self.cancellables)
+        }.store(in: &self.cancellables)
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
         switch section {
         case .feed:
-            return self.items
+            return FeedManager.shared.feeds
         }
     }
 
@@ -41,7 +40,7 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
         case .feed:
             return self.collectionView.dequeueManageableCell(using: self.config,
                                                              for: indexPath,
-                                                             item: item as? FakeItem)
+                                                             item: item as? Feed)
         }
     }
 

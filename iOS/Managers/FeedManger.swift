@@ -14,9 +14,9 @@ class FeedManager {
     static let shared = FeedManager()
     private var cancellables = Set<AnyCancellable>()
 
-    @Published private(set) var posts: [Post] = []
-    @Published private(set) var hasInitialized: Bool = false
-
+    @Published private(set) var feeds: [Feed] = []
+    @Published var selectedFeed: Feed? = nil
+    
     init() {
         self.createFeedQuery()
     }
@@ -27,22 +27,26 @@ class FeedManager {
         query.whereKey("user", equalTo: User.current()!)
         query.getFirstObjectInBackground { object, error in
             if let feed = object as? Feed {
-                self.queryForPosts(for: feed)
+                self.feeds = [feed]
             } else {
                 print("No feed found for the current user.")
             }
         }
     }
 
-    private func queryForPosts(for feed: Feed) {
-        guard let query = feed.posts?.query() else { return }
+    func queryForPosts(for feed: Feed) -> Future<[Post], Error> {
+        return Future { promise in
+            if let query = feed.posts?.query() {
+                query.findObjectsInBackground { objects, error in
+                    if let posts = objects {
+                        promise(.success(posts))
+                    } else {
+                        promise(.failure(ClientError.message(detail: "No posts found on feed")))
+                    }
+                }
 
-        query.findObjectsInBackground { objects, error in
-            if let posts = objects {
-                self.posts = posts
-                self.hasInitialized = true
             } else {
-                self.hasInitialized = false
+                promise(.failure(ClientError.message(detail: "No query for posts")))
             }
         }
     }

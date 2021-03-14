@@ -17,8 +17,6 @@ class FeedCollectionViewController: CollectionViewController<FeedCollectionViewM
         return cv.statusView
     }
 
-    var didSelectFeed: ((Feed) -> Void)? = nil
-
     override func getCollectionView() -> CollectionView {
         return FeedCollectionView()
     }
@@ -27,8 +25,8 @@ class FeedCollectionViewController: CollectionViewController<FeedCollectionViewM
         super.initializeViews()
 
         self.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
-            guard let item = cellItem?.item as? FakeItem else { return }
-            //self.didSelectFeed?(item)
+            guard let item = cellItem?.item as? Feed else { return }
+            FeedManager.shared.selectedFeed = item 
         }.store(in: &self.cancellables)
     }
 }

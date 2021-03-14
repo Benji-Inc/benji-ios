@@ -73,19 +73,6 @@ class FeedViewController: ViewController {
         self.animationView.loopMode = .loop
     }
 
-    private func subscribeToRitualUpdates() {
-        RitualManager.shared.$state.mainSink { state in
-            switch state {
-            case .noRitual:
-                break
-            case .feedAvailable:
-                break
-            default:
-                break
-            }
-        }.store(in: &self.cancellables)
-    }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 

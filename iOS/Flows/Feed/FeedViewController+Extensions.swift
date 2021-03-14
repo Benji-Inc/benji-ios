@@ -8,22 +8,10 @@
 
 import Foundation
 
-extension FeedViewController {
-
-    func addItems() {
-        self.animationView.play()
-        PostsSupplier.shared.getItems()
-            .mainSink(receiveValue: { (items) in
-                self.manager.set(items: items)
-                self.animationView.stop()
-            }).store(in: &self.cancellables)
-    }
-}
-
 extension FeedViewController: PostsCollectionManger {
 
     func postsManagerDidSetItems(_ manager: PostsCollectionManager) {
-        self.indicatorView.configure(with: manager.posts.count)
+        self.indicatorView.configure(with: manager.postVCs.count)
     }
 
     func posts(_ manager: PostsCollectionManager,

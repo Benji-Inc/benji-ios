@@ -8,38 +8,40 @@
 
 import Foundation
 
-struct FakeItem: Hashable {
-    var identifier = UUID().uuidString
-    var color: Color = .purple
-}
-
 class FeedCell: ManagerCell {
-    typealias ItemType = FakeItem
+    typealias ItemType = Feed
 
-    var currentItem: FakeItem?
+    var currentItem: Feed?
 
-    let someView = View()
+    private let avatarView = AvatarView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.contentView.addSubview(self.someView)
+        self.contentView.addSubview(self.avatarView)
+        self.avatarView.alpha = 0.8
     }
 
-    func configure(with item: FakeItem) {
-        self.someView.set(backgroundColor: item.color)
+    func configure(with item: Feed) {
+        item.owner?.retrieveDataIfNeeded()
+            .mainSink(receivedResult: { result in
+                switch result {
+                case .success(let owner):
+                    self.avatarView.set(avatar: owner)
+                case .error(_):
+                    break
+                }
+            }).store(in: &self.cancellables)
     }
 
     override func update(isSelected: Bool) {
-        self.someView.alpha = isSelected ? 0.5 : 1.0
+        self.avatarView.alpha = isSelected ? 1.0 : 0.8
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.someView.width = self.contentView.width - Theme.contentOffset.doubled
-        self.someView.height = self.contentView.height - Theme.contentOffset.doubled
-
-        self.someView.centerOnXAndY()
+        self.avatarView.setSize(for: self.height - Theme.contentOffset.doubled)
+        self.avatarView.centerOnXAndY()
     }
 }
