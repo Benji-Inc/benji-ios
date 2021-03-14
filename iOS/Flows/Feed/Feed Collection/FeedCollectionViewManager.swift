@@ -24,6 +24,7 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
             self.loadSnapshot(animationCycle: cycle)
                 .mainSink { _ in
                     self.select(indexPath: IndexPath(item: 0, section: 0))
+                    self.collectionView.animationView.stop()
                 }.store(in: &self.cancellables)
         }.store(in: &self.cancellables)
     }

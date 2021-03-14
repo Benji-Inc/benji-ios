@@ -38,6 +38,9 @@ class FeedViewController: ViewController {
 
         self.addChild(viewController: self.feedCollectionVC)
 
+        // Initializes the manager. 
+        _ = self.manager
+
         self.view.addSubview(self.reloadButton)
 
         self.reloadButton.alpha = 0
@@ -96,7 +99,7 @@ class FeedViewController: ViewController {
         self.closeButton.centerY = self.feedCollectionVC.view.centerY
         self.closeButton.match(.right, to: .right, of: self.indicatorView)
 
-        self.postContainerView.height = self.view.height - self.closeButton.bottom
+        self.postContainerView.height = self.view.height - self.feedCollectionVC.view.bottom
         self.postContainerView.expandToSuperviewWidth()
         self.postContainerView.centerOnX()
         self.postContainerView.match(.top, to: .bottom, of: self.feedCollectionVC.view)

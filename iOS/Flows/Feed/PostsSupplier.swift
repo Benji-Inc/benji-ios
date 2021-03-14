@@ -90,9 +90,8 @@ class PostsSupplier {
                     case .success(let reservation):
                         promise(.success([ReservationPost(with: reservation)]))
                     case .error(_):
-                        break
+                        promise(.success([]))
                     }
-
                 }).store(in: &self.cancellables)
         }.eraseToAnyPublisher()
     }
@@ -126,7 +125,6 @@ class PostsSupplier {
                     case .error(_):
                         break
                     }
-
                     promise(.success(connetionPosts))
                 }).store(in: &self.cancellables)
         }.eraseToAnyPublisher()

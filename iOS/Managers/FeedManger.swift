@@ -24,7 +24,7 @@ class FeedManager {
     private func createFeedQuery()  {
         guard let query = Feed.query() else { return }
 
-        query.whereKey("user", equalTo: User.current()!)
+        query.whereKey("owner", equalTo: User.current()!)
         query.getFirstObjectInBackground { object, error in
             if let feed = object as? Feed {
                 self.feeds = [feed]

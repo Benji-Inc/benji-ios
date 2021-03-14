@@ -40,7 +40,7 @@ class FeedStatusView: View {
         self.label.centerOnX()
 
         self.countDownView.size = CGSize(width: 200, height: 60)
-        self.countDownView.centerOnXAndY()
+        self.countDownView.centerY = self.label.centerY
     }
 
     func handle(state: RitualManager.State) {
