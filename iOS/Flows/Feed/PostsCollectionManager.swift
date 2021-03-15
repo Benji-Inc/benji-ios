@@ -33,15 +33,19 @@ class PostsCollectionManager: NSObject {
     private var isResetting: Bool = false
     private var cancellables = Set<AnyCancellable>()
 
+    private var hideAnimator: UIViewPropertyAnimator?
+    private var showAnimator: UIViewPropertyAnimator?
+    private var finishAnimator: UIViewPropertyAnimator?
+
     func loadPosts() {
         self.isResetting = false
         PostsSupplier.shared.$posts
             .mainSink { posts in
                 self.postVCs = []
-            if posts.count > 0 {
-                self.set(items: posts)
-            }
-        }.store(in: &self.cancellables)
+                if posts.count > 0 {
+                    self.set(items: posts)
+                }
+            }.store(in: &self.cancellables)
     }
 
     private func set(items: [Postable]) {
@@ -108,36 +112,63 @@ class PostsCollectionManager: NSObject {
     private func show(postVC: PostViewController, at index: Int) {
         self.currentIndex = index 
         let duration: TimeInterval = self.current.isNil ? 0 : 0.2
-        UIView.animate(withDuration: duration) { [weak self] in
+
+        if let animator = self.hideAnimator {
+            self.stop(animator: animator)
+        }
+
+        self.hideAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear, animations: { [weak self] in
             guard let `self` = self, self.current != postVC else { return }
             self.current?.view.alpha = 0
-        } completion: { (completed) in
-            guard postVC != self.current else { return }
+        })
+
+        self.hideAnimator?.addCompletion({ [weak self] position in
+            guard let `self` = self else { return }
+            guard position == .end, postVC != self.current else { return }
             self.current?.removeFromParentSuperview()
             self.current = postVC
             postVC.view.alpha = 0
             self.parentVC?.addChild(viewController: postVC, toView: self.container)
             postVC.view.expandToSuperviewSize()
             postVC.view.layoutNow()
-            UIView.animate(withDuration: 0.2) { [weak self] in
+
+            if let animator = self.showAnimator {
+                self.stop(animator: animator)
+            }
+            self.showAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .linear, animations: { [weak self] in
                 guard let `self` = self else { return }
                 self.current?.view.alpha = 1
-            } completion: { [weak self] (completed) in
-                guard let `self` = self, index == self.currentIndex else { return }
+            })
+
+            self.showAnimator?.addCompletion({ [weak self] position in
+                guard let `self` = self, position == .end, index == self.currentIndex else { return }
                 self.delegate?.posts(self, didShowViewAt: index, with: TimeInterval(postVC.post.duration))
-            }
-        }
+            })
+
+            self.showAnimator?.startAnimation()
+        })
+
+        self.hideAnimator?.startAnimation()
     }
 
     private func finishFeed() {
-        UIView.animate(withDuration: 0.2) { [weak self] in
+
+        if let animator = self.finishAnimator {
+            self.stop(animator: animator)
+        }
+
+        self.finishAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .linear, animations: { [weak self] in
             guard let `self` = self else { return }
             self.current?.view.alpha = 0
-        } completion: { [weak self] (completed) in
-            guard let `self` = self else { return }
+        })
+
+        self.finishAnimator?.addCompletion({ [weak self] position in
+            guard let `self` = self, position == .end else { return }
             self.current = nil
             self.delegate?.postsManagerDidEndDisplaying(self)
-        }
+        })
+
+        self.finishAnimator?.startAnimation()
     }
 
     func reset() {
@@ -146,6 +177,24 @@ class PostsCollectionManager: NSObject {
         self.currentIndex = 0
         self.postVCs.forEach { vc in
             vc.removeFromParent()
+        }
+
+        [self.hideAnimator, self.showAnimator, self.finishAnimator].forEach { animator in
+            if let a = animator {
+                self.stop(animator: a)
+            }
+        }
+    }
+
+    private func stop(animator: UIViewPropertyAnimator) {
+        if animator.state == .active {
+            animator.stopAnimation(false)
+            animator.finishAnimation(at: .start)
+        } else if animator.state == .stopped {
+            animator.finishAnimation(at: .start)
+        } else if animator.isRunning {
+            animator.stopAnimation(false)
+            animator.finishAnimation(at: .start)
         }
     }
 }

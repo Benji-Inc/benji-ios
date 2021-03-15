@@ -16,16 +16,7 @@ class FeedIndicatorView: View {
 
     private let offset: CGFloat = 10
     private var elements: [IndicatorView] = []
-    private unowned let delegate: FeedIndicatorViewDelegate
-
-    init(with delegate: FeedIndicatorViewDelegate) {
-        self.delegate = delegate
-        super.init()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    var delegate: FeedIndicatorViewDelegate?
 
     deinit {
         self.elements.forEach { element in
@@ -79,13 +70,13 @@ class FeedIndicatorView: View {
     func update(to index: Int, with duration: TimeInterval) {
 
         guard let element = self.elements[safe: index] else {
-            self.delegate.feedIndicator(self, didFinishProgressFor: index)
+            self.delegate?.feedIndicator(self, didFinishProgressFor: index)
             return
         }
 
         element.animateProgress(with: duration) { [weak self] in
             guard let `self` = self else { return }
-            self.delegate.feedIndicator(self, didFinishProgressFor: index)
+            self.delegate?.feedIndicator(self, didFinishProgressFor: index)
         }
     }
 
@@ -104,7 +95,7 @@ class FeedIndicatorView: View {
 
     func finishProgress(at index: Int, finishAnimator: Bool = false) {
         self.finishAnimator(at: index, shouldFinish: finishAnimator)
-        self.delegate.feedIndicator(self, didFinishProgressFor: index)
+        self.delegate?.feedIndicator(self, didFinishProgressFor: index)
     }
 
     private func finishAnimator(at index: Int, shouldFinish: Bool) {

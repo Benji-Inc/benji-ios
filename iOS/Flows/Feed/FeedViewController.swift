@@ -24,7 +24,7 @@ class FeedViewController: ViewController {
 
     private let reloadButton = Button()
     let postContainerView = View()
-    lazy var indicatorView = FeedIndicatorView(with: self)
+    let indicatorView = FeedIndicatorView()
     let animationView = AnimationView(name: "loading")
     private let avatarView = AvatarView()
 
@@ -60,6 +60,7 @@ class FeedViewController: ViewController {
 
         self.view.addSubview(self.indicatorView)
         self.indicatorView.alpha = 1
+        self.indicatorView.delegate = self 
 
         self.view.addSubview(self.avatarView)
 
