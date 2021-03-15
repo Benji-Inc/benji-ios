@@ -37,6 +37,7 @@ class PostsCollectionManager: NSObject {
         self.isResetting = false
         PostsSupplier.shared.$posts
             .mainSink { posts in
+                self.postVCs = []
             if posts.count > 0 {
                 self.set(items: posts)
             }
@@ -107,9 +108,11 @@ class PostsCollectionManager: NSObject {
     private func show(postVC: PostViewController, at index: Int) {
         self.currentIndex = index 
         let duration: TimeInterval = self.current.isNil ? 0 : 0.2
-        UIView.animate(withDuration: duration) {
+        UIView.animate(withDuration: duration) { [weak self] in
+            guard let `self` = self, self.current != postVC else { return }
             self.current?.view.alpha = 0
         } completion: { (completed) in
+            guard postVC != self.current else { return }
             self.current?.removeFromParentSuperview()
             self.current = postVC
             postVC.view.alpha = 0

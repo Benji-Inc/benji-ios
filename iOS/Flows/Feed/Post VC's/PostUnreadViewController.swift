@@ -33,7 +33,7 @@ class PostUnreadViewController: PostViewController {
     func configure(with channel: TCHChannel, count: Int) {
         channel.getAuthorAsUser()
             .mainSink(receiveValue: { (user) in
-                self.avatarView.set(avatar: user)
+               // self.avatarView.set(avatar: user)
                 if count > 0 {
                     self.textView.set(localizedText: "You have \(String(count)) unread messages in \(String(optional: channel.friendlyName))")
                 } else {

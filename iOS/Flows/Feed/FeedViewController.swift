@@ -26,6 +26,7 @@ class FeedViewController: ViewController {
     let postContainerView = View()
     lazy var indicatorView = FeedIndicatorView(with: self)
     let animationView = AnimationView(name: "loading")
+    private let avatarView = AvatarView()
 
     override func initializeViews() {
         super.initializeViews()
@@ -60,6 +61,17 @@ class FeedViewController: ViewController {
         self.view.addSubview(self.indicatorView)
         self.indicatorView.alpha = 1
 
+        self.view.addSubview(self.avatarView)
+
+        FeedManager.shared.$selectedFeed.mainSink { feed in
+            if let f = feed {
+                f.owner?.retrieveDataIfNeeded()
+                    .mainSink(receiveValue: { user in
+                        self.avatarView.set(avatar: user)
+                    }).store(in: &self.cancellables)
+            }
+        }.store(in: &self.cancellables)
+
         self.manager.loadPosts()
     }
 
@@ -83,6 +95,10 @@ class FeedViewController: ViewController {
 
         self.animationView.size = CGSize(width: 18, height: 18)
         self.animationView.centerOnXAndY()
+
+        self.avatarView.setSize(for: 60)
+        self.avatarView.pin(.left, padding: Theme.contentOffset)
+        self.avatarView.match(.top, to: .bottom, of: self.indicatorView, offset: Theme.contentOffset)
     }
 
     func showReload() {

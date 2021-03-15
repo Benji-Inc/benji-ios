@@ -29,7 +29,6 @@ class PostViewController: ViewController {
 
     // Common items
     let textView = PostTextView()
-    let avatarView = AvatarView()
     let button = Button()
 
     init(with post: Postable) {
@@ -52,7 +51,6 @@ class PostViewController: ViewController {
         self.container.addSubview(self.getCenterContent())
         self.container.addSubview(self.bottomContainer)
         self.bottomContainer.addSubview(self.getBottomContent())
-        self.container.addSubview(self.avatarView)
 
         self.button.didSelect { [unowned self] in
             self.didTapButton()
@@ -86,11 +84,6 @@ class PostViewController: ViewController {
         if let first = self.container.subviews.first {
             first.frame = self.container.bounds
         }
-
-        self.avatarView.setSize(for: 60)
-        self.avatarView.pin(.left, padding: Theme.contentOffset)
-        self.avatarView.pin(.top, padding: Theme.contentOffset.doubled)
-        self.avatarView.isHidden = self.avatarView.avatar.isNil
 
         self.bottomContainer.size = CGSize(width: self.container.width, height: Theme.buttonHeight)
         self.bottomContainer.pin(.bottom, padding: Theme.contentOffset)
