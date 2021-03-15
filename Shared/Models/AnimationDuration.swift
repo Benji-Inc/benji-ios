@@ -16,6 +16,8 @@ enum AnimationPosition {
     case right
     case up
     case down
+    case inward
+    case outward
 
     func xPosition(view: UIView, multiplier: CGFloat = 0.5) -> CGFloat {
         switch self {
@@ -23,19 +25,19 @@ enum AnimationPosition {
             return -view.width * multiplier
         case .right:
             return view.width * multiplier
-        case .up, .down:
+        default:
             return .zero
         }
     }
 
     func yPosition(view: UIView, multiplier: CGFloat) -> CGFloat {
         switch self {
-        case .left, .right:
-            return .zero
         case .up:
             return -view.height * multiplier
         case .down:
             return view.height * multiplier
+        default:
+            return .zero
         }
     }
 
@@ -45,7 +47,10 @@ enum AnimationPosition {
             return CGAffineTransform(translationX: self.xPosition(view: view, multiplier: multiplier), y: 0.0)
         case .up, .down:
             return CGAffineTransform(translationX: 0.0, y: self.yPosition(view: view, multiplier: multiplier))
+        case .inward:
+            return CGAffineTransform(scaleX: 0.9, y: 0.9)
+        case .outward:
+            return CGAffineTransform(scaleX: 1.1, y: 1.1)
         }
     }
 }
-

@@ -20,7 +20,7 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
         self.collectionView.animationView.play()
 
         FeedManager.shared.$feeds.mainSink { feeds in
-            let cycle = AnimationCycle(inFromPosition: .down, outToPosition: .up, shouldConcatenate: true, scrollToEnd: false)
+            let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
             self.loadSnapshot(animationCycle: cycle)
                 .mainSink { _ in
                     self.collectionView.animationView.stop()
