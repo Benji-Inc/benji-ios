@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-protocol PostsCollectionManger: AnyObject {
+protocol PostsCollectionMangerDelegate: AnyObject {
     func postsManagerDidSetItems(_ manager: PostsCollectionManager)
     func posts(_ manager: PostsCollectionManager, didSelect post: Postable, at index: Int)
     func postsManagerDidEndDisplaying(_ manager: PostsCollectionManager)
@@ -26,22 +26,20 @@ class PostsCollectionManager: NSObject {
     private var current: PostViewController?
     private(set) var postVCs: [PostViewController] = [] {
         didSet {
-            self.delegate.postsManagerDidSetItems(self)
+            self.delegate?.postsManagerDidSetItems(self)
         }
     }
     
-    private unowned let delegate: PostsCollectionManger
+    weak var delegate: PostsCollectionMangerDelegate?
     private unowned let parentVC: ViewController
     private unowned let container: View
 
     private var cancellables = Set<AnyCancellable>()
 
     init(with parentVC: ViewController,
-         container: View,
-         delegate: PostsCollectionManger) {
+         container: View) {
 
         self.parentVC = parentVC
-        self.delegate = delegate
         self.container = container
 
         super.init()
@@ -85,15 +83,15 @@ class PostsCollectionManager: NSObject {
             postVCs.append(postVC)
 
             postVC.didFinish = { [unowned self] in
-                self.delegate.posts(self, didFinish: index)
+                self.delegate?.posts(self, didFinish: index)
             }
 
             postVC.didSelectPost = { [unowned self] in
-                self.delegate.posts(self, didSelect: post, at: index)
+                self.delegate?.posts(self, didSelect: post, at: index)
             }
 
             postVC.didPause = { [unowned self] in
-                self.delegate.posts(self, didPause: index)
+                self.delegate?.posts(self, didPause: index)
             }
         }
 
@@ -130,7 +128,7 @@ class PostsCollectionManager: NSObject {
             UIView.animate(withDuration: 0.2) {
                 postVC.view.alpha = 1
             } completion: { (completed) in
-                self.delegate.posts(self, didShowViewAt: index, with: TimeInterval(postVC.post.duration))
+                self.delegate?.posts(self, didShowViewAt: index, with: TimeInterval(postVC.post.duration))
             }
         }
     }
@@ -139,7 +137,7 @@ class PostsCollectionManager: NSObject {
         UIView.animate(withDuration: 0.2) {
             self.current?.view.alpha = 0
         } completion: { (completed) in
-            self.delegate.postsManagerDidEndDisplaying(self)
+            self.delegate?.postsManagerDidEndDisplaying(self)
         }
     }
 

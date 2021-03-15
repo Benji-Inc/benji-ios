@@ -79,8 +79,7 @@ class PostViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        let margin = Theme.contentOffset * 2
-        self.container.size = CGSize(width: self.view.width - margin, height: self.view.safeAreaRect.height)
+        self.container.size = CGSize(width: self.view.width, height: self.view.safeAreaRect.height)
         self.container.pinToSafeArea(.top, padding: 0)
         self.container.centerOnX()
 
@@ -88,17 +87,16 @@ class PostViewController: ViewController {
             first.frame = self.container.bounds
         }
 
-        self.avatarView.setSize(for: 100)
-        self.avatarView.centerOnX()
-        self.avatarView.pin(.top, padding: self.container.height * 0.3)
+        self.avatarView.setSize(for: 60)
+        self.avatarView.pin(.left, padding: Theme.contentOffset)
+        self.avatarView.pin(.top, padding: Theme.contentOffset.doubled)
         self.avatarView.isHidden = self.avatarView.avatar.isNil
 
         self.bottomContainer.size = CGSize(width: self.container.width, height: Theme.buttonHeight)
         self.bottomContainer.pin(.bottom, padding: Theme.contentOffset)
 
         self.textView.setSize(withWidth: self.container.width * 0.9)
-        self.textView.centerOnX()
-        self.textView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset)
+        self.textView.centerOnXAndY()
 
         self.button.setSize(with: self.bottomContainer.width)
         self.button.centerOnXAndY()

@@ -78,7 +78,8 @@ class FeedIndicatorView: View {
             return
         }
 
-        element.animateProgress(with: duration) { [unowned self] in
+        element.animateProgress(with: duration) { [weak self] in
+            guard let `self` = self else { return }
             self.delegate.feedIndicator(self, didFinishProgressFor: index)
         }
     }
@@ -122,7 +123,7 @@ private class IndicatorView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .background2)
+        self.set(backgroundColor: .background3)
         self.addSubview(self.progressView)
         self.progressView.set(backgroundColor: .teal)
         self.progressView.showShadow(withOffset: 2, color: Color.teal.color)

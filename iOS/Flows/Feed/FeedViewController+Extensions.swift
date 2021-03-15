@@ -8,16 +8,16 @@
 
 import Foundation
 
-extension FeedViewController: PostsCollectionManger {
+extension FeedViewController: PostsCollectionMangerDelegate {
 
     func postsManagerDidSetItems(_ manager: PostsCollectionManager) {
+        self.animationView.stop()
         self.indicatorView.configure(with: manager.postVCs.count)
     }
 
     func posts(_ manager: PostsCollectionManager,
                didSelect post: Postable,
                at index: Int) {
-        
         self.indicatorView.pauseProgress(at: index)
         self.delegate?.feedView(self, didSelect: post)
     }
