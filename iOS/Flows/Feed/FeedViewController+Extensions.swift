@@ -12,6 +12,7 @@ extension FeedViewController: PostsCollectionMangerDelegate {
 
     func postsManagerDidSetItems(_ manager: PostsCollectionManager) {
         UIView.animate(withDuration: 0.2) {
+            self.avatarView.alpha = 1 
             self.postContainerView.alpha = 1 
         }
         self.indicatorView.configure(with: manager.postVCs.count)
