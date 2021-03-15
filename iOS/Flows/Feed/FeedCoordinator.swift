@@ -10,17 +10,20 @@ import Foundation
 import TwilioChatClient
 import TMROLocalization
 
-class FeedCoordinator: Coordinator<Void> {
+class FeedCoordinator: PresentableCoordinator<Void> {
 
-    private let feedVC: FeedViewController
+    lazy var feedVC = FeedViewController()
 
     init(router: Router,
          deepLink: DeepLinkable?,
-         feedVC: FeedViewController) {
-
-        self.feedVC = feedVC
-
+         feed: Feed) {
         super.init(router: router, deepLink: deepLink)
+
+        FeedManager.shared.selectedFeed = feed
+    }
+
+    override func toPresentable() -> DismissableVC {
+        return self.feedVC
     }
 
     override func start() {

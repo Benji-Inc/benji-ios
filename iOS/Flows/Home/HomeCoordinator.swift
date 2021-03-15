@@ -47,8 +47,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             self.showRitual()
         }
 
-        self.homeVC.willShowFeed = {
-            self.addFeedCoordinator()
+        self.homeVC.didTapFeed = { [unowned self] feed in
+            self.present(feed: feed)
         }
 
         if let deeplink = self.deepLink {
@@ -62,11 +62,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         let rightMenuNavigationController = SideNavigationController(with: self.channelsVC)
         rightMenuNavigationController.sideMenuDelegate = self
         SideMenuManager.default.rightMenuNavigationController = rightMenuNavigationController
-
-        let gestures = SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.homeVC.view)
-        gestures.forEach { gesture in
-            gesture.delegate = self.homeVC
-        }
     }
 
     func handle(deeplink: DeepLinkable) {
@@ -116,17 +111,17 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         self.router.present(coordinator, source: self.homeVC)
     }
 
-    private func addFeedCoordinator() {
+    private func present(feed: Feed) {
         self.removeChild()
         let coordinator = FeedCoordinator(router: self.router,
                                           deepLink: self.deepLink,
-                                          feedVC: self.homeVC.feedVC)
+                                          feed: feed)
         self.addChildAndStart(coordinator) { (_) in }
+        self.router.present(coordinator, source: self.homeVC)
     }
 
     private func addChannels(shouldPresent: Bool = true) {
         self.removeChild()
-
         self.addChildAndStart(self.channelsCoordinator) { (_) in }
         if let right = SideMenuManager.default.rightMenuNavigationController, shouldPresent {
             self.homeVC.present(right, animated: true, completion: nil)

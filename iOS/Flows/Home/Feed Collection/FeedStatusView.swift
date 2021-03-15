@@ -36,11 +36,10 @@ class FeedStatusView: View {
         super.layoutSubviews()
 
         self.label.setSize(withWidth: self.width)
-        self.label.centerY = self.centerY * 0.5
-        self.label.centerOnX()
+        self.label.centerOnXAndY()
 
         self.countDownView.size = CGSize(width: 200, height: 60)
-        self.countDownView.centerY = self.label.centerY
+        self.countDownView.centerOnXAndY()
     }
 
     func handle(state: RitualManager.State) {
@@ -52,7 +51,7 @@ class FeedStatusView: View {
             self.countDownView.startTimer(with: date)
             self.showCountDown()
         case .feedAvailable:
-            self.label.animatedText = "Feed Unlocked! Pull down to begin"
+            break
         case .lessThanHourAfter(let date):
             let dateString = Date.hourMinuteTimeOfDay.string(from: date)
             self.label.animatedText = "Take a break! ☕️\nSee you at \(dateString)"

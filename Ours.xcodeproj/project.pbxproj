@@ -22,8 +22,6 @@
 		D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE39236F44A8004FA89A /* User+Extensions.swift */; };
 		D609AE3C236F913F004FA89A /* Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE3B236F913F004FA89A /* Objectable.swift */; };
 		D60B0BE82432F88D004784CD /* PostConnectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60B0BE72432F88D004784CD /* PostConnectionViewController.swift */; };
-		D60C814222092D5300A127A3 /* PagingCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814122092D5300A127A3 /* PagingCollectionViewFlowLayout.swift */; };
-		D60C814422092E4700A127A3 /* PagingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814322092E4700A127A3 /* PagingCollectionView.swift */; };
 		D60C814622092F6B00A127A3 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814522092F6B00A127A3 /* Button.swift */; };
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
@@ -697,8 +695,6 @@
 		D609AE39236F44A8004FA89A /* User+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+Extensions.swift"; sourceTree = "<group>"; };
 		D609AE3B236F913F004FA89A /* Objectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Objectable.swift; sourceTree = "<group>"; };
 		D60B0BE72432F88D004784CD /* PostConnectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostConnectionViewController.swift; sourceTree = "<group>"; };
-		D60C814122092D5300A127A3 /* PagingCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
-		D60C814322092E4700A127A3 /* PagingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PagingCollectionView.swift; sourceTree = "<group>"; };
 		D60C814522092F6B00A127A3 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
@@ -1157,8 +1153,6 @@
 			isa = PBXGroup;
 			children = (
 				D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */,
-				D60C814322092E4700A127A3 /* PagingCollectionView.swift */,
-				D60C814122092D5300A127A3 /* PagingCollectionViewFlowLayout.swift */,
 				D64C6A7F23294ED700DB7257 /* Twilio */,
 			);
 			path = Extensions;
@@ -1200,7 +1194,6 @@
 			isa = PBXGroup;
 			children = (
 				D6579535239A141900A01338 /* CountDownView.swift */,
-				D6792CDB25F9662400B6575C /* Feed Collection */,
 				D6579556239C8B4000A01338 /* FeedCoordinator.swift */,
 				D64932D623FE460200986335 /* FeedIndicatorView.swift */,
 				D62C635322BE9CBB00F4D097 /* FeedViewController.swift */,
@@ -1878,6 +1871,7 @@
 		D6D145F521D549A300CD8CE4 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				D6792CDB25F9662400B6575C /* Feed Collection */,
 				D63D71BC25F03025004C26F7 /* AnimatingLabel.swift */,
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
@@ -2293,7 +2287,6 @@
 				80D4A21823039B82007CB5F1 /* RitualInputContentView.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
 				D642735122C857760088256B /* MessageContext.swift in Sources */,
-				D60C814422092E4700A127A3 /* PagingCollectionView.swift in Sources */,
 				D642735322C85B740088256B /* SystemAvatar.swift in Sources */,
 				D657955A239C8DA000A01338 /* PostIntroViewController.swift in Sources */,
 				D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */,
@@ -2481,7 +2474,6 @@
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6F33C7E24B15063009603FF /* LocationMessageCell.swift in Sources */,
 				D67896B222FF67650059BA75 /* CodeViewController.swift in Sources */,
-				D60C814222092D5300A127A3 /* PagingCollectionViewFlowLayout.swift in Sources */,
 				D6C9EF4525BF6CF000A14DE5 /* Indexable.swift in Sources */,
 				D642737122C991A60088256B /* ClosedRange+Extensions.swift in Sources */,
 				D66379D025A3704300A4A3B7 /* UserNotificationFactory.swift in Sources */,

@@ -41,7 +41,7 @@ class FeedCell: ManagerCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.avatarView.setSize(for: self.height - Theme.contentOffset.doubled)
+        self.avatarView.setSize(for: self.height)
         self.avatarView.centerOnXAndY()
     }
 }

@@ -21,30 +21,23 @@ class HomeViewController: ViewController, TransitionableViewController {
         return .background1
     }
 
-    lazy var feedVC = FeedViewController()
+    lazy var feedCollectionVC = FeedCollectionViewController()
     lazy var captureVC = ImageCaptureViewController()
     let vibrancyView = HomeVibrancyView()
 
     var didTapProfile: CompletionOptional = nil
     var didTapChannels: CompletionOptional = nil
     var didTapAddRitual: CompletionOptional = nil
-
-    var willShowFeed: CompletionOptional = nil
-
-    var minTop: CGFloat {
-        return 60 + self.view.safeAreaRect.top
-    }
+    var didTapFeed: ((Feed) -> Void)? = nil
 
     private var topOffset: CGFloat?
-    private(set) var isPanning: Bool = false
-    var isMenuPresenting: Bool = false 
 
     override func initializeViews() {
         super.initializeViews()
 
         self.view.set(backgroundColor: .background1)
 
-        self.addChild(viewController: self.feedVC)
+        self.addChild(viewController: self.feedCollectionVC)
         self.addChild(viewController: self.captureVC)
 
         self.view.addSubview(self.vibrancyView)
@@ -56,11 +49,6 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.vibrancyView.layer.cornerRadius = 20
         self.vibrancyView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.vibrancyView.layer.masksToBounds = true
-
-        self.vibrancyView.onPan { [unowned self] pan in
-            pan.delegate = self
-            self.handle(pan)
-        }
 
         self.vibrancyView.tabView.profileItem.didSelect = { [unowned self] in
             self.didTapProfile?()
@@ -74,20 +62,10 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.didTapChannels?()
         }
 
-        self.feedVC.didExit = { [unowned self] in
-            self.hideFeed()
-        }
-
-        //        self.vibrancyView.button.didSelect { [unowned self] in
-        //            switch RitualManager.shared.state {
-        //            case .noRitual:
-        //                self.didTapAddRitual?()
-        //            case .feedAvailable:
-        //                self.showFeed()
-        //            default:
-        //                break
-        //            }
-        //        }
+        self.feedCollectionVC.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
+            guard let item = cellItem?.item as? Feed else { return }
+            self.didTapFeed?(item)
+        }.store(in: &self.cancellables)
 
         self.vibrancyView.tabView.postButtonView.button.publisher(for: \.isHighlighted)
             .removeDuplicates()
@@ -105,105 +83,24 @@ class HomeViewController: ViewController, TransitionableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.feedVC.view.expandToSuperviewSize()
-        let topOffset = self.minTop
+        self.feedCollectionVC.view.expandToSuperviewWidth()
+        self.feedCollectionVC.view.height = FeedCollectionViewController.height
+        self.feedCollectionVC.view.pinToSafeArea(.top, padding: 0)
 
-        var size = self.view.size
-        size.height -= topOffset
-
-        self.captureVC.view.size = size
+        self.captureVC.view.height = self.view.height - self.feedCollectionVC.view.bottom - Theme.contentOffset
+        self.captureVC.view.expandToSuperviewWidth()
         self.captureVC.view.centerOnX()
-        if self.topOffset.isNil {
-            self.captureVC.view.pin(.top, padding: topOffset)
-        }
-
+        self.captureVC.view.match(.top, to: .bottom, of: self.feedCollectionVC.view, offset: Theme.contentOffset)
         self.vibrancyView.frame = self.captureVC.view.frame
     }
 
     func animate(show: Bool) {
-        self.isMenuPresenting = !show
         UIView.animate(withDuration: Theme.animationDuration) {
             self.vibrancyView.tabView.alpha = show ? 1.0 : 0.0
-            self.feedVC.feedCollectionVC.view.alpha = show ? 1.0 : 0.0
-        }
-    }
-
-    func showFeed() {
-
-        //        if self.feedVC.parent.isNil {
-        //            self.view.layoutNow()
-        //        }
-        //
-        //        self.willShowFeed?()
-        //        self.feedVC.feedCollectionVC.statusView?.hideAll()
-        //        self.feedVC.showFeed()
-    }
-
-    func hideFeed() {
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.captureVC.view.top = self.minTop
-            self.view.layoutNow()
-        } completion: { completed in
-            self.feedVC.feedCollectionVC.statusView?.reset()
         }
     }
 
     private func didTapPost() {
         // do something 
-    }
-
-    private func handle(_ pan: UIPanGestureRecognizer) {
-        guard let view = pan.view, !self.isMenuPresenting else {return}
-
-        let translation = pan.translation(in: view.superview)
-
-        switch pan.state {
-        case .possible:
-            self.isPanning = false
-        case .began:
-            self.isPanning = false
-            self.topOffset = minTop
-        case .changed:
-            self.isPanning = translation.y > 0
-            let newTop = self.minTop + translation.y
-            self.topOffset = clamp(newTop, self.minTop, self.view.height)
-            self.captureVC.view.top = self.topOffset!
-        case .ended, .cancelled, .failed:
-            self.isPanning = false
-            let diff = (self.view.height - self.minTop) - self.topOffset!
-            let progress = diff / (self.view.height - self.minTop)
-            self.topOffset = progress < 0.65 ? self.view.height : self.minTop
-            UIView.animate(withDuration: Theme.animationDuration) {
-                self.captureVC.view.top = self.topOffset!
-                self.view.layoutNow()
-            } completion: { completed in
-                self.animateFeed(show: progress < 0.65)
-            }
-        @unknown default:
-            break
-        }
-
-        self.view.layoutNow()
-    }
-
-    private func animateFeed(show: Bool) {
-        if show {
-            self.feedVC.showFeed()
-        } else {
-            self.feedVC.feedCollectionVC.collectionViewManager.reset()
-        }
-    }
-}
-
-extension HomeViewController: UIGestureRecognizerDelegate {
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let _ = gestureRecognizer as? UIPanGestureRecognizer, self.isMenuPresenting {
-            return false
-        } else if let _ = gestureRecognizer as? UIScreenEdgePanGestureRecognizer, self.isPanning {
-            return false
-        }
-
-        return true
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 
 class FeedCollectionViewController: CollectionViewController<FeedCollectionViewManger.SectionType, FeedCollectionViewManger> {
 
-    static let height: CGFloat = 100
+    static let height: CGFloat = 60
 
     var statusView: FeedStatusView? {
         guard let cv = self.collectionViewManager.collectionView as? FeedCollectionView else { return nil }
@@ -24,9 +24,13 @@ class FeedCollectionViewController: CollectionViewController<FeedCollectionViewM
     override func initializeViews() {
         super.initializeViews()
 
-        self.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
-            guard let item = cellItem?.item as? Feed else { return }
-            FeedManager.shared.selectedFeed = item 
+        RitualManager.shared.$state.mainSink { state in
+            switch state {
+            case .feedAvailable:
+                self.collectionViewManager.loadFeeds()
+            default:
+                self.collectionViewManager.reset()
+            }
         }.store(in: &self.cancellables)
     }
 }
