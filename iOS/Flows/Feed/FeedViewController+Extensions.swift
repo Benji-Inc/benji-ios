@@ -37,6 +37,10 @@ extension FeedViewController: PostsCollectionMangerDelegate {
         self.indicatorView.pauseProgress(at: index)
     }
 
+    func posts(_ manager: PostsCollectionManager, didResume index: Int) {
+        self.indicatorView.resumeProgress(at: index)
+    }
+
     func posts(_ manager: PostsCollectionManager,
               didShowViewAt index: Int,
               with duration: TimeInterval) {

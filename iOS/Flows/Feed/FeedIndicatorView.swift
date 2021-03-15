@@ -93,6 +93,11 @@ class FeedIndicatorView: View {
         element.animator?.pauseAnimation()
     }
 
+    func resumeProgress(at index: Int) {
+        guard let element = self.elements[safe: index] else { return }
+        element.animator?.startAnimation()
+    }
+
     func finishProgress(at index: Int, finishAnimator: Bool = false) {
         self.finishAnimator(at: index, shouldFinish: finishAnimator)
         self.delegate?.feedIndicator(self, didFinishProgressFor: index)

@@ -20,8 +20,11 @@ class PostViewController: ViewController {
         return self.post.attributes
     }
 
+    var isPaused: Bool = false
+
     var didFinish: CompletionOptional = nil
     var didPause: CompletionOptional = nil
+    var didResume: CompletionOptional = nil
     var didSelectPost: CompletionOptional = nil 
 
     let container = View()
@@ -44,8 +47,19 @@ class PostViewController: ViewController {
         super.initializeViews()
 
         self.view.addSubview(self.container)
-        self.container.didSelect { [unowned self] in
+
+        self.container.onDoubleTap { doubleTap in
             self.didFinish?()
+        }
+
+        self.container.didSelect { [unowned self] in
+            self.isPaused.toggle()
+
+            if self.isPaused {
+                self.didPause?()
+            } else {
+                self.didResume?()
+            }
         }
 
         self.container.addSubview(self.getCenterContent())
