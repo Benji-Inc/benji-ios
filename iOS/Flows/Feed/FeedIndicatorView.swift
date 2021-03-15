@@ -126,10 +126,12 @@ private class IndicatorView: View {
     private(set) var animator: UIViewPropertyAnimator?
 
     deinit {
-        self.animator?.stopAnimation(false)
+        if self.animator?.state == .active {
+            self.animator?.stopAnimation(false)
+        }
         if self.animator?.state == .stopped {
             // This call is the one that can assert and crash the app
-            animator?.finishAnimation(at: .start)
+            self.animator?.finishAnimation(at: .start)
         }
     }
 

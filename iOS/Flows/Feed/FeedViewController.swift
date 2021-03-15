@@ -52,16 +52,15 @@ class FeedViewController: ViewController {
         self.postContainerView.layer.masksToBounds = true
         self.postContainerView.alpha = 0
         
-        self.postContainerView.addSubview(self.animationView)
+        self.view.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
+        self.animationView.play()
 
         self.view.addSubview(self.indicatorView)
         self.indicatorView.alpha = 1
 
-        delay(0.1) {
-            self.manager.loadPosts()
-        }
+        self.manager.loadPosts()
     }
 
     override func viewDidLayoutSubviews() {
