@@ -97,6 +97,7 @@ class HomeViewController: ViewController, TransitionableViewController {
     func animate(show: Bool) {
         UIView.animate(withDuration: Theme.animationDuration) {
             self.vibrancyView.tabView.alpha = show ? 1.0 : 0.0
+            self.feedCollectionVC.view.alpha = show ? 1.0 : 0.0
         }
     }
 

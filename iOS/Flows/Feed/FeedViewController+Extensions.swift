@@ -11,7 +11,9 @@ import Foundation
 extension FeedViewController: PostsCollectionMangerDelegate {
 
     func postsManagerDidSetItems(_ manager: PostsCollectionManager) {
-        self.animationView.stop()
+        UIView.animate(withDuration: 0.2) {
+            self.postContainerView.alpha = 1 
+        }
         self.indicatorView.configure(with: manager.postVCs.count)
     }
 
@@ -37,6 +39,9 @@ extension FeedViewController: PostsCollectionMangerDelegate {
     func posts(_ manager: PostsCollectionManager,
               didShowViewAt index: Int,
               with duration: TimeInterval) {
+        if self.animationView.isAnimationPlaying {
+            self.animationView.stop()
+        }
         self.indicatorView.update(to: index, with: duration)
     }
 }

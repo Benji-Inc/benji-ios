@@ -24,38 +24,26 @@ class PostsCollectionManager: NSObject {
 
     private(set) var currentIndex: Int = 0
     private var current: PostViewController?
-    private(set) var postVCs: [PostViewController] = [] {
-        didSet {
-            self.delegate?.postsManagerDidSetItems(self)
-        }
-    }
+    private(set) var postVCs: [PostViewController] = []
     
     weak var delegate: PostsCollectionMangerDelegate?
-    private unowned let parentVC: ViewController
-    private unowned let container: View
+    weak var parentVC: ViewController?
+    weak var container: View?
 
+    private var isResetting: Bool = false
     private var cancellables = Set<AnyCancellable>()
 
-    init(with parentVC: ViewController,
-         container: View) {
-
-        self.parentVC = parentVC
-        self.container = container
-
-        super.init()
-
-        self.subscribeToUpdates()
-    }
-
-    private func subscribeToUpdates() {
-        PostsSupplier.shared.$posts.mainSink { posts in
-            self.set(items: posts)
+    func loadPosts() {
+        self.isResetting = false
+        PostsSupplier.shared.$posts
+            .mainSink { posts in
+            if posts.count > 0 {
+                self.set(items: posts)
+            }
         }.store(in: &self.cancellables)
     }
 
     private func set(items: [Postable]) {
-
-        var postVCs: [PostViewController] = []
 
         for (index, post) in items.enumerated() {
 
@@ -80,23 +68,26 @@ class PostsCollectionManager: NSObject {
                 postVC = PostMediaViewController(with: post)
             }
 
-            postVCs.append(postVC)
+            self.postVCs.append(postVC)
 
-            postVC.didFinish = { [unowned self] in
+            postVC.didFinish = { [weak self] in
+                guard let `self` = self else { return }
                 self.delegate?.posts(self, didFinish: index)
             }
 
-            postVC.didSelectPost = { [unowned self] in
+            postVC.didSelectPost = { [weak self] in
+                guard let `self` = self else { return }
                 self.delegate?.posts(self, didSelect: post, at: index)
             }
 
-            postVC.didPause = { [unowned self] in
+            postVC.didPause = { [weak self] in
+                guard let `self` = self else { return }
                 self.delegate?.posts(self, didPause: index)
             }
         }
 
-        self.postVCs = postVCs
         self.showFirst()
+        self.delegate?.postsManagerDidSetItems(self)
     }
 
     func showFirst() {
@@ -108,7 +99,7 @@ class PostsCollectionManager: NSObject {
     func advanceToNextView(from index: Int) {
         if let next = self.postVCs[safe: index + 1]  {
             self.show(postVC: next, at: index + 1)
-        } else {
+        } else if !self.isResetting {
             self.finishFeed()
         }
     }
@@ -122,28 +113,36 @@ class PostsCollectionManager: NSObject {
             self.current?.removeFromParentSuperview()
             self.current = postVC
             postVC.view.alpha = 0
-            self.parentVC.addChild(viewController: postVC, toView: self.container)
+            self.parentVC?.addChild(viewController: postVC, toView: self.container)
             postVC.view.expandToSuperviewSize()
             postVC.view.layoutNow()
-            UIView.animate(withDuration: 0.2) {
-                postVC.view.alpha = 1
-            } completion: { (completed) in
+            UIView.animate(withDuration: 0.2) { [weak self] in
+                guard let `self` = self else { return }
+                self.current?.view.alpha = 1
+            } completion: { [weak self] (completed) in
+                guard let `self` = self, index == self.currentIndex else { return }
                 self.delegate?.posts(self, didShowViewAt: index, with: TimeInterval(postVC.post.duration))
             }
         }
     }
 
     private func finishFeed() {
-        UIView.animate(withDuration: 0.2) {
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            guard let `self` = self else { return }
             self.current?.view.alpha = 0
-        } completion: { (completed) in
+        } completion: { [weak self] (completed) in
+            guard let `self` = self else { return }
+            self.current = nil
             self.delegate?.postsManagerDidEndDisplaying(self)
         }
     }
 
     func reset() {
+        self.isResetting = true
         self.current = nil
         self.currentIndex = 0
-        self.postVCs = []
+        self.postVCs.forEach { vc in
+            vc.removeFromParent()
+        }
     }
 }

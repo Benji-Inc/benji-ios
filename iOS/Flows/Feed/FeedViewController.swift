@@ -18,7 +18,7 @@ class FeedViewController: ViewController {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
-    lazy var manager = PostsCollectionManager(with: self, container: self.postContainerView)
+    let manager = PostsCollectionManager()
 
     weak var delegate: FeedViewControllerDelegate?
 
@@ -33,7 +33,9 @@ class FeedViewController: ViewController {
         self.view.addSubview(self.blurView)
 
         // Initializes the manager. 
-        self.manager.delegate = self 
+        self.manager.delegate = self
+        self.manager.parentVC = self
+        self.manager.container = self.postContainerView
 
         self.view.addSubview(self.reloadButton)
 
@@ -45,18 +47,21 @@ class FeedViewController: ViewController {
         }
 
         self.view.addSubview(self.postContainerView)
-        //self.postContainerView.set(backgroundColor: .background1)
         self.postContainerView.layer.cornerRadius = 20
         self.postContainerView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         self.postContainerView.layer.masksToBounds = true
-
+        self.postContainerView.alpha = 0
+        
         self.postContainerView.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
-        self.animationView.play()
 
         self.view.addSubview(self.indicatorView)
         self.indicatorView.alpha = 1
+
+        delay(0.1) {
+            self.manager.loadPosts()
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -79,13 +84,6 @@ class FeedViewController: ViewController {
 
         self.animationView.size = CGSize(width: 18, height: 18)
         self.animationView.centerOnXAndY()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        self.manager.reset()
-        self.indicatorView.resetAllIndicators()
     }
 
     func showReload() {

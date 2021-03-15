@@ -517,6 +517,9 @@
 		D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */; };
 		D6A301AC2380E102006655E0 /* PostsSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301AB2380E102006655E0 /* PostsSupplier.swift */; };
 		D6A401AB24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A401AA24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift */; };
+		D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
+		D6A49A77260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
+		D6A49A78260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
 		D6A4A1F625E9550A007F3E15 /* UserNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */; };
 		D6A4A1F725E9550A007F3E15 /* UserNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */; };
 		D6A714C725D969FE000A90EB /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A714C625D969FE000A90EB /* PostViewController.swift */; };
@@ -915,6 +918,7 @@
 		D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
 		D6A301AB2380E102006655E0 /* PostsSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsSupplier.swift; sourceTree = "<group>"; };
 		D6A401AA24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHMessageOptions+Extensions.swift"; sourceTree = "<group>"; };
+		D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewAnimatingState+Extensions.swift"; sourceTree = "<group>"; };
 		D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCategory.swift; sourceTree = "<group>"; };
 		D6A714C625D969FE000A90EB /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		D6AC90C92594F8F80032774D /* Delegated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Delegated.swift; sourceTree = "<group>"; };
@@ -1909,6 +1913,7 @@
 				D61EC0EB21D312B600204BEE /* UIView+Extensions.swift */,
 				D6347395241EBF6F0071E9DA /* UIView+Layout.swift */,
 				D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */,
+				D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */,
 				D6D1503621D7E74500CD8CE4 /* UIViewController+Extensions.swift */,
 				D642739822CA79B60088256B /* UIWindow+Extensions.swift */,
 			);
@@ -2508,6 +2513,7 @@
 				D61EC0D921D30C8E00204BEE /* DispatchQue+Extensions.swift in Sources */,
 				D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
 				D6884AC825800FC600DA380E /* StatusableRequest.swift in Sources */,
+				D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D6EDFB4C25D48F2B0034A2F6 /* Post.swift in Sources */,
 				D6DADF702207DF60007D9EB1 /* ChannelCell.swift in Sources */,
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
@@ -2581,6 +2587,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6A49A78260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D63DB22925E9991300F6B323 /* NSObject+Extensions.swift in Sources */,
 				D63DB23225E9992600F6B323 /* UIScreen+Extensions.swift in Sources */,
 				D63DB24625E9993F00F6B323 /* PhoneTextField.swift in Sources */,
@@ -2817,6 +2824,7 @@
 				D6551A5025895ECB00B901E4 /* OnboardingContent.swift in Sources */,
 				D6551A5925895EFA00B901E4 /* Button+Extensions.swift in Sources */,
 				D65519282589122000B901E4 /* String+Extensions.swift in Sources */,
+				D6A49A77260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D65519172589120C00B901E4 /* Date+Extensions.swift in Sources */,
 				D65519222589121500B901E4 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D65519FF25895A0800B901E4 /* Statusable.swift in Sources */,

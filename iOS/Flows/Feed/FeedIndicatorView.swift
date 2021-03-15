@@ -27,6 +27,12 @@ class FeedIndicatorView: View {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        self.elements.forEach { element in
+            element.stopCurrent()
+        }
+    }
+
     override func initializeSubviews() {
         super.initializeSubviews()
 
@@ -72,7 +78,6 @@ class FeedIndicatorView: View {
 
     func update(to index: Int, with duration: TimeInterval) {
 
-        // TODO: ADD DURATION FOR EACH TYPE
         guard let element = self.elements[safe: index] else {
             self.delegate.feedIndicator(self, didFinishProgressFor: index)
             return
@@ -120,6 +125,14 @@ private class IndicatorView: View {
     var progressWidth: CGFloat = 0
     private(set) var animator: UIViewPropertyAnimator?
 
+    deinit {
+        self.animator?.stopAnimation(false)
+        if self.animator?.state == .stopped {
+            // This call is the one that can assert and crash the app
+            animator?.finishAnimation(at: .start)
+        }
+    }
+
     override func initializeSubviews() {
         super.initializeSubviews()
 
@@ -139,6 +152,26 @@ private class IndicatorView: View {
 
     func animateProgress(with duration: TimeInterval, completion: CompletionOptional) {
         
+        self.stopCurrent()
+
+        self.animator = UIViewPropertyAnimator(duration: duration,
+                                               curve: .linear,
+                                               animations: { [weak self] in
+                                                guard let `self` = self else { return }
+                                                self.progressWidth = self.width
+                                                self.layoutNow()
+                                               })
+
+        self.animator?.isInterruptible = true
+        self.animator?.addCompletion({ (position) in
+            guard position == .end else { return }
+            completion?()
+        })
+
+        self.animator?.startAnimation()
+    }
+
+    func stopCurrent() {
         if let current = self.animator {
             if current.state == .active {
                 current.stopAnimation(true)
@@ -150,20 +183,5 @@ private class IndicatorView: View {
                 current.finishAnimation(at: .end)
             }
         }
-
-        self.animator = UIViewPropertyAnimator(duration: duration,
-                                               curve: .linear,
-                                               animations: {
-            self.progressWidth = self.width
-            self.layoutNow()
-        })
-
-        self.animator?.isInterruptible = true
-        self.animator?.addCompletion({ (position) in
-            guard position == .end else { return }
-            completion?()
-        })
-
-        self.animator?.startAnimation()
     }
 }
