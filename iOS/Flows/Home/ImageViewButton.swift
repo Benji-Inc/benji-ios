@@ -17,7 +17,7 @@ class ImageViewButton: View {
         super.initializeSubviews()
         
         self.addSubview(self.imageView)
-        self.imageView.tintColor = Color.background3.color
+        self.imageView.tintColor = Color.white.color
         self.imageView.contentMode = .scaleAspectFit
 
         self.didSelect { [unowned self] in
@@ -27,8 +27,6 @@ class ImageViewButton: View {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        self.makeRound()
 
         self.imageView.size = CGSize(width: self.width * 0.55, height: self.height * 0.55)
         self.imageView.centerOnXAndY()

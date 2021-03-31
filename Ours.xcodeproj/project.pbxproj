@@ -503,6 +503,7 @@
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */; };
 		D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
+		D6882B9E26010EBE00F94F07 /* PostCreationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6882B9D26010EBE00F94F07 /* PostCreationViewController.swift */; };
 		D6884AC825800FC600DA380E /* StatusableRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6884AC725800FC600DA380E /* StatusableRequest.swift */; };
 		D6884B222587D25D00DA380E /* OursAppClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = D6884B0E2587D25C00DA380E /* OursAppClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D68B362C25BB1F86005AEB4C /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68B362B25BB1F86005AEB4C /* AttachmentView.swift */; };
@@ -904,6 +905,7 @@
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedAvatarView.swift; sourceTree = "<group>"; };
 		D686DA5C25799EB6000B4C04 /* Statusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statusable.swift; sourceTree = "<group>"; };
+		D6882B9D26010EBE00F94F07 /* PostCreationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCreationViewController.swift; sourceTree = "<group>"; };
 		D6884AC725800FC600DA380E /* StatusableRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusableRequest.swift; sourceTree = "<group>"; };
 		D6884B0E2587D25C00DA380E /* OursAppClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OursAppClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6884B1E2587D25D00DA380E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1749,6 +1751,14 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		D6882B9C26010EA500F94F07 /* Post Creation */ = {
+			isa = PBXGroup;
+			children = (
+				D6882B9D26010EBE00F94F07 /* PostCreationViewController.swift */,
+			);
+			path = "Post Creation";
+			sourceTree = "<group>";
+		};
 		D6884B0F2587D25C00DA380E /* iOS Clip */ = {
 			isa = PBXGroup;
 			children = (
@@ -1875,6 +1885,7 @@
 		D6D145F521D549A300CD8CE4 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				D6882B9C26010EA500F94F07 /* Post Creation */,
 				D6792CDB25F9662400B6575C /* Feed Collection */,
 				D63D71BC25F03025004C26F7 /* AnimatingLabel.swift */,
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
@@ -2385,6 +2396,7 @@
 				D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D6792CE325F99F2E00B6575C /* FeedStatusView.swift in Sources */,
+				D6882B9E26010EBE00F94F07 /* PostCreationViewController.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,
 				D642735E22C90C820088256B /* CGPoint+Extensions.swift in Sources */,
 				D61EC0DE21D30DAC00204BEE /* Array+Extensions.swift in Sources */,

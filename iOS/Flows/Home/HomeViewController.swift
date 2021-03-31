@@ -71,8 +71,8 @@ class HomeViewController: ViewController, TransitionableViewController {
             .removeDuplicates()
             .mainSink { isHighlighted in
                 UIView.animate(withDuration: Theme.animationDuration) {
-                    //self.vibrancyView.show(blur: !isHighlighted)
-                    // self.feedVC.view.alpha = isHighlighted ? 0.0 : 1.0
+                    self.vibrancyView.show(blur: !isHighlighted)
+                    self.view.layoutNow()
                 }
 
             }.store(in: &self.cancellables)
