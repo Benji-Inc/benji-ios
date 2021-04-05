@@ -16,7 +16,6 @@ class PostButtonView: View {
         super.initializeSubviews()
 
         self.addSubview(self.button)
-        self.button.set(style: .normal(color: .white, text: ""))
         self.set(backgroundColor: .clear)
     }
 
@@ -31,11 +30,13 @@ class PostButtonView: View {
     func update(for state: HomeTabView.State) {
         switch state {
         case .home:
-            break
+            self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .white))
         case .post:
-            break
+            self.button.set(style: .normal(color: .white, text: ""))
         case .confirm:
-            break 
+            self.button.set(style: .icon(image: UIImage(systemName: "checkmark")!, color: .green))
         }
+
+        self.layoutNow()
     }
 }

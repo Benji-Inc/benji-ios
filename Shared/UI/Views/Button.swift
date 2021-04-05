@@ -68,7 +68,7 @@ class Button: UIButton, Statusable {
             self.showShadow(withOffset: 5)
             
         case .rounded(let color, let text), .normal(let color, let text):
-
+            self.setImage(nil, for: .normal)
             self.defaultColor = color
 
             var localizedString = localized(text)

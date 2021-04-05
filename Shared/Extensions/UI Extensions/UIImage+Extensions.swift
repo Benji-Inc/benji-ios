@@ -29,17 +29,23 @@ extension UIImage {
 
         var transform: CGAffineTransform = CGAffineTransform.identity
 
-        switch imageOrientation {
+        switch self.imageOrientation {
         case .down, .downMirrored:
-            transform = transform.translatedBy(x: size.width, y: size.height)
+            transform = transform.translatedBy(x: self.size.width, y: self.size.height)
             transform = transform.rotated(by: CGFloat.pi)
             break
-        case .left, .leftMirrored:
-            transform = transform.translatedBy(x: size.width, y: 0)
+        case .left:
+            transform = transform.translatedBy(x: self.size.width, y: 0)
+            break
+        case .leftMirrored:
+            transform = transform.translatedBy(x: self.size.width, y: 0)
             transform = transform.rotated(by: CGFloat.pi / 2.0)
             break
-        case .right, .rightMirrored:
-            transform = transform.translatedBy(x: 0, y: size.height)
+        case .right:
+            transform = transform.translatedBy(x: 0, y: self.size.height)
+            break
+        case .rightMirrored:
+            transform = transform.translatedBy(x: 0, y: self.size.height)
             transform = transform.rotated(by: CGFloat.pi / -2.0)
             break
         case .up, .upMirrored:
@@ -49,13 +55,13 @@ extension UIImage {
         }
 
         //Flip image one more time if needed to, this is to prevent flipped image
-        switch imageOrientation {
+        switch self.imageOrientation {
         case .upMirrored, .downMirrored:
-            transform.translatedBy(x: size.width, y: 0)
+            transform.translatedBy(x: self.size.width, y: 0)
             transform.scaledBy(x: -1, y: 1)
             break
         case .leftMirrored, .rightMirrored:
-            transform.translatedBy(x: size.height, y: 0)
+            transform.translatedBy(x: self.size.height, y: 0)
             transform.scaledBy(x: -1, y: 1)
         case .up, .down, .left, .right:
             break
@@ -65,7 +71,7 @@ extension UIImage {
 
         ctx.concatenate(transform)
 
-        switch imageOrientation {
+        switch self.imageOrientation {
         case .left, .leftMirrored, .right, .rightMirrored:
             ctx.draw(self.cgImage!, in: CGRect(x: 0, y: 0, width: size.height, height: size.width))
         default:
@@ -74,7 +80,8 @@ extension UIImage {
         }
 
         guard let newCGImage = ctx.makeImage() else { return nil }
-        return UIImage.init(cgImage: newCGImage, scale: 1, orientation: .up)
+        let image = UIImage.init(cgImage: newCGImage, scale: 1, orientation: .up)
+        return image
     }
 
     static func imageWithColor(color: UIColor, size: CGSize = CGSize(width: 1, height: 1)) -> UIImage {

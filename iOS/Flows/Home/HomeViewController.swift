@@ -55,6 +55,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.view.addSubview(self.exitButton)
         self.exitButton.imageView.image = UIImage(systemName: "xmark")!
         self.exitButton.didSelect { [unowned self] in
+            self.captureVC.reset()
             self.tabView.state = .home
         }
 
