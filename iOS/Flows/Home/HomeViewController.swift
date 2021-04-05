@@ -90,6 +90,10 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.vibrancyView.show(blur: state == .home)
         }.store(in: &self.cancellables)
 
+        self.captureVC.didShowImage = { [unowned self] in 
+            self.tabView.state = .confirm
+        }
+
 //        self.vibrancyView.tabView.postButtonView.button.publisher(for: \.isHighlighted)
 //            .removeDuplicates()
 //            .mainSink { isHighlighted in
@@ -134,8 +138,14 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
 
     private func didTapPost() {
-        self.vibrancyView.show(blur: false)
-        self.tabView.state = .post
-        //self.captureVC.animate(show: true)
+        switch self.tabView.state {
+        case .home:
+            self.vibrancyView.show(blur: false)
+            self.tabView.state = .post
+        case .post:
+            self.captureVC.capturePhoto()
+        case .confirm:
+            self.captureVC.createPost()
+        }
     }
 }

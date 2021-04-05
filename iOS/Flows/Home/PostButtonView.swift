@@ -27,4 +27,15 @@ class PostButtonView: View {
         self.button.centerOnXAndY()
         self.button.makeRound()
     }
+
+    func update(for state: HomeTabView.State) {
+        switch state {
+        case .home:
+            break
+        case .post:
+            break
+        case .confirm:
+            break 
+        }
+    }
 }
