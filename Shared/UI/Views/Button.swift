@@ -15,6 +15,7 @@ enum ButtonStyle {
     case rounded(color: Color, text: Localized)
     case normal(color: Color, text: Localized)
     case icon(image: UIImage, color: Color)
+    case shadow(image: UIImage, color: Color)
     case animation(view: AnimationView, inset: CGFloat = 8)
 }
 
@@ -60,6 +61,12 @@ class Button: UIButton, Statusable {
         self.style = style
 
         switch style {
+        case .shadow(let image, let color):
+            self.defaultColor = color
+            self.setImage(image, for: .normal)
+            self.tintColor = color.color
+            self.showShadow(withOffset: 5)
+            
         case .rounded(let color, let text), .normal(let color, let text):
 
             self.defaultColor = color

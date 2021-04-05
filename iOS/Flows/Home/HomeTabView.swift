@@ -7,12 +7,26 @@
 //
 
 import Foundation
+import Combine
 
 class HomeTabView: View {
 
     private(set) var postButtonView = PostButtonView()
-    private(set) var profileItem = ImageViewButton()
-    private(set) var channelsItem = ImageViewButton()
+    private var leftButton = ImageViewButton()
+    private var rightButton = ImageViewButton()
+    private var cancellables = Set<AnyCancellable>()
+
+    var didSelectPhotoLibrary: CompletionOptional = nil
+    var didSelectFlip: CompletionOptional = nil
+    var didSelectProfile: CompletionOptional = nil
+    var didSelectChannels: CompletionOptional = nil
+
+    enum State {
+        case home
+        case post
+    }
+
+    @Published var state: State = .home
 
     private let selectionFeedback = UIImpactFeedbackGenerator(style: .light)
 
@@ -21,14 +35,31 @@ class HomeTabView: View {
 
         self.set(backgroundColor: .clear)
 
-        self.addSubview(self.profileItem)
+        self.addSubview(self.leftButton)
         self.addSubview(self.postButtonView)
-        self.addSubview(self.channelsItem)
+        self.addSubview(self.rightButton)
 
-        self.profileItem.imageView.image = UIImage(systemName: "person.crop.circle")
-        self.profileItem.imageView.tintColor = Color.background3.color
-        self.channelsItem.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right")
-        self.channelsItem.imageView.tintColor = Color.background3.color
+        self.$state.mainSink { state in
+            self.handle(state: state)
+        }.store(in: &self.cancellables)
+
+        self.leftButton.didSelect { [unowned self] in
+            switch self.state {
+            case .home:
+                self.didSelectProfile?()
+            case .post:
+                self.didSelectPhotoLibrary?()
+            }
+        }
+
+        self.rightButton.didSelect { [unowned self] in
+            switch self.state {
+            case .home:
+                self.didSelectChannels?()
+            case .post:
+                self.didSelectFlip?()
+            }
+        }
     }
 
     override func layoutSubviews() {
@@ -38,16 +69,27 @@ class HomeTabView: View {
 
         let itemWidth = self.width * 0.33
         let itemSize = CGSize(width: itemWidth, height: 60)
-        self.profileItem.size = itemSize
-        self.profileItem.pin(.top, padding: topPadding)
-        self.profileItem.left = 0
+        self.leftButton.size = itemSize
+        self.leftButton.pin(.top, padding: topPadding)
+        self.leftButton.left = 0
 
         self.postButtonView.size = itemSize
         self.postButtonView.pin(.top)
-        self.postButtonView.left = self.profileItem.right
+        self.postButtonView.left = self.leftButton.right
 
-        self.channelsItem.size = itemSize
-        self.channelsItem.pin(.top, padding: topPadding)
-        self.channelsItem.left = self.postButtonView.right
+        self.rightButton.size = itemSize
+        self.rightButton.pin(.top, padding: topPadding)
+        self.rightButton.left = self.postButtonView.right
+    }
+
+    private func handle(state: State) {
+        switch state {
+        case .home:
+            self.leftButton.imageView.image = UIImage(systemName: "person.crop.circle")
+            self.rightButton.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right")
+        case .post:
+            self.leftButton.imageView.image = UIImage(systemName: "square.grid.2x2")!
+            self.rightButton.imageView.image = UIImage(systemName: "arrow.triangle.2.circlepath")!
+        }
     }
 }

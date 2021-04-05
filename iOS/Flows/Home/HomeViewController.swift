@@ -22,8 +22,10 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
 
     lazy var feedCollectionVC = FeedCollectionViewController()
-    lazy var captureVC = ImageCaptureViewController()
+    lazy var captureVC = PostCreationViewController()
     let vibrancyView = HomeVibrancyView()
+    let tabView = HomeTabView()
+    let exitButton = ImageViewButton()
 
     var didTapProfile: CompletionOptional = nil
     var didTapChannels: CompletionOptional = nil
@@ -50,16 +52,32 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.vibrancyView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.vibrancyView.layer.masksToBounds = true
 
-        self.vibrancyView.tabView.profileItem.didSelect = { [unowned self] in
+        self.view.addSubview(self.exitButton)
+        self.exitButton.imageView.image = UIImage(systemName: "xmark")!
+        self.exitButton.didSelect { [unowned self] in
+            self.tabView.state = .home
+        }
+
+        self.view.addSubview(self.tabView)
+
+        self.tabView.didSelectProfile = { [unowned self] in
             self.didTapProfile?()
         }
 
-        self.vibrancyView.tabView.postButtonView.button.didSelect { [unowned self] in
+        self.tabView.postButtonView.button.didSelect { [unowned self] in
             self.didTapPost()
         }
 
-        self.vibrancyView.tabView.channelsItem.didSelect = { [unowned self] in
+        self.tabView.didSelectChannels = { [unowned self] in
             self.didTapChannels?()
+        }
+
+        self.tabView.didSelectFlip = { [unowned self] in
+           // self.didTapChannels?()
+        }
+
+        self.tabView.didSelectPhotoLibrary = { [unowned self] in
+            //self.didTapChannels?()
         }
 
         self.feedCollectionVC.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
@@ -67,15 +85,20 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.didTapFeed?(item)
         }.store(in: &self.cancellables)
 
-        self.vibrancyView.tabView.postButtonView.button.publisher(for: \.isHighlighted)
-            .removeDuplicates()
-            .mainSink { isHighlighted in
-                UIView.animate(withDuration: Theme.animationDuration) {
-                    self.vibrancyView.show(blur: !isHighlighted)
-                    self.view.layoutNow()
-                }
+        self.tabView.$state.mainSink { state in
+            self.exitButton.alpha = state == .home ? 0.0 : 1.0
+            self.vibrancyView.show(blur: state == .home)
+        }.store(in: &self.cancellables)
 
-            }.store(in: &self.cancellables)
+//        self.vibrancyView.tabView.postButtonView.button.publisher(for: \.isHighlighted)
+//            .removeDuplicates()
+//            .mainSink { isHighlighted in
+//                UIView.animate(withDuration: Theme.animationDuration) {
+//                    self.vibrancyView.show(blur: !isHighlighted)
+//                    self.view.layoutNow()
+//                }
+//
+//            }.store(in: &self.cancellables)
 
         self.captureVC.begin()
     }
@@ -92,16 +115,27 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.captureVC.view.centerOnX()
         self.captureVC.view.match(.top, to: .bottom, of: self.feedCollectionVC.view, offset: Theme.contentOffset)
         self.vibrancyView.frame = self.captureVC.view.frame
+
+        let height = 70 + self.view.safeAreaInsets.bottom
+        self.tabView.size = CGSize(width: self.view.width, height: height)
+        self.tabView.centerOnX()
+        self.tabView.pin(.bottom)
+
+        self.exitButton.squaredSize = 50
+        self.exitButton.match(.top, to: .top, of: self.vibrancyView, offset: Theme.contentOffset)
+        self.exitButton.pin(.right, padding: Theme.contentOffset)
     }
 
     func animate(show: Bool) {
         UIView.animate(withDuration: Theme.animationDuration) {
-            self.vibrancyView.tabView.alpha = show ? 1.0 : 0.0
+            self.tabView.alpha = show ? 1.0 : 0.0
             self.feedCollectionVC.view.alpha = show ? 1.0 : 0.0
         }
     }
 
     private func didTapPost() {
-        // do something 
+        self.vibrancyView.show(blur: false)
+        self.tabView.state = .post
+        //self.captureVC.animate(show: true)
     }
 }
