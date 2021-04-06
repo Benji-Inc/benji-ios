@@ -57,7 +57,7 @@ class Button: UIButton, Statusable {
     }
 
     //Sets text font, color and background color
-    func set(style: ButtonStyle, casingType: StringCasing = .uppercase) {
+    func set(style: ButtonStyle, casingType: StringCasing = .uppercase, alpha: CGFloat = 0.4) {
         self.style = style
 
         switch style {
@@ -83,9 +83,9 @@ class Button: UIButton, Statusable {
             highlightedString.addAttribute(.font, value: FontType.smallBold.font)
             highlightedString.addAttribute(.kern, value: CGFloat(2))
 
-            normalString.addAttribute(.foregroundColor, value: color.color)
-            highlightedString.addAttribute(.foregroundColor, value: color.color)
-            self.setBackground(color: color.color.withAlphaComponent(0.4), forUIControlState: .normal)
+            normalString.addAttribute(.foregroundColor, value: Color.white.color)
+            highlightedString.addAttribute(.foregroundColor, value: Color.white.color)
+            self.setBackground(color: color.color.withAlphaComponent(alpha), forUIControlState: .normal)
             self.setBackground(color: Color.clear.color, forUIControlState: .highlighted)
 
             // Emojis wont show correctly with attributes
@@ -104,10 +104,12 @@ class Button: UIButton, Statusable {
             self.defaultColor = color
             self.setImage(image, for: .normal)
             self.tintColor = color.color
-            self.setBackground(color: color.color.withAlphaComponent(0.4), forUIControlState: .normal)
+            self.setBackground(color: color.color.withAlphaComponent(alpha), forUIControlState: .normal)
             self.setBackground(color: Color.clear.color, forUIControlState: .highlighted)
             self.layer.borderColor = color.color.cgColor
             self.layer.borderWidth = 2
+            self.setAttributedTitle(NSMutableAttributedString(string: ""), for: .normal)
+            self.setAttributedTitle(NSMutableAttributedString(string: ""), for: .highlighted)
             
         case .animation(let view, _):
             self.addSubview(view)

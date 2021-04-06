@@ -22,21 +22,29 @@ class PostButtonView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.button.squaredSize = self.height
+        self.button.height = self.height
         self.button.centerOnXAndY()
-        self.button.makeRound()
     }
 
     func update(for state: HomeTabView.State) {
-        switch state {
-        case .home:
-            self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .white))
-        case .post:
-            self.button.set(style: .normal(color: .white, text: ""))
-        case .confirm:
-            self.button.set(style: .icon(image: UIImage(systemName: "checkmark")!, color: .green))
-        }
 
-        self.layoutNow()
+        UIView.animate(withDuration: Theme.animationDuration) {
+            switch state {
+            case .home:
+                self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .white))
+                self.button.width = self.height
+                self.button.makeRound()
+            case .post:
+                self.button.set(style: .normal(color: .white, text: ""))
+                self.button.width = self.height
+                self.button.makeRound()
+            case .confirm:
+                self.button.set(style: .normal(color: .purple, text: "post"), alpha: 0.8)
+                self.button.expandToSuperviewWidth()
+                self.button.roundCorners()
+            }
+
+            self.layoutNow()
+        }
     }
 }
