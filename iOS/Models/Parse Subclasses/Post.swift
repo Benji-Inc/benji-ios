@@ -92,22 +92,3 @@ extension Post: Objectable {
         return self.relation(forKey: key.rawValue) as? PFRelation
     }
 }
-
-extension Post {
-
-    static func create(with imageData: Data) -> Future<Post, Error> {
-
-        let post = Post()
-        post.author = User.current()!
-        post.body = ""
-        post.priority = 2
-        post.triggerDate = Date()
-        post.expirationDate = nil
-        post.type = .media
-        post.attributes = ["": String()]
-        post.duration = 5
-        post.file = PFFileObject(name:"image.png", data: imageData)
-
-        return post.saveToServer()
-    }
-}

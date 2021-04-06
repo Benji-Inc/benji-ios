@@ -39,9 +39,10 @@ class PostCreationViewController: ImageCaptureViewController {
         self.didShowImage?()
     }
 
+    // Add future 
     func createPost() {
-        guard let data = self.imageView.image?.data else { return }
-        Post.create(with: data)
+        guard let image = self.imageView.image, let data = image.data else { return }
+        FeedManager.shared.createPost(with: data)
             .mainSink { post in
                 self.reset()
             }.store(in: &self.cancellables)

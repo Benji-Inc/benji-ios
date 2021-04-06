@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import Parse
 
 class FeedManager {
 
@@ -47,6 +48,48 @@ class FeedManager {
 
             } else {
                 promise(.failure(ClientError.message(detail: "No query for posts")))
+            }
+        }
+    }
+
+    func createPost(with imageData: Data) -> Future<Post, Error> {
+
+        return Future { promise in
+            if self.feeds.isEmpty {
+                promise(.failure(ClientError.apiError(detail: "No Feeds")))
+            } else if let currentUserFeed = self.feeds.first(where: { feed in
+                return feed.owner == User.current()
+            }) {
+                let post = Post()
+                post.author = User.current()!
+                post.body = ""
+                post.priority = 2
+                post.triggerDate = Date()
+                post.expirationDate = nil
+                post.type = .media
+                post.attributes = ["": String()]
+                post.duration = 5
+                post.file = PFFileObject(name: UUID().uuidString, data: imageData)
+                post.saveToServer()
+                    .mainSink { result in
+                        switch result {
+                        case .success(let p):
+                            currentUserFeed.posts?.add(p)
+                            currentUserFeed.saveToServer()
+                                .mainSink { result in
+                                    switch result {
+                                    case .success(_):
+                                        promise(.success(p))
+                                    case .error(let e):
+                                        promise(.failure(e))
+                                    }
+                                }.store(in: &self.cancellables)
+                        case .error(let e):
+                            promise(.failure(e))
+                        }
+                    }.store(in: &self.cancellables)
+            } else {
+                promise(.failure(ClientError.apiError(detail: "No feed found for user")))
             }
         }
     }

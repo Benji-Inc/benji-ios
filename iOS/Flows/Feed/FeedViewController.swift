@@ -89,9 +89,7 @@ class FeedViewController: ViewController {
         self.indicatorView.pinToSafeArea(.top, padding: Theme.contentOffset)
         self.indicatorView.centerOnX()
 
-        let height = self.view.height - (self.view.safeAreaInsets.bottom)
-        self.postContainerView.height = height
-        self.postContainerView.expandToSuperviewWidth()
+        self.postContainerView.expandToSuperviewSize()
         self.postContainerView.centerOnX()
         self.postContainerView.pinToSafeArea(.top, padding: 0)
 
