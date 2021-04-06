@@ -11,7 +11,6 @@ import Foundation
 class ImageViewButton: View {
 
     let imageView = UIImageView()
-    var didSelect: CompletionOptional = nil
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -19,10 +18,6 @@ class ImageViewButton: View {
         self.addSubview(self.imageView)
         self.imageView.tintColor = Color.background4.color
         self.imageView.contentMode = .scaleAspectFit
-
-        self.didSelect { [unowned self] in
-            self.didSelect?()
-        }
     }
 
     override func layoutSubviews() {

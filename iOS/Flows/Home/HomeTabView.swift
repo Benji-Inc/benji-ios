@@ -96,9 +96,9 @@ class HomeTabView: View {
             self.rightButton.alpha = 1
         case .post:
             self.leftButton.imageView.image = UIImage(systemName: "square.grid.2x2")!
-            self.leftButton.alpha = 1
+            self.leftButton.alpha = 0
             self.rightButton.imageView.image = UIImage(systemName: "arrow.triangle.2.circlepath")!
-            self.rightButton.alpha = 1
+            self.rightButton.alpha = 0
         case .confirm:
             self.leftButton.alpha = 0
             self.rightButton.alpha = 0 

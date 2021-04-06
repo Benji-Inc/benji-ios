@@ -43,7 +43,7 @@ class PostCreationViewController: ImageCaptureViewController {
         guard let data = self.imageView.image?.data else { return }
         Post.create(with: data)
             .mainSink { post in
-                // do something
+                self.reset()
             }.store(in: &self.cancellables)
     }
 

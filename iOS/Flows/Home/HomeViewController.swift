@@ -74,7 +74,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         }
 
         self.tabView.didSelectFlip = { [unowned self] in
-           // self.didTapChannels?()
+            self.captureVC.flipCamera()
         }
 
         self.tabView.didSelectPhotoLibrary = { [unowned self] in

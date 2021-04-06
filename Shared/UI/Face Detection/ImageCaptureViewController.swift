@@ -22,6 +22,7 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
     private var videoOutput: AVCaptureVideoDataOutput?
 
     var didCapturePhoto: ((UIImage) -> Void)?
+    private(set) var currentPosition: AVCaptureDevice.Position = .front
 
     func begin() {
         self.configureCaptureSession()
@@ -38,11 +39,16 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         }
     }
 
+    func flipCamera() {
+        //TODO: 
+    }
+
     func configureCaptureSession() {
+
         // Define the capture device we want to use
         guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera,
                                                    for: .video,
-                                                   position: .front) else {
+                                                   position: self.currentPosition) else {
                                                     fatalError("No front video camera available")
         }
 
@@ -107,5 +113,7 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
 
     func captureOutput(_ output: AVCaptureOutput,
                        didOutput sampleBuffer: CMSampleBuffer,
-                       from connection: AVCaptureConnection) {}
+                       from connection: AVCaptureConnection) {
+
+    }
 }
