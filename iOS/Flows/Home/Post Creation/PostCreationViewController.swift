@@ -20,7 +20,7 @@ class PostCreationViewController: ImageCaptureViewController {
         super.viewDidLoad()
 
         self.view.addSubview(self.imageView)
-
+        self.imageView.contentMode = .scaleAspectFill
         self.didCapturePhoto = { [unowned self] image in
             self.show(image: image)
         }
@@ -32,7 +32,7 @@ class PostCreationViewController: ImageCaptureViewController {
         self.imageView.expandToSuperviewSize()
     }
 
-    private func show(image: UIImage) {
+    func show(image: UIImage) {
         self.stop()
         self.imageView.image = image
         self.didShowImage?()

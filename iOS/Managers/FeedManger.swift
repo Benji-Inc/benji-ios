@@ -70,7 +70,6 @@ class FeedManager {
     }
 
     func createPost(with imageData: Data, progressHandler: @escaping (Int) -> Void) -> Future<Post, Error> {
-
         return Future { promise in
             if self.feeds.isEmpty {
                 promise(.failure(ClientError.apiError(detail: "No Feeds")))

@@ -10,12 +10,14 @@ import Foundation
 import Parse
 import Combine
 import SideMenu
+import Photos
 
 class HomeCoordinator: PresentableCoordinator<Void> {
 
     private lazy var profileVC = ProfileViewController(with: User.current()!)
     private lazy var channelsVC = ChannelsViewController()
     private lazy var homeVC = HomeViewController()
+    private lazy var imagePickerVC = ImagePickerViewController()
 
     private lazy var channelsCoordinator = ChannelsCoordinator(router: self.router,
                                                                deepLink: self.deepLink,
@@ -52,6 +54,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         self.homeVC.didTapFeed = { [unowned self] feed in
             self.present(feed: feed)
+        }
+
+        self.homeVC.didSelectPhotoLibrary = { [unowned self] in
+            self.presentPicker(for: .photoLibrary)
         }
 
         if let deeplink = self.deepLink {
@@ -184,5 +190,45 @@ extension HomeCoordinator: SideMenuNavigationControllerDelegate {
 
     func sideMenuDidDisappear(menu: SideMenuNavigationController, animated: Bool) {
         self.homeVC.animate(show: true)
+    }
+}
+
+extension HomeCoordinator: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+
+    private func presentPicker(for type: UIImagePickerController.SourceType) {
+        guard self.router.topmostViewController != self.imagePickerVC, !self.imagePickerVC.isBeingPresented else { return }
+
+        self.imagePickerVC.sourceType = type
+        self.imagePickerVC.delegate = self 
+        self.homeVC.present(self.imagePickerVC, animated: true, completion: nil)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController,
+                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+
+        defer {
+            self.imagePickerVC.dismiss(animated: true, completion: nil)
+        }
+
+        guard let image = info[.originalImage] as? UIImage else {
+            print("Image not found!")
+            return
+        }
+
+        self.homeVC.captureVC.show(image: image)
+    }
+}
+
+private class ImagePickerViewController: UIImagePickerController, Dismissable {
+    var dismissHandlers: [DismissHandler] = []
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        if self.isBeingClosed {
+            self.dismissHandlers.forEach { (dismissHandler) in
+                dismissHandler.handler?()
+            }
+        }
     }
 }

@@ -30,6 +30,8 @@ class HomeViewController: ViewController, TransitionableViewController {
     var didTapProfile: CompletionOptional = nil
     var didTapChannels: CompletionOptional = nil
     var didTapAddRitual: CompletionOptional = nil
+    var didSelectPhotoLibrary: CompletionOptional = nil
+
     var didTapFeed: ((Feed) -> Void)? = nil
 
     private var topOffset: CGFloat?
@@ -78,7 +80,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         }
 
         self.tabView.didSelectPhotoLibrary = { [unowned self] in
-            //self.didTapChannels?()
+            self.didSelectPhotoLibrary?()
         }
 
         self.feedCollectionVC.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
@@ -94,16 +96,6 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.captureVC.didShowImage = { [unowned self] in 
             self.tabView.state = .confirm
         }
-
-//        self.vibrancyView.tabView.postButtonView.button.publisher(for: \.isHighlighted)
-//            .removeDuplicates()
-//            .mainSink { isHighlighted in
-//                UIView.animate(withDuration: Theme.animationDuration) {
-//                    self.vibrancyView.show(blur: !isHighlighted)
-//                    self.view.layoutNow()
-//                }
-//
-//            }.store(in: &self.cancellables)
 
         self.captureVC.begin()
     }
