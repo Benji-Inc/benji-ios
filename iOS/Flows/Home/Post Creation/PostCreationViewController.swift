@@ -33,19 +33,24 @@ class PostCreationViewController: ImageCaptureViewController {
     }
 
     private func show(image: UIImage) {
-        guard let fixed = image.fixedOrientation() else { return }
         self.stop()
-        self.imageView.image = fixed
+        self.imageView.image = image
         self.didShowImage?()
     }
 
     // Add future 
-    func createPost() {
-        guard let image = self.imageView.image, let data = image.data else { return }
-        FeedManager.shared.createPost(with: data)
-            .mainSink { post in
-                self.reset()
-            }.store(in: &self.cancellables)
+    func createPost(progressHandler: @escaping (Int) -> Void) -> Future<Void, Error> {
+        return Future { promise in
+            if let image = self.imageView.image, let data = image.data {
+                FeedManager.shared.createPost(with: data, progressHandler: progressHandler)
+                    .mainSink { post in
+                        self.reset()
+                        promise(.success(()))
+                    }.store(in: &self.cancellables)
+            } else {
+                promise(.failure(ClientError.apiError(detail: "No image for post")))
+            }
+        }
     }
 
     func reset() {

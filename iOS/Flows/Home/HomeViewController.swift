@@ -146,7 +146,18 @@ class HomeViewController: ViewController, TransitionableViewController {
         case .post:
             self.captureVC.capturePhoto()
         case .confirm:
-            self.captureVC.createPost()
+            self.tabView.postButtonView.button.handleEvent(status: .loading)
+            self.captureVC.createPost { [unowned self] progress in
+                print(progress)
+            }.mainSink { result in
+                switch result {
+                case .success():
+                    self.tabView.postButtonView.button.handleEvent(status: .complete)
+                    self.tabView.state = .post
+                case .error(let e):
+                    self.tabView.postButtonView.button.handleEvent(status: .error(e.localizedDescription))
+                }
+            }.store(in: &self.cancellables)
         }
     }
 }

@@ -113,9 +113,6 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         // Set photo settings for our need
         photoSettings.isHighResolutionPhotoEnabled = true
         photoSettings.flashMode = .auto
-        if #available(iOSApplicationExtension 14.1, *) {
-            photoSettings.isAutoContentAwareDistortionCorrectionEnabled = true
-        } 
         // Call capturePhoto method by passing our photo settings and a
         // delegate implementing AVCapturePhotoCaptureDelegate
         capturePhotoOutput.capturePhoto(with: photoSettings, delegate: self)
@@ -124,6 +121,9 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
     func photoOutput(_ output: AVCapturePhotoOutput,
                      didFinishProcessingPhoto photo: AVCapturePhoto,
                      error: Error?) {
+
+        guard let connection = output.connection(with: .video) else { return }
+        connection.automaticallyAdjustsVideoMirroring = true
 
         guard error == nil,
             let imageData = photo.fileDataRepresentation(),

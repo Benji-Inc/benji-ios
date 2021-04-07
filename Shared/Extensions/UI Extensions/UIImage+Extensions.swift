@@ -38,7 +38,9 @@ extension UIImage {
             transform = transform.translatedBy(x: size.width, y: 0)
             transform = transform.rotated(by: CGFloat.pi / 2.0)
             break
-        case .right, .rightMirrored:
+        case .right:
+            break
+        case .rightMirrored:
             transform = transform.translatedBy(x: 0, y: size.height)
             transform = transform.rotated(by: CGFloat.pi / -2.0)
             break

@@ -23,11 +23,15 @@ class FeedManager {
     }
 
     private func createFeedQuery()  {
-        guard let query = Feed.query() else { return }
+        guard let ownerQuery = Feed.query(), let connectionsQuery = Feed.query() else { return }
 
-        query.whereKey("owner", equalTo: User.current()!)
-        query.includeKey("posts")
-        query.getFirstObjectInBackground { object, error in
+        ownerQuery.whereKey("owner", equalTo: User.current()!)
+        ownerQuery.includeKey("posts")
+
+        connectionsQuery.wher
+
+
+        ownerQuery.getFirstObjectInBackground { object, error in
             if let feed = object as? Feed {
                 self.feeds = [feed]
             } else {
@@ -54,7 +58,7 @@ class FeedManager {
         }
     }
 
-    func createPost(with imageData: Data) -> Future<Post, Error> {
+    func createPost(with imageData: Data, progressHandler: @escaping (Int) -> Void) -> Future<Post, Error> {
 
         return Future { promise in
             if self.feeds.isEmpty {
@@ -62,34 +66,45 @@ class FeedManager {
             } else if let currentUserFeed = self.feeds.first(where: { feed in
                 return feed.owner == User.current()
             }) {
-                let post = Post()
-                post.author = User.current()!
-                post.body = ""
-                post.priority = 2
-                post.triggerDate = Date()
-                post.expirationDate = Date.add(component: .day, amount: 2, toDate: Date())
-                post.type = .media
-                post.attributes = ["": String()]
-                post.duration = 5
-                post.file = PFFileObject(name: UUID().uuidString, data: imageData)
-                post.saveToServer()
-                    .mainSink { result in
-                        switch result {
-                        case .success(let p):
-                            currentUserFeed.posts?.add(p)
-                            currentUserFeed.saveToServer()
-                                .mainSink { result in
-                                    switch result {
-                                    case .success(_):
-                                        promise(.success(p))
-                                    case .error(let e):
-                                        promise(.failure(e))
-                                    }
-                                }.store(in: &self.cancellables)
-                        case .error(let e):
-                            promise(.failure(e))
-                        }
-                    }.store(in: &self.cancellables)
+
+                let file = PFFileObject(name: UUID().uuidString, data: imageData)
+                file?.saveInBackground({ success, error in
+                    if let e = error {
+                        promise(.failure(e))
+                    } else {
+                        let post = Post()
+                        post.author = User.current()!
+                        post.body = ""
+                        post.priority = 2
+                        post.triggerDate = Date()
+                        post.expirationDate = Date.add(component: .day, amount: 2, toDate: Date())
+                        post.type = .media
+                        post.attributes = ["": String()]
+                        post.duration = 5
+                        post.file = file
+                        post.saveToServer()
+                            .mainSink { result in
+                                switch result {
+                                case .success(let p):
+                                    currentUserFeed.posts?.add(p)
+                                    currentUserFeed.saveToServer()
+                                        .mainSink { result in
+                                            switch result {
+                                            case .success(_):
+                                                promise(.success(p))
+                                            case .error(let e):
+                                                promise(.failure(e))
+                                            }
+                                        }.store(in: &self.cancellables)
+                                case .error(let e):
+                                    promise(.failure(e))
+                                }
+                            }.store(in: &self.cancellables)
+                    }
+                }, progressBlock: { progress in
+                    progressHandler(Int(progress))
+                })
+
             } else {
                 promise(.failure(ClientError.apiError(detail: "No feed found for user")))
             }
