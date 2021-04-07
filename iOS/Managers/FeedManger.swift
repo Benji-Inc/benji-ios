@@ -23,21 +23,32 @@ class FeedManager {
     }
 
     private func createFeedQuery()  {
-        guard let ownerQuery = Feed.query(), let connectionsQuery = Feed.query() else { return }
 
-        ownerQuery.whereKey("owner", equalTo: User.current()!)
-        ownerQuery.includeKey("posts")
-
-        connectionsQuery.wher
-
-
-        ownerQuery.getFirstObjectInBackground { object, error in
-            if let feed = object as? Feed {
-                self.feeds = [feed]
-            } else {
-                print("No feed found for the current user.")
-            }
-        }
+        GetAllFeeds().makeRequest(andUpdate: [], viewsToIgnore: [])
+            .mainSink { result in
+                switch result {
+                case .success(let object):
+                    if let feeds = object as? [Feed] {
+                        self.feeds = feeds
+                    } else {
+                        print("No feeds found for the current user.")
+                    }
+                case .error(_):
+                    print("No feed found for the current user.")
+                }
+            }.store(in: &self.cancellables)
+        
+//        guard let query = Feed.query() else { return }
+//
+//        query.whereKey("owner", equalTo: User.current()!)
+//        query.includeKey("posts")
+//        query.getFirstObjectInBackground { object, error in
+//            if let feed = object as? Feed {
+//                self.feeds = [feed]
+//            } else {
+//                print("No feed found for the current user.")
+//            }
+//        }
     }
 
     func queryForPosts(for feed: Feed) -> Future<[Post], Error> {
