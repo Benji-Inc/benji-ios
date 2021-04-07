@@ -26,6 +26,7 @@ class FeedManager {
         guard let query = Feed.query() else { return }
 
         query.whereKey("owner", equalTo: User.current()!)
+        query.includeKey("posts")
         query.getFirstObjectInBackground { object, error in
             if let feed = object as? Feed {
                 self.feeds = [feed]
@@ -38,6 +39,7 @@ class FeedManager {
     func queryForPosts(for feed: Feed) -> Future<[Post], Error> {
         return Future { promise in
             if let query = feed.posts?.query() {
+                query.whereKey("expirationDate", greaterThanOrEqualTo: Date())
                 query.findObjectsInBackground { objects, error in
                     if let posts = objects {
                         promise(.success(posts))
@@ -65,7 +67,7 @@ class FeedManager {
                 post.body = ""
                 post.priority = 2
                 post.triggerDate = Date()
-                post.expirationDate = nil
+                post.expirationDate = Date.add(component: .day, amount: 2, toDate: Date())
                 post.type = .media
                 post.attributes = ["": String()]
                 post.duration = 5

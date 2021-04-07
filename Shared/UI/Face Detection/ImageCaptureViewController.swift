@@ -22,7 +22,14 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
     private var videoOutput: AVCaptureVideoDataOutput?
 
     var didCapturePhoto: ((UIImage) -> Void)?
-    private(set) var currentPosition: AVCaptureDevice.Position = .front
+    var currentPosition: AVCaptureDevice.Position = .front
+
+    enum CameraType {
+        case front
+        case back
+    }
+
+    private(set) var cameraType: CameraType = .front
 
     func begin() {
         self.configureCaptureSession()
@@ -31,16 +38,27 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
 
     func stop() {
         self.session.stopRunning()
-        if let output = self.videoOutput {
+
+        self.session.inputs.forEach { input in
+            self.session.removeInput(input)
+        }
+
+        self.session.outputs.forEach { output in
             self.session.removeOutput(output)
         }
-        if let output = self.capturePhotoOutput {
-            self.session.removeOutput(output)
-        }
+
+        self.previewLayer.removeFromSuperlayer()
     }
 
     func flipCamera() {
-        //TODO: 
+        if self.currentPosition == .front {
+            self.currentPosition = .back
+        } else {
+            self.currentPosition = .front
+        }
+
+        self.stop()
+        self.begin()
     }
 
     func configureCaptureSession() {
@@ -55,7 +73,7 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         // Connect the camera to the capture session input
         do {
             let cameraInput = try AVCaptureDeviceInput(device: camera)
-            if self.session.inputs.isEmpty {
+            if self.session.inputs.isEmpty, self.session.canAddInput(cameraInput) {
                 self.session.addInput(cameraInput)
             }
         } catch {
@@ -95,6 +113,9 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         // Set photo settings for our need
         photoSettings.isHighResolutionPhotoEnabled = true
         photoSettings.flashMode = .auto
+        if #available(iOSApplicationExtension 14.1, *) {
+            photoSettings.isAutoContentAwareDistortionCorrectionEnabled = true
+        } 
         // Call capturePhoto method by passing our photo settings and a
         // delegate implementing AVCapturePhotoCaptureDelegate
         capturePhotoOutput.capturePhoto(with: photoSettings, delegate: self)

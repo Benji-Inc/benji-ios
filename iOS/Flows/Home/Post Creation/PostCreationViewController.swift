@@ -49,6 +49,7 @@ class PostCreationViewController: ImageCaptureViewController {
     }
 
     func reset() {
+        self.currentPosition = .front
         self.imageView.image = nil
         self.begin()
     }
