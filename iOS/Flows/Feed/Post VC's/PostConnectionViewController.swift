@@ -50,7 +50,6 @@ class PostConnectionViewController: PostViewController {
         if let user = connection.nonMeUser, let status = connection.status {
             user.retrieveDataIfNeeded()
                 .mainSink(receiveValue: { user in
-                    //self.avatarView.set(avatar: user)
 
                     let text: Localized
                     switch status {

@@ -85,12 +85,12 @@ class AvatarProfileViewController: ViewController {
                         let string = formatter.string(from: date)
                         self.ritualLabel.setText("Ritual begins everyday @ \(string)")
                     } else {
-                        self.ritualLabel.setText("NO RITUAL SET")
+                        self.ritualLabel.setText("NONE")
                     }
                     self.view.layoutNow()
                 }).store(in: &self.cancellables)
         } else {
-            self.ritualLabel.setText("NO RITUAL SET")
+            self.ritualLabel.setText("NONE")
         }
     }
 }

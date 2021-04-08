@@ -86,6 +86,7 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         self.videoOutput!.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
 
         // Add the video output to the capture session
+        guard self.session.canAddOutput(self.videoOutput!) else { return }
         self.session.addOutput(self.videoOutput!)
 
         let videoConnection = self.videoOutput?.connection(with: .video)

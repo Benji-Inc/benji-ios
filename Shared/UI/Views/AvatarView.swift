@@ -173,8 +173,6 @@ class AvatarView: DisplayableImageView {
     }
 
     private func prepareView() {
-        //self.pressHandler = StationaryPressHandler(with: self)
-
         self.imageView.contentMode = .scaleAspectFill
         self.layer.masksToBounds = true
         self.clipsToBounds = true

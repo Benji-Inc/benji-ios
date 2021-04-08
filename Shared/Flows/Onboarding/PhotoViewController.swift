@@ -34,7 +34,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private let animationView = AnimationView(name: "face_scan")
     private let avatarView = AvatarView()
-    private let borderView = View()
 
     private let beginButton = Button()
     private let confirmButton = Button()
@@ -52,13 +51,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         self.animationView.loopMode = .loop
 
-        self.view.addSubview(self.borderView)
-        self.borderView.roundCorners()
-        self.borderView.layer.borderColor = Color.purple.color.cgColor
-        self.borderView.layer.borderWidth = 4
-        self.borderView.set(backgroundColor: .clear)
-        self.borderView.alpha = 0
-
         self.view.addSubview(self.animationView)
         self.animationView.alpha = 0
         self.view.addSubview(self.avatarView)
@@ -67,6 +59,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.hideAvatar(with: 0)
         self.view.addSubview(self.buttonContainer)
 
+        self.cameraVC.view.clipsToBounds = true 
+        self.cameraVC.view.layer.cornerRadius = 5
+        self.cameraVC.view.layer.borderColor = Color.background2.color.cgColor
+        self.cameraVC.view.layer.borderWidth = 2
         self.cameraVC.view.alpha = 1
         self.cameraVC.didCapturePhoto = { [unowned self] image in
             self.update(image: image)
@@ -123,13 +119,12 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animationView.centerY = self.view.halfHeight * 0.8
         self.animationView.centerOnX()
 
-        let borderHeight = self.view.height * 0.7
-        self.borderView.size = CGSize(width: borderHeight * 0.74, height: borderHeight)
-        self.borderView.centerOnX()
-        self.borderView.top = 30
+        let cameraHeight = self.view.height * 0.7
+        self.cameraVC.view.size = CGSize(width: cameraHeight * 0.74, height: cameraHeight)
+        self.cameraVC.view.centerOnX()
+        self.cameraVC.view.top = 30
 
-        self.cameraVC.view.frame = self.borderView.frame
-        self.avatarView.frame = self.borderView.frame
+        self.avatarView.frame = self.cameraVC.view.frame
 
         let rect = self.buttonContainerRect ?? CGRect(x: Theme.contentOffset,
                                                       y: self.view.bottom,
@@ -188,7 +183,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             //Hide animation view
             UIView.animate(withDuration: 0.2, animations: {
                 self.animationView.alpha = 0
-                self.borderView.alpha = 1
                 self.beginButton.set(style: .normal(color: .lightPurple, text: "Capture"))
             }) { (completed) in
                 // Begin capture
@@ -266,7 +260,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                         self.avatarView.transform = .identity
                         self.avatarView.alpha = 1
                         self.cameraVC.view.alpha = 0
-                        self.borderView.alpha = 0
                         self.view.setNeedsLayout()
                        }) { (completed) in }
     }
@@ -282,11 +275,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func update(image: UIImage) {
-        guard let fixed = image.fixedOrientation() else { return }
         self.cameraVC.stop()
 
-        self.avatarView.set(avatar: fixed)
-        self.image = fixed
+        self.avatarView.set(avatar: image)
+        self.image = image
 
         self.showAvatar()
     }
