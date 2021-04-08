@@ -16,7 +16,7 @@ class PostMediaViewController: PostViewController {
         super.initializeViews()
 
         self.view.insertSubview(self.imageView, at: 0)
-        self.imageView.contentMode = .scaleToFill
+        self.imageView.contentMode = .scaleAspectFill
     }
 
     override func configurePost() {

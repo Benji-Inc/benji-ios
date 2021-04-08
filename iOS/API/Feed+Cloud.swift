@@ -17,7 +17,7 @@ struct GetAllFeeds: CloudFunction {
 
         return self.makeRequest(andUpdate: statusables,
                                 params: [:],
-                                callName: "getMediaFeeds",
+                                callName: "getFeeds",
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
     }
 }

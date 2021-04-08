@@ -42,7 +42,7 @@ class FeedViewController: ViewController {
 
         self.reloadButton.alpha = 0
 
-        self.reloadButton.set(style: .normal(color: .white, text: "Reload"))
+        self.reloadButton.set(style: .normal(color: .purple, text: "Reload"))
         self.reloadButton.didSelect { [unowned self] in
             self.reloadFeed()
         }
@@ -82,8 +82,9 @@ class FeedViewController: ViewController {
 
         self.blurView.expandToSuperviewSize()
 
-        self.reloadButton.size = CGSize(width: 140, height: 40)
-        self.reloadButton.centerOnXAndY()
+        self.reloadButton.setSize(with: self.view.width)
+        self.reloadButton.centerOnX()
+        self.reloadButton.pinToSafeArea(.bottom, padding: 0)
 
         self.indicatorView.size = CGSize(width: self.view.width - 20, height: 2)
         self.indicatorView.pinToSafeArea(.top, padding: Theme.contentOffset)
@@ -106,9 +107,7 @@ class FeedViewController: ViewController {
         self.view.layoutNow()
         UIView.animate(withDuration: Theme.animationDuration, delay: Theme.animationDuration, options: .curveEaseInOut, animations: {
             self.reloadButton.alpha = 1
-            self.indicatorView.alpha = 0
             self.postContainerView.alpha = 0
-            self.avatarView.alpha = 0
         }, completion: { _ in })
     }
 
@@ -116,9 +115,7 @@ class FeedViewController: ViewController {
         self.view.sendSubviewToBack(self.reloadButton)
         UIView.animate(withDuration: Theme.animationDuration, delay: 0, options: .curveEaseInOut, animations: {
             self.reloadButton.alpha = 0
-            self.indicatorView.alpha = 1
             self.postContainerView.alpha = 1
-            self.avatarView.alpha = 1
             self.indicatorView.resetAllIndicators()
         }, completion: { completed in
             self.manager.showFirst()

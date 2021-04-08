@@ -43,9 +43,12 @@ class PostsSupplier {
         }
 
         var publishers: [AnyPublisher<[Postable], Error>] = []
-        publishers.append(self.getInviteAsk())
-        publishers.append(self.getNotificationPermissions())
-        publishers.append(self.getConnections())
+        if FeedManager.shared.selectedFeed?.owner == User.current() {
+            publishers.append(self.getInviteAsk())
+            publishers.append(self.getNotificationPermissions())
+            publishers.append(self.getConnections())
+        }
+
         publishers.append(self.getPosts())
 
         waitForAll(publishers).mainSink { result in

@@ -37,23 +37,14 @@ class FeedManager {
                     print("No feed found for the current user.")
                 }
             }.store(in: &self.cancellables)
-        
-//        guard let query = Feed.query() else { return }
-//
-//        query.whereKey("owner", equalTo: User.current()!)
-//        query.includeKey("posts")
-//        query.getFirstObjectInBackground { object, error in
-//            if let feed = object as? Feed {
-//                self.feeds = [feed]
-//            } else {
-//                print("No feed found for the current user.")
-//            }
-//        }
     }
 
     func queryForPosts(for feed: Feed) -> Future<[Post], Error> {
         return Future { promise in
             if let query = feed.posts?.query() {
+                if feed.owner != User.current() {
+                    query.whereKey("type", equalTo: "media")
+                }
                 query.whereKey("expirationDate", greaterThanOrEqualTo: Date())
                 query.findObjectsInBackground { objects, error in
                     if let posts = objects {
