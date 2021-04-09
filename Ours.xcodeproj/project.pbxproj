@@ -575,7 +575,7 @@
 		D6D4C5B3262096220026D7A2 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */; };
 		D6D4C5B5262096370026D7A2 /* CommentsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */; };
 		D6D4C5B72620965E0026D7A2 /* CommentsCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */; };
-		D6D4C5B9262096720026D7A2 /* CommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B8262096720026D7A2 /* CommentsCell.swift */; };
+		D6D4C5B9262096720026D7A2 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B8262096720026D7A2 /* CommentCell.swift */; };
 		D6D4C5BB262096C10026D7A2 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5BA262096C10026D7A2 /* Comment.swift */; };
 		D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */; };
 		D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
@@ -978,7 +978,7 @@
 		D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionView.swift; sourceTree = "<group>"; };
 		D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionViewManager.swift; sourceTree = "<group>"; };
-		D6D4C5B8262096720026D7A2 /* CommentsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCell.swift; sourceTree = "<group>"; };
+		D6D4C5B8262096720026D7A2 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		D6D4C5BA262096C10026D7A2 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ScalingAnimation.swift"; sourceTree = "<group>"; };
 		D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
@@ -1952,7 +1952,7 @@
 				D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */,
 				D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */,
 				D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */,
-				D6D4C5B8262096720026D7A2 /* CommentsCell.swift */,
+				D6D4C5B8262096720026D7A2 /* CommentCell.swift */,
 			);
 			path = "Medai Post";
 			sourceTree = "<group>";
@@ -2477,7 +2477,7 @@
 				D64A1F07258C16470097817C /* WaitlistViewController.swift in Sources */,
 				D6B37CAB25F7C46000BC3145 /* NotificationPermissionsPost.swift in Sources */,
 				D6090E5A2377D5CF00833DA7 /* ChannelCellAttributesConfigurer.swift in Sources */,
-				D6D4C5B9262096720026D7A2 /* CommentsCell.swift in Sources */,
+				D6D4C5B9262096720026D7A2 /* CommentCell.swift in Sources */,
 				D658C7D2244226A00027D12E /* PostMeditationViewController.swift in Sources */,
 				D6A4A1F625E9550A007F3E15 /* UserNotificationCategory.swift in Sources */,
 				D6090E582377D2CA00833DA7 /* ChannelSectionable.swift in Sources */,
