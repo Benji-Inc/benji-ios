@@ -7,3 +7,12 @@
 //
 
 import Foundation
+
+class CommentsViewController: CollectionViewController<CommentsCollectionViewManager.SectionType, CommentsCollectionViewManager> {
+
+    private lazy var commentsCollectionView = CommentsCollectionView(layout: UICollectionViewFlowLayout())
+
+    override func getCollectionView() -> CollectionView {
+        return self.commentsCollectionView
+    }
+}
