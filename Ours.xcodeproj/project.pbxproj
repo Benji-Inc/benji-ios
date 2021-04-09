@@ -572,6 +572,10 @@
 		D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503D21DAF98500CD8CE4 /* TextField.swift */; };
 		D6D1504021DAFB8300CD8CE4 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503F21DAFB8300CD8CE4 /* UITextField+Extensions.swift */; };
 		D6D380C4257FC18300C562E8 /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D380C3257FC18300C562E8 /* Selectable.swift */; };
+		D6D4C5B3262096220026D7A2 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */; };
+		D6D4C5B5262096370026D7A2 /* CommentsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */; };
+		D6D4C5B72620965E0026D7A2 /* CommentsCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */; };
+		D6D4C5B9262096720026D7A2 /* CommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B8262096720026D7A2 /* CommentsCell.swift */; };
 		D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */; };
 		D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
@@ -970,6 +974,10 @@
 		D6D1503D21DAF98500CD8CE4 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		D6D1503F21DAFB8300CD8CE4 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		D6D380C3257FC18300C562E8 /* Selectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
+		D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
+		D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionView.swift; sourceTree = "<group>"; };
+		D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionViewManager.swift; sourceTree = "<group>"; };
+		D6D4C5B8262096720026D7A2 /* CommentsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCell.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ScalingAnimation.swift"; sourceTree = "<group>"; };
 		D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
@@ -1934,6 +1942,18 @@
 			path = "UI Extensions";
 			sourceTree = "<group>";
 		};
+		D6D4C5B1262096010026D7A2 /* Medai Post */ = {
+			isa = PBXGroup;
+			children = (
+				D6792CD725F95DD400B6575C /* PostMediaViewController.swift */,
+				D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */,
+				D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */,
+				D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */,
+				D6D4C5B8262096720026D7A2 /* CommentsCell.swift */,
+			);
+			path = "Medai Post";
+			sourceTree = "<group>";
+		};
 		D6DADF6A2207DC90007D9EB1 /* Channels */ = {
 			isa = PBXGroup;
 			children = (
@@ -1983,7 +2003,7 @@
 				D6E0ED4E239CA8950073B33E /* PostChannelInviteViewController.swift */,
 				D60B0BE72432F88D004784CD /* PostConnectionViewController.swift */,
 				D6579559239C8DA000A01338 /* PostIntroViewController.swift */,
-				D6792CD725F95DD400B6575C /* PostMediaViewController.swift */,
+				D6D4C5B1262096010026D7A2 /* Medai Post */,
 				D658C7D1244226A00027D12E /* PostMeditationViewController.swift */,
 				D6E80C8A23B2D1180012D438 /* PostNotificationPermissionsViewController.swift */,
 				D6BF68D6239CBF74008E79A1 /* PostReservationViewController.swift */,
@@ -2286,6 +2306,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6D4C5B3262096220026D7A2 /* CommentsViewController.swift in Sources */,
 				D650C1E125B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				D639106F25D7344500D336D7 /* CollectionViewManager+Snapshot.swift in Sources */,
@@ -2298,6 +2319,7 @@
 				D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
 				D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */,
 				D657175C2378C78500F8F96C /* MessageCellAttributesConfigurer.swift in Sources */,
+				D6D4C5B72620965E0026D7A2 /* CommentsCollectionViewManager.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
 				D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
@@ -2345,6 +2367,7 @@
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
 				D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */,
 				D6432BF022D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift in Sources */,
+				D6D4C5B5262096370026D7A2 /* CommentsCollectionView.swift in Sources */,
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
 				D6792CDA25F9661A00B6575C /* FeedCollectionViewController.swift in Sources */,
 				D6B3329325DD74EB00211044 /* Channel+Cloud.swift in Sources */,
@@ -2450,6 +2473,7 @@
 				D64A1F07258C16470097817C /* WaitlistViewController.swift in Sources */,
 				D6B37CAB25F7C46000BC3145 /* NotificationPermissionsPost.swift in Sources */,
 				D6090E5A2377D5CF00833DA7 /* ChannelCellAttributesConfigurer.swift in Sources */,
+				D6D4C5B9262096720026D7A2 /* CommentsCell.swift in Sources */,
 				D658C7D2244226A00027D12E /* PostMeditationViewController.swift in Sources */,
 				D6A4A1F625E9550A007F3E15 /* UserNotificationCategory.swift in Sources */,
 				D6090E582377D2CA00833DA7 /* ChannelSectionable.swift in Sources */,
