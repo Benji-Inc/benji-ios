@@ -576,6 +576,7 @@
 		D6D4C5B5262096370026D7A2 /* CommentsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */; };
 		D6D4C5B72620965E0026D7A2 /* CommentsCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */; };
 		D6D4C5B9262096720026D7A2 /* CommentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B8262096720026D7A2 /* CommentsCell.swift */; };
+		D6D4C5BB262096C10026D7A2 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5BA262096C10026D7A2 /* Comment.swift */; };
 		D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */; };
 		D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
@@ -978,6 +979,7 @@
 		D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionView.swift; sourceTree = "<group>"; };
 		D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionViewManager.swift; sourceTree = "<group>"; };
 		D6D4C5B8262096720026D7A2 /* CommentsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCell.swift; sourceTree = "<group>"; };
+		D6D4C5BA262096C10026D7A2 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ScalingAnimation.swift"; sourceTree = "<group>"; };
 		D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
@@ -1737,6 +1739,7 @@
 		D67FF5A425F6C20C005C3E1E /* Parse Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				D6D4C5BA262096C10026D7A2 /* Comment.swift */,
 				D67FF5A225F6BC3C005C3E1E /* Feed.swift */,
 				D6EDFB4B25D48F2B0034A2F6 /* Post.swift */,
 				D66F0FC622BF004300BA277D /* PostType.swift */,
@@ -2421,6 +2424,7 @@
 				D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */,
 				D66B4BE925EF03B60035A2C5 /* SideNavigationController.swift in Sources */,
 				D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */,
+				D6D4C5BB262096C10026D7A2 /* Comment.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D6792CE325F99F2E00B6575C /* FeedStatusView.swift in Sources */,
 				D6882B9E26010EBE00F94F07 /* PostCreationViewController.swift in Sources */,
