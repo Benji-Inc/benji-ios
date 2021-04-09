@@ -20,6 +20,7 @@ enum PostKey: String {
     case file = "file"
     case duration = "duration"
     case attributes = "attributes"
+    case comments = "comments"
 }
 
 final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
@@ -74,6 +75,10 @@ final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
     var duration: Int {
         get { return self.getObject(for: .duration) ?? 5 }
         set { self.setObject(for: .duration, with: newValue) }
+    }
+
+    var comments: PFRelation<Comment>? {
+        return self.getRelationalObject(for: .comments)
     }
 }
 

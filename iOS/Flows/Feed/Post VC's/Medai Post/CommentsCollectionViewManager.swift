@@ -27,19 +27,51 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
         return section
     }
 
+    private(set) var post: Post
+    @Published var comments: [Comment] = []
+
+    init(with post: Post, collectionView: CollectionView) {
+        self.post = post
+        super.init(with: collectionView)
+    }
+
+    required init(with collectionView: CollectionView) {
+        fatalError("init(with:) has not been implemented")
+    }
+
     override func initialize() {
         super.initialize()
 
         self.collectionView.collectionViewLayout = self.layout
         self.collectionView.animationView.play()
 
-        // Load comments
+        self.post.subscribe(andInclude: PostKey.comments.rawValue)
+            .mainSink { (result) in
+                switch result {
+                case .success(let event):
+                    switch event {
+                    case .entered(let post), .left(let post), .created(let post), .updated(let post), .deleted(let post):
+                        self.post = post
+
+                        let query = self.post.comments?.query()
+                        query?.findObjectsInBackground(block: { objects, error in
+                            self.comments = objects ?? []
+                        })
+                    }
+                case .error(_):
+                    break
+                }
+            }.store(in: &self.cancellables)
+
+        self.$comments.mainSink { comments in
+            self.loadSnapshot()
+        }.store(in: &self.cancellables)
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
         switch section {
         case .comments:
-            return []
+            return self.comments
         }
     }
 
