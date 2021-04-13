@@ -120,6 +120,12 @@ extension Date {
         return day
     }
 
+    var week: Int {
+        let calendar = Calendar.current
+        let day = calendar.component(.weekOfYear, from: self)
+        return day
+    }
+
     var day: Int {
         let calendar = Calendar.current
         let day = calendar.component(.day, from: self)
@@ -172,6 +178,47 @@ extension Date {
     static func date(from components: DateComponents) -> Date? {
         let calendar = Calendar.current
         return calendar.date(from: components)
+    }
+
+    func getDistanceAgoString() -> String {
+        let now = Date()
+        let aMinuteAgo = now.subtract(component: .minute, amount: 1)
+        let anHourAgo = now.subtract(component: .hour, amount: 1)
+        let aDayAgo = now.subtract(component: .day, amount: 1)
+        let aWeekAgo = now.subtract(component: .weekOfYear, amount: 1)
+        let aMonthAgo = now.subtract(component: .month, amount: 1)
+        let aYearAgo = now.subtract(component: .year, amount: 1)
+
+        if self.isBetween(now, and: aMinuteAgo!) {
+            return "now"
+
+        // If less than hour - show # minutes
+        } else if self.isBetween(now, and: anHourAgo!) {
+            let diff = self.minute - now.minute
+            return "\(abs(diff))min ago"
+
+        // If greater than an hour AND less than a day - show # hours
+        } else if self.isBetween(anHourAgo!, and: aDayAgo!) {
+            let diff = self.hour - now.hour
+            return "\(abs(diff))h ago"
+
+        // If greater than a day AND less than a week - show # of days
+        } else if self.isBetween(aDayAgo!, and: aWeekAgo!) {
+            let diff = self.day - now.day
+            return "\(abs(diff))d ago"
+
+        // If greater than a week AND less than a month - show # of weeks
+        } else if self.isBetween(aWeekAgo!, and: aMonthAgo!) {
+            let diff = self.week - now.week
+            return "\(abs(diff))w ago"
+        // If greater than a month AND less than a year - show # of months
+        } else if self.isBetween(aMonthAgo!, and: aYearAgo!) {
+            let diff = self.month - now.month
+            return "\(abs(diff))mo ago"
+        // Else show year and month
+        } else {
+            return Date.standard.string(from: self)
+        }
     }
 }
 

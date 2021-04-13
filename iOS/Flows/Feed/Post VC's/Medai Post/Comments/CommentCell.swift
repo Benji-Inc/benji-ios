@@ -92,8 +92,7 @@ class CommentContentView: View, UIContentView {
 
     private func setText(comment: Comment) {
         guard let date = comment.createdAt else { return }
-        let dateString = Date.dayHourMinuteTimeOfDay.string(from: date)
-        self.label.setText(dateString)
+        self.label.setText(date.getDistanceAgoString())
         self.textView.set(text: String(optional: comment.body))
         self.layoutNow()
     }
