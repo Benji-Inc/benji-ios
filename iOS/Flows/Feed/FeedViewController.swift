@@ -108,6 +108,8 @@ class FeedViewController: ViewController {
         UIView.animate(withDuration: Theme.animationDuration, delay: Theme.animationDuration, options: .curveEaseInOut, animations: {
             self.reloadButton.alpha = 1
             self.postContainerView.alpha = 0
+            self.indicatorView.alpha = 0
+            self.avatarView.alpha = 0
         }, completion: { _ in })
     }
 
@@ -117,6 +119,8 @@ class FeedViewController: ViewController {
             self.reloadButton.alpha = 0
             self.postContainerView.alpha = 1
             self.indicatorView.resetAllIndicators()
+            self.indicatorView.alpha = 1
+            self.avatarView.alpha = 1
         }, completion: { completed in
             self.manager.showFirst()
         })

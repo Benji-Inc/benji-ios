@@ -25,7 +25,8 @@ class PostViewController: ViewController {
     var didFinish: CompletionOptional = nil
     var didPause: CompletionOptional = nil
     var didResume: CompletionOptional = nil
-    var didSelectPost: CompletionOptional = nil 
+    var didSelectPost: CompletionOptional = nil
+    var shouldHideTopView: CompletionOptional = nil 
 
     let container = View()
     let bottomContainer = View()

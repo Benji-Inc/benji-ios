@@ -13,8 +13,12 @@ class PostMediaViewController: PostViewController {
     private let imageView = UIImageView()
     private lazy var commentsVC = CommentsViewController(with: self.post)
 
+    private let commentsButton = CommentsButton()
+
     // Custom Input Accessory View
     lazy var commentInputAccessoryView = CommentInputAccessoryView()
+
+    var isShowingComments: Bool = false
 
     override var inputAccessoryView: UIView? {
         return self.commentInputAccessoryView
@@ -42,29 +46,49 @@ class PostMediaViewController: PostViewController {
         self.view.insertSubview(self.imageView, at: 0)
         self.imageView.contentMode = .scaleAspectFill
 
+        self.view.addSubview(self.commentsButton)
+        self.commentsButton.didSelect { [unowned self] in
+            self.animateComments(show: true)
+        }
+
         KeyboardManger.shared.inputAccessoryView = self.inputAccessoryView
 
         KeyboardManger.shared.$isKeyboardShowing.mainSink { isShowing in
-            if isShowing {
-                self.didPause?()
-            } else {
-                self.didResume?()
-            }
+            self.animateComments(show: isShowing)
         }.store(in: &self.cancellables)
 
-        //self.button.set(style: .normal(color: .purple, text: "Comment"))
+        self.addChild(viewController: self.commentsVC)
+        self.commentsVC.collectionViewManager.loadComments()
+
+        self.commentsVC.collectionViewManager.collectionView.onDoubleTap { [unowned self] (doubleTap) in
+            if self.commentInputAccessoryView.textView.isFirstResponder {
+                self.commentInputAccessoryView.textView.resignFirstResponder()
+            } else {
+                self.animateComments(show: false)
+            }
+        }
+
+        self.commentsButton.set(text: "111")
     }
 
     override func getBottomContent() -> UIView? {
         return nil
     }
 
-    override func didTapButton() {
-        self.didPause?()
-        self.addChild(viewController: self.commentsVC)
-        self.view.alpha = 0.5
-        self.view.layoutNow()
-        self.commentsVC.collectionViewManager.loadComments()
+    func animateComments(show: Bool) {
+        self.isShowingComments = show
+
+        if show {
+            self.shouldHideTopView?()
+        } else {
+            self.didResume?()
+        }
+
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.imageView.alpha  = show ? 0.3 : 1.0
+            self.commentsButton.alpha = show ? 0.0 : 1.0
+            self.view.layoutNow()
+        }
     }
 
     override func configurePost() {
@@ -86,5 +110,16 @@ class PostMediaViewController: PostViewController {
 
         self.imageView.expandToSuperviewSize()
         self.commentsVC.view.expandToSuperviewSize()
+        self.commentsVC.view.centerOnX()
+
+        if self.isShowingComments {
+            self.commentsVC.view.match(.top, to: .top, of: self.view)
+        } else {
+            self.commentsVC.view.match(.top, to: .bottom, of: self.view)
+        }
+
+        self.commentsButton.squaredSize = 60
+        self.commentsButton.pin(.right, padding: 10)
+        self.commentsButton.pinToSafeArea(.bottom, padding: SwipeableInputAccessoryView.preferredHeight + Theme.contentOffset)
     }
 }

@@ -33,12 +33,26 @@ extension FeedViewController: PostsCollectionMangerDelegate {
         self.indicatorView.finishProgress(at: index)
     }
 
-    func posts(_ manager: PostsCollectionManager, didPause index: Int) {
+    func posts(_ manager: PostsCollectionManager, didPause index: Int, shouldHideTop: Bool) {
         self.indicatorView.pauseProgress(at: index)
+
+        if shouldHideTop {
+            UIView.animate(withDuration: 0.2) {
+                self.avatarView.alpha = 0
+                self.indicatorView.alpha = 0
+            }
+        }
     }
 
     func posts(_ manager: PostsCollectionManager, didResume index: Int) {
         self.indicatorView.resumeProgress(at: index)
+
+        if self.avatarView.alpha < 1.0 {
+            UIView.animate(withDuration: 0.2) {
+                self.avatarView.alpha = 1
+                self.indicatorView.alpha = 1
+            }
+        }
     }
 
     func posts(_ manager: PostsCollectionManager,
