@@ -11,12 +11,6 @@ import Lottie
 import TMROLocalization
 import Combine
 
-//typealias InputAccessoryDelegates = MessageInputAccessoryViewDelegate
-//
-//protocol MessageInputAccessoryViewDelegate: AnyObject {
-//    func inputAccessory(_ view: InputAccessoryView, didConfirm sendable: Sendable)
-//}
-
 class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGestureRecognizerDelegate {
 
     static let preferredHeight: CGFloat = 54.0
@@ -45,17 +39,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
     private(set) var inputLeadingContstaint: NSLayoutConstraint?
     private(set) var attachmentHeightAnchor: NSLayoutConstraint?
-
-    unowned let delegate: InputAccessoryDelegates
-
-    init(with delegate: InputAccessoryDelegates) {
-        self.delegate = delegate
-        super.init()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         return CGSize(width: size.width, height: InputAccessoryView.preferredHeight)
@@ -131,7 +114,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.animationView.centerOnY()
     }
 
-    // MARK: SETUP
+    // MARK: PRIVATE
 
     private func setupConstraints() {
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -162,20 +145,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.textView.topAnchor.constraint(equalTo: self.attachmentView.bottomAnchor).isActive = true
         self.textView.bottomAnchor.constraint(equalTo: self.inputContainerView.bottomAnchor).isActive = true
         self.textView.setContentHuggingPriority(.defaultHigh, for: .vertical)
-    }
-
-    private func setupGestures() {
-        let panRecognizer = UIPanGestureRecognizer { [unowned self] (recognizer) in
-            self.handle(pan: recognizer)
-        }
-        panRecognizer.delegate = self
-        self.overlayButton.addGestureRecognizer(panRecognizer)
-
-//        let longPressRecognizer = UILongPressGestureRecognizer { [unowned self] (recognizer) in
-//            self.handle(longPress: recognizer)
-//        }
-//        longPressRecognizer.delegate = self
-//        self.overlayButton.addGestureRecognizer(longPressRecognizer)
     }
 
     private func setupHandlers() {
@@ -218,6 +187,14 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
     // MARK: OVERRIDES
 
+    func setupGestures() {
+        let panRecognizer = UIPanGestureRecognizer { [unowned self] (recognizer) in
+            self.handle(pan: recognizer)
+        }
+        panRecognizer.delegate = self
+        self.overlayButton.addGestureRecognizer(panRecognizer)
+    }
+
     func attachentViewDidUpdate(kind: MessageKind?) {
         self.attachmentHeightAnchor?.constant = kind.isNil ? 0 : 100
         self.layoutNow()
@@ -253,7 +230,8 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     }
 
     func previewAnimatorDidEnd() {
-
+        self.reset()
+        self.previewView?.removeFromSuperview()
     }
 
     func handle(pan: UIPanGestureRecognizer) {
@@ -316,9 +294,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
             self.previewAnimator?.addCompletion({ (position) in
                 if position == .end {
                     self.previewAnimatorDidEnd()
-                    //self.delegate.inputAccessory(self, didConfirm: object)
-                    self.reset()
-                    self.previewView?.removeFromSuperview()
                 }
                 if position == .start {
                     self.previewView?.removeFromSuperview()
