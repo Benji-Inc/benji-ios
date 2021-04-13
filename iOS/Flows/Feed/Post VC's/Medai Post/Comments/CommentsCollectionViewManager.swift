@@ -27,25 +27,27 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
         return section
     }
 
-    private(set) var post: Post
+    var post: Post?
+
     @Published var comments: [Comment] = []
-
-    init(with post: Post, collectionView: CollectionView) {
-        self.post = post
-        super.init(with: collectionView)
-    }
-
-    required init(with collectionView: CollectionView) {
-        fatalError("init(with:) has not been implemented")
-    }
 
     override func initialize() {
         super.initialize()
 
+        self.$comments.mainSink { comments in
+            self.loadSnapshot()
+        }.store(in: &self.cancellables)
+    }
+
+    func loadComments() {
         self.collectionView.collectionViewLayout = self.layout
         self.collectionView.animationView.play()
 
-        self.post.subscribe(andInclude: PostKey.comments.rawValue)
+        // Get initial set
+        self.queryForComments()
+
+        // Subsribe to get updates in real time
+        self.post?.subscribe()
             .mainSink { (result) in
                 switch result {
                 case .success(let event):
@@ -53,19 +55,21 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
                     case .entered(let post), .left(let post), .created(let post), .updated(let post), .deleted(let post):
                         self.post = post
 
-                        let query = self.post.comments?.query()
-                        query?.findObjectsInBackground(block: { objects, error in
-                            self.comments = objects ?? []
-                        })
+                        self.queryForComments()
                     }
                 case .error(_):
                     break
                 }
             }.store(in: &self.cancellables)
+    }
 
-        self.$comments.mainSink { comments in
-            self.loadSnapshot()
-        }.store(in: &self.cancellables)
+    private func queryForComments() {
+        let query = self.post?.comments?.query()
+        query?.order(byAscending: "createdAt")
+        query?.findObjectsInBackground(block: { objects, error in
+            self.comments = objects ?? []
+            self.collectionView.animationView.stop()
+        })
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {

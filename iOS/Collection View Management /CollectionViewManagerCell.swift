@@ -9,9 +9,7 @@
 import Foundation
 import Combine
 
-typealias ManagerCell = CollectionViewManagerCell & ManageableCell
-
-struct ManageableCellRegistration<Cell: ManagerCell> {
+struct ManageableCellRegistration<Cell: UICollectionViewCell & ManageableCell> {
     let cellProvider = UICollectionView.CellRegistration<Cell, Cell.ItemType> { (cell, indexPath, model)  in
         cell.configure(with: model)
         cell.currentItem = model

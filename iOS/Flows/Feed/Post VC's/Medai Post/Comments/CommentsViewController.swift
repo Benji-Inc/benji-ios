@@ -11,11 +11,11 @@ import Combine
 
 class CommentsViewController: CollectionViewController<CommentsCollectionViewManager.SectionType, CommentsCollectionViewManager> {
 
-    private lazy var commentsCollectionView = CommentsCollectionView(layout: UICollectionViewFlowLayout())
+    private lazy var commentsCollectionView = CommentsCollectionView()
 
-    private let post: Post
+    private let post: Postable
 
-    init(with post: Post) {
+    init(with post: Postable) {
         self.post = post
         super.init()
     }
@@ -24,12 +24,21 @@ class CommentsViewController: CollectionViewController<CommentsCollectionViewMan
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func initializeViews() {
+        super.initializeViews()
+
+        if let post = self.post as? Post {
+            self.collectionViewManager.post = post 
+        }
+    }
+
     override func getCollectionView() -> CollectionView {
         return self.commentsCollectionView
     }
 
     private func createComment(with body: String, replyId: String? = nil) {
-        CreateComment(postId: self.post.objectId!,
+        guard let post = self.post as? Post, let objectId = post.objectId else { return }
+        CreateComment(postId: objectId,
                       body: body,
                       attributes: [:],
                       replyId: replyId)

@@ -11,12 +11,23 @@ import Foundation
 class PostMediaViewController: PostViewController {
 
     private let imageView = UIImageView()
+    private lazy var commentsVC = CommentsViewController(with: self.post)
 
     override func initializeViews() {
         super.initializeViews()
 
         self.view.insertSubview(self.imageView, at: 0)
         self.imageView.contentMode = .scaleAspectFill
+
+        self.button.set(style: .normal(color: .purple, text: "Comment"))
+    }
+
+    override func didTapButton() {
+        self.didPause?()
+        self.addChild(viewController: self.commentsVC)
+        self.view.alpha = 0.5
+        self.view.layoutNow()
+        self.commentsVC.collectionViewManager.loadComments()
     }
 
     override func configurePost() {
@@ -37,5 +48,6 @@ class PostMediaViewController: PostViewController {
         super.viewDidLayoutSubviews()
 
         self.imageView.expandToSuperviewSize()
+        self.commentsVC.view.expandToSuperviewSize()
     }
 }

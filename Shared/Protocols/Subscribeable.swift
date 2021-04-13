@@ -28,6 +28,10 @@ extension Subscribeable {
             subscription.handleEvent { (query, event) in
                 promise(.success(event))
             }
+
+            subscription.handleError { query, error in
+                promise(.failure(error))
+            }
         }
     }
 }

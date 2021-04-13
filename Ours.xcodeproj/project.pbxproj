@@ -1871,6 +1871,17 @@
 			path = Posts;
 			sourceTree = "<group>";
 		};
+		D6BEDE422625869E009BA131 /* Comments */ = {
+			isa = PBXGroup;
+			children = (
+				D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */,
+				D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */,
+				D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */,
+				D6D4C5B8262096720026D7A2 /* CommentCell.swift */,
+			);
+			path = Comments;
+			sourceTree = "<group>";
+		};
 		D6C9CD2A2471D67B007376F7 /* Footers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1949,10 +1960,7 @@
 			isa = PBXGroup;
 			children = (
 				D6792CD725F95DD400B6575C /* PostMediaViewController.swift */,
-				D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */,
-				D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */,
-				D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */,
-				D6D4C5B8262096720026D7A2 /* CommentCell.swift */,
+				D6BEDE422625869E009BA131 /* Comments */,
 			);
 			path = "Medai Post";
 			sourceTree = "<group>";

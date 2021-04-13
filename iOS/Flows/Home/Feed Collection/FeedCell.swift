@@ -8,7 +8,7 @@
 
 import Foundation
 
-class FeedCell: ManagerCell {
+class FeedCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Feed
 
     var currentItem: Feed?
