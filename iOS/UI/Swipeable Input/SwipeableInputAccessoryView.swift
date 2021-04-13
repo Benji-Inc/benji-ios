@@ -177,7 +177,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         }
 
         self.textView.confirmationView.button.didSelect { [unowned self] in
-            self.didPressAlertConfirmation()
+            self.didPressAlertCancel()
         }
 
         self.attachmentView.$messageKind.mainSink { (kind) in
@@ -200,7 +200,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.layoutNow()
     }
 
-    func didPressAlertConfirmation() {}
+    func didPressAlertCancel() {}
 
     func handleTextChange(_ text: String) {
         self.animateInputViews(with: text)

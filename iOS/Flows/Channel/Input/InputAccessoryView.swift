@@ -191,6 +191,12 @@ class InputAccessoryView: SwipeableInputAccessoryView, ActiveChannelAccessor {
         self.updateInputType() // Needs to be called after configure
     }
 
+    override func didPressAlertCancel() {
+        super.didPressAlertCancel()
+
+        self.resetAlertProgress()
+    }
+
     override func reset() {
         super.reset()
         self.resetAlertProgress()
