@@ -40,6 +40,7 @@ class CommentContentView: View, UIContentView {
 
     private let avatarView = AvatarView()
     private let textView = CommentTextView()
+    private let label = Label(font: .small, textColor: .background4)
     private var cancellables = Set<AnyCancellable>()
 
     var configuration: UIContentConfiguration {
@@ -64,15 +65,16 @@ class CommentContentView: View, UIContentView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        self.addSubview(self.label)
         self.addSubview(self.avatarView)
         self.addSubview(self.textView)
     }
 
     private func apply(configuration: CommentContentConfiguration) {
-        guard self.appliedConfiguration != configuration else { return }
+        guard self.appliedConfiguration != configuration, let comment = configuration.comment else { return }
         self.appliedConfiguration = configuration
 
-        if let author = configuration.comment?.author {
+        if let author = comment.author {
             author.retrieveDataIfNeeded()
                 .mainSink { result in
                     switch result {
@@ -81,10 +83,18 @@ class CommentContentView: View, UIContentView {
                     case .error(_):
                         break
                     }
+                    self.layoutNow()
                 }.store(in: &self.cancellables)
         }
 
-        self.textView.set(text: String(optional: configuration.comment?.body))
+        self.setText(comment: comment)
+    }
+
+    private func setText(comment: Comment) {
+        guard let date = comment.createdAt else { return }
+        let dateString = Date.dayHourMinuteTimeOfDay.string(from: date)
+        self.label.setText(dateString)
+        self.textView.set(text: String(optional: comment.body))
         self.layoutNow()
     }
 
@@ -95,8 +105,14 @@ class CommentContentView: View, UIContentView {
         self.avatarView.pin(.left, padding: Theme.contentOffset)
         self.avatarView.centerOnY()
 
-        let width = self.width - self.avatarView.right - Theme.contentOffset
-        self.textView.setSize(withWidth: width)
+        let maxWidth = self.width - self.avatarView.right - Theme.contentOffset.doubled
+
+        self.label.setSize(withWidth: maxWidth)
+        self.label.match(.top, to: .top, of: self.avatarView)
+        self.label.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset)
+
+        self.textView.setSize(withWidth: maxWidth)
+        self.textView.match(.top, to: .bottom, of: self.label, offset: 8)
         self.textView.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset)
     }
 }

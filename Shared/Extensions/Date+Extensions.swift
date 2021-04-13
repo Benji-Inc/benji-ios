@@ -82,6 +82,12 @@ extension Date {
         return formatter
     }
 
+    static var dayHourMinuteTimeOfDay: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "E, h:mm a"
+        return formatter
+    }
+
     static var hourMinuteTimeOfDay: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "h : mm a"

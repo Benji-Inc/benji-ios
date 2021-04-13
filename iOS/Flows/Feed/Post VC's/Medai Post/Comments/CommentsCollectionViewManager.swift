@@ -24,6 +24,8 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
         listConfig.showsSeparators = false
 
         let section = NSCollectionLayoutSection.list(using: listConfig, layoutEnvironment: layoutEnvironment)
+        section.interGroupSpacing = 10
+
         return section
     }
 
