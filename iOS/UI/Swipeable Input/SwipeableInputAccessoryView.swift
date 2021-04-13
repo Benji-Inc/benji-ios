@@ -84,10 +84,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
 
-//        self.inputContainerView.addSubview(self.alertProgressView)
-//        self.alertProgressView.set(backgroundColor: .red)
-//        self.alertProgressView.size = .zero
-
         self.inputContainerView.addSubview(self.textView)
         self.inputContainerView.addSubview(self.attachmentView)
         self.inputContainerView.addSubview(self.overlayButton)
@@ -107,7 +103,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
         self.blurView.expandToSuperviewSize()
         self.overlayButton.expandToSuperviewSize()
-        //self.alertProgressView.height = self.inputContainerView.height
 
         self.animationView.size = CGSize(width: 18, height: 18)
         self.animationView.match(.right, to: .right, of: self.inputContainerView, offset: Theme.contentOffset)
@@ -130,7 +125,9 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.inputContainerView.translatesAutoresizingMaskIntoConstraints = false
         self.inputContainerView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
         self.inputContainerView.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -10).isActive = true
-        self.inputLeadingContstaint = self.inputContainerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: 53)
+
+        let leadingConstant: CGFloat = self.shouldShowPlusButton() ? 53 : 0
+        self.inputLeadingContstaint = self.inputContainerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: leadingConstant)
         self.inputLeadingContstaint?.isActive = true
         self.inputContainerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
 
@@ -186,6 +183,10 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     }
 
     // MARK: OVERRIDES
+
+    func shouldShowPlusButton() -> Bool {
+        return true
+    }
 
     func setupGestures() {
         let panRecognizer = UIPanGestureRecognizer { [unowned self] (recognizer) in

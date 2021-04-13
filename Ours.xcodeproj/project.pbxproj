@@ -543,6 +543,7 @@
 		D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */; };
 		D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */; };
+		D6BEDE4E26260584009BA131 /* CommentInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BEDE4D26260584009BA131 /* CommentInputAccessoryView.swift */; };
 		D6BF68D7239CBF74008E79A1 /* PostReservationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BF68D6239CBF74008E79A1 /* PostReservationViewController.swift */; };
 		D6C9CD2C2471D6BE007376F7 /* ReadAllFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */; };
 		D6C9EF3F25BF6CB100A14DE5 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */; };
@@ -946,6 +947,7 @@
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
 		D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryView.swift; sourceTree = "<group>"; };
+		D6BEDE4D26260584009BA131 /* CommentInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentInputAccessoryView.swift; sourceTree = "<group>"; };
 		D6BF68D6239CBF74008E79A1 /* PostReservationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostReservationViewController.swift; sourceTree = "<group>"; };
 		D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadAllFooterView.swift; sourceTree = "<group>"; };
 		D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubbleView.swift; sourceTree = "<group>"; };
@@ -1874,10 +1876,11 @@
 		D6BEDE422625869E009BA131 /* Comments */ = {
 			isa = PBXGroup;
 			children = (
-				D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */,
+				D6D4C5B8262096720026D7A2 /* CommentCell.swift */,
+				D6BEDE4D26260584009BA131 /* CommentInputAccessoryView.swift */,
 				D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */,
 				D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */,
-				D6D4C5B8262096720026D7A2 /* CommentCell.swift */,
+				D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */,
 			);
 			path = Comments;
 			sourceTree = "<group>";
@@ -2577,6 +2580,7 @@
 				D6EDFB4C25D48F2B0034A2F6 /* Post.swift in Sources */,
 				D6DADF702207DF60007D9EB1 /* ChannelCell.swift in Sources */,
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
+				D6BEDE4E26260584009BA131 /* CommentInputAccessoryView.swift in Sources */,
 				D624296723A9EF4F00322ABE /* HomeTabView.swift in Sources */,
 				D66F102622C7C6A900BA277D /* Lorem.swift in Sources */,
 				D66F0FC922BF006D00BA277D /* SystemMessage.swift in Sources */,

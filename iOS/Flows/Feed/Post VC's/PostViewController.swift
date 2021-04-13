@@ -64,7 +64,9 @@ class PostViewController: ViewController {
 
         self.container.addSubview(self.getCenterContent())
         self.container.addSubview(self.bottomContainer)
-        self.bottomContainer.addSubview(self.getBottomContent())
+        if let view = self.getBottomContent() {
+            self.bottomContainer.addSubview(view)
+        }
 
         self.button.didSelect { [unowned self] in
             self.didTapButton()
@@ -84,7 +86,7 @@ class PostViewController: ViewController {
         return self.textView
     }
 
-    func getBottomContent() -> UIView {
+    func getBottomContent() -> UIView? {
         return self.button
     }
 
