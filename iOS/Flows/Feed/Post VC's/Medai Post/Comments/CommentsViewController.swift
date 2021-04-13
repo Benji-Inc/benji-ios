@@ -12,6 +12,8 @@ import Combine
 class CommentsViewController: CollectionViewController<CommentsCollectionViewManager.SectionType, CommentsCollectionViewManager> {
 
     private lazy var commentsCollectionView = CommentsCollectionView()
+    private let exitButton = ImageViewButton()
+    var didTapExit: CompletionOptional = nil
 
     private let post: Postable
 
@@ -29,6 +31,16 @@ class CommentsViewController: CollectionViewController<CommentsCollectionViewMan
 
         if let post = self.post as? Post {
             self.collectionViewManager.post = post 
+        }
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.view.insertSubview(self.exitButton, aboveSubview: self.collectionViewManager.collectionView)
+        self.exitButton.imageView.image = UIImage(systemName: "xmark")!
+        self.exitButton.didSelect { [unowned self] in
+            self.didTapExit?()
         }
     }
 
@@ -51,5 +63,13 @@ class CommentsViewController: CollectionViewController<CommentsCollectionViewMan
                     break
                 }
             }.store(in: &self.cancellables)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.exitButton.squaredSize = 50
+        self.exitButton.pin(.top, padding: Theme.contentOffset)
+        self.exitButton.pin(.right, padding: Theme.contentOffset)
     }
 }

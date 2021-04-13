@@ -68,6 +68,10 @@ class PostMediaViewController: PostViewController {
             }
         }
 
+        self.commentsVC.didTapExit = { [unowned self] in
+            self.animateComments(show: false)
+        }
+
         self.commentsButton.set(text: "111")
     }
 
