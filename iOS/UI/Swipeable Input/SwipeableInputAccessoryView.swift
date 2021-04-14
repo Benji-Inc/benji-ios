@@ -11,6 +11,10 @@ import Lottie
 import TMROLocalization
 import Combine
 
+protocol SwipeableInputAccessoryViewDelegate: AnyObject {
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable)
+}
+
 class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGestureRecognizerDelegate {
 
     static let preferredHeight: CGFloat = 54.0
@@ -36,6 +40,16 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     let plusAnimationView = AnimationView(name: "plusToX")
     let overlayButton = UIButton()
     var cancellables = Set<AnyCancellable>()
+
+    var currentContext: MessageContext = .casual {
+        didSet {
+            self.borderColor = self.currentContext.color.color.cgColor
+        }
+    }
+    
+    var editableMessage: Messageable?
+    var currentMessageKind: MessageKind = .text(String())
+    private var sendableObject: SendableObject?
 
     private(set) var inputLeadingContstaint: NSLayoutConstraint?
     private(set) var attachmentHeightAnchor: NSLayoutConstraint?
@@ -64,6 +78,17 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         }
 
         return newSize
+    }
+
+    unowned let delegate: SwipeableInputAccessoryViewDelegate
+
+    init(with delegate: SwipeableInputAccessoryViewDelegate) {
+        self.delegate = delegate
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func initializeSubviews() {
@@ -205,6 +230,17 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
     func handleTextChange(_ text: String) {
         self.animateInputViews(with: text)
+
+        switch self.currentMessageKind {
+        case .text(_):
+            self.currentMessageKind = .text(text)
+        case .photo(photo: let photo, _):
+            self.currentMessageKind = .photo(photo: photo, body: text)
+        case .video(video: let video, _):
+            self.currentMessageKind = .video(video: video, body: text)
+        default:
+            break
+        }
     }
 
     func updateInputType() {}
@@ -223,16 +259,25 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {}
 
     func shouldHandlePan() -> Bool {
-        return true
+        let object = SendableObject(kind: self.currentMessageKind, context: self.currentContext, previousMessage: self.editableMessage)
+        self.sendableObject = object
+        return object.isSendable
     }
 
     func panDidBegin() {
-
+        self.previewView?.set(backgroundColor: self.currentContext.color)
+        self.previewView?.messageKind = self.currentMessageKind
     }
 
     func previewAnimatorDidEnd() {
         self.reset()
         self.previewView?.removeFromSuperview()
+
+        if let object = self.sendableObject {
+            self.delegate.swipeableInputAccessory(self, didConfirm: object)
+        }
+
+        self.sendableObject = nil
     }
 
     func handle(pan: UIPanGestureRecognizer) {

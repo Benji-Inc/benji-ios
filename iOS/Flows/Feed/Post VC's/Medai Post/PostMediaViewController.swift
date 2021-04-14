@@ -16,7 +16,7 @@ class PostMediaViewController: PostViewController {
     private let commentsButton = CommentsButton()
 
     // Custom Input Accessory View
-    lazy var commentInputAccessoryView = CommentInputAccessoryView()
+    lazy var commentInputAccessoryView = CommentInputAccessoryView(with: self)
 
     var isShowingComments: Bool = false
 
@@ -69,10 +69,15 @@ class PostMediaViewController: PostViewController {
         }
 
         self.commentsVC.didTapExit = { [unowned self] in
+            if self.commentInputAccessoryView.textView.isFirstResponder {
+                self.commentInputAccessoryView.textView.resignFirstResponder()
+            }
             self.animateComments(show: false)
         }
 
-        self.commentsButton.set(text: "111")
+        self.commentsVC.collectionViewManager.$comments.mainSink { comments in
+            self.commentsButton.set(text: String(comments.count))
+        }.store(in: &self.cancellables)
     }
 
     override func getBottomContent() -> UIView? {
@@ -83,6 +88,7 @@ class PostMediaViewController: PostViewController {
         self.isShowingComments = show
 
         if show {
+            self.commentsVC.collectionViewManager.collectionView.scrollToEnd(duringUpdate: false)
             self.shouldHideTopView?()
         } else {
             self.didResume?()
@@ -125,5 +131,30 @@ class PostMediaViewController: PostViewController {
         self.commentsButton.squaredSize = 60
         self.commentsButton.pin(.right, padding: 10)
         self.commentsButton.pinToSafeArea(.bottom, padding: SwipeableInputAccessoryView.preferredHeight + Theme.contentOffset)
+    }
+}
+
+extension PostMediaViewController: SwipeableInputAccessoryViewDelegate {
+
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
+        self.send(object: sendable)
+    }
+
+    private func send(object: Sendable) {
+        guard let post = self.post as? Post, let postId = post.objectId else { return }
+        var body = String()
+
+        if case MessageKind.text(let text) = object.kind {
+            body = text
+        }
+
+        CreateComment(postId: postId, body: body, attributes: [:], replyId: "").makeRequest(andUpdate: [], viewsToIgnore: [self.view]).mainSink { result in
+            switch result {
+            case .success(_):
+                self.commentsVC.collectionViewManager.collectionView.scrollToEnd()
+            case .error(_):
+                break
+            }
+        }.store(in: &self.cancellables)
     }
 }

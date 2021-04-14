@@ -10,7 +10,7 @@ import Foundation
 import TwilioChatClient
 import Photos
 
-extension ChannelViewController: InputAccessoryDelegates {
+extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
 
     func handle(attachment: Attachment, body: String) {
         AttachmentsManager.shared.getMessageKind(for: attachment, body: body)
@@ -25,8 +25,7 @@ extension ChannelViewController: InputAccessoryDelegates {
             }.store(in: &self.cancellables)
     }
 
-    func inputAccessory(_ view: InputAccessoryView, didConfirm sendable: Sendable) {
-
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
         if sendable.previousMessage.isNil {
             self.send(object: sendable)
         } else {

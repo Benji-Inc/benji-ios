@@ -11,39 +11,14 @@ import Lottie
 import TMROLocalization
 import Combine
 
-typealias InputAccessoryDelegates = MessageInputAccessoryViewDelegate
-
-protocol MessageInputAccessoryViewDelegate: AnyObject {
-    func inputAccessory(_ view: InputAccessoryView, didConfirm sendable: Sendable)
-}
-
 class InputAccessoryView: SwipeableInputAccessoryView, ActiveChannelAccessor {
 
-    var currentContext: MessageContext = .casual {
-        didSet {
-            self.borderColor = self.currentContext.color.color.cgColor
-        }
-    }
-    var editableMessage: Messageable?
-    var currentMessageKind: MessageKind = .text(String())
     let alertProgressView = AlertProgressView()
-    private var sendableObject: SendableObject?
 
     override var borderColor: CGColor? {
         didSet {
             self.inputContainerView.layer.borderColor = self.borderColor ?? self.currentContext.color.color.cgColor
         }
-    }
-
-    unowned let delegate: InputAccessoryDelegates
-
-    init(with delegate: InputAccessoryDelegates) {
-        self.delegate = delegate
-        super.init()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
     override func initializeSubviews() {
@@ -85,17 +60,6 @@ class InputAccessoryView: SwipeableInputAccessoryView, ActiveChannelAccessor {
 
     override func handleTextChange(_ text: String) {
         super.handleTextChange(text)
-
-        switch self.currentMessageKind {
-        case .text(_):
-            self.currentMessageKind = .text(text)
-        case .photo(photo: let photo, _):
-            self.currentMessageKind = .photo(photo: photo, body: text)
-        case .video(video: let video, _):
-            self.currentMessageKind = .video(video: video, body: text)
-        default:
-            break
-        }
 
         guard let channelDisplayable = self.activeChannel,
             text.count > 0,
@@ -159,29 +123,6 @@ class InputAccessoryView: SwipeableInputAccessoryView, ActiveChannelAccessor {
             self.inputLeadingContstaint?.constant = inputOffset
             self.layoutNow()
         }
-    }
-
-    override func shouldHandlePan() -> Bool {
-        let object = SendableObject(kind: self.currentMessageKind, context: self.currentContext, previousMessage: self.editableMessage)
-        self.sendableObject = object
-        return object.isSendable
-    }
-
-    override func panDidBegin() {
-        super.panDidBegin()
-
-        self.previewView?.set(backgroundColor: self.currentContext.color)
-        self.previewView?.messageKind = self.currentMessageKind
-    }
-
-    override func previewAnimatorDidEnd() {
-        super.previewAnimatorDidEnd()
-
-        if let object = self.sendableObject {
-            self.delegate.inputAccessory(self, didConfirm: object)
-        }
-
-        self.sendableObject = nil 
     }
 
     override func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
