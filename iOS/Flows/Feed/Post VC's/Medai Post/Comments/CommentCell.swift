@@ -21,17 +21,10 @@ class CommentCell: CollectionViewManagerCell, ManageableCell {
         config.comment = item
         self.contentConfiguration = config
     }
-}
 
-struct CommentContentConfiguration: UIContentConfiguration, Hashable {
-
-    var comment: Comment?
-
-    func makeContentView() -> UIView & UIContentView {
-        return CommentContentView(configuration: self)
-    }
-
-    func updated(for state: UIConfigurationState) -> Self {
-        return self
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let height: CGFloat = layoutAttributes.size.height > 0 ? layoutAttributes.size.height : 44
+        layoutAttributes.size = CGSize(width: layoutAttributes.size.width, height: height)
+        return layoutAttributes
     }
 }

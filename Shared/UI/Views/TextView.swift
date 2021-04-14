@@ -38,7 +38,7 @@ class TextView: UITextView {
     }
 
     convenience init() {
-        self.init(frame: CGRect.zero, textContainer: nil)
+        self.init(frame: .zero, textContainer: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
