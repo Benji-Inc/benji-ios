@@ -32,8 +32,6 @@
 		D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DB24FAD7B400B63412 /* AttachmentCell.swift */; };
 		D61592DE24FAD7C600B63412 /* AttachmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DD24FAD7C600B63412 /* AttachmentHeaderView.swift */; };
 		D61592E024FC195D00B63412 /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DF24FC195D00B63412 /* InputTextView.swift */; };
-		D61ACF802627327E0052CE29 /* CommentContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D61ACF7F2627327E0052CE29 /* CommentContentView.xib */; };
-		D61ACF82262733BE0052CE29 /* CommentContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ACF81262733BE0052CE29 /* CommentContentView.swift */; };
 		D61ACF84262733F40052CE29 /* CommentTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ACF83262733F40052CE29 /* CommentTextView.swift */; };
 		D61D38E3248C07F700BE457B /* InputAccessoryView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E2248C07F700BE457B /* InputAccessoryView+Animation.swift */; };
 		D61D38E5248C0BA600BE457B /* InputAccessoryView+Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E4248C0BA600BE457B /* InputAccessoryView+Connection.swift */; };
@@ -720,8 +718,6 @@
 		D61592DB24FAD7B400B63412 /* AttachmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		D61592DD24FAD7C600B63412 /* AttachmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeaderView.swift; sourceTree = "<group>"; };
 		D61592DF24FC195D00B63412 /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
-		D61ACF7F2627327E0052CE29 /* CommentContentView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CommentContentView.xib; sourceTree = "<group>"; };
-		D61ACF81262733BE0052CE29 /* CommentContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentContentView.swift; sourceTree = "<group>"; };
 		D61ACF83262733F40052CE29 /* CommentTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTextView.swift; sourceTree = "<group>"; };
 		D61D38E2248C07F700BE457B /* InputAccessoryView+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputAccessoryView+Animation.swift"; sourceTree = "<group>"; };
 		D61D38E4248C0BA600BE457B /* InputAccessoryView+Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputAccessoryView+Connection.swift"; sourceTree = "<group>"; };
@@ -1885,8 +1881,6 @@
 			isa = PBXGroup;
 			children = (
 				D6D4C5B8262096720026D7A2 /* CommentCell.swift */,
-				D61ACF81262733BE0052CE29 /* CommentContentView.swift */,
-				D61ACF7F2627327E0052CE29 /* CommentContentView.xib */,
 				D6BEDE4D26260584009BA131 /* CommentInputAccessoryView.swift */,
 				D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */,
 				D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */,
@@ -2190,7 +2184,6 @@
 				D637532C2316172700214F63 /* Roboto-Medium.ttf in Resources */,
 				D650C1F125B741EB0037C59A /* plusToX.json in Resources */,
 				D637532A2316172700214F63 /* Roboto-Regular.ttf in Resources */,
-				D61ACF802627327E0052CE29 /* CommentContentView.xib in Resources */,
 				D61EC0CA21D3071500204BEE /* LaunchScreen.storyboard in Resources */,
 				D61EC0C721D3071500204BEE /* Assets.xcassets in Resources */,
 				D640329225AF3CA500139396 /* arrow.json in Resources */,
@@ -2506,7 +2499,6 @@
 				D6F33C6D24B14988009603FF /* PhotoCellAttributesConfigurer.swift in Sources */,
 				D6792CE125F96C9600B6575C /* FeedCollectionView.swift in Sources */,
 				D60C814622092F6B00A127A3 /* Button.swift in Sources */,
-				D61ACF82262733BE0052CE29 /* CommentContentView.swift in Sources */,
 				D6D1503721D7E74500CD8CE4 /* UIViewController+Extensions.swift in Sources */,
 				80D4A21623039B22007CB5F1 /* RitualInputViewController.swift in Sources */,
 				D64A1F07258C16470097817C /* WaitlistViewController.swift in Sources */,
