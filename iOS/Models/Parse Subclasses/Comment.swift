@@ -14,16 +14,24 @@ enum CommentKey: String {
     case body
     case attributes
     case reply
+    case updateId
+    case post
 }
 
-final class Comment: PFObject, PFSubclassing, Subscribeable {
+final class Comment: PFObject, PFSubclassing, Subscribeable, Commentable {
 
     static func parseClassName() -> String {
         return String(describing: self)
     }
 
-    var isReply: Bool {
-        return !self.reply.isNil
+    var post: Post? {
+        get { return self.getObject(for: .post) }
+        set { self.setObject(for: .post, with: newValue) }
+    }
+
+    var updateId: String? {
+        get { return self.getObject(for: .updateId) }
+        set { self.setObject(for: .updateId, with: newValue) }
     }
 
     var author: User? {
@@ -36,7 +44,7 @@ final class Comment: PFObject, PFSubclassing, Subscribeable {
         set { self.setObject(for: .body, with: newValue) }
     }
 
-    var attributes: [String: Any]? {
+    var attributes: [String: AnyHashable]? {
         get { return self.getObject(for: .attributes) }
         set { self.setObject(for: .attributes, with: newValue) }
     }

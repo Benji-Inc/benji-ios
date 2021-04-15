@@ -51,32 +51,25 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
         self.queryForComments()
 
         // Subsribe to get updates in real time
-
-//        Comment.subscribe(where: [:])
-//            .mainSink { result in
-//                switch result {
-//                case .success(let event):
-//                    switch event {
-//                    case .entered(let obj), .left(let obj), .created(let obj), .updated(let obj), .deleted(let obj):
-//                        if let comments = obj as? [Comment] {
-//                            self.comments = comments
-//                        }
-//                    }
-//                case .error(_):
-//                    break
-//                }
-//            }.store(in: &self.cancellables)
-
-        self.post?.subscribe()
+        Comment.subscribe(where: ["post": self.post!])
             .mainSink { (result) in
                 switch result {
                 case .success(let event):
                     switch event {
-                    case .entered(let post), .left(let post), .created(let post),
-                         .updated(let post), .deleted(let post):
-                        self.post = post
-
-                        self.queryForComments()
+                    case .entered(_), .left(_):
+                        break
+                    case .created(let obj), .updated(let obj):
+                        guard let comment = obj as? Comment else { return }
+                        var current = self.comments.filter { old in
+                            return old.updateId == comment.updateId
+                        }
+                        current.append(comment)
+                        self.comments = current.sorted(by: { lhs, rhs in
+                            return lhs.createdAt! <= rhs.createdAt!
+                        })
+                    case  .deleted(let obj):
+                        guard let comment = obj as? Comment else { return }
+                        self.comments.remove(object: comment)
                     }
                 case .error(_):
                     break

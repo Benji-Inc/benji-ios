@@ -34,6 +34,8 @@
 		D61592E024FC195D00B63412 /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DF24FC195D00B63412 /* InputTextView.swift */; };
 		D61ACF84262733F40052CE29 /* CommentTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ACF83262733F40052CE29 /* CommentTextView.swift */; };
 		D61ACF86262898520052CE29 /* CollectionViewInputHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ACF85262898520052CE29 /* CollectionViewInputHandler.swift */; };
+		D61ACF882628D4AC0052CE29 /* SystemComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ACF872628D4AC0052CE29 /* SystemComment.swift */; };
+		D61ACF8A2628D5200052CE29 /* Commentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ACF892628D5200052CE29 /* Commentable.swift */; };
 		D61D38E3248C07F700BE457B /* InputAccessoryView+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E2248C07F700BE457B /* InputAccessoryView+Animation.swift */; };
 		D61D38E5248C0BA600BE457B /* InputAccessoryView+Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E4248C0BA600BE457B /* InputAccessoryView+Connection.swift */; };
 		D61D38E7248C494A00BE457B /* ChannelViewController+Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E6248C494A00BE457B /* ChannelViewController+Messaging.swift */; };
@@ -720,6 +722,8 @@
 		D61592DF24FC195D00B63412 /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
 		D61ACF83262733F40052CE29 /* CommentTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTextView.swift; sourceTree = "<group>"; };
 		D61ACF85262898520052CE29 /* CollectionViewInputHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewInputHandler.swift; sourceTree = "<group>"; };
+		D61ACF872628D4AC0052CE29 /* SystemComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemComment.swift; sourceTree = "<group>"; };
+		D61ACF892628D5200052CE29 /* Commentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Commentable.swift; sourceTree = "<group>"; };
 		D61D38E2248C07F700BE457B /* InputAccessoryView+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputAccessoryView+Animation.swift"; sourceTree = "<group>"; };
 		D61D38E4248C0BA600BE457B /* InputAccessoryView+Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InputAccessoryView+Connection.swift"; sourceTree = "<group>"; };
 		D61D38E6248C494A00BE457B /* ChannelViewController+Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelViewController+Messaging.swift"; sourceTree = "<group>"; };
@@ -1529,6 +1533,7 @@
 				D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */,
 				D6EDFB5325D490130034A2F6 /* Postable.swift */,
 				D61ACF85262898520052CE29 /* CollectionViewInputHandler.swift */,
+				D61ACF892628D5200052CE29 /* Commentable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -1562,6 +1567,7 @@
 				D607400D23401B3E009633EB /* SystemChannel.swift */,
 				D66F0FC822BF006D00BA277D /* SystemMessage.swift */,
 				D6B37CA525F7C05900BC3145 /* Posts */,
+				D61ACF872628D4AC0052CE29 /* SystemComment.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2499,6 +2505,7 @@
 				D6E859BB25DAD4EA003D1DE9 /* Subscribeable.swift in Sources */,
 				D6F33C6D24B14988009603FF /* PhotoCellAttributesConfigurer.swift in Sources */,
 				D6792CE125F96C9600B6575C /* FeedCollectionView.swift in Sources */,
+				D61ACF8A2628D5200052CE29 /* Commentable.swift in Sources */,
 				D60C814622092F6B00A127A3 /* Button.swift in Sources */,
 				D6D1503721D7E74500CD8CE4 /* UIViewController+Extensions.swift in Sources */,
 				80D4A21623039B22007CB5F1 /* RitualInputViewController.swift in Sources */,
@@ -2554,6 +2561,7 @@
 				D6C9EF4525BF6CF000A14DE5 /* Indexable.swift in Sources */,
 				D642737122C991A60088256B /* ClosedRange+Extensions.swift in Sources */,
 				D66379D025A3704300A4A3B7 /* UserNotificationFactory.swift in Sources */,
+				D61ACF882628D4AC0052CE29 /* SystemComment.swift in Sources */,
 				D6DADF722207DF83007D9EB1 /* ChannelsCollectionView.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,

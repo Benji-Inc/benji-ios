@@ -76,4 +76,11 @@ class CommentCell: CollectionViewManagerCell, ManageableCell {
         self.textView.match(.top, to: .bottom, of: self.label, offset: 8)
         self.textView.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset)
     }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.label.text = nil
+        self.textView.text = nil 
+    }
 }

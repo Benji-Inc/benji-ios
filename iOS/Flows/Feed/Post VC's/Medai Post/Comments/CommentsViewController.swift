@@ -58,12 +58,10 @@ class CommentsViewController: CollectionViewController<CommentsCollectionViewMan
             .makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink { result in
                 switch result {
-                case .success(let object):
-                    guard let comment = object as? Comment else { return }
-                    self.collectionViewManager.comments.append(comment)
+                case .success(_):
                     self.commentsCollectionView.scrollToEnd()
                 case .error(let error):
-                    break
+                    print(error)
                 }
             }.store(in: &self.cancellables)
     }

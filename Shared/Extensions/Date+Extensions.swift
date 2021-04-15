@@ -194,12 +194,13 @@ extension Date {
 
         // If less than hour - show # minutes
         } else if self.isBetween(now, and: anHourAgo!) {
-            let diff = self.minute - now.minute
-            return "\(abs(diff))min ago"
+            var diff = self.minute - now.minute
+            diff = 60 - abs(diff)
+            return "\(diff)min ago"
 
         // If greater than an hour AND less than a day - show # hours
         } else if self.isBetween(anHourAgo!, and: aDayAgo!) {
-            let diff = self.hour - now.hour
+            var diff = self.hour - now.hour
             return "\(abs(diff))h ago"
 
         // If greater than a day AND less than a week - show # of days

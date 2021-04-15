@@ -30,6 +30,8 @@ struct CreateComment: CloudFunction {
     var attributes: [String: Any]?
     var replyId: String?
 
+    // Add system comment
+
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
 
         var params: [String: Any] = ["post": self.postId,
