@@ -56,7 +56,7 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
         }) else { return }
 
         self.collectionViewManager.append(item: systemMessage) { [unowned self] in
-            self.collectionView.scrollToEnd()
+            self.channelCollectionView.scrollToEnd()
         }
 
         self.messageInputAccessoryView.reset()

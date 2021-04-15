@@ -52,7 +52,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     var didLongPress: ((AnyHashable, IndexPath) -> Void)? = nil
     var cancellables = Set<AnyCancellable>()
 
-    var hasLoadedInitialSnapshot: Bool = false
+    private(set) var hasLoadedInitialSnapshot: Bool = false
 
     unowned let collectionView: CollectionView
 

@@ -8,7 +8,24 @@
 
 import Foundation
 
-class PostMediaViewController: PostViewController {
+class PostMediaViewController: PostViewController, CollectionViewInputHandler {
+
+    var collectionView: CollectionView {
+        return self.commentsVC.collectionViewManager.collectionView
+    }
+
+    var inputTextView: InputTextView {
+        return self.commentInputAccessoryView.textView
+    }
+
+    var collectionViewBottomInset: CGFloat = 0 {
+        didSet {
+            self.collectionView.contentInset.bottom = self.collectionViewBottomInset
+            self.collectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
+        }
+    }
+
+    var indexPathForEditing: IndexPath?
 
     private let imageView = UIImageView()
     private lazy var commentsVC = CommentsViewController(with: self.post)
@@ -51,10 +68,12 @@ class PostMediaViewController: PostViewController {
             self.animateComments(show: true)
         }
 
-        KeyboardManger.shared.inputAccessoryView = self.inputAccessoryView
+        self.addKeyboardObservers()
 
         KeyboardManger.shared.$isKeyboardShowing.mainSink { isShowing in
-            self.animateComments(show: isShowing)
+            if isShowing, !self.isShowingComments {
+                self.animateComments(show: true)
+            }
         }.store(in: &self.cancellables)
 
         self.addChild(viewController: self.commentsVC)
@@ -63,8 +82,6 @@ class PostMediaViewController: PostViewController {
         self.commentsVC.collectionViewManager.collectionView.onDoubleTap { [unowned self] (doubleTap) in
             if self.commentInputAccessoryView.textView.isFirstResponder {
                 self.commentInputAccessoryView.textView.resignFirstResponder()
-            } else {
-                self.animateComments(show: false)
             }
         }
 
@@ -88,7 +105,6 @@ class PostMediaViewController: PostViewController {
         self.isShowingComments = show
 
         if show {
-            self.commentsVC.collectionViewManager.collectionView.scrollToEnd(duringUpdate: false)
             self.shouldHideTopView?()
         } else {
             self.didResume?()
@@ -98,6 +114,10 @@ class PostMediaViewController: PostViewController {
             self.imageView.alpha  = show ? 0.3 : 1.0
             self.commentsButton.alpha = show ? 0.0 : 1.0
             self.view.layoutNow()
+        } completion: { completed in
+            if show {
+                self.commentsVC.collectionViewManager.collectionView.scrollToEnd()
+            }
         }
     }
 
@@ -137,24 +157,9 @@ class PostMediaViewController: PostViewController {
 extension PostMediaViewController: SwipeableInputAccessoryViewDelegate {
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
-        self.send(object: sendable)
-    }
 
-    private func send(object: Sendable) {
-        guard let post = self.post as? Post, let postId = post.objectId else { return }
-        var body = String()
-
-        if case MessageKind.text(let text) = object.kind {
-            body = text
+        if case MessageKind.text(let text) = sendable.kind {
+            self.commentsVC.createComment(with: text)
         }
-
-        CreateComment(postId: postId, body: body, attributes: [:], replyId: "").makeRequest(andUpdate: [], viewsToIgnore: [self.view]).mainSink { result in
-            switch result {
-            case .success(_):
-                self.commentsVC.collectionViewManager.collectionView.scrollToEnd()
-            case .error(_):
-                break
-            }
-        }.store(in: &self.cancellables)
     }
 }

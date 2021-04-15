@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import Parse
+import ParseLiveQuery
 
 class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionViewManager.SectionType> {
 
@@ -49,12 +51,29 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
         self.queryForComments()
 
         // Subsribe to get updates in real time
+
+//        Comment.subscribe(where: [:])
+//            .mainSink { result in
+//                switch result {
+//                case .success(let event):
+//                    switch event {
+//                    case .entered(let obj), .left(let obj), .created(let obj), .updated(let obj), .deleted(let obj):
+//                        if let comments = obj as? [Comment] {
+//                            self.comments = comments
+//                        }
+//                    }
+//                case .error(_):
+//                    break
+//                }
+//            }.store(in: &self.cancellables)
+
         self.post?.subscribe()
             .mainSink { (result) in
                 switch result {
                 case .success(let event):
                     switch event {
-                    case .entered(let post), .left(let post), .created(let post), .updated(let post), .deleted(let post):
+                    case .entered(let post), .left(let post), .created(let post),
+                         .updated(let post), .deleted(let post):
                         self.post = post
 
                         self.queryForComments()

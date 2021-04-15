@@ -11,7 +11,7 @@ import Combine
 
 class CommentsViewController: CollectionViewController<CommentsCollectionViewManager.SectionType, CommentsCollectionViewManager> {
 
-    private lazy var commentsCollectionView = CommentsCollectionView()
+    lazy var commentsCollectionView = CommentsCollectionView()
     private let exitButton = ImageViewButton()
     var didTapExit: CompletionOptional = nil
 
@@ -48,8 +48,9 @@ class CommentsViewController: CollectionViewController<CommentsCollectionViewMan
         return self.commentsCollectionView
     }
 
-    private func createComment(with body: String, replyId: String? = nil) {
+    func createComment(with body: String, replyId: String? = nil) {
         guard let post = self.post as? Post, let objectId = post.objectId else { return }
+
         CreateComment(postId: objectId,
                       body: body,
                       attributes: [:],
@@ -57,9 +58,11 @@ class CommentsViewController: CollectionViewController<CommentsCollectionViewMan
             .makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink { result in
                 switch result {
-                case .success(_):
-                    break
-                case .error(_):
+                case .success(let object):
+                    guard let comment = object as? Comment else { return }
+                    self.collectionViewManager.comments.append(comment)
+                    self.commentsCollectionView.scrollToEnd()
+                case .error(let error):
                     break
                 }
             }.store(in: &self.cancellables)

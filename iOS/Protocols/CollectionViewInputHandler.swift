@@ -1,14 +1,56 @@
 //
-//  ChannelViewController+Keyboard.swift
-//  Benji
+//  CollectionViewInputHandler.swift
+//  Ours
 //
-//  Created by Benji Dodgson on 6/3/20.
-//  Copyright © 2020 Benjamin Dodgson. All rights reserved.
+//  Created by Benji Dodgson on 4/15/21.
+//  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
 
-extension ChannelViewController {
+protocol CollectionViewInputHandler where Self: ViewController {
+    /// A Boolean value that determines whether the `MessagesCollectionView` scrolls to the
+    /// last item whenever the `InputTextView` begins editing.
+    ///
+    /// The default value of this property is `false`.
+    /// NOTE: This is related to `scrollToLastItem` whereas the below flag is related to `scrollToBottom` - check each function for differences
+    var scrollsToLastItemOnKeyboardBeginsEditing: Bool { get }
+
+    /// A Boolean value that determines whether the `MessagesCollectionView` scrolls to the
+    /// bottom whenever the `InputTextView` begins editing.
+    ///
+    /// The default value of this property is `false`.
+    /// NOTE: This is related to `scrollToBottom` whereas the above flag is related to `scrollToLastItem` - check each function for differences
+    var scrollsToBottomOnKeyboardBeginsEditing: Bool { get }
+    var maintainPositionOnKeyboardFrameChanged: Bool { get }
+    var additionalBottomInset: CGFloat { get }
+
+    var collectionView: CollectionView { get }
+    var inputTextView: InputTextView { get }
+    var collectionViewBottomInset: CGFloat { get set }
+
+    var indexPathForEditing: IndexPath? { get set }
+    
+    func addKeyboardObservers()
+}
+
+extension CollectionViewInputHandler {
+
+    var scrollsToLastItemOnKeyboardBeginsEditing: Bool {
+        return false 
+    }
+
+    var scrollsToBottomOnKeyboardBeginsEditing: Bool {
+        return true 
+    }
+
+    var maintainPositionOnKeyboardFrameChanged: Bool {
+        return true 
+    }
+
+    var additionalBottomInset: CGFloat {
+        return 10
+    }
 
     // MARK: - Register / Unregister Observers
 
@@ -35,7 +77,7 @@ extension ChannelViewController {
     private func handleTextViewDidBeginEditing(_ notification: Notification) {
         if self.scrollsToLastItemOnKeyboardBeginsEditing || self.scrollsToBottomOnKeyboardBeginsEditing {
             guard let inputTextView = notification.object as? InputTextView,
-                inputTextView === self.messageInputAccessoryView.textView else { return }
+                  inputTextView === self.inputTextView else { return }
 
             if let indexPath = self.indexPathForEditing {
                 self.collectionView.scrollToItem(at: indexPath, at: .bottom, animated: true)
@@ -46,7 +88,7 @@ extension ChannelViewController {
     }
 
     private func handleKeyboardFrameChange(_ notification: Notification) {
-        
+
         guard let keyboardStartFrameInScreenCoords = notification.userInfo?[UIResponder.keyboardFrameBeginUserInfoKey] as? CGRect else { return }
         guard !keyboardStartFrameInScreenCoords.isEmpty || UIDevice.current.userInterfaceIdiom != .pad else {
             // WORKAROUND for what seems to be a bug in iPad's keyboard handling in iOS 11: we receive an extra spurious frame change
@@ -99,9 +141,9 @@ extension ChannelViewController {
         if intersection.isNull || (self.collectionView.frame.maxY - intersection.maxY) > 0.001 {
             // The keyboard is hidden, is a hardware one, or is undocked and does not cover the bottom of the collection view.
             // Note: intersection.maxY may be less than messagesCollectionView.frame.maxY when dealing with undocked keyboards.
-            return max(0, ChannelViewController.additionalBottomInset - self.automaticallyAddedBottomInset)
+            return max(0, self.additionalBottomInset - self.automaticallyAddedBottomInset)
         } else {
-            return max(0, intersection.height + ChannelViewController.additionalBottomInset - self.automaticallyAddedBottomInset)
+            return max(0, intersection.height + self.additionalBottomInset - self.automaticallyAddedBottomInset)
         }
     }
 

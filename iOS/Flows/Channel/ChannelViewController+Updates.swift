@@ -41,7 +41,7 @@ extension ChannelViewController {
         let sections = MessageSupplier.shared.mapMessagesToSections(for: channel.messages, in: .system(channel))
         self.collectionViewManager.set(newSections: sections) { [weak self] in
             guard let `self` = self else { return }
-            self.collectionView.scrollToEnd()
+            self.channelCollectionView.scrollToEnd()
         }
     }
     
@@ -54,9 +54,9 @@ extension ChannelViewController {
 
             switch channelUpdate.status {
             case .added:
-                if self.collectionView.isTypingIndicatorHidden {
+                if self.channelCollectionView.isTypingIndicatorHidden {
                     self.collectionViewManager.updateItem(with: channelUpdate.message) {
-                        self.collectionView.scrollToEnd()
+                        self.channelCollectionView.scrollToEnd()
                     }
                 } else {
                     self.collectionViewManager.setTypingIndicatorViewHidden(true, performUpdates: { [weak self] in

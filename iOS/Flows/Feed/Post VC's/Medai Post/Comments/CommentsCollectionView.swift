@@ -19,4 +19,14 @@ class CommentsCollectionView: CollectionView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override func scrollToEnd(animated: Bool = true, completion: CompletionOptional = nil) {
+
+        let section = self.numberOfSections - 1
+        let item = self.numberOfItems(inSection: section) - 1
+        let lastIndexPath = IndexPath(item: item, section: section)
+        self.scrollToItem(at: lastIndexPath, at: .bottom, animated: animated)
+
+        completion?()
+    }
 }

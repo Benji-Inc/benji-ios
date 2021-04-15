@@ -344,7 +344,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         let contentOffset = self.collectionView.contentOffset.y
         let contentHeight = self.collectionView.contentSize.height
         let diffHeight = contentHeight - contentOffset
-        let frameHeight = self.collectionView.bounds.size.height - self.collectionView.adjustedContentInset.bottom - ChannelViewController.additionalBottomInset
+        let frameHeight = self.collectionView.bounds.size.height - self.collectionView.adjustedContentInset.bottom - 10 //Additional bottom inset
         var triggerThreshold = (diffHeight - frameHeight)/threshold
         triggerThreshold = min(triggerThreshold, 0.0)
         let pullRatio = min(abs(triggerThreshold), 1.0)

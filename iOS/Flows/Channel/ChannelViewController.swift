@@ -17,42 +17,32 @@ protocol ChannelViewControllerDelegate: AnyObject {
     func channelView(_ controller: ChannelViewController, didTapShare message: Messageable)
 }
 
-class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
+class ChannelViewController: FullScreenViewController, ActiveChannelAccessor, CollectionViewInputHandler {
+
+
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     lazy var detailVC = ChannelDetailViewController(delegate: self.delegate)
-    lazy var collectionView = ChannelCollectionView()
-    lazy var collectionViewManager = ChannelCollectionViewManager(with: self.collectionView)
-
-    var indexPathForEditing: IndexPath?
+    lazy var channelCollectionView = ChannelCollectionView()
+    lazy var collectionViewManager = ChannelCollectionViewManager(with: self.channelCollectionView)
 
     unowned let delegate: ChannelViewControllerDelegates
 
-    /// A Boolean value that determines whether the `MessagesCollectionView` scrolls to the
-    /// last item whenever the `InputTextView` begins editing.
-    ///
-    /// The default value of this property is `false`.
-    /// NOTE: This is related to `scrollToLastItem` whereas the below flag is related to `scrollToBottom` - check each function for differences
-    var scrollsToLastItemOnKeyboardBeginsEditing: Bool = false
-
-    /// A Boolean value that determines whether the `MessagesCollectionView` scrolls to the
-    /// bottom whenever the `InputTextView` begins editing.
-    ///
-    /// The default value of this property is `false`.
-    /// NOTE: This is related to `scrollToBottom` whereas the above flag is related to `scrollToLastItem` - check each function for differences
-    var scrollsToBottomOnKeyboardBeginsEditing: Bool = true
-
-    // A Boolean value that determines whether the `MessagesCollectionView`
-    /// maintains it's current position when the height of the `MessageInputBar` changes.
-    ///
-    /// The default value of this property is `false`.
-    var maintainPositionOnKeyboardFrameChanged: Bool = true
-
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
-            self.collectionView.contentInset.bottom = self.collectionViewBottomInset
-            self.collectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
+            self.channelCollectionView.contentInset.bottom = self.collectionViewBottomInset
+            self.channelCollectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
         }
+    }
+
+    var indexPathForEditing: IndexPath?
+
+    var collectionView: CollectionView {
+        return self.channelCollectionView
+    }
+
+    var inputTextView: InputTextView {
+        return self.messageInputAccessoryView.textView
     }
 
     // Custom Input Accessory View
@@ -67,8 +57,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
     override var canBecomeFirstResponder: Bool {
         return true 
     }
-
-    static var additionalBottomInset: CGFloat = 10
 
     // Remembers which keyboard a user uses for this conversation.
     override var textInputContextIdentifier: String? {
@@ -88,12 +76,12 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         super.initializeViews()
 
         self.view.addSubview(self.blurView)
-        self.view.addSubview(self.collectionView)
+        self.view.addSubview(self.channelCollectionView)
 
         self.addChild(viewController: self.detailVC, toView: self.view)
 
-        self.collectionView.dataSource = self.collectionViewManager
-        self.collectionView.delegate = self.collectionViewManager
+        self.channelCollectionView.dataSource = self.collectionViewManager
+        self.channelCollectionView.delegate = self.collectionViewManager
 
         self.setupHandlers()
         self.subscribeToUpdates()
@@ -127,7 +115,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
             self.messageInputAccessoryView.edit(message: message)
         }
 
-        self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
+        self.channelCollectionView.onDoubleTap { [unowned self] (doubleTap) in
             if self.messageInputAccessoryView.textView.isFirstResponder {
                 self.messageInputAccessoryView.textView.resignFirstResponder()
             }
@@ -166,7 +154,7 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
 
     func setupDetailAnimator() {
         self.detailVC.createAnimator()
-        self.collectionView.publisher(for: \.contentOffset)
+        self.channelCollectionView.publisher(for: \.contentOffset)
             .mainSink { (contentOffset) in
                 self.detailVC.animator.fractionComplete = self.getDetailProgress()
                 self.view.layoutNow()
@@ -182,14 +170,14 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor {
         self.detailVC.view.pin(.top)
         self.detailVC.view.centerOnX()
 
-        self.collectionView.expandToSuperviewSize()
+        self.channelCollectionView.expandToSuperviewSize()
     }
 
     private func getDetailProgress() -> CGFloat {
         guard !KeyboardManger.shared.isKeyboardShowing else { return 0 }
 
         let threshold = ChannelDetailViewController.State.expanded.rawValue
-        let offset = self.collectionView.contentOffset.y + self.collectionView.contentInset.top
+        let offset = self.channelCollectionView.contentOffset.y + self.channelCollectionView.contentInset.top
 
         guard offset < threshold else { return 0 }
 
