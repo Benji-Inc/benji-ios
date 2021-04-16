@@ -19,6 +19,7 @@ class RitualManager {
     private var cancellables = Set<AnyCancellable>()
 
     enum State {
+        case initial
         case noRitual
         case lessThanAnHourAway(Date)
         case feedAvailable
@@ -26,7 +27,7 @@ class RitualManager {
         case moreThanHourAfter(Date)
     }
 
-    @Published var state: State = .noRitual
+    @Published var state: State = .initial
 
     var currentTriggerDate: Date? {
         return UserDefaults.standard.value(forKey: Ritual.currentKey) as? Date

@@ -44,6 +44,8 @@ class FeedStatusView: View {
 
     func handle(state: RitualManager.State) {
         switch state {
+        case .initial:
+            self.label.animatedText = "Loading..."
         case .noRitual:
             self.label.animatedText = "Set your ritual time."
         case .lessThanAnHourAway(let date):
