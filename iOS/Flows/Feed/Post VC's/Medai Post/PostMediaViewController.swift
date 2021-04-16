@@ -157,9 +157,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
 extension PostMediaViewController: SwipeableInputAccessoryViewDelegate {
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
-
-        if case MessageKind.text(let text) = sendable.kind {
-            self.commentsVC.createComment(with: text)
-        }
+        guard let post = self.post as? Post else { return }
+        self.commentsVC.createComment(with: sendable, post: post)
     }
 }

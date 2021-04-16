@@ -48,18 +48,19 @@ class CommentsViewController: CollectionViewController<CommentsCollectionViewMan
         return self.commentsCollectionView
     }
 
-    func createComment(with body: String, replyId: String? = nil) {
-        guard let post = self.post as? Post, let objectId = post.objectId else { return }
+    func createComment(with object: Sendable, post: Post) {
 
-        CreateComment(postId: objectId,
-                      body: body,
-                      attributes: [:],
-                      replyId: replyId)
+        let systemComment = SystemComment(with: post, object: object)
+
+        self.collectionViewManager.comments.append(systemComment)
+        self.commentsCollectionView.scrollToEnd()
+
+        CreateComment(comment: systemComment)
             .makeRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink { result in
                 switch result {
                 case .success(_):
-                    self.commentsCollectionView.scrollToEnd()
+                    break 
                 case .error(let error):
                     print(error)
                 }

@@ -12,13 +12,13 @@ import TMROLocalization
 
 class CommentCell: CollectionViewManagerCell, ManageableCell {
 
-    typealias ItemType = Comment
+    typealias ItemType = SystemComment
 
     private let avatarView = AvatarView()
     private let textView = CommentTextView()
     private let label = Label(font: .small, textColor: .background4)
 
-    var currentItem: Comment?
+    var currentItem: SystemComment?
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -28,7 +28,7 @@ class CommentCell: CollectionViewManagerCell, ManageableCell {
         self.addSubview(self.textView)
     }
 
-    func configure(with item: Comment) {
+    func configure(with item: SystemComment) {
         if let author = item.author {
             author.retrieveDataIfNeeded()
                 .mainSink { result in
@@ -52,8 +52,8 @@ class CommentCell: CollectionViewManagerCell, ManageableCell {
         return layoutAttributes
     }
 
-    private func setText(comment: Comment) {
-        guard let date = comment.createdAt else { return }
+    private func setText(comment: SystemComment) {
+        guard let date = comment.created else { return }
         self.label.setText(date.getDistanceAgoString())
         self.textView.set(text: String(optional: comment.body))
         self.layoutNow()

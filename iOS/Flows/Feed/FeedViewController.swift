@@ -77,6 +77,12 @@ class FeedViewController: ViewController {
         self.manager.loadPosts()
     }
 
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        FeedManager.shared.selectedFeed = nil 
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 

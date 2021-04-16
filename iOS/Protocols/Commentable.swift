@@ -10,6 +10,7 @@ import Foundation
 
 protocol Commentable: Hashable {
     var post: Post? { get set }
+    var created: Date? { get set }
     var isReply: Bool { get }
     var author: User? { get set }
     var body: String? { get set }

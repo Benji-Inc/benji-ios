@@ -1557,17 +1557,17 @@
 		D6637A0925A39E0C00A4A3B7 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				D67FF5A425F6C20C005C3E1E /* Parse Subclasses */,
 				D695B44125BA398400843780 /* Attachments */,
 				D64C6A7D23294A8600DB7257 /* ChannelKey.swift */,
 				D66F0FF122C1D86800BA277D /* ChannelsType.swift */,
 				D6830221234AA35C006145FE /* DisplayableChannel.swift */,
 				D642735022C857760088256B /* MessageContext.swift */,
+				D67FF5A425F6C20C005C3E1E /* Parse Subclasses */,
+				D6B37CA525F7C05900BC3145 /* Posts */,
 				D6B230D225BC7FCE0082A41A /* SendableType.swift */,
 				D607400D23401B3E009633EB /* SystemChannel.swift */,
-				D66F0FC822BF006D00BA277D /* SystemMessage.swift */,
-				D6B37CA525F7C05900BC3145 /* Posts */,
 				D61ACF872628D4AC0052CE29 /* SystemComment.swift */,
+				D66F0FC822BF006D00BA277D /* SystemMessage.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";

@@ -10,6 +10,7 @@ import Foundation
 
 struct SystemComment: Commentable {
 
+    var created: Date?
     var post: Post?
     var author: User?
     var body: String?
@@ -17,17 +18,21 @@ struct SystemComment: Commentable {
     var reply: Comment?
     var updateId: String?
 
-    init(post: Post,
+    init(createdAt: Date?,
+         updateId: String?,
+         author: User?,
+         post: Post,
          body: String,
          attributes: [String: AnyHashable]?,
          reply: Comment?) {
 
+        self.created = createdAt
         self.post = post 
-        self.author = User.current()
+        self.author = author
         self.body = body
         self.attributes = attributes
         self.reply = reply
-        self.updateId = UUID().uuidString
+        self.updateId = updateId
     }
 
     init(with post: Post, object: Sendable) {
@@ -35,10 +40,25 @@ struct SystemComment: Commentable {
         if case MessageKind.text(let text) = object.kind {
             body = text 
         }
-        self.init(post: post,
+
+        self.init(createdAt: Date(),
+                  updateId: UUID().uuidString,
+                  author: User.current(),
+                  post: post,
                   body: body,
                   attributes: [:],
                   reply: nil)
+    }
+
+    init(with comment: Comment) {
+
+        self.init(createdAt: comment.createdAt,
+                  updateId: comment.updateId,
+                  author: comment.author,
+                  post: comment.post!,
+                  body: String(optional: comment.body),
+                  attributes: comment.attributes,
+                  reply: comment.reply)
     }
 
     static func == (lhs: SystemComment, rhs: SystemComment) -> Bool {
@@ -47,6 +67,7 @@ struct SystemComment: Commentable {
             lhs.attributes == rhs.attributes &&
             lhs.reply == rhs.reply &&
             lhs.updateId == rhs.updateId &&
-            lhs.post == rhs.post
+            lhs.post == rhs.post &&
+            lhs.created == rhs.created
     }
 }

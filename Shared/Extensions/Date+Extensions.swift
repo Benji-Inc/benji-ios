@@ -180,6 +180,35 @@ extension Date {
         return calendar.date(from: components)
     }
 
+    /// Returns the amount of years from another date
+    func years(from date: Date) -> Int? {
+        return Calendar.current.dateComponents([.year], from: date, to: self).year ?? 0
+    }
+    /// Returns the amount of months from another date
+    func months(from date: Date) -> Int? {
+        return Calendar.current.dateComponents([.month], from: date, to: self).month
+    }
+    /// Returns the amount of weeks from another date
+    func weeks(from date: Date) -> Int? {
+        return Calendar.current.dateComponents([.weekOfMonth], from: date, to: self).weekOfMonth
+    }
+    /// Returns the amount of days from another date
+    func days(from date: Date) -> Int? {
+        return Calendar.current.dateComponents([.day], from: date, to: self).day
+    }
+    /// Returns the amount of hours from another date
+    func hours(from date: Date) -> Int? {
+        return Calendar.current.dateComponents([.hour], from: date, to: self).hour
+    }
+    /// Returns the amount of minutes from another date
+    func minutes(from date: Date) -> Int? {
+        return Calendar.current.dateComponents([.minute], from: date, to: self).minute
+    }
+    /// Returns the amount of seconds from another date
+    func seconds(from date: Date) -> Int? {
+        return Calendar.current.dateComponents([.second], from: date, to: self).second
+    }
+
     func getDistanceAgoString() -> String {
         let now = Date()
         let aMinuteAgo = now.subtract(component: .minute, amount: 1)
@@ -193,28 +222,22 @@ extension Date {
             return "now"
 
         // If less than hour - show # minutes
-        } else if self.isBetween(now, and: anHourAgo!) {
-            var diff = self.minute - now.minute
-            diff = 60 - abs(diff)
-            return "\(diff)min ago"
+        } else if self.isBetween(now, and: anHourAgo!), let diff = self.minutes(from: now) {
+            return "\(abs(diff))min ago"
 
         // If greater than an hour AND less than a day - show # hours
-        } else if self.isBetween(anHourAgo!, and: aDayAgo!) {
-            var diff = self.hour - now.hour
+        } else if self.isBetween(anHourAgo!, and: aDayAgo!), let diff = self.hours(from: now) {
             return "\(abs(diff))h ago"
 
         // If greater than a day AND less than a week - show # of days
-        } else if self.isBetween(aDayAgo!, and: aWeekAgo!) {
-            let diff = self.day - now.day
+        } else if self.isBetween(aDayAgo!, and: aWeekAgo!), let diff = self.days(from: now) {
             return "\(abs(diff))d ago"
 
         // If greater than a week AND less than a month - show # of weeks
-        } else if self.isBetween(aWeekAgo!, and: aMonthAgo!) {
-            let diff = self.week - now.week
+        } else if self.isBetween(aWeekAgo!, and: aMonthAgo!), let diff = self.weeks(from: now) {
             return "\(abs(diff))w ago"
         // If greater than a month AND less than a year - show # of months
-        } else if self.isBetween(aMonthAgo!, and: aYearAgo!) {
-            let diff = self.month - now.month
+        } else if self.isBetween(aMonthAgo!, and: aYearAgo!), let diff = self.months(from: now) {
             return "\(abs(diff))mo ago"
         // Else show year and month
         } else {

@@ -33,7 +33,7 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
 
     var post: Post?
 
-    @Published var comments: [Comment] = []
+    @Published var comments: [SystemComment] = []
 
     override func initialize() {
         super.initialize()
@@ -63,13 +63,13 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
                         var current = self.comments.filter { old in
                             return old.updateId == comment.updateId
                         }
-                        current.append(comment)
+                        current.append(comment.systemComment)
                         self.comments = current.sorted(by: { lhs, rhs in
-                            return lhs.createdAt! <= rhs.createdAt!
+                            return lhs.created! <= rhs.created!
                         })
                     case  .deleted(let obj):
                         guard let comment = obj as? Comment else { return }
-                        self.comments.remove(object: comment)
+                        self.comments.remove(object: comment.systemComment)
                     }
                 case .error(_):
                     break
@@ -81,7 +81,9 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
         let query = self.post?.comments?.query()
         query?.order(byAscending: "createdAt")
         query?.findObjectsInBackground(block: { objects, error in
-            self.comments = objects ?? []
+            self.comments = objects?.map({ comment in
+                return comment.systemComment
+            }) ?? []
             self.collectionView.animationView.stop()
         })
     }
@@ -98,7 +100,7 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
         case .comments:
             return self.collectionView.dequeueManageableCell(using: self.commentsConfig,
                                                              for: indexPath,
-                                                             item: item as? Comment)
+                                                             item: item as? SystemComment)
         }
     }
 }

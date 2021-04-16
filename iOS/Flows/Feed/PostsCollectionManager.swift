@@ -40,6 +40,7 @@ class PostsCollectionManager: NSObject {
 
     func loadPosts() {
         self.isResetting = false
+        self.postVCs = []
         PostsSupplier.shared.$posts
             .mainSink { posts in
                 self.postVCs = []

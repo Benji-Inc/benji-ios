@@ -19,6 +19,13 @@ enum CommentKey: String {
 }
 
 final class Comment: PFObject, PFSubclassing, Subscribeable, Commentable {
+    
+    var created: Date? {
+        get {
+            return self.createdAt
+        }
+        set {}
+    }
 
     static func parseClassName() -> String {
         return String(describing: self)
@@ -52,6 +59,10 @@ final class Comment: PFObject, PFSubclassing, Subscribeable, Commentable {
     var reply: Comment? {
         get { return self.getObject(for: .reply) }
         set { self.setObject(for: .reply, with: newValue) }
+    }
+
+    var systemComment: SystemComment {
+        return SystemComment.init(with: self)
     }
 }
 
