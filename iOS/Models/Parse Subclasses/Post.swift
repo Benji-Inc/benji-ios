@@ -21,6 +21,7 @@ enum PostKey: String {
     case duration = "duration"
     case attributes = "attributes"
     case comments = "comments"
+    case consumers = "consumers"
 }
 
 final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
@@ -79,6 +80,10 @@ final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
 
     var comments: PFRelation<Comment>? {
         return self.getRelationalObject(for: .comments)
+    }
+
+    var consumers: PFRelation<User>? {
+        return self.getRelationalObject(for: .consumers)
     }
 }
 

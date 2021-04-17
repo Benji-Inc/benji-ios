@@ -29,7 +29,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
 
     private let imageView = UIImageView()
     private lazy var commentsVC = CommentsViewController(with: self.post)
-
+    private let consumersView = StackedAvatarView()
     private let commentsButton = CommentsButton()
 
     // Custom Input Accessory View
@@ -60,6 +60,35 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
     override func initializeViews() {
         super.initializeViews()
 
+        guard let post = self.post as? Post else { return }
+
+        post.subscribe()
+            .mainSink { result in
+                switch result {
+                case .success(let event):
+                    switch event {
+                    case .entered(let p), .updated(let p):
+                        p.consumers?.query().findObjectsInBackground(block: { objects, error in
+                            if let users = objects {
+                                self.consumersView.set(items: users)
+                                self.view.layoutNow()
+                            }
+                        })
+                    default:
+                        break
+                    }
+                case .error(_):
+                    break
+                }
+            }.store(in: &self.cancellables)
+
+        post.consumers?.query().findObjectsInBackground(block: { objects, error in
+            if let users = objects {
+                self.consumersView.set(items: users)
+                self.view.layoutNow()
+            }
+        })
+
         self.view.insertSubview(self.imageView, at: 0)
         self.imageView.contentMode = .scaleAspectFill
 
@@ -67,6 +96,9 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         self.commentsButton.didSelect { [unowned self] in
             self.animateComments(show: true)
         }
+
+        self.view.addSubview(self.consumersView)
+        self.consumersView.itemHeight = 40
 
         self.addKeyboardObservers()
 
@@ -151,6 +183,10 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         self.commentsButton.squaredSize = 60
         self.commentsButton.pin(.right, padding: 10)
         self.commentsButton.pinToSafeArea(.bottom, padding: SwipeableInputAccessoryView.preferredHeight + Theme.contentOffset)
+
+        self.consumersView.setSize()
+        self.consumersView.match(.bottom, to: .bottom, of: self.commentsButton)
+        self.consumersView.pin(.left, padding: Theme.contentOffset)
     }
 }
 

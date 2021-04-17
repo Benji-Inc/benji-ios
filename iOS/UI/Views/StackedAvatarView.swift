@@ -70,11 +70,7 @@ class StackedAvatarView: View {
         if totalWidth == 0 {
             totalWidth += size.width
         } else {
-            totalWidth += size.width
-            self.imageViews.forEach { _ in
-                totalWidth += size.width * self.offsetMultiplier
-            }
-            totalWidth -= size.width
+            totalWidth += size.width * self.offsetMultiplier
         }
         
         self.size = CGSize(width: totalWidth, height: self.itemHeight)
