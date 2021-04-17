@@ -45,6 +45,6 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
     }
 
     override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.width / 5, height: self.collectionView.height)
+        return CGSize(width: collectionView.height * 0.74 + Theme.contentOffset, height: self.collectionView.height)
     }
 }
