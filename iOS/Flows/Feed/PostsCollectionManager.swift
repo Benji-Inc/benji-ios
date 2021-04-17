@@ -115,10 +115,20 @@ class PostsCollectionManager: NSObject {
 
     func advanceToNextView(from index: Int) {
         if let next = self.postVCs[safe: index + 1]  {
+            self.consumeIfNeccessary()
             self.show(postVC: next, at: index + 1)
         } else if !self.isResetting {
             self.finishFeed()
         }
+    }
+
+    private func consumeIfNeccessary() {
+        guard let current = self.current,
+              current.post.type == .media,
+              current.post.author != User.current(),
+              let post = current.post as? Post else { return }
+
+        post.addCurrentUserAsConsumer()
     }
     
     private func show(postVC: PostViewController, at index: Int) {

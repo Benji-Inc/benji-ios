@@ -55,6 +55,7 @@ extension Objectable {
 extension Objectable where Self: PFObject {
 
     // Will save the object locally and push up to the server when ready
+    @discardableResult
     func saveLocalThenServer() -> Future<Self, Error> {
         return Future { promise in
             self.saveEventually { (success, error) in

@@ -85,6 +85,22 @@ final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
     var consumers: PFRelation<User>? {
         return self.getRelationalObject(for: .consumers)
     }
+
+    func addCurrentUserAsConsumer() -> Future<Void, Error> {
+        return Future { promise in
+            if let query = self.consumers?.query() {
+                query.getObjectInBackground(withId: User.current()!.objectId!) { user, error in
+                    if user.isNil, error.isNil {
+                        self.add(User.current()!, forKey: PostKey.consumers.rawValue)
+                        self.saveLocalThenServer()
+                    }
+                    promise(.success(()))
+                }
+            } else {
+                promise(.failure(ClientError.apiError(detail: "No query for consumers")))
+            }
+        }
+    }
 }
 
 extension Post: Objectable {
