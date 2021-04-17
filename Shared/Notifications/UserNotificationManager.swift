@@ -78,6 +78,7 @@ class UserNotificationManager: NSObject {
         }
     }
 
+    @discardableResult
     func register(with options: UNAuthorizationOptions = [.alert, .sound, .badge],
                   application: UIApplication) -> Future<Bool, Never> {
 
