@@ -43,15 +43,20 @@ class ReservationsViewController: NavigationBarViewController {
     }
 
     override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
 
-        self.button.setSize(with: self.view.width - Theme.contentOffset.doubled)
+        self.button.setSize(with: self.view.width)
         self.button.centerOnX()
         self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
 
-        self.contactsButton.setSize(with: self.view.width - Theme.contentOffset.doubled)
+        self.contactsButton.setSize(with: self.view.width)
         self.contactsButton.centerOnX()
         self.contactsButton.match(.bottom, to: .top, of: self.button, offset: -10)
+
+        super.viewDidLayoutSubviews()
+    }
+
+    override func getViewForPinning() -> UIView? {
+        return self.contactsButton
     }
 
     private func loadUnclaimedReservations() {

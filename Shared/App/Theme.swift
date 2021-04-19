@@ -14,7 +14,7 @@ struct Theme {
     static let animationDuration: TimeInterval = 0.35
     static let cornerRadius: CGFloat = 10
     static let borderWidth: CGFloat = 2
-    static let contentOffset: CGFloat = 12
+    static let contentOffset: CGFloat = 24
     static let buttonHeight: CGFloat = 60
     static let iPadPortraitWidthRatio: CGFloat = 0.65
 

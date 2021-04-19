@@ -160,7 +160,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.avatarView.setSize(for: 100)
         self.avatarView.centerOnX()
-        self.avatarView.top = self.lineView.bottom + 20
+        self.avatarView.pin(.top)
     }
 
     func updateReservationCreator(with userId: String) {

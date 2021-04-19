@@ -15,10 +15,9 @@ class NavigationBarViewController: ViewController {
     private(set) var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private(set) var animationView = AnimationView(name: "arrow")
     private(set) var backButton = Button()
-    private(set) var titleLabel = Label(font: .regularBold)
-    private(set) var descriptionLabel = Label(font: .small)
-    /// Place all views under the lineView 
-    private(set) var lineView = View()
+    private(set) var titleLabel = Label(font: .display)
+    private(set) var descriptionLabel = Label(font: .mediumThin)
+
     let scrollView = UIScrollView()
 
     override func loadView() {
@@ -37,20 +36,17 @@ class NavigationBarViewController: ViewController {
         }
 
         self.view.addSubview(self.titleLabel)
+        self.titleLabel.textAlignment = .left
         self.view.addSubview(self.descriptionLabel)
-        self.view.addSubview(self.lineView)
-        self.lineView.set(backgroundColor: .background3)
+        self.descriptionLabel.textAlignment = .left
 
         self.updateNavigationBar()
     }
 
     func updateNavigationBar(animateBackButton: Bool = true) {
         self.titleLabel.setText(self.getTitle())
-        self.titleLabel.textAlignment = .center
         self.titleLabel.stringCasing = .uppercase
-
         self.descriptionLabel.setText(self.getDescription())
-        self.descriptionLabel.textAlignment = .center
 
         self.animationView.alpha = self.shouldShowBackButton() ? 1.0 : 0.0
 
@@ -70,17 +66,18 @@ class NavigationBarViewController: ViewController {
         self.backButton.left = Theme.contentOffset
         self.backButton.top = Theme.contentOffset
 
-        self.titleLabel.setSize(withWidth: self.view.width * 0.8)
-        self.titleLabel.centerY = self.backButton.centerY
-        self.titleLabel.centerOnX()
+        self.descriptionLabel.setSize(withWidth: self.view.width - Theme.contentOffset.doubled)
 
-        self.descriptionLabel.setSize(withWidth: self.view.width * 0.8)
-        self.descriptionLabel.top = self.titleLabel.bottom + 20
-        self.descriptionLabel.centerOnX()
+        if let viewForPinning = self.getViewForPinning() {
+            self.descriptionLabel.match(.bottom, to: .top, of: viewForPinning, offset: -Theme.contentOffset.doubled)
+        } else {
+            self.descriptionLabel.pinToSafeArea(.bottom, padding: -Theme.contentOffset.doubled)
+        }
+        self.descriptionLabel.pin(.left, padding: Theme.contentOffset)
 
-        self.lineView.size = CGSize(width: self.view.width - (Theme.contentOffset * 2), height: 2)
-        self.lineView.top = self.descriptionLabel.bottom + 20
-        self.lineView.centerOnX()
+        self.titleLabel.setSize(withWidth: self.view.width - Theme.contentOffset.doubled)
+        self.titleLabel.match(.left, to: .left, of: self.descriptionLabel)
+        self.titleLabel.match(.bottom, to: .top, of: self.descriptionLabel, offset: -20)
 
         self.blurView.expandToSuperviewSize()
     }
@@ -97,6 +94,10 @@ class NavigationBarViewController: ViewController {
 
     func getDescription() -> Localized {
         return LocalizedString.empty
+    }
+
+    func getViewForPinning() -> UIView? {
+        return nil
     }
 
     func didSelectBackButton() { }

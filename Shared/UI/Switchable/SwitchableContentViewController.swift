@@ -32,8 +32,7 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
                 guard let `self` = self else { return }
                 guard let content = value else { return }
                 self.switchTo(content)
-            }
-            .store(in: &self.cancellables)
+            }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
@@ -41,10 +40,10 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
 
         guard let current = self.current else { return }
 
-        let yOffset = self.lineView.bottom 
+        let yOffset = self.view.safeAreaInsets.top
         var vcHeight = current.viewController.getHeight(for: self.scrollView.width)
         if vcHeight <= .zero {
-            vcHeight = self.scrollView.height - self.lineView.bottom - self.view.safeAreaInsets.top - self.view.safeAreaInsets.bottom
+            vcHeight = self.scrollView.height - self.view.safeAreaInsets.top - self.view.safeAreaInsets.bottom
         }
 
         let contentHeight = yOffset + vcHeight
