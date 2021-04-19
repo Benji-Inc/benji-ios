@@ -1991,9 +1991,9 @@
 				D6DADF6D2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift */,
 				D628424C25C1B18000603FA1 /* ChannelsCollectionViewManager+Menu.swift */,
 				D6740D4723AEA5BD009D5702 /* ChannelsCoordiantor.swift */,
+				D6792CE825FBE8D300B6575C /* ChannelsGradientView.swift */,
 				D6DADF6B2207DCA8007D9EB1 /* ChannelsViewController.swift */,
 				D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */,
-				D6792CE825FBE8D300B6575C /* ChannelsGradientView.swift */,
 				D6605413262DBF35002F74F8 /* ReservationsFooterView.swift */,
 			);
 			path = Channels;

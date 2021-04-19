@@ -25,6 +25,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
 
         var listConfig = UICollectionLayoutListConfiguration(appearance: .grouped)
 
+        listConfig.footerMode = .supplementary
         listConfig.backgroundColor = .clear
         listConfig.showsSeparators = false
         listConfig.trailingSwipeActionsConfigurationProvider = { [weak self] indexPath in
