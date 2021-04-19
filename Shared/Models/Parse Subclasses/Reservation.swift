@@ -46,19 +46,20 @@ final class Reservation: PFObject, PFSubclassing {
         }
     }
 
-    static func getReservations(for user: User) -> Future<[Reservation], Error> {
+    static func getUnclaimedReservationCount(for user: User) -> Future<Int, Error> {
         return Future { promise in
             if let query = Reservation.query() {
                 query.whereKey(ReservationKey.createdBy.rawValue, equalTo: user)
-                query.findObjectsInBackground { (objects, error) in
-                    if let reservations = objects as? [Reservation] {
-                        promise(.success(reservations))
-                    } else if let e = error {
+                query.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
+                query.countObjectsInBackground { count, error in
+                    if let e = error {
                         promise(.failure(e))
                     } else {
-                        promise(.failure(ClientError.generic))
+                        promise(.success(Int(count)))
                     }
                 }
+                query.findObjectsInBackground { (objects, error) in
+                                    }
             } else {
                 promise(.failure(ClientError.generic))
             }

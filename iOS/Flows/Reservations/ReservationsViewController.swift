@@ -13,6 +13,8 @@ class ReservationsViewController: ViewController {
     let label = Label(font: .display)
     let button = Button()
 
+    var didSelectReservation: ((Reservation) -> Void)? = nil 
+
     override func initializeViews() {
         super.initializeViews()
 
@@ -32,6 +34,14 @@ class ReservationsViewController: ViewController {
         self.button.setSize(with: self.view.width - Theme.contentOffset.doubled)
         self.button.centerOnX()
         self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+    }
 
+    private func didSelect(reservation: Reservation) {
+        self.button.handleEvent(status: .loading)
+        reservation.prepareMetaData(andUpdate: [])
+            .mainSink(receiveValue: { (_) in
+                self.button.handleEvent(status: .complete)
+                self.didSelectReservation?(reservation)
+            }, receiveCompletion: { (_) in }).store(in: &self.cancellables)
     }
 }

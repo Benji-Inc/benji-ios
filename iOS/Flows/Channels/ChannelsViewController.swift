@@ -46,23 +46,16 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
                 if let channel = selection.item as? DisplayableChannel {
                     self.delegate?.channelsView(self, didSelect: channel.channelType)
                 }
-            case .reservations:
-                if let reservation = selection.item as? Reservation {
-                    self.didSelect(reservation: reservation)
-                }
+//            case .reservations:
+//                if let reservation = selection.item as? Reservation {
+//                    self.didSelect(reservation: reservation)
+//                }
             }
         }.store(in: &self.cancellables)
     }
 
     override func getCollectionView() -> CollectionView {
         return self.channelsCollectionView
-    }
-
-    private func didSelect(reservation: Reservation) {
-        reservation.prepareMetaData(andUpdate: [])
-            .mainSink(receiveValue: { (_) in
-                self.delegate?.channelsView(self, didSelect: reservation)
-            }, receiveCompletion: { (_) in }).store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {

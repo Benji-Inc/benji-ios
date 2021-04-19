@@ -14,13 +14,11 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
 
     enum SectionType: Int, ManagerSectionType {
         case channels = 0
-        case reservations = 1
     }
 
-    private(set) var reservations: [Reservation] = []
+    private(set) var unclaimedReservationCount: Int = 0
 
     private let channelConfig = ManageableCellRegistration<ChannelCell>().cellProvider
-    private let reservationConfig = ManageableCellRegistration<ReservationCell>().cellProvider
 
     lazy var layout = UICollectionViewCompositionalLayout() { sectionIndex, layoutEnvironment in
 
@@ -72,17 +70,14 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         self.collectionView.animationView.play()
 
         let combined = Publishers.Zip(
-            Reservation.getReservations(for: User.current()!),
+            Reservation.getUnclaimedReservationCount(for: User.current()!),
             ChannelSupplier.shared.waitForInitialSync()
         )
 
         combined.mainSink { (result) in
             switch result {
-            case .success((let reservations, _)):
-
-                self.reservations = reservations.filter({ (reservation) -> Bool in
-                    return !reservation.isClaimed
-                })
+            case .success((let count, _)):
+                self.unclaimedReservationCount = count
                 self.loadSnapshot()
             case .error(_):
                 break
@@ -95,8 +90,6 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         switch section {
         case .channels:
             return ChannelSupplier.shared.allChannelsSorted
-        case .reservations:
-            return self.reservations
         }
     }
 
@@ -106,15 +99,6 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
             return self.collectionView.dequeueManageableCell(using: self.channelConfig,
                                                              for: indexPath,
                                                              item: item as? DisplayableChannel)
-        case .reservations:
-            let cell = self.collectionView.dequeueManageableCell(using: self.reservationConfig,
-                                                                 for: indexPath,
-                                                                 item: item as? Reservation)
-            cell?.button.didSelect { [unowned self] in
-                self.select(indexPath: indexPath)
-            }
-
-            return cell
         }
     }
 

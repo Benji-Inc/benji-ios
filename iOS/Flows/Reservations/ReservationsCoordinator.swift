@@ -23,6 +23,10 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
+        self.reservationsVC.didSelectReservation = { [unowned self] reservation in 
+
+        }
+
     }
 }
 
