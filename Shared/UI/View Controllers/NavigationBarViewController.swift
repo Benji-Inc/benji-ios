@@ -66,18 +66,19 @@ class NavigationBarViewController: ViewController {
         self.backButton.left = Theme.contentOffset
         self.backButton.top = Theme.contentOffset
 
-        self.descriptionLabel.setSize(withWidth: self.view.width - Theme.contentOffset.doubled)
+        let maxWidth = self.view.width - Theme.contentOffset.doubled
+        self.descriptionLabel.setSize(withWidth: maxWidth)
+        self.titleLabel.setSize(withWidth: maxWidth)
+        self.descriptionLabel.pin(.left, padding: Theme.contentOffset)
+        self.titleLabel.pin(.left, padding: Theme.contentOffset)
 
         if let viewForPinning = self.getViewForPinning() {
             self.descriptionLabel.match(.bottom, to: .top, of: viewForPinning, offset: -Theme.contentOffset.doubled)
+            self.titleLabel.match(.bottom, to: .top, of: self.descriptionLabel, offset: -20)
         } else {
-            self.descriptionLabel.pinToSafeArea(.bottom, padding: -Theme.contentOffset.doubled)
+            self.titleLabel.pinToSafeArea(.top, padding: Theme.contentOffset)
+            self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 20)
         }
-        self.descriptionLabel.pin(.left, padding: Theme.contentOffset)
-
-        self.titleLabel.setSize(withWidth: self.view.width - Theme.contentOffset.doubled)
-        self.titleLabel.match(.left, to: .left, of: self.descriptionLabel)
-        self.titleLabel.match(.bottom, to: .top, of: self.descriptionLabel, offset: -20)
 
         self.blurView.expandToSuperviewSize()
     }

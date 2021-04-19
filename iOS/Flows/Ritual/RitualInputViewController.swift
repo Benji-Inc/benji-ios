@@ -26,7 +26,7 @@ class RitualInputViewController: ViewController {
         case update
     }
 
-    static let height: CGFloat = 500
+    static let height: CGFloat = 400
     let content = RitualInputContentView()
 
     var selectedDate = Date()
@@ -118,6 +118,7 @@ class RitualInputViewController: ViewController {
     }
 
     private func saveRitual() {
+        self.content.confirmButton.handleEvent(status: .loading)
         RitualManager.shared.createRitual(for: self.selectedDate)
             .mainSink { result in
                 switch result {
@@ -126,6 +127,7 @@ class RitualInputViewController: ViewController {
                 case .error(_):
                     self.animateButton(with: .red, text: "Error")
                 }
+                self.content.confirmButton.handleEvent(status: .complete)
                 delay(2) {
                     self.state = .edit
                 }

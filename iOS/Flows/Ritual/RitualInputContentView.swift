@@ -18,7 +18,7 @@ class RitualInputContentView: View {
     let timeHump = TimeHumpView()
     let confirmButton = Button()
 
-    var labelOffset: CGFloat = 20
+    var labelOffset: CGFloat = -20
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -52,7 +52,7 @@ class RitualInputContentView: View {
         self.confirmButton.bottom = self.height
         self.confirmButton.centerOnX()
 
-        self.timeHump.size = CGSize(width: self.width * 0.9, height: 140)
+        self.timeHump.size = CGSize(width: self.width - Theme.contentOffset.doubled, height: 140)
         self.timeHump.bottom = self.confirmButton.top - 20
         self.timeHump.centerOnX()
 
@@ -84,7 +84,7 @@ class RitualInputContentView: View {
         UIView.animate(withDuration: Theme.animationDuration) {
             self.minusButton.alpha = shouldShow ? 1 : 0
             self.plusButton.alpha = shouldShow ? 1 : 0
-            self.labelOffset = shouldShow ? -100 : -20
+            self.labelOffset = shouldShow ? -60 : 20
             self.timeHump.alpha = shouldShow ? 1 : 0 
             self.layoutNow()
         }
