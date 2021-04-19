@@ -183,7 +183,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         let alert = UIAlertController(title: "Notifications that don't suck.", message: "Most other social apps design their notifications to be vague in order to suck you in for as long as possible. Ours are not. Get reminders about things that YOU set, and recieve important messages from REAL people. Ours is a far better experience with them turned on.", preferredStyle: .alert)
 
-        let allow = UIAlertAction(title: "Yes!", style: .default) { action in
+        let allow = UIAlertAction(title: "Allow", style: .default) { action in
             if status == .denied {
                 if let bundleIdentifier = Bundle.main.bundleIdentifier, let appSettings = URL(string: UIApplication.openSettingsURLString + bundleIdentifier) {
                     if UIApplication.shared.canOpenURL(appSettings) {
@@ -195,7 +195,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             }
         }
 
-        let cancel = UIAlertAction(title: "Nah", style: .cancel) { action in}
+        let cancel = UIAlertAction(title: "Maybe Later", style: .cancel) { action in}
 
         alert.addAction(cancel)
         alert.addAction(allow)

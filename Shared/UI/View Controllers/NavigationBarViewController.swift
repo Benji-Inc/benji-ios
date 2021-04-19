@@ -63,7 +63,7 @@ class NavigationBarViewController: ViewController {
         super.viewDidLayoutSubviews()
 
         self.backButton.size = CGSize(width: 40, height: 40)
-        self.backButton.left = Theme.contentOffset
+        self.backButton.left = Theme.contentOffset - 10
         self.backButton.top = Theme.contentOffset
 
         let maxWidth = self.view.width - Theme.contentOffset.doubled
