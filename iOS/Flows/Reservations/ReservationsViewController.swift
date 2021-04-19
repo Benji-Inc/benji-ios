@@ -7,28 +7,31 @@
 //
 
 import Foundation
+import TMROLocalization
 
-class ReservationsViewController: FullScreenViewController {
+class ReservationsViewController: NavigationBarViewController {
 
-    let label = Label(font: .display)
     let button = Button()
 
-    var didSelectReservation: ((Reservation) -> Void)? = nil 
+    var didSelectReservation: ((Reservation) -> Void)? = nil
+
+    private var reservations: [Reservation] = []
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.addSubview(self.label)
-
         self.view.addSubview(self.button)
         self.button.set(style: .normal(color: .purple, text: "Share"))
+        self.button.didSelect { [unowned self] in
+            if let first = self.reservations.first {
+                self.didSelect(reservation: first)
+            }
+        }
+        self.loadUnclaimedReservations()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        self.label.setSize(withWidth: self.view.width * 0.8)
-        self.label.centerOnXAndY()
 
         self.button.setSize(with: self.view.width - Theme.contentOffset.doubled)
         self.button.centerOnX()
@@ -49,10 +52,21 @@ class ReservationsViewController: FullScreenViewController {
         }
     }
 
-    private func show(reservations: [Reservation]) {
-        self.label.setText("Some text about sharing")
+    override func getTitle() -> Localized {
+        return "Friends don't send, they swipe."
+    }
 
-        self.view.layoutNow()
+    override func getDescription() -> Localized {
+        return "Our's is an exclusive community that cares about quality over quantity when it comes to its users, so invite the people you are most social with. (iOS only)"
+    }
+
+    override func shouldShowBackButton() -> Bool {
+        return false
+    }
+
+    private func show(reservations: [Reservation]) {
+        self.reservations = reservations
+        self.updateNavigationBar()
     }
 
     private func didSelect(reservation: Reservation) {

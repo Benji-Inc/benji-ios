@@ -52,6 +52,8 @@ class NavigationBarViewController: ViewController {
         self.descriptionLabel.setText(self.getDescription())
         self.descriptionLabel.textAlignment = .center
 
+        self.animationView.alpha = self.shouldShowBackButton() ? 1.0 : 0.0
+
         if animateBackButton {
             delay(1.5) {
                 self.animationView.play(fromFrame: 0, toFrame: 160, loopMode: nil, completion: nil)
@@ -84,6 +86,10 @@ class NavigationBarViewController: ViewController {
     }
 
     // MARK: PUBLIC
+
+    func shouldShowBackButton() -> Bool {
+        return true
+    }
 
     func getTitle() -> Localized {
         return LocalizedString.empty

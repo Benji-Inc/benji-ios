@@ -24,30 +24,33 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
         super.start()
 
         self.reservationsVC.didSelectReservation = { [unowned self] reservation in 
-
+            self.presentShare(for: reservation)
         }
-
     }
-}
 
-extension ReservationsCoordinator: CNContactPickerDelegate {
-
-    func findUser(for contact: CNContact) {
-        // Search for user with phone number
-        guard let query = User.query(), let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
-        query.whereKey("phoneNumber", contains: phone)
-        query.getFirstObjectInBackground { [unowned self] (object, error) in
-//            if let user = object as? User {
-//                self.showReservationAlert(for: user)
-//            } else if self.reservation.contactId == contact.identifier {
-//                self.sendText(with: self.reservation.reminderMessage, phone: phone)
-//            } else {
-//                self.reservation.contactId = contact.identifier
-//                self.reservation.saveLocalThenServer()
-//                    .mainSink { (updatedReservation) in
-//                        self.sendText(with: self.reservation.message, phone: phone)
-//                    }.store(in: &self.cancellables)
-//            }
+    private func presentShare(for reservation: Reservation) {
+        let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
+        ac.completionWithItemsHandler = { activityType, completed, items, error in
+            if completed {
+                self.showAlert()
+            }
         }
+        ac.excludedActivityTypes = [.postToFacebook, .postToTwitter, .postToWeibo, .mail, .print, .assignToContact, .saveToCameraRoll, .addToReadingList, .postToFlickr, .postToVimeo, .postToTencentWeibo, .openInIBooks, .markupAsPDF]
+
+        self.reservationsVC.present(ac, animated: true, completion: nil)
+    }
+
+    private func showAlert() {
+        let alert = UIAlertController(title: "Sent!",
+                                      message: "Your RSVP has been sent. As soon as someone accepts using your link, a conversation will be created between the two of you.",
+                                      preferredStyle: .alert)
+
+        let ok = UIAlertAction(title: "Ok", style: .cancel) { (_) in
+            self.finishFlow(with: ())
+        }
+
+        alert.addAction(ok)
+
+        self.router.navController.present(alert, animated: true, completion: nil)
     }
 }
