@@ -59,7 +59,7 @@ class RitualViewController: NavigationBarViewController {
         case .needsAuthorization:
             return "You will need to add notification permission to use this feature."
         default:
-            return "Get a daily reminder to follow up and connect with others."
+            return "Get a daily reminder to follow up and engage with others."
         }
     }
 
