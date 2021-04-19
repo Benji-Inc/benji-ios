@@ -410,6 +410,7 @@
 		D658EA6D261E2A0E00ABB372 /* Feed+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658EA6C261E2A0E00ABB372 /* Feed+Cloud.swift */; };
 		D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */; };
 		D65B0CE5234928620041A176 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CE4234928620041A176 /* ProfileCoordinator.swift */; };
+		D6605414262DBF35002F74F8 /* ReservationsFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6605413262DBF35002F74F8 /* ReservationsFooterView.swift */; };
 		D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D66379CE25A3704300A4A3B7 /* ChatClientManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */; };
@@ -843,6 +844,7 @@
 		D658EA6C261E2A0E00ABB372 /* Feed+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Feed+Cloud.swift"; sourceTree = "<group>"; };
 		D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelsViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D65B0CE4234928620041A176 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
+		D6605413262DBF35002F74F8 /* ReservationsFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsFooterView.swift; sourceTree = "<group>"; };
 		D6629C7425AD254C002C3B92 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatClientManager+Extensions.swift"; sourceTree = "<group>"; };
 		D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserNotificationManager+Extensions.swift"; sourceTree = "<group>"; };
@@ -1208,14 +1210,6 @@
 				D63752C723133AC700214F63 /* Fonts */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		D628425625C1B1E900603FA1 /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				D6DADF6F2207DF60007D9EB1 /* ChannelCell.swift */,
-			);
-			path = Cells;
 			sourceTree = "<group>";
 		};
 		D62C634F22BE9C4600F4D097 /* Feed */ = {
@@ -1991,7 +1985,7 @@
 		D6DADF6A2207DC90007D9EB1 /* Channels */ = {
 			isa = PBXGroup;
 			children = (
-				D628425625C1B1E900603FA1 /* Cells */,
+				D6DADF6F2207DF60007D9EB1 /* ChannelCell.swift */,
 				D67934D423D956BB00536B44 /* ChannelPreviewViewController.swift */,
 				D6DADF712207DF83007D9EB1 /* ChannelsCollectionView.swift */,
 				D6DADF6D2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift */,
@@ -2000,6 +1994,7 @@
 				D6DADF6B2207DCA8007D9EB1 /* ChannelsViewController.swift */,
 				D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */,
 				D6792CE825FBE8D300B6575C /* ChannelsGradientView.swift */,
+				D6605413262DBF35002F74F8 /* ReservationsFooterView.swift */,
 			);
 			path = Channels;
 			sourceTree = "<group>";
@@ -2540,6 +2535,7 @@
 				D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */,
 				D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */,
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
+				D6605414262DBF35002F74F8 /* ReservationsFooterView.swift in Sources */,
 				D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */,
 				D6740D4823AEA5BD009D5702 /* ChannelsCoordiantor.swift in Sources */,
 				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,

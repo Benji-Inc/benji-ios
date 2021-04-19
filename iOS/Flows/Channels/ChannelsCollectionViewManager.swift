@@ -19,6 +19,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
     private(set) var unclaimedReservationCount: Int = 0
 
     private let channelConfig = ManageableCellRegistration<ChannelCell>().cellProvider
+    private let footerConfig = ManageableFooterRegistration<ReservationsFooterView>().footerProvider
 
     lazy var layout = UICollectionViewCompositionalLayout() { sectionIndex, layoutEnvironment in
 
@@ -60,6 +61,10 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
 
         let section = NSCollectionLayoutSection.list(using: listConfig, layoutEnvironment: layoutEnvironment)
         section.contentInsets = NSDirectionalEdgeInsets(top: 80, leading: 0, bottom: 0, trailing: 0)
+
+        section.visibleItemsInvalidationHandler = { items, point, enviroment in
+
+        }
         return section
     }
 
@@ -91,6 +96,12 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         case .channels:
             return ChannelSupplier.shared.allChannelsSorted
         }
+    }
+
+    override func getSupplementaryView(for section: SectionType, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
+        let footer = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
+        footer.configure(with: self.unclaimedReservationCount)
+        return footer
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {

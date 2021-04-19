@@ -16,6 +16,10 @@ struct ManageableCellRegistration<Cell: UICollectionViewCell & ManageableCell> {
     }
 }
 
+struct ManageableFooterRegistration<Footer: UICollectionReusableView> {
+    let footerProvider = UICollectionView.SupplementaryRegistration<Footer>(elementKind: UICollectionView.elementKindSectionHeader) { footerView, elementKind, indexPath in }
+}
+
 // A base class that other cells managed by a CollectionViewManager can inherit from.
 class CollectionViewManagerCell: UICollectionViewCell {
 
