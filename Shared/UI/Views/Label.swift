@@ -107,6 +107,13 @@ class Label: UILabel {
         self.textColor = textColor.color
     }
 
+    func add(attributes: [NSAttributedString.Key : Any], to text: String) {
+        guard let existingText = self.attributedText, let range = existingText.string.range(of: text) else { return }
+        let attributedString = NSMutableAttributedString(existingText)
+        attributedString.addAttributes(attributes, range: range.nsRange(text))
+        super.attributedText = attributedString
+    }
+
     private func setTextWithAttributes(_ newText: String) {
 
         let string = self.stringCasing.format(string: newText)

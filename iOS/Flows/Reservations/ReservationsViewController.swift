@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ReservationsViewController: ViewController {
+class ReservationsViewController: FullScreenViewController {
 
     let label = Label(font: .display)
     let button = Button()

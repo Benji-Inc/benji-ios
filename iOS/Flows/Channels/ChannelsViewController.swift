@@ -13,7 +13,7 @@ import TMROLocalization
 
 protocol ChannelsViewControllerDelegate: AnyObject {
     func channelsView(_ controller: ChannelsViewController, didSelect channelType: ChannelType)
-    func channelsView(_ controller: ChannelsViewController, didSelect reservation: Reservation)
+    func channelsViewConrollerDidSelectReservations(_ controller: ChannelsViewController)
     func channelsViewControllerDidTapAdd(_ controller: ChannelsViewController)
 }
 
@@ -46,12 +46,12 @@ class ChannelsViewController: CollectionViewController<ChannelsCollectionViewMan
                 if let channel = selection.item as? DisplayableChannel {
                     self.delegate?.channelsView(self, didSelect: channel.channelType)
                 }
-//            case .reservations:
-//                if let reservation = selection.item as? Reservation {
-//                    self.didSelect(reservation: reservation)
-//                }
             }
         }.store(in: &self.cancellables)
+
+        self.collectionViewManager.didSelectReservations = { [unowned self] in
+            self.delegate?.channelsViewConrollerDidSelectReservations(self)
+        }
     }
 
     override func getCollectionView() -> CollectionView {

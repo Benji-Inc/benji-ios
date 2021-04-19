@@ -21,6 +21,8 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
     private let channelConfig = ManageableCellRegistration<ChannelCell>().cellProvider
     private let footerConfig = ManageableFooterRegistration<ReservationsFooterView>().footerProvider
 
+    var didSelectReservations: CompletionOptional = nil 
+
     lazy var layout = UICollectionViewCompositionalLayout() { sectionIndex, layoutEnvironment in
 
         var listConfig = UICollectionLayoutListConfiguration(appearance: .grouped)
@@ -102,6 +104,9 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
     override func getSupplementaryView(for section: SectionType, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
         let footer = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
         footer.configure(with: self.unclaimedReservationCount)
+        footer.button.didSelect { [unowned self] in
+            self.didSelectReservations?()
+        }
         return footer
     }
 

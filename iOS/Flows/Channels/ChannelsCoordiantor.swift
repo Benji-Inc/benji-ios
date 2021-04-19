@@ -46,7 +46,7 @@ extension ChannelsCoordinator: ChannelsViewControllerDelegate {
         self.router.present(coordinator, source: self.channelsVC, animated: true)
     }
 
-    func channelsView(_ controller: ChannelsViewController, didSelect reservation: Reservation) {
+    func channelsViewConrollerDidSelectReservations(_ controller: ChannelsViewController) {
         let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) {}
         self.router.present(coordinator, source: self.channelsVC)
