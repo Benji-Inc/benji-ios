@@ -19,7 +19,6 @@ class ReservationsViewController: ViewController {
         super.initializeViews()
 
         self.view.addSubview(self.label)
-        self.label.setText("Some text about sharing")
 
         self.view.addSubview(self.button)
         self.button.set(style: .normal(color: .purple, text: "Share"))
@@ -34,6 +33,26 @@ class ReservationsViewController: ViewController {
         self.button.setSize(with: self.view.width - Theme.contentOffset.doubled)
         self.button.centerOnX()
         self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+    }
+
+    private func loadUnclaimedReservations() {
+        guard let query = Reservation.query() else { return }
+
+        button.handleEvent(status: .loading)
+        query.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
+        query.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
+        query.findObjectsInBackground { objects, error in
+            if let reservations = objects as? [Reservation] {
+                self.button.handleEvent(status: .complete)
+                self.show(reservations: reservations)
+            }
+        }
+    }
+
+    private func show(reservations: [Reservation]) {
+        self.label.setText("Some text about sharing")
+
+        self.view.layoutNow()
     }
 
     private func didSelect(reservation: Reservation) {

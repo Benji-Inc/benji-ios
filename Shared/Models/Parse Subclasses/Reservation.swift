@@ -58,8 +58,6 @@ final class Reservation: PFObject, PFSubclassing {
                         promise(.success(Int(count)))
                     }
                 }
-                query.findObjectsInBackground { (objects, error) in
-                                    }
             } else {
                 promise(.failure(ClientError.generic))
             }
