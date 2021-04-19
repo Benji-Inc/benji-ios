@@ -53,6 +53,8 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
                                                    y: yOffset,
                                                    width: self.scrollView.width,
                                                    height: vcHeight)
+
+        current.viewController.view.pinToSafeArea(.bottom, padding: Theme.contentOffset)
     }
 
     func getInitialContent() -> ContentType {

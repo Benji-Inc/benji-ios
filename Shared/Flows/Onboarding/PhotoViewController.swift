@@ -317,4 +317,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 }
             }).store(in: &self.cancellables)
     }
+
+    func getHeight(for width: CGFloat) -> CGFloat {
+        return 450
+    }
 }
