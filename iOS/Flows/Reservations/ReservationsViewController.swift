@@ -12,21 +12,33 @@ import TMROLocalization
 class ReservationsViewController: NavigationBarViewController {
 
     let button = Button()
+    let contactsButton = Button()
 
+    var didSelectShowContacts: CompletionOptional = nil
     var didSelectReservation: ((Reservation) -> Void)? = nil
 
-    private var reservations: [Reservation] = []
+    private(set) var reservations: [Reservation] = []
 
     override func initializeViews() {
         super.initializeViews()
 
+
         self.view.addSubview(self.button)
         self.button.set(style: .normal(color: .purple, text: "Share"))
         self.button.didSelect { [unowned self] in
-            if let first = self.reservations.first {
+            if let first = self.reservations.first(where: { reservation in
+                reservation.contactId.isNil
+            }) {
                 self.didSelect(reservation: first)
             }
         }
+
+        self.view.addSubview(self.contactsButton)
+        self.contactsButton.set(style: .normal(color: .lightPurple, text: "Invite Contact"))
+        self.contactsButton.didSelect { [unowned self] in
+            self.didSelectShowContacts?()
+        }
+        
         self.loadUnclaimedReservations()
     }
 
@@ -36,6 +48,10 @@ class ReservationsViewController: NavigationBarViewController {
         self.button.setSize(with: self.view.width - Theme.contentOffset.doubled)
         self.button.centerOnX()
         self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+
+        self.contactsButton.setSize(with: self.view.width - Theme.contentOffset.doubled)
+        self.contactsButton.centerOnX()
+        self.contactsButton.match(.bottom, to: .top, of: self.button, offset: -10)
     }
 
     private func loadUnclaimedReservations() {
