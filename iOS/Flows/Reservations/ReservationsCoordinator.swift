@@ -35,7 +35,10 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
                 self.showAlert()
             }
         }
-        ac.excludedActivityTypes = [.postToFacebook, .postToTwitter, .postToWeibo, .mail, .print, .assignToContact, .saveToCameraRoll, .addToReadingList, .postToFlickr, .postToVimeo, .postToTencentWeibo, .openInIBooks, .markupAsPDF]
+
+        let exclusions: [UIActivity.ActivityType] = [.postToFacebook, .postToTwitter, .postToWeibo, .mail, .print, .assignToContact, .saveToCameraRoll, .addToReadingList, .postToFlickr, .postToVimeo, .postToTencentWeibo, .openInIBooks, .markupAsPDF, .airDrop]
+
+        ac.excludedActivityTypes = exclusions
 
         self.reservationsVC.present(ac, animated: true, completion: nil)
     }
