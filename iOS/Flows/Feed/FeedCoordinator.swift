@@ -41,8 +41,7 @@ extension FeedCoordinator: FeedViewControllerDelegate {
             guard let channel = post.channel else { return }
             self.startChannelFlow(for: .channel(channel))
         case .inviteAsk:
-            guard let reservation = post.reservation else { return }
-            self.startReservationFlow(with: reservation)
+            self.presentReservationsFlow(source: controller)
         case .notificationPermissions:
             break
         case .connectionRequest:
@@ -54,9 +53,10 @@ extension FeedCoordinator: FeedViewControllerDelegate {
         }
     }
 
-    private func startReservationFlow(with reservation: Reservation) {
-        let coordinator = ReservationsCoordinator(reservation: reservation, router: self.router, deepLink: self.deepLink)
+    private func presentReservationsFlow(source: UIViewController) {
+        let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { (_) in}
+        self.router.present(coordinator, source: source)
     }
 
     private func startChannelFlow(for type: ChannelType) {

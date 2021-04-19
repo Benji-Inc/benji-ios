@@ -86,6 +86,7 @@ final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
         return self.getRelationalObject(for: .consumers)
     }
 
+    @discardableResult
     func addCurrentUserAsConsumer() -> Future<Void, Error> {
         return Future { promise in
             if let query = self.consumers?.query() {
