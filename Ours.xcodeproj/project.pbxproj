@@ -411,6 +411,10 @@
 		D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */; };
 		D65B0CE5234928620041A176 /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CE4234928620041A176 /* ProfileCoordinator.swift */; };
 		D6605414262DBF35002F74F8 /* ReservationsFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6605413262DBF35002F74F8 /* ReservationsFooterView.swift */; };
+		D6605437262F2109002F74F8 /* ArchiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6605436262F2109002F74F8 /* ArchiveViewController.swift */; };
+		D6605439262F211D002F74F8 /* ArchiveCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6605438262F211D002F74F8 /* ArchiveCollectionView.swift */; };
+		D660543B262F212E002F74F8 /* ArchiveCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660543A262F212E002F74F8 /* ArchiveCollectionViewManager.swift */; };
+		D660543D262F213C002F74F8 /* ArchiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660543C262F213C002F74F8 /* ArchiveCell.swift */; };
 		D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D66379CE25A3704300A4A3B7 /* ChatClientManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */; };
@@ -845,6 +849,10 @@
 		D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelsViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D65B0CE4234928620041A176 /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		D6605413262DBF35002F74F8 /* ReservationsFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsFooterView.swift; sourceTree = "<group>"; };
+		D6605436262F2109002F74F8 /* ArchiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveViewController.swift; sourceTree = "<group>"; };
+		D6605438262F211D002F74F8 /* ArchiveCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCollectionView.swift; sourceTree = "<group>"; };
+		D660543A262F212E002F74F8 /* ArchiveCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCollectionViewManager.swift; sourceTree = "<group>"; };
+		D660543C262F213C002F74F8 /* ArchiveCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCell.swift; sourceTree = "<group>"; };
 		D6629C7425AD254C002C3B92 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatClientManager+Extensions.swift"; sourceTree = "<group>"; };
 		D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserNotificationManager+Extensions.swift"; sourceTree = "<group>"; };
@@ -1477,6 +1485,17 @@
 			path = Meditation;
 			sourceTree = "<group>";
 		};
+		D6605435262F20F6002F74F8 /* Archive */ = {
+			isa = PBXGroup;
+			children = (
+				D6605436262F2109002F74F8 /* ArchiveViewController.swift */,
+				D6605438262F211D002F74F8 /* ArchiveCollectionView.swift */,
+				D660543A262F212E002F74F8 /* ArchiveCollectionViewManager.swift */,
+				D660543C262F213C002F74F8 /* ArchiveCell.swift */,
+			);
+			path = Archive;
+			sourceTree = "<group>";
+		};
 		D66379DB25A39BB000A4A3B7 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1909,6 +1928,7 @@
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				D6605435262F20F6002F74F8 /* Archive */,
 				D6432BF122D8282E0016001A /* Channel */,
 				D6DADF6A2207DC90007D9EB1 /* Channels */,
 				D62C634F22BE9C4600F4D097 /* Feed */,
@@ -2348,6 +2368,7 @@
 				D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
 				D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */,
 				D657175C2378C78500F8F96C /* MessageCellAttributesConfigurer.swift in Sources */,
+				D6605437262F2109002F74F8 /* ArchiveViewController.swift in Sources */,
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
 				D6D4C5B72620965E0026D7A2 /* CommentsCollectionViewManager.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
@@ -2457,6 +2478,7 @@
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D6792CE325F99F2E00B6575C /* FeedStatusView.swift in Sources */,
 				D6882B9E26010EBE00F94F07 /* PostCreationViewController.swift in Sources */,
+				D660543D262F213C002F74F8 /* ArchiveCell.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,
 				D642735E22C90C820088256B /* CGPoint+Extensions.swift in Sources */,
 				D61EC0DE21D30DAC00204BEE /* Array+Extensions.swift in Sources */,
@@ -2508,12 +2530,14 @@
 				D6B37CAB25F7C46000BC3145 /* NotificationPermissionsPost.swift in Sources */,
 				D6090E5A2377D5CF00833DA7 /* ChannelCellAttributesConfigurer.swift in Sources */,
 				D6D4C5B9262096720026D7A2 /* CommentCell.swift in Sources */,
+				D6605439262F211D002F74F8 /* ArchiveCollectionView.swift in Sources */,
 				D658C7D2244226A00027D12E /* PostMeditationViewController.swift in Sources */,
 				D6A4A1F625E9550A007F3E15 /* UserNotificationCategory.swift in Sources */,
 				D6090E582377D2CA00833DA7 /* ChannelSectionable.swift in Sources */,
 				D6DADF6E2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift in Sources */,
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
 				D67FF5A825F7BD31005C3E1E /* SystemPost.swift in Sources */,
+				D660543B262F212E002F74F8 /* ArchiveCollectionViewManager.swift in Sources */,
 				D6B2603822E6AB5E00143CF0 /* ChannelDetailViewController.swift in Sources */,
 				D639106925D72E6F00D336D7 /* UICollectionView.CellRegistration+Extensions.swift in Sources */,
 				D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */,

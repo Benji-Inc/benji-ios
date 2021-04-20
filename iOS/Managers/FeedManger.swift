@@ -39,13 +39,15 @@ class FeedManager {
             }.store(in: &self.cancellables)
     }
 
-    func queryForPosts(for feed: Feed) -> Future<[Post], Error> {
+    func queryForMediaPosts(for feed: Feed, excludeExpired: Bool = true) -> Future<[Post], Error> {
         return Future { promise in
             if let query = feed.posts?.query() {
                 if feed.owner != User.current() {
                     query.whereKey("type", equalTo: "media")
                 }
-                query.whereKey("expirationDate", greaterThanOrEqualTo: Date())
+                if excludeExpired {
+                    query.whereKey("expirationDate", greaterThanOrEqualTo: Date())
+                }
                 query.findObjectsInBackground { objects, error in
                     if let posts = objects {
                         promise(.success(posts))
