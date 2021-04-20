@@ -23,6 +23,9 @@ class HomeViewController: ViewController, TransitionableViewController {
 
     lazy var feedCollectionVC = FeedCollectionViewController()
     lazy var captureVC = PostCreationViewController()
+    lazy var archivesVC = ArchivesViewController()
+
+    
     let vibrancyView = HomeVibrancyView()
     let tabView = HomeTabView()
     let exitButton = ImageViewButton()
@@ -35,6 +38,11 @@ class HomeViewController: ViewController, TransitionableViewController {
     var didTapFeed: ((Feed) -> Void)? = nil
 
     private var topOffset: CGFloat?
+    var minTop: CGFloat {
+        return self.feedCollectionVC.view.bottom
+    }
+    private(set) var isPanning: Bool = false
+    var isMenuPresenting: Bool = false
 
     override func initializeViews() {
         super.initializeViews()
@@ -42,6 +50,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.view.set(backgroundColor: .background1)
 
         self.addChild(viewController: self.feedCollectionVC)
+        self.addChild(viewController: self.archivesVC)
         self.addChild(viewController: self.captureVC)
 
         self.view.addSubview(self.vibrancyView)
@@ -97,6 +106,11 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.tabView.state = .confirm
         }
 
+        self.vibrancyView.onPan { [unowned self] pan in
+            pan.delegate = self
+            self.handle(pan)
+        }
+
         self.captureVC.begin()
     }
 
@@ -107,16 +121,26 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.feedCollectionVC.view.height = FeedCollectionViewController.height
         self.feedCollectionVC.view.pinToSafeArea(.top, padding: 0)
 
-        self.captureVC.view.height = self.view.height - self.feedCollectionVC.view.bottom - Theme.contentOffset
+        self.archivesVC.view.frame = self.captureVC.view.frame
+        self.archivesVC.view.height = self.view.height - self.feedCollectionVC.view.bottom
+        self.archivesVC.view.expandToSuperviewWidth()
+        self.archivesVC.view.centerOnX()
+        self.archivesVC.view.match(.top, to: .bottom, of: self.feedCollectionVC.view)
+
+        self.captureVC.view.height = self.archivesVC.view.height
         self.captureVC.view.expandToSuperviewWidth()
         self.captureVC.view.centerOnX()
-        self.captureVC.view.match(.top, to: .bottom, of: self.feedCollectionVC.view, offset: Theme.contentOffset)
+
+        if self.topOffset.isNil {
+            self.captureVC.view.pin(.top, padding: self.minTop)
+        }
+
         self.vibrancyView.frame = self.captureVC.view.frame
 
         let height = 70 + self.view.safeAreaInsets.bottom
         self.tabView.size = CGSize(width: self.view.width, height: height)
         self.tabView.centerOnX()
-        self.tabView.pin(.bottom)
+        self.tabView.match(.bottom, to: .bottom, of: self.captureVC.view)
 
         self.exitButton.squaredSize = 50
         self.exitButton.match(.top, to: .top, of: self.vibrancyView, offset: Theme.contentOffset)
@@ -124,6 +148,7 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
 
     func animate(show: Bool) {
+        self.isMenuPresenting = !show
         UIView.animate(withDuration: Theme.animationDuration) {
             self.tabView.alpha = show ? 1.0 : 0.0
             self.feedCollectionVC.view.alpha = show ? 1.0 : 0.0
@@ -151,5 +176,53 @@ class HomeViewController: ViewController, TransitionableViewController {
                 }
             }.store(in: &self.cancellables)
         }
+    }
+}
+
+extension HomeViewController: UIGestureRecognizerDelegate {
+
+    private func handle(_ pan: UIPanGestureRecognizer) {
+        guard let view = pan.view, !self.isMenuPresenting else {return}
+
+        let translation = pan.translation(in: view.superview)
+
+        switch pan.state {
+        case .possible:
+            self.isPanning = false
+        case .began:
+            self.isPanning = false
+            self.topOffset = minTop
+        case .changed:
+            self.isPanning = translation.y > 0
+            let newTop = self.minTop + translation.y
+            self.topOffset = clamp(newTop, self.minTop, self.view.height)
+            self.captureVC.view.top = self.topOffset!
+        case .ended, .cancelled, .failed:
+            self.isPanning = false
+            let diff = (self.view.height - self.minTop) - self.topOffset!
+            let progress = diff / (self.view.height - self.minTop)
+            self.topOffset = progress < 0.65 ? self.view.height : self.minTop
+
+            UIView.animate(withDuration: Theme.animationDuration) {
+                self.captureVC.view.top = self.topOffset!
+                self.view.layoutNow()
+            } completion: { completed in
+                self.archivesVC.animate(show: progress < 0.65)
+            }
+        @unknown default:
+            break
+        }
+
+        self.view.layoutNow()
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        if let _ = gestureRecognizer as? UIPanGestureRecognizer, self.isMenuPresenting {
+            return false
+        } else if let _ = gestureRecognizer as? UIScreenEdgePanGestureRecognizer, self.isPanning {
+            return false
+        }
+
+        return true
     }
 }

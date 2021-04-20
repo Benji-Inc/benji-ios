@@ -415,7 +415,6 @@
 		D6605439262F211D002F74F8 /* ArchivesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6605438262F211D002F74F8 /* ArchivesCollectionView.swift */; };
 		D660543B262F212E002F74F8 /* ArchivesCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660543A262F212E002F74F8 /* ArchivesCollectionViewManager.swift */; };
 		D660543D262F213C002F74F8 /* ArchiveCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660543C262F213C002F74F8 /* ArchiveCell.swift */; };
-		D660543F262F63BD002F74F8 /* ArchivesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660543E262F63BD002F74F8 /* ArchivesCoordinator.swift */; };
 		D6605443262F71FF002F74F8 /* MediaMoreButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6605442262F71FF002F74F8 /* MediaMoreButton.swift */; };
 		D6605444262F7234002F74F8 /* MediaMoreButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6605442262F71FF002F74F8 /* MediaMoreButton.swift */; };
 		D6605445262F7235002F74F8 /* MediaMoreButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6605442262F71FF002F74F8 /* MediaMoreButton.swift */; };
@@ -857,7 +856,6 @@
 		D6605438262F211D002F74F8 /* ArchivesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivesCollectionView.swift; sourceTree = "<group>"; };
 		D660543A262F212E002F74F8 /* ArchivesCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivesCollectionViewManager.swift; sourceTree = "<group>"; };
 		D660543C262F213C002F74F8 /* ArchiveCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCell.swift; sourceTree = "<group>"; };
-		D660543E262F63BD002F74F8 /* ArchivesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivesCoordinator.swift; sourceTree = "<group>"; };
 		D6605442262F71FF002F74F8 /* MediaMoreButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaMoreButton.swift; sourceTree = "<group>"; };
 		D6629C7425AD254C002C3B92 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatClientManager+Extensions.swift"; sourceTree = "<group>"; };
@@ -1497,7 +1495,6 @@
 				D660543C262F213C002F74F8 /* ArchiveCell.swift */,
 				D6605438262F211D002F74F8 /* ArchivesCollectionView.swift */,
 				D660543A262F212E002F74F8 /* ArchivesCollectionViewManager.swift */,
-				D660543E262F63BD002F74F8 /* ArchivesCoordinator.swift */,
 				D6605436262F2109002F74F8 /* ArchivesViewController.swift */,
 			);
 			path = Archives;
@@ -2430,7 +2427,6 @@
 				D6432BF022D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift in Sources */,
 				D6D4C5B5262096370026D7A2 /* CommentsCollectionView.swift in Sources */,
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
-				D660543F262F63BD002F74F8 /* ArchivesCoordinator.swift in Sources */,
 				D6792CDA25F9661A00B6575C /* FeedCollectionViewController.swift in Sources */,
 				D6B3329325DD74EB00211044 /* Channel+Cloud.swift in Sources */,
 				D642736622C971FD0088256B /* PostTextView.swift in Sources */,

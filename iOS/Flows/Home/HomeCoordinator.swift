@@ -61,6 +61,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             self.presentPicker(for: .photoLibrary)
         }
 
+        self.homeVC.archivesVC.didSelectPost = { [unowned self] post in
+            self.show(post: post)
+        }
+
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
         }
@@ -74,11 +78,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         SideMenuManager.default.rightMenuNavigationController = rightMenuNavigationController
 
         SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.homeVC.view)
-
-        self.removeChild()
-        let coordinator = ArchivesCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { (_) in }
-        self.router.present(coordinator, source: self.homeVC)
     }
 
     func handle(deeplink: DeepLinkable) {
@@ -119,6 +118,11 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         case .channels:
             self.addChannels()
         }
+    }
+
+    private func show(post: Post) {
+        let vc = PostMediaViewController(with: post)
+        self.router.present(vc, source: self.homeVC)
     }
 
     private func showRitual() {

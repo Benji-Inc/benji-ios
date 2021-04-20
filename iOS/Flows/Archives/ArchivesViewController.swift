@@ -34,9 +34,17 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
                 self.collectionViewManager.load(feed: feed)
             }
         }.store(in: &self.cancellables)
+
+        self.view.alpha = 0
     }
 
     override func getCollectionView() -> CollectionView {
         return self.archiveCollectionView
+    }
+
+    func animate(show: Bool) {
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.view.alpha = show ? 1.0 : 0 
+        }
     }
 }
