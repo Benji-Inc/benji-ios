@@ -28,6 +28,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     
     private var cancellables = Set<AnyCancellable>()
 
+    lazy var archivesVC = ArchiveViewController()
+
     override func toPresentable() -> DismissableVC {
         return self.homeVC
     }
@@ -74,6 +76,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         SideMenuManager.default.rightMenuNavigationController = rightMenuNavigationController
 
         SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.homeVC.view)
+
+        self.router.present(self.archivesVC, source: self.homeVC)
     }
 
     func handle(deeplink: DeepLinkable) {

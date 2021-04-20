@@ -22,6 +22,14 @@ class ArchiveViewController: CollectionViewController<ArchiveCollectionViewManag
                 break 
             }
         }.store(in: &self.cancellables)
+
+        FeedManager.shared.$feeds.mainSink { feeds in
+            if let feed = feeds.first(where: { feed in
+                return feed.owner == User.current()
+            }) {
+                self.collectionViewManager.load(feed: feed)
+            }
+        }.store(in: &self.cancellables)
     }
 
     override func getCollectionView() -> CollectionView {

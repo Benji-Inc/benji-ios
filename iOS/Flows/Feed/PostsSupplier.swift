@@ -69,7 +69,7 @@ class PostsSupplier {
     private func getPosts() -> AnyPublisher<[Postable], Error> {
         return Future { promise in
             if let feed = FeedManager.shared.selectedFeed {
-                FeedManager.shared.queryForMediaPosts(for: feed)
+                FeedManager.shared.queryForCurrentMediaPosts(for: feed)
                     .mainSink { result in
                         switch result {
                         case .success(let posts):

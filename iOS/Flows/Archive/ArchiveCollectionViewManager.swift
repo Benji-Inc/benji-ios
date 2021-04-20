@@ -17,17 +17,18 @@ class ArchiveCollectionViewManager: CollectionViewManager<ArchiveCollectionViewM
     private let archiveConfig = ManageableCellRegistration<ArchiveCell>().cellProvider
 
     lazy var layout: UICollectionViewCompositionalLayout = {
-        let fraction: CGFloat = 1 / 3
+        let widthFraction: CGFloat = 0.33
+        let heightFraction: CGFloat = 0.45
 
         // Item
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(fraction), heightDimension: .fractionalHeight(1))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(widthFraction), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let inset: CGFloat = 2.5
+        let inset: CGFloat = 1.5
         item.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
 
         // Group
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(fraction))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(heightFraction))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
         // Section
@@ -49,7 +50,7 @@ class ArchiveCollectionViewManager: CollectionViewManager<ArchiveCollectionViewM
     }
 
     func load(feed: Feed) {
-        FeedManager.shared.queryForMediaPosts(for: feed, excludeExpired: false)
+        FeedManager.shared.queryForAllMediaPosts(for: feed)
             .mainSink { result in
                 switch result {
                 case .success(let posts):
