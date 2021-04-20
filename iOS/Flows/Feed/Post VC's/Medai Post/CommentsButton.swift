@@ -11,7 +11,7 @@ import TMROLocalization
 
 class CommentsButton: View {
 
-    let label = Label(font: .small, textColor: .white)
+    let label = Label(font: .smallBold, textColor: .white)
     let imageView = UIImageView(image: UIImage(systemName: "text.bubble.fill"))
 
     override func initializeSubviews() {

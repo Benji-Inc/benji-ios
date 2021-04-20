@@ -103,14 +103,12 @@ class PostsCollectionManager: NSObject {
             }
         }
 
-        self.showFirst()
-        self.delegate?.postsManagerDidSetItems(self)
-    }
-
-    func showFirst() {
+        // Show first
         if let first = self.postVCs.first {
             self.show(postVC: first, at: 0)
         }
+
+        self.delegate?.postsManagerDidSetItems(self)
     }
 
     func advanceToNextView(from index: Int) {

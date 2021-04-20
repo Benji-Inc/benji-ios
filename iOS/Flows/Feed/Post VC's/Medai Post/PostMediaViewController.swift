@@ -31,6 +31,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
     private lazy var commentsVC = CommentsViewController(with: self.post)
     private let consumersView = StackedAvatarView()
     private let commentsButton = CommentsButton()
+    private let moreButton = MediaMoreButton()
 
     // Custom Input Accessory View
     lazy var commentInputAccessoryView = CommentInputAccessoryView(with: self)
@@ -59,6 +60,8 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.view.set(backgroundColor: .background1)
 
         guard let post = self.post as? Post else { return }
 
@@ -93,8 +96,19 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         self.imageView.contentMode = .scaleAspectFill
 
         self.view.addSubview(self.commentsButton)
+        self.commentsButton.showShadow(withOffset: 5)
         self.commentsButton.didSelect { [unowned self] in
             self.animateComments(show: true)
+        }
+
+        if post.author == User.current() {
+            self.view.addSubview(self.moreButton)
+            self.moreButton.didConfirmDeletion = { [unowned self] in
+                // Delete post
+                post.deleteInBackground { completed, error in
+                    self.didFinish?()
+                }
+            }
         }
 
         self.view.addSubview(self.consumersView)
@@ -145,6 +159,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         UIView.animate(withDuration: Theme.animationDuration) {
             self.imageView.alpha  = show ? 0.3 : 1.0
             self.commentsButton.alpha = show ? 0.0 : 1.0
+            self.moreButton.alpha = show ? 0.0 : 1.0
             self.view.layoutNow()
         } completion: { completed in
             if show {
@@ -180,9 +195,18 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
             self.commentsVC.view.match(.top, to: .bottom, of: self.view)
         }
 
+        self.moreButton.squaredSize = 60
+        self.moreButton.pin(.right, padding: 10)
+        self.moreButton.pinToSafeArea(.bottom, padding: SwipeableInputAccessoryView.preferredHeight + Theme.contentOffset)
+
         self.commentsButton.squaredSize = 60
         self.commentsButton.pin(.right, padding: 10)
-        self.commentsButton.pinToSafeArea(.bottom, padding: SwipeableInputAccessoryView.preferredHeight + Theme.contentOffset)
+
+        if self.post.author == User.current() {
+            self.commentsButton.match(.bottom, to: .top, of: self.moreButton, offset: -10)
+        } else {
+            self.commentsButton.pinToSafeArea(.bottom, padding: SwipeableInputAccessoryView.preferredHeight + Theme.contentOffset)
+        }
 
         self.consumersView.setSize()
         self.consumersView.match(.bottom, to: .bottom, of: self.commentsButton)

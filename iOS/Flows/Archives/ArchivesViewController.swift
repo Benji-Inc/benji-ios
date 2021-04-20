@@ -12,6 +12,8 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
 
     private lazy var archiveCollectionView = ArchivesCollectionView()
 
+    var didSelectPost: ((Post) -> Void)? = nil
+
     override func initializeViews() {
         super.initializeViews()
 
@@ -19,7 +21,9 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
             guard let selection = result else { return }
             switch selection.section {
             case .posts:
-                break 
+                if let post = selection.item as? Post {
+                    self.didSelectPost?(post)
+                }
             }
         }.store(in: &self.cancellables)
 

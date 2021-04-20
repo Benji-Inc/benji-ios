@@ -128,7 +128,7 @@ class FeedViewController: ViewController {
             self.indicatorView.alpha = 1
             self.avatarView.alpha = 1
         }, completion: { completed in
-            self.manager.showFirst()
+            self.manager.loadPosts()
         })
     }
 }
