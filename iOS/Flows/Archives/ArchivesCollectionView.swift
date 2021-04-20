@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ArchiveCollectionView: CollectionView {
+class ArchivesCollectionView: CollectionView {
 
     init() {
         super.init(layout: UICollectionViewLayout())

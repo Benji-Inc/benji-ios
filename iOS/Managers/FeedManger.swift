@@ -81,7 +81,10 @@ class FeedManager {
         }
     }
 
-    func createPost(with imageData: Data, progressHandler: @escaping (Int) -> Void) -> Future<Post, Error> {
+    func createPost(with data: Data,
+                    previewData: Data,
+                    progressHandler: @escaping (Int) -> Void) -> Future<Post, Error> {
+
         return Future { promise in
             if self.feeds.isEmpty {
                 promise(.failure(ClientError.apiError(detail: "No Feeds")))
@@ -89,8 +92,8 @@ class FeedManager {
                 return feed.owner == User.current()
             }) {
 
-                let file = PFFileObject(name: UUID().uuidString, data: imageData)
-                file?.saveInBackground({ success, error in
+                let previewFile = PFFileObject(name: UUID().uuidString, data: previewData)
+                previewFile?.saveInBackground({ success, error in
                     if let e = error {
                         promise(.failure(e))
                     } else {
@@ -103,7 +106,7 @@ class FeedManager {
                         post.type = .media
                         post.attributes = ["": String()]
                         post.duration = 5
-                        post.file = file
+                        post.preview = previewFile
                         post.saveToServer()
                             .mainSink { result in
                                 switch result {
@@ -113,6 +116,7 @@ class FeedManager {
                                         .mainSink { result in
                                             switch result {
                                             case .success(_):
+
                                                 promise(.success(p))
                                             case .error(let e):
                                                 promise(.failure(e))
@@ -131,5 +135,20 @@ class FeedManager {
                 promise(.failure(ClientError.apiError(detail: "No feed found for user")))
             }
         }
+    }
+
+    private func upload(data: Data, for post: Post) {
+        let file = PFFileObject(name: UUID().uuidString, data: data)
+        file?.saveInBackground({ success, error in
+            if let e = error {
+                // Do something...
+                print(e)
+            } else {
+                post.file = file
+                post.saveToServer()
+            }
+        }, progressBlock: { progress in
+            print(progress)
+        })
     }
 }

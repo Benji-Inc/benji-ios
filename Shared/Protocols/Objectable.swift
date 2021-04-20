@@ -70,6 +70,7 @@ extension Objectable where Self: PFObject {
     }
 
     // Does not save locally but just pushes to server in the background
+    @discardableResult
     func saveToServer() -> Future<Self, Error> {
         return Future { promise in
             self.saveInBackground { (success, error) in

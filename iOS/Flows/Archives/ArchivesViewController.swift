@@ -8,9 +8,9 @@
 
 import Foundation
 
-class ArchiveViewController: CollectionViewController<ArchiveCollectionViewManager.SectionType, ArchiveCollectionViewManager> {
+class ArchivesViewController: CollectionViewController<ArchivesCollectionViewManager.SectionType, ArchivesCollectionViewManager> {
 
-    private lazy var archiveCollectionView = ChannelsCollectionView()
+    private lazy var archiveCollectionView = ArchivesCollectionView()
 
     override func initializeViews() {
         super.initializeViews()

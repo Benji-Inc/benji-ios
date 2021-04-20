@@ -41,8 +41,8 @@ class PostCreationViewController: ImageCaptureViewController {
     // Add future 
     func createPost(progressHandler: @escaping (Int) -> Void) -> Future<Void, Error> {
         return Future { promise in
-            if let image = self.imageView.image, let data = image.data {
-                FeedManager.shared.createPost(with: data, progressHandler: progressHandler)
+            if let image = self.imageView.image, let data = image.data, let preview = image.previewData {
+                FeedManager.shared.createPost(with: data, previewData: preview, progressHandler: progressHandler)
                     .mainSink { post in
                         self.reset()
                         promise(.success(()))

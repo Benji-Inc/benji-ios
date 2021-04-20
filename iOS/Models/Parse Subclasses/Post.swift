@@ -18,6 +18,7 @@ enum PostKey: String {
     case expirationDate = "expirationDate"
     case type = "type"
     case file = "file"
+    case preview = "preview"
     case duration = "duration"
     case attributes = "attributes"
     case comments = "comments"
@@ -61,6 +62,11 @@ final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
             return type
         }
         set { self.setObject(for: .type, with: newValue.rawValue) }
+    }
+
+    var preview: PFFileObject? {
+        get { return self.getObject(for: .preview) }
+        set { self.setObject(for: .preview, with: newValue) }
     }
 
     var file: PFFileObject? {

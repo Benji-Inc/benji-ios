@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ArchiveCollectionViewManager: CollectionViewManager<ArchiveCollectionViewManager.SectionType> {
+class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionViewManager.SectionType> {
 
     enum SectionType: Int, ManagerSectionType {
         case posts

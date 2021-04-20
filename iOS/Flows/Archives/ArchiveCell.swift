@@ -13,7 +13,7 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
 
     private let gradientView = ArchiveGradientView()
     private let imageView = UIImageView()
-    private let label = Label(font: .small)
+    private let label = Label(font: .smallBold)
 
     var currentItem: Post?
 
@@ -31,6 +31,8 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
     }
 
     func configure(with item: Post) {
+
+        // add preview file 
         guard let file = item.file else { return }
 
         file.getDataInBackground { data, error in

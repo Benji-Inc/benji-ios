@@ -28,7 +28,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     
     private var cancellables = Set<AnyCancellable>()
 
-    lazy var archivesVC = ArchiveViewController()
+    lazy var archivesVC = ArchivesViewController()
 
     override func toPresentable() -> DismissableVC {
         return self.homeVC
