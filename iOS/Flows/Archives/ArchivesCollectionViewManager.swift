@@ -45,7 +45,14 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         self.collectionView.animationView.play()
 
         self.$posts.mainSink { _ in
-            self.loadSnapshot()
+            guard self.posts.count > 0 else { return }
+            
+            if self.hasLoadedInitialSnapshot {
+                self.loadSnapshot()
+            } else {
+                let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
+                self.loadSnapshot(animationCycle: cycle)
+            }
         }.store(in: &self.cancellables)
     }
 

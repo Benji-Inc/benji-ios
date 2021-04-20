@@ -16,6 +16,8 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
 
     override func initializeViews() {
         super.initializeViews()
+        
+        self.view.alpha = 0
 
         self.collectionViewManager.$onSelectedItem.mainSink { (result) in
             guard let selection = result else { return }
@@ -31,11 +33,11 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
             if let feed = feeds.first(where: { feed in
                 return feed.owner == User.current()
             }) {
-                self.collectionViewManager.load(feed: feed)
+                if self.view.alpha == 1.0 {
+                    self.collectionViewManager.load(feed: feed)
+                }
             }
         }.store(in: &self.cancellables)
-
-        self.view.alpha = 0
     }
 
     override func getCollectionView() -> CollectionView {
@@ -44,7 +46,16 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
 
     func animate(show: Bool) {
         UIView.animate(withDuration: Theme.animationDuration) {
-            self.view.alpha = show ? 1.0 : 0 
+            self.view.alpha = show ? 1.0 : 0
+        } completion: { _ in
+            
+            if let feed = FeedManager.shared.feeds.first(where: { feed in
+                return feed.owner == User.current()
+            }) {
+                if self.view.alpha == 1.0 {
+                    self.collectionViewManager.load(feed: feed)
+                }
+            }
         }
     }
 }
