@@ -92,7 +92,7 @@ class FeedViewController: ViewController {
         self.reloadButton.centerOnX()
         self.reloadButton.pinToSafeArea(.bottom, padding: 0)
 
-        self.indicatorView.size = CGSize(width: self.view.width - 20, height: 2)
+        self.indicatorView.size = CGSize(width: self.view.width - Theme.contentOffset.doubled, height: 2)
         self.indicatorView.pinToSafeArea(.top, padding: Theme.contentOffset)
         self.indicatorView.centerOnX()
 

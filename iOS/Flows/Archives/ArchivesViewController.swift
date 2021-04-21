@@ -29,13 +29,9 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
             }
         }.store(in: &self.cancellables)
 
-        FeedManager.shared.$feeds.mainSink { feeds in
-            if let feed = feeds.first(where: { feed in
-                return feed.owner == User.current()
-            }) {
-                if self.view.alpha == 1.0 {
-                    self.collectionViewManager.load(feed: feed)
-                }
+        FeedManager.shared.$selectedFeed.mainSink { feeds in
+            if self.view.alpha == 1.0 {
+                self.collectionViewManager.loadPosts()
             }
         }.store(in: &self.cancellables)
     }
@@ -53,7 +49,7 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
                 return feed.owner == User.current()
             }) {
                 if self.view.alpha == 1.0 {
-                    self.collectionViewManager.load(feed: feed)
+                    FeedManager.shared.selectedFeed = feed 
                 }
             }
         }

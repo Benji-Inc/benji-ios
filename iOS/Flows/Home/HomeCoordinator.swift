@@ -35,9 +35,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
-        // Initialize to begin the query
-        _ = FeedManager.shared
-
         self.channelsVC.subscribeToUpdates()
         self.checkForNotifications()
 

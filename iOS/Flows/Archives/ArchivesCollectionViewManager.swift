@@ -36,42 +36,21 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         return UICollectionViewCompositionalLayout(section: section)
     }()
 
-    @Published private var posts: [Post] = []
-
     override func initialize() {
         super.initialize()
 
         self.collectionView.collectionViewLayout = self.layout
-        self.collectionView.animationView.play()
-
-        self.$posts.mainSink { _ in
-            guard self.posts.count > 0 else { return }
-            
-            if self.hasLoadedInitialSnapshot {
-                self.loadSnapshot()
-            } else {
-                let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
-                self.loadSnapshot(animationCycle: cycle)
-            }
-        }.store(in: &self.cancellables)
     }
 
-    func load(feed: Feed) {
-        FeedManager.shared.queryForAllMediaPosts(for: feed)
-            .mainSink { result in
-                switch result {
-                case .success(let posts):
-                    self.posts = posts
-                case .error(_):
-                    break
-                }
-            }.store(in: &self.cancellables)
+    func loadPosts() {
+        let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
+        self.loadSnapshot(animationCycle: cycle)
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
         switch section {
         case .posts:
-            return self.posts
+            return PostsSupplier.shared.posts as? [Post] ?? []
         }
     }
 

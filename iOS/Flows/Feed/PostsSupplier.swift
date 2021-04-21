@@ -22,7 +22,7 @@ class PostsSupplier {
     }
 
     private func subscribeToUpdates() {
-        FeedManager.shared.$selectedFeed.mainSink(receiveValue: { _ in
+        FeedManager.shared.$selectedFeed.mainSink(receiveValue: { feed in
             self.createPosts()
         }).store(in: &self.cancellables)
     }
@@ -30,31 +30,37 @@ class PostsSupplier {
     private func createPosts() {
         self.posts = []
 
-        var initialPosts: [Postable] = []
-        initialPosts.append(MeditationPost())
+        guard !FeedManager.shared.selectedFeed.isNil else { return }
 
-        ChannelSupplier.shared.allInvitedChannels.forEach { (channel) in
-            switch channel.channelType {
-            case .channel(let tchChannel):
-                initialPosts.append(ChannelInvitePost(with: tchChannel.sid!))
-            default:
-                break
-            }
-        }
+        var initialPosts: [Postable] = []
 
         var publishers: [AnyPublisher<[Postable], Error>] = []
         if FeedManager.shared.selectedFeed?.owner == User.current() {
+
+            initialPosts.append(MeditationPost())
+
+            ChannelSupplier.shared.allInvitedChannels.forEach { (channel) in
+                switch channel.channelType {
+                case .channel(let tchChannel):
+                    initialPosts.append(ChannelInvitePost(with: tchChannel.sid!))
+                default:
+                    break
+                }
+            }
+
             publishers.append(self.getInviteAsk())
             publishers.append(self.getNotificationPermissions())
             publishers.append(self.getConnections())
         }
 
-        publishers.append(self.getPosts())
+        publishers.append(self.queryForCurrentMediaPosts(for: FeedManager.shared.selectedFeed!))
 
         waitForAll(publishers).mainSink { result in
             switch result {
             case .success(let all):
-                let joined = Array(all.joined())
+                var joined: [Postable] = Array(all.joined())
+                joined.append(contentsOf: initialPosts)
+                
                 let sorted = joined.sorted { lhs, rhs in
                     return lhs.priority < rhs.priority
                 }
@@ -66,22 +72,45 @@ class PostsSupplier {
         }.store(in: &self.cancellables)
     }
 
-    private func getPosts() -> AnyPublisher<[Postable], Error> {
+    func queryForCurrentMediaPosts(for feed: Feed) -> AnyPublisher<[Postable], Error> {
         return Future { promise in
-            if let feed = FeedManager.shared.selectedFeed {
-                FeedManager.shared.queryForCurrentMediaPosts(for: feed)
-                    .mainSink { result in
-                        switch result {
-                        case .success(let posts):
-                            promise(.success(posts))
-                        case .error(let e):
-                            promise(.failure(e))
-                        }
-                }.store(in: &self.cancellables)
-            } else {
-                promise(.failure(ClientError.message(detail: "No feed selected")))
-            }
+            if let query = feed.posts?.query() {
+                if feed.owner != User.current() {
+                    query.whereKey("type", equalTo: "media")
+                }
 
+                query.whereKey("expirationDate", greaterThanOrEqualTo: Date())
+
+                query.findObjectsInBackground { objects, error in
+                    if let posts = objects {
+                        promise(.success(posts))
+                    } else {
+                        promise(.failure(ClientError.message(detail: "No posts found on feed")))
+                    }
+                }
+
+            } else {
+                promise(.failure(ClientError.message(detail: "No query for posts")))
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    func queryForAllMediaPosts(for feed: Feed) -> AnyPublisher<[Post], Error> {
+        return Future { promise in
+            if let query = feed.posts?.query() {
+                query.whereKey("type", equalTo: "media")
+                query.order(byDescending: "createdAt")
+                query.findObjectsInBackground { objects, error in
+                    if let posts = objects {
+                        promise(.success(posts))
+                    } else {
+                        promise(.failure(ClientError.message(detail: "No posts found on feed")))
+                    }
+                }
+
+            } else {
+                promise(.failure(ClientError.message(detail: "No query for posts")))
+            }
         }.eraseToAnyPublisher()
     }
 
