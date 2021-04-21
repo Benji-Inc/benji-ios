@@ -112,6 +112,8 @@ class PostsCollectionManager: NSObject {
     }
 
     func advanceToNextView(from index: Int) {
+        self.current?.resignFirstResponder()
+
         if let next = self.postVCs[safe: index + 1]  {
             self.consumeIfNeccessary()
             self.show(postVC: next, at: index + 1)

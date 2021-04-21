@@ -16,7 +16,31 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
 
     private let config = ManageableCellRegistration<FeedCell>().cellProvider
 
+    lazy var layout: UICollectionViewCompositionalLayout = {
+        let widthFraction: CGFloat = 0.2
+        let heightFraction: CGFloat = 0.45
+
+        // Item
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(widthFraction), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let verticalInset: CGFloat = 10
+        let horizontalInset: CGFloat = 5
+        item.contentInsets = NSDirectionalEdgeInsets(top: verticalInset, leading: horizontalInset, bottom: verticalInset, trailing: horizontalInset)
+
+        // Group
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+        // Section
+        let section = NSCollectionLayoutSection(group: group)
+        return UICollectionViewCompositionalLayout(section: section)
+    }()
+
     func loadFeeds() {
+
+        self.collectionView.collectionViewLayout = self.layout
+
         self.collectionView.animationView.play()
 
         FeedManager.shared.$feeds.mainSink { feeds in
@@ -42,9 +66,5 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
                                                              for: indexPath,
                                                              item: item as? Feed)
         }
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.height * 0.74 + Theme.contentOffset, height: self.collectionView.height)
     }
 }

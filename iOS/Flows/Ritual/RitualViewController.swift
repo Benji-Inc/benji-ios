@@ -72,8 +72,4 @@ class RitualViewController: NavigationBarViewController {
 
         self.scrollView.contentSize = CGSize(width: self.view.width, height: self.inputVC.view.bottom + 20)
     }
-
-    override func getViewForPinning() -> UIView? {
-        return self.inputVC.view 
-    }
 }

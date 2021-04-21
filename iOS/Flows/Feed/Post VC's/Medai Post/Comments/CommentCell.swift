@@ -63,18 +63,18 @@ class CommentCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
 
         self.avatarView.setSize(for: 44)
-        self.avatarView.pin(.left, padding: Theme.contentOffset)
+        self.avatarView.pin(.left, padding: 12)
         self.avatarView.pin(.top)
 
         let maxWidth = self.width - self.avatarView.right - Theme.contentOffset.doubled
 
         self.label.setSize(withWidth: maxWidth)
         self.label.match(.top, to: .top, of: self.avatarView)
-        self.label.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset)
+        self.label.match(.left, to: .right, of: self.avatarView, offset: 12)
 
         self.textView.setSize(withWidth: maxWidth)
         self.textView.match(.top, to: .bottom, of: self.label, offset: 8)
-        self.textView.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset)
+        self.textView.match(.left, to: .right, of: self.avatarView, offset: 12)
     }
 
     override func prepareForReuse() {

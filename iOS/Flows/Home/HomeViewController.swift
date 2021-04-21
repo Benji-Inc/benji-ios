@@ -39,7 +39,7 @@ class HomeViewController: ViewController, TransitionableViewController {
 
     private var topOffset: CGFloat?
     var minTop: CGFloat {
-        return self.feedCollectionVC.view.bottom
+        return FeedCollectionViewController.height + self.view.safeAreaInsets.top
     }
     private(set) var isPanning: Bool = false
     var isMenuPresenting: Bool = false
@@ -122,10 +122,10 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.feedCollectionVC.view.pinToSafeArea(.top, padding: 0)
 
         self.archivesVC.view.frame = self.captureVC.view.frame
-        self.archivesVC.view.height = self.view.height - self.feedCollectionVC.view.bottom
+        self.archivesVC.view.height = self.view.height - self.minTop
         self.archivesVC.view.expandToSuperviewWidth()
         self.archivesVC.view.centerOnX()
-        self.archivesVC.view.match(.top, to: .bottom, of: self.feedCollectionVC.view)
+        self.archivesVC.view.pin(.top, padding: self.minTop)
 
         self.captureVC.view.height = self.archivesVC.view.height
         self.captureVC.view.expandToSuperviewWidth()
