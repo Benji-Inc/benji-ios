@@ -195,8 +195,8 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
             self.commentsVC.view.match(.top, to: .bottom, of: self.view)
         }
 
-        self.moreButton.squaredSize = 60
-        self.moreButton.pin(.right, padding: 10)
+        self.moreButton.squaredSize = 80
+        self.moreButton.pin(.right, padding: 0)
         self.moreButton.pinToSafeArea(.bottom, padding: SwipeableInputAccessoryView.preferredHeight + Theme.contentOffset)
 
         self.commentsButton.squaredSize = 60

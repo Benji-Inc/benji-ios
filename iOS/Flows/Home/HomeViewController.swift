@@ -116,6 +116,10 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.handle(pan)
         }
 
+        self.archivesVC.didSelectClose = { [unowned self] in
+            self.animateArchives(offset: self.minTop, progress: 1.0)
+        }
+
         self.captureVC.begin()
     }
 
@@ -208,18 +212,22 @@ extension HomeViewController: UIGestureRecognizerDelegate {
             let progress = diff / (self.view.height - self.minTop)
             self.topOffset = progress < 0.65 ? self.view.height : self.minTop
 
-            UIView.animate(withDuration: Theme.animationDuration) {
-                self.captureVC.view.top = self.topOffset!
-                self.view.layoutNow()
-            } completion: { completed in
-                self.isShowingArchive = progress < 0.65
-                self.archivesVC.animate(show: self.isShowingArchive)
-            }
+            self.animateArchives(offset: self.topOffset!, progress: progress)
         @unknown default:
             break
         }
 
         self.view.layoutNow()
+    }
+
+    private func animateArchives(offset: CGFloat, progress: CGFloat) {
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.captureVC.view.top = offset
+            self.view.layoutNow()
+        } completion: { completed in
+            self.isShowingArchive = progress < 0.65
+            self.archivesVC.animate(show: self.isShowingArchive)
+        }
     }
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {

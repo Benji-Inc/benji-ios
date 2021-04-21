@@ -12,6 +12,7 @@ import Lottie
 import Combine
 
 enum ButtonStyle {
+    case noborder(image: UIImage, color: Color)
     case rounded(color: Color, text: Localized)
     case normal(color: Color, text: Localized)
     case icon(image: UIImage, color: Color)
@@ -115,6 +116,12 @@ class Button: UIButton, Statusable {
             self.addSubview(view)
             view.expandToSuperviewSize()
             break
+        case .noborder(let image, let color):
+            self.defaultColor = color
+            self.setImage(image, for: .normal)
+            self.tintColor = color.color
+            self.setAttributedTitle(NSMutableAttributedString(string: ""), for: .normal)
+            self.setAttributedTitle(NSMutableAttributedString(string: ""), for: .highlighted)
         }
 
         self.layer.cornerRadius = Theme.cornerRadius

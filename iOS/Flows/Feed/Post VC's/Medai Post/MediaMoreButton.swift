@@ -15,7 +15,9 @@ class MediaMoreButton: Button {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(style: .icon(image: UIImage(systemName: "ellipsis")!, color: .white))
+        self.showShadow(withOffset: 5)
+
+        self.set(style: .noborder(image: UIImage(systemName: "ellipsis")!, color: .white))
 
         let cancel = UIAction(title: "Cancel", image: UIImage(systemName: "nosign")) { action in}
 

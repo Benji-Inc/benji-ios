@@ -22,6 +22,7 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
 
         self.contentView.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFill
+        self.imageView.layer.cornerRadius = 5 
         self.imageView.clipsToBounds = true 
 
         self.contentView.addSubview(self.gradientView)
