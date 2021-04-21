@@ -50,8 +50,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             self.showRitual()
         }
 
-        self.homeVC.didTapFeed = { [unowned self] feed in
-            self.present(feed: feed)
+        self.homeVC.willPresentFeed = { [unowned self] in
+            self.presentFeed()
         }
 
         self.homeVC.didSelectPhotoLibrary = { [unowned self] in
@@ -129,11 +129,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         self.router.present(coordinator, source: self.homeVC)
     }
 
-    private func present(feed: Feed) {
+    private func presentFeed() {
         self.removeChild()
-        let coordinator = FeedCoordinator(router: self.router,
-                                          deepLink: self.deepLink,
-                                          feed: feed)
+        let coordinator = FeedCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { (_) in }
         self.router.present(coordinator, source: self.homeVC)
     }

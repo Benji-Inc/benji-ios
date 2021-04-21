@@ -35,7 +35,7 @@ class HomeViewController: ViewController, TransitionableViewController {
     var didTapAddRitual: CompletionOptional = nil
     var didSelectPhotoLibrary: CompletionOptional = nil
 
-    var didTapFeed: ((Feed) -> Void)? = nil
+    var willPresentFeed: CompletionOptional = nil
 
     private var topOffset: CGFloat?
     var minTop: CGFloat {
@@ -43,6 +43,7 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
     private(set) var isPanning: Bool = false
     var isMenuPresenting: Bool = false
+    private(set) var isShowingArchive = false
 
     override func initializeViews() {
         super.initializeViews()
@@ -93,8 +94,12 @@ class HomeViewController: ViewController, TransitionableViewController {
         }
 
         self.feedCollectionVC.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
-            guard let item = cellItem?.item as? Feed else { return }
-            self.didTapFeed?(item)
+            guard !self.isPanning, let item = cellItem?.item as? Feed else { return }
+            FeedManager.shared.selectedFeed = item
+            if !self.isShowingArchive {
+                self.willPresentFeed?()
+            }
+
         }.store(in: &self.cancellables)
 
         self.tabView.$state.mainSink { state in
@@ -207,7 +212,8 @@ extension HomeViewController: UIGestureRecognizerDelegate {
                 self.captureVC.view.top = self.topOffset!
                 self.view.layoutNow()
             } completion: { completed in
-                self.archivesVC.animate(show: progress < 0.65)
+                self.isShowingArchive = progress < 0.65
+                self.archivesVC.animate(show: self.isShowingArchive)
             }
         @unknown default:
             break

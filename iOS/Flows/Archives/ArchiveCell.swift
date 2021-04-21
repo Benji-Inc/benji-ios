@@ -59,6 +59,13 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
         self.label.pin(.left, padding: 6)
         self.label.pin(.bottom, padding: 6)
     }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.imageView.image = nil
+        self.label.text = nil 
+    }
 }
 
 class ArchiveGradientView: GradientView {

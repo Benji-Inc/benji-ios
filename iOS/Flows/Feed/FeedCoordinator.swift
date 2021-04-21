@@ -14,14 +14,6 @@ class FeedCoordinator: PresentableCoordinator<Void> {
 
     lazy var feedVC = FeedViewController()
 
-    init(router: Router,
-         deepLink: DeepLinkable?,
-         feed: Feed) {
-        super.init(router: router, deepLink: deepLink)
-
-        FeedManager.shared.selectedFeed = feed
-    }
-
     override func toPresentable() -> DismissableVC {
         return self.feedVC
     }
