@@ -116,7 +116,12 @@ class HomeViewController: ViewController, TransitionableViewController {
         }
 
         self.archivesVC.didSelectClose = { [unowned self] in
+            self.feedCollectionVC.collectionViewManager.unselectAllItems()
             self.animateArchives(offset: self.minTop, progress: 1.0)
+        }
+
+        self.archivesVC.didFinishShowing = { [unowned self] in
+            self.feedCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
         }
 
         self.captureVC.begin()

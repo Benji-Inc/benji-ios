@@ -113,6 +113,11 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
         self.dataSource.apply(snapshot, animatingDifferences: animate, completion: nil)
     }
 
+    func unselectAllItems() {
+        self.selectedIndexPaths = []
+        self.updateSelected(indexPaths: self.selectedIndexPaths, and: self.oldSelectedIndexPaths)
+    }
+
     // MARK: Item Overrides
 
     func getItems(for section: SectionType) -> [AnyHashable] {

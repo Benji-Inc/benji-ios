@@ -53,12 +53,8 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             switch result {
             case .success(let posts):
                 self.posts = posts
-                if self.hasLoadedInitialSnapshot {
-                    self.loadSnapshot()
-                } else {
-                    let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
-                    self.loadSnapshot(animationCycle: cycle)
-                }
+                let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
+                self.loadSnapshot(animationCycle: cycle)
             case .error(_):
                 break
             }

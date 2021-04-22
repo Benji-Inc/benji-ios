@@ -14,6 +14,7 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
 
     var didSelectPost: ((Post) -> Void)? = nil
     var didSelectClose: CompletionOptional = nil
+    var didFinishShowing: CompletionOptional = nil
     
     private let button = Button()
 
@@ -61,13 +62,8 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
         UIView.animate(withDuration: Theme.animationDuration) {
             self.view.alpha = show ? 1.0 : 0
         } completion: { _ in
-            
-            if let feed = FeedManager.shared.feeds.first(where: { feed in
-                return feed.owner == User.current()
-            }) {
-                if self.view.alpha == 1.0 {
-                    FeedManager.shared.selectedFeed = feed 
-                }
+            if self.view.alpha == 1.0 {
+                self.didFinishShowing?()
             }
         }
     }

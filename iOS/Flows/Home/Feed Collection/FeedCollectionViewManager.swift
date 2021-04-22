@@ -34,6 +34,7 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
 
         // Section
         let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Theme.contentOffset, bottom: 0, trailing: Theme.contentOffset)
         return UICollectionViewCompositionalLayout(section: section)
     }()
 
