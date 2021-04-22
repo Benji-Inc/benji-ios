@@ -12,4 +12,8 @@ extension CGFloat {
     var doubled: CGFloat {
         return self * 2
     }
+
+    var half: CGFloat {
+        return self * 0.5
+    }
 }

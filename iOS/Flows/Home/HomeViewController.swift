@@ -25,7 +25,6 @@ class HomeViewController: ViewController, TransitionableViewController {
     lazy var captureVC = PostCreationViewController()
     lazy var archivesVC = ArchivesViewController()
 
-    
     let vibrancyView = HomeVibrancyView()
     let tabView = HomeTabView()
     let exitButton = ImageViewButton()
@@ -121,6 +120,12 @@ class HomeViewController: ViewController, TransitionableViewController {
         }
 
         self.captureVC.begin()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        self.vibrancyView.animateScroll()
     }
 
     override func viewDidLayoutSubviews() {
