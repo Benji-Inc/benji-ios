@@ -46,7 +46,7 @@ class HomeVibrancyView: VibrancyView {
         } completion: { _ in
             self.animationView.play()
 
-            UIView.animate(withDuration: Theme.animationDuration, delay: 4.0, options: []) {
+            UIView.animate(withDuration: Theme.animationDuration, delay: 4.5, options: []) {
                 self.label.alpha = 0
                 self.animationView.alpha = 0
             } completion: { _ in }

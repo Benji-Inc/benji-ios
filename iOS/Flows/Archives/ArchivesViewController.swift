@@ -64,6 +64,8 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
         } completion: { _ in
             if self.view.alpha == 1.0 {
                 self.didFinishShowing?()
+            } else {
+                self.collectionViewManager.reset()
             }
         }
     }

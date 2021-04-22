@@ -38,17 +38,17 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
         return UICollectionViewCompositionalLayout(section: section)
     }()
 
-    func loadFeeds() {
-
+    func loadFeeds(completion: CompletionOptional = nil) {
         self.collectionView.collectionViewLayout = self.layout
 
-        self.collectionView.animationView.play()
-
         FeedManager.shared.$feeds.mainSink { feeds in
+            self.collectionView.animationView.play()
+
             let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
             self.loadSnapshot(animationCycle: cycle)
                 .mainSink { _ in
                     self.collectionView.animationView.stop()
+                    completion?()
                 }.store(in: &self.cancellables)
         }.store(in: &self.cancellables)
     }

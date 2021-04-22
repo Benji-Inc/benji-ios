@@ -108,9 +108,15 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
 
     func reset(animate: Bool = false) {
         self.selectedIndexPaths = []
-        var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
-        snapshot.appendSections([])
-        self.dataSource.apply(snapshot, animatingDifferences: animate, completion: nil)
+        var snapshot = self.dataSource.snapshot()
+        if let all = SectionType.allCases as? [SectionType] {
+            snapshot.deleteSections(all)
+            snapshot.deleteAllItems()
+        }
+
+        self.dataSource.apply(snapshot, animatingDifferences: animate, completion: {
+            self.collectionView.contentSize = .zero
+        })
     }
 
     func unselectAllItems() {

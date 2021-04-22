@@ -65,6 +65,7 @@ class HomeViewController: ViewController, TransitionableViewController {
 
         self.view.addSubview(self.exitButton)
         self.exitButton.imageView.image = UIImage(systemName: "xmark")!
+        self.exitButton.alpha = 0 
         self.exitButton.didSelect { [unowned self] in
             self.captureVC.reset()
             self.tabView.state = .home
@@ -116,12 +117,23 @@ class HomeViewController: ViewController, TransitionableViewController {
         }
 
         self.archivesVC.didSelectClose = { [unowned self] in
-            self.feedCollectionVC.collectionViewManager.unselectAllItems()
+            switch RitualManager.shared.state {
+            case .feedAvailable:
+                self.feedCollectionVC.collectionViewManager.unselectAllItems()
+            default:
+                self.feedCollectionVC.collectionViewManager.reset()
+            }
             self.animateArchives(offset: self.minTop, progress: 1.0)
         }
 
         self.archivesVC.didFinishShowing = { [unowned self] in
-            self.feedCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
+            if self.feedCollectionVC.collectionViewManager.collectionView.numberOfSections == 0 {
+                self.feedCollectionVC.collectionViewManager.loadFeeds { [unowned self] in
+                    self.feedCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
+                }
+            } else {
+                self.feedCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
+            }
         }
 
         self.captureVC.begin()
