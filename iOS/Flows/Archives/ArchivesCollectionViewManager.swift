@@ -82,5 +82,4 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
     override func getSupplementaryView(for section: SectionType, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
         return self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
     }
-
 }
