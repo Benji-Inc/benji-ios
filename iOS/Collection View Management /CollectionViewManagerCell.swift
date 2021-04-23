@@ -10,14 +10,18 @@ import Foundation
 import Combine
 
 struct ManageableCellRegistration<Cell: UICollectionViewCell & ManageableCell> {
-    let cellProvider = UICollectionView.CellRegistration<Cell, Cell.ItemType> { (cell, indexPath, model)  in
+    let provider = UICollectionView.CellRegistration<Cell, Cell.ItemType> { (cell, indexPath, model)  in
         cell.configure(with: model)
         cell.currentItem = model
     }
 }
 
 struct ManageableFooterRegistration<Footer: UICollectionReusableView> {
-    let footerProvider = UICollectionView.SupplementaryRegistration<Footer>(elementKind: UICollectionView.elementKindSectionHeader) { footerView, elementKind, indexPath in }
+    let provider = UICollectionView.SupplementaryRegistration<Footer>(elementKind: UICollectionView.elementKindSectionFooter) { footerView, elementKind, indexPath in }
+}
+
+struct ManageableHeaderRegistration<Header: UICollectionReusableView> {
+    let provider = UICollectionView.SupplementaryRegistration<Header>(elementKind: UICollectionView.elementKindSectionHeader) { footerView, elementKind, indexPath in }
 }
 
 // A base class that other cells managed by a CollectionViewManager can inherit from.

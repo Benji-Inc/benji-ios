@@ -18,8 +18,8 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
 
     private(set) var unclaimedReservationCount: Int = 0
 
-    private let channelConfig = ManageableCellRegistration<ChannelCell>().cellProvider
-    private let footerConfig = ManageableFooterRegistration<ReservationsFooterView>().footerProvider
+    private let channelConfig = ManageableCellRegistration<ChannelCell>().provider
+    private let footerConfig = ManageableFooterRegistration<ReservationsFooterView>().provider
 
     var didSelectReservations: CompletionOptional = nil 
 

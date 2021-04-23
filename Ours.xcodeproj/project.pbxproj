@@ -419,6 +419,7 @@
 		D6605444262F7234002F74F8 /* MediaMoreButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6605442262F71FF002F74F8 /* MediaMoreButton.swift */; };
 		D6605445262F7235002F74F8 /* MediaMoreButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6605442262F71FF002F74F8 /* MediaMoreButton.swift */; };
 		D660544726320C06002F74F8 /* scroll_down.json in Resources */ = {isa = PBXBuildFile; fileRef = D660544626320C06002F74F8 /* scroll_down.json */; };
+		D660544926324239002F74F8 /* ArchiveHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660544826324239002F74F8 /* ArchiveHeaderView.swift */; };
 		D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D66379CE25A3704300A4A3B7 /* ChatClientManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */; };
@@ -859,6 +860,7 @@
 		D660543C262F213C002F74F8 /* ArchiveCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCell.swift; sourceTree = "<group>"; };
 		D6605442262F71FF002F74F8 /* MediaMoreButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaMoreButton.swift; sourceTree = "<group>"; };
 		D660544626320C06002F74F8 /* scroll_down.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = scroll_down.json; sourceTree = "<group>"; };
+		D660544826324239002F74F8 /* ArchiveHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveHeaderView.swift; sourceTree = "<group>"; };
 		D6629C7425AD254C002C3B92 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatClientManager+Extensions.swift"; sourceTree = "<group>"; };
 		D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserNotificationManager+Extensions.swift"; sourceTree = "<group>"; };
@@ -1498,6 +1500,7 @@
 				D6605438262F211D002F74F8 /* ArchivesCollectionView.swift */,
 				D660543A262F212E002F74F8 /* ArchivesCollectionViewManager.swift */,
 				D6605436262F2109002F74F8 /* ArchivesViewController.swift */,
+				D660544826324239002F74F8 /* ArchiveHeaderView.swift */,
 			);
 			path = Archives;
 			sourceTree = "<group>";
@@ -2551,6 +2554,7 @@
 				D6B2603822E6AB5E00143CF0 /* ChannelDetailViewController.swift in Sources */,
 				D639106925D72E6F00D336D7 /* UICollectionView.CellRegistration+Extensions.swift in Sources */,
 				D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */,
+				D660544926324239002F74F8 /* ArchiveHeaderView.swift in Sources */,
 				D6F33C7924B14AF0009603FF /* EmojiCellAttributesConfigurer.swift in Sources */,
 				D640326025AE5CD400139396 /* WelcomeViewController.swift in Sources */,
 				D63844122337C3CD0072227B /* LoadMoreSectionHeader.swift in Sources */,

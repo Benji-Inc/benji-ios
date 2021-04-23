@@ -17,7 +17,7 @@ class AttachmentCollectionViewManager: CollectionViewManager<AttachmentCollectio
     var didSelectPhotoOption: CompletionOptional = nil
     var didSelectLibraryOption: CompletionOptional = nil
 
-    private let cellConfig = ManageableCellRegistration<AttachmentCell>().cellProvider
+    private let cellConfig = ManageableCellRegistration<AttachmentCell>().provider
 
     private let headerConfig = UICollectionView.SupplementaryRegistration
     <AttachmentHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { (headerView, elementKind, indexPath) in }

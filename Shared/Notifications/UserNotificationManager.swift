@@ -143,10 +143,9 @@ class UserNotificationManager: NSObject {
     }
 
     func registerPush(from deviceToken: Data) {
-        guard let installation = PFInstallation.current() else { return }
-        installation.badge = 0
-        installation.setDeviceTokenFrom(deviceToken)
-        installation.saveToken()
+        PFInstallation.current()?.badge = 0
+        PFInstallation.current()?.setDeviceTokenFrom(deviceToken)
+        PFInstallation.current()?.saveToken()
             .mainSink().store(in: &self.cancellables)
     }
 }

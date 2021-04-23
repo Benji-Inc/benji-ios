@@ -14,7 +14,8 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         case posts
     }
 
-    private let archiveConfig = ManageableCellRegistration<ArchiveCell>().cellProvider
+    private let archiveConfig = ManageableCellRegistration<ArchiveCell>().provider
+    private let headerConfig = ManageableHeaderRegistration<ArchiveHeaderView>().provider
 
     lazy var layout: UICollectionViewCompositionalLayout = {
         let widthFraction: CGFloat = 0.33
@@ -34,6 +35,11 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         // Section
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Theme.contentOffset, bottom: 100, trailing: Theme.contentOffset)
+
+        let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40))
+        let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: "header", alignment: .top)
+        section.boundarySupplementaryItems = [headerItem]
+
         return UICollectionViewCompositionalLayout(section: section)
     }()
 
@@ -64,19 +70,17 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
-        switch section {
-        case .posts:
-            return self.posts
-        }
+        return self.posts
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
-        switch section {
-        case .posts:
-            return self.collectionView.dequeueManageableCell(using: self.archiveConfig,
-                                                             for: indexPath,
-                                                             item: item as? Post)
-        }
+        return self.collectionView.dequeueManageableCell(using: self.archiveConfig,
+                                                         for: indexPath,
+                                                         item: item as? Post)
+    }
+
+    override func getSupplementaryView(for section: SectionType, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
+        return self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
     }
 
 }

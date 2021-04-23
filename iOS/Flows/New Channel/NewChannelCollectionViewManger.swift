@@ -17,7 +17,7 @@ class NewChannelCollectionViewManger: CollectionViewManager<NewChannelCollection
 
     private var connections: [Connection] = []
 
-    private let userConfig = ManageableCellRegistration<UserCell>().cellProvider
+    private let userConfig = ManageableCellRegistration<UserCell>().provider
     private let headerConfig = UICollectionView.SupplementaryRegistration
     <NewChannelHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { (headerView, elementKind, indexPath) in }
 

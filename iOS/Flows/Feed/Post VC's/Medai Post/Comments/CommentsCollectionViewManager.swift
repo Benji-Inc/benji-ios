@@ -16,7 +16,7 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
         case comments = 0
     }
 
-    private let commentsConfig = ManageableCellRegistration<CommentCell>().cellProvider
+    private let commentsConfig = ManageableCellRegistration<CommentCell>().provider
 
     lazy var layout = UICollectionViewCompositionalLayout() { sectionIndex, layoutEnvironment in
 

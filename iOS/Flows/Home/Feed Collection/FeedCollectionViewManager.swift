@@ -14,7 +14,7 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
         case feed = 0
     }
 
-    private let config = ManageableCellRegistration<FeedCell>().cellProvider
+    private let config = ManageableCellRegistration<FeedCell>().provider
 
     lazy var layout: UICollectionViewCompositionalLayout = {
         let widthFraction: CGFloat = 0.2
