@@ -131,6 +131,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
     private func presentFeed() {
         self.removeChild()
+        self.homeVC.feedCollectionVC.collectionViewManager.unselectAllItems()
         let coordinator = FeedCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { (_) in }
         self.router.present(coordinator, source: self.homeVC)
