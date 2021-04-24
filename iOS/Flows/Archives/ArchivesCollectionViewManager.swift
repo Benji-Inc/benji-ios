@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionViewManager.SectionType> {
 
@@ -51,6 +52,7 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
     // Posts are sorted by createdBy
     private var posts: [Post] = []
     private var user: User?
+    private var totalCount: Int = 0
 
     override func initialize() {
         super.initialize()
@@ -62,18 +64,19 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         self.user = user
         self.collectionView.animationView.play()
 
-        PostsSupplier.shared.queryForMediaPosts(for: user)
-            .mainSink { result in
+        let combined = Publishers.Zip(
+            PostsSupplier.shared.getCountOfMediaPosts(for: user).assertNoFailure(),
+            PostsSupplier.shared.queryForMediaPosts(for: user).assertNoFailure()
+        )
 
+        combined.mainSink { (result) in
             switch result {
-            case .success(let posts):
+            case (let count, let posts):
                 self.posts = posts
+                self.totalCount = count
                 let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
                 self.loadSnapshot(animationCycle: cycle)
-            case .error(_):
-                break
             }
-
             self.collectionView.animationView.stop()
         }.store(in: &self.cancellables)
     }
@@ -115,7 +118,7 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             return self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
         case UICollectionView.elementKindSectionFooter:
             let footer = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
-            
+            footer.configure(showButton: self.posts.count < self.totalCount)
             footer.button.didSelect { [unowned self] in
                 footer.button.handleEvent(status: .loading)
                 self.appendPosts {

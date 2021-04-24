@@ -95,6 +95,22 @@ class PostsSupplier {
         }.eraseToAnyPublisher()
     }
 
+    func getCountOfMediaPosts(for user: User) -> AnyPublisher<Int, Error> {
+
+        return Future { promise in
+            if let query = Post.query() {
+                query.whereKey("type", equalTo: "media")
+                query.whereKey("author", equalTo: user)
+                query.countObjectsInBackground { count, error in
+                    promise(.success(Int(count)))
+                }
+
+            } else {
+                promise(.failure(ClientError.message(detail: "No query for posts")))
+            }
+        }.eraseToAnyPublisher()
+    }
+
     func queryForMediaPosts(before: Date? = nil,
                             limit: Int = 5,
                             for user: User) -> AnyPublisher<[Post], Error> {
@@ -105,7 +121,6 @@ class PostsSupplier {
                 query.whereKey("author", equalTo: user)
                 if let date = before {
                     query.whereKey("createdAt", lessThanOrEqualTo: date)
-                   // query.whereKey("createdAt", greaterThanOrEqualTo: date)
                 }
                 query.limit = limit
                 query.order(byDescending: "createdAt")

@@ -26,6 +26,10 @@ class ArchiveFooterView: UICollectionReusableView {
         self.button.set(style: .normal(color: .lightPurple, text: "show more"))
     }
 
+    func configure(showButton: Bool) {
+        self.button.isHidden = !showButton
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
