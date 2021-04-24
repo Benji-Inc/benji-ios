@@ -41,7 +41,7 @@ class FeedManager {
 
     func selectFeed(for user: User) {
         self.selectedFeed = self.feeds.first(where: { feed in
-            return feed.owner == user 
+            return feed.owner == user
         })
     }
 
@@ -55,7 +55,6 @@ class FeedManager {
             } else if let currentUserFeed = self.feeds.first(where: { feed in
                 return feed.owner == User.current()
             }) {
-
                 let previewFile = PFFileObject(name: UUID().uuidString, data: previewData)
                 previewFile?.saveInBackground({ success, error in
                     if let e = error {
@@ -80,7 +79,13 @@ class FeedManager {
                                         .mainSink { result in
                                             switch result {
                                             case .success(_):
-
+                                                let file = PFFileObject(name: UUID().uuidString, data: previewData)
+                                                file?.saveInBackground(block: { completed, error in
+                                                    if completed {
+                                                        post.file = file
+                                                        post.saveToServer()
+                                                    }
+                                                })
                                                 promise(.success(p))
                                             case .error(let e):
                                                 promise(.failure(e))

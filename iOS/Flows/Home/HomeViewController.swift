@@ -40,6 +40,11 @@ class HomeViewController: ViewController, TransitionableViewController {
     var minTop: CGFloat {
         return FeedCollectionViewController.height + self.view.safeAreaInsets.top
     }
+
+    var minBottom: CGFloat {
+        return self.view.height
+    }
+
     private(set) var isPanning: Bool = false
     var isMenuPresenting: Bool = false
     private(set) var isShowingArchive = false
@@ -95,8 +100,10 @@ class HomeViewController: ViewController, TransitionableViewController {
 
         self.feedCollectionVC.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
             guard !self.isPanning, let user = cellItem?.item as? User else { return }
-            FeedManager.shared.selectFeed(for: user)
-            if !self.isShowingArchive {
+            if self.isShowingArchive {
+                self.archivesVC.loadPosts(for: user)
+            } else {
+                FeedManager.shared.selectFeed(for: user)
                 self.willPresentFeed?()
             }
 
@@ -232,7 +239,7 @@ extension HomeViewController: UIGestureRecognizerDelegate {
             self.isPanning = false
             let diff = (self.view.height - self.minTop) - self.topOffset!
             let progress = diff / (self.view.height - self.minTop)
-            self.topOffset = progress < 0.65 ? self.view.height : self.minTop
+            self.topOffset = progress < 0.65 ? self.minBottom : self.minTop
 
             self.animateArchives(offset: self.topOffset!, progress: progress)
         @unknown default:

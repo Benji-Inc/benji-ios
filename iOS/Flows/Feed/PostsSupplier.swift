@@ -95,13 +95,14 @@ class PostsSupplier {
         }.eraseToAnyPublisher()
     }
 
-    func queryForAllMediaPosts(for feed: Feed) -> AnyPublisher<[Post], Error> {
+    func queryForAllMediaPosts(for user: User) -> AnyPublisher<[Post], Error> {
         return Future { promise in
-            if let query = feed.posts?.query() {
+            if let query = Post.query() {
                 query.whereKey("type", equalTo: "media")
+                query.whereKey("author", equalTo: user)
                 query.order(byDescending: "createdAt")
                 query.findObjectsInBackground { objects, error in
-                    if let posts = objects {
+                    if let posts = objects as? [Post] {
                         promise(.success(posts))
                     } else {
                         promise(.failure(ClientError.message(detail: "No posts found on feed")))
