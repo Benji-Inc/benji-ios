@@ -26,7 +26,7 @@ extension FeedViewController: PostsCollectionMangerDelegate {
     }
 
     func postsManagerDidEndDisplaying(_ manager: PostsCollectionManager) {
-        self.showReload()
+        FeedManager.shared.selectNextAvailableFeed()
     }
 
     func posts(_ manager: PostsCollectionManager, didFinish index: Int) {

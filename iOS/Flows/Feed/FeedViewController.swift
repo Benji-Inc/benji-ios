@@ -22,7 +22,12 @@ class FeedViewController: ViewController {
 
     weak var delegate: FeedViewControllerDelegate?
 
-    private let reloadButton = Button()
+    private let doneButton = Button()
+    private let emojiLabel = Label(font: .display)
+    private let doneLabel = Label(font: .mediumBold)
+
+    var didTapDone: CompletionOptional = nil
+
     let postContainerView = View()
     let indicatorView = FeedIndicatorView()
     let animationView = AnimationView(name: "loading")
@@ -38,13 +43,23 @@ class FeedViewController: ViewController {
         self.manager.parentVC = self
         self.manager.container = self.postContainerView
 
-        self.view.addSubview(self.reloadButton)
+        self.view.addSubview(self.doneButton)
+        self.view.addSubview(self.doneLabel)
+        self.view.addSubview(self.emojiLabel)
 
-        self.reloadButton.alpha = 0
+        self.emojiLabel.textAlignment = .center
+        self.emojiLabel.setText("😊")
+        self.emojiLabel.alpha = 0
 
-        self.reloadButton.set(style: .normal(color: .purple, text: "Reload"))
-        self.reloadButton.didSelect { [unowned self] in
-            self.reloadFeed()
+        self.doneLabel.setText("Take a deep breath.\nYou're all caught up.")
+        self.doneLabel.textAlignment = .center
+        self.doneButton.alpha = 0
+        self.doneLabel.alpha = 0
+
+        self.doneButton.set(style: .normal(color: .purple, text: "Done"))
+        self.doneButton.didSelect { [unowned self] in
+            self.manager.reset()
+            self.didTapDone?()
         }
 
         self.view.addSubview(self.postContainerView)
@@ -65,22 +80,20 @@ class FeedViewController: ViewController {
         self.view.addSubview(self.avatarView)
         self.avatarView.alpha = 0
         
-        FeedManager.shared.$selectedFeed.mainSink { feed in
-            if let f = feed {
-                f.owner?.retrieveDataIfNeeded()
-                    .mainSink(receiveValue: { user in
-                        self.avatarView.set(avatar: user)
-                    }).store(in: &self.cancellables)
-            }
-        }.store(in: &self.cancellables)
-
-        self.manager.loadPosts()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        FeedManager.shared.selectedFeed = nil 
+        FeedManager.shared.$selectedFeed
+            .removeDuplicates()
+            .mainSink { [weak self] feed in
+                guard let `self` = self else { return }
+                if let f = feed {
+                    f.owner?.retrieveDataIfNeeded()
+                        .mainSink(receiveValue: { user in
+                            self.avatarView.set(avatar: user)
+                        }).store(in: &self.cancellables)
+                    self.manager.loadPosts()
+                } else {
+                    self.showDone()
+                }
+            }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
@@ -88,9 +101,16 @@ class FeedViewController: ViewController {
 
         self.blurView.expandToSuperviewSize()
 
-        self.reloadButton.setSize(with: self.view.width)
-        self.reloadButton.centerOnX()
-        self.reloadButton.pinToSafeArea(.bottom, padding: 0)
+        self.doneLabel.setSize(withWidth: self.view.width - Theme.contentOffset.doubled)
+        self.doneLabel.centerOnXAndY()
+
+        self.emojiLabel.setSize(withWidth: self.view.width)
+        self.emojiLabel.centerOnX()
+        self.emojiLabel.match(.bottom, to: .top, of: self.doneLabel, offset: -Theme.contentOffset)
+
+        self.doneButton.setSize(with: self.view.width)
+        self.doneButton.centerOnX()
+        self.doneButton.pinToSafeArea(.bottom, padding: 0)
 
         self.indicatorView.size = CGSize(width: self.view.width - Theme.contentOffset.doubled, height: 2)
         self.indicatorView.pinToSafeArea(.top, padding: Theme.contentOffset)
@@ -108,27 +128,17 @@ class FeedViewController: ViewController {
         self.avatarView.match(.top, to: .bottom, of: self.indicatorView, offset: Theme.contentOffset)
     }
 
-    func showReload() {
-        self.view.bringSubviewToFront(self.reloadButton)
+    func showDone() {
+        self.view.bringSubviewToFront(self.doneButton)
         self.view.layoutNow()
         UIView.animate(withDuration: Theme.animationDuration, delay: Theme.animationDuration, options: .curveEaseInOut, animations: {
-            self.reloadButton.alpha = 1
+            self.doneButton.alpha = 1
+            self.doneLabel.alpha = 1
+            self.emojiLabel.alpha = 1
+            
             self.postContainerView.alpha = 0
             self.indicatorView.alpha = 0
             self.avatarView.alpha = 0
         }, completion: { _ in })
-    }
-
-    private func reloadFeed() {
-        self.view.sendSubviewToBack(self.reloadButton)
-        UIView.animate(withDuration: Theme.animationDuration, delay: 0, options: .curveEaseInOut, animations: {
-            self.reloadButton.alpha = 0
-            self.postContainerView.alpha = 1
-            self.indicatorView.resetAllIndicators()
-            self.indicatorView.alpha = 1
-            self.avatarView.alpha = 1
-        }, completion: { completed in
-            self.manager.loadPosts()
-        })
     }
 }

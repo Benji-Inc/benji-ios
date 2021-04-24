@@ -39,6 +39,16 @@ class FeedManager {
             }.store(in: &self.cancellables)
     }
 
+    func selectNextAvailableFeed() {
+        if let current = self.selectedFeed,
+           let index = self.feeds.firstIndex(of: current),
+           let next = self.feeds[safe: index + 1] {
+            self.selectedFeed = next
+        } else {
+            self.selectedFeed = nil
+        }
+    }
+
     func selectFeed(for user: User) {
         self.selectedFeed = self.feeds.first(where: { feed in
             return feed.owner == user

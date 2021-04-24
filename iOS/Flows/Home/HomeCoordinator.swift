@@ -133,6 +133,13 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         self.removeChild()
         self.homeVC.feedCollectionVC.collectionViewManager.unselectAllItems()
         let coordinator = FeedCoordinator(router: self.router, deepLink: self.deepLink)
+        coordinator.feedVC.didTapDone = {
+            coordinator.feedVC.dismiss(animated: true) {
+                coordinator.removeFromParent()
+
+                print(self.furthestChild)
+            }
+        }
         self.addChildAndStart(coordinator) { (_) in }
         self.router.present(coordinator, source: self.homeVC)
     }

@@ -57,10 +57,8 @@ class PostViewController: ViewController {
             }
         }.store(in: &self.cancellables)
 
-        self.container.didSelect { [unowned self] in
-            if !self.isPaused {
-                self.didFinish?()
-            }
+        self.container.onDoubleTap { doubleTap in
+            self.didFinish?()
         }
 
         self.container.addSubview(self.getCenterContent())
