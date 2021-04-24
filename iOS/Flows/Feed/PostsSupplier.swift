@@ -95,11 +95,19 @@ class PostsSupplier {
         }.eraseToAnyPublisher()
     }
 
-    func queryForAllMediaPosts(for user: User) -> AnyPublisher<[Post], Error> {
+    func queryForMediaPosts(before: Date? = nil,
+                            limit: Int = 5,
+                            for user: User) -> AnyPublisher<[Post], Error> {
+
         return Future { promise in
             if let query = Post.query() {
                 query.whereKey("type", equalTo: "media")
                 query.whereKey("author", equalTo: user)
+                if let date = before {
+                    query.whereKey("createdAt", lessThanOrEqualTo: date)
+                   // query.whereKey("createdAt", greaterThanOrEqualTo: date)
+                }
+                query.limit = limit
                 query.order(byDescending: "createdAt")
                 query.findObjectsInBackground { objects, error in
                     if let posts = objects as? [Post] {

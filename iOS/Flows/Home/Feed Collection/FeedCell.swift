@@ -35,7 +35,7 @@ class FeedCell: CollectionViewManagerCell, ManageableCell {
     }
 
     override func update(isSelected: Bool) {
-        self.avatarView.alpha = isSelected ? 1.0 : 0.8
+        self.avatarView.alpha = isSelected ? 1.0 : 0.6
         self.avatarView.borderColor = isSelected ? .purple : .background2
     }
 

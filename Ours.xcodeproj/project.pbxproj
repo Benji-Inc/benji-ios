@@ -507,6 +507,7 @@
 		D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67934DE23DDFC4200536B44 /* PFInstallation+Extensions.swift */; };
 		D67934E523DE66FE00536B44 /* PushPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67934E423DE66FE00536B44 /* PushPayload.swift */; };
 		D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67A82DA230CCE3D0076152B /* SplashViewController.swift */; };
+		D67B7FF8263473DD00AD9DA8 /* ArchiveFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67B7FF7263473DD00AD9DA8 /* ArchiveFooterView.swift */; };
 		D67C319625EE882B00289787 /* PostButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67C319525EE882B00289787 /* PostButtonView.swift */; };
 		D67FF5A325F6BC3C005C3E1E /* Feed.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67FF5A225F6BC3C005C3E1E /* Feed.swift */; };
 		D67FF5A825F7BD31005C3E1E /* SystemPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67FF5A725F7BD31005C3E1E /* SystemPost.swift */; };
@@ -928,6 +929,7 @@
 		D67934DE23DDFC4200536B44 /* PFInstallation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFInstallation+Extensions.swift"; sourceTree = "<group>"; };
 		D67934E423DE66FE00536B44 /* PushPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPayload.swift; sourceTree = "<group>"; };
 		D67A82DA230CCE3D0076152B /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		D67B7FF7263473DD00AD9DA8 /* ArchiveFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveFooterView.swift; sourceTree = "<group>"; };
 		D67C319525EE882B00289787 /* PostButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostButtonView.swift; sourceTree = "<group>"; };
 		D67FF5A225F6BC3C005C3E1E /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Feed.swift; sourceTree = "<group>"; };
 		D67FF5A725F7BD31005C3E1E /* SystemPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPost.swift; sourceTree = "<group>"; };
@@ -1501,6 +1503,7 @@
 				D660543A262F212E002F74F8 /* ArchivesCollectionViewManager.swift */,
 				D6605436262F2109002F74F8 /* ArchivesViewController.swift */,
 				D660544826324239002F74F8 /* ArchiveHeaderView.swift */,
+				D67B7FF7263473DD00AD9DA8 /* ArchiveFooterView.swift */,
 			);
 			path = Archives;
 			sourceTree = "<group>";
@@ -2485,6 +2488,7 @@
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */,
 				D66B4BE925EF03B60035A2C5 /* SideNavigationController.swift in Sources */,
+				D67B7FF8263473DD00AD9DA8 /* ArchiveFooterView.swift in Sources */,
 				D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */,
 				D6D4C5BB262096C10026D7A2 /* Comment.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
