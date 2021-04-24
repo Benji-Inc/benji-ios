@@ -38,7 +38,7 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Theme.contentOffset, bottom: 0, trailing: Theme.contentOffset)
 
-        let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40))
+        let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(180))
         let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
 
         let footerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(140))
@@ -115,7 +115,11 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
 
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            return self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+            let header = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+            if let user = self.user {
+                header.configure(with: user)
+            }
+            return header 
         case UICollectionView.elementKindSectionFooter:
             let footer = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
             footer.configure(showButton: self.posts.count < self.totalCount)
