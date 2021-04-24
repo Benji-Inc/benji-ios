@@ -20,7 +20,7 @@ class PostViewController: ViewController {
         return self.post.attributes
     }
 
-    var isPaused: Bool = false
+    @Published var isPaused: Bool = false
 
     var didFinish: CompletionOptional = nil
     var didPause: CompletionOptional = nil
@@ -49,17 +49,17 @@ class PostViewController: ViewController {
 
         self.view.addSubview(self.container)
 
-        self.container.onDoubleTap { doubleTap in
-            self.didFinish?()
-        }
-
-        self.container.didSelect { [unowned self] in
-            self.isPaused.toggle()
-
-            if self.isPaused {
+        self.$isPaused.mainSink { isPaused in
+            if isPaused {
                 self.didPause?()
             } else {
                 self.didResume?()
+            }
+        }.store(in: &self.cancellables)
+
+        self.container.didSelect { [unowned self] in
+            if !self.isPaused {
+                self.didFinish?()
             }
         }
 
@@ -110,5 +110,20 @@ class PostViewController: ViewController {
 
         self.button.setSize(with: self.bottomContainer.width)
         self.button.centerOnXAndY()
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        self.isPaused = true
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        self.isPaused = false
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        self.isPaused = false
     }
 }
