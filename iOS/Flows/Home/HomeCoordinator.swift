@@ -135,9 +135,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         let coordinator = FeedCoordinator(router: self.router, deepLink: self.deepLink)
         coordinator.feedVC.didTapDone = {
             coordinator.feedVC.dismiss(animated: true) {
-                coordinator.removeFromParent()
-
-                print(self.furthestChild)
+                coordinator.feedVC.cancellables.forEach { cancellable in
+                    cancellable.cancel()
+                }
+                coordinator.feedVC.removeFromParent()
             }
         }
         self.addChildAndStart(coordinator) { (_) in }
