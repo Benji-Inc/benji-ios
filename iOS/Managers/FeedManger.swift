@@ -39,6 +39,12 @@ class FeedManager {
             }.store(in: &self.cancellables)
     }
 
+    func selectFeed(for user: User) {
+        self.selectedFeed = self.feeds.first(where: { feed in
+            return feed.owner == user 
+        })
+    }
+
     func createPost(with data: Data,
                     previewData: Data,
                     progressHandler: @escaping (Int) -> Void) -> Future<Post, Error> {

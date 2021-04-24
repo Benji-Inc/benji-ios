@@ -9,9 +9,9 @@
 import Foundation
 
 class FeedCell: CollectionViewManagerCell, ManageableCell {
-    typealias ItemType = Feed
+    typealias ItemType = User
 
-    var currentItem: Feed?
+    var currentItem: User?
 
     private let avatarView = AvatarView()
 
@@ -22,8 +22,8 @@ class FeedCell: CollectionViewManagerCell, ManageableCell {
         self.avatarView.alpha = 0.8
     }
 
-    func configure(with item: Feed) {
-        item.owner?.retrieveDataIfNeeded()
+    func configure(with item: User) {
+        item.retrieveDataIfNeeded()
             .mainSink(receivedResult: { result in
                 switch result {
                 case .success(let owner):

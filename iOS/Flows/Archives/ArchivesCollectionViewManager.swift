@@ -51,10 +51,10 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         self.collectionView.collectionViewLayout = self.layout
     }
 
-    func loadPosts() {
+    func loadPosts(for feed: Feed) {
 
         self.collectionView.animationView.play()
-        PostsSupplier.shared.queryForAllMediaPosts(for: FeedManager.shared.selectedFeed!).mainSink { result in
+        PostsSupplier.shared.queryForAllMediaPosts(for: feed).mainSink { result in
 
             switch result {
             case .success(let posts):

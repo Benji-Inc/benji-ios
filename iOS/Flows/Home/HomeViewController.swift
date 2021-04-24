@@ -94,8 +94,8 @@ class HomeViewController: ViewController, TransitionableViewController {
         }
 
         self.feedCollectionVC.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
-            guard !self.isPanning, let item = cellItem?.item as? Feed else { return }
-            FeedManager.shared.selectedFeed = item
+            guard !self.isPanning, let user = cellItem?.item as? User else { return }
+            FeedManager.shared.selectFeed(for: user)
             if !self.isShowingArchive {
                 self.willPresentFeed?()
             }

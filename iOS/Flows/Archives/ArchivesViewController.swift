@@ -39,9 +39,9 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
             }
         }.store(in: &self.cancellables)
 
-        FeedManager.shared.$selectedFeed.mainSink { feeds in
-            if self.view.alpha == 1.0 {
-                self.collectionViewManager.loadPosts()
+        FeedManager.shared.$selectedFeed.mainSink { feed in
+            if let feed = feed, self.view.alpha == 1.0 {
+                self.collectionViewManager.loadPosts(for: feed)
             }
         }.store(in: &self.cancellables)
     }

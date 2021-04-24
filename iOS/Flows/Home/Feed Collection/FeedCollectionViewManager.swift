@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.SectionType> {
 
@@ -38,25 +39,38 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
         return UICollectionViewCompositionalLayout(section: section)
     }()
 
+    private var users: [User] = []
+
     func loadFeeds(completion: CompletionOptional = nil) {
         self.collectionView.collectionViewLayout = self.layout
 
-        FeedManager.shared.$feeds.mainSink { feeds in
-            self.collectionView.animationView.play()
+        self.collectionView.animationView.play()
 
-            let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
-            self.loadSnapshot(animationCycle: cycle)
-                .mainSink { _ in
-                    self.collectionView.animationView.stop()
-                    completion?()
-                }.store(in: &self.cancellables)
+        let combined = Publishers.Zip(
+            GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).assertNoFailure(),
+            FeedManager.shared.$feeds
+        )
+
+        combined.mainSink { (result) in
+            switch result {
+            case (let connections, _):
+                var usrs = [User.current()!]
+                let connectedUsers = connections.compactMap { connection in
+                    return connection.nonMeUser
+                }
+                usrs.append(contentsOf: connectedUsers)
+                self.users = usrs
+                self.loadSnapshot()
+            }
+            self.collectionView.animationView.stop()
+            completion?()
         }.store(in: &self.cancellables)
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
         switch section {
         case .feed:
-            return FeedManager.shared.feeds
+            return self.users
         }
     }
 
@@ -65,7 +79,7 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
         case .feed:
             return self.collectionView.dequeueManageableCell(using: self.config,
                                                              for: indexPath,
-                                                             item: item as? Feed)
+                                                             item: item as? User)
         }
     }
 }
