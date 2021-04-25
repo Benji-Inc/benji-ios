@@ -55,10 +55,6 @@ class ReservationsViewController: NavigationBarViewController {
         super.viewDidLayoutSubviews()
     }
 
-    override func getViewForPinning() -> UIView? {
-        return self.contactsButton
-    }
-
     private func loadUnclaimedReservations() {
         guard let query = Reservation.query() else { return }
 

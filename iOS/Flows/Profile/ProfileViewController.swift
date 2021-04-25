@@ -104,19 +104,19 @@ class ProfileViewController: ViewController, TransitionableViewController {
         let itemSize = CGSize(width: self.view.width - (Theme.contentOffset * 2), height: 60)
 
         self.nameView.size = itemSize
-        self.nameView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset)
+        self.nameView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset.half)
         self.nameView.pin(.left, padding: Theme.contentOffset)
 
         self.handleView.size = itemSize
-        self.handleView.match(.top, to: .bottom, of: self.nameView, offset: Theme.contentOffset)
+        self.handleView.match(.top, to: .bottom, of: self.nameView, offset: Theme.contentOffset.half)
         self.handleView.pin(.left, padding: Theme.contentOffset)
 
         self.localTimeView.size = itemSize
-        self.localTimeView.match(.top, to: .bottom, of: self.handleView, offset: Theme.contentOffset)
+        self.localTimeView.match(.top, to: .bottom, of: self.handleView, offset: Theme.contentOffset.half)
         self.localTimeView.pin(.left, padding: Theme.contentOffset)
 
         self.ritualView.size = itemSize
-        self.ritualView.match(.top, to: .bottom, of: self.localTimeView, offset: Theme.contentOffset)
+        self.ritualView.match(.top, to: .bottom, of: self.localTimeView, offset: Theme.contentOffset.half)
         self.ritualView.pin(.left, padding: Theme.contentOffset)
 
         self.versionLabel.setSize(withWidth: self.view.width)
