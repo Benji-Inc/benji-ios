@@ -65,26 +65,6 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
 
         guard let post = self.post as? Post else { return }
 
-        post.subscribe()
-            .mainSink { result in
-                switch result {
-                case .success(let event):
-                    switch event {
-                    case .entered(let p), .updated(let p):
-                        p.consumers?.query().findObjectsInBackground(block: { objects, error in
-                            if let users = objects {
-                                self.consumersView.set(items: users)
-                                self.view.layoutNow()
-                            }
-                        })
-                    default:
-                        break
-                    }
-                case .error(_):
-                    break
-                }
-            }.store(in: &self.cancellables)
-
         post.consumers?.query().findObjectsInBackground(block: { objects, error in
             if let users = objects {
                 self.consumersView.set(items: users)
