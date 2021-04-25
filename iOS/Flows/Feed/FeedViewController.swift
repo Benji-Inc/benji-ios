@@ -33,6 +33,15 @@ class FeedViewController: ViewController {
     let animationView = AnimationView(name: "loading")
     let avatarView = AvatarView()
 
+    enum State {
+        case loading
+        case noPosts
+        case showingFeed
+        case finished
+    }
+
+    @Published var state: State = .loading
+
     override func initializeViews() {
         super.initializeViews()
 
@@ -51,7 +60,6 @@ class FeedViewController: ViewController {
         self.emojiLabel.setText("😊")
         self.emojiLabel.alpha = 0
 
-        self.doneLabel.setText("Take a deep breath.\nYou're all caught up.")
         self.doneLabel.textAlignment = .center
         self.doneButton.alpha = 0
         self.doneLabel.alpha = 0
@@ -71,14 +79,27 @@ class FeedViewController: ViewController {
         self.view.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
-        self.animationView.play()
 
         self.view.addSubview(self.indicatorView)
         self.indicatorView.alpha = 1
         self.indicatorView.delegate = self 
 
         self.view.addSubview(self.avatarView)
-        self.avatarView.alpha = 0
+
+        self.$state
+            .removeDuplicates()
+            .mainSink { state in
+            switch state {
+            case .loading:
+                self.showLoading()
+            case .noPosts:
+                self.showNoPosts()
+            case .showingFeed:
+                self.showFeed()
+            case .finished:
+                self.showDone()
+            }
+        }.store(in: &self.cancellables)
     }
 
     func loadPosts(for user: User) {
@@ -116,14 +137,50 @@ class FeedViewController: ViewController {
         self.animationView.size = CGSize(width: 18, height: 18)
         self.animationView.centerOnXAndY()
 
-        self.avatarView.setSize(for: 60)
-        self.avatarView.pin(.left, padding: Theme.contentOffset)
-        self.avatarView.match(.top, to: .bottom, of: self.indicatorView, offset: Theme.contentOffset)
+        switch self.state {
+        case .loading, .noPosts:
+            self.avatarView.setSize(for: 100)
+            self.avatarView.centerOnX()
+            self.avatarView.match(.bottom, to: .top, of: self.doneLabel, offset: -Theme.contentOffset)
+        case .showingFeed, .finished:
+            self.avatarView.setSize(for: 60)
+            self.avatarView.pin(.left, padding: Theme.contentOffset)
+            self.avatarView.match(.top, to: .bottom, of: self.indicatorView, offset: Theme.contentOffset)
+        }
     }
 
-    func showDone() {
+    private func showLoading() {
+        self.animationView.play()
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.doneLabel.alpha = 0
+            self.doneButton.alpha = 0
+            self.view.layoutNow()
+        }
+    }
+
+    private func showNoPosts() {
+        self.animationView.stop()
+        
+        if let user = self.manager.feedOwner {
+            let text = LocalizedString(id: "", arguments: [user.givenName], default: "@(name) has no posts for today.")
+            self.doneLabel.setText(text)
+            self.view.layoutNow()
+        }
+
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.doneLabel.alpha = 1
+            self.doneButton.alpha = 1
+            self.view.layoutNow()
+        }
+    }
+
+    private func showDone() {
+        self.animationView.stop()
         self.view.bringSubviewToFront(self.doneButton)
+        self.doneLabel.setText("Take a deep breath.\nYou're all caught up.")
+
         self.view.layoutNow()
+
         UIView.animate(withDuration: Theme.animationDuration, delay: Theme.animationDuration, options: .curveEaseInOut, animations: {
             self.doneButton.alpha = 1
             self.doneLabel.alpha = 1
@@ -132,6 +189,18 @@ class FeedViewController: ViewController {
             self.postContainerView.alpha = 0
             self.indicatorView.alpha = 0
             self.avatarView.alpha = 0
+
+            self.view.layoutNow()
         }, completion: { _ in })
+    }
+
+    private func showFeed() {
+        self.animationView.stop()
+        UIView.animate(withDuration: 0.2) {
+            self.doneLabel.alpha = 0
+            self.doneButton.alpha = 0
+            self.postContainerView.alpha = 1
+            self.view.layoutNow()
+        }
     }
 }

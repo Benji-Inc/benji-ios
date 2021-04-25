@@ -19,7 +19,6 @@ class FeedCell: CollectionViewManagerCell, ManageableCell {
         super.initializeSubviews()
 
         self.contentView.addSubview(self.avatarView)
-        self.avatarView.alpha = 0.8
     }
 
     func configure(with item: User) {
@@ -35,7 +34,6 @@ class FeedCell: CollectionViewManagerCell, ManageableCell {
     }
 
     override func update(isSelected: Bool) {
-        self.avatarView.alpha = isSelected ? 1.0 : 0.6
         self.avatarView.borderColor = isSelected ? .purple : .background2
     }
 

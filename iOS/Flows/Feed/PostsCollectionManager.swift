@@ -10,6 +10,7 @@ import Foundation
 import Combine
 
 protocol PostsCollectionMangerDelegate: AnyObject {
+    func postsManagerDidNotFindPosts(_ manager: PostsCollectionManager)
     func postsManagerDidSetItems(_ manager: PostsCollectionManager)
     func posts(_ manager: PostsCollectionManager, didSelect post: Postable, at index: Int)
     func postsManagerDidEndDisplaying(_ manager: PostsCollectionManager)
@@ -49,6 +50,8 @@ class PostsCollectionManager: NSObject {
                 self.postVCs = []
                 if posts.count > 0 {
                     self.set(items: posts)
+                } else {
+                    self.delegate?.postsManagerDidNotFindPosts(self)
                 }
             }.store(in: &self.cancellables)
     }

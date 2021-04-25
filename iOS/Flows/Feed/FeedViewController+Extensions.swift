@@ -10,11 +10,12 @@ import Foundation
 
 extension FeedViewController: PostsCollectionMangerDelegate {
 
+    func postsManagerDidNotFindPosts(_ manager: PostsCollectionManager) {
+        self.state = .noPosts
+    }
+
     func postsManagerDidSetItems(_ manager: PostsCollectionManager) {
-        UIView.animate(withDuration: 0.2) {
-            self.avatarView.alpha = 1 
-            self.postContainerView.alpha = 1 
-        }
+        self.state = .showingFeed
         self.indicatorView.configure(with: manager.postVCs.count)
     }
 
@@ -26,7 +27,7 @@ extension FeedViewController: PostsCollectionMangerDelegate {
     }
 
     func postsManagerDidEndDisplaying(_ manager: PostsCollectionManager) {
-        self.showDone()
+        self.state = .finished
     }
 
     func posts(_ manager: PostsCollectionManager, didFinish index: Int) {
