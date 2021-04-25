@@ -83,12 +83,15 @@ class PostsSupplier {
         }.eraseToAnyPublisher()
     }
 
-    func getCountOfMediaPosts(for user: User) -> AnyPublisher<Int, Error> {
+    func getCountOfMediaPosts(for user: User, excludeExpired: Bool = false) -> AnyPublisher<Int, Error> {
 
         return Future { promise in
             if let query = Post.query() {
                 query.whereKey("type", equalTo: "media")
                 query.whereKey("author", equalTo: user)
+                if excludeExpired {
+                    query.whereKey("expirationDate", greaterThanOrEqualTo: Date())
+                }
                 query.countObjectsInBackground { count, error in
                     promise(.success(Int(count)))
                 }

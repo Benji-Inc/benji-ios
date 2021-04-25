@@ -25,6 +25,8 @@ class DisplayableImageView: View {
         }
     }
 
+    var didDisplayImage: ((UIImage) -> Void)? = nil
+
     override init() {
         super.init()
     }
@@ -51,6 +53,7 @@ class DisplayableImageView: View {
     private func updateImageView(with displayable: ImageDisplayable) {
         if let photo = displayable.image {
             self.imageView.image = photo
+            self.didDisplayImage?(photo)
         } else if let objectID = displayable.userObjectID {
             self.findUser(with: objectID)
         } else if let url = displayable.url {
@@ -60,9 +63,9 @@ class DisplayableImageView: View {
 
     private func downloadAndSetImage(for user: User) {
         user.smallImage?.getDataInBackground { (imageData: Data?, error: Error?) in
-            guard let data = imageData else { return }
-            let image = UIImage(data: data)
+            guard let data = imageData, let image = UIImage(data: data) else { return }
             self.imageView.image = image
+            self.didDisplayImage?(image)
         }
     }
 
@@ -77,6 +80,7 @@ class DisplayableImageView: View {
         self.imageView.sd_setImage(with: url, completed: { [weak self] (image, error, imageCacheType, imageUrl) in
             guard let `self` = self, let downloadedImage = image else { return }
             self.imageView.image = downloadedImage
+            self.didDisplayImage?(downloadedImage)
         })
     }
 }
