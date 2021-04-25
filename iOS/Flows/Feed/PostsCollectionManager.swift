@@ -38,10 +38,13 @@ class PostsCollectionManager: NSObject {
     private var showAnimator: UIViewPropertyAnimator?
     private var finishAnimator: UIViewPropertyAnimator?
 
-    func loadPosts() {
+    private(set) var feedOwner: User?
+
+    func loadPosts(for user: User) {
+        self.feedOwner = user 
         self.isResetting = false
         self.postVCs = []
-        PostsSupplier.shared.$posts
+        PostsSupplier.shared.getPosts(for: user)
             .mainSink { posts in
                 self.postVCs = []
                 if posts.count > 0 {
@@ -187,10 +190,20 @@ class PostsCollectionManager: NSObject {
         self.finishAnimator?.addCompletion({ [weak self] position in
             guard let `self` = self, position == .end else { return }
             self.current = nil
-            self.delegate?.postsManagerDidEndDisplaying(self)
+            self.checkForNextFeed()
         })
 
         self.finishAnimator?.startAnimation()
+    }
+
+    func checkForNextFeed() {
+        if let user = self.feedOwner,
+           let next = FeedManager.shared.getNextAvailableFeed(after: user),
+           let nextOwner = next.owner {
+            self.loadPosts(for: nextOwner)
+        } else {
+            self.delegate?.postsManagerDidEndDisplaying(self)
+        }
     }
 
     func reset() {

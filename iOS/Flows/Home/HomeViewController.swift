@@ -34,7 +34,7 @@ class HomeViewController: ViewController, TransitionableViewController {
     var didTapAddRitual: CompletionOptional = nil
     var didSelectPhotoLibrary: CompletionOptional = nil
 
-    var willPresentFeed: CompletionOptional = nil
+    var willPresentFeedForUser: ((User) -> Void)? = nil
 
     private var topOffset: CGFloat?
     var minTop: CGFloat {
@@ -103,8 +103,7 @@ class HomeViewController: ViewController, TransitionableViewController {
             if self.isShowingArchive {
                 self.archivesVC.loadPosts(for: user)
             } else {
-                FeedManager.shared.selectFeed(for: user)
-                self.willPresentFeed?()
+                self.willPresentFeedForUser?(user)
             }
 
         }.store(in: &self.cancellables)

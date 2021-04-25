@@ -79,21 +79,14 @@ class FeedViewController: ViewController {
 
         self.view.addSubview(self.avatarView)
         self.avatarView.alpha = 0
-        
-        FeedManager.shared.$selectedFeed
-            .removeDuplicates()
-            .mainSink { [weak self] feed in
-                guard let `self` = self else { return }
-                if let f = feed {
-                    f.owner?.retrieveDataIfNeeded()
-                        .mainSink(receiveValue: { user in
-                            self.avatarView.set(avatar: user)
-                        }).store(in: &self.cancellables)
-                    self.manager.loadPosts()
-                } else {
-                    self.showDone()
-                }
-            }.store(in: &self.cancellables)
+    }
+
+    func loadPosts(for user: User) {
+        user.retrieveDataIfNeeded()
+            .mainSink(receiveValue: { user in
+                self.avatarView.set(avatar: user)
+            }).store(in: &self.cancellables)
+        self.manager.loadPosts(for: user)
     }
 
     override func viewDidLayoutSubviews() {
