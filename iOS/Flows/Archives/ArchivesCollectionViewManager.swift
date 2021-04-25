@@ -12,42 +12,60 @@ import Combine
 class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionViewManager.SectionType> {
 
     enum SectionType: Int, ManagerSectionType {
+        case user
         case posts
     }
 
     private let archiveConfig = ManageableCellRegistration<ArchiveCell>().provider
-    private let headerConfig = ManageableHeaderRegistration<ArchiveHeaderView>().provider
+    private let headerConfig = ManageableCellRegistration<ArchiveHeaderCell>().provider
     private let footerConfig = ManageableFooterRegistration<ArchiveFooterView>().provider
 
-    lazy var layout: UICollectionViewCompositionalLayout = {
-        let widthFraction: CGFloat = 0.33
-        let heightFraction: CGFloat = 0.45
+    lazy var layout = UICollectionViewCompositionalLayout() { sectionIndex, layoutEnvironment in
 
-        // Item
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(widthFraction), heightDimension: .fractionalHeight(1))
-        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        guard let sectionType = SectionType(rawValue: sectionIndex) else { return nil }
 
-        let inset: CGFloat = 1.5
-        item.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
+        switch sectionType {
+        case .user:
+            // Item
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        // Group
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(heightFraction))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+            // Group
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(160))
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
-        // Section
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Theme.contentOffset, bottom: 0, trailing: Theme.contentOffset)
+            // Section
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Theme.contentOffset, bottom: 0, trailing: Theme.contentOffset)
 
-        let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(180))
-        let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+            return section
+        case .posts:
+            let widthFraction: CGFloat = 0.33
+            let heightFraction: CGFloat = 0.45
 
-        let footerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(140))
-        let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerItemSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+            // Item
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(widthFraction), heightDimension: .fractionalHeight(1))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        section.boundarySupplementaryItems = [headerItem, footerItem]
+            let inset: CGFloat = 1.5
+            item.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
 
-        return UICollectionViewCompositionalLayout(section: section)
-    }()
+            // Group
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalWidth(heightFraction))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+            // Section
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Theme.contentOffset, bottom: 0, trailing: Theme.contentOffset)
+
+            let footerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(140))
+            let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerItemSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+
+            section.boundarySupplementaryItems = [footerItem]
+
+            return section
+        }
+    }
 
     // Posts are sorted by createdBy
     private var posts: [Post] = []
@@ -102,24 +120,37 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
-        return self.posts
+        switch section {
+        case .user:
+            if let u = self.user {
+                return [u]
+            } else {
+                return []
+            }
+        case .posts:
+            return self.posts
+        }
+
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
-        return self.collectionView.dequeueManageableCell(using: self.archiveConfig,
-                                                         for: indexPath,
-                                                         item: item as? Post)
+        switch section {
+        case .user:
+            return self.collectionView.dequeueManageableCell(using: self.headerConfig,
+                                                             for: indexPath,
+                                                             item: self.user)
+        case .posts:
+            return self.collectionView.dequeueManageableCell(using: self.archiveConfig,
+                                                             for: indexPath,
+                                                             item: item as? Post)
+        }
     }
 
     override func getSupplementaryView(for section: SectionType, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
 
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let header = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
-            if let user = self.user {
-                header.configure(with: user)
-            }
-            return header 
+            return nil
         case UICollectionView.elementKindSectionFooter:
             let footer = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
             footer.configure(showButton: self.posts.count < self.totalCount)
