@@ -33,6 +33,5 @@ class PostReviewDetailsView: View {
         self.captionTextView.size = CGSize(width: self.width - Theme.contentOffset.doubled, height: height)
         self.captionTextView.match(.top, to: .bottom, of: self.imageView, offset: Theme.contentOffset.half)
         self.captionTextView.centerOnX()
-        
     }
 }

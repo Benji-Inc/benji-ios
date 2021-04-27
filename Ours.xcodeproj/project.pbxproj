@@ -25,7 +25,7 @@
 		D60C814622092F6B00A127A3 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814522092F6B00A127A3 /* Button.swift */; };
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
-		D6116C3C25F2335000D94A09 /* HomeVibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6116C3B25F2335000D94A09 /* HomeVibrancyView.swift */; };
+		D6116C3C25F2335000D94A09 /* PostVibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
@@ -726,7 +726,7 @@
 		D60C814522092F6B00A127A3 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
-		D6116C3B25F2335000D94A09 /* HomeVibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVibrancyView.swift; sourceTree = "<group>"; };
+		D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVibrancyView.swift; sourceTree = "<group>"; };
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewManager.swift; sourceTree = "<group>"; };
 		D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
@@ -1810,6 +1810,7 @@
 		D6882B9C26010EA500F94F07 /* Post Creation */ = {
 			isa = PBXGroup;
 			children = (
+				D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */,
 				D6882B9D26010EBE00F94F07 /* PostCreationViewController.swift */,
 				D6A1161E2636177500DAB511 /* PostReviewViewController.swift */,
 				D6A11620263618BB00DAB511 /* PostReviewDetailsView.swift */,
@@ -1970,7 +1971,6 @@
 				D63D71BC25F03025004C26F7 /* AnimatingLabel.swift */,
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
-				D6116C3B25F2335000D94A09 /* HomeVibrancyView.swift */,
 				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
 				D642735422C87CCA0088256B /* ImageViewButton.swift */,
 				D67C319525EE882B00289787 /* PostButtonView.swift */,
@@ -2653,7 +2653,7 @@
 				D63DB20F25E96EAF00F6B323 /* NSExtensionContext+Extensions.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
 				D6C9EF3F25BF6CB100A14DE5 /* MessageBubbleView.swift in Sources */,
-				D6116C3C25F2335000D94A09 /* HomeVibrancyView.swift in Sources */,
+				D6116C3C25F2335000D94A09 /* PostVibrancyView.swift in Sources */,
 				D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */,
 				D64932D723FE460200986335 /* FeedIndicatorView.swift in Sources */,
 				D66A580525DD68F9001B3F64 /* NewChannelCoordinator.swift in Sources */,
