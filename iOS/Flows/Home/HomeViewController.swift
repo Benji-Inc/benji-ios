@@ -94,6 +94,9 @@ class HomeViewController: ViewController, TransitionableViewController {
 
         self.tabView.$state.mainSink { state in
             self.captureVC.handle(state: state)
+            UIView.animate(withDuration: Theme.animationDuration) {
+                self.view.layoutNow()
+            }
         }.store(in: &self.cancellables)
 
         self.captureVC.didShowImage = { [unowned self] in 
@@ -103,6 +106,10 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.captureVC.vibrancyView.onPan { [unowned self] pan in
             pan.delegate = self
             self.handle(pan)
+        }
+
+        self.captureVC.didTapExit = {
+            self.tabView.state = .home
         }
 
         self.archivesVC.didSelectClose = { [unowned self] in
@@ -193,9 +200,6 @@ class HomeViewController: ViewController, TransitionableViewController {
 //                    self.tabView.postButtonView.button.handleEvent(status: .error(e.localizedDescription))
 //                }
 //            }.store(in: &self.cancellables)
-        }
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.view.layoutNow()
         }
     }
 }
