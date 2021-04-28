@@ -158,10 +158,9 @@ class PostCreationViewController: ImageCaptureViewController {
             transform.m34 = 1.0 / -500
             transform = CATransform3DRotate(transform, 85.0 * .pi / 180.0, 1.0, 0.0, 0.0)
 
-            let move = CATransform3DMakeTranslation(0, -(self.view.height * 0.3), 0)
+            let move = CATransform3DMakeTranslation(0, -100, 0)
             let new = CATransform3DConcat(transform, move)
             let scale = CATransform3DScale(new, 1.0, 1.0, 0.5)
-            //let newer = CATransform3DConcat(new, scale)
 
             UIView.animateKeyframes(withDuration: 0.0, delay: 0.0, options: .allowUserInteraction) {
 
@@ -169,8 +168,14 @@ class PostCreationViewController: ImageCaptureViewController {
                     layer.transform = scale
                 }
 
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+                    self.captionTextView.alpha = 0.0
+                    self.swipeLabel.alpha = 0.0
+                    self.swipeLabel.transform = CGAffineTransform(translationX: 0.0, y: -100)
+                }
+
                 UIView.addKeyframe(withRelativeStartTime: 0.8, relativeDuration: 0.5) {
-                    self.imageView.alpha = 0.2
+                    self.imageView.alpha = 0.0
                 }
 
             } completion: { _ in
@@ -198,6 +203,8 @@ class PostCreationViewController: ImageCaptureViewController {
         self.imageView.alpha = 1.0
         self.imageView.transform = .identity
 
+        self.swipeLabel.alpha = 1.0
+        self.swipeLabel.transform = .identity
         self.captionTextView.alpha = 1.0
     }
 }
