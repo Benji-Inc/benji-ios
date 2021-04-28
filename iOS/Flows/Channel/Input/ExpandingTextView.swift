@@ -12,8 +12,8 @@ class ExpandingTextView: TextView {
 
     private var initialPlaceholder: String?
 
-    override func initialize() {
-        super.initialize()
+    override func initializeViews() {
+        super.initializeViews()
 
         self.translatesAutoresizingMaskIntoConstraints = false
         self.textContainer.heightTracksTextView = true

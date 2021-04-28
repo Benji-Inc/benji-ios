@@ -19,6 +19,7 @@ class PostCreationViewController: ImageCaptureViewController {
 
     let vibrancyView = PostVibrancyView()
     let exitButton = ImageViewButton()
+    let captionTextView = CaptionTextView()
 
     var didTapExit: CompletionOptional = nil
 
@@ -40,14 +41,19 @@ class PostCreationViewController: ImageCaptureViewController {
         super.viewDidLoad()
 
         self.view.set(backgroundColor: .background1)
+        self.view.addSubview(self.vibrancyView)
 
         self.view.addSubview(self.imageView)
+        self.imageView.layer.cornerRadius = 5
+        self.imageView.clipsToBounds = true 
         self.imageView.contentMode = .scaleAspectFill
         self.didCapturePhoto = { [unowned self] image in
             self.show(image: image)
         }
 
-        self.view.addSubview(self.vibrancyView)
+        self.view.addSubview(self.captionTextView)
+        self.captionTextView.alpha = 0
+
         self.view.addSubview(self.exitButton)
 
         self.exitButton.imageView.image = UIImage(systemName: "xmark")!
@@ -81,16 +87,20 @@ class PostCreationViewController: ImageCaptureViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.imageView.height = self.view.height * 0.5
-        self.imageView.width = self.view.width * 0.5
-        self.imageView.centerOnX()
-        self.imageView.centerY = self.view.halfHeight * 0.8
-
-        self.vibrancyView.expandToSuperviewSize()
-
         self.exitButton.squaredSize = 50
         self.exitButton.match(.top, to: .top, of: self.vibrancyView, offset: Theme.contentOffset)
         self.exitButton.pin(.right, padding: Theme.contentOffset)
+
+        self.imageView.height = self.view.height * 0.3
+        self.imageView.width = self.view.width * 0.3
+        self.imageView.centerOnX()
+        self.imageView.match(.top, to: .top, of: self.exitButton, offset: 12)
+
+        self.captionTextView.size = CGSize(width: self.view.width - Theme.contentOffset.doubled, height: 94)
+        self.captionTextView.match(.top, to: .bottom, of: self.imageView, offset: Theme.contentOffset.half)
+        self.captionTextView.centerOnX()
+
+        self.vibrancyView.expandToSuperviewSize()
 
         self.swipeLabel.setSize(withWidth: self.view.width)
         self.swipeLabel.centerOnX()
@@ -100,6 +110,7 @@ class PostCreationViewController: ImageCaptureViewController {
     func handle(state: HomeTabView.State) {
         self.tabState = state
         UIView.animate(withDuration: Theme.animationDuration) {
+            self.captionTextView.alpha = state == .review ? 1.0 : 0.0
             self.swipeLabel.alpha = state == .review ? 1.0 : 0.0
             self.exitButton.alpha = state == .home ? 0.0 : 1.0
             self.vibrancyView.show(blur: state == .home)
@@ -115,6 +126,8 @@ class PostCreationViewController: ImageCaptureViewController {
     func reset() {
         self.currentPosition = .front
         self.imageView.image = nil
+        self.swipeLabel.alpha = 0.0
+        self.imageView.transform = .identity
         self.begin()
     }
 
@@ -182,9 +195,18 @@ class PostCreationViewController: ImageCaptureViewController {
 
     //reset the animation
     private func prepareInitialAnimation() {
-        //self.isAnimatingFinal = false
         self.imageView.alpha = 1.0
-        //self.label.transform = CGAffineTransform.init(scaleX: self.minScale, y: self.minScale)
+        self.imageView.transform = .identity
+
+        self.captionTextView.alpha = 1.0
+    }
+}
+
+extension PostCreationViewController: UITextViewDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
 }
 

@@ -12,11 +12,11 @@ import Combine
 
 class TextView: UITextView {
 
-    // Maximum length of text. 0 means no limit.
-    var maxLength: Int = 250
-
     // Trim white space and newline characters when end editing. Default is true
     var trimWhiteSpaceWhenEndEditing: Bool = true
+
+    // Maximum length of text. 0 means no limit.
+    var maxLength: Int = 250
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -34,7 +34,7 @@ class TextView: UITextView {
 
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
-        self.initialize()
+        self.initializeViews()
     }
 
     convenience init() {
@@ -43,10 +43,10 @@ class TextView: UITextView {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(frame: .zero, textContainer: nil)
-        self.initialize()
+        self.initializeViews()
     }
 
-    func initialize() {
+    func initializeViews() {
 
         let styleAttributes = StringStyle(font: .smallBold, color: .white).attributes
         self.typingAttributes = styleAttributes

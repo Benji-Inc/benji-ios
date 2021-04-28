@@ -11,8 +11,8 @@ import TMROLocalization
 
 class PostTextView: TextView {
 
-    override func initialize() {
-        super.initialize()
+    override func initializeViews() {
+        super.initializeViews()
 
         self.isScrollEnabled = false 
     }
