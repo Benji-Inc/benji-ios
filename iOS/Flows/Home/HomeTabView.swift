@@ -23,7 +23,8 @@ class HomeTabView: View {
 
     enum State {
         case home
-        case post
+        case capture
+        case review
         case confirm
     }
 
@@ -48,9 +49,9 @@ class HomeTabView: View {
             switch self.state {
             case .home:
                 self.didSelectProfile?()
-            case .post:
+            case .capture:
                 self.didSelectPhotoLibrary?()
-            case .confirm:
+            case .review, .confirm:
                 break
             }
         }
@@ -59,9 +60,9 @@ class HomeTabView: View {
             switch self.state {
             case .home:
                 self.didSelectChannels?()
-            case .post:
+            case .capture:
                 self.didSelectFlip?()
-            case .confirm:
+            case .review, .confirm:
                 break
             }
         }
@@ -94,12 +95,14 @@ class HomeTabView: View {
             self.leftButton.alpha = 1
             self.rightButton.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right")
             self.rightButton.alpha = 1
-        case .post:
+        case .capture:
             self.leftButton.imageView.image = UIImage(systemName: "square.grid.2x2")!
             self.leftButton.alpha = 1
             self.rightButton.imageView.image = UIImage(systemName: "arrow.triangle.2.circlepath")!
             self.rightButton.alpha = 1
-            
+        case .review:
+            self.leftButton.alpha = 0
+            self.rightButton.alpha = 0 
         case .confirm:
             self.leftButton.alpha = 0
             self.rightButton.alpha = 0 

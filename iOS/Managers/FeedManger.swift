@@ -52,6 +52,7 @@ class FeedManager {
 
     func createPost(with data: Data,
                     previewData: Data,
+                    caption: String?,
                     progressHandler: @escaping (Int) -> Void) -> Future<Post, Error> {
 
         return Future { promise in
@@ -72,7 +73,11 @@ class FeedManager {
                         post.triggerDate = Date()
                         post.expirationDate = Date.add(component: .day, amount: 2, toDate: Date())
                         post.type = .media
-                        post.attributes = ["": String()]
+                        var att: [String: Any] = [:]
+                        if let cap = caption {
+                            att["caption"] = cap 
+                        }
+                        post.attributes = att
                         post.duration = 5
                         post.preview = previewFile
                         post.saveToServer()

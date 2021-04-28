@@ -100,10 +100,10 @@ class HomeViewController: ViewController, TransitionableViewController {
         }.store(in: &self.cancellables)
 
         self.captureVC.didShowImage = { [unowned self] in 
-            self.tabView.state = .confirm
+            self.tabView.state = .review
         }
 
-        self.captureVC.vibrancyView.onPan { [unowned self] pan in
+        self.captureVC.shouldHandlePan = { [unowned self] pan in
             pan.delegate = self
             self.handle(pan)
         }
@@ -167,7 +167,11 @@ class HomeViewController: ViewController, TransitionableViewController {
         let height = 70 + self.view.safeAreaInsets.bottom
         self.tabView.size = CGSize(width: self.view.width, height: height)
         self.tabView.centerOnX()
-        self.tabView.match(.bottom, to: .bottom, of: self.captureVC.view)
+        if self.tabView.state == .review {
+            self.tabView.match(.top, to: .bottom, of: self.captureVC.view)
+        } else {
+            self.tabView.match(.bottom, to: .bottom, of: self.captureVC.view)
+        }
     }
 
     func animate(show: Bool) {
@@ -181,9 +185,12 @@ class HomeViewController: ViewController, TransitionableViewController {
     private func didTapPost() {
         switch self.tabView.state {
         case .home:
-            self.tabView.state = .post
-        case .post:
+            self.topOffset = nil 
+            self.tabView.state = .capture
+        case .capture:
             self.captureVC.capturePhoto()
+        case .review:
+            break
         case .confirm:
             self.tabView.postButtonView.button.handleEvent(status: .loading)
             // show review
