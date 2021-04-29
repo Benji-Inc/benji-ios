@@ -21,12 +21,13 @@ class PostCreationViewController: ImageCaptureViewController {
     let vibrancyView = PostVibrancyView()
     let exitButton = ImageViewButton()
     let captionTextView = CaptionTextView()
+    let gradientView = GradientView(with: [Color.background1.color.withAlphaComponent(0.5).cgColor, Color.clear.color.cgColor], startPoint: .bottomCenter, endPoint: .topCenter)
 
     var didTapExit: CompletionOptional = nil
 
     let swipeLabel = Label(font: .largeThin)
 
-    private var tabState: HomeTabView.State = .home
+    private(set) var tabState: HomeTabView.State = .home
 
     private(set) var animator: UIViewPropertyAnimator?
 
@@ -49,12 +50,16 @@ class PostCreationViewController: ImageCaptureViewController {
         self.view.addSubview(self.vibrancyView)
         
         self.view.addSubview(self.imageView)
+        self.imageView.isUserInteractionEnabled = true 
         self.imageView.layer.cornerRadius = 5
         self.imageView.clipsToBounds = true 
         self.imageView.contentMode = .scaleAspectFill
         self.didCapturePhoto = { [unowned self] image in
             self.show(image: image)
         }
+
+        self.imageView.addSubview(self.gradientView)
+        self.gradientView.alpha = 0
 
         self.imageView.addSubview(self.captionTextView)
         self.captionTextView.alpha = 0
@@ -81,6 +86,21 @@ class PostCreationViewController: ImageCaptureViewController {
                 self.handle(pan: pan)
             }
         }
+
+        KeyboardManger.shared.$cachedKeyboardFrame.removeDuplicates().mainSink { _ in
+            if KeyboardManger.shared.isKeyboardShowing {
+                UIView.animate(withDuration: 0.2) {
+                    self.view.layoutNow()
+                }
+            }
+        }.store(in: &self.cancellables)
+
+        KeyboardManger.shared.$isKeyboardShowing.removeDuplicates().mainSink { isShowing in
+            UIView.animate(withDuration: 0.2) {
+                self.captionTextView.countView.alpha = isShowing ? 1.0 : 0.0
+                self.view.layoutNow()
+            }
+        }.store(in: &self.cancellables)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -106,11 +126,20 @@ class PostCreationViewController: ImageCaptureViewController {
         self.imageView.height = height
         self.imageView.width = self.view.width - Theme.contentOffset.doubled
         self.imageView.centerOnX()
-        self.imageView.match(.top, to: .bottom, of: self.exitButton)
+
+        if KeyboardManger.shared.isKeyboardShowing {
+            self.imageView.pin(.bottom, padding: KeyboardManger.shared.cachedKeyboardFrame.height + 10)
+        } else {
+            self.imageView.match(.top, to: .bottom, of: self.exitButton)
+        }
 
         self.captionTextView.size = CGSize(width: self.imageView.width - Theme.contentOffset, height: 94)
         self.captionTextView.pin(.bottom, padding: Theme.contentOffset.half)
         self.captionTextView.centerOnX()
+
+        self.gradientView.expandToSuperviewWidth()
+        self.gradientView.height = self.imageView.height * 0.35
+        self.gradientView.pin(.bottom, padding: 0.0)
     }
 
     func handle(state: HomeTabView.State) {
@@ -119,6 +148,7 @@ class PostCreationViewController: ImageCaptureViewController {
             self.captionTextView.alpha = state == .review ? 1.0 : 0.0
             self.exitButton.alpha = state == .home ? 0.0 : 1.0
             self.swipeLabel.alpha = state == .review ? 1.0 : 0.0
+            self.gradientView.alpha = state == .review ? 1.0 : 0.0
             self.vibrancyView.show(blur: state == .home)
         }
     }
@@ -232,9 +262,10 @@ class PostCreationViewController: ImageCaptureViewController {
     }
 
     func hideSwipeLabel() {
+        self.swipeLabel.setText("Uploading: %100")
+        self.view.layoutNow()
         UIView.animate(withDuration: Theme.animationDuration, delay: 1.0, options: []) {
             self.swipeLabel.alpha = 0
-            self.swipeLabel.transform = CGAffineTransform(translationX: 0.0, y: 1000)
         } completion: { _ in
             self.showSwipeLabel()
         }
@@ -242,7 +273,10 @@ class PostCreationViewController: ImageCaptureViewController {
 
     func showSwipeLabel() {
         self.swipeLabel.setText("Swipe up to post")
-        UIView.animate(withDuration: 1, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+        self.swipeLabel.transform = CGAffineTransform(translationX: 0.0, y: 50)
+
+        self.view.layoutNow()
+        UIView.animate(withDuration: 1, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1.0, options: .curveEaseIn, animations: {
             self.swipeLabel.transform = .identity
             self.swipeLabel.alpha = 1.0
         }) { _ in
@@ -256,51 +290,5 @@ extension PostCreationViewController: UITextViewDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
-    }
-}
-
-extension PostCreationViewController: UIGestureRecognizerDelegate {
-
-    func handle(pan: UIPanGestureRecognizer) {
-        guard self.tabState == .review else { return }
-
-        let currentPoint = pan.location(in: nil)
-
-        switch pan.state {
-        case .began:
-            self.createAnimator()
-            self.panStartPoint = currentPoint
-        case .changed:
-            if self.interactionInProgress {
-                let progress = self.progress(currentPoint: currentPoint)
-                self.animator?.fractionComplete = progress
-            } else if currentPoint.y + self.panStartPoint.y > self.threshold {
-                self.interactionInProgress = true
-                self.startPoint = currentPoint
-            }
-
-        case .ended, .cancelled, .failed:
-            self.interactionInProgress = false
-
-            print(self.progress(currentPoint: currentPoint))
-            self.animator?.isReversed = self.progress(currentPoint: currentPoint) < 1.0
-            self.animator?.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
-
-        case .possible:
-            break
-        @unknown default:
-            break
-        }
-    }
-
-    private func progress(currentPoint: CGPoint) -> CGFloat {
-        let progress = (self.startPoint.y - currentPoint.y) / self.distance
-        return clamp(progress, 0.0, 1.0)
-    }
-}
-
-extension PostCreationViewController: SwipeableInputAccessoryViewDelegate {
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
-
     }
 }

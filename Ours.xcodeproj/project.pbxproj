@@ -525,8 +525,9 @@
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
 		D696650D2639A00C0009114B /* CaptionTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D696650C2639A00C0009114B /* CaptionTextView.swift */; };
-		D696650F2639B5640009114B /* PostCreateViewController+Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = D696650E2639B5640009114B /* PostCreateViewController+Upload.swift */; };
+		D696650F2639B5640009114B /* PostCreationViewController+Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = D696650E2639B5640009114B /* PostCreationViewController+Upload.swift */; };
 		D6966511263AF4D70009114B /* CaptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966510263AF4D70009114B /* CaptionView.swift */; };
+		D6966515263B60910009114B /* PostCreationViewController+Panning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966514263B60910009114B /* PostCreationViewController+Panning.swift */; };
 		D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
 		D69972FA25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
 		D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
@@ -952,8 +953,9 @@
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D696650C2639A00C0009114B /* CaptionTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionTextView.swift; sourceTree = "<group>"; };
-		D696650E2639B5640009114B /* PostCreateViewController+Upload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostCreateViewController+Upload.swift"; sourceTree = "<group>"; };
+		D696650E2639B5640009114B /* PostCreationViewController+Upload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostCreationViewController+Upload.swift"; sourceTree = "<group>"; };
 		D6966510263AF4D70009114B /* CaptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionView.swift; sourceTree = "<group>"; };
+		D6966514263B60910009114B /* PostCreationViewController+Panning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostCreationViewController+Panning.swift"; sourceTree = "<group>"; };
 		D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
 		D69972FD25EAFC18000AEE6A /* OursNotificationContent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursNotificationContent.entitlements; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
@@ -1813,8 +1815,9 @@
 			isa = PBXGroup;
 			children = (
 				D696650C2639A00C0009114B /* CaptionTextView.swift */,
-				D696650E2639B5640009114B /* PostCreateViewController+Upload.swift */,
 				D6882B9D26010EBE00F94F07 /* PostCreationViewController.swift */,
+				D6966514263B60910009114B /* PostCreationViewController+Panning.swift */,
+				D696650E2639B5640009114B /* PostCreationViewController+Upload.swift */,
 				D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */,
 			);
 			path = "Post Creation";
@@ -2412,7 +2415,7 @@
 				D6BEDE5026262795009BA131 /* CommentsButton.swift in Sources */,
 				D64A8F46259008B2002948E1 /* ChannelSupplier+Extensions.swift in Sources */,
 				D6F37D6025B5D8610034C9C5 /* AvatarProfileViewController.swift in Sources */,
-				D696650F2639B5640009114B /* PostCreateViewController+Upload.swift in Sources */,
+				D696650F2639B5640009114B /* PostCreationViewController+Upload.swift in Sources */,
 				D61592DE24FAD7C600B63412 /* AttachmentHeaderView.swift in Sources */,
 				D642735522C87CCA0088256B /* ImageViewButton.swift in Sources */,
 				D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */,
@@ -2518,6 +2521,7 @@
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
 				D6432BF522D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift in Sources */,
 				D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */,
+				D6966515263B60910009114B /* PostCreationViewController+Panning.swift in Sources */,
 				D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */,
 				D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */,

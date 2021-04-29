@@ -20,6 +20,7 @@ class CaptionTextView: TextView {
 
         self.maxLength = 140
 
+        self.tintColor = Color.background4.color
         self.layer.borderWidth = 2
         self.layer.cornerRadius = 5
         self.layer.borderColor = Color.background4.color.cgColor
@@ -35,8 +36,6 @@ class CaptionTextView: TextView {
         self.textContainerInset.right = 10
         self.textContainerInset.top = Theme.contentOffset.half
         self.textContainerInset.bottom = Theme.contentOffset.half
-
-        self.backgroundColor = Color.background4.color.withAlphaComponent(0.25)
 
         self.set(placeholder: "Add caption")
 
