@@ -1812,10 +1812,10 @@
 		D6882B9C26010EA500F94F07 /* Post Creation */ = {
 			isa = PBXGroup;
 			children = (
-				D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */,
-				D6882B9D26010EBE00F94F07 /* PostCreationViewController.swift */,
-				D696650E2639B5640009114B /* PostCreateViewController+Upload.swift */,
 				D696650C2639A00C0009114B /* CaptionTextView.swift */,
+				D696650E2639B5640009114B /* PostCreateViewController+Upload.swift */,
+				D6882B9D26010EBE00F94F07 /* PostCreationViewController.swift */,
+				D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */,
 			);
 			path = "Post Creation";
 			sourceTree = "<group>";

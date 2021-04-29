@@ -56,7 +56,7 @@ class PostCreationViewController: ImageCaptureViewController {
             self.show(image: image)
         }
 
-        self.view.addSubview(self.captionTextView)
+        self.imageView.addSubview(self.captionTextView)
         self.captionTextView.alpha = 0
 
         self.view.addSubview(self.exitButton)
@@ -96,20 +96,21 @@ class PostCreationViewController: ImageCaptureViewController {
         self.exitButton.match(.top, to: .top, of: self.vibrancyView, offset: Theme.contentOffset)
         self.exitButton.pin(.right, padding: Theme.contentOffset)
 
-        self.imageView.height = self.view.height * 0.3
-        self.imageView.width = self.view.width * 0.3
-        self.imageView.centerOnX()
-        self.imageView.match(.top, to: .top, of: self.exitButton, offset: 12)
-
-        self.captionTextView.size = CGSize(width: self.view.width - Theme.contentOffset.doubled, height: 94)
-        self.captionTextView.match(.top, to: .bottom, of: self.imageView, offset: Theme.contentOffset.half)
-        self.captionTextView.centerOnX()
-
         self.vibrancyView.expandToSuperviewSize()
 
         self.swipeLabel.setSize(withWidth: self.view.width)
         self.swipeLabel.centerOnX()
         self.swipeLabel.pinToSafeArea(.bottom, padding: Theme.contentOffset.doubled)
+
+        let height = self.view.height - self.exitButton.bottom - Theme.contentOffset.doubled - self.swipeLabel.height - self.view.safeAreaInsets.bottom - Theme.contentOffset
+        self.imageView.height = height
+        self.imageView.width = self.view.width - Theme.contentOffset.doubled
+        self.imageView.centerOnX()
+        self.imageView.match(.top, to: .bottom, of: self.exitButton)
+
+        self.captionTextView.size = CGSize(width: self.imageView.width - Theme.contentOffset, height: 94)
+        self.captionTextView.pin(.bottom, padding: Theme.contentOffset.half)
+        self.captionTextView.centerOnX()
     }
 
     func handle(state: HomeTabView.State) {
@@ -164,9 +165,9 @@ class PostCreationViewController: ImageCaptureViewController {
             transform.m34 = 1.0 / -500
             transform = CATransform3DRotate(transform, 85.0 * .pi / 180.0, 1.0, 0.0, 0.0)
 
-            let move = CATransform3DMakeTranslation(0, -100, 0)
+            let move = CATransform3DMakeTranslation(0, -400, 0)
             let new = CATransform3DConcat(transform, move)
-            let scale = CATransform3DScale(new, 1.0, 1.0, 0.5)
+            let scale = CATransform3DScale(new, 0.5, 0.5, 0.5)
 
             UIView.animateKeyframes(withDuration: 0.0, delay: 0.0, options: .allowUserInteraction) {
 
@@ -177,7 +178,7 @@ class PostCreationViewController: ImageCaptureViewController {
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
                     self.captionTextView.alpha = 0.0
                     self.swipeLabel.alpha = 0.0
-                    self.swipeLabel.transform = CGAffineTransform(translationX: 0.0, y: -100)
+                    self.swipeLabel.transform = CGAffineTransform(translationX: 0.0, y: -200)
                 }
 
                 UIView.addKeyframe(withRelativeStartTime: 0.8, relativeDuration: 0.5) {
@@ -295,5 +296,11 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
     private func progress(currentPoint: CGPoint) -> CGFloat {
         let progress = (self.startPoint.y - currentPoint.y) / self.distance
         return clamp(progress, 0.0, 1.0)
+    }
+}
+
+extension PostCreationViewController: SwipeableInputAccessoryViewDelegate {
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
+
     }
 }
