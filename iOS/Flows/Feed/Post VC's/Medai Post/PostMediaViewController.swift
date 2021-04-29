@@ -28,6 +28,8 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
     var indexPathForEditing: IndexPath?
 
     private let imageView = UIImageView()
+    private let gradientView = GradientView(with: [Color.clear.color.cgColor, Color.background1.color.withAlphaComponent(0.5).cgColor], startPoint: .topCenter, endPoint: .bottomCenter)
+    private let captionView = CaptionView()
     private lazy var commentsVC = CommentsViewController(with: self.post)
     private let consumersView = StackedAvatarView()
     private let commentsButton = CommentsButton()
@@ -74,6 +76,14 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
 
         self.view.insertSubview(self.imageView, at: 0)
         self.imageView.contentMode = .scaleAspectFill
+
+        self.view.addSubview(self.gradientView)
+
+        self.view.addSubview(self.captionView)
+        self.captionView.setText(for: self.post)
+            .mainSink { _ in
+                self.view.layoutNow()
+            }.store(in: &self.cancellables)
 
         self.view.addSubview(self.commentsButton)
         self.commentsButton.showShadow(withOffset: 5)
@@ -140,6 +150,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
             self.imageView.alpha  = show ? 0.3 : 1.0
             self.commentsButton.alpha = show ? 0.0 : 1.0
             self.moreButton.alpha = show ? 0.0 : 1.0
+            self.captionView.alpha = show ? 0.0 : 1.0
             self.view.layoutNow()
         } completion: { completed in
             if show {
@@ -188,9 +199,18 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
             self.commentsButton.pinToSafeArea(.bottom, padding: SwipeableInputAccessoryView.preferredHeight + Theme.contentOffset)
         }
 
+        let height = self.captionView.getHeight(for: self.view.width - self.moreButton.width - Theme.contentOffset)
+        self.captionView.height = height
+        self.captionView.match(.bottom, to: .bottom, of: self.moreButton)
+        self.captionView.pin(.left, padding: Theme.contentOffset)
+
         self.consumersView.setSize()
-        self.consumersView.match(.bottom, to: .bottom, of: self.commentsButton)
+        self.consumersView.match(.bottom, to: .top, of: self.captionView)
         self.consumersView.pin(.left, padding: Theme.contentOffset)
+
+        self.gradientView.expandToSuperviewWidth()
+        self.gradientView.height = self.view.height - self.consumersView.top
+        self.gradientView.pin(.bottom)
     }
 }
 

@@ -525,6 +525,8 @@
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
 		D696650D2639A00C0009114B /* CaptionTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D696650C2639A00C0009114B /* CaptionTextView.swift */; };
+		D696650F2639B5640009114B /* PostCreateViewController+Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = D696650E2639B5640009114B /* PostCreateViewController+Upload.swift */; };
+		D6966511263AF4D70009114B /* CaptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966510263AF4D70009114B /* CaptionView.swift */; };
 		D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
 		D69972FA25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
 		D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
@@ -950,6 +952,8 @@
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D696650C2639A00C0009114B /* CaptionTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionTextView.swift; sourceTree = "<group>"; };
+		D696650E2639B5640009114B /* PostCreateViewController+Upload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostCreateViewController+Upload.swift"; sourceTree = "<group>"; };
+		D6966510263AF4D70009114B /* CaptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionView.swift; sourceTree = "<group>"; };
 		D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
 		D69972FD25EAFC18000AEE6A /* OursNotificationContent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursNotificationContent.entitlements; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
@@ -1810,6 +1814,7 @@
 			children = (
 				D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */,
 				D6882B9D26010EBE00F94F07 /* PostCreationViewController.swift */,
+				D696650E2639B5640009114B /* PostCreateViewController+Upload.swift */,
 				D696650C2639A00C0009114B /* CaptionTextView.swift */,
 			);
 			path = "Post Creation";
@@ -2015,6 +2020,7 @@
 				D6BEDE4F26262795009BA131 /* CommentsButton.swift */,
 				D6BEDE422625869E009BA131 /* Comments */,
 				D6605442262F71FF002F74F8 /* MediaMoreButton.swift */,
+				D6966510263AF4D70009114B /* CaptionView.swift */,
 			);
 			path = "Medai Post";
 			sourceTree = "<group>";
@@ -2406,6 +2412,7 @@
 				D6BEDE5026262795009BA131 /* CommentsButton.swift in Sources */,
 				D64A8F46259008B2002948E1 /* ChannelSupplier+Extensions.swift in Sources */,
 				D6F37D6025B5D8610034C9C5 /* AvatarProfileViewController.swift in Sources */,
+				D696650F2639B5640009114B /* PostCreateViewController+Upload.swift in Sources */,
 				D61592DE24FAD7C600B63412 /* AttachmentHeaderView.swift in Sources */,
 				D642735522C87CCA0088256B /* ImageViewButton.swift in Sources */,
 				D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */,
@@ -2505,6 +2512,7 @@
 				D61EC0DE21D30DAC00204BEE /* Array+Extensions.swift in Sources */,
 				D6CD4F3D23F3A618004818B6 /* Connection+Cloud.swift in Sources */,
 				D61EC0F121D313F500204BEE /* ScreenSize.swift in Sources */,
+				D6966511263AF4D70009114B /* CaptionView.swift in Sources */,
 				D64C6A9E232D6DD500DB7257 /* TypingIndicatorView.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ChannelCoordinator.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,

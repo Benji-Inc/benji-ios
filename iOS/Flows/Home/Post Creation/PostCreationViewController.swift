@@ -8,12 +8,13 @@
 
 import Foundation
 import Combine
+import Parse
 
 class PostCreationViewController: ImageCaptureViewController {
 
-    private var cancellables = Set<AnyCancellable>()
+    var cancellables = Set<AnyCancellable>()
 
-    private let imageView = UIImageView()
+    let imageView = UIImageView()
     var didShowImage: CompletionOptional = nil
     var shouldHandlePan: ((UIPanGestureRecognizer) -> Void)? = nil
 
@@ -29,6 +30,7 @@ class PostCreationViewController: ImageCaptureViewController {
 
     private(set) var animator: UIViewPropertyAnimator?
 
+    var canSwipeToPost: Bool = false
     var interactionInProgress = false // If we're currently progressing
 
     let threshold: CGFloat = 10 // Distance, in points, a pan must move vertically before a animation
@@ -37,12 +39,15 @@ class PostCreationViewController: ImageCaptureViewController {
     var panStartPoint = CGPoint() // Where the pan gesture began
     var startPoint = CGPoint() // Where the pan gesture was when animation was started
 
+    var previewFile: PFFileObject?
+    var file: PFFileObject?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.view.set(backgroundColor: .background1)
         self.view.addSubview(self.vibrancyView)
-
+        
         self.view.addSubview(self.imageView)
         self.imageView.layer.cornerRadius = 5
         self.imageView.clipsToBounds = true 
@@ -67,12 +72,12 @@ class PostCreationViewController: ImageCaptureViewController {
         self.swipeLabel.setText("Swipe up to post")
         self.swipeLabel.textAlignment = .center
         self.swipeLabel.showShadow(withOffset: 5)
-        self.swipeLabel.alpha = 0
+        self.swipeLabel.alpha = 1
 
         self.vibrancyView.onPan { [unowned self] pan in
             if self.tabState == .home {
                 self.shouldHandlePan?(pan)
-            } else {
+            } else if self.canSwipeToPost {
                 self.handle(pan: pan)
             }
         }
@@ -111,8 +116,8 @@ class PostCreationViewController: ImageCaptureViewController {
         self.tabState = state
         UIView.animate(withDuration: Theme.animationDuration) {
             self.captionTextView.alpha = state == .review ? 1.0 : 0.0
-            self.swipeLabel.alpha = state == .review ? 1.0 : 0.0
             self.exitButton.alpha = state == .home ? 0.0 : 1.0
+            self.swipeLabel.alpha = state == .review ? 1.0 : 0.0
             self.vibrancyView.show(blur: state == .home)
         }
     }
@@ -121,31 +126,32 @@ class PostCreationViewController: ImageCaptureViewController {
         self.stop()
         self.imageView.image = image
         self.didShowImage?()
+        self.preloadData { progress in
+            print(progress)
+            if progress < 100 {
+                self.swipeLabel.setText("Uploading: %\(progress)")
+            } else {
+                self.hideSwipeLabel()
+            }
+            self.view.layoutNow()
+        }.mainSink().store(in: &self.cancellables)
     }
 
     func reset() {
         self.currentPosition = .front
         self.imageView.image = nil
-        self.swipeLabel.alpha = 0.0
         self.imageView.transform = .identity
         self.begin()
-    }
+        self.previewFile?.cancel()
+        self.previewFile?.clearCachedDataInBackground()
 
-    func createPost(progressHandler: @escaping (Int) -> Void) -> Future<Void, Error> {
-        return Future { promise in
-            if let image = self.imageView.image, let data = image.data, let preview = image.previewData {
-                FeedManager.shared.createPost(with: data,
-                                              previewData: preview,
-                                              caption: nil,
-                                              progressHandler: progressHandler)
-                    .mainSink { post in
-                        self.reset()
-                        promise(.success(()))
-                    }.store(in: &self.cancellables)
-            } else {
-                promise(.failure(ClientError.apiError(detail: "No image for post")))
-            }
-        }
+        self.canSwipeToPost = false
+
+        self.file?.cancel()
+        self.previewFile?.clearCachedDataInBackground()
+
+        self.swipeLabel.alpha = 0.0
+        self.swipeLabel.transform = CGAffineTransform(translationX: 0.0, y: 200)
     }
 
     func createAnimator() {
@@ -186,8 +192,15 @@ class PostCreationViewController: ImageCaptureViewController {
         self.animator?.addCompletion({ [weak self] (position) in
             guard let `self` = self else { return }
             // Animator completes initially on pause, so we also need to check progress
-            if position == .end {//, let progress = self.animator?.fractionComplete, progress == 1.0 {
-                print("CREATE POST")
+            if position == .end {
+                self.createPost().mainSink { result in
+                    switch result {
+                    case .success(_):
+                        self.finishSaving()
+                    case .error(_):
+                        break
+                    }
+                }.store(in: &self.cancellables)
             }
             self.animator = nil
         })
@@ -198,6 +211,15 @@ class PostCreationViewController: ImageCaptureViewController {
         self.prepareInitialAnimation()
     }
 
+    private func finishSaving() {
+        UIView.animate(withDuration: Theme.animationDuration, delay: 1.0, options: []) {
+
+        } completion: { _ in
+            self.didTapExit?()
+            self.reset()
+        }
+    }
+
     //reset the animation
     private func prepareInitialAnimation() {
         self.imageView.alpha = 1.0
@@ -206,6 +228,25 @@ class PostCreationViewController: ImageCaptureViewController {
         self.swipeLabel.alpha = 1.0
         self.swipeLabel.transform = .identity
         self.captionTextView.alpha = 1.0
+    }
+
+    func hideSwipeLabel() {
+        UIView.animate(withDuration: Theme.animationDuration, delay: 1.0, options: []) {
+            self.swipeLabel.alpha = 0
+            self.swipeLabel.transform = CGAffineTransform(translationX: 0.0, y: 1000)
+        } completion: { _ in
+            self.showSwipeLabel()
+        }
+    }
+
+    func showSwipeLabel() {
+        self.swipeLabel.setText("Swipe up to post")
+        UIView.animate(withDuration: 1, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1.0, options: .curveEaseInOut, animations: {
+            self.swipeLabel.transform = .identity
+            self.swipeLabel.alpha = 1.0
+        }) { _ in
+            self.canSwipeToPost = true
+        }
     }
 }
 
