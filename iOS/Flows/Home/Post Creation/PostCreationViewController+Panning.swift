@@ -78,7 +78,8 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
                 }
 
             } completion: { _ in
-
+                self.imageView.alpha = 0
+                self.swipeLabel.alpha = 0 
             }
         })
 

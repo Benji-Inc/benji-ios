@@ -50,7 +50,6 @@ class PostCreationViewController: ImageCaptureViewController {
         self.view.set(backgroundColor: .background1)
         self.view.addSubview(self.vibrancyView)
         
-        self.view.addSubview(self.imageView)
         self.imageView.isUserInteractionEnabled = true 
         self.imageView.layer.cornerRadius = 5
         self.imageView.clipsToBounds = true 
@@ -164,7 +163,13 @@ class PostCreationViewController: ImageCaptureViewController {
 
     func show(image: UIImage) {
         self.stop()
+        if self.imageView.superview.isNil {
+            self.view.addSubview(self.imageView)
+        }
+
         self.imageView.image = image
+        self.imageView.alpha = 1.0
+        
         self.didShowImage?()
         self.preloadData { progress in
             print(progress)
@@ -181,7 +186,10 @@ class PostCreationViewController: ImageCaptureViewController {
         self.currentPosition = .front
         self.imageView.image = nil
         self.imageView.transform = .identity
+
+        self.imageView.removeFromSuperview()
         self.begin()
+
         self.previewFile?.cancel()
         self.previewFile?.clearCachedDataInBackground()
 
@@ -196,19 +204,29 @@ class PostCreationViewController: ImageCaptureViewController {
         self.captionTextView.text = nil
         self.captionTextView.resignFirstResponder()
 
-        self.finishLabel.alpha = 0 
+        self.finishLabel.alpha = 0
+
+        self.view.layoutNow()
     }
 
     func finishSaving() {
+        self.imageView.alpha = 0
+
         self.finishLabel.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         self.finishLabel.alpha = 0.0
         self.view.layoutNow()
-        UIView.animate(withDuration: 1, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1.0, options: .curveEaseIn, animations: {
+        
+        UIView.animate(withDuration: 2.5, delay: 0.5, usingSpringWithDamping: 0.5, initialSpringVelocity: 1.0, options: .curveEaseIn, animations: {
             self.finishLabel.transform = .identity
             self.finishLabel.alpha = 1.0
         }) { _ in
-            self.didTapExit?()
-            self.reset()
+            UIView.animate(withDuration: Theme.animationDuration, delay: 0.0, options: []) {
+                self.finishLabel.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+                self.finishLabel.alpha = 0.0
+            } completion: { _ in
+                self.didTapExit?()
+                self.reset()
+            }
         }
     }
 

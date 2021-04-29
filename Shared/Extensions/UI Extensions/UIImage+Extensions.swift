@@ -89,7 +89,7 @@ extension UIImage: MediaItem {
     }
 
     var data: Data? {
-        return self.jpegData(compressionQuality: 100.0)
+        return self.jpegData(compressionQuality: 70.0)
     }
 
     var previewData: Data? {
