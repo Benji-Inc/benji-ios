@@ -11,8 +11,8 @@ import TMROLocalization
 
 class CommentTextView: TextView {
 
-    override func initialize() {
-        super.initialize()
+    override func initializeViews() {
+        super.initializeViews()
 
         self.isEditable = false
         self.isScrollEnabled = false

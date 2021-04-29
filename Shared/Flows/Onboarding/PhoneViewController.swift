@@ -46,7 +46,6 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         } else if let text = self.textField.text, text.isEmpty {
             self.isSendingCode = false
             self.textEntry.button.isEnabled = false
-            
         }
     }
 

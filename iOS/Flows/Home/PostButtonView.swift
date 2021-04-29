@@ -34,10 +34,12 @@ class PostButtonView: View {
                 self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .white))
                 self.button.width = self.height
                 self.button.makeRound()
-            case .post:
+            case .capture:
                 self.button.set(style: .normal(color: .white, text: ""))
                 self.button.width = self.height
                 self.button.makeRound()
+            case .review:
+                break 
             case .confirm:
                 self.button.set(style: .normal(color: .purple, text: "post"), alpha: 0.8)
                 self.button.expandToSuperviewWidth()

@@ -33,7 +33,7 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
 
     func configure(with item: Post) {
 
-        var file = item.preview ?? item.file
+        let file = item.preview ?? item.file
 
         file?.getDataInBackground { data, error in
             if let data = data, let image = UIImage(data: data) {

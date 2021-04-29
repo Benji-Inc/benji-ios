@@ -10,13 +10,17 @@ import Foundation
 import Combine
 import Lottie
 
-class HomeVibrancyView: VibrancyView {
+class PostVibrancyView: VibrancyView {
 
     let animationView = AnimationView(name: "scroll_down")
     let label = Label(font: .small)
 
     override func initializeSubviews() {
         super.initializeSubviews()
+
+        self.layer.cornerRadius = 20
+        self.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        self.layer.masksToBounds = true
 
         self.vibrancyEffectView.contentView.addSubview(self.animationView)
         self.animationView.loopMode = .loop

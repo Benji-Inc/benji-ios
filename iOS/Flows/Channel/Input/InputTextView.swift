@@ -34,8 +34,8 @@ class InputTextView: ExpandingTextView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func initialize() {
-        super.initialize()
+    override func initializeViews() {
+        super.initializeViews()
 
         self.addSubview(self.countView)
         self.countView.isHidden = true

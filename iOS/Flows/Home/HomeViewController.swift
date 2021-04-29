@@ -25,9 +25,7 @@ class HomeViewController: ViewController, TransitionableViewController {
     lazy var captureVC = PostCreationViewController()
     lazy var archivesVC = ArchivesViewController()
 
-    let vibrancyView = HomeVibrancyView()
     let tabView = HomeTabView()
-    let exitButton = ImageViewButton()
 
     var didTapProfile: CompletionOptional = nil
     var didTapChannels: CompletionOptional = nil
@@ -58,23 +56,9 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.addChild(viewController: self.archivesVC)
         self.addChild(viewController: self.captureVC)
 
-        self.view.addSubview(self.vibrancyView)
-
         self.self.captureVC.view.layer.cornerRadius = 20
         self.captureVC.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         self.captureVC.view.layer.masksToBounds = true
-
-        self.vibrancyView.layer.cornerRadius = 20
-        self.vibrancyView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        self.vibrancyView.layer.masksToBounds = true
-
-        self.view.addSubview(self.exitButton)
-        self.exitButton.imageView.image = UIImage(systemName: "xmark")!
-        self.exitButton.alpha = 0 
-        self.exitButton.didSelect { [unowned self] in
-            self.captureVC.reset()
-            self.tabView.state = .home
-        }
 
         self.view.addSubview(self.tabView)
 
@@ -109,17 +93,23 @@ class HomeViewController: ViewController, TransitionableViewController {
         }.store(in: &self.cancellables)
 
         self.tabView.$state.mainSink { state in
-            self.exitButton.alpha = state == .home ? 0.0 : 1.0
-            self.vibrancyView.show(blur: state == .home)
+            self.captureVC.handle(state: state)
+            UIView.animate(withDuration: Theme.animationDuration) {
+                self.view.layoutNow()
+            }
         }.store(in: &self.cancellables)
 
         self.captureVC.didShowImage = { [unowned self] in 
-            self.tabView.state = .confirm
+            self.tabView.state = .review
         }
 
-        self.vibrancyView.onPan { [unowned self] pan in
+        self.captureVC.shouldHandlePan = { [unowned self] pan in
             pan.delegate = self
             self.handle(pan)
+        }
+
+        self.captureVC.didTapExit = {
+            self.tabView.state = .home
         }
 
         self.archivesVC.didSelectClose = { [unowned self] in
@@ -145,12 +135,6 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.captureVC.begin()
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        self.vibrancyView.animateScroll()
-    }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
@@ -164,24 +148,30 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.archivesVC.view.centerOnX()
         self.archivesVC.view.pin(.top, padding: self.minTop)
 
-        self.captureVC.view.height = self.archivesVC.view.height
+        if self.tabView.state == .home {
+            self.captureVC.view.height = self.archivesVC.view.height
+        } else {
+            self.captureVC.view.height = self.view.height - self.view.safeAreaInsets.top
+        }
         self.captureVC.view.expandToSuperviewWidth()
         self.captureVC.view.centerOnX()
 
         if self.topOffset.isNil {
-            self.captureVC.view.pin(.top, padding: self.minTop)
+            if self.tabView.state == .home {
+                self.captureVC.view.pin(.top, padding: self.minTop)
+            } else {
+                self.captureVC.view.pinToSafeArea(.top, padding: 0)
+            }
         }
-
-        self.vibrancyView.frame = self.captureVC.view.frame
 
         let height = 70 + self.view.safeAreaInsets.bottom
         self.tabView.size = CGSize(width: self.view.width, height: height)
         self.tabView.centerOnX()
-        self.tabView.match(.bottom, to: .bottom, of: self.captureVC.view)
-
-        self.exitButton.squaredSize = 50
-        self.exitButton.match(.top, to: .top, of: self.vibrancyView, offset: Theme.contentOffset)
-        self.exitButton.pin(.right, padding: Theme.contentOffset)
+        if self.tabView.state == .review {
+            self.tabView.match(.top, to: .bottom, of: self.captureVC.view)
+        } else {
+            self.tabView.match(.bottom, to: .bottom, of: self.captureVC.view)
+        }
     }
 
     func animate(show: Bool) {
@@ -195,23 +185,14 @@ class HomeViewController: ViewController, TransitionableViewController {
     private func didTapPost() {
         switch self.tabView.state {
         case .home:
-            self.vibrancyView.show(blur: false)
-            self.tabView.state = .post
-        case .post:
+            self.topOffset = nil 
+            self.tabView.state = .capture
+        case .capture:
             self.captureVC.capturePhoto()
+        case .review:
+            break
         case .confirm:
-            self.tabView.postButtonView.button.handleEvent(status: .loading)
-            self.captureVC.createPost { [unowned self] progress in
-                print(progress)
-            }.mainSink { result in
-                switch result {
-                case .success():
-                    self.tabView.postButtonView.button.handleEvent(status: .complete)
-                    self.tabView.state = .post
-                case .error(let e):
-                    self.tabView.postButtonView.button.handleEvent(status: .error(e.localizedDescription))
-                }
-            }.store(in: &self.cancellables)
+            break
         }
     }
 }
