@@ -252,7 +252,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         case .welcome(_):
             return LocalizedString(id: "",
                                    arguments: [],
-                                   default: "Ours is a better place to be social online.")
+                                   default: "Ours is an exclusive community of people building a better place to be social online. To best serve this community, we currently require an RSVP for access OR you can tap JOIN to be added to the waitlist.")
         case .phone(_):
             if let user = self.reservationUser {
                 return LocalizedString(id: "",

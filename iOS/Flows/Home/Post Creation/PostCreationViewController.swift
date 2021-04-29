@@ -26,6 +26,7 @@ class PostCreationViewController: ImageCaptureViewController {
     var didTapExit: CompletionOptional = nil
 
     let swipeLabel = Label(font: .largeThin)
+    let finishLabel = Label(font: .largeThin)
 
     private(set) var tabState: HomeTabView.State = .home
 
@@ -78,6 +79,11 @@ class PostCreationViewController: ImageCaptureViewController {
         self.swipeLabel.textAlignment = .center
         self.swipeLabel.showShadow(withOffset: 5)
         self.swipeLabel.alpha = 1
+
+        self.view.addSubview(self.finishLabel)
+        self.finishLabel.setText("Posted 😎")
+        self.finishLabel.textAlignment = .center
+        self.finishLabel.alpha = 0.0
 
         self.vibrancyView.onPan { [unowned self] pan in
             if self.tabState == .home {
@@ -140,6 +146,9 @@ class PostCreationViewController: ImageCaptureViewController {
         self.gradientView.expandToSuperviewWidth()
         self.gradientView.height = self.imageView.height * 0.35
         self.gradientView.pin(.bottom, padding: 0.0)
+
+        self.finishLabel.setSize(withWidth: self.view.width)
+        self.finishLabel.centerOnXAndY()
     }
 
     func handle(state: HomeTabView.State) {
@@ -186,12 +195,18 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.captionTextView.text = nil
         self.captionTextView.resignFirstResponder()
+
+        self.finishLabel.alpha = 0 
     }
 
     func finishSaving() {
-        UIView.animate(withDuration: Theme.animationDuration, delay: 1.0, options: []) {
-
-        } completion: { _ in
+        self.finishLabel.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        self.finishLabel.alpha = 0.0
+        self.view.layoutNow()
+        UIView.animate(withDuration: 1, delay: 0.0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1.0, options: .curveEaseIn, animations: {
+            self.finishLabel.transform = .identity
+            self.finishLabel.alpha = 1.0
+        }) { _ in
             self.didTapExit?()
             self.reset()
         }

@@ -22,6 +22,7 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
         case .changed:
             if self.interactionInProgress {
                 let progress = self.progress(currentPoint: currentPoint)
+                print(progress)
                 self.animator?.fractionComplete = progress
             } else if currentPoint.y + self.panStartPoint.y > self.threshold {
                 self.interactionInProgress = true
@@ -31,8 +32,8 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
         case .ended, .cancelled, .failed:
             self.interactionInProgress = false
 
-            print(self.progress(currentPoint: currentPoint))
-            self.animator?.isReversed = self.progress(currentPoint: currentPoint) < 1.0
+            let isReversed = self.progress(currentPoint: currentPoint) < 0.5
+            self.animator?.isReversed = isReversed
             self.animator?.continueAnimation(withTimingParameters: nil, durationFactor: 0.0)
 
         case .possible:
@@ -68,7 +69,6 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
                 }
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                    self.captionTextView.alpha = 0.0
                     self.swipeLabel.alpha = 0.0
                     self.swipeLabel.transform = CGAffineTransform(translationX: 0.0, y: -200)
                 }
