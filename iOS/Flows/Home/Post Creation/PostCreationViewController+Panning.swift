@@ -46,4 +46,71 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
         let progress = (self.startPoint.y - currentPoint.y) / self.distance
         return clamp(progress, 0.0, 1.0)
     }
+
+    private func createAnimator() {
+        guard self.animator.isNil else { return }
+
+        self.animator = UIViewPropertyAnimator(duration: 1.0, curve: .linear, animations: { [weak self] in
+            guard let `self` = self else { return }
+            let layer = self.imageView.layer
+            var transform = CATransform3DIdentity
+            transform.m34 = 1.0 / -500
+            transform = CATransform3DRotate(transform, 85.0 * .pi / 180.0, 1.0, 0.0, 0.0)
+
+            let move = CATransform3DMakeTranslation(0, -400, 0)
+            let new = CATransform3DConcat(transform, move)
+            let scale = CATransform3DScale(new, 0.5, 0.5, 0.5)
+
+            UIView.animateKeyframes(withDuration: 0.0, delay: 0.0, options: .allowUserInteraction) {
+
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
+                    layer.transform = scale
+                }
+
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+                    self.captionTextView.alpha = 0.0
+                    self.swipeLabel.alpha = 0.0
+                    self.swipeLabel.transform = CGAffineTransform(translationX: 0.0, y: -200)
+                }
+
+                UIView.addKeyframe(withRelativeStartTime: 0.8, relativeDuration: 0.5) {
+                    self.imageView.alpha = 0.0
+                }
+
+            } completion: { _ in
+
+            }
+        })
+
+        self.animator?.addCompletion({ [weak self] (position) in
+            guard let `self` = self else { return }
+            // Animator completes initially on pause, so we also need to check progress
+            if position == .end {
+                self.createPost().mainSink { result in
+                    switch result {
+                    case .success(_):
+                        self.finishSaving()
+                    case .error(_):
+                        break
+                    }
+                }.store(in: &self.cancellables)
+            }
+            self.animator = nil
+        })
+
+        self.animator?.scrubsLinearly = true
+        self.animator?.isInterruptible = true
+        self.animator?.pauseAnimation()
+        self.prepareInitialAnimation()
+    }
+
+    //reset the animation
+    func prepareInitialAnimation() {
+        self.imageView.alpha = 1.0
+        self.imageView.transform = .identity
+
+        self.swipeLabel.alpha = 1.0
+        self.swipeLabel.transform = .identity
+        self.captionTextView.alpha = 1.0
+    }
 }
