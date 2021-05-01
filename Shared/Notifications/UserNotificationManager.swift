@@ -73,6 +73,7 @@ class UserNotificationManager: NSObject {
                     let categories: Set<UNNotificationCategory> = Set.init(userCategories)
                     self.center.setNotificationCategories(categories)
                 }
+
                 promise(.success(granted))
             }
         }
@@ -85,6 +86,7 @@ class UserNotificationManager: NSObject {
         return Future { promise in
             self.requestAuthorization(with: options)
                 .mainSink { (granted) in
+
                     if granted {
                         application.registerForRemoteNotifications()  // To update our token
                     }
@@ -117,7 +119,7 @@ class UserNotificationManager: NSObject {
     }
 
     #if !NOTIFICATION
-    func clearNotificationCenter() {
+    func resetBadgeCount() {
         let count = UIApplication.shared.applicationIconBadgeNumber
         UIApplication.shared.applicationIconBadgeNumber = 0
         UIApplication.shared.applicationIconBadgeNumber = count
@@ -143,9 +145,18 @@ class UserNotificationManager: NSObject {
     }
 
     func registerPush(from deviceToken: Data) {
-        PFInstallation.current()?.badge = 0
-        PFInstallation.current()?.setDeviceTokenFrom(deviceToken)
-        PFInstallation.current()?.saveToken()
-            .mainSink().store(in: &self.cancellables)
+        guard let current = PFInstallation.current() else { return }
+        // Need to update the device token every app launch
+        current.badge = 0
+        current.setDeviceTokenFrom(deviceToken)
+        current.saveToken()
+            .mainSink(receivedResult: { result in
+                switch result {
+                case .success():
+                    break
+                case .error(let error):
+                    print(error)
+                }
+            }).store(in: &self.cancellables)
     }
 }

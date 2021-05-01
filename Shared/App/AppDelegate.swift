@@ -52,13 +52,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print(error)
+        print("DID FAIL TO REGISTER FOR PUSH \(error)")
     }
 
     func application(_ application: UIApplication,
                  didReceiveRemoteNotification userInfo: [AnyHashable : Any],
                  fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
 
+        print("DID RECEIVE REMOTE NOTIFICATION")
         guard application.applicationState == .active || application.applicationState == .inactive else {
             completionHandler(.noData)
             return
@@ -74,7 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     private func prepareCurrentUser() {
         #if !NOTIFICATION
-        UserNotificationManager.shared.clearNotificationCenter()
+        UserNotificationManager.shared.resetBadgeCount()
         #endif
 
         #if !APPCLIP && !NOTIFICATION
