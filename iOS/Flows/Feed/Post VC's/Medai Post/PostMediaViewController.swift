@@ -48,8 +48,8 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         return true
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
         self.becomeFirstResponder()
     }
@@ -107,7 +107,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         self.addKeyboardObservers()
 
         KeyboardManger.shared.$isKeyboardShowing.mainSink { isShowing in
-            if isShowing, !self.isShowingComments {
+            if isShowing, !self.isShowingComments, self.commentInputAccessoryView.textView.isFirstResponder {
                 self.animateComments(show: true)
             }
         }.store(in: &self.cancellables)
