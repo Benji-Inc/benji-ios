@@ -40,10 +40,10 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
 
         guard let current = self.current else { return }
 
-        let yOffset = self.view.safeAreaInsets.top
+        let yOffset = self.backButton.bottom
         var vcHeight = current.viewController.getHeight(for: self.scrollView.width)
         if vcHeight <= .zero {
-            vcHeight = self.scrollView.height - self.view.safeAreaInsets.top - self.view.safeAreaInsets.bottom
+            vcHeight = self.scrollView.height - yOffset - self.view.safeAreaInsets.top - self.view.safeAreaInsets.bottom
         }
 
         let contentHeight = yOffset + vcHeight
