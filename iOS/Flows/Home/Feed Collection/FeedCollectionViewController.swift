@@ -24,7 +24,8 @@ class FeedCollectionViewController: CollectionViewController<FeedCollectionViewM
     override func initializeViews() {
         super.initializeViews()
 
-        RitualManager.shared.$state.mainSink { state in
+        RitualManager.shared.$state
+            .mainSink { state in
             switch state {
             case .feedAvailable:
                 self.collectionViewManager.loadFeeds()

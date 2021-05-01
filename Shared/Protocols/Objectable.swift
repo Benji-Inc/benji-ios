@@ -174,6 +174,21 @@ extension Objectable where Self: PFObject {
             }
         }
     }
+
+    func retrieveDataFromServer() -> Future<Self, Error> {
+        return Future { promise in
+            self.fetchInBackground { object, error in
+                if let e = error {
+                    SessionManager.shared.handleParse(error: e)
+                    promise(.failure(e))
+                } else if let objectWithData = object as? Self {
+                    promise(.success(objectWithData))
+                } else {
+                    promise(.failure(ClientError.generic))
+                }
+            }
+        }
+    }
     
     func retrieveDataIfNeeded() -> Future<Self, Error> {
         return Future { promise in

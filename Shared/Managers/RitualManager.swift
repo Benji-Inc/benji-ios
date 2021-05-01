@@ -52,9 +52,9 @@ class RitualManager {
             }).store(in: &self.cancellables)
     }
 
-    private func determineState(for user: User) {
+    func determineState(for user: User) {
         if let ritual = user.ritual {
-            ritual.retrieveDataIfNeeded()
+            ritual.retrieveDataFromServer()
                 .mainSink { result in
                     switch result {
                     case .success(let r):

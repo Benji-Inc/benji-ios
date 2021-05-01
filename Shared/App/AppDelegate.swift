@@ -31,24 +31,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        #if !NOTIFICATION
-        UserNotificationManager.shared.clearNotificationCenter()
-        #endif
-        
-        #if !APPCLIP && !NOTIFICATION
-        guard !ChatClientManager.shared.isConnected, let _ = User.current()?.objectId else { return }
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        self.prepareCurrentUser()
+    }
 
-        GetChatToken()
-            .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink(receiveValue: { (token) in
-                if ChatClientManager.shared.client.isNil {
-                    ChatClientManager.shared.initialize(token: token)
-                } else {
-                    ChatClientManager.shared.update(token: token)
-                }
-            }).store(in: &self.cancellables)
-        #endif
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        self.prepareCurrentUser()
     }
 
     func application(_ application: UIApplication,
@@ -83,5 +71,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     #endif
+
+    private func prepareCurrentUser() {
+        #if !NOTIFICATION
+        UserNotificationManager.shared.clearNotificationCenter()
+        #endif
+
+        #if !APPCLIP && !NOTIFICATION
+        guard let current = User.current() else { return }
+
+        RitualManager.shared.determineState(for: current)
+
+        guard !ChatClientManager.shared.isConnected else { return }
+
+        GetChatToken()
+            .makeRequest(andUpdate: [], viewsToIgnore: [])
+            .mainSink(receiveValue: { (token) in
+                if ChatClientManager.shared.client.isNil {
+                    ChatClientManager.shared.initialize(token: token)
+                } else {
+                    ChatClientManager.shared.update(token: token)
+                }
+            }).store(in: &self.cancellables)
+        #endif
+    }
 }
 
