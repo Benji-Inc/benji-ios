@@ -68,6 +68,6 @@ class FeedCell: CollectionViewManagerCell, ManageableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        self.avatarView.reset()
+        self.avatarView.displayable = nil 
     }
 }
