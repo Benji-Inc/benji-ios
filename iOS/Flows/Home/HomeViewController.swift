@@ -22,7 +22,7 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
 
     lazy var feedCollectionVC = FeedCollectionViewController()
-    lazy var captureVC = PostCreationViewController()
+    lazy var createVC = PostCreationViewController()
     lazy var archivesVC = ArchivesViewController()
 
     let tabView = HomeTabView()
@@ -34,7 +34,7 @@ class HomeViewController: ViewController, TransitionableViewController {
 
     var willPresentFeedForUser: ((User) -> Void)? = nil
 
-    private var topOffset: CGFloat?
+    var topOffset: CGFloat?
     var minTop: CGFloat {
         return FeedCollectionViewController.height + self.view.safeAreaInsets.top
     }
@@ -43,9 +43,9 @@ class HomeViewController: ViewController, TransitionableViewController {
         return self.view.height
     }
 
-    private(set) var isPanning: Bool = false
+    var isPanning: Bool = false
     var isMenuPresenting: Bool = false
-    private(set) var isShowingArchive = false
+    var isShowingArchive = false
 
     override func initializeViews() {
         super.initializeViews()
@@ -54,11 +54,11 @@ class HomeViewController: ViewController, TransitionableViewController {
 
         self.addChild(viewController: self.feedCollectionVC)
         self.addChild(viewController: self.archivesVC)
-        self.addChild(viewController: self.captureVC)
+        self.addChild(viewController: self.createVC)
 
-        self.self.captureVC.view.layer.cornerRadius = 20
-        self.captureVC.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        self.captureVC.view.layer.masksToBounds = true
+        self.self.createVC.view.layer.cornerRadius = 20
+        self.createVC.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        self.createVC.view.layer.masksToBounds = true
 
         self.view.addSubview(self.tabView)
 
@@ -75,7 +75,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         }
 
         self.tabView.didSelectFlip = { [unowned self] in
-            self.captureVC.flipCamera()
+            self.createVC.flipCamera()
         }
 
         self.tabView.didSelectPhotoLibrary = { [unowned self] in
@@ -93,22 +93,22 @@ class HomeViewController: ViewController, TransitionableViewController {
         }.store(in: &self.cancellables)
 
         self.tabView.$state.mainSink { state in
-            self.captureVC.handle(state: state)
+            self.createVC.handle(state: state)
             UIView.animate(withDuration: Theme.animationDuration) {
                 self.view.layoutNow()
             }
         }.store(in: &self.cancellables)
 
-        self.captureVC.didShowImage = { [unowned self] in 
+        self.createVC.didShowImage = { [unowned self] in 
             self.tabView.state = .review
         }
 
-        self.captureVC.shouldHandlePan = { [unowned self] pan in
+        self.createVC.shouldHandlePan = { [unowned self] pan in
             pan.delegate = self
             self.handle(pan)
         }
 
-        self.captureVC.didTapExit = {
+        self.createVC.didTapExit = {
             self.tabView.state = .home
         }
 
@@ -132,7 +132,7 @@ class HomeViewController: ViewController, TransitionableViewController {
             }
         }
 
-        self.captureVC.begin()
+        self.createVC.begin()
     }
 
     override func viewDidLayoutSubviews() {
@@ -142,25 +142,25 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.feedCollectionVC.view.height = FeedCollectionViewController.height
         self.feedCollectionVC.view.pinToSafeArea(.top, padding: 0)
 
-        self.archivesVC.view.frame = self.captureVC.view.frame
+        self.archivesVC.view.frame = self.createVC.view.frame
         self.archivesVC.view.height = self.view.height - self.minTop
         self.archivesVC.view.expandToSuperviewWidth()
         self.archivesVC.view.centerOnX()
         self.archivesVC.view.pin(.top, padding: self.minTop)
 
         if self.tabView.state == .home {
-            self.captureVC.view.height = self.archivesVC.view.height
+            self.createVC.view.height = self.archivesVC.view.height
         } else {
-            self.captureVC.view.height = self.view.height - self.view.safeAreaInsets.top
+            self.createVC.view.height = self.view.height - self.view.safeAreaInsets.top
         }
-        self.captureVC.view.expandToSuperviewWidth()
-        self.captureVC.view.centerOnX()
+        self.createVC.view.expandToSuperviewWidth()
+        self.createVC.view.centerOnX()
 
         if self.topOffset.isNil {
             if self.tabView.state == .home {
-                self.captureVC.view.pin(.top, padding: self.minTop)
+                self.createVC.view.pin(.top, padding: self.minTop)
             } else {
-                self.captureVC.view.pinToSafeArea(.top, padding: 0)
+                self.createVC.view.pinToSafeArea(.top, padding: 0)
             }
         }
 
@@ -168,9 +168,9 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.tabView.size = CGSize(width: self.view.width, height: height)
         self.tabView.centerOnX()
         if self.tabView.state == .review {
-            self.tabView.match(.top, to: .bottom, of: self.captureVC.view)
+            self.tabView.match(.top, to: .bottom, of: self.createVC.view)
         } else {
-            self.tabView.match(.bottom, to: .bottom, of: self.captureVC.view)
+            self.tabView.match(.bottom, to: .bottom, of: self.createVC.view)
         }
     }
 
@@ -182,56 +182,9 @@ class HomeViewController: ViewController, TransitionableViewController {
         }
     }
 
-    private func didTapPost() {
-        switch self.tabView.state {
-        case .home:
-            self.topOffset = nil 
-            self.tabView.state = .capture
-        case .capture:
-            self.captureVC.capturePhoto()
-        case .review:
-            break
-        case .confirm:
-            break
-        }
-    }
-}
-
-extension HomeViewController: UIGestureRecognizerDelegate {
-
-    private func handle(_ pan: UIPanGestureRecognizer) {
-        guard let view = pan.view, !self.isMenuPresenting else {return}
-
-        let translation = pan.translation(in: view.superview)
-
-        switch pan.state {
-        case .possible:
-            self.isPanning = false
-        case .began:
-            self.isPanning = false
-            self.topOffset = minTop
-        case .changed:
-            self.isPanning = translation.y > 0
-            let newTop = self.minTop + translation.y
-            self.topOffset = clamp(newTop, self.minTop, self.view.height)
-            self.captureVC.view.top = self.topOffset!
-        case .ended, .cancelled, .failed:
-            self.isPanning = false
-            let diff = (self.view.height - self.minTop) - self.topOffset!
-            let progress = diff / (self.view.height - self.minTop)
-            self.topOffset = progress < 0.65 ? self.minBottom : self.minTop
-
-            self.animateArchives(offset: self.topOffset!, progress: progress)
-        @unknown default:
-            break
-        }
-
-        self.view.layoutNow()
-    }
-
-    private func animateArchives(offset: CGFloat, progress: CGFloat) {
+    func animateArchives(offset: CGFloat, progress: CGFloat) {
         UIView.animate(withDuration: Theme.animationDuration) {
-            self.captureVC.view.top = offset
+            self.createVC.view.top = offset
             self.view.layoutNow()
         } completion: { completed in
             self.isShowingArchive = progress < 0.65
@@ -239,13 +192,22 @@ extension HomeViewController: UIGestureRecognizerDelegate {
         }
     }
 
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let _ = gestureRecognizer as? UIPanGestureRecognizer, self.isMenuPresenting {
-            return false
-        } else if let _ = gestureRecognizer as? UIScreenEdgePanGestureRecognizer, self.isPanning {
-            return false
-        }
+    private func didTapPost() {
+        switch self.tabView.state {
+        case .home:
+            self.topOffset = nil 
+            self.tabView.state = .capture
 
-        return true
+            if self.createVC.vibrancyView.animationView.isAnimationPlaying {
+                self.createVC.vibrancyView.animationView.stop()
+            }
+            
+        case .capture:
+            self.createVC.capturePhoto()
+        case .review:
+            break
+        case .confirm:
+            break
+        }
     }
 }

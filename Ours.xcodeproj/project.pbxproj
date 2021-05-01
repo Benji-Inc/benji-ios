@@ -26,6 +26,7 @@
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
 		D6116C3C25F2335000D94A09 /* PostVibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */; };
+		D6140737263DB22F00B84605 /* HomeViewController+Panning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140736263DB22F00B84605 /* HomeViewController+Panning.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
@@ -732,6 +733,7 @@
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
 		D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVibrancyView.swift; sourceTree = "<group>"; };
+		D6140736263DB22F00B84605 /* HomeViewController+Panning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeViewController+Panning.swift"; sourceTree = "<group>"; };
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewManager.swift; sourceTree = "<group>"; };
 		D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
@@ -1976,13 +1978,14 @@
 		D6D145F521D549A300CD8CE4 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				D6882B9C26010EA500F94F07 /* Post Creation */,
-				D6792CDB25F9662400B6575C /* Feed Collection */,
 				D63D71BC25F03025004C26F7 /* AnimatingLabel.swift */,
+				D6792CDB25F9662400B6575C /* Feed Collection */,
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
 				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
+				D6140736263DB22F00B84605 /* HomeViewController+Panning.swift */,
 				D642735422C87CCA0088256B /* ImageViewButton.swift */,
+				D6882B9C26010EA500F94F07 /* Post Creation */,
 				D67C319525EE882B00289787 /* PostButtonView.swift */,
 				D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */,
 			);
@@ -2503,6 +2506,7 @@
 				D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */,
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
+				D6140737263DB22F00B84605 /* HomeViewController+Panning.swift in Sources */,
 				D6B37CAD25F7C50000BC3145 /* ConnectionRequestPost.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */,

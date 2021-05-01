@@ -264,7 +264,7 @@ extension HomeCoordinator: UIImagePickerControllerDelegate, UINavigationControll
             return
         }
 
-        self.homeVC.captureVC.show(image: image)
+        self.homeVC.createVC.show(image: image)
     }
 }
 
