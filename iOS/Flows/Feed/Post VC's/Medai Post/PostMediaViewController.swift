@@ -27,7 +27,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
 
     var indexPathForEditing: IndexPath?
 
-    private let imageView = UIImageView()
+    private let imageView = DisplayableImageView()
     private let gradientView = GradientView(with: [Color.clear.color.cgColor, Color.background1.color.withAlphaComponent(0.5).cgColor], startPoint: .topCenter, endPoint: .bottomCenter)
     private let captionView = CaptionView()
     private lazy var commentsVC = CommentsViewController(with: self.post)
@@ -164,13 +164,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
 
         guard let file = self.post.file else { return }
 
-        file.getDataInBackground { data, error in
-            if let data = data, let image = UIImage(data: data) {
-                self.imageView.image = image
-            }
-        } progressBlock: { progress in
-            print(progress)
-        }
+        self.imageView.displayable = file
     }
 
     override func viewDidLayoutSubviews() {
@@ -201,7 +195,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
 
         let height = self.captionView.getHeight(for: self.view.width - self.moreButton.width - Theme.contentOffset)
         self.captionView.height = height
-        self.captionView.match(.bottom, to: .bottom, of: self.moreButton)
+        self.captionView.pinToSafeArea(.bottom, padding: SwipeableInputAccessoryView.preferredHeight + Theme.contentOffset)
         self.captionView.pin(.left, padding: Theme.contentOffset)
 
         self.consumersView.setSize()

@@ -32,7 +32,7 @@ class CaptionView: View {
         return Future { promise in
             post.author?.retrieveDataIfNeeded()
                 .mainSink(receiveValue: { user in
-                    self.label.setText(user.fullName + ":")
+                    self.label.setText(user.handle)
                     self.captionLabel.setText(post.body)
                     promise(.success(()))
                 }).store(in: &self.cancellables)

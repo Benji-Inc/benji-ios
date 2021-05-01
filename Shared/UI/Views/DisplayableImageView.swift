@@ -29,6 +29,7 @@ class DisplayableImageView: View {
             guard let displayable = self.displayable else {
                 self.imageView.image = nil
                 self.blurView.effect = self.blurEffect
+                self.loadingIndicator.stopAnimating()
                 return
             }
 
@@ -68,10 +69,10 @@ class DisplayableImageView: View {
                 }
 
                 if let img = image {
+                    self.loadingIndicator.stopAnimating()
                     self.didDisplayImage?(img)
                 }
 
-                self.loadingIndicator.stopAnimating()
 
             }.store(in: &self.cancellables)
     }
