@@ -58,15 +58,14 @@ class DisplayableImageView: View {
             self.findUser(with: objectID)
         } else if let url = displayable.url {
             self.downloadAndSetImage(url: url)
+        } else if let file = displayable as? PFFileObject {
+            self.downloadAndSet(file: file)
         }
     }
 
     private func downloadAndSetImage(for user: User) {
-        user.smallImage?.getDataInBackground { (imageData: Data?, error: Error?) in
-            guard let data = imageData, let image = UIImage(data: data) else { return }
-            self.imageView.image = image
-            self.didDisplayImage?(image)
-        }
+        guard let file = user.smallImage else { return }
+        self.downloadAndSet(file: file)
     }
 
     private func findUser(with objectID: String) {
@@ -82,5 +81,21 @@ class DisplayableImageView: View {
             self.imageView.image = downloadedImage
             self.didDisplayImage?(downloadedImage)
         })
+    }
+
+    private func downloadAndSet(file: PFFileObject) {
+        file.retrieveDataInBackground { progress in
+            // show progress
+        }.mainSink { result in
+            switch result {
+            case .success(let data):
+                guard let image = UIImage(data: data) else { return }
+                self.imageView.image = image
+                self.didDisplayImage?(image)
+            case .error(let error):
+                // show error
+                break
+            }
+        }.store(in: &self.cancellables)
     }
 }

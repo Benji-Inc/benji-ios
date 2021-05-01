@@ -12,7 +12,7 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Post
 
     private let gradientView = ArchiveGradientView()
-    private let imageView = UIImageView()
+    private let imageView = DisplayableImageView()
     private let label = Label(font: .smallBold)
 
     var currentItem: Post?
@@ -37,7 +37,7 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
 
         file?.getDataInBackground { data, error in
             if let data = data, let image = UIImage(data: data) {
-                self.imageView.image = image
+                self.imageView.displayable = image
             }
         } progressBlock: { progress in
             print(progress)

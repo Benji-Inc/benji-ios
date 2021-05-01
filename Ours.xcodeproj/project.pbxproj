@@ -528,6 +528,9 @@
 		D696650F2639B5640009114B /* PostCreationViewController+Upload.swift in Sources */ = {isa = PBXBuildFile; fileRef = D696650E2639B5640009114B /* PostCreationViewController+Upload.swift */; };
 		D6966511263AF4D70009114B /* CaptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966510263AF4D70009114B /* CaptionView.swift */; };
 		D6966515263B60910009114B /* PostCreationViewController+Panning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966514263B60910009114B /* PostCreationViewController+Panning.swift */; };
+		D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
+		D6966518263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
+		D6966519263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
 		D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
 		D69972FA25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
 		D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
@@ -956,6 +959,7 @@
 		D696650E2639B5640009114B /* PostCreationViewController+Upload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostCreationViewController+Upload.swift"; sourceTree = "<group>"; };
 		D6966510263AF4D70009114B /* CaptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionView.swift; sourceTree = "<group>"; };
 		D6966514263B60910009114B /* PostCreationViewController+Panning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostCreationViewController+Panning.swift"; sourceTree = "<group>"; };
+		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
 		D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
 		D69972FD25EAFC18000AEE6A /* OursNotificationContent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursNotificationContent.entitlements; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
@@ -1854,6 +1858,7 @@
 			isa = PBXGroup;
 			children = (
 				D67934DE23DDFC4200536B44 /* PFInstallation+Extensions.swift */,
+				D6966516263D96D70009114B /* PFFileObject+Extensions.swift */,
 			);
 			path = Parse;
 			sourceTree = "<group>";
@@ -2666,6 +2671,7 @@
 				D64932D723FE460200986335 /* FeedIndicatorView.swift in Sources */,
 				D66A580525DD68F9001B3F64 /* NewChannelCoordinator.swift in Sources */,
 				D6D1500C21D5E7C200CD8CE4 /* CollectionViewManager.swift in Sources */,
+				D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */,
 				D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */,
 				D6FA622423F06AEF00048C4A /* AnimationCycle.swift in Sources */,
 				D64DD8AC23CE2C180039DC5A /* OnboardingViewController.swift in Sources */,
@@ -2857,6 +2863,7 @@
 				D63DB29125E999B200F6B323 /* Button.swift in Sources */,
 				D63DB25625E9995700F6B323 /* ClientError.swift in Sources */,
 				D63DB21725E998E200F6B323 /* AppDelegate+Initialization.swift in Sources */,
+				D6966519263D96D70009114B /* PFFileObject+Extensions.swift in Sources */,
 				D63DB22725E9990900F6B323 /* MathFunctions.swift in Sources */,
 				D63DB28F25E999AB00F6B323 /* FullScreenViewController.swift in Sources */,
 			);
@@ -2970,6 +2977,7 @@
 				D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */,
 				D65519112589120600B901E4 /* Array+Extensions.swift in Sources */,
 				D65519052589110A00B901E4 /* DeeplinkTarget.swift in Sources */,
+				D6966518263D96D70009114B /* PFFileObject+Extensions.swift in Sources */,
 				D65519442589123200B901E4 /* Completeable.swift in Sources */,
 				D65519152589120C00B901E4 /* Error+Extensions.swift in Sources */,
 				D67758AF25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */,
