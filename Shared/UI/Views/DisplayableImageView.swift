@@ -20,6 +20,10 @@ class DisplayableImageView: View {
     lazy var blurEffect = UIBlurEffect(style: .systemMaterialDark)
     lazy var blurView = BlurView(effect: self.blurEffect)
 
+    lazy var loadingIndicator = UIActivityIndicatorView(style: .medium)
+
+    let errorImageView = UIImageView(image: UIImage(systemName: "exclamationmark.triangle"))
+
     var displayable: ImageDisplayable? {
         didSet {
             guard let displayable = self.displayable else { return }
@@ -53,6 +57,13 @@ class DisplayableImageView: View {
         self.imageView.contentMode = .scaleAspectFill
 
         self.addSubview(self.blurView)
+        self.blurView.contentView.addSubview(self.loadingIndicator)
+        self.loadingIndicator.hidesWhenStopped = true
+
+        self.blurView.contentView.addSubview(self.errorImageView)
+        self.errorImageView.tintColor = Color.white.color
+        self.errorImageView.contentMode = .scaleAspectFit
+        self.errorImageView.alpha = 0.0
 
         self.imageView.publisher(for: \.image)
             .removeDuplicates()
@@ -62,6 +73,9 @@ class DisplayableImageView: View {
                 }
 
                 if let img = image {
+                    if self.loadingIndicator.isAnimating {
+                        self.loadingIndicator.stopAnimating()
+                    }
                     self.didDisplayImage?(img)
                 }
 
@@ -73,9 +87,17 @@ class DisplayableImageView: View {
 
         self.imageView.expandToSuperviewSize()
         self.blurView.expandToSuperviewSize()
+
+        self.loadingIndicator.centerOnXAndY()
+
+        self.errorImageView.squaredSize = self.blurView.width * 0.25
+        self.errorImageView.centerOnXAndY()
     }
 
     private func updateImageView(with displayable: ImageDisplayable) {
+        self.errorImageView.alpha = 0.0
+        self.loadingIndicator.startAnimating()
+
         if let photo = displayable.image {
             self.imageView.image = photo
         } else if let objectID = displayable.userObjectID {
@@ -101,7 +123,12 @@ class DisplayableImageView: View {
 
     private func downloadAndSetImage(url: URL) {
         self.imageView.sd_setImage(with: url, completed: { [weak self] (image, error, imageCacheType, imageUrl) in
-            guard let `self` = self, let downloadedImage = image else { return }
+            guard let `self` = self, let downloadedImage = image else {
+                self?.loadingIndicator.stopAnimating()
+                self?.errorImageView.alpha = 1.0
+                return
+            }
+
             self.imageView.image = downloadedImage
         })
     }
@@ -112,14 +139,18 @@ class DisplayableImageView: View {
         }.mainSink { result in
             switch result {
             case .success(let data):
-                guard let image = UIImage(data: data) else { return }
+                guard let image = UIImage(data: data) else {
+                    self.loadingIndicator.stopAnimating()
+                    self.errorImageView.alpha = 1.0
+                    return
+                }
+
                 self.imageView.image = image
-                self.didDisplayImage?(image)
-            case .error(let error):
-                // show error
+            case .error(_):
+                self.errorImageView.alpha = 1.0
+                self.loadingIndicator.stopAnimating()
                 break
             }
         }.store(in: &self.cancellables)
     }
-
 }
