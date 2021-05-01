@@ -67,7 +67,7 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         guard let camera = AVCaptureDevice.default(.builtInWideAngleCamera,
                                                    for: .video,
                                                    position: self.currentPosition) else {
-                                                    fatalError("No front video camera available")
+            return
         }
 
         // Connect the camera to the capture session input
@@ -127,8 +127,8 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         connection.automaticallyAdjustsVideoMirroring = true
 
         guard error == nil,
-            let imageData = photo.fileDataRepresentation(),
-            let image = UIImage.init(data: imageData , scale: 1.0) else { return }
+              let imageData = photo.fileDataRepresentation(),
+              let image = UIImage.init(data: imageData , scale: 1.0) else { return }
 
         self.didCapturePhoto?(image)
     }

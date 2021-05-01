@@ -27,7 +27,7 @@ class PostButtonView: View {
     }
 
     func update(for state: HomeTabView.State) {
-
+        print(state)
         UIView.animate(withDuration: Theme.animationDuration) {
             switch state {
             case .home:
@@ -41,9 +41,7 @@ class PostButtonView: View {
             case .review:
                 break 
             case .confirm:
-                self.button.set(style: .normal(color: .purple, text: "post"), alpha: 0.8)
-                self.button.expandToSuperviewWidth()
-                self.button.roundCorners()
+                break
             }
 
             self.layoutNow()
