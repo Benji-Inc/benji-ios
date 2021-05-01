@@ -72,4 +72,10 @@ class CollectionViewManagerCell: UICollectionViewCell {
     func collectionViewManagerDidEndDisplaying() { }
 
     func update(isSelected: Bool) {}
+
+    func reset() {
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+    }
 }

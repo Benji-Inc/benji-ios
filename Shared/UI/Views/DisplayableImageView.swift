@@ -15,7 +15,7 @@ import Combine
 class DisplayableImageView: View {
 
     private(set) var imageView = UIImageView()
-    private var cancellables = Set<AnyCancellable>()
+    private(set) var cancellables = Set<AnyCancellable>()
 
     lazy var blurEffect = UIBlurEffect(style: .systemMaterialDark)
     lazy var blurView = BlurView(effect: self.blurEffect)
@@ -26,7 +26,12 @@ class DisplayableImageView: View {
 
     var displayable: ImageDisplayable? {
         didSet {
-            guard let displayable = self.displayable else { return }
+            guard let displayable = self.displayable else {
+                self.imageView.image = nil
+                self.blurView.effect = self.blurEffect
+                return
+            }
+
             self.updateImageView(with: displayable)
             self.setNeedsLayout()
         }
@@ -34,19 +39,8 @@ class DisplayableImageView: View {
 
     var didDisplayImage: ((UIImage) -> Void)? = nil
 
-    override init() {
-        super.init()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        self.displayable = UIImage()
-        super.init(coder: aDecoder)
-    }
-
     deinit {
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
-        }
+        self.reset()
     }
 
     override func initializeSubviews() {
@@ -68,16 +62,16 @@ class DisplayableImageView: View {
         self.imageView.publisher(for: \.image)
             .removeDuplicates()
             .mainSink { image in
+                
                 UIView.animate(withDuration: Theme.animationDuration) {
                     self.blurView.effect = image.isNil ? self.blurEffect : nil
                 }
 
                 if let img = image {
-                    if self.loadingIndicator.isAnimating {
-                        self.loadingIndicator.stopAnimating()
-                    }
                     self.didDisplayImage?(img)
                 }
+
+                self.loadingIndicator.stopAnimating()
 
             }.store(in: &self.cancellables)
     }
@@ -152,5 +146,17 @@ class DisplayableImageView: View {
                 break
             }
         }.store(in: &self.cancellables)
+    }
+
+    func reset() {
+        
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+
+        self.errorImageView.alpha = 0.0
+        self.displayable = nil
+        self.loadingIndicator.stopAnimating()
+        self.blurView.effect = self.blurEffect
     }
 }

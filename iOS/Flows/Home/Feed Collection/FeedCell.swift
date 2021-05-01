@@ -38,8 +38,6 @@ class FeedCell: CollectionViewManagerCell, ManageableCell {
                     break
                 }
             }).store(in: &self.cancellables)
-
-
     }
 
     func checkForPosts(for user: User, andUpdate image: UIImage) {
@@ -65,5 +63,11 @@ class FeedCell: CollectionViewManagerCell, ManageableCell {
 
         self.avatarView.setSize(for: self.height)
         self.avatarView.centerOnXAndY()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.avatarView.reset()
     }
 }

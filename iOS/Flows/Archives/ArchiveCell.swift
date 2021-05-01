@@ -32,17 +32,11 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
     }
 
     func configure(with item: Post) {
+        self.reset()
 
         let file = item.preview ?? item.file
 
-        file?.getDataInBackground { data, error in
-            if let data = data, let image = UIImage(data: data) {
-                self.imageView.displayable = image
-            }
-        } progressBlock: { progress in
-            print(progress)
-        }
-
+        self.imageView.displayable = file
         self.label.setText(item.createdAt?.getDistanceAgoString() ?? String())
     }
 
@@ -60,11 +54,11 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
         self.label.pin(.bottom, padding: 6)
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    override func reset() {
+        super.reset()
 
-        self.imageView.displayable = nil
-        self.label.text = nil 
+        self.imageView.displayable = nil 
+        self.label.text = nil
     }
 }
 
