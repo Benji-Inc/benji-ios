@@ -17,6 +17,9 @@ class DisplayableImageView: View {
     private(set) var imageView = UIImageView()
     private var cancellables = Set<AnyCancellable>()
 
+    lazy var blurEffect = UIBlurEffect(style: .systemMaterialDark)
+    lazy var blurView = BlurView(effect: self.blurEffect)
+
     var displayable: ImageDisplayable? {
         didSet {
             guard let displayable = self.displayable else { return }
@@ -36,24 +39,45 @@ class DisplayableImageView: View {
         super.init(coder: aDecoder)
     }
 
+    deinit {
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+    }
+
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.set(backgroundColor: .clear)
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFill
+
+        self.addSubview(self.blurView)
+
+        self.imageView.publisher(for: \.image)
+            .removeDuplicates()
+            .mainSink { image in
+                UIView.animate(withDuration: Theme.animationDuration) {
+                    self.blurView.effect = image.isNil ? self.blurEffect : nil
+                }
+
+                if let img = image {
+                    self.didDisplayImage?(img)
+                }
+
+            }.store(in: &self.cancellables)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.imageView.frame = self.bounds
+        self.imageView.expandToSuperviewSize()
+        self.blurView.expandToSuperviewSize()
     }
 
     private func updateImageView(with displayable: ImageDisplayable) {
         if let photo = displayable.image {
             self.imageView.image = photo
-            self.didDisplayImage?(photo)
         } else if let objectID = displayable.userObjectID {
             self.findUser(with: objectID)
         } else if let url = displayable.url {
@@ -79,7 +103,6 @@ class DisplayableImageView: View {
         self.imageView.sd_setImage(with: url, completed: { [weak self] (image, error, imageCacheType, imageUrl) in
             guard let `self` = self, let downloadedImage = image else { return }
             self.imageView.image = downloadedImage
-            self.didDisplayImage?(downloadedImage)
         })
     }
 
@@ -98,4 +121,5 @@ class DisplayableImageView: View {
             }
         }.store(in: &self.cancellables)
     }
+
 }

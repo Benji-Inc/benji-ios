@@ -63,7 +63,7 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        self.imageView.image = nil
+        self.imageView.displayable = nil
         self.label.text = nil 
     }
 }
