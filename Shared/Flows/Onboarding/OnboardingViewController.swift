@@ -30,6 +30,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var nameVC = NameViewController()
     lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
+    //lazy var ritualVC = ritualview
     let avatarView = AvatarView()
     private let confettiView = ConfettiView()
     
