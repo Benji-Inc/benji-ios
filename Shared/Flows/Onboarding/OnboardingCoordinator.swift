@@ -9,8 +9,11 @@
 import Foundation
 import PhoneNumberKit
 import Parse
+import Combine
 
 class OnboardingCoordinator: PresentableCoordinator<Void> {
+
+    private var cancellables = Set<AnyCancellable>()
 
     lazy var onboardingVC = OnboardingViewController(with: self.reservationId,
                                                      reservationCreatorId: self.reservationCreatorId,
@@ -53,4 +56,16 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     func onboardingView(_ controller: OnboardingViewController, didVerify user: PFUser) {
         self.finishFlow(with: ())
     }
+
+    func onboardingViewControllerNeedsAuthorization(_ controller: OnboardingViewController) {
+        UserNotificationManager.shared.register(application: UIApplication.shared)
+            .mainSink { (granted) in
+                if granted {
+                    controller.ritualVC.state = .update
+                } else if let settingsUrl = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(settingsUrl, completionHandler: { (success) in })
+                }
+            }.store(in: &self.cancellables)
+    }
 }
+

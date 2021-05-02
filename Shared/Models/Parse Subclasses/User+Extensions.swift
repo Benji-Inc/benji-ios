@@ -24,8 +24,10 @@ extension User: Avatar {
 
         if self.fullName.isEmpty {
             return false
-        } else if self.smallImage == nil {
+        } else if self.smallImage.isNil {
             return false
+        } else if self.ritual.isNil {
+            return false 
         }
 
         return true 

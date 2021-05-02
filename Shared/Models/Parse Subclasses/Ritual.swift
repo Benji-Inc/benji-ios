@@ -95,18 +95,32 @@ extension Ritual: Objectable {
 
     func saveEventually() -> Future<Ritual, Error> {
         return Future { promise in
-            User.current()?.ritual = self
-            User.current()?.saveLocalThenServer()
-                .mainSink(receiveValue: { (_) in
-                    promise(.success(self))
-                }, receiveCompletion: { (result) in
-                    switch result {
-                    case .finished:
-                        break
-                    case .failure(let e):
-                        promise(.failure(e))
-                    }
-                }).store(in: &self.cancellables)
+            if let ritual = User.current()?.ritual {
+                ritual.hour = self.hour
+                ritual.minute = self.minute
+                ritual.saveEventually()
+                    .mainSink { result in
+                        switch result {
+                        case .success(let ritual):
+                            promise(.success(ritual))
+                        case .error(let error):
+                            promise(.failure(error))
+                        }
+                    }.store(in: &self.cancellables)
+            } else {
+                User.current()?.ritual = self
+                User.current()?.saveLocalThenServer()
+                    .mainSink(receiveValue: { (_) in
+                        promise(.success(self))
+                    }, receiveCompletion: { (result) in
+                        switch result {
+                        case .finished:
+                            break
+                        case .failure(let e):
+                            promise(.failure(e))
+                        }
+                    }).store(in: &self.cancellables)
+            }
         }
     }
 }

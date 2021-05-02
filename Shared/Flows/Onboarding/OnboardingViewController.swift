@@ -12,6 +12,7 @@ import TMROLocalization
 
 protocol OnboardingViewControllerDelegate: AnyObject {
     func onboardingView(_ controller: OnboardingViewController, didVerify user: PFUser)
+    func onboardingViewControllerNeedsAuthorization(_ controller: OnboardingViewController)
 }
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent>, TransitionableViewController {
@@ -135,9 +136,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.photoVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                if let user = User.current() {
-                    self.delegate.onboardingView(self, didVerify: user)
-                }
+                self.current = .ritual(self.ritualVC)
             case .failure(_):
                 break
             }
@@ -152,6 +151,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             case .failure(_):
                 break
             }
+        }
+
+        self.ritualVC.didTapNeedsAthorization = { [unowned self] in
+            self.delegate.onboardingViewControllerNeedsAuthorization(self)
         }
 
         self.ritualVC.$state.mainSink { state in
@@ -248,11 +251,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         case .ritual(let vc):
             switch vc.state {
             case .needsAuthorization:
-                return ""
+                return "Last Step"
             case .edit:
-                return ""
+                return "DAILY RITUAL"
             case .update:
-                return ""
+                return "DAILY RITUAL"
             }
         }
     }
@@ -328,11 +331,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         case .ritual(let vc):
             switch vc.state {
             case .needsAuthorization:
-                return ""
+                return "A ritual is a period of time each day you are most ready to engage with others. Allow notifications to get started."
             case .edit:
-                return ""
+                return "Swipe/tap to set your ritual. Each day, starting at that time, you will have 60 mins to access optimized ways to engage with others."
             case .update:
-                return ""
+                return "Your ritual has been set."
             }
         }
     }
@@ -373,7 +376,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             #if APPCLIP
             self.current = .waitlist(self.waitlistVC)
             #else
-            if let _ = User.current()?.smallImage {
+            if let current = User.current(), current.isOnboarded {
                 self.delegate.onboardingView(self, didVerify: User.current()!)
             } else {
                 self.current = .photo(self.photoVC)
