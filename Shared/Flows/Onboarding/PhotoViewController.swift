@@ -233,7 +233,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private func showButtons() {
         UIView.animate(withDuration: Theme.animationDuration) {
             self.buttonContainerRect = CGRect(x: Theme.contentOffset,
-                                              y: self.view.height - self.view.safeAreaInsets.bottom - Theme.buttonHeight,
+                                              y: self.view.height - self.view.safeAreaInsets.bottom - Theme.buttonHeight - Theme.contentOffset,
                                               width: self.view.width - (Theme.contentOffset * 2),
                                               height: Theme.buttonHeight)
             self.view.layoutNow()
@@ -284,27 +284,12 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     func saveProfilePicture(image: UIImage) {
-        guard let current = User.current() else { return }
+        guard let current = User.current(), let data = image.previewData else { return }
 
-        // NOTE: Remember, we're in points not pixels. Max image size will
-        // depend on image pixel density. It's okay for now.
-        let maxAllowedDimension: CGFloat = 100.0
-        let longSide = max(image.size.width, image.size.height)
-
-        var scaledImage: UIImage
-        if longSide > maxAllowedDimension {
-            let scaleFactor: CGFloat = maxAllowedDimension / longSide
-            scaledImage = image.scaled(by: scaleFactor)
-        } else {
-            scaledImage = image
-        }
-
-        if let scaledData = scaledImage.pngData() {
-            let scaledImageFile = PFFileObject(name:"small_image.png", data: scaledData)
-            current.smallImage = scaledImageFile
-        }
-
+        let file = PFFileObject(name:"small_image.jpeg", data: data)
         self.confirmButton.handleEvent(status: .loading)
+        
+        current.smallImage = file
         current.saveToServer()
             .flatMap({ (user) -> AnyPublisher<Any, Error> in
                 return ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
@@ -312,13 +297,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 switch result {
                 case .success(_):
                     self.currentState = .finish
-                case .error(let error):
+                case .error(_):
                     self.currentState = .error
                 }
             }).store(in: &self.cancellables)
-    }
-
-    func getHeight(for width: CGFloat) -> CGFloat {
-        return 450
     }
 }

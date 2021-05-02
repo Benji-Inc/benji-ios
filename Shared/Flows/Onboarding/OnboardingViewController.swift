@@ -195,7 +195,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getInitialContent() -> OnboardingContent {
-        guard let status = User.current()?.status else { return .welcome(self.welcomeVC)}
+        guard let current = User.current(), let status = current.status else { return .welcome(self.welcomeVC)}
         switch status {
         case .active, .waitlist:
             #if APPCLIP
@@ -207,7 +207,15 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             #if APPCLIP
             return .waitlist(self.waitlistVC)
             #else
-            return .name(self.nameVC)
+            if current.fullName.isEmpty {
+                return .name(self.nameVC)
+            } else if current.smallImage.isNil {
+                return .photo(self.photoVC)
+            } else if current.ritual.isNil {
+                return .ritual(self.ritualVC)
+            } else {
+                return .name(self.nameVC)
+            }
             #endif
         case .needsVerification:
             return .welcome(self.welcomeVC)
@@ -326,16 +334,16 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         case .photo(_):
             return LocalizedString(id: "",
                                    arguments: [],
-                                   default: "For the safety of yourself and others, we require a front facing photo. This helps ensure everyone is who they say they are. No 🤖's!")
+                                   default: "To ensure everyone is who they say they are we require a photo. No 🤖's!")
             
         case .ritual(let vc):
             switch vc.state {
             case .needsAuthorization:
-                return "A ritual is a period of time each day you are most ready to engage with others. Allow notifications to get started."
+                return "Your ritual is a practice/reminder each day to for you to engage with others, so that the rest of your day is as distraction free as possible."
             case .edit:
-                return "Swipe/tap to set your ritual. Each day, starting at that time, you will have 60 mins to access optimized ways to engage with others."
+                return "Each day, beginning at that time you select, you will have 60 mins to access optimized ways to engage with others."
             case .update:
-                return "Your ritual has been set."
+                return "Each day, beginning at that time you select, you will have 60 mins to access optimized ways to engage with others."
             }
         }
     }

@@ -74,10 +74,10 @@ class NavigationBarViewController: ViewController {
 
         if let viewForPinning = self.getViewForPinning() {
             self.descriptionLabel.match(.bottom, to: .top, of: viewForPinning, offset: -Theme.contentOffset.doubled)
-            self.titleLabel.match(.bottom, to: .top, of: self.descriptionLabel, offset: -20)
+            self.titleLabel.match(.bottom, to: .top, of: self.descriptionLabel, offset: 0)
         } else {
             self.titleLabel.pinToSafeArea(.top, padding: Theme.contentOffset)
-            self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 20)
+            self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 10)
         }
 
         self.blurView.expandToSuperviewSize()

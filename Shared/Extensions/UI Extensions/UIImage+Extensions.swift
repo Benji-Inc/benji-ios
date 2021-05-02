@@ -47,6 +47,10 @@ extension UIImage {
 
         return scaledImage
     }
+
+    var previewData: Data? {
+        return self.jpegData(compressionQuality: 30.0)
+    }
 }
 
 extension UIImage: Avatar {
@@ -90,10 +94,6 @@ extension UIImage: MediaItem {
 
     var data: Data? {
         return self.jpegData(compressionQuality: 70.0)
-    }
-
-    var previewData: Data? {
-        return self.jpegData(compressionQuality: 30.0)
     }
 }
 #endif

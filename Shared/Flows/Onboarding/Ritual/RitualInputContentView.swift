@@ -49,7 +49,7 @@ class RitualInputContentView: View {
         super.layoutSubviews()
 
         self.confirmButton.setSize(with: self.width)
-        self.confirmButton.bottom = self.height
+        self.confirmButton.bottom = self.height - Theme.contentOffset
         self.confirmButton.centerOnX()
 
         self.timeHump.size = CGSize(width: self.width - Theme.contentOffset.doubled, height: 140)
