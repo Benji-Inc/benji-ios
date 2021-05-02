@@ -1169,10 +1169,10 @@
 		D6140742263EE7D800B84605 /* Ritual */ = {
 			isa = PBXGroup;
 			children = (
-				80C7C6052316112400643A14 /* TimeHumpView.swift */,
 				D6140738263E240D00B84605 /* RitualInputContentView.swift */,
 				D614073B263E240D00B84605 /* RitualInputViewController.swift */,
 				D6140739263E240D00B84605 /* RitualTimeLabel.swift */,
+				80C7C6052316112400643A14 /* TimeHumpView.swift */,
 			);
 			path = Ritual;
 			sourceTree = "<group>";

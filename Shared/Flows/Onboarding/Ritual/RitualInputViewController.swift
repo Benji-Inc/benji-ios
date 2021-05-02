@@ -18,7 +18,10 @@ private func round(num: CGFloat, toMultipleOf multiple: Int) -> Int {
     return Int(rounded)
 }
 
-class RitualInputViewController: ViewController {
+class RitualInputViewController: ViewController, Completable, Sizeable {
+    typealias ResultType = Void
+    
+    var onDidComplete: ((Result<Void, Error>) -> Void)?
 
     enum State {
         case needsAuthorization
@@ -131,6 +134,7 @@ class RitualInputViewController: ViewController {
                 delay(2) {
                     self.state = .edit
                 }
+                self.complete(with: .success(()))
             }.store(in: &self.cancellables)
     }
 

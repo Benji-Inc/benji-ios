@@ -30,7 +30,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var nameVC = NameViewController()
     lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
-    //lazy var ritualVC = ritualview
+    lazy var ritualVC = RitualInputViewController()
+    
     let avatarView = AvatarView()
     private let confettiView = ConfettiView()
     
@@ -142,6 +143,21 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
         }
 
+        self.ritualVC.onDidComplete = { [unowned self] result in
+            switch result {
+            case .success:
+                if let user = User.current() {
+                    self.delegate.onboardingView(self, didVerify: user)
+                }
+            case .failure(_):
+                break
+            }
+        }
+
+        self.ritualVC.$state.mainSink { state in
+            self.updateNavigationBar()
+        }.store(in: &self.cancellables)
+
         self.waitlistVC.$didShowUpgrade.mainSink { [weak self] (didShow) in
             guard let `self` = self, didShow else { return }
             delay(1.0) { [unowned self] in
@@ -209,7 +225,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         case .waitlist(_):
             return "Congrats! 🎉"
         case .photo(let vc):
-            
             switch vc.currentState {
             case .initial:
                 return LocalizedString(id: "",
@@ -229,6 +244,15 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                                        default: "Error!")
             case .finish:
                 return LocalizedString.empty
+            }
+        case .ritual(let vc):
+            switch vc.state {
+            case .needsAuthorization:
+                return ""
+            case .edit:
+                return ""
+            case .update:
+                return ""
             }
         }
     }
@@ -300,6 +324,16 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             return LocalizedString(id: "",
                                    arguments: [],
                                    default: "For the safety of yourself and others, we require a front facing photo. This helps ensure everyone is who they say they are. No 🤖's!")
+            
+        case .ritual(let vc):
+            switch vc.state {
+            case .needsAuthorization:
+                return ""
+            case .edit:
+                return ""
+            case .update:
+                return ""
+            }
         }
     }
 
