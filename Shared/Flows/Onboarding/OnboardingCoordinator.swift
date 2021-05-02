@@ -58,6 +58,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     }
 
     func onboardingViewControllerNeedsAuthorization(_ controller: OnboardingViewController) {
+        #if !NOTIFICATION
         UserNotificationManager.shared.register(application: UIApplication.shared)
             .mainSink { (granted) in
                 if granted {
@@ -66,6 +67,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
                     UIApplication.shared.open(settingsUrl, completionHandler: { (success) in })
                 }
             }.store(in: &self.cancellables)
+        #endif
     }
 }
 

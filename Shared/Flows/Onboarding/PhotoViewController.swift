@@ -312,7 +312,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 switch result {
                 case .success(_):
                     self.currentState = .finish
-                case .error(_):
+                case .error(let error):
                     self.currentState = .error
                 }
             }).store(in: &self.cancellables)

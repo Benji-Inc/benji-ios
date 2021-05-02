@@ -132,14 +132,5 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
         self.presentAnimator?.startAnimation()
     }
 
-    func handleKeyboard(frame: CGRect,
-                        with animationDuration: TimeInterval,
-                        timingCurve: UIView.AnimationCurve) {
-
-        UIView.animate(withDuration: animationDuration, animations: {
-            self.view.layoutNow()
-        })
-    }
-
     func willUpdateContent() {}
 }
