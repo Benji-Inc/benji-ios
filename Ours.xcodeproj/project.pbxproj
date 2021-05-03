@@ -474,6 +474,10 @@
 		D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* Avatar.swift */; };
 		D66F0FF222C1D86800BA277D /* ChannelsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FF122C1D86800BA277D /* ChannelsType.swift */; };
 		D66F102622C7C6A900BA277D /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
+		D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1EE264029BC00BF2B8D /* Toast.swift */; };
+		D671E1F126402A2000BF2B8D /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F026402A2000BF2B8D /* ToastView.swift */; };
+		D671E1F326402B1F00BF2B8D /* ToastQue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F226402B1F00BF2B8D /* ToastQue.swift */; };
+		D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F426402B9800BF2B8D /* ToastScheduler.swift */; };
 		D6740D4823AEA5BD009D5702 /* ChannelsCoordiantor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6740D4723AEA5BD009D5702 /* ChannelsCoordiantor.swift */; };
 		D6748CBE262DAF280095F4B1 /* ReservationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6748CBD262DAF280095F4B1 /* ReservationsViewController.swift */; };
 		D677588325B09F4D007E0184 /* Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588225B09F4D007E0184 /* Transitionable.swift */; };
@@ -914,6 +918,10 @@
 		D66F0FE522C0640E00BA277D /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
 		D66F0FF122C1D86800BA277D /* ChannelsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsType.swift; sourceTree = "<group>"; };
 		D66F102522C7C6A900BA277D /* Lorem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lorem.swift; sourceTree = "<group>"; };
+		D671E1EE264029BC00BF2B8D /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
+		D671E1F026402A2000BF2B8D /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
+		D671E1F226402B1F00BF2B8D /* ToastQue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastQue.swift; sourceTree = "<group>"; };
+		D671E1F426402B9800BF2B8D /* ToastScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastScheduler.swift; sourceTree = "<group>"; };
 		D6740D4723AEA5BD009D5702 /* ChannelsCoordiantor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsCoordiantor.swift; sourceTree = "<group>"; };
 		D6748CBD262DAF280095F4B1 /* ReservationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsViewController.swift; sourceTree = "<group>"; };
 		D677588225B09F4D007E0184 /* Transitionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transitionable.swift; sourceTree = "<group>"; };
@@ -1625,6 +1633,7 @@
 				D607400D23401B3E009633EB /* SystemChannel.swift */,
 				D61ACF872628D4AC0052CE29 /* SystemComment.swift */,
 				D66F0FC822BF006D00BA277D /* SystemMessage.swift */,
+				D671E1EE264029BC00BF2B8D /* Toast.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1746,6 +1755,16 @@
 				D61EC0C121D3071400204BEE /* ViewController.swift */,
 			);
 			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		D671E1ED2640297900BF2B8D /* Toast */ = {
+			isa = PBXGroup;
+			children = (
+				D671E1F026402A2000BF2B8D /* ToastView.swift */,
+				D671E1F226402B1F00BF2B8D /* ToastQue.swift */,
+				D671E1F426402B9800BF2B8D /* ToastScheduler.swift */,
+			);
+			path = Toast;
 			sourceTree = "<group>";
 		};
 		D677588125B09F18007E0184 /* Transitions */ = {
@@ -1979,6 +1998,7 @@
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				D671E1ED2640297900BF2B8D /* Toast */,
 				D6605435262F20F6002F74F8 /* Archives */,
 				D6432BF122D8282E0016001A /* Channel */,
 				D6DADF6A2207DC90007D9EB1 /* Channels */,
@@ -2470,6 +2490,7 @@
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
 				D677588325B09F4D007E0184 /* Transitionable.swift in Sources */,
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
+				D671E1F126402A2000BF2B8D /* ToastView.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
 				D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */,
 				D6432BF022D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift in Sources */,
@@ -2484,6 +2505,7 @@
 				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
 				D623BC4F23EF5157007358CB /* ProfileItem.swift in Sources */,
 				D66379D625A3704300A4A3B7 /* HealthKitManager.swift in Sources */,
+				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
 				D61D38E7248C494A00BE457B /* ChannelViewController+Messaging.swift in Sources */,
 				D6579557239C8B4000A01338 /* FeedCoordinator.swift in Sources */,
@@ -2601,6 +2623,7 @@
 				D6F33C7924B14AF0009603FF /* EmojiCellAttributesConfigurer.swift in Sources */,
 				D640326025AE5CD400139396 /* WelcomeViewController.swift in Sources */,
 				D63844122337C3CD0072227B /* LoadMoreSectionHeader.swift in Sources */,
+				D671E1F326402B1F00BF2B8D /* ToastQue.swift in Sources */,
 				D6579536239A141900A01338 /* CountDownView.swift in Sources */,
 				D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */,
 				D6F33C8624B150C3009603FF /* EmojiMessageCell.swift in Sources */,
@@ -2653,6 +2676,7 @@
 				D67758A025B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,
 				D6DADF742207E0E2007D9EB1 /* TCHChannel+Extensions.swift in Sources */,
 				D6E80C8B23B2D1180012D438 /* PostNotificationPermissionsViewController.swift in Sources */,
+				D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */,
 				D684840A22CD48D000362AC3 /* GradientView.swift in Sources */,
 				D6FC8098237A66220089AACC /* ChannelSupplier.swift in Sources */,
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,

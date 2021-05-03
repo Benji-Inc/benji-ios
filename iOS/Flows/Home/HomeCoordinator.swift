@@ -35,6 +35,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
+        ToastScheduler.shared.delegate = self
+
         self.channelsVC.subscribeToUpdates()
         self.checkForNotifications()
 
@@ -278,6 +280,18 @@ private class ImagePickerViewController: UIImagePickerController, Dismissable {
             self.dismissHandlers.forEach { (dismissHandler) in
                 dismissHandler.handler?()
             }
+        }
+    }
+}
+
+extension HomeCoordinator: ToastSchedulerDelegate {
+
+    func didInteractWith(type: ToastType) {
+        switch type {
+        case .error(_):
+            break
+        case .regular(_):
+            break 
         }
     }
 }
