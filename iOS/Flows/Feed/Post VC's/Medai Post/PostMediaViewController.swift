@@ -40,6 +40,8 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
 
     var isShowingComments: Bool = false
 
+    var didDeletePost: CompletionOptional = nil
+
     override var inputAccessoryView: UIView? {
         return self.commentInputAccessoryView
     }
@@ -94,9 +96,9 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         if post.author == User.current() {
             self.view.addSubview(self.moreButton)
             self.moreButton.didConfirmDeletion = { [unowned self] in
-                // Delete post
                 post.deleteInBackground { completed, error in
                     self.didFinish?()
+                    self.didDeletePost?()
                 }
             }
         }

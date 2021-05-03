@@ -78,6 +78,11 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         self.collectionView.collectionViewLayout = self.layout
     }
 
+    func reloadForExistingUser() {
+        guard let user = self.user else { return }
+        self.loadPosts(for: user)
+    }
+
     func loadPosts(for user: User) {
         self.user = user
         self.collectionView.animationView.play()
