@@ -55,7 +55,9 @@ class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.S
             switch result {
             case (let connections, _):
                 var usrs = [User.current()!]
-                let connectedUsers = connections.compactMap { connection in
+                let connectedUsers = connections.filter({ connection in
+                    return connection.status == .accepted
+                }).compactMap { connection in
                     return connection.nonMeUser
                 }
                 usrs.append(contentsOf: connectedUsers)
