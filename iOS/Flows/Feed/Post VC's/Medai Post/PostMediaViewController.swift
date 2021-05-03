@@ -97,6 +97,8 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
             self.view.addSubview(self.moreButton)
             self.moreButton.didConfirmDeletion = { [unowned self] in
                 post.deleteInBackground { completed, error in
+                    ToastScheduler.shared.schedule(toastType: .basic(displayable: UIImage(systemName: "trash")!,
+                                                                     title: "Post Deleted", description: "You have successfully deleted your post"))
                     self.didFinish?()
                     self.didDeletePost?()
                 }
