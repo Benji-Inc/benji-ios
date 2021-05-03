@@ -196,7 +196,9 @@ class HomeViewController: ViewController, TransitionableViewController {
         switch self.tabView.state {
         case .home:
 
-            ToastScheduler.shared.schedule(toastType: .basic(displayable: User.current()!, title: Lorem.name(), description: Lorem.paragraph()))
+            let error = ClientError.message(detail: "Something went wrong with the mainframe")
+
+            ToastScheduler.shared.schedule(toastType: .error(error))
 
 //            self.topOffset = nil
 //            self.tabView.state = .capture

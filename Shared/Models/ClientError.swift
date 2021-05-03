@@ -17,6 +17,7 @@ enum ClientError: Swift.Error {
 }
 
 extension ClientError {
+
     var localizedDescription: String {
         switch self {
         case .apiError(let detail):

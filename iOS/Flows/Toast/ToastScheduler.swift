@@ -11,7 +11,7 @@ import TwilioChatClient
 import TMROLocalization
 
 enum ToastType {
-    case error(Error)
+    case error(ClientError)
     case basic(displayable: ImageDisplayable, title: Localized, description: Localized)
 }
 
@@ -41,12 +41,12 @@ class ToastScheduler {
         }
     }
 
-    private func createErrorToast(for error: Error) -> Toast? {
-        guard let image = UIImage(systemName: "error") else { return nil }
+    private func createErrorToast(for error: ClientError) -> Toast? {
+        guard let image = UIImage(systemName: "exclamationmark.triangle") else { return nil }
 
         return Toast(id: error.localizedDescription + "error",
                      priority: 1,
-                     title: "Error",
+                     title: "Oops!",
                      description: error.localizedDescription,
                      displayable: image,
                      deeplink: nil,
