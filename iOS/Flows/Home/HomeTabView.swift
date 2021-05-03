@@ -109,5 +109,6 @@ class HomeTabView: View {
         }
 
         self.postButtonView.update(for: state)
+        self.layoutNow()
     }
 }

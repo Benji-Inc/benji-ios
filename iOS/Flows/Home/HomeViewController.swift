@@ -132,7 +132,9 @@ class HomeViewController: ViewController, TransitionableViewController {
             }
         }
 
-        self.createVC.begin()
+        if self.createVC.isAuthorized {
+            self.createVC.begin()
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -196,6 +198,10 @@ class HomeViewController: ViewController, TransitionableViewController {
         switch self.tabView.state {
         case .home:
 
+            if !self.createVC.session.isRunning {
+                self.createVC.begin()
+            }
+            
             self.topOffset = nil
             self.tabView.state = .capture
 

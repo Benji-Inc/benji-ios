@@ -8,8 +8,11 @@
 
 import Foundation
 import AVFoundation
+import Combine
 
 class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
+
+    var cancellables = Set<AnyCancellable>()
 
     let session = AVCaptureSession()
     var previewLayer: AVCaptureVideoPreviewLayer!
@@ -29,11 +32,32 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         case back
     }
 
+    var isAuthorized: Bool {
+        return AVCaptureDevice.authorizationStatus(for: AVMediaType.video) == AVAuthorizationStatus.authorized
+    }
+
     private(set) var cameraType: CameraType = .front
 
+    func requestAthorization() -> Future<Bool, Never> {
+        return Future { promise in
+            if self.isAuthorized {
+                promise(.success(true))
+            } else {
+                AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: { (granted: Bool) -> Void in
+                    promise(.success(granted))
+               })
+            }
+        }
+    }
+
     func begin() {
-        self.configureCaptureSession()
-        self.session.startRunning()
+        self.requestAthorization()
+            .mainSink { authorized in
+                if authorized {
+                    self.configureCaptureSession()
+                    self.session.startRunning()
+                }
+            }.store(in: &self.cancellables)
     }
 
     func stop() {
@@ -137,5 +161,13 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
                        didOutput sampleBuffer: CMSampleBuffer,
                        from connection: AVCaptureConnection) {
 
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        if let layer = self.previewLayer {
+            layer.frame = self.view.bounds
+        }
     }
 }

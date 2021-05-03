@@ -27,24 +27,20 @@ class PostButtonView: View {
     }
 
     func update(for state: HomeTabView.State) {
-        print(state)
-        UIView.animate(withDuration: Theme.animationDuration) {
-            switch state {
-            case .home:
-                self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .white))
-                self.button.width = self.height
-                self.button.makeRound()
-            case .capture:
-                self.button.set(style: .normal(color: .white, text: ""))
-                self.button.width = self.height
-                self.button.makeRound()
-            case .review:
-                break 
-            case .confirm:
-                break
-            }
-
-            self.layoutNow()
+        switch state {
+        case .home:
+            self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .white))
+        case .capture:
+            self.button.set(style: .normal(color: .white, text: ""))
+        case .review:
+            break
+        case .confirm:
+            break
         }
+
+        self.button.width = self.height
+        self.button.makeRound()
+
+        self.layoutNow()
     }
 }

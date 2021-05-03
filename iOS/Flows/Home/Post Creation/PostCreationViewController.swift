@@ -12,8 +12,6 @@ import Parse
 
 class PostCreationViewController: ImageCaptureViewController {
 
-    var cancellables = Set<AnyCancellable>()
-
     let imageView = UIImageView()
     var didShowImage: CompletionOptional = nil
     var shouldHandlePan: ((UIPanGestureRecognizer) -> Void)? = nil
@@ -77,7 +75,7 @@ class PostCreationViewController: ImageCaptureViewController {
         self.swipeLabel.setText("Swipe up to post")
         self.swipeLabel.textAlignment = .center
         self.swipeLabel.showShadow(withOffset: 5)
-        self.swipeLabel.alpha = 1
+        self.swipeLabel.alpha = 0
 
         self.view.addSubview(self.finishLabel)
         self.finishLabel.setText("Posted 😎")
@@ -169,7 +167,7 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.imageView.image = image
         self.imageView.alpha = 1.0
-        
+
         self.didShowImage?()
         self.preloadData { progress in
             print(progress)
