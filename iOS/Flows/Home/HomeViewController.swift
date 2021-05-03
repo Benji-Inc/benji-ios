@@ -196,16 +196,12 @@ class HomeViewController: ViewController, TransitionableViewController {
         switch self.tabView.state {
         case .home:
 
-            let error = ClientError.message(detail: "Something went wrong with the mainframe")
+            self.topOffset = nil
+            self.tabView.state = .capture
 
-            ToastScheduler.shared.schedule(toastType: .error(error))
-
-//            self.topOffset = nil
-//            self.tabView.state = .capture
-//
-//            if self.createVC.vibrancyView.animationView.isAnimationPlaying {
-//                self.createVC.vibrancyView.animationView.stop()
-//            }
+            if self.createVC.vibrancyView.animationView.isAnimationPlaying {
+                self.createVC.vibrancyView.animationView.stop()
+            }
             
         case .capture:
             self.createVC.capturePhoto()
