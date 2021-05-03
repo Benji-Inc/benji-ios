@@ -290,8 +290,8 @@ extension HomeCoordinator: ToastSchedulerDelegate {
         switch type {
         case .error(_):
             break
-        case .regular(_):
-            break 
+        case .basic(_, _, _):
+            break
         }
     }
 }

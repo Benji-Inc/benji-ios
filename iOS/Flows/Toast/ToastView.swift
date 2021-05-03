@@ -320,10 +320,10 @@ class ToastView: View {
 
         if let height = self.maxHeight {
             self.height = height
-        } else if self.descriptionLabel.bottom + Theme.contentOffset < 84 {
+        } else if self.descriptionLabel.bottom + Theme.contentOffset.half < 84 {
             self.height = 84
         } else {
-            self.height = self.descriptionLabel.bottom + Theme.contentOffset
+            self.height = self.descriptionLabel.bottom + Theme.contentOffset.half
         }
     }
 }

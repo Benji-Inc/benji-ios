@@ -12,7 +12,7 @@ import TMROLocalization
 
 enum ToastType {
     case error(Error)
-    case regular(Toast)
+    case basic(displayable: ImageDisplayable, title: Localized, description: Localized)
 }
 
 protocol ToastSchedulerDelegate: AnyObject {
@@ -30,8 +30,8 @@ class ToastScheduler {
         switch toastType {
         case .error(let error):
             toast = self.createErrorToast(for: error)
-        case .regular(let t):
-            toast = t
+        case .basic(let displayable, let title, let description):
+            toast = self.createBasicToast(for: displayable, title: title, description: description)
         }
 
         if let t = toast {
@@ -52,6 +52,21 @@ class ToastScheduler {
                      deeplink: nil,
                      didTap: { [unowned self] in 
                         self.delegate?.didInteractWith(type: .error(error))
+        })
+    }
+
+    private func createBasicToast(for displayable: ImageDisplayable,
+                                  title: Localized,
+                                  description: Localized) -> Toast? {
+
+        return Toast(id: Lorem.randomString(),
+                     priority: 1,
+                     title: title,
+                     description: description,
+                     displayable: displayable,
+                     deeplink: nil,
+                     didTap: { [unowned self] in
+                        self.delegate?.didInteractWith(type: .basic(displayable: displayable, title: title, description: description))
         })
     }
 }
