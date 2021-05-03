@@ -12,21 +12,14 @@ import Combine
 
 extension PFInstallation {
 
-    func saveToken() -> Future<Void, Error> {
+    static func getCurrent() -> Future<PFInstallation, Error> {
         return Future { promise in
-            if let current = User.current() {
-                self["userId"] = current.objectId
-                self.saveInBackground { (success, error) in
-                    if success {
-                        promise(.success(()))
-                    } else if let error = error {
-                        promise(.failure(error))
-                    } else {
-                        promise(.failure(ClientError.message(detail: "There was a problem saving your authorization credentials.")))
-                    }
+            self.getCurrentInstallationInBackground().continueWith { task in
+                if let installation = task.result {
+                    return promise(.success(installation))
+                } else {
+                    return promise(.failure(ClientError.apiError(detail: "No installation was returned")))
                 }
-            } else {
-                promise(.failure(ClientError.message(detail: "You don't appear to be logged in.")))
             }
         }
     }

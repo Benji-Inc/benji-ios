@@ -67,25 +67,33 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     }
 
     private func sendCode(to phone: PhoneNumber, region: String) {
-        guard let installationId = UserNotificationManager.shared.installationId else { return }
-
         self.textEntry.button.handleEvent(status: .loading)
         self.isSendingCode = true
-        SendCode(phoneNumber: phone,
-                 region: region,
-                 installationId: installationId)
-            .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink(receiveValue: { (value) in },
-                      receiveCompletion: { (result) in
-                        switch result {
-                        case .finished:
-                            self.textEntry.button.handleEvent(status: .complete)
-                            self.complete(with: .success(phone))
-                        case .failure(let error):
-                            self.textEntry.button.handleEvent(status: .error(""))
-                            self.complete(with: .failure(error))
-                        }
-                      }).store(in: &self.cancellables)
+
+        PFInstallation.getCurrent()
+            .mainSink { result in
+                switch result {
+                case .success(let current):
+                    SendCode(phoneNumber: phone,
+                             region: region,
+                             installationId: current.installationId)
+                        .makeRequest(andUpdate: [], viewsToIgnore: [])
+                        .mainSink(receiveValue: { (value) in },
+                                  receiveCompletion: { (result) in
+                                    switch result {
+                                    case .finished:
+                                        self.textEntry.button.handleEvent(status: .complete)
+                                        self.complete(with: .success(phone))
+                                    case .failure(let error):
+                                        self.textEntry.button.handleEvent(status: .error(""))
+                                        self.complete(with: .failure(error))
+                                    }
+                                  }).store(in: &self.cancellables)
+                case .error(let error):
+                    self.textEntry.button.handleEvent(status: .error(""))
+                    self.complete(with: .failure(error))
+                }
+            }.store(in: &self.cancellables)
     }
 }
 

@@ -43,28 +43,36 @@ class CodeViewController: TextInputViewController<Void> {
     // True if we're in the process of verifying the code
     var verifying: Bool = false
     private func verify(code: String) {
-        guard !self.verifying, let phoneNumber = self.phoneNumber, let installationId = PFInstallation.current()?.installationId else { return }
-
+        guard !self.verifying, let phoneNumber = self.phoneNumber else { return }
+        
         self.verifying = true
-
         self.textEntry.button.handleEvent(status: .loading)
-        VerifyCode(code: code,
-                   phoneNumber: phoneNumber,
-                   installationId: installationId,
-                   reservationId: String(optional: self.reservationId))
-            .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink(receivedResult: { (result) in
-                switch result {
-                case .success(let token):
-                    self.becomeUser(with: token)
-                case .error:
-                    self.textEntry.button.handleEvent(status: .error(""))
-                    self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
-                    self.verifying = false
-                }
 
-                self.textField.resignFirstResponder()
-            }).store(in: &self.cancellables)
+        PFInstallation.getCurrent()
+            .mainSink { result in
+                switch result {
+                case .success(let installation):
+                    VerifyCode(code: code,
+                               phoneNumber: phoneNumber,
+                               installationId: installation.installationId,
+                               reservationId: String(optional: self.reservationId))
+                        .makeRequest(andUpdate: [], viewsToIgnore: [])
+                        .mainSink(receivedResult: { (result) in
+                            switch result {
+                            case .success(let token):
+                                self.becomeUser(with: token)
+                            case .error:
+                                self.textEntry.button.handleEvent(status: .error(""))
+                                self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
+                                self.verifying = false
+                            }
+
+                            self.textField.resignFirstResponder()
+                        }).store(in: &self.cancellables)
+                case .error(let error):
+                    self.complete(with: .failure(error))
+                }
+            }.store(in: &self.cancellables)
     }
 
     private func becomeUser(with token: String) {

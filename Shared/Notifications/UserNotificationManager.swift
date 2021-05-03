@@ -25,10 +25,6 @@ class UserNotificationManager: NSObject {
 
     var cancellables = Set<AnyCancellable>()
 
-    var installationId: String? {
-        return PFInstallation.current()?.installationId
-    }
-
     override init() {
         super.init()
 
@@ -145,18 +141,19 @@ class UserNotificationManager: NSObject {
     }
 
     func registerPush(from deviceToken: Data) {
-        guard let current = PFInstallation.current() else { return }
-        // Need to update the device token every app launch
-        current.badge = 0
-        current.setDeviceTokenFrom(deviceToken)
-        current.saveToken()
-            .mainSink(receivedResult: { result in
+        PFInstallation.getCurrent()
+            .mainSink { result in
                 switch result {
-                case .success():
+                case .success(let current):
+                    current.badge = 0
+                    current.setDeviceTokenFrom(deviceToken)
+                    if current["userId"].isNil {
+                        current["userId"] = User.current()?.objectId
+                    }
+                    current.saveInBackground()
+                case .error(_):
                     break
-                case .error(let error):
-                    print(error)
                 }
-            }).store(in: &self.cancellables)
+            }.store(in: &self.cancellables)
     }
 }
