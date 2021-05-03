@@ -220,7 +220,7 @@ class ToastView: View {
             } else {
                 self.top = superView.bottom + self.screenOffset + superView.safeAreaInsets.bottom
             }
-            self.width =  (60 * 0.74) + (Theme.contentOffset * 2)
+            self.width =  (60 * 0.74) + (Theme.contentOffset)
             self.maxHeight = 84
             self.centerOnX()
         case .present:
@@ -292,30 +292,28 @@ class ToastView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        guard let superView = UIWindow.topWindow() else { return }
-
         self.blurView.expandToSuperviewSize()
         self.vibrancyEffectView.expandToSuperviewSize()
         self.blurView.roundCorners()
 
         self.imageView.size = CGSize(width: 60 * 0.74, height: 60)
-        self.imageView.left = Theme.contentOffset
-        self.imageView.top = Theme.contentOffset
+        self.imageView.left = Theme.contentOffset.half
+        self.imageView.top = Theme.contentOffset.half
 
         let maxTitleWidth: CGFloat
         if UIScreen.main.isSmallerThan(screenSize: .tablet) {
-            maxTitleWidth = (superView.width * 0.95) - (self.imageView.right + 22)
+            maxTitleWidth = self.width - (self.imageView.right + Theme.contentOffset)
         } else {
-            maxTitleWidth = (superView.width * Theme.iPadPortraitWidthRatio) - (self.imageView.right + 22)
+            maxTitleWidth = (self.width * Theme.iPadPortraitWidthRatio) - (self.imageView.right + 22)
         }
 
         self.titleLabel.setSize(withWidth: maxTitleWidth)
-        self.titleLabel.left = self.imageView.right + Theme.contentOffset
-        self.titleLabel.top = self.imageView.top
+        self.titleLabel.match(.left, to: .right, of: self.imageView, offset: Theme.contentOffset.half)
+        self.titleLabel.match(.top, to: .top, of: self.imageView)
 
         self.descriptionLabel.setSize(withWidth: maxTitleWidth)
-        self.descriptionLabel.left = self.imageView.right + Theme.contentOffset
-        self.descriptionLabel.top = self.titleLabel.bottom + 4
+        self.descriptionLabel.match(.left, to: .right, of: self.imageView, offset: Theme.contentOffset.half)
+        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 4)
         if self.descriptionLabel.height > 84 {
             self.descriptionLabel.height = 84
         }

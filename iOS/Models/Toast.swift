@@ -15,6 +15,7 @@ struct Toast: Equatable {
     var title: Localized
     var description: Localized
     var displayable: ImageDisplayable
+    var deeplink: DeepLinkable?
     var didTap: () -> Void
 
     static func == (lhs: Toast, rhs: Toast) -> Bool {

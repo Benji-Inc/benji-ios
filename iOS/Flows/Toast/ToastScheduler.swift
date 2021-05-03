@@ -49,7 +49,8 @@ class ToastScheduler {
                      title: "Error",
                      description: error.localizedDescription,
                      displayable: image,
-                     didTap: {
+                     deeplink: nil,
+                     didTap: { [unowned self] in 
                         self.delegate?.didInteractWith(type: .error(error))
         })
     }

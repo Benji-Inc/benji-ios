@@ -1760,9 +1760,9 @@
 		D671E1ED2640297900BF2B8D /* Toast */ = {
 			isa = PBXGroup;
 			children = (
-				D671E1F026402A2000BF2B8D /* ToastView.swift */,
 				D671E1F226402B1F00BF2B8D /* ToastQue.swift */,
 				D671E1F426402B9800BF2B8D /* ToastScheduler.swift */,
+				D671E1F026402A2000BF2B8D /* ToastView.swift */,
 			);
 			path = Toast;
 			sourceTree = "<group>";

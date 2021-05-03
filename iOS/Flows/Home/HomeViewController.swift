@@ -195,12 +195,17 @@ class HomeViewController: ViewController, TransitionableViewController {
     private func didTapPost() {
         switch self.tabView.state {
         case .home:
-            self.topOffset = nil 
-            self.tabView.state = .capture
+            let toast = Toast(id: Lorem.randomString(), priority: 1, title: Lorem.name(), description: Lorem.paragraph(), displayable: User.current()!.smallImage!, deeplink: nil) {
 
-            if self.createVC.vibrancyView.animationView.isAnimationPlaying {
-                self.createVC.vibrancyView.animationView.stop()
             }
+
+            ToastScheduler.shared.schedule(toastType: .regular(toast))
+//            self.topOffset = nil
+//            self.tabView.state = .capture
+//
+//            if self.createVC.vibrancyView.animationView.isAnimationPlaying {
+//                self.createVC.vibrancyView.animationView.stop()
+//            }
             
         case .capture:
             self.createVC.capturePhoto()
