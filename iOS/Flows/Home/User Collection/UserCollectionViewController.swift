@@ -8,17 +8,17 @@
 
 import Foundation
 
-class FeedCollectionViewController: CollectionViewController<FeedCollectionViewManger.SectionType, FeedCollectionViewManger> {
+class UserCollectionViewController: CollectionViewController<UserCollectionViewManger.SectionType, UserCollectionViewManger> {
 
     static let height: CGFloat = 100
 
     var statusView: FeedStatusView? {
-        guard let cv = self.collectionViewManager.collectionView as? FeedCollectionView else { return nil }
+        guard let cv = self.collectionViewManager.collectionView as? UserCollectionView else { return nil }
         return cv.statusView
     }
 
     override func getCollectionView() -> CollectionView {
-        return FeedCollectionView()
+        return UserCollectionView()
     }
 
     override func initializeViews() {

@@ -9,13 +9,13 @@
 import Foundation
 import Combine
 
-class FeedCollectionViewManger: CollectionViewManager<FeedCollectionViewManger.SectionType> {
+class UserCollectionViewManger: CollectionViewManager<UserCollectionViewManger.SectionType> {
 
     enum SectionType: Int, ManagerSectionType {
         case feed = 0
     }
 
-    private let config = ManageableCellRegistration<FeedCell>().provider
+    private let config = ManageableCellRegistration<UserCell>().provider
 
     lazy var layout: UICollectionViewCompositionalLayout = {
         let widthFraction: CGFloat = 0.2

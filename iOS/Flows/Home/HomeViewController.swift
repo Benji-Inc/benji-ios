@@ -21,7 +21,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         return .background1
     }
 
-    lazy var feedCollectionVC = FeedCollectionViewController()
+    lazy var feedCollectionVC = UserCollectionViewController()
     lazy var createVC = PostCreationViewController()
     lazy var archivesVC = ArchivesViewController()
 
@@ -36,7 +36,7 @@ class HomeViewController: ViewController, TransitionableViewController {
 
     var topOffset: CGFloat?
     var minTop: CGFloat {
-        return FeedCollectionViewController.height + self.view.safeAreaInsets.top
+        return UserCollectionViewController.height + self.view.safeAreaInsets.top
     }
 
     var minBottom: CGFloat {
@@ -141,7 +141,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         super.viewDidLayoutSubviews()
 
         self.feedCollectionVC.view.expandToSuperviewWidth()
-        self.feedCollectionVC.view.height = FeedCollectionViewController.height
+        self.feedCollectionVC.view.height = UserCollectionViewController.height
         self.feedCollectionVC.view.pinToSafeArea(.top, padding: 0)
 
         self.archivesVC.view.frame = self.createVC.view.frame

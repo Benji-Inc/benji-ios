@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class FeedCollectionView: CollectionView {
+class UserCollectionView: CollectionView {
 
     let statusView = FeedStatusView()
     private var cancellables = Set<AnyCancellable>()
