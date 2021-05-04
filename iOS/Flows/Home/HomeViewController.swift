@@ -21,7 +21,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         return .background1
     }
 
-    lazy var feedCollectionVC = UserCollectionViewController()
+    lazy var userCollectionVC = UserCollectionViewController()
     lazy var createVC = PostCreationViewController()
     lazy var archivesVC = ArchivesViewController()
 
@@ -52,8 +52,8 @@ class HomeViewController: ViewController, TransitionableViewController {
 
         self.view.set(backgroundColor: .background1)
 
-        self.addChild(viewController: self.feedCollectionVC)
         self.addChild(viewController: self.archivesVC)
+        self.addChild(viewController: self.userCollectionVC)
         self.addChild(viewController: self.createVC)
 
         self.self.createVC.view.layer.cornerRadius = 20
@@ -82,7 +82,7 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.didSelectPhotoLibrary?()
         }
 
-        self.feedCollectionVC.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
+        self.userCollectionVC.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
             guard !self.isPanning, let user = cellItem?.item as? User else { return }
             if self.isShowingArchive {
                 self.archivesVC.loadPosts(for: user)
@@ -115,20 +115,20 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.archivesVC.didSelectClose = { [unowned self] in
             switch RitualManager.shared.state {
             case .feedAvailable:
-                self.feedCollectionVC.collectionViewManager.unselectAllItems()
+                self.userCollectionVC.collectionViewManager.unselectAllItems()
             default:
-                self.feedCollectionVC.collectionViewManager.reset()
+                self.userCollectionVC.collectionViewManager.reset()
             }
             self.animateArchives(offset: self.minTop, progress: 1.0)
         }
 
         self.archivesVC.didFinishShowing = { [unowned self] in
-            if self.feedCollectionVC.collectionViewManager.collectionView.numberOfSections == 0 {
-                self.feedCollectionVC.collectionViewManager.loadFeeds { [unowned self] in
-                    self.feedCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
+            if self.userCollectionVC.collectionViewManager.collectionView.numberOfSections == 0 {
+                self.userCollectionVC.collectionViewManager.loadFeeds { [unowned self] in
+                    self.userCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
                 }
             } else {
-                self.feedCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
+                self.userCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
             }
         }
 
@@ -140,18 +140,17 @@ class HomeViewController: ViewController, TransitionableViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.feedCollectionVC.view.expandToSuperviewWidth()
-        self.feedCollectionVC.view.height = UserCollectionViewController.height
-        self.feedCollectionVC.view.pinToSafeArea(.top, padding: 0)
+        self.userCollectionVC.view.expandToSuperviewWidth()
+        self.userCollectionVC.view.height = UserCollectionViewController.height
+        self.userCollectionVC.view.pinToSafeArea(.top, padding: 0)
 
-        self.archivesVC.view.frame = self.createVC.view.frame
-        self.archivesVC.view.height = self.view.height - self.minTop
+        self.archivesVC.view.height = self.view.height - self.view.safeAreaInsets.top
         self.archivesVC.view.expandToSuperviewWidth()
         self.archivesVC.view.centerOnX()
-        self.archivesVC.view.pin(.top, padding: self.minTop)
+        self.archivesVC.view.pinToSafeArea(.top, padding: 0)
 
         if self.tabView.state == .home {
-            self.createVC.view.height = self.archivesVC.view.height
+            self.createVC.view.height = self.view.height - self.minTop
         } else {
             self.createVC.view.height = self.view.height - self.view.safeAreaInsets.top
         }
@@ -180,7 +179,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.isMenuPresenting = !show
         UIView.animate(withDuration: Theme.animationDuration) {
             self.tabView.alpha = show ? 1.0 : 0.0
-            self.feedCollectionVC.view.alpha = show ? 1.0 : 0.0
+            self.userCollectionVC.view.alpha = show ? 1.0 : 0.0
         }
     }
 

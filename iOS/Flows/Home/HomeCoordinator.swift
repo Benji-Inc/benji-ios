@@ -138,7 +138,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
     private func presentFeed(for user: User) {
         self.removeChild()
-        self.homeVC.feedCollectionVC.collectionViewManager.unselectAllItems()
+        self.homeVC.userCollectionVC.collectionViewManager.unselectAllItems()
         let coordinator = FeedCoordinator(router: self.router, deepLink: self.deepLink)
         coordinator.feedVC.didTapDone = {
             coordinator.feedVC.dismiss(animated: true) {

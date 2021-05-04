@@ -34,7 +34,7 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
             switch selection.section {
             case .user:
                 break 
-            case .posts:
+            case .posts, .today:
                 if let post = selection.item as? Post {
                     self.didSelectPost?(post)
                 }

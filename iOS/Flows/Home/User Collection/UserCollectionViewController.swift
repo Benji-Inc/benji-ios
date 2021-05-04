@@ -12,6 +12,9 @@ class UserCollectionViewController: CollectionViewController<UserCollectionViewM
 
     static let height: CGFloat = 100
 
+    private let gradientView = GradientView(with: [Color.background1.color.withAlphaComponent(0.6).cgColor,
+                                                   Color.background1.color.withAlphaComponent(0).cgColor], startPoint: .topCenter, endPoint: .bottomCenter)
+
     var statusView: FeedStatusView? {
         guard let cv = self.collectionViewManager.collectionView as? UserCollectionView else { return nil }
         return cv.statusView
@@ -33,5 +36,13 @@ class UserCollectionViewController: CollectionViewController<UserCollectionViewM
                 self.collectionViewManager.reset()
             }
         }.store(in: &self.cancellables)
+
+        self.view.insertSubview(self.gradientView, belowSubview: self.collectionViewManager.collectionView)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.gradientView.expandToSuperviewSize()
     }
 }

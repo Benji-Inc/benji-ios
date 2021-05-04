@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class ArchiveHeaderCell: CollectionViewManagerCell, ManageableCell {
+class UserHeaderCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = User
 
     var currentItem: User?
@@ -25,6 +25,7 @@ class ArchiveHeaderCell: CollectionViewManagerCell, ManageableCell {
     }
 
     func configure(with user: User) {
+
         user.retrieveDataIfNeeded()
             .mainSink(receiveValue: { user in
                 self.nameLabel.setText(user.fullName)
