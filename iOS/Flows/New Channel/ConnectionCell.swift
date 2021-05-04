@@ -10,7 +10,7 @@ import Foundation
 import TMROLocalization
 import Lottie
 
-class UserCell: CollectionViewManagerCell, ManageableCell {
+class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Connection
 
     private let avatarView = AvatarView()
