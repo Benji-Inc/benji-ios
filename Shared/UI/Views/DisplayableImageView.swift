@@ -22,7 +22,7 @@ class DisplayableImageView: View {
 
     lazy var loadingIndicator = UIActivityIndicatorView(style: .medium)
 
-    let errorImageView = UIImageView(image: UIImage(systemName: "exclamationmark.triangle"))
+    let symbolImageView = UIImageView(image: UIImage(systemName: "exclamationmark.triangle"))
 
     var displayable: ImageDisplayable? {
         didSet {
@@ -55,10 +55,10 @@ class DisplayableImageView: View {
         self.blurView.contentView.addSubview(self.loadingIndicator)
         self.loadingIndicator.hidesWhenStopped = true
 
-        self.blurView.contentView.addSubview(self.errorImageView)
-        self.errorImageView.tintColor = Color.white.color
-        self.errorImageView.contentMode = .scaleAspectFit
-        self.errorImageView.alpha = 0.0
+        self.blurView.contentView.addSubview(self.symbolImageView)
+        self.symbolImageView.tintColor = Color.white.color
+        self.symbolImageView.contentMode = .scaleAspectFit
+        self.symbolImageView.alpha = 0.0
 
         self.imageView.publisher(for: \.image)
             .removeDuplicates()
@@ -85,12 +85,12 @@ class DisplayableImageView: View {
 
         self.loadingIndicator.centerOnXAndY()
 
-        self.errorImageView.squaredSize = self.blurView.width * 0.25
-        self.errorImageView.centerOnXAndY()
+        self.symbolImageView.squaredSize = self.blurView.width * 0.25
+        self.symbolImageView.centerOnXAndY()
     }
 
     private func updateImageView(with displayable: ImageDisplayable) {
-        self.errorImageView.alpha = 0.0
+        self.symbolImageView.alpha = 0.0
         self.loadingIndicator.startAnimating()
 
         if let photo = displayable.image {
@@ -120,7 +120,7 @@ class DisplayableImageView: View {
         self.imageView.sd_setImage(with: url, completed: { [weak self] (image, error, imageCacheType, imageUrl) in
             guard let `self` = self, let downloadedImage = image else {
                 self?.loadingIndicator.stopAnimating()
-                self?.errorImageView.alpha = 1.0
+                self?.symbolImageView.alpha = 1.0
                 return
             }
 
@@ -136,13 +136,13 @@ class DisplayableImageView: View {
             case .success(let data):
                 guard let image = UIImage(data: data) else {
                     self.loadingIndicator.stopAnimating()
-                    self.errorImageView.alpha = 1.0
+                    self.symbolImageView.alpha = 1.0
                     return
                 }
 
                 self.imageView.image = image
             case .error(_):
-                self.errorImageView.alpha = 1.0
+                self.symbolImageView.alpha = 1.0
                 self.loadingIndicator.stopAnimating()
                 break
             }
@@ -155,7 +155,7 @@ class DisplayableImageView: View {
             cancellable.cancel()
         }
 
-        self.errorImageView.alpha = 0.0
+        self.symbolImageView.alpha = 0.0
         self.displayable = nil
         self.loadingIndicator.stopAnimating()
         self.blurView.effect = self.blurEffect

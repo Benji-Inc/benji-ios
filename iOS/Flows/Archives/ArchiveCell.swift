@@ -36,8 +36,29 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
 
         let file = item.preview ?? item.file
 
-        self.imageView.displayable = file
-        self.label.setText(item.createdAt?.getDistanceAgoString() ?? String())
+        if item.author == User.current() {
+            self.imageView.displayable = file
+            self.label.setText(item.createdAt?.getDistanceAgoString() ?? String())
+            self.layoutNow()
+        } else {
+            switch RitualManager.shared.state {
+            case .feedAvailable:
+                self.imageView.displayable = file
+                self.label.setText(item.createdAt?.getDistanceAgoString() ?? String())
+                self.layoutNow()
+            default:
+                if RitualManager.shared.currentTriggerDate?.day == item.createdAt?.day {
+                    self.imageView.displayable = file
+                    self.label.setText(item.createdAt?.getDistanceAgoString() ?? String())
+                    self.layoutNow()
+                } else {
+                    self.imageView.loadingIndicator.stopAnimating()
+                    self.imageView.symbolImageView.image = UIImage(systemName: "lock.fill")
+                    self.imageView.layoutNow()
+                }
+                break
+            }
+        }
     }
 
     override func layoutSubviews() {
