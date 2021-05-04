@@ -53,7 +53,7 @@ class FeedStatusView: View {
             self.countDownView.startTimer(with: date)
             self.showCountDown()
         case .feedAvailable:
-            break
+            ToastScheduler.shared.schedule(toastType: .basic(displayable: UIImage(systemName: "lock.open")!, title: "Unlocked", description: "Your ritual has begun! You now have access to all features."))
         case .lessThanHourAfter(let date):
             let dateString = Date.hourMinuteTimeOfDay.string(from: date)
             self.label.animatedText = "Take a break! ☕️\nSee you at \(dateString)"

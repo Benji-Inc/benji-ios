@@ -128,7 +128,6 @@ class RitualManager {
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "ritual"
 
-        //        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
         let trigger = UNCalendarNotificationTrigger(dateMatching: ritual.timeComponents,
                                                     repeats: true)
 
