@@ -20,6 +20,11 @@ class RitualCoordinator: PresentableCoordinator<Void> {
 }
 
 extension RitualCoordinator: RitualViewControllerDelegate {
+    func ritualInputViewControllerDidAddRitual(_ controller: RitualViewController) {
+        controller.dismiss(animated: true) {
+            self.finishFlow(with: ())
+        }
+    }
 
     func ritualInputViewControllerNeedsAuthorization(_ controller: RitualViewController) {
         UserNotificationManager.shared.register(application: UIApplication.shared)

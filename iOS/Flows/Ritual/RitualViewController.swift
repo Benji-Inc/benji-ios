@@ -11,6 +11,8 @@ import TMROLocalization
 
 protocol RitualViewControllerDelegate: AnyObject {
     func ritualInputViewControllerNeedsAuthorization(_ controller: RitualViewController)
+    func ritualInputViewControllerDidAddRitual(_ controller: RitualViewController)
+
 }
 
 class RitualViewController: NavigationBarViewController {
@@ -36,6 +38,15 @@ class RitualViewController: NavigationBarViewController {
 
         self.inputVC.didTapNeedsAthorization = {
             self.delegate.ritualInputViewControllerNeedsAuthorization(self)
+        }
+
+        self.inputVC.onDidComplete = { [unowned self] result in
+            switch result {
+            case .success():
+                self.delegate.ritualInputViewControllerDidAddRitual(self)
+            case .failure(_):
+                break
+            }
         }
 
         self.inputVC.$state
