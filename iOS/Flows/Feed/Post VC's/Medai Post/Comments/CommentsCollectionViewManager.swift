@@ -36,8 +36,23 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
 
     @Published var comments: [SystemComment] = []
 
+    var sub: Subscription<PFObject>?
+
+    // remove once live queries work.
+    lazy var refreshControl: UIRefreshControl = {
+        let action = UIAction { action in
+            self.queryForComments()
+        }
+
+        let control = UIRefreshControl(frame: .zero, primaryAction: action)
+        control.tintColor = Color.white.color
+        return control
+    }()
+
     override func initialize() {
         super.initialize()
+
+        self.collectionView.refreshControl = self.refreshControl
 
         self.$comments.mainSink { comments in
             self.loadSnapshot()
@@ -50,42 +65,19 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
 
         // Get initial set
         self.queryForComments()
-
-        // Subsribe to get updates in real time
-        Comment.subscribe(where: ["post": self.post!])
-            .mainSink { (result) in
-                switch result {
-                case .success(let event):
-                    switch event {
-                    case .entered(_), .left(_):
-                        break
-                    case .created(let obj), .updated(let obj):
-                        guard let comment = obj as? Comment else { return }
-                        var current = self.comments.filter { old in
-                            return old.updateId == comment.updateId
-                        }
-                        current.append(comment.systemComment)
-                        self.comments = current.sorted(by: { lhs, rhs in
-                            return lhs.created! <= rhs.created!
-                        })
-                    case  .deleted(let obj):
-                        guard let comment = obj as? Comment else { return }
-                        self.comments.remove(object: comment.systemComment)
-                    }
-                case .error(_):
-                    break
-                }
-            }.store(in: &self.cancellables)
     }
 
     private func queryForComments() {
         let query = self.post?.comments?.query()
         query?.order(byAscending: "createdAt")
+
+        self.refreshControl.beginRefreshing()
         query?.findObjectsInBackground(block: { objects, error in
             self.comments = objects?.map({ comment in
                 return comment.systemComment
             }) ?? []
             self.collectionView.animationView.stop()
+            self.refreshControl.endRefreshing()
         })
     }
 

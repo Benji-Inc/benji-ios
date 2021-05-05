@@ -90,6 +90,7 @@ class ProfileViewController: ViewController, TransitionableViewController {
         self.handleView.configure(with: .handle, for: user)
         self.localTimeView.configure(with: .localTime, for: user)
         self.ritualView.configure(with: .ritual, for: user)
+        self.view.layoutNow()
     }
 
     override func viewDidLayoutSubviews() {
