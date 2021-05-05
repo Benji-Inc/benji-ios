@@ -22,7 +22,6 @@ class ReservationsViewController: NavigationBarViewController {
     override func initializeViews() {
         super.initializeViews()
 
-
         self.view.addSubview(self.button)
         self.button.set(style: .normal(color: .purple, text: "Share"))
         self.button.didSelect { [unowned self] in

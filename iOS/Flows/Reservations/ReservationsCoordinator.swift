@@ -53,17 +53,8 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     }
 
     private func showSentAlert() {
-        let alert = UIAlertController(title: "Sent!",
-                                      message: "Your RSVP has been sent. As soon as someone accepts using your link, a conversation will be created between the two of you.",
-                                      preferredStyle: .alert)
-
-        let ok = UIAlertAction(title: "Ok", style: .cancel) { (_) in
-            self.finishFlow(with: ())
-        }
-
-        alert.addAction(ok)
-
-        self.router.navController.present(alert, animated: true, completion: nil)
+        ToastScheduler.shared.schedule(toastType: .basic(displayable: UIImage(systemName: "envelope")!, title: "RSVP Sent", description: "Your RSVP has been sent. As soon as someone accepts using your link, a conversation will be created between the two of you."))
+        self.finishFlow(with: ())
     }
 
     private func showContacts() {
@@ -74,19 +65,8 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     }
 
     private func showSentAlert(for avatar: Avatar) {
-        let message = LocalizedString(id: "", arguments: [avatar.fullName], default: "Your RSVP has been sent too @(name). As soon as they accept, a conversation will be created between the two of you.")
-        let text = localized(message)
-        let alert = UIAlertController(title: "RSVP Sent",
-                                      message: text,
-                                      preferredStyle: .alert)
-
-        let ok = UIAlertAction(title: "Ok", style: .cancel) { (_) in
-            self.finishFlow(with: ())
-        }
-
-        alert.addAction(ok)
-
-        self.router.topmostViewController.present(alert, animated: true, completion: nil)
+        ToastScheduler.shared.schedule(toastType: .basic(displayable: avatar, title: "RSVP Sent", description: "Your RSVP has been sent too @(name). As soon as they accept, a conversation will be created between the two of you."))
+        self.finishFlow(with: ())
     }
 
     private func sendText(with message: String?, phone: String) {
@@ -164,28 +144,36 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
 
     func findUser(for contact: CNContact) {
         // Search for user with phone number
-        guard let query = User.query(), let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
-        query.whereKey("phoneNumber", contains: phone)
-        query.getFirstObjectInBackground { [unowned self] (object, error) in
-            if let user = object as? User {
+        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
+
+        let combined = Publishers.Zip(
+            self.selectedReservation!.prepareMetaData(andUpdate: []),
+            User.getFirstObject(where: "phoneNumber", contains: phone)
+        )
+
+        combined.mainSink { (result) in
+            switch result {
+            case .success((_, let user)):
                 self.showReservationAlert(for: user)
-            } else if let rsvp = self.selectedReservation, rsvp.contactId == contact.identifier {
-                self.sendText(with: rsvp.reminderMessage, phone: phone)
-            } else if let rsvp = self.selectedReservation {
-                rsvp.contactId = contact.identifier
-                rsvp.saveLocalThenServer()
-                    .mainSink { (updatedReservation) in
-                        self.sendText(with: rsvp.message, phone: phone)
-                    }.store(in: &self.cancellables)
+            case .error(_):
+                if let rsvp = self.selectedReservation, rsvp.contactId == contact.identifier {
+                    self.sendText(with: rsvp.reminderMessage, phone: phone)
+                } else if let rsvp = self.selectedReservation {
+                    rsvp.contactId = contact.identifier
+                    rsvp.saveLocalThenServer()
+                        .mainSink { (updatedReservation) in
+                            self.sendText(with: rsvp.message, phone: phone)
+                        }.store(in: &self.cancellables)
+                }
             }
-        }
+        }.store(in: &self.cancellables)
     }
 
     func showReservationAlert(for user: User) {
         let title = LocalizedString(id: "", arguments: [user.fullName], default: "Connect with @(name)?")
         let titleText = localized(title)
 
-        let body = LocalizedString(id: "", arguments: [user.fullName], default: "@(name) has an account. Tap OK to send the request.")
+        let body = LocalizedString(id: "", arguments: [user.fullName], default: "@(name) has an account. Tap OK to send the request. (This will NOT consume one of your RSVP's)")
         let bodyText = localized(body)
         let alert = UIAlertController(title: titleText,
                                       message: bodyText,

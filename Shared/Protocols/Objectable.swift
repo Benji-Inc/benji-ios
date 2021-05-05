@@ -84,10 +84,10 @@ extension Objectable where Self: PFObject {
         }
     }
 
-    static func getObject(with objectId: String) -> Future<Self, Error> {
+    static func getFirstObject(where key: String, contains string: String) -> Future<Self, Error> {
         return Future { promise in
             let query = self.query()
-            query?.whereKey("objectId", contains: objectId)
+            query?.whereKey(key, contains: string)
             query?.getFirstObjectInBackground(block: { object, error in
                 if let obj = object as? Self {
                     promise(.success(obj))
@@ -98,6 +98,10 @@ extension Objectable where Self: PFObject {
                 }
             })
         }
+    }
+
+    static func getObject(with objectId: String) -> Future<Self, Error> {
+        return self.getFirstObject(where: "objectId", contains: objectId)
     }
 
     static func localThenNetworkQuery(for objectId: String) -> Future<Self, Error> {
