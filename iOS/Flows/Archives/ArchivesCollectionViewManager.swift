@@ -143,7 +143,10 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
 
             switch result {
             case .success(let posts):
-                self.posts.append(contentsOf: posts)
+                let nonTodayPosts = posts.filter { post in
+                    return !self.todayPosts.contains(post)
+                }
+                self.posts.append(contentsOf: nonTodayPosts)
                 self.posts.removeDuplicates()
                 self.loadSnapshot()
                 completion?()
@@ -199,7 +202,7 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             return header
         case UICollectionView.elementKindSectionFooter:
             let footer = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
-            footer.configure(showButton: self.posts.count < self.totalCount)
+            footer.configure(showButton: self.posts.count < (self.totalCount - self.todayPosts.count))
             footer.button.didSelect { [unowned self] in
                 footer.button.handleEvent(status: .loading)
                 self.appendPosts {
