@@ -79,7 +79,7 @@ class ChannelDetailViewController: ViewController {
 
         self.textView.setSize(withWidth: maxWidth)
         self.textView.left = Theme.contentOffset
-        self.textView.match(.top, to: .bottom, of: self.label, offset: Theme.contentOffset)
+        self.textView.match(.top, to: .bottom, of: self.label, offset: Theme.contentOffset.half)
     }
 
     private func subscribeToUpdates() {
@@ -111,7 +111,7 @@ class ChannelDetailViewController: ViewController {
             message = "No one has joined yet."
             // No one in the channel but the current user.
         } else if users.count == 1, let user = users.first {
-            self.label.setText(user.handle)
+            self.label.setText(user.fullName)
             message = self.getMessage(for: user, date: date, channel: channel)
         } else {
             // Group chat
@@ -176,7 +176,7 @@ class ChannelDetailViewController: ViewController {
             author = user.fullName
         }
 
-        return LocalizedString(id: "", arguments: [user.handle, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). @(author) created this conversation on @(date)")
+        return LocalizedString(id: "", arguments: [user.fullName, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). @(author) created this conversation on @(date)")
     }
 
     private func getMessage(for users: [User], date: Date, channel: TCHChannel) -> LocalizedString {
@@ -184,9 +184,9 @@ class ChannelDetailViewController: ViewController {
         var text = ""
         for (index, user) in users.enumerated() {
             if index < users.count - 1 {
-                text.append(String("\(user.handle), "))
+                text.append(String("\(user.fullName), "))
             } else if index == users.count - 1 && users.count > 1 {
-                text.append(String("\(user.handle)"))
+                text.append(String("\(user.fullName)"))
             } else {
                 text.append(user.handle)
             }
