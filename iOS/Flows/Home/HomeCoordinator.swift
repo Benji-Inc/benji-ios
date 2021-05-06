@@ -291,12 +291,9 @@ private class ImagePickerViewController: UIImagePickerController, Dismissable {
 
 extension HomeCoordinator: ToastSchedulerDelegate {
 
-    func didInteractWith(type: ToastType) {
-        switch type {
-        case .error(_):
-            break
-        case .basic(_, _, _):
-            break
+    func didInteractWith(type: ToastType, deeplink: DeepLinkable?) {
+        if let link = deeplink {
+            self.handle(deeplink: link)
         }
     }
 }

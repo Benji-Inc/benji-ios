@@ -11,12 +11,13 @@ import TwilioChatClient
 import TMROLocalization
 
 enum ToastType {
+    case newMessage(TCHMessage, TCHChannel)
     case error(ClientError)
     case basic(displayable: ImageDisplayable, title: Localized, description: Localized)
 }
 
 protocol ToastSchedulerDelegate: AnyObject {
-    func didInteractWith(type: ToastType)
+    func didInteractWith(type: ToastType, deeplink: DeepLinkable?)
 }
 
 class ToastScheduler {
@@ -32,6 +33,8 @@ class ToastScheduler {
             toast = self.createErrorToast(for: error)
         case .basic(let displayable, let title, let description):
             toast = self.createBasicToast(for: displayable, title: title, description: description)
+        case .newMessage(let msg, let channel):
+            toast = self.createMessageToast(for: msg, channel: channel)
         }
 
         if let t = toast {
@@ -51,7 +54,7 @@ class ToastScheduler {
                      displayable: image,
                      deeplink: nil,
                      didTap: { [unowned self] in 
-                        self.delegate?.didInteractWith(type: .error(error))
+                        self.delegate?.didInteractWith(type: .error(error), deeplink: nil)
         })
     }
 
@@ -66,7 +69,23 @@ class ToastScheduler {
                      displayable: displayable,
                      deeplink: nil,
                      didTap: { [unowned self] in
-                        self.delegate?.didInteractWith(type: .basic(displayable: displayable, title: title, description: description))
+                        self.delegate?.didInteractWith(type: .basic(displayable: displayable, title: title, description: description), deeplink: nil)
+        })
+    }
+
+    private func createMessageToast(for message: TCHMessage, channel: TCHChannel) -> Toast? {
+        guard let body = message.body, !body.isEmpty else { return nil }
+
+        return Toast(id: message.id,
+                     priority: 1,
+                     title: message.avatar.fullName,
+                     description: body,
+                     displayable: message.avatar,
+                     deeplink: DeepLinkObject(target: .channel),
+                     didTap: { [unowned self] in
+                        let deeplink = DeepLinkObject(target: .channel)
+                        deeplink.customMetadata["channelId"] = channel.sid
+                        self.delegate?.didInteractWith(type: .newMessage(message, channel), deeplink: deeplink)
         })
     }
 }
