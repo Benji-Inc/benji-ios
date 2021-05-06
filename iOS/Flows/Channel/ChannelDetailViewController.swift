@@ -173,10 +173,10 @@ class ChannelDetailViewController: ViewController {
         if channel.isOwnedByMe {
             author = "You"
         } else {
-            author = user.fullName
+            author = user.givenName
         }
 
-        return LocalizedString(id: "", arguments: [user.fullName, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). @(author) created this conversation on @(date)")
+        return LocalizedString(id: "", arguments: [user.givenName, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). @(author) created this conversation on @(date)")
     }
 
     private func getMessage(for users: [User], date: Date, channel: TCHChannel) -> LocalizedString {
@@ -184,11 +184,11 @@ class ChannelDetailViewController: ViewController {
         var text = ""
         for (index, user) in users.enumerated() {
             if index < users.count - 1 {
-                text.append(String("\(user.fullName), "))
+                text.append(String("\(user.givenName), "))
             } else if index == users.count - 1 && users.count > 1 {
-                text.append(String("\(user.fullName)"))
+                text.append(String("\(user.givenName)"))
             } else {
-                text.append(user.handle)
+                text.append(user.givenName)
             }
         }
 
@@ -198,7 +198,7 @@ class ChannelDetailViewController: ViewController {
         } else if let user = users.first(where: { user in
             return user.objectId == channel.createdBy
         }) {
-            author = user.fullName
+            author = user.givenName
         }
 
         return LocalizedString(id: "", arguments: [text, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your group chat with [@(name)](userid). @(author) created this conversation on @(date)")
