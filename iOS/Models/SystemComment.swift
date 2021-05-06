@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SystemComment: Commentable {
+struct SystemComment: Commentable, Comparable {
 
     var created: Date?
     var post: Post?
@@ -63,11 +63,13 @@ struct SystemComment: Commentable {
 
     static func == (lhs: SystemComment, rhs: SystemComment) -> Bool {
         return lhs.author == rhs.author &&
-            lhs.body == rhs.body &&
-            lhs.attributes == rhs.attributes &&
             lhs.reply == rhs.reply &&
             lhs.updateId == rhs.updateId &&
             lhs.post == rhs.post &&
             lhs.created == rhs.created
+    }
+
+    static func < (lhs: SystemComment, rhs: SystemComment) -> Bool {
+        return lhs.created! < rhs.created!
     }
 }

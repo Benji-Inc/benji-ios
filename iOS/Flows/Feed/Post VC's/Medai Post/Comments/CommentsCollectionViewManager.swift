@@ -36,7 +36,7 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
 
     @Published var comments: [SystemComment] = []
 
-    var sub: Subscription<PFObject>?
+    private(set) var subscription: Subscription<PFObject>?
 
     // remove once live queries work.
     lazy var refreshControl: UIRefreshControl = {
@@ -62,6 +62,38 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
     func loadComments() {
         self.collectionView.collectionViewLayout = self.layout
         self.collectionView.animationView.play()
+
+        guard let p = self.post else { return }
+
+        let query = Comment.query()!.whereKey("post", equalTo: p)
+        self.subscription = Client.shared.subscribe(query)
+
+        self.subscription?.handleEvent { query, event in
+            switch event {
+            case .entered(_):
+                break
+            case .left(let obj), .deleted(let obj):
+                guard let comment = obj as? Comment else { return }
+                self.comments.remove(object: comment.systemComment)
+                runMain {
+                    self.loadSnapshot()
+                }
+            case .created(let obj):
+                guard let comment = obj as? Comment else { return }
+                self.comments.append(comment.systemComment)
+                self.comments.sort()
+                runMain {
+                    self.loadSnapshot()
+                }
+            case .updated(let obj):
+                if let comment = obj as? Comment, let index = self.comments.firstIndex(of: comment.systemComment) {
+                    self.comments[index] = comment.systemComment
+                    runMain {
+                        self.loadSnapshot()
+                    }
+                }
+            }
+        }
 
         // Get initial set
         self.queryForComments()

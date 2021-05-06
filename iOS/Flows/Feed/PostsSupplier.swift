@@ -39,8 +39,7 @@ class PostsSupplier {
             publishers.append(self.getConnections())
         }
 
-        publishers.append(self.queryForCurrentMediaPosts(for: user))
-
+        publishers.append(self.queryForCurrentPosts(for: user))
 
         return Future { promise in
             waitForAll(publishers).mainSink { result in
@@ -61,11 +60,11 @@ class PostsSupplier {
         }
     }
 
-    func queryForCurrentMediaPosts(for owner: User) -> AnyPublisher<[Postable], Error> {
+    func queryForCurrentPosts(for owner: User) -> AnyPublisher<[Postable], Error> {
         return Future { promise in
 
             if let query = Post.query() {
-                query.whereKey("type", equalTo: "media")
+                query.whereKey("type", containedIn: ["media", "unreadMessages", "generalUnreadMessages"])
                 query.whereKey("author", equalTo: owner)
                 query.whereKey("expirationDate", greaterThanOrEqualTo: Date())
                 query.order(byDescending: "createdAt")
