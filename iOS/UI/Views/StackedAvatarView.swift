@@ -30,14 +30,13 @@ class StackedAvatarView: View {
         self.imageViews.removeAllFromSuperview(andRemoveAll: true)
 
         let max: Int = min(items.count, self.maxItems)
-        for index in stride(from: max - 1, through: 0, by: -1) {
-            let item: Avatar = items[index]
-            let avatarView = AvatarView()
-            avatarView.set(avatar: item)
-            avatarView.imageView.layer.borderColor = Color.white.color.cgColor
-            avatarView.imageView.layer.borderWidth = 2
-
-            self.imageViews.append(avatarView, toSuperview: self)
+        for index in stride(from: max, through: 0, by: -1) {
+            print(index)
+            if let item: Avatar = items[safe: index] {
+                let avatarView = AvatarView()
+                avatarView.set(avatar: item)
+                self.imageViews.append(avatarView, toSuperview: self)
+            }
         }
 
         self.layoutNow()
@@ -69,8 +68,10 @@ class StackedAvatarView: View {
 
         if totalWidth == 0 {
             totalWidth += size.width
-        } else {
+        } else if self.imageViews.count == 1 {
             totalWidth += size.width * self.offsetMultiplier
+        } else {
+            totalWidth += (size.width * self.offsetMultiplier) * 2
         }
         
         self.size = CGSize(width: totalWidth, height: self.itemHeight)

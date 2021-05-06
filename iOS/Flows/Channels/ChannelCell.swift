@@ -70,8 +70,12 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
         self.stackedAvatarView.centerOnY()
         self.stackedAvatarView.pin(.left, padding: Theme.contentOffset)
 
-        self.label.setSize(withWidth: self.contentView.width * 0.9)
-        self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset)
+        let maxWidth = self.contentView.width - self.stackedAvatarView.right - Theme.contentOffset.half - Theme.contentOffset
+        self.label.setSize(withWidth: maxWidth)
+        if label.height > self.contentView.height {
+            self.label.height = self.contentView.height
+        }
+        self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset.half)
         self.label.centerOnY()
     }
 
@@ -79,6 +83,7 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
         user.retrieveDataIfNeeded()
             .mainSink(receiveValue: { user in
                 self.label.setText(user.givenName)
+                self.label.setFont(.largeThin)
                 self.layoutNow()
             }).store(in: &self.cancellables)
     }
@@ -94,6 +99,10 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
                 text.append(user.givenName)
             }
         }
+
+        self.label.setText(text)
+        self.label.setFont(.mediumThin)
+        self.layoutNow()
     }
 
     override func prepareForReuse() {
