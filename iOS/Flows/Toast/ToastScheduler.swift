@@ -27,65 +27,64 @@ class ToastScheduler {
 
     func schedule(toastType: ToastType) {
 
-        var toast: Toast?
         switch toastType {
         case .error(let error):
-            toast = self.createErrorToast(for: error)
+            self.createErrorToast(for: error)
         case .basic(let displayable, let title, let description):
-            toast = self.createBasicToast(for: displayable, title: title, description: description)
+            self.createBasicToast(for: displayable, title: title, description: description)
         case .newMessage(let msg, let channel):
-            toast = self.createMessageToast(for: msg, channel: channel)
-        }
-
-        if let t = toast {
-            runMain {
-                ToastQueue.shared.add(toast: t)
-            }
+            self.createMessageToast(for: msg, channel: channel)
         }
     }
 
-    private func createErrorToast(for error: ClientError) -> Toast? {
-        guard let image = UIImage(systemName: "exclamationmark.triangle") else { return nil }
+    private func createErrorToast(for error: ClientError) {
+        guard let image = UIImage(systemName: "exclamationmark.triangle") else { return }
 
-        return Toast(id: error.localizedDescription + "error",
-                     priority: 1,
-                     title: "Oops!",
-                     description: error.localizedDescription,
-                     displayable: image,
-                     deeplink: nil,
-                     didTap: { [unowned self] in 
-                        self.delegate?.didInteractWith(type: .error(error), deeplink: nil)
-        })
+        let toast = Toast(id: error.localizedDescription + "error",
+                          priority: 1,
+                          title: "Oops!",
+                          description: error.localizedDescription,
+                          displayable: image,
+                          deeplink: nil,
+                          didTap: { [unowned self] in
+                            self.delegate?.didInteractWith(type: .error(error), deeplink: nil)
+                          })
+
+        ToastQueue.shared.add(toast: toast)
     }
 
     private func createBasicToast(for displayable: ImageDisplayable,
                                   title: Localized,
-                                  description: Localized) -> Toast? {
+                                  description: Localized) {
 
-        return Toast(id: Lorem.randomString(),
-                     priority: 1,
-                     title: title,
-                     description: description,
-                     displayable: displayable,
-                     deeplink: nil,
-                     didTap: { [unowned self] in
-                        self.delegate?.didInteractWith(type: .basic(displayable: displayable, title: title, description: description), deeplink: nil)
-        })
+        let toast = Toast(id: Lorem.randomString(),
+                          priority: 1,
+                          title: title,
+                          description: description,
+                          displayable: displayable,
+                          deeplink: nil,
+                          didTap: { [unowned self] in
+                            self.delegate?.didInteractWith(type: .basic(displayable: displayable, title: title, description: description), deeplink: nil)
+                          })
+
+        ToastQueue.shared.add(toast: toast)
     }
 
-    private func createMessageToast(for message: TCHMessage, channel: TCHChannel) -> Toast? {
-        guard let body = message.body, !body.isEmpty else { return nil }
+    private func createMessageToast(for message: TCHMessage, channel: TCHChannel) {
+        guard let body = message.body, !body.isEmpty else { return }
 
-        return Toast(id: message.id,
-                     priority: 1,
-                     title: message.avatar.fullName,
-                     description: body,
-                     displayable: message.avatar,
-                     deeplink: DeepLinkObject(target: .channel),
-                     didTap: { [unowned self] in
-                        let deeplink = DeepLinkObject(target: .channel)
-                        deeplink.customMetadata["channelId"] = channel.sid
-                        self.delegate?.didInteractWith(type: .newMessage(message, channel), deeplink: deeplink)
-        })
+        let toast = Toast(id: message.id,
+                          priority: 1,
+                          title: message.avatar.fullName,
+                          description: body,
+                          displayable: message.avatar,
+                          deeplink: DeepLinkObject(target: .channel),
+                          didTap: { [unowned self] in
+                            let deeplink = DeepLinkObject(target: .channel)
+                            deeplink.customMetadata["channelId"] = channel.sid
+                            self.delegate?.didInteractWith(type: .newMessage(message, channel), deeplink: deeplink)
+                          })
+        
+        ToastQueue.shared.add(toast: toast)
     }
 }
