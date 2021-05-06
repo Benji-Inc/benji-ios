@@ -27,9 +27,7 @@ class DisplayableImageView: View {
     var displayable: ImageDisplayable? {
         didSet {
             guard let displayable = self.displayable else {
-                self.imageView.image = nil
-                self.blurView.effect = self.blurEffect
-                self.loadingIndicator.stopAnimating()
+                self.showResult(for: nil)
                 return
             }
 
@@ -59,22 +57,6 @@ class DisplayableImageView: View {
         self.symbolImageView.tintColor = Color.white.color
         self.symbolImageView.contentMode = .scaleAspectFit
         self.symbolImageView.alpha = 0.0
-
-        self.imageView.publisher(for: \.image)
-            .removeDuplicates()
-            .mainSink { image in
-                
-                UIView.animate(withDuration: Theme.animationDuration) {
-                    self.blurView.effect = image.isNil ? self.blurEffect : nil
-                }
-
-                if let img = image {
-                    self.loadingIndicator.stopAnimating()
-                    self.didDisplayImage?(img)
-                }
-
-
-            }.store(in: &self.cancellables)
     }
 
     override func layoutSubviews() {
@@ -94,7 +76,7 @@ class DisplayableImageView: View {
         self.loadingIndicator.startAnimating()
 
         if let photo = displayable.image {
-            self.imageView.image = photo
+            self.showResult(for: photo)
         } else if let objectID = displayable.userObjectID {
             self.findUser(with: objectID)
         } else if let url = displayable.url {
@@ -119,31 +101,31 @@ class DisplayableImageView: View {
     private func downloadAndSetImage(url: URL) {
         self.imageView.sd_setImage(with: url, completed: { [weak self] (image, error, imageCacheType, imageUrl) in
             guard let `self` = self, let downloadedImage = image else {
-                self?.loadingIndicator.stopAnimating()
-                self?.symbolImageView.alpha = 1.0
+                self?.showResult(for: nil)
                 return
             }
 
-            self.imageView.image = downloadedImage
+            self.showResult(for: downloadedImage)
         })
     }
 
     private func downloadAndSet(file: PFFileObject) {
         file.retrieveDataInBackground { progress in
             // show progress
-        }.mainSink { result in
+        }.mainSink { [weak self] result in
+            guard let `self` = self else { return }
+
             switch result {
             case .success(let data):
                 guard let image = UIImage(data: data) else {
-                    self.loadingIndicator.stopAnimating()
-                    self.symbolImageView.alpha = 1.0
+                    self.showResult(for: nil)
                     return
                 }
 
-                self.imageView.image = image
+                self.showResult(for: image)
+
             case .error(_):
-                self.symbolImageView.alpha = 1.0
-                self.loadingIndicator.stopAnimating()
+                self.showResult(for: nil)
                 break
             }
         }.store(in: &self.cancellables)
@@ -159,5 +141,16 @@ class DisplayableImageView: View {
         self.displayable = nil
         self.loadingIndicator.stopAnimating()
         self.blurView.effect = self.blurEffect
+    }
+
+    private func showResult(for image: UIImage?) {
+
+        UIView.animate(withDuration: 0.2) {
+            self.symbolImageView.alpha = image.isNil ? 1.0 : 0.0
+            self.blurView.effect = image.isNil ? self.blurEffect : nil
+        }
+
+        self.loadingIndicator.stopAnimating()
+        self.imageView.image = image
     }
 }
