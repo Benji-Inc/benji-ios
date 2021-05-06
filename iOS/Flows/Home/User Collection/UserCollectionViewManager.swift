@@ -41,10 +41,15 @@ class UserCollectionViewManger: CollectionViewManager<UserCollectionViewManger.S
 
     private var users: [User] = []
 
+    private var userCV: UserCollectionView? {
+        return self.collectionView as? UserCollectionView
+    }
+
     func loadFeeds(completion: CompletionOptional = nil) {
         self.collectionView.collectionViewLayout = self.layout
 
-        self.collectionView.animationView.play()
+        self.userCV?.animationView.play()
+        self.userCV?.statusView.alpha = 0
 
         let combined = Publishers.Zip(
             GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).assertNoFailure(),

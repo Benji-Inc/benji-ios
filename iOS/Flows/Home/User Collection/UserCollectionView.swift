@@ -30,7 +30,7 @@ class UserCollectionView: CollectionView {
         self.backgroundView = self.statusView
 
         self.publisher(for: \.contentSize).mainSink { (size) in
-            self.statusView.alpha = size.width > 0.0 && !self.animationView.isAnimationPlaying ? 0.0 : 1.0
+            self.statusView.alpha = size.width == 0.0 && size.height == 0.0 ? 1.0 : 0.0
         }.store(in: &self.cancellables)
 
         self.bounces = true
