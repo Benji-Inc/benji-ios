@@ -2,29 +2,29 @@ PODS:
   - Bolts-Swift (1.5.0)
   - Bolts/Tasks (1.9.1)
   - GestureRecognizerClosures (5.0.0)
-  - lottie-ios (3.1.9)
-  - Parse (1.19.1):
-    - Parse/Core (= 1.19.1)
-  - Parse/Core (1.19.1):
+  - lottie-ios (3.2.2)
+  - Parse (1.19.2):
+    - Parse/Core (= 1.19.2)
+  - Parse/Core (1.19.2):
     - Bolts/Tasks (= 1.9.1)
   - ParseLiveQuery (2.8.0):
     - Bolts-Swift (~> 1.5.0)
     - Parse (~> 1.19.0)
     - Starscream (~> 4.0.4)
-  - PhoneNumberKit (3.3.1):
-    - PhoneNumberKit/PhoneNumberKitCore (= 3.3.1)
-    - PhoneNumberKit/UIKit (= 3.3.1)
-  - PhoneNumberKit/PhoneNumberKitCore (3.3.1)
-  - PhoneNumberKit/UIKit (3.3.1):
+  - PhoneNumberKit (3.3.3):
+    - PhoneNumberKit/PhoneNumberKitCore (= 3.3.3)
+    - PhoneNumberKit/UIKit (= 3.3.3)
+  - PhoneNumberKit/PhoneNumberKitCore (3.3.3)
+  - PhoneNumberKit/UIKit (3.3.3):
     - PhoneNumberKit/PhoneNumberKitCore
-  - SDWebImage (5.10.0):
-    - SDWebImage/Core (= 5.10.0)
-  - SDWebImage/Core (5.10.0)
+  - SDWebImage (5.11.1):
+    - SDWebImage/Core (= 5.11.1)
+  - SDWebImage/Core (5.11.1)
   - SideMenu (6.5.0)
   - Starscream (4.0.4)
   - TMROCoordinator (0.0.3)
   - TMROLocalization (0.0.2)
-  - TwilioChatClient (4.0.2)
+  - TwilioChatClient (4.2.1)
 
 DEPENDENCIES:
   - GestureRecognizerClosures
@@ -58,17 +58,17 @@ SPEC CHECKSUMS:
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
   Bolts-Swift: afbbaf8c8186e7f769be4afa656949c14087ba44
   GestureRecognizerClosures: 0dcafb45e669e7a775c840383e54b3d16983037b
-  lottie-ios: 3a3758ef5a008e762faec9c9d50a39842f26d124
-  Parse: e40fdb9c7d665823b7fe9865949cac9a53eb2ce7
+  lottie-ios: a033bb989eea77d9f99cc4e2bbdd3788229761ad
+  Parse: 081fb8755c3000fd11df817eec235def233d0af3
   ParseLiveQuery: 366b5876aa20074ea7fea52446376e102447b5df
-  PhoneNumberKit: ff153d5e299f6da566cb73c6aa71e354933b2932
-  SDWebImage: 9169792e9eec3e45bba2a0c02f74bf8bd922d1ee
+  PhoneNumberKit: 4ce83273551c4d2ae10b7361162f4283dd02835f
+  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   TMROCoordinator: 8e675e45c895feafdd548e1dd2de35430d3ea146
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
-  TwilioChatClient: bc386ab597f9fbb8e799491f15c07519d080a4f2
+  TwilioChatClient: 7eae02efb2a0882c4cbe39cbb0ba6129681f6fe5
 
 PODFILE CHECKSUM: c465ae04e1824d5f8857822c0b5479f62947465e
 
-COCOAPODS: 1.10.0.rc.1
+COCOAPODS: 1.10.1
