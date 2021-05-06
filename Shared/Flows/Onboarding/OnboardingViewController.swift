@@ -74,11 +74,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.welcomeVC.$state.mainSink { (state) in
             switch state {
             case .welcome:
-                break
+                self.updateNavigationBar()
             case .signup:
                 self.current = .phone(self.phoneVC)
             case .reservationInput:
-                break
+                self.updateNavigationBar()
             case .foundReservation(let reservation):
                 self.reservationId = reservation.objectId
                 if let identity = reservation.createdBy?.objectId {
@@ -86,7 +86,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 }
                 self.current = .phone(self.phoneVC)
             case .reservationError:
-                break
+                self.updateNavigationBar()
             }
         }.store(in: &self.cancellables)
 
@@ -178,7 +178,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.confettiView.expandToSuperviewSize()
 
-        self.avatarView.setSize(for: 100)
+        self.avatarView.setSize(for: 60)
         self.avatarView.centerOnX()
         self.avatarView.pin(.top)
     }
@@ -225,8 +225,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func getTitle() -> Localized {
         guard let content = self.current else { return "" }
         switch content {
-        case .welcome(_):
-            return "Welcome!"
+        case .welcome(let vc):
+            switch vc.state {
+            case .reservationInput:
+                return "Enter RSVP"
+            default:
+                return "Welcome!"
+            }
         case .phone(_):
             return "Enter Phone"
         case .code(_):
@@ -285,14 +290,20 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         guard let content = self.current else { return "" }
 
         switch content {
-        case .welcome(_):
-            return LocalizedString(id: "",
-                                   arguments: [],
-                                   default: "Ours is an exclusive community of people building a better place to be social online. To best serve this community, we currently require an RSVP for access OR you can tap JOIN to be added to the waitlist.")
+        case .welcome(let vc):
+
+            switch vc.state {
+            case .reservationInput:
+                return "Enter the RSVP code, to get immediate access and connect with the person who invited you."
+            default:
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "Ours is an exclusive community of people building a better place to be social online. To best serve this community, we currently require an RSVP for access OR you can tap JOIN to be added to the waitlist.")
+            }
         case .phone(_):
             if let user = self.reservationUser {
                 return LocalizedString(id: "",
-                                       arguments: [user.givenName],
+                                       arguments: [user.fullName],
                                        default: "Please verify your mobile number, to accept @(fullname)'s reservation.")
             } else {
                 return LocalizedString(id: "",

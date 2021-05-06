@@ -102,6 +102,7 @@ class ToastView: View {
         self.imageView.layer.cornerRadius = 5
         self.imageView.imageView.tintColor = Color.white.color
         self.imageView.imageView.contentMode = .scaleAspectFit
+        self.imageView.clipsToBounds = true
 
         self.descriptionLabel.alpha = 0
         self.titleLabel.alpha = 0

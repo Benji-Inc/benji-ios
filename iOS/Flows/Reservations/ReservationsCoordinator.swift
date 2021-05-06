@@ -65,7 +65,8 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     }
 
     private func showSentAlert(for avatar: Avatar) {
-        ToastScheduler.shared.schedule(toastType: .basic(displayable: avatar, title: "RSVP Sent", description: "Your RSVP has been sent too @(name). As soon as they accept, a conversation will be created between the two of you."))
+        let text = LocalizedString(id: "", arguments: [avatar.fullName], default: "Your RSVP has been sent too @(name). As soon as they accept, a conversation will be created between the two of you.")
+        ToastScheduler.shared.schedule(toastType: .basic(displayable: avatar, title: "RSVP Sent", description: text))
         self.finishFlow(with: ())
     }
 
@@ -137,6 +138,11 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
                 reservation.contactId.isNil
             })
         }
+
+        if self.selectedReservation.isNil {
+            self.selectedReservation = self.reservationsVC.reservations.first
+        }
+
         picker.dismiss(animated: true) {
             self.findUser(for: contact)
         }
@@ -144,10 +150,10 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
 
     func findUser(for contact: CNContact) {
         // Search for user with phone number
-        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
+        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers(), let reservation = self.selectedReservation else { return }
 
         let combined = Publishers.Zip(
-            self.selectedReservation!.prepareMetaData(andUpdate: []),
+            reservation.prepareMetaData(andUpdate: []),
             User.getFirstObject(where: "phoneNumber", contains: phone)
         )
 
@@ -156,13 +162,13 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
             case .success((_, let user)):
                 self.showReservationAlert(for: user)
             case .error(_):
-                if let rsvp = self.selectedReservation, rsvp.contactId == contact.identifier {
-                    self.sendText(with: rsvp.reminderMessage, phone: phone)
-                } else if let rsvp = self.selectedReservation {
-                    rsvp.contactId = contact.identifier
-                    rsvp.saveLocalThenServer()
+                if reservation.contactId == contact.identifier {
+                    self.sendText(with: reservation.reminderMessage, phone: phone)
+                } else {
+                    reservation.contactId = contact.identifier
+                    reservation.saveLocalThenServer()
                         .mainSink { (updatedReservation) in
-                            self.sendText(with: rsvp.message, phone: phone)
+                            self.sendText(with: reservation.message, phone: phone)
                         }.store(in: &self.cancellables)
                 }
             }

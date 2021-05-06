@@ -109,8 +109,27 @@ class WelcomeViewController: TextInputViewController<Void> {
         }
     }
 
+    override func textFieldDidChange() {
+        super.textFieldDidChange()
+
+        if let text = self.textField.text, !text.isEmpty {
+            self.textEntry.button.isEnabled = true
+
+        } else {
+            self.textEntry.button.isEnabled = false
+        }
+    }
+
+    override func didTapButton() {
+        self.claimRSVP()
+    }
+
     override func textFieldDidEndEditing(_ textField: UITextField) {
-        guard let code = textField.text, !code.isEmpty else {
+        self.claimRSVP()
+    }
+
+    private func claimRSVP() {
+        guard let code = self.textField.text, !code.isEmpty else {
             self.state = .welcome
             return
         }
