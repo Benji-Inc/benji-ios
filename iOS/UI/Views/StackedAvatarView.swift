@@ -31,7 +31,6 @@ class StackedAvatarView: View {
 
         let max: Int = min(items.count, self.maxItems)
         for index in stride(from: max, through: 0, by: -1) {
-            print(index)
             if let item: Avatar = items[safe: index] {
                 let avatarView = AvatarView()
                 avatarView.set(avatar: item)
