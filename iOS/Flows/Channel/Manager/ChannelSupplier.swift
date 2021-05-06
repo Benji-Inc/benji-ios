@@ -215,29 +215,20 @@ class ChannelSupplier {
         })
     }
 
-    @discardableResult
     func createChannel(uniqueName: String = UUID().uuidString,
                        friendlyName: String,
                        members: [String],
-                       setActive: Bool = true) -> Future<Void, Error> {
+                       setActive: Bool = true) {
         
-        return Future { promise in
-            CreateChannel(uniqueName: uniqueName,
-                          friendlyName: friendlyName,
-                          attributes: [:],
-                          members: members)
-                .makeRequest(andUpdate: [], viewsToIgnore: [])
-                .mainSink { result in
-                    switch result {
-                    case .success(_):
-                        if setActive {
-                            self.set(activeChannel: DisplayableChannel(channelType: .pending(uniqueName)))
-                        }
-                        promise(.success(()))
-                    case .error(let e):
-                        promise(.failure(e))
-                    }
-                }.store(in: &self.cancellables)
+        if setActive {
+            self.set(activeChannel: DisplayableChannel(channelType: .pending(uniqueName)))
         }
+        
+        CreateChannel(uniqueName: uniqueName,
+                      friendlyName: friendlyName,
+                      attributes: [:],
+                      members: members)
+            .makeRequest(andUpdate: [], viewsToIgnore: [])
+            .mainSink().store(in: &self.cancellables)
     }
 }
