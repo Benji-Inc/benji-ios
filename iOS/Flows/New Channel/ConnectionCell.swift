@@ -14,8 +14,8 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Connection
 
     private let avatarView = AvatarView()
-    private let handleLabel = Label(font: .regularBold, textColor: .lightPurple)
-    private let nameLabel = Label(font: .small)
+    private let titleLabel = Label(font: .regularBold, textColor: .lightPurple)
+    private let subTitleLabel = Label(font: .small)
     private let animationView = AnimationView(name: "checkbox")
 
     var didTapButton: CompletionOptional = nil
@@ -25,8 +25,8 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         super.initializeSubviews()
 
         self.contentView.addSubview(self.avatarView)
-        self.contentView.addSubview(self.handleLabel)
-        self.contentView.addSubview(self.nameLabel)
+        self.contentView.addSubview(self.titleLabel)
+        self.contentView.addSubview(self.subTitleLabel)
         self.contentView.addSubview(self.animationView)
     }
 
@@ -36,8 +36,8 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         nonMeUser.retrieveDataIfNeeded()
             .mainSink { user in
                 self.avatarView.set(avatar: nonMeUser)
-                self.handleLabel.setText(nonMeUser.handle)
-                self.nameLabel.setText(nonMeUser.fullName)
+                self.titleLabel.setText(nonMeUser.fullName)
+                self.subTitleLabel.setText(nonMeUser.handle)
                 self.layoutNow()
             }.store(in: &self.cancellables)
     }
@@ -50,17 +50,17 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.avatarView.setSize(for: self.contentView.height - Theme.contentOffset.doubled)
+        self.avatarView.setSize(for: self.contentView.height - Theme.contentOffset)
         self.avatarView.pin(.left, padding: Theme.contentOffset)
         self.avatarView.centerOnY()
 
-        self.nameLabel.setSize(withWidth: self.contentView.width * 0.6)
-        self.nameLabel.match(.bottom, to: .bottom, of: self.avatarView)
-        self.nameLabel.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset)
+        self.subTitleLabel.setSize(withWidth: self.contentView.width * 0.6)
+        self.subTitleLabel.match(.bottom, to: .bottom, of: self.avatarView)
+        self.subTitleLabel.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset.half)
 
-        self.handleLabel.setSize(withWidth: self.contentView.width * 0.6)
-        self.handleLabel.match(.bottom, to: .top, of: self.nameLabel, offset: -4)
-        self.handleLabel.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset)
+        self.titleLabel.setSize(withWidth: self.contentView.width * 0.6)
+        self.titleLabel.match(.bottom, to: .top, of: self.subTitleLabel, offset: -4)
+        self.titleLabel.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset.half)
 
         self.animationView.squaredSize = 20
         self.animationView.pin(.right, padding: Theme.contentOffset)
