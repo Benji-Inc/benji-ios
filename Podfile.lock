@@ -24,7 +24,7 @@ PODS:
   - Starscream (4.0.4)
   - TMROCoordinator (0.0.3)
   - TMROLocalization (0.0.2)
-  - TwilioChatClient (4.2.1)
+  - TwilioChatClient (4.1.0)
 
 DEPENDENCIES:
   - GestureRecognizerClosures
@@ -36,7 +36,7 @@ DEPENDENCIES:
   - SideMenu
   - TMROCoordinator
   - TMROLocalization
-  - TwilioChatClient
+  - TwilioChatClient (= 4.1.0)
 
 SPEC REPOS:
   trunk:
@@ -67,8 +67,8 @@ SPEC CHECKSUMS:
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   TMROCoordinator: 8e675e45c895feafdd548e1dd2de35430d3ea146
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
-  TwilioChatClient: 7eae02efb2a0882c4cbe39cbb0ba6129681f6fe5
+  TwilioChatClient: 88217a65e6b5eeba81be09c49b7dec1210b1e9b9
 
-PODFILE CHECKSUM: c465ae04e1824d5f8857822c0b5479f62947465e
+PODFILE CHECKSUM: 3659fb70dc358a27206efb2c884d7a141481ed3e
 
 COCOAPODS: 1.10.1

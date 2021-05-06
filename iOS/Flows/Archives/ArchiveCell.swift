@@ -32,7 +32,6 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
     }
 
     func configure(with item: Post) {
-        self.reset()
 
         let file = item.preview ?? item.file
 
@@ -47,16 +46,17 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
                 self.label.setText(item.createdAt?.getDistanceAgoString() ?? String())
                 self.layoutNow()
             default:
-                if RitualManager.shared.currentTriggerDate?.day == item.createdAt?.day {
-                    self.imageView.displayable = file
-                    self.label.setText(item.createdAt?.getDistanceAgoString() ?? String())
-                    self.layoutNow()
-                } else {
+                if let trigger = item.triggerDate,
+                   let currentTrigger = RitualManager.shared.currentTriggerDate,
+                   currentTrigger.isSameDay(as: trigger) {
                     self.imageView.loadingIndicator.stopAnimating()
                     self.imageView.symbolImageView.image = UIImage(systemName: "lock.fill")
                     self.imageView.layoutNow()
+                } else {
+                    self.imageView.displayable = file
+                    self.label.setText(item.createdAt?.getDistanceAgoString() ?? String())
+                    self.layoutNow()
                 }
-                break
             }
         }
     }
@@ -75,10 +75,10 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
         self.label.pin(.bottom, padding: 6)
     }
 
-    override func reset() {
-        super.reset()
+    override func prepareForReuse() {
+        super.prepareForReuse()
 
-        self.imageView.displayable = nil 
+        self.imageView.displayable = nil
         self.label.text = nil
     }
 }

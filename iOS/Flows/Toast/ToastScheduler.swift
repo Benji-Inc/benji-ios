@@ -9,6 +9,7 @@
 import Foundation
 import TwilioChatClient
 import TMROLocalization
+import Combine
 
 enum ToastType {
     case newMessage(TCHMessage, TCHChannel)
@@ -22,6 +23,8 @@ protocol ToastSchedulerDelegate: AnyObject {
 
 class ToastScheduler {
     static let shared = ToastScheduler()
+
+    private var cancellables = Set<AnyCancellable>()
 
     weak var delegate: ToastSchedulerDelegate?
 
@@ -73,18 +76,26 @@ class ToastScheduler {
     private func createMessageToast(for message: TCHMessage, channel: TCHChannel) {
         guard let body = message.body, !body.isEmpty else { return }
 
-        let toast = Toast(id: message.id,
-                          priority: 1,
-                          title: message.avatar.fullName,
-                          description: body,
-                          displayable: message.avatar,
-                          deeplink: DeepLinkObject(target: .channel),
-                          didTap: { [unowned self] in
-                            let deeplink = DeepLinkObject(target: .channel)
-                            deeplink.customMetadata["channelId"] = channel.sid
-                            self.delegate?.didInteractWith(type: .newMessage(message, channel), deeplink: deeplink)
-                          })
-        
-        ToastQueue.shared.add(toast: toast)
+        message.getAuthorAsUser()
+            .mainSink { result in
+                switch result {
+                case .success(let user):
+                    let toast = Toast(id: message.id,
+                                      priority: 1,
+                                      title: user.fullName,
+                                      description: body,
+                                      displayable: user,
+                                      deeplink: DeepLinkObject(target: .channel),
+                                      didTap: { [unowned self] in
+                                        let deeplink = DeepLinkObject(target: .channel)
+                                        deeplink.customMetadata["channelId"] = channel.sid
+                                        self.delegate?.didInteractWith(type: .newMessage(message, channel), deeplink: deeplink)
+                                      })
+
+                    ToastQueue.shared.add(toast: toast)
+                case .error(_):
+                    break
+                }
+            }.store(in: &self.cancellables)
     }
 }
