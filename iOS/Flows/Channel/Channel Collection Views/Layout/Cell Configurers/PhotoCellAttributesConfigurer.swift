@@ -11,7 +11,7 @@ import Foundation
 class PhotoCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
     var avatarSize = CGSize(width: 30, height: 36)
-    var horizontalPadding: CGFloat = Theme.contentOffset
+    var horizontalPadding: CGFloat = Theme.contentOffset.half
 
     var textViewVerticalPadding: CGFloat = 10
     var textViewHorizontalPadding: CGFloat = 14
@@ -84,7 +84,7 @@ class PhotoCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
     private func getTextViewFrame(with bubbleViewSize: CGSize,
                                   textViewSize: CGSize) -> CGRect {
-        return CGRect(x: self.bubbleViewHorizontalPadding,
+        return CGRect(x: self.horizontalPadding,
                       y: self.textViewVerticalPadding,
                       width: textViewSize.width,
                       height: textViewSize.height)
@@ -101,7 +101,7 @@ class PhotoCellAttributesConfigurer: ChannelCellAttributesConfigurer {
         if message.isFromCurrentUser {
             xOffset = layout.itemWidth - textViewSize.width - self.textViewHorizontalPadding.doubled - self.bubbleViewHorizontalPadding
         } else {
-            xOffset = Theme.contentOffset + self.bubbleViewHorizontalPadding
+            xOffset = self.horizontalPadding
         }
 
         return CGRect(x: xOffset,
