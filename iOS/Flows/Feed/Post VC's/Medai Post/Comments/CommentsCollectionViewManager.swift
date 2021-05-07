@@ -38,21 +38,8 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
 
     private(set) var subscription: Subscription<PFObject>?
 
-    // remove once live queries work.
-    lazy var refreshControl: UIRefreshControl = {
-        let action = UIAction { action in
-            self.queryForComments()
-        }
-
-        let control = UIRefreshControl(frame: .zero, primaryAction: action)
-        control.tintColor = Color.white.color
-        return control
-    }()
-
     override func initialize() {
         super.initialize()
-
-        self.collectionView.refreshControl = self.refreshControl
 
         self.$comments.mainSink { comments in
             self.loadSnapshot()
