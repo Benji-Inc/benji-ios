@@ -16,8 +16,6 @@ class HomeTabView: View {
     private var rightButton = ImageViewButton()
     private var cancellables = Set<AnyCancellable>()
 
-    var didSelectPhotoLibrary: CompletionOptional = nil
-    var didSelectFlip: CompletionOptional = nil
     var didSelectProfile: CompletionOptional = nil
     var didSelectChannels: CompletionOptional = nil
 
@@ -46,25 +44,11 @@ class HomeTabView: View {
         }.store(in: &self.cancellables)
 
         self.leftButton.didSelect { [unowned self] in
-            switch self.state {
-            case .home:
-                self.didSelectProfile?()
-            case .capture:
-                self.didSelectPhotoLibrary?()
-            case .review, .confirm:
-                break
-            }
+            self.didSelectProfile?()
         }
 
         self.rightButton.didSelect { [unowned self] in
-            switch self.state {
-            case .home:
-                self.didSelectChannels?()
-            case .capture:
-                self.didSelectFlip?()
-            case .review, .confirm:
-                break
-            }
+            self.didSelectChannels?()
         }
     }
 
@@ -102,10 +86,8 @@ class HomeTabView: View {
             self.rightButton.imageView.image = UIImage(systemName: "bubble.left.and.bubble.right")
             self.rightButton.alpha = 1
         case .capture:
-            self.leftButton.imageView.image = UIImage(systemName: "square.grid.2x2")!
-            self.leftButton.alpha = 1
-            self.rightButton.imageView.image = UIImage(systemName: "arrow.triangle.2.circlepath")!
-            self.rightButton.alpha = 1
+            self.leftButton.alpha = 0
+            self.rightButton.alpha = 0
         case .review:
             self.leftButton.alpha = 0
             self.rightButton.alpha = 0 
