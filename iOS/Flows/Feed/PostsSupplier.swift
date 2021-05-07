@@ -39,7 +39,8 @@ class PostsSupplier {
             publishers.append(self.getConnections())
         }
 
-        publishers.append(self.queryForCurrentPosts(for: user))
+        publishers.append(self.queryForCurrentMediaPosts(for: user))
+        publishers.append(self.queryForUnreadPosts(for: user))
 
         return Future { promise in
             waitForAll(publishers).mainSink { result in
@@ -60,14 +61,35 @@ class PostsSupplier {
         }
     }
 
-    func queryForCurrentPosts(for owner: User) -> AnyPublisher<[Postable], Error> {
+    func queryForCurrentMediaPosts(for owner: User) -> AnyPublisher<[Postable], Error> {
         return Future { promise in
 
             if let query = Post.query() {
-                query.whereKey("type", containedIn: ["media", "unreadMessages", "generalUnreadMessages"])
+                query.whereKey("type", containedIn: ["media"])
                 query.whereKey("author", equalTo: owner)
                 query.whereKey("expirationDate", greaterThanOrEqualTo: Date())
                 query.order(byDescending: "createdAt")
+                query.findObjectsInBackground { objects, error in
+                    if let posts = objects as? [Post] {
+                        promise(.success(posts))
+                    } else {
+                        promise(.failure(ClientError.message(detail: "No posts found on feed")))
+                    }
+                }
+
+            } else {
+                promise(.failure(ClientError.message(detail: "No query for posts")))
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    func queryForUnreadPosts(for owner: User) -> AnyPublisher<[Postable], Error> {
+        return Future { promise in
+
+            if let query = Post.query() {
+                query.whereKey("type", containedIn: ["unreadMessages", "generalUnreadMessages"])
+                query.whereKey("author", equalTo: owner)
+                query.whereKey("attributes.numberOfUnread", notEqualTo: 0)
                 query.findObjectsInBackground { objects, error in
                     if let posts = objects as? [Post] {
                         promise(.success(posts))

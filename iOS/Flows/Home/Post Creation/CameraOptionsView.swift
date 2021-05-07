@@ -16,6 +16,8 @@ class CameraOptionsView: View {
     private let libraryButton = CameraOptionView(type: .library)
     private let flashButton = CameraOptionView(type: .flash)
 
+    //var didSelectOption: ((CameraOptionView.OptionType) -> Void)? = nil 
+
     override func initializeSubviews() {
         super.initializeSubviews()
 

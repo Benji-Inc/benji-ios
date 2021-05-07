@@ -24,8 +24,11 @@ class PostUnreadViewController: PostViewController {
     }
 
     override func configurePost() {
+
         guard let channel = self.post.channel,
-              let count = self.post.numberOfUnread else { return }
+              let count = self.post.numberOfUnread else {
+            return
+        }
 
         self.configure(with: channel, count: count)
     }
@@ -33,13 +36,13 @@ class PostUnreadViewController: PostViewController {
     func configure(with channel: TCHChannel, count: Int) {
         channel.getAuthorAsUser()
             .mainSink(receiveValue: { (user) in
-               // self.avatarView.set(avatar: user)
                 if count > 0 {
                     self.textView.set(localizedText: "You have \(String(count)) unread messages in \(String(optional: channel.friendlyName))")
                 } else {
                     self.textView.set(localizedText: "Nice job! 🥳 You are all caught up in: \(String(optional: channel.friendlyName))")
                 }
 
+                print(channel.friendlyName)
                 self.view.layoutNow()
             }).store(in: &self.cancellables)
     }
