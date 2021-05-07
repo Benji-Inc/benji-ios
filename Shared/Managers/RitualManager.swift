@@ -127,6 +127,7 @@ class RitualManager {
         content.body = "Your daily feed is unlocked for the next hour."
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "ritual"
+        content.setData(value: DeepLinkTarget.feed.rawValue, for: .target)
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: ritual.timeComponents,
                                                     repeats: true)
@@ -150,6 +151,7 @@ class RitualManager {
         content.body = "You have 10 mins left to check your feed for the day."
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "ritual"
+        content.setData(value: DeepLinkTarget.feed.rawValue, for: .target)
 
         var lastChanceTime: DateComponents = ritual.timeComponents
         if let minutes = ritual.timeComponents.minute {

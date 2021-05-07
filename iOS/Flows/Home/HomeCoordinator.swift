@@ -113,7 +113,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         case .profile:
             self.addProfile()
         case .feed:
-            break
+            if let current = User.current() {
+                self.presentFeed(for: current)
+            }
         case .channels:
             self.addChannels()
         }

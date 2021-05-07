@@ -44,6 +44,10 @@ class RitualInputViewController: ViewController, Completable, Sizeable {
     override func initializeViews() {
         super.initializeViews()
 
+        if RitualManager.shared.currentTriggerDate.exists {
+            self.state = .update
+        }
+
         self.$state
             .removeDuplicates()
             .mainSink { (state) in

@@ -81,5 +81,9 @@ extension UNMutableNotificationContent {
     func setValue(for key: NotificationContentKey, from data: [String: Any]) {
         self.userInfo[key.rawValue] = data[key.rawValue]
     }
+
+    func setData(value: Any, for key: NotificationContentKey) {
+        self.userInfo["data"] = [key.rawValue: value]
+    }
 }
 
