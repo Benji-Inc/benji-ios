@@ -74,7 +74,11 @@ class HomeTabView: View {
         let itemWidth = self.width * 0.33
         let itemSize = CGSize(width: itemWidth, height: 60)
         self.leftButton.size = itemSize
-        self.leftButton.pin(.bottom, padding: 0)
+        if self.safeAreaInsets.bottom == 0 {
+            self.leftButton.pin(.bottom, padding: 0)
+        } else  {
+            self.leftButton.pinToSafeArea(.bottom, padding: 0)
+        }
         self.leftButton.left = 0
 
         self.postButtonView.size = itemSize
@@ -82,7 +86,11 @@ class HomeTabView: View {
         self.postButtonView.left = self.leftButton.right
 
         self.rightButton.size = itemSize
-        self.rightButton.pin(.bottom, padding: 0)
+        if self.safeAreaInsets.bottom == 0 {
+            self.rightButton.pin(.bottom, padding: 0)
+        } else  {
+            self.rightButton.pinToSafeArea(.bottom, padding: 0)
+        }
         self.rightButton.left = self.postButtonView.right
     }
 

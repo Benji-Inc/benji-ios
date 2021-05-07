@@ -18,6 +18,8 @@ class PostCreationViewController: ImageCaptureViewController {
 
     let vibrancyView = PostVibrancyView()
     let exitButton = ImageViewButton()
+    let cameraOptionsView = CameraOptionsView()
+
     let captionTextView = CaptionTextView()
     let gradientView = GradientView(with: [Color.background1.color.withAlphaComponent(0.5).cgColor, Color.clear.color.cgColor], startPoint: .bottomCenter, endPoint: .topCenter)
 
@@ -63,13 +65,15 @@ class PostCreationViewController: ImageCaptureViewController {
         self.captionTextView.alpha = 0
 
         self.view.addSubview(self.exitButton)
-
         self.exitButton.imageView.image = UIImage(systemName: "xmark")!
         self.exitButton.alpha = 0
         self.exitButton.didSelect { [unowned self] in
             self.didTapExit?()
             self.reset()
         }
+
+        self.view.addSubview(self.cameraOptionsView)
+        self.cameraOptionsView.alpha = 0
 
         self.view.addSubview(self.swipeLabel)
         self.swipeLabel.setText("Swipe up to post")
@@ -117,7 +121,12 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.exitButton.squaredSize = 50
         self.exitButton.match(.top, to: .top, of: self.vibrancyView, offset: Theme.contentOffset)
-        self.exitButton.pin(.right, padding: Theme.contentOffset)
+        self.exitButton.pin(.left, padding: Theme.contentOffset)
+
+        self.cameraOptionsView.width = 50
+        self.cameraOptionsView.height = 200
+        self.cameraOptionsView.match(.top, to: .top, of: self.vibrancyView, offset: Theme.contentOffset + 10)
+        self.cameraOptionsView.pin(.right, padding: Theme.contentOffset)
 
         self.vibrancyView.expandToSuperviewSize()
 
@@ -153,6 +162,7 @@ class PostCreationViewController: ImageCaptureViewController {
         UIView.animate(withDuration: Theme.animationDuration) {
             self.captionTextView.alpha = state == .review ? 1.0 : 0.0
             self.exitButton.alpha = state == .home ? 0.0 : 1.0
+            self.cameraOptionsView.alpha = state == .home ? 0.0 : 1.0
             self.swipeLabel.alpha = state == .review ? 1.0 : 0.0
             self.gradientView.alpha = state == .review ? 1.0 : 0.0
             self.vibrancyView.show(blur: state == .home)

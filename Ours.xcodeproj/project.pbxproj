@@ -289,6 +289,7 @@
 		D64A1F13258D598B0097817C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C821D3071500204BEE /* LaunchScreen.storyboard */; };
 		D64A8F46259008B2002948E1 /* ChannelSupplier+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A8F45259008B2002948E1 /* ChannelSupplier+Extensions.swift */; };
 		D64A8F4C25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A8F4B25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift */; };
+		D64BD4182645B9C20053A55A /* CameraOptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64BD4172645B9C20053A55A /* CameraOptionsView.swift */; };
 		D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D64C6A7E23294A8600DB7257 /* ChannelKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A7D23294A8600DB7257 /* ChannelKey.swift */; };
 		D64C6A97232D5C0400DB7257 /* TCHMember+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A96232D5C0400DB7257 /* TCHMember+Extensions.swift */; };
@@ -847,6 +848,7 @@
 		D64A1F06258C16470097817C /* WaitlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistViewController.swift; sourceTree = "<group>"; };
 		D64A8F45259008B2002948E1 /* ChannelSupplier+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelSupplier+Extensions.swift"; sourceTree = "<group>"; };
 		D64A8F4B25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Extensions.swift"; sourceTree = "<group>"; };
+		D64BD4172645B9C20053A55A /* CameraOptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraOptionsView.swift; sourceTree = "<group>"; };
 		D64C6A79232883FE00DB7257 /* CloudFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudFunction.swift; sourceTree = "<group>"; };
 		D64C6A7D23294A8600DB7257 /* ChannelKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelKey.swift; sourceTree = "<group>"; };
 		D64C6A96232D5C0400DB7257 /* TCHMember+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHMember+Extensions.swift"; sourceTree = "<group>"; };
@@ -1868,6 +1870,7 @@
 				D6966514263B60910009114B /* PostCreationViewController+Panning.swift */,
 				D696650E2639B5640009114B /* PostCreationViewController+Upload.swift */,
 				D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */,
+				D64BD4172645B9C20053A55A /* CameraOptionsView.swift */,
 			);
 			path = "Post Creation";
 			sourceTree = "<group>";
@@ -2572,6 +2575,7 @@
 				D64C6A9E232D6DD500DB7257 /* TypingIndicatorView.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ChannelCoordinator.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
+				D64BD4182645B9C20053A55A /* CameraOptionsView.swift in Sources */,
 				D6432BF522D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift in Sources */,
 				D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */,
 				D6966515263B60910009114B /* PostCreationViewController+Panning.swift in Sources */,
