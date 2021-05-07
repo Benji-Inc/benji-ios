@@ -102,13 +102,11 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
         let query = self.post?.comments?.query()
         query?.order(byAscending: "createdAt")
 
-        self.refreshControl.beginRefreshing()
         query?.findObjectsInBackground(block: { objects, error in
             self.comments = objects?.map({ comment in
                 return comment.systemComment
             }) ?? []
             self.collectionView.animationView.stop()
-            self.refreshControl.endRefreshing()
         })
     }
 
