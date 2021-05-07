@@ -72,13 +72,8 @@ class NavigationBarViewController: ViewController {
         self.descriptionLabel.pin(.left, padding: Theme.contentOffset)
         self.titleLabel.pin(.left, padding: Theme.contentOffset)
 
-        if let viewForPinning = self.getViewForPinning() {
-            self.descriptionLabel.match(.bottom, to: .top, of: viewForPinning, offset: -Theme.contentOffset.doubled)
-            self.titleLabel.match(.bottom, to: .top, of: self.descriptionLabel, offset: 0)
-        } else {
-            self.titleLabel.pinToSafeArea(.top, padding: Theme.contentOffset)
-            self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 10)
-        }
+        self.titleLabel.match(.top, to: .bottom, of: self.backButton)
+        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 10)
 
         self.blurView.expandToSuperviewSize()
     }
@@ -95,10 +90,6 @@ class NavigationBarViewController: ViewController {
 
     func getDescription() -> Localized {
         return LocalizedString.empty
-    }
-
-    func getViewForPinning() -> UIView? {
-        return nil
     }
 
     func didSelectBackButton() { }

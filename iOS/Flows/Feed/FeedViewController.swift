@@ -124,7 +124,7 @@ class FeedViewController: ViewController {
 
         self.doneButton.setSize(with: self.view.width)
         self.doneButton.centerOnX()
-        self.doneButton.pinToSafeArea(.bottom, padding: 0)
+        self.doneButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
 
         self.indicatorView.size = CGSize(width: self.view.width - Theme.contentOffset.doubled, height: 2)
         self.indicatorView.pinToSafeArea(.top, padding: Theme.contentOffset)

@@ -35,11 +35,13 @@ class RitualManager {
 
     init() {
         self.subscribeToUpdates()
-        self.determineState(for: User.current()!)
+        if let user = User.current() {
+            self.determineState(for: user)
+        }
     }
 
     private func subscribeToUpdates() {
-        User.current()!.subscribe()
+        User.current()?.subscribe()
             .mainSink(receiveValue: { (event) in
                 switch event {
                 case .created(let u), .updated(let u), .entered(let u):

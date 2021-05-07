@@ -49,16 +49,18 @@ class ReservationsFooterView: UICollectionReusableView {
         super.layoutSubviews()
 
         self.button.size = CGSize(width: 160, height: 40)
-        self.button.centerOnX()
-        self.button.pin(.bottom)
 
         self.label.setSize(withWidth: self.button.width)
         self.label.centerOnX()
-        self.label.match(.bottom, to: .top, of: self.button, offset: -Theme.contentOffset)
+        self.label.pin(.top, padding: Theme.contentOffset)
+
+
+        self.button.centerOnX()
+        self.button.match(.top, to: .bottom, of: self.label, offset: Theme.contentOffset.half)
     }
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        layoutAttributes.size = CGSize(width: layoutAttributes.size.width, height: 120)
+        layoutAttributes.size = CGSize(width: layoutAttributes.size.width, height: 220)
         return layoutAttributes
     }
 }

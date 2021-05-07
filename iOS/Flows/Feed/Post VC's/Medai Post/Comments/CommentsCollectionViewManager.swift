@@ -80,8 +80,20 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
                 }
             case .created(let obj):
                 guard let comment = obj as? Comment else { return }
-                self.comments.append(comment.systemComment)
-                self.comments.sort()
+                var index: Int?
+                for (indx, existing) in self.comments.enumerated() {
+                    if existing.updateId == comment.updateId {
+                        index = indx
+                    }
+                }
+
+                if let indx = index {
+                    self.comments[indx] = comment.systemComment
+                } else {
+                    self.comments.append(comment.systemComment)
+                    self.comments.sort()
+                }
+
                 runMain {
                     self.loadSnapshot()
                 }

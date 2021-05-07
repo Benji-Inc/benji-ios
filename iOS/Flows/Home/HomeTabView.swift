@@ -71,12 +71,10 @@ class HomeTabView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let topPadding: CGFloat = 20
-
         let itemWidth = self.width * 0.33
         let itemSize = CGSize(width: itemWidth, height: 60)
         self.leftButton.size = itemSize
-        self.leftButton.pin(.top, padding: topPadding)
+        self.leftButton.pin(.bottom, padding: 0)
         self.leftButton.left = 0
 
         self.postButtonView.size = itemSize
@@ -84,7 +82,7 @@ class HomeTabView: View {
         self.postButtonView.left = self.leftButton.right
 
         self.rightButton.size = itemSize
-        self.rightButton.pin(.top, padding: topPadding)
+        self.rightButton.pin(.bottom, padding: 0)
         self.rightButton.left = self.postButtonView.right
     }
 
