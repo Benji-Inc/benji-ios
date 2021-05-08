@@ -171,6 +171,16 @@ extension Date {
         && self.day == date.day
     }
 
+    func isSameDateOrInFuture(for date: Date) -> Bool {
+        if self.isSameDay(as: date) {
+            return true
+        } else if self > date {
+            return true
+        } else {
+            return false
+        }
+    }
+
     var ageInYears: Int {
         return Date().year - self.year
     }

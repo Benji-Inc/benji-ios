@@ -77,6 +77,8 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.view.addSubview(self.cameraOptionsView)
         self.cameraOptionsView.alpha = 0
+        self.cameraOptionsView.backgroundColor = Color.white.color.withAlphaComponent(0.2)
+        self.cameraOptionsView.roundCorners()
 
         self.flashMode = .off
 
@@ -96,7 +98,7 @@ class PostCreationViewController: ImageCaptureViewController {
         self.datePicker.minimumDate = Date()
         self.datePicker.datePickerMode = .date
         self.datePicker.tintColor = .white
-        self.datePicker.alpha = 0 
+        self.datePicker.alpha = 0
 
         self.view.addSubview(self.swipeLabel)
         self.swipeLabel.setText("Swipe up to post")
@@ -144,16 +146,15 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.exitButton.squaredSize = 50
         self.exitButton.match(.top, to: .top, of: self.vibrancyView, offset: Theme.contentOffset)
-        self.exitButton.pin(.left, padding: Theme.contentOffset)
+        self.exitButton.pin(.right, padding: Theme.contentOffset)
 
         self.cameraOptionsView.width = 50
         self.cameraOptionsView.height = 200
-        self.cameraOptionsView.match(.top, to: .top, of: self.vibrancyView, offset: Theme.contentOffset + 10)
+        self.cameraOptionsView.centerOnY()
         self.cameraOptionsView.pin(.right, padding: Theme.contentOffset)
 
-        self.datePicker.match(.top, to: .top, of: self.cameraOptionsView)
-        self.datePicker.width = 120
-        self.datePicker.centerOnX()
+        self.datePicker.match(.top, to: .top, of: self.exitButton, offset: 8)
+        self.datePicker.pin(.left, padding: Theme.contentOffset)
 
         self.vibrancyView.expandToSuperviewSize()
 
@@ -243,6 +244,10 @@ class PostCreationViewController: ImageCaptureViewController {
         self.finishLabel.alpha = 0
 
         self.datePicker.date = Date()
+
+        self.datePicker.publisher(for: \.date).mainSink { _ in
+            self.view.layoutNow()
+        }.store(in: &self.cancellables)
 
         self.view.layoutNow()
     }

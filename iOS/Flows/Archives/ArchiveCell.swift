@@ -43,20 +43,21 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
             switch RitualManager.shared.state {
             case .feedAvailable:
                 self.imageView.displayable = file
-                self.label.setText(item.createdAt?.getDistanceAgoString() ?? String())
+                self.label.setText(item.triggerDate?.getDistanceAgoString() ?? String())
                 self.layoutNow()
             default:
                 if let trigger = item.triggerDate,
                    let currentTrigger = RitualManager.shared.currentTriggerDate,
-                   currentTrigger.isSameDay(as: trigger) {
+                   trigger.isSameDateOrInFuture(for: currentTrigger) {
                     self.imageView.loadingIndicator.stopAnimating()
                     self.imageView.symbolImageView.image = UIImage(systemName: "lock.fill")
                     self.imageView.layoutNow()
                 } else {
                     self.imageView.displayable = file
-                    self.label.setText(item.createdAt?.getDistanceAgoString() ?? String())
-                    self.layoutNow()
                 }
+
+                self.label.setText(item.triggerDate?.getDistanceAgoString() ?? String())
+                self.layoutNow()
             }
         }
     }

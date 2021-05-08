@@ -13,7 +13,7 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
 
     enum SectionType: Int, ManagerSectionType {
         case user
-        case today
+        case upcoming
         case posts
     }
 
@@ -41,7 +41,7 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             section.contentInsets = NSDirectionalEdgeInsets(top: UserCollectionViewController.height, leading: Theme.contentOffset, bottom: 0, trailing: Theme.contentOffset)
 
             return section
-        case .today:
+        case .upcoming:
             let widthFraction: CGFloat = 0.33
             let heightFraction: CGFloat = 0.45
 
@@ -99,7 +99,7 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
 
     // Posts are sorted by createdBy
     private var posts: [Post] = []
-    private var todayPosts: [Post] = []
+    private var upcomingPosts: [Post] = []
     private var user: User?
     private var totalCount: Int = 0
 
@@ -143,10 +143,10 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
 
             switch result {
             case .success(let posts):
-                let nonTodayPosts = posts.filter { post in
-                    return !self.todayPosts.contains(post)
+                let nonUpcomingPosts = posts.filter { post in
+                    return !self.upcomingPosts.contains(post)
                 }
-                self.posts.append(contentsOf: nonTodayPosts)
+                self.posts.append(contentsOf: nonUpcomingPosts)
                 self.posts.removeDuplicates()
                 self.loadSnapshot()
                 completion?()
@@ -166,8 +166,8 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             } else {
                 return []
             }
-        case .today:
-            return self.todayPosts
+        case .upcoming:
+            return self.upcomingPosts
         case .posts:
             return self.posts
         }
@@ -180,7 +180,7 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             return self.collectionView.dequeueManageableCell(using: self.userConfig,
                                                              for: indexPath,
                                                              item: self.user)
-        case .posts, .today:
+        case .posts, .upcoming:
             return self.collectionView.dequeueManageableCell(using: self.archiveConfig,
                                                              for: indexPath,
                                                              item: item as? Post)
@@ -193,8 +193,8 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         case UICollectionView.elementKindSectionHeader:
 
             let header = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
-            if section == .today {
-                header.label.setText("Today")
+            if section == .upcoming {
+                header.label.setText("Upcoming")
             } else {
                 header.label.setText("Previous")
             }
@@ -202,7 +202,7 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             return header
         case UICollectionView.elementKindSectionFooter:
             let footer = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
-            footer.configure(showButton: self.posts.count < (self.totalCount - self.todayPosts.count))
+            footer.configure(showButton: self.posts.count < (self.totalCount - self.upcomingPosts.count))
             footer.button.didSelect { [unowned self] in
                 footer.button.handleEvent(status: .loading)
                 self.appendPosts {
@@ -220,14 +220,14 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         var past: [Post] = []
 
         posts.forEach { post in
-            if let trigger = post.triggerDate, trigger.isSameDay(as: Date()) {
+            if let trigger = post.triggerDate, trigger.isSameDateOrInFuture(for: Date()) {
                 today.append(post)
             } else {
                 past.append(post)
             }
         }
 
-        self.todayPosts = today
+        self.upcomingPosts = today
         self.posts = past
     }
 }

@@ -94,7 +94,7 @@ class CameraOptionView: View {
             case .flip:
                 return "flip"
             case .library:
-                return "library"
+                return "photo"
             case .flash:
                 return "flash"
             }
@@ -153,7 +153,7 @@ class CameraOptionView: View {
         super.layoutSubviews()
 
         self.imageView.squaredSize = self.width * 0.6
-        self.imageView.pin(.top)
+        self.imageView.pin(.top, padding: 10)
         self.imageView.centerOnX()
 
         self.imageView.layer.shadowColor = Color.background1.color.cgColor
