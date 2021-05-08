@@ -74,13 +74,9 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.didTapChannels?()
         }
 
-//        self.tabView.didSelectFlip = { [unowned self] in
-//            self.createVC.flipCamera()
-//        }
-
-//        self.tabView.didSelectPhotoLibrary = { [unowned self] in
-//            self.didSelectPhotoLibrary?()
-//        }
+        self.createVC.didSelectLibrary = { [unowned self] in
+            self.didSelectPhotoLibrary?()
+        }
 
         self.userCollectionVC.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
             guard !self.isPanning, let user = cellItem?.item as? User else { return }

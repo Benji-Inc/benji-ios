@@ -17,11 +17,7 @@ extension TCHMessageOptions {
             if mediaItem.isNil {
                 self.withBody(body)
             }
-
-            print("READY")
             self.withAttributes(attributes) { (result) in
-                print("GO")
-
                 if result.isSuccessful() {
                     if let item = mediaItem {
                         self.with(mediaItem: item)

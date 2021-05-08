@@ -37,6 +37,7 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
     }
 
     private(set) var cameraType: CameraType = .front
+    var flashMode: AVCaptureDevice.FlashMode = .auto
 
     func requestAthorization() -> Future<Bool, Never> {
         return Future { promise in
@@ -45,7 +46,7 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
             } else {
                 AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: { (granted: Bool) -> Void in
                     promise(.success(granted))
-               })
+                })
             }
         }
     }
@@ -72,6 +73,14 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         }
 
         self.previewLayer.removeFromSuperlayer()
+    }
+
+    func toggleFlash() {
+        if self.flashMode == .on {
+            self.flashMode = .off
+        } else if self.flashMode == .off {
+            self.flashMode = .on
+        }
     }
 
     func flipCamera() {
@@ -137,7 +146,7 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         let photoSettings = AVCapturePhotoSettings()
         // Set photo settings for our need
         photoSettings.isHighResolutionPhotoEnabled = true
-        photoSettings.flashMode = .auto
+        photoSettings.flashMode = self.flashMode
         // Call capturePhoto method by passing our photo settings and a
         // delegate implementing AVCapturePhotoCaptureDelegate
         capturePhotoOutput.capturePhoto(with: photoSettings, delegate: self)

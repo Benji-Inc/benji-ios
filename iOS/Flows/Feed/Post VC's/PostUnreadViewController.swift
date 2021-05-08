@@ -42,7 +42,6 @@ class PostUnreadViewController: PostViewController {
                     self.textView.set(localizedText: "Nice job! 🥳 You are all caught up in: \(String(optional: channel.friendlyName))")
                 }
 
-                print(channel.friendlyName)
                 self.view.layoutNow()
             }).store(in: &self.cancellables)
     }

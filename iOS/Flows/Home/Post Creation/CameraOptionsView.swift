@@ -16,7 +16,7 @@ class CameraOptionsView: View {
     private let libraryButton = CameraOptionView(type: .library)
     private let flashButton = CameraOptionView(type: .flash)
 
-    //var didSelectOption: ((CameraOptionView.OptionType) -> Void)? = nil 
+    var didSelectOption: ((CameraOptionView.OptionType, Bool) -> Void)? = nil
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -24,6 +24,21 @@ class CameraOptionsView: View {
         self.addSubview(self.flipButton)
         self.addSubview(self.libraryButton)
         self.addSubview(self.flashButton)
+
+        self.flipButton.didSelect { [unowned self] in
+            self.flipButton.isSelected.toggle()
+            self.didSelectOption?(.flip, self.flipButton.isSelected)
+        }
+
+        self.libraryButton.didSelect { [unowned self] in
+            self.libraryButton.isSelected.toggle()
+            self.didSelectOption?(.library, self.libraryButton.isSelected)
+        }
+
+        self.flashButton.didSelect { [unowned self] in
+            self.flashButton.isSelected.toggle()
+            self.didSelectOption?(.flash, self.flashButton.isSelected)
+        }
     }
 
     override func layoutSubviews() {
@@ -43,14 +58,9 @@ class CameraOptionsView: View {
     }
 }
 
-private class CameraOptionView: View {
+class CameraOptionView: View {
 
     private var cancellables = Set<AnyCancellable>()
-
-    enum State {
-        case notSelected
-        case selected
-    }
 
     enum OptionType {
         case flip
@@ -96,7 +106,7 @@ private class CameraOptionView: View {
     private let imageView = UIImageView()
     private let label = Label(font: .small)
 
-    @Published var state: State = .notSelected
+    @Published var isSelected: Bool = false
 
     init(type: OptionType) {
         self.type = type
@@ -125,15 +135,16 @@ private class CameraOptionView: View {
         self.label.textAlignment = .center
         self.label.setText(self.type.title)
 
-        self.$state.mainSink { state in
-            switch state {
-            case .notSelected:
+        self.$isSelected.mainSink { isSelected in
+
+            if isSelected {
                 self.imageView.image = self.type.image
                 self.label.setText(self.type.title)
-            case .selected:
+            } else {
                 self.imageView.image = self.type.selectedImage
                 self.label.setText(self.type.title)
             }
+
             self.layoutNow()
         }.store(in: &self.cancellables)
     }

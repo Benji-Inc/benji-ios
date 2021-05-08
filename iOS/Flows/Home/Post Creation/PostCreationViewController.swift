@@ -30,6 +30,8 @@ class PostCreationViewController: ImageCaptureViewController {
 
     private(set) var tabState: HomeTabView.State = .home
 
+    var didSelectLibrary: CompletionOptional = nil
+
     var animator: UIViewPropertyAnimator?
 
     var canSwipeToPost: Bool = false
@@ -74,6 +76,19 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.view.addSubview(self.cameraOptionsView)
         self.cameraOptionsView.alpha = 0
+
+        self.flashMode = .off
+
+        self.cameraOptionsView.didSelectOption = { [unowned self] type, isSelected in
+            switch type {
+            case .flip:
+                self.flipCamera()
+            case .library:
+                self.didSelectLibrary?()
+            case .flash:
+                self.toggleFlash()
+            }
+        }
 
         self.view.addSubview(self.swipeLabel)
         self.swipeLabel.setText("Swipe up to post")
@@ -162,7 +177,7 @@ class PostCreationViewController: ImageCaptureViewController {
         UIView.animate(withDuration: Theme.animationDuration) {
             self.captionTextView.alpha = state == .review ? 1.0 : 0.0
             self.exitButton.alpha = state == .home ? 0.0 : 1.0
-            self.cameraOptionsView.alpha = state == .home ? 0.0 : 1.0
+            self.cameraOptionsView.alpha = state == .capture ? 1.0 : 0.0
             self.swipeLabel.alpha = state == .review ? 1.0 : 0.0
             self.gradientView.alpha = state == .review ? 1.0 : 0.0
             self.vibrancyView.show(blur: state == .home)
