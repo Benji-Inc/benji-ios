@@ -36,9 +36,9 @@ class PostsSupplier {
 
             publishers.append(self.getInviteAsk())
             publishers.append(self.getNotificationPermissions())
-            publishers.append(self.getConnections())
         }
 
+        publishers.append(self.queryForConnectionPosts(for: user))
         publishers.append(self.queryForCurrentMediaPosts(for: user))
         publishers.append(self.queryForUnreadPosts(for: user))
 
@@ -59,6 +59,27 @@ class PostsSupplier {
                 }
             }.store(in: &self.cancellables)
         }
+    }
+
+    func queryForConnectionPosts(for author: User) -> AnyPublisher<[Postable], Error> {
+        return Future { promise in
+
+            if let query = Post.query() {
+                query.whereKey("type", containedIn: ["connectionRequest"])
+                query.whereKey("author", equalTo: author)
+                query.order(byDescending: "createdAt")
+                query.findObjectsInBackground { objects, error in
+                    if let posts = objects as? [Post] {
+                        promise(.success(posts))
+                    } else {
+                        promise(.failure(ClientError.message(detail: "No connection posts found on feed")))
+                    }
+                }
+
+            } else {
+                promise(.failure(ClientError.message(detail: "No query for posts")))
+            }
+        }.eraseToAnyPublisher()
     }
 
     func queryForCurrentMediaPosts(for owner: User) -> AnyPublisher<[Postable], Error> {
@@ -177,24 +198,24 @@ class PostsSupplier {
         }.eraseToAnyPublisher()
     }
 
-    private func getConnections() -> AnyPublisher<[Postable], Error> {
-        return Future { promise in
-            GetAllConnections(direction: .incoming)
-                .makeRequest(andUpdate: [], viewsToIgnore: [])
-                .mainSink(receivedResult: { (result) in
-                    var connetionPosts: [Postable] = []
-                    switch result {
-                    case .success(let connections):
-                        connections.forEach { (connection) in
-                            if connection.status == .invited {
-                                connetionPosts.append(ConnectionRequestPost(with: connection))
-                            }
-                        }
-                    case .error(_):
-                        break
-                    }
-                    promise(.success(connetionPosts))
-                }).store(in: &self.cancellables)
-        }.eraseToAnyPublisher()
-    }
+//    private func getConnections() -> AnyPublisher<[Postable], Error> {
+//        return Future { promise in
+//            GetAllConnections(direction: .incoming)
+//                .makeRequest(andUpdate: [], viewsToIgnore: [])
+//                .mainSink(receivedResult: { (result) in
+//                    var connetionPosts: [Postable] = []
+//                    switch result {
+//                    case .success(let connections):
+//                        connections.forEach { (connection) in
+//                            if connection.status == .invited {
+//                                connetionPosts.append(ConnectionRequestPost(with: connection))
+//                            }
+//                        }
+//                    case .error(_):
+//                        break
+//                    }
+//                    promise(.success(connetionPosts))
+//                }).store(in: &self.cancellables)
+//        }.eraseToAnyPublisher()
+//    }
 }

@@ -16,11 +16,12 @@ class PostConnectionViewController: PostViewController {
     private let declineButton = Button()
     private var connection: Connection?
     private let buttonContainer = View()
+    private let avatarView = AvatarView()
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.container.addSubview(self.textView)
+        self.container.addSubview(self.avatarView)
 
         self.buttonContainer.addSubview(self.acceptButton)
         self.buttonContainer.addSubview(self.declineButton)
@@ -41,7 +42,11 @@ class PostConnectionViewController: PostViewController {
     }
 
     override func configurePost() {
-        guard let connection = self.post.connection else { return }
+        guard let connection = self.post.connection else {
+            print("No connection found")
+            return
+        }
+
         self.configure(connection: connection)
     }
 
@@ -50,6 +55,8 @@ class PostConnectionViewController: PostViewController {
         if let user = connection.nonMeUser, let status = connection.status {
             user.retrieveDataIfNeeded()
                 .mainSink(receiveValue: { user in
+
+                    self.avatarView.set(avatar: user)
 
                     let text: Localized
                     switch status {
@@ -73,6 +80,10 @@ class PostConnectionViewController: PostViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        self.avatarView.setSize(for: 100)
+        self.avatarView.centerOnX()
+        self.avatarView.match(.bottom, to: .top, of: self.textView, offset: -Theme.contentOffset)
 
         self.buttonContainer.expandToSuperviewSize()
 
