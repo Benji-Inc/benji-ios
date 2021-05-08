@@ -46,8 +46,8 @@ extension PostCreationViewController {
         post.author = User.current()!
         post.body = self.captionTextView.text
         post.priority = 2
-        post.triggerDate = Date()
-        post.expirationDate = Date.add(component: .day, amount: 2, toDate: Date())
+        post.triggerDate = self.datePicker.date
+        post.expirationDate = Date.add(component: .day, amount: 2, toDate: self.datePicker.date)
         post.type = .media
         post.attributes = [:]
         post.duration = 5

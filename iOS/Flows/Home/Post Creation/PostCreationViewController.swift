@@ -19,6 +19,7 @@ class PostCreationViewController: ImageCaptureViewController {
     let vibrancyView = PostVibrancyView()
     let exitButton = ImageViewButton()
     let cameraOptionsView = CameraOptionsView()
+    let datePicker = UIDatePicker()
 
     let captionTextView = CaptionTextView()
     let gradientView = GradientView(with: [Color.background1.color.withAlphaComponent(0.5).cgColor, Color.clear.color.cgColor], startPoint: .bottomCenter, endPoint: .topCenter)
@@ -90,6 +91,13 @@ class PostCreationViewController: ImageCaptureViewController {
             }
         }
 
+        self.view.addSubview(self.datePicker)
+        self.datePicker.preferredDatePickerStyle = .compact
+        self.datePicker.minimumDate = Date()
+        self.datePicker.datePickerMode = .date
+        self.datePicker.tintColor = .white
+        self.datePicker.alpha = 0 
+
         self.view.addSubview(self.swipeLabel)
         self.swipeLabel.setText("Swipe up to post")
         self.swipeLabel.textAlignment = .center
@@ -143,6 +151,10 @@ class PostCreationViewController: ImageCaptureViewController {
         self.cameraOptionsView.match(.top, to: .top, of: self.vibrancyView, offset: Theme.contentOffset + 10)
         self.cameraOptionsView.pin(.right, padding: Theme.contentOffset)
 
+        self.datePicker.match(.top, to: .top, of: self.cameraOptionsView)
+        self.datePicker.width = 120
+        self.datePicker.centerOnX()
+
         self.vibrancyView.expandToSuperviewSize()
 
         self.swipeLabel.setSize(withWidth: self.view.width)
@@ -178,6 +190,7 @@ class PostCreationViewController: ImageCaptureViewController {
             self.captionTextView.alpha = state == .review ? 1.0 : 0.0
             self.exitButton.alpha = state == .home ? 0.0 : 1.0
             self.cameraOptionsView.alpha = state == .capture ? 1.0 : 0.0
+            self.datePicker.alpha = state == .capture ? 1.0 : 0.0
             self.swipeLabel.alpha = state == .review ? 1.0 : 0.0
             self.gradientView.alpha = state == .review ? 1.0 : 0.0
             self.vibrancyView.show(blur: state == .home)
@@ -228,6 +241,8 @@ class PostCreationViewController: ImageCaptureViewController {
         self.captionTextView.resignFirstResponder()
 
         self.finishLabel.alpha = 0
+
+        self.datePicker.date = Date()
 
         self.view.layoutNow()
     }
