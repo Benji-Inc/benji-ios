@@ -16,7 +16,6 @@ struct Attachment: Hashable {
     }
 
     let asset: PHAsset
-    let info: [UIImagePickerController.InfoKey : Any]?
 
     static func == (lhs: Attachment, rhs: Attachment) -> Bool {
         return lhs.id == rhs.id

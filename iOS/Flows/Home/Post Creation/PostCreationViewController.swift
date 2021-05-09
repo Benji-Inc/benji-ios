@@ -198,6 +198,18 @@ class PostCreationViewController: ImageCaptureViewController {
         }
     }
 
+    func load(attachment: Attachment) {
+        self.stop()
+        if self.imageView.superview.isNil {
+            self.view.addSubview(self.imageView)
+        }
+
+        AttachmentsManager.shared.getImage(for: attachment, size: self.imageView.size)
+            .mainSink { (image, _) in
+                self.show(image: image)
+            }.store(in: &self.cancellables)
+    }
+
     func show(image: UIImage) {
         self.stop()
         if self.imageView.superview.isNil {

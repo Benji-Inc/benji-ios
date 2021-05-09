@@ -119,7 +119,7 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
             return
         }
 
-        let attachment = Attachment(asset: asset, info: info)
+        let attachment = Attachment(asset: asset)
         self.channelVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
         self.channelVC.messageInputAccessoryView.updateInputType()
     }

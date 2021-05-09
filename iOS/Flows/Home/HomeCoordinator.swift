@@ -10,14 +10,20 @@ import Foundation
 import Parse
 import Combine
 import SideMenu
-import Photos
+import PhotosUI
 
 class HomeCoordinator: PresentableCoordinator<Void> {
 
     private lazy var profileVC = ProfileViewController(with: User.current()!)
     private lazy var channelsVC = ChannelsViewController()
     private lazy var homeVC = HomeViewController()
-    private lazy var imagePickerVC = ImagePickerViewController()
+    private lazy var imagePickerVC: PHPickerViewController = {
+        var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
+        config.selectionLimit = 1
+        config.filter = .any(of: [.images])
+        let vc = PHPickerViewController.init(configuration: config)
+        return vc
+    }()
 
     private lazy var channelsCoordinator = ChannelsCoordinator(router: self.router,
                                                                deepLink: self.deepLink,
@@ -57,7 +63,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
 
         self.homeVC.didSelectPhotoLibrary = { [unowned self] in
-            self.presentPicker(for: .photoLibrary)
+            self.presentPicker()
         }
 
         self.homeVC.archivesVC.didSelectPost = { [unowned self] post in
@@ -251,42 +257,25 @@ extension HomeCoordinator: SideMenuNavigationControllerDelegate {
     }
 }
 
-extension HomeCoordinator: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension HomeCoordinator: PHPickerViewControllerDelegate, UINavigationControllerDelegate {
 
-    private func presentPicker(for type: UIImagePickerController.SourceType) {
+    private func presentPicker() {
         guard self.router.topmostViewController != self.imagePickerVC, !self.imagePickerVC.isBeingPresented else { return }
 
-        self.imagePickerVC.sourceType = type
-        self.imagePickerVC.delegate = self 
+        self.imagePickerVC.delegate = self
         self.homeVC.present(self.imagePickerVC, animated: true, completion: nil)
     }
 
-    func imagePickerController(_ picker: UIImagePickerController,
-                               didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         defer {
             self.imagePickerVC.dismiss(animated: true, completion: nil)
         }
 
-        guard let image = info[.originalImage] as? UIImage else {
-            print("Image not found!")
-            return
-        }
-
-        self.homeVC.createVC.show(image: image)
-    }
-}
-
-private class ImagePickerViewController: UIImagePickerController, Dismissable {
-    var dismissHandlers: [DismissHandler] = []
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        if self.isBeingClosed {
-            self.dismissHandlers.forEach { (dismissHandler) in
-                dismissHandler.handler?()
-            }
+        let identifiers: [String] = results.compactMap(\.assetIdentifier)
+        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
+        if let asset = fetchResult.firstObject {
+            let attachment = Attachment(asset: asset)
+            self.homeVC.createVC.load(attachment: attachment)
         }
     }
 }

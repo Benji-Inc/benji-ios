@@ -10,7 +10,7 @@ import Foundation
 import Photos
 import Combine
 
-private class PhotoRequestOptions: PHImageRequestOptions {
+class PhotoRequestOptions: PHImageRequestOptions {
 
     override init() {
         super.init()
@@ -130,7 +130,7 @@ class AttachmentsManager {
         for index in 0...result.count - 1 {
             let asset = result.object(at: index)
             assets.append(asset)
-            let attachement = Attachment(asset: asset, info: nil)
+            let attachement = Attachment(asset: asset)
             attachments.append(attachement)
         }
 
