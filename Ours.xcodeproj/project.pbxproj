@@ -552,6 +552,9 @@
 		D69972FA25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
 		D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */; };
 		D69972FC25EA9A22000AEE6A /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */; };
+		D69B75FB264842D00007020D /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69B75FA264842D00007020D /* VideoView.swift */; };
+		D69B75FC264842D00007020D /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69B75FA264842D00007020D /* VideoView.swift */; };
+		D69B75FD264842D00007020D /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69B75FA264842D00007020D /* VideoView.swift */; };
 		D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
 		D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */; };
 		D6A301AC2380E102006655E0 /* PostsSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301AB2380E102006655E0 /* PostsSupplier.swift */; };
@@ -987,6 +990,7 @@
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
 		D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
 		D69972FD25EAFC18000AEE6A /* OursNotificationContent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursNotificationContent.entitlements; sourceTree = "<group>"; };
+		D69B75FA264842D00007020D /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
 		D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
 		D6A301AB2380E102006655E0 /* PostsSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsSupplier.swift; sourceTree = "<group>"; };
@@ -1672,6 +1676,7 @@
 				D6D1503D21DAF98500CD8CE4 /* TextField.swift */,
 				D61EC0E321D30E9100204BEE /* TextView.swift */,
 				D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */,
+				D69B75FA264842D00007020D /* VideoView.swift */,
 				D61EC0E521D30EB300204BEE /* View.swift */,
 			);
 			path = Views;
@@ -2693,6 +2698,7 @@
 				D6FC8098237A66220089AACC /* ChannelSupplier.swift in Sources */,
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,
 				D6405B67236E002E00FAA06B /* User.swift in Sources */,
+				D69B75FB264842D00007020D /* VideoView.swift in Sources */,
 				D6EDD1992355DBFA00FDA5D6 /* ProfileDetailView.swift in Sources */,
 				D6830222234AA35C006145FE /* DisplayableChannel.swift in Sources */,
 				D60B0BE82432F88D004784CD /* PostConnectionViewController.swift in Sources */,
@@ -2843,6 +2849,7 @@
 				D63DB23A25E9992600F6B323 /* UIScrollView+Extensions.swift in Sources */,
 				D63DB23025E9991F00F6B323 /* String+Extensions.swift in Sources */,
 				D63DB24F25E9994B00F6B323 /* Delegated.swift in Sources */,
+				D69B75FD264842D00007020D /* VideoView.swift in Sources */,
 				D63DB23725E9992600F6B323 /* UIView+ScalingAnimation.swift in Sources */,
 				D63DB26825E9997800F6B323 /* UserNotificationManager+Extensions.swift in Sources */,
 				D63DB22E25E9991F00F6B323 /* PhoneKit.swift in Sources */,
@@ -2997,6 +3004,7 @@
 				D655193D2589122700B901E4 /* UIWindow+Extensions.swift in Sources */,
 				D67758A125B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,
 				D6551A5F25895F1300B901E4 /* TextField.swift in Sources */,
+				D69B75FC264842D00007020D /* VideoView.swift in Sources */,
 				D6792CE625FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
 				D6140743263EE81C00B84605 /* RitualTimeLabel.swift in Sources */,
 				D65519062589110A00B901E4 /* Coordinator.swift in Sources */,
