@@ -9,11 +9,13 @@
 import Foundation
 import Combine
 import Parse
+import AVFoundation
 
 class PostCreationViewController: ImageCaptureViewController {
 
     let imageView = UIImageView()
-    var didShowImage: CompletionOptional = nil
+    let videoView = VideoView()
+    var didShowMedia: CompletionOptional = nil
     var shouldHandlePan: ((UIPanGestureRecognizer) -> Void)? = nil
 
     let vibrancyView = PostVibrancyView()
@@ -167,6 +169,8 @@ class PostCreationViewController: ImageCaptureViewController {
         self.imageView.width = self.view.width - Theme.contentOffset.doubled
         self.imageView.centerOnX()
 
+        self.videoView.frame = self.imageView.bounds
+
         if KeyboardManger.shared.isKeyboardShowing {
             self.imageView.pin(.bottom, padding: KeyboardManger.shared.cachedKeyboardFrame.height + 10)
         } else {
@@ -200,14 +204,62 @@ class PostCreationViewController: ImageCaptureViewController {
 
     func load(attachment: Attachment) {
         self.stop()
-        if self.imageView.superview.isNil {
-            self.view.addSubview(self.imageView)
+
+        switch attachment.asset.mediaType {
+        case .unknown:
+            break
+        case .image:
+            AttachmentsManager.shared.getImage(for: attachment, size: self.imageView.size)
+                .mainSink { (image, _) in
+                    self.show(image: image)
+                }.store(in: &self.cancellables)
+        case .video:
+            AttachmentsManager.shared.getVideoAsset(for: attachment)
+                .mainSink { asset in
+                    if let asset = asset {
+                        self.show(asset: asset)
+                    }
+                }.store(in: &self.cancellables)
+        case .audio:
+            break
+        @unknown default:
+            break
+        }
+    }
+
+    func show(asset: AVAsset) {
+        self.stop()
+
+        if self.videoView.superview.isNil {
+            self.view.addSubview(self.videoView)
         }
 
-        AttachmentsManager.shared.getImage(for: attachment, size: self.imageView.size)
-            .mainSink { (image, _) in
-                self.show(image: image)
-            }.store(in: &self.cancellables)
+        self.videoView.alpha = 1
+
+        self.videoView.asset = asset
+        self.didShowMedia?()
+
+        self.videoView.player?.play()
+
+        if let urlAsset = asset as? AVURLAsset {
+            guard let videoData = try? Data(contentsOf: urlAsset.url) else { return }
+
+            let imageGenerator = AVAssetImageGenerator(asset: asset)
+            let time = CMTimeMakeWithSeconds(1.0, preferredTimescale: 1)
+
+            var actualTime : CMTime = CMTimeMake(value: 0, timescale: 0)
+
+            guard let cgIimage = try? imageGenerator.copyCGImage(at: time, actualTime: &actualTime), let preview = UIImage(cgImage: cgIimage).previewData else { return }
+
+//            self.preload(data: videoData, preview: preview) { progress in
+//                if progress < 100 {
+//                    self.swipeLabel.setText("Uploading: %\(progress)")
+//                } else {
+//                    self.hideSwipeLabel()
+//                }
+//                self.view.layoutNow()
+//            }.mainSink().store(in: &self.cancellables)
+        }
     }
 
     func show(image: UIImage) {
@@ -219,9 +271,10 @@ class PostCreationViewController: ImageCaptureViewController {
         self.imageView.image = image
         self.imageView.alpha = 1.0
 
-        self.didShowImage?()
-        self.preloadData { progress in
-            print(progress)
+        self.didShowMedia?()
+
+        guard let data = image.data, let preview = image.previewData else { return }
+        self.preload(data: data, preview: preview) { progress in
             if progress < 100 {
                 self.swipeLabel.setText("Uploading: %\(progress)")
             } else {
@@ -266,6 +319,7 @@ class PostCreationViewController: ImageCaptureViewController {
 
     func finishSaving() {
         self.imageView.alpha = 0
+        self.videoView.alpha = 0
 
         self.finishLabel.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         self.finishLabel.alpha = 0.0

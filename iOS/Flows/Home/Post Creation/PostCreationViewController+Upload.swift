@@ -12,32 +12,27 @@ import Parse
 
 extension PostCreationViewController {
 
-    func preloadData(progressHandler: @escaping (Int) -> Void) -> Future<Void, Error> {
+    func preload(data: Data, preview: Data, progressHandler: @escaping (Int) -> Void) -> Future<Void, Error> {
 
         return Future { promise in
-            if let image = self.imageView.image, let data = image.data, let preview = image.previewData {
 
-                self.file = PFFileObject(name: UUID().uuidString, data: data)
-                self.file?.saveInBackground({ success, error in
-                    if let e = error {
-                        promise(.failure(e))
-                    } else {
-                        self.previewFile = PFFileObject(name: UUID().uuidString, data: preview)
-                        self.previewFile?.saveInBackground(block: { completed, error in
-                            if let e = error {
-                                promise(.failure(e))
-                            } else {
-                                promise(.success(()))
-                            }
-                        })
-                    }
-                }, progressBlock: { progress in
-                    progressHandler(Int(progress))
-                })
-
-            } else {
-                promise(.failure(ClientError.apiError(detail: "No feed found for user")))
-            }
+            self.file = PFFileObject(name: UUID().uuidString, data: data)
+            self.file?.saveInBackground({ success, error in
+                if let e = error {
+                    promise(.failure(e))
+                } else {
+                    self.previewFile = PFFileObject(name: UUID().uuidString, data: preview)
+                    self.previewFile?.saveInBackground(block: { completed, error in
+                        if let e = error {
+                            promise(.failure(e))
+                        } else {
+                            promise(.success(()))
+                        }
+                    })
+                }
+            }, progressBlock: { progress in
+                progressHandler(Int(progress))
+            })
         }
     }
 

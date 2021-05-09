@@ -48,13 +48,13 @@ class VideoView: View {
 
     var `repeat`: Repeat = .once
 
-    var url: URL? {
+    var asset: AVAsset? {
         didSet {
-            guard let url = self.url else {
+            guard let asset = self.asset else {
                 self.teardown()
                 return
             }
-            self.setup(url: url)
+            self.setup(asset: asset)
         }
     }
 
@@ -68,9 +68,9 @@ class VideoView: View {
         self.translatesAutoresizingMaskIntoConstraints = false
     }
 
-    private func setup(url: URL) {
+    private func setup(asset: AVAsset) {
 
-        self.player = AVPlayer(playerItem: AVPlayerItem(url: url))
+        self.player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
 
         self.player?.currentItem?.addObserver(self,
                                               forKeyPath: "status",

@@ -25,7 +25,7 @@ class AttachmentsManager {
 
     static let shared = AttachmentsManager()
     private var cancellables = Set<AnyCancellable>()
-    private let imageManager = PHImageManager()
+    private let manager = PHImageManager()
 
     private(set) var attachments: [Attachment] = []
 
@@ -68,7 +68,7 @@ class AttachmentsManager {
             case .unknown:
                 promise(.failure(ClientError.message(detail: "Unknown asset type.")))
             case .image:
-                self.imageManager.requestImageDataAndOrientation(for: attachment.asset, options: PhotoRequestOptions()) { (data, type, orientation, info) in
+                self.manager.requestImageDataAndOrientation(for: attachment.asset, options: PhotoRequestOptions()) { (data, type, orientation, info) in
                     let item = PhotoAttachment(url: nil, _data: data, info: info)
                     promise(.success(.photo(photo: item, body: body)))
                 }
@@ -82,6 +82,17 @@ class AttachmentsManager {
         }
     }
 
+    func getVideoAsset(for attachment: Attachment) -> Future<AVAsset?, Never> {
+        
+        return Future { promise in
+            let options = PHVideoRequestOptions()
+            options.deliveryMode = .fastFormat
+            self.manager.requestAVAsset(forVideo: attachment.asset, options: options) { asset, audioMix, info in
+                promise(.success(asset))
+            }
+        }
+    }
+
     func getImage(for attachment: Attachment,
                   contentMode: PHImageContentMode = .aspectFill,
                   size: CGSize) -> Future<(UIImage, [AnyHashable: Any]?), Error> {
@@ -89,7 +100,7 @@ class AttachmentsManager {
         return Future { promise in
             let options = PhotoRequestOptions()
 
-            self.imageManager.requestImage(for: attachment.asset,
+            self.manager.requestImage(for: attachment.asset,
                                            targetSize: size,
                                            contentMode: contentMode,
                                            options: options) { (image, info) in

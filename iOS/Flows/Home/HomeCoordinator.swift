@@ -20,7 +20,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     private lazy var imagePickerVC: PHPickerViewController = {
         var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
         config.selectionLimit = 1
-        config.filter = .any(of: [.images])
+        config.filter = .any(of: [.images,.videos])
         let vc = PHPickerViewController.init(configuration: config)
         return vc
     }()

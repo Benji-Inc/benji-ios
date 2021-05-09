@@ -95,7 +95,7 @@ class HomeViewController: ViewController, TransitionableViewController {
             }
         }.store(in: &self.cancellables)
 
-        self.createVC.didShowImage = { [unowned self] in 
+        self.createVC.didShowMedia = { [unowned self] in 
             self.tabView.state = .review
         }
 
