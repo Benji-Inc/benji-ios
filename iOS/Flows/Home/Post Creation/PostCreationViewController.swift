@@ -277,7 +277,8 @@ class PostCreationViewController: ImageCaptureViewController {
 
             var actualTime : CMTime = CMTimeMake(value: 0, timescale: 0)
 
-            guard let cgIimage = try? imageGenerator.copyCGImage(at: time, actualTime: &actualTime), let preview = UIImage(cgImage: cgIimage).previewData else { return }
+            // Not sure what the orientation should be for all video
+            guard let cgIimage = try? imageGenerator.copyCGImage(at: time, actualTime: &actualTime), let preview = UIImage(cgImage: cgIimage, scale: 1, orientation: .right).previewData else { return }
 
             self.preload(data: videoData, preview: preview) { progress in
                 if progress < 100 {

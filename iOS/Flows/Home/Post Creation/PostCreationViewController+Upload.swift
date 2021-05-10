@@ -45,11 +45,13 @@ extension PostCreationViewController {
         post.expirationDate = Date.add(component: .day, amount: 2, toDate: self.datePicker.date)
         post.type = .media
         var attributes: [String: Any] = [:]
+        var duration: Int = 5
         if let attachment = self.attachment {
             attributes["mediaType"] = attachment.asset.mediaType
+            duration = Int(attachment.asset.duration)
         }
         post.attributes = [:]
-        post.duration = 5
+        post.duration = duration
         post.preview = self.previewFile
         post.file = self.file
         return post.saveToServer()
