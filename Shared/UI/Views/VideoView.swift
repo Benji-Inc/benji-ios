@@ -24,6 +24,8 @@ class VideoView: View {
         return self.layer as! AVPlayerLayer
     }
 
+    private(set) var isPlaying: Bool = false
+
     var player: AVPlayer? {
         get {
             self.playerLayer.player
@@ -119,6 +121,7 @@ class VideoView: View {
 
     func teardown() {
         self.player?.pause()
+        self.isPlaying = false
 
         self.player?.currentItem?.removeObserver(self, forKeyPath: "status")
 
@@ -136,6 +139,7 @@ class VideoView: View {
     }
 
     func replay() {
+        self.isPlaying = true
         self.player?.seek(to: .zero)
         self.player?.play()
     }
@@ -167,6 +171,7 @@ class VideoView: View {
            !item.isPlaybackBufferEmpty,
            CMTimeGetSeconds(item.duration) != CMTimeGetSeconds(player.currentTime()) {
             self.player?.play()
+            self.isPlaying = true 
         }
     }
 }

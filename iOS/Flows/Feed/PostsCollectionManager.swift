@@ -171,6 +171,7 @@ class PostsCollectionManager: NSObject {
             self.showAnimator?.addCompletion({ [weak self] position in
                 guard let `self` = self, position == .end, index == self.currentIndex else { return }
                 self.delegate?.posts(self, didShowViewAt: index, with: TimeInterval(postVC.post.duration))
+                postVC.configurePost()
             })
 
             self.showAnimator?.startAnimation()

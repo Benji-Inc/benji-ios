@@ -70,8 +70,6 @@ class PostViewController: ViewController {
         self.button.didSelect { [unowned self] in
             self.didTapButton()
         }
-
-        self.configurePost()
     }
 
     func configurePost() {}

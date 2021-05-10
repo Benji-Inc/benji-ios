@@ -272,6 +272,8 @@ class PostCreationViewController: ImageCaptureViewController {
         if let urlAsset = asset as? AVURLAsset {
             guard let videoData = try? Data(contentsOf: urlAsset.url) else { return }
 
+            print("FILE SIZE \(urlAsset.fileSize ?? 0)")
+
             let imageGenerator = AVAssetImageGenerator(asset: asset)
             let time = CMTimeMakeWithSeconds(1.0, preferredTimescale: 1)
 

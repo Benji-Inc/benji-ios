@@ -20,7 +20,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     private lazy var imagePickerVC: PHPickerViewController = {
         var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
         config.selectionLimit = 1
-        config.filter = .any(of: [.images,.videos])
+        config.filter = .any(of: [.images, .videos])
         let vc = PHPickerViewController.init(configuration: config)
         return vc
     }()
@@ -134,7 +134,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                 self.homeVC.archivesVC.collectionViewManager.reloadForExistingUser()
             }
         }
-        self.router.present(vc, source: self.homeVC)
+
+        self.router.present(vc, source: self.homeVC, cancelHandler: nil, animated: true) {
+            vc.configurePost()
+        }
     }
 
     private func showRitual() {

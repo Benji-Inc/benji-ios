@@ -34,6 +34,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
     private let captionView = CaptionView()
     private lazy var commentsVC = CommentsViewController(with: self.post)
     private let consumersView = StackedAvatarView()
+
     private let commentsButton = CommentsButton()
     private let moreButton = MediaMoreButton()
 
@@ -43,6 +44,8 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
     var isShowingComments: Bool = false
 
     var didDeletePost: CompletionOptional = nil
+
+    @Published var isPresented: Bool = false
 
     override var inputAccessoryView: UIView? {
         return self.commentInputAccessoryView
@@ -64,12 +67,20 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         if !self.isFirstResponder {
             self.becomeFirstResponder()
         }
+
+        self.isPresented = true
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
         self.resignFirstResponder()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        self.isPresented = false
     }
 
     override func initializeViews() {
@@ -147,6 +158,10 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         self.commentsVC.collectionViewManager.$comments.mainSink { comments in
             self.commentsButton.set(text: String(comments.count))
         }.store(in: &self.cancellables)
+
+        self.container.didSelect { [unowned self] in
+            self.videoView.replay()
+        }
     }
 
     override func getBottomContent() -> UIView? {
@@ -188,17 +203,27 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
             case .image:
                 break
             case .video:
-
+                self.isPaused = true
                 p.file?.retrieveDataInBackground(progressHandler: { progress in
-                    print("VIDEO PROGRESS: \(progress)")
+                    self.isPaused = progress < 100
                 }).mainSink(receiveValue: { data in
                     self.imageView.removeFromSuperview()
                     self.view.insertSubview(self.videoView, at: 0)
                     self.view.layoutNow()
 
                     self.videoView.data = data
-                    self.videoView.player?.play()
+
+                    if self.isPresented, !self.videoView.isPlaying {
+                        self.videoView.replay()
+                    }
+
                 }).store(in: &self.cancellables)
+
+                self.$isPresented.mainSink { isPresented in
+                    if isPresented, let _ = self.videoView.data, !self.videoView.isPlaying {
+                        self.videoView.replay()
+                    }
+                }.store(in: &self.cancellables)
 
             case .audio:
                 break

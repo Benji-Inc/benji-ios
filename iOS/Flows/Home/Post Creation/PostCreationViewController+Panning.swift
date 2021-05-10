@@ -92,8 +92,9 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
                     switch result {
                     case .success(_):
                         self.finishSaving()
-                    case .error(_):
-                        break
+                    case .error(let error):
+                        print(error)
+                        self.reset()
                     }
                 }.store(in: &self.cancellables)
             }
