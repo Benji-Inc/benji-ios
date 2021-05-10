@@ -114,8 +114,8 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
             self.imageView.alpha = 1.0
             self.imageView.transform = .identity
         } else {
-//            self.videoView.alpha = 1.0
-//            self.videoView.transform = .identity
+            self.videoView.alpha = 1.0
+            self.videoView.transform = .identity
         }
 
         self.swipeLabel.alpha = 1.0

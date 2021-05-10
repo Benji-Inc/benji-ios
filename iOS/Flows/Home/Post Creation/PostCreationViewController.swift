@@ -317,6 +317,7 @@ class PostCreationViewController: ImageCaptureViewController {
     func reset() {
 
         self.attachment = nil
+        self.videoView.transform = .identity
         self.videoView.removeFromSuperview()
         self.videoView.teardown()
 
@@ -333,6 +334,9 @@ class PostCreationViewController: ImageCaptureViewController {
         self.canSwipeToPost = false
 
         self.file?.cancel()
+        self.file?.clearCachedDataInBackground()
+        
+        self.previewFile?.cancel()
         self.previewFile?.clearCachedDataInBackground()
 
         self.swipeLabel.alpha = 0.0
