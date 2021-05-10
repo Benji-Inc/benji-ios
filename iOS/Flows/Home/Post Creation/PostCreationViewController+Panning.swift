@@ -54,7 +54,7 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
         self.animator = UIViewPropertyAnimator(duration: 1.0, curve: .linear, animations: { [weak self] in
             guard let `self` = self else { return }
 
-            let viewToAnimate = self.attachment.isNil ? self.imageView : self.videoView
+            let viewToAnimate = self.imageView//self.attachment.isNil ? self.imageView : self.videoView
             let layer = viewToAnimate.layer
             var transform = CATransform3DIdentity
             transform.m34 = 1.0 / -500
@@ -114,8 +114,8 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
             self.imageView.alpha = 1.0
             self.imageView.transform = .identity
         } else {
-            self.videoView.alpha = 1.0
-            self.videoView.transform = .identity
+//            self.videoView.alpha = 1.0
+//            self.videoView.transform = .identity
         }
 
         self.swipeLabel.alpha = 1.0
