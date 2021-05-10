@@ -47,10 +47,10 @@ extension PostCreationViewController {
         var attributes: [String: Any] = [:]
         var duration: Int = 5
         if let attachment = self.attachment {
-            attributes["mediaType"] = attachment.asset.mediaType
+            attributes["mediaType"] = attachment.asset.mediaType.rawValue
             duration = Int(attachment.asset.duration)
         }
-        post.attributes = [:]
+        post.attributes = attributes
         post.duration = duration
         post.preview = self.previewFile
         post.file = self.file

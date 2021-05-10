@@ -22,7 +22,6 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
         case .changed:
             if self.interactionInProgress {
                 let progress = self.progress(currentPoint: currentPoint)
-                print(progress)
                 self.animator?.fractionComplete = progress
             } else if currentPoint.y + self.panStartPoint.y > self.threshold {
                 self.interactionInProgress = true

@@ -28,6 +28,8 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
     var indexPathForEditing: IndexPath?
 
     private let imageView = DisplayableImageView()
+    private let videoView = VideoView()
+    
     private let gradientView = GradientView(with: [Color.clear.color.cgColor, Color.background1.color.withAlphaComponent(0.5).cgColor], startPoint: .topCenter, endPoint: .bottomCenter)
     private let captionView = CaptionView()
     private lazy var commentsVC = CommentsViewController(with: self.post)
@@ -72,6 +74,8 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.videoView.contentMode = .scaleAspectFill
 
         self.view.set(backgroundColor: .background1)
 
@@ -159,7 +163,8 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         }
 
         UIView.animate(withDuration: Theme.animationDuration) {
-            self.imageView.alpha  = show ? 0.3 : 1.0
+            self.imageView.alpha = show ? 0.3 : 1.0
+            self.videoView.alpha = show ? 0.3 : 1.0
             self.commentsButton.alpha = show ? 0.0 : 1.0
             self.moreButton.alpha = show ? 0.0 : 1.0
             self.captionView.alpha = show ? 0.0 : 1.0
@@ -183,7 +188,18 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
             case .image:
                 break
             case .video:
-                break
+
+                p.file?.retrieveDataInBackground(progressHandler: { progress in
+                    print("VIDEO PROGRESS: \(progress)")
+                }).mainSink(receiveValue: { data in
+                    self.imageView.removeFromSuperview()
+                    self.view.insertSubview(self.videoView, at: 0)
+                    self.view.layoutNow()
+
+                    self.videoView.data = data
+                    self.videoView.player?.play()
+                }).store(in: &self.cancellables)
+
             case .audio:
                 break
             @unknown default:
@@ -198,6 +214,8 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         super.viewDidLayoutSubviews()
 
         self.imageView.expandToSuperviewSize()
+        self.videoView.expandToSuperviewSize()
+
         self.commentsVC.view.expandToSuperviewSize()
         self.commentsVC.view.centerOnX()
 

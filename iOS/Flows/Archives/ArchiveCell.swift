@@ -14,6 +14,7 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
     private let gradientView = ArchiveGradientView()
     private let imageView = DisplayableImageView()
     private let label = Label(font: .smallBold)
+    private let playImageView = UIImageView(image: UIImage(systemName: "play")!)
 
     var currentItem: Post?
 
@@ -23,7 +24,11 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFill
         self.imageView.layer.cornerRadius = 5 
-        self.imageView.clipsToBounds = true 
+        self.imageView.clipsToBounds = true
+
+        self.contentView.addSubview(self.playImageView)
+        self.playImageView.alpha = 0
+        self.playImageView.tintColor = Color.white.color
 
         self.contentView.addSubview(self.gradientView)
 
@@ -37,12 +42,14 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
 
         if item.author == User.current() {
             self.imageView.displayable = file
+            self.playImageView.alpha = item.mediaType == .video ? 1.0 : 0.0
             self.label.setText(item.createdAt?.getDistanceAgoString() ?? String())
             self.layoutNow()
         } else {
             switch RitualManager.shared.state {
             case .feedAvailable:
                 self.imageView.displayable = file
+                self.playImageView.alpha = item.mediaType == .video ? 1.0 : 0.0
                 self.label.setText(item.triggerDate?.getDistanceAgoString() ?? String())
                 self.layoutNow()
             default:
@@ -54,6 +61,7 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
                     self.imageView.layoutNow()
                 } else {
                     self.imageView.displayable = file
+                    self.playImageView.alpha = item.mediaType == .video ? 1.0 : 0.0
                 }
 
                 self.label.setText(item.triggerDate?.getDistanceAgoString() ?? String())
@@ -66,6 +74,9 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
 
         self.imageView.expandToSuperviewSize()
+
+        self.playImageView.squaredSize = 20
+        self.playImageView.centerOnXAndY()
 
         self.gradientView.expandToSuperviewWidth()
         self.gradientView.height = self.contentView.halfHeight

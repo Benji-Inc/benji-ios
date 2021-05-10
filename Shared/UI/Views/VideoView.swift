@@ -48,6 +48,25 @@ class VideoView: View {
 
     var `repeat`: Repeat = .once
 
+    var data: Data? {
+        didSet {
+            guard let data = self.data else {
+                self.teardown()
+                return
+            }
+
+            let cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("ours_post_video.mp4")
+
+            do {
+                try data.write(to: cacheURL, options: .atomicWrite)
+            } catch let err {
+                print("Failed with error: \(err)")
+            }
+
+            self.setup(url: cacheURL)
+        }
+    }
+
     var asset: AVAsset? {
         didSet {
             guard let asset = self.asset else {
@@ -68,10 +87,17 @@ class VideoView: View {
         self.translatesAutoresizingMaskIntoConstraints = false
     }
 
+    private func setup(url: URL) {
+        self.player = AVPlayer(playerItem: AVPlayerItem(url: url))
+        self.setup()
+    }
+
     private func setup(asset: AVAsset) {
-
         self.player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
+        self.setup()
+    }
 
+    func setup() {
         self.player?.currentItem?.addObserver(self,
                                               forKeyPath: "status",
                                               options: [.old, .new],
