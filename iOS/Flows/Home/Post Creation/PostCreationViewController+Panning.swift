@@ -53,7 +53,9 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
 
         self.animator = UIViewPropertyAnimator(duration: 1.0, curve: .linear, animations: { [weak self] in
             guard let `self` = self else { return }
-            let layer = self.imageView.layer
+
+            let viewToAnimate = self.attachment.isNil ? self.imageView : self.videoView
+            let layer = viewToAnimate.layer
             var transform = CATransform3DIdentity
             transform.m34 = 1.0 / -500
             transform = CATransform3DRotate(transform, 85.0 * .pi / 180.0, 1.0, 0.0, 0.0)
@@ -74,11 +76,11 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
                 }
 
                 UIView.addKeyframe(withRelativeStartTime: 0.8, relativeDuration: 0.5) {
-                    self.imageView.alpha = 0.0
+                    viewToAnimate.alpha = 0.0
                 }
 
             } completion: { _ in
-                self.imageView.alpha = 0
+                viewToAnimate.alpha = 0
                 self.swipeLabel.alpha = 0 
             }
         })
@@ -107,8 +109,14 @@ extension PostCreationViewController: UIGestureRecognizerDelegate {
 
     //reset the animation
     func prepareInitialAnimation() {
-        self.imageView.alpha = 1.0
-        self.imageView.transform = .identity
+
+        if self.attachment.isNil {
+            self.imageView.alpha = 1.0
+            self.imageView.transform = .identity
+        } else {
+            self.videoView.alpha = 1.0
+            self.videoView.transform = .identity
+        }
 
         self.swipeLabel.alpha = 1.0
         self.swipeLabel.transform = .identity

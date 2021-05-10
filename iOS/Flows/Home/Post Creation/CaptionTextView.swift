@@ -20,10 +20,10 @@ class CaptionTextView: TextView {
 
         self.maxLength = 140
 
-        self.tintColor = Color.background4.color
+        self.tintColor = Color.white.color
         self.layer.borderWidth = 2
         self.layer.cornerRadius = 5
-        self.layer.borderColor = Color.background4.color.cgColor
+        self.layer.borderColor = Color.white.color.cgColor
         self.clipsToBounds = true
 
         self.isScrollEnabled = true

@@ -109,12 +109,17 @@ class VideoView: View {
         self.player = nil
     }
 
+    func replay() {
+        self.player?.seek(to: .zero)
+        self.player?.play()
+    }
+
     @objc func itemDidPlayToEndTime(_ notification: NSNotification) {
         guard self.repeat == .loop else {
             return
         }
-        self.player?.seek(to: .zero)
-        self.player?.play()
+        
+        self.replay()
     }
 
     @objc func itemFailedToPlayToEndTime(_ notification: NSNotification) {

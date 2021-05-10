@@ -49,6 +49,8 @@ class PostCreationViewController: ImageCaptureViewController {
     var previewFile: PFFileObject?
     var file: PFFileObject?
 
+    var attachment: Attachment?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -63,11 +65,19 @@ class PostCreationViewController: ImageCaptureViewController {
             self.show(image: image)
         }
 
-        self.imageView.addSubview(self.gradientView)
         self.gradientView.alpha = 0
 
-        self.imageView.addSubview(self.captionTextView)
         self.captionTextView.alpha = 0
+
+        self.videoView.contentMode = .scaleAspectFill
+        self.videoView.isUserInteractionEnabled = true
+        self.videoView.layer.cornerRadius = 5
+        self.videoView.clipsToBounds = true
+        self.videoView.layer.masksToBounds = true
+
+        self.videoView.didSelect { [unowned self] in
+            self.videoView.replay()
+        }
 
         self.view.addSubview(self.exitButton)
         self.exitButton.imageView.image = UIImage(systemName: "xmark")!
@@ -169,12 +179,16 @@ class PostCreationViewController: ImageCaptureViewController {
         self.imageView.width = self.view.width - Theme.contentOffset.doubled
         self.imageView.centerOnX()
 
-        self.videoView.frame = self.imageView.bounds
+        self.videoView.height = height
+        self.videoView.width = self.view.width - Theme.contentOffset.doubled
+        self.videoView.centerOnX()
 
         if KeyboardManger.shared.isKeyboardShowing {
             self.imageView.pin(.bottom, padding: KeyboardManger.shared.cachedKeyboardFrame.height + 10)
+            self.videoView.pin(.bottom, padding: KeyboardManger.shared.cachedKeyboardFrame.height + 10)
         } else {
             self.imageView.match(.top, to: .bottom, of: self.exitButton)
+            self.videoView.match(.top, to: .bottom, of: self.exitButton)
         }
 
         self.captionTextView.size = CGSize(width: self.imageView.width - Theme.contentOffset, height: 94)
@@ -187,6 +201,10 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.finishLabel.setSize(withWidth: self.view.width)
         self.finishLabel.centerOnXAndY()
+
+        self.datePicker.publisher(for: \.date).mainSink { _ in
+            self.view.layoutNow()
+        }.store(in: &self.cancellables)
     }
 
     func handle(state: HomeTabView.State) {
@@ -204,6 +222,8 @@ class PostCreationViewController: ImageCaptureViewController {
 
     func load(attachment: Attachment) {
         self.stop()
+
+        self.attachment = attachment
 
         switch attachment.asset.mediaType {
         case .unknown:
@@ -232,14 +252,20 @@ class PostCreationViewController: ImageCaptureViewController {
 
         if self.videoView.superview.isNil {
             self.view.addSubview(self.videoView)
+            self.videoView.addSubview(self.gradientView)
+            self.videoView.addSubview(self.captionTextView)
         }
 
         self.videoView.alpha = 1
+
+        self.view.layoutNow()
 
         self.videoView.asset = asset
         self.didShowMedia?()
 
         self.videoView.player?.play()
+
+        self.showSwipeLabel()
 
         if let urlAsset = asset as? AVURLAsset {
             guard let videoData = try? Data(contentsOf: urlAsset.url) else { return }
@@ -266,6 +292,8 @@ class PostCreationViewController: ImageCaptureViewController {
         self.stop()
         if self.imageView.superview.isNil {
             self.view.addSubview(self.imageView)
+            self.imageView.addSubview(self.gradientView)
+            self.imageView.addSubview(self.captionTextView)
         }
 
         self.imageView.image = image
@@ -285,6 +313,10 @@ class PostCreationViewController: ImageCaptureViewController {
     }
 
     func reset() {
+
+        self.attachment = nil
+        self.videoView.removeFromSuperview()
+
         self.currentPosition = .front
         self.imageView.image = nil
         self.imageView.transform = .identity
@@ -305,14 +337,13 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.captionTextView.text = nil
         self.captionTextView.resignFirstResponder()
+        self.captionTextView.removeFromSuperview()
+
+        self.gradientView.removeFromSuperview()
 
         self.finishLabel.alpha = 0
 
         self.datePicker.date = Date()
-
-        self.datePicker.publisher(for: \.date).mainSink { _ in
-            self.view.layoutNow()
-        }.store(in: &self.cancellables)
 
         self.view.layoutNow()
     }

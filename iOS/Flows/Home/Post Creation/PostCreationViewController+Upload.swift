@@ -44,6 +44,10 @@ extension PostCreationViewController {
         post.triggerDate = self.datePicker.date
         post.expirationDate = Date.add(component: .day, amount: 2, toDate: self.datePicker.date)
         post.type = .media
+        var attributes: [String: Any] = [:]
+        if let attachment = self.attachment {
+            attributes["mediaType"] = attachment.asset.mediaType
+        }
         post.attributes = [:]
         post.duration = 5
         post.preview = self.previewFile
