@@ -95,11 +95,13 @@ class HomeViewController: ViewController, TransitionableViewController {
             }
         }.store(in: &self.cancellables)
 
-        self.createVC.didShowMedia = { [unowned self] in 
+        self.createVC.didShowMedia = { [weak self] in
+            guard let `self` = self else { return }
             self.tabView.state = .review
         }
 
-        self.createVC.shouldHandlePan = { [unowned self] pan in
+        self.createVC.shouldHandlePan = { [weak self] pan in
+            guard let `self` = self else { return }
             pan.delegate = self
             self.handle(pan)
         }

@@ -14,7 +14,7 @@ import AVFoundation
 class PostCreationViewController: ImageCaptureViewController {
 
     let imageView = UIImageView()
-    //let videoView = VideoView()
+    let videoView = VideoView()
     var didShowMedia: CompletionOptional = nil
     var shouldHandlePan: ((UIPanGestureRecognizer) -> Void)? = nil
 
@@ -69,15 +69,15 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.captionTextView.alpha = 0
 
-//        self.videoView.contentMode = .scaleAspectFill
-//        self.videoView.isUserInteractionEnabled = true
-//        self.videoView.layer.cornerRadius = 5
-//        self.videoView.clipsToBounds = true
-//        self.videoView.layer.masksToBounds = true
-//
-//        self.videoView.didSelect { [unowned self] in
-//            self.videoView.replay()
-//        }
+        self.videoView.contentMode = .scaleAspectFill
+        self.videoView.isUserInteractionEnabled = true
+        self.videoView.layer.cornerRadius = 5
+        self.videoView.clipsToBounds = true
+        self.videoView.layer.masksToBounds = true
+
+        self.videoView.didSelect { [unowned self] in
+            self.videoView.replay()
+        }
 
         self.view.addSubview(self.exitButton)
         self.exitButton.imageView.image = UIImage(systemName: "xmark")!
@@ -145,6 +145,12 @@ class PostCreationViewController: ImageCaptureViewController {
                 self.view.layoutNow()
             }
         }.store(in: &self.cancellables)
+
+        self.datePicker.publisher(for: \.date)
+            .removeDuplicates()
+            .mainSink { _ in
+            self.view.layoutNow()
+        }.store(in: &self.cancellables)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -179,16 +185,16 @@ class PostCreationViewController: ImageCaptureViewController {
         self.imageView.width = self.view.width - Theme.contentOffset.doubled
         self.imageView.centerOnX()
 
-//        self.videoView.height = height
-//        self.videoView.width = self.view.width - Theme.contentOffset.doubled
-//        self.videoView.centerOnX()
+        self.videoView.height = height
+        self.videoView.width = self.view.width - Theme.contentOffset.doubled
+        self.videoView.centerOnX()
 
         if KeyboardManger.shared.isKeyboardShowing {
             self.imageView.pin(.bottom, padding: KeyboardManger.shared.cachedKeyboardFrame.height + 10)
-            //self.videoView.pin(.bottom, padding: KeyboardManger.shared.cachedKeyboardFrame.height + 10)
+            self.videoView.pin(.bottom, padding: KeyboardManger.shared.cachedKeyboardFrame.height + 10)
         } else {
             self.imageView.match(.top, to: .bottom, of: self.exitButton)
-            //self.videoView.match(.top, to: .bottom, of: self.exitButton)
+            self.videoView.match(.top, to: .bottom, of: self.exitButton)
         }
 
         self.captionTextView.size = CGSize(width: self.imageView.width - Theme.contentOffset, height: 94)
@@ -201,10 +207,6 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.finishLabel.setSize(withWidth: self.view.width)
         self.finishLabel.centerOnXAndY()
-
-        self.datePicker.publisher(for: \.date).mainSink { _ in
-            self.view.layoutNow()
-        }.store(in: &self.cancellables)
     }
 
     func handle(state: HomeTabView.State) {
@@ -250,20 +252,20 @@ class PostCreationViewController: ImageCaptureViewController {
     func show(asset: AVAsset) {
         self.stop()
 
-//        if self.videoView.superview.isNil {
-//            self.view.addSubview(self.videoView)
-//            self.videoView.addSubview(self.gradientView)
-//            self.videoView.addSubview(self.captionTextView)
-//        }
-//
-//        self.videoView.alpha = 1
+        if self.videoView.superview.isNil {
+            self.view.addSubview(self.videoView)
+            self.videoView.addSubview(self.gradientView)
+            self.videoView.addSubview(self.captionTextView)
+        }
+
+        self.videoView.alpha = 1
 
         self.view.layoutNow()
 
-       // self.videoView.asset = asset
+        self.videoView.asset = asset
         self.didShowMedia?()
 
-        //self.videoView.player?.play()
+        self.videoView.player?.play()
 
         self.showSwipeLabel()
 
@@ -277,14 +279,14 @@ class PostCreationViewController: ImageCaptureViewController {
 
             guard let cgIimage = try? imageGenerator.copyCGImage(at: time, actualTime: &actualTime), let preview = UIImage(cgImage: cgIimage).previewData else { return }
 
-//            self.preload(data: videoData, preview: preview) { progress in
-//                if progress < 100 {
-//                    self.swipeLabel.setText("Uploading: %\(progress)")
-//                } else {
-//                    self.hideSwipeLabel()
-//                }
-//                self.view.layoutNow()
-//            }.mainSink().store(in: &self.cancellables)
+            self.preload(data: videoData, preview: preview) { progress in
+                if progress < 100 {
+                    self.swipeLabel.setText("Uploading: %\(progress)")
+                } else {
+                    self.hideSwipeLabel()
+                }
+                self.view.layoutNow()
+            }.mainSink().store(in: &self.cancellables)
         }
     }
 
@@ -315,8 +317,8 @@ class PostCreationViewController: ImageCaptureViewController {
     func reset() {
 
         self.attachment = nil
-//        self.videoView.removeFromSuperview()
-//        self.videoView.teardown()
+        self.videoView.removeFromSuperview()
+        self.videoView.teardown()
 
         self.currentPosition = .front
         self.imageView.image = nil
@@ -351,7 +353,7 @@ class PostCreationViewController: ImageCaptureViewController {
 
     func finishSaving() {
         self.imageView.alpha = 0
-        //self.videoView.alpha = 0
+        self.videoView.alpha = 0
 
         self.finishLabel.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
         self.finishLabel.alpha = 0.0
