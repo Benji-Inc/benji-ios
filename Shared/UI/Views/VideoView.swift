@@ -91,7 +91,7 @@ class VideoView: View {
                                                object: self.player?.currentItem)
     }
 
-    private func teardown() {
+    func teardown() {
         self.player?.pause()
 
         self.player?.currentItem?.removeObserver(self, forKeyPath: "status")

@@ -104,7 +104,7 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.handle(pan)
         }
 
-        self.createVC.didTapExit = {
+        self.createVC.didTapExit = { [unowned self] in 
             self.tabView.state = .home
         }
 

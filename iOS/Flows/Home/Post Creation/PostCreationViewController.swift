@@ -83,8 +83,8 @@ class PostCreationViewController: ImageCaptureViewController {
         self.exitButton.imageView.image = UIImage(systemName: "xmark")!
         self.exitButton.alpha = 0
         self.exitButton.didSelect { [unowned self] in
-            self.didTapExit?()
             self.reset()
+            self.didTapExit?()
         }
 
         self.view.addSubview(self.cameraOptionsView)
@@ -316,6 +316,7 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.attachment = nil
         self.videoView.removeFromSuperview()
+        self.videoView.teardown()
 
         self.currentPosition = .front
         self.imageView.image = nil
