@@ -49,7 +49,7 @@ extension UIImage {
     }
 
     var previewData: Data? {
-        return self.jpegData(compressionQuality: 30.0)
+        return self.jpegData(compressionQuality: 5.0)
     }
 }
 
@@ -93,7 +93,7 @@ extension UIImage: MediaItem {
     }
 
     var data: Data? {
-        return self.jpegData(compressionQuality: 70.0)
+        return self.jpegData(compressionQuality: 30.0)
     }
 }
 #endif

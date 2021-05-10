@@ -12,6 +12,9 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
 
     private lazy var archiveCollectionView = ArchivesCollectionView()
 
+    private let gradientView = GradientView(with: [Color.background1.color.withAlphaComponent(1.0).cgColor,
+                                                   Color.background1.color.withAlphaComponent(0).cgColor].reversed(), startPoint: .topCenter, endPoint: .bottomCenter)
+
     var didSelectPost: ((Post) -> Void)? = nil
     var didSelectClose: CompletionOptional = nil
     var didFinishShowing: CompletionOptional = nil
@@ -28,6 +31,8 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
         self.button.didSelect { [unowned self] in
             self.didSelectClose?()
         }
+
+        self.view.insertSubview(self.gradientView, belowSubview: self.button)
 
         self.collectionViewManager.$onSelectedItem.mainSink { (result) in
             guard let selection = result else { return }
@@ -58,6 +63,10 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
         self.button.setSize(with: self.view.width)
         self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
         self.button.centerOnX()
+
+        self.gradientView.expandToSuperviewWidth()
+        self.gradientView.height = self.button.height + Theme.contentOffset
+        self.gradientView.pin(.bottom)
     }
 
     func animate(show: Bool) {

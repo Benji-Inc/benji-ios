@@ -174,9 +174,24 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
     override func configurePost() {
         super.configurePost()
 
-        guard let file = self.post.file else { return }
+        guard let p = self.post as? Post, let file = p.file else { return }
 
-        self.imageView.displayable = file
+        if let type = p.mediaType {
+            switch type {
+            case .unknown:
+                break
+            case .image:
+                break
+            case .video:
+                break
+            case .audio:
+                break
+            @unknown default:
+                break 
+            }
+        } else {
+            self.imageView.displayable = file
+        }
     }
 
     override func viewDidLayoutSubviews() {

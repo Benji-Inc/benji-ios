@@ -9,6 +9,7 @@
 import Foundation
 import Parse
 import Combine
+import Photos
 
 enum PostKey: String {
     case author = "author"
@@ -72,6 +73,14 @@ final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
     var file: PFFileObject? {
         get { return self.getObject(for: .file) }
         set { self.setObject(for: .file, with: newValue) }
+    }
+
+    var mediaType: PHAssetMediaType? {
+        if let value = self.attributes?["mediaType"] as? Int {
+            return PHAssetMediaType(rawValue: value)
+        }
+
+        return nil 
     }
 
     var attributes: [String : Any]? {
