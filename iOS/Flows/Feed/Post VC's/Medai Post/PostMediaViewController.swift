@@ -80,13 +80,15 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
+        if self.videoView.isPlaying {
+            self.videoView.teardown()
+        }
+
         self.isPresented = false
     }
 
     override func initializeViews() {
         super.initializeViews()
-
-        self.videoView.contentMode = .scaleAspectFill
 
         self.view.set(backgroundColor: .background1)
 
@@ -100,7 +102,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         })
 
         self.view.insertSubview(self.imageView, at: 0)
-        self.imageView.contentMode = .scaleAspectFill
+        self.imageView.contentMode = .scaleAspectFit
 
         self.view.addSubview(self.gradientView)
 

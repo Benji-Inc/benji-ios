@@ -71,7 +71,7 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.captionTextView.alpha = 0
 
-        self.videoView.contentMode = .scaleAspectFill
+        self.videoView.contentMode = .scaleAspectFit
         self.videoView.isUserInteractionEnabled = true
         self.videoView.layer.cornerRadius = 5
         self.videoView.clipsToBounds = true
