@@ -9,8 +9,39 @@
 import Foundation
 import Combine
 import Parse
+import LightCompressor
 
 extension PostCreationViewController {
+
+    func compressVideo(source: URL) -> Future<URL, Error> {
+
+        return Future { promise in
+            let videoCompressor = LightCompressor()
+            let destination = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("ours_post_video.mp4")
+            self.compression = videoCompressor.compressVideo(source: source,
+                                                             destination: destination,
+                                                             quality: .very_low,
+                                                             isMinBitRateEnabled: true,
+                                                             keepOriginalResolution: true,
+                                                             progressQueue: .main,
+                                                             progressHandler: { progress in
+                                                                self.swipeLabel.setText("Compressing: %\(progress)")
+                                                                self.view.layoutNow()
+                                                             }, completion: { result in
+
+                                                                switch result {
+                                                                case .onStart:
+                                                                    break
+                                                                case .onSuccess(let path):
+                                                                    promise(.success(path))
+                                                                case .onFailure(let error):
+                                                                    promise(.failure(error))
+                                                                case .onCancelled:
+                                                                    promise(.failure(ClientError.message(detail: "Compression cancelled")))
+                                                                }
+                                                             })
+        }
+    }
 
     func preload(data: Data, preview: Data, progressHandler: @escaping (Int) -> Void) -> Future<Void, Error> {
 

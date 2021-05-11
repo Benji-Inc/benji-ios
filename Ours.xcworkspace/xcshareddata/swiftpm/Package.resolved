@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "LightCompressor",
+        "repositoryURL": "https://github.com/AbedElazizShe/LightCompressor_iOS.git",
+        "state": {
+          "branch": null,
+          "revision": "fe196a51b76a722683a2e7aebd9aff9987ee1365",
+          "version": "0.1.8"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

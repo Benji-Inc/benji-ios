@@ -10,6 +10,7 @@ import Foundation
 import Combine
 import Parse
 import AVFoundation
+import LightCompressor
 
 class PostCreationViewController: ImageCaptureViewController {
 
@@ -50,6 +51,7 @@ class PostCreationViewController: ImageCaptureViewController {
     var file: PFFileObject?
 
     var attachment: Attachment?
+    var compression: Compression?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -149,8 +151,8 @@ class PostCreationViewController: ImageCaptureViewController {
         self.datePicker.publisher(for: \.date)
             .removeDuplicates()
             .mainSink { _ in
-            self.view.layoutNow()
-        }.store(in: &self.cancellables)
+                self.view.layoutNow()
+            }.store(in: &self.cancellables)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -269,28 +271,37 @@ class PostCreationViewController: ImageCaptureViewController {
 
         self.showSwipeLabel()
 
-        if let urlAsset = asset as? AVURLAsset {
-            guard let videoData = try? Data(contentsOf: urlAsset.url) else { return }
+        guard let urlAsset = asset as? AVURLAsset else { return }
 
-            print("FILE SIZE \(urlAsset.fileSize ?? 0)")
+        self.compressVideo(source: urlAsset.url).mainSink { result in
+            switch result {
+            case .success(let path):
+                guard let videoData = try? Data.init(contentsOf: path) else { return }
+                
+                let imageGenerator = AVAssetImageGenerator(asset: asset)
+                imageGenerator.appliesPreferredTrackTransform = true
+                let time = CMTimeMakeWithSeconds(1.0, preferredTimescale: 1)
 
-            let imageGenerator = AVAssetImageGenerator(asset: asset)
-            let time = CMTimeMakeWithSeconds(1.0, preferredTimescale: 1)
+                var actualTime : CMTime = CMTimeMake(value: 0, timescale: 0)
 
-            var actualTime : CMTime = CMTimeMake(value: 0, timescale: 0)
+                // Not sure what the orientation should be for all video
+                guard let cgIimage = try? imageGenerator.copyCGImage(at: time, actualTime: &actualTime), let preview = UIImage(cgImage: cgIimage, scale: 1, orientation: .right).previewData else { return }
 
-            // Not sure what the orientation should be for all video
-            guard let cgIimage = try? imageGenerator.copyCGImage(at: time, actualTime: &actualTime), let preview = UIImage(cgImage: cgIimage, scale: 1, orientation: .right).previewData else { return }
+                self.preload(data: videoData, preview: preview) { progress in
+                    if progress < 100 {
+                        self.swipeLabel.setText("Uploading: %\(progress)")
+                    } else {
+                        self.hideSwipeLabel()
+                    }
+                    self.view.layoutNow()
+                }.mainSink().store(in: &self.cancellables)
+            case .error(_):
+                break
+            }
+        }.store(in: &self.cancellables)
 
-            self.preload(data: videoData, preview: preview) { progress in
-                if progress < 100 {
-                    self.swipeLabel.setText("Uploading: %\(progress)")
-                } else {
-                    self.hideSwipeLabel()
-                }
-                self.view.layoutNow()
-            }.mainSink().store(in: &self.cancellables)
-        }
+
+
     }
 
     func show(image: UIImage) {
@@ -354,6 +365,8 @@ class PostCreationViewController: ImageCaptureViewController {
         self.finishLabel.alpha = 0
 
         self.datePicker.date = Date()
+
+        self.compression?.cancel = true
 
         self.view.layoutNow()
     }
