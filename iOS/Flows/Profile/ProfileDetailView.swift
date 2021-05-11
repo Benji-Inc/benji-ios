@@ -7,12 +7,20 @@
 //
 
 import Foundation
+import Combine
 
 class ProfileDetailView: View {
     
     let titleLabel = Label(font: .small)
     let label = Label(font: .smallBold)
     let button = Button()
+    private var cancellables = Set<AnyCancellable>()
+
+    deinit {
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+    }
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -68,16 +76,22 @@ class ProfileDetailView: View {
         self.button.set(style: .normal(color: .lightPurple, text: "Set"))
         self.button.isHidden = false
 
-        user.ritual?.fetchIfNeededInBackground(block: { (object, error) in
-            if let ritual = object as? Ritual, let date = ritual.date {
-                let formatter = DateFormatter()
-                formatter.dateFormat = "h:mm a"
-                let string = formatter.string(from: date)
-                self.label.setText(string)
-                self.button.set(style: .normal(color: .lightPurple, text: "EDIT"))
-            }
+        user.ritual?.retrieveDataIfNeeded()
+            .mainSink(receivedResult: { result in
+                switch result {
+                case .success(let ritual):
+                    if let date = ritual.date {
+                        let formatter = DateFormatter()
+                        formatter.dateFormat = "h:mm a"
+                        let string = formatter.string(from: date)
+                        self.label.setText(string)
+                        self.button.set(style: .normal(color: .lightPurple, text: "EDIT"))
+                    }
 
-            self.layoutNow()
-        })
+                    self.layoutNow()
+                case .error(_):
+                    break
+                }
+            }).store(in: &self.cancellables)
     }
 }

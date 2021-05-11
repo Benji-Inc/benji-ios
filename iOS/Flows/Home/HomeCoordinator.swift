@@ -67,7 +67,11 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
 
         self.homeVC.archivesVC.didSelectPost = { [unowned self] post in
-            self.show(post: post)
+            if post.isLocked {
+                self.showLockedNotification(for: post)
+            } else {
+                self.show(post: post)
+            }
         }
 
         if let deeplink = self.deepLink {
@@ -210,6 +214,32 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                     self.showSoftAskNotifications(for: settings.authorizationStatus)
                 }
             }.store(in: &self.cancellables)
+    }
+
+    private func showLockedNotification(for post: Post) {
+
+        User.current()?.ritual?.retrieveDataIfNeeded()
+            .mainSink(receivedResult: { result in
+                switch result {
+                case .success(let ritual):
+                    if let date = ritual.date {
+                        let formatter = DateFormatter()
+                        formatter.dateFormat = "h:mm a"
+                        let string = formatter.string(from: date)
+
+                        let alert = UIAlertController(title: "Post locked.", message: "This post is locked until your feed is made available at \(string).", preferredStyle: .alert)
+
+                        let cancel = UIAlertAction(title: "Ok", style: .cancel) { action in}
+
+                        alert.addAction(cancel)
+
+                        self.router.topmostViewController.present(alert, animated: true, completion: nil)
+                    }
+
+                case .error(_):
+                    break
+                }
+            }).store(in: &self.cancellables)
     }
 
     private func showSoftAskNotifications(for status: UNAuthorizationStatus) {

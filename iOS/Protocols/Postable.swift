@@ -21,6 +21,7 @@ protocol Postable {
     var attributes: [String: Any]? { get set }
     var duration: Int { get set }
     var pixelSize: CGSize { get }
+    var isLocked: Bool { get }
 }
 
 extension Postable {
@@ -48,5 +49,24 @@ extension Postable {
         guard let width = self.attributes?["pixelWidth"] as? Int,
               let height = self.attributes?["pixelHeight"] as? Int else { return .zero }
         return CGSize(width: width, height: height)
+    }
+
+    var isLocked: Bool {
+        if self.author == User.current() {
+            return false
+        }
+
+        switch RitualManager.shared.state {
+        case .feedAvailable:
+            return false
+        default:
+            if let trigger = self.triggerDate,
+               let currentTrigger = RitualManager.shared.currentTriggerDate,
+               trigger.isSameDateOrInFuture(for: currentTrigger) {
+                return true
+            } else {
+                return false
+            }
+        }
     }
 }

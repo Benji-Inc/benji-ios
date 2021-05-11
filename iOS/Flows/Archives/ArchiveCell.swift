@@ -40,34 +40,17 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
 
         let file = item.preview ?? item.file
 
-        if item.author == User.current() {
+        if item.isLocked {
+            self.imageView.loadingIndicator.stopAnimating()
+            self.imageView.symbolImageView.image = UIImage(systemName: "lock.fill")
+            self.imageView.layoutNow()
+        } else {
             self.imageView.displayable = file
             self.playImageView.alpha = item.mediaType == .video ? 1.0 : 0.0
-            self.label.setText(item.createdAt?.getDistanceAgoString() ?? String())
-            self.layoutNow()
-        } else {
-            switch RitualManager.shared.state {
-            case .feedAvailable:
-                self.imageView.displayable = file
-                self.playImageView.alpha = item.mediaType == .video ? 1.0 : 0.0
-                self.label.setText(item.triggerDate?.getDistanceAgoString() ?? String())
-                self.layoutNow()
-            default:
-                if let trigger = item.triggerDate,
-                   let currentTrigger = RitualManager.shared.currentTriggerDate,
-                   trigger.isSameDateOrInFuture(for: currentTrigger) {
-                    self.imageView.loadingIndicator.stopAnimating()
-                    self.imageView.symbolImageView.image = UIImage(systemName: "lock.fill")
-                    self.imageView.layoutNow()
-                } else {
-                    self.imageView.displayable = file
-                    self.playImageView.alpha = item.mediaType == .video ? 1.0 : 0.0
-                }
-
-                self.label.setText(item.triggerDate?.getDistanceAgoString() ?? String())
-                self.layoutNow()
-            }
         }
+
+        self.label.setText(item.triggerDate?.getDistanceAgoString() ?? String())
+        self.layoutNow()
     }
 
     override func layoutSubviews() {

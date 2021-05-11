@@ -30,7 +30,8 @@ class ArchivePreviewViewController: ViewController {
 
         //self.view.addSubview(self.content)
        // self.content.configure(with: self.channel)
-        self.preferredContentSize = self.size
+        let new = CGSize(width: self.size.width * 3, height: self.size.height * 3)
+        self.preferredContentSize = new
         self.view.set(backgroundColor: .red)
     }
 
