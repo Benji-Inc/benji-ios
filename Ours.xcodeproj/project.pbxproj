@@ -574,6 +574,8 @@
 		D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */; };
 		D6B2603822E6AB5E00143CF0 /* ChannelDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2603722E6AB5E00143CF0 /* ChannelDetailViewController.swift */; };
 		D6B2603D22E6B8EA00143CF0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */; };
+		D6B268FD264B017D00EFDA17 /* ArchivesCollectionViewManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B268FC264B017D00EFDA17 /* ArchivesCollectionViewManager+Extensions.swift */; };
+		D6B268FF264B02AA00EFDA17 /* ArchivePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B268FE264B02AA00EFDA17 /* ArchivePreviewViewController.swift */; };
 		D6B3329325DD74EB00211044 /* Channel+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329225DD74EB00211044 /* Channel+Cloud.swift */; };
 		D6B3329525DDB9E300211044 /* NewChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329425DDB9E300211044 /* NewChannelHeaderView.swift */; };
 		D6B37CA425F7C05200BC3145 /* MeditationPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CA325F7C05200BC3145 /* MeditationPost.swift */; };
@@ -1007,6 +1009,8 @@
 		D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDateLabel.swift; sourceTree = "<group>"; };
 		D6B2603722E6AB5E00143CF0 /* ChannelDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDetailViewController.swift; sourceTree = "<group>"; };
 		D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		D6B268FC264B017D00EFDA17 /* ArchivesCollectionViewManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivesCollectionViewManager+Extensions.swift"; sourceTree = "<group>"; };
+		D6B268FE264B02AA00EFDA17 /* ArchivePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivePreviewViewController.swift; sourceTree = "<group>"; };
 		D6B3329225DD74EB00211044 /* Channel+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Channel+Cloud.swift"; sourceTree = "<group>"; };
 		D6B3329425DDB9E300211044 /* NewChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelHeaderView.swift; sourceTree = "<group>"; };
 		D6B37CA325F7C05200BC3145 /* MeditationPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationPost.swift; sourceTree = "<group>"; };
@@ -1555,12 +1559,14 @@
 			isa = PBXGroup;
 			children = (
 				D660543C262F213C002F74F8 /* ArchiveCell.swift */,
-				D6605438262F211D002F74F8 /* ArchivesCollectionView.swift */,
-				D660543A262F212E002F74F8 /* ArchivesCollectionViewManager.swift */,
-				D6605436262F2109002F74F8 /* ArchivesViewController.swift */,
-				D660544826324239002F74F8 /* UserHeaderCell.swift */,
 				D67B7FF7263473DD00AD9DA8 /* ArchiveFooterView.swift */,
 				D66C11C92641926100F38957 /* ArchiveHeaderView.swift */,
+				D6B268FE264B02AA00EFDA17 /* ArchivePreviewViewController.swift */,
+				D6605438262F211D002F74F8 /* ArchivesCollectionView.swift */,
+				D660543A262F212E002F74F8 /* ArchivesCollectionViewManager.swift */,
+				D6B268FC264B017D00EFDA17 /* ArchivesCollectionViewManager+Extensions.swift */,
+				D6605436262F2109002F74F8 /* ArchivesViewController.swift */,
+				D660544826324239002F74F8 /* UserHeaderCell.swift */,
 			);
 			path = Archives;
 			sourceTree = "<group>";
@@ -2642,6 +2648,7 @@
 				D6090E582377D2CA00833DA7 /* ChannelSectionable.swift in Sources */,
 				D6DADF6E2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift in Sources */,
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
+				D6B268FF264B02AA00EFDA17 /* ArchivePreviewViewController.swift in Sources */,
 				D67FF5A825F7BD31005C3E1E /* SystemPost.swift in Sources */,
 				D660543B262F212E002F74F8 /* ArchivesCollectionViewManager.swift in Sources */,
 				D6B2603822E6AB5E00143CF0 /* ChannelDetailViewController.swift in Sources */,
@@ -2670,6 +2677,7 @@
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
 				D6605414262DBF35002F74F8 /* ReservationsFooterView.swift in Sources */,
 				D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */,
+				D6B268FD264B017D00EFDA17 /* ArchivesCollectionViewManager+Extensions.swift in Sources */,
 				D6740D4823AEA5BD009D5702 /* ChannelsCoordiantor.swift in Sources */,
 				D672C31C2644342F00C9E878 /* ChannelContentView.swift in Sources */,
 				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,

@@ -20,6 +20,7 @@ protocol Postable {
     var file: PFFileObject? { get set }
     var attributes: [String: Any]? { get set }
     var duration: Int { get set }
+    var pixelSize: CGSize { get }
 }
 
 extension Postable {
@@ -41,5 +42,11 @@ extension Postable {
 
     var reservation: Reservation? {
         return self.attributes?["reservation"] as? Reservation
+    }
+
+    var pixelSize: CGSize {
+        guard let width = self.attributes?["pixelWidth"] as? Int,
+              let height = self.attributes?["pixelHeight"] as? Int else { return .zero }
+        return CGSize(width: width, height: height)
     }
 }

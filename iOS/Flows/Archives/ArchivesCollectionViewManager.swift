@@ -230,4 +230,34 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         self.upcomingPosts = today
         self.posts = past
     }
+
+    // MARK: Menu overrides
+
+    override func collectionView(_ collectionView: UICollectionView,
+                                 contextMenuConfigurationForItemAt indexPath: IndexPath,
+                                 point: CGPoint) -> UIContextMenuConfiguration? {
+        guard let section = SectionType(rawValue: indexPath.section) else { return nil }
+
+        var post: Post?
+        switch section {
+        case .user:
+            return nil
+        case .upcoming:
+            post = self.upcomingPosts[safe: indexPath.row]
+        case .posts:
+            post = self.posts[safe: indexPath.row]
+        }
+
+        guard let p = post, let cell = collectionView.cellForItem(at: indexPath) as? ArchiveCell else { return nil }
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+            return ArchivePreviewViewController(with: p, size: cell.size)
+        }, actionProvider: { suggestedActions in
+            if p.author == User.current() {
+                return self.makeCurrentUsertMenu(for: p, at: indexPath)
+            } else {
+                return self.makeNonCurrentUserMenu(for: p, at: indexPath)
+            }
+        })
+    }
 }

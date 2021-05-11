@@ -90,7 +90,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.set(backgroundColor: .background1)
+        self.view.set(backgroundColor: .background2)
 
         guard let post = self.post as? Post else { return }
 
@@ -241,7 +241,21 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         super.viewDidLayoutSubviews()
 
         self.imageView.expandToSuperviewSize()
-        self.videoView.expandToSuperviewSize()
+
+        if self.post.pixelSize.width == .zero {
+            self.imageView.expandToSuperviewSize()
+            self.videoView.expandToSuperviewSize()
+        } else {
+
+            self.imageView.expandToSuperviewWidth()
+            self.imageView.height = self.view.height * 0.7
+            self.imageView.centerY = self.view.halfHeight * 0.6
+
+            self.videoView.expandToSuperviewWidth()
+            self.videoView.height = self.view.height * 0.7
+            self.videoView.centerY = self.view.halfHeight * 0.6
+        }
+
 
         self.commentsVC.view.expandToSuperviewSize()
         self.commentsVC.view.centerOnX()

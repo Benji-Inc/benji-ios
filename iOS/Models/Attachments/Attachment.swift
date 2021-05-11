@@ -17,6 +17,24 @@ struct Attachment: Hashable {
 
     let asset: PHAsset
 
+    var attributes: [String: Any] {
+        return ["mediaType": self.asset.mediaType.rawValue,
+                "duration": Int(self.asset.duration),
+                "pixelWidth": self.asset.pixelWidth,
+                "pixelHeight": self.asset.pixelHeight,
+                "creationDate": self.asset.creationDate as Any,
+                "location": ["latitude": self.asset.location?.coordinate.latitude,
+                             "longitude": self.asset.location?.coordinate.longitude]]
+    }
+
+    var duration: Int {
+        return self.attributes["duration"] as? Int ?? 0
+    }
+
+    var mediaType: Int {
+        return self.attributes["mediaType"] as? Int ?? 0
+    }
+
     static func == (lhs: Attachment, rhs: Attachment) -> Bool {
         return lhs.id == rhs.id
     }
