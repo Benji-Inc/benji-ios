@@ -92,6 +92,7 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
 
         self.imageView.displayable = nil
         self.label.text = nil
+        self.playImageView.alpha = 0
     }
 }
 

@@ -17,15 +17,18 @@ extension PostCreationViewController {
 
         return Future { promise in
             let videoCompressor = LightCompressor()
-            let destination = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!.appendingPathComponent("ours_post_video.mp4")
+            let destination = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("compressed.mp4")
+            try? FileManager.default.removeItem(at: destination)
+            
             self.compression = videoCompressor.compressVideo(source: source,
                                                              destination: destination,
-                                                             quality: .very_low,
-                                                             isMinBitRateEnabled: true,
+                                                             quality: .very_high,
+                                                             isMinBitRateEnabled: false,
                                                              keepOriginalResolution: true,
                                                              progressQueue: .main,
                                                              progressHandler: { progress in
-                                                                self.swipeLabel.setText("Compressing: %\(progress)")
+                                                                let prg = Int(progress.fractionCompleted) * 100
+                                                                self.swipeLabel.setText("Compressing: %\(prg)")
                                                                 self.view.layoutNow()
                                                              }, completion: { result in
 
