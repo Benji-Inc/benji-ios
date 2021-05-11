@@ -102,7 +102,6 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
         })
 
         self.view.insertSubview(self.imageView, at: 0)
-        self.imageView.contentMode = .scaleAspectFit
 
         self.view.addSubview(self.gradientView)
 
@@ -198,6 +197,14 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
 
         guard let p = self.post as? Post, let file = p.file else { return }
 
+        if self.post.pixelSize.width > self.post.pixelSize.height {
+            self.imageView.contentMode = .scaleAspectFit
+            self.videoView.contentMode = .scaleAspectFit
+        } else {
+            self.imageView.contentMode = .scaleAspectFill
+            self.videoView.contentMode = .scaleAspectFill
+        }
+
         if let type = p.mediaType {
             switch type {
             case .unknown:
@@ -242,20 +249,18 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
 
         self.imageView.expandToSuperviewSize()
 
-        if self.post.pixelSize.width == .zero {
-            self.imageView.expandToSuperviewSize()
-            self.videoView.expandToSuperviewSize()
-        } else {
-
+        if self.post.pixelSize.width > self.post.pixelSize.height {
             self.imageView.expandToSuperviewWidth()
             self.imageView.height = self.view.height * 0.7
-            self.imageView.centerY = self.view.halfHeight * 0.6
+            self.imageView.centerY = self.view.halfHeight * 0.8
 
             self.videoView.expandToSuperviewWidth()
             self.videoView.height = self.view.height * 0.7
-            self.videoView.centerY = self.view.halfHeight * 0.6
+            self.videoView.centerY = self.view.halfHeight * 0.8
+        } else {
+            self.imageView.expandToSuperviewSize()
+            self.videoView.expandToSuperviewSize()
         }
-
 
         self.commentsVC.view.expandToSuperviewSize()
         self.commentsVC.view.centerOnX()

@@ -28,7 +28,8 @@ struct Attachment: Hashable {
     }
 
     var duration: Int {
-        return self.attributes["duration"] as? Int ?? 0
+        guard let value = self.attributes["duration"] as? Int else { return 5 }
+        return clamp(value, min: 5)
     }
 
     var mediaType: Int {

@@ -16,15 +16,11 @@ extension ArchivesCollectionViewManager {
 
         let confirm = UIAction(title: "Confirm", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
 
-//            switch channel.channelType {
-//            case .system(_):
-//                break
-//            case .pending(_):
-//                break
-//            case .channel(let tchChannel):
-//                ChannelSupplier.shared.delete(channel: tchChannel)
-//                    .mainSink().store(in: &self.cancellables)
-//            }
+            post.deleteInBackground { completed, error in
+                ToastScheduler.shared.schedule(toastType: .basic(displayable: UIImage(systemName: "trash")!,
+                                                                 title: "Post Deleted", description: "You have successfully deleted your post"))
+                self.reloadForExistingUser()
+            }
         }
 
         let deleteMenu = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [confirm, neverMind])

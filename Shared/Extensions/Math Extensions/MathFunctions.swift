@@ -9,6 +9,10 @@
 import Foundation
 import UIKit
 
+func clamp(_ value: Int, min: Int) -> Int {
+    return (min...Int.max).clamp(value)
+}
+
 func pow(_ lhs: Int, _ rhs: Int) -> Int {
     return Int(powf(Float(lhs), Float(rhs)))
 }
