@@ -29,10 +29,22 @@ class ArchivePreviewViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
 
-        guard let file = self.post.file else { return }
 
         let new = CGSize(width: self.size.width * 3, height: self.size.height * 3)
         self.preferredContentSize = new
+
+        self.view.set(backgroundColor: .background2)
+
+        if self.post.isLocked {
+            self.showLocked()
+        } else {
+            self.showPost()
+        }
+    }
+
+    private func showPost() {
+
+        guard let file = self.post.file else { return }
 
         if self.post.pixelSize.width > self.post.pixelSize.height {
             self.imageView.contentMode = .scaleAspectFit
@@ -77,8 +89,11 @@ class ArchivePreviewViewController: ViewController {
             self.view.addSubview(self.imageView)
             self.imageView.displayable = file
         }
+    }
 
-        self.view.set(backgroundColor: .background2)
+    private func showLocked() {
+        self.imageView.symbolImageView.image = UIImage(systemName: "lock.fill")
+        self.imageView.symbolImageView.alpha = 1 
     }
 
     override func viewDidDisappear(_ animated: Bool) {

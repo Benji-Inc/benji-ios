@@ -29,8 +29,8 @@ class PostViewController: ViewController {
     var didSelectPost: CompletionOptional = nil
     var shouldHideTopView: CompletionOptional = nil
 
-    let leftView = CircleTapView()
-    let rightView = CircleTapView()
+    let leftView = AnimatingTapView()
+    let rightView = AnimatingTapView()
 
     let container = PassThroughView()
     let bottomContainer = View()

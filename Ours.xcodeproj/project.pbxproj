@@ -576,7 +576,7 @@
 		D6B2603D22E6B8EA00143CF0 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */; };
 		D6B268FD264B017D00EFDA17 /* ArchivesCollectionViewManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B268FC264B017D00EFDA17 /* ArchivesCollectionViewManager+Extensions.swift */; };
 		D6B268FF264B02AA00EFDA17 /* ArchivePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B268FE264B02AA00EFDA17 /* ArchivePreviewViewController.swift */; };
-		D6B26903264C7D2000EFDA17 /* CircleTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B26902264C7D2000EFDA17 /* CircleTapView.swift */; };
+		D6B26903264C7D2000EFDA17 /* AnimatingTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B26902264C7D2000EFDA17 /* AnimatingTapView.swift */; };
 		D6B3329325DD74EB00211044 /* Channel+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329225DD74EB00211044 /* Channel+Cloud.swift */; };
 		D6B3329525DDB9E300211044 /* NewChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329425DDB9E300211044 /* NewChannelHeaderView.swift */; };
 		D6B37CA425F7C05200BC3145 /* MeditationPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B37CA325F7C05200BC3145 /* MeditationPost.swift */; };
@@ -1012,7 +1012,7 @@
 		D6B2603C22E6B8EA00143CF0 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		D6B268FC264B017D00EFDA17 /* ArchivesCollectionViewManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchivesCollectionViewManager+Extensions.swift"; sourceTree = "<group>"; };
 		D6B268FE264B02AA00EFDA17 /* ArchivePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivePreviewViewController.swift; sourceTree = "<group>"; };
-		D6B26902264C7D2000EFDA17 /* CircleTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleTapView.swift; sourceTree = "<group>"; };
+		D6B26902264C7D2000EFDA17 /* AnimatingTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatingTapView.swift; sourceTree = "<group>"; };
 		D6B3329225DD74EB00211044 /* Channel+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Channel+Cloud.swift"; sourceTree = "<group>"; };
 		D6B3329425DDB9E300211044 /* NewChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelHeaderView.swift; sourceTree = "<group>"; };
 		D6B37CA325F7C05200BC3145 /* MeditationPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationPost.swift; sourceTree = "<group>"; };
@@ -1767,7 +1767,7 @@
 				D684840922CD48D000362AC3 /* GradientView.swift */,
 				D684840B22CD48FA00362AC3 /* PassThroughView.swift */,
 				D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */,
-				D6B26902264C7D2000EFDA17 /* CircleTapView.swift */,
+				D6B26902264C7D2000EFDA17 /* AnimatingTapView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2480,7 +2480,7 @@
 				D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
 				D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
-				D6B26903264C7D2000EFDA17 /* CircleTapView.swift in Sources */,
+				D6B26903264C7D2000EFDA17 /* AnimatingTapView.swift in Sources */,
 				D61D38E3248C07F700BE457B /* InputAccessoryView+Animation.swift in Sources */,
 				D614073D263E240D00B84605 /* RitualInputContentView.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,

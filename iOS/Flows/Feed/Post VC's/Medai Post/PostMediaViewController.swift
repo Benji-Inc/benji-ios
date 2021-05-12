@@ -209,11 +209,15 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
             case .unknown:
                 break
             case .image:
-                break
+                self.isPaused = true
+                self.imageView.didDisplayImage = { [unowned self] image in
+                    self.isPaused = false
+                }
+                self.imageView.displayable = file
             case .video:
-                //self.isPaused = true
+                self.isPaused = true
                 p.file?.retrieveDataInBackground(progressHandler: { progress in
-                   // self.isPaused = progress < 100
+                    self.isPaused = progress < 100
                 }).mainSink(receiveValue: { data in
                     self.imageView.removeFromSuperview()
                     self.view.insertSubview(self.videoView, at: 0)
@@ -239,9 +243,9 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
                 break 
             }
         } else {
-            //self.isPaused = true
+            self.isPaused = true
             self.imageView.didDisplayImage = { [unowned self] image in
-                //self.isPaused = false
+                self.isPaused = false
             }
             self.imageView.displayable = file
         }

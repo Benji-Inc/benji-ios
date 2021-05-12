@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CircleTapView: View {
+class AnimatingTapView: View {
 
     private let circleView = View()
     var startingPoint: CGPoint = .zero
@@ -28,7 +28,7 @@ class CircleTapView: View {
     }
 
     func startFillAnimation(at startingPoint: CGPoint, completion: CompletionOptional = nil) {
-        let color = Color.background4.color.withAlphaComponent(0.3)
+        let color = Color.background4.color.withAlphaComponent(0.15)
         self.circleView.alpha = 0
         self.circleView.layer.cornerRadius = self.circleView.halfHeight
         self.circleView.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
