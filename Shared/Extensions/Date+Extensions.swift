@@ -228,6 +228,15 @@ extension Date {
         let aMonthAgo = now.subtract(component: .month, amount: 1)
         let aYearAgo = now.subtract(component: .year, amount: 1)
 
+        if self > now {
+            let inADay = now.add(component: .day, amount: 1)
+            if self.isBetween(now, and: inADay!) {
+                return "Later Today"
+            } else {
+                return "Coming soon."
+            }
+        }
+
         if self.isBetween(now, and: aMinuteAgo!) {
             return "now"
 

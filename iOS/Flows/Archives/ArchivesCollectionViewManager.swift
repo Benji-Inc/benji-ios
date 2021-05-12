@@ -220,7 +220,7 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         var past: [Post] = []
 
         posts.forEach { post in
-            if let trigger = post.triggerDate, trigger.isSameDateOrInFuture(for: Date()) {
+            if post.isLocked {
                 today.append(post)
             } else {
                 past.append(post)
