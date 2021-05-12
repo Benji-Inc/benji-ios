@@ -14,7 +14,8 @@ protocol PostsCollectionMangerDelegate: AnyObject {
     func postsManagerDidSetItems(_ manager: PostsCollectionManager, for user: User)
     func posts(_ manager: PostsCollectionManager, didSelect post: Postable, at index: Int)
     func postsManagerDidEndDisplaying(_ manager: PostsCollectionManager)
-    func posts(_ manager: PostsCollectionManager, didPause index: Int, shouldHideTop: Bool)
+    func posts(_ manager: PostsCollectionManager, didPause index: Int)
+    func posts(_ manager: PostsCollectionManager, shouldHideTop: Bool)
     func posts(_ manager: PostsCollectionManager, didResume index: Int)
     func posts(_ manager: PostsCollectionManager, didFinish index: Int)
     func posts(_ manager: PostsCollectionManager,
@@ -95,12 +96,12 @@ class PostsCollectionManager: NSObject {
 
             postVC.didPause = { [weak self] in
                 guard let `self` = self else { return }
-                self.delegate?.posts(self, didPause: index, shouldHideTop: false)
+                self.delegate?.posts(self, didPause: index)
             }
 
             postVC.shouldHideTopView = { [weak self] in
                 guard let `self` = self else { return }
-                self.delegate?.posts(self, didPause: index, shouldHideTop: true)
+                self.delegate?.posts(self, shouldHideTop: true)
             }
 
             postVC.didResume = { [weak self] in

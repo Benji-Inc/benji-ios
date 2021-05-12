@@ -86,6 +86,10 @@ class FeedViewController: ViewController {
 
         self.view.addSubview(self.avatarView)
 
+//        self.avatarView.publisher(for: \.alpha).mainSink { value in
+//            print(value)
+//        }.store(in: &self.cancellables)
+
         self.$state
             .removeDuplicates()
             .mainSink { state in

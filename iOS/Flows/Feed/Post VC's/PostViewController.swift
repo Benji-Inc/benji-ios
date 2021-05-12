@@ -106,16 +106,22 @@ class PostViewController: ViewController {
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
+        guard touches.first?.view == self.container else { return }
+
         self.isPaused = true
     }
 
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
+        guard touches.first?.view == self.container else { return }
+
         self.isPaused = false
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
+        guard touches.first?.view == self.container else { return }
+
         self.isPaused = false
     }
 }

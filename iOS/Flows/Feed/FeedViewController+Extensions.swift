@@ -10,6 +10,15 @@ import Foundation
 
 extension FeedViewController: PostsCollectionMangerDelegate {
 
+    func posts(_ manager: PostsCollectionManager, shouldHideTop: Bool) {
+        if shouldHideTop {
+            UIView.animate(withDuration: 0.2) {
+                self.avatarView.alpha = 0
+                self.indicatorView.alpha = 0
+            }
+        }
+    }
+
     func postsManagerDidNotFindPosts(_ manager: PostsCollectionManager) {
         self.state = .noPosts
     }
@@ -38,15 +47,8 @@ extension FeedViewController: PostsCollectionMangerDelegate {
         self.indicatorView.finishProgress(at: index)
     }
 
-    func posts(_ manager: PostsCollectionManager, didPause index: Int, shouldHideTop: Bool) {
+    func posts(_ manager: PostsCollectionManager, didPause index: Int) {
         self.indicatorView.pauseProgress(at: index)
-
-        if shouldHideTop {
-            UIView.animate(withDuration: 0.2) {
-                self.avatarView.alpha = 0
-                self.indicatorView.alpha = 0
-            }
-        }
     }
 
     func posts(_ manager: PostsCollectionManager, didResume index: Int) {

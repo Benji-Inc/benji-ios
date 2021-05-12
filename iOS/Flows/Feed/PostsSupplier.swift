@@ -36,11 +36,11 @@ class PostsSupplier {
 
             publishers.append(self.getInviteAsk())
             publishers.append(self.getNotificationPermissions())
+            publishers.append(self.queryForConnectionPosts(for: user))
+            publishers.append(self.queryForUnreadPosts(for: user))
         }
 
-        publishers.append(self.queryForConnectionPosts(for: user))
         publishers.append(self.queryForCurrentMediaPosts(for: user))
-        publishers.append(self.queryForUnreadPosts(for: user))
 
         return Future { promise in
             waitForAll(publishers).mainSink { result in
@@ -110,10 +110,17 @@ class PostsSupplier {
             if let query = Post.query() {
                 query.whereKey("type", containedIn: ["unreadMessages", "generalUnreadMessages"])
                 query.whereKey("author", equalTo: owner)
-                query.whereKey("attributes.numberOfUnread", notEqualTo: 0)
+                query.whereKey("attributes.numberOfUnread", greaterThan: 0)
                 query.findObjectsInBackground { objects, error in
                     if let posts = objects as? [Post] {
-                        promise(.success(posts))
+                        let filtered = posts.filter { post in
+                            if post.type == .unreadMessages {
+                                return post.channel.exists
+                            } else {
+                                return true
+                            }
+                        }
+                        promise(.success(filtered))
                     } else {
                         promise(.failure(ClientError.message(detail: "No posts found on feed")))
                     }
