@@ -10,6 +10,12 @@ import Foundation
 
 extension FeedViewController: PostsCollectionMangerDelegate {
 
+    func posts(_ manager: PostsCollectionManager,
+               didGoBackTo index: Int,
+               with duration: TimeInterval) {
+        self.indicatorView.goBack(to: index, with: duration)
+    }
+
     func posts(_ manager: PostsCollectionManager, shouldHideTop: Bool) {
         if shouldHideTop {
             UIView.animate(withDuration: 0.2) {

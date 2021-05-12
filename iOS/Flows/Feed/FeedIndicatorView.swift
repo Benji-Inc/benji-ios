@@ -88,6 +88,19 @@ class FeedIndicatorView: View {
         }
     }
 
+    func goBack(to previousIndex: Int, with duration: TimeInterval) {
+        for (index, view) in self.elements.enumerated() {
+            // reset the current and the previous
+            if index >= previousIndex {
+                self.finishAnimator(at: index, shouldFinish: false)
+                view.progressWidth = 0
+                view.layoutNow()
+            }
+        }
+
+        self.update(to: previousIndex, with: duration)
+    }
+
     func pauseProgress(at index: Int) {
         guard let element = self.elements[safe: index] else { return }
         element.animator?.pauseAnimation()

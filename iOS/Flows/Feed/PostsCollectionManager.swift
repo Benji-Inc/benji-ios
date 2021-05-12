@@ -18,6 +18,7 @@ protocol PostsCollectionMangerDelegate: AnyObject {
     func posts(_ manager: PostsCollectionManager, shouldHideTop: Bool)
     func posts(_ manager: PostsCollectionManager, didResume index: Int)
     func posts(_ manager: PostsCollectionManager, didFinish index: Int)
+    func posts(_ manager: PostsCollectionManager, didGoBackTo index: Int, with duration: TimeInterval)
     func posts(_ manager: PostsCollectionManager,
                didShowViewAt index: Int,
                with duration: TimeInterval)
@@ -107,6 +108,14 @@ class PostsCollectionManager: NSObject {
             postVC.didResume = { [weak self] in
                 guard let `self` = self else { return }
                 self.delegate?.posts(self, didResume: index)
+            }
+
+            postVC.didGoBack = { [weak self] in
+                guard let `self` = self else { return }
+                let previous = clamp(index - 1, min: 0)
+                if let previousPost = items[safe: previous] {
+                    self.delegate?.posts(self, didGoBackTo: previous, with: TimeInterval(previousPost.duration))
+                }
             }
         }
 

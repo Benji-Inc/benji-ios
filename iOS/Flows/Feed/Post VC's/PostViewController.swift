@@ -22,18 +22,24 @@ class PostViewController: ViewController {
 
     @Published var isPaused: Bool = false
 
+    var didGoBack: CompletionOptional = nil
     var didFinish: CompletionOptional = nil
     var didPause: CompletionOptional = nil
     var didResume: CompletionOptional = nil
     var didSelectPost: CompletionOptional = nil
-    var shouldHideTopView: CompletionOptional = nil 
+    var shouldHideTopView: CompletionOptional = nil
 
-    let container = View()
+    let leftView = CircleTapView()
+    let rightView = CircleTapView()
+
+    let container = PassThroughView()
     let bottomContainer = View()
 
     // Common items
     let textView = PostTextView()
     let button = Button()
+
+    private let selectionImpact = UIImpactFeedbackGenerator()
 
     init(with post: Postable) {
         self.post = post
@@ -47,6 +53,9 @@ class PostViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.addSubview(self.rightView)
+        self.view.addSubview(self.leftView)
+
         self.view.addSubview(self.container)
 
         self.$isPaused.mainSink { isPaused in
@@ -57,8 +66,20 @@ class PostViewController: ViewController {
             }
         }.store(in: &self.cancellables)
 
-        self.container.onDoubleTap { doubleTap in
-            self.didFinish?()
+        self.rightView.onTap { [unowned self] tap in
+            self.selectionImpact.impactOccurred()
+            let location = tap.location(in: self.rightView)
+            self.rightView.startFillAnimation(at: location) { [unowned self] in
+                self.didFinish?()
+            }
+        }
+
+        self.leftView.onTap { [unowned self] tap in
+            self.selectionImpact.impactOccurred()
+            let location = tap.location(in: self.leftView)
+            self.leftView.startFillAnimation(at: location) { [unowned self] in
+                self.didGoBack?()
+            }
         }
 
         self.container.addSubview(self.getCenterContent())
@@ -86,6 +107,14 @@ class PostViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        self.leftView.expandToSuperviewHeight()
+        self.leftView.width = self.view.halfWidth
+        self.leftView.pin(.left)
+
+        self.rightView.expandToSuperviewHeight()
+        self.rightView.width = self.view.halfWidth
+        self.rightView.pin(.right)
+
         self.container.size = CGSize(width: self.view.width, height: self.view.safeAreaRect.height)
         self.container.pinToSafeArea(.top, padding: 0)
         self.container.centerOnX()
@@ -102,26 +131,5 @@ class PostViewController: ViewController {
 
         self.button.setSize(with: self.bottomContainer.width)
         self.button.centerOnXAndY()
-    }
-
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        guard touches.first?.view == self.container else { return }
-
-        self.isPaused = true
-    }
-
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesCancelled(touches, with: event)
-        guard touches.first?.view == self.container else { return }
-
-        self.isPaused = false
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        guard touches.first?.view == self.container else { return }
-
-        self.isPaused = false
     }
 }
