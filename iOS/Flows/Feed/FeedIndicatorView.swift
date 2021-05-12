@@ -124,6 +124,8 @@ class FeedIndicatorView: View {
         animator.stopAnimation(false)
         if shouldFinish {
             animator.finishAnimation(at: .end)
+        } else {
+            animator.finishAnimation(at: .start)
         }
     }
 }

@@ -113,8 +113,9 @@ class PostsCollectionManager: NSObject {
             postVC.didGoBack = { [weak self] in
                 guard let `self` = self else { return }
                 let previous = clamp(index - 1, min: 0)
-                if let previousPost = items[safe: previous] {
-                    self.delegate?.posts(self, didGoBackTo: previous, with: TimeInterval(previousPost.duration))
+                if let previousVC = self.postVCs[safe: previous] {
+                    self.delegate?.posts(self, didGoBackTo: previous, with: TimeInterval(previousVC.post.duration))
+                    self.show(postVC: previousVC, at: previous)
                 }
             }
         }
