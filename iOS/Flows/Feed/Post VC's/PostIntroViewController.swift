@@ -50,6 +50,7 @@ class PostIntroViewController: PostViewController {
         }
 
         self.descritpionLabel.setText("Each notification is a 20 minute distraction to your brain.")
+        self.view.layoutNow()
     }
 
     override func viewDidLayoutSubviews() {

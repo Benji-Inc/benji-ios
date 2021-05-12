@@ -11,7 +11,7 @@ import Combine
 
 protocol PostsCollectionMangerDelegate: AnyObject {
     func postsManagerDidNotFindPosts(_ manager: PostsCollectionManager)
-    func postsManagerDidSetItems(_ manager: PostsCollectionManager)
+    func postsManagerDidSetItems(_ manager: PostsCollectionManager, for user: User)
     func posts(_ manager: PostsCollectionManager, didSelect post: Postable, at index: Int)
     func postsManagerDidEndDisplaying(_ manager: PostsCollectionManager)
     func posts(_ manager: PostsCollectionManager, didPause index: Int, shouldHideTop: Bool)
@@ -114,7 +114,9 @@ class PostsCollectionManager: NSObject {
             self.show(postVC: first, at: 0)
         }
 
-        self.delegate?.postsManagerDidSetItems(self)
+        if let user = self.feedOwner {
+            self.delegate?.postsManagerDidSetItems(self, for: user)
+        }
     }
 
     func advanceToNextView(from index: Int) {

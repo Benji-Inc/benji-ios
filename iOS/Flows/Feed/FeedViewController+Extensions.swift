@@ -14,9 +14,13 @@ extension FeedViewController: PostsCollectionMangerDelegate {
         self.state = .noPosts
     }
 
-    func postsManagerDidSetItems(_ manager: PostsCollectionManager) {
+    func postsManagerDidSetItems(_ manager: PostsCollectionManager, for user: User) {
         self.state = .showingFeed
         self.indicatorView.configure(with: manager.postVCs.count)
+        user.retrieveDataIfNeeded()
+            .mainSink(receiveValue: { user in
+                self.avatarView.set(avatar: user)
+            }).store(in: &self.cancellables)
     }
 
     func posts(_ manager: PostsCollectionManager,

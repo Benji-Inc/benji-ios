@@ -240,6 +240,10 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
                 break 
             }
         } else {
+            self.isPaused = true
+            self.imageView.didDisplayImage = { [unowned self] image in
+                self.isPaused = false
+            }
             self.imageView.displayable = file
         }
     }

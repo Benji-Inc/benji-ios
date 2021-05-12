@@ -103,10 +103,6 @@ class FeedViewController: ViewController {
     }
 
     func loadPosts(for user: User) {
-        user.retrieveDataIfNeeded()
-            .mainSink(receiveValue: { user in
-                self.avatarView.set(avatar: user)
-            }).store(in: &self.cancellables)
         self.manager.loadPosts(for: user)
     }
 
