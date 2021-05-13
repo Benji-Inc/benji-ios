@@ -39,24 +39,40 @@ class UserNotificationManager: NSObject {
         }
     }
 
-    func silentRegister(withApplication application: UIApplication) {
+//    func silentRegister(withApplication application: UIApplication) {
+//
+//        self.getNotificationSettings()
+//            .mainSink { (settings) in
+//                switch settings.authorizationStatus {
+//                case .authorized:
+//                    application.registerForRemoteNotifications()  // To update our token
+//                case .provisional:
+//                    application.registerForRemoteNotifications()  // To update our token
+//                case .notDetermined:
+//                    self.register(with: [.alert, .sound, .badge, .provisional], application: application)
+//                        .mainSink { (_) in }.store(in: &self.cancellables)
+//                case .denied, .ephemeral:
+//                    return
+//                @unknown default:
+//                    return
+//                }
+//            }.store(in: &self.cancellables)
+//    }
 
-        self.getNotificationSettings()
-            .mainSink { (settings) in
-                switch settings.authorizationStatus {
-                case .authorized:
-                    application.registerForRemoteNotifications()  // To update our token
-                case .provisional:
-                    application.registerForRemoteNotifications()  // To update our token
-                case .notDetermined:
-                    self.register(with: [.alert, .sound, .badge, .provisional], application: application)
-                        .mainSink { (_) in }.store(in: &self.cancellables)
-                case .denied, .ephemeral:
-                    return
-                @unknown default:
-                    return
-                }
-            }.store(in: &self.cancellables)
+    @discardableResult
+    func register(with options: UNAuthorizationOptions = [.alert, .sound, .badge],
+                  application: UIApplication) -> Future<Bool, Never> {
+
+        return Future { promise in
+            self.requestAuthorization(with: options)
+                .mainSink { (granted) in
+
+                    if granted {
+                        application.registerForRemoteNotifications()  // To update our token
+                    }
+                    promise(.success(granted))
+                }.store(in: &self.cancellables)
+        }
     }
 
     private func requestAuthorization(with options: UNAuthorizationOptions = [.alert, .sound, .badge]) -> Future<Bool, Never> {
@@ -72,22 +88,6 @@ class UserNotificationManager: NSObject {
 
                 promise(.success(granted))
             }
-        }
-    }
-
-    @discardableResult
-    func register(with options: UNAuthorizationOptions = [.alert, .sound, .badge],
-                  application: UIApplication) -> Future<Bool, Never> {
-
-        return Future { promise in
-            self.requestAuthorization(with: options)
-                .mainSink { (granted) in
-
-                    if granted {
-                        application.registerForRemoteNotifications()  // To update our token
-                    }
-                    promise(.success(granted))
-                }.store(in: &self.cancellables)
         }
     }
 

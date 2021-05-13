@@ -49,7 +49,7 @@ class LaunchManager {
         if let user = User.current(), user.isAuthenticated {
             // Make sure we set this up each launch
             #if !NOTIFICATION
-            UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            UserNotificationManager.shared.register(application: UIApplication.shared)
             #endif
         }
         
