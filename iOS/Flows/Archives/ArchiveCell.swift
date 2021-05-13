@@ -73,6 +73,7 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.imageView.symbolImageView.image = UIImage(systemName: "exclamationmark.triangle")
         self.imageView.displayable = nil
         self.label.text = nil
         self.playImageView.alpha = 0

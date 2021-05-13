@@ -42,7 +42,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     var didTapResend: ((Messageable) -> Void)?
     var didTapEdit: ((Messageable, IndexPath) -> Void)?
     var willDisplayCell: ((Messageable, IndexPath) -> Void)?
-    private let selectionFeedback = UIImpactFeedbackGenerator(style: .heavy)
     var userTyping: User?
     private var footerView: ReadAllFooterView?
     private var isSettingReadAll = false
@@ -145,7 +144,6 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         cell.didTapMessage = { [weak self] in
             guard let `self` = self else { return }
             self.updateConsumers(for: message)
-            self.selectionFeedback.impactOccurred()
         }
 
         return cell

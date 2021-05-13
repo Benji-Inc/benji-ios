@@ -14,6 +14,8 @@ class MessageBubbleView: View, Indexable {
     private let circleView = View()
     var startingPoint: CGPoint = .zero
 
+    private let selectionImpact = UIImpactFeedbackGenerator()
+
     override func initializeSubviews() {
         super.initializeSubviews()
 
@@ -31,6 +33,8 @@ class MessageBubbleView: View, Indexable {
     func startFillAnimation(at startingPoint: CGPoint,
                             for message: Messageable,
                             completion: @escaping (Messageable) -> Void) {
+
+        self.selectionImpact.impactOccurred()
 
         let color: Color
 
