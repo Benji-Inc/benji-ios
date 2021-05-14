@@ -28,6 +28,7 @@ class PostViewController: ViewController {
     var didResume: CompletionOptional = nil
     var didSelectPost: CompletionOptional = nil
     var shouldHideTopView: CompletionOptional = nil
+    var canMoveForwardOrBackward: Bool = true
 
     let leftView = AnimatingTapView()
     let rightView = AnimatingTapView()
@@ -67,6 +68,7 @@ class PostViewController: ViewController {
         }.store(in: &self.cancellables)
 
         self.rightView.onTap { [unowned self] tap in
+            guard self.canMoveForwardOrBackward else { return }
             self.selectionImpact.impactOccurred()
             let location = tap.location(in: self.rightView)
             self.rightView.startFillAnimation(at: location) { [unowned self] in
@@ -75,6 +77,7 @@ class PostViewController: ViewController {
         }
 
         self.leftView.onTap { [unowned self] tap in
+            guard self.canMoveForwardOrBackward else { return }
             self.selectionImpact.impactOccurred()
             let location = tap.location(in: self.leftView)
             self.leftView.startFillAnimation(at: location) { [unowned self] in

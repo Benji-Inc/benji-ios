@@ -52,8 +52,15 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
                                                                         if let msg = message, let _ = error {
                                                                             msg.status = .error
                                                                             self.collectionViewManager.updateItem(with: msg)
+                                                                            if msg.context == .emergency {
+                                                                                self.showAlertSentToast(for: msg)
+                                                                            }
                                                                         }
         }) else { return }
+
+        if systemMessage.context == .emergency {
+            self.showAlertSentToast(for: systemMessage)
+        }
 
         self.collectionViewManager.append(item: systemMessage) { [unowned self] in
             self.channelCollectionView.scrollToEnd()
@@ -80,5 +87,46 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
             self.collectionViewManager.updateItem(with: updatedMessage)
             self.messageInputAccessoryView.reset()
         }
+    }
+
+    private func showAlertSentToast(for message: SystemMessage) {
+        guard let displaybleChannel = self.activeChannel, case ChannelType.channel(let channel) = displaybleChannel.channelType else { return }
+
+        var displayable: ImageDisplayable = User.current()!
+                channel.getUsers(excludeMe: true)
+                    .mainSink(receiveValue: { (users) in
+                        var name: String = ""
+
+                        if let friendlyName = channel.friendlyName {
+                            name = friendlyName
+                        } else if users.count == 0 {
+                            name = "You"
+                        } else if users.count == 1, let user = users.first(where: { user in
+                            return user.objectId != User.current()?.objectId
+                        }) {
+                            displayable = user
+                            name = user.fullName
+                        } else {
+                            displayable = users.first!
+                            name = self.displayGroupChat(for: channel, with: users)
+                        }
+
+                        ToastScheduler.shared.schedule(toastType: .basic(displayable: displayable, title: "Notification Sent", description: "A notification linking to your message has been sent to: \(name)."))
+                    }).store(in: &self.cancellables)
+    }
+
+    private func displayGroupChat(for channel: TCHChannel, with users: [User]) -> String {
+        var text = ""
+        for (index, user) in users.enumerated() {
+            if index < users.count - 1 {
+                text.append(String("\(user.givenName), "))
+            } else if index == users.count - 1 && users.count > 1 {
+                text.append(String("\(user.givenName)"))
+            } else {
+                text.append(user.givenName)
+            }
+        }
+
+        return text
     }
 }

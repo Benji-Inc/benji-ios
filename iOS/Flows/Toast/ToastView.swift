@@ -302,6 +302,7 @@ class ToastView: View {
         self.imageView.size = CGSize(width: 60 * 0.74, height: 60)
         self.imageView.left = Theme.contentOffset.half
         self.imageView.top = Theme.contentOffset.half
+        self.imageView.roundCorners()
 
         let maxTitleWidth: CGFloat
         if UIScreen.main.isSmallerThan(screenSize: .tablet) {

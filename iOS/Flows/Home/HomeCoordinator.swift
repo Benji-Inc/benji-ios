@@ -133,6 +133,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
     private func show(post: Post) {
         let vc = PostMediaViewController(with: post)
+        vc.canMoveForwardOrBackward = false 
         vc.didDeletePost = { [unowned self] in
             vc.dismiss(animated: true) {
                 self.homeVC.archivesVC.collectionViewManager.reloadForExistingUser()
