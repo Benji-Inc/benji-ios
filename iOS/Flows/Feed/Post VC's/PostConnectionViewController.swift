@@ -42,12 +42,20 @@ class PostConnectionViewController: PostViewController {
     }
 
     override func configurePost() {
-        guard let connection = self.post.connection else {
+        guard let connectionId = self.post.connectionId else {
             print("No connection found")
             return
         }
 
-        self.configure(connection: connection)
+        Connection.localThenNetworkQuery(for: connectionId)
+            .mainSink { result in
+                switch result {
+                case .success(let connection):
+                    self.configure(connection: connection)
+                case .error(_):
+                    break
+                }
+            }.store(in: &self.cancellables)
     }
 
     private func configure(connection: Connection) {

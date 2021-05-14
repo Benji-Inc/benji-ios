@@ -37,12 +37,8 @@ extension Postable {
         return self.attributes?["numberOfUnread"] as? Int
     }
 
-    var connection: Connection? {
-        return self.attributes?["connection"] as? Connection
-    }
-
-    var reservation: Reservation? {
-        return self.attributes?["reservation"] as? Reservation
+    var connectionId: String? {
+        return self.attributes?["connectionId"] as? String
     }
 
     var pixelSize: CGSize {
