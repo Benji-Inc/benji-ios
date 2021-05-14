@@ -98,11 +98,8 @@ class ToastView: View {
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 10
 
-        self.imageView.layer.masksToBounds = true
-        self.imageView.layer.cornerRadius = 5
         self.imageView.imageView.tintColor = Color.white.color
         self.imageView.imageView.contentMode = .scaleAspectFit
-        self.imageView.clipsToBounds = true
 
         self.descriptionLabel.alpha = 0
         self.titleLabel.alpha = 0
@@ -302,7 +299,10 @@ class ToastView: View {
         self.imageView.size = CGSize(width: 60 * 0.74, height: 60)
         self.imageView.left = Theme.contentOffset.half
         self.imageView.top = Theme.contentOffset.half
-        self.imageView.roundCorners()
+        
+        self.imageView.layer.masksToBounds = true
+        self.imageView.layer.cornerRadius = 5
+        self.imageView.clipsToBounds = true
 
         let maxTitleWidth: CGFloat
         if UIScreen.main.isSmallerThan(screenSize: .tablet) {
