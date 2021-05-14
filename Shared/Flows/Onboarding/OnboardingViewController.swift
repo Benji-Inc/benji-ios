@@ -379,10 +379,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         switch launchActivity {
         case .onboarding(let phoneNumber):
             if let content = self.current,
-               case OnboardingContent.phone(let vc) = content,
-               !vc.isSendingCode {
-                vc.textField.text = phoneNumber
-                vc.textFieldDidEndEditing(vc.textField)
+               case OnboardingContent.welcome(let vc) = content {
+
+                self.current = .phone(self.phoneVC)
+
+                delay(0.25) { [unowned self] in
+                    self.phoneVC.textField.text = phoneNumber
+                    self.phoneVC.didTapButton()
+                }
             }
         case .reservation(_):
             break

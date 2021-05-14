@@ -38,9 +38,21 @@ class WaitlistViewController: ViewController, Sizeable {
         super.viewDidLoad()
 
         #if APPCLIP
-        if User.current()?.status == .inactive || User.current()?.status == .active {
-            self.loadUpgrade()
-        }
+        User.current()?.subscribe()
+            .mainSink(receivedResult: { result in
+                switch result {
+                case .success(let event):
+                    switch event {
+                    case .entered(let u), .left(let u), .created(let u), .updated(let u), .deleted(let u):
+                        if u.status == .inactive || u.status == .active {
+                            self.loadUpgrade()
+                        }
+                    }
+                case .error(_):
+                    break
+                }
+            }).store(in: &self.cancellables)
+
         #endif
 
         QuePostions.subscription.handle(Event.entered) { [unowned self] (query, object) in
