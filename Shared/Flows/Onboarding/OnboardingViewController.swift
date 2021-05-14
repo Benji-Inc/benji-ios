@@ -376,20 +376,24 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     func handle(launchActivity: LaunchActivity) {
+        guard let content = self.current, case OnboardingContent.welcome(let vc) = content else { return }
+
         switch launchActivity {
         case .onboarding(let phoneNumber):
-            if let content = self.current,
-               case OnboardingContent.welcome(let vc) = content {
 
-                self.current = .phone(self.phoneVC)
+            self.current = .phone(self.phoneVC)
 
-                delay(0.25) { [unowned self] in
-                    self.phoneVC.textField.text = phoneNumber
-                    self.phoneVC.didTapButton()
-                }
+            delay(0.25) { [unowned self] in
+                self.phoneVC.textField.text = phoneNumber
+                self.phoneVC.didTapButton()
             }
-        case .reservation(_):
-            break
+        case .reservation(let reservationId):
+            vc.state = .reservationInput
+            vc.textField.text = reservationId
+
+            delay(0.25) {
+                vc.didTapButton()
+            }
         }
     }
 
