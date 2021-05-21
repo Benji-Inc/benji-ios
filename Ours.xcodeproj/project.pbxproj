@@ -90,6 +90,9 @@
 		D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67D823D3927500EA373A /* PhoneTextField.swift */; };
 		D63C67DE23D415A700EA373A /* FaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DD23D415A700EA373A /* FaceView.swift */; };
 		D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */; };
+		D63D5C97265811B000543200 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D5C96265811B000543200 /* URL+Extensions.swift */; };
+		D63D5C98265811B000543200 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D5C96265811B000543200 /* URL+Extensions.swift */; };
+		D63D5C99265811B000543200 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D5C96265811B000543200 /* URL+Extensions.swift */; };
 		D63D63032486A9020037E046 /* InputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D63022486A9020037E046 /* InputAccessoryView.swift */; };
 		D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */; };
 		D63D71B625F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */; };
@@ -816,6 +819,7 @@
 		D63C67D823D3927500EA373A /* PhoneTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextField.swift; sourceTree = "<group>"; };
 		D63C67DD23D415A700EA373A /* FaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceView.swift; sourceTree = "<group>"; };
 		D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FaceDetectionViewController+Extensions.swift"; sourceTree = "<group>"; };
+		D63D5C96265811B000543200 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		D63D63022486A9020037E046 /* InputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputAccessoryView.swift; sourceTree = "<group>"; };
 		D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCaptureViewController.swift; sourceTree = "<group>"; };
 		D63D71B825F025E8004C26F7 /* FaceDetection.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FaceDetection.storyboard; sourceTree = "<group>"; };
@@ -1385,6 +1389,7 @@
 		D6356D9625A36CF30015104F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */,
 				D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */,
 				D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */,
 				D6D1460621D552B100CD8CE4 /* Character+Extensions.swift */,
@@ -1405,8 +1410,8 @@
 				D61EC0E921D3111600204BEE /* String+Extensions.swift */,
 				D6D1503A21D7F47600CD8CE4 /* UI Extensions */,
 				D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */,
-				D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */,
 				D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */,
+				D63D5C96265811B000543200 /* URL+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2572,6 +2577,7 @@
 				D64C6A9C232D6C9200DB7257 /* BubbleCircleView.swift in Sources */,
 				D691794222F6418700340AA3 /* Router.swift in Sources */,
 				D6EDFB5425D490130034A2F6 /* Postable.swift in Sources */,
+				D63D5C97265811B000543200 /* URL+Extensions.swift in Sources */,
 				D64DD8B223CE403D0039DC5A /* SwitchableContentViewController.swift in Sources */,
 				D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */,
 				D6D1501821D5F40F00CD8CE4 /* UICollectionView+Extensions.swift in Sources */,
@@ -2954,6 +2960,7 @@
 				D63DB22125E9990100F6B323 /* Array+Extensions.swift in Sources */,
 				D63DB25C25E9995E00F6B323 /* Reservation.swift in Sources */,
 				D63DB28E25E999AB00F6B323 /* NavigationController.swift in Sources */,
+				D63D5C99265811B000543200 /* URL+Extensions.swift in Sources */,
 				D63DB28D25E999AB00F6B323 /* NavigationBarViewController.swift in Sources */,
 				D63DB29125E999B200F6B323 /* Button.swift in Sources */,
 				D63DB25625E9995700F6B323 /* ClientError.swift in Sources */,
@@ -2981,6 +2988,7 @@
 				D6AC90CB2594F8F80032774D /* Delegated.swift in Sources */,
 				D655191F2589121500B901E4 /* Optional+Extensions.swift in Sources */,
 				D65519042589110A00B901E4 /* MainCoordinator.swift in Sources */,
+				D63D5C98265811B000543200 /* URL+Extensions.swift in Sources */,
 				D6551A3025895E4600B901E4 /* SwitchableContentViewController.swift in Sources */,
 				D63DB21025E96EAF00F6B323 /* NSExtensionContext+Extensions.swift in Sources */,
 				D6551A3A25895E6E00B901E4 /* FaceDetectionViewController.swift in Sources */,

@@ -13,7 +13,6 @@ import SDWebImage
 class PhotoMessageCell: BaseMessageCell {
 
     private var cachedURL: URL?
-    let blurView = BlurView(effect: UIBlurEffect(style: .light))
     let imageView = IndexImageView()
     let bubbleView = MessageBubbleView()
     let textView = MessageTextView()
@@ -25,15 +24,10 @@ class PhotoMessageCell: BaseMessageCell {
         self.bubbleView.addSubview(self.textView)
 
         self.contentView.insertSubview(self.imageView, belowSubview: self.avatarView)
-        self.contentView.insertSubview(self.blurView, aboveSubview: self.imageView)
         self.imageView.imageView.contentMode = .scaleAspectFill
         self.imageView.imageView.clipsToBounds = true
         self.imageView.layer.cornerRadius = 5
         self.imageView.layer.masksToBounds = true
-
-        self.blurView.clipsToBounds = true
-        self.blurView.layer.cornerRadius = 5
-        self.blurView.layer.masksToBounds = true
 
         self.bubbleView.didSelect { [unowned self] in
             self.didTapMessage()
@@ -65,38 +59,21 @@ class PhotoMessageCell: BaseMessageCell {
         guard message.hasMedia() else { return }
 
         if let url = self.cachedURL {
-            self.load(url: url)
+            self.imageView.displayable = url
         } else {
             message.getMediaContentURL()
                 .mainSink(receivedResult: { (result) in
                     switch result {
                     case .success(let urlString):
                         if let url = URL(string: urlString) {
-                            self.load(url: url)
+                            self.cachedURL = url
+                            self.imageView.displayable = url
                         }
                     case .error(_):
                         break
                     }
                 }).store(in: &self.cancellables)
         }
-    }
-
-    private func load(url: URL) {
-        self.cachedURL = url
-
-        SDWebImageManager.shared.loadImage(with: url,
-                                           options: [],
-                                           progress: { (received, expected, url) in
-                                            //let diff: CGFloat = CGFloat(received) / CGFloat(expected)
-                                            //let progress = clamp(diff, 0.0, 1.0)
-
-                                           }, completed: { (image, data, error, cacheType, finished, url) in
-                                            guard url == self.cachedURL else { return }
-                                            self.imageView.displayable = image
-                                            UIView.animate(withDuration: 0.5) {
-                                                self.blurView.effect = nil
-                                            }
-                                           })
     }
 
     override func handleIsConsumed(for message: Messageable) {
@@ -119,7 +96,6 @@ class PhotoMessageCell: BaseMessageCell {
         super.layoutContent(with: attributes)
 
         self.imageView.frame = attributes.attributes.attachmentFrame
-        self.blurView.frame = attributes.attributes.attachmentFrame
         self.textView.frame = attributes.attributes.textViewFrame
         self.bubbleView.frame = attributes.attributes.bubbleViewFrame
         self.bubbleView.layer.maskedCorners = attributes.attributes.maskedCorners
