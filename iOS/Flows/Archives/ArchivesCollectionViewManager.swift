@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import Parse
 
 class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionViewManager.SectionType> {
 
@@ -103,6 +104,8 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
     private var user: User?
     private var totalCount: Int = 0
 
+    var liveQuery: PFQuery<PFObject>?
+
     override func initialize() {
         super.initialize()
 
@@ -133,6 +136,8 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             }
             self.collectionView.animationView.stop()
         }.store(in: &self.cancellables)
+
+        self.subscribeToUpdates(for: user)
     }
 
     func appendPosts(completion: CompletionOptional) {

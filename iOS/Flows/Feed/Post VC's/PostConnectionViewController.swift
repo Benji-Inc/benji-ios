@@ -47,7 +47,7 @@ class PostConnectionViewController: PostViewController {
             return
         }
 
-        Connection.localThenNetworkQuery(for: connectionId)
+        Connection.getObject(with: connectionId)
             .mainSink { result in
                 switch result {
                 case .success(let connection):

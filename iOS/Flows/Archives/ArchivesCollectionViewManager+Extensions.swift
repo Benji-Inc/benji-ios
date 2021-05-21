@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ParseLiveQuery
 
 extension ArchivesCollectionViewManager {
 
@@ -41,5 +42,32 @@ extension ArchivesCollectionViewManager {
 
         // Create and return a UIMenu with the share action
         return UIMenu(title: "Options", children: [open])
+    }
+
+    func subscribeToUpdates(for user: User) {
+        if let query = self.liveQuery {
+            Client.shared.unsubscribe(query)
+        }
+
+        guard let query = Post.query() else { return }
+        self.liveQuery = query
+
+        query.whereKey("author", equalTo: user)
+        let subscription = Client.shared.subscribe(query)
+
+        subscription.handleEvent { query, event in
+            switch event {
+            case .entered(_):
+                print("ENTERED")
+            case .left(_):
+                print("LEFT")
+            case .created(_):
+                print("CREATED")
+            case .updated(_):
+                print("UPDATED")
+            case .deleted(_):
+                print("DELETED")
+            }
+        }
     }
 }
