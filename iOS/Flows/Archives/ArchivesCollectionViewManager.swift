@@ -16,9 +16,11 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         case user
         case upcoming
         case posts
+        case empty
     }
 
     private let archiveConfig = ManageableCellRegistration<ArchiveCell>().provider
+    private let emptyConfig = ManageableCellRegistration<ArchiveEmptyCell>().provider
     private let userConfig = ManageableCellRegistration<UserHeaderCell>().provider
     private let footerConfig = ManageableFooterRegistration<ArchiveFooterView>().provider
     private let headerConfig = ManageableHeaderRegistration<ArchiveHeaderView>().provider
@@ -98,7 +100,24 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
 
                 section.boundarySupplementaryItems = [footerItem, headerItem]
             }
+            return section
 
+        case .empty:
+
+            // Item
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+            let inset: CGFloat = 1.5
+            item.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
+
+            // Group
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.5))
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+            // Section
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Theme.contentOffset, bottom: 0, trailing: Theme.contentOffset)
 
             return section
         }
@@ -185,8 +204,13 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             return self.upcomingPosts
         case .posts:
             return self.posts
-        }
+        case .empty:
+            if !self.upcomingPosts.isEmpty || !self.posts.isEmpty {
+                return []
+            }
 
+            return [EmptyCellItem()]
+        }
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
@@ -199,6 +223,10 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             return self.collectionView.dequeueManageableCell(using: self.archiveConfig,
                                                              for: indexPath,
                                                              item: item as? Post)
+        case .empty:
+            return self.collectionView.dequeueManageableCell(using: self.emptyConfig,
+                                                             for: indexPath,
+                                                             item: item as? EmptyCellItem)
         }
     }
 
@@ -260,6 +288,8 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             post = self.upcomingPosts[safe: indexPath.row]
         case .posts:
             post = self.posts[safe: indexPath.row]
+        case .empty:
+            return nil
         }
 
         guard let p = post, let cell = collectionView.cellForItem(at: indexPath) as? ArchiveCell else { return nil }

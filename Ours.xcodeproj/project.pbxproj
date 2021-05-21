@@ -93,6 +93,7 @@
 		D63D5C97265811B000543200 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D5C96265811B000543200 /* URL+Extensions.swift */; };
 		D63D5C98265811B000543200 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D5C96265811B000543200 /* URL+Extensions.swift */; };
 		D63D5C99265811B000543200 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D5C96265811B000543200 /* URL+Extensions.swift */; };
+		D63D5C9B26585D1300543200 /* ArchiveEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D5C9A26585D1300543200 /* ArchiveEmptyCell.swift */; };
 		D63D63032486A9020037E046 /* InputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D63022486A9020037E046 /* InputAccessoryView.swift */; };
 		D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */; };
 		D63D71B625F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */; };
@@ -820,6 +821,7 @@
 		D63C67DD23D415A700EA373A /* FaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceView.swift; sourceTree = "<group>"; };
 		D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FaceDetectionViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D63D5C96265811B000543200 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
+		D63D5C9A26585D1300543200 /* ArchiveEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveEmptyCell.swift; sourceTree = "<group>"; };
 		D63D63022486A9020037E046 /* InputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputAccessoryView.swift; sourceTree = "<group>"; };
 		D63D71B425F00ED8004C26F7 /* ImageCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCaptureViewController.swift; sourceTree = "<group>"; };
 		D63D71B825F025E8004C26F7 /* FaceDetection.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = FaceDetection.storyboard; sourceTree = "<group>"; };
@@ -1568,6 +1570,7 @@
 			isa = PBXGroup;
 			children = (
 				D660543C262F213C002F74F8 /* ArchiveCell.swift */,
+				D63D5C9A26585D1300543200 /* ArchiveEmptyCell.swift */,
 				D67B7FF7263473DD00AD9DA8 /* ArchiveFooterView.swift */,
 				D66C11C92641926100F38957 /* ArchiveHeaderView.swift */,
 				D6B268FE264B02AA00EFDA17 /* ArchivePreviewViewController.swift */,
@@ -2583,6 +2586,7 @@
 				D6D1501821D5F40F00CD8CE4 /* UICollectionView+Extensions.swift in Sources */,
 				D61D38E5248C0BA600BE457B /* InputAccessoryView+Connection.swift in Sources */,
 				D6730ECB2649F14F00B5DC16 /* AVURLAsset+Extension.swift in Sources */,
+				D63D5C9B26585D1300543200 /* ArchiveEmptyCell.swift in Sources */,
 				D64C6A97232D5C0400DB7257 /* TCHMember+Extensions.swift in Sources */,
 				D6815DBB22EE1F1400E71251 /* PostsCollectionManager.swift in Sources */,
 				D63C67DE23D415A700EA373A /* FaceView.swift in Sources */,

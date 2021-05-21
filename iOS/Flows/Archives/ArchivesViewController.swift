@@ -37,7 +37,7 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
         self.collectionViewManager.$onSelectedItem.mainSink { (result) in
             guard let selection = result else { return }
             switch selection.section {
-            case .user:
+            case .user, .empty:
                 break 
             case .posts, .upcoming:
                 if let post = selection.item as? Post {
