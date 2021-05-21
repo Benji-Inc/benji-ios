@@ -17,18 +17,14 @@ extension TCHMessageOptions {
             if mediaItem.isNil {
                 self.withBody(body)
             }
-            self.withAttributes(attributes) { (result) in
-                if result.isSuccessful() {
-                    if let item = mediaItem {
-                        self.with(mediaItem: item)
-                    }
-                    promise(.success(self))
-                } else if let error = result.error {
-                    promise(.failure(error))
-                } else {
-                    promise(.failure(ClientError.message(detail: "Failed to create options for message.")))
-                }
+
+            // Twilio fails to call completion for this function.
+            self.withAttributes(attributes, completion: nil)
+
+            if let item = mediaItem {
+                self.with(mediaItem: item)
             }
+            promise(.success(self))
         }
     }
 
