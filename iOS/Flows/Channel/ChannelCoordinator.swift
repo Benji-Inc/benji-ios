@@ -9,12 +9,20 @@
 import Foundation
 import TMROLocalization
 import Photos
+import PhotosUI
 import Combine
 
 class ChannelCoordinator: PresentableCoordinator<Void> {
 
     lazy var channelVC = ChannelViewController(delegate: self)
-    private lazy var imagePickerVC = ImagePickerViewController()
+    private lazy var cameraVC = ImagePickerViewController()
+    private lazy var imagePickerVC: PHPickerViewController = {
+        var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
+        config.selectionLimit = 1
+        config.filter = .any(of: [.images, .videos])
+        let vc = PHPickerViewController.init(configuration: config)
+        return vc
+    }()
     private var cancellables = Set<AnyCancellable>()
 
     init(router: Router,
@@ -37,16 +45,16 @@ class ChannelCoordinator: PresentableCoordinator<Void> {
 
         NotificationCenter.default.publisher(for: .didTapPhotoCamera)
             .mainSink { (note) in
-                self.presentPicker(for: .camera)
+                self.presentCamera()
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: .didTapPhotoLibrary)
             .removeDuplicates()
             .mainSink { (note) in
-                self.presentPicker(for: .photoLibrary)
+                self.presentPicker()
             }.store(in: &self.cancellables)
 
-        self.imagePickerVC.delegate = self
+        self.cameraVC.delegate = self
     }
 }
 
@@ -85,43 +93,66 @@ extension ChannelCoordinator: ChannelViewControllerDelegate {
     }
 }
 
-extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHPickerViewControllerDelegate {
 
-    @objc func didTapPhotoCamera(_ notification: Notification) {
-        self.presentPicker(for: .camera)
-    }
+    private func presentCamera() {
 
-    @objc func didTapPhotoLibrary(_ notification: Notification) {
-        self.presentPicker(for: .photoLibrary)
-    }
+        let alert = UIAlertController(title: "Coming soon", message: "Taking pictures is currently unavailable.", preferredStyle: .alert)
 
-    private func presentPicker(for type: UIImagePickerController.SourceType) {
-        guard self.router.topmostViewController != self.imagePickerVC, !self.imagePickerVC.isBeingPresented else { return }
+        let ok = UIAlertAction(title: "Ok", style: .cancel, handler: nil)
 
-        self.imagePickerVC.sourceType = type
-        self.imagePickerVC.dismissHandlers.append { [unowned self] in
-            UIView.animate(withDuration: 0.2) {
-                self.channelVC.messageInputAccessoryView.alpha = 1.0
-            }
-        }
-        self.channelVC.present(self.imagePickerVC, animated: true, completion: nil)
+        alert.addAction(ok)
+
+        self.channelVC.present(alert, animated: true, completion: nil)
+//        guard self.router.topmostViewController != self.cameraVC, !self.cameraVC.isBeingPresented else { return }
+//
+//        self.cameraVC.sourceType = .camera
+////        self.cameraVC.dismissHandlers.append { [unowned self] in
+////            UIView.animate(withDuration: 0.2) {
+////                self.channelVC.messageInputAccessoryView.alpha = 1.0
+////            }
+////        }
+//        self.channelVC.present(self.cameraVC, animated: true, completion: nil)
     }
 
     func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
 
+        // Need to convert UIImage to an Attachment
+
+////        defer {
+////            self.cameraVC.dismiss(animated: true, completion: nil)
+////        }
+//
+//        guard let asset = info[.phAsset] as? PHAsset else {
+//            print("Image not found!")
+//            return
+//        }
+//
+//        let attachment = Attachment(asset: asset)
+//        self.channelVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
+//        self.channelVC.messageInputAccessoryView.updateInputType()
+    }
+
+    private func presentPicker() {
+        guard self.router.topmostViewController != self.imagePickerVC, !self.imagePickerVC.isBeingPresented else { return }
+
+        self.imagePickerVC.delegate = self
+        self.channelVC.present(self.imagePickerVC, animated: true, completion: nil)
+    }
+
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         defer {
             self.imagePickerVC.dismiss(animated: true, completion: nil)
         }
 
-        guard let asset = info[.phAsset] as? PHAsset else {
-            print("Image not found!")
-            return
+        let identifiers: [String] = results.compactMap(\.assetIdentifier)
+        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
+        if let asset = fetchResult.firstObject {
+            let attachment = Attachment(asset: asset)
+            self.channelVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
+            self.channelVC.messageInputAccessoryView.updateInputType()
         }
-
-        let attachment = Attachment(asset: asset)
-        self.channelVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
-        self.channelVC.messageInputAccessoryView.updateInputType()
     }
 }
 
