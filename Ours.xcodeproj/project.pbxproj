@@ -640,6 +640,7 @@
 		D6DF870725A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
 		D6E0ED4F239CA8950073B33E /* PostChannelInviteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E0ED4E239CA8950073B33E /* PostChannelInviteViewController.swift */; };
 		D6E0ED53239CBDA40073B33E /* PostUnreadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E0ED52239CBDA40073B33E /* PostUnreadViewController.swift */; };
+		D6E33899265808EC00BE3C24 /* TwilioChatClient in Frameworks */ = {isa = PBXBuildFile; productRef = D6E33898265808EC00BE3C24 /* TwilioChatClient */; };
 		D6E4C7FB238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */; };
 		D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E65F18237791650061AA67 /* ManageableCell.swift */; };
 		D6E80C8B23B2D1180012D438 /* PostNotificationPermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E80C8A23B2D1180012D438 /* PostNotificationPermissionsViewController.swift */; };
@@ -1125,6 +1126,7 @@
 				D658C7DD24425E410027D12E /* HealthKit.framework in Frameworks */,
 				D5913FD2104D7480AB2029C6 /* Pods_Ours.framework in Frameworks */,
 				D6730ECE264ACB1200B5DC16 /* LightCompressor in Frameworks */,
+				D6E33899265808EC00BE3C24 /* TwilioChatClient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2203,6 +2205,7 @@
 			name = Ours;
 			packageProductDependencies = (
 				D6730ECD264ACB1200B5DC16 /* LightCompressor */,
+				D6E33898265808EC00BE3C24 /* TwilioChatClient */,
 			);
 			productName = Benji;
 			productReference = D61EC0BC21D3071400204BEE /* Ours.app */;
@@ -2283,6 +2286,7 @@
 			mainGroup = D61EC0B321D3071400204BEE;
 			packageReferences = (
 				D6730ECC264ACB1200B5DC16 /* XCRemoteSwiftPackageReference "LightCompressor_iOS" */,
+				D6E33897265808EC00BE3C24 /* XCRemoteSwiftPackageReference "twilio-chat-ios" */,
 			);
 			productRefGroup = D61EC0BD21D3071400204BEE /* Products */;
 			projectDirPath = "";
@@ -3476,6 +3480,14 @@
 				minimumVersion = 0.1.8;
 			};
 		};
+		D6E33897265808EC00BE3C24 /* XCRemoteSwiftPackageReference "twilio-chat-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twilio/twilio-chat-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -3483,6 +3495,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D6730ECC264ACB1200B5DC16 /* XCRemoteSwiftPackageReference "LightCompressor_iOS" */;
 			productName = LightCompressor;
+		};
+		D6E33898265808EC00BE3C24 /* TwilioChatClient */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6E33897265808EC00BE3C24 /* XCRemoteSwiftPackageReference "twilio-chat-ios" */;
+			productName = TwilioChatClient;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

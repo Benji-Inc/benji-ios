@@ -9,6 +9,15 @@
           "revision": "fe196a51b76a722683a2e7aebd9aff9987ee1365",
           "version": "0.1.8"
         }
+      },
+      {
+        "package": "TwilioChatClient",
+        "repositoryURL": "https://github.com/twilio/twilio-chat-ios",
+        "state": {
+          "branch": null,
+          "revision": "5ecf02f8dba6d2edb0744e36e5561a97272b0160",
+          "version": "5.0.0"
+        }
       }
     ]
   },
