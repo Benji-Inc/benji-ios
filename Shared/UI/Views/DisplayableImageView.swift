@@ -11,6 +11,7 @@ import Parse
 import SDWebImage
 import UIKit
 import Combine
+import Lottie
 
 class DisplayableImageView: View {
 
@@ -20,7 +21,7 @@ class DisplayableImageView: View {
     lazy var blurEffect = UIBlurEffect(style: .systemMaterialDark)
     lazy var blurView = BlurView(effect: self.blurEffect)
 
-    lazy var loadingIndicator = UIActivityIndicatorView(style: .medium)
+    let animationView = AnimationView(name: "loading")
 
     let symbolImageView = UIImageView(image: UIImage(systemName: "exclamationmark.triangle"))
 
@@ -50,8 +51,8 @@ class DisplayableImageView: View {
         self.imageView.contentMode = .scaleAspectFill
 
         self.addSubview(self.blurView)
-        self.blurView.contentView.addSubview(self.loadingIndicator)
-        self.loadingIndicator.hidesWhenStopped = true
+        self.blurView.contentView.addSubview(self.animationView)
+        self.animationView.loopMode = .loop
 
         self.blurView.contentView.addSubview(self.symbolImageView)
         self.symbolImageView.tintColor = Color.white.color
@@ -65,7 +66,7 @@ class DisplayableImageView: View {
         self.imageView.expandToSuperviewSize()
         self.blurView.expandToSuperviewSize()
 
-        self.loadingIndicator.centerOnXAndY()
+        self.animationView.centerOnXAndY()
 
         self.symbolImageView.squaredSize = self.blurView.width * 0.25
         self.symbolImageView.centerOnXAndY()
@@ -73,7 +74,7 @@ class DisplayableImageView: View {
 
     private func updateImageView(with displayable: ImageDisplayable) {
         self.symbolImageView.alpha = 0.0
-        self.loadingIndicator.startAnimating()
+        self.animationView.play()
 
         if let photo = displayable.image {
             self.showResult(for: photo)
@@ -139,7 +140,7 @@ class DisplayableImageView: View {
 
         self.symbolImageView.alpha = 0.0
         self.displayable = nil
-        self.loadingIndicator.stopAnimating()
+        self.animationView.stop()
         self.blurView.effect = self.blurEffect
     }
 
@@ -150,7 +151,7 @@ class DisplayableImageView: View {
             self.blurView.effect = image.isNil ? self.blurEffect : nil
         }
 
-        self.loadingIndicator.stopAnimating()
+        self.animationView.stop()
         self.imageView.image = image
     }
 }

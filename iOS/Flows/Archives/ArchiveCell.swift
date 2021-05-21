@@ -43,7 +43,7 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
         let file = item.preview ?? item.file
 
         if item.isLocked {
-            self.imageView.loadingIndicator.stopAnimating()
+            self.imageView.animationView.stop()
             self.imageView.symbolImageView.image = UIImage(systemName: "lock.fill")
             self.imageView.layoutNow()
         } else {
