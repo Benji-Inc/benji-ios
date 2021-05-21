@@ -38,6 +38,8 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
 
     func configure(with item: Post) {
 
+        self.reset()
+
         let file = item.preview ?? item.file
 
         if item.isLocked {
@@ -73,6 +75,10 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.reset()
+    }
+
+    override func reset() {
         self.imageView.symbolImageView.image = UIImage(systemName: "exclamationmark.triangle")
         self.imageView.displayable = nil
         self.label.text = nil

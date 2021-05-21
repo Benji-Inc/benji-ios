@@ -55,7 +55,7 @@ class TypingIndicatorCell: UICollectionViewCell {
         super.layoutSubviews()
 
         self.avatarView.setSize(for: 36)
-        self.avatarView.left = Theme.contentOffset
+        self.avatarView.left = Theme.contentOffset.half
 
         let insets = UIEdgeInsets(top: 4, left: self.avatarView.right + 4, bottom: 2, right: 0)
         self.typingBubble.frame = self.bounds.inset(by: insets)
