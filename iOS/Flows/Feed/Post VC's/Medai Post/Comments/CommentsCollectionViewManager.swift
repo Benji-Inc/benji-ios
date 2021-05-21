@@ -12,7 +12,7 @@ import ParseLiveQuery
 
 class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionViewManager.SectionType> {
 
-    enum SectionType: Int, ManagerSectionType {
+    enum SectionType: Int, ManagerSectionType, CaseIterable {
         case comments = 0
     }
 
@@ -108,6 +108,10 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
             }) ?? []
             self.collectionView.animationView.stop()
         })
+    }
+
+    override func getSections() -> [SectionType] {
+        return SectionType.allCases
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {

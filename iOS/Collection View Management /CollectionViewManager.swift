@@ -3,7 +3,7 @@
 import Foundation
 import Combine
 
-protocol ManagerSectionType: CaseIterable, Hashable, RawRepresentable where Self.RawValue == Int {}
+protocol ManagerSectionType: Hashable, RawRepresentable where Self.RawValue == Int {}
 
 class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
@@ -68,14 +68,14 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     }
 
     @discardableResult
-    func loadSnapshot(animationCycle: AnimationCycle? = nil) -> Future<Void, Never> {
+    func loadSnapshot(animationCycle: AnimationCycle? = nil, animatingDifferences: Bool = false) -> Future<Void, Never> {
         return Future { promise in
 
             let snapshot = self.createSnapshot()
 
             if let cycle = animationCycle {
                 self.animateOut(position: cycle.outToPosition, concatenate: cycle.shouldConcatenate) { [unowned self] in
-                    self.dataSource.apply(snapshot, animatingDifferences: false) {
+                    self.dataSource.apply(snapshot, animatingDifferences: animatingDifferences) {
                         self.animateIn(position: cycle.inFromPosition,
                                        concatenate: cycle.shouldConcatenate,
                                        scrollToEnd: cycle.scrollToEnd) {
@@ -96,11 +96,10 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     func createSnapshot() -> NSDiffableDataSourceSnapshot<SectionType, AnyHashable> {
         var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
 
-        if let allCases = SectionType.allCases as? [SectionType] {
-            snapshot.appendSections(allCases)
-            allCases.forEach { (section) in
-                snapshot.appendItems(self.getItems(for: section), toSection: section)
-            }
+        let allCases = self.getSections()
+        snapshot.appendSections(allCases)
+        allCases.forEach { (section) in
+            snapshot.appendItems(self.getItems(for: section), toSection: section)
         }
 
         return snapshot
@@ -109,10 +108,10 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     func reset(animate: Bool = false) {
         self.selectedIndexPaths = []
         var snapshot = self.dataSource.snapshot()
-        if let all = SectionType.allCases as? [SectionType] {
-            snapshot.deleteSections(all)
-            snapshot.deleteAllItems()
-        }
+
+        let all = self.getSections()
+        snapshot.deleteSections(all)
+        snapshot.deleteAllItems()
 
         self.dataSource.apply(snapshot, animatingDifferences: animate, completion: {
             self.collectionView.contentSize = .zero
@@ -125,6 +124,10 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     }
 
     // MARK: Item Overrides
+
+    func getSections() -> [SectionType] {
+        fatalError("getSections() not implemented")
+    }
 
     func getItems(for section: SectionType) -> [AnyHashable] {
         fatalError("getItems() not implemented")

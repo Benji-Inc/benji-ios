@@ -12,7 +12,7 @@ import Combine
 
 class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionViewManager.SectionType> {
 
-    enum SectionType: Int, ManagerSectionType {
+    enum SectionType: Int, ManagerSectionType, CaseIterable {
         case channels = 0
     }
 
@@ -88,6 +88,10 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
             }
             self.collectionView.animationView.stop()
         }.store(in: &self.cancellables)
+    }
+
+    override func getSections() -> [SectionType] {
+        return SectionType.allCases
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {

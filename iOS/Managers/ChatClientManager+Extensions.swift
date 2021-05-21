@@ -10,9 +10,6 @@ import Foundation
 import TwilioChatClient
 
 typealias CompletionHandler = (_ success: Bool, _ error: Error?) -> Void
-typealias ClientCompletion = (_ client: TwilioChatClient, _ error: Error?) -> Void
-typealias ChannelsCompletion = (_ channel: [TCHChannel], _ error: Error?) -> Void
-typealias ChannelCreationCompletion = (_ channel: TCHChannel?, _ error: Error?) -> Void
 
 struct ChatClientUpdate {
     var client: TwilioChatClient

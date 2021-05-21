@@ -10,7 +10,7 @@ import Foundation
 
 class AttachmentCollectionViewManager: CollectionViewManager<AttachmentCollectionViewManager.SectionType> {
 
-    enum SectionType: Int, ManagerSectionType {
+    enum SectionType: Int, ManagerSectionType, CaseIterable {
         case photos
     }
 
@@ -24,6 +24,10 @@ class AttachmentCollectionViewManager: CollectionViewManager<AttachmentCollectio
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
         return AttachmentsManager.shared.attachments
+    }
+
+    override func getSections() -> [SectionType] {
+        return SectionType.allCases
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {

@@ -17,11 +17,7 @@ extension ArchivesCollectionViewManager {
 
         let confirm = UIAction(title: "Confirm", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
 
-            post.deleteInBackground { completed, error in
-                ToastScheduler.shared.schedule(toastType: .basic(displayable: UIImage(systemName: "trash")!,
-                                                                 title: "Post Deleted", description: "You have successfully deleted your post"))
-                self.reloadForExistingUser()
-            }
+            post.deleteInBackground()
         }
 
         let deleteMenu = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [confirm, neverMind])
@@ -56,17 +52,26 @@ extension ArchivesCollectionViewManager {
         let subscription = Client.shared.subscribe(query)
 
         subscription.handleEvent { query, event in
-            switch event {
-            case .entered(_):
-                print("ENTERED")
-            case .left(_):
-                print("LEFT")
-            case .created(_):
-                print("CREATED")
-            case .updated(_):
-                print("UPDATED")
-            case .deleted(_):
-                print("DELETED")
+            runMain {
+                switch event {
+                case .entered(_):
+                    break 
+                case .left(_):
+                    print("LEFT")
+                case .created(_):
+                    self.loadPosts(for: user)
+                case .updated(let object):
+                    guard let post = object as? Post, post.type == .media else { return }
+                    ToastScheduler.shared.schedule(toastType: .basic(displayable: post.file!,
+                                                                     title: "Post Updated", description: "Post was successfully updated."))
+
+                case .deleted(let object):
+                    guard let post = object as? Post, post.type == .media else { return }
+                    ToastScheduler.shared.schedule(toastType: .basic(displayable: UIImage(systemName: "trash")!,
+                                                                     title: "Post Deleted", description: "Post was successfully deleted from your archive."))
+
+                    self.reloadForExistingUser()
+                }
             }
         }
     }

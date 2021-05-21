@@ -12,7 +12,7 @@ import Parse
 
 class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionViewManager.SectionType> {
 
-    enum SectionType: Int, ManagerSectionType {
+    enum SectionType: Int, ManagerSectionType, CaseIterable {
         case user
         case upcoming
         case posts
@@ -61,7 +61,8 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             let section = NSCollectionLayoutSection(group: group)
             section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Theme.contentOffset, bottom: 0, trailing: Theme.contentOffset)
 
-            let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40))
+            let headerHeight: CGFloat = self.getItems(for: .upcoming).count > 0 ? 40 : 0
+            let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(headerHeight))
             let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
 
             section.boundarySupplementaryItems = [headerItem]
@@ -89,7 +90,8 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
             let footerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(160))
             let footerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerItemSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
 
-            let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40))
+            let headerHeight: CGFloat = self.getItems(for: .posts).count > 0 ? 40 : 0
+            let headerItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(headerHeight))
             let headerItem = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerItemSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
 
             section.boundarySupplementaryItems = [headerItem, footerItem]
@@ -163,6 +165,10 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         }.store(in: &self.cancellables)
     }
 
+    override func getSections() -> [SectionType] {
+        return SectionType.allCases
+    }
+
     override func getItems(for section: SectionType) -> [AnyHashable] {
         switch section {
         case .user:
@@ -196,11 +202,10 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
 
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-
             let header = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
-            if section == .upcoming {
+            if section == .upcoming, !self.upcomingPosts.isEmpty {
                 header.label.setText("Upcoming")
-            } else {
+            } else if section == .posts, !self.posts.isEmpty {
                 header.label.setText("Previous")
             }
             header.layoutNow()

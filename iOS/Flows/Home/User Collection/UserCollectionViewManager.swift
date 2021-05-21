@@ -11,7 +11,7 @@ import Combine
 
 class UserCollectionViewManger: CollectionViewManager<UserCollectionViewManger.SectionType> {
 
-    enum SectionType: Int, ManagerSectionType {
+    enum SectionType: Int, ManagerSectionType, CaseIterable {
         case feed = 0
     }
 
@@ -72,6 +72,10 @@ class UserCollectionViewManger: CollectionViewManager<UserCollectionViewManger.S
             self.collectionView.animationView.stop()
             completion?()
         }.store(in: &self.cancellables)
+    }
+
+    override func getSections() -> [SectionType] {
+        return SectionType.allCases
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
