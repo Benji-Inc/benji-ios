@@ -32,7 +32,7 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
         switch sectionType {
         case .user:
             // Item
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
             // Group
@@ -41,7 +41,7 @@ class ArchivesCollectionViewManager: CollectionViewManager<ArchivesCollectionVie
 
             // Section
             let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: UserCollectionViewController.height, leading: Theme.contentOffset, bottom: 0, trailing: Theme.contentOffset)
+            section.contentInsets = NSDirectionalEdgeInsets(top: UserCollectionViewController.height, leading: 8, bottom: 0, trailing: 8)
 
             return section
         case .upcoming:

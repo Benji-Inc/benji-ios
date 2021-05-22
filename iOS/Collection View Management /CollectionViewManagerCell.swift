@@ -25,7 +25,7 @@ struct ManageableHeaderRegistration<Header: UICollectionReusableView> {
 }
 
 // A base class that other cells managed by a CollectionViewManager can inherit from.
-class CollectionViewManagerCell: UICollectionViewCell {
+class CollectionViewManagerCell: UICollectionViewListCell {
 
     var onLongPress: (() -> Void)?
     var cancellables = Set<AnyCancellable>()

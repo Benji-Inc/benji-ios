@@ -8,58 +8,50 @@
 
 import Foundation
 import Combine
+import TMROLocalization
 
 class UserHeaderCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = User
 
     var currentItem: User?
 
-    let nameLabel = Label(font: .display)
-    let ritualLabel = Label(font: .regular, textColor: .background4)
-
-    override func initializeSubviews() {
-        super.initializeSubviews()
-
-        self.contentView.addSubview(self.nameLabel)
-        self.contentView.addSubview(self.ritualLabel)
-    }
-
     func configure(with user: User) {
-
-        user.retrieveDataIfNeeded()
-            .mainSink(receiveValue: { user in
-                self.nameLabel.setText(user.fullName)
-                self.setTextFor(ritual: user.ritual)
-                self.layoutNow()
-            }).store(in: &self.cancellables)
+            user.retrieveDataIfNeeded()
+                .mainSink(receiveValue: { user in
+                    self.fetchRitual(for: user)
+                    self.setNeedsUpdateConfiguration()
+                }).store(in: &self.cancellables)
     }
 
-    func setTextFor(ritual: Ritual?) {
-        if let r = ritual {
-            r.fetchIfNeededInBackground(block: { (object, error) in
-                if let ritual = object as? Ritual, let date = ritual.date {
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "h:mm a"
-                    let string = formatter.string(from: date)
-                    self.ritualLabel.setText("Ritual starts at: \(string)")
-                    self.layoutNow()
+    func fetchRitual(for user: User) {
+        user.ritual?.retrieveDataIfNeeded()
+            .mainSink(receivedResult: { result in
+
+                var config = self.defaultContentConfiguration()
+                let titleFont = FontType.display
+                let title = NSAttributedString(string: user.fullName, attributes: [NSAttributedString.Key.font: titleFont.font,
+                                                                                   NSAttributedString.Key.kern: titleFont.kern,
+                                                                                   NSAttributedString.Key.foregroundColor: Color.white.color])
+                config.attributedText =  title
+
+                switch result {
+                case .success(let ritual):
+                    if let date = ritual.date {
+                        let formatter = DateFormatter()
+                        formatter.dateFormat = "h:mm a"
+                        let string = formatter.string(from: date)
+                        let descriptionFont = FontType.regular
+                        let description = NSAttributedString(string: "Ritual starts at: \(string)", attributes: [NSAttributedString.Key.font: descriptionFont.font,
+                                                                                           NSAttributedString.Key.kern: descriptionFont.kern,
+                                                                                           NSAttributedString.Key.foregroundColor: Color.background4.color])
+                        config.secondaryAttributedText =  description
+                    }
+                case .error(_):
+                    break
                 }
-            })
 
-        } else {
-            self.ritualLabel.setText("No ritual set")
-        }
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.nameLabel.setSize(withWidth: self.width)
-        self.nameLabel.pin(.top, padding: Theme.contentOffset.half)
-        self.nameLabel.pin(.left)
-
-        self.ritualLabel.setSize(withWidth: self.width)
-        self.ritualLabel.match(.top, to: .bottom, of: self.nameLabel, offset: 0)
-        self.ritualLabel.pin(.left)
+                self.contentConfiguration = config
+                //self.setNeedsUpdateConfiguration()
+            }).store(in: &self.cancellables)
     }
 }
