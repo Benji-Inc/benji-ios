@@ -636,6 +636,7 @@
 		D6D39281265AAFB900E49F1E /* lock.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39280265AAFB900E49F1E /* lock.json */; };
 		D6D39282265AAFB900E49F1E /* lock.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39280265AAFB900E49F1E /* lock.json */; };
 		D6D39283265AAFB900E49F1E /* lock.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39280265AAFB900E49F1E /* lock.json */; };
+		D6D39286265ACCAE00E49F1E /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D39285265ACCAE00E49F1E /* Notice.swift */; };
 		D6D4C5B3262096220026D7A2 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */; };
 		D6D4C5B5262096370026D7A2 /* CommentsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */; };
 		D6D4C5B72620965E0026D7A2 /* CommentsCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */; };
@@ -1078,6 +1079,7 @@
 		D6D39278265AAAA700E49F1E /* MicroAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroAnimation.swift; sourceTree = "<group>"; };
 		D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnimationView+Extensions.swift"; sourceTree = "<group>"; };
 		D6D39280265AAFB900E49F1E /* lock.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lock.json; sourceTree = "<group>"; };
+		D6D39285265ACCAE00E49F1E /* Notice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
 		D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionView.swift; sourceTree = "<group>"; };
 		D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionViewManager.swift; sourceTree = "<group>"; };
@@ -1887,6 +1889,7 @@
 			children = (
 				D6D4C5BA262096C10026D7A2 /* Comment.swift */,
 				D67FF5A225F6BC3C005C3E1E /* Feed.swift */,
+				D6D39285265ACCAE00E49F1E /* Notice.swift */,
 				D6EDFB4B25D48F2B0034A2F6 /* Post.swift */,
 				D66F0FC622BF004300BA277D /* PostType.swift */,
 			);
@@ -2055,6 +2058,7 @@
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				D6D39284265ACC9200E49F1E /* Notification */,
 				D671E1ED2640297900BF2B8D /* Toast */,
 				D6605435262F20F6002F74F8 /* Archives */,
 				D6432BF122D8282E0016001A /* Channel */,
@@ -2118,6 +2122,13 @@
 				D642739822CA79B60088256B /* UIWindow+Extensions.swift */,
 			);
 			path = "UI Extensions";
+			sourceTree = "<group>";
+		};
+		D6D39284265ACC9200E49F1E /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Notification;
 			sourceTree = "<group>";
 		};
 		D6D4C5B1262096010026D7A2 /* Medai Post */ = {
@@ -2518,6 +2529,7 @@
 				D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
 				D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
+				D6D39286265ACCAE00E49F1E /* Notice.swift in Sources */,
 				D6B26903264C7D2000EFDA17 /* AnimatingTapView.swift in Sources */,
 				D61D38E3248C07F700BE457B /* InputAccessoryView+Animation.swift in Sources */,
 				D614073D263E240D00B84605 /* RitualInputContentView.swift in Sources */,
