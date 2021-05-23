@@ -63,25 +63,27 @@ class DisplayableImageView: View {
         self.$state.mainSink { state in
             switch state {
             case .initial:
-                self.reset()
+                self.animationView.reset()
+                self.displayable = nil
+                self.animationView.stop()
+                self.blurView.effect = self.blurEffect
             case .loading:
                 if self.animationView.isAnimationPlaying {
                     self.animationView.stop()
                 }
-                self.animationView.load(animation: .loading)
-                self.animationView.loopMode = .loop
-                self.animationView.play()
+                self.animationView.load(animation: .pie)
             case .error:
                 if self.animationView.isAnimationPlaying {
                     self.animationView.stop()
                 }
                 self.animationView.load(animation: .error)
-                self.animationView.loopMode = .playOnce
+                self.animationView.loopMode = .loop
                 self.animationView.play()
             case .success:
                 if self.animationView.isAnimationPlaying {
                     self.animationView.stop()
                 }
+                self.animationView.reset()
             }
         }.store(in: &self.cancellables)
     }
@@ -123,19 +125,32 @@ class DisplayableImageView: View {
     }
 
     private func downloadAndSetImage(url: URL) {
-        self.imageView.sd_setImage(with: url, completed: { [weak self] (image, error, imageCacheType, imageUrl) in
+        self.imageView.sd_setImage(with: url, placeholderImage: nil, options: []) { received, expected, url in
+            if self.animationView.microAnimation == .pie {
+                let progress: Float
+                if received > 0 {
+                    progress = (Float(expected) - Float(received)) / Float(expected) * 100
+                } else {
+                    progress = 0
+                }
+                self.animationView.currentProgress = AnimationProgressTime(progress)
+            }
+        } completed: { [weak self] image, error, cacheType, url in
             guard let `self` = self, let downloadedImage = image else {
                 self?.showResult(for: nil)
                 return
             }
 
             self.showResult(for: downloadedImage)
-        })
+        }
     }
 
     private func downloadAndSet(file: PFFileObject) {
         file.retrieveDataInBackground { progress in
-            // show progress
+            if self.animationView.microAnimation == .pie {
+                let time = AnimationProgressTime(progress)
+                self.animationView.currentProgress = time
+            }
         }.mainSink { [weak self] result in
             guard let `self` = self else { return }
 

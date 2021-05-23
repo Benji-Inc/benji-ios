@@ -32,4 +32,9 @@ extension AnimationView {
         self.microAnimation = animation
         self.animation = Animation.named(animation.rawValue)
     }
+
+    func reset() {
+        self.microAnimation = nil 
+        self.animation = nil
+    }
  }

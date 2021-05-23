@@ -142,7 +142,7 @@ extension TCHMessage: Messageable {
     }
 
     func getMediaContentURL() -> Future<String, Error> {
-        return Future { promise in 
+        return Future { promise in
             self.getMediaContentTemporaryUrl { (result, url) in
                 if let mediaURL = url {
                     promise(.success(mediaURL))
