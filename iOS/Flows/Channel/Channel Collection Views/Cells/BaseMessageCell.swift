@@ -19,7 +19,7 @@ class BaseMessageCell: UICollectionViewCell {
 
     private(set) var currentMessage: Messageable?
     private(set) var attributes: ChannelCollectionViewLayoutAttributes?
-    private var animationView = AnimationView(name: "error")
+    private var animationView = AnimationView.with(animation: .error)
 
     override init(frame: CGRect) {
         super.init(frame: frame)

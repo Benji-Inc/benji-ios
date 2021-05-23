@@ -30,7 +30,7 @@ class FeedViewController: ViewController {
 
     let postContainerView = View()
     let indicatorView = FeedIndicatorView()
-    let animationView = AnimationView(name: "loading")
+    let animationView = AnimationView.with(animation: .loading)
     let avatarView = AvatarView()
 
     enum State {

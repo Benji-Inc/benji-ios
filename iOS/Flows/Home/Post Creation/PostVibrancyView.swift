@@ -12,7 +12,7 @@ import Lottie
 
 class PostVibrancyView: VibrancyView {
 
-    let animationView = AnimationView(name: "scroll_down")
+    let animationView = AnimationView.with(animation: .scrollDown)
     let label = Label(font: .small)
 
     override func initializeSubviews() {

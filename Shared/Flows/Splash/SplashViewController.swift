@@ -21,7 +21,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         return .background1
     }
 
-    let animationView = AnimationView(name: "loading")
+    let animationView = AnimationView.with(animation: .loading)
     let label = Label(font: .small)
     let versionLabel = Label(frame: .zero, font: .small, textColor: .background2)
 

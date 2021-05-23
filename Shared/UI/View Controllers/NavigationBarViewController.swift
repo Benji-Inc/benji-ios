@@ -13,7 +13,7 @@ import Lottie
 class NavigationBarViewController: ViewController {
 
     private(set) var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    private(set) var animationView = AnimationView(name: "arrow")
+    private(set) var animationView = AnimationView.with(animation: .arrow)
     private(set) var backButton = Button()
     private(set) var titleLabel = Label(font: .display)
     private(set) var descriptionLabel = Label(font: .mediumThin)

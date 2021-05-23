@@ -27,6 +27,7 @@ extension Selectable where Self: UIControl {
             self.setAssociatedObject(key: &selectionHandlerKey, value: newValue)
         }
     }
+    
     private(set) var action: UIAction? {
         get {
             return self.getAssociatedObject(&actionHandlerKey)

@@ -33,7 +33,7 @@ class Button: UIButton, Statusable {
     /// Used to store the initial color of the button to return to from error state
     var defaultColor: Color?
 
-    let animationView = AnimationView(name: "loading")
+    let animationView = AnimationView.with(animation: .loading)
 
     var style: ButtonStyle?
     lazy var errorLabel = Label(font: .regular)

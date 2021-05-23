@@ -36,8 +36,8 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     let attachmentView = AttachmentView()
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
     lazy var textView = InputTextView(with: self)
-    let animationView = AnimationView(name: "loading")
-    let plusAnimationView = AnimationView(name: "plusToX")
+    let animationView = AnimationView.with(animation: .loading)
+    let plusAnimationView = AnimationView.with(animation: .plusToX)
     let overlayButton = UIButton()
     var cancellables = Set<AnyCancellable>()
 

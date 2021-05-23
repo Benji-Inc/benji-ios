@@ -44,8 +44,9 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
 
         if item.isLocked {
             self.imageView.animationView.stop()
-            self.imageView.symbolImageView.image = UIImage(systemName: "lock.fill")
-            self.imageView.layoutNow()
+            self.imageView.animationView.load(animation: .lock)
+            self.imageView.animationView.loopMode = .playOnce
+            self.imageView.animationView.play()
         } else {
             self.imageView.displayable = file
             self.playImageView.alpha = item.mediaType == .video ? 1.0 : 0.0
@@ -79,7 +80,6 @@ class ArchiveCell: CollectionViewManagerCell, ManageableCell {
     }
 
     override func reset() {
-        self.imageView.symbolImageView.image = UIImage(systemName: "exclamationmark.triangle")
         self.imageView.displayable = nil
         self.label.text = nil
         self.playImageView.alpha = 0

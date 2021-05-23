@@ -32,7 +32,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         return vc
     }()
 
-    private let animationView = AnimationView(name: "face_scan")
+    private let animationView = AnimationView.with(animation: .faceScan)
     private let avatarView = AvatarView()
 
     private let beginButton = Button()

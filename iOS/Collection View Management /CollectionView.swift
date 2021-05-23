@@ -11,7 +11,7 @@ import Lottie
 
 class CollectionView: UICollectionView {
 
-    let animationView = AnimationView(name: "loading")
+    let animationView = AnimationView.with(animation: .loading)
 
     init(layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: layout)

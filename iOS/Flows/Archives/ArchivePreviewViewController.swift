@@ -92,8 +92,10 @@ class ArchivePreviewViewController: ViewController {
     }
 
     private func showLocked() {
-        self.imageView.symbolImageView.image = UIImage(systemName: "lock.fill")
-        self.imageView.symbolImageView.alpha = 1 
+        self.imageView.animationView.stop()
+        self.imageView.animationView.load(animation: .lock)
+        self.imageView.animationView.loopMode = .playOnce
+        self.imageView.animationView.play()
     }
 
     override func viewDidDisappear(_ animated: Bool) {

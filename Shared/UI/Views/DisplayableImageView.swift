@@ -21,9 +21,16 @@ class DisplayableImageView: View {
     lazy var blurEffect = UIBlurEffect(style: .systemMaterialDark)
     lazy var blurView = BlurView(effect: self.blurEffect)
 
-    let animationView = AnimationView(name: "loading")
+    enum State {
+        case initial
+        case loading
+        case error
+        case success
+    }
 
-    let symbolImageView = UIImageView(image: UIImage(systemName: "exclamationmark.triangle"))
+    @Published var state: State = .initial
+
+    let animationView = AnimationView()
 
     var displayable: ImageDisplayable? {
         didSet {
@@ -52,12 +59,31 @@ class DisplayableImageView: View {
 
         self.addSubview(self.blurView)
         self.blurView.contentView.addSubview(self.animationView)
-        self.animationView.loopMode = .loop
 
-        self.blurView.contentView.addSubview(self.symbolImageView)
-        self.symbolImageView.tintColor = Color.white.color
-        self.symbolImageView.contentMode = .scaleAspectFit
-        self.symbolImageView.alpha = 0.0
+        self.$state.mainSink { state in
+            switch state {
+            case .initial:
+                self.reset()
+            case .loading:
+                if self.animationView.isAnimationPlaying {
+                    self.animationView.stop()
+                }
+                self.animationView.load(animation: .loading)
+                self.animationView.loopMode = .loop
+                self.animationView.play()
+            case .error:
+                if self.animationView.isAnimationPlaying {
+                    self.animationView.stop()
+                }
+                self.animationView.load(animation: .error)
+                self.animationView.loopMode = .playOnce
+                self.animationView.play()
+            case .success:
+                if self.animationView.isAnimationPlaying {
+                    self.animationView.stop()
+                }
+            }
+        }.store(in: &self.cancellables)
     }
 
     override func layoutSubviews() {
@@ -66,15 +92,12 @@ class DisplayableImageView: View {
         self.imageView.expandToSuperviewSize()
         self.blurView.expandToSuperviewSize()
 
+        self.animationView.squaredSize = 20
         self.animationView.centerOnXAndY()
-
-        self.symbolImageView.squaredSize = self.blurView.width * 0.25
-        self.symbolImageView.centerOnXAndY()
     }
 
     private func updateImageView(with displayable: ImageDisplayable) {
-        self.symbolImageView.alpha = 0.0
-        self.animationView.play()
+        self.state = .loading
 
         if let photo = displayable.image {
             self.showResult(for: photo)
@@ -138,20 +161,18 @@ class DisplayableImageView: View {
             cancellable.cancel()
         }
 
-        self.symbolImageView.alpha = 0.0
         self.displayable = nil
         self.animationView.stop()
         self.blurView.effect = self.blurEffect
     }
 
     private func showResult(for image: UIImage?) {
+        self.state = image.isNil ? .error : .success
 
         UIView.animate(withDuration: 0.2) {
-            self.symbolImageView.alpha = image.isNil ? 1.0 : 0.0
             self.blurView.effect = image.isNil ? self.blurEffect : nil
         }
 
-        self.animationView.stop()
         self.imageView.image = image
     }
 }

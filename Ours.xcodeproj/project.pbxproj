@@ -624,6 +624,18 @@
 		D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503D21DAF98500CD8CE4 /* TextField.swift */; };
 		D6D1504021DAFB8300CD8CE4 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503F21DAFB8300CD8CE4 /* UITextField+Extensions.swift */; };
 		D6D380C4257FC18300C562E8 /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D380C3257FC18300C562E8 /* Selectable.swift */; };
+		D6D39271265AA9E000E49F1E /* pie_loader.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39270265AA9E000E49F1E /* pie_loader.json */; };
+		D6D39272265AA9E000E49F1E /* pie_loader.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39270265AA9E000E49F1E /* pie_loader.json */; };
+		D6D39273265AA9E000E49F1E /* pie_loader.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39270265AA9E000E49F1E /* pie_loader.json */; };
+		D6D39279265AAAA700E49F1E /* MicroAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D39278265AAAA700E49F1E /* MicroAnimation.swift */; };
+		D6D3927A265AAAA700E49F1E /* MicroAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D39278265AAAA700E49F1E /* MicroAnimation.swift */; };
+		D6D3927B265AAAA700E49F1E /* MicroAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D39278265AAAA700E49F1E /* MicroAnimation.swift */; };
+		D6D3927D265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */; };
+		D6D3927E265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */; };
+		D6D3927F265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */; };
+		D6D39281265AAFB900E49F1E /* lock.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39280265AAFB900E49F1E /* lock.json */; };
+		D6D39282265AAFB900E49F1E /* lock.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39280265AAFB900E49F1E /* lock.json */; };
+		D6D39283265AAFB900E49F1E /* lock.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39280265AAFB900E49F1E /* lock.json */; };
 		D6D4C5B3262096220026D7A2 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */; };
 		D6D4C5B5262096370026D7A2 /* CommentsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */; };
 		D6D4C5B72620965E0026D7A2 /* CommentsCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */; };
@@ -1062,6 +1074,10 @@
 		D6D1503D21DAF98500CD8CE4 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		D6D1503F21DAFB8300CD8CE4 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		D6D380C3257FC18300C562E8 /* Selectable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
+		D6D39270265AA9E000E49F1E /* pie_loader.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = pie_loader.json; sourceTree = "<group>"; };
+		D6D39278265AAAA700E49F1E /* MicroAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroAnimation.swift; sourceTree = "<group>"; };
+		D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnimationView+Extensions.swift"; sourceTree = "<group>"; };
+		D6D39280265AAFB900E49F1E /* lock.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lock.json; sourceTree = "<group>"; };
 		D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionView.swift; sourceTree = "<group>"; };
 		D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionViewManager.swift; sourceTree = "<group>"; };
@@ -1391,6 +1407,7 @@
 		D6356D9625A36CF30015104F /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */,
 				D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */,
 				D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */,
 				D677589F25B0A17D007E0184 /* CGRect+Extensions.swift */,
@@ -1649,6 +1666,7 @@
 				D67934E423DE66FE00536B44 /* PushPayload.swift */,
 				D642735222C85B740088256B /* SystemAvatar.swift */,
 				D61EC0EF21D313D900204BEE /* View Models */,
+				D6D39278265AAAA700E49F1E /* MicroAnimation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1737,6 +1755,8 @@
 		D668893023F2741500FD2764 /* Animations */ = {
 			isa = PBXGroup;
 			children = (
+				D6D39280265AAFB900E49F1E /* lock.json */,
+				D6D39270265AA9E000E49F1E /* pie_loader.json */,
 				D660544626320C06002F74F8 /* scroll_down.json */,
 				D640328B25AF3CA500139396 /* arrow.json */,
 				D640328D25AF3CA500139396 /* checkbox.json */,
@@ -2319,10 +2339,12 @@
 				D637532B2316172700214F63 /* Roboto-Bold.ttf in Resources */,
 				D640329625AF3CA500139396 /* checkbox.json in Resources */,
 				D63D71B925F025E8004C26F7 /* FaceDetection.storyboard in Resources */,
+				D6D39281265AAFB900E49F1E /* lock.json in Resources */,
 				D637532C2316172700214F63 /* Roboto-Medium.ttf in Resources */,
 				D650C1F125B741EB0037C59A /* plusToX.json in Resources */,
 				D637532A2316172700214F63 /* Roboto-Regular.ttf in Resources */,
 				D61EC0CA21D3071500204BEE /* LaunchScreen.storyboard in Resources */,
+				D6D39271265AA9E000E49F1E /* pie_loader.json in Resources */,
 				D61EC0C721D3071500204BEE /* Assets.xcassets in Resources */,
 				D640329225AF3CA500139396 /* arrow.json in Resources */,
 			);
@@ -2342,8 +2364,10 @@
 				D63DB27A25E9998A00F6B323 /* plusToX.json in Resources */,
 				D63DB27625E9998A00F6B323 /* arrow.json in Resources */,
 				D63DB27B25E9998D00F6B323 /* Assets.xcassets in Resources */,
+				D6D39283265AAFB900E49F1E /* lock.json in Resources */,
 				D63DB27925E9998A00F6B323 /* face_scan.json in Resources */,
 				D63DB27C25E9999300F6B323 /* Roboto-Medium.ttf in Resources */,
+				D6D39273265AA9E000E49F1E /* pie_loader.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2361,8 +2385,10 @@
 				D650C1F225B741EB0037C59A /* plusToX.json in Resources */,
 				D655198A258912AE00B901E4 /* Roboto-Bold.ttf in Resources */,
 				D65518F125890E3D00B901E4 /* Assets.xcassets in Resources */,
+				D6D39282265AAFB900E49F1E /* lock.json in Resources */,
 				D64A1F13258D598B0097817C /* LaunchScreen.storyboard in Resources */,
 				D640329325AF3CA500139396 /* arrow.json in Resources */,
+				D6D39272265AA9E000E49F1E /* pie_loader.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2526,6 +2552,7 @@
 				D61EC0F521D3151400204BEE /* NSAttributedString+Extensions.swift in Sources */,
 				D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */,
 				D6D1460721D552B100CD8CE4 /* Character+Extensions.swift in Sources */,
+				D6D39279265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
 				D66F0FF222C1D86800BA277D /* ChannelsType.swift in Sources */,
 				D6E4C7FB238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift in Sources */,
 				D696650D2639A00C0009114B /* CaptionTextView.swift in Sources */,
@@ -2718,6 +2745,7 @@
 				D642737122C991A60088256B /* ClosedRange+Extensions.swift in Sources */,
 				D66379D025A3704300A4A3B7 /* UserNotificationFactory.swift in Sources */,
 				D61ACF882628D4AC0052CE29 /* SystemComment.swift in Sources */,
+				D6D3927D265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,
 				D6DADF722207DF83007D9EB1 /* ChannelsCollectionView.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
@@ -2878,6 +2906,7 @@
 				D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */,
 				D6605445262F7235002F74F8 /* MediaMoreButton.swift in Sources */,
 				D63DB28625E999A100F6B323 /* FaceDetectionViewController.swift in Sources */,
+				D6D3927F265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,
 				D63DB24225E9993F00F6B323 /* WaitlistViewController.swift in Sources */,
 				D63DB27F25E9999C00F6B323 /* TransitionRouter+Fill.swift in Sources */,
 				D63DB22C25E9991800F6B323 /* PFInstallation+Extensions.swift in Sources */,
@@ -2938,6 +2967,7 @@
 				D63DB24525E9993F00F6B323 /* CodeViewController.swift in Sources */,
 				D63DB29425E999B200F6B323 /* AvatarView.swift in Sources */,
 				D63DB23325E9992600F6B323 /* UIControl+Extensions.swift in Sources */,
+				D6D3927B265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
 				D63DB20D25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */,
 				D63DB27425E9997F00F6B323 /* AnyHashableDisplayable.swift in Sources */,
 				D63DB21325E998D700F6B323 /* Onboarding+Cloud.swift in Sources */,
@@ -3028,6 +3058,7 @@
 				D63D71BE25F03025004C26F7 /* AnimatingLabel.swift in Sources */,
 				D65519372589122700B901E4 /* UIViewController+Extensions.swift in Sources */,
 				D6551A6A25895F9400B901E4 /* FaceView.swift in Sources */,
+				D6D3927E265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,
 				D65519532589125500B901E4 /* AnimationCycle.swift in Sources */,
 				D66379DF25A39BFD00A4A3B7 /* LaunchManager.swift in Sources */,
 				D640326125AE5CD400139396 /* WelcomeViewController.swift in Sources */,
@@ -3080,6 +3111,7 @@
 				D65519282589122000B901E4 /* String+Extensions.swift in Sources */,
 				D6A49A77260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D65519172589120C00B901E4 /* Date+Extensions.swift in Sources */,
+				D6D3927A265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
 				D65519222589121500B901E4 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D65519FF25895A0800B901E4 /* Statusable.swift in Sources */,
 				D6605444262F7234002F74F8 /* MediaMoreButton.swift in Sources */,

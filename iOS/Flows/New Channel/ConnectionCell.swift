@@ -16,7 +16,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     private let avatarView = AvatarView()
     private let titleLabel = Label(font: .regularBold, textColor: .lightPurple)
     private let subTitleLabel = Label(font: .small)
-    private let animationView = AnimationView(name: "checkbox")
+    private let animationView = AnimationView.with(animation: .checkbox)
 
     var didTapButton: CompletionOptional = nil
     var currentItem: Connection?

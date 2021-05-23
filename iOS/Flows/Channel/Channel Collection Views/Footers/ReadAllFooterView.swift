@@ -13,7 +13,7 @@ import Combine
 
 class ReadAllFooterView: UICollectionReusableView {
 
-    let animationView = AnimationView(name: "loading")
+    let animationView = AnimationView.with(animation: .loading)
     private let label = Label(font: .smallBold)
     var isAnimatingFinal: Bool = false
     private let minScale: CGFloat = 0.8
