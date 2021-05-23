@@ -115,6 +115,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        self.avatarView.layer.borderColor = nil
+        self.avatarView.layer.borderWidth = 0 
+
         self.animationView.size = CGSize(width: 140, height: 140)
         self.animationView.centerY = self.view.halfHeight * 0.8
         self.animationView.centerOnX()

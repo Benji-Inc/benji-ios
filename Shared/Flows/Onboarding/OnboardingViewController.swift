@@ -343,10 +343,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             #endif
 
         case .photo(_):
-            return LocalizedString(id: "",
-                                   arguments: [],
-                                   default: "To ensure everyone is who they say they are we require a photo. No 🤖's!")
-            
+            if self.photoVC.currentState == .initial {
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "To ensure everyone is who they say they are we require a photo. No 🤖's!")
+            } else {
+                return LocalizedString.empty
+            }
+
         case .ritual(let vc):
             switch vc.state {
             case .needsAuthorization:
