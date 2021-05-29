@@ -16,5 +16,4 @@ class NoticeViewController: CollectionViewController<NoticeCollectionViewManager
     override func getCollectionView() -> CollectionView {
         return self.noticeCollectionView
     }
-
 }

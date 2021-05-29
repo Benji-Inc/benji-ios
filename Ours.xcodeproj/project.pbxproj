@@ -641,6 +641,7 @@
 		D6D3928A265F15CA00E49F1E /* NoticeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D39289265F15CA00E49F1E /* NoticeViewController.swift */; };
 		D6D3928C265F15D800E49F1E /* NoticeCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3928B265F15D800E49F1E /* NoticeCollectionViewManager.swift */; };
 		D6D3928E265F15F100E49F1E /* NoticeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3928D265F15F100E49F1E /* NoticeCollectionView.swift */; };
+		D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3928F266287A700E49F1E /* NoticeSupplier.swift */; };
 		D6D4C5B3262096220026D7A2 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */; };
 		D6D4C5B5262096370026D7A2 /* CommentsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */; };
 		D6D4C5B72620965E0026D7A2 /* CommentsCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */; };
@@ -1088,6 +1089,7 @@
 		D6D39289265F15CA00E49F1E /* NoticeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeViewController.swift; sourceTree = "<group>"; };
 		D6D3928B265F15D800E49F1E /* NoticeCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCollectionViewManager.swift; sourceTree = "<group>"; };
 		D6D3928D265F15F100E49F1E /* NoticeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCollectionView.swift; sourceTree = "<group>"; };
+		D6D3928F266287A700E49F1E /* NoticeSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeSupplier.swift; sourceTree = "<group>"; };
 		D6D4C5B2262096220026D7A2 /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		D6D4C5B4262096370026D7A2 /* CommentsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionView.swift; sourceTree = "<group>"; };
 		D6D4C5B62620965E0026D7A2 /* CommentsCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsCollectionViewManager.swift; sourceTree = "<group>"; };
@@ -2139,6 +2141,7 @@
 				D6D3928D265F15F100E49F1E /* NoticeCollectionView.swift */,
 				D6D3928B265F15D800E49F1E /* NoticeCollectionViewManager.swift */,
 				D6D39289265F15CA00E49F1E /* NoticeViewController.swift */,
+				D6D3928F266287A700E49F1E /* NoticeSupplier.swift */,
 			);
 			path = Notices;
 			sourceTree = "<group>";
@@ -2526,6 +2529,7 @@
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				D639106F25D7344500D336D7 /* CollectionViewManager+Snapshot.swift in Sources */,
 				D6EAB68823E6211200B90D5A /* ProfilePhotoViewController.swift in Sources */,
+				D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */,
 				D6A401AB24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift in Sources */,
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,
 				D6F33C7724B14AC2009603FF /* ContactCellAttributesConfigurer.swift in Sources */,
