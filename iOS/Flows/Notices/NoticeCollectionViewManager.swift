@@ -57,8 +57,8 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
         return SectionType.allCases
     }
 
-    override func getItem(for indexPath: IndexPath) -> AnyHashable? {
-        return self.notices[safe: indexPath.row]
+    override func getItems(for section: SectionType) -> [AnyHashable] {
+        return self.notices
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {

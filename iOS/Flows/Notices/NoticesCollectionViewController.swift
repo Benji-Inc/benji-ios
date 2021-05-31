@@ -8,10 +8,11 @@
 
 import Foundation
 
-class NoticeViewController: CollectionViewController<NoticeCollectionViewManager.SectionType, NoticeCollectionViewManager> {
+class NoticesCollectionViewController: CollectionViewController<NoticeCollectionViewManager.SectionType, NoticeCollectionViewManager> {
+
+    static let height: CGFloat = 140
 
     private lazy var noticeCollectionView = NoticeCollectionView()
-
 
     override func getCollectionView() -> CollectionView {
         return self.noticeCollectionView

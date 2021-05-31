@@ -21,6 +21,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         return .background1
     }
 
+    lazy var noticesCollectionVC = NoticesCollectionViewController()
     lazy var userCollectionVC = UserCollectionViewController()
     lazy var createVC = PostCreationViewController()
     lazy var archivesVC = ArchivesViewController()
@@ -36,7 +37,7 @@ class HomeViewController: ViewController, TransitionableViewController {
 
     var topOffset: CGFloat?
     var minTop: CGFloat {
-        return UserCollectionViewController.height + self.view.safeAreaInsets.top
+        return NoticesCollectionViewController.height + self.view.safeAreaInsets.top
     }
 
     var minBottom: CGFloat {
@@ -53,7 +54,8 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.view.set(backgroundColor: .background1)
 
         self.addChild(viewController: self.archivesVC)
-        self.addChild(viewController: self.userCollectionVC)
+        //self.addChild(viewController: self.userCollectionVC)
+        self.addChild(viewController: self.noticesCollectionVC)
         self.addChild(viewController: self.createVC)
 
         self.self.createVC.view.layer.cornerRadius = 20
@@ -137,6 +139,10 @@ class HomeViewController: ViewController, TransitionableViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        self.noticesCollectionVC.view.expandToSuperviewWidth()
+        self.noticesCollectionVC.view.height = NoticesCollectionViewController.height
+        self.noticesCollectionVC.view.pinToSafeArea(.top, padding: 0)
 
         self.userCollectionVC.view.expandToSuperviewWidth()
         self.userCollectionVC.view.height = UserCollectionViewController.height
