@@ -18,8 +18,6 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
 
     @Published var centerIndexPath: IndexPath? = nil
 
-    var colors: [Color] = [.red, .lightPurple, .purple, .green, .orange]
-
     lazy var layout: UICollectionViewCompositionalLayout = {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .horizontal
@@ -41,19 +39,16 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
         }, configuration: config)
     }()
 
-    var notices: [SystemNotice] = []
-
     override func initialize() {
         super.initialize()
 
         self.collectionView.collectionViewLayout = self.layout
 
-        for _ in 0...self.colors.count - 1 {
-            let notice = SystemNotice(createdAt: Date(), notice: nil, type: .system, attributes: [:])
-            self.notices.append(notice)
-        }
-
-        self.loadSnapshot()
+        NoticeSupplier.shared.$notices.mainSink { _ in
+            self.loadSnapshot().mainSink { _ in
+                // Begin auto scroll
+            }.store(in: &self.cancellables)
+        }.store(in: &self.cancellables)
     }
 
     override func getSections() -> [SectionType] {
@@ -61,16 +56,15 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
-        return self.notices
+        return NoticeSupplier.shared.notices
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
-        let cell = self.collectionView.dequeueManageableCell(using: self.noticeConfig,
-                                                             for: indexPath,
-                                                             item: item as? SystemNotice)
-        guard let color = self.colors[safe: indexPath.row] else { return nil }
-        cell?.contentView.set(backgroundColor: color)
-        return cell
+
+        return self.collectionView.dequeueManageableCell(using: self.noticeConfig,
+                                                         for: indexPath,
+                                                         item: item as? SystemNotice)
+
     }
 
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {

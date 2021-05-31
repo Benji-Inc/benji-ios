@@ -84,6 +84,22 @@ extension Objectable where Self: PFObject {
         }
     }
 
+    static func fetchAll() -> Future<[Self], Never> {
+        return Future { promise in
+            if let query = self.query() {
+                query.findObjectsInBackground { objects, error in
+                    if let objs = objects as? [Self] {
+                        promise(.success(objs))
+                    } else {
+                        promise(.success([]))
+                    }
+                }
+            } else {
+                promise(.success([]))
+            }
+        }
+    }
+
     static func getFirstObject(where key: String, contains string: String) -> Future<Self, Error> {
         return Future { promise in
             let query = self.query()

@@ -15,15 +15,48 @@ class NoticeSupplier {
 
     static let shared = NoticeSupplier()
 
+    enum NoticeStatus {
+        case deleted(SystemNotice)
+        case updated(SystemNotice)
+        case created(SystemNotice)
+    }
+
     private var cancellables = Set<AnyCancellable>()
 
+    @Published private(set) var notices: [SystemNotice] = []
+    @Published private(set) var noticeStatus: NoticeStatus? = nil
+
     init() {
-        self.subscribeToUpdates()
+        self.loadNotices()
     }
 
     deinit {
         self.cancellables.forEach { cancellable in
             cancellable.cancel()
+        }
+    }
+
+    func loadNotices() {
+
+        let combined = Publishers.Zip(
+            self.getLocalNotices(),
+            Notice.fetchAll()
+        )
+
+        combined.mainSink { (local, server) in
+            var notices = server.compactMap { notice in
+                return SystemNotice(with: notice)
+            }
+
+            notices.append(contentsOf: local)
+            self.notices = notices
+
+        }.store(in: &self.cancellables)
+    }
+
+    private func getLocalNotices() -> Future<[SystemNotice], Never> {
+        return Future { promise in 
+            promise(.success([]))
         }
     }
 

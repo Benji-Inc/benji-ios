@@ -27,6 +27,8 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
             break
         case .system:
             break 
+        case .ritual:
+            break 
         }
     }
 

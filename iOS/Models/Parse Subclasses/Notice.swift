@@ -21,6 +21,7 @@ final class Notice: PFObject, PFSubclassing, Subscribeable {
         case alert
         case connectionRequest
         case system
+        case ritual
     }
 
     static func parseClassName() -> String {
