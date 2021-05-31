@@ -32,6 +32,8 @@ struct SystemNotice: Noticeable, Comparable {
         self.created = createdAt
         self.notice = notice
         self.attributes = attributes
+        self.priority = priority
+        self.type = type 
     }
 
     init(with notice: Notice) {

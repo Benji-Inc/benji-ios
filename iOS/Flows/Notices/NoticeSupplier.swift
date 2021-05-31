@@ -49,14 +49,25 @@ class NoticeSupplier {
             }
 
             notices.append(contentsOf: local)
-            self.notices = notices
+            self.notices = notices.sorted()
 
         }.store(in: &self.cancellables)
     }
 
     private func getLocalNotices() -> Future<[SystemNotice], Never> {
-        return Future { promise in 
-            promise(.success([]))
+        return Future { promise in
+
+            var notices: [SystemNotice] = []
+
+            let ritual = SystemNotice(createdAt: nil, notice: nil, type: .ritual, priority: 0, attributes: [:])
+
+            notices.append(ritual)
+            
+            for _ in 0...5 {
+                let notice = SystemNotice(createdAt: Date(), notice: nil, type: .system, priority: 1, attributes: [:])
+                notices.append(notice)
+            }
+            promise(.success(notices))
         }
     }
 

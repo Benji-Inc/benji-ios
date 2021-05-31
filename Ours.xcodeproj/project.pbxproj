@@ -23,6 +23,7 @@
 		D60C814622092F6B00A127A3 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C814522092F6B00A127A3 /* Button.swift */; };
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
+		D60F95EC2665A17000CF8766 /* RitualCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60F95EB2665A17000CF8766 /* RitualCell.swift */; };
 		D6116C3C25F2335000D94A09 /* PostVibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */; };
 		D6140737263DB22F00B84605 /* HomeViewController+Panning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140736263DB22F00B84605 /* HomeViewController+Panning.swift */; };
 		D614073D263E240D00B84605 /* RitualInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140738263E240D00B84605 /* RitualInputContentView.swift */; };
@@ -777,6 +778,7 @@
 		D60C814522092F6B00A127A3 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
+		D60F95EB2665A17000CF8766 /* RitualCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RitualCell.swift; sourceTree = "<group>"; };
 		D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVibrancyView.swift; sourceTree = "<group>"; };
 		D6140736263DB22F00B84605 /* HomeViewController+Panning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeViewController+Panning.swift"; sourceTree = "<group>"; };
 		D6140738263E240D00B84605 /* RitualInputContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualInputContentView.swift; sourceTree = "<group>"; };
@@ -1230,6 +1232,15 @@
 				D6FC8095237A64650089AACC /* MessageSupplier.swift */,
 			);
 			path = Manager;
+			sourceTree = "<group>";
+		};
+		D60F95EA2665A15200CF8766 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				D6D39287265F15B800E49F1E /* NoticeCell.swift */,
+				D60F95EB2665A17000CF8766 /* RitualCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		D6140742263EE7D800B84605 /* Ritual */ = {
@@ -2140,7 +2151,7 @@
 		D6D39284265ACC9200E49F1E /* Notices */ = {
 			isa = PBXGroup;
 			children = (
-				D6D39287265F15B800E49F1E /* NoticeCell.swift */,
+				D60F95EA2665A15200CF8766 /* Cells */,
 				D6D3928D265F15F100E49F1E /* NoticeCollectionView.swift */,
 				D6D3928B265F15D800E49F1E /* NoticeCollectionViewManager.swift */,
 				D6D39289265F15CA00E49F1E /* NoticesCollectionViewController.swift */,
@@ -2837,6 +2848,7 @@
 				D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */,
 				D6FA622423F06AEF00048C4A /* AnimationCycle.swift in Sources */,
 				D64DD8AC23CE2C180039DC5A /* OnboardingViewController.swift in Sources */,
+				D60F95EC2665A17000CF8766 /* RitualCell.swift in Sources */,
 				D66379CF25A3704300A4A3B7 /* UserNotificationManager+Extensions.swift in Sources */,
 				D66F0FDA22BF297F00BA277D /* MainCoordinator.swift in Sources */,
 				D6F33C8824B150F9009603FF /* BaseMessageCell.swift in Sources */,

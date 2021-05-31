@@ -15,6 +15,7 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
     }
 
     private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
+    private let ritualConfig = ManageableCellRegistration<RitualCell>().provider
 
     @Published var centerIndexPath: IndexPath? = nil
 
@@ -61,10 +62,18 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
 
-        return self.collectionView.dequeueManageableCell(using: self.noticeConfig,
-                                                         for: indexPath,
-                                                         item: item as? SystemNotice)
+        guard let type = NoticeSupplier.shared.notices[safe: indexPath.row]?.type else { return nil }
 
+        switch type {
+        case .ritual:
+            return self.collectionView.dequeueManageableCell(using: self.ritualConfig,
+                                                             for: indexPath,
+                                                             item: item as? SystemNotice)
+        default:
+            return self.collectionView.dequeueManageableCell(using: self.noticeConfig,
+                                                             for: indexPath,
+                                                             item: item as? SystemNotice)
+        }
     }
 
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
