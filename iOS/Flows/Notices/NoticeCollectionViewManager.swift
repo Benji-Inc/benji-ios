@@ -16,6 +16,8 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
 
     private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
 
+    var colors: [Color] = [.red, .lightPurple, .purple, .green, .orange]
+
     lazy var layout: UICollectionViewCompositionalLayout = {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .horizontal
@@ -24,6 +26,7 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
             // Item
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
 
             // Group
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
@@ -31,7 +34,6 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
 
             // Section
             let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
             return section
 
         }, configuration: config)
@@ -44,7 +46,7 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
 
         self.collectionView.collectionViewLayout = self.layout
 
-        for _ in 0...10 {
+        for _ in 0...self.colors.count - 1 {
             let notice = SystemNotice(createdAt: Date(), notice: nil, type: .system, attributes: [:])
             self.notices.append(notice)
         }
@@ -61,8 +63,11 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
-        return self.collectionView.dequeueManageableCell(using: self.noticeConfig,
-                                                         for: indexPath,
-                                                         item: item as? SystemNotice)
+        let cell = self.collectionView.dequeueManageableCell(using: self.noticeConfig,
+                                                             for: indexPath,
+                                                             item: item as? SystemNotice)
+        guard let color = self.colors[safe: indexPath.row] else { return nil }
+        cell?.contentView.set(backgroundColor: color)
+        return cell
     }
 }

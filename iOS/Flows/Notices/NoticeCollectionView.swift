@@ -12,6 +12,8 @@ class NoticeCollectionView: CollectionView {
 
     init() {
         super.init(layout: UICollectionViewLayout())
+        self.isPagingEnabled = true
+        self.showsHorizontalScrollIndicator = false
     }
     
     required init?(coder aDecoder: NSCoder) {
