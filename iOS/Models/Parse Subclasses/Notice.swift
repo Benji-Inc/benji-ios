@@ -20,6 +20,7 @@ final class Notice: PFObject, PFSubclassing, Subscribeable {
     enum NoticeType: String {
         case alert
         case connectionRequest
+        case system
     }
 
     static func parseClassName() -> String {
@@ -30,7 +31,7 @@ final class Notice: PFObject, PFSubclassing, Subscribeable {
         get { return self.getObject(for: .type) }
     }
 
-    var attributes: [String: Any]? {
+    var attributes: [String: AnyHashable]? {
         get { self.getObject(for: .attributes) }
     }
 

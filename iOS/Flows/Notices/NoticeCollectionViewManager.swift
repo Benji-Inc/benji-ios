@@ -41,6 +41,8 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
     override func initialize() {
         super.initialize()
 
+        self.collectionView.collectionViewLayout = self.layout
+
     }
 
     override func getSections() -> [SectionType] {

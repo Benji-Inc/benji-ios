@@ -13,8 +13,22 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: Notice?
 
-    func configure(with item: Notice) {
+    override func initializeSubviews() {
+        super.initializeSubviews()
 
+        self.contentView.set(backgroundColor: .red)
+    }
+
+    func configure(with item: Notice) {
+        guard let type = item.type else { return }
+        switch type {
+        case .alert:
+            break
+        case .connectionRequest:
+            break
+        case .system:
+            break 
+        }
     }
 
     override func layoutSubviews() {
