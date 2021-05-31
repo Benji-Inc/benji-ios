@@ -38,11 +38,19 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
         }
     }
 
+    var notices: [SystemNotice] = []
+
     override func initialize() {
         super.initialize()
 
         self.collectionView.collectionViewLayout = self.layout
 
+        for _ in 0...10 {
+            let notice = SystemNotice(createdAt: Date(), notice: nil, type: .system, attributes: [:])
+            self.notices.append(notice)
+        }
+
+        self.loadSnapshot()
     }
 
     override func getSections() -> [SectionType] {
@@ -50,12 +58,12 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
     }
 
     override func getItem(for indexPath: IndexPath) -> AnyHashable? {
-        return nil
+        return self.notices[safe: indexPath.row]
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         return self.collectionView.dequeueManageableCell(using: self.noticeConfig,
                                                          for: indexPath,
-                                                         item: item as? Notice)
+                                                         item: item as? SystemNotice)
     }
 }

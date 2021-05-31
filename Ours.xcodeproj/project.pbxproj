@@ -1699,6 +1699,7 @@
 				D607400D23401B3E009633EB /* SystemChannel.swift */,
 				D61ACF872628D4AC0052CE29 /* SystemComment.swift */,
 				D66F0FC822BF006D00BA277D /* SystemMessage.swift */,
+				D6D3929126653A1400E49F1E /* SystemNotice.swift */,
 				D671E1EE264029BC00BF2B8D /* Toast.swift */,
 			);
 			path = Models;
@@ -2140,7 +2141,6 @@
 			isa = PBXGroup;
 			children = (
 				D6D39287265F15B800E49F1E /* NoticeCell.swift */,
-				D6D3929126653A1400E49F1E /* SystemNotice.swift */,
 				D6D3928D265F15F100E49F1E /* NoticeCollectionView.swift */,
 				D6D3928B265F15D800E49F1E /* NoticeCollectionViewManager.swift */,
 				D6D39289265F15CA00E49F1E /* NoticeViewController.swift */,

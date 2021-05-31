@@ -17,11 +17,13 @@ protocol Noticeable: Hashable {
 struct SystemNotice: Noticeable, Comparable {
 
     var notice: Notice?
+    var type: Notice.NoticeType?
     var created: Date?
     var attributes: [String : AnyHashable]?
 
     init(createdAt: Date?,
          notice: Notice?,
+         type: Notice.NoticeType,
          attributes: [String: AnyHashable]?) {
 
         self.created = createdAt
@@ -33,11 +35,13 @@ struct SystemNotice: Noticeable, Comparable {
 
         self.init(createdAt: notice.createdAt,
                   notice: notice,
+                  type: notice.type!,
                   attributes: notice.attributes)
     }
 
     static func == (lhs: SystemNotice, rhs: SystemNotice) -> Bool {
         return lhs.notice == rhs.notice &&
+            lhs.type == rhs.type &&
             lhs.created == rhs.created
     }
 

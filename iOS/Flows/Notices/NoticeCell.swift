@@ -9,9 +9,9 @@
 import Foundation
 
 class NoticeCell: CollectionViewManagerCell, ManageableCell {
-    typealias ItemType = Notice
+    typealias ItemType = SystemNotice
 
-    var currentItem: Notice?
+    var currentItem: SystemNotice?
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -19,7 +19,7 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.set(backgroundColor: .red)
     }
 
-    func configure(with item: Notice) {
+    func configure(with item: SystemNotice) {
         guard let type = item.type else { return }
         switch type {
         case .alert:
