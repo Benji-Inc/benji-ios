@@ -119,4 +119,12 @@ class CollectionView: UICollectionView {
         }
         return viewType
     }
+
+    func centerMostIndexPath() -> IndexPath? {
+        let point = CGPoint(x: self.halfWidth + self.contentOffset.x,
+                            y: self.halfHeight + self.contentOffset.y)
+        guard let indexPath = self.indexPathForItem(at: point) else { return nil }
+
+        return indexPath
+    }
 }

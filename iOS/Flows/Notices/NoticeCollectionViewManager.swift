@@ -16,6 +16,8 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
 
     private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
 
+    @Published var centerIndexPath: IndexPath? = nil
+
     var colors: [Color] = [.red, .lightPurple, .purple, .green, .orange]
 
     lazy var layout: UICollectionViewCompositionalLayout = {
@@ -69,5 +71,15 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
         guard let color = self.colors[safe: indexPath.row] else { return nil }
         cell?.contentView.set(backgroundColor: color)
         return cell
+    }
+
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        super.scrollViewDidEndDecelerating(scrollView)
+        self.centerIndexPath = self.collectionView.centerMostIndexPath()
+    }
+
+    override func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        super.scrollViewDidEndScrollingAnimation(scrollView)
+        self.centerIndexPath = self.collectionView.centerMostIndexPath()
     }
 }

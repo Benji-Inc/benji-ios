@@ -17,4 +17,16 @@ class NoticesCollectionViewController: CollectionViewController<NoticeCollection
     override func getCollectionView() -> CollectionView {
         return self.noticeCollectionView
     }
+
+    override func initializeViews() {
+        super.initializeViews()
+
+        self.collectionViewManager.$centerIndexPath
+            .removeDuplicates()
+            .mainSink { indexPath in
+            guard let ip = indexPath else { return }
+
+            print("IP \(ip)")
+        }.store(in: &self.cancellables)
+    }
 }
