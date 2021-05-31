@@ -9,5 +9,14 @@
 import Foundation
 
 class AlertCell: NoticeCell {
+
+    override func configure(with item: SystemNotice) {
+        super.configure(with: item)
+
+        guard let messageId = item.attributes?["channelId"] as? String,
+              let channelId = item.attributes?["messageId"] as? String else { return }
+
+        
+    }
     
 }

@@ -21,22 +21,5 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.layer.cornerRadius = Theme.cornerRadius
     }
 
-    func configure(with item: SystemNotice) {
-        guard let type = item.type else { return }
-        switch type {
-        case .alert:
-            break
-        case .connectionRequest:
-            break
-        case .system:
-            break 
-        case .ritual:
-            break 
-        }
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-    }
+    func configure(with item: SystemNotice) {}
 }

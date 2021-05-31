@@ -19,6 +19,7 @@ struct SystemNotice: Noticeable, Comparable {
 
     var notice: Notice?
     var type: Notice.NoticeType?
+    var body: String?
     var created: Date?
     var priority: Int?
     var attributes: [String : AnyHashable]?
@@ -27,13 +28,15 @@ struct SystemNotice: Noticeable, Comparable {
          notice: Notice?,
          type: Notice.NoticeType,
          priority: Int?,
+         body: String?,
          attributes: [String: AnyHashable]?) {
 
         self.created = createdAt
         self.notice = notice
         self.attributes = attributes
         self.priority = priority
-        self.type = type 
+        self.type = type
+        self.body = body
     }
 
     init(with notice: Notice) {
@@ -42,6 +45,7 @@ struct SystemNotice: Noticeable, Comparable {
                   notice: notice,
                   type: notice.type!,
                   priority: notice.priority!,
+                  body: notice.body,
                   attributes: notice.attributes)
     }
 
@@ -49,6 +53,7 @@ struct SystemNotice: Noticeable, Comparable {
         return lhs.notice == rhs.notice &&
             lhs.type == rhs.type &&
             lhs.priority == rhs.priority &&
+            lhs.body == rhs.body &&
             lhs.created == rhs.created
     }
 

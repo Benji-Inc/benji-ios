@@ -13,13 +13,16 @@ enum NoticeKey: String {
     case type
     case attributes
     case priority
+    case body
 }
 
 final class Notice: PFObject, PFSubclassing, Subscribeable {
 
     enum NoticeType: String {
-        case alert
-        case connectionRequest
+        case alert = "ALERT_MESSAGE"
+        case connectionRequest = "CONNECTION_REQUEST"
+        case connectionConfirmed = "CONNECTION_CONFIRMED"
+        case messageRead = "MESSAGE_READ"
         case system
         case ritual
     }
@@ -38,6 +41,10 @@ final class Notice: PFObject, PFSubclassing, Subscribeable {
 
     var priority: Int? {
         get { self.getObject(for: .priority) }
+    }
+
+    var body: String? {
+        get { self.getObject(for: .body) }
     }
 }
 
