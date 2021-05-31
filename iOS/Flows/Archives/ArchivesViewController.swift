@@ -10,6 +10,8 @@ import Foundation
 
 class ArchivesViewController: CollectionViewController<ArchivesCollectionViewManager.SectionType, ArchivesCollectionViewManager> {
 
+    lazy var userCollectionVC = UserCollectionViewController()
+
     private lazy var archiveCollectionView = ArchivesCollectionView()
 
     private let gradientView = GradientView(with: [Color.background1.color.withAlphaComponent(1.0).cgColor,
@@ -17,7 +19,6 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
 
     var didSelectPost: ((Post) -> Void)? = nil
     var didSelectClose: CompletionOptional = nil
-    var didFinishShowing: CompletionOptional = nil
     
     private let button = Button()
 
@@ -25,6 +26,9 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
         super.initializeViews()
         
         self.view.alpha = 0
+
+        self.addChild(self.userCollectionVC)
+        self.view.insertSubview(self.userCollectionVC.view, aboveSubview: self.archiveCollectionView)
 
         self.view.insertSubview(self.button, aboveSubview: self.archiveCollectionView)
         self.button.set(style: .icon(image: UIImage(systemName: "chevron.compact.up")!, color: .purple))
@@ -45,6 +49,11 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
                 }
             }
         }.store(in: &self.cancellables)
+
+        self.userCollectionVC.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
+            guard let user = cellItem?.item as? User else { return }
+            self.loadPosts(for: user)
+        }.store(in: &self.cancellables)
     }
 
     func loadPosts(for user: User) {
@@ -60,6 +69,10 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        self.userCollectionVC.view.expandToSuperviewWidth()
+        self.userCollectionVC.view.height = UserCollectionViewController.height
+        self.userCollectionVC.view.pinToSafeArea(.top, padding: 0)
+
         self.button.setSize(with: self.view.width)
         self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
         self.button.centerOnX()
@@ -74,10 +87,20 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
             self.view.alpha = show ? 1.0 : 0
         } completion: { _ in
             if self.view.alpha == 1.0 {
-                self.didFinishShowing?()
+                self.didFinishShowing()
             } else {
                 self.collectionViewManager.reset()
             }
+        }
+    }
+
+    func didFinishShowing() {
+        if self.userCollectionVC.collectionViewManager.collectionView.numberOfSections == 0 {
+            self.userCollectionVC.collectionViewManager.loadFeeds { [unowned self] in
+                self.userCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
+            }
+        } else {
+            self.userCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
         }
     }
 }

@@ -22,7 +22,6 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
 
     lazy var noticesCollectionVC = NoticesCollectionViewController()
-    lazy var userCollectionVC = UserCollectionViewController()
     lazy var createVC = PostCreationViewController()
     lazy var archivesVC = ArchivesViewController()
 
@@ -32,8 +31,6 @@ class HomeViewController: ViewController, TransitionableViewController {
     var didTapChannels: CompletionOptional = nil
     var didTapAddRitual: CompletionOptional = nil
     var didSelectPhotoLibrary: CompletionOptional = nil
-
-    var willPresentFeedForUser: ((User) -> Void)? = nil
 
     var topOffset: CGFloat?
     var minTop: CGFloat {
@@ -80,16 +77,6 @@ class HomeViewController: ViewController, TransitionableViewController {
             self.didSelectPhotoLibrary?()
         }
 
-        self.userCollectionVC.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
-            guard !self.isPanning, let user = cellItem?.item as? User else { return }
-            if self.isShowingArchive {
-                self.archivesVC.loadPosts(for: user)
-            } else {
-                self.willPresentFeedForUser?(user)
-            }
-
-        }.store(in: &self.cancellables)
-
         self.tabView.$state.mainSink { state in
             self.createVC.handle(state: state)
             UIView.animate(withDuration: Theme.animationDuration) {
@@ -115,21 +102,11 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.archivesVC.didSelectClose = { [unowned self] in
             switch RitualManager.shared.state {
             case .feedAvailable:
-                self.userCollectionVC.collectionViewManager.unselectAllItems()
+                self.archivesVC.userCollectionVC.collectionViewManager.unselectAllItems()
             default:
-                self.userCollectionVC.collectionViewManager.reset()
+                self.archivesVC.userCollectionVC.collectionViewManager.reset()
             }
             self.animateArchives(offset: self.minTop, progress: 1.0)
-        }
-
-        self.archivesVC.didFinishShowing = { [unowned self] in
-            if self.userCollectionVC.collectionViewManager.collectionView.numberOfSections == 0 {
-                self.userCollectionVC.collectionViewManager.loadFeeds { [unowned self] in
-                    self.userCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
-                }
-            } else {
-                self.userCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))
-            }
         }
 
         if self.createVC.isAuthorized {
@@ -143,10 +120,6 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.noticesCollectionVC.view.expandToSuperviewWidth()
         self.noticesCollectionVC.view.height = NoticesCollectionViewController.height
         self.noticesCollectionVC.view.pinToSafeArea(.top, padding: 0)
-
-        self.userCollectionVC.view.expandToSuperviewWidth()
-        self.userCollectionVC.view.height = UserCollectionViewController.height
-        self.userCollectionVC.view.pinToSafeArea(.top, padding: 0)
 
         self.archivesVC.view.height = self.view.height - self.view.safeAreaInsets.top
         self.archivesVC.view.expandToSuperviewWidth()
@@ -183,7 +156,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.isMenuPresenting = !show
         UIView.animate(withDuration: Theme.animationDuration) {
             self.tabView.alpha = show ? 1.0 : 0.0
-            self.userCollectionVC.view.alpha = show ? 1.0 : 0.0
+            //self.userCollectionVC.view.alpha = show ? 1.0 : 0.0
         }
     }
 

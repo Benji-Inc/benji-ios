@@ -31,8 +31,8 @@ class NoticeCollectionView: CollectionView {
 
         self.backgroundView = self.statusView
 
-        self.publisher(for: \.contentSize).mainSink { (size) in
-            self.statusView.alpha = size.width == 0.0 && size.height == 0.0 ? 1.0 : 0.0
-        }.store(in: &self.cancellables)
+//        self.publisher(for: \.contentSize).mainSink { (size) in
+//            self.statusView.alpha = size.width == 0.0 && size.height == 0.0 ? 1.0 : 0.0
+//        }.store(in: &self.cancellables)
     }
 }

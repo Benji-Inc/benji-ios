@@ -58,10 +58,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             self.showRitual()
         }
 
-        self.homeVC.willPresentFeedForUser = { [unowned self] user in
-            self.presentFeed(for: user)
-        }
-
         self.homeVC.didSelectPhotoLibrary = { [unowned self] in
             self.presentPicker()
         }
@@ -123,9 +119,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         case .profile:
             self.addProfile()
         case .feed:
-            if let current = User.current() {
-                self.presentFeed(for: current)
-            }
+            self.presentFeed()
         case .channels:
             self.addChannels()
         }
@@ -152,9 +146,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         self.router.present(coordinator, source: self.homeVC)
     }
 
-    private func presentFeed(for user: User) {
+    private func presentFeed() {
         self.removeChild()
-        self.homeVC.userCollectionVC.collectionViewManager.unselectAllItems()
         let coordinator = FeedCoordinator(router: self.router, deepLink: self.deepLink)
         coordinator.feedVC.didTapDone = {
             coordinator.feedVC.dismiss(animated: true) {
@@ -166,7 +159,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
         self.addChildAndStart(coordinator) { (_) in }
         self.router.present(coordinator, source: self.homeVC, cancelHandler: nil, animated: true) {
-            coordinator.feedVC.loadPosts(for: user)
+            coordinator.feedVC.loadPosts(for: User.current()!)
         }
     }
 
