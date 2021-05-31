@@ -59,14 +59,14 @@ class NoticeSupplier {
 
             var notices: [SystemNotice] = []
 
-            let ritual = SystemNotice(createdAt: nil, notice: nil, type: .ritual, priority: 0, attributes: [:])
+            let ritual = SystemNotice(createdAt: nil, notice: nil, type: .ritual, priority: 0, body: nil, attributes: [:])
 
             notices.append(ritual)
 
             
             
             for _ in 0...5 {
-                let notice = SystemNotice(createdAt: Date(), notice: nil, type: .system, priority: 1, attributes: [:])
+                let notice = SystemNotice(createdAt: Date(), notice: nil, type: .system, priority: 1, body: nil, attributes: [:])
                 notices.append(notice)
             }
             promise(.success(notices))
