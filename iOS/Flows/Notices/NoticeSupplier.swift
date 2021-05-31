@@ -62,6 +62,8 @@ class NoticeSupplier {
             let ritual = SystemNotice(createdAt: nil, notice: nil, type: .ritual, priority: 0, attributes: [:])
 
             notices.append(ritual)
+
+            
             
             for _ in 0...5 {
                 let notice = SystemNotice(createdAt: Date(), notice: nil, type: .system, priority: 1, attributes: [:])

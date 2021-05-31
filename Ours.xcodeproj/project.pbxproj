@@ -24,6 +24,8 @@
 		D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
 		D60F95EC2665A17000CF8766 /* RitualCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60F95EB2665A17000CF8766 /* RitualCell.swift */; };
+		D60F95EE2665A5C400CF8766 /* AlertCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60F95ED2665A5C400CF8766 /* AlertCell.swift */; };
+		D60F95F02665A5E400CF8766 /* ConnectionRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */; };
 		D6116C3C25F2335000D94A09 /* PostVibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */; };
 		D6140737263DB22F00B84605 /* HomeViewController+Panning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140736263DB22F00B84605 /* HomeViewController+Panning.swift */; };
 		D614073D263E240D00B84605 /* RitualInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140738263E240D00B84605 /* RitualInputContentView.swift */; };
@@ -779,6 +781,8 @@
 		D60C81472209314200A127A3 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
 		D60F95EB2665A17000CF8766 /* RitualCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RitualCell.swift; sourceTree = "<group>"; };
+		D60F95ED2665A5C400CF8766 /* AlertCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertCell.swift; sourceTree = "<group>"; };
+		D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestCell.swift; sourceTree = "<group>"; };
 		D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVibrancyView.swift; sourceTree = "<group>"; };
 		D6140736263DB22F00B84605 /* HomeViewController+Panning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeViewController+Panning.swift"; sourceTree = "<group>"; };
 		D6140738263E240D00B84605 /* RitualInputContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualInputContentView.swift; sourceTree = "<group>"; };
@@ -1239,6 +1243,8 @@
 			children = (
 				D6D39287265F15B800E49F1E /* NoticeCell.swift */,
 				D60F95EB2665A17000CF8766 /* RitualCell.swift */,
+				D60F95ED2665A5C400CF8766 /* AlertCell.swift */,
+				D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2649,6 +2655,7 @@
 				D6D145FF21D5510400CD8CE4 /* StringStyle.swift in Sources */,
 				D64C6A9C232D6C9200DB7257 /* BubbleCircleView.swift in Sources */,
 				D691794222F6418700340AA3 /* Router.swift in Sources */,
+				D60F95F02665A5E400CF8766 /* ConnectionRequestCell.swift in Sources */,
 				D6EDFB5425D490130034A2F6 /* Postable.swift in Sources */,
 				D63D5C97265811B000543200 /* URL+Extensions.swift in Sources */,
 				D64DD8B223CE403D0039DC5A /* SwitchableContentViewController.swift in Sources */,
@@ -2822,6 +2829,7 @@
 				D67758AE25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */,
 				80C7C6062316112400643A14 /* TimeHumpView.swift in Sources */,
 				D61EC0D921D30C8E00204BEE /* DispatchQue+Extensions.swift in Sources */,
+				D60F95EE2665A5C400CF8766 /* AlertCell.swift in Sources */,
 				D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
 				D6884AC825800FC600DA380E /* StatusableRequest.swift in Sources */,
 				D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
