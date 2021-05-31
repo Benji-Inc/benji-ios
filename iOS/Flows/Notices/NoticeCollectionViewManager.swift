@@ -16,12 +16,11 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
 
     private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
 
-    lazy var layout = UICollectionViewCompositionalLayout() { sectionIndex, layoutEnvironment in
+    lazy var layout: UICollectionViewCompositionalLayout = {
+        let config = UICollectionViewCompositionalLayoutConfiguration()
+        config.scrollDirection = .horizontal
 
-        guard let sectionType = SectionType(rawValue: sectionIndex) else { return nil }
-
-        switch sectionType {
-        case .notices:
+        return UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, enviroment in
             // Item
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -33,10 +32,10 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
             // Section
             let section = NSCollectionLayoutSection(group: group)
             section.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
-
             return section
-        }
-    }
+
+        }, configuration: config)
+    }()
 
     var notices: [SystemNotice] = []
 
