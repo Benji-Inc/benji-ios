@@ -49,7 +49,6 @@ class UserCollectionViewManger: CollectionViewManager<UserCollectionViewManger.S
         self.collectionView.collectionViewLayout = self.layout
 
         self.userCV?.animationView.play()
-        self.userCV?.statusView.alpha = 0
 
         let combined = Publishers.Zip(
             GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).assertNoFailure(),

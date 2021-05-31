@@ -11,9 +11,6 @@ import Combine
 
 class UserCollectionView: CollectionView {
 
-    let statusView = FeedStatusView()
-    private var cancellables = Set<AnyCancellable>()
-
     init() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -26,12 +23,6 @@ class UserCollectionView: CollectionView {
 
     override func initializeViews() {
         super.initializeViews()
-
-        self.backgroundView = self.statusView
-
-        self.publisher(for: \.contentSize).mainSink { (size) in
-            self.statusView.alpha = size.width == 0.0 && size.height == 0.0 ? 1.0 : 0.0
-        }.store(in: &self.cancellables)
 
         self.bounces = true
         self.set(backgroundColor: .clear)

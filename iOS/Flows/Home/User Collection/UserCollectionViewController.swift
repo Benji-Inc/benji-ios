@@ -15,11 +15,6 @@ class UserCollectionViewController: CollectionViewController<UserCollectionViewM
     private let gradientView = GradientView(with: [Color.background1.color.withAlphaComponent(0.6).cgColor,
                                                    Color.background1.color.withAlphaComponent(0).cgColor], startPoint: .topCenter, endPoint: .bottomCenter)
 
-    var statusView: FeedStatusView? {
-        guard let cv = self.collectionViewManager.collectionView as? UserCollectionView else { return nil }
-        return cv.statusView
-    }
-
     override func getCollectionView() -> CollectionView {
         return UserCollectionView()
     }
