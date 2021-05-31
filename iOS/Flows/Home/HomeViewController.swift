@@ -31,7 +31,7 @@ class HomeViewController: ViewController, TransitionableViewController {
     var didTapChannels: CompletionOptional = nil
     var didTapAddRitual: CompletionOptional = nil
     var didSelectPhotoLibrary: CompletionOptional = nil
-
+    var noticesTopOffset: CGFloat = 0
     var topOffset: CGFloat?
     var minTop: CGFloat {
         return NoticesCollectionViewController.height + self.view.safeAreaInsets.top
@@ -51,7 +51,6 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.view.set(backgroundColor: .background1)
 
         self.addChild(viewController: self.archivesVC)
-        //self.addChild(viewController: self.userCollectionVC)
         self.addChild(viewController: self.noticesCollectionVC)
         self.addChild(viewController: self.createVC)
 
@@ -106,7 +105,8 @@ class HomeViewController: ViewController, TransitionableViewController {
             default:
                 self.archivesVC.userCollectionVC.collectionViewManager.reset()
             }
-            self.animateArchives(offset: self.minTop, progress: 1.0)
+            self.noticesTopOffset = 0 
+            self.animate(offset: self.minTop, progress: 1.0)
         }
 
         if self.createVC.isAuthorized {
@@ -119,7 +119,7 @@ class HomeViewController: ViewController, TransitionableViewController {
 
         self.noticesCollectionVC.view.expandToSuperviewWidth()
         self.noticesCollectionVC.view.height = NoticesCollectionViewController.height
-        self.noticesCollectionVC.view.pinToSafeArea(.top, padding: 0)
+        self.noticesCollectionVC.view.pinToSafeArea(.top, padding: self.noticesTopOffset)
 
         self.archivesVC.view.height = self.view.height - self.view.safeAreaInsets.top
         self.archivesVC.view.expandToSuperviewWidth()
@@ -156,11 +156,11 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.isMenuPresenting = !show
         UIView.animate(withDuration: Theme.animationDuration) {
             self.tabView.alpha = show ? 1.0 : 0.0
-            //self.userCollectionVC.view.alpha = show ? 1.0 : 0.0
+            self.noticesCollectionVC.view.alpha = show ? 1.0 : 0.0
         }
     }
 
-    func animateArchives(offset: CGFloat, progress: CGFloat) {
+    func animate(offset: CGFloat, progress: CGFloat) {
         UIView.animate(withDuration: Theme.animationDuration) {
             self.createVC.view.top = offset
             self.view.layoutNow()

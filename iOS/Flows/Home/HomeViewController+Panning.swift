@@ -20,19 +20,24 @@ extension HomeViewController: UIGestureRecognizerDelegate {
             self.isPanning = false
         case .began:
             self.isPanning = false
-            self.topOffset = minTop
+            self.topOffset = self.minTop
         case .changed:
             self.isPanning = translation.y > 0
             let newTop = self.minTop + translation.y
             self.topOffset = clamp(newTop, self.minTop, self.view.height)
             self.createVC.view.top = self.topOffset!
+
+            let noticesTop = -translation.y
+            self.noticesTopOffset = clamp(noticesTop, -NoticesCollectionViewController.height, 0)
+            
         case .ended, .cancelled, .failed:
             self.isPanning = false
             let diff = (self.view.height - self.minTop) - self.topOffset!
             let progress = diff / (self.view.height - self.minTop)
             self.topOffset = progress < 0.65 ? self.minBottom : self.minTop
+            self.noticesTopOffset = progress < 0.65 ? -NoticesCollectionViewController.height : 0
 
-            self.animateArchives(offset: self.topOffset!, progress: progress)
+            self.animate(offset: self.topOffset!, progress: progress)
         @unknown default:
             break
         }

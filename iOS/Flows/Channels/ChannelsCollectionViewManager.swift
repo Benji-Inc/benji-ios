@@ -63,7 +63,7 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         }
 
         let section = NSCollectionLayoutSection.list(using: listConfig, layoutEnvironment: layoutEnvironment)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 100, leading: 0, bottom: 0, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: NoticesCollectionViewController.height, leading: 0, bottom: 0, trailing: 0)
         return section
     }
 

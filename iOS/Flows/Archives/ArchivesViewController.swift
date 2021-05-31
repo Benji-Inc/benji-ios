@@ -33,6 +33,9 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
         self.view.insertSubview(self.button, aboveSubview: self.archiveCollectionView)
         self.button.set(style: .icon(image: UIImage(systemName: "chevron.compact.up")!, color: .purple))
         self.button.didSelect { [unowned self] in
+            UIView.animate(withDuration: 0.2) {
+                self.view.alpha = 0 
+            }
             self.didSelectClose?()
         }
 
