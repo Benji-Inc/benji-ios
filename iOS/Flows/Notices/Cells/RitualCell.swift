@@ -11,6 +11,7 @@ import Foundation
 class RitualCell: NoticeCell {
 
     private let label = AnimatingLabel()
+    private let button = Button()
     private let countDownView = CountDownView()
 
     override func initializeSubviews() {
@@ -20,6 +21,10 @@ class RitualCell: NoticeCell {
         self.label.textAlignment = .center
 
         self.addSubview(self.countDownView)
+
+        self.addSubview(self.button)
+
+        self.button.set(style: .normal(color: .purple, text: "Begin"))
 
         self.countDownView.didExpire = {
             RitualManager.shared.state = .feedAvailable
@@ -33,8 +38,13 @@ class RitualCell: NoticeCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.label.setSize(withWidth: self.width)
-        self.label.centerOnXAndY()
+        self.label.setSize(withWidth: self.width - Theme.contentOffset)
+        self.label.centerOnX()
+        self.label.centerY = self.contentView.height * 0.35
+
+        self.button.size = CGSize(width: 160, height: 40)
+        self.button.pin(.bottom, padding: Theme.contentOffset.half)
+        self.button.centerOnX()
 
         self.countDownView.size = CGSize(width: 200, height: 60)
         self.countDownView.centerOnXAndY()
@@ -44,23 +54,33 @@ class RitualCell: NoticeCell {
         switch state {
         case .initial:
             self.label.animatedText = "Loading..."
+            self.button.alpha = 0
         case .noRitual:
             self.label.animatedText = "Set your ritual time."
+            self.button.alpha = 0
         case .lessThanAnHourAway(let date):
             self.label.animatedText = ""
             self.countDownView.startTimer(with: date)
             self.showCountDown()
+            self.button.alpha = 0
         case .feedAvailable:
-            ToastScheduler.shared.schedule(toastType: .basic(displayable: UIImage(systemName: "lock.open")!, title: "Unlocked", description: "Your ritual has begun! You now have access to all features."))
+            self.showRitualReady()
         case .lessThanHourAfter(let date):
             let dateString = Date.hourMinuteTimeOfDay.string(from: date)
             self.label.animatedText = "Take a break! ☕️\nSee you at \(dateString)"
+            self.button.alpha = 0
         case .moreThanHourAfter(let date):
             let dateString = Date.hourMinuteTimeOfDay.string(from: date)
             self.label.animatedText = "See you tomorrow at \n\(dateString)"
+            self.button.alpha = 0
         }
 
         self.layoutNow()
+    }
+
+    func showRitualReady() {
+        self.label.animatedText = "Your feed is unlocked!"
+        self.button.alpha = 1
     }
 
     private func showCountDown() {

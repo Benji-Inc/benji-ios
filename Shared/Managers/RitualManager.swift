@@ -38,6 +38,26 @@ class RitualManager {
         if let user = User.current() {
             self.determineState(for: user)
         }
+
+        self.$state.mainSink { state in
+            switch state {
+            case .initial:
+                break
+            case .noRitual:
+                break
+            case .lessThanAnHourAway(_):
+                break
+            case .feedAvailable:
+                #if IOS 
+                ToastScheduler.shared.schedule(toastType: .basic(displayable: UIImage(systemName: "lock.open")!, title: "Unlocked", description: "Your ritual has begun! You now have access to all features."))
+                #endif
+
+            case .lessThanHourAfter(_):
+                break
+            case .moreThanHourAfter(_):
+                break
+            }
+        }.store(in: &self.cancellables)
     }
 
     private func subscribeToUpdates() {

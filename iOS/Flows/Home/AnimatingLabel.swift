@@ -28,7 +28,7 @@ class AnimatingLabel: Label {
     }
 
     init() {
-        super.init(frame: .zero, font: .small, textColor: .background3)
+        super.init(frame: .zero, font: .small, textColor: .background4)
     }
     
     required init?(coder: NSCoder) {
