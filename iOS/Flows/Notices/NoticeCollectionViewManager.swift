@@ -45,9 +45,12 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
 
         self.collectionView.collectionViewLayout = self.layout
 
+        self.collectionView.animationView.play()
         NoticeSupplier.shared.$notices.mainSink { _ in
-            self.loadSnapshot().mainSink { _ in
+            let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
+            self.loadSnapshot(animationCycle: cycle).mainSink { _ in
                 // Begin auto scroll
+                self.collectionView.animationView.stop()
             }.store(in: &self.cancellables)
         }.store(in: &self.cancellables)
     }
