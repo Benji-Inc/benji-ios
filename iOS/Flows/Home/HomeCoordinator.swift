@@ -70,6 +70,11 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             }
         }
 
+        self.homeVC.noticesCollectionVC.collectionViewManager.$onSelectedItem.mainSink { selection in
+            guard let item = selection?.item as? SystemNotice else { return }
+            self.handle(notice: item)
+        }.store(in: &self.cancellables)
+
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
         }
@@ -122,6 +127,23 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             self.presentFeed()
         case .channels:
             self.addChannels()
+        }
+    }
+
+    private func handle(notice: SystemNotice) {
+        switch notice.type {
+        case .alert:
+            break
+        case .connectionRequest:
+            break
+        case .connectionConfirmed:
+            break
+        case .messageRead:
+            break
+        case .system:
+            break
+        case .ritual:
+            self.presentFeed()
         }
     }
 

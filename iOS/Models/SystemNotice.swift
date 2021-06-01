@@ -18,7 +18,7 @@ protocol Noticeable: Hashable {
 struct SystemNotice: Noticeable, Comparable {
 
     var notice: Notice?
-    var type: Notice.NoticeType?
+    var type: Notice.NoticeType
     var body: String?
     var created: Date?
     var priority: Int?
