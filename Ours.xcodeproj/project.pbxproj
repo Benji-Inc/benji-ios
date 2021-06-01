@@ -522,7 +522,6 @@
 		D6792CDD25F9665E00B6575C /* UserCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CDC25F9665E00B6575C /* UserCollectionViewManager.swift */; };
 		D6792CDF25F9666F00B6575C /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CDE25F9666F00B6575C /* UserCell.swift */; };
 		D6792CE125F96C9600B6575C /* UserCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE025F96C9600B6575C /* UserCollectionView.swift */; };
-		D6792CE325F99F2E00B6575C /* FeedStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE225F99F2E00B6575C /* FeedStatusView.swift */; };
 		D6792CE525FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
 		D6792CE625FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
 		D6792CE725FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
@@ -993,7 +992,6 @@
 		D6792CDC25F9665E00B6575C /* UserCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCollectionViewManager.swift; sourceTree = "<group>"; };
 		D6792CDE25F9666F00B6575C /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		D6792CE025F96C9600B6575C /* UserCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCollectionView.swift; sourceTree = "<group>"; };
-		D6792CE225F99F2E00B6575C /* FeedStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedStatusView.swift; sourceTree = "<group>"; };
 		D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAGradientLayer+Extensions.swift"; sourceTree = "<group>"; };
 		D6792CE825FBE8D300B6575C /* ChannelsGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelsGradientView.swift; sourceTree = "<group>"; };
 		D67934D423D956BB00536B44 /* ChannelPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelPreviewViewController.swift; sourceTree = "<group>"; };
@@ -1901,7 +1899,6 @@
 				D6792CE025F96C9600B6575C /* UserCollectionView.swift */,
 				D6792CD925F9661A00B6575C /* UserCollectionViewController.swift */,
 				D6792CDC25F9665E00B6575C /* UserCollectionViewManager.swift */,
-				D6792CE225F99F2E00B6575C /* FeedStatusView.swift */,
 			);
 			path = "User Collection";
 			sourceTree = "<group>";
@@ -2680,7 +2677,6 @@
 				D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */,
 				D6D4C5BB262096C10026D7A2 /* Comment.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
-				D6792CE325F99F2E00B6575C /* FeedStatusView.swift in Sources */,
 				D6882B9E26010EBE00F94F07 /* PostCreationViewController.swift in Sources */,
 				D6605443262F71FF002F74F8 /* MediaMoreButton.swift in Sources */,
 				D660543D262F213C002F74F8 /* ArchiveCell.swift in Sources */,

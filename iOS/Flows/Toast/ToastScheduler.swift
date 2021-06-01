@@ -14,7 +14,7 @@ import Combine
 enum ToastType {
     case newMessage(TCHMessage, TCHChannel)
     case error(ClientError)
-    case basic(displayable: ImageDisplayable, title: Localized, description: Localized)
+    case basic(identifier: String, displayable: ImageDisplayable, title: Localized, description: Localized)
 }
 
 protocol ToastSchedulerDelegate: AnyObject {
@@ -33,8 +33,8 @@ class ToastScheduler {
         switch toastType {
         case .error(let error):
             self.createErrorToast(for: error)
-        case .basic(let displayable, let title, let description):
-            self.createBasicToast(for: displayable, title: title, description: description)
+        case .basic(let identifier, let displayable, let title, let description):
+            self.createBasicToast(for: identifier, displayable: displayable, title: title, description: description)
         case .newMessage(let msg, let channel):
             self.createMessageToast(for: msg, channel: channel)
         }
@@ -56,7 +56,8 @@ class ToastScheduler {
         ToastQueue.shared.add(toast: toast)
     }
 
-    private func createBasicToast(for displayable: ImageDisplayable,
+    private func createBasicToast(for identifier: String,
+                                  displayable: ImageDisplayable,
                                   title: Localized,
                                   description: Localized) {
 
@@ -67,7 +68,7 @@ class ToastScheduler {
                           displayable: displayable,
                           deeplink: nil,
                           didTap: { [unowned self] in
-                            self.delegate?.didInteractWith(type: .basic(displayable: displayable, title: title, description: description), deeplink: nil)
+                            self.delegate?.didInteractWith(type: .basic(identifier: identifier, displayable: displayable, title: title, description: description), deeplink: nil)
                           })
 
         ToastQueue.shared.add(toast: toast)

@@ -62,12 +62,14 @@ extension ArchivesCollectionViewManager {
                     self.loadPosts(for: user)
                 case .updated(let object):
                     guard let post = object as? Post, post.type == .media else { return }
-                    ToastScheduler.shared.schedule(toastType: .basic(displayable: post.file!,
+                    ToastScheduler.shared.schedule(toastType: .basic(identifier: post.objectId!,
+                                                    displayable: post.file!,
                                                                      title: "Post Updated", description: "Post was successfully updated."))
 
                 case .deleted(let object):
                     guard let post = object as? Post, post.type == .media else { return }
-                    ToastScheduler.shared.schedule(toastType: .basic(displayable: UIImage(systemName: "trash")!,
+                    ToastScheduler.shared.schedule(toastType: .basic(identifier: post.objectId!,
+                                                    displayable: UIImage(systemName: "trash")!,
                                                                      title: "Post Deleted", description: "Post was successfully deleted from your archive."))
 
                     self.reloadForExistingUser()

@@ -111,7 +111,7 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
                             name = self.displayGroupChat(for: channel, with: users)
                         }
 
-                        ToastScheduler.shared.schedule(toastType: .basic(displayable: displayable, title: "Notification Sent", description: "A notification linking to your message has been sent to: \(name)."))
+                        ToastScheduler.shared.schedule(toastType: .basic(identifier: message.id, displayable: displayable, title: "Notification Sent", description: "A notification linking to your message has been sent to: \(name)."))
                     }).store(in: &self.cancellables)
     }
 

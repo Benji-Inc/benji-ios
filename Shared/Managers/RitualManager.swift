@@ -49,7 +49,8 @@ class RitualManager {
                 break
             case .feedAvailable:
                 #if IOS 
-                ToastScheduler.shared.schedule(toastType: .basic(displayable: UIImage(systemName: "lock.open")!, title: "Unlocked", description: "Your ritual has begun! You now have access to all features."))
+                ToastScheduler.shared.schedule(toastType: .basic(identifier: self.currentTriggerDate!.description,
+                                                displayable: UIImage(systemName: "lock.open")!, title: "Unlocked", description: "Your ritual has begun! You now have access to all features."))
                 #endif
 
             case .lessThanHourAfter(_):
