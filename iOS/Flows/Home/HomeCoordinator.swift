@@ -146,6 +146,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             switch RitualManager.shared.state {
             case .feedAvailable:
                 self.presentFeed()
+            case .noRitual:
+                self.showRitual()
             default:
                 break
             }
