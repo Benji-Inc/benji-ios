@@ -32,9 +32,15 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell, UIGestureRecognizer
 
     func configure(with item: SystemNotice) {}
 
+    func canHandleStationaryPress() -> Bool {
+        return true
+    }
+
     // MARK: Touch Handling
 
     @objc private func handleStationaryPress(_ gestureRecognizer: StationaryPressGestureRecognizer) {
+        
+        guard self.canHandleStationaryPress() else { return }
         // Scale down the cell when pressed, and scale back up on release.
         switch gestureRecognizer.state {
         case .possible, .changed:

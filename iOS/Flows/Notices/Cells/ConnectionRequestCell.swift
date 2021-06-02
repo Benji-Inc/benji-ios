@@ -18,6 +18,10 @@ class ConnectionRequestCell: NoticeCell {
         self.contentView.addSubview(self.content)
     }
 
+    override func canHandleStationaryPress() -> Bool {
+        return false 
+    }
+
     override func configure(with item: SystemNotice) {
         super.configure(with: item)
 
@@ -27,7 +31,7 @@ class ConnectionRequestCell: NoticeCell {
             switch result {
             case .success(let connection):
                 self.content.configure(with: connection)
-                self.layoutNow()
+                self.content.layoutNow()
             case .error(_):
                 break
             }

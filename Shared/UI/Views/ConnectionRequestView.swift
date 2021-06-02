@@ -61,7 +61,7 @@ class ConnectionRequestView: View {
             .mainSink { result in
                 switch result {
                 case .success(let userWithData):
-                    let text = LocalizedString(id: "", arguments: [userWithData.handle], default: "[@(handle)](link) has invited you to connect.")
+                    let text = LocalizedString(id: "", arguments: [userWithData.fullName], default: "[@(handle)](link) has invited you to connect.")
                     let attributedString = AttributedString(text,
                                                             fontType: .regular,
                                                             color: .white)
@@ -80,26 +80,26 @@ class ConnectionRequestView: View {
         self.containerView.expandToSuperviewSize()
         self.confettiView.expandToSuperviewSize()
 
-        self.avatarView.left = Theme.contentOffset
-        self.avatarView.top = Theme.contentOffset
-        self.avatarView.setSize(for: 100)
+        self.avatarView.left = Theme.contentOffset.half
+        self.avatarView.top = Theme.contentOffset.half
+        self.avatarView.setSize(for: self.containerView.height - Theme.contentOffset)
 
-        let maxLabelWidth = self.containerView.width - Theme.contentOffset.doubled
+        let maxLabelWidth = self.containerView.width - self.avatarView.right - Theme.contentOffset
         self.textView.setSize(withWidth: maxLabelWidth)
-        self.textView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset)
-        self.textView.match(.left, to: .left, of: self.avatarView)
+        self.textView.match(.top, to: .top, of: self.avatarView)
+        self.textView.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset.half)
 
-        let buttonWidth = self.containerView.halfWidth - Theme.contentOffset.doubled
+        let buttonWidth = (self.containerView.width - self.avatarView.right - Theme.contentOffset - Theme.contentOffset.half) * 0.5
 
         self.acceptButton.size = CGSize(width: buttonWidth, height: 40)
-        self.acceptButton.pin(.right, padding: Theme.contentOffset)
-        self.acceptButton.pin(.bottom, padding: Theme.contentOffset)
+        self.acceptButton.match(.right, to: .right, of: self.containerView, offset: -Theme.contentOffset.half)
+        self.acceptButton.pin(.bottom, padding: Theme.contentOffset.half)
 
         self.declineButton.size = CGSize(width: buttonWidth, height: 40)
-        self.declineButton.pin(.left, padding: Theme.contentOffset)
-        self.declineButton.pin(.bottom, padding: Theme.contentOffset)
+        self.declineButton.match(.right, to: .left, of: self.acceptButton, offset: -Theme.contentOffset.half)
+        self.declineButton.pin(.bottom, padding: Theme.contentOffset.half)
 
-        self.successLabel.setSize(withWidth: self.width * 0.8)
+        self.successLabel.setSize(withWidth: self.containerView.width * 0.8)
         self.successLabel.centerOnXAndY()
     }
 

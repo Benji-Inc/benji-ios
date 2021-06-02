@@ -15,6 +15,8 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
     }
 
     private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
+    private let connectionConfig = ManageableCellRegistration<ConnectionRequestCell>().provider
+    private let alertConfig = ManageableCellRegistration<AlertCell>().provider
     private let ritualConfig = ManageableCellRegistration<RitualCell>().provider
 
     @Published var centerIndexPath: IndexPath? = nil
@@ -70,6 +72,14 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
         switch type {
         case .ritual:
             return self.collectionView.dequeueManageableCell(using: self.ritualConfig,
+                                                             for: indexPath,
+                                                             item: item as? SystemNotice)
+        case .alert:
+            return self.collectionView.dequeueManageableCell(using: self.alertConfig,
+                                                             for: indexPath,
+                                                             item: item as? SystemNotice)
+        case .connectionRequest:
+            return self.collectionView.dequeueManageableCell(using: self.connectionConfig,
                                                              for: indexPath,
                                                              item: item as? SystemNotice)
         default:

@@ -63,12 +63,6 @@ class NoticeSupplier {
 
             notices.append(ritual)
 
-            
-            
-            for _ in 0...5 {
-                let notice = SystemNotice(createdAt: Date(), notice: nil, type: .system, priority: 1, body: nil, attributes: [:])
-                notices.append(notice)
-            }
             promise(.success(notices))
         }
     }

@@ -32,7 +32,10 @@ final class Notice: PFObject, PFSubclassing, Subscribeable {
     }
 
     var type: NoticeType? {
-        get { return self.getObject(for: .type) }
+        get {
+            guard let value: String = self.getObject(for: .type), let t = NoticeType(rawValue: value) else { return nil }
+            return t
+        }
     }
 
     var attributes: [String: AnyHashable]? {
