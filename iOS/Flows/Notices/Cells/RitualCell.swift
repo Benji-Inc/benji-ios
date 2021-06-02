@@ -33,11 +33,13 @@ class RitualCell: NoticeCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.label.setSize(withWidth: self.width - Theme.contentOffset)
-        self.label.centerOnXAndY()
+        self.label.setSize(withWidth: self.contentView.width - Theme.contentOffset)
+        self.label.left = self.contentView.halfWidth - self.label.halfWidth
+        self.label.top = self.contentView.halfHeight - self.label.halfHeight
 
         self.countDownView.size = CGSize(width: 200, height: 60)
-        self.countDownView.centerOnXAndY()
+        self.countDownView.left = self.contentView.halfWidth - self.countDownView.halfWidth
+        self.countDownView.top = self.contentView.halfHeight - self.countDownView.halfHeight
     }
 
     func handle(state: RitualManager.State) {

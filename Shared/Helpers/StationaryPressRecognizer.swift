@@ -18,6 +18,7 @@ class StationaryPressGestureRecognizer: UIGestureRecognizer {
 
     /// Maximum movement in pixels allowed before the gesture is cancelled. Default is 10.
     var allowableMovement: CGFloat = 10
+    var selectionFeedback = UIImpactFeedbackGenerator(style: .light)
 
     /// The initial position on the screen where the press began.
     private var initialTouchPoint: CGPoint?
@@ -34,6 +35,7 @@ class StationaryPressGestureRecognizer: UIGestureRecognizer {
         // Only track one touch at a time
         if touches.count == 1 {
             self.state = .began
+            self.selectionFeedback.impactOccurred()
             self.initialTouchPoint = self.location(in: nil)
         } else {
             self.state = .failed
