@@ -651,6 +651,9 @@
 		D6D4C5B9262096720026D7A2 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5B8262096720026D7A2 /* CommentCell.swift */; };
 		D6D4C5BB262096C10026D7A2 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D4C5BA262096C10026D7A2 /* Comment.swift */; };
 		D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */; };
+		D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
+		D6D804B12667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
+		D6D804B22667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
 		D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6DA3192259B5B6D0078E769 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
@@ -1102,6 +1105,7 @@
 		D6D4C5B8262096720026D7A2 /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		D6D4C5BA262096C10026D7A2 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ScalingAnimation.swift"; sourceTree = "<group>"; };
+		D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationaryPressRecognizer.swift; sourceTree = "<group>"; };
 		D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		D6DA3191259B5B6D0078E769 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -1804,6 +1808,7 @@
 				D66A0B932351821200A0FFEA /* Completeable.swift */,
 				D65519F22589591D00B901E4 /* Typealies.swift */,
 				D6AC90C92594F8F80032774D /* Delegated.swift */,
+				D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -2618,6 +2623,7 @@
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
 				D6792CDA25F9661A00B6575C /* UserCollectionViewController.swift in Sources */,
 				D6B3329325DD74EB00211044 /* Channel+Cloud.swift in Sources */,
+				D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */,
 				D642736622C971FD0088256B /* PostTextView.swift in Sources */,
 				D6DADF6C2207DCA8007D9EB1 /* ChannelsViewController.swift in Sources */,
 				D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */,
@@ -3020,6 +3026,7 @@
 				D63DB29425E999B200F6B323 /* AvatarView.swift in Sources */,
 				D63DB23325E9992600F6B323 /* UIControl+Extensions.swift in Sources */,
 				D6D3927B265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
+				D6D804B22667E06700741594 /* StationaryPressRecognizer.swift in Sources */,
 				D63DB20D25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */,
 				D63DB27425E9997F00F6B323 /* AnyHashableDisplayable.swift in Sources */,
 				D63DB21325E998D700F6B323 /* Onboarding+Cloud.swift in Sources */,
@@ -3177,6 +3184,7 @@
 				D65519442589123200B901E4 /* Completeable.swift in Sources */,
 				D65519152589120C00B901E4 /* Error+Extensions.swift in Sources */,
 				D67758AF25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */,
+				D6D804B12667E06700741594 /* StationaryPressRecognizer.swift in Sources */,
 				D65519352589122700B901E4 /* UIControl+Extensions.swift in Sources */,
 				D6551A5325895EE000B901E4 /* TextEntryField.swift in Sources */,
 				D66A580125DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,
