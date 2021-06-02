@@ -143,7 +143,12 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         case .system:
             break
         case .ritual:
-            self.presentFeed()
+            switch RitualManager.shared.state {
+            case .feedAvailable:
+                self.presentFeed()
+            default:
+                break
+            }
         }
     }
 
