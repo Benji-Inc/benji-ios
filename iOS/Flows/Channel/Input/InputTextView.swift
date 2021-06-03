@@ -39,6 +39,11 @@ class InputTextView: ExpandingTextView {
 
         self.addSubview(self.countView)
         self.countView.isHidden = true
+
+        NotificationCenter.default.publisher(for: UIPasteboard.changedNotification)
+            .mainSink { (_) in
+                self.pasteboardDidChange()
+            }.store(in: &self.cancellables)
     }
 
     func updateInputView(type: InputViewType, becomeFirstResponder: Bool = true) {
@@ -76,5 +81,11 @@ class InputTextView: ExpandingTextView {
         self.countView.size = CGSize(width: 70, height: 20)
         self.countView.right = self.width - 5
         self.countView.bottom = self.height - 5
+    }
+
+    private func pasteboardDidChange() {
+        if UIPasteboard.general.hasStrings, let strings = UIPasteboard.general.strings {
+            print(strings)
+        }
     }
 }

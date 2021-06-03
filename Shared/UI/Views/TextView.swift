@@ -18,7 +18,7 @@ class TextView: UITextView {
     // Maximum length of text. 0 means no limit.
     var maxLength: Int = 250
 
-    private var cancellables = Set<AnyCancellable>()
+    var cancellables = Set<AnyCancellable>()
 
     override var text: String! {
         didSet {

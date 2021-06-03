@@ -16,11 +16,19 @@ extension InputAccessoryView {
         case .possible:
             break
         case .began:
-            self.startAlertAnimation()
+            if case MessageKind.text(let text) = self.currentMessageKind, text.isEmpty {
+                UIMenuController.shared.showMenu(from: self, rect: self.textView.bounds)
+            } else {
+                self.startAlertAnimation()
+            }
         case .changed:
             break
         case .ended, .cancelled, .failed:
-            self.endAlertAnimation()
+            if case MessageKind.text(let text) = self.currentMessageKind, text.isEmpty {
+                break
+            } else {
+                self.endAlertAnimation()
+            }
         @unknown default:
             break
         }
