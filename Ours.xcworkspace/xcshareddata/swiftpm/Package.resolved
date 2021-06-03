@@ -11,6 +11,24 @@
         }
       },
       {
+        "package": "SDWebImage",
+        "repositoryURL": "https://github.com/SDWebImage/SDWebImage.git",
+        "state": {
+          "branch": null,
+          "revision": "76dd4b49110b8624317fc128e7fa0d8a252018bc",
+          "version": "5.11.1"
+        }
+      },
+      {
+        "package": "SDWebImageLinkPlugin",
+        "repositoryURL": "https://github.com/SDWebImage/SDWebImageLinkPlugin.git",
+        "state": {
+          "branch": null,
+          "revision": "2e76fb5f526864e01d757eccc7724dc3ce629eb8",
+          "version": "0.3.0"
+        }
+      },
+      {
         "package": "TwilioChatClient",
         "repositoryURL": "https://github.com/twilio/twilio-chat-ios",
         "state": {

@@ -11,7 +11,6 @@ def shared_pods
   pod 'TMROCoordinator'
   pod 'TMROLocalization'
 
-  pod 'SDWebImage'
 end
 
 target 'Ours' do
