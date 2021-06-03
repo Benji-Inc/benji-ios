@@ -20,7 +20,7 @@ class ConnectionRequestView: View {
     private let acceptButton = Button()
     private let declineButton = Button()
     private let confettiView = ConfettiView()
-    private let successLabel = Label(font: .display)
+    private let successLabel = Label(font: .mediumBold)
 
     var currentItem: Connection?
     var didUpdateConnection: ((Connection) -> Void)? = nil
@@ -32,6 +32,7 @@ class ConnectionRequestView: View {
 
         self.addSubview(self.confettiView)
         self.addSubview(self.successLabel)
+        self.successLabel.textAlignment = .center
         self.addSubview(self.containerView)
 
         self.containerView.addSubview(self.textView)
@@ -39,15 +40,18 @@ class ConnectionRequestView: View {
         self.containerView.addSubview(self.acceptButton)
         self.acceptButton.set(style: .normal(color: .purple, text: "Accept"))
         self.acceptButton.didSelect { [unowned self] in
-            self.updateConnection(with: .accepted, button: self.acceptButton)
+            if let from = self.currentItem?.from {
+                self.updateConnection(with: .accepted, user: from, button: self.acceptButton)
+            }
         }
         self.containerView.addSubview(self.declineButton)
         self.declineButton.set(style: .normal(color: .red, text: "Decline"))
         self.declineButton.didSelect { [unowned self] in
-            self.updateConnection(with: .declined, button: self.declineButton)
+            if let from = self.currentItem?.from {
+                self.updateConnection(with: .declined, user: from, button: self.declineButton)
+            }
         }
 
-        self.successLabel.setText("Success! 🥳")
         self.successLabel.alpha = 0
 
         self.set(backgroundColor: .clear)
@@ -55,19 +59,29 @@ class ConnectionRequestView: View {
     }
 
     func configure(with item: Connection) {
-        guard let status = item.status, status == .invited, let user = item.from else { return }
+
         self.currentItem = item
+
+        guard let user = item.from else { return }
+
         user.retrieveDataIfNeeded()
             .mainSink { result in
                 switch result {
                 case .success(let userWithData):
-                    let text = LocalizedString(id: "", arguments: [userWithData.fullName], default: "[@(name)](\(user.objectId!)) has invited you to connect.")
-                    let attributedString = AttributedString(text,
-                                                            fontType: .regular,
-                                                            color: .white)
-                    self.textView.set(attributed: attributedString, linkColor: .lightPurple)
-                    self.avatarView.set(avatar: userWithData)
-                    self.layoutNow()
+
+                    if let status = item.status, status == .invited {
+                        let text = LocalizedString(id: "", arguments: [userWithData.fullName], default: "[@(name)](\(user.objectId!)) has invited you to connect.")
+                        let attributedString = AttributedString(text,
+                                                                fontType: .regular,
+                                                                color: .white)
+                        self.textView.set(attributed: attributedString, linkColor: .lightPurple)
+                        self.avatarView.set(avatar: userWithData)
+                        self.layoutNow()
+
+                    } else {
+                        self.showSuccess(for: item, user: userWithData)
+                    }
+
                 case .error(_):
                     break
                 }
@@ -103,7 +117,9 @@ class ConnectionRequestView: View {
         self.successLabel.centerOnXAndY()
     }
 
-    private func updateConnection(with status: Connection.Status, button: Button) {
+    private func updateConnection(with status: Connection.Status,
+                                  user: User,
+                                  button: Button) {
         button.handleEvent(status: .loading)
         if let connection = self.currentItem {
             UpdateConnection(connectionId: connection.objectId!, status: status).makeRequest(andUpdate: [], viewsToIgnore: [self])
@@ -112,7 +128,7 @@ class ConnectionRequestView: View {
                     case .success(let updatedConnection):
                         button.handleEvent(status: .complete)
                         if let updated = updatedConnection as? Connection {
-                            self.showSuccess(for: updated)
+                            self.showSuccess(for: updated, user: user, shouldComplete: true)
                         }
                     case .error(let e):
                         button.handleEvent(status: .error(e.localizedDescription))
@@ -121,13 +137,21 @@ class ConnectionRequestView: View {
         }
     }
 
-    private func showSuccess(for connection: Connection) {
+    private func showSuccess(for connection: Connection,
+                             user: User,
+                             shouldComplete: Bool = false) {
+        let text = LocalizedString(id: "", arguments: [user.givenName], default: "Success! 🥳\n You are now connected with @(name)")
+        self.successLabel.setText(text)
+        self.layoutNow()
+
         UIView.animate(withDuration: Theme.animationDuration) {
             self.containerView.alpha = 0
             self.successLabel.alpha = 1
         } completion: { completed in
             self.confettiView.startConfetti(with: 3.0)
-            self.didUpdateConnection?(connection)
+            if shouldComplete {
+                self.didUpdateConnection?(connection)
+            }
         }
     }
 }
