@@ -133,7 +133,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     private func handle(notice: SystemNotice) {
         switch notice.type {
         case .alert:
-            break
+            guard let channelId = notice.attributes?["channelId"] as? String, let channel = ChannelSupplier.shared.getChannel(withSID: channelId) else { return }
+            self.startChannelFlow(for: channel.channelType)
+
         case .connectionRequest:
             break
         case .connectionConfirmed:
