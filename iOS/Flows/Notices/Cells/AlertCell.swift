@@ -30,6 +30,8 @@ class AlertCell: NoticeCell {
     override func configure(with item: SystemNotice) {
         super.configure(with: item)
 
+        // TODO: Add message lookup, And add message date. 
+
         guard let body = item.body,
               let author = item.attributes?["author"] as? String else { return }
 

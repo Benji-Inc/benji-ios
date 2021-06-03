@@ -106,6 +106,28 @@ class MessageSupplier: NSObject {
 
     //MARK: GET MESSAGES
 
+    static func getMessage(from channelId: String, with index: NSNumber) -> Future<Messageable, Error> {
+        return Future { promise in
+            if let displyable = ChannelSupplier.shared.allChannelsSorted.first(where: { channel in
+                if case ChannelType.channel(let channel) = channel.channelType {
+                    return channel.sid == channelId
+                }
+                return false
+            }),  case ChannelType.channel(let channel) = displyable.channelType,  let msgObject = channel.messages {
+                
+                msgObject.message(withIndex: index) { result, message in
+                    if let msg = message {
+                        promise(.success(msg))
+                    } else {
+                        promise(.failure(ClientError.apiError(detail: "No message found for index")))
+                    }
+                }
+            } else {
+                promise(.failure(ClientError.apiError(detail: "No messages object")))
+            }
+        }
+    }
+
     @discardableResult
     func getLastMessages(batchAmount: UInt = 20) -> Future<[ChannelSectionable], Error> {
         return Future { promise in
