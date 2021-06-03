@@ -39,25 +39,25 @@ class UserNotificationManager: NSObject {
         }
     }
 
-//    func silentRegister(withApplication application: UIApplication) {
-//
-//        self.getNotificationSettings()
-//            .mainSink { (settings) in
-//                switch settings.authorizationStatus {
-//                case .authorized:
-//                    application.registerForRemoteNotifications()  // To update our token
-//                case .provisional:
-//                    application.registerForRemoteNotifications()  // To update our token
-//                case .notDetermined:
-//                    self.register(with: [.alert, .sound, .badge, .provisional], application: application)
-//                        .mainSink { (_) in }.store(in: &self.cancellables)
-//                case .denied, .ephemeral:
-//                    return
-//                @unknown default:
-//                    return
-//                }
-//            }.store(in: &self.cancellables)
-//    }
+    func silentRegister(withApplication application: UIApplication) {
+
+        self.getNotificationSettings()
+            .mainSink { (settings) in
+                switch settings.authorizationStatus {
+                case .authorized:
+                    application.registerForRemoteNotifications()  // To update our token
+                case .provisional:
+                    application.registerForRemoteNotifications()  // To update our token
+                case .notDetermined:
+                    self.register(with: [.alert, .sound, .badge, .provisional], application: application)
+                        .mainSink { (_) in }.store(in: &self.cancellables)
+                case .denied, .ephemeral:
+                    return
+                @unknown default:
+                    return
+                }
+            }.store(in: &self.cancellables)
+    }
 
     @discardableResult
     func register(with options: UNAuthorizationOptions = [.alert, .sound, .badge],

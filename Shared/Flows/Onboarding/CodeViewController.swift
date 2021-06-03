@@ -80,7 +80,7 @@ class CodeViewController: TextInputViewController<Void> {
             if let _ = user?.objectId {
                 self.textEntry.button.handleEvent(status: .complete)
                 #if !NOTIFICATION
-                UserNotificationManager.shared.register(application: UIApplication.shared)
+                UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
                 #endif
                 self.complete(with: .success(()))
             } else if let error = error {
