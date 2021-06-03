@@ -1,5 +1,5 @@
 //
-//  MessageInputTextView.swift
+//  InputTextView.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 8/30/20.
@@ -22,6 +22,8 @@ class InputTextView: ExpandingTextView {
 
     private(set) var currentInputView: InputViewType = .keyboard
     var textDidUpdate: ((String) -> Void)?
+
+    @Published var currentURL: URL?
 
     unowned let attachmentDelegate: AttachmentViewControllerDelegate
 
@@ -71,6 +73,8 @@ class InputTextView: ExpandingTextView {
 
     override func textDidChange() {
         super.textDidChange()
+
+        self.checkForDataTypes()
         self.textDidUpdate?(self.text)
         self.countView.udpate(with: self.text.count, max: self.maxLength)
     }
@@ -86,6 +90,21 @@ class InputTextView: ExpandingTextView {
     private func pasteboardDidChange() {
         if UIPasteboard.general.hasStrings, let strings = UIPasteboard.general.strings {
             print(strings)
+        }
+    }
+
+    private func checkForDataTypes() {
+        guard let input = self.text else { return }
+        
+        let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+        let matches = detector.matches(in: input, options: [], range: NSRange(location: 0, length: input.utf16.count))
+
+        for match in matches {
+            guard let range = Range(match.range, in: input) else { continue }
+            let url = input[range]
+            print(url)
+
+            self.currentURL = URL(string: String(url))
         }
     }
 }

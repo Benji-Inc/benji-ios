@@ -188,6 +188,11 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
             self.handleTextChange(text)
         }
 
+        self.textView.$currentURL.mainSink { value in
+            guard let url = value else { return }
+            print(url)
+        }.store(in: &self.cancellables)
+
         self.overlayButton.didSelect { [unowned self] in
             if !self.textView.isFirstResponder {
                 self.textView.becomeFirstResponder()
