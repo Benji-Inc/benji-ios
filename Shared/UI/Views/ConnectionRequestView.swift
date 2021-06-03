@@ -56,7 +56,7 @@ class ConnectionRequestView: View {
 
         self.set(backgroundColor: .clear)
         self.containerView.roundCorners()
-        self.containerView.clipsToBounds = true 
+        self.confettiView.clipsToBounds = true 
     }
 
     func configure(with item: Connection) {

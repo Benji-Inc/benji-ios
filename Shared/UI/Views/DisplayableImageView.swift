@@ -70,7 +70,9 @@ class DisplayableImageView: View {
                 if self.animationView.isAnimationPlaying {
                     self.animationView.stop()
                 }
+                self.animationView.loopMode = .loop
                 self.animationView.load(animation: .loading)
+                self.animationView.play()
             case .error:
                 if self.animationView.isAnimationPlaying {
                     self.animationView.stop()
