@@ -64,14 +64,13 @@ class DisplayableImageView: View {
             switch state {
             case .initial:
                 self.animationView.reset()
-                self.displayable = nil
                 self.animationView.stop()
                 self.blurView.effect = self.blurEffect
             case .loading:
                 if self.animationView.isAnimationPlaying {
                     self.animationView.stop()
                 }
-                self.animationView.load(animation: .pie)
+                self.animationView.load(animation: .loading)
             case .error:
                 if self.animationView.isAnimationPlaying {
                     self.animationView.stop()
