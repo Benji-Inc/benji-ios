@@ -41,7 +41,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         return self.view.height
     }
 
-    var isPanning: Bool = false
+    @Published var isPanning: Bool = false
     var isMenuPresenting: Bool = false
     var isShowingArchive = false
 
@@ -59,6 +59,14 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.createVC.view.layer.masksToBounds = true
 
         self.view.addSubview(self.tabView)
+
+        self.$isPanning
+            .removeDuplicates()
+            .mainSink { isPanning in
+                UIView.animate(withDuration: 0.1) {
+                    self.noticesCollectionVC.view.alpha = isPanning ? 0.0 : 1.0
+                }
+        }.store(in: &self.cancellables)
 
         self.tabView.didSelectProfile = { [unowned self] in
             self.didTapProfile?()

@@ -66,7 +66,7 @@ class RitualCell: NoticeCell {
     }
 
     func showRitualReady() {
-        self.label.animatedText = "Your feed is unlocked!"
+        self.label.animatedText = "Your feed is unlocked!\nTap to begin 🥳"
     }
 
     private func showCountDown() {

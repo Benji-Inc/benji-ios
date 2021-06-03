@@ -61,7 +61,7 @@ class ConnectionRequestView: View {
             .mainSink { result in
                 switch result {
                 case .success(let userWithData):
-                    let text = LocalizedString(id: "", arguments: [userWithData.fullName], default: "[@(handle)](link) has invited you to connect.")
+                    let text = LocalizedString(id: "", arguments: [userWithData.fullName], default: "[@(name)](\(user.objectId!)) has invited you to connect.")
                     let attributedString = AttributedString(text,
                                                             fontType: .regular,
                                                             color: .white)

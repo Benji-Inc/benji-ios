@@ -204,25 +204,4 @@ class PostsSupplier {
                 }.store(in: &self.cancellables)
         }.eraseToAnyPublisher()
     }
-
-//    private func getConnections() -> AnyPublisher<[Postable], Error> {
-//        return Future { promise in
-//            GetAllConnections(direction: .incoming)
-//                .makeRequest(andUpdate: [], viewsToIgnore: [])
-//                .mainSink(receivedResult: { (result) in
-//                    var connetionPosts: [Postable] = []
-//                    switch result {
-//                    case .success(let connections):
-//                        connections.forEach { (connection) in
-//                            if connection.status == .invited {
-//                                connetionPosts.append(ConnectionRequestPost(with: connection))
-//                            }
-//                        }
-//                    case .error(_):
-//                        break
-//                    }
-//                    promise(.success(connetionPosts))
-//                }).store(in: &self.cancellables)
-//        }.eraseToAnyPublisher()
-//    }
 }
