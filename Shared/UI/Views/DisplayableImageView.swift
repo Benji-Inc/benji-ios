@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import SDWebImage
 import SDWebImageLinkPlugin
 import UIKit
 import Combine
@@ -55,6 +54,7 @@ class DisplayableImageView: View {
         super.initializeSubviews()
 
         self.set(backgroundColor: .clear)
+
         self.addSubview(self.imageView)
         self.imageView.contentMode = .scaleAspectFill
 
@@ -100,7 +100,7 @@ class DisplayableImageView: View {
         self.animationView.centerOnXAndY()
     }
 
-    private func updateImageView(with displayable: ImageDisplayable) {
+    func updateImageView(with displayable: ImageDisplayable) {
         self.state = .loading
 
         if let photo = displayable.image {
@@ -183,7 +183,7 @@ class DisplayableImageView: View {
         self.blurView.effect = self.blurEffect
     }
 
-    private func showResult(for image: UIImage?) {
+    func showResult(for image: UIImage?) {
         self.state = image.isNil ? .error : .success
 
         UIView.animate(withDuration: 0.2) {

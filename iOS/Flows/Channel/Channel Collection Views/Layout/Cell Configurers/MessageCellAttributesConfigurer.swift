@@ -23,7 +23,7 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
                             attributes: ChannelCollectionViewLayoutAttributes) {
 
         // Handle any data types
-        if let types = self.detectDataTypes(from: message) {
+        if let types = message.getDataTypes() {
             attributes.attributes.attachmentFrame = self.getAttachmentFrame(for: types)
         } else {
             // If no data types then display text
@@ -65,7 +65,7 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
     private func cellContentHeight(with message: Messageable,
                                    for layout: ChannelCollectionViewFlowLayout) -> CGFloat {
-        if let results = self.detectDataTypes(from: message) {
+        if let results = message.getDataTypes() {
             return self.getAttachmentFrame(for: results).size.height
         } else {
             let size = self.getTextViewSize(with: message, for: layout)
@@ -143,25 +143,5 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
     private func getAvatarPadding(for layout: ChannelCollectionViewFlowLayout) -> CGFloat {
         guard let dataSource = layout.dataSource else { return .zero }
         return dataSource.numberOfMembers > 2 ? 8 : 8
-    }
-
-    private func detectDataTypes(from message: Messageable) -> [NSTextCheckingResult]? {
-        guard case MessageKind.text(let text) = message.kind, let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) else { return nil }
-
-        let range = NSRange(text.startIndex..<text.endIndex, in: text)
-
-        var results: [NSTextCheckingResult] = []
-
-        detector.enumerateMatches(in: text,
-                                  options: [],
-                                  range: range) { (match, flags, _) in
-            guard let match = match else {
-                return
-            }
-
-            results.append(match)
-        }
-
-        return results
     }
 }

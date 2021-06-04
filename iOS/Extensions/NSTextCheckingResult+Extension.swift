@@ -17,4 +17,8 @@ extension NSTextCheckingResult: ImageDisplayable {
     var image: UIImage? {
         return nil
     }
+
+    var textResult: NSTextCheckingResult? {
+        return self
+    }
 }

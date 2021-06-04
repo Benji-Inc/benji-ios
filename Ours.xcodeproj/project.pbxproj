@@ -687,6 +687,9 @@
 		D6EDFB5425D490130034A2F6 /* Postable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EDFB5325D490130034A2F6 /* Postable.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
 		D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */; };
+		D6F312A0266ADDA600E25FEE /* LinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F3129F266ADDA600E25FEE /* LinkView.swift */; };
+		D6F312A1266ADDA600E25FEE /* LinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F3129F266ADDA600E25FEE /* LinkView.swift */; };
+		D6F312A2266ADDA600E25FEE /* LinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F3129F266ADDA600E25FEE /* LinkView.swift */; };
 		D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
 		D6F33C6D24B14988009603FF /* PhotoCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6C24B14988009603FF /* PhotoCellAttributesConfigurer.swift */; };
 		D6F33C6F24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6E24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift */; };
@@ -1135,6 +1138,7 @@
 		D6EDFB5325D490130034A2F6 /* Postable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Postable.swift; sourceTree = "<group>"; };
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
 		D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashableDisplayable.swift; sourceTree = "<group>"; };
+		D6F3129F266ADDA600E25FEE /* LinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkView.swift; sourceTree = "<group>"; };
 		D6F33C6A24AFCF24009603FF /* MessageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageKind.swift; sourceTree = "<group>"; };
 		D6F33C6C24B14988009603FF /* PhotoCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCellAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D6F33C6E24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedMessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
@@ -1756,6 +1760,7 @@
 				D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */,
 				D60C81492209360400A127A3 /* DisplayableImageView.swift */,
 				D61EC0E121D30E6000204BEE /* Label.swift */,
+				D6F3129F266ADDA600E25FEE /* LinkView.swift */,
 				D6F733D923D37C6300FBC7BC /* TextEntryField.swift */,
 				D6D1503D21DAF98500CD8CE4 /* TextField.swift */,
 				D61EC0E321D30E9100204BEE /* TextView.swift */,
@@ -2595,6 +2600,7 @@
 				D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */,
 				D6D3929226653A1400E49F1E /* SystemNotice.swift in Sources */,
 				D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */,
+				D6F312A0266ADDA600E25FEE /* LinkView.swift in Sources */,
 				D650C1DA25B5EE3D0037C59A /* AvatarContextDelegate.swift in Sources */,
 				D65519F32589591D00B901E4 /* Typealies.swift in Sources */,
 				D6BEDE5026262795009BA131 /* CommentsButton.swift in Sources */,
@@ -2988,6 +2994,7 @@
 				D63DB22C25E9991800F6B323 /* PFInstallation+Extensions.swift in Sources */,
 				D63DB25A25E9995E00F6B323 /* User+Objectable.swift in Sources */,
 				D63DB25325E9995100F6B323 /* RitualManager.swift in Sources */,
+				D6F312A2266ADDA600E25FEE /* LinkView.swift in Sources */,
 				D63DB24E25E9994B00F6B323 /* Typealies.swift in Sources */,
 				D63DB23A25E9992600F6B323 /* UIScrollView+Extensions.swift in Sources */,
 				D63DB23025E9991F00F6B323 /* String+Extensions.swift in Sources */,
@@ -3148,6 +3155,7 @@
 				D65519122589120600B901E4 /* ClosedRange+Extensions.swift in Sources */,
 				D64A1F08258C16470097817C /* WaitlistViewController.swift in Sources */,
 				D6551A2D25895E3C00B901E4 /* OnboardingViewController.swift in Sources */,
+				D6F312A1266ADDA600E25FEE /* LinkView.swift in Sources */,
 				D6551A3325895E4C00B901E4 /* PhoneViewController.swift in Sources */,
 				D655193D2589122700B901E4 /* UIWindow+Extensions.swift in Sources */,
 				D67758A125B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,

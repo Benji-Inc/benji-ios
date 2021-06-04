@@ -9,6 +9,7 @@
 import Foundation
 import Parse
 import Combine
+import SDWebImageLinkPlugin
 
 enum LaunchActivity {
     case onboarding(phoneNumber: String)
@@ -52,6 +53,9 @@ class LaunchManager {
             UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
             #endif
         }
+
+        SDImageLoadersManager.shared.addLoader(SDImageLinkLoader.shared)
+        SDWebImageManager.defaultImageLoader = SDImageLoadersManager.shared
         
         self.initializeUserData(with: nil)
     }

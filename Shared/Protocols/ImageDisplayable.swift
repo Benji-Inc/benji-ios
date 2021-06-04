@@ -13,10 +13,15 @@ protocol ImageDisplayable {
     var userObjectID: String? { get }
     var image: UIImage? { get }
     var url: URL? { get }
+    var textResult: NSTextCheckingResult? { get }
 }
 
 extension ImageDisplayable {
     var url: URL? {
         return nil 
+    }
+
+    var textResult: NSTextCheckingResult? {
+        return nil
     }
 }
