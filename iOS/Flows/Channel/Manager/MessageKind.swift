@@ -37,6 +37,8 @@ enum MessageKind {
     /// A contact message.
     case contact(ContactItem)
 
+    case link(URL)
+
     var isSendable: Bool {
         switch self {
         case .text(let body):
@@ -92,6 +94,8 @@ extension MessageKind: Equatable {
             return lhsAudio == rhsAudio
         case (.contact(let lhsContact), .contact(let rhsContact)):
             return lhsContact == rhsContact
+        case (.link(let lhsLink), .link(let rhsLink)):
+            return lhsLink == rhsLink
         default:
             return false
         }

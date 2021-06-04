@@ -51,6 +51,8 @@ class PreviewMessageView: View {
                 break
             case .contact(_):
                 break
+            case .link(_):
+                break
             }
             self.layoutNow()
         }.store(in: &self.cancellables)

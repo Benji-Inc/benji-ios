@@ -175,6 +175,8 @@ class ChannelCollectionViewFlowLayout: UICollectionViewFlowLayout {
                 return AudioCellAttributesConfigurer()
             case .contact(_):
                 return ContactCellAttributesConfigurer()
+            case .link(_):
+                return LinkCellAttributesConfigurer()
             }
         }
 

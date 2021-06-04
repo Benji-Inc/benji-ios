@@ -31,19 +31,14 @@ class LinkView: DisplayableImageView {
     override func updateImageView(with displayable: ImageDisplayable) {
         self.state = .loading
 
-        if let result = displayable.textResult {
-            self.downloadAndSet(result: result)
+        if let url = displayable.url {
+            self.downloadAndSet(url: url)
         } else {
             self.showResult(for: nil)
         }
     }
 
-    private func downloadAndSet(result: NSTextCheckingResult) {
-        guard let url = result.url else {
-            self.showResult(for: nil)
-            return
-        }
-
+    private func downloadAndSet(url: URL) {
         self.linkView.sd_setImage(with: url) { [weak self] linkImage, error, linkCache, linkURL in
             guard let `self` = self else { return }
             self.showResult(for: linkImage)

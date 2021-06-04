@@ -138,6 +138,8 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
             cell = channelCollectionView.dequeueReusableCell(AudioMessageCell.self, for: indexPath)
         case .contact(_):
             cell = channelCollectionView.dequeueReusableCell(ContactMessageCell.self, for: indexPath)
+        case .link(_):
+            cell = channelCollectionView.dequeueReusableCell(LinkCell.self, for: indexPath)
         }
 
         cell.configure(with: message)

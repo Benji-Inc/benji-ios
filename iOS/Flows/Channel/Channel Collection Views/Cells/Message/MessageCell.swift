@@ -11,14 +11,12 @@ import Parse
 
 class MessageCell: BaseMessageCell {
 
-    let imageView = LinkView()
     let bubbleView = MessageBubbleView()
     let textView = MessageTextView()
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.contentView.addSubview(self.imageView)
         self.contentView.addSubview(self.bubbleView)
         self.bubbleView.addSubview(self.textView)
 
@@ -48,11 +46,7 @@ class MessageCell: BaseMessageCell {
         super.configure(with: message)
 
         if case MessageKind.text(let text) = message.kind {
-            if let first = message.getDataTypes()?.first, first.resultType == .link {
-                self.imageView.displayable = first
-            } else {
-                self.textView.set(text: text, messageContext: message.context)
-            }
+            self.textView.set(text: text, messageContext: message.context)
         }
     }
 
@@ -81,6 +75,5 @@ class MessageCell: BaseMessageCell {
         self.bubbleView.layer.maskedCorners = attributes.attributes.maskedCorners
         self.bubbleView.roundCorners()
         self.bubbleView.indexPath = attributes.indexPath
-        self.imageView.frame = attributes.attributes.attachmentFrame
     }
 }

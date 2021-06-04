@@ -690,6 +690,8 @@
 		D6F312A0266ADDA600E25FEE /* LinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F3129F266ADDA600E25FEE /* LinkView.swift */; };
 		D6F312A1266ADDA600E25FEE /* LinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F3129F266ADDA600E25FEE /* LinkView.swift */; };
 		D6F312A2266ADDA600E25FEE /* LinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F3129F266ADDA600E25FEE /* LinkView.swift */; };
+		D6F312A4266AE1E600E25FEE /* LinkCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F312A3266AE1E600E25FEE /* LinkCellAttributesConfigurer.swift */; };
+		D6F312A8266AE27D00E25FEE /* LinkCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F312A7266AE27D00E25FEE /* LinkCell.swift */; };
 		D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
 		D6F33C6D24B14988009603FF /* PhotoCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6C24B14988009603FF /* PhotoCellAttributesConfigurer.swift */; };
 		D6F33C6F24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6E24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift */; };
@@ -1139,6 +1141,8 @@
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
 		D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyHashableDisplayable.swift; sourceTree = "<group>"; };
 		D6F3129F266ADDA600E25FEE /* LinkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkView.swift; sourceTree = "<group>"; };
+		D6F312A3266AE1E600E25FEE /* LinkCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkCellAttributesConfigurer.swift; sourceTree = "<group>"; };
+		D6F312A7266AE27D00E25FEE /* LinkCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkCell.swift; sourceTree = "<group>"; };
 		D6F33C6A24AFCF24009603FF /* MessageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageKind.swift; sourceTree = "<group>"; };
 		D6F33C6C24B14988009603FF /* PhotoCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCellAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D6F33C6E24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedMessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
@@ -1505,6 +1509,7 @@
 				D6F33C6C24B14988009603FF /* PhotoCellAttributesConfigurer.swift */,
 				D64C6AA1232EA06800DB7257 /* TypingCellAttributesConfigurer.swift */,
 				D6F33C7424B14A7B009603FF /* VideoAttributesCellConfigurer.swift */,
+				D6F312A3266AE1E600E25FEE /* LinkCellAttributesConfigurer.swift */,
 			);
 			path = "Cell Configurers";
 			sourceTree = "<group>";
@@ -1956,6 +1961,7 @@
 				D64C6A9A232D6C3B00DB7257 /* Typing */,
 				D6F33C8124B15086009603FF /* VideoMessageCell.swift */,
 				D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */,
+				D6F312A7266AE27D00E25FEE /* LinkCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2699,6 +2705,7 @@
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
 				D6140737263DB22F00B84605 /* HomeViewController+Panning.swift in Sources */,
 				D6B37CAD25F7C50000BC3145 /* ConnectionRequestPost.swift in Sources */,
+				D6F312A8266AE27D00E25FEE /* LinkCell.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */,
 				D66B4BE925EF03B60035A2C5 /* SideNavigationController.swift in Sources */,
@@ -2916,6 +2923,7 @@
 				D6F33C7524B14A7B009603FF /* VideoAttributesCellConfigurer.swift in Sources */,
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,
 				D609AE36236F3F81004FA89A /* User+Objectable.swift in Sources */,
+				D6F312A4266AE1E600E25FEE /* LinkCellAttributesConfigurer.swift in Sources */,
 				D677589625B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,
 				D6A301AC2380E102006655E0 /* PostsSupplier.swift in Sources */,
 				D66F0FDC22BF2ADC00BA277D /* HomeCoordinator.swift in Sources */,

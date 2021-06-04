@@ -86,6 +86,8 @@ extension ChannelCoordinator: ChannelViewControllerDelegate {
             break
         case .contact(_):
             break
+        case .link(let link):
+            items = [link]
         }
 
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
