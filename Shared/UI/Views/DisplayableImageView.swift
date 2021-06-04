@@ -9,6 +9,7 @@
 import Foundation
 import Parse
 import SDWebImage
+import SDWebImageLinkPlugin
 import UIKit
 import Combine
 import Lottie

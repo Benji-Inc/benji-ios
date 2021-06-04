@@ -11,12 +11,14 @@ import Parse
 
 class MessageCell: BaseMessageCell {
 
+    let imageView = DisplayableImageView()
     let bubbleView = MessageBubbleView()
     let textView = MessageTextView()
 
     override func initializeViews() {
         super.initializeViews()
 
+        self.contentView.addSubview(self.imageView)
         self.contentView.addSubview(self.bubbleView)
         self.bubbleView.addSubview(self.textView)
 
@@ -47,7 +49,6 @@ class MessageCell: BaseMessageCell {
 
         if case MessageKind.text(let text) = message.kind {
             self.textView.set(text: text, messageContext: message.context)
-            self.detectDataTypes(from: text)
         }
     }
 
@@ -74,53 +75,5 @@ class MessageCell: BaseMessageCell {
         self.bubbleView.layer.maskedCorners = attributes.attributes.maskedCorners
         self.bubbleView.roundCorners()
         self.bubbleView.indexPath = attributes.indexPath
-    }
-
-    private func detectDataTypes(from string: String) {
-        guard let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) else { return }
-
-        let range = NSRange(string.startIndex..<string.endIndex, in: string)
-        detector.enumerateMatches(in: string,
-                                  options: [],
-                                  range: range) { (match, flags, _) in
-            guard let match = match else {
-                return
-            }
-
-            switch match.resultType {
-            case .date:
-                let date = match.date
-                let timeZone = match.timeZone
-                let duration = match.duration
-                print(date, timeZone, duration)
-            case .address:
-                if let components = match.components {
-                    let name = components[.name]
-                    let jobTitle = components[.jobTitle]
-                    let organization = components[.organization]
-                    let street = components[.street]
-                    let locality = components[.city]
-                    let region = components[.state]
-                    let postalCode = components[.zip]
-                    let country = components[.country]
-                    let phoneNumber = components[.phone]
-                    print(name, jobTitle, organization, street, locality, region, postalCode, country, phoneNumber)
-                }
-            case .link:
-                let url = match.url
-                print(url)
-            case .phoneNumber:
-                let phoneNumber = match.phoneNumber
-                print(phoneNumber)
-            case .transitInformation:
-                if let components = match.components {
-                    let airline = components[.airline]
-                    let flight = components[.flight]
-                    print(airline, flight)
-                }
-            default:
-                return
-            }
-        }
     }
 }

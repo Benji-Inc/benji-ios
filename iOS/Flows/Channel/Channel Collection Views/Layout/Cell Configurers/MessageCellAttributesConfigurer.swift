@@ -22,28 +22,34 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
                             for layout: ChannelCollectionViewFlowLayout,
                             attributes: ChannelCollectionViewLayoutAttributes) {
 
-        let textViewSize = self.getTextViewSize(with: message, for: layout)
-        let bubbleViewFrame = self.getBubbleViewFrame(with: message, textViewSize: textViewSize, for: layout)
-        attributes.attributes.bubbleViewFrame = bubbleViewFrame
-
-        let avatarFrame = self.getAvatarFrame(with: message, layout: layout)
-        attributes.attributes.avatarFrame = avatarFrame
-
-        attributes.attributes.textViewFrame = self.getTextViewFrame(with: bubbleViewFrame.size, textViewSize: textViewSize)
-
-        //Determine masked corners
-        if message.isFromCurrentUser {
-            if let previous = previousMessage, previous.authorID == message.authorID {
-                attributes.attributes.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
-            } else {
-                attributes.attributes.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
-            }
+        // Handle any data types
+        if let types = self.detectDataTypes(from: message) {
+            attributes.attributes.attachmentFrame = self.getAttachmentFrame(for: types)
         } else {
+            // If no data types then display text
+            let textViewSize = self.getTextViewSize(with: message, for: layout)
+            let bubbleViewFrame = self.getBubbleViewFrame(with: message, textViewSize: textViewSize, for: layout)
+            attributes.attributes.bubbleViewFrame = bubbleViewFrame
 
-            if let next = nextMessage, next.authorID == message.authorID {
-                attributes.attributes.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
+            let avatarFrame = self.getAvatarFrame(with: message, layout: layout)
+            attributes.attributes.avatarFrame = avatarFrame
+
+            attributes.attributes.textViewFrame = self.getTextViewFrame(with: bubbleViewFrame.size, textViewSize: textViewSize)
+
+            //Determine masked corners
+            if message.isFromCurrentUser {
+                if let previous = previousMessage, previous.authorID == message.authorID {
+                    attributes.attributes.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
+                } else {
+                    attributes.attributes.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
+                }
             } else {
-                attributes.attributes.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner]
+
+                if let next = nextMessage, next.authorID == message.authorID {
+                    attributes.attributes.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner]
+                } else {
+                    attributes.attributes.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner]
+                }
             }
         }
     }
@@ -59,8 +65,24 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
     private func cellContentHeight(with message: Messageable,
                                    for layout: ChannelCollectionViewFlowLayout) -> CGFloat {
-        let size = self.getTextViewSize(with: message, for: layout)
-        return self.getBubbleViewFrame(with: message, textViewSize: size, for: layout).height
+        if let results = self.detectDataTypes(from: message) {
+            return self.getAttachmentFrame(for: results).size.height
+        } else {
+            let size = self.getTextViewSize(with: message, for: layout)
+            return self.getBubbleViewFrame(with: message, textViewSize: size, for: layout).height
+        }
+    }
+
+    private func getAttachmentFrame(for results: [NSTextCheckingResult]) -> CGRect {
+        let types = results.compactMap { result in
+            return result.resultType
+        }
+
+        if types.contains(.link) {
+            return CGRect(x: 0, y: 0, width: 250, height: 350)
+        } else {
+            return .zero
+        }
     }
 
     private func getAvatarFrame(with message: Messageable, layout: ChannelCollectionViewFlowLayout) -> CGRect {
@@ -121,5 +143,25 @@ class MessageCellAttributesConfigurer: ChannelCellAttributesConfigurer {
     private func getAvatarPadding(for layout: ChannelCollectionViewFlowLayout) -> CGFloat {
         guard let dataSource = layout.dataSource else { return .zero }
         return dataSource.numberOfMembers > 2 ? 8 : 8
+    }
+
+    private func detectDataTypes(from message: Messageable) -> [NSTextCheckingResult]? {
+        guard case MessageKind.text(let text) = message.kind, let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) else { return nil }
+
+        let range = NSRange(text.startIndex..<text.endIndex, in: text)
+
+        var results: [NSTextCheckingResult] = []
+
+        detector.enumerateMatches(in: text,
+                                  options: [],
+                                  range: range) { (match, flags, _) in
+            guard let match = match else {
+                return
+            }
+
+            results.append(match)
+        }
+
+        return results
     }
 }

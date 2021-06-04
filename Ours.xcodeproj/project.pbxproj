@@ -657,6 +657,7 @@
 		D6D804B526693AE700741594 /* SDWebImageLinkPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B426693AE700741594 /* SDWebImageLinkPlugin */; };
 		D6D804B72669415200741594 /* SDWebImageLinkPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B62669415200741594 /* SDWebImageLinkPlugin */; };
 		D6D804B92669416E00741594 /* SDWebImageLinkPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B82669416E00741594 /* SDWebImageLinkPlugin */; };
+		D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804BA266A8B7D00741594 /* NSTextCheckingResult+Extension.swift */; };
 		D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D6DA3192259B5B6D0078E769 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
@@ -1109,6 +1110,7 @@
 		D6D4C5BA262096C10026D7A2 /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ScalingAnimation.swift"; sourceTree = "<group>"; };
 		D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationaryPressRecognizer.swift; sourceTree = "<group>"; };
+		D6D804BA266A8B7D00741594 /* NSTextCheckingResult+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextCheckingResult+Extension.swift"; sourceTree = "<group>"; };
 		D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
 		D6D8BB6C24677B5D00937581 /* Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reservation.swift; sourceTree = "<group>"; };
 		D6DA3191259B5B6D0078E769 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
@@ -1327,6 +1329,7 @@
 			children = (
 				D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */,
 				D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */,
+				D6D804BA266A8B7D00741594 /* NSTextCheckingResult+Extension.swift */,
 				D64C6A7F23294ED700DB7257 /* Twilio */,
 			);
 			path = Extensions;
@@ -2836,6 +2839,7 @@
 				D69B75FB264842D00007020D /* VideoView.swift in Sources */,
 				D6EDD1992355DBFA00FDA5D6 /* ProfileDetailView.swift in Sources */,
 				D6830222234AA35C006145FE /* DisplayableChannel.swift in Sources */,
+				D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */,
 				D60B0BE82432F88D004784CD /* PostConnectionViewController.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
 				D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */,
