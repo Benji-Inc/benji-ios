@@ -9,6 +9,7 @@
 import Foundation
 import TMROLocalization
 import TwilioChatClient
+import SafariServices
 
 extension ChannelCollectionViewManager: UIContextMenuInteractionDelegate {
 
@@ -17,9 +18,14 @@ extension ChannelCollectionViewManager: UIContextMenuInteractionDelegate {
             let indexPath = indexView.indexPath,
             let message = self.item(at: indexPath) else { return nil }
 
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: { suggestedActions in
+        return UIContextMenuConfiguration(identifier: nil) {
+            if case MessageKind.link(let url) = message.kind {
+                return SFSafariViewController(url: url)
+            }
+            return nil
+        } actionProvider: { suggested in
             return self.makeContextMenu(for: message, at: indexPath)
-        })
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
@@ -57,18 +63,35 @@ extension ChannelCollectionViewManager: UIContextMenuInteractionDelegate {
         let readCancel = UIAction(title: "Never mind", image: UIImage(systemName: "nosign")) { action in
         }
 
+        let open = UIAction(title: "Open", image: UIImage(systemName: "cursorarrow")) { action in
+            if case MessageKind.link(let url) = message.kind {
+                UIApplication.shared.open(url)
+            }
+        }
+
         let readMenu = UIMenu(title: "Set messages to read", image: UIImage(systemName: "eyeglasses"), children: [readCancel, readOk])
 
         if message.isFromCurrentUser {
             if message.status == .error {
                 return UIMenu(title: "There was an error sending this message.", children: [resend])
             } else {
-                return UIMenu(title: "", children: [deleteMenu, share, editMessage])
+                var children = [deleteMenu, share]
+                if case MessageKind.link(_) = message.kind {
+                    children.append(open)
+                } else {
+                    children.append(editMessage)
+                }
+                return UIMenu(title: "", children: children)
             }
         }
 
+        var children = [share, readMenu]
+        if case MessageKind.link(_) = message.kind {
+            children.append(open)
+        }
+
         // Create and return a UIMenu with the share action
-        return UIMenu(title: "", children: [share, readMenu])
+        return UIMenu(title: "", children: children)
     }
 
     private func setToRead(message: Messageable) {
