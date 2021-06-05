@@ -31,7 +31,7 @@ final class UserPrefrences: PFObject, PFSubclassing {
         set { self.setObject(for: .keyboardInstructionsCount, with: newValue) }
     }
 
-    static func getLocal() -> Future<UserPrefrences, Error> {
+    static func getOrCreateLocal() -> Future<UserPrefrences, Error> {
         return Future { promise in
             if let query = Self.query() {
                 query.fromLocalDatastore()
@@ -39,7 +39,15 @@ final class UserPrefrences: PFObject, PFSubclassing {
                     if let up = object as? Self {
                         promise(.success(up))
                     } else {
-                        promise(.failure(ClientError.message(detail: "Failed to retrieve local data.")))
+
+                        let prefs = UserPrefrences()
+                        prefs.pinInBackground { success, error in
+                            if success {
+                                promise(.success(prefs))
+                            } else {
+                                promise(.failure(ClientError.message(detail: "Failed to save data locally")))
+                            }
+                        }
                     }
                 }
             }

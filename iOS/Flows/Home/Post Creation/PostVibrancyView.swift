@@ -52,11 +52,11 @@ class PostVibrancyView: VibrancyView {
     }
 
     func animateScroll() {
-        UserPrefrences.getLocal()
+        UserPrefrences.getOrCreateLocal()
             .mainSink { result in
                 switch result {
                 case .success(let prefs):
-                    if prefs.swipeAnimationCount < 2 {
+                    if prefs.swipeAnimationCount < 3 {
                         self.showScroll(for: prefs)
                     }
                 case .error(_):
