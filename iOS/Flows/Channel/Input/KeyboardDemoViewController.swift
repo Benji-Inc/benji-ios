@@ -22,6 +22,7 @@ class KeyboardDemoViewController: ViewController {
     }
 
     private var didFinishDemos: CompletionOptional = nil
+    @Published var currentIndex: Int = 0
 
     enum DemoType {
 
@@ -58,12 +59,22 @@ class KeyboardDemoViewController: ViewController {
         self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
         self.view.addSubview(self.scrollView)
+        self.scrollView.delegate = self
         self.view.addSubview(self.pagingIndicator)
 
         self.pagingIndicator.hidesForSinglePage = true
         self.pagingIndicator.backgroundStyle = .prominent
 
         self.scrollView.isPagingEnabled = true
+
+        self.$currentIndex
+            .removeDuplicates()
+            .mainSink { index in
+                if let view = self.demoViews[safe: index] {
+                    view.animationView.play()
+                }
+                self.pagingIndicator.currentPage = index
+            }.store(in: &self.cancellables)
     }
 
     func load(demos: [DemoType]) {
@@ -77,6 +88,10 @@ class KeyboardDemoViewController: ViewController {
 
         self.pagingIndicator.numberOfPages = demos.count
         self.pagingIndicator.currentPage = 0
+
+        if let view = self.demoViews[safe: 0] {
+            view.animationView.play()
+        }
         
         self.view.layoutNow()
     }
@@ -98,6 +113,17 @@ class KeyboardDemoViewController: ViewController {
         self.pagingIndicator.sizeToFit()
         self.pagingIndicator.centerOnX()
         self.pagingIndicator.pinToSafeArea(.bottom, padding: 0)
+    }
+}
+
+extension KeyboardDemoViewController: UIScrollViewDelegate {
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        self.currentIndex = scrollView.currentXIndex
+    }
+
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        self.currentIndex = scrollView.currentXIndex
     }
 }
 
