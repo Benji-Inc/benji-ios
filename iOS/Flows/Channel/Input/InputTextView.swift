@@ -22,7 +22,7 @@ class InputTextView: ExpandingTextView {
     lazy var demoVC = KeyboardDemoViewController()
     lazy var confirmationView = AlertConfirmationView()
 
-    private(set) var currentInputView: InputViewType = .keyboard
+    private(set) var currentInputView: InputViewType? 
     var textDidUpdate: ((String) -> Void)?
 
     unowned let attachmentDelegate: AttachmentViewControllerDelegate
