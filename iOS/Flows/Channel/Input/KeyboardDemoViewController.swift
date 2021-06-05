@@ -15,7 +15,13 @@ class KeyboardDemoViewController: ViewController {
     let scrollView = UIScrollView()
     let pagingIndicator = UIPageControl()
 
-    private var demoViews: [DemoView] = []
+    private var demoViews: [DemoView] {
+        return self.scrollView.subviews.compactMap { view in
+            return view as? DemoView
+        }
+    }
+
+    private var didFinishDemos: CompletionOptional = nil
 
     enum DemoType {
 
@@ -50,12 +56,16 @@ class KeyboardDemoViewController: ViewController {
         self.view = self.scrollView
     }
 
-    func load(demos: [DemoType]) {
-        self.demoViews.removeAll()
+    override func initializeViews() {
+        super.initializeViews()
 
-        self.scrollView.subviews.forEach { subview in
-            subview.removeFromSuperview()
-        }
+        self.scrollView.isPagingEnabled = true
+        self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    }
+
+    func load(demos: [DemoType]) {
+
+        self.scrollView.removeAllSubviews()
 
         demos.forEach { demo in
             let view = DemoView(with: demo)
@@ -63,12 +73,6 @@ class KeyboardDemoViewController: ViewController {
         }
 
         self.view.layoutNow()
-    }
-
-    func play() {
-//        delay(2.0) { [unowned self] in
-//            self.play()
-//        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -81,7 +85,7 @@ class KeyboardDemoViewController: ViewController {
                                 height: self.view.height)
         }
 
-        self.scrollView.contentSize = CGSize(width: self.view.width * CGFloat((self.demoViews.count - 1)), height: self.view.height)
+        self.scrollView.contentSize = CGSize(width: self.view.width * CGFloat((self.demoViews.count)), height: self.view.height)
     }
 }
 
@@ -103,12 +107,18 @@ class DemoView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        self.set(backgroundColor: .red)
+        self.addSubview(self.label)
+        self.addSubview(self.animationView)
+
+        self.label.setText(self.demo.instruction)
         self.animationView.load(animation: self.demo.animation)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        self.animationView.squaredSize = 100
         self.animationView.centerOnX()
         self.animationView.centerY = self.height * 0.4
 

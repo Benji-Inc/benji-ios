@@ -2055,8 +2055,8 @@
 				D61D38E2248C07F700BE457B /* InputAccessoryView+Animation.swift */,
 				D61D38E4248C0BA600BE457B /* InputAccessoryView+Connection.swift */,
 				D61592DF24FC195D00B63412 /* InputTextView.swift */,
-				D63752C5231258DA00214F63 /* PreviewMessageView.swift */,
 				D62C9CBE266BE50700BB9632 /* KeyboardDemoViewController.swift */,
+				D63752C5231258DA00214F63 /* PreviewMessageView.swift */,
 			);
 			path = Input;
 			sourceTree = "<group>";

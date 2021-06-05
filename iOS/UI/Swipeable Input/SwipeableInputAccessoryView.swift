@@ -190,7 +190,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
         self.overlayButton.didSelect { [unowned self] in
             if !self.textView.isFirstResponder {
-                self.textView.becomeFirstResponder()
+                self.textView.updateInputView(type: .demo, becomeFirstResponder: true)
             }
         }
 
