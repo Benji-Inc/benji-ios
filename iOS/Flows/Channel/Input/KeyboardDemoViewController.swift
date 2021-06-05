@@ -52,15 +52,18 @@ class KeyboardDemoViewController: ViewController {
         }
     }
 
-    override func loadView() {
-        self.view = self.scrollView
-    }
-
     override func initializeViews() {
         super.initializeViews()
 
-        self.scrollView.isPagingEnabled = true
         self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+
+        self.view.addSubview(self.scrollView)
+        self.view.addSubview(self.pagingIndicator)
+
+        self.pagingIndicator.hidesForSinglePage = true
+        self.pagingIndicator.backgroundStyle = .prominent
+
+        self.scrollView.isPagingEnabled = true
     }
 
     func load(demos: [DemoType]) {
@@ -72,11 +75,16 @@ class KeyboardDemoViewController: ViewController {
             self.scrollView.addSubview(view)
         }
 
+        self.pagingIndicator.numberOfPages = demos.count
+        self.pagingIndicator.currentPage = 0
+        
         self.view.layoutNow()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        self.scrollView.expandToSuperviewSize()
 
         for (index, view) in self.demoViews.enumerated() {
             let xOffset: CGFloat = self.scrollView.width * CGFloat(index)
@@ -86,6 +94,10 @@ class KeyboardDemoViewController: ViewController {
         }
 
         self.scrollView.contentSize = CGSize(width: self.view.width * CGFloat((self.demoViews.count)), height: self.view.height)
+
+        self.pagingIndicator.sizeToFit()
+        self.pagingIndicator.centerOnX()
+        self.pagingIndicator.pinToSafeArea(.bottom, padding: 0)
     }
 }
 
