@@ -140,6 +140,10 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
             cell = channelCollectionView.dequeueReusableCell(ContactMessageCell.self, for: indexPath)
         case .link(_):
             cell = channelCollectionView.dequeueReusableCell(LinkCell.self, for: indexPath)
+            if let msgCell = cell as? LinkCell {
+                let interaction = UIContextMenuInteraction(delegate: self)
+                msgCell.imageView.addInteraction(interaction)
+            }
         }
 
         cell.configure(with: message)

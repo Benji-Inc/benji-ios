@@ -11,7 +11,7 @@ import Foundation
 class LinkCell: BaseMessageCell {
 
     private var cachedURL: URL?
-    let imageView = LinkView()
+    let imageView = IndexLinkView()
 
     override func initializeViews() {
         super.initializeViews()
@@ -37,6 +37,7 @@ class LinkCell: BaseMessageCell {
     override func layoutContent(with attributes: ChannelCollectionViewLayoutAttributes) {
         super.layoutContent(with: attributes)
 
+        self.imageView.indexPath = attributes.indexPath
         self.imageView.frame = attributes.attributes.attachmentFrame
     }
 
@@ -44,4 +45,8 @@ class LinkCell: BaseMessageCell {
         super.prepareForReuse()
 
     }
+}
+
+class IndexLinkView: LinkView, Indexable {
+    var indexPath: IndexPath?
 }
