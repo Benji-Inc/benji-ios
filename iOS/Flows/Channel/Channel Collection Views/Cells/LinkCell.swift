@@ -24,6 +24,8 @@ class LinkCell: BaseMessageCell {
 
         guard case MessageKind.link(let link) = message.kind else { return }
 
+        self.imageView.displayable = link 
+
         self.avatarView.set(avatar: message.avatar)
     }
 
