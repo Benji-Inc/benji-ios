@@ -10,7 +10,13 @@ import Foundation
 
 class LinkCellAttributesConfigurer: ChannelCellAttributesConfigurer {
 
-    override func configure(with message: Messageable, previousMessage: Messageable?, nextMessage: Messageable?, for layout: ChannelCollectionViewFlowLayout, attributes: ChannelCollectionViewLayoutAttributes) {
+    override func configure(with message: Messageable,
+                            previousMessage: Messageable?,
+                            nextMessage: Messageable?,
+                            for layout: ChannelCollectionViewFlowLayout,
+                            attributes: ChannelCollectionViewLayoutAttributes) {
+
+
 
     }
 

@@ -85,7 +85,12 @@ extension TCHMessage: Messageable {
     var kind: MessageKind {
         switch self.messageType {
         case .text:
-            return .text(String(optional: self.body))
+            guard let text = self.body else { return .text("")}
+            if let types = self.getDataTypes(from: text), let first = types.first, let url = first.url {
+                return .link(url)
+            } else {
+                return .text(text)
+            }
         case .media:
             guard let type = self.mediaType, let mediaType = MediaType(rawValue: type) else {
                 return .text(String(optional: self.body))
@@ -153,6 +158,26 @@ extension TCHMessage: Messageable {
                 }
             }
         }
+    }
+
+    func getDataTypes(from text: String) -> [NSTextCheckingResult]? {
+        guard let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) else { return nil }
+
+        let range = NSRange(text.startIndex..<text.endIndex, in: text)
+
+        var results: [NSTextCheckingResult] = []
+
+        detector.enumerateMatches(in: text,
+                                  options: [],
+                                  range: range) { (match, flags, _) in
+            guard let match = match else {
+                return
+            }
+
+            results.append(match)
+        }
+
+        return results
     }
 }
 

@@ -51,7 +51,6 @@ class MessageCell: BaseMessageCell {
     }
 
     override func handleIsConsumed(for message: Messageable) {
-        guard message.getDataTypes().isNil else { return }
 
         self.bubbleView.set(backgroundColor: message.color)
 

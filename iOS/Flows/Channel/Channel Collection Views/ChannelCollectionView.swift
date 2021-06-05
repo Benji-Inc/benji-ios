@@ -41,6 +41,7 @@ class ChannelCollectionView: CollectionView {
         self.register(PhotoMessageCell.self)
         self.register(VideoMessageCell.self)
         self.register(TypingIndicatorCell.self)
+        self.register(LinkCell.self)
         
         self.register(ChannelSectionHeader.self,
                       forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)

@@ -51,8 +51,8 @@ class PreviewMessageView: View {
                 break
             case .contact(_):
                 break
-            case .link(_):
-                break
+            case .link(let url):
+                self.textView.text = url.absoluteString
             }
             self.layoutNow()
         }.store(in: &self.cancellables)

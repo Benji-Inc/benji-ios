@@ -23,8 +23,6 @@ class InputTextView: ExpandingTextView {
     private(set) var currentInputView: InputViewType = .keyboard
     var textDidUpdate: ((String) -> Void)?
 
-    @Published var currentURL: URL?
-
     unowned let attachmentDelegate: AttachmentViewControllerDelegate
 
     init(with delegate: AttachmentViewControllerDelegate) {
@@ -41,11 +39,6 @@ class InputTextView: ExpandingTextView {
 
         self.addSubview(self.countView)
         self.countView.isHidden = true
-
-        NotificationCenter.default.publisher(for: UIPasteboard.changedNotification)
-            .mainSink { (_) in
-                self.pasteboardDidChange()
-            }.store(in: &self.cancellables)
     }
 
     func updateInputView(type: InputViewType, becomeFirstResponder: Bool = true) {
@@ -74,7 +67,6 @@ class InputTextView: ExpandingTextView {
     override func textDidChange() {
         super.textDidChange()
 
-        self.checkForDataTypes()
         self.textDidUpdate?(self.text)
         self.countView.udpate(with: self.text.count, max: self.maxLength)
     }
@@ -85,26 +77,5 @@ class InputTextView: ExpandingTextView {
         self.countView.size = CGSize(width: 70, height: 20)
         self.countView.right = self.width - 5
         self.countView.bottom = self.height - 5
-    }
-
-    private func pasteboardDidChange() {
-        if UIPasteboard.general.hasStrings, let strings = UIPasteboard.general.strings {
-            print(strings)
-        }
-    }
-
-    private func checkForDataTypes() {
-        guard let input = self.text else { return }
-        
-        let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-        let matches = detector.matches(in: input, options: [], range: NSRange(location: 0, length: input.utf16.count))
-
-        for match in matches {
-            guard let range = Range(match.range, in: input) else { continue }
-            let url = input[range]
-            print(url)
-
-            self.currentURL = URL(string: String(url))
-        }
     }
 }

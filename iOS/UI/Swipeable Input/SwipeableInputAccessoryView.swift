@@ -188,11 +188,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
             self.handleTextChange(text)
         }
 
-        self.textView.$currentURL.mainSink { value in
-            guard let url = value else { return }
-            print(url)
-        }.store(in: &self.cancellables)
-
         self.overlayButton.didSelect { [unowned self] in
             if !self.textView.isFirstResponder {
                 self.textView.becomeFirstResponder()
@@ -238,7 +233,11 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
         switch self.currentMessageKind {
         case .text(_):
-            self.currentMessageKind = .text(text)
+            if let types = self.getDataTypes(from: text), let first = types.first, let url = first.url {
+                self.currentMessageKind = .link(url)
+            } else {
+                self.currentMessageKind = .text(text)
+            }
         case .photo(photo: let photo, _):
             self.currentMessageKind = .photo(photo: photo, body: text)
         case .video(video: let video, _):
@@ -246,6 +245,26 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         default:
             break
         }
+    }
+
+    func getDataTypes(from text: String) -> [NSTextCheckingResult]? {
+        guard let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) else { return nil }
+
+        let range = NSRange(text.startIndex..<text.endIndex, in: text)
+
+        var results: [NSTextCheckingResult] = []
+
+        detector.enumerateMatches(in: text,
+                                  options: [],
+                                  range: range) { (match, flags, _) in
+            guard let match = match else {
+                return
+            }
+
+            results.append(match)
+        }
+
+        return results
     }
 
     func updateInputType() {}

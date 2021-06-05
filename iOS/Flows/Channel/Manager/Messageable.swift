@@ -90,24 +90,4 @@ extension Messageable {
             }
         }
     }
-
-    func getDataTypes() -> [NSTextCheckingResult]? {
-        guard case MessageKind.text(let text) = self.kind, let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) else { return nil }
-
-        let range = NSRange(text.startIndex..<text.endIndex, in: text)
-
-        var results: [NSTextCheckingResult] = []
-
-        detector.enumerateMatches(in: text,
-                                  options: [],
-                                  range: range) { (match, flags, _) in
-            guard let match = match else {
-                return
-            }
-
-            results.append(match)
-        }
-
-        return results
-    }
 }
