@@ -9,11 +9,19 @@
 import Foundation
 import Combine
 import Lottie
+import Parse
 
 class PostVibrancyView: VibrancyView {
 
     let animationView = AnimationView.with(animation: .scrollDown)
     let label = Label(font: .small)
+    private var cancellables = Set<AnyCancellable>()
+
+    deinit {
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+    }
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -44,6 +52,24 @@ class PostVibrancyView: VibrancyView {
     }
 
     func animateScroll() {
+        UserPrefrences.getLocal()
+            .mainSink { result in
+                switch result {
+                case .success(let prefs):
+                    if prefs.swipeAnimationCount < 2 {
+                        self.showScroll(for: prefs)
+                    }
+                case .error(_):
+                    break
+                }
+            }.store(in: &self.cancellables)
+    }
+
+    private func showScroll(for preferences: UserPrefrences) {
+
+        preferences.swipeAnimationCount += 1
+        preferences.saveLocally()
+
         UIView.animate(withDuration: Theme.animationDuration) {
             self.label.alpha = 1.0
             self.animationView.alpha = 1.0

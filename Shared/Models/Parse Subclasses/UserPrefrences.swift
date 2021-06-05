@@ -13,7 +13,6 @@ import Combine
 enum UserPrefrencesKey: String {
     case swipeAnimationViewCount
     case keyboardInstructionsCount
-
 }
 
 final class UserPrefrences: PFObject, PFSubclassing {
@@ -22,13 +21,13 @@ final class UserPrefrences: PFObject, PFSubclassing {
         return String(describing: self)
     }
 
-    var swipeAnimationCount: Int? {
-        get { return self.getObject(for: .swipeAnimationViewCount) }
+    var swipeAnimationCount: Int {
+        get { return self.getObject(for: .swipeAnimationViewCount) ?? 0 }
         set { self.setObject(for: .swipeAnimationViewCount, with: newValue) }
     }
 
-    var keyboardInstructionsCount: Int? {
-        get { return self.getObject(for: .keyboardInstructionsCount) }
+    var keyboardInstructionsCount: Int {
+        get { return self.getObject(for: .keyboardInstructionsCount) ?? 0 }
         set { self.setObject(for: .keyboardInstructionsCount, with: newValue) }
     }
 
@@ -47,7 +46,8 @@ final class UserPrefrences: PFObject, PFSubclassing {
         }
     }
 
-    func pin() -> Future<Void, Error> {
+    @discardableResult
+    func saveLocally() -> Future<Void, Error> {
         return Future { promise in
             self.pinInBackground { success, error in
                 if success {
