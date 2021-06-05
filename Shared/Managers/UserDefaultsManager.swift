@@ -11,15 +11,15 @@ import Foundation
 class UserDefaultsManager {
 
     enum Key: String {
-        case swipeAnimationViewCount
-        case keyboardInstructionsCount
+        case hasShownHomeSwipe
+        case hasShownKeyboardInstructions
     }
 
-    func update(key: Key, with value: Bool) {
+    static func update(key: Key, with value: Bool) {
         UserDefaults.standard.setValue(value, forKey: key.rawValue)
     }
 
-    func getValue(for key: Key) -> Bool {
+    static func getValue(for key: Key) -> Bool {
         return UserDefaults.standard.bool(forKey: key.rawValue)
     }
 }

@@ -14,6 +14,7 @@ class KeyboardDemoViewController: ViewController {
 
     let scrollView = UIScrollView()
     let pagingIndicator = UIPageControl()
+    let exitButton = ImageViewButton()
 
     private var demoViews: [DemoView] {
         return self.scrollView.subviews.compactMap { view in
@@ -33,11 +34,11 @@ class KeyboardDemoViewController: ViewController {
         var instruction: Localized {
             switch self {
             case .send:
-                return "Send"
+                return "Swipe up to send"
             case .sendAlert:
-                return "Alert"
+                return "Hold down to send something important"
             case .cursor:
-                return "Cursor"
+                return "Use the space bar to move the cursor"
             }
         }
 
@@ -62,6 +63,9 @@ class KeyboardDemoViewController: ViewController {
         self.scrollView.delegate = self
         self.view.addSubview(self.pagingIndicator)
 
+        self.view.addSubview(self.exitButton)
+        self.exitButton.imageView.image = UIImage(systemName: "xmark")!
+
         self.pagingIndicator.hidesForSinglePage = true
         self.pagingIndicator.backgroundStyle = .prominent
 
@@ -70,6 +74,13 @@ class KeyboardDemoViewController: ViewController {
         self.$currentIndex
             .removeDuplicates()
             .mainSink { index in
+                for (viewIndex, view) in self.demoViews.enumerated() {
+                    if viewIndex == index {
+                        view.animationView.play()
+                    } else {
+                        view.animationView.stop()
+                    }
+                }
                 if let view = self.demoViews[safe: index] {
                     view.animationView.play()
                 }
@@ -145,11 +156,12 @@ class DemoView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .red)
         self.addSubview(self.label)
         self.addSubview(self.animationView)
 
         self.label.setText(self.demo.instruction)
+        self.label.textAlignment = .center
+
         self.animationView.load(animation: self.demo.animation)
     }
 
@@ -158,9 +170,9 @@ class DemoView: View {
 
         self.animationView.squaredSize = 100
         self.animationView.centerOnX()
-        self.animationView.centerY = self.height * 0.4
+        self.animationView.centerY = self.height * 0.35
 
-        self.label.setSize(withWidth: self.width - Theme.contentOffset)
+        self.label.setSize(withWidth: self.width - Theme.contentOffset.doubled)
         self.label.centerOnX()
         self.label.match(.top, to: .bottom, of: self.animationView, offset: Theme.contentOffset.half)
     }

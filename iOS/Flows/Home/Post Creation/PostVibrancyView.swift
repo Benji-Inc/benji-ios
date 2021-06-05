@@ -52,23 +52,12 @@ class PostVibrancyView: VibrancyView {
     }
 
     func animateScroll() {
-        UserPrefrences.getOrCreateLocal()
-            .mainSink { result in
-                switch result {
-                case .success(let prefs):
-                    if prefs.swipeAnimationCount < 3 {
-                        self.showScroll(for: prefs)
-                    }
-                case .error(_):
-                    break
-                }
-            }.store(in: &self.cancellables)
+        if !UserDefaultsManager.getValue(for: .hasShownHomeSwipe) {
+            self.showScroll()
+        }
     }
 
-    private func showScroll(for preferences: UserPrefrences) {
-
-        preferences.swipeAnimationCount += 1
-        preferences.saveLocally()
+    private func showScroll() {
 
         UIView.animate(withDuration: Theme.animationDuration) {
             self.label.alpha = 1.0
@@ -79,7 +68,9 @@ class PostVibrancyView: VibrancyView {
             UIView.animate(withDuration: Theme.animationDuration, delay: 4.5, options: []) {
                 self.label.alpha = 0
                 self.animationView.alpha = 0
-            } completion: { _ in }
+            } completion: { _ in
+                UserDefaultsManager.update(key: .hasShownHomeSwipe, with: true)
+            }
         }
     }
 }
