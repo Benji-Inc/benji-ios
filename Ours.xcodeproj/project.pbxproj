@@ -80,6 +80,9 @@
 		D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
 		D62C635422BE9CBB00F4D097 /* FeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C635322BE9CBB00F4D097 /* FeedViewController.swift */; };
 		D62C635622BE9E5C00F4D097 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C635522BE9E5C00F4D097 /* CollectionViewController.swift */; };
+		D62C9CBB266BDA5A00BB9632 /* UserPrefrences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CBA266BDA5A00BB9632 /* UserPrefrences.swift */; };
+		D62C9CBC266BDA5A00BB9632 /* UserPrefrences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CBA266BDA5A00BB9632 /* UserPrefrences.swift */; };
+		D62C9CBD266BDA5A00BB9632 /* UserPrefrences.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CBA266BDA5A00BB9632 /* UserPrefrences.swift */; };
 		D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6347395241EBF6F0071E9DA /* UIView+Layout.swift */; };
 		D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */; };
 		D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63752C5231258DA00214F63 /* PreviewMessageView.swift */; };
@@ -843,6 +846,7 @@
 		D62BB742244DEEA400607677 /* Optional+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extensions.swift"; sourceTree = "<group>"; };
 		D62C635322BE9CBB00F4D097 /* FeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewController.swift; sourceTree = "<group>"; };
 		D62C635522BE9E5C00F4D097 /* CollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		D62C9CBA266BDA5A00BB9632 /* UserPrefrences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPrefrences.swift; sourceTree = "<group>"; };
 		D6347395241EBF6F0071E9DA /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 		D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extensions.swift"; sourceTree = "<group>"; };
 		D63752C5231258DA00214F63 /* PreviewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewMessageView.swift; sourceTree = "<group>"; };
@@ -1559,13 +1563,14 @@
 			isa = PBXGroup;
 			children = (
 				D6405B6A236E0E7900FAA06B /* Connection.swift */,
+				D63D71C025F0419D004C26F7 /* ConnectionPreference.swift */,
+				D6DF870525A5214D0089B0CF /* QuePositions.swift */,
 				D6D8BB6C24677B5D00937581 /* Reservation.swift */,
 				80D4A21B2303A005007CB5F1 /* Ritual.swift */,
 				D6405B66236E002E00FAA06B /* User.swift */,
 				D609AE39236F44A8004FA89A /* User+Extensions.swift */,
 				D609AE35236F3F81004FA89A /* User+Objectable.swift */,
-				D6DF870525A5214D0089B0CF /* QuePositions.swift */,
-				D63D71C025F0419D004C26F7 /* ConnectionPreference.swift */,
+				D62C9CBA266BDA5A00BB9632 /* UserPrefrences.swift */,
 			);
 			path = "Parse Subclasses";
 			sourceTree = "<group>";
@@ -2576,6 +2581,7 @@
 			files = (
 				D6D4C5B3262096220026D7A2 /* CommentsViewController.swift in Sources */,
 				D650C1E125B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
+				D62C9CBB266BDA5A00BB9632 /* UserPrefrences.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				D639106F25D7344500D336D7 /* CollectionViewManager+Snapshot.swift in Sources */,
 				D6EAB68823E6211200B90D5A /* ProfilePhotoViewController.swift in Sources */,
@@ -3022,6 +3028,7 @@
 				D63DB24725E9993F00F6B323 /* OnboardingCoordinator.swift in Sources */,
 				D63DB28225E9999C00F6B323 /* TransitionRouter.swift in Sources */,
 				D63DB22625E9990900F6B323 /* CGPoint+Extensions.swift in Sources */,
+				D62C9CBD266BDA5A00BB9632 /* UserPrefrences.swift in Sources */,
 				D63DB26625E9997200F6B323 /* StringCasing.swift in Sources */,
 				D63DB25F25E9995E00F6B323 /* QuePositions.swift in Sources */,
 				D63DB24325E9993F00F6B323 /* NameViewController.swift in Sources */,
@@ -3183,6 +3190,7 @@
 				D65519292589122000B901E4 /* PhoneKit.swift in Sources */,
 				D65519782589129B00B901E4 /* ImageDisplayable.swift in Sources */,
 				D65519C125891A4800B901E4 /* NavigationController.swift in Sources */,
+				D62C9CBC266BDA5A00BB9632 /* UserPrefrences.swift in Sources */,
 				D655197A2589129B00B901E4 /* ResourceObject.swift in Sources */,
 				D66379E825A39C2900A4A3B7 /* UserNotificationManager+Extensions.swift in Sources */,
 				D655196C2589128300B901E4 /* StringCasing.swift in Sources */,
