@@ -150,7 +150,7 @@ class MessageDeliveryManager {
         case .link(let url):
             var mutableAttributes = attributes
             mutableAttributes["isLink"] = true
-            return options.with(body: url.absoluteString, mediaItem: nil, attributes: TCHJsonAttributes.init(dictionary: attributes))
+            return options.with(body: url.absoluteString, mediaItem: nil, attributes: TCHJsonAttributes.init(dictionary: mutableAttributes))
         default:
             return Future { promise in
                 promise(.failure(ClientError.message(detail: "Unsupported MessageKind")))
