@@ -148,6 +148,8 @@ class MessageDeliveryManager {
             mutableAttributes["body"] = body
             return options.with(body: body, mediaItem: item, attributes: TCHJsonAttributes.init(dictionary: mutableAttributes))
         case .link(let url):
+            var mutableAttributes = attributes
+            mutableAttributes["isLink"] = true
             return options.with(body: url.absoluteString, mediaItem: nil, attributes: TCHJsonAttributes.init(dictionary: attributes))
         default:
             return Future { promise in

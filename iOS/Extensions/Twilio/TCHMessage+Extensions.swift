@@ -82,11 +82,16 @@ extension TCHMessage: Messageable {
         return .delivered
     }
 
+    var isLink: Bool {
+        guard let value = self.attributes?["isLink"] as? Bool else { return false }
+        return value
+    }
+
     var kind: MessageKind {
         switch self.messageType {
         case .text:
             guard let text = self.body else { return .text("")}
-            if let types = self.getDataTypes(from: text), let first = types.first, let url = first.url {
+            if self.isLink, let url = URL(string: text) {
                 return .link(url)
             } else {
                 return .text(text)
@@ -98,7 +103,7 @@ extension TCHMessage: Messageable {
 
             switch mediaType {
             case .photo:
-                let body = self.attributes()?.dictionary?["body"] as? String
+                let body = self.attributes?["body"] as? String
                 return .photo(photo: EmptyMediaItem(mediaType: mediaType), body: String(optional: body))
             case .video:
                 fatalError()
@@ -109,7 +114,7 @@ extension TCHMessage: Messageable {
     }
 
     var context: MessageContext {
-        if let statusString = self.attributes()?.dictionary?["context"] as? String, let type = MessageContext(rawValue: statusString) {
+        if let statusString = self.attributes?["context"] as? String, let type = MessageContext(rawValue: statusString) {
             return type
         }
 
@@ -117,7 +122,7 @@ extension TCHMessage: Messageable {
     }
 
     var hasBeenConsumedBy: [String] {
-        return self.attributes()?.dictionary?["consumers"] as? [String] ?? []
+        return self.attributes?["consumers"] as? [String] ?? []
     }
 
     @discardableResult
@@ -158,26 +163,6 @@ extension TCHMessage: Messageable {
                 }
             }
         }
-    }
-
-    func getDataTypes(from text: String) -> [NSTextCheckingResult]? {
-        guard let detector = try? NSDataDetector(types: NSTextCheckingAllTypes) else { return nil }
-
-        let range = NSRange(text.startIndex..<text.endIndex, in: text)
-
-        var results: [NSTextCheckingResult] = []
-
-        detector.enumerateMatches(in: text,
-                                  options: [],
-                                  range: range) { (match, flags, _) in
-            guard let match = match else {
-                return
-            }
-
-            results.append(match)
-        }
-
-        return results
     }
 }
 
