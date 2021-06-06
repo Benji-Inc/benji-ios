@@ -34,11 +34,17 @@ class PostsCollectionManager: NSObject {
     weak var parentVC: ViewController?
     weak var container: View?
 
+    let threshold: CGFloat = 10 // Distance, in points, a pan must move horizontally before a animation
+    let distance: CGFloat = 250 // Distance that a pan must move to fully animate
+    var interactionInProgress = false // If we're currently progressing
+    var panStartPoint = CGPoint() // Where the pan gesture began
+    var startPoint = CGPoint() // Where the pan gesture was when animation was started
+
     private var isResetting: Bool = false
     private var cancellables = Set<AnyCancellable>()
     private var finishAnimator: UIViewPropertyAnimator?
 
-    private var transitionAnimator: UIViewPropertyAnimator?
+    var transitionAnimator: UIViewPropertyAnimator?
 
     private(set) var feedOwner: User?
 
@@ -111,7 +117,7 @@ class PostsCollectionManager: NSObject {
 
             postVC.handlePan = { [weak self] pan in
                 guard let `self` = self else { return }
-                self.handlePan(for: postVC, pan: pan)
+                self.handle(pan: pan, for: postVC)
             }
 
             postVC.didGoBack = { [weak self] in
@@ -131,33 +137,6 @@ class PostsCollectionManager: NSObject {
 
         if let user = self.feedOwner {
             self.delegate?.postsManagerDidSetItems(self, for: user)
-        }
-    }
-
-    func handlePan(for postVC: PostViewController, pan: UIPanGestureRecognizer) {
-        guard let view = pan.view else {return}
-
-        let translation = pan.translation(in: view.superview)
-
-        print(translation)
-
-        switch pan.state {
-        case .possible:
-            break
-        case .began:
-            break
-
-            // set starting point
-        case .changed:
-            break
-            // Determine progess based on starting point and width
-
-        case .ended, .cancelled, .failed:
-            break
-        // If progress is greater than 50%, completed flip
-        // If not, reverse and reset
-        @unknown default:
-            break
         }
     }
 
@@ -206,18 +185,6 @@ class PostsCollectionManager: NSObject {
         })
 
         self.transitionAnimator?.startAnimation()
-    }
-
-    private func createAnimator() -> UIViewPropertyAnimator {
-        let animator = UIViewPropertyAnimator(duration: 1.0,
-                                              curve: .linear,
-                                              animations: nil)
-
-        self.transitionAnimator?.pausesOnCompletion = true
-        self.transitionAnimator?.isInterruptible = true
-        self.transitionAnimator?.isUserInteractionEnabled = true
-        self.transitionAnimator?.pauseAnimation()
-        return animator
     }
 
     func advanceToNextView(from index: Int) {

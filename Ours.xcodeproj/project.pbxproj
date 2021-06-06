@@ -575,6 +575,7 @@
 		D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
 		D6A301AA23808252006655E0 /* ChannelCollectionViewManager+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */; };
 		D6A301AC2380E102006655E0 /* PostsSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A301AB2380E102006655E0 /* PostsSupplier.swift */; };
+		D6A3FF8A266D6432008548D1 /* PostsCollectionViewManager+Panning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A3FF89266D6432008548D1 /* PostsCollectionViewManager+Panning.swift */; };
 		D6A401AB24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A401AA24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift */; };
 		D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
 		D6A49A77260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
@@ -1056,6 +1057,7 @@
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
 		D6A301A923808252006655E0 /* ChannelCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
 		D6A301AB2380E102006655E0 /* PostsSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsSupplier.swift; sourceTree = "<group>"; };
+		D6A3FF89266D6432008548D1 /* PostsCollectionViewManager+Panning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PostsCollectionViewManager+Panning.swift"; sourceTree = "<group>"; };
 		D6A401AA24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHMessageOptions+Extensions.swift"; sourceTree = "<group>"; };
 		D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewAnimatingState+Extensions.swift"; sourceTree = "<group>"; };
 		D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCategory.swift; sourceTree = "<group>"; };
@@ -1391,6 +1393,7 @@
 				D6623DF3266D47BF000E3B73 /* GradientBlurView.swift */,
 				D6EDFB4A25D48F1D0034A2F6 /* Post VC's */,
 				D6815DBA22EE1F1400E71251 /* PostsCollectionManager.swift */,
+				D6A3FF89266D6432008548D1 /* PostsCollectionViewManager+Panning.swift */,
 				D6A301AB2380E102006655E0 /* PostsSupplier.swift */,
 			);
 			path = Feed;
@@ -2779,6 +2782,7 @@
 				D67934D523D956BB00536B44 /* ChannelPreviewViewController.swift in Sources */,
 				D67C319625EE882B00289787 /* PostButtonView.swift in Sources */,
 				D66F0FD822BF295A00BA277D /* Coordinator.swift in Sources */,
+				D6A3FF8A266D6432008548D1 /* PostsCollectionViewManager+Panning.swift in Sources */,
 				D67934E523DE66FE00536B44 /* PushPayload.swift in Sources */,
 				D66F0FD422BF074C00BA277D /* DeeplinkObject.swift in Sources */,
 				D6FC809A237A68F50089AACC /* ChannelViewController+Updates.swift in Sources */,
