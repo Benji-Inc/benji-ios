@@ -108,7 +108,7 @@ class FeedIndicatorView: View {
 
     func resumeProgress(at index: Int) {
         guard let element = self.elements[safe: index] else { return }
-        element.animator?.startAnimation()
+        element.animator?.continueAnimation(withTimingParameters: nil, durationFactor: 1.0)
     }
 
     func finishProgress(at index: Int, finishAnimator: Bool = false) {
@@ -164,24 +164,33 @@ private class IndicatorView: View {
     }
 
     func animateProgress(with duration: TimeInterval, completion: CompletionOptional) {
-        
-        self.stopCurrent()
 
-        self.animator = UIViewPropertyAnimator(duration: duration,
-                                               curve: .linear,
-                                               animations: { [weak self] in
-                                                guard let `self` = self else { return }
-                                                self.progressWidth = self.width
-                                                self.layoutNow()
-                                               })
+        if self.animator.isNil {
+            self.animator = self.createAnimator(with: duration)
+        }
 
-        self.animator?.isInterruptible = true
+        self.animator?.addAnimations { [weak self] in
+            guard let `self` = self else { return }
+            self.progressWidth = self.width
+            self.layoutNow()
+        }
+
         self.animator?.addCompletion({ (position) in
             guard position == .end else { return }
             completion?()
         })
 
         self.animator?.startAnimation()
+    }
+
+    private func createAnimator(with duration: TimeInterval) -> UIViewPropertyAnimator {
+        let animator = UIViewPropertyAnimator(duration: duration,
+                                              curve: .linear,
+                                              animations: nil)
+        self.animator?.isInterruptible = true
+        self.animator?.scrubsLinearly = true
+        self.animator?.pauseAnimation()
+        return animator
     }
 
     func stopCurrent() {
