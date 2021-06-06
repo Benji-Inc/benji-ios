@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import GestureRecognizerClosures
 
 class PostViewController: ViewController {
 
@@ -32,10 +33,7 @@ class PostViewController: ViewController {
 
     let gradientBlurView = GradientBlurView(with: [Color.background2.color.cgColor, Color.background3.color.cgColor], startPoint: .topCenter, endPoint: .bottomCenter)
 
-    let leftView = AnimatingTapView()
-    let rightView = AnimatingTapView()
-
-    let container = PassThroughView()
+    let container = View()
     let bottomContainer = View()
 
     // Common items
@@ -58,9 +56,6 @@ class PostViewController: ViewController {
 
         self.view.addSubview(self.gradientBlurView)
 
-        self.view.addSubview(self.rightView)
-        self.view.addSubview(self.leftView)
-
         self.view.addSubview(self.container)
 
         self.$isPaused.mainSink { isPaused in
@@ -71,16 +66,18 @@ class PostViewController: ViewController {
             }
         }.store(in: &self.cancellables)
 
-        self.rightView.didSelect { [unowned self] in
-            guard self.canMoveForwardOrBackward else { return }
-            self.selectionImpact.impactOccurred()
-            self.didFinish?()
-        }
+        self.container.onTap { [unowned self] tap in
 
-        self.leftView.didSelect { [unowned self] in
             guard self.canMoveForwardOrBackward else { return }
+
+            let location = tap.location(in: self.container)
             self.selectionImpact.impactOccurred()
-            self.didGoBack?()
+
+            if location.x < self.container.halfWidth {
+                self.didGoBack?()
+            } else {
+                self.didFinish?()
+            }
         }
 
         self.container.addSubview(self.getCenterContent())
@@ -109,14 +106,6 @@ class PostViewController: ViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        self.leftView.expandToSuperviewHeight()
-        self.leftView.width = self.view.halfWidth
-        self.leftView.pin(.left)
-
-        self.rightView.expandToSuperviewHeight()
-        self.rightView.width = self.view.halfWidth
-        self.rightView.pin(.right)
 
         self.container.size = CGSize(width: self.view.width, height: self.view.safeAreaRect.height - Theme.buttonHeight - Theme.contentOffset)
         self.container.pinToSafeArea(.top, padding: 0)
