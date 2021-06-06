@@ -41,6 +41,8 @@ class PostsCollectionManager: NSObject {
     private var showAnimator: UIViewPropertyAnimator?
     private var finishAnimator: UIViewPropertyAnimator?
 
+    private var transitionAnimator: UIViewPropertyAnimator?
+
     private(set) var feedOwner: User?
 
     func loadPosts(for user: User) {
@@ -130,12 +132,65 @@ class PostsCollectionManager: NSObject {
         }
     }
 
+    func transition(to: PostViewController, at index: Int) {
+        guard let parent = self.parentVC,
+              let from = self.current,
+              let container = self.container else { return }
+
+        if self.transitionAnimator.isNil {
+            self.transitionAnimator = self.createAnimator()
+        }
+
+        self.currentIndex = index
+        parent.addChild(viewController: to, toView: self.container)
+        to.view.isHidden = true
+        to.view.expandToSuperviewSize()
+        to.view.layoutNow()
+        to.configurePost()
+
+        self.transitionAnimator?.addAnimations {
+            UIView.transition(with: container,
+                              duration: 0.0,
+                              options: [.transitionFlipFromRight],
+                              animations: {
+                                to.view.isHidden = true
+                                from.view.isHidden = false
+                })
+        }
+
+        self.transitionAnimator?.addCompletion({ [weak self] position in
+            guard let `self` = self else { return }
+
+            self.current?.removeFromParentSuperview()
+            self.current = to
+
+            self.delegate?.posts(self, didShowViewAt: index, with: TimeInterval(to.post.duration))
+
+            self.transitionAnimator = nil
+        })
+
+        self.transitionAnimator?.startAnimation()
+    }
+
+    private func createAnimator() -> UIViewPropertyAnimator {
+        let animator = UIViewPropertyAnimator(duration: 1.0,
+                                              curve: .linear,
+                                              animations: nil)
+
+        self.transitionAnimator?.pausesOnCompletion = true
+        self.transitionAnimator?.isInterruptible = true
+        self.transitionAnimator?.isUserInteractionEnabled = true
+        self.transitionAnimator?.pauseAnimation()
+        return animator
+    }
+
     func advanceToNextView(from index: Int) {
         self.current?.resignFirstResponder()
 
         if let next = self.postVCs[safe: index + 1]  {
             self.consumeIfNeccessary()
-            self.show(postVC: next, at: index + 1)
+            self.transition(to: next, at: index + 1)
+            //self.show(postVC: next, at: index + 1)
         } else if !self.isResetting {
             self.finishFeed()
         }
