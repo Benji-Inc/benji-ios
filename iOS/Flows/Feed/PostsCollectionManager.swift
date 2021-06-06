@@ -36,9 +36,6 @@ class PostsCollectionManager: NSObject {
 
     private var isResetting: Bool = false
     private var cancellables = Set<AnyCancellable>()
-
-    private var hideAnimator: UIViewPropertyAnimator?
-    private var showAnimator: UIViewPropertyAnimator?
     private var finishAnimator: UIViewPropertyAnimator?
 
     private var transitionAnimator: UIViewPropertyAnimator?
@@ -117,14 +114,14 @@ class PostsCollectionManager: NSObject {
                 let previous = clamp(index - 1, min: 0)
                 if let previousVC = self.postVCs[safe: previous] {
                     self.delegate?.posts(self, didGoBackTo: previous, with: TimeInterval(previousVC.post.duration))
-                    self.show(postVC: previousVC, at: previous)
+                    self.transition(to: previousVC, at: previous, option: .transitionFlipFromLeft)
                 }
             }
         }
 
         // Show first
         if let first = self.postVCs.first {
-            self.show(postVC: first, at: 0)
+            self.transition(to: first, at: 0)
         }
 
         if let user = self.feedOwner {
@@ -132,10 +129,13 @@ class PostsCollectionManager: NSObject {
         }
     }
 
-    func transition(to: PostViewController, at index: Int) {
-        guard let parent = self.parentVC,
-              let from = self.current,
-              let container = self.container else { return }
+    func transition(to: PostViewController,
+                    at index: Int,
+                    option: UIView.AnimationOptions = .transitionFlipFromRight) {
+
+        guard let parent = self.parentVC, let container = self.container else { return }
+
+        self.transitionAnimator = nil 
 
         if self.transitionAnimator.isNil {
             self.transitionAnimator = self.createAnimator()
@@ -148,13 +148,17 @@ class PostsCollectionManager: NSObject {
         to.configurePost()
 
         self.transitionAnimator?.addAnimations {
-            UIView.transition(with: container,
-                              duration: 0.0,
-                              options: [.transitionFlipFromRight],
-                              animations: {
-                                to.view.isHidden = false
-                                from.view.isHidden = true
-                })
+            if let from = self.current {
+                UIView.transition(with: container,
+                                  duration: 0.0,
+                                  options: [option],
+                                  animations: {
+                                    to.view.isHidden = false
+                                    from.view.isHidden = true
+                    })
+            } else {
+                to.view.isHidden = false
+            }
         }
 
         self.transitionAnimator?.addCompletion({ [weak self] position in
@@ -190,7 +194,6 @@ class PostsCollectionManager: NSObject {
         if let next = self.postVCs[safe: index + 1]  {
             self.consumeIfNeccessary()
             self.transition(to: next, at: index + 1)
-            //self.show(postVC: next, at: index + 1)
         } else if !self.isResetting {
             self.finishFeed()
         }
@@ -203,49 +206,6 @@ class PostsCollectionManager: NSObject {
               let post = current.post as? Post else { return }
 
         post.addCurrentUserAsConsumer()
-    }
-    
-    private func show(postVC: PostViewController, at index: Int) {
-        self.currentIndex = index 
-        let duration: TimeInterval = self.current.isNil ? 0 : 0.2
-
-        if let animator = self.hideAnimator {
-            self.stop(animator: animator)
-        }
-
-        self.hideAnimator = UIViewPropertyAnimator(duration: duration, curve: .linear, animations: { [weak self] in
-            guard let `self` = self, self.current != postVC else { return }
-            self.current?.view.alpha = 0
-        })
-
-        self.hideAnimator?.addCompletion({ [weak self] position in
-            guard let `self` = self else { return }
-            guard position == .end, postVC != self.current else { return }
-            self.current?.removeFromParentSuperview()
-            self.current = postVC
-            postVC.view.alpha = 0
-            self.parentVC?.addChild(viewController: postVC, toView: self.container)
-            postVC.view.expandToSuperviewSize()
-            postVC.view.layoutNow()
-
-            if let animator = self.showAnimator {
-                self.stop(animator: animator)
-            }
-            self.showAnimator = UIViewPropertyAnimator(duration: 0.2, curve: .linear, animations: { [weak self] in
-                guard let `self` = self else { return }
-                self.current?.view.alpha = 1
-            })
-
-            self.showAnimator?.addCompletion({ [weak self] position in
-                guard let `self` = self, position == .end, index == self.currentIndex else { return }
-                self.delegate?.posts(self, didShowViewAt: index, with: TimeInterval(postVC.post.duration))
-                postVC.configurePost()
-            })
-
-            self.showAnimator?.startAnimation()
-        })
-
-        self.hideAnimator?.startAnimation()
     }
 
     private func finishFeed() {
@@ -286,7 +246,7 @@ class PostsCollectionManager: NSObject {
             vc.removeFromParent()
         }
 
-        [self.hideAnimator, self.showAnimator, self.finishAnimator].forEach { animator in
+        [self.transitionAnimator, self.finishAnimator].forEach { animator in
             if let a = animator {
                 self.stop(animator: a)
             }

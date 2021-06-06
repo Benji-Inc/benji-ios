@@ -71,20 +71,22 @@ class PostViewController: ViewController {
             }
         }.store(in: &self.cancellables)
 
-        self.rightView.onTap { [unowned self] tap in
+        self.rightView.didSelect { [unowned self] in
             guard self.canMoveForwardOrBackward else { return }
             self.selectionImpact.impactOccurred()
             self.didFinish?()
         }
 
-        self.leftView.onTap { [unowned self] tap in
+        self.leftView.didSelect { [unowned self] in
             guard self.canMoveForwardOrBackward else { return }
             self.selectionImpact.impactOccurred()
             self.didGoBack?()
         }
 
         self.container.addSubview(self.getCenterContent())
-        self.container.addSubview(self.bottomContainer)
+
+        // Not in the container so it can handle touch events. 
+        self.view.addSubview(self.bottomContainer)
         if let view = self.getBottomContent() {
             self.bottomContainer.addSubview(view)
         }
@@ -116,7 +118,7 @@ class PostViewController: ViewController {
         self.rightView.width = self.view.halfWidth
         self.rightView.pin(.right)
 
-        self.container.size = CGSize(width: self.view.width, height: self.view.safeAreaRect.height)
+        self.container.size = CGSize(width: self.view.width, height: self.view.safeAreaRect.height - Theme.buttonHeight - Theme.contentOffset)
         self.container.pinToSafeArea(.top, padding: 0)
         self.container.centerOnX()
 
@@ -125,7 +127,7 @@ class PostViewController: ViewController {
         }
 
         self.bottomContainer.size = CGSize(width: self.container.width, height: Theme.buttonHeight)
-        self.bottomContainer.pin(.bottom, padding: Theme.contentOffset)
+        self.bottomContainer.pinToSafeArea(.bottom, padding: Theme.contentOffset)
 
         self.textView.setSize(withWidth: self.container.width * 0.9)
         self.textView.centerOnXAndY()
