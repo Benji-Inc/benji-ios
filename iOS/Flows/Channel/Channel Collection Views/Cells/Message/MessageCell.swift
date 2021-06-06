@@ -37,6 +37,7 @@ class MessageCell: BaseMessageCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.bubbleView.backgroundColor = nil 
         self.bubbleView.layer.borderColor = nil
         self.bubbleView.layer.borderWidth = 0
         self.textView.text = nil
