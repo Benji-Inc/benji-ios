@@ -14,7 +14,11 @@ import Combine
 enum ToastType {
     case newMessage(TCHMessage, TCHChannel)
     case error(ClientError)
-    case basic(identifier: String, displayable: ImageDisplayable, title: Localized, description: Localized)
+    case basic(identifier: String,
+               displayable: ImageDisplayable,
+               title: Localized,
+               description: Localized,
+               deepLink: DeepLinkable?)
 }
 
 protocol ToastSchedulerDelegate: AnyObject {
@@ -33,8 +37,8 @@ class ToastScheduler {
         switch toastType {
         case .error(let error):
             self.createErrorToast(for: error)
-        case .basic(let identifier, let displayable, let title, let description):
-            self.createBasicToast(for: identifier, displayable: displayable, title: title, description: description)
+        case .basic(let identifier, let displayable, let title, let description, let deepLink):
+            self.createBasicToast(for: identifier, displayable: displayable, title: title, description: description, deepLink: deepLink)
         case .newMessage(let msg, let channel):
             self.createMessageToast(for: msg, channel: channel)
         }
@@ -59,16 +63,17 @@ class ToastScheduler {
     private func createBasicToast(for identifier: String,
                                   displayable: ImageDisplayable,
                                   title: Localized,
-                                  description: Localized) {
+                                  description: Localized,
+                                  deepLink: DeepLinkable?) {
 
         let toast = Toast(id: Lorem.randomString(),
                           priority: 1,
                           title: title,
                           description: description,
                           displayable: displayable,
-                          deeplink: nil,
+                          deeplink: deepLink,
                           didTap: { [unowned self] in
-                            self.delegate?.didInteractWith(type: .basic(identifier: identifier, displayable: displayable, title: title, description: description), deeplink: nil)
+                            self.delegate?.didInteractWith(type: .basic(identifier: identifier, displayable: displayable, title: title, description: description, deepLink: deepLink), deeplink: deepLink)
                           })
 
         ToastQueue.shared.add(toast: toast)

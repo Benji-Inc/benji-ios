@@ -123,7 +123,8 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
                 post.deleteInBackground { completed, error in
                     ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(),
                                                     displayable: UIImage(systemName: "trash")!,
-                                                                     title: "Post Deleted", description: "You have successfully deleted your post"))
+                                                                     title: "Post Deleted", description: "You have successfully deleted your post",
+                                                                     deepLink: nil))
                     self.didFinish?()
                     self.didDeletePost?()
                 }

@@ -50,7 +50,7 @@ class RitualManager {
             case .feedAvailable:
                 #if IOS 
                 ToastScheduler.shared.schedule(toastType: .basic(identifier: self.currentTriggerDate!.description,
-                                                displayable: UIImage(systemName: "lock.open")!, title: "Unlocked", description: "Your ritual has begun! You now have access to all features."))
+                                                                 displayable: UIImage(systemName: "lock.open")!, title: "Unlocked", description: "Your ritual has begun! You now have access to all features.", deepLink: DeepLinkObject(target: .feed)))
                 #endif
 
             case .lessThanHourAfter(_):

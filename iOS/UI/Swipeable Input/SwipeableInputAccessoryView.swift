@@ -184,13 +184,23 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
             }
         }.store(in: &self.cancellables)
 
+        self.textView.demoVC.exitButton.didSelect { [unowned self] in
+            UserDefaultsManager.update(key: .hasShownKeyboardInstructions, with: true)
+            self.textView.updateInputView(type: .keyboard)
+        }
+
         self.textView.textDidUpdate = { [unowned self] text in
             self.handleTextChange(text)
         }
 
         self.overlayButton.didSelect { [unowned self] in
             if !self.textView.isFirstResponder {
-                self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
+                if UserDefaultsManager.getValue(for: .hasShownKeyboardInstructions) {
+                    self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
+                } else {
+                    self.textView.updateInputView(type: .demo, becomeFirstResponder: true)
+
+                }
             }
         }
 

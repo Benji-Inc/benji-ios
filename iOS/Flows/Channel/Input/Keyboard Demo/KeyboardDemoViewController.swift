@@ -57,6 +57,8 @@ class KeyboardDemoViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.set(backgroundColor: .background2)
+
         self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
         self.view.addSubview(self.scrollView)
@@ -124,6 +126,10 @@ class KeyboardDemoViewController: ViewController {
         self.pagingIndicator.sizeToFit()
         self.pagingIndicator.centerOnX()
         self.pagingIndicator.pinToSafeArea(.bottom, padding: 0)
+
+        self.exitButton.squaredSize = 50
+        self.exitButton.pin(.top, padding: Theme.contentOffset.half)
+        self.exitButton.pin(.right, padding: Theme.contentOffset.half)
     }
 }
 
@@ -135,45 +141,5 @@ extension KeyboardDemoViewController: UIScrollViewDelegate {
 
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         self.currentIndex = scrollView.currentXIndex
-    }
-}
-
-class DemoView: View {
-
-    let animationView = AnimationView()
-    let label = Label(font: .regular)
-    private let demo: KeyboardDemoViewController.DemoType
-
-    init(with demo: KeyboardDemoViewController.DemoType) {
-        self.demo = demo
-        super.init()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func initializeSubviews() {
-        super.initializeSubviews()
-
-        self.addSubview(self.label)
-        self.addSubview(self.animationView)
-
-        self.label.setText(self.demo.instruction)
-        self.label.textAlignment = .center
-
-        self.animationView.load(animation: self.demo.animation)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.animationView.squaredSize = 100
-        self.animationView.centerOnX()
-        self.animationView.centerY = self.height * 0.35
-
-        self.label.setSize(withWidth: self.width - Theme.contentOffset.doubled)
-        self.label.centerOnX()
-        self.label.match(.top, to: .bottom, of: self.animationView, offset: Theme.contentOffset.half)
     }
 }

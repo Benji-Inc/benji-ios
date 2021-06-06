@@ -87,6 +87,7 @@
 		D62C9CC1266C3CA800BB9632 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */; };
 		D62C9CC2266C3CAB00BB9632 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */; };
 		D62C9CC3266C3CAC00BB9632 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */; };
+		D62C9CC6266C417100BB9632 /* DemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CC5266C417100BB9632 /* DemoView.swift */; };
 		D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6347395241EBF6F0071E9DA /* UIView+Layout.swift */; };
 		D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */; };
 		D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63752C5231258DA00214F63 /* PreviewMessageView.swift */; };
@@ -853,6 +854,7 @@
 		D62C9CBA266BDA5A00BB9632 /* UserPrefrences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPrefrences.swift; sourceTree = "<group>"; };
 		D62C9CBE266BE50700BB9632 /* KeyboardDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDemoViewController.swift; sourceTree = "<group>"; };
 		D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		D62C9CC5266C417100BB9632 /* DemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoView.swift; sourceTree = "<group>"; };
 		D6347395241EBF6F0071E9DA /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 		D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extensions.swift"; sourceTree = "<group>"; };
 		D63752C5231258DA00214F63 /* PreviewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewMessageView.swift; sourceTree = "<group>"; };
@@ -1389,6 +1391,15 @@
 				D6A301AB2380E102006655E0 /* PostsSupplier.swift */,
 			);
 			path = Feed;
+			sourceTree = "<group>";
+		};
+		D62C9CC4266C415E00BB9632 /* Keyboard Demo */ = {
+			isa = PBXGroup;
+			children = (
+				D62C9CBE266BE50700BB9632 /* KeyboardDemoViewController.swift */,
+				D62C9CC5266C417100BB9632 /* DemoView.swift */,
+			);
+			path = "Keyboard Demo";
 			sourceTree = "<group>";
 		};
 		D6356D7E25A369F80015104F /* Shared */ = {
@@ -2060,7 +2071,7 @@
 				D61D38E2248C07F700BE457B /* InputAccessoryView+Animation.swift */,
 				D61D38E4248C0BA600BE457B /* InputAccessoryView+Connection.swift */,
 				D61592DF24FC195D00B63412 /* InputTextView.swift */,
-				D62C9CBE266BE50700BB9632 /* KeyboardDemoViewController.swift */,
+				D62C9CC4266C415E00BB9632 /* Keyboard Demo */,
 				D63752C5231258DA00214F63 /* PreviewMessageView.swift */,
 			);
 			path = Input;
@@ -2836,6 +2847,7 @@
 				D66379D725A3704300A4A3B7 /* SessionManager.swift in Sources */,
 				D6A714C725D969FE000A90EB /* PostViewController.swift in Sources */,
 				D66A580725DD691A001B3F64 /* NewChannelViewController.swift in Sources */,
+				D62C9CC6266C417100BB9632 /* DemoView.swift in Sources */,
 				D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */,
 				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
 				D6D3928A265F15CA00E49F1E /* NoticesCollectionViewController.swift in Sources */,

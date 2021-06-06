@@ -44,13 +44,14 @@ class InputTextView: ExpandingTextView {
     }
 
     func updateInputView(type: InputViewType, becomeFirstResponder: Bool = true) {
-        guard self.currentInputView != type else { return }
 
         defer {
             if becomeFirstResponder, !self.isFirstResponder {
                 self.becomeFirstResponder()
             }
         }
+
+        guard self.currentInputView != type else { return }
 
         switch type {
         case .attachments:
