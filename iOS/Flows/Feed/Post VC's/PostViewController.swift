@@ -28,6 +28,8 @@ class PostViewController: ViewController {
     var didPause: CompletionOptional = nil
     var didResume: CompletionOptional = nil
     var didSelectPost: CompletionOptional = nil
+    var handlePan: ((UIPanGestureRecognizer) -> Void)? = nil
+
     var shouldHideTopView: CompletionOptional = nil
     var canMoveForwardOrBackward: Bool = true
 
@@ -78,6 +80,10 @@ class PostViewController: ViewController {
             } else {
                 self.didFinish?()
             }
+        }
+
+        self.container.onPan { [unowned self] pan in
+            self.handlePan?(pan)
         }
 
         self.container.addSubview(self.getCenterContent())

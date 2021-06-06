@@ -109,6 +109,11 @@ class PostsCollectionManager: NSObject {
                 self.delegate?.posts(self, didResume: index)
             }
 
+            postVC.handlePan = { [weak self] pan in
+                guard let `self` = self else { return }
+                self.handlePan(for: postVC, pan: pan)
+            }
+
             postVC.didGoBack = { [weak self] in
                 guard let `self` = self else { return }
                 let previous = clamp(index - 1, min: 0)
@@ -126,6 +131,33 @@ class PostsCollectionManager: NSObject {
 
         if let user = self.feedOwner {
             self.delegate?.postsManagerDidSetItems(self, for: user)
+        }
+    }
+
+    func handlePan(for postVC: PostViewController, pan: UIPanGestureRecognizer) {
+        guard let view = pan.view else {return}
+
+        let translation = pan.translation(in: view.superview)
+
+        print(translation)
+
+        switch pan.state {
+        case .possible:
+            break
+        case .began:
+            break
+
+            // set starting point
+        case .changed:
+            break
+            // Determine progess based on starting point and width
+
+        case .ended, .cancelled, .failed:
+            break
+        // If progress is greater than 50%, completed flip
+        // If not, reverse and reset
+        @unknown default:
+            break
         }
     }
 
