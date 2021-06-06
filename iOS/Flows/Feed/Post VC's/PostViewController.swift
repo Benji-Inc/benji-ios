@@ -70,19 +70,13 @@ class PostViewController: ViewController {
         self.rightView.onTap { [unowned self] tap in
             guard self.canMoveForwardOrBackward else { return }
             self.selectionImpact.impactOccurred()
-            let location = tap.location(in: self.rightView)
-            self.rightView.startFillAnimation(at: location) { [unowned self] in
-                self.didFinish?()
-            }
+            self.didFinish?()
         }
 
         self.leftView.onTap { [unowned self] tap in
             guard self.canMoveForwardOrBackward else { return }
             self.selectionImpact.impactOccurred()
-            let location = tap.location(in: self.leftView)
-            self.leftView.startFillAnimation(at: location) { [unowned self] in
-                self.didGoBack?()
-            }
+            self.didGoBack?()
         }
 
         self.container.addSubview(self.getCenterContent())

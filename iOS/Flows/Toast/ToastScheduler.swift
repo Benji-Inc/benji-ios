@@ -66,7 +66,7 @@ class ToastScheduler {
                                   description: Localized,
                                   deepLink: DeepLinkable?) {
 
-        let toast = Toast(id: Lorem.randomString(),
+        let toast = Toast(id: identifier,
                           priority: 1,
                           title: title,
                           description: description,

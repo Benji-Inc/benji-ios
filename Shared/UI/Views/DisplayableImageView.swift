@@ -81,11 +81,18 @@ class DisplayableImageView: View {
                 self.animationView.load(animation: .error)
                 self.animationView.loopMode = .loop
                 self.animationView.play()
+                UIView.animate(withDuration: 0.2) {
+                    self.blurView.effect = self.blurEffect
+                }
             case .success:
                 if self.animationView.isAnimationPlaying {
                     self.animationView.stop()
                 }
                 self.animationView.reset()
+
+                UIView.animate(withDuration: 0.2) {
+                    self.blurView.effect = nil
+                }
             }
         }.store(in: &self.cancellables)
     }
@@ -185,11 +192,6 @@ class DisplayableImageView: View {
 
     func showResult(for image: UIImage?) {
         self.state = image.isNil ? .error : .success
-
-        UIView.animate(withDuration: 0.2) {
-            self.blurView.effect = image.isNil ? self.blurEffect : nil
-        }
-
         self.imageView.image = image
     }
 }
