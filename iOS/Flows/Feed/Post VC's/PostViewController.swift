@@ -30,6 +30,8 @@ class PostViewController: ViewController {
     var shouldHideTopView: CompletionOptional = nil
     var canMoveForwardOrBackward: Bool = true
 
+    let gradientBlurView = GradientBlurView(with: [Color.background2.color.cgColor, Color.background3.color.cgColor], startPoint: .topCenter, endPoint: .bottomCenter)
+
     let leftView = AnimatingTapView()
     let rightView = AnimatingTapView()
 
@@ -53,6 +55,8 @@ class PostViewController: ViewController {
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.view.addSubview(self.gradientBlurView)
 
         self.view.addSubview(self.rightView)
         self.view.addSubview(self.leftView)
@@ -128,5 +132,8 @@ class PostViewController: ViewController {
 
         self.button.setSize(with: self.bottomContainer.width)
         self.button.centerOnXAndY()
+
+        self.gradientBlurView.expandToSuperviewSize()
+        self.gradientBlurView.roundCorners()
     }
 }

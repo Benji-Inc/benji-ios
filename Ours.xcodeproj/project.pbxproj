@@ -446,6 +446,7 @@
 		D6605445262F7235002F74F8 /* MediaMoreButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6605442262F71FF002F74F8 /* MediaMoreButton.swift */; };
 		D660544726320C06002F74F8 /* scroll_down.json in Resources */ = {isa = PBXBuildFile; fileRef = D660544626320C06002F74F8 /* scroll_down.json */; };
 		D660544926324239002F74F8 /* UserHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D660544826324239002F74F8 /* UserHeaderCell.swift */; };
+		D6623DF4266D47BF000E3B73 /* GradientBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6623DF3266D47BF000E3B73 /* GradientBlurView.swift */; };
 		D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D66379CE25A3704300A4A3B7 /* ChatClientManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */; };
@@ -951,6 +952,7 @@
 		D6605442262F71FF002F74F8 /* MediaMoreButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaMoreButton.swift; sourceTree = "<group>"; };
 		D660544626320C06002F74F8 /* scroll_down.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = scroll_down.json; sourceTree = "<group>"; };
 		D660544826324239002F74F8 /* UserHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHeaderCell.swift; sourceTree = "<group>"; };
+		D6623DF3266D47BF000E3B73 /* GradientBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientBlurView.swift; sourceTree = "<group>"; };
 		D6629C7425AD254C002C3B92 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatClientManager+Extensions.swift"; sourceTree = "<group>"; };
 		D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserNotificationManager+Extensions.swift"; sourceTree = "<group>"; };
@@ -1386,6 +1388,7 @@
 				D64932D623FE460200986335 /* FeedIndicatorView.swift */,
 				D62C635322BE9CBB00F4D097 /* FeedViewController.swift */,
 				D67896B522FF86AB0059BA75 /* FeedViewController+Extensions.swift */,
+				D6623DF3266D47BF000E3B73 /* GradientBlurView.swift */,
 				D6EDFB4A25D48F1D0034A2F6 /* Post VC's */,
 				D6815DBA22EE1F1400E71251 /* PostsCollectionManager.swift */,
 				D6A301AB2380E102006655E0 /* PostsSupplier.swift */,
@@ -2877,6 +2880,7 @@
 				D6FC8098237A66220089AACC /* ChannelSupplier.swift in Sources */,
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,
 				D6405B67236E002E00FAA06B /* User.swift in Sources */,
+				D6623DF4266D47BF000E3B73 /* GradientBlurView.swift in Sources */,
 				D69B75FB264842D00007020D /* VideoView.swift in Sources */,
 				D6EDD1992355DBFA00FDA5D6 /* ProfileDetailView.swift in Sources */,
 				D6830222234AA35C006145FE /* DisplayableChannel.swift in Sources */,

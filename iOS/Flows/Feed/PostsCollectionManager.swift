@@ -141,7 +141,6 @@ class PostsCollectionManager: NSObject {
             self.transitionAnimator = self.createAnimator()
         }
 
-        self.currentIndex = index
         parent.addChild(viewController: to, toView: self.container)
         to.view.isHidden = true
         to.view.expandToSuperviewSize()
@@ -153,14 +152,15 @@ class PostsCollectionManager: NSObject {
                               duration: 0.0,
                               options: [.transitionFlipFromRight],
                               animations: {
-                                to.view.isHidden = true
-                                from.view.isHidden = false
+                                to.view.isHidden = false
+                                from.view.isHidden = true
                 })
         }
 
         self.transitionAnimator?.addCompletion({ [weak self] position in
             guard let `self` = self else { return }
 
+            self.currentIndex = index
             self.current?.removeFromParentSuperview()
             self.current = to
 
