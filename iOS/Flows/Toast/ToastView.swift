@@ -94,12 +94,13 @@ class ToastView: View {
         self.vibrancyEffectView.contentView.addSubview(self.titleLabel)
         self.blurView.contentView.addSubview(self.vibrancyEffectView)
 
+
         self.isUserInteractionEnabled = true
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 10
 
         self.imageView.imageView.tintColor = Color.white.color
-        //self.imageView.imageView.contentMode = .scaleAspectFit
+        self.imageView.imageView.contentMode = .scaleAspectFit
 
         self.descriptionLabel.alpha = 0
         self.titleLabel.alpha = 0

@@ -111,9 +111,14 @@ class PostConnectionViewController: PostViewController {
         self.button.handleEvent(status: .loading)
         UpdateConnection(connectionId: connection.objectId!, status: status)
             .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink(receiveValue: { updatedConnection in
-                self.button.handleEvent(status: .complete)
-                self.didFinish?()
+            .mainSink(receivedResult: { result in
+                switch result {
+                case .success(_):
+                    self.button.handleEvent(status: .complete)
+                    self.didFinish?()
+                case .error(let e):
+                    print(e)
+                }
             }).store(in: &self.cancellables)
     }
 }
