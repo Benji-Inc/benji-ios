@@ -11,7 +11,7 @@ import TwilioChatClient
 import Combine
 
 class ChannelCollectionViewManager: NSObject, UITextViewDelegate, ChannelDataSource,
-UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ActiveChannelAccessor {
+UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDataSourcePrefetching, ActiveChannelAccessor {
 
     enum ScrollDirection {
         case up
@@ -68,6 +68,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     }
 
     private func updateLayoutDataSource() {
+        self.collectionView.prefetchDataSource = self 
         self.collectionView.channelLayout.dataSource = self
     }
 
@@ -91,6 +92,16 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         }
 
         return self.numberOfItems(inSection: section)
+    }
+
+    // MARK: PREFETCH
+
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        print("PRE-FETCH: \(indexPaths)")
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+
     }
 
     // MARK: DELEGATE

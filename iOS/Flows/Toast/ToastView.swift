@@ -26,7 +26,7 @@ class ToastView: View {
     private lazy var vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
     private let titleLabel = Label(font: .regularBold)
     private let descriptionLabel = Label(font: .smallBold)
-    private let imageView = DisplayableImageView()
+    private let imageView = AvatarView()
 
     var didDismiss: () -> Void = {}
     var didTap: () -> Void = {}
@@ -99,7 +99,7 @@ class ToastView: View {
         self.layer.cornerRadius = 10
 
         self.imageView.imageView.tintColor = Color.white.color
-        self.imageView.imageView.contentMode = .scaleAspectFit
+        //self.imageView.imageView.contentMode = .scaleAspectFit
 
         self.descriptionLabel.alpha = 0
         self.titleLabel.alpha = 0

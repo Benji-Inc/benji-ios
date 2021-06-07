@@ -63,7 +63,7 @@ class CommentCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
 
         self.avatarView.setSize(for: 44)
-        self.avatarView.pin(.left, padding: 12)
+        self.avatarView.pin(.left, padding: 0)
         self.avatarView.pin(.top)
 
         let maxWidth = self.width - self.avatarView.right - Theme.contentOffset.doubled

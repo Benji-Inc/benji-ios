@@ -27,7 +27,7 @@ class CommentsCollectionViewManager: CollectionViewManager<CommentsCollectionVie
 
         let section = NSCollectionLayoutSection.list(using: listConfig, layoutEnvironment: layoutEnvironment)
         section.interGroupSpacing = 10
-        section.contentInsets = NSDirectionalEdgeInsets(top: 30, leading: 0, bottom: 0, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 30, leading: Theme.contentOffset, bottom: 0, trailing: Theme.contentOffset)
 
         return section
     }

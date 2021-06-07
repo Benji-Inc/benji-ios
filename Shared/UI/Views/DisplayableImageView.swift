@@ -134,7 +134,7 @@ class DisplayableImageView: View {
     }
 
     private func downloadAndSetImage(url: URL) {
-        self.imageView.sd_setImage(with: url, placeholderImage: nil, options: []) { received, expected, url in
+        self.imageView.sd_setImage(with: url, placeholderImage: nil, options: [.refreshCached]) { received, expected, url in
             if self.animationView.microAnimation == .pie {
                 let progress: Float
                 if received > 0 {
