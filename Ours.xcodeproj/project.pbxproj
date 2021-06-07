@@ -585,6 +585,9 @@
 		D6A714C725D969FE000A90EB /* PostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A714C625D969FE000A90EB /* PostViewController.swift */; };
 		D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AC90C92594F8F80032774D /* Delegated.swift */; };
 		D6AC90CB2594F8F80032774D /* Delegated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AC90C92594F8F80032774D /* Delegated.swift */; };
+		D6AD7999266E870200ED7A93 /* MIMEType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD7998266E870200ED7A93 /* MIMEType.swift */; };
+		D6AD799A266E870200ED7A93 /* MIMEType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD7998266E870200ED7A93 /* MIMEType.swift */; };
+		D6AD799B266E870200ED7A93 /* MIMEType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AD7998266E870200ED7A93 /* MIMEType.swift */; };
 		D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B230D225BC7FCE0082A41A /* SendableType.swift */; };
 		D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */; };
 		D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */; };
@@ -1063,6 +1066,7 @@
 		D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCategory.swift; sourceTree = "<group>"; };
 		D6A714C625D969FE000A90EB /* PostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewController.swift; sourceTree = "<group>"; };
 		D6AC90C92594F8F80032774D /* Delegated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Delegated.swift; sourceTree = "<group>"; };
+		D6AD7998266E870200ED7A93 /* MIMEType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MIMEType.swift; sourceTree = "<group>"; };
 		D6B230D225BC7FCE0082A41A /* SendableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableType.swift; sourceTree = "<group>"; };
 		D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSectionHeader.swift; sourceTree = "<group>"; };
 		D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDateLabel.swift; sourceTree = "<group>"; };
@@ -1857,6 +1861,7 @@
 				D65519F22589591D00B901E4 /* Typealies.swift */,
 				D6AC90C92594F8F80032774D /* Delegated.swift */,
 				D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */,
+				D6AD7998266E870200ED7A93 /* MIMEType.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -2760,6 +2765,7 @@
 				D64BD4182645B9C20053A55A /* CameraOptionsView.swift in Sources */,
 				D6432BF522D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift in Sources */,
 				D6D3928C265F15D800E49F1E /* NoticeCollectionViewManager.swift in Sources */,
+				D6AD7999266E870200ED7A93 /* MIMEType.swift in Sources */,
 				D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */,
 				D6966515263B60910009114B /* PostCreationViewController+Panning.swift in Sources */,
 				D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
@@ -3074,6 +3080,7 @@
 				D63DB28825E999A100F6B323 /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D63DB26325E9997200F6B323 /* StringStyle.swift in Sources */,
 				D63DB25825E9995700F6B323 /* AnimationCycle.swift in Sources */,
+				D6AD799B266E870200ED7A93 /* MIMEType.swift in Sources */,
 				D63DB24D25E9994B00F6B323 /* Completeable.swift in Sources */,
 				D63DB23425E9992600F6B323 /* UIEdgeInsets+Extensions.swift in Sources */,
 				D63DB26025E9996C00F6B323 /* PushPayload.swift in Sources */,
@@ -3155,6 +3162,7 @@
 				D63D5C98265811B000543200 /* URL+Extensions.swift in Sources */,
 				D6551A3025895E4600B901E4 /* SwitchableContentViewController.swift in Sources */,
 				D63DB21025E96EAF00F6B323 /* NSExtensionContext+Extensions.swift in Sources */,
+				D6AD799A266E870200ED7A93 /* MIMEType.swift in Sources */,
 				D6551A3A25895E6E00B901E4 /* FaceDetectionViewController.swift in Sources */,
 				D66379E225A39C0400A4A3B7 /* UserNotificationManager.swift in Sources */,
 				D6DF870725A5214D0089B0CF /* QuePositions.swift in Sources */,

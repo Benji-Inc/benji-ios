@@ -46,16 +46,19 @@ extension PostCreationViewController {
         }
     }
 
-    func preload(data: Data, preview: Data, progressHandler: @escaping (Int) -> Void) -> Future<Void, Error> {
+    func preload(data: Data,
+                 mimeType: MIMEType,
+                 preview: Data,
+                 progressHandler: @escaping (Int) -> Void) -> Future<Void, Error> {
 
         return Future { promise in
 
-            self.file = PFFileObject(name: UUID().uuidString, data: data)
+            self.file = PFFileObject(name: UUID().uuidString + "." + mimeType.rawValue, data: data)
             self.file?.saveInBackground({ success, error in
                 if let e = error {
                     promise(.failure(e))
                 } else {
-                    self.previewFile = PFFileObject(name: UUID().uuidString, data: preview)
+                    self.previewFile = PFFileObject(name: UUID().uuidString + "." + mimeType.rawValue, data: preview)
                     self.previewFile?.saveInBackground(block: { completed, error in
                         if let e = error {
                             promise(.failure(e))

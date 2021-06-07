@@ -287,7 +287,7 @@ class PostCreationViewController: ImageCaptureViewController {
                 // Not sure what the orientation should be for all video
                 guard let cgIimage = try? imageGenerator.copyCGImage(at: time, actualTime: &actualTime), let preview = UIImage(cgImage: cgIimage, scale: 1, orientation: .right).previewData else { return }
 
-                self.preload(data: videoData, preview: preview) { progress in
+                self.preload(data: videoData, mimeType: .mp4, preview: preview) { progress in
                     if progress < 100 {
                         self.swipeLabel.setText("Uploading: %\(progress)")
                     } else {
@@ -318,7 +318,7 @@ class PostCreationViewController: ImageCaptureViewController {
         self.didShowMedia?()
 
         guard let data = image.data, let preview = image.previewData else { return }
-        self.preload(data: data, preview: preview) { progress in
+        self.preload(data: data, mimeType: .jpeg, preview: preview) { progress in
             if progress < 100 {
                 self.swipeLabel.setText("Uploading: %\(progress)")
             } else {
