@@ -101,7 +101,7 @@ class PostMediaViewController: PostViewController, CollectionViewInputHandler {
             }
         })
 
-        self.view.insertSubview(self.imageView, at: 0)
+        self.view.insertSubview(self.imageView, aboveSubview: self.gradientBlurView)
 
         self.view.addSubview(self.gradientView)
 

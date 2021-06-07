@@ -83,4 +83,10 @@ class CommentCell: CollectionViewManagerCell, ManageableCell {
         self.label.text = nil
         self.textView.text = nil 
     }
+
+    override func updateConfiguration(using state: UICellConfigurationState) {
+        var backgroundConfig = UIBackgroundConfiguration.listPlainCell().updated(for: state)
+        backgroundConfig.backgroundColor = Color.clear.color
+        self.backgroundConfiguration = backgroundConfig
+    }
 }

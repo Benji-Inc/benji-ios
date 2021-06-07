@@ -82,9 +82,9 @@ class PostViewController: ViewController {
             }
         }
 
-        self.container.onPan { [unowned self] pan in
-            self.handlePan?(pan)
-        }
+//        self.container.onPan { [unowned self] pan in
+//            self.handlePan?(pan)
+//        }
 
         self.container.addSubview(self.getCenterContent())
 
