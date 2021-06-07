@@ -62,12 +62,13 @@ extension ArchivesCollectionViewManager {
                     self.loadPosts(for: user)
                 case .updated(let object):
                     guard let post = object as? Post, post.type == .media else { return }
-
-                    ToastScheduler.shared.schedule(toastType: .basic(identifier: post.objectId!,
-                                                    displayable: post.file!,
-                                                                     title: "Post Updated",
-                                                                     description: "Post was successfully updated.",
-                                                                     deepLink: nil))
+                    // Add back in once Comments are isolated.
+                
+//                    ToastScheduler.shared.schedule(toastType: .basic(identifier: post.objectId!,
+//                                                    displayable: post.file!,
+//                                                                     title: "Post Updated",
+//                                                                     description: "Post was successfully updated.",
+//                                                                     deepLink: nil))
 
                 case .deleted(let object):
                     guard let post = object as? Post, post.type == .media else { return }
