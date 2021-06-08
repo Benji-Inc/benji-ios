@@ -18,4 +18,6 @@ enum MicroAnimation: String {
     case loading = "loading"
     case plusToX = "plusToX"
     case lock = "lock"
+    case send = "send_interaction"
+    case sendAlert = "send_alert_interaction"
 }
