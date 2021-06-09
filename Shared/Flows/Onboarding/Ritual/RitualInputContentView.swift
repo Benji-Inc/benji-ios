@@ -85,6 +85,8 @@ class RitualInputContentView: View {
             self.minusButton.alpha = shouldShow ? 1 : 0
             self.plusButton.alpha = shouldShow ? 1 : 0
             self.labelOffset = shouldShow ? -60 : 20
+            self.timeLabel.alpha = shouldShow ? 1 : 0.25
+            self.everyDayLabel.alpha = shouldShow ? 1 : 0.25
             self.timeHump.alpha = shouldShow ? 1 : 0 
             self.layoutNow()
         }

@@ -9,6 +9,7 @@
 import Foundation
 import Parse
 import TMROLocalization
+import Lottie
 
 protocol OnboardingViewControllerDelegate: AnyObject {
     func onboardingView(_ controller: OnboardingViewController, didVerify user: PFUser)
@@ -32,6 +33,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
     lazy var ritualVC = RitualInputViewController()
+
+    let loadingBlur = BlurView()
+    let blurEffect = UIBlurEffect(style: .systemMaterial)
+    let loadingAnimationView = AnimationView()
     
     let avatarView = AvatarView()
     private let confettiView = ConfettiView()
@@ -65,6 +70,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.loadingAnimationView.load(animation: .loading)
+        self.loadingAnimationView.loopMode = .loop
+        self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
 
         self.scrollView.insertSubview(self.confettiView, aboveSubview: self.blurView)
 
@@ -108,13 +117,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                     #if APPCLIP
                     self.current = .waitlist(self.waitlistVC)
                     #else
-                    self.delegate.onboardingView(self, didVerify: current)
+                    self.showLoading(user: current)
                     #endif
                 } else if current.status == .inactive, current.isOnboarded {
                     #if APPCLIP
                     self.current = .waitlist(self.waitlistVC)
                     #else
-                    self.delegate.onboardingView(self, didVerify: current)
+                    self.showLoading(user: current)
                     #endif
                 } else {
                     self.current = .name(self.nameVC)
@@ -177,10 +186,25 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         super.viewDidLayoutSubviews()
 
         self.confettiView.expandToSuperviewSize()
+        self.loadingBlur.expandToSuperviewSize()
 
         self.avatarView.setSize(for: 60)
         self.avatarView.centerOnX()
         self.avatarView.pin(.top)
+
+        self.loadingAnimationView.size = CGSize(width: 18, height: 18)
+        self.loadingAnimationView.centerOnXAndY()
+    }
+
+    private func showLoading(user: User) {
+        self.view.addSubview(self.loadingBlur)
+        self.view.layoutNow()
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.loadingBlur.effect = self.blurEffect
+        } completion: { completed in
+            self.loadingAnimationView.play()
+            self.delegate.onboardingView(self, didVerify: user)
+        }
     }
 
     func updateReservationCreator(with userId: String) {

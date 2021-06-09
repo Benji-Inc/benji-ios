@@ -146,8 +146,8 @@ class RitualManager {
         UserNotificationManager.shared.removeNonEssentialPendingNotifications()
 
         let content = UNMutableNotificationContent()
-        content.title = "Feed Unlocked"
-        content.body = "Your daily feed is unlocked for the next hour."
+        content.title = "Feed Unlocked 🎊"
+        content.body = "Your daily feed is unlocked for the next hour. ⏰"
         content.sound = UNNotificationSound.default
         content.threadIdentifier = "ritual"
         content.setData(value: DeepLinkTarget.feed.rawValue, for: .target)
