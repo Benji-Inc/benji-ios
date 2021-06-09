@@ -12,7 +12,7 @@ import Lottie
 class DemoView: View {
 
     let animationView = AnimationView()
-    let label = Label(font: .regular)
+    let label = Label(font: .small)
     private let demo: KeyboardDemoViewController.DemoType
 
     init(with demo: KeyboardDemoViewController.DemoType) {
@@ -39,12 +39,13 @@ class DemoView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.animationView.squaredSize = 100
-        self.animationView.centerOnX()
-        self.animationView.centerY = self.height * 0.35
-
         self.label.setSize(withWidth: self.width - Theme.contentOffset.doubled)
         self.label.centerOnX()
-        self.label.match(.top, to: .bottom, of: self.animationView, offset: Theme.contentOffset.half)
+        self.label.pinToSafeArea(.bottom, padding: Theme.contentOffset.doubled)
+
+        self.animationView.width = self.width - Theme.contentOffset.doubled
+        self.animationView.height = self.height * 0.4
+        self.animationView.centerOnX()
+        self.animationView.match(.bottom, to: .top, of: self.label, offset: -Theme.contentOffset.half)
     }
 }

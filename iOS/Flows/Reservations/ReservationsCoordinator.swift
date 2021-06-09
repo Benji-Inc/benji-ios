@@ -65,7 +65,7 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     }
 
     private func showSentAlert(for avatar: Avatar) {
-        let text = LocalizedString(id: "", arguments: [avatar.fullName], default: "Your RSVP has been sent too @(name). As soon as they accept, a conversation will be created between the two of you.")
+        let text = LocalizedString(id: "", arguments: [avatar.fullName], default: "Your RSVP has been sent to @(name). As soon as they accept, a conversation will be created between the two of you.")
         ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: avatar, title: "RSVP Sent", description: text, deepLink: nil))
         self.finishFlow(with: ())
     }

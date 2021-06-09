@@ -98,6 +98,7 @@ class ArchivesViewController: CollectionViewController<ArchivesCollectionViewMan
     }
 
     func didFinishShowing() {
+        UserDefaultsManager.update(key: .hasShownHomeSwipe, with: true)
         if self.userCollectionVC.collectionViewManager.collectionView.numberOfSections == 0 {
             self.userCollectionVC.collectionViewManager.loadFeeds { [unowned self] in
                 self.userCollectionVC.collectionViewManager.select(indexPath: IndexPath(item: 0, section: 0))

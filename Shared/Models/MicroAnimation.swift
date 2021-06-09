@@ -20,4 +20,5 @@ enum MicroAnimation: String {
     case lock = "lock"
     case send = "send_interaction"
     case sendAlert = "send_alert_interaction"
+    case cursor = "cursor_interaction"
 }

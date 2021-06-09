@@ -45,11 +45,11 @@ class KeyboardDemoViewController: ViewController {
         var animation: MicroAnimation {
             switch self {
             case .send:
-                return .checkbox
+                return .send
             case .sendAlert:
-                return .checkbox
+                return .sendAlert
             case .cursor:
-                return .checkbox
+                return .cursor
             }
         }
     }
