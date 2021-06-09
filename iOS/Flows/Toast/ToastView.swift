@@ -94,7 +94,6 @@ class ToastView: View {
         self.vibrancyEffectView.contentView.addSubview(self.titleLabel)
         self.blurView.contentView.addSubview(self.vibrancyEffectView)
 
-
         self.isUserInteractionEnabled = true
         self.layer.masksToBounds = true
         self.layer.cornerRadius = 10
@@ -300,6 +299,12 @@ class ToastView: View {
         self.imageView.size = CGSize(width: 60 * 0.74, height: 60)
         self.imageView.left = Theme.contentOffset.half
         self.imageView.top = Theme.contentOffset.half
+
+        if self.imageView.displayable is UIImage {
+            self.imageView.layer.borderColor = Color.clear.color.cgColor
+            self.imageView.layer.borderWidth = 0
+            self.imageView.set(backgroundColor: .clear)
+        }
         
         self.imageView.layer.masksToBounds = true
         self.imageView.layer.cornerRadius = 5
