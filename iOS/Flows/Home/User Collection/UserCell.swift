@@ -28,30 +28,10 @@ class UserCell: CollectionViewManagerCell, ManageableCell {
                 switch result {
                 case .success(let owner):
                     self.avatarView.set(avatar: owner)
-                    self.avatarView.didDisplayImage = { [unowned self] image in
-                        if item != User.current() {
-                            self.checkForPosts(for: item, andUpdate: image)
-                        }
-                    }
-
                 case .error(_):
                     break
                 }
             }).store(in: &self.cancellables)
-    }
-
-    func checkForPosts(for user: User, andUpdate image: UIImage) {
-        PostsSupplier.shared.getCountOfMediaPosts(for: user, excludeExpired: true)
-            .mainSink { result in
-                switch result {
-                case .success(let count):
-                    if count == 0 {
-                        self.avatarView.imageView.image = image.grayscaleImage()
-                    }
-                case .error(_):
-                    break
-                }
-            }.store(in: &self.cancellables)
     }
 
     override func update(isSelected: Bool) {

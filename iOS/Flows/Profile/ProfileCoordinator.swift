@@ -25,17 +25,7 @@ class ProfileCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
-        self.profileVC.delegate = self 
-
-        if let link = self.deepLink, let target = link.deepLinkTarget, target == .ritual {
-            self.presentRitual()
-        }
-    }
-
-    private func presentRitual() {
-        let coordinator = RitualCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { (resutl) in }
-        self.router.present(coordinator, source: self.profileVC)
+        self.profileVC.delegate = self
     }
 
     private func presentPhoto() {
@@ -51,7 +41,7 @@ extension ProfileCoordinator: ProfileViewControllerDelegate {
 
         switch item {
         case .ritual:
-            self.presentRitual()
+            break 
         case .picture:
             self.presentPhoto()
         default:

@@ -22,16 +22,6 @@ class UserCollectionViewController: CollectionViewController<UserCollectionViewM
     override func initializeViews() {
         super.initializeViews()
 
-        RitualManager.shared.$state
-            .mainSink { state in
-            switch state {
-            case .feedAvailable:
-                self.collectionViewManager.loadFeeds()
-            default:
-                self.collectionViewManager.reset()
-            }
-        }.store(in: &self.cancellables)
-
         self.view.insertSubview(self.gradientView, belowSubview: self.collectionViewManager.collectionView)
     }
 

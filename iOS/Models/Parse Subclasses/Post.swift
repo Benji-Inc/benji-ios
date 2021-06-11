@@ -26,7 +26,7 @@ enum PostKey: String {
     case consumers = "consumers"
 }
 
-final class Post: PFObject, PFSubclassing, Postable, Subscribeable {
+final class Post: PFObject, PFSubclassing, Subscribeable {
 
     static func parseClassName() -> String {
         return String(describing: self)

@@ -56,14 +56,7 @@ class NoticeSupplier {
 
     private func getLocalNotices() -> Future<[SystemNotice], Never> {
         return Future { promise in
-
-            var notices: [SystemNotice] = []
-
-            let ritual = SystemNotice(createdAt: nil, notice: nil, type: .ritual, priority: 0, body: nil, attributes: [:])
-
-            notices.append(ritual)
-
-            promise(.success(notices))
+            promise(.success([]))
         }
     }
 

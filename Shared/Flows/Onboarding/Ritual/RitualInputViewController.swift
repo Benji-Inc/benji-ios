@@ -44,10 +44,6 @@ class RitualInputViewController: ViewController, Completable, Sizeable {
     override func initializeViews() {
         super.initializeViews()
 
-        if RitualManager.shared.currentTriggerDate.exists {
-            self.state = .update
-        }
-
         self.$state
             .removeDuplicates()
             .mainSink { (state) in
@@ -126,20 +122,7 @@ class RitualInputViewController: ViewController, Completable, Sizeable {
 
     private func saveRitual() {
         self.content.confirmButton.handleEvent(status: .loading)
-        RitualManager.shared.createRitual(for: self.selectedDate)
-            .mainSink { result in
-                switch result {
-                case .success(_):
-                    self.animateButton(with: .lightPurple, text: "Success")
-                case .error(_):
-                    self.animateButton(with: .red, text: "Error")
-                }
-                self.content.confirmButton.handleEvent(status: .complete)
-                delay(2) {
-                    self.state = .edit
-                }
-                self.complete(with: .success(()))
-            }.store(in: &self.cancellables)
+
     }
 
     private func updateForStateChange() {

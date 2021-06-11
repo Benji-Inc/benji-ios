@@ -79,9 +79,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #endif
 
         #if !APPCLIP && !NOTIFICATION
-        guard let current = User.current() else { return }
-
-        RitualManager.shared.determineState(for: current)
 
         guard !ChatClientManager.shared.isConnected else { return }
 

@@ -103,12 +103,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                         }
                     }.store(in: &self.cancellables)
             }
-        case .ritual:
-            self.startRitualFlow()
         case .profile:
             self.addProfile()
-        case .feed:
-            self.presentFeed()
         case .channels:
             self.addChannels()
         }
@@ -128,15 +124,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             break
         case .system:
             break
-        case .ritual:
-            switch RitualManager.shared.state {
-            case .feedAvailable:
-                self.presentFeed()
-            case .noRitual:
-                self.showRitual()
-            default:
-                break
-            }
         }
     }
 
@@ -145,23 +132,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         let coordinator = RitualCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { (_) in }
         self.router.present(coordinator, source: self.homeVC)
-    }
-
-    private func presentFeed() {
-        self.removeChild()
-        let coordinator = FeedCoordinator(router: self.router, deepLink: self.deepLink)
-        coordinator.feedVC.didTapDone = {
-            coordinator.feedVC.dismiss(animated: true) {
-                coordinator.feedVC.cancellables.forEach { cancellable in
-                    cancellable.cancel()
-                }
-                coordinator.feedVC.removeFromParent()
-            }
-        }
-        self.addChildAndStart(coordinator) { (_) in }
-        self.router.present(coordinator, source: self.homeVC, cancelHandler: nil, animated: true) {
-            coordinator.feedVC.loadPosts(for: User.current()!)
-        }
     }
 
     private func addChannels(shouldPresent: Bool = true) {
@@ -179,12 +149,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         if let left = SideMenuManager.default.leftMenuNavigationController, shouldPresent {
             self.homeVC.present(left, animated: true, completion: nil)
         }
-    }
-
-    private func startRitualFlow() {
-        let coordinator = RitualCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { (result) in }
-        self.router.present(coordinator, source: self.homeVC)
     }
 
     func startChannelFlow(for type: ChannelType?) {

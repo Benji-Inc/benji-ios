@@ -24,7 +24,6 @@ final class Notice: PFObject, PFSubclassing, Subscribeable {
         case connectionConfirmed = "CONNECTION_CONFIRMED"
         case messageRead = "MESSAGE_READ"
         case system
-        case ritual
     }
 
     static func parseClassName() -> String {
