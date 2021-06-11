@@ -27,7 +27,6 @@
 		D60F95EE2665A5C400CF8766 /* AlertCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60F95ED2665A5C400CF8766 /* AlertCell.swift */; };
 		D60F95F02665A5E400CF8766 /* ConnectionRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */; };
 		D6116C3C25F2335000D94A09 /* PostVibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */; };
-		D6140737263DB22F00B84605 /* HomeViewController+Panning.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140736263DB22F00B84605 /* HomeViewController+Panning.swift */; };
 		D614073D263E240D00B84605 /* RitualInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140738263E240D00B84605 /* RitualInputContentView.swift */; };
 		D614073E263E240D00B84605 /* RitualTimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140739263E240D00B84605 /* RitualTimeLabel.swift */; };
 		D614073F263E240D00B84605 /* RitualViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614073A263E240D00B84605 /* RitualViewController.swift */; };
@@ -814,7 +813,6 @@
 		D60F95ED2665A5C400CF8766 /* AlertCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertCell.swift; sourceTree = "<group>"; };
 		D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestCell.swift; sourceTree = "<group>"; };
 		D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVibrancyView.swift; sourceTree = "<group>"; };
-		D6140736263DB22F00B84605 /* HomeViewController+Panning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeViewController+Panning.swift"; sourceTree = "<group>"; };
 		D6140738263E240D00B84605 /* RitualInputContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualInputContentView.swift; sourceTree = "<group>"; };
 		D6140739263E240D00B84605 /* RitualTimeLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualTimeLabel.swift; sourceTree = "<group>"; };
 		D614073A263E240D00B84605 /* RitualViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualViewController.swift; sourceTree = "<group>"; };
@@ -2180,7 +2178,6 @@
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
 				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
-				D6140736263DB22F00B84605 /* HomeViewController+Panning.swift */,
 				D642735422C87CCA0088256B /* ImageViewButton.swift */,
 				D6882B9C26010EA500F94F07 /* Post Creation */,
 				D67C319525EE882B00289787 /* PostButtonView.swift */,
@@ -2759,7 +2756,6 @@
 				D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */,
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
-				D6140737263DB22F00B84605 /* HomeViewController+Panning.swift in Sources */,
 				D6B37CAD25F7C50000BC3145 /* ConnectionRequestPost.swift in Sources */,
 				D6F312A8266AE27D00E25FEE /* LinkCell.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,

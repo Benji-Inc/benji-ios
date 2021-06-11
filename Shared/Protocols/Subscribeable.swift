@@ -17,7 +17,7 @@ protocol Subscribeable where Self: PFObject {
 }
 
 private var subscriberKey: UInt8 = 0
-extension Subscribeable where Self: PFObject {
+extension Subscribeable {
 
     static func subscribe<T>(where dict: [String: Any]? = nil) -> Future<Event<T>, Error> {
 

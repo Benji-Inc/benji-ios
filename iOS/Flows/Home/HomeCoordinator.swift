@@ -54,22 +54,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             self.addChannels()
         }
 
-        self.homeVC.didTapAddRitual = { [unowned self] in
-            self.showRitual()
-        }
-
-        self.homeVC.didSelectPhotoLibrary = { [unowned self] in
-            self.presentPicker()
-        }
-
-        self.homeVC.archivesVC.didSelectPost = { [unowned self] post in
-            if post.isLocked {
-                self.showLockedNotification(for: post)
-            } else {
-                self.show(post: post)
-            }
-        }
-
         self.homeVC.noticesCollectionVC.collectionViewManager.$onSelectedItem.mainSink { selection in
             guard let item = selection?.item as? SystemNotice else { return }
             self.handle(notice: item)
@@ -153,20 +137,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             default:
                 break
             }
-        }
-    }
-
-    private func show(post: Post) {
-        let vc = PostMediaViewController(with: post)
-        vc.canMoveForwardOrBackward = false 
-        vc.didDeletePost = { [unowned self] in
-            vc.dismiss(animated: true) {
-                self.homeVC.archivesVC.collectionViewManager.reloadForExistingUser()
-            }
-        }
-
-        self.router.present(vc, source: self.homeVC, cancelHandler: nil, animated: true) {
-            vc.configurePost()
         }
     }
 
@@ -312,29 +282,6 @@ extension HomeCoordinator: SideMenuNavigationControllerDelegate {
 
     func sideMenuDidDisappear(menu: SideMenuNavigationController, animated: Bool) {
         self.homeVC.animate(show: true)
-    }
-}
-
-extension HomeCoordinator: PHPickerViewControllerDelegate, UINavigationControllerDelegate {
-
-    private func presentPicker() {
-        guard self.router.topmostViewController != self.imagePickerVC, !self.imagePickerVC.isBeingPresented else { return }
-
-        self.imagePickerVC.delegate = self
-        self.homeVC.present(self.imagePickerVC, animated: true, completion: nil)
-    }
-
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        defer {
-            self.imagePickerVC.dismiss(animated: true, completion: nil)
-        }
-
-        let identifiers: [String] = results.compactMap(\.assetIdentifier)
-        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
-        if let asset = fetchResult.firstObject {
-            let attachment = Attachment(asset: asset)
-            self.homeVC.createVC.load(attachment: attachment)
-        }
     }
 }
 

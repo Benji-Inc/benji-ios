@@ -22,104 +22,35 @@ class HomeViewController: ViewController, TransitionableViewController {
     }
 
     lazy var noticesCollectionVC = NoticesCollectionViewController()
-    lazy var createVC = PostCreationViewController()
-    lazy var archivesVC = ArchivesViewController()
 
     let tabView = HomeTabView()
 
     var didTapProfile: CompletionOptional = nil
     var didTapChannels: CompletionOptional = nil
-    var didTapAddRitual: CompletionOptional = nil
-    var didSelectPhotoLibrary: CompletionOptional = nil
-    var noticesTopOffset: CGFloat = 0
-    var topOffset: CGFloat?
-    var minTop: CGFloat {
-        return NoticesCollectionViewController.height + self.view.safeAreaInsets.top
-    }
-
-    var minBottom: CGFloat {
-        return self.view.height
-    }
-
-    @Published var isPanning: Bool = false
     var isMenuPresenting: Bool = false
-    var isShowingArchive = false
 
     override func initializeViews() {
         super.initializeViews()
 
         self.view.set(backgroundColor: .background1)
 
-        self.addChild(viewController: self.archivesVC)
         self.addChild(viewController: self.noticesCollectionVC)
-        self.addChild(viewController: self.createVC)
-
-        self.self.createVC.view.layer.cornerRadius = 20
-        self.createVC.view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        self.createVC.view.layer.masksToBounds = true
 
         self.view.addSubview(self.tabView)
 
-        self.$isPanning
-            .removeDuplicates()
-            .mainSink { isPanning in
-                UIView.animate(withDuration: 0.1) {
-                    self.noticesCollectionVC.view.alpha = isPanning ? 0.0 : 1.0
-                }
-        }.store(in: &self.cancellables)
-
         self.tabView.didSelectProfile = { [unowned self] in
             self.didTapProfile?()
-        }
-
-        self.tabView.postButtonView.button.didSelect { [unowned self] in
-            self.didTapPost()
         }
 
         self.tabView.didSelectChannels = { [unowned self] in
             self.didTapChannels?()
         }
 
-        self.createVC.didSelectLibrary = { [unowned self] in
-            self.didSelectPhotoLibrary?()
-        }
-
         self.tabView.$state.mainSink { state in
-            self.createVC.handle(state: state)
             UIView.animate(withDuration: Theme.animationDuration) {
                 self.view.layoutNow()
             }
         }.store(in: &self.cancellables)
-
-        self.createVC.didShowMedia = { [weak self] in
-            guard let `self` = self else { return }
-            self.tabView.state = .review
-        }
-
-        self.createVC.shouldHandlePan = { [weak self] pan in
-            guard let `self` = self else { return }
-            pan.delegate = self
-            self.handle(pan)
-        }
-
-        self.createVC.didTapExit = { [unowned self] in 
-            self.tabView.state = .home
-        }
-
-        self.archivesVC.didSelectClose = { [unowned self] in
-            switch RitualManager.shared.state {
-            case .feedAvailable:
-                self.archivesVC.userCollectionVC.collectionViewManager.unselectAllItems()
-            default:
-                self.archivesVC.userCollectionVC.collectionViewManager.reset()
-            }
-            self.noticesTopOffset = 0 
-            self.animate(offset: self.minTop, progress: 1.0)
-        }
-
-        if self.createVC.isAuthorized {
-            self.createVC.begin()
-        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -127,37 +58,14 @@ class HomeViewController: ViewController, TransitionableViewController {
 
         self.noticesCollectionVC.view.expandToSuperviewWidth()
         self.noticesCollectionVC.view.height = NoticesCollectionViewController.height
-        self.noticesCollectionVC.view.pinToSafeArea(.top, padding: self.noticesTopOffset)
+        self.noticesCollectionVC.view.pinToSafeArea(.top, padding: Theme.contentOffset)
 
-        self.archivesVC.view.height = self.view.height - self.view.safeAreaInsets.top
-        self.archivesVC.view.expandToSuperviewWidth()
-        self.archivesVC.view.centerOnX()
-        self.archivesVC.view.pinToSafeArea(.top, padding: 0)
-
-        if self.tabView.state == .home {
-            self.createVC.view.height = self.view.height - self.minTop
-        } else {
-            self.createVC.view.height = self.view.height - self.view.safeAreaInsets.top
-        }
-        self.createVC.view.expandToSuperviewWidth()
-        self.createVC.view.centerOnX()
-
-        if self.topOffset.isNil {
-            if self.tabView.state == .home {
-                self.createVC.view.pin(.top, padding: self.minTop)
-            } else {
-                self.createVC.view.pinToSafeArea(.top, padding: 0)
-            }
-        }
 
         let height = 70 + self.view.safeAreaInsets.bottom
         self.tabView.size = CGSize(width: self.view.width, height: height)
         self.tabView.centerOnX()
-        if self.tabView.state == .review {
-            self.tabView.match(.top, to: .bottom, of: self.createVC.view)
-        } else {
-            self.tabView.match(.bottom, to: .bottom, of: self.createVC.view)
-        }
+
+        self.tabView.pinToSafeArea(.bottom, padding: Theme.contentOffset)
     }
 
     func animate(show: Bool) {
@@ -165,40 +73,6 @@ class HomeViewController: ViewController, TransitionableViewController {
         UIView.animate(withDuration: Theme.animationDuration) {
             self.tabView.alpha = show ? 1.0 : 0.0
             self.noticesCollectionVC.view.alpha = show ? 1.0 : 0.0
-        }
-    }
-
-    func animate(offset: CGFloat, progress: CGFloat) {
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.createVC.view.top = offset
-            self.view.layoutNow()
-        } completion: { completed in
-            self.isShowingArchive = progress < 0.65
-            self.archivesVC.animate(show: self.isShowingArchive)
-        }
-    }
-
-    private func didTapPost() {
-        switch self.tabView.state {
-        case .home:
-
-            if !self.createVC.session.isRunning {
-                self.createVC.begin()
-            }
-            
-            self.topOffset = nil
-            self.tabView.state = .capture
-
-            if self.createVC.vibrancyView.animationView.isAnimationPlaying {
-                self.createVC.vibrancyView.animationView.stop()
-            }
-            
-        case .capture:
-            self.createVC.capturePhoto()
-        case .review:
-            break
-        case .confirm:
-            break
         }
     }
 }
