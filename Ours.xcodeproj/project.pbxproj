@@ -410,8 +410,6 @@
 		D6551A7025895FFB00B901E4 /* FaceDetectionViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */; };
 		D657175C2378C78500F8F96C /* MessageCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */; };
 		D657175E2378CEBA00F8F96C /* ChannelCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657175D2378CEBA00F8F96C /* ChannelCollectionViewManager.swift */; };
-		D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D4244229D20027D12E /* MeditationViewController.swift */; };
-		D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */; };
 		D658C7DD24425E410027D12E /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D658C7DC24425E410027D12E /* HealthKit.framework */; };
 		D658EA6D261E2A0E00ABB372 /* Feed+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D658EA6C261E2A0E00ABB372 /* Feed+Cloud.swift */; };
 		D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */; };
@@ -879,8 +877,6 @@
 		D65519F22589591D00B901E4 /* Typealies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealies.swift; sourceTree = "<group>"; };
 		D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D657175D2378CEBA00F8F96C /* ChannelCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelCollectionViewManager.swift; sourceTree = "<group>"; };
-		D658C7D4244229D20027D12E /* MeditationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationViewController.swift; sourceTree = "<group>"; };
-		D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeditationCoordinator.swift; sourceTree = "<group>"; };
 		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		D658EA6C261E2A0E00ABB372 /* Feed+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Feed+Cloud.swift"; sourceTree = "<group>"; };
 		D65B0CCD2344AE390041A176 /* ChannelsViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelsViewController+Extensions.swift"; sourceTree = "<group>"; };
@@ -1542,15 +1538,6 @@
 			path = Typing;
 			sourceTree = "<group>";
 		};
-		D658C7D3244229C00027D12E /* Meditation */ = {
-			isa = PBXGroup;
-			children = (
-				D658C7D624422C5F0027D12E /* MeditationCoordinator.swift */,
-				D658C7D4244229D20027D12E /* MeditationViewController.swift */,
-			);
-			path = Meditation;
-			sourceTree = "<group>";
-		};
 		D66379DB25A39BB000A4A3B7 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1992,7 +1979,6 @@
 				D6432BF122D8282E0016001A /* Channel */,
 				D6DADF6A2207DC90007D9EB1 /* Channels */,
 				D6D145F521D549A300CD8CE4 /* Home */,
-				D658C7D3244229C00027D12E /* Meditation */,
 				D66A580325DD68F9001B3F64 /* New Channel */,
 				D6792CD625F923B800B6575C /* Post Creation */,
 				D6B2603B22E6B8CD00143CF0 /* Profile */,
@@ -2537,9 +2523,7 @@
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
 				D6F312A8266AE27D00E25FEE /* LinkCell.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
-				D658C7D5244229D20027D12E /* MeditationViewController.swift in Sources */,
 				D66B4BE925EF03B60035A2C5 /* SideNavigationController.swift in Sources */,
-				D658C7D724422C5F0027D12E /* MeditationCoordinator.swift in Sources */,
 				D6D4C5BB262096C10026D7A2 /* Comment.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D6882B9E26010EBE00F94F07 /* PostCreationViewController.swift in Sources */,
