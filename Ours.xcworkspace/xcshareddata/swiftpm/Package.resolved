@@ -2,7 +2,7 @@
   "object": {
     "pins": [
       {
-        "package": "LightCompressor_iOS",
+        "package": "LightCompressor",
         "repositoryURL": "https://github.com/AbedElazizShe/LightCompressor_iOS.git",
         "state": {
           "branch": null,
@@ -29,7 +29,7 @@
         }
       },
       {
-        "package": "twilio-chat-ios",
+        "package": "TwilioChatClient",
         "repositoryURL": "https://github.com/twilio/twilio-chat-ios",
         "state": {
           "branch": null,

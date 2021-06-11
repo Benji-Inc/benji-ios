@@ -8,28 +8,16 @@
 
 import Foundation
 import Lottie
+import Combine
 
 class TextField: UITextField {
 
     var padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
 
-    override var text: String? {
-        get {
-            return super.text
-        }
-        set {
-            guard super.text != newValue else { return }
-            if let newText = newValue {
-                super.text = newText
-            } else {
-                super.text = newValue
-            }
-            self.onTextChanged?()
-        }
-    }
-
     var onTextChanged: (() -> ())?
     var onEditingEnded: (() -> ())?
+
+    var cancellables = Set<AnyCancellable>()
 
     init() {
         super.init(frame: .zero)
@@ -40,9 +28,21 @@ class TextField: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+    }
+
     func initialize() {
         self.keyboardAppearance = .dark
- 
+
+        self.publisher(for: \.text)
+            .removeDuplicates()
+            .mainSink { _ in
+                self.onTextChanged?()
+            }.store(in: &self.cancellables)
+
         self.addTarget(self,
                        action: #selector(handleTextChanged),
                        for: UIControl.Event.editingChanged)
@@ -60,7 +60,6 @@ class TextField: UITextField {
     }
 
     func set(attributed: AttributedString, alignment: NSTextAlignment = .left) {
-        //APPLE BUG: Trying to set both the attributed text AND the defaultAttributes will cause a memory crash
         self.text = attributed.string.string
         self.setDefaultAttributes(style: attributed.style, alignment: alignment)
     }
