@@ -27,9 +27,7 @@
 		D6116C3C25F2335000D94A09 /* PostVibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */; };
 		D614073D263E240D00B84605 /* RitualInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140738263E240D00B84605 /* RitualInputContentView.swift */; };
 		D614073E263E240D00B84605 /* RitualTimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140739263E240D00B84605 /* RitualTimeLabel.swift */; };
-		D614073F263E240D00B84605 /* RitualViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614073A263E240D00B84605 /* RitualViewController.swift */; };
 		D6140740263E240D00B84605 /* RitualInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614073B263E240D00B84605 /* RitualInputViewController.swift */; };
-		D6140741263E240D00B84605 /* RitualCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614073C263E240D00B84605 /* RitualCoordinator.swift */; };
 		D6140743263EE81C00B84605 /* RitualTimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140739263E240D00B84605 /* RitualTimeLabel.swift */; };
 		D6140744263EE81C00B84605 /* RitualInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614073B263E240D00B84605 /* RitualInputViewController.swift */; };
 		D6140745263EE81C00B84605 /* RitualInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140738263E240D00B84605 /* RitualInputContentView.swift */; };
@@ -762,9 +760,7 @@
 		D6116C3B25F2335000D94A09 /* PostVibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostVibrancyView.swift; sourceTree = "<group>"; };
 		D6140738263E240D00B84605 /* RitualInputContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualInputContentView.swift; sourceTree = "<group>"; };
 		D6140739263E240D00B84605 /* RitualTimeLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualTimeLabel.swift; sourceTree = "<group>"; };
-		D614073A263E240D00B84605 /* RitualViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualViewController.swift; sourceTree = "<group>"; };
 		D614073B263E240D00B84605 /* RitualInputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualInputViewController.swift; sourceTree = "<group>"; };
-		D614073C263E240D00B84605 /* RitualCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualCoordinator.swift; sourceTree = "<group>"; };
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewManager.swift; sourceTree = "<group>"; };
 		D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
@@ -2001,7 +1997,6 @@
 				D6792CD625F923B800B6575C /* Post Creation */,
 				D6B2603B22E6B8CD00143CF0 /* Profile */,
 				D68BEAD224831F7C00C95D31 /* Reservations */,
-				D6EDD1932355DB6000FDA5D6 /* Ritual */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -2097,15 +2092,6 @@
 				D639106825D72E6F00D336D7 /* UICollectionView.CellRegistration+Extensions.swift */,
 			);
 			path = "Collection View Management ";
-			sourceTree = "<group>";
-		};
-		D6EDD1932355DB6000FDA5D6 /* Ritual */ = {
-			isa = PBXGroup;
-			children = (
-				D614073C263E240D00B84605 /* RitualCoordinator.swift */,
-				D614073A263E240D00B84605 /* RitualViewController.swift */,
-			);
-			path = Ritual;
 			sourceTree = "<group>";
 		};
 		D6F33C7A24B1502C009603FF /* Message */ = {
@@ -2622,11 +2608,9 @@
 				D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */,
 				D62C9CC1266C3CA800BB9632 /* UserDefaultsManager.swift in Sources */,
 				D6792CDD25F9665E00B6575C /* UserCollectionViewManager.swift in Sources */,
-				D6140741263E240D00B84605 /* RitualCoordinator.swift in Sources */,
 				D6C9CD2C2471D6BE007376F7 /* ReadAllFooterView.swift in Sources */,
 				D65B0CE5234928620041A176 /* ProfileCoordinator.swift in Sources */,
 				D66379CE25A3704300A4A3B7 /* ChatClientManager+Extensions.swift in Sources */,
-				D614073F263E240D00B84605 /* RitualViewController.swift in Sources */,
 				D64C6A99232D6C0200DB7257 /* TypingBubbleView.swift in Sources */,
 				D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */,
 				D65B0CCE2344AE390041A176 /* ChannelsViewController+Extensions.swift in Sources */,

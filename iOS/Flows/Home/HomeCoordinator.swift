@@ -127,13 +127,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-    private func showRitual() {
-        self.removeChild()
-        let coordinator = RitualCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { (_) in }
-        self.router.present(coordinator, source: self.homeVC)
-    }
-
     private func addChannels(shouldPresent: Bool = true) {
         self.removeChild()
         self.addChildAndStart(self.channelsCoordinator) { (_) in }
