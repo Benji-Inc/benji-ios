@@ -12,7 +12,7 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
 
     enum SectionType: Int, ManagerSectionType, CaseIterable {
         case notices
-        case users
+        case channels
     }
 
     private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
@@ -43,7 +43,7 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
         switch section {
         case .notices:
             return NoticeSupplier.shared.notices
-        case .users:
+        case .channels:
             return []
         }
     }
@@ -52,7 +52,7 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
         switch section {
         case .notices:
             return self.getNoticeCell(for: indexPath, item: item)
-        case .users:
+        case .channels:
             return self.getUserCell(for: indexPath, item: item)
         }
     }

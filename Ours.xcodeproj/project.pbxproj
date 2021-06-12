@@ -406,9 +406,7 @@
 		D6617CF626743DFE00439C06 /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D6617CF726743DFE00439C06 /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D6617CF926753E6800439C06 /* HomeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF826753E6800439C06 /* HomeCollectionView.swift */; };
-		D6617CFB26753E8700439C06 /* HomeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CFA26753E8700439C06 /* HomeItem.swift */; };
 		D6617CFD26753EAD00439C06 /* HomeCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */; };
-		D6617CFF2675407900439C06 /* HomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CFE2675407900439C06 /* HomeCell.swift */; };
 		D6617D012675411E00439C06 /* HomeCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */; };
 		D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
@@ -846,9 +844,7 @@
 		D6617CEF26743DCF00439C06 /* SystemNotice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemNotice.swift; sourceTree = "<group>"; };
 		D6617CF426743DFE00439C06 /* Notice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
 		D6617CF826753E6800439C06 /* HomeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionView.swift; sourceTree = "<group>"; };
-		D6617CFA26753E8700439C06 /* HomeItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeItem.swift; sourceTree = "<group>"; };
 		D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewManager.swift; sourceTree = "<group>"; };
-		D6617CFE2675407900439C06 /* HomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCell.swift; sourceTree = "<group>"; };
 		D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6629C7425AD254C002C3B92 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatClientManager+Extensions.swift"; sourceTree = "<group>"; };
@@ -1889,9 +1885,7 @@
 				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
 				D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */,
 				D6617CF826753E6800439C06 /* HomeCollectionView.swift */,
-				D6617CFA26753E8700439C06 /* HomeItem.swift */,
 				D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */,
-				D6617CFE2675407900439C06 /* HomeCell.swift */,
 				D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */,
 			);
 			path = Home;
@@ -2361,7 +2355,6 @@
 				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
 				D623BC4F23EF5157007358CB /* ProfileItem.swift in Sources */,
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
-				D6617CFF2675407900439C06 /* HomeCell.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
 				D61D38E7248C494A00BE457B /* ChannelViewController+Messaging.swift in Sources */,
 				D6617CF926753E6800439C06 /* HomeCollectionView.swift in Sources */,
@@ -2386,7 +2379,6 @@
 				D64C6A9C232D6C9200DB7257 /* BubbleCircleView.swift in Sources */,
 				D691794222F6418700340AA3 /* Router.swift in Sources */,
 				D60F95F02665A5E400CF8766 /* ConnectionRequestCell.swift in Sources */,
-				D6617CFB26753E8700439C06 /* HomeItem.swift in Sources */,
 				D63D5C97265811B000543200 /* URL+Extensions.swift in Sources */,
 				D64DD8B223CE403D0039DC5A /* SwitchableContentViewController.swift in Sources */,
 				D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */,
