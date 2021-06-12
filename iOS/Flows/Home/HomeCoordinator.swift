@@ -54,10 +54,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             self.addChannels()
         }
 
-        self.homeVC.noticesCollectionVC.collectionViewManager.$onSelectedItem.mainSink { selection in
-            guard let item = selection?.item as? SystemNotice else { return }
-            self.handle(notice: item)
-        }.store(in: &self.cancellables)
+//        self.homeVC.noticesCollectionVC.collectionViewManager.$onSelectedItem.mainSink { selection in
+//            //guard let item = selection?.item as? SystemNotice else { return }
+//            //self.handle(notice: item)
+//        }.store(in: &self.cancellables)
 
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
@@ -110,23 +110,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-    private func handle(notice: SystemNotice) {
-        switch notice.type {
-        case .alert:
-            guard let channelId = notice.attributes?["channelId"] as? String, let channel = ChannelSupplier.shared.getChannel(withSID: channelId) else { return }
-            self.startChannelFlow(for: channel.channelType)
-
-        case .connectionRequest:
-            break
-        case .connectionConfirmed:
-            break
-        case .messageRead:
-            break
-        case .system:
-            break
-        }
-    }
-
     private func addChannels(shouldPresent: Bool = true) {
         self.removeChild()
         self.addChildAndStart(self.channelsCoordinator) { (_) in }
@@ -166,32 +149,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                     self.showSoftAskNotifications(for: settings.authorizationStatus)
                 }
             }.store(in: &self.cancellables)
-    }
-
-    private func showLockedNotification(for post: Post) {
-
-        User.current()?.ritual?.retrieveDataIfNeeded()
-            .mainSink(receivedResult: { result in
-                switch result {
-                case .success(let ritual):
-                    if let date = ritual.date {
-                        let formatter = DateFormatter()
-                        formatter.dateFormat = "h:mm a"
-                        let string = formatter.string(from: date)
-
-                        let alert = UIAlertController(title: "Post locked.", message: "This post is locked until your feed is made available at \(string).", preferredStyle: .alert)
-
-                        let cancel = UIAlertAction(title: "Ok", style: .cancel) { action in}
-
-                        alert.addAction(cancel)
-
-                        self.router.topmostViewController.present(alert, animated: true, completion: nil)
-                    }
-
-                case .error(_):
-                    break
-                }
-            }).store(in: &self.cancellables)
     }
 
     private func showSoftAskNotifications(for status: UNAuthorizationStatus) {
