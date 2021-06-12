@@ -14,7 +14,6 @@ class AvatarProfileViewController: ViewController {
     private let avatarView = AvatarView()
     private let handleLabel = Label(font: .small, textColor: .purple)
     private let nameLabel = Label(font: .mediumBold)
-    private let ritualLabel = Label(font: .small, textColor: .white)
     private let vibrancyView = VibrancyView()
 
     private let chatButton = Button()
@@ -38,13 +37,10 @@ class AvatarProfileViewController: ViewController {
         self.view.addSubview(self.handleLabel)
         self.view.addSubview(self.nameLabel)
         self.view.addSubview(self.chatButton)
-        self.view.addSubview(self.ritualLabel)
 
         self.avatarView.set(avatar: self.avatar)
         self.nameLabel.setText(self.avatar.fullName)
         self.handleLabel.setText(self.avatar.handle)
-
-        self.getRitual()
 
         self.preferredContentSize = CGSize(width: 300, height: 300)
     }
@@ -67,30 +63,5 @@ class AvatarProfileViewController: ViewController {
         self.handleLabel.setSize(withWidth: maxWidth)
         self.handleLabel.centerOnX()
         self.handleLabel.match(.top, to: .bottom, of: self.nameLabel, offset: 4)
-
-        self.ritualLabel.setSize(withWidth: maxWidth)
-        self.ritualLabel.centerOnX()
-        self.ritualLabel.pin(.bottom, padding: Theme.contentOffset)
-    }
-
-    private func getRitual() {
-        guard let user = self.avatar as? User else { return }
-
-        if let ritualId = user.ritual?.objectId {
-            Ritual.localThenNetworkQuery(for: ritualId)
-                .mainSink(receiveValue: { (ritual) in
-                    if let date = ritual.date {
-                        let formatter = DateFormatter()
-                        formatter.dateFormat = "h:mm a"
-                        let string = formatter.string(from: date)
-                        self.ritualLabel.setText("Ritual begins everyday @ \(string)")
-                    } else {
-                        self.ritualLabel.setText("NONE")
-                    }
-                    self.view.layoutNow()
-                }).store(in: &self.cancellables)
-        } else {
-            self.ritualLabel.setText("NONE")
-        }
     }
 }

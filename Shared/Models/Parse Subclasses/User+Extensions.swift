@@ -26,8 +26,6 @@ extension User: Avatar {
             return false
         } else if self.smallImage.isNil {
             return false
-        } else if self.ritual.isNil {
-            return false 
         }
 
         return true 

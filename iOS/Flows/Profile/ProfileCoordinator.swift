@@ -40,8 +40,6 @@ extension ProfileCoordinator: ProfileViewControllerDelegate {
         guard user.isCurrentUser else { return }
 
         switch item {
-        case .ritual:
-            break 
         case .picture:
             self.presentPhoto()
         default:

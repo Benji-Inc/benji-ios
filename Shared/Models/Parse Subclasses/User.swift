@@ -59,11 +59,6 @@ final class User: PFUser, Subscribeable {
         set { self.setObject(for: .handle, with: newValue) }
     }
 
-    var ritual: Ritual? {
-        get { return self.getObject(for: .ritual) }
-        set { self.setObject(for: .ritual, with: newValue) }
-    }
-
     var smallImage: PFFileObject? {
         get { return self.getObject(for: .smallImage) }
         set { self.setObject(for: .smallImage, with: newValue) }

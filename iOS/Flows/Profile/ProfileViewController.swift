@@ -33,7 +33,6 @@ class ProfileViewController: ViewController, TransitionableViewController {
     private let nameView = ProfileDetailView()
     private let handleView = ProfileDetailView()
     private let localTimeView = ProfileDetailView()
-    private let ritualView = ProfileDetailView()
     let versionLabel = Label(frame: .zero, font: .small, textColor: .background2)
 
     init(with user: User) {
@@ -59,11 +58,6 @@ class ProfileViewController: ViewController, TransitionableViewController {
         self.view.addSubview(self.nameView)
         self.view.addSubview(self.handleView)
         self.view.addSubview(self.localTimeView)
-        self.view.addSubview(self.ritualView)
-        self.ritualView.button.isVisible = true 
-        self.ritualView.button.didSelect { [unowned self] in
-            self.delegate?.profileView(self, didSelect: .ritual, for: self.user)
-        }
 
         self.user.subscribe()
             .mainSink(receiveValue: { event in
@@ -89,7 +83,6 @@ class ProfileViewController: ViewController, TransitionableViewController {
         self.nameView.configure(with: .name, for: user)
         self.handleView.configure(with: .handle, for: user)
         self.localTimeView.configure(with: .localTime, for: user)
-        self.ritualView.configure(with: .ritual, for: user)
         self.view.layoutNow()
     }
 
@@ -116,14 +109,10 @@ class ProfileViewController: ViewController, TransitionableViewController {
         self.localTimeView.match(.top, to: .bottom, of: self.handleView, offset: Theme.contentOffset.half)
         self.localTimeView.pin(.left, padding: Theme.contentOffset)
 
-        self.ritualView.size = itemSize
-        self.ritualView.match(.top, to: .bottom, of: self.localTimeView, offset: Theme.contentOffset.half)
-        self.ritualView.pin(.left, padding: Theme.contentOffset)
-
         self.versionLabel.setSize(withWidth: self.view.width)
         self.versionLabel.pin(.left, padding: Theme.contentOffset)
         self.versionLabel.pinToSafeArea(.bottom, padding: 0)
 
-        self.scrollView.contentSize = CGSize(width: self.view.width, height: self.ritualView.bottom)
+        self.scrollView.contentSize = CGSize(width: self.view.width, height: self.localTimeView.bottom)
     }
 }

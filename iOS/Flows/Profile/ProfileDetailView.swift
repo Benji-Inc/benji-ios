@@ -46,9 +46,6 @@ class ProfileDetailView: View {
         case .localTime:
             self.titleLabel.setText("Local Time")
             self.label.setText(Date.nowInLocalFormat)
-        case .ritual:
-            self.titleLabel.setText("Ritual")
-            self.getRitual(for: user)
         }
 
         self.layoutNow()
@@ -68,30 +65,5 @@ class ProfileDetailView: View {
         self.button.size = CGSize(width: 100, height: 40)
         self.button.bottom = self.label.bottom
         self.button.pin(.right)
-    }
-
-    private func getRitual(for user: User) {
-
-        self.label.setText("NO RITUAL SET")
-        self.button.set(style: .normal(color: .lightPurple, text: "Set"))
-        self.button.isHidden = false
-
-        user.ritual?.retrieveDataIfNeeded()
-            .mainSink(receivedResult: { result in
-                switch result {
-                case .success(let ritual):
-                    if let date = ritual.date {
-                        let formatter = DateFormatter()
-                        formatter.dateFormat = "h:mm a"
-                        let string = formatter.string(from: date)
-                        self.label.setText(string)
-                        self.button.set(style: .normal(color: .lightPurple, text: "EDIT"))
-                    }
-
-                    self.layoutNow()
-                case .error(_):
-                    break
-                }
-            }).store(in: &self.cancellables)
     }
 }

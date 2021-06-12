@@ -14,5 +14,4 @@ enum ProfileItem {
     case name
     case handle
     case localTime
-    case ritual
 }

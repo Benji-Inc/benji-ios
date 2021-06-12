@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		25A3C9242AB89217209A4BA1 /* Pods_OursNotificationContent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D4674CB88B1B4B693F10A2 /* Pods_OursNotificationContent.framework */; };
-		80D4A21C2303A005007CB5F1 /* Ritual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21B2303A005007CB5F1 /* Ritual.swift */; };
 		8FC6A04F2F23510867229A84 /* Pods_OursAppClip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */; };
 		D5913FD2104D7480AB2029C6 /* Pods_Ours.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */; };
 		D607400E23401B3E009633EB /* SystemChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D607400D23401B3E009633EB /* SystemChannel.swift */; };
@@ -172,7 +171,6 @@
 		D63DB25825E9995700F6B323 /* AnimationCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA622323F06AEF00048C4A /* AnimationCycle.swift */; };
 		D63DB25925E9995E00F6B323 /* User+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE39236F44A8004FA89A /* User+Extensions.swift */; };
 		D63DB25A25E9995E00F6B323 /* User+Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE35236F3F81004FA89A /* User+Objectable.swift */; };
-		D63DB25B25E9995E00F6B323 /* Ritual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21B2303A005007CB5F1 /* Ritual.swift */; };
 		D63DB25C25E9995E00F6B323 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
 		D63DB25D25E9995E00F6B323 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
 		D63DB25E25E9995E00F6B323 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B6A236E0E7900FAA06B /* Connection.swift */; };
@@ -613,7 +611,6 @@
 		D6E4C7FB238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */; };
 		D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E65F18237791650061AA67 /* ManageableCell.swift */; };
 		D6E859BB25DAD4EA003D1DE9 /* Subscribeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E859BA25DAD4EA003D1DE9 /* Subscribeable.swift */; };
-		D6E859C025DAD553003D1DE9 /* Ritual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21B2303A005007CB5F1 /* Ritual.swift */; };
 		D6E859C325DAD56D003D1DE9 /* Subscribeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E859BA25DAD4EA003D1DE9 /* Subscribeable.swift */; };
 		D6EAB68823E6211200B90D5A /* ProfilePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAB68623E615B500B90D5A /* ProfilePhotoViewController.swift */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
@@ -707,7 +704,6 @@
 		3FD1AE8358B3CA7B98B5B241 /* Pods-OursAppClip.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursAppClip.release.xcconfig"; path = "Pods/Target Support Files/Pods-OursAppClip/Pods-OursAppClip.release.xcconfig"; sourceTree = "<group>"; };
 		4811B856F63AD691A9EDA954 /* Pods-Ours.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.release.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.release.xcconfig"; sourceTree = "<group>"; };
 		69BD6F6BD1555BE5571F430F /* Pods-OursNotificationContent.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursNotificationContent.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OursNotificationContent/Pods-OursNotificationContent.debug.xcconfig"; sourceTree = "<group>"; };
-		80D4A21B2303A005007CB5F1 /* Ritual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ritual.swift; sourceTree = "<group>"; };
 		89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.debug.xcconfig"; sourceTree = "<group>"; };
 		BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ours.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OursAppClip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1408,7 +1404,6 @@
 				D63D71C025F0419D004C26F7 /* ConnectionPreference.swift */,
 				D6DF870525A5214D0089B0CF /* QuePositions.swift */,
 				D6D8BB6C24677B5D00937581 /* Reservation.swift */,
-				80D4A21B2303A005007CB5F1 /* Ritual.swift */,
 				D6405B66236E002E00FAA06B /* User.swift */,
 				D609AE39236F44A8004FA89A /* User+Extensions.swift */,
 				D609AE35236F3F81004FA89A /* User+Objectable.swift */,
@@ -2560,7 +2555,6 @@
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
 				D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,
-				80D4A21C2303A005007CB5F1 /* Ritual.swift in Sources */,
 				D64A8F4C25900BA4002948E1 /* ChannelCollectionViewManager+Extensions.swift in Sources */,
 				D61EC0E221D30E6000204BEE /* Label.swift in Sources */,
 				D61EC0E021D30E3F00204BEE /* FullScreenViewController.swift in Sources */,
@@ -2628,7 +2622,6 @@
 				D63D71B725F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
 				D63DB29A25E999B200F6B323 /* TextView.swift in Sources */,
 				D63DB28C25E999AB00F6B323 /* ViewController.swift in Sources */,
-				D63DB25B25E9995E00F6B323 /* Ritual.swift in Sources */,
 				D63DB22425E9990500F6B323 /* DispatchQue+Extensions.swift in Sources */,
 				D63DB23B25E9992600F6B323 /* UIView+Extensions.swift in Sources */,
 				D63DB26425E9997200F6B323 /* AttributedString.swift in Sources */,
@@ -2831,7 +2824,6 @@
 				D62C9CC2266C3CAB00BB9632 /* UserDefaultsManager.swift in Sources */,
 				D65519702589128300B901E4 /* StringStyle.swift in Sources */,
 				D6551A1325895C4F00B901E4 /* Theme.swift in Sources */,
-				D6E859C025DAD553003D1DE9 /* Ritual.swift in Sources */,
 				D6551A2525895D7700B901E4 /* AvatarView.swift in Sources */,
 				D65519322589122700B901E4 /* UIView+Layout.swift in Sources */,
 				D65519592589126800B901E4 /* Connection.swift in Sources */,
