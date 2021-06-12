@@ -178,7 +178,7 @@ class ChannelSupplier {
 
     // MARK: GETTERS
 
-    func waitForInitialSync() -> Future<Void, Error> {
+    func waitForInitialSync() -> Future<Void, Never> {
         return Future { promise in
             ChannelSupplier.shared.$isSynced.mainSink { (isSynced) in
                 guard isSynced else { return }

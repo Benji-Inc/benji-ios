@@ -78,16 +78,16 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
             ChannelSupplier.shared.waitForInitialSync()
         )
 
-        combined.mainSink { (result) in
-            switch result {
-            case .success((let count, _)):
-                self.unclaimedReservationCount = count
-                self.loadSnapshot()
-            case .error(_):
-                break
-            }
-            self.collectionView.animationView.stop()
-        }.store(in: &self.cancellables)
+//        combined.mainSink { (result) in
+//            switch result {
+//            case .success((let count, _)):
+//                self.unclaimedReservationCount = count
+//                self.loadSnapshot()
+//            case .error(_):
+//                break
+//            }
+//            self.collectionView.animationView.stop()
+//        }.store(in: &self.cancellables)
     }
 
     override func getSections() -> [SectionType] {
@@ -118,24 +118,25 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
                                                              item: item as? DisplayableChannel)
         }
     }
+}
 
     // MARK: Menu overrides
-
-    override func collectionView(_ collectionView: UICollectionView,
-                                 contextMenuConfigurationForItemAt indexPath: IndexPath,
-                                 point: CGPoint) -> UIContextMenuConfiguration? {
-
-        guard let channel = ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row],
-              let cell = collectionView.cellForItem(at: indexPath) as? ChannelCell else { return nil }
-
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
-            return ChannelPreviewViewController(with: channel, size: cell.size)
-        }, actionProvider: { suggestedActions in
-            if channel.isFromCurrentUser {
-                return self.makeCurrentUsertMenu(for: channel, at: indexPath)
-            } else {
-                return self.makeNonCurrentUserMenu(for: channel, at: indexPath)
-            }
-        })
-    }
-}
+//
+//    override func collectionView(_ collectionView: UICollectionView,
+//                                 contextMenuConfigurationForItemAt indexPath: IndexPath,
+//                                 point: CGPoint) -> UIContextMenuConfiguration? {
+//
+//        guard let channel = ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row],
+//              let cell = collectionView.cellForItem(at: indexPath) as? ChannelCell else { return nil }
+//
+//        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+//            return ChannelPreviewViewController(with: channel, size: cell.size)
+//        }, actionProvider: { suggestedActions in
+//            if channel.isFromCurrentUser {
+//                return self.makeCurrentUsertMenu(for: channel, at: indexPath)
+//            } else {
+//                return self.makeNonCurrentUserMenu(for: channel, at: indexPath)
+//            }
+//        })
+//    }
+//}

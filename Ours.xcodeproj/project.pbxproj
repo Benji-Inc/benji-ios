@@ -52,7 +52,7 @@
 		D61EC0F921D317AB00204BEE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F821D317AB00204BEE /* Theme.swift */; };
 		D623BC4F23EF5157007358CB /* ProfileItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D623BC4E23EF5157007358CB /* ProfileItem.swift */; };
 		D624296723A9EF4F00322ABE /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D624296623A9EF4F00322ABE /* HomeTabView.swift */; };
-		D628424D25C1B18000603FA1 /* ChannelsCollectionViewManager+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D628424C25C1B18000603FA1 /* ChannelsCollectionViewManager+Menu.swift */; };
+		D628424D25C1B18000603FA1 /* HomeCollectionViewManager+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D628424C25C1B18000603FA1 /* HomeCollectionViewManager+Menu.swift */; };
 		D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
 		D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */; };
 		D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
@@ -754,7 +754,7 @@
 		D61EC0F821D317AB00204BEE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		D623BC4E23EF5157007358CB /* ProfileItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileItem.swift; sourceTree = "<group>"; };
 		D624296623A9EF4F00322ABE /* HomeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabView.swift; sourceTree = "<group>"; };
-		D628424C25C1B18000603FA1 /* ChannelsCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelsCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
+		D628424C25C1B18000603FA1 /* HomeCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
 		D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotificationContent+Extensions.swift"; sourceTree = "<group>"; };
 		D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotification+Extensions.swift"; sourceTree = "<group>"; };
 		D62BB742244DEEA400607677 /* Optional+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extensions.swift"; sourceTree = "<group>"; };
@@ -1118,14 +1118,14 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
-		D60F95EA2665A15200CF8766 /* Cells */ = {
+		D60F95EA2665A15200CF8766 /* Notices */ = {
 			isa = PBXGroup;
 			children = (
 				D6D39287265F15B800E49F1E /* NoticeCell.swift */,
 				D60F95ED2665A5C400CF8766 /* AlertCell.swift */,
 				D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */,
 			);
-			path = Cells;
+			path = Notices;
 			sourceTree = "<group>";
 		};
 		D61592D424FACD7700B63412 /* Attachment */ = {
@@ -1867,7 +1867,6 @@
 			children = (
 				D671E1ED2640297900BF2B8D /* Toast */,
 				D6432BF122D8282E0016001A /* Channel */,
-				D6DADF6A2207DC90007D9EB1 /* Channels */,
 				D6D145F521D549A300CD8CE4 /* Home */,
 				D66A580325DD68F9001B3F64 /* New Channel */,
 				D6B2603B22E6B8CD00143CF0 /* Profile */,
@@ -1879,13 +1878,15 @@
 		D6D145F521D549A300CD8CE4 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				D60F95EA2665A15200CF8766 /* Cells */,
+				D6DADF6A2207DC90007D9EB1 /* Channels */,
+				D60F95EA2665A15200CF8766 /* Notices */,
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
 				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
 				D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */,
 				D6617CF826753E6800439C06 /* HomeCollectionView.swift */,
 				D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */,
+				D628424C25C1B18000603FA1 /* HomeCollectionViewManager+Menu.swift */,
 				D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */,
 			);
 			path = Home;
@@ -1931,7 +1932,6 @@
 				D67934D423D956BB00536B44 /* ChannelPreviewViewController.swift */,
 				D6DADF712207DF83007D9EB1 /* ChannelsCollectionView.swift */,
 				D6DADF6D2207DF33007D9EB1 /* ChannelsCollectionViewManager.swift */,
-				D628424C25C1B18000603FA1 /* ChannelsCollectionViewManager+Menu.swift */,
 				D6740D4723AEA5BD009D5702 /* ChannelsCoordiantor.swift */,
 				D6792CE825FBE8D300B6575C /* ChannelsGradientView.swift */,
 				D6DADF6B2207DCA8007D9EB1 /* ChannelsViewController.swift */,
@@ -2487,7 +2487,7 @@
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,
-				D628424D25C1B18000603FA1 /* ChannelsCollectionViewManager+Menu.swift in Sources */,
+				D628424D25C1B18000603FA1 /* HomeCollectionViewManager+Menu.swift in Sources */,
 				D6F33C8024B15076009603FF /* AudioMessageCell.swift in Sources */,
 				D6792CE525FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
 				D61EC0E621D30EB300204BEE /* View.swift in Sources */,

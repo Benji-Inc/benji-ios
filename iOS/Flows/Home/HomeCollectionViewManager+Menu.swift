@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension ChannelsCollectionViewManager {
+extension HomeCollectionViewManager {
 
     func makeCurrentUsertMenu(for channel: DisplayableChannel, at indexPath: IndexPath) -> UIMenu {
 
