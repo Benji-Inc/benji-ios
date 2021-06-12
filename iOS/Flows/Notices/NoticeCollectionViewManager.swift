@@ -77,9 +77,9 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
             let cell = self.collectionView.dequeueManageableCell(using: self.connectionConfig,
                                                                  for: indexPath,
                                                                  item: item as? SystemNotice)
-            cell?.content.didUpdateConnection = { [weak self] _ in
-                // Do something??
-            }
+//            cell?.content.didUpdateConnection = { [weak self] _ in
+//                // Do something??
+//            }
             return cell 
         default:
             return self.collectionView.dequeueManageableCell(using: self.noticeConfig,
