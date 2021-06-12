@@ -15,11 +15,14 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
         case users
     }
 
+    private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
+    private let connectionConfig = ManageableCellRegistration<ConnectionRequestCell>().provider
+    private let alertConfig = ManageableCellRegistration<AlertCell>().provider
 
     override func initializeManager() {
         super.initializeManager()
 
-    
+        self.collectionView.collectionViewLayout = HomeCollectionViewLayout.layout
     }
 
     override func getSections() -> [SectionType] {
@@ -27,10 +30,47 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
     }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
-        return []
+        switch section {
+        case .notices:
+            return NoticeSupplier.shared.notices
+        case .users:
+            return []
+        }
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
+        switch section {
+        case .notices:
+            return self.getNoticeCell(for: indexPath, item: item)
+        case .users:
+            return self.getUserCell(for: indexPath, item: item)
+        }
+    }
+
+    private func getNoticeCell(for indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
+        guard let type = NoticeSupplier.shared.notices[safe: indexPath.row]?.type else { return nil }
+
+        switch type {
+        case .alert:
+            return self.collectionView.dequeueManageableCell(using: self.alertConfig,
+                                                             for: indexPath,
+                                                             item: item as? SystemNotice)
+        case .connectionRequest:
+            let cell = self.collectionView.dequeueManageableCell(using: self.connectionConfig,
+                                                                 for: indexPath,
+                                                                 item: item as? SystemNotice)
+//            cell?.content.didUpdateConnection = { [weak self] _ in
+//                // Do something??
+//            }
+            return cell
+        default:
+            return self.collectionView.dequeueManageableCell(using: self.noticeConfig,
+                                                             for: indexPath,
+                                                             item: item as? SystemNotice)
+        }
+    }
+
+    private func getUserCell(for indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         return nil
     }
 }
