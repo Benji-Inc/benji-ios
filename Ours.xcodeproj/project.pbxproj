@@ -408,6 +408,8 @@
 		D6617CF926753E6800439C06 /* HomeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF826753E6800439C06 /* HomeCollectionView.swift */; };
 		D6617CFB26753E8700439C06 /* HomeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CFA26753E8700439C06 /* HomeItem.swift */; };
 		D6617CFD26753EAD00439C06 /* HomeCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */; };
+		D6617CFF2675407900439C06 /* HomeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CFE2675407900439C06 /* HomeCell.swift */; };
+		D6617D012675411E00439C06 /* HomeCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */; };
 		D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D66379CE25A3704300A4A3B7 /* ChatClientManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */; };
@@ -849,6 +851,8 @@
 		D6617CF826753E6800439C06 /* HomeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionView.swift; sourceTree = "<group>"; };
 		D6617CFA26753E8700439C06 /* HomeItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeItem.swift; sourceTree = "<group>"; };
 		D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewManager.swift; sourceTree = "<group>"; };
+		D6617CFE2675407900439C06 /* HomeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCell.swift; sourceTree = "<group>"; };
+		D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6629C7425AD254C002C3B92 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatClientManager+Extensions.swift"; sourceTree = "<group>"; };
 		D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserNotificationManager+Extensions.swift"; sourceTree = "<group>"; };
@@ -1892,6 +1896,8 @@
 				D6617CF826753E6800439C06 /* HomeCollectionView.swift */,
 				D6617CFA26753E8700439C06 /* HomeItem.swift */,
 				D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */,
+				D6617CFE2675407900439C06 /* HomeCell.swift */,
+				D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2360,6 +2366,7 @@
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
 				D671E1F126402A2000BF2B8D /* ToastView.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
+				D6617D012675411E00439C06 /* HomeCollectionViewLayout.swift in Sources */,
 				D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */,
 				D6432BF022D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift in Sources */,
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
@@ -2371,6 +2378,7 @@
 				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
 				D623BC4F23EF5157007358CB /* ProfileItem.swift in Sources */,
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
+				D6617CFF2675407900439C06 /* HomeCell.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
 				D61D38E7248C494A00BE457B /* ChannelViewController+Messaging.swift in Sources */,
 				D6617CF926753E6800439C06 /* HomeCollectionView.swift in Sources */,
