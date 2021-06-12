@@ -45,12 +45,6 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.tabView.didSelectChannels = { [unowned self] in
             self.didTapChannels?()
         }
-
-        self.tabView.$state.mainSink { state in
-            UIView.animate(withDuration: Theme.animationDuration) {
-                self.view.layoutNow()
-            }
-        }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
