@@ -44,7 +44,7 @@ class HomeCollectionViewLayout: UICollectionViewLayout {
 
                 return section
             case .channels:
-                let widthFraction: CGFloat = 0.33
+                let widthFraction: CGFloat = 0.5
                 let heightFraction: CGFloat = 0.45
 
                 // Item

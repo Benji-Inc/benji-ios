@@ -22,6 +22,7 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
     }
 
     let tabView = HomeTabView()
+    let addButton = Button()
 
     var isMenuPresenting: Bool = false
 
@@ -30,6 +31,9 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
 
         self.view.set(backgroundColor: .background1)
         self.view.addSubview(self.tabView)
+
+        self.view.insertSubview(self.addButton, aboveSubview: self.collectionViewManager.collectionView)
+        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightPurple))
     }
 
     override func getCollectionView() -> CollectionView {
@@ -50,6 +54,11 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
         self.tabView.centerOnX()
 
         self.tabView.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+
+        self.addButton.squaredSize = 60
+        self.addButton.makeRound()
+        self.addButton.pin(.right, padding: Theme.contentOffset)
+        self.addButton.pinToSafeArea(.bottom, padding: 0)
     }
 
     func animate(show: Bool) {

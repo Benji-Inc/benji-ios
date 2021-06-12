@@ -18,8 +18,6 @@ extension HomeCoordinator: SideMenuNavigationControllerDelegate {
     func sideMenuDidAppear(menu: SideMenuNavigationController, animated: Bool) {
         if let _ = menu.viewControllers.first as? ProfileViewController {
             self.addProfile(shouldPresent: false)
-        } else if let _ = menu.viewControllers.first as? ChannelsViewController {
-           // self.addChannels(shouldPresent: false)
         }
     }
 

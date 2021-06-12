@@ -34,6 +34,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         self.checkForNotifications()
 
+        self.homeVC.addButton.didSelect { [unowned self] in
+           // self.delegate?.channelsViewControllerDidTapAdd(self)
+        }
+
         self.homeVC.tabView.didSelectProfile = { [unowned self] in
             self.addProfile()
         }
@@ -137,6 +141,24 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                 }
             }.store(in: &self.cancellables)
     }
+
+//    func channelsViewConrollerDidSelectReservations(_ controller: ChannelsViewController) {
+//        let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
+//        self.addChildAndStart(coordinator) {}
+//       // self.router.present(coordinator, source: self.channelsVC)
+//    }
+
+//    func channelsViewControllerDidTapAdd(_ controller: ChannelsViewController) {
+//        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
+//        self.addChildAndStart(coordinator) { result in
+//            coordinator.toPresentable().dismiss(animated: true) {
+//                if result {
+//                    self.startChannelFlow(for: nil)
+//                }
+//            }
+//        }
+//        self.router.present(coordinator, source: self.channelsVC)
+//    }
 
     private func showSoftAskNotifications(for status: UNAuthorizationStatus) {
 

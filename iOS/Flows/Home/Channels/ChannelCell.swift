@@ -19,6 +19,7 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        self.contentView.set(backgroundColor: .background3)
         self.contentView.addSubview(self.content)
     }
 
