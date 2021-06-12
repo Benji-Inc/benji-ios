@@ -18,8 +18,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     lazy var homeVC = HomeViewController()
 
     lazy var profileCoordinator = ProfileCoordinator(router: self.router,
-                                                             deepLink: self.deepLink,
-                                                             vc: self.profileVC)
+                                                     deepLink: self.deepLink,
+                                                     vc: self.profileVC)
     
     private var cancellables = Set<AnyCancellable>()
 
@@ -40,14 +40,15 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         self.homeVC.collectionViewManager.$onSelectedItem.mainSink { selection in
             guard let value = selection else { return }
-
-
+            switch value.section {
+            case .notices:
+                guard let notice = value.item as? SystemNotice else { return }
+                self.handle(notice: notice)
+            case .channels:
+                guard let channel = value.item as? DisplayableChannel else { return }
+                self.startChannelFlow(for: channel.channelType)
+            }
         }.store(in: &self.cancellables)
-
-//        self.homeVC.noticesCollectionVC.collectionViewManager.$onSelectedItem.mainSink { selection in
-//            //guard let item = selection?.item as? SystemNotice else { return }
-//            //self.handle(notice: item)
-//        }.store(in: &self.cancellables)
 
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
@@ -67,7 +68,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         switch target {
         case .reservation:
-            break // show a reservation alert. 
+            break // show a reservation alert.
         case .home:
             break
         case .login:
@@ -92,6 +93,23 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         case .profile:
             self.addProfile()
         case .channels:
+            break
+        }
+    }
+
+    private func handle(notice: SystemNotice) {
+        switch notice.type {
+        case .alert:
+            guard let channelId = notice.attributes?["channelId"] as? String, let channel = ChannelSupplier.shared.getChannel(withSID: channelId) else { return }
+            self.startChannelFlow(for: channel.channelType)
+
+        case .connectionRequest:
+            break
+        case .connectionConfirmed:
+            break
+        case .messageRead:
+            break
+        case .system:
             break
         }
     }
