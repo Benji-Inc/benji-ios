@@ -22,7 +22,17 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
     override func initializeManager() {
         super.initializeManager()
 
-        self.collectionView.collectionViewLayout = HomeCollectionViewLayout.layout
+    }
+
+    func load() {
+        self.collectionView.animationView.play()
+        NoticeSupplier.shared.$notices.mainSink { _ in
+            let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
+            self.loadSnapshot(animationCycle: cycle).mainSink { _ in
+                // Begin auto scroll
+                self.collectionView.animationView.stop()
+            }.store(in: &self.cancellables)
+        }.store(in: &self.cancellables)
     }
 
     override func getSections() -> [SectionType] {

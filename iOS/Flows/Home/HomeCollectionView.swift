@@ -9,5 +9,11 @@
 import Foundation
 
 class HomeCollectionView: CollectionView {
-    
+    init() {
+        super.init(layout: HomeCollectionViewLayout.layout)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

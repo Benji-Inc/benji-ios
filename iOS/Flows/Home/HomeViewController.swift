@@ -11,7 +11,7 @@ import Contacts
 import Parse
 import Combine
 
-class HomeViewController: ViewController, TransitionableViewController {
+class HomeViewController: CollectionViewController<HomeCollectionViewManager.SectionType, HomeCollectionViewManager>, TransitionableViewController {
 
     var receivingPresentationType: TransitionType {
         return .home
@@ -20,8 +20,6 @@ class HomeViewController: ViewController, TransitionableViewController {
     var transitionColor: Color {
         return .background1
     }
-
-    lazy var noticesCollectionVC = NoticesCollectionViewController()
 
     let tabView = HomeTabView()
 
@@ -34,7 +32,6 @@ class HomeViewController: ViewController, TransitionableViewController {
 
         self.view.set(backgroundColor: .background1)
 
-        self.addChild(viewController: self.noticesCollectionVC)
 
         self.view.addSubview(self.tabView)
 
@@ -47,13 +44,18 @@ class HomeViewController: ViewController, TransitionableViewController {
         }
     }
 
+    override func getCollectionView() -> CollectionView {
+        return HomeCollectionView()
+    }
+
+    override func viewWasPresented() {
+        super.viewWasPresented()
+
+        self.collectionViewManager.load()
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        self.noticesCollectionVC.view.expandToSuperviewWidth()
-        self.noticesCollectionVC.view.height = NoticesCollectionViewController.height
-        self.noticesCollectionVC.view.pinToSafeArea(.top, padding: Theme.contentOffset)
-
 
         let height = 70 + self.view.safeAreaInsets.bottom
         self.tabView.size = CGSize(width: self.view.width, height: height)
@@ -66,7 +68,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.isMenuPresenting = !show
         UIView.animate(withDuration: Theme.animationDuration) {
             self.tabView.alpha = show ? 1.0 : 0.0
-            self.noticesCollectionVC.view.alpha = show ? 1.0 : 0.0
+            self.collectionViewManager.collectionView.alpha = show ? 1.0 : 0.0
         }
     }
 }
