@@ -59,10 +59,10 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     required init(with collectionView: CollectionView) {
         self.collectionView = collectionView
         super.init()
-        self.initialize()
+        self.initializeManager()
     }
 
-    func initialize() {
+    func initializeManager() {
         self.collectionView.dataSource = self.dataSource
         self.collectionView.delegate = self
     }

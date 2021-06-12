@@ -41,8 +41,8 @@ class NoticeCollectionViewManager: CollectionViewManager<NoticeCollectionViewMan
         }, configuration: config)
     }()
 
-    override func initialize() {
-        super.initialize()
+    override func initializeManager() {
+        super.initializeManager()
 
         self.collectionView.collectionViewLayout = self.layout
 

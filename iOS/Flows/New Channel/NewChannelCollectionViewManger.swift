@@ -23,8 +23,8 @@ class NewChannelCollectionViewManger: CollectionViewManager<NewChannelCollection
 
     var didLoadSnapshot: CompletionOptional = nil 
 
-    override func initialize() {
-        super.initialize()
+    override func initializeManager() {
+        super.initializeManager()
 
         self.allowMultipleSelection = true 
 

@@ -67,8 +67,8 @@ class ChannelsCollectionViewManager: CollectionViewManager<ChannelsCollectionVie
         return section
     }
 
-    override func initialize() {
-        super.initialize()
+    override func initializeManager() {
+        super.initializeManager()
 
         self.collectionView.collectionViewLayout = self.layout
         self.collectionView.animationView.play()
