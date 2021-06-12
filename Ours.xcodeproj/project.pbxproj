@@ -408,6 +408,7 @@
 		D6617CF926753E6800439C06 /* HomeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF826753E6800439C06 /* HomeCollectionView.swift */; };
 		D6617CFD26753EAD00439C06 /* HomeCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */; };
 		D6617D012675411E00439C06 /* HomeCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */; };
+		D6617D042675737400439C06 /* HomeCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D032675737400439C06 /* HomeCoordinator+Extensions.swift */; };
 		D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D66379CE25A3704300A4A3B7 /* ChatClientManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */; };
@@ -846,6 +847,7 @@
 		D6617CF826753E6800439C06 /* HomeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionView.swift; sourceTree = "<group>"; };
 		D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewManager.swift; sourceTree = "<group>"; };
 		D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D6617D032675737400439C06 /* HomeCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Extensions.swift"; sourceTree = "<group>"; };
 		D6629C7425AD254C002C3B92 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatClientManager+Extensions.swift"; sourceTree = "<group>"; };
 		D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserNotificationManager+Extensions.swift"; sourceTree = "<group>"; };
@@ -1879,15 +1881,16 @@
 			isa = PBXGroup;
 			children = (
 				D6DADF6A2207DC90007D9EB1 /* Channels */,
-				D60F95EA2665A15200CF8766 /* Notices */,
-				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
-				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
-				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
-				D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */,
 				D6617CF826753E6800439C06 /* HomeCollectionView.swift */,
+				D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */,
 				D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */,
 				D628424C25C1B18000603FA1 /* HomeCollectionViewManager+Menu.swift */,
-				D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */,
+				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
+				D6617D032675737400439C06 /* HomeCoordinator+Extensions.swift */,
+				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
+				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
+				D60F95EA2665A15200CF8766 /* Notices */,
+				D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2334,6 +2337,7 @@
 				D6E4C7FB238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift in Sources */,
 				D66A0B942351821200A0FFEA /* Completeable.swift in Sources */,
 				D62C9CBF266BE50700BB9632 /* KeyboardDemoViewController.swift in Sources */,
+				D6617D042675737400439C06 /* HomeCoordinator+Extensions.swift in Sources */,
 				D64C6AA2232EA06800DB7257 /* TypingCellAttributesConfigurer.swift in Sources */,
 				D6F33C8224B15086009603FF /* VideoMessageCell.swift in Sources */,
 				D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */,

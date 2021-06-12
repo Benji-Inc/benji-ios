@@ -15,20 +15,9 @@ import PhotosUI
 class HomeCoordinator: PresentableCoordinator<Void> {
 
     private lazy var profileVC = ProfileViewController(with: User.current()!)
-    private lazy var channelsVC = ChannelsViewController()
-    private lazy var homeVC = HomeViewController()
-    private lazy var imagePickerVC: PHPickerViewController = {
-        var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
-        config.selectionLimit = 1
-        config.filter = .any(of: [.images, .videos])
-        let vc = PHPickerViewController.init(configuration: config)
-        return vc
-    }()
+    lazy var homeVC = HomeViewController()
 
-    private lazy var channelsCoordinator = ChannelsCoordinator(router: self.router,
-                                                               deepLink: self.deepLink,
-                                                               vc: self.channelsVC)
-    private lazy var profileCoordinator = ProfileCoordinator(router: self.router,
+    lazy var profileCoordinator = ProfileCoordinator(router: self.router,
                                                              deepLink: self.deepLink,
                                                              vc: self.profileVC)
     
@@ -43,15 +32,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         ToastScheduler.shared.delegate = self
 
-        self.channelsVC.subscribeToUpdates()
         self.checkForNotifications()
 
         self.homeVC.didTapProfile = { [unowned self] in
             self.addProfile()
-        }
-
-        self.homeVC.didTapChannels = { [unowned self] in
-            self.addChannels()
         }
 
 //        self.homeVC.noticesCollectionVC.collectionViewManager.$onSelectedItem.mainSink { selection in
@@ -66,10 +50,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         let leftMenuNavigationController = SideNavigationController(with: self.profileVC)
         leftMenuNavigationController.sideMenuDelegate = self
         SideMenuManager.default.leftMenuNavigationController = leftMenuNavigationController
-
-        let rightMenuNavigationController = SideNavigationController(with: self.channelsVC)
-        rightMenuNavigationController.sideMenuDelegate = self
-        SideMenuManager.default.rightMenuNavigationController = rightMenuNavigationController
 
         SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.homeVC.view)
     }
@@ -106,24 +86,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         case .profile:
             self.addProfile()
         case .channels:
-            self.addChannels()
-        }
-    }
-
-    private func addChannels(shouldPresent: Bool = true) {
-        self.removeChild()
-        self.addChildAndStart(self.channelsCoordinator) { (_) in }
-        if let right = SideMenuManager.default.rightMenuNavigationController, shouldPresent {
-            self.homeVC.present(right, animated: true, completion: nil)
-        }
-    }
-
-    private func addProfile(shouldPresent: Bool = true) {
-        self.removeChild()
-
-        self.addChildAndStart(self.profileCoordinator) { (_) in }
-        if let left = SideMenuManager.default.leftMenuNavigationController, shouldPresent {
-            self.homeVC.present(left, animated: true, completion: nil)
+            break
         }
     }
 
@@ -173,37 +136,5 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         alert.addAction(allow)
 
         self.router.topmostViewController.present(alert, animated: true, completion: nil)
-    }
-}
-
-extension HomeCoordinator: SideMenuNavigationControllerDelegate {
-
-    func sideMenuWillAppear(menu: SideMenuNavigationController, animated: Bool) {
-        self.homeVC.animate(show: false)
-    }
-
-    func sideMenuDidAppear(menu: SideMenuNavigationController, animated: Bool) {
-        if let _ = menu.viewControllers.first as? ProfileViewController {
-            self.addProfile(shouldPresent: false)
-        } else if let _ = menu.viewControllers.first as? ChannelsViewController {
-            self.addChannels(shouldPresent: false)
-        }
-    }
-
-    func sideMenuWillDisappear(menu: SideMenuNavigationController, animated: Bool) {
-
-    }
-
-    func sideMenuDidDisappear(menu: SideMenuNavigationController, animated: Bool) {
-        self.homeVC.animate(show: true)
-    }
-}
-
-extension HomeCoordinator: ToastSchedulerDelegate {
-
-    func didInteractWith(type: ToastType, deeplink: DeepLinkable?) {
-        if let link = deeplink {
-            self.handle(deeplink: link)
-        }
     }
 }
