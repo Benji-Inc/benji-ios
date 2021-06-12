@@ -588,9 +588,6 @@
 		D6D39282265AAFB900E49F1E /* lock.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39280265AAFB900E49F1E /* lock.json */; };
 		D6D39283265AAFB900E49F1E /* lock.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39280265AAFB900E49F1E /* lock.json */; };
 		D6D39288265F15B800E49F1E /* NoticeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D39287265F15B800E49F1E /* NoticeCell.swift */; };
-		D6D3928A265F15CA00E49F1E /* NoticesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D39289265F15CA00E49F1E /* NoticesCollectionViewController.swift */; };
-		D6D3928C265F15D800E49F1E /* NoticeCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3928B265F15D800E49F1E /* NoticeCollectionViewManager.swift */; };
-		D6D3928E265F15F100E49F1E /* NoticeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3928D265F15F100E49F1E /* NoticeCollectionView.swift */; };
 		D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3928F266287A700E49F1E /* NoticeSupplier.swift */; };
 		D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */; };
 		D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
@@ -986,9 +983,6 @@
 		D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnimationView+Extensions.swift"; sourceTree = "<group>"; };
 		D6D39280265AAFB900E49F1E /* lock.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lock.json; sourceTree = "<group>"; };
 		D6D39287265F15B800E49F1E /* NoticeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCell.swift; sourceTree = "<group>"; };
-		D6D39289265F15CA00E49F1E /* NoticesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticesCollectionViewController.swift; sourceTree = "<group>"; };
-		D6D3928B265F15D800E49F1E /* NoticeCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCollectionViewManager.swift; sourceTree = "<group>"; };
-		D6D3928D265F15F100E49F1E /* NoticeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCollectionView.swift; sourceTree = "<group>"; };
 		D6D3928F266287A700E49F1E /* NoticeSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeSupplier.swift; sourceTree = "<group>"; };
 		D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ScalingAnimation.swift"; sourceTree = "<group>"; };
 		D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationaryPressRecognizer.swift; sourceTree = "<group>"; };
@@ -1499,6 +1493,7 @@
 		D66379DC25A39BC200A4A3B7 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				D6D3928F266287A700E49F1E /* NoticeSupplier.swift */,
 				D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */,
 				D66379CB25A3704300A4A3B7 /* ChatClientManager.swift */,
 				D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */,
@@ -1874,7 +1869,6 @@
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
-				D6D39284265ACC9200E49F1E /* Notices */,
 				D671E1ED2640297900BF2B8D /* Toast */,
 				D6432BF122D8282E0016001A /* Channel */,
 				D6DADF6A2207DC90007D9EB1 /* Channels */,
@@ -1889,6 +1883,7 @@
 		D6D145F521D549A300CD8CE4 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				D60F95EA2665A15200CF8766 /* Cells */,
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
 				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
@@ -1932,18 +1927,6 @@
 				D642739822CA79B60088256B /* UIWindow+Extensions.swift */,
 			);
 			path = "UI Extensions";
-			sourceTree = "<group>";
-		};
-		D6D39284265ACC9200E49F1E /* Notices */ = {
-			isa = PBXGroup;
-			children = (
-				D60F95EA2665A15200CF8766 /* Cells */,
-				D6D3928D265F15F100E49F1E /* NoticeCollectionView.swift */,
-				D6D3928B265F15D800E49F1E /* NoticeCollectionViewManager.swift */,
-				D6D39289265F15CA00E49F1E /* NoticesCollectionViewController.swift */,
-				D6D3928F266287A700E49F1E /* NoticeSupplier.swift */,
-			);
-			path = Notices;
 			sourceTree = "<group>";
 		};
 		D6DADF6A2207DC90007D9EB1 /* Channels */ = {
@@ -2429,7 +2412,6 @@
 				D67896CC2304524C0059BA75 /* ChannelCoordinator.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
 				D6432BF522D82CDC0016001A /* ChannelCollectionViewFlowLayout.swift in Sources */,
-				D6D3928C265F15D800E49F1E /* NoticeCollectionViewManager.swift in Sources */,
 				D6AD7999266E870200ED7A93 /* MIMEType.swift in Sources */,
 				D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */,
 				D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
@@ -2501,7 +2483,6 @@
 				D62C9CC6266C417100BB9632 /* DemoView.swift in Sources */,
 				D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */,
 				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
-				D6D3928A265F15CA00E49F1E /* NoticesCollectionViewController.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6F33C7E24B15063009603FF /* LocationMessageCell.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
@@ -2582,7 +2563,6 @@
 				D6D1502D21D6A08300CD8CE4 /* ChannelCollectionView.swift in Sources */,
 				D67934D723D9580F00536B44 /* MessagePreviewViewController.swift in Sources */,
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
-				D6D3928E265F15F100E49F1E /* NoticeCollectionView.swift in Sources */,
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
 				D6F33C7524B14A7B009603FF /* VideoAttributesCellConfigurer.swift in Sources */,
 				D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */,

@@ -32,8 +32,13 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
 
         self.view.set(backgroundColor: .background1)
 
-
         self.view.addSubview(self.tabView)
+
+        self.collectionViewManager.$onSelectedItem.mainSink { selection in
+            guard let value = selection else { return }
+
+
+        }.store(in: &self.cancellables)
 
         self.tabView.didSelectProfile = { [unowned self] in
             self.didTapProfile?()
