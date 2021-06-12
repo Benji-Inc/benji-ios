@@ -407,6 +407,7 @@
 		D6617CFD26753EAD00439C06 /* HomeCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */; };
 		D6617D012675411E00439C06 /* HomeCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */; };
 		D6617D042675737400439C06 /* HomeCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D032675737400439C06 /* HomeCoordinator+Extensions.swift */; };
+		D6617D0626757BD600439C06 /* ReservationsFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D0526757BD600439C06 /* ReservationsFooterView.swift */; };
 		D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D66379CE25A3704300A4A3B7 /* ChatClientManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */; };
@@ -839,6 +840,7 @@
 		D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewManager.swift; sourceTree = "<group>"; };
 		D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6617D032675737400439C06 /* HomeCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Extensions.swift"; sourceTree = "<group>"; };
+		D6617D0526757BD600439C06 /* ReservationsFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsFooterView.swift; sourceTree = "<group>"; };
 		D6629C7425AD254C002C3B92 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatClientManager+Extensions.swift"; sourceTree = "<group>"; };
 		D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserNotificationManager+Extensions.swift"; sourceTree = "<group>"; };
@@ -1919,6 +1921,7 @@
 				D6DADF6F2207DF60007D9EB1 /* ChannelCell.swift */,
 				D672C31B2644342F00C9E878 /* ChannelContentView.swift */,
 				D67934D423D956BB00536B44 /* ChannelPreviewViewController.swift */,
+				D6617D0526757BD600439C06 /* ReservationsFooterView.swift */,
 			);
 			path = Channels;
 			sourceTree = "<group>";
@@ -2344,6 +2347,7 @@
 				D657175E2378CEBA00F8F96C /* ChannelCollectionViewManager.swift in Sources */,
 				D609AE3C236F913F004FA89A /* Objectable.swift in Sources */,
 				D63D63032486A9020037E046 /* InputAccessoryView.swift in Sources */,
+				D6617D0626757BD600439C06 /* ReservationsFooterView.swift in Sources */,
 				D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */,
 				D64C6A7E23294A8600DB7257 /* ChannelKey.swift in Sources */,
 				D68BEAD424831FA000C95D31 /* ReservationsCoordinator.swift in Sources */,

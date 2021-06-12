@@ -20,7 +20,12 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
     private let connectionConfig = ManageableCellRegistration<ConnectionRequestCell>().provider
     private let alertConfig = ManageableCellRegistration<AlertCell>().provider
     private let channelConfig = ManageableCellRegistration<ChannelCell>().provider
-    
+    private let footerConfig = ManageableFooterRegistration<ReservationsFooterView>().provider
+
+    private var unclaimedCount: Int = 0
+
+    var didSelectReservations: CompletionOptional = nil 
+
     override func initializeManager() {
         super.initializeManager()
 
@@ -36,24 +41,16 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
         )
 
         combined.mainSink { (value) in
-//            switch result {
-//            case .success((let count, let channels, let notices)):
-//                //self.unclaimedReservationCount = count
-//                self.loadSnapshot()
-//            case .error(_):
-//                break
-//            }
-            self.loadSnapshot()
-            self.collectionView.animationView.stop()
+            switch value {
+            case (let count, _, _):
+                self.unclaimedCount = count
+                let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
+                self.loadSnapshot(animationCycle: cycle).mainSink { _ in
+                    // Begin auto scroll
+                    self.collectionView.animationView.stop()
+                }.store(in: &self.cancellables)
+            }
         }.store(in: &self.cancellables)
-
-//        NoticeSupplier.shared.$notices.mainSink { _ in
-//            let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
-//            self.loadSnapshot(animationCycle: cycle).mainSink { _ in
-//                // Begin auto scroll
-//                self.collectionView.animationView.stop()
-//            }.store(in: &self.cancellables)
-//        }.store(in: &self.cancellables)
     }
 
     override func getSections() -> [SectionType] {
@@ -67,6 +64,17 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
         case .channels:
             return ChannelSupplier.shared.allChannelsSorted
         }
+    }
+
+    override func getSupplementaryView(for section: SectionType, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
+        guard section == .channels else { return nil }
+        
+        let footer = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
+        footer.configure(with: self.unclaimedCount)
+        footer.button.didSelect { [unowned self] in
+            self.didSelectReservations?()
+        }
+        return footer
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {

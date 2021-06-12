@@ -35,11 +35,15 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         self.checkForNotifications()
 
         self.homeVC.addButton.didSelect { [unowned self] in
-           // self.delegate?.channelsViewControllerDidTapAdd(self)
+            self.didTapAdd()
         }
 
         self.homeVC.tabView.didSelectProfile = { [unowned self] in
             self.addProfile()
+        }
+
+        self.homeVC.collectionViewManager.didSelectReservations = { [unowned self] in
+            self.didSelectReservations()
         }
 
         self.homeVC.collectionViewManager.$onSelectedItem.mainSink { selection in
@@ -142,23 +146,23 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             }.store(in: &self.cancellables)
     }
 
-//    func channelsViewConrollerDidSelectReservations(_ controller: ChannelsViewController) {
-//        let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
-//        self.addChildAndStart(coordinator) {}
-//       // self.router.present(coordinator, source: self.channelsVC)
-//    }
+    func didSelectReservations() {
+        let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) {}
+        self.router.present(coordinator, source: self.homeVC)
+    }
 
-//    func channelsViewControllerDidTapAdd(_ controller: ChannelsViewController) {
-//        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
-//        self.addChildAndStart(coordinator) { result in
-//            coordinator.toPresentable().dismiss(animated: true) {
-//                if result {
-//                    self.startChannelFlow(for: nil)
-//                }
-//            }
-//        }
-//        self.router.present(coordinator, source: self.channelsVC)
-//    }
+    func didTapAdd() {
+        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { result in
+            coordinator.toPresentable().dismiss(animated: true) {
+                if result {
+                    self.startChannelFlow(for: nil)
+                }
+            }
+        }
+        self.router.present(coordinator, source: self.homeVC)
+    }
 
     private func showSoftAskNotifications(for status: UNAuthorizationStatus) {
 
