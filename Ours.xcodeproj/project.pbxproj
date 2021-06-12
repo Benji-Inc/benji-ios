@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		25A3C9242AB89217209A4BA1 /* Pods_OursNotificationContent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D4674CB88B1B4B693F10A2 /* Pods_OursNotificationContent.framework */; };
-		80C7C6062316112400643A14 /* TimeHumpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C7C6052316112400643A14 /* TimeHumpView.swift */; };
 		80D4A21C2303A005007CB5F1 /* Ritual.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D4A21B2303A005007CB5F1 /* Ritual.swift */; };
 		8FC6A04F2F23510867229A84 /* Pods_OursAppClip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */; };
 		D5913FD2104D7480AB2029C6 /* Pods_Ours.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */; };
@@ -24,17 +23,6 @@
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
 		D60F95EE2665A5C400CF8766 /* AlertCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60F95ED2665A5C400CF8766 /* AlertCell.swift */; };
 		D60F95F02665A5E400CF8766 /* ConnectionRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */; };
-		D614073D263E240D00B84605 /* RitualInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140738263E240D00B84605 /* RitualInputContentView.swift */; };
-		D614073E263E240D00B84605 /* RitualTimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140739263E240D00B84605 /* RitualTimeLabel.swift */; };
-		D6140740263E240D00B84605 /* RitualInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614073B263E240D00B84605 /* RitualInputViewController.swift */; };
-		D6140743263EE81C00B84605 /* RitualTimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140739263E240D00B84605 /* RitualTimeLabel.swift */; };
-		D6140744263EE81C00B84605 /* RitualInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614073B263E240D00B84605 /* RitualInputViewController.swift */; };
-		D6140745263EE81C00B84605 /* RitualInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140738263E240D00B84605 /* RitualInputContentView.swift */; };
-		D6140746263EE81E00B84605 /* RitualTimeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140739263E240D00B84605 /* RitualTimeLabel.swift */; };
-		D6140747263EE81E00B84605 /* RitualInputViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614073B263E240D00B84605 /* RitualInputViewController.swift */; };
-		D6140748263EE81E00B84605 /* RitualInputContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6140738263E240D00B84605 /* RitualInputContentView.swift */; };
-		D6140749263EE85500B84605 /* TimeHumpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C7C6052316112400643A14 /* TimeHumpView.swift */; };
-		D614074A263EE85600B84605 /* TimeHumpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C7C6052316112400643A14 /* TimeHumpView.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
@@ -719,7 +707,6 @@
 		3FD1AE8358B3CA7B98B5B241 /* Pods-OursAppClip.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursAppClip.release.xcconfig"; path = "Pods/Target Support Files/Pods-OursAppClip/Pods-OursAppClip.release.xcconfig"; sourceTree = "<group>"; };
 		4811B856F63AD691A9EDA954 /* Pods-Ours.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.release.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.release.xcconfig"; sourceTree = "<group>"; };
 		69BD6F6BD1555BE5571F430F /* Pods-OursNotificationContent.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursNotificationContent.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OursNotificationContent/Pods-OursNotificationContent.debug.xcconfig"; sourceTree = "<group>"; };
-		80C7C6052316112400643A14 /* TimeHumpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeHumpView.swift; sourceTree = "<group>"; };
 		80D4A21B2303A005007CB5F1 /* Ritual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ritual.swift; sourceTree = "<group>"; };
 		89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.debug.xcconfig"; sourceTree = "<group>"; };
 		BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ours.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -738,9 +725,6 @@
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
 		D60F95ED2665A5C400CF8766 /* AlertCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertCell.swift; sourceTree = "<group>"; };
 		D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestCell.swift; sourceTree = "<group>"; };
-		D6140738263E240D00B84605 /* RitualInputContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualInputContentView.swift; sourceTree = "<group>"; };
-		D6140739263E240D00B84605 /* RitualTimeLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualTimeLabel.swift; sourceTree = "<group>"; };
-		D614073B263E240D00B84605 /* RitualInputViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RitualInputViewController.swift; sourceTree = "<group>"; };
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewManager.swift; sourceTree = "<group>"; };
 		D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
@@ -1146,17 +1130,6 @@
 				D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		D6140742263EE7D800B84605 /* Ritual */ = {
-			isa = PBXGroup;
-			children = (
-				D6140738263E240D00B84605 /* RitualInputContentView.swift */,
-				D614073B263E240D00B84605 /* RitualInputViewController.swift */,
-				D6140739263E240D00B84605 /* RitualTimeLabel.swift */,
-				80C7C6052316112400643A14 /* TimeHumpView.swift */,
-			);
-			path = Ritual;
 			sourceTree = "<group>";
 		};
 		D61592D424FACD7700B63412 /* Attachment */ = {
@@ -1748,7 +1721,6 @@
 		D67896A122FF40AB0059BA75 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				D6140742263EE7D800B84605 /* Ritual */,
 				D67896B122FF67650059BA75 /* CodeViewController.swift */,
 				D67896BC23025FEC0059BA75 /* NameViewController.swift */,
 				D64DD8AF23CE3E7F0039DC5A /* OnboardingContent.swift */,
@@ -2342,7 +2314,6 @@
 				D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
 				D6B26903264C7D2000EFDA17 /* AnimatingTapView.swift in Sources */,
 				D61D38E3248C07F700BE457B /* InputAccessoryView+Animation.swift in Sources */,
-				D614073D263E240D00B84605 /* RitualInputContentView.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
 				D642735122C857760088256B /* MessageContext.swift in Sources */,
 				D642735322C85B740088256B /* SystemAvatar.swift in Sources */,
@@ -2451,7 +2422,6 @@
 				D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */,
 				D63DB20B25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */,
 				D6617CEA26741C4500439C06 /* UITextField+Extensions.swift in Sources */,
-				D6140740263E240D00B84605 /* RitualInputViewController.swift in Sources */,
 				D61EC0F921D317AB00204BEE /* Theme.swift in Sources */,
 				D6B3329525DDB9E300211044 /* NewChannelHeaderView.swift in Sources */,
 				D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */,
@@ -2551,7 +2521,6 @@
 				D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */,
 				D639F61824B1566B007E63B7 /* AttibutedMessageCell.swift in Sources */,
 				D67758AE25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */,
-				80C7C6062316112400643A14 /* TimeHumpView.swift in Sources */,
 				D61EC0D921D30C8E00204BEE /* DispatchQue+Extensions.swift in Sources */,
 				D60F95EE2665A5C400CF8766 /* AlertCell.swift in Sources */,
 				D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
@@ -2589,7 +2558,6 @@
 				D6FC809C237A6ED30089AACC /* ChannelCollectionViewManager+Typing.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
-				D614073E263E240D00B84605 /* RitualTimeLabel.swift in Sources */,
 				D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,
 				80D4A21C2303A005007CB5F1 /* Ritual.swift in Sources */,
@@ -2708,7 +2676,6 @@
 				D63DB29925E999B200F6B323 /* Label.swift in Sources */,
 				D63DB25425E9995700F6B323 /* AnimationDuration.swift in Sources */,
 				D63DB25025E9995100F6B323 /* LaunchManager.swift in Sources */,
-				D6140746263EE81E00B84605 /* RitualTimeLabel.swift in Sources */,
 				D63DB23525E9992600F6B323 /* UIView+Layout.swift in Sources */,
 				D63DB27325E9997F00F6B323 /* Subscribeable.swift in Sources */,
 				D63DB28B25E999A600F6B323 /* SwitchableContentViewController.swift in Sources */,
@@ -2723,13 +2690,11 @@
 				D63DB21225E998D700F6B323 /* Config.swift in Sources */,
 				D63DB26125E9996C00F6B323 /* SystemAvatar.swift in Sources */,
 				D6792CE725FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
-				D6140747263EE81E00B84605 /* RitualInputViewController.swift in Sources */,
 				D63DB21A25E998F000F6B323 /* Router.swift in Sources */,
 				D63DB23E25E9992900F6B323 /* UNNotification+Extensions.swift in Sources */,
 				D63DB1FE25E968C300F6B323 /* NotificationViewController.swift in Sources */,
 				D63DB27125E9997F00F6B323 /* ImageDisplayable.swift in Sources */,
 				D63DB25225E9995100F6B323 /* SessionManager.swift in Sources */,
-				D6140748263EE81E00B84605 /* RitualInputContentView.swift in Sources */,
 				D63DB29825E999B200F6B323 /* DisplayableImageView.swift in Sources */,
 				D63DB21925E998F000F6B323 /* MainCoordinator.swift in Sources */,
 				D63DB29025E999B200F6B323 /* View.swift in Sources */,
@@ -2747,7 +2712,6 @@
 				D63DB23925E9992600F6B323 /* UIViewController+Extensions.swift in Sources */,
 				D63DB29225E999B200F6B323 /* VibrancyView.swift in Sources */,
 				D63DB29625E999B200F6B323 /* AvatarView+Extensions.swift in Sources */,
-				D614074A263EE85600B84605 /* TimeHumpView.swift in Sources */,
 				D63DB21825E998E900F6B323 /* Theme.swift in Sources */,
 				D63DB21525E998D700F6B323 /* CloudFunction.swift in Sources */,
 				D63DB26E25E9997F00F6B323 /* Objectable.swift in Sources */,
@@ -2810,7 +2774,6 @@
 				D65519622589127A00B901E4 /* PushPayload.swift in Sources */,
 				D6551A4125895E9500B901E4 /* TextInputViewController.swift in Sources */,
 				D655195D2589126800B901E4 /* User.swift in Sources */,
-				D6140749263EE85500B84605 /* TimeHumpView.swift in Sources */,
 				D667C08E25E559D500BED8B7 /* KeyboardManager.swift in Sources */,
 				D6551A3B25895E7E00B901E4 /* NavigationBarViewController.swift in Sources */,
 				D655197E2589129B00B901E4 /* Objectable.swift in Sources */,
@@ -2820,7 +2783,6 @@
 				D650C1E225B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
 				D65519392589122700B901E4 /* UIEdgeInsets+Extensions.swift in Sources */,
 				D65519772589129B00B901E4 /* AnyHashableDisplayable.swift in Sources */,
-				D6140745263EE81C00B84605 /* RitualInputContentView.swift in Sources */,
 				D63D71C225F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
 				D63DB1F225E95CEC00F6B323 /* Connection+Cloud.swift in Sources */,
 				D6F37D6C25B5EC350034C9C5 /* AvatarProfileViewController.swift in Sources */,
@@ -2835,7 +2797,6 @@
 				D66379DF25A39BFD00A4A3B7 /* LaunchManager.swift in Sources */,
 				D640326125AE5CD400139396 /* WelcomeViewController.swift in Sources */,
 				D65519632589127A00B901E4 /* SystemAvatar.swift in Sources */,
-				D6140744263EE81C00B84605 /* RitualInputViewController.swift in Sources */,
 				D655191B2589121100B901E4 /* CGPoint+Extensions.swift in Sources */,
 				D6637A2925A3A82F00A4A3B7 /* TextView.swift in Sources */,
 				D64A1EF6258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
@@ -2850,7 +2811,6 @@
 				D6551A5F25895F1300B901E4 /* TextField.swift in Sources */,
 				D69B75FC264842D00007020D /* VideoView.swift in Sources */,
 				D6792CE625FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
-				D6140743263EE81C00B84605 /* RitualTimeLabel.swift in Sources */,
 				D65519062589110A00B901E4 /* Coordinator.swift in Sources */,
 				D65519BE25891A0500B901E4 /* RootNavigationController.swift in Sources */,
 				D6551A4D25895EBB00B901E4 /* Sizeable.swift in Sources */,

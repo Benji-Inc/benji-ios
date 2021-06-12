@@ -32,7 +32,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var nameVC = NameViewController()
     lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
-    lazy var ritualVC = RitualInputViewController()
 
     let loadingBlur = BlurView()
     let blurEffect = UIBlurEffect(style: .systemMaterial)
@@ -145,15 +144,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.photoVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                self.current = .ritual(self.ritualVC)
-            case .failure(_):
-                break
-            }
-        }
-
-        self.ritualVC.onDidComplete = { [unowned self] result in
-            switch result {
-            case .success:
                 if let user = User.current() {
                     self.delegate.onboardingView(self, didVerify: user)
                 }
@@ -161,14 +151,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 break
             }
         }
-
-        self.ritualVC.didTapNeedsAthorization = { [unowned self] in
-            self.delegate.onboardingViewControllerNeedsAuthorization(self)
-        }
-
-        self.ritualVC.$state.mainSink { state in
-            self.updateNavigationBar()
-        }.store(in: &self.cancellables)
 
         self.waitlistVC.$didShowUpgrade.mainSink { [weak self] (didShow) in
             guard let `self` = self, didShow else { return }
@@ -235,8 +217,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 return .name(self.nameVC)
             } else if current.smallImage.isNil {
                 return .photo(self.photoVC)
-            } else if current.ritual.isNil {
-                return .ritual(self.ritualVC)
             } else {
                 return .name(self.nameVC)
             }
@@ -284,15 +264,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                                        default: "Error!")
             case .finish:
                 return LocalizedString.empty
-            }
-        case .ritual(let vc):
-            switch vc.state {
-            case .needsAuthorization:
-                return "Last Step"
-            case .edit:
-                return "DAILY RITUAL"
-            case .update:
-                return "DAILY RITUAL"
             }
         }
     }
@@ -373,16 +344,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                                        default: "To ensure everyone is who they say they are we require a photo. No 🤖's!")
             } else {
                 return LocalizedString.empty
-            }
-
-        case .ritual(let vc):
-            switch vc.state {
-            case .needsAuthorization:
-                return "Your ritual is a practice/reminder each day to for you to engage with others, so that the rest of your day is as distraction free as possible."
-            case .edit:
-                return "Each day, beginning at that time you select, you will have 60 mins to access optimized ways to engage with others."
-            case .update:
-                return "Each day, beginning at that time you select, you will have 60 mins to access optimized ways to engage with others."
             }
         }
     }

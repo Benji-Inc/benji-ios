@@ -85,11 +85,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
                     }
                 }
             } else {
-                UserNotificationManager.shared.register(application: UIApplication.shared).mainSink { granted in
-                    if granted {
-                        self.onboardingVC.ritualVC.state = .update
-                    }
-                }.store(in: &self.cancellables)
+                UserNotificationManager.shared.register(application: UIApplication.shared)
             }
         }
 
