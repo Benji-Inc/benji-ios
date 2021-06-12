@@ -23,30 +23,13 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
 
     let tabView = HomeTabView()
 
-    var didTapProfile: CompletionOptional = nil
-    var didTapChannels: CompletionOptional = nil
     var isMenuPresenting: Bool = false
 
     override func initializeViews() {
         super.initializeViews()
 
         self.view.set(backgroundColor: .background1)
-
         self.view.addSubview(self.tabView)
-
-        self.collectionViewManager.$onSelectedItem.mainSink { selection in
-            guard let value = selection else { return }
-
-
-        }.store(in: &self.cancellables)
-
-        self.tabView.didSelectProfile = { [unowned self] in
-            self.didTapProfile?()
-        }
-
-        self.tabView.didSelectChannels = { [unowned self] in
-            self.didTapChannels?()
-        }
     }
 
     override func getCollectionView() -> CollectionView {

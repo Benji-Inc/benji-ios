@@ -34,9 +34,15 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         self.checkForNotifications()
 
-        self.homeVC.didTapProfile = { [unowned self] in
+        self.homeVC.tabView.didSelectProfile = { [unowned self] in
             self.addProfile()
         }
+
+        self.homeVC.collectionViewManager.$onSelectedItem.mainSink { selection in
+            guard let value = selection else { return }
+
+
+        }.store(in: &self.cancellables)
 
 //        self.homeVC.noticesCollectionVC.collectionViewManager.$onSelectedItem.mainSink { selection in
 //            //guard let item = selection?.item as? SystemNotice else { return }
