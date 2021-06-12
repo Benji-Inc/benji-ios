@@ -147,12 +147,14 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     }
 
     func didSelectReservations() {
+        self.removeChild()
         let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) {}
         self.router.present(coordinator, source: self.homeVC)
     }
 
     func didTapAdd() {
+        self.removeChild()
         let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { result in
             coordinator.toPresentable().dismiss(animated: true) {
