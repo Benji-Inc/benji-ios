@@ -16,9 +16,7 @@ extension HomeCoordinator: SideMenuNavigationControllerDelegate {
     }
 
     func sideMenuDidAppear(menu: SideMenuNavigationController, animated: Bool) {
-        if let _ = menu.viewControllers.first as? ProfileViewController {
-            self.addProfile(shouldPresent: false)
-        }
+        
     }
 
     func sideMenuWillDisappear(menu: SideMenuNavigationController, animated: Bool) {
@@ -27,15 +25,6 @@ extension HomeCoordinator: SideMenuNavigationControllerDelegate {
 
     func sideMenuDidDisappear(menu: SideMenuNavigationController, animated: Bool) {
         self.homeVC.animate(show: true)
-    }
-
-    func addProfile(shouldPresent: Bool = true) {
-        self.removeChild()
-
-        self.addChildAndStart(self.profileCoordinator) { (_) in }
-        if let left = SideMenuManager.default.leftMenuNavigationController, shouldPresent {
-            self.homeVC.present(left, animated: true, completion: nil)
-        }
     }
 }
 

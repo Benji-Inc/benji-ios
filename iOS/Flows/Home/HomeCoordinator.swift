@@ -14,12 +14,7 @@ import PhotosUI
 
 class HomeCoordinator: PresentableCoordinator<Void> {
 
-    private lazy var profileVC = ProfileViewController(with: User.current()!)
     lazy var homeVC = HomeViewController()
-
-    lazy var profileCoordinator = ProfileCoordinator(router: self.router,
-                                                     deepLink: self.deepLink,
-                                                     vc: self.profileVC)
     
     private var cancellables = Set<AnyCancellable>()
 
@@ -36,10 +31,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         self.homeVC.addButton.didSelect { [unowned self] in
             self.didTapAdd()
-        }
-
-        self.homeVC.tabView.didSelectProfile = { [unowned self] in
-            self.addProfile()
         }
 
         self.homeVC.collectionViewManager.didSelectReservations = { [unowned self] in
@@ -61,10 +52,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
         }
-
-        let leftMenuNavigationController = SideNavigationController(with: self.profileVC)
-        leftMenuNavigationController.sideMenuDelegate = self
-        SideMenuManager.default.leftMenuNavigationController = leftMenuNavigationController
 
         SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.homeVC.view)
     }
@@ -98,8 +85,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                         }
                     }.store(in: &self.cancellables)
             }
-        case .profile:
-            self.addProfile()
         case .channels:
             break
         }

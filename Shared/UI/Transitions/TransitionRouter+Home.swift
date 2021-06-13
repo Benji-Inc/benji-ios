@@ -25,11 +25,11 @@ extension TransitionRouter {
 
         self.toVC.view.layoutIfNeeded()
 
-        let transformOffset = homeVC.tabView.height
+        let transformOffset = homeVC.addButton.height
         self.toVC.navigationController?.navigationBar.alpha = 0
         self.toVC.view.frame = toVCFinalFrame
         self.toVC.view.alpha = 0
-        homeVC.tabView.transform = CGAffineTransform(translationX: 0, y: transformOffset)
+        homeVC.addButton.transform = CGAffineTransform(translationX: 0, y: transformOffset)
 
         self.toVC.navigationController?.navigationBar.alpha = 0
 
@@ -48,7 +48,7 @@ extension TransitionRouter {
                                     }
 
                                     UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
-                                        homeVC.tabView.transform = .identity
+                                        homeVC.addButton.transform = .identity
                                     }
         }) { (completed) in
             // Unhide all of the views we tampered with so that they're visible after the transition

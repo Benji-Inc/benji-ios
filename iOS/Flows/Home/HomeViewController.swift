@@ -21,7 +21,6 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
         return .background1
     }
 
-    let tabView = HomeTabView()
     let addButton = Button()
 
     var isMenuPresenting: Bool = false
@@ -30,7 +29,6 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
         super.initializeViews()
 
         self.view.set(backgroundColor: .background1)
-        self.view.addSubview(self.tabView)
 
         self.view.insertSubview(self.addButton, aboveSubview: self.collectionViewManager.collectionView)
         self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightPurple))
@@ -49,12 +47,6 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        let height = 70 + self.view.safeAreaInsets.bottom
-        self.tabView.size = CGSize(width: self.view.width, height: height)
-        self.tabView.centerOnX()
-
-        self.tabView.pinToSafeArea(.bottom, padding: Theme.contentOffset)
-
         self.addButton.squaredSize = 60
         self.addButton.makeRound()
         self.addButton.pin(.right, padding: Theme.contentOffset)
@@ -64,7 +56,6 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
     func animate(show: Bool) {
         self.isMenuPresenting = !show
         UIView.animate(withDuration: Theme.animationDuration) {
-            self.tabView.alpha = show ? 1.0 : 0.0
             self.collectionViewManager.collectionView.alpha = show ? 1.0 : 0.0
         }
     }
