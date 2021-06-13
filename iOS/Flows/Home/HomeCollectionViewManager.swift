@@ -21,6 +21,7 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
     private let alertConfig = ManageableCellRegistration<AlertCell>().provider
     private let channelConfig = ManageableCellRegistration<ChannelCell>().provider
     private let footerConfig = ManageableFooterRegistration<ReservationsFooterView>().provider
+    private let headerConfig = ManageableHeaderRegistration<UserHeaderView>().provider
 
     private var unclaimedCount: Int = 0
 
@@ -67,14 +68,26 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
     }
 
     override func getSupplementaryView(for section: SectionType, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
-        guard section == .channels else { return nil }
-        
-        let footer = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
-        footer.configure(with: self.unclaimedCount)
-        footer.button.didSelect { [unowned self] in
-            self.didSelectReservations?()
+
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            guard section == .notices else { return nil }
+            let header = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+            return header
+        case UICollectionView.elementKindSectionFooter:
+            guard section == .channels else { return nil }
+
+            let footer = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
+            footer.configure(with: self.unclaimedCount)
+            footer.button.didSelect { [unowned self] in
+                self.didSelectReservations?()
+            }
+            return footer
+        default:
+            return nil
         }
-        return footer
+        
+
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {

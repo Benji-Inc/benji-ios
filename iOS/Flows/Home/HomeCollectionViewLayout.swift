@@ -42,6 +42,12 @@ class HomeCollectionViewLayout: UICollectionViewLayout {
                     }
                 }
 
+                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120))
+                let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
+                header.pinToVisibleBounds = true 
+
+                section.boundarySupplementaryItems = [header]
+
                 return section
             case .channels:
                 let widthFraction: CGFloat = 0.5

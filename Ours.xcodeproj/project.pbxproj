@@ -408,6 +408,7 @@
 		D6617D012675411E00439C06 /* HomeCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */; };
 		D6617D042675737400439C06 /* HomeCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D032675737400439C06 /* HomeCoordinator+Extensions.swift */; };
 		D6617D0626757BD600439C06 /* ReservationsFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D0526757BD600439C06 /* ReservationsFooterView.swift */; };
+		D6617D0826758C3600439C06 /* UserHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D0726758C3600439C06 /* UserHeaderView.swift */; };
 		D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6629C7425AD254C002C3B92 /* ConfettiView.swift */; };
 		D66379CE25A3704300A4A3B7 /* ChatClientManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */; };
@@ -841,6 +842,7 @@
 		D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6617D032675737400439C06 /* HomeCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Extensions.swift"; sourceTree = "<group>"; };
 		D6617D0526757BD600439C06 /* ReservationsFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsFooterView.swift; sourceTree = "<group>"; };
+		D6617D0726758C3600439C06 /* UserHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserHeaderView.swift; sourceTree = "<group>"; };
 		D6629C7425AD254C002C3B92 /* ConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfettiView.swift; sourceTree = "<group>"; };
 		D66379C425A3704300A4A3B7 /* ChatClientManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ChatClientManager+Extensions.swift"; sourceTree = "<group>"; };
 		D66379C525A3704300A4A3B7 /* UserNotificationManager+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserNotificationManager+Extensions.swift"; sourceTree = "<group>"; };
@@ -1111,9 +1113,10 @@
 		D60F95EA2665A15200CF8766 /* Notices */ = {
 			isa = PBXGroup;
 			children = (
-				D6D39287265F15B800E49F1E /* NoticeCell.swift */,
 				D60F95ED2665A5C400CF8766 /* AlertCell.swift */,
 				D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */,
+				D6D39287265F15B800E49F1E /* NoticeCell.swift */,
+				D6617D0726758C3600439C06 /* UserHeaderView.swift */,
 			);
 			path = Notices;
 			sourceTree = "<group>";
@@ -2443,6 +2446,7 @@
 				D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */,
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
 				D6D145FD21D550E400CD8CE4 /* AttributedString.swift in Sources */,
+				D6617D0826758C3600439C06 /* UserHeaderView.swift in Sources */,
 				D672C31C2644342F00C9E878 /* ChannelContentView.swift in Sources */,
 				D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */,
 				D6F33C6F24B14A0F009603FF /* AttributedMessageCellAttributesConfigurer.swift in Sources */,
