@@ -49,8 +49,8 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
 
         self.addButton.squaredSize = 60
         self.addButton.makeRound()
-        self.addButton.pin(.right, padding: Theme.contentOffset)
-        self.addButton.pinToSafeArea(.bottom, padding: 0)
+        self.addButton.centerOnX()
+        self.addButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
     }
 
     func animate(show: Bool) {

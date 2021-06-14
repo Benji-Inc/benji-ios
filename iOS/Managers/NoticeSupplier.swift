@@ -26,32 +26,29 @@ class NoticeSupplier {
     @Published private(set) var notices: [SystemNotice] = []
     @Published private(set) var noticeStatus: NoticeStatus? = nil
 
-    init() {
-        self.loadNotices()
-    }
-
     deinit {
         self.cancellables.forEach { cancellable in
             cancellable.cancel()
         }
     }
 
-    func loadNotices() {
+    func loadNotices() -> Future<Void, Never> {
+        return Future { promise in
+            let combined = Publishers.Zip(
+                self.getLocalNotices(),
+                Notice.fetchAll()
+            )
 
-        let combined = Publishers.Zip(
-            self.getLocalNotices(),
-            Notice.fetchAll()
-        )
+            combined.mainSink { (local, server) in
+                var notices = server.compactMap { notice in
+                    return SystemNotice(with: notice)
+                }
 
-        combined.mainSink { (local, server) in
-            var notices = server.compactMap { notice in
-                return SystemNotice(with: notice)
-            }
-
-            notices.append(contentsOf: local)
-            self.notices = notices.sorted()
-
-        }.store(in: &self.cancellables)
+                notices.append(contentsOf: local)
+                self.notices = notices.sorted()
+                promise(.success(()))
+            }.store(in: &self.cancellables)
+        }
     }
 
     private func getLocalNotices() -> Future<[SystemNotice], Never> {

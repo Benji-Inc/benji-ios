@@ -13,7 +13,7 @@ import Combine
 class ChannelContentView: View {
 
     let stackedAvatarView = StackedAvatarView()
-    let label = Label(font: .largeThin, textColor: .background4)
+    let label = Label(font: .mediumThin, textColor: .background4)
 
     private var cancellables = Set<AnyCancellable>()
     private var currentItem: DisplayableChannel?
@@ -31,9 +31,8 @@ class ChannelContentView: View {
         self.addSubview(self.label)
         self.label.textAlignment = .left
         self.label.lineBreakMode = .byTruncatingTail
-        self.stackedAvatarView.itemHeight = 50
+        self.stackedAvatarView.itemHeight = 70
     }
-
 
     func configure(with item: DisplayableChannel) {
         self.currentItem = item
@@ -74,16 +73,14 @@ class ChannelContentView: View {
         super.layoutSubviews()
 
         self.stackedAvatarView.setSize()
-        self.stackedAvatarView.centerOnY()
-        self.stackedAvatarView.pin(.left, padding: Theme.contentOffset)
+        self.stackedAvatarView.pin(.top, padding: Theme.contentOffset.half)
+        self.stackedAvatarView.pin(.left, padding: Theme.contentOffset.half)
 
-        let maxWidth = self.width - self.stackedAvatarView.right - Theme.contentOffset.half - Theme.contentOffset
+        let maxWidth = self.width - Theme.contentOffset
         self.label.setSize(withWidth: maxWidth)
-        if label.height > self.height {
-            self.label.height = self.height
-        }
-        self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset.half)
-        self.label.centerOnY()
+
+        self.label.pin(.bottom, padding: Theme.contentOffset.half)
+        self.label.pin(.left, padding: Theme.contentOffset.half)
     }
 
     private func displayDM(for channel: TCHChannel, with user: User) {

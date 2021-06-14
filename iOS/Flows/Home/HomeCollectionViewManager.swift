@@ -38,7 +38,7 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
         let combined = Publishers.Zip3(
             Reservation.getUnclaimedReservationCount(for: User.current()!),
             ChannelSupplier.shared.waitForInitialSync(),
-            NoticeSupplier.shared.$notices
+            NoticeSupplier.shared.loadNotices()
         )
 
         combined.mainSink { (value) in

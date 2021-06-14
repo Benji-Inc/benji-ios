@@ -23,7 +23,7 @@ class HomeCollectionViewLayout: UICollectionViewLayout {
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8)
+                item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: Theme.contentOffset, bottom: 8, trailing: Theme.contentOffset)
 
                 // Group
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(140))
@@ -32,6 +32,7 @@ class HomeCollectionViewLayout: UICollectionViewLayout {
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .groupPagingCentered
+                section.contentInsets = NSDirectionalEdgeInsets(top: Theme.contentOffset, leading: 0, bottom: 0, trailing: 0)
                 section.visibleItemsInvalidationHandler = { (items, offset, environment) in
                     items.forEach { item in
                         let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
@@ -44,8 +45,6 @@ class HomeCollectionViewLayout: UICollectionViewLayout {
 
                 let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120))
                 let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-                header.pinToVisibleBounds = true 
-
                 section.boundarySupplementaryItems = [header]
 
                 return section
@@ -57,7 +56,7 @@ class HomeCollectionViewLayout: UICollectionViewLayout {
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(widthFraction), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-                let inset: CGFloat = 1.5
+                let inset: CGFloat = 5
                 item.contentInsets = NSDirectionalEdgeInsets(top: inset, leading: inset, bottom: inset, trailing: inset)
 
                 // Group

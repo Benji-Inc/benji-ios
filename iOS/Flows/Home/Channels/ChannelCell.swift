@@ -19,8 +19,8 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.contentView.set(backgroundColor: .background3)
         self.contentView.addSubview(self.content)
+        self.content.set(backgroundColor: .purple)
     }
 
     func configure(with item: DisplayableChannel) {
@@ -36,6 +36,7 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
         super.layoutSubviews()
 
         self.content.expandToSuperviewSize()
+        self.content.roundCorners()
     }
 
     override func prepareForReuse() {
