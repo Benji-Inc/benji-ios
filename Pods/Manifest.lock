@@ -17,7 +17,6 @@ PODS:
   - PhoneNumberKit/PhoneNumberKitCore (3.3.3)
   - PhoneNumberKit/UIKit (3.3.3):
     - PhoneNumberKit/PhoneNumberKitCore
-  - SideMenu (6.5.0)
   - Starscream (4.0.4)
   - TMROCoordinator (0.0.3)
   - TMROLocalization (0.0.2)
@@ -28,7 +27,6 @@ DEPENDENCIES:
   - Parse
   - ParseLiveQuery
   - PhoneNumberKit
-  - SideMenu
   - TMROCoordinator
   - TMROLocalization
 
@@ -41,7 +39,6 @@ SPEC REPOS:
     - Parse
     - ParseLiveQuery
     - PhoneNumberKit
-    - SideMenu
     - Starscream
     - TMROCoordinator
     - TMROLocalization
@@ -54,11 +51,10 @@ SPEC CHECKSUMS:
   Parse: 081fb8755c3000fd11df817eec235def233d0af3
   ParseLiveQuery: 366b5876aa20074ea7fea52446376e102447b5df
   PhoneNumberKit: 4ce83273551c4d2ae10b7361162f4283dd02835f
-  SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   TMROCoordinator: 8e675e45c895feafdd548e1dd2de35430d3ea146
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
 
-PODFILE CHECKSUM: d826d4fe223474b7251b3b8831e28bcfda8f6a1c
+PODFILE CHECKSUM: 714a1c0d9540237f3e88ca9ca511461ed3e0e47a
 
 COCOAPODS: 1.10.1

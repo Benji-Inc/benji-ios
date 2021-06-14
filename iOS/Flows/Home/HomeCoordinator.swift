@@ -9,7 +9,6 @@
 import Foundation
 import Parse
 import Combine
-import SideMenu
 import PhotosUI
 
 class HomeCoordinator: PresentableCoordinator<Void> {
@@ -52,8 +51,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
         }
-
-        SideMenuManager.default.addScreenEdgePanGesturesToPresent(toView: self.homeVC.view)
     }
 
     func handle(deeplink: DeepLinkable) {

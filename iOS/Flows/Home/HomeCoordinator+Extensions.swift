@@ -7,26 +7,6 @@
 //
 
 import Foundation
-import SideMenu
-
-extension HomeCoordinator: SideMenuNavigationControllerDelegate {
-
-    func sideMenuWillAppear(menu: SideMenuNavigationController, animated: Bool) {
-        self.homeVC.animate(show: false)
-    }
-
-    func sideMenuDidAppear(menu: SideMenuNavigationController, animated: Bool) {
-        
-    }
-
-    func sideMenuWillDisappear(menu: SideMenuNavigationController, animated: Bool) {
-
-    }
-
-    func sideMenuDidDisappear(menu: SideMenuNavigationController, animated: Bool) {
-        self.homeVC.animate(show: true)
-    }
-}
 
 extension HomeCoordinator: ToastSchedulerDelegate {
 

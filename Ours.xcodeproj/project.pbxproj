@@ -434,7 +434,6 @@
 		D66A580925DD6954001B3F64 /* NewChannelCollectionViewManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580825DD6954001B3F64 /* NewChannelCollectionViewManger.swift */; };
 		D66A580B25DD6990001B3F64 /* ConnectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580A25DD6990001B3F64 /* ConnectionCell.swift */; };
 		D66A580D25DD6B06001B3F64 /* NewChannelCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580C25DD6B06001B3F64 /* NewChannelCollectionView.swift */; };
-		D66B4BE925EF03B60035A2C5 /* SideNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */; };
 		D66F0FC922BF006D00BA277D /* SystemMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FC822BF006D00BA277D /* SystemMessage.swift */; };
 		D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FCE22BF060500BA277D /* Deeplinkable.swift */; };
 		D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
@@ -854,7 +853,6 @@
 		D66A580825DD6954001B3F64 /* NewChannelCollectionViewManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCollectionViewManger.swift; sourceTree = "<group>"; };
 		D66A580A25DD6990001B3F64 /* ConnectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionCell.swift; sourceTree = "<group>"; };
 		D66A580C25DD6B06001B3F64 /* NewChannelCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCollectionView.swift; sourceTree = "<group>"; };
-		D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideNavigationController.swift; sourceTree = "<group>"; };
 		D66F0FC822BF006D00BA277D /* SystemMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMessage.swift; sourceTree = "<group>"; };
 		D66F0FCE22BF060500BA277D /* Deeplinkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplinkable.swift; sourceTree = "<group>"; };
 		D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkTarget.swift; sourceTree = "<group>"; };
@@ -1858,7 +1856,6 @@
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
 				D6D145F321D5493000CD8CE4 /* HomeViewController.swift */,
 				D60F95EA2665A15200CF8766 /* Notices */,
-				D66B4BE825EF03B60035A2C5 /* SideNavigationController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -2357,7 +2354,6 @@
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
 				D6F312A8266AE27D00E25FEE /* LinkCell.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
-				D66B4BE925EF03B60035A2C5 /* SideNavigationController.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,
 				D642735E22C90C820088256B /* CGPoint+Extensions.swift in Sources */,
