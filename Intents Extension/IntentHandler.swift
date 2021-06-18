@@ -20,10 +20,15 @@ import Intents
 class IntentHandler: INExtension, INSendMessageIntentHandling, INSearchForMessagesIntentHandling, INSetMessageAttributeIntentHandling {
     
     override func handler(for intent: INIntent) -> Any {
-        // This is the default implementation.  If you want different objects to handle different intents,
-        // you can override this and return the handler you want for that particular intent.
-        
-        return self
+        switch intent {
+            case is INSendMessageIntent, is INSearchForMessagesIntent, is INSetMessageAttributeIntent:
+                return MessageIntentHandler()
+            case is INShareFocusStatusIntent:
+                return FocusIntentHandler()
+            default:
+                // SiriKit doesn't call this method with intents you don't support.
+                return self
+        }
     }
     
     // MARK: - INSendMessageIntentHandling
