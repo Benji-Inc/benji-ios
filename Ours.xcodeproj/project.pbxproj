@@ -8,7 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		25A3C9242AB89217209A4BA1 /* Pods_OursNotificationContent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D4674CB88B1B4B693F10A2 /* Pods_OursNotificationContent.framework */; };
+		7F227B8576E160C9469E08D1 /* Pods_Intents_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C50C41C9E4C24DF432E0D86 /* Pods_Intents_Extension.framework */; };
 		8FC6A04F2F23510867229A84 /* Pods_OursAppClip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */; };
+		AADC7E9FFFC02BDF01417BAA /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC9EA4C00F002569A56127C /* Pods_NotificationService.framework */; };
+		C03D8861C3D82A5BDDC5CF8C /* Pods_Intents_ExtensionUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */; };
 		D5913FD2104D7480AB2029C6 /* Pods_Ours.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */; };
 		D607400E23401B3E009633EB /* SystemChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D607400D23401B3E009633EB /* SystemChannel.swift */; };
 		D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E552377CB2F00833DA7 /* Messageable.swift */; };
@@ -737,11 +740,19 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0F9025F524FF835237D79B76 /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 		22E80A859F4294D8C5A052D8 /* Pods-OursNotificationContent.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursNotificationContent.release.xcconfig"; path = "Pods/Target Support Files/Pods-OursNotificationContent/Pods-OursNotificationContent.release.xcconfig"; sourceTree = "<group>"; };
+		2C50C41C9E4C24DF432E0D86 /* Pods_Intents_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Intents_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		31BB9AC23B5A8B9AEE379B27 /* Pods-Intents ExtensionUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Intents ExtensionUI.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Intents ExtensionUI/Pods-Intents ExtensionUI.debug.xcconfig"; sourceTree = "<group>"; };
 		3FD1AE8358B3CA7B98B5B241 /* Pods-OursAppClip.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursAppClip.release.xcconfig"; path = "Pods/Target Support Files/Pods-OursAppClip/Pods-OursAppClip.release.xcconfig"; sourceTree = "<group>"; };
 		4811B856F63AD691A9EDA954 /* Pods-Ours.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.release.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.release.xcconfig"; sourceTree = "<group>"; };
+		4AC9EA4C00F002569A56127C /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		58361BE3E111762AC2D79605 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
 		69BD6F6BD1555BE5571F430F /* Pods-OursNotificationContent.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursNotificationContent.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OursNotificationContent/Pods-OursNotificationContent.debug.xcconfig"; sourceTree = "<group>"; };
 		89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.debug.xcconfig"; sourceTree = "<group>"; };
+		8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Intents_ExtensionUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5070281C7CBB8DE82CD0BA7 /* Pods-Intents ExtensionUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Intents ExtensionUI.release.xcconfig"; path = "Pods/Target Support Files/Pods-Intents ExtensionUI/Pods-Intents ExtensionUI.release.xcconfig"; sourceTree = "<group>"; };
+		ABE4B3805F2AC689EC91BEC0 /* Pods-Intents Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Intents Extension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Intents Extension/Pods-Intents Extension.debug.xcconfig"; sourceTree = "<group>"; };
 		BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ours.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OursAppClip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D33049F6417FECDE51BB13DB /* Pods-OursAppClip.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursAppClip.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OursAppClip/Pods-OursAppClip.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1080,6 +1091,7 @@
 		D6FC809B237A6ED30089AACC /* ChannelCollectionViewManager+Typing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChannelCollectionViewManager+Typing.swift"; sourceTree = "<group>"; };
 		D6FEF02C257EB71700F9789B /* Button+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Extensions.swift"; sourceTree = "<group>"; };
 		D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Extensions.swift"; sourceTree = "<group>"; };
+		F3CB2AFC202AF9758DB4EBDE /* Pods-Intents Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Intents Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Intents Extension/Pods-Intents Extension.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1124,6 +1136,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AADC7E9FFFC02BDF01417BAA /* Pods_NotificationService.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1132,6 +1145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6AE0F7E267CFA6C00C6B048 /* Intents.framework in Frameworks */,
+				7F227B8576E160C9469E08D1 /* Pods_Intents_Extension.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1140,6 +1154,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6AE0F89267CFA6D00C6B048 /* IntentsUI.framework in Frameworks */,
+				C03D8861C3D82A5BDDC5CF8C /* Pods_Intents_ExtensionUI.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1155,6 +1170,12 @@
 				3FD1AE8358B3CA7B98B5B241 /* Pods-OursAppClip.release.xcconfig */,
 				69BD6F6BD1555BE5571F430F /* Pods-OursNotificationContent.debug.xcconfig */,
 				22E80A859F4294D8C5A052D8 /* Pods-OursNotificationContent.release.xcconfig */,
+				ABE4B3805F2AC689EC91BEC0 /* Pods-Intents Extension.debug.xcconfig */,
+				F3CB2AFC202AF9758DB4EBDE /* Pods-Intents Extension.release.xcconfig */,
+				31BB9AC23B5A8B9AEE379B27 /* Pods-Intents ExtensionUI.debug.xcconfig */,
+				A5070281C7CBB8DE82CD0BA7 /* Pods-Intents ExtensionUI.release.xcconfig */,
+				58361BE3E111762AC2D79605 /* Pods-NotificationService.debug.xcconfig */,
+				0F9025F524FF835237D79B76 /* Pods-NotificationService.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1171,6 +1192,9 @@
 				D3D4674CB88B1B4B693F10A2 /* Pods_OursNotificationContent.framework */,
 				D6AE0F7D267CFA6C00C6B048 /* Intents.framework */,
 				D6AE0F88267CFA6D00C6B048 /* IntentsUI.framework */,
+				2C50C41C9E4C24DF432E0D86 /* Pods_Intents_Extension.framework */,
+				8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */,
+				4AC9EA4C00F002569A56127C /* Pods_NotificationService.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2173,6 +2197,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D6AE0F77267CF9CA00C6B048 /* Build configuration list for PBXNativeTarget "NotificationService" */;
 			buildPhases = (
+				2FAA492D9EB10E92959FA9F0 /* [CP] Check Pods Manifest.lock */,
 				D6AE0F69267CF9CA00C6B048 /* Sources */,
 				D6AE0F6A267CF9CA00C6B048 /* Frameworks */,
 				D6AE0F6B267CF9CA00C6B048 /* Resources */,
@@ -2190,6 +2215,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D6AE0F9A267CFA6D00C6B048 /* Build configuration list for PBXNativeTarget "Intents Extension" */;
 			buildPhases = (
+				43AB9D595B2A31F19EC66FEB /* [CP] Check Pods Manifest.lock */,
 				D6AE0F78267CFA6C00C6B048 /* Sources */,
 				D6AE0F79267CFA6C00C6B048 /* Frameworks */,
 				D6AE0F7A267CFA6C00C6B048 /* Resources */,
@@ -2207,6 +2233,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D6AE0F97267CFA6D00C6B048 /* Build configuration list for PBXNativeTarget "Intents ExtensionUI" */;
 			buildPhases = (
+				425AB734762B605DC628E2FD /* [CP] Check Pods Manifest.lock */,
 				D6AE0F83267CFA6D00C6B048 /* Sources */,
 				D6AE0F84267CFA6D00C6B048 /* Frameworks */,
 				D6AE0F85267CFA6D00C6B048 /* Resources */,
@@ -2401,6 +2428,28 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OursAppClip/Pods-OursAppClip-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		2FAA492D9EB10E92959FA9F0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NotificationService-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		30D8572DC83E8E92F5506E42 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2413,6 +2462,50 @@
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-Ours-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		425AB734762B605DC628E2FD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Intents ExtensionUI-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		43AB9D595B2A31F19EC66FEB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Intents Extension-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3455,6 +3548,7 @@
 		};
 		D6AE0F75267CF9CA00C6B048 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 58361BE3E111762AC2D79605 /* Pods-NotificationService.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NotificationService.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -3463,6 +3557,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Notification Service/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = NotificationService;
+				INFOPLIST_KEY_CFBundleExecutable = NotificationService;
+				INFOPLIST_KEY_CFBundleName = NotificationService;
+				INFOPLIST_KEY_CFBundleVersion = 1;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Benjamin Dodgson. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3470,7 +3567,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 3.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Ours.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3482,6 +3579,7 @@
 		};
 		D6AE0F76267CF9CA00C6B048 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0F9025F524FF835237D79B76 /* Pods-NotificationService.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = NotificationService.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -3490,6 +3588,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Notification Service/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = NotificationService;
+				INFOPLIST_KEY_CFBundleExecutable = NotificationService;
+				INFOPLIST_KEY_CFBundleName = NotificationService;
+				INFOPLIST_KEY_CFBundleVersion = 1;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Benjamin Dodgson. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3497,7 +3598,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 3.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Ours.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3509,6 +3610,7 @@
 		};
 		D6AE0F98267CFA6D00C6B048 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 31BB9AC23B5A8B9AEE379B27 /* Pods-Intents ExtensionUI.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "Intents ExtensionUI/Intents ExtensionUI.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -3517,6 +3619,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents ExtensionUI/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Intents ExtensionUI";
+				INFOPLIST_KEY_CFBundleExecutable = "Intents ExtensionUI";
+				INFOPLIST_KEY_CFBundleName = "Intents ExtensionUI";
+				INFOPLIST_KEY_CFBundleVersion = 1;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Benjamin Dodgson. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3524,7 +3629,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 3.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Benji.Ours.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3536,6 +3641,7 @@
 		};
 		D6AE0F99267CFA6D00C6B048 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A5070281C7CBB8DE82CD0BA7 /* Pods-Intents ExtensionUI.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "Intents ExtensionUI/Intents ExtensionUI.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -3544,6 +3650,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents ExtensionUI/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Intents ExtensionUI";
+				INFOPLIST_KEY_CFBundleExecutable = "Intents ExtensionUI";
+				INFOPLIST_KEY_CFBundleName = "Intents ExtensionUI";
+				INFOPLIST_KEY_CFBundleVersion = 1;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Benjamin Dodgson. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3551,7 +3660,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 3.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Benji.Ours.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3563,6 +3672,7 @@
 		};
 		D6AE0F9B267CFA6D00C6B048 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = ABE4B3805F2AC689EC91BEC0 /* Pods-Intents Extension.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "Intents Extension/Intents Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -3571,6 +3681,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Intents Extension";
+				INFOPLIST_KEY_CFBundleExecutable = "Intents Extension";
+				INFOPLIST_KEY_CFBundleName = "Intents Extension";
+				INFOPLIST_KEY_CFBundleVersion = 1;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Benjamin Dodgson. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3578,7 +3691,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 3.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Benji.Ours.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3590,6 +3703,7 @@
 		};
 		D6AE0F9C267CFA6D00C6B048 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F3CB2AFC202AF9758DB4EBDE /* Pods-Intents Extension.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "Intents Extension/Intents Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
@@ -3598,6 +3712,9 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents Extension/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Intents Extension";
+				INFOPLIST_KEY_CFBundleExecutable = "Intents Extension";
+				INFOPLIST_KEY_CFBundleName = "Intents Extension";
+				INFOPLIST_KEY_CFBundleVersion = 1;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Copyright © 2021 Benjamin Dodgson. All rights reserved.";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -3605,7 +3722,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 3.4.6;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Benji.Ours.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

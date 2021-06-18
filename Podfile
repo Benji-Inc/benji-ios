@@ -4,7 +4,6 @@ platform :ios, '14.0'
 def shared_pods
   pod 'Parse'
   pod 'GestureRecognizerClosures'
-#  pod 'PhoneNumberKit'
   pod 'ParseLiveQuery'
 
   pod 'TMROCoordinator'
@@ -25,6 +24,24 @@ target 'OursAppClip' do
 end
 
 target 'OursNotificationContent' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+  shared_pods
+end
+
+target 'NotificationService' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+  shared_pods
+end
+
+target 'Intents Extension' do
+  # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+  use_frameworks!
+  shared_pods
+end
+
+target 'Intents ExtensionUI' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   shared_pods
