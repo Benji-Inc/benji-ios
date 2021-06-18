@@ -544,6 +544,12 @@
 		D6AE0F8F267CFA6D00C6B048 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D6AE0F8D267CFA6D00C6B048 /* MainInterface.storyboard */; };
 		D6AE0F93267CFA6D00C6B048 /* Intents ExtensionUI.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D6AE0F87267CFA6D00C6B048 /* Intents ExtensionUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D6AE0F96267CFA6D00C6B048 /* Intents Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D6AE0F7C267CFA6C00C6B048 /* Intents Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D6AE0F9F267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0F9E267CFB7D00C6B048 /* MessageIntentHandler.swift */; };
+		D6AE0FA0267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0F9E267CFB7D00C6B048 /* MessageIntentHandler.swift */; };
+		D6AE0FA1267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0F9E267CFB7D00C6B048 /* MessageIntentHandler.swift */; };
+		D6AE0FA3267CFB9300C6B048 /* FocusStatusIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FA2267CFB9300C6B048 /* FocusStatusIntentHandler.swift */; };
+		D6AE0FA4267CFB9300C6B048 /* FocusStatusIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FA2267CFB9300C6B048 /* FocusStatusIntentHandler.swift */; };
+		D6AE0FA5267CFB9300C6B048 /* FocusStatusIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FA2267CFB9300C6B048 /* FocusStatusIntentHandler.swift */; };
 		D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B230D225BC7FCE0082A41A /* SendableType.swift */; };
 		D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */; };
 		D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */; };
@@ -972,6 +978,8 @@
 		D6AE0F8B267CFA6D00C6B048 /* IntentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentViewController.swift; sourceTree = "<group>"; };
 		D6AE0F8E267CFA6D00C6B048 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		D6AE0F90267CFA6D00C6B048 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D6AE0F9E267CFB7D00C6B048 /* MessageIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageIntentHandler.swift; sourceTree = "<group>"; };
+		D6AE0FA2267CFB9300C6B048 /* FocusStatusIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusStatusIntentHandler.swift; sourceTree = "<group>"; };
 		D6B230D225BC7FCE0082A41A /* SendableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableType.swift; sourceTree = "<group>"; };
 		D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSectionHeader.swift; sourceTree = "<group>"; };
 		D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDateLabel.swift; sourceTree = "<group>"; };
@@ -1324,15 +1332,16 @@
 		D6356D8425A36AC00015104F /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				D64C6AA523307DB300DB7257 /* Ours.entitlements */,
 				D61EC0D621D30C0500204BEE /* API */,
 				D61EC0D321D30BBF00204BEE /* App */,
+				D6E65F17237791450061AA67 /* Collection View Management  */,
 				D61EC0D721D30C1400204BEE /* Extensions */,
 				D6D145F121D548F600CD8CE4 /* Flows */,
-				D6E65F17237791450061AA67 /* Collection View Management  */,
 				D61EC0CB21D3071500204BEE /* Info.plist */,
+				D6AE0F9D267CFB4D00C6B048 /* Intent Handlers */,
 				D66379DC25A39BC200A4A3B7 /* Managers */,
 				D6637A0925A39E0C00A4A3B7 /* Models */,
+				D64C6AA523307DB300DB7257 /* Ours.entitlements */,
 				D6637A0525A39D3700A4A3B7 /* Protocols */,
 				D6637A3325A3AC0500A4A3B7 /* UI */,
 			);
@@ -1902,6 +1911,15 @@
 			path = "Intents ExtensionUI";
 			sourceTree = "<group>";
 		};
+		D6AE0F9D267CFB4D00C6B048 /* Intent Handlers */ = {
+			isa = PBXGroup;
+			children = (
+				D6AE0F9E267CFB7D00C6B048 /* MessageIntentHandler.swift */,
+				D6AE0FA2267CFB9300C6B048 /* FocusStatusIntentHandler.swift */,
+			);
+			path = "Intent Handlers";
+			sourceTree = "<group>";
+		};
 		D6B2603522E6A97400143CF0 /* Layout */ = {
 			isa = PBXGroup;
 			children = (
@@ -2466,6 +2484,7 @@
 				D657175C2378C78500F8F96C /* MessageCellAttributesConfigurer.swift in Sources */,
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
+				D6AE0F9F267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
 				D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
@@ -2538,6 +2557,7 @@
 				D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */,
 				D6F80BE725C9C14000E9C75F /* CNContact+Extensions.swift in Sources */,
 				D61EC0F721D316F100204BEE /* Color.swift in Sources */,
+				D6AE0FA3267CFB9300C6B048 /* FocusStatusIntentHandler.swift in Sources */,
 				D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */,
 				D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */,
 				D64C6AA0232DC2B700DB7257 /* TypingIndicatorCell.swift in Sources */,
@@ -3052,6 +3072,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6AE0FA4267CFB9300C6B048 /* FocusStatusIntentHandler.swift in Sources */,
+				D6AE0FA0267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D6AE0F81267CFA6C00C6B048 /* IntentHandler.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3060,6 +3082,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6AE0FA5267CFB9300C6B048 /* FocusStatusIntentHandler.swift in Sources */,
+				D6AE0FA1267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D6AE0F8C267CFA6D00C6B048 /* IntentViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
