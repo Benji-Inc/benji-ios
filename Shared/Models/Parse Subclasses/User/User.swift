@@ -23,11 +23,11 @@ enum UserKey: String {
     case givenName
     case familyName
     case smallImage
-    case ritual
     case quePosition
     case status
     case handle
     case connectionPreferences
+    case focusStatus
 }
 
 enum UserStatus: String {
@@ -75,6 +75,11 @@ final class User: PFUser, Subscribeable {
             return UserStatus.init(rawValue: string)
         }
         set { self.setObject(for: .status, with: newValue?.rawValue) }
+    }
+
+    var focusStatus: String? {
+        get { return String(optional: self.getObject(for: .focusStatus)) }
+        set { self.setObject(for: .focusStatus, with: newValue) }
     }
 
     var connectionPreferences: [ConnectionPreference] {
