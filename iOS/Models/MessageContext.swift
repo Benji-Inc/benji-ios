@@ -15,28 +15,6 @@ enum MessageContext: String, CaseIterable {
     case passive
     case status
 
-    var title: Localized {
-        switch self {
-        case .timeSensitive:
-            return "Time-Sensitive ⏰"
-        case .passive:
-            return "Casual 😌"
-        case .status:
-            return ""
-        }
-    }
-
-    var text: Localized {
-        switch self {
-        case .timeSensitive:
-            return "Time-Sensitive"
-        case .passive:
-            return "Casual"
-        case .status:
-            return ""
-        }
-    }
-
     var color: Color {
         switch self {
         case .timeSensitive:
