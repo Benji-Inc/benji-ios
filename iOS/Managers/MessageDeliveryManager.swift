@@ -10,6 +10,7 @@ import Foundation
 import TwilioChatClient
 import Combine
 import TMROLocalization
+import Intents
 
 class MessageDeliveryManager {
 
@@ -122,6 +123,7 @@ class MessageDeliveryManager {
                     case .success(let options):
                         messagesObject.sendMessage(with: options, completion: { (result, message) in
                             if result.isSuccessful(), let msg = message {
+                                self.dontatIntent(for: msg, channel: channel)
                                 promise(.success(msg))
                             } else if let e = result.error {
                                 promise(.failure(e))
@@ -134,6 +136,13 @@ class MessageDeliveryManager {
                     }
                 }.store(in: &self.cancellables)
         }.eraseToAnyPublisher()
+    }
+
+    private func dontatIntent(for message: Messageable, channel: TCHChannel) {
+        let incomingMessageIntent: INSendMessageIntent = INSendMessageIntent(recipients: nil, outgoingMessageType: .outgoingMessageText, content: nil, speakableGroupName: nil, conversationIdentifier: nil, serviceName: nil, sender: nil, attachments: [])
+        let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
+        interaction.direction = .outgoing
+        interaction.donate(completion: nil)
     }
 
     private func getOptions(for kind: MessageKind, attributes: [String : Any] = [:]) -> Future<TCHMessageOptions, Error> {
