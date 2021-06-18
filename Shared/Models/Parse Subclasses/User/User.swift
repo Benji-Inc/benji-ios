@@ -37,7 +37,7 @@ enum UserStatus: String {
     case needsVerification // Has entered a phone number but not a verification code. 
 }
 
-final class User: PFUser, Subscribeable {
+final class User: PFUser {
 
     var phoneNumber: String? {
         get { return self.getObject(for: .phoneNumber) }
@@ -86,3 +86,5 @@ final class User: PFUser, Subscribeable {
         return self.getObject(for: .connectionPreferences) ?? []
     }
 }
+
+extension User: Subscribeable {}

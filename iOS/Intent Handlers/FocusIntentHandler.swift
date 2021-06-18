@@ -8,10 +8,16 @@
 
 import Foundation
 import Intents
+import Parse
 
 class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
 
     func handle(intent: INShareFocusStatusIntent, completion: @escaping (INShareFocusStatusIntentResponse) -> Void) {
+
+//        if let isFocused = intent.focusStatus?.isFocused, let current = User.current() {
+//
+//        }
+
         let response = INShareFocusStatusIntentResponse(code: .success, userActivity: nil)
         completion(response)
     }
