@@ -550,6 +550,9 @@
 		D6AE0FA3267CFB9300C6B048 /* FocusStatusIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FA2267CFB9300C6B048 /* FocusStatusIntentHandler.swift */; };
 		D6AE0FA4267CFB9300C6B048 /* FocusStatusIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FA2267CFB9300C6B048 /* FocusStatusIntentHandler.swift */; };
 		D6AE0FA5267CFB9300C6B048 /* FocusStatusIntentHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FA2267CFB9300C6B048 /* FocusStatusIntentHandler.swift */; };
+		D6AE0FAB267D037900C6B048 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
+		D6AE0FAC267D037900C6B048 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
+		D6AE0FAD267D037900C6B048 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
 		D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B230D225BC7FCE0082A41A /* SendableType.swift */; };
 		D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */; };
 		D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */; };
@@ -983,6 +986,7 @@
 		D6AE0FA6267D009B00C6B048 /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
 		D6AE0FA7267D00A500C6B048 /* Intents Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Intents Extension.entitlements"; sourceTree = "<group>"; };
 		D6AE0FA8267D00B000C6B048 /* Intents ExtensionUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Intents ExtensionUI.entitlements"; sourceTree = "<group>"; };
+		D6AE0FAA267D037900C6B048 /* User+INPerson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "User+INPerson.swift"; sourceTree = "<group>"; };
 		D6B230D225BC7FCE0082A41A /* SendableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableType.swift; sourceTree = "<group>"; };
 		D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSectionHeader.swift; sourceTree = "<group>"; };
 		D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDateLabel.swift; sourceTree = "<group>"; };
@@ -1484,10 +1488,7 @@
 				D63D71C025F0419D004C26F7 /* ConnectionPreference.swift */,
 				D6DF870525A5214D0089B0CF /* QuePositions.swift */,
 				D6D8BB6C24677B5D00937581 /* Reservation.swift */,
-				D6405B66236E002E00FAA06B /* User.swift */,
-				D609AE39236F44A8004FA89A /* User+Extensions.swift */,
-				D609AE35236F3F81004FA89A /* User+Objectable.swift */,
-				D62C9CBA266BDA5A00BB9632 /* UserPrefrences.swift */,
+				D6AE0FA9267D034D00C6B048 /* User */,
 			);
 			path = "Parse Subclasses";
 			sourceTree = "<group>";
@@ -1924,6 +1925,18 @@
 				D6AE0FA2267CFB9300C6B048 /* FocusStatusIntentHandler.swift */,
 			);
 			path = "Intent Handlers";
+			sourceTree = "<group>";
+		};
+		D6AE0FA9267D034D00C6B048 /* User */ = {
+			isa = PBXGroup;
+			children = (
+				D6405B66236E002E00FAA06B /* User.swift */,
+				D609AE39236F44A8004FA89A /* User+Extensions.swift */,
+				D609AE35236F3F81004FA89A /* User+Objectable.swift */,
+				D62C9CBA266BDA5A00BB9632 /* UserPrefrences.swift */,
+				D6AE0FAA267D037900C6B048 /* User+INPerson.swift */,
+			);
+			path = User;
 			sourceTree = "<group>";
 		};
 		D6B2603522E6A97400143CF0 /* Layout */ = {
@@ -2551,6 +2564,7 @@
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
 				D61D38E7248C494A00BE457B /* ChannelViewController+Messaging.swift in Sources */,
 				D6617CF926753E6800439C06 /* HomeCollectionView.swift in Sources */,
+				D6AE0FAB267D037900C6B048 /* User+INPerson.swift in Sources */,
 				D61EC0E421D30E9100204BEE /* TextView.swift in Sources */,
 				D657175E2378CEBA00F8F96C /* ChannelCollectionViewManager.swift in Sources */,
 				D609AE3C236F913F004FA89A /* Objectable.swift in Sources */,
@@ -2863,6 +2877,7 @@
 				D6792CE725FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
 				D63DB21A25E998F000F6B323 /* Router.swift in Sources */,
 				D63DB23E25E9992900F6B323 /* UNNotification+Extensions.swift in Sources */,
+				D6AE0FAD267D037900C6B048 /* User+INPerson.swift in Sources */,
 				D63DB1FE25E968C300F6B323 /* NotificationViewController.swift in Sources */,
 				D63DB27125E9997F00F6B323 /* ImageDisplayable.swift in Sources */,
 				D63DB25225E9995100F6B323 /* SessionManager.swift in Sources */,
@@ -2990,6 +3005,7 @@
 				D677589225B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D65519202589121500B901E4 /* NSObject+Extensions.swift in Sources */,
 				D655195B2589126800B901E4 /* User+Extensions.swift in Sources */,
+				D6AE0FAC267D037900C6B048 /* User+INPerson.swift in Sources */,
 				D655190E2589120100B901E4 /* Character+Extensions.swift in Sources */,
 				D65519292589122000B901E4 /* PhoneKit.swift in Sources */,
 				D65519782589129B00B901E4 /* ImageDisplayable.swift in Sources */,
