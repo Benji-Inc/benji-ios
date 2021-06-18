@@ -15,6 +15,25 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
 
     private var cancellables = Set<AnyCancellable>()
 
+    override init() {
+        super.init()
+        self.initializeParse()
+    }
+
+    private func initializeParse() {
+        if Parse.currentConfiguration == nil  {
+            let config = ParseClientConfiguration { configuration in
+                configuration.applicationGroupIdentifier = "group.com.BENJI"
+                configuration.containingApplicationBundleIdentifier = "com.Benji.Ours"
+                configuration.server = Config.shared.environment.url
+                configuration.applicationId = Config.shared.environment.appID
+                configuration.isLocalDatastoreEnabled = true
+            }
+            
+            Parse.initialize(with: config)
+        }
+    }
+
     func handle(intent: INShareFocusStatusIntent, completion: @escaping (INShareFocusStatusIntentResponse) -> Void) {
 
         if let isFocused = intent.focusStatus?.isFocused, let current = User.current() {
@@ -32,6 +51,7 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
                     let response = INShareFocusStatusIntentResponse(code: code, userActivity: nil)
                     completion(response)
                 } receiveValue: { _ in
+
                 }.store(in: &self.cancellables)
         }
     }
