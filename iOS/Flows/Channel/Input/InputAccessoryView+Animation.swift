@@ -62,7 +62,7 @@ extension InputAccessoryView {
             self.showAlertConfirmation()
         } else {
             self.alertAnimator?.stopAnimation(true)
-            self.currentContext = .casual
+            self.currentContext = .passive
             self.alertAnimator = UIViewPropertyAnimator(duration: 0.5,
                                                         curve: .linear,
                                                         animations: { [unowned self] in

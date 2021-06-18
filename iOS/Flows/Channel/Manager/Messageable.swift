@@ -74,7 +74,7 @@ extension Messageable {
             if self.isConsumed {
                 return .background3
             } else {
-                if self.context == .casual {
+                if self.context == .passive {
                     return .lightPurple
                 } else {
                     return self.context.color

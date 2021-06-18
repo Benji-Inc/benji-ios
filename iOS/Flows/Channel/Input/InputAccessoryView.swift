@@ -24,7 +24,7 @@ class InputAccessoryView: SwipeableInputAccessoryView, ActiveChannelAccessor {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.currentContext = .casual
+        self.currentContext = .passive
 
         self.inputContainerView.insertSubview(self.alertProgressView, belowSubview: self.textView)
         self.alertProgressView.set(backgroundColor: .red)
@@ -168,7 +168,7 @@ class InputAccessoryView: SwipeableInputAccessoryView, ActiveChannelAccessor {
     }
 
     func resetAlertProgress() {
-        self.currentContext = .casual
+        self.currentContext = .passive
         self.alertProgressView.width = 0
         self.alertProgressView.set(backgroundColor: .red)
         self.alertProgressView.alpha = 1

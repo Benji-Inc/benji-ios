@@ -118,7 +118,7 @@ extension TCHMessage: Messageable {
             return type
         }
 
-        return .casual
+        return .passive
     }
 
     var hasBeenConsumedBy: [String] {

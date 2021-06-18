@@ -17,7 +17,7 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
             .mainSink { (result) in
                 switch result {
                 case .success(let kind):
-                    let object = SendableObject(kind: kind, context: .casual)
+                    let object = SendableObject(kind: kind, context: .passive)
                     self.send(object: object)
                 case .error(_):
                     break

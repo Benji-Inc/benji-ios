@@ -14,7 +14,7 @@ enum MessageContext: String, CaseIterable {
     case emergency
     case timeSensitive
     case convenient
-    case casual
+    case passive
     case status
 
     var title: Localized {
@@ -25,7 +25,7 @@ enum MessageContext: String, CaseIterable {
             return "Time-Sensitive ⏰"
         case .convenient:
             return "When you have time 🙋🏻‍♂️"
-        case .casual:
+        case .passive:
             return "Casual 😌"
         case .status:
             return ""
@@ -40,7 +40,7 @@ enum MessageContext: String, CaseIterable {
             return "Time-Sensitive"
         case .convenient:
             return "When you have time"
-        case .casual:
+        case .passive:
             return "Casual"
         case .status:
             return ""
@@ -55,7 +55,7 @@ enum MessageContext: String, CaseIterable {
             return .orange
         case .convenient:
             return .green
-        case .casual:
+        case .passive:
             return .lightPurple
         case .status:
             return .background3

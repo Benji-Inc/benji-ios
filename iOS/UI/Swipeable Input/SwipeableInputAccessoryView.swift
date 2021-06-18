@@ -41,7 +41,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     let overlayButton = UIButton()
     var cancellables = Set<AnyCancellable>()
 
-    var currentContext: MessageContext = .casual {
+    var currentContext: MessageContext = .passive {
         didSet {
             self.borderColor = self.currentContext.color.color.cgColor
         }

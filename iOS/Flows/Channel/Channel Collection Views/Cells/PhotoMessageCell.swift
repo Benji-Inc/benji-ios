@@ -83,7 +83,7 @@ class PhotoMessageCell: BaseMessageCell {
 
         if !message.isFromCurrentUser, !message.isConsumed, message.context != .status {
 
-            if !message.isFromCurrentUser, message.context == .casual {
+            if !message.isFromCurrentUser, message.context == .passive {
                 self.bubbleView.layer.borderColor = Color.purple.color.cgColor
             } else {
                 self.bubbleView.layer.borderColor = message.context.color.color.cgColor

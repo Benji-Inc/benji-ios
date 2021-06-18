@@ -38,7 +38,7 @@ class MessageBubbleView: View, Indexable {
 
         let color: Color
 
-        if !message.isFromCurrentUser, message.context == .casual {
+        if !message.isFromCurrentUser, message.context == .passive {
             color = .purple
         } else {
             color = message.context.color

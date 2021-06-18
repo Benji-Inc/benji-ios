@@ -98,7 +98,7 @@ class MessageDeliveryManager {
     //MARK: MESSAGE HELPERS
 
     private func sendMessage(to channel: TCHChannel,
-                             context: MessageContext = .casual,
+                             context: MessageContext = .passive,
                              kind: MessageKind,
                              attributes: [String : Any] = [:]) -> AnyPublisher<Messageable, Error> {
 
