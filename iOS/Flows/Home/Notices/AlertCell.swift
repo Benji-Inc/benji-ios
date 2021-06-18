@@ -35,7 +35,7 @@ class AlertCell: NoticeCell {
         guard let body = item.body,
               let author = item.attributes?["author"] as? String else { return }
 
-        self.textView.set(text: body, messageContext: MessageContext.emergency)
+        self.textView.set(text: body, messageContext: MessageContext.timeSensitive)
 
         User.getObject(with: author).mainSink { result in
             switch result {

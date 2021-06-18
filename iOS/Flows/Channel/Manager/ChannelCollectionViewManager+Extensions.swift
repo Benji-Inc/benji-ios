@@ -25,7 +25,7 @@ extension ChannelCollectionViewManager {
             messageCopy.udpateConsumers(with: current)
                 .mainSink { copyWithConsumers in
                     self.updateItem(with: copyWithConsumers) {
-                        if message.context == .emergency {
+                        if message.context == .timeSensitive {
                             UIApplication.shared.applicationIconBadgeNumber = 0
                         }
 

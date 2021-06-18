@@ -52,13 +52,13 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
                                                                         if let msg = message, let _ = error {
                                                                             msg.status = .error
                                                                             self.collectionViewManager.updateItem(with: msg)
-                                                                            if msg.context == .emergency {
+                                                                            if msg.context == .timeSensitive {
                                                                                 self.showAlertSentToast(for: msg)
                                                                             }
                                                                         }
         }) else { return }
 
-        if systemMessage.context == .emergency {
+        if systemMessage.context == .timeSensitive {
             self.showAlertSentToast(for: systemMessage)
         }
 

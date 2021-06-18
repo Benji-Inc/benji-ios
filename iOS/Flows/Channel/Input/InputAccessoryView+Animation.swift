@@ -35,7 +35,7 @@ extension InputAccessoryView {
     }
 
     private func startAlertAnimation() {
-        self.currentContext = .emergency
+        self.currentContext = .timeSensitive
         self.alertAnimator?.stopAnimation(true)
         self.alertAnimator?.pausesOnCompletion = true
         self.selectionFeedback.impactOccurred()
