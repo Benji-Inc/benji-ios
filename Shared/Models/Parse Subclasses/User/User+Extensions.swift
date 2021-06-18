@@ -50,3 +50,5 @@ extension User {
         }
     }
 }
+
+extension User: Subscribeable {}

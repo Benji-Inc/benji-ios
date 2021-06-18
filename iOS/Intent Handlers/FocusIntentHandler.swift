@@ -9,17 +9,31 @@
 import Foundation
 import Intents
 import Parse
+import Combine
 
 class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
 
+    private var cancellables = Set<AnyCancellable>()
+
     func handle(intent: INShareFocusStatusIntent, completion: @escaping (INShareFocusStatusIntentResponse) -> Void) {
 
-//        if let isFocused = intent.focusStatus?.isFocused, let current = User.current() {
-//
-//        }
+        if let isFocused = intent.focusStatus?.isFocused, let current = User.current() {
 
-        let response = INShareFocusStatusIntentResponse(code: .success, userActivity: nil)
-        completion(response)
+            current.focusStatus = isFocused ? "focused" : "available"
+            current.saveToServer()
+                .sink { result in
+                    let code: INShareFocusStatusIntentResponseCode
+                    switch result {
+                    case .finished:
+                        code = .success
+                    case .failure(_):
+                        code = .failure
+                    }
+                    let response = INShareFocusStatusIntentResponse(code: code, userActivity: nil)
+                    completion(response)
+                } receiveValue: { _ in
+                }.store(in: &self.cancellables)
+        }
     }
 }
 

@@ -10,6 +10,7 @@ import Foundation
 import Contacts
 import Parse
 import Combine
+import Intents
 
 class HomeViewController: CollectionViewController<HomeCollectionViewManager.SectionType, HomeCollectionViewManager>, TransitionableViewController {
 
@@ -27,6 +28,22 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
 
     override func initializeViews() {
         super.initializeViews()
+
+        INFocusStatusCenter.default.requestAuthorization { status in
+            switch status {
+
+            case .notDetermined:
+                break
+            case .restricted:
+                break
+            case .denied:
+                break
+            case .authorized:
+                break
+            @unknown default:
+                break
+            }
+        }
 
         self.view.set(backgroundColor: .background1)
 

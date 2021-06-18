@@ -45,17 +45,17 @@ final class User: PFUser {
     }
 
     var givenName: String {
-        get { return String(optional: self.getObject(for: .givenName)) }
+        get { return self.getObject(for: .givenName) ?? String() }
         set { self.setObject(for: .givenName, with: newValue) }
     }
 
     var familyName: String {
-        get { return String(optional: self.getObject(for: .familyName)) }
+        get { return self.getObject(for: .familyName) ?? String() }
         set { self.setObject(for: .familyName, with: newValue) }
     }
 
     var handle: String {
-        get { return String(optional: self.getObject(for: .handle)) }
+        get { return self.getObject(for: .handle) ?? String() }
         set { self.setObject(for: .handle, with: newValue) }
     }
 
@@ -78,7 +78,7 @@ final class User: PFUser {
     }
 
     var focusStatus: String? {
-        get { return String(optional: self.getObject(for: .focusStatus)) }
+        get { return self.getObject(for: .focusStatus) }
         set { self.setObject(for: .focusStatus, with: newValue) }
     }
 
@@ -86,5 +86,3 @@ final class User: PFUser {
         return self.getObject(for: .connectionPreferences) ?? []
     }
 }
-
-extension User: Subscribeable {}

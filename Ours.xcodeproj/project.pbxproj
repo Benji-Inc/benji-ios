@@ -553,6 +553,27 @@
 		D6AE0FAB267D037900C6B048 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
 		D6AE0FAC267D037900C6B048 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
 		D6AE0FAD267D037900C6B048 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
+		D6AE0FE8267D2C1800C6B048 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
+		D6AE0FE9267D2C1900C6B048 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
+		D6AE0FEA267D2C1900C6B048 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6405B66236E002E00FAA06B /* User.swift */; };
+		D6AE0FEB267D2CA900C6B048 /* ConnectionPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71C025F0419D004C26F7 /* ConnectionPreference.swift */; };
+		D6AE0FEC267D2CA900C6B048 /* ConnectionPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71C025F0419D004C26F7 /* ConnectionPreference.swift */; };
+		D6AE0FED267D2CAA00C6B048 /* ConnectionPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63D71C025F0419D004C26F7 /* ConnectionPreference.swift */; };
+		D6AE0FEF267D2CBA00C6B048 /* Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE3B236F913F004FA89A /* Objectable.swift */; };
+		D6AE0FF1267D2CC900C6B048 /* ClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3B22CFCCD80055CC7C /* ClientError.swift */; };
+		D6AE0FF2267D2CCA00C6B048 /* ClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3B22CFCCD80055CC7C /* ClientError.swift */; };
+		D6AE0FF3267D2CCA00C6B048 /* ClientError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D646DB3B22CFCCD80055CC7C /* ClientError.swift */; };
+		D6AE0FF4267D2CD700C6B048 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CD25A3704300A4A3B7 /* SessionManager.swift */; };
+		D6AE0FF5267D2CD800C6B048 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CD25A3704300A4A3B7 /* SessionManager.swift */; };
+		D6AE0FF6267D2CD800C6B048 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379CD25A3704300A4A3B7 /* SessionManager.swift */; };
+		D6AE0FF7267D2CE400C6B048 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
+		D6AE0FF9267D2CE600C6B048 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
+		D6AE0FFA267D2CE700C6B048 /* Error+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D69EB4492457EB4500473530 /* Error+Extensions.swift */; };
+		D6AE0FFB267D2D9500C6B048 /* Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE3B236F913F004FA89A /* Objectable.swift */; };
+		D6AE0FFC267D2D9500C6B048 /* Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE3B236F913F004FA89A /* Objectable.swift */; };
+		D6AE0FFD267D2D9A00C6B048 /* User+Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE35236F3F81004FA89A /* User+Objectable.swift */; };
+		D6AE0FFE267D2D9B00C6B048 /* User+Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE35236F3F81004FA89A /* User+Objectable.swift */; };
+		D6AE0FFF267D2D9B00C6B048 /* User+Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE35236F3F81004FA89A /* User+Objectable.swift */; };
 		D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B230D225BC7FCE0082A41A /* SendableType.swift */; };
 		D6B2601622E41BE700143CF0 /* ChannelSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */; };
 		D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */; };
@@ -3171,7 +3192,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6AE0FF1267D2CC900C6B048 /* ClientError.swift in Sources */,
+				D6AE0FEB267D2CA900C6B048 /* ConnectionPreference.swift in Sources */,
+				D6AE0FF4267D2CD700C6B048 /* SessionManager.swift in Sources */,
+				D6AE0FF7267D2CE400C6B048 /* Error+Extensions.swift in Sources */,
+				D6AE0FE8267D2C1800C6B048 /* User.swift in Sources */,
+				D6AE0FFD267D2D9A00C6B048 /* User+Objectable.swift in Sources */,
 				D6AE0F70267CF9CA00C6B048 /* NotificationService.swift in Sources */,
+				D6AE0FFC267D2D9500C6B048 /* Objectable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3179,9 +3207,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6AE0FEC267D2CA900C6B048 /* ConnectionPreference.swift in Sources */,
+				D6AE0FE9267D2C1900C6B048 /* User.swift in Sources */,
+				D6AE0FF9267D2CE600C6B048 /* Error+Extensions.swift in Sources */,
+				D6AE0FFE267D2D9B00C6B048 /* User+Objectable.swift in Sources */,
 				D6AE0FA4267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */,
 				D6AE0FA0267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D6AE0F81267CFA6C00C6B048 /* IntentHandler.swift in Sources */,
+				D6AE0FF5267D2CD800C6B048 /* SessionManager.swift in Sources */,
+				D6AE0FF2267D2CCA00C6B048 /* ClientError.swift in Sources */,
+				D6AE0FFB267D2D9500C6B048 /* Objectable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3189,9 +3224,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6AE0FED267D2CAA00C6B048 /* ConnectionPreference.swift in Sources */,
+				D6AE0FEA267D2C1900C6B048 /* User.swift in Sources */,
+				D6AE0FFA267D2CE700C6B048 /* Error+Extensions.swift in Sources */,
+				D6AE0FFF267D2D9B00C6B048 /* User+Objectable.swift in Sources */,
+				D6AE0FEF267D2CBA00C6B048 /* Objectable.swift in Sources */,
 				D6AE0FA5267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */,
 				D6AE0FA1267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D6AE0F8C267CFA6D00C6B048 /* IntentViewController.swift in Sources */,
+				D6AE0FF6267D2CD800C6B048 /* SessionManager.swift in Sources */,
+				D6AE0FF3267D2CCA00C6B048 /* ClientError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3594,6 +3636,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Benji.Ours.NotificationService;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = NOTIFICATION_SERVICE;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3656,6 +3699,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Benji.Ours.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = INTENTS_UI;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3687,6 +3731,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Benji.Ours.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = INTENTS_DEBUG;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -3718,6 +3763,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Benji.Ours.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = INTENTS;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
