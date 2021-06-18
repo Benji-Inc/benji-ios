@@ -4,7 +4,7 @@ platform :ios, '14.0'
 def shared_pods
   pod 'Parse'
   pod 'GestureRecognizerClosures'
-  pod 'PhoneNumberKit'
+#  pod 'PhoneNumberKit'
   pod 'ParseLiveQuery'
 
   pod 'TMROCoordinator'
