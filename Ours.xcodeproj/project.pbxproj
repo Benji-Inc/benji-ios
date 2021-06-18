@@ -452,7 +452,6 @@
 		D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F426402B9800BF2B8D /* ToastScheduler.swift */; };
 		D672C31C2644342F00C9E878 /* ChannelContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D672C31B2644342F00C9E878 /* ChannelContentView.swift */; };
 		D6730ECB2649F14F00B5DC16 /* AVURLAsset+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */; };
-		D6730ECE264ACB1200B5DC16 /* LightCompressor in Frameworks */ = {isa = PBXBuildFile; productRef = D6730ECD264ACB1200B5DC16 /* LightCompressor */; };
 		D6748CBE262DAF280095F4B1 /* ReservationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6748CBD262DAF280095F4B1 /* ReservationsViewController.swift */; };
 		D677588325B09F4D007E0184 /* Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588225B09F4D007E0184 /* Transitionable.swift */; };
 		D677588425B09F4D007E0184 /* Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588225B09F4D007E0184 /* Transitionable.swift */; };
@@ -1025,7 +1024,6 @@
 				D6D804B526693AE700741594 /* SDWebImageLinkPlugin in Frameworks */,
 				D658C7DD24425E410027D12E /* HealthKit.framework in Frameworks */,
 				D5913FD2104D7480AB2029C6 /* Pods_Ours.framework in Frameworks */,
-				D6730ECE264ACB1200B5DC16 /* LightCompressor in Frameworks */,
 				D6E33899265808EC00BE3C24 /* TwilioChatClient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1959,7 +1957,6 @@
 			);
 			name = Ours;
 			packageProductDependencies = (
-				D6730ECD264ACB1200B5DC16 /* LightCompressor */,
 				D6E33898265808EC00BE3C24 /* TwilioChatClient */,
 				D6D804B426693AE700741594 /* SDWebImageLinkPlugin */,
 			);
@@ -2047,7 +2044,6 @@
 			);
 			mainGroup = D61EC0B321D3071400204BEE;
 			packageReferences = (
-				D6730ECC264ACB1200B5DC16 /* XCRemoteSwiftPackageReference "LightCompressor_iOS" */,
 				D6E33897265808EC00BE3C24 /* XCRemoteSwiftPackageReference "twilio-chat-ios" */,
 				D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */,
 			);
@@ -3194,14 +3190,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D6730ECC264ACB1200B5DC16 /* XCRemoteSwiftPackageReference "LightCompressor_iOS" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/AbedElazizShe/LightCompressor_iOS.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.1.8;
-			};
-		};
 		D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageLinkPlugin.git";
@@ -3221,11 +3209,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D6730ECD264ACB1200B5DC16 /* LightCompressor */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6730ECC264ACB1200B5DC16 /* XCRemoteSwiftPackageReference "LightCompressor_iOS" */;
-			productName = LightCompressor;
-		};
 		D6D804B426693AE700741594 /* SDWebImageLinkPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */;
