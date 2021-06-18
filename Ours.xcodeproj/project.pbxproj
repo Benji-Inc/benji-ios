@@ -1261,7 +1261,6 @@
 		D61EC0B321D3071400204BEE = {
 			isa = PBXGroup;
 			children = (
-				D6AE0FA6267D009B00C6B048 /* NotificationService.entitlements */,
 				D6356D7E25A369F80015104F /* Shared */,
 				D6356D8425A36AC00015104F /* iOS */,
 				D6884B0F2587D25C00DA380E /* App Clip */,
@@ -1932,6 +1931,7 @@
 		D6AE0F6E267CF9CA00C6B048 /* Notification Service */ = {
 			isa = PBXGroup;
 			children = (
+				D6AE0FA6267D009B00C6B048 /* NotificationService.entitlements */,
 				D6AE0F6F267CF9CA00C6B048 /* NotificationService.swift */,
 				D6AE0F71267CF9CA00C6B048 /* Info.plist */,
 			);
@@ -3584,7 +3584,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 58361BE3E111762AC2D79605 /* Pods-NotificationService.debug.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = NotificationService.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "Notification Service/NotificationService.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
@@ -3615,7 +3615,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 0F9025F524FF835237D79B76 /* Pods-NotificationService.release.xcconfig */;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = NotificationService.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "Notification Service/NotificationService.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
