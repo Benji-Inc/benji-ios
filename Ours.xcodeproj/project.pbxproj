@@ -980,6 +980,9 @@
 		D6AE0F90267CFA6D00C6B048 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D6AE0F9E267CFB7D00C6B048 /* MessageIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageIntentHandler.swift; sourceTree = "<group>"; };
 		D6AE0FA2267CFB9300C6B048 /* FocusStatusIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusStatusIntentHandler.swift; sourceTree = "<group>"; };
+		D6AE0FA6267D009B00C6B048 /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
+		D6AE0FA7267D00A500C6B048 /* Intents Extension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Intents Extension.entitlements"; sourceTree = "<group>"; };
+		D6AE0FA8267D00B000C6B048 /* Intents ExtensionUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Intents ExtensionUI.entitlements"; sourceTree = "<group>"; };
 		D6B230D225BC7FCE0082A41A /* SendableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableType.swift; sourceTree = "<group>"; };
 		D6B2601522E41BE700143CF0 /* ChannelSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSectionHeader.swift; sourceTree = "<group>"; };
 		D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDateLabel.swift; sourceTree = "<group>"; };
@@ -1213,6 +1216,7 @@
 		D61EC0B321D3071400204BEE = {
 			isa = PBXGroup;
 			children = (
+				D6AE0FA6267D009B00C6B048 /* NotificationService.entitlements */,
 				D6356D7E25A369F80015104F /* Shared */,
 				D6356D8425A36AC00015104F /* iOS */,
 				D6884B0F2587D25C00DA380E /* App Clip */,
@@ -1895,6 +1899,7 @@
 		D6AE0F7F267CFA6C00C6B048 /* Intents Extension */ = {
 			isa = PBXGroup;
 			children = (
+				D6AE0FA7267D00A500C6B048 /* Intents Extension.entitlements */,
 				D6AE0F80267CFA6C00C6B048 /* IntentHandler.swift */,
 				D6AE0F82267CFA6C00C6B048 /* Info.plist */,
 			);
@@ -1904,6 +1909,7 @@
 		D6AE0F8A267CFA6D00C6B048 /* Intents ExtensionUI */ = {
 			isa = PBXGroup;
 			children = (
+				D6AE0FA8267D00B000C6B048 /* Intents ExtensionUI.entitlements */,
 				D6AE0F8B267CFA6D00C6B048 /* IntentViewController.swift */,
 				D6AE0F8D267CFA6D00C6B048 /* MainInterface.storyboard */,
 				D6AE0F90267CFA6D00C6B048 /* Info.plist */,
@@ -3434,6 +3440,7 @@
 		D6AE0F75267CF9CA00C6B048 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NotificationService.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
@@ -3460,6 +3467,7 @@
 		D6AE0F76267CF9CA00C6B048 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = NotificationService.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
@@ -3486,6 +3494,7 @@
 		D6AE0F98267CFA6D00C6B048 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Intents ExtensionUI/Intents ExtensionUI.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
@@ -3512,6 +3521,7 @@
 		D6AE0F99267CFA6D00C6B048 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Intents ExtensionUI/Intents ExtensionUI.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
@@ -3538,6 +3548,7 @@
 		D6AE0F9B267CFA6D00C6B048 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Intents Extension/Intents Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
@@ -3564,6 +3575,7 @@
 		D6AE0F9C267CFA6D00C6B048 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Intents Extension/Intents Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
