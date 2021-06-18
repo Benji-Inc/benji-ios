@@ -1207,7 +1207,7 @@
 			children = (
 				D6356D7E25A369F80015104F /* Shared */,
 				D6356D8425A36AC00015104F /* iOS */,
-				D6884B0F2587D25C00DA380E /* iOS Clip */,
+				D6884B0F2587D25C00DA380E /* App Clip */,
 				D63DB1FC25E968C300F6B323 /* Notification Content */,
 				D6AE0F6E267CF9CA00C6B048 /* Notification Service */,
 				D6AE0F7F267CFA6C00C6B048 /* Intents Extension */,
@@ -1826,13 +1826,13 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		D6884B0F2587D25C00DA380E /* iOS Clip */ = {
+		D6884B0F2587D25C00DA380E /* App Clip */ = {
 			isa = PBXGroup;
 			children = (
 				D6884B1E2587D25D00DA380E /* Info.plist */,
 				D6884B1F2587D25D00DA380E /* AppClip.entitlements */,
 			);
-			path = "iOS Clip";
+			path = "App Clip";
 			sourceTree = "<group>";
 		};
 		D68BEAD224831F7C00C95D31 /* Reservations */ = {
@@ -3358,11 +3358,11 @@
 				API_TARGET = STAGING;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "iOS Clip/AppClip.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "App Clip/AppClip.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
-				INFOPLIST_FILE = "iOS Clip/Info.plist";
+				INFOPLIST_FILE = "App Clip/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3386,11 +3386,11 @@
 				API_TARGET = PRODUCTION;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "iOS Clip/AppClip.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "App Clip/AppClip.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
-				INFOPLIST_FILE = "iOS Clip/Info.plist";
+				INFOPLIST_FILE = "App Clip/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
