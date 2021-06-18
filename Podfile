@@ -5,7 +5,6 @@ def shared_pods
   pod 'Parse'
   pod 'GestureRecognizerClosures'
   pod 'PhoneNumberKit'
-  pod 'lottie-ios'
   pod 'ParseLiveQuery'
 
   pod 'TMROCoordinator'
