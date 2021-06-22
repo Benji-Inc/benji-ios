@@ -193,7 +193,6 @@
 		D63DB27025E9997F00F6B323 /* Deeplinkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FCE22BF060500BA277D /* Deeplinkable.swift */; };
 		D63DB27125E9997F00F6B323 /* ImageDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */; };
 		D63DB27225E9997F00F6B323 /* ResourceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502821D6085200CD8CE4 /* ResourceObject.swift */; };
-		D63DB27325E9997F00F6B323 /* Subscribeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E859BA25DAD4EA003D1DE9 /* Subscribeable.swift */; };
 		D63DB27425E9997F00F6B323 /* AnyHashableDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715A23B84C5C000ED221 /* AnyHashableDisplayable.swift */; };
 		D63DB27525E9998A00F6B323 /* error.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328C25AF3CA500139396 /* error.json */; };
 		D63DB27625E9998A00F6B323 /* arrow.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328B25AF3CA500139396 /* arrow.json */; };
@@ -495,6 +494,9 @@
 		D67934DB23DC011D00536B44 /* CharacterCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67934DA23DC011D00536B44 /* CharacterCountView.swift */; };
 		D67934DF23DDFC4200536B44 /* PFInstallation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67934DE23DDFC4200536B44 /* PFInstallation+Extensions.swift */; };
 		D67934E523DE66FE00536B44 /* PushPayload.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67934E423DE66FE00536B44 /* PushPayload.swift */; };
+		D679DE0C26821EE70054DCAF /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */; };
+		D679DE0D26821EE80054DCAF /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */; };
+		D679DE0E26821EE80054DCAF /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */; };
 		D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67A82DA230CCE3D0076152B /* SplashViewController.swift */; };
 		D6830222234AA35C006145FE /* DisplayableChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6830221234AA35C006145FE /* DisplayableChannel.swift */; };
 		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
@@ -656,8 +658,6 @@
 		D6E33899265808EC00BE3C24 /* TwilioChatClient in Frameworks */ = {isa = PBXBuildFile; productRef = D6E33898265808EC00BE3C24 /* TwilioChatClient */; };
 		D6E4C7FB238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */; };
 		D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E65F18237791650061AA67 /* ManageableCell.swift */; };
-		D6E859BB25DAD4EA003D1DE9 /* Subscribeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E859BA25DAD4EA003D1DE9 /* Subscribeable.swift */; };
-		D6E859C325DAD56D003D1DE9 /* Subscribeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E859BA25DAD4EA003D1DE9 /* Subscribeable.swift */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
 		D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
@@ -1081,7 +1081,6 @@
 		D6DF870525A5214D0089B0CF /* QuePositions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuePositions.swift; sourceTree = "<group>"; };
 		D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelHeaderAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D6E65F18237791650061AA67 /* ManageableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageableCell.swift; sourceTree = "<group>"; };
-		D6E859BA25DAD4EA003D1DE9 /* Subscribeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscribeable.swift; sourceTree = "<group>"; };
 		D6EAC95423D145350028DAA2 /* Sizeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sizeable.swift; sourceTree = "<group>"; };
 		D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionViewController.swift; sourceTree = "<group>"; };
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
@@ -1642,7 +1641,6 @@
 				D6D1502821D6085200CD8CE4 /* ResourceObject.swift */,
 				D686DA5C25799EB6000B4C04 /* Statusable.swift */,
 				D6884AC725800FC600DA380E /* StatusableRequest.swift */,
-				D6E859BA25DAD4EA003D1DE9 /* Subscribeable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -1666,11 +1664,11 @@
 				D646DB3B22CFCCD80055CC7C /* ClientError.swift */,
 				D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */,
 				D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */,
+				D6D39278265AAAA700E49F1E /* MicroAnimation.swift */,
 				D6405B65236E001A00FAA06B /* Parse Subclasses */,
 				D67934E423DE66FE00536B44 /* PushPayload.swift */,
 				D642735222C85B740088256B /* SystemAvatar.swift */,
 				D61EC0EF21D313D900204BEE /* View Models */,
-				D6D39278265AAAA700E49F1E /* MicroAnimation.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -2759,7 +2757,6 @@
 				D61EC0EC21D312B600204BEE /* UIView+Extensions.swift in Sources */,
 				D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */,
 				D61ACF86262898520052CE29 /* CollectionViewInputHandler.swift in Sources */,
-				D6E859BB25DAD4EA003D1DE9 /* Subscribeable.swift in Sources */,
 				D6F33C6D24B14988009603FF /* PhotoCellAttributesConfigurer.swift in Sources */,
 				D60C814622092F6B00A127A3 /* Button.swift in Sources */,
 				D6D1503721D7E74500CD8CE4 /* UIViewController+Extensions.swift in Sources */,
@@ -2982,7 +2979,6 @@
 				D63DB25425E9995700F6B323 /* AnimationDuration.swift in Sources */,
 				D63DB25025E9995100F6B323 /* LaunchManager.swift in Sources */,
 				D63DB23525E9992600F6B323 /* UIView+Layout.swift in Sources */,
-				D63DB27325E9997F00F6B323 /* Subscribeable.swift in Sources */,
 				D63DB28B25E999A600F6B323 /* SwitchableContentViewController.swift in Sources */,
 				D63DB23F25E9993800F6B323 /* AvatarContextDelegate.swift in Sources */,
 				D63DB28825E999A100F6B323 /* FaceDetectionViewController+Extensions.swift in Sources */,
@@ -3191,7 +3187,6 @@
 				D63DB20C25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */,
 				D66379FE25A39C6000A4A3B7 /* UserNotificationFactory.swift in Sources */,
 				D65518F82589109100B901E4 /* AppDelegate.swift in Sources */,
-				D6E859C325DAD56D003D1DE9 /* Subscribeable.swift in Sources */,
 				D6617CF126743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D6551A4A25895EB200B901E4 /* Switchable.swift in Sources */,
 				D65519412589122C00B901E4 /* UNNotification+Extensions.swift in Sources */,
@@ -3212,6 +3207,7 @@
 				D6AE0FF4267D2CD700C6B048 /* SessionManager.swift in Sources */,
 				D6AE0FF7267D2CE400C6B048 /* Error+Extensions.swift in Sources */,
 				D6AE0FE8267D2C1800C6B048 /* User.swift in Sources */,
+				D679DE0C26821EE70054DCAF /* NSObject+Extensions.swift in Sources */,
 				D6AE0FFD267D2D9A00C6B048 /* User+Objectable.swift in Sources */,
 				D66ED459267D4B1200332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0F70267CF9CA00C6B048 /* NotificationService.swift in Sources */,
@@ -3230,6 +3226,7 @@
 				D66ED457267D35E100332BA3 /* Config.swift in Sources */,
 				D66ED45A267D4B1300332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0FA4267CFB9300C6B048 /* FocusIntentHandler.swift in Sources */,
+				D679DE0D26821EE80054DCAF /* NSObject+Extensions.swift in Sources */,
 				D6AE0FA0267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D6AE0F81267CFA6C00C6B048 /* IntentHandler.swift in Sources */,
 				D66ED45D267D4B4000332BA3 /* Array+Extensions.swift in Sources */,
@@ -3243,6 +3240,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D679DE0E26821EE80054DCAF /* NSObject+Extensions.swift in Sources */,
 				D6AE0FED267D2CAA00C6B048 /* ConnectionPreference.swift in Sources */,
 				D6AE0FEA267D2C1900C6B048 /* User.swift in Sources */,
 				D6AE0FFA267D2CE700C6B048 /* Error+Extensions.swift in Sources */,

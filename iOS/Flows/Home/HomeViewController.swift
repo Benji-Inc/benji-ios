@@ -29,21 +29,26 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
     override func initializeViews() {
         super.initializeViews()
 
-        INFocusStatusCenter.default.requestAuthorization { status in
-            switch status {
+//        INFocusStatusCenter.default.requestAuthorization { status in
+//            switch status {
+//
+//            case .notDetermined:
+//                break
+//            case .restricted:
+//                break
+//            case .denied:
+//                break
+//            case .authorized:
+//                break
+//            @unknown default:
+//                break
+//            }
+//        }
 
-            case .notDetermined:
-                break
-            case .restricted:
-                break
-            case .denied:
-                break
-            case .authorized:
-                break
-            @unknown default:
-                break
-            }
-        }
+        ConnectionsManager.shared.$userUpdated.mainSink { user in
+            guard let u = user else { return }
+            print("FOCUS: \(String(describing: u.focusStatus))")
+        }.store(in: &self.cancellables)
 
         self.view.set(backgroundColor: .background1)
 

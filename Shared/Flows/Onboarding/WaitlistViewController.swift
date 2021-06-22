@@ -20,6 +20,12 @@ class WaitlistViewController: ViewController, Sizeable {
 
     @Published var didShowUpgrade: Bool = false
 
+#if APPCLIP
+    private let userQuery = User.query()
+#endif
+
+    private let queQuery = QuePostions.query()
+
     lazy var skOverlay: SKOverlay = {
         let config = SKOverlay.AppClipConfiguration(position: .bottom)
         let overlay = SKOverlay(configuration: config)
@@ -38,32 +44,39 @@ class WaitlistViewController: ViewController, Sizeable {
         super.viewDidLoad()
 
         #if APPCLIP
-        User.current()?.subscribe()
-            .mainSink(receivedResult: { result in
-                switch result {
-                case .success(let event):
-                    switch event {
-                    case .entered(let u), .left(let u), .created(let u), .updated(let u), .deleted(let u):
-                        if u.status == .inactive || u.status == .active {
-                            self.loadUpgrade()
-                        }
+        if let query = self.userQuery, let objectId = User.current()?.objectId {
+
+            query.whereKey("objectId", equalTo: objectId)
+
+            let subscription = Client.shared.subscribe(query)
+
+            subscription.handleEvent { query, event in
+                switch event {
+                case .entered(let u), .left(let u), .created(let u), .updated(let u), .deleted(let u):
+                    guard let user = u as? User else { return }
+                    if user.status == .inactive || user.status == .active {
+                        self.loadUpgrade()
                     }
-                case .error(_):
-                    break
                 }
-            }).store(in: &self.cancellables)
-
-        #endif
-
-        QuePostions.subscription.handle(Event.entered) { [unowned self] (query, object) in
-            if let que = object as? QuePostions {
-                self.loadWaitlist(for: que)
             }
         }
 
-        QuePostions.subscription.handle(Event.updated) { [unowned self] (query, object) in
-            if let que = object as? QuePostions {
-                self.loadWaitlist(for: que)
+        #endif
+
+        if let query = self.queQuery {
+            let subscription = Client.shared.subscribe(query)
+
+            subscription.handleEvent { query, event in
+                switch event {
+                case .entered(let u):
+                    guard let que = u as? QuePostions else { return }
+                    self.loadWaitlist(for: que)
+                case .updated(let u):
+                    guard let que = u as? QuePostions else { return }
+                    self.loadWaitlist(for: que)
+                default: 
+                    break
+                }
             }
         }
     }

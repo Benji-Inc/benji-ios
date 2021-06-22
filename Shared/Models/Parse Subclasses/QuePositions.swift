@@ -22,14 +22,6 @@ final class QuePostions: PFObject, PFSubclassing {
         return String(describing: self)
     }
 
-    static var subscription: Subscription<PFObject> {
-        if let query = QuePostions.query() {
-            return Client.shared.subscribe(query)
-        } else {
-            fatalError()
-        }
-    }
-
     var max: Int {
         return self.getObject(for: .max) ?? 0
     }

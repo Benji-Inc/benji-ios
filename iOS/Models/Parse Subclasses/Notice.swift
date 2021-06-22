@@ -16,7 +16,7 @@ enum NoticeKey: String {
     case body
 }
 
-final class Notice: PFObject, PFSubclassing, Subscribeable {
+final class Notice: PFObject, PFSubclassing {
 
     enum NoticeType: String {
         case alert = "ALERT_MESSAGE"

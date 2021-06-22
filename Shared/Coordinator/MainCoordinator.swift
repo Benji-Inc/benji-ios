@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Combine
+import Parse
 
 class MainCoordinator: Coordinator<Void> {
 
@@ -18,6 +19,7 @@ class MainCoordinator: Coordinator<Void> {
 
     lazy var splashVC = SplashViewController()
     var cancellables = Set<AnyCancellable>()
+    lazy var userQuery = User.query() // Will crash if initialized before parse registers the subclass
 
     override func start() {
         super.start()
@@ -164,6 +166,7 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     func showLogOutAlert() {
+
         let alert = UIAlertController(title: "🙀",
                                       message: "Someone tripped over a 🐈 and ☠️ the mainframe.",
                                       preferredStyle: .alert)
@@ -173,7 +176,10 @@ class MainCoordinator: Coordinator<Void> {
 
         alert.addAction(ok)
 
-        self.router.topmostViewController.present(alert, animated: true, completion: nil)
+        if self.router.topmostViewController is UIAlertController {
+        } else {
+            self.router.topmostViewController.present(alert, animated: true, completion: nil)
+        }
     }
 
     private func logOut() {

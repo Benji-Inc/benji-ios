@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ParseLiveQuery
 
 extension MainCoordinator: UserNotificationManagerDelegate {
     func userNotificationManager(willHandle deeplink: DeepLinkable) {
@@ -34,14 +35,21 @@ extension MainCoordinator: LaunchManagerDelegate {
     }
 
     func subscribeToUserUpdates() {
-        User.current()?.subscribe().mainSink(receiveValue: { (event) in
-            switch event {
-            case .deleted(_):
-                self.showLogOutAlert()
-            default:
-                break
+        if let query = self.userQuery, let objectId = User.current()?.objectId {
+
+            query.whereKey("objectId", equalTo: objectId)
+
+            let subscription = Client.shared.subscribe(query)
+
+            subscription.handleEvent { query, event in
+                switch event {
+                case .deleted(_):
+                    self.showLogOutAlert()
+                default:
+                    break
+                }
             }
-        }).store(in: &self.cancellables)
+        }
     }
 
     #if APPCLIP
