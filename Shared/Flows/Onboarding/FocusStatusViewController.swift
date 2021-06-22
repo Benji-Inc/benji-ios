@@ -20,7 +20,7 @@ class FocusStatusViewController: ViewController, Sizeable, Completable {
 
         self.view.addSubview(self.button)
         self.button.set(style: .normal(color: .purple, text: "Allow"))
-        
+
         self.button.didSelect { [unowned self] in
             INFocusStatusCenter.default.requestAuthorization { status in
                 self.complete(with: .success(status))

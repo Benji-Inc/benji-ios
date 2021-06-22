@@ -10,6 +10,7 @@ import Foundation
 import Parse
 import TMROLocalization
 import Lottie
+import Intents
 
 protocol OnboardingViewControllerDelegate: AnyObject {
     func onboardingView(_ controller: OnboardingViewController, didVerify user: PFUser)
@@ -32,6 +33,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var nameVC = NameViewController()
     lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
+    lazy var focusVC = FocusStatusViewController()
 
     let loadingBlur = BlurView()
     let blurEffect = UIBlurEffect(style: .systemMaterial)
@@ -144,7 +146,16 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.photoVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
-                if let user = User.current() {
+                self.current = .focus(self.focusVC)
+            case .failure(_):
+                break
+            }
+        }
+
+        self.focusVC.onDidComplete = { [unowned self] result in
+            switch result {
+            case .success(let status):
+                if status == .authorized, let user = User.current() {
                     self.delegate.onboardingView(self, didVerify: user)
                 }
             case .failure(_):
@@ -265,6 +276,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             case .finish:
                 return LocalizedString.empty
             }
+        case .focus(_):
+            return LocalizedString(id: "", arguments: [], default: "Add Focus")
         }
     }
 
@@ -345,6 +358,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             } else {
                 return LocalizedString.empty
             }
+        case .focus(_):
+            return LocalizedString(id: "", arguments: [], default: "Ours works with your focus to better help others know how to communicate with you.")
         }
     }
 

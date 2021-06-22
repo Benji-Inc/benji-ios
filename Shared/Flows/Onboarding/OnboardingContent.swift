@@ -17,6 +17,7 @@ enum OnboardingContent: Switchable {
     case name(NameViewController)
     case waitlist(WaitlistViewController)
     case photo(PhotoViewController)
+    case focus(FocusStatusViewController)
 
     var viewController: UIViewController & Sizeable {
         switch self {
@@ -32,6 +33,7 @@ enum OnboardingContent: Switchable {
             return vc
         case .photo(let vc):
             return vc
+        case .focus(let vc)
         }
     }
 
@@ -49,6 +51,8 @@ enum OnboardingContent: Switchable {
             return false 
         case .photo(_):
             return true
+        case .focus(_):
+            return false 
         }
     }
 }
