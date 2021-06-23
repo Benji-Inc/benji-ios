@@ -14,13 +14,17 @@ extension ProfilePhotoViewController {
 
     func setupMetal() {
         self.metalDevice = MTLCreateSystemDefaultDevice()
-        self.metalCommandQueue = metalDevice.makeCommandQueue()
+        self.metalCommandQueue = self.metalDevice.makeCommandQueue()
 
-        self.cameraView.device = metalDevice
+        self.cameraView.device = self.metalDevice
         self.cameraView.isPaused = true
         self.cameraView.enableSetNeedsDisplay = false
         self.cameraView.delegate = self
         self.cameraView.framebufferOnly = false
+    }
+
+    func setupCoreImage() {
+        self.ciContext = CIContext(mtlDevice: self.metalDevice)
     }
 }
 
@@ -28,7 +32,7 @@ extension ProfilePhotoViewController: MTKViewDelegate {
     
     func draw(in view: MTKView) {
         // grab command buffer so we can encode instructions to GPU
-        guard let commandBuffer = metalCommandQueue.makeCommandBuffer() else {
+        guard let commandBuffer = self.metalCommandQueue.makeCommandBuffer() else {
             return
         }
 
