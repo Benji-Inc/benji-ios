@@ -75,7 +75,7 @@ extension ProfilePhotoViewController: AVCaptureVideoDataOutputSampleBufferDelega
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         // Grab the pixelbuffer frame from the camera output
         guard let pixelBuffer = sampleBuffer.imageBuffer else { return }
-       // processVideoFrame(pixelBuffer)
+        self.processVideoFrame(pixelBuffer)
     }
 }
 
