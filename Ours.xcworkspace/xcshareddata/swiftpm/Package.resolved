@@ -2,7 +2,7 @@
   "object": {
     "pins": [
       {
-        "package": "lottie-ios",
+        "package": "Lottie",
         "repositoryURL": "https://github.com/airbnb/lottie-ios.git",
         "state": {
           "branch": null,
@@ -38,7 +38,7 @@
         }
       },
       {
-        "package": "twilio-chat-ios",
+        "package": "TwilioChatClient",
         "repositoryURL": "https://github.com/twilio/twilio-chat-ios",
         "state": {
           "branch": null,
