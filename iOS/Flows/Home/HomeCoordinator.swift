@@ -36,6 +36,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             self.didSelectReservations()
         }
 
+        self.homeVC.collectionViewManager.didSelectProfilePhoto = { [unowned self] in
+            self.didSelectProfilePhoto()
+        }
+
         self.homeVC.collectionViewManager.$onSelectedItem.mainSink { selection in
             guard let value = selection else { return }
             switch value.section {
@@ -133,6 +137,12 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) {}
         self.router.present(coordinator, source: self.homeVC)
+    }
+
+    private func didSelectProfilePhoto() {
+        guard let vc = UIStoryboard(name: "ProfilePhoto", bundle: nil).instantiateViewController(withIdentifier: "ProfilePhoto") as? ProfilePhotoViewController else { return }
+
+        self.router.present(vc, source: self.homeVC)
     }
 
     func didTapAdd() {

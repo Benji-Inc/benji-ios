@@ -11,8 +11,14 @@ import Vision
 import MetalKit
 import AVFoundation
 
-class ProfilePhotoViewController: ViewController {
+class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
 
+    func toPresentable() -> DismissableVC {
+        return self
+    }
+
+    var dismissHandlers: [DismissHandler] = []
+    
     // The Vision requests and the handler to perform them.
     private let requestHandler = VNSequenceRequestHandler()
     private var facePoseRequest: VNDetectFaceRectanglesRequest!
@@ -47,6 +53,16 @@ class ProfilePhotoViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.intializeRequests()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        if self.isBeingClosed {
+            self.dismissHandlers.forEach { (dismissHandler) in
+                dismissHandler.handler?()
+            }
+        }
     }
 
     deinit {

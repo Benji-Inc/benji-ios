@@ -25,7 +25,8 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
 
     private var unclaimedCount: Int = 0
 
-    var didSelectReservations: CompletionOptional = nil 
+    var didSelectReservations: CompletionOptional = nil
+    var didSelectProfilePhoto: CompletionOptional = nil
 
     override func initializeManager() {
         super.initializeManager()
@@ -73,6 +74,9 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
         case UICollectionView.elementKindSectionHeader:
             guard section == .notices else { return nil }
             let header = self.collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+            header.imageView.didSelect { [unowned self] in
+                self.didSelectProfilePhoto?()
+            }
             return header
         case UICollectionView.elementKindSectionFooter:
             guard section == .channels else { return nil }
@@ -86,8 +90,6 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
         default:
             return nil
         }
-        
-
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
