@@ -10,6 +10,7 @@ import Foundation
 import Vision
 import MetalKit
 import AVFoundation
+import CoreImage.CIFilterBuiltins
 
 class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
 
@@ -36,6 +37,9 @@ class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
     // The Metal pipeline.
     var metalDevice: MTLDevice!
     var metalCommandQueue: MTLCommandQueue!
+
+    // A structure that contains RGB color intensity values.
+    private var colors: AngleColors?
 
     // The Core Image pipeline.
     var ciContext: CIContext!
@@ -76,7 +80,7 @@ class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
         self.facePoseRequest = VNDetectFaceRectanglesRequest { [weak self] request, _ in
             guard let face = request.results?.first as? VNFaceObservation else { return }
             // Generate RGB color intensity values for the face rectangle angles.
-            //self?.colors = AngleColors(roll: face.roll, pitch: face.pitch, yaw: face.yaw)
+            self?.colors = AngleColors(roll: face.roll, pitch: face.pitch, yaw: face.yaw)
         }
         self.facePoseRequest.revision = VNDetectFaceRectanglesRequestRevision3
 
@@ -133,36 +137,62 @@ class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
     private func blend(original framePixelBuffer: CVPixelBuffer,
                        mask maskPixelBuffer: CVPixelBuffer) {
 
-//        // Remove the optionality from generated color intensities or exit early.
-//        guard let colors = colors else { return }
-//
-//        // Create CIImage objects for the video frame and the segmentation mask.
-//        let originalImage = CIImage(cvPixelBuffer: framePixelBuffer).oriented(.right)
-//        var maskImage = CIImage(cvPixelBuffer: maskPixelBuffer)
-//
-//        // Scale the mask image to fit the bounds of the video frame.
-//        let scaleX = originalImage.extent.width / maskImage.extent.width
-//        let scaleY = originalImage.extent.height / maskImage.extent.height
-//        maskImage = maskImage.transformed(by: .init(scaleX: scaleX, y: scaleY))
-//
-//        // Define RGB vectors for CIColorMatrix filter.
-//        let vectors = [
-//            "inputRVector": CIVector(x: 0, y: 0, z: 0, w: colors.red),
-//            "inputGVector": CIVector(x: 0, y: 0, z: 0, w: colors.green),
-//            "inputBVector": CIVector(x: 0, y: 0, z: 0, w: colors.blue)
-//        ]
-//
-//        // Create a colored background image.
-//        let backgroundImage = maskImage.applyingFilter("CIColorMatrix",
-//                                                       parameters: vectors)
-//
-//        // Blend the original, background, and mask images.
-//        let blendFilter = CIFilter.blendWithRedMask()
-//        blendFilter.inputImage = originalImage
-//        blendFilter.backgroundImage = backgroundImage
-//        blendFilter.maskImage = maskImage
-//
-//        // Set the new, blended image as current.
-//        currentCIImage = blendFilter.outputImage?.oriented(.left)
+        // Remove the optionality from generated color intensities or exit early.
+        guard let colors = colors else { return }
+
+        // Create CIImage objects for the video frame and the segmentation mask.
+        let originalImage = CIImage(cvPixelBuffer: framePixelBuffer).oriented(.right)
+        var maskImage = CIImage(cvPixelBuffer: maskPixelBuffer)
+
+        // Scale the mask image to fit the bounds of the video frame.
+        let scaleX = originalImage.extent.width / maskImage.extent.width
+        let scaleY = originalImage.extent.height / maskImage.extent.height
+        maskImage = maskImage.transformed(by: .init(scaleX: scaleX, y: scaleY))
+
+        // Define RGB vectors for CIColorMatrix filter.
+        let vectors = [
+            "inputRVector": CIVector(x: 0, y: 0, z: 0, w: colors.red),
+            "inputGVector": CIVector(x: 0, y: 0, z: 0, w: colors.green),
+            "inputBVector": CIVector(x: 0, y: 0, z: 0, w: colors.blue)
+        ]
+
+        // Create a colored background image.
+        let backgroundImage = maskImage.applyingFilter("CIColorMatrix",
+                                                       parameters: vectors)
+
+        // Blend the original, background, and mask images.
+        let blendFilter = CIFilter.blendWithRedMask()
+        blendFilter.inputImage = originalImage
+        blendFilter.backgroundImage = backgroundImage
+        blendFilter.maskImage = maskImage
+
+        // Set the new, blended image as current.
+        self.currentCIImage = blendFilter.outputImage?.oriented(.left)
+    }
+}
+
+/// A structure that provides an RGB color intensity value for the roll, pitch, and yaw angles.
+struct AngleColors {
+
+    let red: CGFloat
+    let blue: CGFloat
+    let green: CGFloat
+
+    init(roll: NSNumber?, pitch: NSNumber?, yaw: NSNumber?) {
+        red = AngleColors.convert(value: roll, with: -.pi, and: .pi)
+        blue = AngleColors.convert(value: pitch, with: -.pi / 2, and: .pi / 2)
+        green = AngleColors.convert(value: yaw, with: -.pi / 2, and: .pi / 2)
+    }
+
+    static func convert(value: NSNumber?, with minValue: CGFloat, and maxValue: CGFloat) -> CGFloat {
+        guard let value = value else { return 0 }
+        let maxValue = maxValue * 0.8
+        let minValue = minValue + (maxValue * 0.2)
+        let facePoseRange = maxValue - minValue
+
+        guard facePoseRange != 0 else { return 0 } // protect from zero division
+
+        let colorRange: CGFloat = 1
+        return (((CGFloat(truncating: value) - minValue) * colorRange) / facePoseRange)
     }
 }
