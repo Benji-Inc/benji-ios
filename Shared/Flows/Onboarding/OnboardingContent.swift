@@ -33,7 +33,8 @@ enum OnboardingContent: Switchable {
             return vc
         case .photo(let vc):
             return vc
-        case .focus(let vc)
+        case .focus(let vc):
+            return vc
         }
     }
 
