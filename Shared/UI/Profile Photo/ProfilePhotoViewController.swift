@@ -38,8 +38,7 @@ class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
     var metalDevice: MTLDevice!
     var metalCommandQueue: MTLCommandQueue!
 
-    // A structure that contains RGB color intensity values.
-    private var colors: AngleColors?
+    private var color: UIColor = Color.purple.color
 
     // The Core Image pipeline.
     var ciContext: CIContext!
@@ -52,11 +51,27 @@ class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
     // The capture session that provides video frames.
     var session: AVCaptureSession?
 
+    let button = Button()
+
     // MARK: - ViewController LifeCycle Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        self.view.insertSubview(self.button, aboveSubview: self.cameraView)
+        self.button.set(style: .normal(color: .lightPurple, text: "Pick"))
+        self.button.didSelect { [unowned self] in
+            self.showPicker()
+        }
+
         self.intializeRequests()
+    }
+
+    private func showPicker() {
+        let picker = UIColorPickerViewController()
+        picker.selectedColor = self.color
+        picker.delegate = self
+        self.present(picker, animated: true, completion: nil)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -80,7 +95,7 @@ class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
         self.facePoseRequest = VNDetectFaceRectanglesRequest { [weak self] request, _ in
             guard let face = request.results?.first as? VNFaceObservation else { return }
             // Generate RGB color intensity values for the face rectangle angles.
-            self?.colors = AngleColors(roll: face.roll, pitch: face.pitch, yaw: face.yaw)
+            //self?.colors = AngleColors(roll: face.roll, pitch: face.pitch, yaw: face.yaw)
         }
         self.facePoseRequest.revision = VNDetectFaceRectanglesRequestRevision3
 
@@ -99,7 +114,7 @@ class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
             fatalError("Error getting AVCaptureDeviceInput")
         }
 
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        DispatchQueue.global(qos: .default).async { [weak self] in
             guard let self = self else { return }
             self.session = AVCaptureSession()
             self.session?.sessionPreset = .high
@@ -115,17 +130,24 @@ class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
         }
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.button.setSize(with: self.view.width)
+        self.button.centerOnX()
+        self.button.pinToSafeArea(.bottom, padding: 0)
+    }
+
     // MARK: - Perform Requests
 
     func processVideoFrame(_ framePixelBuffer: CVPixelBuffer) {
         // Perform the requests on the pixel buffer that contains the video frame.
-        try? requestHandler.perform([facePoseRequest, segmentationRequest],
+        try? requestHandler.perform([self.facePoseRequest, self.segmentationRequest],
                                     on: framePixelBuffer,
                                     orientation: .right)
 
         // Get the pixel buffer that contains the mask image.
-        guard let maskPixelBuffer =
-                segmentationRequest.results?.first?.pixelBuffer else { return }
+        guard let maskPixelBuffer = self.segmentationRequest.results?.first?.pixelBuffer else { return }
 
         // Process the images.
         self.blend(original: framePixelBuffer, mask: maskPixelBuffer)
@@ -138,7 +160,7 @@ class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
                        mask maskPixelBuffer: CVPixelBuffer) {
 
         // Remove the optionality from generated color intensities or exit early.
-        guard let colors = colors else { return }
+        //guard let colors = self.colors else { return }
 
         // Create CIImage objects for the video frame and the segmentation mask.
         let originalImage = CIImage(cvPixelBuffer: framePixelBuffer).oriented(.right)
@@ -151,14 +173,14 @@ class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
 
         // Define RGB vectors for CIColorMatrix filter.
         let vectors = [
-            "inputRVector": CIVector(x: 0, y: 0, z: 0, w: colors.red),
-            "inputGVector": CIVector(x: 0, y: 0, z: 0, w: colors.green),
-            "inputBVector": CIVector(x: 0, y: 0, z: 0, w: colors.blue)
+            "inputRVector": CIVector(x: 0, y: 0, z: 0, w: self.color.redValue),
+            "inputGVector": CIVector(x: 0, y: 0, z: 0, w: self.color.greenValue),
+            "inputBVector": CIVector(x: 0, y: 0, z: 0, w: self.color.blueValue)
         ]
 
         // Create a colored background image.
-        let backgroundImage = maskImage.applyingFilter("CIColorMatrix",
-                                                       parameters: vectors)
+        //let backgroundImage = maskImage
+        let backgroundImage = maskImage.applyingFilter("CIColorMatrix", parameters: vectors)
 
         // Blend the original, background, and mask images.
         let blendFilter = CIFilter.blendWithRedMask()
@@ -171,28 +193,9 @@ class ProfilePhotoViewController: UIViewController, Presentable, Dismissable {
     }
 }
 
-/// A structure that provides an RGB color intensity value for the roll, pitch, and yaw angles.
-struct AngleColors {
+extension ProfilePhotoViewController: UIColorPickerViewControllerDelegate {
 
-    let red: CGFloat
-    let blue: CGFloat
-    let green: CGFloat
-
-    init(roll: NSNumber?, pitch: NSNumber?, yaw: NSNumber?) {
-        red = AngleColors.convert(value: roll, with: -.pi, and: .pi)
-        blue = AngleColors.convert(value: pitch, with: -.pi / 2, and: .pi / 2)
-        green = AngleColors.convert(value: yaw, with: -.pi / 2, and: .pi / 2)
-    }
-
-    static func convert(value: NSNumber?, with minValue: CGFloat, and maxValue: CGFloat) -> CGFloat {
-        guard let value = value else { return 0 }
-        let maxValue = maxValue * 0.8
-        let minValue = minValue + (maxValue * 0.2)
-        let facePoseRange = maxValue - minValue
-
-        guard facePoseRange != 0 else { return 0 } // protect from zero division
-
-        let colorRange: CGFloat = 1
-        return (((CGFloat(truncating: value) - minValue) * colorRange) / facePoseRange)
+    func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
+        self.color = color
     }
 }

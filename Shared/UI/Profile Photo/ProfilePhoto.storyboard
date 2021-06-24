@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mtkView contentMode="scaleToFill" colorPixelFormat="BGRA8Unorm" depthStencilPixelFormat="Depth32Float" translatesAutoresizingMaskIntoConstraints="NO" id="dd7-QE-TQj">
-                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                                <rect key="frame" x="0.0" y="44" width="414" height="674"/>
                             </mtkView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="vDu-zF-Fre"/>
@@ -26,7 +26,7 @@
                             <constraint firstItem="dd7-QE-TQj" firstAttribute="top" secondItem="vDu-zF-Fre" secondAttribute="top" id="RfG-9R-FrE"/>
                             <constraint firstItem="dd7-QE-TQj" firstAttribute="leading" secondItem="vDu-zF-Fre" secondAttribute="leading" id="a5x-gn-mNZ"/>
                             <constraint firstItem="vDu-zF-Fre" firstAttribute="trailing" secondItem="dd7-QE-TQj" secondAttribute="trailing" id="pko-uD-jEv"/>
-                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="dd7-QE-TQj" secondAttribute="bottom" id="sdp-Ki-q3m"/>
+                            <constraint firstItem="vDu-zF-Fre" firstAttribute="bottom" secondItem="dd7-QE-TQj" secondAttribute="bottom" constant="144" id="sdp-Ki-q3m"/>
                         </constraints>
                     </view>
                     <connections>
@@ -35,7 +35,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ief-a0-LHa" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="139" y="105"/>
+            <point key="canvasLocation" x="137.68115942028987" y="104.46428571428571"/>
         </scene>
     </scenes>
     <resources>
