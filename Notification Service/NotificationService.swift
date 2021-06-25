@@ -7,6 +7,7 @@
 //
 
 import UserNotifications
+import Intents
 
 class NotificationService: UNNotificationServiceExtension {
 
@@ -14,16 +15,40 @@ class NotificationService: UNNotificationServiceExtension {
     var bestAttemptContent: UNMutableNotificationContent?
 
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-        self.contentHandler = contentHandler
-        bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
-        
-        if let bestAttemptContent = bestAttemptContent {
-            // Modify the notification content here...
-            bestAttemptContent.title = "\(bestAttemptContent.title) [modified]"
-            
-            contentHandler(bestAttemptContent)
+
+        let incomingMessageIntent = INSendMessageIntent(recipients: [],
+                                                        outgoingMessageType: .unknown,
+                                                        content: nil,
+                                                        speakableGroupName: nil,
+                                                        conversationIdentifier: nil,
+                                                        serviceName: nil,
+                                                        sender: nil,
+                                                        attachments: [])
+
+        let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
+        interaction.direction = .incoming
+        interaction.donate(completion: nil)
+
+        do {
+            let messageContent = try request.content.updating(from: incomingMessageIntent)
+            contentHandler(messageContent)
+        }
+        catch {
+            // Handle error
         }
     }
+
+//    override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
+//        self.contentHandler = contentHandler
+//        bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
+//
+//        if let bestAttemptContent = bestAttemptContent {
+//            // Modify the notification content here...
+//            bestAttemptContent.title = "\(bestAttemptContent.title) [modified]"
+//
+//            contentHandler(bestAttemptContent)
+//        }
+//    }
     
     override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.
