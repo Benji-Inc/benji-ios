@@ -462,6 +462,7 @@
 		D672C31C2644342F00C9E878 /* ChannelContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D672C31B2644342F00C9E878 /* ChannelContentView.swift */; };
 		D6730ECB2649F14F00B5DC16 /* AVURLAsset+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */; };
 		D6748CBE262DAF280095F4B1 /* ReservationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6748CBD262DAF280095F4B1 /* ReservationsViewController.swift */; };
+		D675C1EF2686919200FA32A8 /* TCHMessage+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D675C1EE2686919200FA32A8 /* TCHMessage+Intents.swift */; };
 		D677588325B09F4D007E0184 /* Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588225B09F4D007E0184 /* Transitionable.swift */; };
 		D677588425B09F4D007E0184 /* Transitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588225B09F4D007E0184 /* Transitionable.swift */; };
 		D677588C25B09F9C007E0184 /* TransitionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588B25B09F9C007E0184 /* TransitionRouter.swift */; };
@@ -961,6 +962,7 @@
 		D672C31B2644342F00C9E878 /* ChannelContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelContentView.swift; sourceTree = "<group>"; };
 		D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVURLAsset+Extension.swift"; sourceTree = "<group>"; };
 		D6748CBD262DAF280095F4B1 /* ReservationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsViewController.swift; sourceTree = "<group>"; };
+		D675C1EE2686919200FA32A8 /* TCHMessage+Intents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TCHMessage+Intents.swift"; sourceTree = "<group>"; };
 		D677588225B09F4D007E0184 /* Transitionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transitionable.swift; sourceTree = "<group>"; };
 		D677588B25B09F9C007E0184 /* TransitionRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionRouter.swift; sourceTree = "<group>"; };
 		D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+Fade.swift"; sourceTree = "<group>"; };
@@ -1586,6 +1588,7 @@
 				D6DADF682207D246007D9EB1 /* TCHMessage+Extensions.swift */,
 				D64C6A96232D5C0400DB7257 /* TCHMember+Extensions.swift */,
 				D6A401AA24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift */,
+				D675C1EE2686919200FA32A8 /* TCHMessage+Intents.swift */,
 			);
 			path = Twilio;
 			sourceTree = "<group>";
@@ -2686,6 +2689,7 @@
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,
 				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
+				D675C1EF2686919200FA32A8 /* TCHMessage+Intents.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
 				D61D38E7248C494A00BE457B /* ChannelViewController+Messaging.swift in Sources */,
 				D6617CF926753E6800439C06 /* HomeCollectionView.swift in Sources */,

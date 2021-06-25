@@ -16,6 +16,8 @@ class NotificationService: UNNotificationServiceExtension {
 
     override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
 
+        let user = User.current()
+
         let incomingMessageIntent = INSendMessageIntent(recipients: [],
                                                         outgoingMessageType: .unknown,
                                                         content: nil,
