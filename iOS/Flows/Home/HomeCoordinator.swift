@@ -136,16 +136,32 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     }
 
     func didTapAdd() {
-        self.removeChild()
-        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { result in
-            coordinator.toPresentable().dismiss(animated: true) {
-                if result {
-                    self.startChannelFlow(for: nil)
-                }
-            }
-        }
-        self.router.present(coordinator, source: self.homeVC)
+        //Test code
+
+        let content = UNMutableNotificationContent()
+        content.title = "title"
+        content.body = "the body of the message"
+        content.setData(value: "IM7b3ce31e841b4a1ea4d6c916c722869e", for: .messageId)
+        content.setData(value: "CH6c6489bb4557489a8d51ad58c1bd0a94", for: .channelId)
+        content.interruptionLevel = .timeSensitive
+        content.relevanceScore = 0.5
+
+        let request = UNNotificationRequest(identifier: Lorem.randomString(),
+                                            content: content,
+                                            trigger: nil)
+
+        UserNotificationManager.shared.schedule(note: request)
+
+//        self.removeChild()
+//        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
+//        self.addChildAndStart(coordinator) { result in
+//            coordinator.toPresentable().dismiss(animated: true) {
+//                if result {
+//                    self.startChannelFlow(for: nil)
+//                }
+//            }
+//        }
+//        self.router.present(coordinator, source: self.homeVC)
     }
 
     private func showSoftAskNotifications(for status: UNAuthorizationStatus) {
