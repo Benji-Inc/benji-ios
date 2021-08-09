@@ -11,19 +11,19 @@ def shared_pods
 
 end
 
-target 'Ours' do
+target 'Jibber' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   shared_pods
 end
 
-target 'OursAppClip' do
+target 'JibberAppClip' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   shared_pods
 end
 
-target 'OursNotificationContent' do
+target 'JibberNotificationContent' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   shared_pods

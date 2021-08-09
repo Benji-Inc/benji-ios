@@ -7,12 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		25A3C9242AB89217209A4BA1 /* Pods_OursNotificationContent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3D4674CB88B1B4B693F10A2 /* Pods_OursNotificationContent.framework */; };
+		3C6BA3DBF903DC2C3EF5C0E9 /* Pods_JibberNotificationContent.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EF5726571B2E4F636D7A421 /* Pods_JibberNotificationContent.framework */; };
+		6851F42D7A8C627D0D8E2FD7 /* Pods_JibberAppClip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B5575903562C0A4F3344ADF /* Pods_JibberAppClip.framework */; };
 		7F227B8576E160C9469E08D1 /* Pods_Intents_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C50C41C9E4C24DF432E0D86 /* Pods_Intents_Extension.framework */; };
-		8FC6A04F2F23510867229A84 /* Pods_OursAppClip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */; };
 		AADC7E9FFFC02BDF01417BAA /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC9EA4C00F002569A56127C /* Pods_NotificationService.framework */; };
 		C03D8861C3D82A5BDDC5CF8C /* Pods_Intents_ExtensionUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */; };
-		D5913FD2104D7480AB2029C6 /* Pods_Ours.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */; };
 		D607400E23401B3E009633EB /* SystemChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D607400D23401B3E009633EB /* SystemChannel.swift */; };
 		D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E552377CB2F00833DA7 /* Messageable.swift */; };
 		D6090E582377D2CA00833DA7 /* ChannelSectionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E572377D2CA00833DA7 /* ChannelSectionable.swift */; };
@@ -544,12 +543,12 @@
 		D6AD79B5267030FA00ED7A93 /* send_alert_interaction.json in Resources */ = {isa = PBXBuildFile; fileRef = D6AD79AE267030FA00ED7A93 /* send_alert_interaction.json */; };
 		D6AD79B6267030FA00ED7A93 /* send_alert_interaction.json in Resources */ = {isa = PBXBuildFile; fileRef = D6AD79AE267030FA00ED7A93 /* send_alert_interaction.json */; };
 		D6AD79B7267030FA00ED7A93 /* send_alert_interaction.json in Resources */ = {isa = PBXBuildFile; fileRef = D6AD79AE267030FA00ED7A93 /* send_alert_interaction.json */; };
-		D6AE0F5D267CF80C00C6B048 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F5C267CF80C00C6B048 /* Lottie */; };
-		D6AE0F5F267CF82200C6B048 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F5E267CF82200C6B048 /* Lottie */; };
-		D6AE0F61267CF82C00C6B048 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F60267CF82C00C6B048 /* Lottie */; };
-		D6AE0F64267CF8A400C6B048 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */; };
-		D6AE0F66267CF8B600C6B048 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F65267CF8B600C6B048 /* PhoneNumberKit */; };
-		D6AE0F68267CF8D900C6B048 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F67267CF8D900C6B048 /* PhoneNumberKit */; };
+		D6AE0F5D267CF80C00C6B048 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F5C267CF80C00C6B048 /* SwiftPackageProductDependency */; };
+		D6AE0F5F267CF82200C6B048 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F5E267CF82200C6B048 /* SwiftPackageProductDependency */; };
+		D6AE0F61267CF82C00C6B048 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F60267CF82C00C6B048 /* SwiftPackageProductDependency */; };
+		D6AE0F64267CF8A400C6B048 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F63267CF8A400C6B048 /* SwiftPackageProductDependency */; };
+		D6AE0F66267CF8B600C6B048 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F65267CF8B600C6B048 /* SwiftPackageProductDependency */; };
+		D6AE0F68267CF8D900C6B048 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F67267CF8D900C6B048 /* SwiftPackageProductDependency */; };
 		D6AE0F70267CF9CA00C6B048 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0F6F267CF9CA00C6B048 /* NotificationService.swift */; };
 		D6AE0F74267CF9CA00C6B048 /* NotificationService.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D6AE0F6D267CF9CA00C6B048 /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D6AE0F7E267CFA6C00C6B048 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6AE0F7D267CFA6C00C6B048 /* Intents.framework */; };
@@ -645,9 +644,9 @@
 		D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
 		D6D804B12667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
 		D6D804B22667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
-		D6D804B526693AE700741594 /* SDWebImageLinkPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B426693AE700741594 /* SDWebImageLinkPlugin */; };
-		D6D804B72669415200741594 /* SDWebImageLinkPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B62669415200741594 /* SDWebImageLinkPlugin */; };
-		D6D804B92669416E00741594 /* SDWebImageLinkPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B82669416E00741594 /* SDWebImageLinkPlugin */; };
+		D6D804B526693AE700741594 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B426693AE700741594 /* SwiftPackageProductDependency */; };
+		D6D804B72669415200741594 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B62669415200741594 /* SwiftPackageProductDependency */; };
+		D6D804B92669416E00741594 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B82669416E00741594 /* SwiftPackageProductDependency */; };
 		D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804BA266A8B7D00741594 /* NSTextCheckingResult+Extension.swift */; };
 		D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
@@ -658,7 +657,7 @@
 		D6DADF742207E0E2007D9EB1 /* TCHChannel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF732207E0E2007D9EB1 /* TCHChannel+Extensions.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
 		D6DF870725A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
-		D6E33899265808EC00BE3C24 /* TwilioChatClient in Frameworks */ = {isa = PBXBuildFile; productRef = D6E33898265808EC00BE3C24 /* TwilioChatClient */; };
+		D6E33899265808EC00BE3C24 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6E33898265808EC00BE3C24 /* SwiftPackageProductDependency */; };
 		D6E4C7FB238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */; };
 		D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E65F18237791650061AA67 /* ManageableCell.swift */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
@@ -702,6 +701,7 @@
 		D6FC809C237A6ED30089AACC /* ChannelCollectionViewManager+Typing.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FC809B237A6ED30089AACC /* ChannelCollectionViewManager+Typing.swift */; };
 		D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF02C257EB71700F9789B /* Button+Extensions.swift */; };
 		D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */; };
+		E09AAFB2C502C558A3890EC4 /* Pods_Jibber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E2F7DB90EF2AB2CB1624D0 /* Pods_Jibber.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -771,10 +771,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		08560A4056B4615E0D2AE87B /* Pods-JibberAppClip.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JibberAppClip.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JibberAppClip/Pods-JibberAppClip.debug.xcconfig"; sourceTree = "<group>"; };
+		0BCE13437A0D1E7CEC42C2DD /* Pods-Jibber.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Jibber.release.xcconfig"; path = "Pods/Target Support Files/Pods-Jibber/Pods-Jibber.release.xcconfig"; sourceTree = "<group>"; };
+		0EF5726571B2E4F636D7A421 /* Pods_JibberNotificationContent.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JibberNotificationContent.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F9025F524FF835237D79B76 /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Pods/Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 		22E80A859F4294D8C5A052D8 /* Pods-OursNotificationContent.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursNotificationContent.release.xcconfig"; path = "Pods/Target Support Files/Pods-OursNotificationContent/Pods-OursNotificationContent.release.xcconfig"; sourceTree = "<group>"; };
 		2C50C41C9E4C24DF432E0D86 /* Pods_Intents_Extension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Intents_Extension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		31BB9AC23B5A8B9AEE379B27 /* Pods-Intents ExtensionUI.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Intents ExtensionUI.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Intents ExtensionUI/Pods-Intents ExtensionUI.debug.xcconfig"; sourceTree = "<group>"; };
+		37E2F7DB90EF2AB2CB1624D0 /* Pods_Jibber.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Jibber.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FD1AE8358B3CA7B98B5B241 /* Pods-OursAppClip.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursAppClip.release.xcconfig"; path = "Pods/Target Support Files/Pods-OursAppClip/Pods-OursAppClip.release.xcconfig"; sourceTree = "<group>"; };
 		4811B856F63AD691A9EDA954 /* Pods-Ours.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.release.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.release.xcconfig"; sourceTree = "<group>"; };
 		4AC9EA4C00F002569A56127C /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -782,12 +786,14 @@
 		69BD6F6BD1555BE5571F430F /* Pods-OursNotificationContent.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursNotificationContent.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OursNotificationContent/Pods-OursNotificationContent.debug.xcconfig"; sourceTree = "<group>"; };
 		89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.debug.xcconfig"; sourceTree = "<group>"; };
 		8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Intents_ExtensionUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F5C2A04512449C153CEB369 /* Pods-Jibber.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Jibber.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Jibber/Pods-Jibber.debug.xcconfig"; sourceTree = "<group>"; };
+		90FC9450D5907C3FC1CF12F0 /* Pods-JibberNotificationContent.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JibberNotificationContent.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JibberNotificationContent/Pods-JibberNotificationContent.debug.xcconfig"; sourceTree = "<group>"; };
+		9B5575903562C0A4F3344ADF /* Pods_JibberAppClip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JibberAppClip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A01F4177F369C2987256F642 /* Pods-JibberNotificationContent.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JibberNotificationContent.release.xcconfig"; path = "Pods/Target Support Files/Pods-JibberNotificationContent/Pods-JibberNotificationContent.release.xcconfig"; sourceTree = "<group>"; };
 		A5070281C7CBB8DE82CD0BA7 /* Pods-Intents ExtensionUI.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Intents ExtensionUI.release.xcconfig"; path = "Pods/Target Support Files/Pods-Intents ExtensionUI/Pods-Intents ExtensionUI.release.xcconfig"; sourceTree = "<group>"; };
 		ABE4B3805F2AC689EC91BEC0 /* Pods-Intents Extension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Intents Extension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Intents Extension/Pods-Intents Extension.debug.xcconfig"; sourceTree = "<group>"; };
-		BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Ours.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OursAppClip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C93B258C6ACB241C6FA99005 /* Pods-JibberAppClip.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JibberAppClip.release.xcconfig"; path = "Pods/Target Support Files/Pods-JibberAppClip/Pods-JibberAppClip.release.xcconfig"; sourceTree = "<group>"; };
 		D33049F6417FECDE51BB13DB /* Pods-OursAppClip.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursAppClip.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OursAppClip/Pods-OursAppClip.debug.xcconfig"; sourceTree = "<group>"; };
-		D3D4674CB88B1B4B693F10A2 /* Pods_OursNotificationContent.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OursNotificationContent.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D607400D23401B3E009633EB /* SystemChannel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemChannel.swift; sourceTree = "<group>"; };
 		D6090E552377CB2F00833DA7 /* Messageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messageable.swift; sourceTree = "<group>"; };
 		D6090E572377D2CA00833DA7 /* ChannelSectionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelSectionable.swift; sourceTree = "<group>"; };
@@ -1130,12 +1136,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6AE0F5D267CF80C00C6B048 /* Lottie in Frameworks */,
-				D6D804B526693AE700741594 /* SDWebImageLinkPlugin in Frameworks */,
+				D6AE0F5D267CF80C00C6B048 /* BuildFile in Frameworks */,
+				D6D804B526693AE700741594 /* BuildFile in Frameworks */,
 				D658C7DD24425E410027D12E /* HealthKit.framework in Frameworks */,
-				D6AE0F64267CF8A400C6B048 /* PhoneNumberKit in Frameworks */,
-				D5913FD2104D7480AB2029C6 /* Pods_Ours.framework in Frameworks */,
-				D6E33899265808EC00BE3C24 /* TwilioChatClient in Frameworks */,
+				D6AE0F64267CF8A400C6B048 /* BuildFile in Frameworks */,
+				D6E33899265808EC00BE3C24 /* BuildFile in Frameworks */,
+				E09AAFB2C502C558A3890EC4 /* Pods_Jibber.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1143,12 +1149,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6AE0F61267CF82C00C6B048 /* Lottie in Frameworks */,
+				D6AE0F61267CF82C00C6B048 /* BuildFile in Frameworks */,
 				D63DB1FB25E968C300F6B323 /* UserNotificationsUI.framework in Frameworks */,
-				D6D804B92669416E00741594 /* SDWebImageLinkPlugin in Frameworks */,
-				D6AE0F68267CF8D900C6B048 /* PhoneNumberKit in Frameworks */,
+				D6D804B92669416E00741594 /* BuildFile in Frameworks */,
+				D6AE0F68267CF8D900C6B048 /* BuildFile in Frameworks */,
 				D63DB1F925E968C300F6B323 /* UserNotifications.framework in Frameworks */,
-				25A3C9242AB89217209A4BA1 /* Pods_OursNotificationContent.framework in Frameworks */,
+				3C6BA3DBF903DC2C3EF5C0E9 /* Pods_JibberNotificationContent.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1156,10 +1162,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8FC6A04F2F23510867229A84 /* Pods_OursAppClip.framework in Frameworks */,
-				D6AE0F66267CF8B600C6B048 /* PhoneNumberKit in Frameworks */,
-				D6D804B72669415200741594 /* SDWebImageLinkPlugin in Frameworks */,
-				D6AE0F5F267CF82200C6B048 /* Lottie in Frameworks */,
+				D6AE0F66267CF8B600C6B048 /* BuildFile in Frameworks */,
+				D6D804B72669415200741594 /* BuildFile in Frameworks */,
+				D6AE0F5F267CF82200C6B048 /* BuildFile in Frameworks */,
+				6851F42D7A8C627D0D8E2FD7 /* Pods_JibberAppClip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1207,6 +1213,12 @@
 				A5070281C7CBB8DE82CD0BA7 /* Pods-Intents ExtensionUI.release.xcconfig */,
 				58361BE3E111762AC2D79605 /* Pods-NotificationService.debug.xcconfig */,
 				0F9025F524FF835237D79B76 /* Pods-NotificationService.release.xcconfig */,
+				8F5C2A04512449C153CEB369 /* Pods-Jibber.debug.xcconfig */,
+				0BCE13437A0D1E7CEC42C2DD /* Pods-Jibber.release.xcconfig */,
+				08560A4056B4615E0D2AE87B /* Pods-JibberAppClip.debug.xcconfig */,
+				C93B258C6ACB241C6FA99005 /* Pods-JibberAppClip.release.xcconfig */,
+				90FC9450D5907C3FC1CF12F0 /* Pods-JibberNotificationContent.debug.xcconfig */,
+				A01F4177F369C2987256F642 /* Pods-JibberNotificationContent.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -1216,16 +1228,16 @@
 			children = (
 				D65519B02589167E00B901E4 /* UIKit.framework */,
 				D658C7DC24425E410027D12E /* HealthKit.framework */,
-				BD82DC7955DE533DB0B01EC2 /* Pods_Ours.framework */,
-				D0DA788FC642C4335AF718F4 /* Pods_OursAppClip.framework */,
 				D63DB1F825E968C300F6B323 /* UserNotifications.framework */,
 				D63DB1FA25E968C300F6B323 /* UserNotificationsUI.framework */,
-				D3D4674CB88B1B4B693F10A2 /* Pods_OursNotificationContent.framework */,
 				D6AE0F7D267CFA6C00C6B048 /* Intents.framework */,
 				D6AE0F88267CFA6D00C6B048 /* IntentsUI.framework */,
 				2C50C41C9E4C24DF432E0D86 /* Pods_Intents_Extension.framework */,
 				8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */,
 				4AC9EA4C00F002569A56127C /* Pods_NotificationService.framework */,
+				37E2F7DB90EF2AB2CB1624D0 /* Pods_Jibber.framework */,
+				9B5575903562C0A4F3344ADF /* Pods_JibberAppClip.framework */,
+				0EF5726571B2E4F636D7A421 /* Pods_JibberNotificationContent.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -2168,10 +2180,10 @@
 			);
 			name = Jibber;
 			packageProductDependencies = (
-				D6E33898265808EC00BE3C24 /* TwilioChatClient */,
-				D6D804B426693AE700741594 /* SDWebImageLinkPlugin */,
-				D6AE0F5C267CF80C00C6B048 /* Lottie */,
-				D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */,
+				D6E33898265808EC00BE3C24 /* SwiftPackageProductDependency */,
+				D6D804B426693AE700741594 /* SwiftPackageProductDependency */,
+				D6AE0F5C267CF80C00C6B048 /* SwiftPackageProductDependency */,
+				D6AE0F63267CF8A400C6B048 /* SwiftPackageProductDependency */,
 			);
 			productName = Benji;
 			productReference = D61EC0BC21D3071400204BEE /* Jibber.app */;
@@ -2192,9 +2204,9 @@
 			);
 			name = JibberNotificationContent;
 			packageProductDependencies = (
-				D6D804B82669416E00741594 /* SDWebImageLinkPlugin */,
-				D6AE0F60267CF82C00C6B048 /* Lottie */,
-				D6AE0F67267CF8D900C6B048 /* PhoneNumberKit */,
+				D6D804B82669416E00741594 /* SwiftPackageProductDependency */,
+				D6AE0F60267CF82C00C6B048 /* SwiftPackageProductDependency */,
+				D6AE0F67267CF8D900C6B048 /* SwiftPackageProductDependency */,
 			);
 			productName = OursNotificationContent;
 			productReference = D63DB1F725E968C300F6B323 /* JibberNotificationContent.appex */;
@@ -2216,9 +2228,9 @@
 			);
 			name = JibberAppClip;
 			packageProductDependencies = (
-				D6D804B62669415200741594 /* SDWebImageLinkPlugin */,
-				D6AE0F5E267CF82200C6B048 /* Lottie */,
-				D6AE0F65267CF8B600C6B048 /* PhoneNumberKit */,
+				D6D804B62669415200741594 /* SwiftPackageProductDependency */,
+				D6AE0F5E267CF82200C6B048 /* SwiftPackageProductDependency */,
+				D6AE0F65267CF8B600C6B048 /* SwiftPackageProductDependency */,
 			);
 			productName = BenjiAppClip;
 			productReference = D6884B0E2587D25C00DA380E /* JibberAppClip.app */;
@@ -2324,10 +2336,10 @@
 			);
 			mainGroup = D61EC0B321D3071400204BEE;
 			packageReferences = (
-				D6E33897265808EC00BE3C24 /* XCRemoteSwiftPackageReference "twilio-chat-ios" */,
-				D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */,
-				D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */,
-				D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */,
+				D6E33897265808EC00BE3C24 /* RemoteSwiftPackageReference */,
+				D6D804B326693AE700741594 /* RemoteSwiftPackageReference */,
+				D6AE0F5B267CF80C00C6B048 /* RemoteSwiftPackageReference */,
+				D6AE0F62267CF8A400C6B048 /* RemoteSwiftPackageReference */,
 			);
 			productRefGroup = D61EC0BD21D3071400204BEE /* Products */;
 			projectDirPath = "";
@@ -2448,15 +2460,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OursAppClip/Pods-OursAppClip-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-JibberAppClip/Pods-JibberAppClip-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-OursAppClip/Pods-OursAppClip-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-JibberAppClip/Pods-JibberAppClip-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OursAppClip/Pods-OursAppClip-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-JibberAppClip/Pods-JibberAppClip-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2FAA492D9EB10E92959FA9F0 /* [CP] Check Pods Manifest.lock */ = {
@@ -2492,7 +2504,7 @@
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Ours-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-Jibber-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2549,15 +2561,15 @@
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Ours/Pods-Ours-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Jibber/Pods-Jibber-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Ours/Pods-Ours-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Jibber/Pods-Jibber-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Ours/Pods-Ours-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Jibber/Pods-Jibber-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D71341A6A22D249126B1B7ED /* [CP] Check Pods Manifest.lock */ = {
@@ -2575,7 +2587,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-OursAppClip-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-JibberAppClip-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -2597,7 +2609,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-OursNotificationContent-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-JibberNotificationContent-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3443,7 +3455,7 @@
 		};
 		D61EC0CF21D3071500204BEE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */;
+			baseConfigurationReference = 8F5C2A04512449C153CEB369 /* Pods-Jibber.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				API_TARGET = STAGING;
@@ -3471,7 +3483,7 @@
 		};
 		D61EC0D021D3071500204BEE /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4811B856F63AD691A9EDA954 /* Pods-Ours.release.xcconfig */;
+			baseConfigurationReference = 0BCE13437A0D1E7CEC42C2DD /* Pods-Jibber.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				API_TARGET = PRODUCTION;
@@ -3500,7 +3512,7 @@
 		};
 		D63DB20725E968C300F6B323 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 69BD6F6BD1555BE5571F430F /* Pods-OursNotificationContent.debug.xcconfig */;
+			baseConfigurationReference = 90FC9450D5907C3FC1CF12F0 /* Pods-JibberNotificationContent.debug.xcconfig */;
 			buildSettings = {
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Notification Content/OursNotificationContent.entitlements";
@@ -3527,7 +3539,7 @@
 		};
 		D63DB20825E968C300F6B323 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 22E80A859F4294D8C5A052D8 /* Pods-OursNotificationContent.release.xcconfig */;
+			baseConfigurationReference = A01F4177F369C2987256F642 /* Pods-JibberNotificationContent.release.xcconfig */;
 			buildSettings = {
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Notification Content/OursNotificationContent.entitlements";
@@ -3554,7 +3566,7 @@
 		};
 		D6884B242587D25D00DA380E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D33049F6417FECDE51BB13DB /* Pods-OursAppClip.debug.xcconfig */;
+			baseConfigurationReference = 08560A4056B4615E0D2AE87B /* Pods-JibberAppClip.debug.xcconfig */;
 			buildSettings = {
 				API_TARGET = STAGING;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -3582,7 +3594,7 @@
 		};
 		D6884B252587D25D00DA380E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3FD1AE8358B3CA7B98B5B241 /* Pods-OursAppClip.release.xcconfig */;
+			baseConfigurationReference = C93B258C6ACB241C6FA99005 /* Pods-JibberAppClip.release.xcconfig */;
 			buildSettings = {
 				API_TARGET = PRODUCTION;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -3873,7 +3885,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+		D6AE0F5B267CF80C00C6B048 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
 			requirement = {
@@ -3881,7 +3893,7 @@
 				minimumVersion = 3.0.0;
 			};
 		};
-		D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */ = {
+		D6AE0F62267CF8A400C6B048 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/marmelroy/PhoneNumberKit.git";
 			requirement = {
@@ -3889,7 +3901,7 @@
 				minimumVersion = 3.0.0;
 			};
 		};
-		D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */ = {
+		D6D804B326693AE700741594 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageLinkPlugin.git";
 			requirement = {
@@ -3897,7 +3909,7 @@
 				minimumVersion = 0.3.0;
 			};
 		};
-		D6E33897265808EC00BE3C24 /* XCRemoteSwiftPackageReference "twilio-chat-ios" */ = {
+		D6E33897265808EC00BE3C24 /* RemoteSwiftPackageReference */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/twilio/twilio-chat-ios";
 			requirement = {
@@ -3908,54 +3920,54 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D6AE0F5C267CF80C00C6B048 /* Lottie */ = {
+		D6AE0F5C267CF80C00C6B048 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			package = D6AE0F5B267CF80C00C6B048 /* RemoteSwiftPackageReference */;
 			productName = Lottie;
 		};
-		D6AE0F5E267CF82200C6B048 /* Lottie */ = {
+		D6AE0F5E267CF82200C6B048 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			package = D6AE0F5B267CF80C00C6B048 /* RemoteSwiftPackageReference */;
 			productName = Lottie;
 		};
-		D6AE0F60267CF82C00C6B048 /* Lottie */ = {
+		D6AE0F60267CF82C00C6B048 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			package = D6AE0F5B267CF80C00C6B048 /* RemoteSwiftPackageReference */;
 			productName = Lottie;
 		};
-		D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */ = {
+		D6AE0F63267CF8A400C6B048 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */;
+			package = D6AE0F62267CF8A400C6B048 /* RemoteSwiftPackageReference */;
 			productName = PhoneNumberKit;
 		};
-		D6AE0F65267CF8B600C6B048 /* PhoneNumberKit */ = {
+		D6AE0F65267CF8B600C6B048 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */;
+			package = D6AE0F62267CF8A400C6B048 /* RemoteSwiftPackageReference */;
 			productName = PhoneNumberKit;
 		};
-		D6AE0F67267CF8D900C6B048 /* PhoneNumberKit */ = {
+		D6AE0F67267CF8D900C6B048 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */;
+			package = D6AE0F62267CF8A400C6B048 /* RemoteSwiftPackageReference */;
 			productName = PhoneNumberKit;
 		};
-		D6D804B426693AE700741594 /* SDWebImageLinkPlugin */ = {
+		D6D804B426693AE700741594 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */;
+			package = D6D804B326693AE700741594 /* RemoteSwiftPackageReference */;
 			productName = SDWebImageLinkPlugin;
 		};
-		D6D804B62669415200741594 /* SDWebImageLinkPlugin */ = {
+		D6D804B62669415200741594 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */;
+			package = D6D804B326693AE700741594 /* RemoteSwiftPackageReference */;
 			productName = SDWebImageLinkPlugin;
 		};
-		D6D804B82669416E00741594 /* SDWebImageLinkPlugin */ = {
+		D6D804B82669416E00741594 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */;
+			package = D6D804B326693AE700741594 /* RemoteSwiftPackageReference */;
 			productName = SDWebImageLinkPlugin;
 		};
-		D6E33898265808EC00BE3C24 /* TwilioChatClient */ = {
+		D6E33898265808EC00BE3C24 /* SwiftPackageProductDependency */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6E33897265808EC00BE3C24 /* XCRemoteSwiftPackageReference "twilio-chat-ios" */;
+			package = D6E33897265808EC00BE3C24 /* RemoteSwiftPackageReference */;
 			productName = TwilioChatClient;
 		};
 /* End XCSwiftPackageProductDependency section */
