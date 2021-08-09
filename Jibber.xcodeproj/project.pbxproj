@@ -386,7 +386,6 @@
 		D6551A7025895FFB00B901E4 /* FaceDetectionViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */; };
 		D657175C2378C78500F8F96C /* MessageCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */; };
 		D657175E2378CEBA00F8F96C /* ChannelCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D657175D2378CEBA00F8F96C /* ChannelCollectionViewManager.swift */; };
-		D658C7DD24425E410027D12E /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D658C7DC24425E410027D12E /* HealthKit.framework */; };
 		D660544726320C06002F74F8 /* scroll_down.json in Resources */ = {isa = PBXBuildFile; fileRef = D660544626320C06002F74F8 /* scroll_down.json */; };
 		D6617CEA26741C4500439C06 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CE926741C4500439C06 /* UITextField+Extensions.swift */; };
 		D6617CEB26741C4500439C06 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CE926741C4500439C06 /* UITextField+Extensions.swift */; };
@@ -1138,7 +1137,6 @@
 			files = (
 				D6AE0F5D267CF80C00C6B048 /* BuildFile in Frameworks */,
 				D6D804B526693AE700741594 /* BuildFile in Frameworks */,
-				D658C7DD24425E410027D12E /* HealthKit.framework in Frameworks */,
 				D6AE0F64267CF8A400C6B048 /* BuildFile in Frameworks */,
 				D6E33899265808EC00BE3C24 /* BuildFile in Frameworks */,
 				E09AAFB2C502C558A3890EC4 /* Pods_Jibber.framework in Frameworks */,
