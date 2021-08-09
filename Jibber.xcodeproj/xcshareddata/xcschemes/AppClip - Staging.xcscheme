@@ -46,7 +46,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D6884B0D2587D25C00DA380E"
             BuildableName = "JibberAppClip.app"
-            BlueprintName = "JibberAppClip"
+            BlueprintName = "AppClip"
             ReferencedContainer = "container:Jibber.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
