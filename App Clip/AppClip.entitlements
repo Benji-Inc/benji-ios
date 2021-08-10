@@ -6,9 +6,9 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>appclips:ourown.chat</string>
-		<string>appclips:ourown.chat/onboarding</string>
-		<string>appclips:ourown.chat/reservation</string>
+		<string>appclips:jibber.wtf</string>
+		<string>appclips:jibber.wtf/onboarding</string>
+		<string>appclips:jibber.wtf/reservation</string>
 	</array>
 	<key>com.apple.developer.parent-application-identifiers</key>
 	<array>
