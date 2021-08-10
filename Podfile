@@ -17,19 +17,19 @@ target 'Jibber' do
   shared_pods
 end
 
-target 'JibberAppClip' do
+target 'AppClip' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   shared_pods
 end
 
-target 'JibberNotificationContent' do
+target 'Notification Content' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   shared_pods
 end
 
-target 'NotificationService' do
+target 'Notification Service' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   shared_pods
