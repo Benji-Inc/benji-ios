@@ -192,4 +192,3 @@ class MainCoordinator: Coordinator<Void> {
         self.runOnboardingFlow()
     }
 }
-
