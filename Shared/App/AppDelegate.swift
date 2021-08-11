@@ -18,11 +18,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        #if !NOTIFICATION
+#if !NOTIFICATION
         let rootNavController = RootNavigationController()
         self.initializeKeyWindow(with: rootNavController)
         self.initializeMainCoordinator(with: rootNavController, withOptions: launchOptions)
-        #endif
+#endif
 
         return true
     }
@@ -41,7 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return LaunchManager.shared.continueUser(activity: userActivity)
     }
 
-    #if !APPCLIP
+#if !APPCLIP
     func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         UserNotificationManager.shared.registerPush(from: deviceToken)
@@ -52,8 +52,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication,
-                 didReceiveRemoteNotification userInfo: [AnyHashable : Any],
-                 fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+                     didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
 
         print("DID RECEIVE REMOTE NOTIFICATION")
         guard application.applicationState == .active || application.applicationState == .inactive else {
@@ -67,27 +67,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             completionHandler(.noData)
         }
     }
-    #endif
+#endif
+
 
     private func prepareCurrentUser() {
-        #if !NOTIFICATION
+#if !NOTIFICATION
         UserNotificationManager.shared.resetBadgeCount()
-        #endif
+#endif
 
-        #if !APPCLIP && !NOTIFICATION
+#if !APPCLIP && !NOTIFICATION
 
         guard !ChatClientManager.shared.isConnected else { return }
 
-        GetChatToken()
-            .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink(receiveValue: { (token) in
-                if ChatClientManager.shared.client.isNil {
-                    ChatClientManager.shared.initialize(token: token)
-                } else {
-                    ChatClientManager.shared.update(token: token)
-                }
-            }).store(in: &self.cancellables)
-        #endif
+        Task {
+            guard let token = try? await GetChatToken().makeAsyncRequest(andUpdate: [],
+                                                                         viewsToIgnore: []) else { return }
+
+            if ChatClientManager.shared.client.isNil {
+                ChatClientManager.shared.initialize(token: token)
+            } else {
+                ChatClientManager.shared.update(token: token)
+            }
+        }
+#endif
     }
 }
 

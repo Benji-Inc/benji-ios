@@ -12,7 +12,8 @@ import Parse
 import Combine
 import Intents
 
-class HomeViewController: CollectionViewController<HomeCollectionViewManager.SectionType, HomeCollectionViewManager>, TransitionableViewController {
+class HomeViewController: CollectionViewController<HomeCollectionViewManager.SectionType,
+                            HomeCollectionViewManager>, TransitionableViewController {
 
     var receivingPresentationType: TransitionType {
         return .home

@@ -9,7 +9,7 @@
 import Foundation
 
 class CollectionViewController<SectionType: ManagerSectionType,
-ManagerType: CollectionViewManager<SectionType>>: ViewController {
+                               ManagerType: CollectionViewManager<SectionType>>: ViewController {
 
     private var collectionView: CollectionView!
     lazy var collectionViewManager = ManagerType(with: self.collectionView)
