@@ -75,7 +75,7 @@ class ChannelSupplier {
     }
 
     deinit {
-        self.isSynced = false 
+        self.isSynced = false
     }
 
     func set(activeChannel: DisplayableChannel?) {
@@ -199,7 +199,7 @@ class ChannelSupplier {
             case .channel(let tchChannel):
                 return tchChannel.uniqueName == name
             default:
-                return false 
+                return false
             }
         })
     }
@@ -223,12 +223,17 @@ class ChannelSupplier {
         if setActive {
             self.set(activeChannel: DisplayableChannel(channelType: .pending(uniqueName)))
         }
-        
-        CreateChannel(uniqueName: uniqueName,
-                      friendlyName: friendlyName,
-                      attributes: [:],
-                      members: members)
-            .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink().store(in: &self.cancellables)
+
+        Task {
+            do {
+                try await CreateChannel(uniqueName: uniqueName,
+                                        friendlyName: friendlyName,
+                                        attributes: [:],
+                                        members: members)
+                    .makeAsyncRequest(andUpdate: [], viewsToIgnore: [])
+            } catch {
+                print(error)
+            }
+        }
     }
 }

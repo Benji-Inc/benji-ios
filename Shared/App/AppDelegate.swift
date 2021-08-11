@@ -89,7 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     ChatClientManager.shared.update(token: token)
                 }
             } catch {
-                print("===== \(error)")
+                print(error)
             }
         }
 #endif
