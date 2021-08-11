@@ -11,6 +11,7 @@ import Parse
 import Combine
 
 struct CreateConnection: CloudFunction {
+
     typealias ReturnType = Any
 
     var to: User
@@ -24,6 +25,20 @@ struct CreateConnection: CloudFunction {
                                 callName: "createConnection",
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
     }
+
+    func makeAsyncRequest(andUpdate statusables: [Statusable],
+                          viewsToIgnore: [UIView]) async throws -> Any {
+
+        let params = ["to": self.to.objectId!,
+                      "status": Connection.Status.invited.rawValue]
+
+        let result = try await self.makeAsyncRequest(andUpdate: statusables,
+                                                     params: params,
+                                                     callName: "createConnection",
+                                                     viewsToIgnore: viewsToIgnore)
+
+        return result
+    }
 }
 
 struct UpdateConnection: CloudFunction {
@@ -32,7 +47,9 @@ struct UpdateConnection: CloudFunction {
     var connectionId: String
     var status: Connection.Status
 
-    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
+    func makeRequest(andUpdate statusables: [Statusable],
+                     viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
+
         let params = ["connectionId": self.connectionId,
                       "status": self.status.rawValue]
 
@@ -40,6 +57,17 @@ struct UpdateConnection: CloudFunction {
                                 params: params,
                                 callName: "updateConnection",
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
+    }
+
+    func makeAsyncRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
+        let params = ["connectionId": self.connectionId,
+                      "status": self.status.rawValue]
+
+        let result = try await self.makeAsyncRequest(andUpdate: statusables,
+                                                     params: params,
+                                                     callName: "updateConnection",
+                                                     viewsToIgnore: viewsToIgnore)
+        return result
     }
 }
 
@@ -54,39 +82,73 @@ struct GetAllConnections: CloudFunction {
 
     var direction: Direction = .all
 
-    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<[Connection], Error> {
+    func makeRequest(andUpdate statusables: [Statusable],
+                     viewsToIgnore: [UIView]) -> AnyPublisher<[Connection], Error> {
 
         return self.makeRequest(andUpdate: statusables,
                                 params: [:],
                                 callName: "getConnections",
                                 viewsToIgnore: viewsToIgnore).map { (value) -> [Connection] in
-                                    if let dict = value as? [String: [Connection]] {
-                                        var all: [Connection] = []
+            if let dict = value as? [String: [Connection]] {
+                var all: [Connection] = []
 
-                                        switch self.direction {
-                                        case .incoming:
-                                            if let incoming = dict["incoming"] {
-                                                all = incoming
-                                            }
-                                        case .outgoing:
-                                            if let outgoing = dict["outgoing"] {
-                                                all = outgoing
-                                            }
-                                        case .all:
-                                            if let incoming = dict["incoming"] {
-                                                all.append(contentsOf: incoming)
-                                            }
-                                            if let outgoing = dict["outgoing"] {
-                                                all.append(contentsOf: outgoing)
-                                            }
-                                        }
+                switch self.direction {
+                case .incoming:
+                    if let incoming = dict["incoming"] {
+                        all = incoming
+                    }
+                case .outgoing:
+                    if let outgoing = dict["outgoing"] {
+                        all = outgoing
+                    }
+                case .all:
+                    if let incoming = dict["incoming"] {
+                        all.append(contentsOf: incoming)
+                    }
+                    if let outgoing = dict["outgoing"] {
+                        all.append(contentsOf: outgoing)
+                    }
+                }
 
-                                        return all
-                                    } else {
-                                        return []
-                                    }
-                                }.eraseToAnyPublisher()
+                return all
+            } else {
+                return []
+            }
+        }.eraseToAnyPublisher()
+    }
+
+    func makeAsyncRequest(andUpdate statusables: [Statusable],
+                          viewsToIgnore: [UIView]) async throws -> [Connection] {
+
+        let result = try await self.makeAsyncRequest(andUpdate: statusables,
+                                                     params: [:],
+                                                     callName: "getConnections",
+                                                     viewsToIgnore: viewsToIgnore)
+
+        if let dict = result as? [String: [Connection]] {
+            var all: [Connection] = []
+
+            switch self.direction {
+            case .incoming:
+                if let incoming = dict["incoming"] {
+                    all = incoming
+                }
+            case .outgoing:
+                if let outgoing = dict["outgoing"] {
+                    all = outgoing
+                }
+            case .all:
+                if let incoming = dict["incoming"] {
+                    all.append(contentsOf: incoming)
+                }
+                if let outgoing = dict["outgoing"] {
+                    all.append(contentsOf: outgoing)
+                }
+            }
+
+            return all
+        } else {
+            throw ClientError.apiError(detail: "Get all connections error")
+        }
     }
 }
-
-

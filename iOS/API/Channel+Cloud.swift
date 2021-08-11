@@ -11,15 +11,17 @@ import Parse
 import Combine
 
 struct CreateChannel: CloudFunction {
+    
     typealias ReturnType = Any
-
+    
     var uniqueName: String
     var friendlyName: String
     var attributes: [String: Any]
     var members: [String]
-
-    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
-
+    
+    func makeRequest(andUpdate statusables: [Statusable],
+                     viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
+        
         let params: [String: Any] = ["uniqueName": self.uniqueName,
                                      "friendlyName": self.friendlyName,
                                      "type": "private",
@@ -30,5 +32,18 @@ struct CreateChannel: CloudFunction {
                                 params: params,
                                 callName: "createChannel",
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
+    }
+    
+    func makeAsyncRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
+        let params: [String: Any] = ["uniqueName": self.uniqueName,
+                                     "friendlyName": self.friendlyName,
+                                     "type": "private",
+                                     "attributes": self.attributes,
+                                     "members": self.members]
+        
+        return try await self.makeAsyncRequest(andUpdate: statusables,
+                                               params: params,
+                                               callName: "createChannel",
+                                               viewsToIgnore: viewsToIgnore)
     }
 }

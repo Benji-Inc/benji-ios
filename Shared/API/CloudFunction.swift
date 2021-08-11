@@ -13,6 +13,8 @@ import Combine
 protocol CloudFunction: StatusableRequest {
     func makeRequest(andUpdate statusables: [Statusable],
                      viewsToIgnore: [UIView]) -> AnyPublisher<ReturnType, Error>
+    func makeAsyncRequest(andUpdate statusables: [Statusable],
+                          viewsToIgnore: [UIView]) async throws -> ReturnType
 }
 
 extension CloudFunction {
@@ -33,8 +35,7 @@ extension CloudFunction {
             return WeakAnyStatusable(statusable)
         }
 
-        return try await withCheckedThrowingContinuation({
-            (continuation: CheckedContinuation<Any, Error>) in
+        return try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Any, Error>) in
 
             PFCloud.callFunction(inBackground: callName,
                                  withParameters: params) { (object, error) in
