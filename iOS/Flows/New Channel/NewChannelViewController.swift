@@ -60,7 +60,10 @@ class NewChannelViewController: CollectionViewController<NewChannelCollectionVie
             return connection.nonMeUser?.objectId
         }
 
-        ChannelSupplier.shared.createChannel(friendlyName: "", members: members, setActive: true)
+        ChannelSupplier.shared.createChannel(friendlyName: "",
+                                             members: members,
+                                             setActive: true)
+
         self.didCreateChannel?()
     }
 }

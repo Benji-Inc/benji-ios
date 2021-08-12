@@ -10,6 +10,12 @@
 		2C9DC2F4715948651C293215 /* Pods_Notification_Content.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8815B0EA9F1296FC57545F /* Pods_Notification_Content.framework */; };
 		6FBC3C8F68FC243D6E1A42F6 /* Pods_Notification_Service.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FBC4612F5436670D960DB97 /* Pods_Notification_Service.framework */; };
 		7F227B8576E160C9469E08D1 /* Pods_Intents_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C50C41C9E4C24DF432E0D86 /* Pods_Intents_Extension.framework */; };
+		807A7BC526C5B5A20023A71E /* Task+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC426C5B5A20023A71E /* Task+Extensions.swift */; };
+		807A7BC626C5B5A20023A71E /* Task+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC426C5B5A20023A71E /* Task+Extensions.swift */; };
+		807A7BC726C5B5A20023A71E /* Task+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC426C5B5A20023A71E /* Task+Extensions.swift */; };
+		807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
+		807A7BCA26C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
+		807A7BCB26C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
 		876DD7048C07730CF091087A /* Pods_AppClip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B92BA452D2C2DB45DD711F86 /* Pods_AppClip.framework */; };
 		C03D8861C3D82A5BDDC5CF8C /* Pods_Intents_ExtensionUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */; };
 		D607400E23401B3E009633EB /* SystemChannel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D607400D23401B3E009633EB /* SystemChannel.swift */; };
@@ -542,12 +548,12 @@
 		D6AD79B5267030FA00ED7A93 /* send_alert_interaction.json in Resources */ = {isa = PBXBuildFile; fileRef = D6AD79AE267030FA00ED7A93 /* send_alert_interaction.json */; };
 		D6AD79B6267030FA00ED7A93 /* send_alert_interaction.json in Resources */ = {isa = PBXBuildFile; fileRef = D6AD79AE267030FA00ED7A93 /* send_alert_interaction.json */; };
 		D6AD79B7267030FA00ED7A93 /* send_alert_interaction.json in Resources */ = {isa = PBXBuildFile; fileRef = D6AD79AE267030FA00ED7A93 /* send_alert_interaction.json */; };
-		D6AE0F5D267CF80C00C6B048 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F5C267CF80C00C6B048 /* SwiftPackageProductDependency */; };
-		D6AE0F5F267CF82200C6B048 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F5E267CF82200C6B048 /* SwiftPackageProductDependency */; };
-		D6AE0F61267CF82C00C6B048 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F60267CF82C00C6B048 /* SwiftPackageProductDependency */; };
-		D6AE0F64267CF8A400C6B048 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F63267CF8A400C6B048 /* SwiftPackageProductDependency */; };
-		D6AE0F66267CF8B600C6B048 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F65267CF8B600C6B048 /* SwiftPackageProductDependency */; };
-		D6AE0F68267CF8D900C6B048 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F67267CF8D900C6B048 /* SwiftPackageProductDependency */; };
+		D6AE0F5D267CF80C00C6B048 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F5C267CF80C00C6B048 /* Lottie */; };
+		D6AE0F5F267CF82200C6B048 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F5E267CF82200C6B048 /* Lottie */; };
+		D6AE0F61267CF82C00C6B048 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F60267CF82C00C6B048 /* Lottie */; };
+		D6AE0F64267CF8A400C6B048 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */; };
+		D6AE0F66267CF8B600C6B048 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F65267CF8B600C6B048 /* PhoneNumberKit */; };
+		D6AE0F68267CF8D900C6B048 /* PhoneNumberKit in Frameworks */ = {isa = PBXBuildFile; productRef = D6AE0F67267CF8D900C6B048 /* PhoneNumberKit */; };
 		D6AE0F70267CF9CA00C6B048 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0F6F267CF9CA00C6B048 /* NotificationService.swift */; };
 		D6AE0F74267CF9CA00C6B048 /* Notification Service.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = D6AE0F6D267CF9CA00C6B048 /* Notification Service.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D6AE0F7E267CFA6C00C6B048 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6AE0F7D267CFA6C00C6B048 /* Intents.framework */; };
@@ -643,9 +649,9 @@
 		D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
 		D6D804B12667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
 		D6D804B22667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
-		D6D804B526693AE700741594 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B426693AE700741594 /* SwiftPackageProductDependency */; };
-		D6D804B72669415200741594 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B62669415200741594 /* SwiftPackageProductDependency */; };
-		D6D804B92669416E00741594 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B82669416E00741594 /* SwiftPackageProductDependency */; };
+		D6D804B526693AE700741594 /* SDWebImageLinkPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B426693AE700741594 /* SDWebImageLinkPlugin */; };
+		D6D804B72669415200741594 /* SDWebImageLinkPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B62669415200741594 /* SDWebImageLinkPlugin */; };
+		D6D804B92669416E00741594 /* SDWebImageLinkPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = D6D804B82669416E00741594 /* SDWebImageLinkPlugin */; };
 		D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804BA266A8B7D00741594 /* NSTextCheckingResult+Extension.swift */; };
 		D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */; };
 		D6D8BB6D24677B5D00937581 /* Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D8BB6C24677B5D00937581 /* Reservation.swift */; };
@@ -656,7 +662,7 @@
 		D6DADF742207E0E2007D9EB1 /* TCHChannel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DADF732207E0E2007D9EB1 /* TCHChannel+Extensions.swift */; };
 		D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
 		D6DF870725A5214D0089B0CF /* QuePositions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DF870525A5214D0089B0CF /* QuePositions.swift */; };
-		D6E33899265808EC00BE3C24 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; productRef = D6E33898265808EC00BE3C24 /* SwiftPackageProductDependency */; };
+		D6E33899265808EC00BE3C24 /* TwilioChatClient in Frameworks */ = {isa = PBXBuildFile; productRef = D6E33898265808EC00BE3C24 /* TwilioChatClient */; };
 		D6E4C7FB238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E4C7FA238E4217002B1330 /* ChannelHeaderAttributesConfigurer.swift */; };
 		D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E65F18237791650061AA67 /* ManageableCell.swift */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
@@ -784,6 +790,8 @@
 		69BD6F6BD1555BE5571F430F /* Pods-OursNotificationContent.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursNotificationContent.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OursNotificationContent/Pods-OursNotificationContent.debug.xcconfig"; sourceTree = "<group>"; };
 		6EBB237D17BE8FEF541EA89F /* Pods-Notification Service.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notification Service.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Notification Service/Pods-Notification Service.debug.xcconfig"; sourceTree = "<group>"; };
 		6FBC4612F5436670D960DB97 /* Pods_Notification_Service.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Notification_Service.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		807A7BC426C5B5A20023A71E /* Task+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Extensions.swift"; sourceTree = "<group>"; };
+		807A7BC826C5C8100023A71E /* Task+TaskPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+TaskPool.swift"; sourceTree = "<group>"; };
 		89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.debug.xcconfig"; sourceTree = "<group>"; };
 		8C8815B0EA9F1296FC57545F /* Pods_Notification_Content.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Notification_Content.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Intents_ExtensionUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1141,10 +1149,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6AE0F5D267CF80C00C6B048 /* BuildFile in Frameworks */,
-				D6D804B526693AE700741594 /* BuildFile in Frameworks */,
-				D6AE0F64267CF8A400C6B048 /* BuildFile in Frameworks */,
-				D6E33899265808EC00BE3C24 /* BuildFile in Frameworks */,
+				D6AE0F5D267CF80C00C6B048 /* Lottie in Frameworks */,
+				D6D804B526693AE700741594 /* SDWebImageLinkPlugin in Frameworks */,
+				D6AE0F64267CF8A400C6B048 /* PhoneNumberKit in Frameworks */,
+				D6E33899265808EC00BE3C24 /* TwilioChatClient in Frameworks */,
 				E09AAFB2C502C558A3890EC4 /* Pods_Jibber.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1153,10 +1161,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6AE0F61267CF82C00C6B048 /* BuildFile in Frameworks */,
+				D6AE0F61267CF82C00C6B048 /* Lottie in Frameworks */,
 				D63DB1FB25E968C300F6B323 /* UserNotificationsUI.framework in Frameworks */,
-				D6D804B92669416E00741594 /* BuildFile in Frameworks */,
-				D6AE0F68267CF8D900C6B048 /* BuildFile in Frameworks */,
+				D6D804B92669416E00741594 /* SDWebImageLinkPlugin in Frameworks */,
+				D6AE0F68267CF8D900C6B048 /* PhoneNumberKit in Frameworks */,
 				D63DB1F925E968C300F6B323 /* UserNotifications.framework in Frameworks */,
 				2C9DC2F4715948651C293215 /* Pods_Notification_Content.framework in Frameworks */,
 			);
@@ -1166,9 +1174,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6AE0F66267CF8B600C6B048 /* BuildFile in Frameworks */,
-				D6D804B72669415200741594 /* BuildFile in Frameworks */,
-				D6AE0F5F267CF82200C6B048 /* BuildFile in Frameworks */,
+				D6AE0F66267CF8B600C6B048 /* PhoneNumberKit in Frameworks */,
+				D6D804B72669415200741594 /* SDWebImageLinkPlugin in Frameworks */,
+				D6AE0F5F267CF82200C6B048 /* Lottie in Frameworks */,
 				876DD7048C07730CF091087A /* Pods_AppClip.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1478,6 +1486,8 @@
 				D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */,
 				D6D380C3257FC18300C562E8 /* Selectable.swift */,
 				D61EC0E921D3111600204BEE /* String+Extensions.swift */,
+				807A7BC426C5B5A20023A71E /* Task+Extensions.swift */,
+				807A7BC826C5C8100023A71E /* Task+TaskPool.swift */,
 				D6D1503A21D7F47600CD8CE4 /* UI Extensions */,
 				D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */,
 				D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */,
@@ -2190,10 +2200,10 @@
 			);
 			name = Jibber;
 			packageProductDependencies = (
-				D6E33898265808EC00BE3C24 /* SwiftPackageProductDependency */,
-				D6D804B426693AE700741594 /* SwiftPackageProductDependency */,
-				D6AE0F5C267CF80C00C6B048 /* SwiftPackageProductDependency */,
-				D6AE0F63267CF8A400C6B048 /* SwiftPackageProductDependency */,
+				D6E33898265808EC00BE3C24 /* TwilioChatClient */,
+				D6D804B426693AE700741594 /* SDWebImageLinkPlugin */,
+				D6AE0F5C267CF80C00C6B048 /* Lottie */,
+				D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */,
 			);
 			productName = Benji;
 			productReference = D61EC0BC21D3071400204BEE /* Jibber.app */;
@@ -2214,9 +2224,9 @@
 			);
 			name = "Notification Content";
 			packageProductDependencies = (
-				D6D804B82669416E00741594 /* SwiftPackageProductDependency */,
-				D6AE0F60267CF82C00C6B048 /* SwiftPackageProductDependency */,
-				D6AE0F67267CF8D900C6B048 /* SwiftPackageProductDependency */,
+				D6D804B82669416E00741594 /* SDWebImageLinkPlugin */,
+				D6AE0F60267CF82C00C6B048 /* Lottie */,
+				D6AE0F67267CF8D900C6B048 /* PhoneNumberKit */,
 			);
 			productName = OursNotificationContent;
 			productReference = D63DB1F725E968C300F6B323 /* Notification Content.appex */;
@@ -2238,9 +2248,9 @@
 			);
 			name = AppClip;
 			packageProductDependencies = (
-				D6D804B62669415200741594 /* SwiftPackageProductDependency */,
-				D6AE0F5E267CF82200C6B048 /* SwiftPackageProductDependency */,
-				D6AE0F65267CF8B600C6B048 /* SwiftPackageProductDependency */,
+				D6D804B62669415200741594 /* SDWebImageLinkPlugin */,
+				D6AE0F5E267CF82200C6B048 /* Lottie */,
+				D6AE0F65267CF8B600C6B048 /* PhoneNumberKit */,
 			);
 			productName = BenjiAppClip;
 			productReference = D6884B0E2587D25C00DA380E /* AppClip.app */;
@@ -2346,10 +2356,10 @@
 			);
 			mainGroup = D61EC0B321D3071400204BEE;
 			packageReferences = (
-				D6E33897265808EC00BE3C24 /* RemoteSwiftPackageReference */,
-				D6D804B326693AE700741594 /* RemoteSwiftPackageReference */,
-				D6AE0F5B267CF80C00C6B048 /* RemoteSwiftPackageReference */,
-				D6AE0F62267CF8A400C6B048 /* RemoteSwiftPackageReference */,
+				D6E33897265808EC00BE3C24 /* XCRemoteSwiftPackageReference "twilio-chat-ios" */,
+				D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */,
+				D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */,
 			);
 			productRefGroup = D61EC0BD21D3071400204BEE /* Products */;
 			projectDirPath = "";
@@ -2847,6 +2857,7 @@
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,
 				D6405B67236E002E00FAA06B /* User.swift in Sources */,
 				D69B75FB264842D00007020D /* VideoView.swift in Sources */,
+				807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */,
 				D6830222234AA35C006145FE /* DisplayableChannel.swift in Sources */,
 				D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
@@ -2859,6 +2870,7 @@
 				D60F95EE2665A5C400CF8766 /* AlertCell.swift in Sources */,
 				D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
 				D6884AC825800FC600DA380E /* StatusableRequest.swift in Sources */,
+				807A7BC526C5B5A20023A71E /* Task+Extensions.swift in Sources */,
 				D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D6DADF702207DF60007D9EB1 /* ChannelCell.swift in Sources */,
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
@@ -3014,8 +3026,10 @@
 				D63DB26325E9997200F6B323 /* StringStyle.swift in Sources */,
 				D63DB25825E9995700F6B323 /* AnimationCycle.swift in Sources */,
 				D6AD799B266E870200ED7A93 /* MIMEType.swift in Sources */,
+				807A7BCB26C5C8100023A71E /* Task+TaskPool.swift in Sources */,
 				D63DB24D25E9994B00F6B323 /* Completeable.swift in Sources */,
 				D63DB23425E9992600F6B323 /* UIEdgeInsets+Extensions.swift in Sources */,
+				807A7BC726C5B5A20023A71E /* Task+Extensions.swift in Sources */,
 				D63DB26025E9996C00F6B323 /* PushPayload.swift in Sources */,
 				D63DB21225E998D700F6B323 /* Config.swift in Sources */,
 				D63DB26125E9996C00F6B323 /* SystemAvatar.swift in Sources */,
@@ -3094,6 +3108,7 @@
 				D63D5C98265811B000543200 /* URL+Extensions.swift in Sources */,
 				D6551A3025895E4600B901E4 /* SwitchableContentViewController.swift in Sources */,
 				D6AD799A266E870200ED7A93 /* MIMEType.swift in Sources */,
+				807A7BC626C5B5A20023A71E /* Task+Extensions.swift in Sources */,
 				D6551A3A25895E6E00B901E4 /* FaceDetectionViewController.swift in Sources */,
 				D66379E225A39C0400A4A3B7 /* UserNotificationManager.swift in Sources */,
 				D6DF870725A5214D0089B0CF /* QuePositions.swift in Sources */,
@@ -3116,6 +3131,7 @@
 				D65519392589122700B901E4 /* UIEdgeInsets+Extensions.swift in Sources */,
 				D65519772589129B00B901E4 /* AnyHashableDisplayable.swift in Sources */,
 				D63D71C225F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
+				807A7BCA26C5C8100023A71E /* Task+TaskPool.swift in Sources */,
 				D63DB1F225E95CEC00F6B323 /* Connection+Cloud.swift in Sources */,
 				D6F37D6C25B5EC350034C9C5 /* AvatarProfileViewController.swift in Sources */,
 				D65519762589129B00B901E4 /* Deeplinkable.swift in Sources */,
@@ -3895,7 +3911,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D6AE0F5B267CF80C00C6B048 /* RemoteSwiftPackageReference */ = {
+		D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
 			requirement = {
@@ -3903,7 +3919,7 @@
 				minimumVersion = 3.0.0;
 			};
 		};
-		D6AE0F62267CF8A400C6B048 /* RemoteSwiftPackageReference */ = {
+		D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/marmelroy/PhoneNumberKit.git";
 			requirement = {
@@ -3911,7 +3927,7 @@
 				minimumVersion = 3.0.0;
 			};
 		};
-		D6D804B326693AE700741594 /* RemoteSwiftPackageReference */ = {
+		D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageLinkPlugin.git";
 			requirement = {
@@ -3919,7 +3935,7 @@
 				minimumVersion = 0.3.0;
 			};
 		};
-		D6E33897265808EC00BE3C24 /* RemoteSwiftPackageReference */ = {
+		D6E33897265808EC00BE3C24 /* XCRemoteSwiftPackageReference "twilio-chat-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/twilio/twilio-chat-ios";
 			requirement = {
@@ -3930,54 +3946,54 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D6AE0F5C267CF80C00C6B048 /* SwiftPackageProductDependency */ = {
+		D6AE0F5C267CF80C00C6B048 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6AE0F5B267CF80C00C6B048 /* RemoteSwiftPackageReference */;
+			package = D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
 		};
-		D6AE0F5E267CF82200C6B048 /* SwiftPackageProductDependency */ = {
+		D6AE0F5E267CF82200C6B048 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6AE0F5B267CF80C00C6B048 /* RemoteSwiftPackageReference */;
+			package = D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
 		};
-		D6AE0F60267CF82C00C6B048 /* SwiftPackageProductDependency */ = {
+		D6AE0F60267CF82C00C6B048 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6AE0F5B267CF80C00C6B048 /* RemoteSwiftPackageReference */;
+			package = D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
 		};
-		D6AE0F63267CF8A400C6B048 /* SwiftPackageProductDependency */ = {
+		D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6AE0F62267CF8A400C6B048 /* RemoteSwiftPackageReference */;
+			package = D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */;
 			productName = PhoneNumberKit;
 		};
-		D6AE0F65267CF8B600C6B048 /* SwiftPackageProductDependency */ = {
+		D6AE0F65267CF8B600C6B048 /* PhoneNumberKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6AE0F62267CF8A400C6B048 /* RemoteSwiftPackageReference */;
+			package = D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */;
 			productName = PhoneNumberKit;
 		};
-		D6AE0F67267CF8D900C6B048 /* SwiftPackageProductDependency */ = {
+		D6AE0F67267CF8D900C6B048 /* PhoneNumberKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6AE0F62267CF8A400C6B048 /* RemoteSwiftPackageReference */;
+			package = D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */;
 			productName = PhoneNumberKit;
 		};
-		D6D804B426693AE700741594 /* SwiftPackageProductDependency */ = {
+		D6D804B426693AE700741594 /* SDWebImageLinkPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6D804B326693AE700741594 /* RemoteSwiftPackageReference */;
+			package = D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */;
 			productName = SDWebImageLinkPlugin;
 		};
-		D6D804B62669415200741594 /* SwiftPackageProductDependency */ = {
+		D6D804B62669415200741594 /* SDWebImageLinkPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6D804B326693AE700741594 /* RemoteSwiftPackageReference */;
+			package = D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */;
 			productName = SDWebImageLinkPlugin;
 		};
-		D6D804B82669416E00741594 /* SwiftPackageProductDependency */ = {
+		D6D804B82669416E00741594 /* SDWebImageLinkPlugin */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6D804B326693AE700741594 /* RemoteSwiftPackageReference */;
+			package = D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */;
 			productName = SDWebImageLinkPlugin;
 		};
-		D6E33898265808EC00BE3C24 /* SwiftPackageProductDependency */ = {
+		D6E33898265808EC00BE3C24 /* TwilioChatClient */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D6E33897265808EC00BE3C24 /* RemoteSwiftPackageReference */;
+			package = D6E33897265808EC00BE3C24 /* XCRemoteSwiftPackageReference "twilio-chat-ios" */;
 			productName = TwilioChatClient;
 		};
 /* End XCSwiftPackageProductDependency section */

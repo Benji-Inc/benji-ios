@@ -13,6 +13,8 @@ class ViewController: UIViewController, Dismissable {
 
     var dismissHandlers: [DismissHandler] = []
     var cancellables = Set<AnyCancellable>()
+    /// A pool of Tasks that are automatically cancelled when our view disappears
+    var taskPool = TaskPool()
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -54,6 +56,11 @@ class ViewController: UIViewController, Dismissable {
             self.dismissHandlers.forEach { (dismissHandler) in
                 dismissHandler.handler?()
             }
+        }
+
+        // If our view goes off the screen, automatically cancel any tasks associated with it.
+        Task {
+            await self.taskPool.cancelAndRemoveAll()
         }
     }
 

@@ -168,7 +168,7 @@ class Button: UIButton, Statusable {
         switch status {
         case .loading, .initial:
             return self.handleLoadingState()
-        case .complete, .saved, .invalid, .custom(_), .valid:
+        case .complete, .saved, .invalid, .custom(_), .valid, .cancelled:
             return self.handleNormalState()
         case .error(let message):
             return self.handleError(message)
