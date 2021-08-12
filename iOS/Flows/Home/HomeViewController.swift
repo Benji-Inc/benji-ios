@@ -13,7 +13,7 @@ import Combine
 import Intents
 
 class HomeViewController: CollectionViewController<HomeCollectionViewManager.SectionType,
-                            HomeCollectionViewManager>, TransitionableViewController {
+                          HomeCollectionViewManager>, TransitionableViewController {
 
     var receivingPresentationType: TransitionType {
         return .home
