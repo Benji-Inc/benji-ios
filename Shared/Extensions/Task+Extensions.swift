@@ -8,8 +8,6 @@
 
 import Foundation
 
-
-
 extension Task where Success == Never, Failure == Never {
 
     /// Temporarily suspends the current task for at least the specified number of seconds.
