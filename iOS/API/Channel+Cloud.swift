@@ -33,7 +33,8 @@ struct CreateChannel: CloudFunction {
                                 callName: "createChannel",
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
     }
-    
+
+    @discardableResult
     func makeAsyncRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
         let params: [String: Any] = ["uniqueName": self.uniqueName,
                                      "friendlyName": self.friendlyName,
