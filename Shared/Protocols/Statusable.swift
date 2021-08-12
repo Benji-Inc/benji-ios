@@ -46,6 +46,7 @@ enum EventStatus: Equatable {
     case valid // Used for temporary validation (ie: handling a valid phone number)
     case invalid // User for temporary validation (ie: invalid email address)
     case loading
+    case cancelled
     case error(String) // Temporary state used to communicate an error occured (ie: api returns an error)
     case saved // Temporary state used to communicate an object was saved successfully
     case complete // A permenantent state showing an object is valid and has been saved
@@ -70,6 +71,8 @@ enum EventStatus: Equatable {
         case .complete:
             break
         case .custom(_):
+            break
+        case .cancelled:
             break
         }
 
