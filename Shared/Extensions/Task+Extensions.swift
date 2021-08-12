@@ -8,23 +8,22 @@
 
 import Foundation
 
-/// A thread safe collection of tasks.
-/// This allows for bulk-cancelling multiple tasks.
+/// A thread safe collection of tasks that automatically handles removing tasks from itself when the tasks finish.
 actor TaskPool {
 
     private var pool: [Task<Void, Never>] = []
 
-    /// Adds a task to the pool.
+    /// Adds a task to the pool and prepares to automatically remove the task once it's finished.
     func add(_ task: Task<Void, Never>) {
         self.pool.append(task)
+
+        Task {
+            _ = await task.result
+            self.pool.remove(object: task)
+        }
     }
 
-    /// Removes a task from the pool.
-    func remove(_ task: Task<Void, Never>) {
-        self.pool.remove(object: task)
-    }
-
-    /// Cancels all tasks currently in the pool.
+    /// Cancels all tasks currently in the pool and removes them.
     func cancelAndRemoveAll() {
         for task in self.pool {
             task.cancel()
@@ -39,8 +38,6 @@ extension Task where Success == Void, Failure == Never {
     func add(to taskPool: TaskPool) {
         Task {
             await taskPool.add(self)
-            _ = await self.result
-            await taskPool.remove(self)
         }
     }
 }
