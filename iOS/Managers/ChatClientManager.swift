@@ -37,30 +37,29 @@ class ChatClientManager: NSObject {
         return client.connectionState == .connected
     }
 
-    var cancellables = Set<AnyCancellable>()
+    func initializeAsync(token: String) async throws {
+        // Initialize the ChannelSupplier so it can listen to the client updates.
+        _ = ChannelSupplier.shared
 
-    @discardableResult
-    func initialize(token: String) -> Future<Void, Error> {
-        return Future { [weak self] promise in
-            guard let `self` = self else { return }
-            // Initialize the ChannelSupplier so it can listen to the client updates.
-            _ = ChannelSupplier.shared
+        let result: Void = try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Void, Error>) in
             TwilioChatClient.chatClient(withToken: token,
                                         properties: nil,
                                         delegate: self,
                                         completion: { (result, client) in
-
-                                            if let error = result.error {
-                                                promise(.failure(error))
-                                            } else if let strongClient = client {
-                                                self.client = strongClient
-                                                //TwilioChatClient.setLogLevel(.debug)
-                                                promise(.success(()))
-                                            } else {
-                                                promise(.failure(ClientError.message(detail: "Failed to initialize chat client.")))
-                                            }
+                if let error = result.error {
+                    continuation.resume(throwing: error)
+                } else if let strongClient = client {
+                    self.client = strongClient
+                    continuation.resume()
+                } else {
+                    continuation.resume(throwing: ClientError.message(detail: "Failed to initialize chat client."))
+                }
             })
-        }
+        })
+
+        try Task.checkCancellation()
+
+        return result
     }
 
     @discardableResult
