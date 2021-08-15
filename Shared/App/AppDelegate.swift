@@ -94,7 +94,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let token = try await GetChatToken().makeAsyncRequest(andUpdate: [], viewsToIgnore: [])
 
         if ChatClientManager.shared.client.isNil {
-            ChatClientManager.shared.initialize(token: token)
+            try await ChatClientManager.shared.initializeAsync(token: token)
         } else {
             ChatClientManager.shared.update(token: token)
         }

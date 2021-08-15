@@ -19,6 +19,7 @@ class MainCoordinator: Coordinator<Void> {
 
     lazy var splashVC = SplashViewController()
     var cancellables = Set<AnyCancellable>()
+    private let taskPool = TaskPool()
     lazy var userQuery = User.query() // Will crash if initialized before parse registers the subclass
 
     override func start() {
@@ -43,7 +44,6 @@ class MainCoordinator: Coordinator<Void> {
     // Code you don't want to use in your App Clip.
 
     func handle(result: LaunchStatus) {
-
         switch result {
         case .success(let object, let token):
             self.deepLink = object
@@ -59,7 +59,13 @@ class MainCoordinator: Coordinator<Void> {
             } else if ChatClientManager.shared.isConnected {
                 self.runHomeFlow()
             } else if !token.isEmpty {
-                self.initializeChat(with: token)
+                Task {
+                    do {
+                        try await self.initializeChatAsync(with: token)
+                    } catch {
+                        print(error)
+                    }
+                }.add(to: self.taskPool)
             } else if let deeplink = object {
                 self.handle(deeplink: deeplink)
             }
@@ -68,29 +74,7 @@ class MainCoordinator: Coordinator<Void> {
         }
     }
 
-    private func initializeChat(with token: String) {
-        // Fixes double loading.
-        guard !self.isInitializingChat else { return }
-
-        self.isInitializingChat = true
-        ChatClientManager.shared.initialize(token: token)
-            .mainSink(receiveValue: { (result) in }, receiveCompletion: { (_) in
-                self.isInitializingChat = false
-                guard let user = User.current(), user.isOnboarded else { return }
-                if let user = User.current(), user.isOnboarded {
-                    if let deeplink = self.deepLink {
-                        self.handle(deeplink: deeplink)
-                    } else {
-                        self.runHomeFlow()
-                    }
-                } else {
-                    self.runOnboardingFlow()
-                }
-            }).store(in: &self.cancellables)
-    }
-
     private func runHomeFlow() {
-
         if let homeCoordinator = self.childCoordinator as? HomeCoordinator {
             if let deepLink = self.deepLink {
                 homeCoordinator.handle(deeplink: deepLink)
@@ -103,13 +87,44 @@ class MainCoordinator: Coordinator<Void> {
                 // If the home coordinator ever finishes, put handling logic here.
             })
         } else {
-            GetChatToken()
-                .makeRequest(andUpdate: [], viewsToIgnore: [])
-                .mainSink(receiveValue: { (token) in
-                    self.initializeChat(with: token)
-                }, receiveCompletion: { (_) in }).store(in: &self.cancellables)
+            Task {
+                do {
+                    try await self.getChatToken()
+                } catch {
+                    print(error)
+                }
+            }.add(to: self.taskPool)
         }
     }
+
+    func getChatToken() async throws {
+        let token = try await GetChatToken().makeAsyncRequest(andUpdate: [], viewsToIgnore: [])
+        try await self.initializeChatAsync(with: token)
+    }
+
+    private func initializeChatAsync(with token: String) async throws {
+        // Fixes double loading.
+        guard !self.isInitializingChat else { return }
+
+        self.isInitializingChat = true
+
+        try await ChatClientManager.shared.initializeAsync(token: token)
+
+        self.isInitializingChat = false
+
+        guard let user = User.current(), user.isOnboarded else { return }
+
+        if let user = User.current(), user.isOnboarded {
+            if let deeplink = self.deepLink {
+                self.handle(deeplink: deeplink)
+            } else {
+                self.runHomeFlow()
+            }
+        } else {
+            self.runOnboardingFlow()
+        }
+    }
+
     #endif
 
     func runOnboardingFlow() {
