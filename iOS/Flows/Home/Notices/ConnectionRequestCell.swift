@@ -27,7 +27,7 @@ class ConnectionRequestCell: NoticeCell {
 
         guard let connectionId = item.attributes?["connectionId"] as? String else { return }
 
-        Connection.getObject(with: connectionId).mainSink { result in
+        Connection.getObjectSync(with: connectionId).mainSink { result in
             switch result {
             case .success(let connection):
                 self.content.configure(with: connection)

@@ -87,7 +87,7 @@ class ReservationsViewController: NavigationBarViewController {
 
     private func didSelect(reservation: Reservation) {
         self.button.handleEvent(status: .loading)
-        reservation.prepareMetaData(andUpdate: [])
+        reservation.prepareMetaDataSync(andUpdate: [])
             .mainSink(receiveValue: { (_) in
                 self.button.handleEvent(status: .complete)
                 self.didSelectReservation?(reservation)

@@ -71,7 +71,6 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     }
 
     private func sendText(with message: String?, phone: String) {
-
         self.messageComposer.recipients = [phone]
         self.messageComposer.body = message
         self.messageComposer.messageComposeDelegate = self
@@ -144,36 +143,34 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
         }
 
         picker.dismiss(animated: true) {
-            self.findUser(for: contact)
+            Task {
+                await self.findUser(for: contact)
+            }
         }
     }
 
-    func findUser(for contact: CNContact) {
+    func findUser(for contact: CNContact) async {
         // Search for user with phone number
         guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers(),
-                let reservation = self.selectedReservation else { return }
+              let reservation = self.selectedReservation else {
+                  return
+              }
+        
+        do {
+            async let matchingUser = User.getFirstObject(where: "phoneNumber", contains: phone)
+            // Ensure that the reservation metadata is prepared before we show the reservation
+            try await reservation.prepareMetadata(andUpdate: [])
 
-        let combined = Publishers.Zip(
-            reservation.prepareMetaData(andUpdate: []),
-            User.getFirstObject(where: "phoneNumber", contains: phone)
-        )
-
-        combined.mainSink { (result) in
-            switch result {
-            case .success((_, let user)):
-                self.showReservationAlert(for: user)
-            case .error(_):
-                if reservation.contactId == contact.identifier {
-                    self.sendText(with: reservation.reminderMessage, phone: phone)
-                } else {
-                    reservation.contactId = contact.identifier
-                    reservation.saveLocalThenServerSync()
-                        .mainSink { (updatedReservation) in
-                            self.sendText(with: reservation.message, phone: phone)
-                        }.store(in: &self.cancellables)
-                }
+            try await self.showReservationAlert(for: matchingUser)
+        } catch {
+            if reservation.contactId == contact.identifier {
+                self.sendText(with: reservation.reminderMessage, phone: phone)
+            } else {
+                reservation.contactId = contact.identifier
+                _ = try? await reservation.saveLocalThenServer()
+                self.sendText(with: reservation.message, phone: phone)
             }
-        }.store(in: &self.cancellables)
+        }
     }
 
     func showReservationAlert(for user: User) {

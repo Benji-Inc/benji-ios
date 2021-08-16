@@ -134,7 +134,8 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
         return "RSVP code: \(String(optional: self.objectId))\nOurs an is an exclusive place to be social. I saved you a spot. Tap👇\n\(link)"
     }
 
-    func prepareMetaData(andUpdate statusables: [Statusable]) -> Future<Void, Error> {
+    @available(*, deprecated, message: "Use aync version")
+    func prepareMetaDataSync(andUpdate statusables: [Statusable]) -> Future<Void, Error> {
         return Future { promise in
             let metadataProvider = LPMetadataProvider()
 
@@ -166,6 +167,43 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
                 }
             } else {
                 promise(.failure(ClientError.generic))
+            }
+        }
+    }
+
+    func prepareMetadata(andUpdate statusables: [Statusable]) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            let metadataProvider = LPMetadataProvider()
+
+            // Trigger the loading event for all statusables
+            for statusable in statusables {
+                statusable.handleEvent(status: .loading)
+            }
+
+            let domainURL = "https://ourown.chat"
+            if let objectId = self.objectId {
+                self.link = domainURL + "/reservation?reservationId=\(objectId)"
+            }
+
+            if let url = URL(string: domainURL) {
+                metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
+                    Task.onMainActor {
+                        if let e = error {
+                            for statusable in statusables {
+                                statusable.handleEvent(status: .error("Error"))
+                            }
+                            continuation.resume(throwing: e)
+                        } else {
+                            self.metadata = metadata
+                            for statusable in statusables {
+                                statusable.handleEvent(status: .complete)
+                            }
+                            continuation.resume(returning: ())
+                        }
+                    }
+                }
+            } else {
+                continuation.resume(throwing: ClientError.generic)
             }
         }
     }

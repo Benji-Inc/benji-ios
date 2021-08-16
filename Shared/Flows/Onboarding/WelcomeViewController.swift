@@ -135,7 +135,7 @@ class WelcomeViewController: TextInputViewController<Void> {
         }
 
         self.textEntry.button.handleEvent(status: .loading)
-        Reservation.getObject(with: code)
+        Reservation.getObjectSync(with: code)
             .mainSink(receivedResult: { (result) in
                 switch result {
                 case .success(let reservation):

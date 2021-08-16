@@ -137,7 +137,8 @@ extension Objectable where Self: PFObject {
         }
     }
 
-    static func getFirstObject(where key: String, contains string: String) -> Future<Self, Error> {
+    @available(*, deprecated, message: "Use async version")
+    static func getFirstObjectSync(where key: String, contains string: String) -> Future<Self, Error> {
         return Future { promise in
             let query = self.query()
             query?.whereKey(key, contains: string)
@@ -153,8 +154,27 @@ extension Objectable where Self: PFObject {
         }
     }
 
-    static func getObject(with objectId: String) -> Future<Self, Error> {
-        return self.getFirstObject(where: "objectId", contains: objectId)
+    static func getFirstObject(where key: String, contains string: String) async throws -> Self {
+        let object: Self = try await withCheckedThrowingContinuation({ continuation in
+            let query = self.query()
+            query?.whereKey(key, contains: string)
+            query?.getFirstObjectInBackground(block: { object, error in
+                if let obj = object as? Self {
+                    continuation.resume(returning: obj)
+                } else if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(throwing: ClientError.generic)
+                }
+            })
+        })
+
+        return object
+    }
+
+    @available(*, deprecated, message: "Use async version")
+    static func getObjectSync(with objectId: String) -> Future<Self, Error> {
+        return self.getFirstObjectSync(where: "objectId", contains: objectId)
     }
 
     static func localThenNetworkQuerySync(for objectId: String) -> Future<Self, Error> {

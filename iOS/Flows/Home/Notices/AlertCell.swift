@@ -37,7 +37,7 @@ class AlertCell: NoticeCell {
 
         self.textView.set(text: body, messageContext: MessageContext.timeSensitive)
 
-        User.getObject(with: author).mainSink { result in
+        User.getObjectSync(with: author).mainSink { result in
             switch result {
             case .success(let user):
                 self.avatarView.set(avatar: user)
