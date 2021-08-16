@@ -87,7 +87,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 #if !APPCLIP && !NOTIFICATION
     func getChatToken() async {
         do {
-            let token = try await GetChatToken().makeAsyncRequest()
+            let token = try await GetChatToken().makeRequest()
 
             if ChatClientManager.shared.client.isNil {
                 try await ChatClientManager.shared.initialize(token: token)

@@ -230,7 +230,7 @@ class ChannelSupplier {
                                         friendlyName: friendlyName,
                                         attributes: [:],
                                         members: members)
-                    .makeAsyncRequest(andUpdate: [], viewsToIgnore: [])
+                    .makeRequest(andUpdate: [], viewsToIgnore: [])
             } catch {
                 print(error)
             }

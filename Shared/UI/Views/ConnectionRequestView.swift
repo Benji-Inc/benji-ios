@@ -132,7 +132,7 @@ class ConnectionRequestView: View {
             }
 
             let updatedConnection = try await UpdateConnection(connectionId: connection.objectId!, status: status)
-                .makeAsyncRequest(andUpdate: [], viewsToIgnore: [self])
+                .makeRequest(andUpdate: [], viewsToIgnore: [self])
 
             button.handleEvent(status: .complete)
             if let updated = updatedConnection as? Connection {

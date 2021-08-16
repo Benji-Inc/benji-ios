@@ -26,7 +26,7 @@ struct CreateConnection: CloudFunction {
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
     }
 
-    func makeAsyncRequest(andUpdate statusables: [Statusable],
+    func makeRequest(andUpdate statusables: [Statusable],
                           viewsToIgnore: [UIView]) async throws -> Any {
 
         let params = ["to": self.to.objectId!,
@@ -59,7 +59,7 @@ struct UpdateConnection: CloudFunction {
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
     }
 
-    func makeAsyncRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
         let params = ["connectionId": self.connectionId,
                       "status": self.status.rawValue]
 
@@ -117,7 +117,7 @@ struct GetAllConnections: CloudFunction {
         }.eraseToAnyPublisher()
     }
 
-    func makeAsyncRequest(andUpdate statusables: [Statusable],
+    func makeRequest(andUpdate statusables: [Statusable],
                           viewsToIgnore: [UIView]) async throws -> [Connection] {
 
         let result = try await self.makeRequest(andUpdate: statusables,

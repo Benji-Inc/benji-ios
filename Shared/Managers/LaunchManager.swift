@@ -80,7 +80,7 @@ class LaunchManager {
         }
 
         do {
-            let token = try await GetChatToken().makeAsyncRequest()
+            let token = try await GetChatToken().makeRequest()
             self.finishedInitialFetch = true
             return .success(object: deeplink, token: token)
         } catch {

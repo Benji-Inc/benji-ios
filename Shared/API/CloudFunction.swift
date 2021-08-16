@@ -13,7 +13,7 @@ import Combine
 protocol CloudFunction: StatusableRequest {
     func makeSynchronousRequest(andUpdate statusables: [Statusable],
                                 viewsToIgnore: [UIView]) -> AnyPublisher<ReturnType, Error>
-    func makeAsyncRequest(andUpdate statusables: [Statusable],
+    func makeRequest(andUpdate statusables: [Statusable],
                           viewsToIgnore: [UIView]) async throws -> ReturnType
 }
 
