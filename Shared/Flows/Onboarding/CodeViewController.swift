@@ -37,61 +37,35 @@ class CodeViewController: TextInputViewController<Void> {
 
     override func didTapButton() {
         guard let code = self.textField.text, code.extraWhitespaceRemoved().count == 4 else { return }
-        self.verify(code: code)
+
+        Task { await self.verify(code: code) }
     }
 
     // True if we're in the process of verifying the code
-    var verifying: Bool = false
-    private func verify(code: String) {
+    private var verifying: Bool = false
+    private func verify(code: String) async {
         guard !self.verifying, let phoneNumber = self.phoneNumber else { return }
         
         self.verifying = true
         self.textEntry.button.handleEvent(status: .loading)
 
-        PFInstallation.getCurrent()
-            .mainSink { result in
-                switch result {
-                case .success(let installation):
-                    VerifyCode(code: code,
-                               phoneNumber: phoneNumber,
-                               installationId: installation.installationId,
-                               reservationId: String(optional: self.reservationId))
-                        .makeRequest(andUpdate: [], viewsToIgnore: [])
-                        .mainSink(receivedResult: { (result) in
-                            switch result {
-                            case .success(let token):
-                                self.becomeUser(with: token)
-                            case .error:
-                                self.textEntry.button.handleEvent(status: .error(""))
-                                self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
-                                self.verifying = false
-                            }
+        do {
+            let installation = try await PFInstallation.getCurrent()
+            let token = try await VerifyCode(code: code,
+                                             phoneNumber: phoneNumber,
+                                             installationId: installation.installationId,
+                                             reservationId: String(optional: self.reservationId))
+                .makeAsyncRequest()
 
-                            self.textField.resignFirstResponder()
-                        }).store(in: &self.cancellables)
-                case .error(let error):
-                    self.complete(with: .failure(error))
-                }
-            }.store(in: &self.cancellables)
-    }
-
-    private func becomeUser(with token: String) {
-        User.become(inBackground: token) { (user, error) in
-            if let _ = user?.objectId {
-                self.textEntry.button.handleEvent(status: .complete)
-                #if !NOTIFICATION
-                UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
-                #endif
-                self.complete(with: .success(()))
-            } else if let error = error {
-                self.textEntry.button.handleEvent(status: .error(error.localizedDescription))
-                self.complete(with: .failure(error))
-            } else {
-                self.textEntry.button.handleEvent(status: .error(""))
-                self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
-            }
-
-            self.verifying = false
+            self.textField.resignFirstResponder()
+            try await User.become(asynchronously: token)
+            self.textEntry.button.handleEvent(status: .complete)
+            self.complete(with: .success(()))
+        } catch {
+            self.textEntry.button.handleEvent(status: .error(error.localizedDescription))
+            self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
         }
+
+        self.verifying = false
     }
 }

@@ -45,7 +45,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 #if !APPCLIP
     func application(_ application: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        UserNotificationManager.shared.registerPush(from: deviceToken)
+        Task {
+            await UserNotificationManager.shared.registerPush(from: deviceToken)
+        }
     }
 
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -69,7 +71,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 #endif
-
 
     private func prepareCurrentUser() {
 #if !NOTIFICATION

@@ -77,8 +77,8 @@ struct VerifyCode: CloudFunction {
         }).eraseToAnyPublisher()
     }
     
-    func makeAsyncRequest(andUpdate statusables: [Statusable],
-                          viewsToIgnore: [UIView]) async throws -> String {
+    func makeAsyncRequest(andUpdate statusables: [Statusable] = [],
+                          viewsToIgnore: [UIView] = []) async throws -> String {
         
         let params: [String: Any] = ["authCode": self.code,
                                      "installationId": self.installationId,
