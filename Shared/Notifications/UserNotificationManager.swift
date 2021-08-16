@@ -40,7 +40,6 @@ class UserNotificationManager: NSObject {
     }
 
     func silentRegister(withApplication application: UIApplication) {
-
         self.getNotificationSettings()
             .mainSink { (settings) in
                 switch settings.authorizationStatus {
@@ -114,13 +113,13 @@ class UserNotificationManager: NSObject {
         self.center.removeAllPendingNotificationRequests()
     }
 
-    #if !NOTIFICATION
+#if !NOTIFICATION
     func resetBadgeCount() {
         let count = UIApplication.shared.applicationIconBadgeNumber
         UIApplication.shared.applicationIconBadgeNumber = 0
         UIApplication.shared.applicationIconBadgeNumber = count
     }
-    #endif
+#endif
 
     @discardableResult
     func handle(userInfo: [AnyHashable: Any]) -> Bool {
@@ -140,20 +139,18 @@ class UserNotificationManager: NSObject {
         }
     }
 
-    func registerPush(from deviceToken: Data) {
-        PFInstallation.getCurrent()
-            .mainSink { result in
-                switch result {
-                case .success(let current):
-                    current.badge = 0
-                    current.setDeviceTokenFrom(deviceToken)
-                    if current["userId"].isNil {
-                        current["userId"] = User.current()?.objectId
-                    }
-                    current.saveInBackground()
-                case .error(_):
-                    break
-                }
-            }.store(in: &self.cancellables)
+    func registerPush(from deviceToken: Data) async {
+        do {
+            let installation = try await PFInstallation.getCurrent()
+            installation.badge = 0
+            installation.setDeviceTokenFrom(deviceToken)
+            if installation["userId"].isNil {
+                installation["userId"] = User.current()?.objectId
+            }
+            
+            try await installation.saveInBackground()
+        } catch {
+            print(error)
+        }
     }
 }

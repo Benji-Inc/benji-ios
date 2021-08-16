@@ -53,10 +53,12 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         guard !self.isSendingCode,
               self.isPhoneNumberValid(),
               let phone = self.phoneTextField.text?.parsePhoneNumber(for: self.phoneTextField.currentRegion) else {
-                return
-        }
+                  return
+              }
 
-        self.sendCode(to: phone, region: self.phoneTextField.currentRegion)
+        Task {
+            await self.sendCode(to: phone, region: self.phoneTextField.currentRegion)
+        }
     }
 
     private func isPhoneNumberValid() -> Bool {
@@ -66,34 +68,22 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         return false
     }
 
-    private func sendCode(to phone: PhoneNumber, region: String) {
+    private func sendCode(to phone: PhoneNumber, region: String) async {
         self.textEntry.button.handleEvent(status: .loading)
         self.isSendingCode = true
 
-        PFInstallation.getCurrent()
-            .mainSink { result in
-                switch result {
-                case .success(let current):
-                    SendCode(phoneNumber: phone,
-                             region: region,
-                             installationId: current.installationId)
-                        .makeRequest(andUpdate: [], viewsToIgnore: [])
-                        .mainSink(receiveValue: { (value) in },
-                                  receiveCompletion: { (result) in
-                                    switch result {
-                                    case .finished:
-                                        self.textEntry.button.handleEvent(status: .complete)
-                                        self.complete(with: .success(phone))
-                                    case .failure(let error):
-                                        self.textEntry.button.handleEvent(status: .error(""))
-                                        self.complete(with: .failure(error))
-                                    }
-                                  }).store(in: &self.cancellables)
-                case .error(let error):
-                    self.textEntry.button.handleEvent(status: .error(""))
-                    self.complete(with: .failure(error))
-                }
-            }.store(in: &self.cancellables)
+        do {
+            let installation = try await PFInstallation.getCurrent()
+
+            let _ = try await SendCode(phoneNumber: phone,
+                                       region: region,
+                                       installationId: installation.installationId)
+                .makeAsyncRequest()
+            self.textEntry.button.handleEvent(status: .complete)
+            self.complete(with: .success(phone))
+        } catch {
+            self.textEntry.button.handleEvent(status: .error(""))
+            self.complete(with: .failure(error))
+        }
     }
 }
-
