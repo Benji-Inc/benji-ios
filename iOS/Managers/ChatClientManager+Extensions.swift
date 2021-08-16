@@ -72,19 +72,20 @@ extension ChatClientManager: TwilioChatClientDelegate {
     //MARK: CLIENT UDPATES
 
     func chatClientTokenExpired(_ client: TwilioChatClient) {
-        self.getNewChatTokent()
+        Task { await self.getNewChatToken() }
     }
 
     func chatClientTokenWillExpire(_ client: TwilioChatClient) {
-        self.getNewChatTokent()
+        Task { await self.getNewChatToken() }
     }
 
-    private func getNewChatTokent() {
-        GetChatToken()
-            .makeRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink(receiveValue: { [unowned self] (token) in
-                self.update(token: token)
-            }) { (_) in }.store(in: &self.cancellables)
+    private func getNewChatToken() async {
+        do {
+            let token = try await GetChatToken().makeAsyncRequest()
+            try await self.updateAsync(token: token)
+        } catch {
+            print(error)
+        }
     }
 
     func chatClient(_ client: TwilioChatClient, synchronizationStatusUpdated status: TCHClientSynchronizationStatus) {

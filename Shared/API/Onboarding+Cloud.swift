@@ -33,7 +33,9 @@ struct SendCode: CloudFunction {
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
     }
     
-    func makeAsyncRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
+    func makeAsyncRequest(andUpdate statusables: [Statusable] = [],
+                          viewsToIgnore: [UIView] = []) async throws -> Any {
+
         let phoneString = PhoneKit.shared.format(self.phoneNumber, toType: .e164)
         
         let params = ["phoneNumber": phoneString,

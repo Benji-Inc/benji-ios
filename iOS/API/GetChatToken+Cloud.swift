@@ -14,8 +14,8 @@ struct GetChatToken: CloudFunction {
     
     typealias ReturnType = String
 
-    func makeRequest(andUpdate statusables: [Statusable],
-                     viewsToIgnore: [UIView]) -> AnyPublisher<String, Error> {
+    func makeRequest(andUpdate statusables: [Statusable] = [],
+                     viewsToIgnore: [UIView] = []) -> AnyPublisher<String, Error> {
 
         return self.makeRequest(andUpdate: statusables,
                                 params: [:],
@@ -25,8 +25,8 @@ struct GetChatToken: CloudFunction {
         }).eraseToAnyPublisher()
     }
 
-    func makeAsyncRequest(andUpdate statusables: [Statusable],
-                          viewsToIgnore: [UIView]) async throws -> String {
+    func makeAsyncRequest(andUpdate statusables: [Statusable] = [],
+                          viewsToIgnore: [UIView] = []) async throws -> String {
 
         let result = try await self.makeAsyncRequest(andUpdate: [],
                                                      params: [:],
