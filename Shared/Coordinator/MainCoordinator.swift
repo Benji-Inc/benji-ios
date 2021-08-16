@@ -19,7 +19,6 @@ class MainCoordinator: Coordinator<Void> {
 
     lazy var splashVC = SplashViewController()
     var cancellables = Set<AnyCancellable>()
-    private let taskPool = TaskPool()
     lazy var userQuery = User.query() // Will crash if initialized before parse registers the subclass
 
     override func start() {
@@ -32,12 +31,25 @@ class MainCoordinator: Coordinator<Void> {
         UserNotificationManager.shared.delegate = self
         LaunchManager.shared.delegate = self
 
-        self.runLaunchFlow()
+        Task {
+            await self.runLaunchFlow()
+        }
     }
 
-    private func runLaunchFlow() {
-        LaunchManager.shared.launchApp(with: self.launchOptions)
-        self.router.setRootModule(self.splashVC, animated: false)
+    private func runLaunchFlow() async {
+        await self.router.setRootModule(self.splashVC, animated: false)
+
+        let launchStatus = await LaunchManager.shared.launchApp(with: self.launchOptions)
+
+#if !APPCLIP && !NOTIFICATION
+        // Code you don't want to use in your App Clip.
+        self.handle(result: launchStatus)
+#elseif !NOTIFICATION
+        // Code your App Clip may access.
+        self.handleAppClip(result: launchStatus)
+#endif
+
+        self.subscribeToUserUpdates()
     }
 
     #if !APPCLIP && !NOTIFICATION
@@ -61,11 +73,11 @@ class MainCoordinator: Coordinator<Void> {
             } else if !token.isEmpty {
                 Task {
                     do {
-                        try await self.initializeChatAsync(with: token)
+                        try await self.initializeChat(with: token)
                     } catch {
                         print(error)
                     }
-                }.add(to: self.taskPool)
+                }
             } else if let deeplink = object {
                 self.handle(deeplink: deeplink)
             }
@@ -93,16 +105,16 @@ class MainCoordinator: Coordinator<Void> {
                 } catch {
                     print(error)
                 }
-            }.add(to: self.taskPool)
+            }
         }
     }
 
     func getChatToken() async throws {
         let token = try await GetChatToken().makeAsyncRequest(andUpdate: [], viewsToIgnore: [])
-        try await self.initializeChatAsync(with: token)
+        try await self.initializeChat(with: token)
     }
 
-    private func initializeChatAsync(with token: String) async throws {
+    private func initializeChat(with token: String) async throws {
         // Fixes double loading.
         guard !self.isInitializingChat else { return }
 
@@ -181,7 +193,6 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     func showLogOutAlert() {
-
         let alert = UIAlertController(title: "🙀",
                                       message: "Someone tripped over a 🐈 and ☠️ the mainframe.",
                                       preferredStyle: .alert)
