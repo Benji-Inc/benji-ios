@@ -79,24 +79,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 #if !APPCLIP && !NOTIFICATION
         guard !ChatClientManager.shared.isConnected else { return }
 
-        Task {
-            do {
-                try await self.getChatToken()
-            } catch {
-                print(error)
-            }
-        }
+        Task { await self.getChatToken() }
 #endif
     }
 
 #if !APPCLIP && !NOTIFICATION
-    func getChatToken() async throws {
-        let token = try await GetChatToken().makeAsyncRequest(andUpdate: [], viewsToIgnore: [])
+    func getChatToken() async {
+        do {
+            let token = try await GetChatToken().makeAsyncRequest()
 
-        if ChatClientManager.shared.client.isNil {
-            try await ChatClientManager.shared.initializeAsync(token: token)
-        } else {
-            ChatClientManager.shared.update(token: token)
+            if ChatClientManager.shared.client.isNil {
+                try await ChatClientManager.shared.initializeAsync(token: token)
+            } else {
+                try await ChatClientManager.shared.updateAsync(token: token)
+            }
+        } catch {
+            print(error)
         }
     }
 #endif

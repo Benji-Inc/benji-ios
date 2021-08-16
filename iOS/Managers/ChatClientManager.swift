@@ -62,6 +62,7 @@ class ChatClientManager: NSObject {
         return result
     }
 
+    @available(*, deprecated, renamed: "updateAsync")
     @discardableResult
     func update(token: String) -> Future<Void, Error> {
         return Future { promise in
@@ -76,6 +77,22 @@ class ChatClientManager: NSObject {
                     }
                 })
             }
+        }
+    }
+
+    func updateAsync(token: String) async throws {
+        guard let client = self.client else {
+            throw ClientError.message(detail: "Chat client missing.")
+        }
+
+        let result: TCHResult = await client.updateToken(token)
+
+        if result.isSuccessful() {
+            return
+        } else if let error = result.error {
+            throw error
+        } else {
+            throw ClientError.message(detail: "Failed to update chat token.")
         }
     }
 }
