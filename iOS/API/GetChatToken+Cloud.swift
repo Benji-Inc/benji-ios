@@ -25,7 +25,7 @@ struct GetChatToken: CloudFunction {
         }).eraseToAnyPublisher()
     }
 
-    func makeAsyncRequest(andUpdate statusables: [Statusable] = [],
+    func makeRequest(andUpdate statusables: [Statusable] = [],
                           viewsToIgnore: [UIView] = []) async throws -> String {
 
         let result = try await self.makeRequest(andUpdate: [],

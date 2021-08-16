@@ -78,7 +78,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
             let _ = try await SendCode(phoneNumber: phone,
                                        region: region,
                                        installationId: installation.installationId)
-                .makeAsyncRequest()
+                .makeRequest()
             self.textEntry.button.handleEvent(status: .complete)
             self.complete(with: .success(phone))
         } catch {

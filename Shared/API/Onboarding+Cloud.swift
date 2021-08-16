@@ -33,7 +33,7 @@ struct SendCode: CloudFunction {
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
     }
     
-    func makeAsyncRequest(andUpdate statusables: [Statusable] = [],
+    func makeRequest(andUpdate statusables: [Statusable] = [],
                           viewsToIgnore: [UIView] = []) async throws -> Any {
 
         let phoneString = PhoneKit.shared.format(self.phoneNumber, toType: .e164)
@@ -77,7 +77,7 @@ struct VerifyCode: CloudFunction {
         }).eraseToAnyPublisher()
     }
     
-    func makeAsyncRequest(andUpdate statusables: [Statusable] = [],
+    func makeRequest(andUpdate statusables: [Statusable] = [],
                           viewsToIgnore: [UIView] = []) async throws -> String {
         
         let params: [String: Any] = ["authCode": self.code,
@@ -112,7 +112,7 @@ struct ActivateUser: CloudFunction {
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
     }
     
-    func makeAsyncRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
+    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
         return try await self.makeRequest(andUpdate: statusables,
                                                params: [:],
                                                callName: "setActiveStatus",

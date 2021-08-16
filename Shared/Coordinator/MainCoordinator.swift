@@ -110,7 +110,7 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     func getChatToken() async throws {
-        let token = try await GetChatToken().makeAsyncRequest(andUpdate: [], viewsToIgnore: [])
+        let token = try await GetChatToken().makeRequest(andUpdate: [], viewsToIgnore: [])
         try await self.initializeChat(with: token)
     }
 

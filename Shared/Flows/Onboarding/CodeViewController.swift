@@ -55,7 +55,7 @@ class CodeViewController: TextInputViewController<Void> {
                                              phoneNumber: phoneNumber,
                                              installationId: installation.installationId,
                                              reservationId: String(optional: self.reservationId))
-                .makeAsyncRequest()
+                .makeRequest()
 
             self.textField.resignFirstResponder()
             try await User.become(asynchronously: token)
