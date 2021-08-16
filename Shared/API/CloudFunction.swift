@@ -11,7 +11,6 @@ import Parse
 import Combine
 
 protocol CloudFunction: StatusableRequest {
-    @available(*, deprecated, message: "Use async instead.")
     func makeSynchronousRequest(andUpdate statusables: [Statusable],
                                 viewsToIgnore: [UIView]) -> AnyPublisher<ReturnType, Error>
     func makeAsyncRequest(andUpdate statusables: [Statusable],
