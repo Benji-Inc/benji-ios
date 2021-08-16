@@ -12,11 +12,9 @@ import ParseLiveQuery
 extension MainCoordinator: UserNotificationManagerDelegate {
     
     nonisolated func userNotificationManager(willHandle deeplink: DeepLinkable) {
-        Task {
-            await MainActor.run {
-                self.deepLink = deeplink
-                self.handle(deeplink: deeplink)
-            }
+        Task.onMainActor {
+            self.deepLink = deeplink
+            self.handle(deeplink: deeplink)
         }
     }
 }
