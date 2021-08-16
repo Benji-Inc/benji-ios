@@ -58,7 +58,7 @@ class CodeViewController: TextInputViewController<Void> {
                 .makeRequest()
 
             self.textField.resignFirstResponder()
-            try await User.become(asynchronously: token)
+            try await User.become(withSessionToken: token)
             self.textEntry.button.handleEvent(status: .complete)
             self.complete(with: .success(()))
         } catch {
