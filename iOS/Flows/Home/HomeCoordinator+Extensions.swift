@@ -9,9 +9,10 @@
 import Foundation
 
 extension HomeCoordinator: ToastSchedulerDelegate {
-
-    func didInteractWith(type: ToastType, deeplink: DeepLinkable?) {
-        if let link = deeplink {
+    
+    nonisolated func didInteractWith(type: ToastType, deeplink: DeepLinkable?) {
+        Task.onMainActor {
+            guard let link = deeplink else { return }
             self.handle(deeplink: link)
         }
     }

@@ -143,17 +143,17 @@ extension ChannelCoordinator: UIImagePickerControllerDelegate, UINavigationContr
         self.channelVC.present(self.imagePickerVC, animated: true, completion: nil)
     }
 
-    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-        defer {
-            self.imagePickerVC.dismiss(animated: true, completion: nil)
-        }
+    nonisolated func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        Task.onMainActor {
+            let identifiers: [String] = results.compactMap(\.assetIdentifier)
+            let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
+            if let asset = fetchResult.firstObject {
+                let attachment = Attachment(asset: asset)
+                self.channelVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
+                self.channelVC.messageInputAccessoryView.updateInputType()
+            }
 
-        let identifiers: [String] = results.compactMap(\.assetIdentifier)
-        let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
-        if let asset = fetchResult.firstObject {
-            let attachment = Attachment(asset: asset)
-            self.channelVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
-            self.channelVC.messageInputAccessoryView.updateInputType()
+            self.imagePickerVC.dismiss(animated: true, completion: nil)
         }
     }
 }

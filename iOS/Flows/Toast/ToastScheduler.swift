@@ -33,7 +33,6 @@ class ToastScheduler {
     weak var delegate: ToastSchedulerDelegate?
 
     func schedule(toastType: ToastType) {
-
         switch toastType {
         case .error(let error):
             self.createErrorToast(for: error)
@@ -54,8 +53,8 @@ class ToastScheduler {
                           displayable: image,
                           deeplink: nil,
                           didTap: { [unowned self] in
-                            self.delegate?.didInteractWith(type: .error(error), deeplink: nil)
-                          })
+            self.delegate?.didInteractWith(type: .error(error), deeplink: nil)
+        })
 
         ToastQueue.shared.add(toast: toast)
     }

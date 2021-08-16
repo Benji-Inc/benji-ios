@@ -93,6 +93,7 @@ extension DispatchQueue {
     return work
 }
 
+@available(*, deprecated, message: "Use Task.onMainActor")
 func runMain(_ execute: @escaping () -> ()) {
     DispatchQueue.main.async {
         execute()

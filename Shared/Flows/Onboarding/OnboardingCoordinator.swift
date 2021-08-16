@@ -53,13 +53,18 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
 }
 
 extension OnboardingCoordinator: OnboardingViewControllerDelegate {
-    func onboardingView(_ controller: OnboardingViewController, didVerify user: PFUser) {
-        self.finishFlow(with: ())
+
+    nonisolated func onboardingView(_ controller: OnboardingViewController, didVerify user: PFUser) {
+        Task {
+            await self.finishFlow(with: ())
+        }
     }
 
-    func onboardingViewControllerNeedsAuthorization(_ controller: OnboardingViewController) {
+    nonisolated func onboardingViewControllerNeedsAuthorization(_ controller: OnboardingViewController) {
         #if !NOTIFICATION
-        self.checkForNotifications()
+        Task {
+            await self.checkForNotifications()
+        }
         #endif
     }
 

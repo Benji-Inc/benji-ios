@@ -10,16 +10,23 @@ import Foundation
 import ParseLiveQuery
 
 extension MainCoordinator: UserNotificationManagerDelegate {
-    func userNotificationManager(willHandle deeplink: DeepLinkable) {
-        self.deepLink = deeplink
-        self.handle(deeplink: deeplink)
+    
+    nonisolated func userNotificationManager(willHandle deeplink: DeepLinkable) {
+        Task {
+            await MainActor.run {
+                self.deepLink = deeplink
+                self.handle(deeplink: deeplink)
+            }
+        }
     }
 }
 
 extension MainCoordinator: LaunchManagerDelegate {
 
-    func launchManager(_ manager: LaunchManager, didReceive activity: LaunchActivity) {
-        self.furthestChild.handle(launchActivity: activity)
+    nonisolated func launchManager(_ manager: LaunchManager, didReceive activity: LaunchActivity) {
+        Task {
+            await self.furthestChild.handle(launchActivity: activity)
+        }
     }
 
     func subscribeToUserUpdates() {
@@ -40,17 +47,15 @@ extension MainCoordinator: LaunchManagerDelegate {
         }
     }
 
-    #if APPCLIP
+#if APPCLIP
     func handleAppClip(result: LaunchStatus) {
         switch result {
         case .success(let object, _):
             self.deepLink = object
-            runMain {
-                self.runOnboardingFlow()
-            }
+            self.runOnboardingFlow()
         case .failed(_):
             break
         }
     }
-    #endif
+#endif
 }

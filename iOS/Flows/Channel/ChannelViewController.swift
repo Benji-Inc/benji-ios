@@ -13,6 +13,7 @@ import Combine
 
 typealias ChannelViewControllerDelegates = ChannelDetailViewControllerDelegate & ChannelViewControllerDelegate
 
+@MainActor
 protocol ChannelViewControllerDelegate: AnyObject {
     func channelView(_ controller: ChannelViewController, didTapShare message: Messageable)
 }

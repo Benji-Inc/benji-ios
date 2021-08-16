@@ -8,6 +8,23 @@
 
 import Foundation
 
+extension Task where Success == Void, Failure == Never {
+
+    static func onMainActor(body: @escaping @MainActor @Sendable () -> Success) {
+        Task {
+            await MainActor.run {
+                body()
+            }
+        }
+    }
+
+    static func onMainActorAsync(body: @escaping @MainActor @Sendable () -> Success) async {
+        await MainActor.run {
+            body()
+        }
+    }
+}
+
 extension Task where Success == Never, Failure == Never {
 
     /// Temporarily suspends the current task for at least the specified number of seconds.
