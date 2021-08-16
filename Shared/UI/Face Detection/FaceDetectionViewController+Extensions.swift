@@ -35,9 +35,7 @@ extension FaceDetectionViewController {
 
     func updateFaceView(for result: VNFaceObservation) {
         defer {
-            runMain {
-                self.faceView.setNeedsDisplay()
-            }
+            self.faceView.setNeedsDisplay()
         }
 
         let box = result.boundingBox

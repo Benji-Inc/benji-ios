@@ -33,6 +33,9 @@ protocol Objectable: AnyObject {
     func saveLocalThenServerSync() -> Future<Self, Error>
     func saveToServerSync() -> Future<Self, Error>
 
+    func saveLocalThenServer() async throws -> Self
+    func saveToServer() async throws -> Self
+
     static func localThenNetworkQuerySync(for objectId: String) -> Future<Self, Error>
     static func localThenNetworkArrayQuerySync(where identifiers: [String], isEqual: Bool, container: ContainerName) -> Future<[Self], Error>
 }
@@ -54,6 +57,39 @@ extension Objectable {
 
 extension Objectable where Self: PFObject {
 
+    @discardableResult
+    func saveLocalThenServer() async throws -> Self {
+        let object: Self = try await withCheckedThrowingContinuation { continuation in
+            self.saveEventually { (success, error) in
+                if let error = error {
+                    SessionManager.shared.handleParse(error: error)
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: self)
+                }
+            }
+        }
+
+        return object
+    }
+
+    @discardableResult
+    func saveToServer() async throws -> Self {
+        let object: Self = try await withCheckedThrowingContinuation { continuation in
+            self.saveInBackground { (success, error) in
+                if let error = error {
+                    SessionManager.shared.handleParse(error: error)
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: self)
+                }
+            }
+        }
+
+        return object
+    }
+
+    @available(*, deprecated, message: "Use async version")
     // Will save the object locally and push up to the server when ready
     @discardableResult
     func saveLocalThenServerSync() -> Future<Self, Error> {
@@ -69,6 +105,7 @@ extension Objectable where Self: PFObject {
         }
     }
 
+    @available(*, deprecated, message: "Use async version")
     // Does not save locally but just pushes to server in the background
     @discardableResult
     func saveToServerSync() -> Future<Self, Error> {

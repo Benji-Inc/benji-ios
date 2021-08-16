@@ -59,7 +59,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.hideAvatar(with: 0)
         self.view.addSubview(self.buttonContainer)
 
-        self.cameraVC.view.clipsToBounds = true 
+        self.cameraVC.view.clipsToBounds = true
         self.cameraVC.view.layer.cornerRadius = 5
         self.cameraVC.view.layer.borderColor = Color.background2.color.cgColor
         self.cameraVC.view.layer.borderWidth = 2
@@ -102,7 +102,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.confirmButton.set(style: .normal(color: .purple, text: "Continue"))
         self.confirmButton.didSelect { [unowned self] in
             guard let fixed = self.image else { return }
-            self.saveProfilePictureSync(image: fixed)
+            Task {
+                await self.saveProfilePicture(image: fixed)
+            }
         }
     }
 
@@ -116,7 +118,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         super.viewDidLayoutSubviews()
 
         self.avatarView.layer.borderColor = nil
-        self.avatarView.layer.borderWidth = 0 
+        self.avatarView.layer.borderWidth = 0
 
         self.animationView.size = CGSize(width: 140, height: 140)
         self.animationView.centerY = self.view.halfHeight * 0.8
@@ -260,21 +262,21 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     func showAvatar() {
         UIView.animate(withDuration: Theme.animationDuration,
                        animations: {
-                        self.avatarView.transform = .identity
-                        self.avatarView.alpha = 1
-                        self.cameraVC.view.alpha = 0
-                        self.view.setNeedsLayout()
-                       }) { (completed) in }
+            self.avatarView.transform = .identity
+            self.avatarView.alpha = 1
+            self.cameraVC.view.alpha = 0
+            self.view.setNeedsLayout()
+        }) { (completed) in }
     }
 
     func hideAvatar(with duration: TimeInterval = Theme.animationDuration) {
         UIView.animate(withDuration: duration,
                        animations: {
-                        self.avatarView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-                        self.avatarView.alpha = 0
-                        self.cameraVC.view.alpha = 1
-                        self.view.setNeedsLayout()
-                       }) { (completed) in }
+            self.avatarView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            self.avatarView.alpha = 0
+            self.cameraVC.view.alpha = 1
+            self.view.setNeedsLayout()
+        }) { (completed) in }
     }
 
     private func update(image: UIImage) {
@@ -286,43 +288,20 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.showAvatar()
     }
 
-    func saveProfilePictureSync(image: UIImage) {
-        guard let current = User.current(), let data = image.previewData else { return }
-
-        let file = PFFileObject(name:"small_image.jpeg", data: data)
-        self.confirmButton.handleEvent(status: .loading)
-        
-        current.smallImage = file
-        current.saveToServerSync()
-            .flatMap({ (user) -> AnyPublisher<Any, Error> in
-                return ActivateUser().makeSynchronousRequest(andUpdate: [], viewsToIgnore: [self.view])
-            }).mainSink(receivedResult: { (result) in
-                switch result {
-                case .success(_):
-                    self.currentState = .finish
-                case .error(_):
-                    self.currentState = .error
-                }
-            }).store(in: &self.cancellables)
-    }
-
-    func saveProfilePicture(image: UIImage) async {
-        guard let current = User.current(), let data = image.previewData else { return }
+    private func saveProfilePicture(image: UIImage) async {
+        guard let currentUser = User.current(), let data = image.previewData else { return }
 
         let file = PFFileObject(name:"small_image.jpeg", data: data)
         self.confirmButton.handleEvent(status: .loading)
 
-        current.smallImage = file
-        current.saveToServerSync()
-            .flatMap({ (user) -> AnyPublisher<Any, Error> in
-                return ActivateUser().makeSynchronousRequest(andUpdate: [], viewsToIgnore: [self.view])
-            }).mainSink(receivedResult: { (result) in
-                switch result {
-                case .success(_):
-                    self.currentState = .finish
-                case .error(_):
-                    self.currentState = .error
-                }
-            }).store(in: &self.cancellables)
+        currentUser.smallImage = file
+
+        do {
+            try await currentUser.saveToServer()
+            try await ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
+            self.currentState = .finish
+        } catch {
+            self.currentState = .error
+        }
     }
 }

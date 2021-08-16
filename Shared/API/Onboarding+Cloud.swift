@@ -111,7 +111,8 @@ struct ActivateUser: CloudFunction {
                                 delayInterval: 0.0,
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
     }
-    
+
+    @discardableResult
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
         return try await self.makeRequest(andUpdate: statusables,
                                                params: [:],

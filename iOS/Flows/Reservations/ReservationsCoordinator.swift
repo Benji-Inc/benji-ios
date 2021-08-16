@@ -150,7 +150,8 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
 
     func findUser(for contact: CNContact) {
         // Search for user with phone number
-        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers(), let reservation = self.selectedReservation else { return }
+        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers(),
+                let reservation = self.selectedReservation else { return }
 
         let combined = Publishers.Zip(
             reservation.prepareMetaData(andUpdate: []),

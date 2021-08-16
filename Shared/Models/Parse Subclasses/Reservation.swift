@@ -149,7 +149,7 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
             }
             if let url = URL(string: domainURL) {
                 metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
-                    runMain {
+                    Task.onMainActor {
                         if let e = error {
                             for statusable in statusables {
                                 statusable.handleEvent(status: .error("Error"))

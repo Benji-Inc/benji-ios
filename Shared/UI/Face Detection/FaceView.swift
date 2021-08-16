@@ -35,9 +35,7 @@ class FaceView: UIView {
 
         self.boundingBox = .zero
 
-        runMain {
-            self.setNeedsDisplay()
-        }
+        self.setNeedsDisplay()
     }
 
     override func draw(_ rect: CGRect) {
