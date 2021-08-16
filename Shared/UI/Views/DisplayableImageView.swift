@@ -127,10 +127,10 @@ class DisplayableImageView: View {
     }
 
     private func findUser(with objectID: String) {
-        User.localThenNetworkQuerySync(for: objectID)
-            .mainSink(receiveValue: { (user) in
-                self.downloadAndSetImage(for: user)
-            }).store(in: &self.cancellables)
+        Task {
+            guard let user = try? await User.localThenNetworkQuery(for: objectID) else { return }
+            self.downloadAndSetImage(for: user)
+        }
     }
 
     private func downloadAndSetImage(url: URL) {

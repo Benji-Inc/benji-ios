@@ -10,6 +10,7 @@ import Foundation
 import TwilioChatClient
 import Combine
 
+@MainActor
 class ChannelCollectionViewManager: NSObject, UITextViewDelegate, ChannelDataSource,
 UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDataSourcePrefetching, ActiveChannelAccessor {
 

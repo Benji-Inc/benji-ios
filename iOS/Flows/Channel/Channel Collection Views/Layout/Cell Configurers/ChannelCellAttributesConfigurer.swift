@@ -9,6 +9,7 @@
 import Foundation
 /// An object is responsible for
 /// sizing and configuring cells for given `IndexPath`s.
+@MainActor
 class ChannelCellAttributesConfigurer {
 
     /// Used to configure the layout attributes for a given cell.

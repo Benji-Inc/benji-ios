@@ -34,8 +34,6 @@ protocol Objectable: AnyObject {
     func saveLocalThenServer() async throws -> Self
     func saveToServer() async throws -> Self
 
-    static func localThenNetworkQuerySync(for objectId: String) -> Future<Self, Error>
-
     static func localThenNetworkQuery(for objectId: String) async throws -> Self
     static func localThenNetworkArrayQuery(where identifiers: [String],
                                            isEqual: Bool,
@@ -170,44 +168,6 @@ extension Objectable where Self: PFObject {
         }
 
         return object
-    }
-
-    @available(*, deprecated, message: "Use async version")
-    static func localThenNetworkQuerySync(for objectId: String) -> Future<Self, Error> {
-        return Future { promise in
-            if let query = self.query() {
-                query.fromPin(withName: objectId)
-                query.getFirstObjectInBackground()
-                    .continueWith { (task) -> Any? in
-                        if let object = task.result as? Self {
-                            promise(.success(object))
-                        } else if let nonCacheQuery = self.query() {
-                            nonCacheQuery.whereKey(ObjectKey.objectId.rawValue, equalTo: objectId)
-                            nonCacheQuery.getFirstObjectInBackground { (object, error) in
-                                if let nonCachedObject = object as? Self, let identifier = nonCachedObject.objectId {
-                                    nonCachedObject.pinInBackground(withName: identifier) { (success, error) in
-                                        if let e = error {
-                                            SessionManager.shared.handleParse(error: e)
-                                            promise(.failure(e))
-                                        } else {
-                                            promise(.success(nonCachedObject))
-                                        }
-                                    }
-                                } else if let e = error {
-                                    SessionManager.shared.handleParse(error: e)
-                                    promise(.failure(e))
-                                } else {
-                                    promise(.failure(ClientError.generic))
-                                }
-                            }
-                        } else {
-                            promise(.failure(ClientError.generic))
-                        }
-
-                        return nil
-                    }
-            }
-        }
     }
 
     static func localThenNetworkArrayQuery(where identifiers: [String],

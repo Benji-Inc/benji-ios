@@ -59,7 +59,7 @@ class ChannelDetailViewController: ViewController {
         self.view.addSubview(self.label)
         self.label.alpha = 0
 
-        self.subscribeToUpdates()
+        self.subscribeToChannelUpdates()
     }
 
     override func viewDidLayoutSubviews() {
@@ -83,8 +83,7 @@ class ChannelDetailViewController: ViewController {
         self.textView.match(.top, to: .bottom, of: self.label, offset: Theme.contentOffset.half)
     }
 
-    private func subscribeToUpdates() {
-
+    private func subscribeToChannelUpdates() {
         ChannelSupplier.shared.$activeChannel.mainSink { [weak self] (channel) in
             guard let `self` = self, let activeChannel = channel else { return }
             switch activeChannel.channelType {
