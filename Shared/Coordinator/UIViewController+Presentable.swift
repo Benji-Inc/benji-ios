@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 protocol Presentable: AnyObject {
 
     typealias DismissableVC = UIViewController & Dismissable

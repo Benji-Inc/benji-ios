@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 protocol CoordinatorType: AnyObject {
     var parentCoordinator: CoordinatorType? { set get }
     var furthestChild: CoordinatorType { get }
@@ -17,6 +18,7 @@ protocol CoordinatorType: AnyObject {
     func handle(launchActivity: LaunchActivity)
 }
 
+@MainActor
 class Coordinator<Result>: NSObject, CoordinatorType {
 
     let router: Router
@@ -77,6 +79,7 @@ class Coordinator<Result>: NSObject, CoordinatorType {
     func handle(launchActivity: LaunchActivity) {}
 }
 
+@MainActor
 class PresentableCoordinator<Result>: Coordinator<Result>, Presentable {
 
     var isFinished: Bool = false

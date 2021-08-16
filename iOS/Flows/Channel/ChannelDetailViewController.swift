@@ -12,6 +12,7 @@ import Parse
 import TMROLocalization
 import Combine
 
+@MainActor
 protocol ChannelDetailViewControllerDelegate: AnyObject {
     func channelDetailViewControllerDidTapMenu(_ vc: ChannelDetailViewController)
 }
