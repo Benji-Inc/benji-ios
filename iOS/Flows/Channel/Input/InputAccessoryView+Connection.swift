@@ -19,9 +19,6 @@ extension InputAccessoryView {
             self.textView.isUserInteractionEnabled = false
             self.animationView.play()
         case .connected:
-            if let activeChannel = self.activeChannel, case .channel(let channel) = activeChannel.channelType {
-                self.setPlaceholder(with: channel)
-            }
             self.textView.isUserInteractionEnabled = true
             self.animationView.stop()
             self.borderColor = nil
@@ -40,12 +37,5 @@ extension InputAccessoryView {
         }
 
         self.layoutNow()
-    }
-
-    private func setPlaceholder(with channel: TCHChannel) {
-        channel.getUsers(excludeMe: true)
-            .mainSink(receiveValue: { (users) in
-                self.textView.setPlaceholder(for: users)
-            }).store(in: &self.cancellables)
     }
 }

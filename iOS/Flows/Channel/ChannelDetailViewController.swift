@@ -97,10 +97,11 @@ class ChannelDetailViewController: ViewController {
     }
 
     private func layoutViews(for channel: TCHChannel) {
-        channel.getUsers(excludeMe: true)
-            .mainSink { (users) in
-                self.layout(forNonMe: users, channel: channel)
-            }.store(in: &self.cancellables)
+        Task {
+            guard let users = try? await channel.getUsers() else { return }
+
+            self.layout(forNonMe: users, channel: channel)
+        }
     }
 
     private func layout(forNonMe users: [User], channel: TCHChannel) {

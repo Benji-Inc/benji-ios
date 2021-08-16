@@ -39,34 +39,35 @@ class ChannelContentView: View {
 
         switch item.channelType {
         case .channel(let channel):
-            self.display(channel: channel)
+            Task {
+                await self.display(channel: channel)
+            }
         default:
             break
         }
     }
 
-    private func display(channel: TCHChannel) {
+    private func display(channel: TCHChannel) async {
+        guard let users = try? await channel.getUsers(excludeMe: true) else {
+            return
+        }
 
-        channel.getUsers(excludeMe: true)
-            .mainSink(receiveValue: { (users) in
-                guard self.currentItem?.id == channel.id else { return }
+        guard self.currentItem?.id == channel.id else { return }
 
-                if let friendlyName = channel.friendlyName {
-                    self.label.setText(friendlyName.capitalized)
-                } else if users.count == 0 {
-                    self.label.setText("You")
-                } else if users.count == 1, let user = users.first(where: { user in
-                    return user.objectId != User.current()?.objectId
-                }) {
-                    self.displayDM(for: channel, with: user)
-                } else {
-                    self.displayGroupChat(for: channel, with: users)
-                }
-                self.stackedAvatarView.set(items: users)
-                self.stackedAvatarView.layoutNow()
-                self.layoutNow()
-
-            }).store(in: &self.cancellables)
+        if let friendlyName = channel.friendlyName {
+            self.label.setText(friendlyName.capitalized)
+        } else if users.count == 0 {
+            self.label.setText("You")
+        } else if users.count == 1, let user = users.first(where: { user in
+            return user.objectId != User.current()?.objectId
+        }) {
+            self.displayDM(for: channel, with: user)
+        } else {
+            self.displayGroupChat(for: channel, with: users)
+        }
+        self.stackedAvatarView.set(items: users)
+        self.stackedAvatarView.layoutNow()
+        self.layoutNow()
     }
 
     override func layoutSubviews() {
