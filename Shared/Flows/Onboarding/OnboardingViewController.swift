@@ -201,7 +201,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     func updateReservationCreator(with userId: String) {
-        User.localThenNetworkQuery(for: userId)
+        User.localThenNetworkQuerySync(for: userId)
             .mainSink(receiveValue: { (user) in
                 self.reservationUser = user
                 self.avatarView.set(avatar: user)

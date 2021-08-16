@@ -127,7 +127,7 @@ class DisplayableImageView: View {
     }
 
     private func findUser(with objectID: String) {
-        User.localThenNetworkQuery(for: objectID)
+        User.localThenNetworkQuerySync(for: objectID)
             .mainSink(receiveValue: { (user) in
                 self.downloadAndSetImage(for: user)
             }).store(in: &self.cancellables)

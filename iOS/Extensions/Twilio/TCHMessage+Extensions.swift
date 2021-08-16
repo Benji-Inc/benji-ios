@@ -169,6 +169,6 @@ extension TCHMessage: Messageable {
 extension TCHMessage {
 
     func getAuthorAsUser() -> Future<User, Error> {
-        return User.localThenNetworkQuery(for: self.authorID)
+        return User.localThenNetworkQuerySync(for: self.authorID)
     }
 }

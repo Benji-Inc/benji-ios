@@ -45,7 +45,7 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
         case .connectionRequest:
             guard let connectionId = notification.connectionId else { return }
             self.view.addSubview(self.connectionRequestView)
-            Connection.localThenNetworkQuery(for: connectionId)
+            Connection.localThenNetworkQuerySync(for: connectionId)
                 .mainSink { connection in
                     self.connectionRequestView.configure(with: connection)
                 }.store(in: &self.cancellables)

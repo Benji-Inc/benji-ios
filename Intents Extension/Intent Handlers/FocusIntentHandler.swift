@@ -39,7 +39,7 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         if let isFocused = intent.focusStatus?.isFocused, let current = User.current() {
 
             current.focusStatus = isFocused ? "focused" : "available"
-            current.saveToServer()
+            current.saveToServerSync()
                 .sink { result in
                     let code: INShareFocusStatusIntentResponseCode
                     switch result {

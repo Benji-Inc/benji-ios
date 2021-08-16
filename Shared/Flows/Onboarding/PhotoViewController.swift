@@ -102,7 +102,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.confirmButton.set(style: .normal(color: .purple, text: "Continue"))
         self.confirmButton.didSelect { [unowned self] in
             guard let fixed = self.image else { return }
-            self.saveProfilePicture(image: fixed)
+            self.saveProfilePictureSync(image: fixed)
         }
     }
 
@@ -286,14 +286,34 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.showAvatar()
     }
 
-    func saveProfilePicture(image: UIImage) {
+    func saveProfilePictureSync(image: UIImage) {
         guard let current = User.current(), let data = image.previewData else { return }
 
         let file = PFFileObject(name:"small_image.jpeg", data: data)
         self.confirmButton.handleEvent(status: .loading)
         
         current.smallImage = file
-        current.saveToServer()
+        current.saveToServerSync()
+            .flatMap({ (user) -> AnyPublisher<Any, Error> in
+                return ActivateUser().makeSynchronousRequest(andUpdate: [], viewsToIgnore: [self.view])
+            }).mainSink(receivedResult: { (result) in
+                switch result {
+                case .success(_):
+                    self.currentState = .finish
+                case .error(_):
+                    self.currentState = .error
+                }
+            }).store(in: &self.cancellables)
+    }
+
+    func saveProfilePicture(image: UIImage) async {
+        guard let current = User.current(), let data = image.previewData else { return }
+
+        let file = PFFileObject(name:"small_image.jpeg", data: data)
+        self.confirmButton.handleEvent(status: .loading)
+
+        current.smallImage = file
+        current.saveToServerSync()
             .flatMap({ (user) -> AnyPublisher<Any, Error> in
                 return ActivateUser().makeSynchronousRequest(andUpdate: [], viewsToIgnore: [self.view])
             }).mainSink(receivedResult: { (result) in

@@ -43,7 +43,7 @@ extension TCHChannel {
     }
 
     func getAuthorAsUser() -> Future<User, Error> {
-        return User.localThenNetworkQuery(for: self.createdBy!)
+        return User.localThenNetworkQuerySync(for: self.createdBy!)
     }
 
     func getUsers(excludeMe: Bool = false) -> Future<[User], Error> {
@@ -60,7 +60,7 @@ extension TCHChannel {
             }
         }
 
-        return User.localThenNetworkArrayQuery(where: identifiers,
+        return User.localThenNetworkArrayQuerySync(where: identifiers,
                                                isEqual: true,
                                                container: .channel(identifier: self.sid!))
     }

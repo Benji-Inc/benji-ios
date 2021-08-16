@@ -166,7 +166,7 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
                     self.sendText(with: reservation.reminderMessage, phone: phone)
                 } else {
                     reservation.contactId = contact.identifier
-                    reservation.saveLocalThenServer()
+                    reservation.saveLocalThenServerSync()
                         .mainSink { (updatedReservation) in
                             self.sendText(with: reservation.message, phone: phone)
                         }.store(in: &self.cancellables)

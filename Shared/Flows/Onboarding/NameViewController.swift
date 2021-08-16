@@ -53,7 +53,7 @@ class NameViewController: TextInputViewController<Void> {
 
         self.textEntry.button.handleEvent(status: .loading)
         User.current()?.formatName(from: text)
-        User.current()?.saveLocalThenServer()
+        User.current()?.saveLocalThenServerSync()
             .mainSink(receiveValue: { (user) in
                 self.textEntry.button.handleEvent(status: .complete)
                 self.complete(with: .success(()))

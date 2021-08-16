@@ -30,22 +30,22 @@ protocol Objectable: AnyObject {
     func getObject<Type>(for key: KeyType) -> Type?
     func getRelationalObject<PFRelation>(for key: KeyType) -> PFRelation?
     func setObject<Type>(for key: KeyType, with newValue: Type)
-    func saveLocalThenServer() -> Future<Self, Error>
-    func saveToServer() -> Future<Self, Error>
+    func saveLocalThenServerSync() -> Future<Self, Error>
+    func saveToServerSync() -> Future<Self, Error>
 
-    static func localThenNetworkQuery(for objectId: String) -> Future<Self, Error>
-    static func localThenNetworkArrayQuery(where identifiers: [String], isEqual: Bool, container: ContainerName) -> Future<[Self], Error>
+    static func localThenNetworkQuerySync(for objectId: String) -> Future<Self, Error>
+    static func localThenNetworkArrayQuerySync(where identifiers: [String], isEqual: Bool, container: ContainerName) -> Future<[Self], Error>
 }
 
 extension Objectable {
 
-    static func cachedQuery(for objectID: String) -> Future<Self, Error> {
+    static func cachedQuerySync(for objectID: String) -> Future<Self, Error> {
         return Future { promise in
             promise(.failure(ClientError.generic))
         }
     }
 
-    static func cachedArrayQuery(with identifiers: [String]) -> Future<[Self], Error> {
+    static func cachedArrayQuerySync(with identifiers: [String]) -> Future<[Self], Error> {
         return Future { promise in
             promise(.failure(ClientError.generic))
         }
@@ -56,7 +56,7 @@ extension Objectable where Self: PFObject {
 
     // Will save the object locally and push up to the server when ready
     @discardableResult
-    func saveLocalThenServer() -> Future<Self, Error> {
+    func saveLocalThenServerSync() -> Future<Self, Error> {
         return Future { promise in
             self.saveEventually { (success, error) in
                 if let e = error {
@@ -71,7 +71,7 @@ extension Objectable where Self: PFObject {
 
     // Does not save locally but just pushes to server in the background
     @discardableResult
-    func saveToServer() -> Future<Self, Error> {
+    func saveToServerSync() -> Future<Self, Error> {
         return Future { promise in
             self.saveInBackground { (success, error) in
                 if let e = error {
@@ -120,7 +120,7 @@ extension Objectable where Self: PFObject {
         return self.getFirstObject(where: "objectId", contains: objectId)
     }
 
-    static func localThenNetworkQuery(for objectId: String) -> Future<Self, Error> {
+    static func localThenNetworkQuerySync(for objectId: String) -> Future<Self, Error> {
         return Future { promise in
             if let query = self.query() {
                 query.fromPin(withName: objectId)
@@ -157,7 +157,7 @@ extension Objectable where Self: PFObject {
         }
     }
 
-    static func localThenNetworkArrayQuery(where identifiers: [String],
+    static func localThenNetworkArrayQuerySync(where identifiers: [String],
                                            isEqual: Bool,
                                            container: ContainerName) -> Future<[Self], Error> {
         return Future { promise in

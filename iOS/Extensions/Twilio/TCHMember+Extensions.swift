@@ -36,7 +36,7 @@ extension TCHMember: Avatar {
 
 extension TCHMember {
     func getMemberAsUser() -> Future<User, Error> {
-        return User.localThenNetworkQuery(for: self.identity!)
+        return User.localThenNetworkQuerySync(for: self.identity!)
     }
 }
 
