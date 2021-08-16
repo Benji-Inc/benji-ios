@@ -12,7 +12,7 @@ import Parse
 extension PFUser {
 
     @discardableResult
-    static func become(asynchronously sessionToken: String) async throws -> PFUser {
+    static func become(withSessionToken sessionToken: String) async throws -> PFUser {
         let user: PFUser = try await withCheckedThrowingContinuation { continuation in
             User.become(inBackground: sessionToken) { (user, error) in
                 if let user = user {
