@@ -22,7 +22,6 @@ enum LaunchStatus {
 }
 
 protocol LaunchManagerDelegate: AnyObject {
-    func launchManager(_ manager: LaunchManager, didFinishWith status: LaunchStatus)
     func launchManager(_ manager: LaunchManager, didReceive activity: LaunchActivity)
 }
 
@@ -34,10 +33,7 @@ class LaunchManager {
     
     weak var delegate: LaunchManagerDelegate?
 
-    private var cancellables = Set<AnyCancellable>()
-    
-    func launchApp(with options: [UIApplication.LaunchOptionsKey: Any]?) {
-
+    func launchApp(with options: [UIApplication.LaunchOptionsKey: Any]?) async -> LaunchStatus {
         if Parse.currentConfiguration == nil  {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
                 configuration.applicationGroupIdentifier = "group.com.BENJI"
@@ -46,54 +42,52 @@ class LaunchManager {
                 configuration.isLocalDatastoreEnabled = true
             }))
         }
-        
+
+#if !NOTIFICATION
+        // Silently register for notifications every launch.
         if let user = User.current(), user.isAuthenticated {
-            // Make sure we set this up each launch
-            #if !NOTIFICATION
-            UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
-            #endif
+            Task {
+                await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            }
         }
+#endif
 
         SDImageLoadersManager.shared.addLoader(SDImageLinkLoader.shared)
         SDWebImageManager.defaultImageLoader = SDImageLoadersManager.shared
-        
-        self.initializeUserData(with: nil)
+
+        let launchStatus = await self.initializeUserData(with: nil)
+        return launchStatus
+    }
+
+    private func initializeUserData(with deeplink: DeepLinkable?) async -> LaunchStatus {
+        guard let _ = User.current()?.objectId else {
+            return .success(object: deeplink, token: String())
+        }
+
+#if !APPCLIP && !NOTIFICATION
+        return await self.getChatToken(with: deeplink)
+#else
+        return .success(object: deeplink, token: String())
+#endif
     }
     
-    private func initializeUserData(with deeplink: DeepLinkable?) {
-        if let _ = User.current()?.objectId {
-            #if !APPCLIP && !NOTIFICATION
-            self.getChatToken(with: deeplink)
-            #else
-            self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: String()))
-            #endif
-        } else {
-            self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: String()))
+#if !APPCLIP && !NOTIFICATION
+
+    func getChatToken(with deeplink: DeepLinkable?) async -> LaunchStatus {
+        // No need to get a new chat token if we're already connected.
+        guard !ChatClientManager.shared.isConnected else {
+            return .success(object: deeplink, token: String())
+        }
+
+        do {
+            let token = try await GetChatToken().makeAsyncRequest()
+            self.finishedInitialFetch = true
+            return .success(object: deeplink, token: token)
+        } catch {
+            return .failed(error: ClientError.apiError(detail: error.localizedDescription))
         }
     }
-    
-    #if !APPCLIP && !NOTIFICATION
-    // Code you don't want to use in your App Clip.
-    func getChatToken(with deeplink: DeepLinkable?) {
-        if ChatClientManager.shared.isConnected {
-            self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: String()))
-        } else {
-            GetChatToken()
-                .makeSynchronousRequest(andUpdate: [], viewsToIgnore: [])
-                .mainSink(receiveValue: { (token) in
-                    self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: token))
-                }, receiveCompletion: { (result) in
-                    self.finishedInitialFetch = true
-                    switch result {
-                    case .finished:
-                        break 
-                    case .failure(_):
-                        self.delegate?.launchManager(self, didFinishWith: .failed(error: ClientError.generic))
-                    }
-                }).store(in: &self.cancellables)
-        }
-    }
-    #endif
+#endif
     
     func continueUser(activity: NSUserActivity) -> Bool {
         if activity.activityType == NSUserActivityTypeBrowsingWeb,

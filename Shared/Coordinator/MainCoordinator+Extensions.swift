@@ -22,18 +22,6 @@ extension MainCoordinator: LaunchManagerDelegate {
         self.furthestChild.handle(launchActivity: activity)
     }
 
-    func launchManager(_ manager: LaunchManager, didFinishWith status: LaunchStatus) {
-        #if !APPCLIP && !NOTIFICATION
-        // Code you don't want to use in your App Clip.
-        self.handle(result: status)
-        #elseif !NOTIFICATION
-        // Code your App Clip may access.
-        self.handleAppClip(result: status)
-        #endif
-
-        self.subscribeToUserUpdates()
-    }
-
     func subscribeToUserUpdates() {
         if let query = self.userQuery, let objectId = User.current()?.objectId {
 
