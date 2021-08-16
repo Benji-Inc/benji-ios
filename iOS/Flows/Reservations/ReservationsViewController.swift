@@ -86,11 +86,16 @@ class ReservationsViewController: NavigationBarViewController {
     }
 
     private func didSelect(reservation: Reservation) {
-        self.button.handleEvent(status: .loading)
-        reservation.prepareMetaDataSync(andUpdate: [])
-            .mainSink(receiveValue: { (_) in
+        Task {
+            do {
+                self.button.handleEvent(status: .loading)
+                try await reservation.prepareMetadata(andUpdate: [])
+
                 self.button.handleEvent(status: .complete)
                 self.didSelectReservation?(reservation)
-            }, receiveCompletion: { (_) in }).store(in: &self.cancellables)
+            } catch {
+                self.button.handleEvent(status: .error(error.localizedDescription))
+            }
+        }
     }
 }

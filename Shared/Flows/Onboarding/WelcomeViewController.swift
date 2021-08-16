@@ -121,34 +121,37 @@ class WelcomeViewController: TextInputViewController<Void> {
     }
 
     override func didTapButton() {
-        self.claimRSVP()
+        Task {
+            await self.claimRSVP()
+        }
     }
 
     override func textFieldDidEndEditing(_ textField: UITextField) {
-        self.claimRSVP()
+        Task {
+            await self.claimRSVP()
+        }
     }
 
-    private func claimRSVP() {
+    private func claimRSVP() async {
         guard let code = self.textField.text, !code.isEmpty else {
             self.state = .welcome
             return
         }
 
         self.textEntry.button.handleEvent(status: .loading)
-        Reservation.getObjectSync(with: code)
-            .mainSink(receivedResult: { (result) in
-                switch result {
-                case .success(let reservation):
-                    if reservation.isClaimed {
-                        self.state = .reservationError
-                    } else {
-                        self.state = .foundReservation(reservation)
-                    }
-                    self.textEntry.button.handleEvent(status: .complete)
-                case .error(let e):
-                    self.textEntry.button.handleEvent(status: .error(e.localizedDescription))
-                    self.state = .reservationError
-                }
-            }).store(in: &self.cancellables)
+
+        do {
+            let reservation = try await Reservation.getObject(with: code)
+
+            if reservation.isClaimed {
+                self.state = .reservationError
+            } else {
+                self.state = .foundReservation(reservation)
+            }
+            self.textEntry.button.handleEvent(status: .complete)
+        } catch {
+            self.textEntry.button.handleEvent(status: .error(error.localizedDescription))
+            self.state = .reservationError
+        }
     }
 }

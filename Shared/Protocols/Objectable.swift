@@ -30,8 +30,6 @@ protocol Objectable: AnyObject {
     func getObject<Type>(for key: KeyType) -> Type?
     func getRelationalObject<PFRelation>(for key: KeyType) -> PFRelation?
     func setObject<Type>(for key: KeyType, with newValue: Type)
-    func saveLocalThenServerSync() -> Future<Self, Error>
-    func saveToServerSync() -> Future<Self, Error>
 
     func saveLocalThenServer() async throws -> Self
     func saveToServer() async throws -> Self
@@ -89,38 +87,6 @@ extension Objectable where Self: PFObject {
         return object
     }
 
-    @available(*, deprecated, message: "Use async version")
-    // Will save the object locally and push up to the server when ready
-    @discardableResult
-    func saveLocalThenServerSync() -> Future<Self, Error> {
-        return Future { promise in
-            self.saveEventually { (success, error) in
-                if let e = error {
-                    SessionManager.shared.handleParse(error: e)
-                    promise(.failure(e))
-                } else {
-                    promise(.success(self))
-                }
-            }
-        }
-    }
-
-    @available(*, deprecated, message: "Use async version")
-    // Does not save locally but just pushes to server in the background
-    @discardableResult
-    func saveToServerSync() -> Future<Self, Error> {
-        return Future { promise in
-            self.saveInBackground { (success, error) in
-                if let e = error {
-                    SessionManager.shared.handleParse(error: e)
-                    promise(.failure(e))
-                } else {
-                    promise(.success(self))
-                }
-            }
-        }
-    }
-
     static func fetchAll() -> Future<[Self], Never> {
         return Future { promise in
             if let query = self.query() {
@@ -134,23 +100,6 @@ extension Objectable where Self: PFObject {
             } else {
                 promise(.success([]))
             }
-        }
-    }
-
-    @available(*, deprecated, message: "Use async version")
-    static func getFirstObjectSync(where key: String, contains string: String) -> Future<Self, Error> {
-        return Future { promise in
-            let query = self.query()
-            query?.whereKey(key, contains: string)
-            query?.getFirstObjectInBackground(block: { object, error in
-                if let obj = object as? Self {
-                    promise(.success(obj))
-                } else if let e = error {
-                    promise(.failure(e))
-                } else {
-                    promise(.failure(ClientError.generic))
-                }
-            })
         }
     }
 
@@ -172,9 +121,9 @@ extension Objectable where Self: PFObject {
         return object
     }
 
-    @available(*, deprecated, message: "Use async version")
-    static func getObjectSync(with objectId: String) -> Future<Self, Error> {
-        return self.getFirstObjectSync(where: "objectId", contains: objectId)
+    static func getObject(with objectId: String) async throws -> Self {
+        let object = try await self.getFirstObject(where: "objectId", contains: objectId)
+        return object
     }
 
     static func localThenNetworkQuerySync(for objectId: String) -> Future<Self, Error> {

@@ -19,7 +19,7 @@ class ConnectionRequestCell: NoticeCell {
     }
 
     override func canHandleStationaryPress() -> Bool {
-        return false 
+        return false
     }
 
     override func configure(with item: SystemNotice) {
@@ -27,15 +27,15 @@ class ConnectionRequestCell: NoticeCell {
 
         guard let connectionId = item.attributes?["connectionId"] as? String else { return }
 
-        Connection.getObjectSync(with: connectionId).mainSink { result in
-            switch result {
-            case .success(let connection):
+        Task {
+            do {
+                let connection = try await Connection.getObject(with: connectionId)
                 self.content.configure(with: connection)
                 self.content.layoutNow()
-            case .error(_):
-                break
+            } catch {
+                print(error)
             }
-        }.store(in: &self.cancellables)
+        }
     }
 
     override func layoutSubviews() {

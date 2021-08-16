@@ -47,16 +47,20 @@ class NameViewController: TextInputViewController<Void> {
     private func updateUserName() {
         guard let text = self.textField.text, !text.isEmpty else { return }
 
-        guard text.isValidPersonName else {
-            return
-        }
+        guard text.isValidPersonName else { return }
 
         self.textEntry.button.handleEvent(status: .loading)
-        User.current()?.formatName(from: text)
-        User.current()?.saveLocalThenServerSync()
-            .mainSink(receiveValue: { (user) in
+        Task {
+            do {
+                User.current()?.formatName(from: text)
+
+                try await User.current()?.saveLocalThenServer()
                 self.textEntry.button.handleEvent(status: .complete)
                 self.complete(with: .success(()))
-            }).store(in: &self.cancellables)
+            } catch {
+                self.textEntry.button.handleEvent(status: .error("Failed to update user name."))
+                self.complete(with: .failure(error))
+            }
+        }
     }
 }
