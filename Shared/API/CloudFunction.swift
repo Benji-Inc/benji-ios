@@ -14,7 +14,7 @@ protocol CloudFunction: StatusableRequest {
     func makeSynchronousRequest(andUpdate statusables: [Statusable],
                                 viewsToIgnore: [UIView]) -> AnyPublisher<ReturnType, Error>
     func makeRequest(andUpdate statusables: [Statusable],
-                          viewsToIgnore: [UIView]) async throws -> ReturnType
+                     viewsToIgnore: [UIView]) async throws -> ReturnType
 }
 
 extension CloudFunction {

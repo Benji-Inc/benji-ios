@@ -8,7 +8,7 @@
 
 import Foundation
 
-class NewChannelViewController: CollectionViewController<NewChannelCollectionViewManger.SectionType, NewChannelCollectionViewManger> {
+class NewChannelViewController: CollectionViewController<NewChannelCollectionViewManager.SectionType, NewChannelCollectionViewManager> {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     var didCreateChannel: CompletionOptional = nil

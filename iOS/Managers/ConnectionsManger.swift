@@ -15,43 +15,32 @@ class ConnectionsManager {
 
     static let shared = ConnectionsManager()
 
-    private(set) var connectedUsers: [User] = []
-
     @Published var userUpdated: User?
 
-    private var cancellables = Set<AnyCancellable>()
+    private(set) var connectedUsers: [User] = []
     private var userQueries: [PFQuery<PFObject>] = []
 
     init() {
-        self.subscribeToUpdates()
-    }
-
-    deinit {
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
+        Task {
+            await self.subscribeToUpdates()
         }
     }
 
-    private func subscribeToUpdates() {
-
-        GetAllConnections()
-            .makeSynchronousRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink { result in
-                switch result {
-                case .success(let connections):
-                    self.connectedUsers = connections.filter({ connection in
-                        return connection.status == .accepted
-                    }).compactMap({ connection in
-                        return connection.nonMeUser
-                    })
-                    self.subscribeToUserUdpates()
-                case .error(_):
-                    break
-                }
-            }.store(in: &self.cancellables)
+    private func subscribeToUpdates() async {
+        do {
+            let connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])
+            self.connectedUsers = connections.filter({ connection in
+                return connection.status == .accepted
+            }).compactMap({ connection in
+                return connection.nonMeUser
+            })
+            self.subscribeToUserUpdates()
+        } catch {
+            print(error)
+        }
     }
 
-    private func subscribeToUserUdpates() {
+    private func subscribeToUserUpdates() {
         self.userQueries.removeAll()
 
         self.connectedUsers.forEach { user in

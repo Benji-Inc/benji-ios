@@ -437,7 +437,7 @@
 		D66A580125DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
 		D66A580525DD68F9001B3F64 /* NewChannelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580425DD68F9001B3F64 /* NewChannelCoordinator.swift */; };
 		D66A580725DD691A001B3F64 /* NewChannelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580625DD691A001B3F64 /* NewChannelViewController.swift */; };
-		D66A580925DD6954001B3F64 /* NewChannelCollectionViewManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580825DD6954001B3F64 /* NewChannelCollectionViewManger.swift */; };
+		D66A580925DD6954001B3F64 /* NewChannelCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580825DD6954001B3F64 /* NewChannelCollectionViewManager.swift */; };
 		D66A580B25DD6990001B3F64 /* ConnectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580A25DD6990001B3F64 /* ConnectionCell.swift */; };
 		D66A580D25DD6B06001B3F64 /* NewChannelCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580C25DD6B06001B3F64 /* NewChannelCollectionView.swift */; };
 		D66ED456267D35E100332BA3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
@@ -961,7 +961,7 @@
 		D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
 		D66A580425DD68F9001B3F64 /* NewChannelCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewChannelCoordinator.swift; sourceTree = "<group>"; };
 		D66A580625DD691A001B3F64 /* NewChannelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelViewController.swift; sourceTree = "<group>"; };
-		D66A580825DD6954001B3F64 /* NewChannelCollectionViewManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCollectionViewManger.swift; sourceTree = "<group>"; };
+		D66A580825DD6954001B3F64 /* NewChannelCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCollectionViewManager.swift; sourceTree = "<group>"; };
 		D66A580A25DD6990001B3F64 /* ConnectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionCell.swift; sourceTree = "<group>"; };
 		D66A580C25DD6B06001B3F64 /* NewChannelCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelCollectionView.swift; sourceTree = "<group>"; };
 		D66ED45F267D50D300332BA3 /* ConnectionsManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionsManger.swift; sourceTree = "<group>"; };
@@ -1830,7 +1830,7 @@
 			isa = PBXGroup;
 			children = (
 				D66A580C25DD6B06001B3F64 /* NewChannelCollectionView.swift */,
-				D66A580825DD6954001B3F64 /* NewChannelCollectionViewManger.swift */,
+				D66A580825DD6954001B3F64 /* NewChannelCollectionViewManager.swift */,
 				D66A580425DD68F9001B3F64 /* NewChannelCoordinator.swift */,
 				D6B3329425DDB9E300211044 /* NewChannelHeaderView.swift */,
 				D66A580625DD691A001B3F64 /* NewChannelViewController.swift */,
@@ -2935,7 +2935,7 @@
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
 				D6617CF026743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D6D1500721D5E73D00CD8CE4 /* ChannelViewController.swift in Sources */,
-				D66A580925DD6954001B3F64 /* NewChannelCollectionViewManger.swift in Sources */,
+				D66A580925DD6954001B3F64 /* NewChannelCollectionViewManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
