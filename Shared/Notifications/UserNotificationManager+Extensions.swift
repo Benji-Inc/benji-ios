@@ -40,6 +40,7 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
             if let target = response.notification.deepLinkTarget {
                 var deepLink = DeepLinkObject(target: target)
                 deepLink.customMetadata = response.notification.customMetadata
+
                 self.delegate?.userNotificationManager(willHandle: deepLink)
             }
         default:
