@@ -16,11 +16,11 @@ struct CreateConnection: CloudFunction {
 
     var to: User
 
-    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
+    func makeSynchronousRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
         let params = ["to": self.to.objectId!,
                       "status": Connection.Status.invited.rawValue]
 
-        return self.makeRequest(andUpdate: statusables,
+        return self.makeSynchronousRequest(andUpdate: statusables,
                                 params: params,
                                 callName: "createConnection",
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
@@ -32,7 +32,7 @@ struct CreateConnection: CloudFunction {
         let params = ["to": self.to.objectId!,
                       "status": Connection.Status.invited.rawValue]
 
-        let result = try await self.makeAsyncRequest(andUpdate: statusables,
+        let result = try await self.makeRequest(andUpdate: statusables,
                                                      params: params,
                                                      callName: "createConnection",
                                                      viewsToIgnore: viewsToIgnore)
@@ -47,13 +47,13 @@ struct UpdateConnection: CloudFunction {
     var connectionId: String
     var status: Connection.Status
 
-    func makeRequest(andUpdate statusables: [Statusable],
+    func makeSynchronousRequest(andUpdate statusables: [Statusable],
                      viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
 
         let params = ["connectionId": self.connectionId,
                       "status": self.status.rawValue]
 
-        return self.makeRequest(andUpdate: statusables,
+        return self.makeSynchronousRequest(andUpdate: statusables,
                                 params: params,
                                 callName: "updateConnection",
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
@@ -63,7 +63,7 @@ struct UpdateConnection: CloudFunction {
         let params = ["connectionId": self.connectionId,
                       "status": self.status.rawValue]
 
-        let result = try await self.makeAsyncRequest(andUpdate: statusables,
+        let result = try await self.makeRequest(andUpdate: statusables,
                                                      params: params,
                                                      callName: "updateConnection",
                                                      viewsToIgnore: viewsToIgnore)
@@ -82,10 +82,10 @@ struct GetAllConnections: CloudFunction {
 
     var direction: Direction = .all
 
-    func makeRequest(andUpdate statusables: [Statusable],
+    func makeSynchronousRequest(andUpdate statusables: [Statusable],
                      viewsToIgnore: [UIView]) -> AnyPublisher<[Connection], Error> {
 
-        return self.makeRequest(andUpdate: statusables,
+        return self.makeSynchronousRequest(andUpdate: statusables,
                                 params: [:],
                                 callName: "getConnections",
                                 viewsToIgnore: viewsToIgnore).map { (value) -> [Connection] in
@@ -120,7 +120,7 @@ struct GetAllConnections: CloudFunction {
     func makeAsyncRequest(andUpdate statusables: [Statusable],
                           viewsToIgnore: [UIView]) async throws -> [Connection] {
 
-        let result = try await self.makeAsyncRequest(andUpdate: statusables,
+        let result = try await self.makeRequest(andUpdate: statusables,
                                                      params: [:],
                                                      callName: "getConnections",
                                                      viewsToIgnore: viewsToIgnore)

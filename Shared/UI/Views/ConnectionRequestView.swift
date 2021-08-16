@@ -56,7 +56,7 @@ class ConnectionRequestView: View {
 
         self.set(backgroundColor: .clear)
         self.containerView.roundCorners()
-        self.confettiView.clipsToBounds = true 
+        self.confettiView.clipsToBounds = true
     }
 
     func configure(with item: Connection) {
@@ -120,21 +120,24 @@ class ConnectionRequestView: View {
 
     private func updateConnection(with status: Connection.Status,
                                   user: User,
-                                  button: Button) {
+                                  button: Button) async {
+
         button.handleEvent(status: .loading)
-        if let connection = self.currentItem {
-            UpdateConnection(connectionId: connection.objectId!, status: status).makeRequest(andUpdate: [], viewsToIgnore: [self])
-                .mainSink { (result) in
-                    switch result {
-                    case .success(let updatedConnection):
-                        button.handleEvent(status: .complete)
-                        if let updated = updatedConnection as? Connection {
-                            self.showSuccess(for: updated, user: user, shouldComplete: true)
-                        }
-                    case .error(let e):
-                        button.handleEvent(status: .error(e.localizedDescription))
-                    }
-                }.store(in: &self.cancellables)
+
+        do {
+            guard let connection = self.currentItem else {
+                throw ClientError.apiError(detail: "Unable to update connection.")
+            }
+            
+            let updatedConnection = try await UpdateConnection(connectionId: connection.objectId!, status: status)
+                .makeAsyncRequest(andUpdate: [], viewsToIgnore: [self])
+
+            button.handleEvent(status: .complete)
+            if let updated = updatedConnection as? Connection {
+                self.showSuccess(for: updated, user: user, shouldComplete: true)
+            }
+        } catch {
+            button.handleEvent(status: .error(error.localizedDescription))
         }
     }
 

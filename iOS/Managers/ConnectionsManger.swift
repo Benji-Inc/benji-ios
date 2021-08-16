@@ -35,7 +35,7 @@ class ConnectionsManager {
     private func subscribeToUpdates() {
 
         GetAllConnections()
-            .makeRequest(andUpdate: [], viewsToIgnore: [])
+            .makeSynchronousRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink { result in
                 switch result {
                 case .success(let connections):

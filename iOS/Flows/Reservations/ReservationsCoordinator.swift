@@ -200,7 +200,7 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
     }
 
     func createConnection(with user: User) {
-        CreateConnection(to: user).makeRequest(andUpdate: [], viewsToIgnore: [])
+        CreateConnection(to: user).makeSynchronousRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink(receiveValue: { (_) in
                 self.showSentAlert(for: user)
             }).store(in: &self.cancellables)

@@ -14,10 +14,10 @@ struct GetChatToken: CloudFunction {
     
     typealias ReturnType = String
 
-    func makeRequest(andUpdate statusables: [Statusable] = [],
+    func makeSynchronousRequest(andUpdate statusables: [Statusable] = [],
                      viewsToIgnore: [UIView] = []) -> AnyPublisher<String, Error> {
 
-        return self.makeRequest(andUpdate: statusables,
+        return self.makeSynchronousRequest(andUpdate: statusables,
                                 params: [:],
                                 callName: "getChatToken",
                                 viewsToIgnore: viewsToIgnore).map({ (value) -> String in
@@ -28,7 +28,7 @@ struct GetChatToken: CloudFunction {
     func makeAsyncRequest(andUpdate statusables: [Statusable] = [],
                           viewsToIgnore: [UIView] = []) async throws -> String {
 
-        let result = try await self.makeAsyncRequest(andUpdate: [],
+        let result = try await self.makeRequest(andUpdate: [],
                                                      params: [:],
                                                      callName: "getChatToken",
                                                      viewsToIgnore: [])

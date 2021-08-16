@@ -19,14 +19,14 @@ struct SendCode: CloudFunction {
     let region: String
     let installationId: String
     
-    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
+    func makeSynchronousRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
         let phoneString = PhoneKit.shared.format(self.phoneNumber, toType: .e164)
         
         let params = ["phoneNumber": phoneString,
                       "installationId": self.installationId,
                       "region": self.region]
         
-        return self.makeRequest(andUpdate: statusables,
+        return self.makeSynchronousRequest(andUpdate: statusables,
                                 params: params,
                                 callName: "sendCode",
                                 delayInterval: 0.0,
@@ -42,7 +42,7 @@ struct SendCode: CloudFunction {
                       "installationId": self.installationId,
                       "region": self.region]
         
-        let result = try await self.makeAsyncRequest(andUpdate: statusables,
+        let result = try await self.makeRequest(andUpdate: statusables,
                                                      params: params,
                                                      callName: "sendCode",
                                                      delayInterval: 0.0,
@@ -59,13 +59,13 @@ struct VerifyCode: CloudFunction {
     let installationId: String
     let reservationId: String
     
-    func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<String, Error> {
+    func makeSynchronousRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<String, Error> {
         let params: [String: Any] = ["authCode": self.code,
                                      "installationId": self.installationId,
                                      "reservationId": self.reservationId,
                                      "phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164)]
         
-        return self.makeRequest(andUpdate: statusables,
+        return self.makeSynchronousRequest(andUpdate: statusables,
                                 params: params,
                                 callName: "validateCode",
                                 viewsToIgnore: viewsToIgnore).map({ (value) -> String in
@@ -85,7 +85,7 @@ struct VerifyCode: CloudFunction {
                                      "reservationId": self.reservationId,
                                      "phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164)]
         
-        let result = try await self.makeAsyncRequest(andUpdate: statusables,
+        let result = try await self.makeRequest(andUpdate: statusables,
                                                      params: params,
                                                      callName: "validateCode",
                                                      viewsToIgnore: viewsToIgnore)
@@ -102,10 +102,10 @@ struct ActivateUser: CloudFunction {
     
     typealias ReturnType = Any
     
-    func makeRequest(andUpdate statusables: [Statusable],
+    func makeSynchronousRequest(andUpdate statusables: [Statusable],
                      viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
         
-        return self.makeRequest(andUpdate: statusables,
+        return self.makeSynchronousRequest(andUpdate: statusables,
                                 params: [:],
                                 callName: "setActiveStatus",
                                 delayInterval: 0.0,
@@ -113,7 +113,7 @@ struct ActivateUser: CloudFunction {
     }
     
     func makeAsyncRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
-        return try await self.makeAsyncRequest(andUpdate: statusables,
+        return try await self.makeRequest(andUpdate: statusables,
                                                params: [:],
                                                callName: "setActiveStatus",
                                                delayInterval: 0.0,
