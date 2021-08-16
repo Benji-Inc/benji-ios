@@ -40,15 +40,17 @@ class ConnectionRequestView: View {
         self.containerView.addSubview(self.acceptButton)
         self.acceptButton.set(style: .normal(color: .purple, text: "Accept"))
         self.acceptButton.didSelect { [unowned self] in
-            if let from = self.currentItem?.from {
-                self.updateConnection(with: .accepted, user: from, button: self.acceptButton)
+            guard let from = self.currentItem?.from else { return }
+            Task {
+                await self.updateConnection(with: .accepted, user: from, button: self.acceptButton)
             }
         }
         self.containerView.addSubview(self.declineButton)
         self.declineButton.set(style: .normal(color: .red, text: "Decline"))
         self.declineButton.didSelect { [unowned self] in
-            if let from = self.currentItem?.from {
-                self.updateConnection(with: .declined, user: from, button: self.declineButton)
+            guard let from = self.currentItem?.from else { return }
+            Task {
+                await self.updateConnection(with: .declined, user: from, button: self.declineButton)
             }
         }
 
@@ -128,7 +130,7 @@ class ConnectionRequestView: View {
             guard let connection = self.currentItem else {
                 throw ClientError.apiError(detail: "Unable to update connection.")
             }
-            
+
             let updatedConnection = try await UpdateConnection(connectionId: connection.objectId!, status: status)
                 .makeAsyncRequest(andUpdate: [], viewsToIgnore: [self])
 
@@ -159,4 +161,3 @@ class ConnectionRequestView: View {
         }
     }
 }
-
