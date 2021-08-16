@@ -19,7 +19,7 @@ struct CreateChannel: CloudFunction {
     var attributes: [String: Any]
     var members: [String]
     
-    func makeRequest(andUpdate statusables: [Statusable],
+    func makeSynchronousRequest(andUpdate statusables: [Statusable],
                      viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
         
         let params: [String: Any] = ["uniqueName": self.uniqueName,
@@ -28,7 +28,7 @@ struct CreateChannel: CloudFunction {
                                      "attributes": self.attributes,
                                      "members": self.members]
         
-        return self.makeRequest(andUpdate: statusables,
+        return self.makeSynchronousRequest(andUpdate: statusables,
                                 params: params,
                                 callName: "createChannel",
                                 viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
@@ -42,7 +42,7 @@ struct CreateChannel: CloudFunction {
                                      "attributes": self.attributes,
                                      "members": self.members]
         
-        return try await self.makeAsyncRequest(andUpdate: statusables,
+        return try await self.makeRequest(andUpdate: statusables,
                                                params: params,
                                                callName: "createChannel",
                                                viewsToIgnore: viewsToIgnore)

@@ -37,7 +37,7 @@ class ChatClientManager: NSObject {
         return client.connectionState == .connected
     }
 
-    func initializeAsync(token: String) async throws {
+    func initialize(token: String) async throws {
         // Initialize the ChannelSupplier so it can listen to the client updates.
         _ = ChannelSupplier.shared
 
@@ -62,25 +62,7 @@ class ChatClientManager: NSObject {
         return result
     }
 
-    @available(*, deprecated, renamed: "updateAsync")
-    @discardableResult
-    func update(token: String) -> Future<Void, Error> {
-        return Future { promise in
-            if let client = self.client {
-                client.updateToken(token, completion: { (result) in
-                    if result.isSuccessful() {
-                        promise(.success(()))
-                    } else if let e = result.error {
-                        promise(.failure(e))
-                    } else {
-                        promise(.failure(ClientError.message(detail: "Failed to update chat token.")))
-                    }
-                })
-            }
-        }
-    }
-
-    func updateAsync(token: String) async throws {
+    func update(token: String) async throws {
         guard let client = self.client else {
             throw ClientError.message(detail: "Chat client missing.")
         }

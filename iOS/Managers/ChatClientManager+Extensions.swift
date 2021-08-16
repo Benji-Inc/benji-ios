@@ -82,7 +82,7 @@ extension ChatClientManager: TwilioChatClientDelegate {
     private func getNewChatToken() async {
         do {
             let token = try await GetChatToken().makeAsyncRequest()
-            try await self.updateAsync(token: token)
+            try await self.update(token: token)
         } catch {
             print(error)
         }

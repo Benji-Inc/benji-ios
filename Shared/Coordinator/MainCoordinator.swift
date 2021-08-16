@@ -108,7 +108,7 @@ class MainCoordinator: Coordinator<Void> {
 
         self.isInitializingChat = true
 
-        try await ChatClientManager.shared.initializeAsync(token: token)
+        try await ChatClientManager.shared.initialize(token: token)
 
         self.isInitializingChat = false
 

@@ -295,7 +295,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         current.smallImage = file
         current.saveToServer()
             .flatMap({ (user) -> AnyPublisher<Any, Error> in
-                return ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
+                return ActivateUser().makeSynchronousRequest(andUpdate: [], viewsToIgnore: [self.view])
             }).mainSink(receivedResult: { (result) in
                 switch result {
                 case .success(_):

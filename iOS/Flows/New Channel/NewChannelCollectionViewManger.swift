@@ -29,7 +29,7 @@ class NewChannelCollectionViewManger: CollectionViewManager<NewChannelCollection
         self.allowMultipleSelection = true 
 
         self.collectionView.animationView.play()
-        GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])
+        GetAllConnections().makeSynchronousRequest(andUpdate: [], viewsToIgnore: [])
             .mainSink { result in
                 switch result {
                 case .success(let connections):

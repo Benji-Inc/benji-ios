@@ -11,19 +11,20 @@ import Parse
 import Combine
 
 protocol CloudFunction: StatusableRequest {
-    func makeRequest(andUpdate statusables: [Statusable],
-                     viewsToIgnore: [UIView]) -> AnyPublisher<ReturnType, Error>
+    @available(*, deprecated, message: "Use async instead.")
+    func makeSynchronousRequest(andUpdate statusables: [Statusable],
+                                viewsToIgnore: [UIView]) -> AnyPublisher<ReturnType, Error>
     func makeAsyncRequest(andUpdate statusables: [Statusable],
                           viewsToIgnore: [UIView]) async throws -> ReturnType
 }
 
 extension CloudFunction {
 
-    func makeRequest(andUpdate statusables: [Statusable],
-                     params: [String: Any],
-                     callName: String,
-                     delayInterval: TimeInterval = 2.0,
-                     viewsToIgnore: [UIView]) -> Future<Any, Error> {
+    func makeSynchronousRequest(andUpdate statusables: [Statusable],
+                                params: [String: Any],
+                                callName: String,
+                                delayInterval: TimeInterval = 2.0,
+                                viewsToIgnore: [UIView]) -> Future<Any, Error> {
 
         return Future { promise in
 
@@ -69,11 +70,11 @@ extension CloudFunction {
         }
     }
 
-    func makeAsyncRequest(andUpdate statusables: [Statusable],
-                          params: [String : Any],
-                          callName: String,
-                          delayInterval: TimeInterval = 2.0,
-                          viewsToIgnore: [UIView]) async throws -> Any {
+    func makeRequest(andUpdate statusables: [Statusable],
+                     params: [String : Any],
+                     callName: String,
+                     delayInterval: TimeInterval = 2.0,
+                     viewsToIgnore: [UIView]) async throws -> Any {
 
         // Trigger the loading event for all statusables
         for statusable in statusables {

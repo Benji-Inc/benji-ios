@@ -79,7 +79,7 @@ class LaunchManager {
             self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: String()))
         } else {
             GetChatToken()
-                .makeRequest(andUpdate: [], viewsToIgnore: [])
+                .makeSynchronousRequest(andUpdate: [], viewsToIgnore: [])
                 .mainSink(receiveValue: { (token) in
                     self.delegate?.launchManager(self, didFinishWith: .success(object: deeplink, token: token))
                 }, receiveCompletion: { (result) in
