@@ -79,7 +79,6 @@ class Coordinator<Result>: NSObject, CoordinatorType {
     func handle(launchActivity: LaunchActivity) {}
 }
 
-@MainActor
 class PresentableCoordinator<Result>: Coordinator<Result>, Presentable {
 
     var isFinished: Bool = false
