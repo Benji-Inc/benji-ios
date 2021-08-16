@@ -87,7 +87,6 @@ extension CloudFunction {
 
         do {
             let result = try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Any, Error>) in
-
                 PFCloud.callFunction(inBackground: callName,
                                      withParameters: params) { (object, error) in
 
