@@ -9,7 +9,6 @@
 import Foundation
 import TMROLocalization
 
-@MainActor
 protocol ChannelDataSource: AnyObject {
 
     var numberOfMembers: Int { get set }
