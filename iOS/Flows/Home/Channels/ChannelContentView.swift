@@ -10,7 +10,6 @@ import Foundation
 import TwilioChatClient
 import Combine
 
-#warning("Make the base view the main actor.")
 @MainActor
 class ChannelContentView: View {
 
