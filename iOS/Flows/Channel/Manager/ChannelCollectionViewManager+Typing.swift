@@ -14,9 +14,7 @@ extension ChannelCollectionViewManager {
         self.setTypingIndicatorViewHidden(isHidden, animated: true, whilePerforming: updates) { [weak self] success in
             guard let `self` = self else { return }
             if success, self.isLastMessageVisible() == true {
-                runMain {
-                    self.collectionView.scrollToEnd()
-                }
+                self.collectionView.scrollToEnd()
             }
         }
     }

@@ -45,7 +45,6 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
     }
 
     func send(object: Sendable) {
-
         guard let systemMessage = MessageDeliveryManager.shared.send(object: object,
                                                                      attributes: [:],
                                                                      completion: { (message, error) in
@@ -53,13 +52,17 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
                                                                             msg.status = .error
                                                                             self.collectionViewManager.updateItem(with: msg)
                                                                             if msg.context == .timeSensitive {
-                                                                                self.showAlertSentToast(for: msg)
+                                                                                Task {
+                                                                                    await self.showAlertSentToast(for: msg)
+                                                                                }
                                                                             }
                                                                         }
         }) else { return }
 
         if systemMessage.context == .timeSensitive {
-            self.showAlertSentToast(for: systemMessage)
+            Task {
+                await self.showAlertSentToast(for: systemMessage)
+            }
         }
 
         self.collectionViewManager.append(item: systemMessage) { [unowned self] in
@@ -70,7 +73,6 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
     }
 
     func resend(message: Messageable) {
-        
         guard let systemMessage = MessageDeliveryManager.shared.resend(message: message, completion: { (newMessage, error) in
             if let msg = newMessage, let _ = error {
                 msg.status = .error
@@ -89,30 +91,38 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
         }
     }
 
-    private func showAlertSentToast(for message: SystemMessage) {
-        guard let displaybleChannel = self.activeChannel, case ChannelType.channel(let channel) = displaybleChannel.channelType else { return }
+    private func showAlertSentToast(for message: SystemMessage) async {
+        guard let displaybleChannel = self.activeChannel,
+              case ChannelType.channel(let channel) = displaybleChannel.channelType else { return }
 
         var displayable: ImageDisplayable = User.current()!
-                channel.getUsers(excludeMe: true)
-                    .mainSink(receiveValue: { (users) in
-                        var name: String = ""
 
-                        if let friendlyName = channel.friendlyName {
-                            name = friendlyName
-                        } else if users.count == 0 {
-                            name = "You"
-                        } else if users.count == 1, let user = users.first(where: { user in
-                            return user.objectId != User.current()?.objectId
-                        }) {
-                            displayable = user
-                            name = user.fullName
-                        } else {
-                            displayable = users.first!
-                            name = self.displayGroupChat(for: channel, with: users)
-                        }
+        guard let users = try? await channel.getUsers(excludeMe: true) else {
+            return
+        }
 
-                        ToastScheduler.shared.schedule(toastType: .basic(identifier: message.id, displayable: displayable, title: "Notification Sent", description: "A notification linking to your message has been sent to: \(name).", deepLink: nil))
-                    }).store(in: &self.cancellables)
+        var name: String = ""
+
+        if let friendlyName = channel.friendlyName {
+            name = friendlyName
+        } else if users.count == 0 {
+            name = "You"
+        } else if users.count == 1, let user = users.first(where: { user in
+            return user.objectId != User.current()?.objectId
+        }) {
+            displayable = user
+            name = user.fullName
+        } else {
+            displayable = users.first!
+            name = self.displayGroupChat(for: channel, with: users)
+        }
+
+        let description = "A notification linking to your message has been sent to: \(name)."
+        ToastScheduler.shared.schedule(toastType: .basic(identifier: message.id,
+                                                         displayable: displayable,
+                                                         title: "Notification Sent",
+                                                         description: description,
+                                                         deepLink: nil))
     }
 
     private func displayGroupChat(for channel: TCHChannel, with users: [User]) -> String {

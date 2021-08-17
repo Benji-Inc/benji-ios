@@ -400,5 +400,3 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         }
     }
 }
-
-

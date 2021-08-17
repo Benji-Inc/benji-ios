@@ -37,16 +37,17 @@ class AlertCell: NoticeCell {
 
         self.textView.set(text: body, messageContext: MessageContext.timeSensitive)
 
-        User.getObject(with: author).mainSink { result in
-            switch result {
-            case .success(let user):
+        Task {
+            do {
+                let user = try await User.getObject(with: author)
                 self.avatarView.set(avatar: user)
-            case .error(_):
-                break
+                self.setNeedsLayout()
+            } catch {
+                print(error)
             }
-        }.store(in: &self.cancellables)
+        }
 
-        self.layoutNow()
+        self.setNeedsLayout()
     }
 
     override func layoutSubviews() {

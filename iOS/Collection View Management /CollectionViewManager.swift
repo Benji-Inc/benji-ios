@@ -5,7 +5,8 @@ import Combine
 
 protocol ManagerSectionType: Hashable, RawRepresentable where Self.RawValue == Int {}
 
-class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollectionViewDelegate,
+                                                              UICollectionViewDelegateFlowLayout {
 
     lazy var dataSource: UICollectionViewDiffableDataSource<SectionType, AnyHashable> = {
         let dataSource = UICollectionViewDiffableDataSource<SectionType, AnyHashable>(collectionView: self.collectionView) { (cv, indexPath, item) -> UICollectionViewCell? in

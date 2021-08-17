@@ -14,17 +14,6 @@ struct GetChatToken: CloudFunction {
     
     typealias ReturnType = String
     
-    func makeSynchronousRequest(andUpdate statusables: [Statusable] = [],
-                                viewsToIgnore: [UIView] = []) -> AnyPublisher<String, Error> {
-        
-        return self.makeSynchronousRequest(andUpdate: statusables,
-                                           params: [:],
-                                           callName: "getChatToken",
-                                           viewsToIgnore: viewsToIgnore).map({ (value) -> String in
-            return value as? String ?? String()
-        }).eraseToAnyPublisher()
-    }
-    
     func makeRequest(andUpdate statusables: [Statusable] = [],
                      viewsToIgnore: [UIView] = []) async throws -> String {
         

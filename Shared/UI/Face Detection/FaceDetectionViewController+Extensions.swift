@@ -35,7 +35,7 @@ extension FaceDetectionViewController {
 
     func updateFaceView(for result: VNFaceObservation) {
         defer {
-            runMain {
+            Task.onMainActor {
                 self.faceView.setNeedsDisplay()
             }
         }

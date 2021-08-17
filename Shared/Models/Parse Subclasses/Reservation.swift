@@ -103,8 +103,7 @@ extension Reservation: Objectable {
 
 private var reservationMetadataKey: UInt8 = 0
 private var linkKey: UInt8 = 0
-extension Reservation: UIActivityItemSource, StatusableRequest {
-    typealias ReturnType = Void
+extension Reservation: UIActivityItemSource {
 
     private(set) var metadata: LPLinkMetadata? {
         get {
@@ -134,8 +133,8 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
         return "RSVP code: \(String(optional: self.objectId))\nOurs an is an exclusive place to be social. I saved you a spot. Tap👇\n\(link)"
     }
 
-    func prepareMetaData(andUpdate statusables: [Statusable]) -> Future<Void, Error> {
-        return Future { promise in
+    func prepareMetadata(andUpdate statusables: [Statusable]) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
             let metadataProvider = LPMetadataProvider()
 
             // Trigger the loading event for all statusables
@@ -147,25 +146,26 @@ extension Reservation: UIActivityItemSource, StatusableRequest {
             if let objectId = self.objectId {
                 self.link = domainURL + "/reservation?reservationId=\(objectId)"
             }
+
             if let url = URL(string: domainURL) {
                 metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
-                    runMain {
+                    Task.onMainActor {
                         if let e = error {
                             for statusable in statusables {
                                 statusable.handleEvent(status: .error("Error"))
                             }
-                            promise(.failure(e))
+                            continuation.resume(throwing: e)
                         } else {
                             self.metadata = metadata
                             for statusable in statusables {
                                 statusable.handleEvent(status: .complete)
                             }
-                            promise(.success(()))
+                            continuation.resume(returning: ())
                         }
                     }
                 }
             } else {
-                promise(.failure(ClientError.generic))
+                continuation.resume(throwing: ClientError.generic)
             }
         }
     }

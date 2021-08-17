@@ -35,7 +35,7 @@ class FaceView: UIView {
 
         self.boundingBox = .zero
 
-        runMain {
+        Task.onMainActor {
             self.setNeedsDisplay()
         }
     }

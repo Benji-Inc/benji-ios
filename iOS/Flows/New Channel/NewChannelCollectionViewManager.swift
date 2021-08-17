@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class NewChannelCollectionViewManger: CollectionViewManager<NewChannelCollectionViewManger.SectionType> {
+class NewChannelCollectionViewManager: CollectionViewManager<NewChannelCollectionViewManager.SectionType> {
 
     enum SectionType: Int, ManagerSectionType, CaseIterable {
         case users
@@ -29,19 +29,25 @@ class NewChannelCollectionViewManger: CollectionViewManager<NewChannelCollection
         self.allowMultipleSelection = true 
 
         self.collectionView.animationView.play()
-        GetAllConnections().makeSynchronousRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink { result in
-                switch result {
-                case .success(let connections):
-                    self.connections = connections.filter { (connection) -> Bool in
-                        return !connection.nonMeUser.isNil
-                    }
-                    self.loadSnapshot()
-                case .error(_):
-                    break
-                }
-                self.collectionView.animationView.stop()
-            }.store(in: &self.cancellables)
+
+        Task {
+            await self.getAllConnections()
+        }
+    }
+
+    private func getAllConnections() async {
+        do {
+            let connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])
+            self.connections = connections.filter { (connection) -> Bool in
+                return !connection.nonMeUser.isNil
+            }
+            self.loadSnapshot()
+        } catch {
+            print(error)
+        }
+
+        #warning("Move this to use Statusable.")
+        self.collectionView.animationView.stop()
     }
 
     override func getSections() -> [SectionType] {

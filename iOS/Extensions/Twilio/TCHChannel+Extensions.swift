@@ -42,12 +42,7 @@ extension TCHChannel {
         }
     }
 
-    func getAuthorAsUser() -> Future<User, Error> {
-        return User.localThenNetworkQuery(for: self.createdBy!)
-    }
-
-    func getUsers(excludeMe: Bool = false) -> Future<[User], Error> {
-
+    func getUsers(excludeMe: Bool = false) async throws -> [User] {
         let members = self.members?.membersList() ?? []
 
         var identifiers: [String] = []
@@ -59,10 +54,10 @@ extension TCHChannel {
                 }
             }
         }
-
-        return User.localThenNetworkArrayQuery(where: identifiers,
-                                               isEqual: true,
-                                               container: .channel(identifier: self.sid!))
+        let users = try await User.localThenNetworkArrayQuery(where: identifiers,
+                                                                   isEqual: true,
+                                                                   container: .channel(identifier: self.sid!))
+        return users
     }
 
     var channelDescription: String {
@@ -87,6 +82,7 @@ extension TCHChannel {
 }
 
 extension TCHChannel: Comparable {
+    
     public static func < (lhs: TCHChannel, rhs: TCHChannel) -> Bool {
         guard let lhsDate = lhs.dateUpdatedAsDate, let rhsDate = rhs.dateUpdatedAsDate else { return false }
         return lhsDate > rhsDate

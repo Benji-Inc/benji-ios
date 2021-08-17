@@ -93,11 +93,11 @@ extension ChannelViewController {
                 }
             case .typingStarted:
                 if let memberID = memberUpdate.member.identity, memberID != User.current()?.objectId {
-                    memberUpdate.member.getMemberAsUser()
-                        .mainSink(receiveValue: { (user) in
-                            self.collectionViewManager.userTyping = user
-                            self.collectionViewManager.setTypingIndicatorViewHidden(false, performUpdates: nil)
-                        }).store(in: &self.cancellables)
+                    Task {
+                        guard let user = try? await memberUpdate.member.getMemberAsUser() else { return }
+                        self.collectionViewManager.userTyping = user
+                        self.collectionViewManager.setTypingIndicatorViewHidden(false, performUpdates: nil)
+                    }
                 }
             }
         }.store(in: &self.cancellables)

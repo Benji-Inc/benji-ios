@@ -16,28 +16,17 @@ struct CreateConnection: CloudFunction {
 
     var to: User
 
-    func makeSynchronousRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
-        let params = ["to": self.to.objectId!,
-                      "status": Connection.Status.invited.rawValue]
-
-        return self.makeSynchronousRequest(andUpdate: statusables,
-                                params: params,
-                                callName: "createConnection",
-                                viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
-    }
-
+    @discardableResult
     func makeRequest(andUpdate statusables: [Statusable],
-                          viewsToIgnore: [UIView]) async throws -> Any {
+                     viewsToIgnore: [UIView]) async throws -> Any {
 
         let params = ["to": self.to.objectId!,
                       "status": Connection.Status.invited.rawValue]
 
-        let result = try await self.makeRequest(andUpdate: statusables,
-                                                     params: params,
-                                                     callName: "createConnection",
-                                                     viewsToIgnore: viewsToIgnore)
-
-        return result
+        return try await self.makeRequest(andUpdate: statusables,
+                                          params: params,
+                                          callName: "createConnection",
+                                          viewsToIgnore: viewsToIgnore)
     }
 }
 
@@ -47,27 +36,14 @@ struct UpdateConnection: CloudFunction {
     var connectionId: String
     var status: Connection.Status
 
-    func makeSynchronousRequest(andUpdate statusables: [Statusable],
-                     viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
-
-        let params = ["connectionId": self.connectionId,
-                      "status": self.status.rawValue]
-
-        return self.makeSynchronousRequest(andUpdate: statusables,
-                                params: params,
-                                callName: "updateConnection",
-                                viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
-    }
-
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
         let params = ["connectionId": self.connectionId,
                       "status": self.status.rawValue]
 
-        let result = try await self.makeRequest(andUpdate: statusables,
-                                                     params: params,
-                                                     callName: "updateConnection",
-                                                     viewsToIgnore: viewsToIgnore)
-        return result
+        return try await self.makeRequest(andUpdate: statusables,
+                                          params: params,
+                                          callName: "updateConnection",
+                                          viewsToIgnore: viewsToIgnore)
     }
 }
 
@@ -82,48 +58,13 @@ struct GetAllConnections: CloudFunction {
 
     var direction: Direction = .all
 
-    func makeSynchronousRequest(andUpdate statusables: [Statusable],
-                     viewsToIgnore: [UIView]) -> AnyPublisher<[Connection], Error> {
-
-        return self.makeSynchronousRequest(andUpdate: statusables,
-                                params: [:],
-                                callName: "getConnections",
-                                viewsToIgnore: viewsToIgnore).map { (value) -> [Connection] in
-            if let dict = value as? [String: [Connection]] {
-                var all: [Connection] = []
-
-                switch self.direction {
-                case .incoming:
-                    if let incoming = dict["incoming"] {
-                        all = incoming
-                    }
-                case .outgoing:
-                    if let outgoing = dict["outgoing"] {
-                        all = outgoing
-                    }
-                case .all:
-                    if let incoming = dict["incoming"] {
-                        all.append(contentsOf: incoming)
-                    }
-                    if let outgoing = dict["outgoing"] {
-                        all.append(contentsOf: outgoing)
-                    }
-                }
-
-                return all
-            } else {
-                return []
-            }
-        }.eraseToAnyPublisher()
-    }
-
     func makeRequest(andUpdate statusables: [Statusable],
-                          viewsToIgnore: [UIView]) async throws -> [Connection] {
+                     viewsToIgnore: [UIView]) async throws -> [Connection] {
 
         let result = try await self.makeRequest(andUpdate: statusables,
-                                                     params: [:],
-                                                     callName: "getConnections",
-                                                     viewsToIgnore: viewsToIgnore)
+                                                params: [:],
+                                                callName: "getConnections",
+                                                viewsToIgnore: viewsToIgnore)
 
         if let dict = result as? [String: [Connection]] {
             var all: [Connection] = []

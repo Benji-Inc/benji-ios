@@ -160,6 +160,7 @@ class VideoView: View {
                                of object: Any?,
                                change: [NSKeyValueChangeKey : Any]?,
                                context: UnsafeMutableRawPointer?) {
+        
         if keyPath == "status", let status = self.player?.currentItem?.status, status == .failed {
             self.teardown()
         }
@@ -170,8 +171,9 @@ class VideoView: View {
            let item = player.currentItem,
            !item.isPlaybackBufferEmpty,
            CMTimeGetSeconds(item.duration) != CMTimeGetSeconds(player.currentTime()) {
+            
             self.player?.play()
-            self.isPlaying = true 
+            self.isPlaying = true
         }
     }
 }

@@ -35,25 +35,22 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
     }
 
     func handle(intent: INShareFocusStatusIntent, completion: @escaping (INShareFocusStatusIntentResponse) -> Void) {
+        guard let isFocused = intent.focusStatus?.isFocused, let currentUser = User.current() else { return }
 
-        if let isFocused = intent.focusStatus?.isFocused, let current = User.current() {
+        #warning("Change these to enums")
+        currentUser.focusStatus = isFocused ? "focused" : "available"
 
-            current.focusStatus = isFocused ? "focused" : "available"
-            current.saveToServer()
-                .sink { result in
-                    let code: INShareFocusStatusIntentResponseCode
-                    switch result {
-                    case .finished:
-                        code = .success
-                    case .failure(_):
-                        code = .failure
-                    }
-                    let response = INShareFocusStatusIntentResponse(code: code, userActivity: nil)
-                    completion(response)
-                } receiveValue: { _ in
+        Task {
+            do {
+                try await currentUser.saveToServer()
 
-                }.store(in: &self.cancellables)
+                let response = INShareFocusStatusIntentResponse(code: .success, userActivity: nil)
+                completion(response)
+            } catch {
+                let response = INShareFocusStatusIntentResponse(code: .failure, userActivity: nil)
+                completion(response)
+            }
         }
+
     }
 }
-

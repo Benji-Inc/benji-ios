@@ -22,8 +22,8 @@ extension MainCoordinator: UserNotificationManagerDelegate {
 extension MainCoordinator: LaunchManagerDelegate {
 
     nonisolated func launchManager(_ manager: LaunchManager, didReceive activity: LaunchActivity) {
-        Task {
-            await self.furthestChild.handle(launchActivity: activity)
+        Task.onMainActor {
+            self.furthestChild.handle(launchActivity: activity)
         }
     }
 

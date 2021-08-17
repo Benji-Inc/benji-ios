@@ -30,22 +30,19 @@ protocol Objectable: AnyObject {
     func getObject<Type>(for key: KeyType) -> Type?
     func getRelationalObject<PFRelation>(for key: KeyType) -> PFRelation?
     func setObject<Type>(for key: KeyType, with newValue: Type)
-    func saveLocalThenServer() -> Future<Self, Error>
-    func saveToServer() -> Future<Self, Error>
 
-    static func localThenNetworkQuery(for objectId: String) -> Future<Self, Error>
-    static func localThenNetworkArrayQuery(where identifiers: [String], isEqual: Bool, container: ContainerName) -> Future<[Self], Error>
+    func saveLocalThenServer() async throws -> Self
+    func saveToServer() async throws -> Self
+
+    static func localThenNetworkQuery(for objectId: String) async throws -> Self
+    static func localThenNetworkArrayQuery(where identifiers: [String],
+                                           isEqual: Bool,
+                                           container: ContainerName) async throws -> [Self]
 }
 
 extension Objectable {
 
-    static func cachedQuery(for objectID: String) -> Future<Self, Error> {
-        return Future { promise in
-            promise(.failure(ClientError.generic))
-        }
-    }
-
-    static func cachedArrayQuery(with identifiers: [String]) -> Future<[Self], Error> {
+    static func cachedQuerySync(for objectID: String) -> Future<Self, Error> {
         return Future { promise in
             promise(.failure(ClientError.generic))
         }
@@ -54,34 +51,36 @@ extension Objectable {
 
 extension Objectable where Self: PFObject {
 
-    // Will save the object locally and push up to the server when ready
     @discardableResult
-    func saveLocalThenServer() -> Future<Self, Error> {
-        return Future { promise in
+    func saveLocalThenServer() async throws -> Self {
+        let object: Self = try await withCheckedThrowingContinuation { continuation in
             self.saveEventually { (success, error) in
-                if let e = error {
-                    SessionManager.shared.handleParse(error: e)
-                    promise(.failure(e))
+                if let error = error {
+                    SessionManager.shared.handleParse(error: error)
+                    continuation.resume(throwing: error)
                 } else {
-                    promise(.success(self))
+                    continuation.resume(returning: self)
                 }
             }
         }
+
+        return object
     }
 
-    // Does not save locally but just pushes to server in the background
     @discardableResult
-    func saveToServer() -> Future<Self, Error> {
-        return Future { promise in
+    func saveToServer() async throws -> Self {
+        let object: Self = try await withCheckedThrowingContinuation { continuation in
             self.saveInBackground { (success, error) in
-                if let e = error {
-                    SessionManager.shared.handleParse(error: e)
-                    promise(.failure(e))
+                if let error = error {
+                    SessionManager.shared.handleParse(error: error)
+                    continuation.resume(throwing: error)
                 } else {
-                    promise(.success(self))
+                    continuation.resume(returning: self)
                 }
             }
         }
+
+        return object
     }
 
     static func fetchAll() -> Future<[Self], Never> {
@@ -100,99 +99,112 @@ extension Objectable where Self: PFObject {
         }
     }
 
-    static func getFirstObject(where key: String, contains string: String) -> Future<Self, Error> {
-        return Future { promise in
+    static func getFirstObject(where key: String, contains string: String) async throws -> Self {
+        let object: Self = try await withCheckedThrowingContinuation { continuation in
             let query = self.query()
             query?.whereKey(key, contains: string)
             query?.getFirstObjectInBackground(block: { object, error in
                 if let obj = object as? Self {
-                    promise(.success(obj))
+                    continuation.resume(returning: obj)
                 } else if let e = error {
-                    promise(.failure(e))
+                    continuation.resume(throwing: e)
                 } else {
-                    promise(.failure(ClientError.generic))
+                    continuation.resume(throwing: ClientError.generic)
                 }
             })
         }
+
+        return object
     }
 
-    static func getObject(with objectId: String) -> Future<Self, Error> {
-        return self.getFirstObject(where: "objectId", contains: objectId)
+    static func getObject(with objectId: String) async throws -> Self {
+        let object = try await self.getFirstObject(where: "objectId", contains: objectId)
+        return object
     }
 
-    static func localThenNetworkQuery(for objectId: String) -> Future<Self, Error> {
-        return Future { promise in
-            if let query = self.query() {
-                query.fromPin(withName: objectId)
-                query.getFirstObjectInBackground()
-                    .continueWith { (task) -> Any? in
-                        if let object = task.result as? Self {
-                            promise(.success(object))
-                        } else if let nonCacheQuery = self.query() {
-                            nonCacheQuery.whereKey(ObjectKey.objectId.rawValue, equalTo: objectId)
-                            nonCacheQuery.getFirstObjectInBackground { (object, error) in
-                                if let nonCachedObject = object as? Self, let identifier = nonCachedObject.objectId {
-                                    nonCachedObject.pinInBackground(withName: identifier) { (success, error) in
-                                        if let e = error {
-                                            SessionManager.shared.handleParse(error: e)
-                                            promise(.failure(e))
-                                        } else {
-                                            promise(.success(nonCachedObject))
-                                        }
-                                    }
-                                } else if let e = error {
-                                    SessionManager.shared.handleParse(error: e)
-                                    promise(.failure(e))
-                                } else {
-                                    promise(.failure(ClientError.generic))
-                                }
-                            }
-                        } else {
-                            promise(.failure(ClientError.generic))
-                        }
-
-                        return nil
-                    }
+    static func localThenNetworkQuery(for objectId: String) async throws -> Self {
+        let object: Self = try await withCheckedThrowingContinuation { continuation in
+            guard let query = self.query() else {
+                continuation.resume(throwing: ClientError.message(detail: "Unable get query for object"))
+                return
             }
+
+            query.fromPin(withName: objectId)
+            query.getFirstObjectInBackground()
+                .continueWith { (task) -> Any? in
+                    if let object = task.result as? Self {
+                        continuation.resume(returning: object)
+                    } else if let nonCacheQuery = self.query() {
+                        nonCacheQuery.whereKey(ObjectKey.objectId.rawValue, equalTo: objectId)
+                        nonCacheQuery.getFirstObjectInBackground { (object, error) in
+                            if let nonCachedObject = object as? Self, let identifier = nonCachedObject.objectId {
+                                nonCachedObject.pinInBackground(withName: identifier) { (success, error) in
+                                    if let e = error {
+                                        SessionManager.shared.handleParse(error: e)
+                                        continuation.resume(throwing: e)
+                                    } else {
+                                        continuation.resume(returning: nonCachedObject)
+                                    }
+                                }
+                            } else if let e = error {
+                                SessionManager.shared.handleParse(error: e)
+                                continuation.resume(throwing: e)
+                            } else {
+                                continuation.resume(throwing: ClientError.generic)
+                            }
+                        }
+                    } else {
+                        continuation.resume(throwing: ClientError.generic)
+                    }
+
+                    return nil
+                }
         }
+
+        return object
     }
 
     static func localThenNetworkArrayQuery(where identifiers: [String],
                                            isEqual: Bool,
-                                           container: ContainerName) -> Future<[Self], Error> {
-        return Future { promise in
-            if let query = self.query() {
-                query.fromPin(withName: container.name)
-                query.findObjectsInBackground()
-                    .continueWith { (task) -> Any? in
-                        if let objects = task.result as? [Self], !objects.isEmpty, objects.count == identifiers.count {
-                            promise(.success(objects))
-                        } else if let nonCacheQuery = self.query() {
-                            if isEqual {
-                                nonCacheQuery.whereKey(ObjectKey.objectId.rawValue, containedIn: identifiers)
-                            } else {
-                                nonCacheQuery.whereKey(ObjectKey.objectId.rawValue, notContainedIn: identifiers)
-                            }
-                            nonCacheQuery.findObjectsInBackground { (objects, error) in
-                                PFObject.pinAll(inBackground: objects, withName: container.name) { (success, error) in
-                                    if let e = error {
-                                        SessionManager.shared.handleParse(error: e)
-                                        promise(.failure(e))
-                                    } else if let objectsForType = objects as? [Self] {
-                                        promise(.success(objectsForType))
-                                    } else {
-                                        promise(.failure(ClientError.generic))
-                                    }
+                                           container: ContainerName) async throws -> [Self] {
+
+        let array: [Self] = try await withCheckedThrowingContinuation { continuation in
+            guard let query = self.query() else {
+                continuation.resume(throwing: ClientError.message(detail: "Unable get query for object"))
+                return
+            }
+            query.fromPin(withName: container.name)
+            query.findObjectsInBackground()
+                .continueWith { (task) -> Any? in
+                    if let objects = task.result as? [Self], !objects.isEmpty, objects.count == identifiers.count {
+                        continuation.resume(returning: objects)
+                    } else if let nonCacheQuery = self.query() {
+                        if isEqual {
+                            nonCacheQuery.whereKey(ObjectKey.objectId.rawValue, containedIn: identifiers)
+                        } else {
+                            nonCacheQuery.whereKey(ObjectKey.objectId.rawValue, notContainedIn: identifiers)
+                        }
+                        nonCacheQuery.findObjectsInBackground { (objects, error) in
+                            PFObject.pinAll(inBackground: objects, withName: container.name) { (success, error) in
+                                if let e = error {
+                                    SessionManager.shared.handleParse(error: e)
+                                    continuation.resume(throwing: e)
+                                } else if let objectsForType = objects as? [Self] {
+                                    continuation.resume(returning: objectsForType)
+                                } else {
+                                    continuation.resume(throwing: ClientError.generic)
                                 }
                             }
-                        } else {
-                            promise(.failure(ClientError.generic))
                         }
-
-                        return nil
+                    } else {
+                        continuation.resume(throwing: ClientError.generic)
                     }
-            }
+
+                    return nil
+                }
         }
+
+        return array
     }
 
     func retrieveDataFromServer() -> Future<Self, Error> {
