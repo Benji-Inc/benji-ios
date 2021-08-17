@@ -198,9 +198,13 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
     }
 
     func createConnection(with user: User) {
-        CreateConnection(to: user).makeSynchronousRequest(andUpdate: [], viewsToIgnore: [])
-            .mainSink(receiveValue: { (_) in
+        Task {
+            do {
+                try await CreateConnection(to: user).makeRequest(andUpdate: [], viewsToIgnore: [])
                 self.showSentAlert(for: user)
-            }).store(in: &self.cancellables)
+            } catch {
+                print(error)
+            }
+        }
     }
 }

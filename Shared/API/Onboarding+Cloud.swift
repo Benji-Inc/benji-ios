@@ -19,20 +19,6 @@ struct SendCode: CloudFunction {
     let region: String
     let installationId: String
     
-    func makeSynchronousRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
-        let phoneString = PhoneKit.shared.format(self.phoneNumber, toType: .e164)
-        
-        let params = ["phoneNumber": phoneString,
-                      "installationId": self.installationId,
-                      "region": self.region]
-        
-        return self.makeSynchronousRequest(andUpdate: statusables,
-                                params: params,
-                                callName: "sendCode",
-                                delayInterval: 0.0,
-                                viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
-    }
-    
     func makeRequest(andUpdate statusables: [Statusable] = [],
                           viewsToIgnore: [UIView] = []) async throws -> Any {
 
@@ -58,25 +44,7 @@ struct VerifyCode: CloudFunction {
     let phoneNumber: PhoneNumber
     let installationId: String
     let reservationId: String
-    
-    func makeSynchronousRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) -> AnyPublisher<String, Error> {
-        let params: [String: Any] = ["authCode": self.code,
-                                     "installationId": self.installationId,
-                                     "reservationId": self.reservationId,
-                                     "phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164)]
-        
-        return self.makeSynchronousRequest(andUpdate: statusables,
-                                params: params,
-                                callName: "validateCode",
-                                viewsToIgnore: viewsToIgnore).map({ (value) -> String in
-            if let token = value as? String, !token.isEmpty {
-                return token
-            } else {
-                return ""
-            }
-        }).eraseToAnyPublisher()
-    }
-    
+
     func makeRequest(andUpdate statusables: [Statusable] = [],
                           viewsToIgnore: [UIView] = []) async throws -> String {
         
@@ -101,16 +69,6 @@ struct VerifyCode: CloudFunction {
 struct ActivateUser: CloudFunction {
     
     typealias ReturnType = Any
-    
-    func makeSynchronousRequest(andUpdate statusables: [Statusable],
-                     viewsToIgnore: [UIView]) -> AnyPublisher<Any, Error> {
-        
-        return self.makeSynchronousRequest(andUpdate: statusables,
-                                params: [:],
-                                callName: "setActiveStatus",
-                                delayInterval: 0.0,
-                                viewsToIgnore: viewsToIgnore).eraseToAnyPublisher()
-    }
 
     @discardableResult
     func makeRequest(andUpdate statusables: [Statusable], viewsToIgnore: [UIView]) async throws -> Any {
