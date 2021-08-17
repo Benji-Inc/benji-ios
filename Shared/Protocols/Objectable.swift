@@ -47,12 +47,6 @@ extension Objectable {
             promise(.failure(ClientError.generic))
         }
     }
-
-    static func cachedArrayQuerySync(with identifiers: [String]) -> Future<[Self], Error> {
-        return Future { promise in
-            promise(.failure(ClientError.generic))
-        }
-    }
 }
 
 extension Objectable where Self: PFObject {
