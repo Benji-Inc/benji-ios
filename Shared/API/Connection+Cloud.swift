@@ -23,12 +23,10 @@ struct CreateConnection: CloudFunction {
         let params = ["to": self.to.objectId!,
                       "status": Connection.Status.invited.rawValue]
 
-        let result = try await self.makeRequest(andUpdate: statusables,
-                                                params: params,
-                                                callName: "createConnection",
-                                                viewsToIgnore: viewsToIgnore)
-
-        return result
+        return try await self.makeRequest(andUpdate: statusables,
+                                          params: params,
+                                          callName: "createConnection",
+                                          viewsToIgnore: viewsToIgnore)
     }
 }
 
@@ -42,11 +40,10 @@ struct UpdateConnection: CloudFunction {
         let params = ["connectionId": self.connectionId,
                       "status": self.status.rawValue]
 
-        let result = try await self.makeRequest(andUpdate: statusables,
-                                                params: params,
-                                                callName: "updateConnection",
-                                                viewsToIgnore: viewsToIgnore)
-        return result
+        return try await self.makeRequest(andUpdate: statusables,
+                                          params: params,
+                                          callName: "updateConnection",
+                                          viewsToIgnore: viewsToIgnore)
     }
 }
 
