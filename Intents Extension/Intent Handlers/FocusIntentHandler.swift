@@ -37,6 +37,7 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
     func handle(intent: INShareFocusStatusIntent, completion: @escaping (INShareFocusStatusIntentResponse) -> Void) {
         guard let isFocused = intent.focusStatus?.isFocused, let currentUser = User.current() else { return }
 
+        #warning("Change these to enums")
         currentUser.focusStatus = isFocused ? "focused" : "available"
 
         Task {

@@ -5,7 +5,6 @@ import Combine
 
 protocol ManagerSectionType: Hashable, RawRepresentable where Self.RawValue == Int {}
 
-@MainActor
 class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollectionViewDelegate,
                                                               UICollectionViewDelegateFlowLayout {
 
