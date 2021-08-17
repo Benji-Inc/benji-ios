@@ -37,6 +37,11 @@ enum UserStatus: String {
     case needsVerification // Has entered a phone number but not a verification code. 
 }
 
+enum FocusStatus: String {
+    case focused
+    case available
+}
+
 final class User: PFUser {
 
     var phoneNumber: String? {
@@ -77,9 +82,12 @@ final class User: PFUser {
         set { self.setObject(for: .status, with: newValue?.rawValue) }
     }
 
-    var focusStatus: String? {
-        get { return self.getObject(for: .focusStatus) }
-        set { self.setObject(for: .focusStatus, with: newValue) }
+    var focusStatus: FocusStatus? {
+        get {
+            guard let string: String = self.getObject(for: .focusStatus) else { return nil }
+            return FocusStatus(rawValue: string)
+        }
+        set { self.setObject(for: .focusStatus, with: newValue?.rawValue) }
     }
 
     var connectionPreferences: [ConnectionPreference] {
