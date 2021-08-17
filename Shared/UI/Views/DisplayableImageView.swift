@@ -180,7 +180,6 @@ class DisplayableImageView: View {
     }
 
     func reset() {
-        
         self.cancellables.forEach { cancellable in
             cancellable.cancel()
         }
