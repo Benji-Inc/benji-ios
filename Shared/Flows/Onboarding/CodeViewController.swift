@@ -12,6 +12,8 @@ import Parse
 import TMROLocalization
 import Combine
 
+#warning("Move main actor to the base view controller.")
+@MainActor
 class CodeViewController: TextInputViewController<Void> {
 
     var phoneNumber: PhoneNumber?

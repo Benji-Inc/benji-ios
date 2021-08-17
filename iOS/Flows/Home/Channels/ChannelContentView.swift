@@ -10,6 +10,8 @@ import Foundation
 import TwilioChatClient
 import Combine
 
+#warning("Make the base view the main actor.")
+@MainActor
 class ChannelContentView: View {
 
     let stackedAvatarView = StackedAvatarView()
@@ -52,23 +54,20 @@ class ChannelContentView: View {
 
         guard self.currentItem?.id == channel.id else { return }
 
-        #warning("Figure out a way to not have to manually put this on the main actor.")
-        Task.onMainActor {
-            if let friendlyName = channel.friendlyName {
-                self.label.setText(friendlyName.capitalized)
-            } else if users.count == 0 {
-                self.label.setText("You")
-            } else if users.count == 1, let user = users.first(where: { user in
-                return user.objectId != User.current()?.objectId
-            }) {
-                self.displayDM(for: channel, with: user)
-            } else {
-                self.displayGroupChat(for: channel, with: users)
-            }
-            self.stackedAvatarView.set(items: users)
-            self.stackedAvatarView.layoutNow()
-            self.layoutNow()
+        if let friendlyName = channel.friendlyName {
+            self.label.setText(friendlyName.capitalized)
+        } else if users.count == 0 {
+            self.label.setText("You")
+        } else if users.count == 1, let user = users.first(where: { user in
+            return user.objectId != User.current()?.objectId
+        }) {
+            self.displayDM(for: channel, with: user)
+        } else {
+            self.displayGroupChat(for: channel, with: users)
         }
+        self.stackedAvatarView.set(items: users)
+        self.stackedAvatarView.layoutNow()
+        self.layoutNow()
     }
 
     override func layoutSubviews() {
