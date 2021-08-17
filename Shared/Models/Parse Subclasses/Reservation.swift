@@ -103,8 +103,7 @@ extension Reservation: Objectable {
 
 private var reservationMetadataKey: UInt8 = 0
 private var linkKey: UInt8 = 0
-extension Reservation: UIActivityItemSource, StatusableRequest {
-    typealias ReturnType = Void
+extension Reservation: UIActivityItemSource {
 
     private(set) var metadata: LPLinkMetadata? {
         get {

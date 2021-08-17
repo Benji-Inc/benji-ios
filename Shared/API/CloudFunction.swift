@@ -10,8 +10,10 @@ import Foundation
 import Parse
 import Combine
 
-protocol CloudFunction: StatusableRequest {
-    @discardableResult
+protocol CloudFunction {
+
+    associatedtype ReturnType
+
     func makeRequest(andUpdate statusables: [Statusable],
                      viewsToIgnore: [UIView]) async throws -> ReturnType
 }
