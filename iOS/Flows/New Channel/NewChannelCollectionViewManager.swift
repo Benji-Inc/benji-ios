@@ -46,6 +46,7 @@ class NewChannelCollectionViewManager: CollectionViewManager<NewChannelCollectio
             print(error)
         }
 
+        #warning("Move this to use Statusable.")
         self.collectionView.animationView.stop()
     }
 
