@@ -246,18 +246,6 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
         return .zero 
     }
 
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let managerCell = cell as? CollectionViewManagerCell {
-            managerCell.collectionViewManagerWillDisplay()
-        }
-    }
-
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let managerCell = cell as? CollectionViewManagerCell {
-            managerCell.collectionViewManagerDidEndDisplaying()
-        }
-    }
-
     // MARK: CollectionView Menu
 
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {

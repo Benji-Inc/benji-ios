@@ -68,10 +68,6 @@ class CollectionViewManagerCell: UICollectionViewListCell {
         self.contentView.addGestureRecognizer(longPress)
     }
 
-    #warning("Remove these display calls.")
-    func collectionViewManagerWillDisplay() { }
-    func collectionViewManagerDidEndDisplaying() { }
-
     func update(isSelected: Bool) {}
 
     func reset() {
