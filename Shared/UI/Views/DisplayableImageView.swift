@@ -117,13 +117,17 @@ class DisplayableImageView: View {
         } else if let url = displayable.url {
             self.downloadAndSetImage(url: url)
         } else if let file = displayable as? PFFileObject {
-            self.downloadAndSet(file: file)
+            Task {
+                await self.downloadAndSet(file: file)
+            }
         }
     }
 
     private func downloadAndSetImage(for user: User) {
         guard let file = user.smallImage else { return }
-        self.downloadAndSet(file: file)
+        Task {
+            await self.downloadAndSet(file: file)
+        }
     }
 
     private func findUser(with objectID: String) {
@@ -154,29 +158,28 @@ class DisplayableImageView: View {
         }
     }
 
-    private func downloadAndSet(file: PFFileObject) {
-        file.retrieveDataInBackground { progress in
-            if self.animationView.microAnimation == .pie {
-                let time = AnimationProgressTime(progress)
-                self.animationView.currentProgress = time
-            }
-        }.mainSink { [weak self] result in
-            guard let `self` = self else { return }
-
-            switch result {
-            case .success(let data):
-                guard let image = UIImage(data: data) else {
-                    self.showResult(for: nil)
-                    return
+    @MainActor
+    private func downloadAndSet(file: PFFileObject) async {
+        do {
+            let data = try await file.retrieveDataInBackground { progress in
+                if self.animationView.microAnimation == .pie {
+                    let time = AnimationProgressTime(progress)
+                    self.animationView.currentProgress = time
                 }
-
-                self.showResult(for: image)
-
-            case .error(_):
-                self.showResult(for: nil)
-                break
             }
-        }.store(in: &self.cancellables)
+
+            guard !Task.isCancelled else { return }
+
+            guard let image = UIImage(data: data) else {
+                self.showResult(for: nil)
+                return
+            }
+
+            self.showResult(for: image)
+        } catch {
+            guard !Task.isCancelled else { return }
+            self.showResult(for: nil)
+        }
     }
 
     func reset() {
