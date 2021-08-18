@@ -32,6 +32,7 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
 
     }
 
+    @MainActor
     func load() async {
         self.collectionView.animationView.play()
 
@@ -43,6 +44,7 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
 
         self.unclaimedCount = await unclaimedReservationCount
         let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
+
 
         self.loadSnapshot(animationCycle: cycle).mainSink { _ in
             // Begin auto scroll
