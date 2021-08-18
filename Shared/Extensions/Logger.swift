@@ -7,7 +7,9 @@
 //
 
 import Foundation
+import os
 
-func log(_ message: String) {
-    print("===== "+message)
+func logDebug(_ message: String) {
+    let logger = Logger()
+    logger.log(level: .debug, "🟡 === \(message)")
 }

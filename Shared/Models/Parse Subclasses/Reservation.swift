@@ -52,7 +52,6 @@ final class Reservation: PFObject, PFSubclassing {
                 query.whereKey(ReservationKey.createdBy.rawValue, equalTo: user)
                 query.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
                 query.countObjectsInBackground { count, error in
-                    log("The count was \(count)")
                     if let _ = error {
                         continuation.resume(returning: 0)
                     } else {

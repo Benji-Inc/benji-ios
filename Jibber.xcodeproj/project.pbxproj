@@ -1480,6 +1480,7 @@
 				D61EC0E721D3107A00204BEE /* Date+Extensions.swift */,
 				D61EC0D821D30C8E00204BEE /* DispatchQue+Extensions.swift */,
 				D69EB4492457EB4500473530 /* Error+Extensions.swift */,
+				802C448926CC76CC00A333A4 /* Logger.swift */,
 				D642735C22C90C640088256B /* Math Extensions */,
 				D61EC0F421D3151400204BEE /* NSAttributedString+Extensions.swift */,
 				D6D1460C21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift */,
@@ -1821,7 +1822,6 @@
 				D6AC90C92594F8F80032774D /* Delegated.swift */,
 				D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */,
 				D6AD7998266E870200ED7A93 /* MIMEType.swift */,
-				802C448926CC76CC00A333A4 /* Logger.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";

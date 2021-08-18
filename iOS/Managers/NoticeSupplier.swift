@@ -35,7 +35,6 @@ class NoticeSupplier {
 
             await allNotices.append(contentsOf: localNotices)
             self.notices = allNotices.sorted()
-            log("loaded dem notices")
         } catch {
             print(error)
         }
