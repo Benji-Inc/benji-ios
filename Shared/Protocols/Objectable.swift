@@ -83,27 +83,14 @@ extension Objectable where Self: PFObject {
         return object
     }
 
-    static func fetchAll() -> Future<[Self], Never> {
-        return Future { promise in
-            if let query = self.query() {
-                query.findObjectsInBackground { objects, error in
-                    if let objs = objects as? [Self] {
-                        promise(.success(objs))
-                    } else {
-                        promise(.success([]))
-                    }
-                }
-            } else {
-                promise(.success([]))
-            }
-        }
-    }
-
     static func getFirstObject(where key: String, contains string: String) async throws -> Self {
         let object: Self = try await withCheckedThrowingContinuation { continuation in
-            let query = self.query()
-            query?.whereKey(key, contains: string)
-            query?.getFirstObjectInBackground(block: { object, error in
+            guard let query = self.query() else {
+                continuation.resume(throwing: ClientError.apiError(detail: "Query was nil"))
+                return
+            }
+            query.whereKey(key, contains: string)
+            query.getFirstObjectInBackground(block: { object, error in
                 if let obj = object as? Self {
                     continuation.resume(returning: obj)
                 } else if let e = error {
@@ -120,6 +107,27 @@ extension Objectable where Self: PFObject {
     static func getObject(with objectId: String) async throws -> Self {
         let object = try await self.getFirstObject(where: "objectId", contains: objectId)
         return object
+    }
+
+    static func fetchAll() async throws -> [Self] {
+        let objects: [Self] = try await withCheckedThrowingContinuation { continuation in
+            guard let query = self.query() else {
+                continuation.resume(throwing: ClientError.apiError(detail: "Query was nil"))
+                return
+            }
+
+            query.findObjectsInBackground { objects, error in
+                if let objs = objects as? [Self] {
+                    continuation.resume(returning: objs)
+                } else if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: [])
+                }
+            }
+        }
+
+        return objects
     }
 
     static func localThenNetworkQuery(for objectId: String) async throws -> Self {

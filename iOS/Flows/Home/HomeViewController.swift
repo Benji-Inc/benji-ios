@@ -48,7 +48,9 @@ class HomeViewController: CollectionViewController<HomeCollectionViewManager.Sec
     override func viewWasPresented() {
         super.viewWasPresented()
 
-        self.collectionViewManager.load()
+        Task {
+            await self.collectionViewManager.load()
+        }
     }
 
     override func viewDidLayoutSubviews() {

@@ -21,40 +21,28 @@ class NoticeSupplier {
         case created(SystemNotice)
     }
 
-    private var cancellables = Set<AnyCancellable>()
-
     @Published private(set) var notices: [SystemNotice] = []
     @Published private(set) var noticeStatus: NoticeStatus? = nil
 
-    deinit {
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
+    func loadNotices() async {
+        do {
+            async let localNotices = self.getLocalNotices()
+            async let serverNotices = Notice.fetchAll()
+
+            var allNotices = try await serverNotices.compactMap { notice in
+                return SystemNotice(with: notice)
+            }
+
+            await allNotices.append(contentsOf: localNotices)
+            self.notices = allNotices.sorted()
+            log("loaded dem notices")
+        } catch {
+            print(error)
         }
     }
 
-    func loadNotices() -> Future<Void, Never> {
-        return Future { promise in
-            let combined = Publishers.Zip(
-                self.getLocalNotices(),
-                Notice.fetchAll()
-            )
-
-            combined.mainSink { (local, server) in
-                var notices = server.compactMap { notice in
-                    return SystemNotice(with: notice)
-                }
-
-                notices.append(contentsOf: local)
-                self.notices = notices.sorted()
-                promise(.success(()))
-            }.store(in: &self.cancellables)
-        }
-    }
-
-    private func getLocalNotices() -> Future<[SystemNotice], Never> {
-        return Future { promise in
-            promise(.success([]))
-        }
+    private func getLocalNotices() async -> [SystemNotice] {
+        return []
     }
 
     private func subscribeToUpdates() {
