@@ -18,20 +18,17 @@ extension ChannelViewController {
         case .system(let channel):
             self.loadSystem(channel: channel)
         case .channel(_):
-            MessageSupplier.shared.getLastMessages()
-                .mainSink { result in
-                    switch result {
-                    case .success(let sections):
-                        self.collectionViewManager.set(newSections: sections,
-                                                       animate: true) {
-                            self.setupDetailAnimator()
-                        }
-                    case .error(_):
-                        break
+            Task {
+                do {
+                    let sections = try await MessageSupplier.shared.getLastMessages()
+                    self.collectionViewManager.set(newSections: sections,
+                                                   animate: true) {
+                        self.setupDetailAnimator()
                     }
-
-
-                }.store(in: &self.cancellables)
+                } catch {
+                    logDebug(error)
+                }
+            }
         case .pending(_):
             break 
         }

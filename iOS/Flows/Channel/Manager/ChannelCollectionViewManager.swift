@@ -317,12 +317,17 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         case .pending(_):
             break 
         case .channel(let channel):
-            MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1), for: channel)
-                .mainSink(receiveValue: { (sections) in
+            Task {
+                do {
+                    let sections = try await MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1),
+                                                                                for: channel)
                     self.set(newSections: sections,
                              keepOffset: true,
                              completion: nil)
-                }).store(in: &self.cancellables)
+                } catch {
+                    logDebug(error)
+                }
+            }
         }
     }
 
