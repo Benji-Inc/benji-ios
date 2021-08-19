@@ -25,20 +25,18 @@ extension TCHChannel {
     func diffIdentifier() -> NSObjectProtocol {
         return String(optional: self.sid) as NSObjectProtocol
     }
-#warning("Convert to async")
-    func getNonMeMembers() -> Future<[TCHMember], Error> {
-        return Future { promise in
-            if let members = self.members?.membersList() {
-                var nonMeMembers: [TCHMember] = []
-                members.forEach { (member) in
-                    if member.identity != User.current()?.objectId {
-                        nonMeMembers.append(member)
-                    }
+
+    func getNonMeMembers() -> [TCHMember] {
+        if let members = self.members?.membersList() {
+            var nonMeMembers: [TCHMember] = []
+            members.forEach { (member) in
+                if member.identity != User.current()?.objectId {
+                    nonMeMembers.append(member)
                 }
-                promise(.success(nonMeMembers))
-            } else {
-                promise(.failure(ClientError.message(detail: "There was a problem fetching other members.")))
             }
+            return nonMeMembers
+        } else {
+            return []
         }
     }
 
@@ -65,16 +63,16 @@ extension TCHChannel {
               let text = attributes.dictionary?[ChannelKey.description.rawValue] as? String else { return String() }
         return text
     }
-#warning("Convert to async")
-    func join() -> Future<Void, Error> {
-        return Future { promise in
+
+    func join() async throws {
+        return try await withCheckedThrowingContinuation { continuation in
             self.join { result in
                 if result.isSuccessful() {
-                    promise(.success(()))
+                    continuation.resume(returning: ())
                 } else if let e = result.error {
-                    promise(.failure(e))
+                    continuation.resume(throwing: e)
                 } else {
-                    promise(.failure(ClientError.apiError(detail: "Failed to join channel")))
+                    continuation.resume(throwing: ClientError.apiError(detail: "Failed to join channel"))
                 }
             }
         }
