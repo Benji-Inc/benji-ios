@@ -6,9 +6,8 @@
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Photos
-import Combine
 
 class PhotoRequestOptions: PHImageRequestOptions {
 
@@ -24,7 +23,6 @@ class PhotoRequestOptions: PHImageRequestOptions {
 class AttachmentsManager {
 
     static let shared = AttachmentsManager()
-    private var cancellables = Set<AnyCancellable>()
     private let manager = PHImageManager()
 
     private(set) var attachments: [Attachment] = []
@@ -40,7 +38,7 @@ class AttachmentsManager {
             return false 
         }
     }
-    
+
     func requestAttachements() async throws {
         return try await withCheckedThrowingContinuation { continuation in
             if self.isAuthorized {
@@ -60,46 +58,36 @@ class AttachmentsManager {
         }
     }
 
-#warning("Convert to async")
-    func getMessageKind(for attachment: Attachment, body: String) -> Future<MessageKind, Error> {
-        return Future { promise in
 
+    func getMessageKind(for attachment: Attachment, body: String) async throws -> MessageKind {
+        let messageKind: MessageKind = try await withCheckedThrowingContinuation { continuation in
             switch attachment.asset.mediaType {
             case .unknown:
-                promise(.failure(ClientError.message(detail: "Unknown asset type.")))
+                continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
             case .image:
-                self.manager.requestImageDataAndOrientation(for: attachment.asset, options: PhotoRequestOptions()) { (data, type, orientation, info) in
+                self.manager.requestImageDataAndOrientation(for: attachment.asset,
+                                                               options: PhotoRequestOptions())
+                { (data, type, orientation, info) in
                     let item = PhotoAttachment(url: nil, _data: data, info: info)
-                    promise(.success(.photo(photo: item, body: body)))
+                    continuation.resume(returning: .photo(photo: item, body: body))
                 }
             case .video:
-                promise(.failure(ClientError.message(detail: "Video not supported.")))
+                continuation.resume(throwing: ClientError.message(detail: "Video not supported."))
             case .audio:
-                promise(.failure(ClientError.message(detail: "Audio not supported")))
+                continuation.resume(throwing: ClientError.message(detail: "Audio not supported"))
             @unknown default:
-                break
+                continuation.resume(throwing: ClientError.message(detail: "Unknown asset type."))
             }
         }
+
+        return messageKind
     }
 
-#warning("Convert to async")
-    func getVideoAsset(for attachment: Attachment) -> Future<AVAsset?, Never> {
-        
-        return Future { promise in
-            let options = PHVideoRequestOptions()
-            options.deliveryMode = .fastFormat
-            self.manager.requestAVAsset(forVideo: attachment.asset, options: options) { asset, audioMix, info in
-                promise(.success(asset))
-            }
-        }
-    }
-
-#warning("Convert to async")
     func getImage(for attachment: Attachment,
                   contentMode: PHImageContentMode = .aspectFill,
-                  size: CGSize) -> Future<(UIImage, [AnyHashable: Any]?), Error> {
+                  size: CGSize) async throws -> (UIImage, [AnyHashable: Any]?) {
 
-        return Future { promise in
+        let result: (UIImage, [AnyHashable: Any]?) = try await withCheckedThrowingContinuation { continuation in
             let options = PhotoRequestOptions()
 
             self.manager.requestImage(for: attachment.asset,
@@ -107,14 +95,26 @@ class AttachmentsManager {
                                            contentMode: contentMode,
                                            options: options) { (image, info) in
                 if let img = image {
-                    promise(.success((img, info)))
+                    continuation.resume(returning: (img, info))
                 } else {
-                    promise(.failure(ClientError.message(detail: "Failed to retrieve image")))
+                    continuation.resume(throwing: ClientError.message(detail: "Failed to retrieve image"))
                 }
             }
         }
+
+        return result
     }
 
+    func getVideoAsset(for attachment: Attachment) async -> AVAsset? {
+        let asset: AVAsset? = await withCheckedContinuation { continuation in
+            let options = PHVideoRequestOptions()
+            options.deliveryMode = .fastFormat
+            self.manager.requestAVAsset(forVideo: attachment.asset, options: options) { asset, audioMix, info in
+                continuation.resume(returning: asset)
+            }
+        }
+        return asset
+    }
 
     private func requestAuthorization() async throws {
          return try await withCheckedThrowingContinuation { continuation in

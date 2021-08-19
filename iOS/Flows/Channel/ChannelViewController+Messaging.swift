@@ -13,16 +13,15 @@ import Photos
 extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
 
     func handle(attachment: Attachment, body: String) {
-        AttachmentsManager.shared.getMessageKind(for: attachment, body: body)
-            .mainSink { (result) in
-                switch result {
-                case .success(let kind):
-                    let object = SendableObject(kind: kind, context: .passive)
-                    self.send(object: object)
-                case .error(_):
-                    break
-                }
-            }.store(in: &self.cancellables)
+        Task {
+            do {
+                let kind = try await AttachmentsManager.shared.getMessageKind(for: attachment, body: body)
+                let object = SendableObject(kind: kind, context: .passive)
+                self.send(object: object)
+            } catch {
+                logDebug(error)
+            }
+        }
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
