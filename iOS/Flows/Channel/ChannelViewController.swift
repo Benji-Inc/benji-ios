@@ -89,7 +89,6 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor, Co
     }
 
     private func setupHandlers() {
-
         self.addKeyboardObservers()
 
         self.detailVC.$isHandlingTouches.mainSink { isHandlingTouches in
@@ -100,7 +99,8 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor, Co
             }
         }.store(in: &self.cancellables)
 
-        KeyboardManger.shared.$isKeyboardShowing.mainSink { isShowing in                self.detailVC.animator.fractionComplete = self.getDetailProgress()
+        KeyboardManger.shared.$isKeyboardShowing.mainSink { isShowing in
+            self.detailVC.animator.fractionComplete = self.getDetailProgress()
         }.store(in: &self.cancellables)
 
         self.collectionViewManager.didTapShare = { [unowned self] message in
@@ -108,7 +108,9 @@ class ChannelViewController: FullScreenViewController, ActiveChannelAccessor, Co
         }
 
         self.collectionViewManager.didTapResend = { [unowned self] message in
-            self.resend(message: message)
+            Task {
+                await self.resend(message: message)
+            }
         }
 
         self.collectionViewManager.didTapEdit = { [unowned self] message, indexPath in
