@@ -122,12 +122,13 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     }
 
     private func checkForNotifications() {
-        UserNotificationManager.shared.getNotificationSettings()
-            .mainSink { settings in
-                if settings.authorizationStatus != .authorized {
-                    self.showSoftAskNotifications(for: settings.authorizationStatus)
-                }
-            }.store(in: &self.cancellables)
+        Task {
+            let settings = await UserNotificationManager.shared.getNotificationSettings()
+
+            if settings.authorizationStatus != .authorized {
+                self.showSoftAskNotifications(for: settings.authorizationStatus)
+            }
+        }
     }
 
     func didSelectReservations() {
@@ -162,7 +163,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                     }
                 }
             } else {
-                UserNotificationManager.shared.register(application: UIApplication.shared)
+                Task {
+                    await UserNotificationManager.shared.register(application: UIApplication.shared)
+                }
             }
         }
 
