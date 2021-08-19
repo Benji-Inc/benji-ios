@@ -31,7 +31,7 @@ class ConnectionRequestCell: NoticeCell {
             do {
                 let connection = try await Connection.getObject(with: connectionId)
                 await self.content.configure(with: connection)
-                await self.setNeedsLayout()
+                self.setNeedsLayout()
             } catch {
                 print(error)
             }
