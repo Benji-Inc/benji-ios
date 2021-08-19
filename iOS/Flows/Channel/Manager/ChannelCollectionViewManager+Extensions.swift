@@ -23,23 +23,33 @@ extension ChannelCollectionViewManager {
         return Future { promise in 
             //create system message copy of current message
             let messageCopy = SystemMessage(with: message)
-            messageCopy.udpateConsumers(with: current)
-                .mainSink { copyWithConsumers in
+            Task {
+                do {
+                    let copyWithConsumers = try await messageCopy.updateConsumers(with: current)
                     self.updateItem(with: copyWithConsumers) {
                         if message.context == .timeSensitive {
                             UIApplication.shared.applicationIconBadgeNumber = 0
                         }
 
-                        //call update on the actual message and update on callback
-                        message.udpateConsumers(with: current)
-                            .mainSink { _ in
+                        Task {
+                            do {
+                                //call update on the actual message and update on callback
+                                try await message.updateConsumers(with: current)
                                 promise(.success(()))
-                            }.store(in: &self.cancellables)
+                            } catch {
+                                logDebug(error)
+                            }
+                        }
                     }
-                }.store(in: &self.cancellables)
+                } catch {
+                    promise(.failure(error))
+                }
+            }
+
         }.eraseToAnyPublisher()
     }
 
+    #warning("Convert to async")
     func setAllMessagesToRead() -> AnyPublisher<[Void], Error> {
         let publishers: [AnyPublisher<Void, Error>] = MessageSupplier.shared.unreadMessages.map { (message) -> AnyPublisher<Void, Error> in
             return self.updateConsumers(for: message)

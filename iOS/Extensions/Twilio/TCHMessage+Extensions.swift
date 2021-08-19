@@ -10,7 +10,6 @@ import Foundation
 import TwilioChatClient
 import Parse
 import TMROLocalization
-import Combine
 
 extension TCHMessage: Avatar {
 
@@ -124,47 +123,48 @@ extension TCHMessage: Messageable {
     var hasBeenConsumedBy: [String] {
         return self.attributes?["consumers"] as? [String] ?? []
     }
-#warning("Convert to async")
+
     @discardableResult
-    func udpateConsumers(with consumer: Avatar) -> Future<Messageable, Error> {
+    func updateConsumers(with consumer: Avatar) async throws -> Messageable {
         var consumers = self.hasBeenConsumedBy
         consumers.append(consumer.userObjectID!)
-        return self.appendAttributes(with: ["consumers": consumers])
+        return try await self.appendAttributes(with: ["consumers": consumers])
     }
 
-#warning("Convert to async")
-    func appendAttributes(with attributes: [String: Any]) -> Future<Messageable, Error> {
-        return Future { promise in
+    func appendAttributes(with attributes: [String: Any]) async throws -> Messageable {
+        let messageable: Messageable = try await withCheckedThrowingContinuation { continuation in
             let current: [String: Any] = self.attributes()?.dictionary as? [String: Any] ?? [:]
             let updated = current.merging(attributes, uniquingKeysWith: { (first, _) in first })
 
             if let newAttributes = TCHJsonAttributes.init(dictionary: updated) {
                 self.setAttributes(newAttributes) { (result) in
                     if let error = result.error {
-                        promise(.failure(error))
+                        continuation.resume(throwing: error)
                     } else {
-                        promise(.success(self))
+                        continuation.resume(returning: self)
                     }
                 }
             } else {
-                promise(.failure(ClientError.generic))
+                continuation.resume(throwing: ClientError.generic)
             }
         }
+
+        return messageable
     }
 
-#warning("Convert to async")
-    func getMediaContentURL() -> Future<String, Error> {
-        return Future { promise in
+    func getMediaContentURL() async throws -> String {
+        let url: String = try await withCheckedThrowingContinuation { continuation in
             self.getMediaContentTemporaryUrl { (result, url) in
                 if let mediaURL = url {
-                    promise(.success(mediaURL))
+                    continuation.resume(returning: mediaURL)
                 } else if let e = result.error {
-                    promise(.failure(e))
+                    continuation.resume(throwing: e)
                 } else {
-                    promise(.failure(ClientError.apiError(detail: "Error retrieving media content URL.")))
+                    continuation.resume(throwing: ClientError.apiError(detail: "Error retrieving media content URL."))
                 }
             }
         }
+        return url
     }
 }
 

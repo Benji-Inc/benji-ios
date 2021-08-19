@@ -70,18 +70,18 @@ class SystemMessage: Messageable {
                   attributes: message.attributes)
     }
 
-#warning("Convert to async")
     @discardableResult
-    func udpateConsumers(with consumer: Avatar) -> Future<Messageable, Error> {
-        return Future { promise in
+    func updateConsumers(with consumer: Avatar) async throws -> Messageable {
+        let messageable: Messageable = try await withCheckedThrowingContinuation { continuation in
             if let identity = consumer.userObjectID, !self.hasBeenConsumedBy.contains(identity) {
                 var consumers = self.hasBeenConsumedBy
                 consumers.append(identity)
                 self.attributes?["consumers"] = consumers
-                promise(.success(self))
+                continuation.resume(returning: self)
             } else {
-                promise(.failure(ClientError.generic))
+                continuation.resume(throwing: ClientError.generic)
             }
         }
+        return messageable
     }
 }

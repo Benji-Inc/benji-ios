@@ -61,18 +61,17 @@ class PhotoMessageCell: BaseMessageCell {
         if let url = self.cachedURL {
             self.imageView.displayable = url
         } else {
-            message.getMediaContentURL()
-                .mainSink(receivedResult: { (result) in
-                    switch result {
-                    case .success(let urlString):
-                        if let url = URL(string: urlString) {
-                            self.cachedURL = url
-                            self.imageView.displayable = url
-                        }
-                    case .error(_):
-                        break
+            Task {
+                do {
+                    let urlString = try await message.getMediaContentURL()
+                    if let url = URL(string: urlString) {
+                        self.cachedURL = url
+                        self.imageView.displayable = url
                     }
-                }).store(in: &self.cancellables)
+                } catch {
+                    logDebug(error)
+                }
+            }
         }
     }
 

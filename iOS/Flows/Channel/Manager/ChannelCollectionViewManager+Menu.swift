@@ -96,6 +96,12 @@ extension ChannelCollectionViewManager: UIContextMenuInteractionDelegate {
 
     private func setToRead(message: Messageable) {
         guard let current = User.current() else { return }
-        _ = message.udpateConsumers(with: current)
+        Task {
+            do {
+                try await message.updateConsumers(with: current)
+            } catch {
+                logDebug(error)
+            }
+        }
     }
 }
