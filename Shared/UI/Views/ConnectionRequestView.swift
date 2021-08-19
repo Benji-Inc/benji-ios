@@ -61,34 +61,28 @@ class ConnectionRequestView: View {
         self.confettiView.clipsToBounds = true
     }
 
-    func configure(with item: Connection) {
-
+    @MainActor
+    func configure(with item: Connection) async {
         self.currentItem = item
 
         guard let user = item.from else { return }
 
-        user.retrieveDataIfNeeded()
-            .mainSink { result in
-                switch result {
-                case .success(let userWithData):
-
-                    if let status = item.status, status == .invited {
-                        let text = LocalizedString(id: "", arguments: [userWithData.fullName], default: "[@(name)](\(user.objectId!)) has invited you to connect.")
-                        let attributedString = AttributedString(text,
-                                                                fontType: .regular,
-                                                                color: .white)
-                        self.textView.set(attributed: attributedString, linkColor: .lightPurple)
-                        self.avatarView.set(avatar: userWithData)
-                        self.layoutNow()
-
-                    } else {
-                        self.showSuccess(for: item, user: userWithData)
-                    }
-
-                case .error(_):
-                    break
-                }
-            }.store(in: &self.cancellables)
+        do {
+            let userWithData = try await user.retrieveDataIfNeeded()
+            if let status = item.status, status == .invited {
+                let text = LocalizedString(id: "", arguments: [userWithData.fullName], default: "[@(name)](\(user.objectId!)) has invited you to connect.")
+                let attributedString = AttributedString(text,
+                                                        fontType: .regular,
+                                                        color: .white)
+                self.textView.set(attributed: attributedString, linkColor: .lightPurple)
+                self.avatarView.set(avatar: userWithData)
+                self.layoutNow()
+            } else {
+                self.showSuccess(for: item, user: userWithData)
+            }
+        } catch {
+            logDebug(error)
+        }
     }
 
     override func layoutSubviews() {

@@ -212,38 +212,24 @@ extension Objectable where Self: PFObject {
 
         return array
     }
-#warning("Convert to async")
-    func retrieveDataFromServer() -> Future<Self, Error> {
-        return Future { promise in
-            self.fetchInBackground { object, error in
-                if let e = error {
-                    SessionManager.shared.handleParse(error: e)
-                    promise(.failure(e))
-                } else if let objectWithData = object as? Self {
-                    promise(.success(objectWithData))
-                } else {
-                    promise(.failure(ClientError.generic))
-                }
-            }
-        }
-    }
-#warning("Convert to async")
-    func retrieveDataIfNeeded() -> Future<Self, Error> {
-        return Future { promise in
+
+    func retrieveDataIfNeeded() async throws -> Self {
+        let object: Self = try await withCheckedThrowingContinuation { continuation in
             if self.isDataAvailable {
-                promise(.success(self))
+                continuation.resume(returning: self)
             } else {
                 self.fetchIfNeededInBackground { (object, error) in
                     if let e = error {
                         SessionManager.shared.handleParse(error: e)
-                        promise(.failure(e))
+                        continuation.resume(throwing: e)
                     } else if let objectWithData = object as? Self {
-                        promise(.success(objectWithData))
+                        continuation.resume(returning: objectWithData)
                     } else {
-                        promise(.failure(ClientError.generic))
+                        continuation.resume(throwing: ClientError.generic)
                     }
                 }
             }
         }
+        return object
     }
 }

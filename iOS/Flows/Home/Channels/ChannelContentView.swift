@@ -60,7 +60,7 @@ class ChannelContentView: View {
         } else if users.count == 1, let user = users.first(where: { user in
             return user.objectId != User.current()?.objectId
         }) {
-            self.displayDM(for: channel, with: user)
+            await self.displayDM(for: channel, with: user)
         } else {
             self.displayGroupChat(for: channel, with: users)
         }
@@ -83,13 +83,11 @@ class ChannelContentView: View {
         self.label.pin(.left, padding: Theme.contentOffset.half)
     }
 
-    private func displayDM(for channel: TCHChannel, with user: User) {
-        user.retrieveDataIfNeeded()
-            .mainSink(receiveValue: { user in
-                self.label.setText(user.givenName)
-                self.label.setFont(.largeThin)
-                self.layoutNow()
-            }).store(in: &self.cancellables)
+    private func displayDM(for channel: TCHChannel, with user: User) async {
+        guard let user = try? await user.retrieveDataIfNeeded() else { return }
+        self.label.setText(user.givenName)
+        self.label.setFont(.largeThin)
+        self.setNeedsLayout()
     }
 
     func displayGroupChat(for channel: TCHChannel, with users: [User]) {

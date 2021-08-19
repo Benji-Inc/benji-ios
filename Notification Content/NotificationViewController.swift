@@ -39,7 +39,8 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
     }
     
     func didReceive(_ notification: UNNotification) {
-        guard let category = UserNotificationCategory.init(rawValue: notification.request.content.categoryIdentifier) else { return }
+        guard let category
+                = UserNotificationCategory(rawValue: notification.request.content.categoryIdentifier) else { return }
 
         switch category {
         case .connectionRequest:
@@ -51,7 +52,7 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
                     return
                 }
 
-                self.connectionRequestView.configure(with: connection)
+                await self.connectionRequestView.configure(with: connection)
             }
         case .connnectionConfirmed:
             break

@@ -9,6 +9,7 @@
 import Foundation
 
 extension UICollectionView.CellRegistration where Cell: CollectionViewManagerCell & ManageableCell {
+
     var cellProvider: (UICollectionView, IndexPath, Item) -> Cell {
         return { collectionView, indexPath, item in
             let cell = collectionView.dequeueConfiguredReusableCell(using: self,

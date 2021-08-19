@@ -30,8 +30,8 @@ class ConnectionRequestCell: NoticeCell {
         Task {
             do {
                 let connection = try await Connection.getObject(with: connectionId)
-                self.content.configure(with: connection)
-                self.content.layoutNow()
+                await self.content.configure(with: connection)
+                await self.setNeedsLayout()
             } catch {
                 print(error)
             }
