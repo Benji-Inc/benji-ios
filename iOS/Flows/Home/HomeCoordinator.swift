@@ -70,17 +70,19 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
                 self.startChannelFlow(for: channel.channelType)
             } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
-                Connection.cachedQuerySync(for: connectionId)
-                    .mainSink { result in
-                        switch result {
-                        case .success(let connection):
-                            if let channelId = connection.channelId, let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
-                                self.startChannelFlow(for: channel.channelType)
-                            }
-                        case .error(_):
-                            break
-                        }
-                    }.store(in: &self.cancellables)
+                Task {
+                    do {
+                        let connection = try await Connection.cachedQuery(for: connectionId)
+                        guard let channelId = connection.channelId,
+                              let channel = ChannelSupplier.shared.getChannel(withSID: channelId) else {
+                                  return
+                              }
+
+                        self.startChannelFlow(for: channel.channelType)
+                    } catch {
+                        logDebug(error)
+                    }
+                }
             }
         case .channels:
             break

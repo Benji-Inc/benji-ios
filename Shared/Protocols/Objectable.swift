@@ -42,10 +42,8 @@ protocol Objectable: AnyObject {
 
 extension Objectable {
 
-    static func cachedQuerySync(for objectID: String) -> Future<Self, Error> {
-        return Future { promise in
-            promise(.failure(ClientError.generic))
-        }
+    static func cachedQuery(for objectID: String) async throws -> Self {
+        throw ClientError.generic
     }
 }
 
