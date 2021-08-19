@@ -55,19 +55,19 @@ extension ChannelViewController {
             switch channelUpdate.status {
             case .added:
                 if self.channelCollectionView.isTypingIndicatorHidden {
-                    self.collectionViewManager.updateItem(with: channelUpdate.message) {
+                    self.collectionViewManager.updateItemSync(with: channelUpdate.message) {
                         self.channelCollectionView.scrollToEnd()
                     }
                 } else {
                     self.collectionViewManager.setTypingIndicatorViewHidden(true, performUpdates: { [weak self] in
                         guard let `self` = self else { return }
-                        self.collectionViewManager.updateItem(with: channelUpdate.message,
+                        self.collectionViewManager.updateItemSync(with: channelUpdate.message,
                                                               replaceTypingIndicator: true,
                                                               completion: nil)
                     })
                 }
             case .changed:
-                self.collectionViewManager.updateItem(with: channelUpdate.message)
+                self.collectionViewManager.updateItemSync(with: channelUpdate.message)
             case .deleted:
                 self.collectionViewManager.delete(item: channelUpdate.message)
             case .toastReceived:

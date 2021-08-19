@@ -7,13 +7,12 @@
 //
 
 import Foundation
-import UIKit
 
 extension UICollectionView {
 
-    func performBatchUpdates(modifyItems: (() -> Swift.Void)? = nil,
-                             updates: (() -> Swift.Void)? = nil,
-                             completion: ((Bool) -> Swift.Void)? = nil) {
+    func performBatchUpdatesSync(modifyItems: (() -> Swift.Void)? = nil,
+                                 updates: (() -> Swift.Void)? = nil,
+                                 completion: ((Bool) -> Swift.Void)? = nil) {
 
         if self.frame == .zero {
             modifyItems?()
@@ -30,6 +29,29 @@ extension UICollectionView {
             self.collectionViewLayout.invalidateLayout()
             completion?(completed)
         })
+    }
+
+    @discardableResult
+    func performBatchUpdates(modifyItems: (() -> Swift.Void)? = nil,
+                             updates: (() -> Swift.Void)? = nil) async -> Bool {
+
+        if self.frame == .zero {
+            modifyItems?()
+            self.reloadData()
+            return true
+        }
+        
+        let completed: Bool = await withCheckedContinuation { continuation in
+            self.performBatchUpdates({
+                modifyItems?()
+                updates?()
+            }, completion: { (completed) in
+                // Force collection view to update otherwise the cells will reflect the old layout
+                self.collectionViewLayout.invalidateLayout()
+                continuation.resume(returning: completed)
+            })
+        }
+        return completed
     }
 }
 

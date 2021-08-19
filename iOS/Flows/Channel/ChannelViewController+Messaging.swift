@@ -49,7 +49,7 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
                                                                      completion: { (message, error) in
                                                                         if let msg = message, let _ = error {
                                                                             msg.status = .error
-                                                                            self.collectionViewManager.updateItem(with: msg)
+                                                                            self.collectionViewManager.updateItemSync(with: msg)
                                                                             if msg.context == .timeSensitive {
                                                                                 Task {
                                                                                     await self.showAlertSentToast(for: msg)
@@ -75,17 +75,17 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
         guard let systemMessage = MessageDeliveryManager.shared.resend(message: message, completion: { (newMessage, error) in
             if let msg = newMessage, let _ = error {
                 msg.status = .error
-                self.collectionViewManager.updateItem(with: msg)
+                self.collectionViewManager.updateItemSync(with: msg)
             }
         }) else { return }
 
-        self.collectionViewManager.updateItem(with: systemMessage)
+        self.collectionViewManager.updateItemSync(with: systemMessage)
     }
 
     func update(object: Sendable) {
         if let updatedMessage = MessageSupplier.shared.update(object: object) {
             self.indexPathForEditing = nil
-            self.collectionViewManager.updateItem(with: updatedMessage)
+            self.collectionViewManager.updateItemSync(with: updatedMessage)
             self.messageInputAccessoryView.reset()
         }
     }

@@ -11,50 +11,36 @@ import Combine
 
 extension ChannelCollectionViewManager {
 
-#warning("Convert to async")
-    @discardableResult
-    func updateConsumers(for message: Messageable) -> AnyPublisher<Void, Error> {
-        guard let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed, !message.hasBeenConsumedBy.contains(current.objectId!) else {
-            return Future { promise in
-                promise(.success(()))
-            }.eraseToAnyPublisher()
+    func updateConsumers(for message: Messageable) async throws {
+        // Make sure the message can be cosumed before trying to update it.
+        guard let current = User.current(),
+              !message.isFromCurrentUser,
+              message.canBeConsumed,
+              !message.hasBeenConsumedBy.contains(current.objectId!) else {
+
+                  return
+              }
+
+        // create system message copy of current message
+        let messageCopy = SystemMessage(with: message)
+
+        let copyWithConsumers = try await messageCopy.updateConsumers(with: current)
+        await self.updateItem(with: copyWithConsumers)
+        if message.context == .timeSensitive {
+            UIApplication.shared.applicationIconBadgeNumber = 0
         }
 
-        return Future { promise in 
-            //create system message copy of current message
-            let messageCopy = SystemMessage(with: message)
-            Task {
-                do {
-                    let copyWithConsumers = try await messageCopy.updateConsumers(with: current)
-                    self.updateItem(with: copyWithConsumers) {
-                        if message.context == .timeSensitive {
-                            UIApplication.shared.applicationIconBadgeNumber = 0
-                        }
-
-                        Task {
-                            do {
-                                //call update on the actual message and update on callback
-                                try await message.updateConsumers(with: current)
-                                promise(.success(()))
-                            } catch {
-                                logDebug(error)
-                            }
-                        }
-                    }
-                } catch {
-                    promise(.failure(error))
-                }
-            }
-
-        }.eraseToAnyPublisher()
+        //call update on the actual message and update on callback
+        try await message.updateConsumers(with: current)
     }
 
-    #warning("Convert to async")
-    func setAllMessagesToRead() -> AnyPublisher<[Void], Error> {
-        let publishers: [AnyPublisher<Void, Error>] = MessageSupplier.shared.unreadMessages.map { (message) -> AnyPublisher<Void, Error> in
-            return self.updateConsumers(for: message)
+    func setAllMessagesToRead() async {
+        do {
+            for message in MessageSupplier.shared.unreadMessages {
+                try await self.updateConsumers(for: message)
+            }
+        } catch {
+            logDebug(error)
         }
-
-        return waitForAll(publishers)
     }
 }
