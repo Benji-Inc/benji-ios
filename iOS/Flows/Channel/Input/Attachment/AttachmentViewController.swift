@@ -51,17 +51,20 @@ class AttachmentViewController: CollectionViewController<AttachmentCollectionVie
 
         if let attachmentCollectionView = self.collectionViewManager.collectionView as? AttachmentCollectionView {
             attachmentCollectionView.didTapAuthorize = { [unowned self] in
-                AttachmentsManager.shared.requestAttachements()
-                    .mainSink { (result) in
-                        switch result {
-                        case .success(_):
-                            self.collectionViewManager.loadSnapshot()
-                        case .error(_):
-                            if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
-                                UIApplication.shared.open(url)
-                            }
-                        }
-                    }.store(in: &self.cancellables)
+                Task {
+                    await self.handleAttachmentAuthorized()
+                }
+            }
+        }
+    }
+
+    private func handleAttachmentAuthorized() async {
+        do {
+            try await AttachmentsManager.shared.requestAttachements()
+            await self.collectionViewManager.loadSnapshot()
+        } catch {
+            if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
+                await UIApplication.shared.open(url)
             }
         }
     }
@@ -69,11 +72,15 @@ class AttachmentViewController: CollectionViewController<AttachmentCollectionVie
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        if AttachmentsManager.shared.isAuthorized {
-            AttachmentsManager.shared.requestAttachements()
-                .mainSink { (_) in
-                    self.collectionViewManager.loadSnapshot()
-                }.store(in: &self.cancellables)
+        Task {
+            do {
+                if AttachmentsManager.shared.isAuthorized {
+                    try await AttachmentsManager.shared.requestAttachements()
+                    await self.collectionViewManager.loadSnapshot()
+                }
+            } catch {
+                logDebug(error)
+            }
         }
     }
 

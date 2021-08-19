@@ -40,24 +40,22 @@ class AttachmentsManager {
             return false 
         }
     }
-
-#warning("Convert to async")
-    func requestAttachements() -> Future<Void, Error> {
-        return Future { promise in
+    
+    func requestAttachements() async throws {
+        return try await withCheckedThrowingContinuation { continuation in
             if self.isAuthorized {
                 self.fetchAttachments()
-                promise(.success(()))
+                continuation.resume(returning: ())
             } else {
-                self.requestAuthorization()
-                    .mainSink { (result) in
-                        switch result {
-                        case .success():
-                            self.fetchAttachments()
-                            promise(.success(()))
-                        case .error(let error):
-                            promise(.failure(error))
-                        }
-                    }.store(in: &self.cancellables)
+                Task {
+                    do {
+                        try await self.requestAuthorization()
+                        self.fetchAttachments()
+                        continuation.resume(returning: ())
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                }
             }
         }
     }
@@ -117,16 +115,17 @@ class AttachmentsManager {
         }
     }
 
-    private func requestAuthorization() -> Future<Void, Error> {
-        return Future { promise in
-            PHPhotoLibrary.requestAuthorization({ (status) in
-                switch status {
-                case .authorized, .limited:
-                    promise(.success(()))
-                default:
-                    promise(.failure(ClientError.message(detail: "Failed to authorize")))
-                }
-            })
+
+    private func requestAuthorization() async throws {
+         return try await withCheckedThrowingContinuation { continuation in
+             PHPhotoLibrary.requestAuthorization({ (status) in
+                 switch status {
+                 case .authorized, .limited:
+                     continuation.resume(returning: ())
+                 default:
+                     continuation.resume(throwing: ClientError.message(detail: "Failed to authorize"))
+                 }
+             })
         }
     }
 

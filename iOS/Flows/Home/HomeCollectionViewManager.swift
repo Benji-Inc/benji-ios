@@ -45,11 +45,8 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
         self.unclaimedCount = await unclaimedReservationCount
         let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
 
-
-        self.loadSnapshot(animationCycle: cycle).mainSink { _ in
-            // Begin auto scroll
-            self.collectionView.animationView.stop()
-        }.store(in: &self.cancellables)
+        await self.loadSnapshot(animationCycle: cycle)
+        self.collectionView.animationView.stop()
     }
 
     override func getSections() -> [SectionType] {
