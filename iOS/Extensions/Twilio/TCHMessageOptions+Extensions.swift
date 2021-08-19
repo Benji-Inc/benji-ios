@@ -12,6 +12,7 @@ import Combine
 
 extension TCHMessageOptions {
 
+#warning("Convert to async")
     func with(body: String, mediaItem: MediaItem? = nil, attributes: TCHJsonAttributes) -> Future<TCHMessageOptions, Error> {
         return Future { promise in
             if mediaItem.isNil {

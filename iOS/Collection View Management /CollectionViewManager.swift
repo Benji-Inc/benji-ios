@@ -68,6 +68,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
         self.collectionView.delegate = self
     }
 
+#warning("Convert to async")
     @discardableResult
     func loadSnapshot(animationCycle: AnimationCycle? = nil, animatingDifferences: Bool = false) -> Future<Void, Never> {
         return Future { promise in

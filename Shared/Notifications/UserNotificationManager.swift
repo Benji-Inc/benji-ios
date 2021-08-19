@@ -31,6 +31,7 @@ class UserNotificationManager: NSObject {
         self.center.delegate = self
     }
 
+    #warning("Convert to async")
     func getNotificationSettings() -> Future<UNNotificationSettings, Never> {
         return Future { promise in
             self.center.getNotificationSettings { (settings) in
@@ -57,7 +58,7 @@ class UserNotificationManager: NSObject {
                 }
             }.store(in: &self.cancellables)
     }
-
+#warning("Convert to async")
     @discardableResult
     func register(with options: UNAuthorizationOptions = [.alert, .sound, .badge],
                   application: UIApplication) -> Future<Bool, Never> {
@@ -73,7 +74,7 @@ class UserNotificationManager: NSObject {
                 }.store(in: &self.cancellables)
         }
     }
-
+#warning("Convert to async")
     private func requestAuthorization(with options: UNAuthorizationOptions = [.alert, .sound, .badge]) -> Future<Bool, Never> {
         return Future { promise in
             self.center.requestAuthorization(options: options) { (granted, error) in
@@ -129,7 +130,7 @@ class UserNotificationManager: NSObject {
         self.schedule(note: note)
         return true
     }
-
+#warning("Convert to async")
     @discardableResult
     func schedule(note: UNNotificationRequest) -> Future<Void, Never> {
         return Future { promise in

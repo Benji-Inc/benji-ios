@@ -11,6 +11,7 @@ import Combine
 
 extension ChannelCollectionViewManager {
 
+#warning("Convert to async")
     @discardableResult
     func updateConsumers(for message: Messageable) -> AnyPublisher<Void, Error> {
         guard let current = User.current(), !message.isFromCurrentUser, message.canBeConsumed, !message.hasBeenConsumedBy.contains(current.objectId!) else {

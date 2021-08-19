@@ -212,7 +212,7 @@ extension Objectable where Self: PFObject {
 
         return array
     }
-
+#warning("Convert to async")
     func retrieveDataFromServer() -> Future<Self, Error> {
         return Future { promise in
             self.fetchInBackground { object, error in
@@ -227,7 +227,7 @@ extension Objectable where Self: PFObject {
             }
         }
     }
-    
+#warning("Convert to async")
     func retrieveDataIfNeeded() -> Future<Self, Error> {
         return Future { promise in
             if self.isDataAvailable {

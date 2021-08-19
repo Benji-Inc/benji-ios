@@ -145,6 +145,7 @@ class MessageDeliveryManager {
         interaction.donate(completion: nil)
     }
 
+#warning("Convert to async")
     private func getOptions(for kind: MessageKind, attributes: [String : Any] = [:]) -> Future<TCHMessageOptions, Error> {
         let options = TCHMessageOptions()
 

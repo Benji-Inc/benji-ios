@@ -41,6 +41,7 @@ class AttachmentsManager {
         }
     }
 
+#warning("Convert to async")
     func requestAttachements() -> Future<Void, Error> {
         return Future { promise in
             if self.isAuthorized {
@@ -61,6 +62,7 @@ class AttachmentsManager {
         }
     }
 
+#warning("Convert to async")
     func getMessageKind(for attachment: Attachment, body: String) -> Future<MessageKind, Error> {
         return Future { promise in
 
@@ -82,6 +84,7 @@ class AttachmentsManager {
         }
     }
 
+#warning("Convert to async")
     func getVideoAsset(for attachment: Attachment) -> Future<AVAsset?, Never> {
         
         return Future { promise in
@@ -93,6 +96,7 @@ class AttachmentsManager {
         }
     }
 
+#warning("Convert to async")
     func getImage(for attachment: Attachment,
                   contentMode: PHImageContentMode = .aspectFill,
                   size: CGSize) -> Future<(UIImage, [AnyHashable: Any]?), Error> {
