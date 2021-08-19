@@ -48,7 +48,7 @@ class CodeViewController: TextInputViewController<Void> {
         guard !self.verifying, let phoneNumber = self.phoneNumber else { return }
         
         self.verifying = true
-        self.textEntry.button.handleEvent(status: .loading)
+        await self.textEntry.button.handleEvent(status: .loading)
 
         do {
             let installation = try await PFInstallation.getCurrent()
@@ -60,10 +60,10 @@ class CodeViewController: TextInputViewController<Void> {
 
             self.textField.resignFirstResponder()
             try await User.become(withSessionToken: token)
-            self.textEntry.button.handleEvent(status: .complete)
+            await self.textEntry.button.handleEvent(status: .complete)
             self.complete(with: .success(()))
         } catch {
-            self.textEntry.button.handleEvent(status: .error(error.localizedDescription))
+            await self.textEntry.button.handleEvent(status: .error(error.localizedDescription))
             self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
         }
 

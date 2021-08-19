@@ -138,7 +138,7 @@ class WelcomeViewController: TextInputViewController<Void> {
             return
         }
 
-        self.textEntry.button.handleEvent(status: .loading)
+        await self.textEntry.button.handleEvent(status: .loading)
 
         do {
             let reservation = try await Reservation.getObject(with: code)
@@ -148,9 +148,9 @@ class WelcomeViewController: TextInputViewController<Void> {
             } else {
                 self.state = .foundReservation(reservation)
             }
-            self.textEntry.button.handleEvent(status: .complete)
+            await self.textEntry.button.handleEvent(status: .complete)
         } catch {
-            self.textEntry.button.handleEvent(status: .error(error.localizedDescription))
+            await self.textEntry.button.handleEvent(status: .error(error.localizedDescription))
             self.state = .reservationError
         }
     }

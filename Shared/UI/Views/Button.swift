@@ -163,16 +163,14 @@ class Button: UIButton, Statusable {
         self.size = CGSize(width: width - Theme.contentOffset.doubled, height: Theme.buttonHeight)
     }
 
-#warning("Convert to async")
-    @discardableResult
-    func handleEvent(status: EventStatus) -> Future<Void, Never> {
+    func handleEvent(status: EventStatus) async {
         switch status {
         case .loading, .initial:
-            return self.handleLoadingState()
+            await self.handleLoadingState()
         case .complete, .saved, .invalid, .custom(_), .valid, .cancelled:
-            return self.handleNormalState()
+            await self.handleNormalState()
         case .error(let message):
-            return self.handleError(message)
+            await self.handleError(message)
         }
     }
 }

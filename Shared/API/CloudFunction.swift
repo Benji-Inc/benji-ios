@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import Combine
 
 protocol CloudFunction {
 
@@ -27,8 +26,12 @@ extension CloudFunction {
                      viewsToIgnore: [UIView]) async throws -> Any {
 
         // Trigger the loading event for all statusables
-        for statusable in statusables {
-            statusable.handleEvent(status: .loading)
+        await withTaskGroup(of: Void.self) { group in
+            for statusable in statusables {
+                group.addTask {
+                    await statusable.handleEvent(status: .loading)
+                }
+            }
         }
 
         // Reference the statusables weakly in case they are deallocated before the signal finishes.
@@ -53,22 +56,38 @@ extension CloudFunction {
 
             try Task.checkCancellation()
 
-            weakStatusables.forEach { (statusable) in
-                statusable.value?.handleEvent(status: .saved)
+            await withTaskGroup(of: Void.self) { group in
+                for weakStatusable in weakStatusables {
+                    group.addTask {
+                        guard let statusable = weakStatusable.value else { return }
+                        await statusable.handleEvent(status: .saved)
+                    }
+                }
             }
 
             // A saved status is temporary so we set it to complete after a short delay
-            delay(delayInterval) {
-                weakStatusables.forEach { (statusable) in
-                    statusable.value?.handleEvent(status: .complete)
+            Task {
+                await Task.snooze(seconds: delayInterval)
+                await withTaskGroup(of: Void.self) { group in
+                    for weakStatusable in weakStatusables {
+                        group.addTask {
+                            guard let statusable = weakStatusable.value else { return }
+                            await statusable.handleEvent(status: .complete)
+                        }
+                    }
                 }
             }
 
             return result
         } catch {
             SessionManager.shared.handleParse(error: error)
-            weakStatusables.forEach { (statusable) in
-                statusable.value?.handleEvent(status: .error(error.localizedDescription))
+            await withTaskGroup(of: Void.self) { group in
+                for weakStatusable in weakStatusables {
+                    group.addTask {
+                        guard let statusable = weakStatusable.value else { return }
+                        await statusable.handleEvent(status: .error(error.localizedDescription))
+                    }
+                }
             }
             throw(error)
         }

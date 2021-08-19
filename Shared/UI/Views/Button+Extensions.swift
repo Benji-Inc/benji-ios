@@ -7,13 +7,12 @@
 //
 
 import Foundation
-import Combine
 
 extension Button {
 
     /// Starts a loading animation on the button and hides the text.
-    func handleLoadingState() -> Future<Void, Never> {
-        return Future { promise in
+    func handleLoadingState() async {
+        return await withCheckedContinuation { continuation in
             if !self.alphaOutAnimator.isRunning {
                 self.isUserInteractionEnabled = false
                 self.isEnabled = false
@@ -33,7 +32,7 @@ extension Button {
                 }
 
                 self.alphaOutAnimator.addCompletion { (position) in
-                    promise(.success(()))
+                    continuation.resume(returning: ())
                 }
 
                 self.animationView.isHidden = false
@@ -45,8 +44,8 @@ extension Button {
     }
 
     /// Stops any loading animations and shows the button in its standard color with whatever text is assigned to it.
-    func handleNormalState() -> Future<Void, Never> {
-        return Future { promise in
+    func handleNormalState() async {
+        return await withCheckedContinuation { continuation in
             if !self.alphaInAnimator.isRunning {
                 self.alphaOutAnimator.stopAnimation(true)
                 self.alphaInAnimator.stopAnimation(true)
@@ -65,7 +64,7 @@ extension Button {
                 self.alphaInAnimator.addCompletion { (position) in
                     self.isUserInteractionEnabled = true
                     self.isEnabled = true
-                    promise(.success(()))
+                    continuation.resume(returning: ())
                 }
 
                 self.animationView.stop()
@@ -74,8 +73,8 @@ extension Button {
     }
 
     /// Changes the button to the error color and displays a provided error message on the button.
-    func handleError(_ description: String) -> Future<Void, Never> {
-        return Future { promise in
+    func handleError(_ description: String) async {
+        return await withCheckedContinuation { continuation in
             // We need to stop this animator in the case that we get an error before the completion is called (which starts the spinner)
             self.alphaOutAnimator.stopAnimation(true)
 
@@ -96,7 +95,7 @@ extension Button {
                 self.errorLabel.alpha = 1.0
                 self.setBackground(color: Color.red.color.withAlphaComponent(0.4), forUIControlState: .normal)
             }) { (_) in
-                promise(.success(()))
+                continuation.resume(returning: ())
             }
         }
     }

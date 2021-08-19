@@ -152,7 +152,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         case .error:
             self.handleErrorState()
         case .finish:
-            self.handleFinishState()
+            Task {
+                await self.handleFinishState()
+            }
         }
 
         self.view.layoutNow()
@@ -227,9 +229,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.complete(with: .failure(ClientError.message(detail: "There was a problem. Please try again.")))
     }
 
-    private func handleFinishState() {
+    @MainActor
+    private func handleFinishState() async {
         self.complete(with: .success(()))
-        self.confirmButton.handleEvent(status: .loading)
+        await self.confirmButton.handleEvent(status: .loading)
         self.cancellables.forEach { (cancellable) in
             cancellable.cancel()
         }
@@ -292,7 +295,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         guard let currentUser = User.current(), let data = image.previewData else { return }
 
         let file = PFFileObject(name:"small_image.jpeg", data: data)
-        self.confirmButton.handleEvent(status: .loading)
+        await self.confirmButton.handleEvent(status: .loading)
 
         currentUser.smallImage = file
 
