@@ -40,13 +40,6 @@ protocol Objectable: AnyObject {
                                            container: ContainerName) async throws -> [Self]
 }
 
-extension Objectable {
-
-    static func cachedQuery(for objectID: String) async throws -> Self {
-        throw ClientError.generic
-    }
-}
-
 extension Objectable where Self: PFObject {
 
     @discardableResult
