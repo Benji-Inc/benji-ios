@@ -70,7 +70,6 @@ class SystemMessage: Messageable {
                   attributes: message.attributes)
     }
 
-#warning("Convert to async")
     @discardableResult
     func updateConsumers(with consumer: Avatar) async throws -> Messageable {
         let messageable: Messageable = try await withCheckedThrowingContinuation { continuation in
