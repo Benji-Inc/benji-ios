@@ -160,7 +160,13 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         cell.configure(with: message)
         cell.didTapMessage = { [weak self] in
             guard let `self` = self else { return }
-            self.updateConsumers(for: message)
+            Task {
+                do {
+                    try await self.updateConsumers(for: message)
+                } catch {
+                    logDebug(error)
+                }
+            }
         }
 
         return cell
@@ -311,12 +317,17 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         case .pending(_):
             break 
         case .channel(let channel):
-            MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1), for: channel)
-                .mainSink(receiveValue: { (sections) in
+            Task {
+                do {
+                    let sections = try await MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1),
+                                                                                for: channel)
                     self.set(newSections: sections,
                              keepOffset: true,
                              completion: nil)
-                }).store(in: &self.cancellables)
+                } catch {
+                    logDebug(error)
+                }
+            }
         }
     }
 
@@ -370,14 +381,16 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         if !self.isSettingReadAll,
            MessageSupplier.shared.unreadMessages.count > 0,
            self.lastScrollDirection == .up {
+
             self.isSettingReadAll = true
             footer.animationView.play()
-            self.setAllMessagesToRead()
-                .mainSink(receiveValue: { (_) in
-                    footer.stop()
-                    self.isSettingReadAll = false
-                    self.collectionView.scrollToLastItem()
-                }).store(in: &self.cancellables)
+
+            Task {
+                await self.setAllMessagesToRead()
+                footer.stop()
+                self.isSettingReadAll = false
+                self.collectionView.scrollToLastItem()
+            }
         } else if self.lastScrollDirection == .up {
             footer.stop()
             self.collectionView.scrollToLastItem()

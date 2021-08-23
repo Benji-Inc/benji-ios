@@ -6,9 +6,8 @@
 //  Copyright © 2020 Benjamin Dodgson. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import Photos
-import Combine
 
 class AttachmentCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Attachment
@@ -30,11 +29,10 @@ class AttachmentCell: CollectionViewManagerCell, ManageableCell {
     }
 
     func configure(with item: Attachment) {
-
-        AttachmentsManager.shared.getImage(for: item, size: self.size)
-            .mainSink { (image, _) in
-                self.imageView.displayable = image 
-            }.store(in: &self.cancellables)
+        Task {
+            guard let image = try? await AttachmentsManager.shared.getImage(for: item, size: self.size) else { return }
+            self.imageView.displayable = image.0
+        }
     }
 
     override func layoutSubviews() {

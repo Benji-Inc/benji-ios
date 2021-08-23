@@ -30,7 +30,6 @@ class AttachmentView: View {
     }
 
     func configure(with item: Attachment?) {
-
         self.attachment = item
         
         guard let attachement = item else {
@@ -41,17 +40,16 @@ class AttachmentView: View {
             return
         }
 
-        AttachmentsManager.shared.getMessageKind(for: attachement, body: String())
-            .mainSink { (result) in
-                switch result {
-                case .success(let kind):
-                    self.messageKind = kind
-                    self.imageView.displayable = kind.displayable
-                    self.layoutNow()
-                case .error(_):
-                    break
-                }
-            }.store(in: &self.cancellables)
+        Task {
+            guard let kind = try? await AttachmentsManager.shared.getMessageKind(for: attachement,
+                                                                                    body: String()) else {
+                return
+            }
+
+            self.messageKind = kind
+            self.imageView.displayable = kind.displayable
+            self.layoutNow()
+        }
     }
 
     override func layoutSubviews() {

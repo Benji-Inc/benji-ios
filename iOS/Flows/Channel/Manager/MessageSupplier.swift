@@ -106,32 +106,41 @@ class MessageSupplier: NSObject {
 
     //MARK: GET MESSAGES
 
-#warning("Convert to async")
-    static func getMessage(from channelId: String, with index: NSNumber) -> Future<Messageable, Error> {
-        return Future { promise in
-            if let displyable = ChannelSupplier.shared.allChannelsSorted.first(where: { channel in
+    static func getMessage(from channelId: String, with index: NSNumber) async throws -> Messageable {
+        let messageable: Messageable = try await withCheckedThrowingContinuation { continuation in
+            // Get the channel
+            guard let channel = ChannelSupplier.shared.allChannelsSorted.first(where: { channel in
                 if case ChannelType.channel(let channel) = channel.channelType {
                     return channel.sid == channelId
                 }
                 return false
-            }),  case ChannelType.channel(let channel) = displyable.channelType,  let msgObject = channel.messages {
-                
-                msgObject.message(withIndex: index) { result, message in
-                    if let msg = message {
-                        promise(.success(msg))
-                    } else {
-                        promise(.failure(ClientError.apiError(detail: "No message found for index")))
-                    }
+            }) else {
+                continuation.resume(throwing: ClientError.apiError(detail: "Channel not found"))
+                return
+            }
+
+            // Get the messages off of the channel
+            guard case ChannelType.channel(let channel) = channel.channelType,
+                  let messages = channel.messages else {
+                      continuation.resume(throwing: ClientError.apiError(detail: "No messages object"))
+                      return
+                  }
+
+            messages.message(withIndex: index) { result, message in
+                if let msg = message {
+                    continuation.resume(returning: msg)
+                } else {
+                    continuation.resume(throwing: ClientError.apiError(detail: "No message found for index"))
                 }
-            } else {
-                promise(.failure(ClientError.apiError(detail: "No messages object")))
             }
         }
+
+        return messageable
     }
-#warning("Convert to async")
+
     @discardableResult
-    func getLastMessages(batchAmount: UInt = 20) -> Future<[ChannelSectionable], Error> {
-        return Future { promise in
+    func getLastMessages(batchAmount: UInt = 20) async throws -> [ChannelSectionable] {
+        let channelSections: [ChannelSectionable] = try await withCheckedThrowingContinuation { continuation in
             var tchChannel: TCHChannel?
 
             if let activeChannel = ChannelSupplier.shared.activeChannel {
@@ -152,21 +161,23 @@ class MessageSupplier: NSObject {
                         self.allMessages = msgs
                         let sections = self.mapMessagesToSections(for: msgs, in: .channel(channel))
                         self.sections = sections
-                        promise(.success(sections))
+                        continuation.resume(returning: sections)
                     } else {
-                        promise(.failure(ClientError.message(detail: "Failed to retrieve last messages.")))
+                        continuation.resume(throwing: ClientError.message(detail: "Failed to retrieve last messages."))
                     }
                 }
             } else {
-                promise(.failure(ClientError.message(detail: "Failed to retrieve last messages.")))
+                continuation.resume(throwing: ClientError.message(detail: "Failed to retrieve last messages."))
             }
         }
+        return channelSections
     }
 
     func getMessages(before index: UInt,
                      batchAmount: UInt = 20,
-                     for channel: TCHChannel) -> Future<[ChannelSectionable], Error> {
-        return Future { promise in
+                     for channel: TCHChannel) async throws -> [ChannelSectionable] {
+
+        let sections: [ChannelSectionable] = try await withCheckedThrowingContinuation { continuation in
             if let messagesObject = channel.messages {
                 self.messagesObject = messagesObject
                 messagesObject.getBefore(index, withCount: batchAmount) { (result, messages) in
@@ -174,15 +185,16 @@ class MessageSupplier: NSObject {
                         self.allMessages.insert(contentsOf: msgs, at: 0)
                         let sections = self.mapMessagesToSections(for: self.allMessages, in: .channel(channel))
                         self.sections = sections
-                        promise(.success(sections))
+                        continuation.resume(returning: sections)
                     } else {
-                        promise(.failure(ClientError.message(detail: "Failed to retrieve messages.")))
+                        continuation.resume(throwing: ClientError.message(detail: "Failed to retrieve messages."))
                     }
                 }
             } else {
-                promise(.failure(ClientError.message(detail: "Failed to retrieve messages.")))
+                continuation.resume(throwing: ClientError.message(detail: "Failed to retrieve messages."))
             }
         }
+        return sections
     }
 
     func mapMessagesToSections(for messages: [Messageable], in channelable: ChannelType) -> [ChannelSectionable] {

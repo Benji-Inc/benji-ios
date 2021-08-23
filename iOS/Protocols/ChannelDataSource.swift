@@ -25,7 +25,9 @@ protocol ChannelDataSource: AnyObject {
              animate: Bool,
              completion: CompletionOptional)
     func append(item: Messageable, completion: CompletionOptional)
-    func updateItem(with updatedItem: Messageable,
+    @MainActor
+    func append(item: Messageable) async
+    func updateItemSync(with updatedItem: Messageable,
                     replaceTypingIndicator: Bool,
                     completion: CompletionOptional)
     func delete(item: Messageable, in section: Int)
@@ -95,14 +97,9 @@ extension ChannelDataSource {
         if let count = itemCount, let section = sectionIndex {
             let indexPath = IndexPath(item: count, section: section)
 
-            self.collectionView.performBatchUpdates(modifyItems: { [unowned self] in
-                self.sections[section].items.append(item)
-                }, updates: { [unowned self] in
-                    self.collectionView.insertItems(at: [indexPath])
-            }) { (completed) in
-                completion?()
-            }
-
+            self.sections[section].items.append(item)
+            self.collectionView.insertItems(at: [indexPath])
+            completion?()
         } else {
             //Create new section
             let new = ChannelSectionable(date: item.createdAt, items: [item])
@@ -112,7 +109,32 @@ extension ChannelDataSource {
         }
     }
 
-    func updateItem(with updatedItem: Messageable,
+    @MainActor
+    func append(item: Messageable) async {
+        var sectionIndex: Int?
+        var itemCount: Int?
+
+        for (index, type) in self.sections.enumerated() {
+            if type.date.isSameDay(as: item.createdAt) {
+                sectionIndex = index
+                itemCount = type.items.count
+            }
+        }
+
+        if let count = itemCount, let section = sectionIndex {
+            let indexPath = IndexPath(item: count, section: section)
+
+            self.sections[section].items.append(item)
+            self.collectionView.insertItems(at: [indexPath])
+        } else {
+            //Create new section
+            let new = ChannelSectionable(date: item.createdAt, items: [item])
+            self.sections.append(new)
+            self.collectionView.reloadData()
+        }
+    }
+
+    func updateItemSync(with updatedItem: Messageable,
                     replaceTypingIndicator: Bool = false,
                     completion: CompletionOptional = nil) {
 
@@ -149,13 +171,50 @@ extension ChannelDataSource {
 
         guard let ip = indexPath else { return }
 
-        self.collectionView.performBatchUpdates(modifyItems: {
-            self.sections[ip.section].items[ip.row] = updatedItem
-        }, updates: {
-            self.collectionView.reloadItems(at: [ip])
-        }) { (completed) in
-            completion?()
+        self.sections[ip.section].items[ip.row] = updatedItem
+        self.collectionView.reloadItems(at: [ip])
+        completion?()
+    }
+
+    @MainActor
+    func updateItem(with updatedItem: Messageable, replaceTypingIndicator: Bool = false) async {
+
+        // If there is no update id and it's from the current user,
+        // then we've already displayed this message and can safely return.
+        if updatedItem.updateId == nil && updatedItem.isFromCurrentUser {
+            return
         }
+
+        var indexPath: IndexPath? = nil
+
+        // If the new message matches an existing message's id, then replace the old one.
+        if let updateId = updatedItem.updateId {
+            for (sectionIndex, section) in self.sections.enumerated() {
+                for (itemIndex, item) in section.items.enumerated() {
+                    print("ID \(item.updateId ?? "NONE")")
+                    if item.updateId == updateId {
+                        indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+                        break
+                    }
+                }
+            }
+        }
+
+        // If the new message isn't replacing an old one, append it to the end.
+        if indexPath.isNil {
+            if replaceTypingIndicator, let lastSection = self.sections.last {
+                let section = self.sections.count - 1
+                indexPath = IndexPath(item: lastSection.items.count - 1, section: section)
+            } else {
+                await self.append(item: updatedItem)
+                return
+            }
+        }
+
+        guard let indexPath = indexPath else { return }
+        
+        self.sections[indexPath.section].items[indexPath.row] = updatedItem
+        self.collectionView.reloadItems(at: [indexPath])
     }
     
     func delete(item: Messageable, in section: Int = 0) {

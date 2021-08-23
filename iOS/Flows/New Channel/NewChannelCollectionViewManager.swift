@@ -41,7 +41,7 @@ class NewChannelCollectionViewManager: CollectionViewManager<NewChannelCollectio
             self.connections = connections.filter { (connection) -> Bool in
                 return !connection.nonMeUser.isNil
             }
-            self.loadSnapshot()
+            await self.loadSnapshot()
         } catch {
             print(error)
         }

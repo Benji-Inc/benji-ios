@@ -18,20 +18,17 @@ extension ChannelViewController {
         case .system(let channel):
             self.loadSystem(channel: channel)
         case .channel(_):
-            MessageSupplier.shared.getLastMessages()
-                .mainSink { result in
-                    switch result {
-                    case .success(let sections):
-                        self.collectionViewManager.set(newSections: sections,
-                                                       animate: true) {
-                            self.setupDetailAnimator()
-                        }
-                    case .error(_):
-                        break
+            Task {
+                do {
+                    let sections = try await MessageSupplier.shared.getLastMessages()
+                    self.collectionViewManager.set(newSections: sections,
+                                                   animate: true) {
+                        self.setupDetailAnimator()
                     }
-
-
-                }.store(in: &self.cancellables)
+                } catch {
+                    logDebug(error)
+                }
+            }
         case .pending(_):
             break 
         }
@@ -55,19 +52,19 @@ extension ChannelViewController {
             switch channelUpdate.status {
             case .added:
                 if self.channelCollectionView.isTypingIndicatorHidden {
-                    self.collectionViewManager.updateItem(with: channelUpdate.message) {
+                    self.collectionViewManager.updateItemSync(with: channelUpdate.message) {
                         self.channelCollectionView.scrollToEnd()
                     }
                 } else {
                     self.collectionViewManager.setTypingIndicatorViewHidden(true, performUpdates: { [weak self] in
                         guard let `self` = self else { return }
-                        self.collectionViewManager.updateItem(with: channelUpdate.message,
+                        self.collectionViewManager.updateItemSync(with: channelUpdate.message,
                                                               replaceTypingIndicator: true,
                                                               completion: nil)
                     })
                 }
             case .changed:
-                self.collectionViewManager.updateItem(with: channelUpdate.message)
+                self.collectionViewManager.updateItemSync(with: channelUpdate.message)
             case .deleted:
                 self.collectionViewManager.delete(item: channelUpdate.message)
             case .toastReceived:

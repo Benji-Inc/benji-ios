@@ -53,8 +53,6 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     var didLongPress: ((AnyHashable, IndexPath) -> Void)? = nil
     var cancellables = Set<AnyCancellable>()
 
-    private(set) var hasLoadedInitialSnapshot: Bool = false
-
     unowned let collectionView: CollectionView
 
     required init(with collectionView: CollectionView) {
@@ -68,28 +66,26 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
         self.collectionView.delegate = self
     }
 
-#warning("Convert to async")
-    @discardableResult
-    func loadSnapshot(animationCycle: AnimationCycle? = nil, animatingDifferences: Bool = false) -> Future<Void, Never> {
-        return Future { promise in
-
+    func loadSnapshot(animationCycle: AnimationCycle? = nil, animatingDifferences: Bool = false) async {
+        return await withCheckedContinuation { continuation in
             let snapshot = self.createSnapshot()
 
-            if let cycle = animationCycle {
-                self.animateOut(position: cycle.outToPosition, concatenate: cycle.shouldConcatenate) { [unowned self] in
-                    self.dataSource.apply(snapshot, animatingDifferences: animatingDifferences) {
-                        self.animateIn(position: cycle.inFromPosition,
-                                       concatenate: cycle.shouldConcatenate,
-                                       scrollToEnd: cycle.scrollToEnd) {
-                            self.hasLoadedInitialSnapshot = true
-                            promise(.success(()))
+            Task.onMainActor {
+                if let cycle = animationCycle {
+                    self.animateOut(position: cycle.outToPosition, concatenate: cycle.shouldConcatenate) {
+                        self.dataSource.apply(snapshot, animatingDifferences: animatingDifferences) {
+                            self.animateIn(position: cycle.inFromPosition,
+                                           concatenate: cycle.shouldConcatenate,
+                                           scrollToEnd: cycle.scrollToEnd) {
+
+                                continuation.resume(returning: ())
+                            }
                         }
                     }
-                }
-            } else {
-                self.dataSource.apply(snapshot, animatingDifferences: false) {
-                    self.hasLoadedInitialSnapshot = true 
-                    promise(.success(()))
+                } else {
+                    self.dataSource.apply(snapshot, animatingDifferences: false) {
+                        continuation.resume(returning: ())
+                    }
                 }
             }
         }

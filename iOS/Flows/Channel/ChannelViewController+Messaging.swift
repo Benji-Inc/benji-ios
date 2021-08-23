@@ -13,21 +13,22 @@ import Photos
 extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
 
     func handle(attachment: Attachment, body: String) {
-        AttachmentsManager.shared.getMessageKind(for: attachment, body: body)
-            .mainSink { (result) in
-                switch result {
-                case .success(let kind):
-                    let object = SendableObject(kind: kind, context: .passive)
-                    self.send(object: object)
-                case .error(_):
-                    break
-                }
-            }.store(in: &self.cancellables)
+        Task {
+            do {
+                let kind = try await AttachmentsManager.shared.getMessageKind(for: attachment, body: body)
+                let object = SendableObject(kind: kind, context: .passive)
+                await self.send(object: object)
+            } catch {
+                logDebug(error)
+            }
+        }
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
         if sendable.previousMessage.isNil {
-            self.send(object: sendable)
+            Task {
+                await self.send(object: sendable)
+            }
         } else {
             self.update(object: sendable)
         }
@@ -44,49 +45,57 @@ extension ChannelViewController: SwipeableInputAccessoryViewDelegate {
         }
     }
 
-    func send(object: Sendable) {
-        guard let systemMessage = MessageDeliveryManager.shared.send(object: object,
-                                                                     attributes: [:],
-                                                                     completion: { (message, error) in
-                                                                        if let msg = message, let _ = error {
-                                                                            msg.status = .error
-                                                                            self.collectionViewManager.updateItem(with: msg)
-                                                                            if msg.context == .timeSensitive {
-                                                                                Task {
-                                                                                    await self.showAlertSentToast(for: msg)
-                                                                                }
-                                                                            }
-                                                                        }
-        }) else { return }
+    @MainActor
+    func send(object: Sendable) async {
+        do {
+            let systemMessage = try await MessageDeliveryManager.shared.send(object: object,
+                                                                             attributes: [:],
+                                                                             systemMessageHandler: { (systemMessage) in
+                // Update the UI immediately so the app feels more responsive.
+                Task {
+                    if systemMessage.context == .timeSensitive {
+                        await self.showAlertSentToast(for: systemMessage)
+                    }
 
-        if systemMessage.context == .timeSensitive {
-            Task {
-                await self.showAlertSentToast(for: systemMessage)
+                    self.collectionViewManager.append(item: systemMessage) { [unowned self] in
+                        self.channelCollectionView.scrollToEnd()
+                    }
+
+                    self.messageInputAccessoryView.reset()
+                }
+            })
+
+            // If the message comes back with an error, schedule a toast to let the user know.
+            if systemMessage.status == .error {
+                self.collectionViewManager.updateItemSync(with: systemMessage)
+                if systemMessage.context == .timeSensitive {
+                    await self.showAlertSentToast(for: systemMessage)
+                }
             }
+        } catch {
+            logDebug(error)
         }
-
-        self.collectionViewManager.append(item: systemMessage) { [unowned self] in
-            self.channelCollectionView.scrollToEnd()
-        }
-
-        self.messageInputAccessoryView.reset()
     }
 
-    func resend(message: Messageable) {
-        guard let systemMessage = MessageDeliveryManager.shared.resend(message: message, completion: { (newMessage, error) in
-            if let msg = newMessage, let _ = error {
-                msg.status = .error
-                self.collectionViewManager.updateItem(with: msg)
-            }
-        }) else { return }
+    func resend(message: Messageable) async {
+        do {
+            let systemMessage = try await MessageDeliveryManager.shared.resend(message: message,
+                                                                               systemMessageHandler: { systemMessage in
+                self.collectionViewManager.updateItemSync(with: systemMessage)
+            })
 
-        self.collectionViewManager.updateItem(with: systemMessage)
+            if systemMessage.status == .error {
+                self.collectionViewManager.updateItemSync(with: systemMessage)
+            }
+        } catch {
+            logDebug(error)
+        }
     }
 
     func update(object: Sendable) {
         if let updatedMessage = MessageSupplier.shared.update(object: object) {
             self.indexPathForEditing = nil
-            self.collectionViewManager.updateItem(with: updatedMessage)
+            self.collectionViewManager.updateItemSync(with: updatedMessage)
             self.messageInputAccessoryView.reset()
         }
     }

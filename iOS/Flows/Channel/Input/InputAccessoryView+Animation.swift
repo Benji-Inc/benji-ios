@@ -78,10 +78,9 @@ extension InputAccessoryView {
 
         self.textView.updateInputView(type: .confirmation)
 
-        channel.getNonMeMembers()
-            .mainSink(receiveValue: { (members) in
-                self.textView.confirmationView.setAlertMessage(for: members)
-            }).store(in: &self.cancellables)
+        #warning("Use users instead.")
+        let members = channel.getNonMeMembers()
+        self.textView.confirmationView.setAlertMessage(for: members)
 
         self.alertProgressView.size = CGSize(width: self.width, height: self.height)
     }
