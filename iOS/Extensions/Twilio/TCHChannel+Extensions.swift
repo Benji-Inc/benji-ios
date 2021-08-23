@@ -25,7 +25,7 @@ extension TCHChannel {
     func diffIdentifier() -> NSObjectProtocol {
         return String(optional: self.sid) as NSObjectProtocol
     }
-
+#warning("Convert to async")
     func getNonMeMembers() -> Future<[TCHMember], Error> {
         return Future { promise in
             if let members = self.members?.membersList() {
@@ -65,7 +65,7 @@ extension TCHChannel {
               let text = attributes.dictionary?[ChannelKey.description.rawValue] as? String else { return String() }
         return text
     }
-
+#warning("Convert to async")
     func join() -> Future<Void, Error> {
         return Future { promise in
             self.join { result in

@@ -10,7 +10,7 @@ import Foundation
 
 /// A thread safe collection of tasks that automatically handles removing tasks from itself when the tasks finish.
 actor TaskPool {
-
+    
     private var pool: [Task<Void, Never>] = []
 
     /// Adds a task to the pool and prepares to automatically remove the task once it's finished.

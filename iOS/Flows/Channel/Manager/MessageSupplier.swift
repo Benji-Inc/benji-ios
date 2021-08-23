@@ -106,6 +106,7 @@ class MessageSupplier: NSObject {
 
     //MARK: GET MESSAGES
 
+#warning("Convert to async")
     static func getMessage(from channelId: String, with index: NSNumber) -> Future<Messageable, Error> {
         return Future { promise in
             if let displyable = ChannelSupplier.shared.allChannelsSorted.first(where: { channel in
@@ -127,7 +128,7 @@ class MessageSupplier: NSObject {
             }
         }
     }
-
+#warning("Convert to async")
     @discardableResult
     func getLastMessages(batchAmount: UInt = 20) -> Future<[ChannelSectionable], Error> {
         return Future { promise in

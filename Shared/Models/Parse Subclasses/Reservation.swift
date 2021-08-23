@@ -63,26 +63,6 @@ final class Reservation: PFObject, PFSubclassing {
             }
         }
     }
-
-    static func getFirstUnclaimed(for user: User) -> Future<Reservation, Error> {
-        return Future { promise in
-            if let query = Reservation.query() {
-                query.whereKey(ReservationKey.createdBy.rawValue, equalTo: user)
-                query.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
-                query.findObjectsInBackground { (objects, error) in
-                    if let reservations = objects as? [Reservation], let first = reservations.first {
-                        promise(.success(first))
-                    } else if let e = error {
-                        promise(.failure(e))
-                    } else {
-                        promise(.failure(ClientError.generic))
-                    }
-                }
-            } else {
-                promise(.failure(ClientError.generic))
-            }
-        }
-    }
 }
 
 extension Reservation: Objectable {

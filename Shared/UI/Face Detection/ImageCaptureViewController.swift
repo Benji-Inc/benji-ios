@@ -38,7 +38,7 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
 
     private(set) var cameraType: CameraType = .front
     var flashMode: AVCaptureDevice.FlashMode = .auto
-
+#warning("Convert to async")
     func requestAthorization() -> Future<Bool, Never> {
         return Future { promise in
             if self.isAuthorized {

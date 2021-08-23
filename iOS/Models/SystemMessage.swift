@@ -70,6 +70,7 @@ class SystemMessage: Messageable {
                   attributes: message.attributes)
     }
 
+#warning("Convert to async")
     @discardableResult
     func udpateConsumers(with consumer: Avatar) -> Future<Messageable, Error> {
         return Future { promise in

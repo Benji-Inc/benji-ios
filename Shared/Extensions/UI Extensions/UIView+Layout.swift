@@ -232,7 +232,7 @@ extension UIView {
         self.setNeedsLayout()
         self.layoutIfNeeded()
     }
-
+    
     /// Pins the specified side of the view to the same side of its superview with optional padding space.
     /// The view's size remains unchanged. If the view has no superview, this function does nothing.
     func pin(_ side: ViewSide, padding: CGFloat = 0) {

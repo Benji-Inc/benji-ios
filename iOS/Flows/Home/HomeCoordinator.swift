@@ -70,17 +70,19 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
                 self.startChannelFlow(for: channel.channelType)
             } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
-                Connection.cachedQuerySync(for: connectionId)
-                    .mainSink { result in
-                        switch result {
-                        case .success(let connection):
-                            if let channelId = connection.channelId, let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
-                                self.startChannelFlow(for: channel.channelType)
-                            }
-                        case .error(_):
-                            break
-                        }
-                    }.store(in: &self.cancellables)
+                Task {
+                    do {
+                        let connection = try await Connection.getObject(with: connectionId)
+                        guard let channelId = connection.channelId,
+                              let channel = ChannelSupplier.shared.getChannel(withSID: channelId) else {
+                                  return
+                              }
+
+                        self.startChannelFlow(for: channel.channelType)
+                    } catch {
+                        logDebug(error)
+                    }
+                }
             }
         case .channels:
             break
@@ -120,12 +122,13 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     }
 
     private func checkForNotifications() {
-        UserNotificationManager.shared.getNotificationSettings()
-            .mainSink { settings in
-                if settings.authorizationStatus != .authorized {
-                    self.showSoftAskNotifications(for: settings.authorizationStatus)
-                }
-            }.store(in: &self.cancellables)
+        Task {
+            let settings = await UserNotificationManager.shared.getNotificationSettings()
+
+            if settings.authorizationStatus != .authorized {
+                self.showSoftAskNotifications(for: settings.authorizationStatus)
+            }
+        }
     }
 
     func didSelectReservations() {
@@ -160,7 +163,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                     }
                 }
             } else {
-                UserNotificationManager.shared.register(application: UIApplication.shared)
+                Task {
+                    await UserNotificationManager.shared.register(application: UIApplication.shared)
+                }
             }
         }
 

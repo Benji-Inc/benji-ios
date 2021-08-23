@@ -10,6 +10,9 @@ import Foundation
 import os
 
 func logDebug(_ message: String) {
-    let logger = Logger()
-    logger.log(level: .debug, "🟡 === \(message)")
+    Logger().log(level: .debug, "🟡 === \(message)")
+}
+
+func logDebug(_ error: Error) {
+    Logger().log(level: .debug, "🔴 === \(error.localizedDescription)")
 }

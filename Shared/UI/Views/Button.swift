@@ -163,6 +163,7 @@ class Button: UIButton, Statusable {
         self.size = CGSize(width: width - Theme.contentOffset.doubled, height: Theme.buttonHeight)
     }
 
+#warning("Convert to async")
     @discardableResult
     func handleEvent(status: EventStatus) -> Future<Void, Never> {
         switch status {

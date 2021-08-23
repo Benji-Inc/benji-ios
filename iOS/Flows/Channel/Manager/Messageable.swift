@@ -35,7 +35,9 @@ protocol Messageable: AnyObject {
     var hasBeenConsumedBy: [String] { get }
     var color: Color { get }
     var kind: MessageKind { get }
+#warning("Convert to async")
     func udpateConsumers(with consumer: Avatar) -> Future<Messageable, Error>
+#warning("Convert to async")
     func appendAttributes(with attributes: [String: Any]) -> Future<Messageable, Error>
 }
 

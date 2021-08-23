@@ -20,16 +20,15 @@ extension PFFileObject: ImageDisplayable {
         return nil
     }
 
-    func retrieveDataInBackground(progressHandler: ((Int) -> Void)? = nil) -> Future<Data, Error> {
-        return Future { promise in
-
+    func retrieveDataInBackground(progressHandler: ((Int) -> Void)? = nil) async throws -> Data {
+        return try await withCheckedThrowingContinuation { continuation in
             self.getDataInBackground { data, error in
                 if let e = error {
-                    promise(.failure(e))
+                    continuation.resume(throwing: e)
                 } else if let data = data {
-                    promise(.success(data))
+                    continuation.resume(returning: data)
                 } else {
-                    promise(.failure(ClientError.apiError(detail: "No error or data returned for file.")))
+                    continuation.resume(throwing: ClientError.apiError(detail: "No error or data returned for file."))
                 }
             } progressBlock: { progress in
                 progressHandler?(Int(progress))

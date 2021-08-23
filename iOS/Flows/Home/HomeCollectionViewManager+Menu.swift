@@ -10,11 +10,13 @@ import Foundation
 
 extension HomeCollectionViewManager {
 
-    func makeCurrentUsertMenu(for channel: DisplayableChannel, at indexPath: IndexPath) -> UIMenu {
+    func makeCurrentUserMenu(for channel: DisplayableChannel, at indexPath: IndexPath) -> UIMenu {
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
 
-        let confirm = UIAction(title: "Confirm", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
+        let confirm = UIAction(title: "Confirm",
+                               image: UIImage(systemName: "trash"),
+                               attributes: .destructive) { action in
 
             switch channel.channelType {
             case .system(_):
@@ -22,12 +24,20 @@ extension HomeCollectionViewManager {
             case .pending(_):
                 break
             case .channel(let tchChannel):
-                ChannelSupplier.shared.delete(channel: tchChannel)
-                    .mainSink().store(in: &self.cancellables)
+                Task {
+                    do {
+                        try await ChannelSupplier.shared.delete(channel: tchChannel)
+                    } catch {
+                        logDebug(error)
+                    }
+                }
             }
         }
 
-        let deleteMenu = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [confirm, neverMind])
+        let deleteMenu = UIMenu(title: "Delete",
+                                image: UIImage(systemName: "trash"),
+                                options: .destructive,
+                                children: [confirm, neverMind])
 
         let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { _ in
             self.select(indexPath: indexPath)
@@ -41,7 +51,9 @@ extension HomeCollectionViewManager {
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
 
-        let confirm = UIAction(title: "Confirm", image: UIImage(systemName: "clear"), attributes: .destructive) { action in
+        let confirm = UIAction(title: "Confirm",
+                               image: UIImage(systemName: "clear"),
+                               attributes: .destructive) { action in
 
             switch channel.channelType {
             case .system(_):
@@ -49,8 +61,13 @@ extension HomeCollectionViewManager {
             case .pending(_):
                 break
             case .channel(let tchChannel):
-                ChannelSupplier.shared.delete(channel: tchChannel)
-                    .mainSink().store(in: &self.cancellables)
+                Task {
+                    do {
+                        try await ChannelSupplier.shared.delete(channel: tchChannel)
+                    } catch {
+                        logDebug(error)
+                    }
+                }
             }
         }
 

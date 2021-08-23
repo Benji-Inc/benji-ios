@@ -30,16 +30,24 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.animationView)
     }
 
+
     func configure(with item: Connection) {
         guard let nonMeUser = item.nonMeUser else { return }
 
-        nonMeUser.retrieveDataIfNeeded()
-            .mainSink { user in
-                self.avatarView.set(avatar: nonMeUser)
-                self.titleLabel.setText(nonMeUser.fullName)
-                self.subTitleLabel.setText(nonMeUser.handle)
-                self.layoutNow()
-            }.store(in: &self.cancellables)
+        Task {
+            do {
+                let userWithData = try await nonMeUser.retrieveDataIfNeeded()
+
+                Task.onMainActor {
+                    self.avatarView.set(avatar: userWithData)
+                    self.titleLabel.setText(userWithData.fullName)
+                    self.subTitleLabel.setText(userWithData.handle)
+                    self.layoutNow()
+                }
+            } catch {
+                logDebug(error)
+            }
+        }
     }
 
     override func update(isSelected: Bool) {

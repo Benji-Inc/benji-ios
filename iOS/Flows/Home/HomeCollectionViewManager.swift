@@ -132,7 +132,7 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
             return ChannelPreviewViewController(with: channel, size: cell.size)
         }, actionProvider: { suggestedActions in
             if channel.isFromCurrentUser {
-                return self.makeCurrentUsertMenu(for: channel, at: indexPath)
+                return self.makeCurrentUserMenu(for: channel, at: indexPath)
             } else {
                 return self.makeNonCurrentUserMenu(for: channel, at: indexPath)
             }

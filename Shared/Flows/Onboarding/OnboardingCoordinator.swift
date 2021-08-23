@@ -61,26 +61,26 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     }
 
     nonisolated func onboardingViewControllerNeedsAuthorization(_ controller: OnboardingViewController) {
-        #if !NOTIFICATION
+#if !NOTIFICATION
         Task {
             await self.checkForNotifications()
         }
-        #endif
+#endif
     }
 
-    #if !NOTIFICATION
-    private func checkForNotifications() {
-        UserNotificationManager.shared.getNotificationSettings()
-            .mainSink { settings in
-                if settings.authorizationStatus != .authorized {
-                    self.showSoftAskNotifications(for: settings.authorizationStatus)
-                }
-            }.store(in: &self.cancellables)
+#if !NOTIFICATION
+    private func checkForNotifications() async {
+        let settings = await UserNotificationManager.shared.getNotificationSettings()
+
+        if settings.authorizationStatus != .authorized {
+            await self.showSoftAskNotifications(for: settings.authorizationStatus)
+        }
     }
 
-    private func showSoftAskNotifications(for status: UNAuthorizationStatus) {
-
-        let alert = UIAlertController(title: "Notifications that don't suck.", message: "Most other social apps design their notifications to be vague in order to suck you in for as long as possible. Ours are not. Get reminders about things that YOU set, and recieve important messages from REAL people. Ours is a far better experience with them turned on.", preferredStyle: .alert)
+    private func showSoftAskNotifications(for status: UNAuthorizationStatus) async {
+        let alert = UIAlertController(title: "Notifications that don't suck.",
+                                      message: "Most other social apps design their notifications to be vague in order to suck you in for as long as possible. Ours are not. Get reminders about things that YOU set, and recieve important messages from REAL people. Ours is a far better experience with them turned on.",
+                                      preferredStyle: .alert)
 
         let allow = UIAlertAction(title: "Allow", style: .default) { action in
             if status == .denied {
@@ -90,7 +90,9 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
                     }
                 }
             } else {
-                UserNotificationManager.shared.register(application: UIApplication.shared)
+                Task {
+                    await UserNotificationManager.shared.register(application: UIApplication.shared)
+                }
             }
         }
 
@@ -101,6 +103,6 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
 
         self.router.topmostViewController.present(alert, animated: true, completion: nil)
     }
-    #endif
+#endif
 }
 

@@ -31,62 +31,61 @@ class UserNotificationManager: NSObject {
         self.center.delegate = self
     }
 
-    func getNotificationSettings() -> Future<UNNotificationSettings, Never> {
-        return Future { promise in
+    func getNotificationSettings() async -> UNNotificationSettings {
+        let result: UNNotificationSettings = await withCheckedContinuation { continuation in
             self.center.getNotificationSettings { (settings) in
-                promise(.success(settings))
+                continuation.resume(returning:  settings)
             }
         }
+
+        return result
     }
 
     func silentRegister(withApplication application: UIApplication) {
-        self.getNotificationSettings()
-            .mainSink { (settings) in
-                switch settings.authorizationStatus {
-                case .authorized:
-                    application.registerForRemoteNotifications()  // To update our token
-                case .provisional:
-                    application.registerForRemoteNotifications()  // To update our token
-                case .notDetermined:
-                    self.register(with: [.alert, .sound, .badge, .provisional], application: application)
-                        .mainSink { (_) in }.store(in: &self.cancellables)
-                case .denied, .ephemeral:
-                    return
-                @unknown default:
-                    return
-                }
-            }.store(in: &self.cancellables)
+        Task {
+            let settings = await self.getNotificationSettings()
+
+            switch settings.authorizationStatus {
+            case .authorized:
+                await application.registerForRemoteNotifications()  // To update our token
+            case .provisional:
+                await application.registerForRemoteNotifications()  // To update our token
+            case .notDetermined:
+                await self.register(with: [.alert, .sound, .badge, .provisional], application: application)
+            case .denied, .ephemeral:
+                return
+            @unknown default:
+                return
+            }
+        }
     }
 
     @discardableResult
     func register(with options: UNAuthorizationOptions = [.alert, .sound, .badge],
-                  application: UIApplication) -> Future<Bool, Never> {
+                  application: UIApplication) async -> Bool {
 
-        return Future { promise in
-            self.requestAuthorization(with: options)
-                .mainSink { (granted) in
-
-                    if granted {
-                        application.registerForRemoteNotifications()  // To update our token
-                    }
-                    promise(.success(granted))
-                }.store(in: &self.cancellables)
+        let granted = await self.requestAuthorization(with: options)
+        if granted {
+            await application.registerForRemoteNotifications()  // To update our token
         }
+        return granted
     }
 
-    private func requestAuthorization(with options: UNAuthorizationOptions = [.alert, .sound, .badge]) -> Future<Bool, Never> {
-        return Future { promise in
-            self.center.requestAuthorization(options: options) { (granted, error) in
-                if granted {
-                    let userCategories = UserNotificationCategory.allCases.map { userCategory in
-                        return userCategory.category
-                    }
-                    let categories: Set<UNNotificationCategory> = Set.init(userCategories)
-                    self.center.setNotificationCategories(categories)
+    private func requestAuthorization(with options: UNAuthorizationOptions = [.alert, .sound, .badge]) async -> Bool {
+        do {
+            let granted = try await self.center.requestAuthorization(options: options)
+            if granted {
+                let userCategories = UserNotificationCategory.allCases.map { userCategory in
+                    return userCategory.category
                 }
-
-                promise(.success(granted))
+                let categories: Set<UNNotificationCategory> = Set.init(userCategories)
+                self.center.setNotificationCategories(categories)
             }
+
+            return granted
+        } catch {
+            logDebug(error)
+            return false
         }
     }
 
@@ -126,17 +125,15 @@ class UserNotificationManager: NSObject {
         guard let data = userInfo["data"] as? [String: Any],
               let note = UserNotificationFactory.createNote(from: data) else { return false }
 
-        self.schedule(note: note)
+        Task {
+            await self.schedule(note: note)
+        }
+
         return true
     }
 
-    @discardableResult
-    func schedule(note: UNNotificationRequest) -> Future<Void, Never> {
-        return Future { promise in
-            self.center.add(note, withCompletionHandler: { (_) in
-                promise(.success(()))
-            })
-        }
+    func schedule(note: UNNotificationRequest) async {
+        try? await self.center.add(note)
     }
 
     func registerPush(from deviceToken: Data) async {

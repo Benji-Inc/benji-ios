@@ -7,13 +7,10 @@
 //
 
 import Foundation
-import Combine
 
 class UserHeaderView: UICollectionReusableView {
 
     let imageView = AvatarView()
-
-    private var cancellables = Set<AnyCancellable>()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,19 +22,13 @@ class UserHeaderView: UICollectionReusableView {
         self.initializeSubviews()
     }
 
-    deinit {
-        self.cancellables.forEach({ cancellable in
-            cancellable.cancel()
-        })
-    }
-
     func initializeSubviews() {
         self.addSubview(self.imageView)
 
-        User.current()?.retrieveDataIfNeeded()
-            .mainSink(receiveValue: { user in
-                self.imageView.displayable = user 
-            }).store(in: &self.cancellables)
+        Task {
+            guard let user = try? await User.current()?.retrieveDataIfNeeded() else { return }
+            self.imageView.displayable = user
+        }
     }
 
     override func layoutSubviews() {

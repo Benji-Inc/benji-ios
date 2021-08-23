@@ -124,7 +124,7 @@ extension TCHMessage: Messageable {
     var hasBeenConsumedBy: [String] {
         return self.attributes?["consumers"] as? [String] ?? []
     }
-
+#warning("Convert to async")
     @discardableResult
     func udpateConsumers(with consumer: Avatar) -> Future<Messageable, Error> {
         var consumers = self.hasBeenConsumedBy
@@ -132,6 +132,7 @@ extension TCHMessage: Messageable {
         return self.appendAttributes(with: ["consumers": consumers])
     }
 
+#warning("Convert to async")
     func appendAttributes(with attributes: [String: Any]) -> Future<Messageable, Error> {
         return Future { promise in
             let current: [String: Any] = self.attributes()?.dictionary as? [String: Any] ?? [:]
@@ -151,6 +152,7 @@ extension TCHMessage: Messageable {
         }
     }
 
+#warning("Convert to async")
     func getMediaContentURL() -> Future<String, Error> {
         return Future { promise in
             self.getMediaContentTemporaryUrl { (result, url) in
