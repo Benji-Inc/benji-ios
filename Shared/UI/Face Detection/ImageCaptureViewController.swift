@@ -32,30 +32,12 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         case back
     }
 
-    var isAuthorized: Bool {
-        return AVCaptureDevice.authorizationStatus(for: AVMediaType.video) == AVAuthorizationStatus.authorized
-    }
-
     private(set) var cameraType: CameraType = .front
     var flashMode: AVCaptureDevice.FlashMode = .auto
 
-    func requestAuthorization() async -> Bool {
-        let isGranted: Bool = await withCheckedContinuation { continuation in
-            if self.isAuthorized {
-                continuation.resume(returning: true)
-            } else {
-                AVCaptureDevice.requestAccess(for: AVMediaType.video, completionHandler: { (granted: Bool) -> Void in
-                    continuation.resume(returning: granted)
-                })
-            }
-        }
-
-        return isGranted
-    }
-
     func begin() {
         Task {
-            let authorized = await self.requestAuthorization()
+            let authorized = await AVCaptureDevice.requestAccess(for: AVMediaType.video)
 
             if authorized {
                 self.configureCaptureSession()

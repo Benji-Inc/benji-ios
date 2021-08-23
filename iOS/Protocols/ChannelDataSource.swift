@@ -97,14 +97,9 @@ extension ChannelDataSource {
         if let count = itemCount, let section = sectionIndex {
             let indexPath = IndexPath(item: count, section: section)
 
-            self.collectionView.performBatchUpdatesSync(modifyItems: { [unowned self] in
-                self.sections[section].items.append(item)
-                }, updates: { [unowned self] in
-                    self.collectionView.insertItems(at: [indexPath])
-            }) { (completed) in
-                completion?()
-            }
-
+            self.sections[section].items.append(item)
+            self.collectionView.insertItems(at: [indexPath])
+            completion?()
         } else {
             //Create new section
             let new = ChannelSectionable(date: item.createdAt, items: [item])
@@ -129,13 +124,8 @@ extension ChannelDataSource {
         if let count = itemCount, let section = sectionIndex {
             let indexPath = IndexPath(item: count, section: section)
 
-            await self.collectionView.performBatchUpdates(modifyItems: { [unowned self] in
-                self.sections[section].items.append(item)
-                }, updates: { [unowned self] in
-                    self.collectionView.insertItems(at: [indexPath])
-            })
-            return
-
+            self.sections[section].items.append(item)
+            self.collectionView.insertItems(at: [indexPath])
         } else {
             //Create new section
             let new = ChannelSectionable(date: item.createdAt, items: [item])
@@ -181,13 +171,9 @@ extension ChannelDataSource {
 
         guard let ip = indexPath else { return }
 
-        self.collectionView.performBatchUpdatesSync(modifyItems: {
-            self.sections[ip.section].items[ip.row] = updatedItem
-        }, updates: {
-            self.collectionView.reloadItems(at: [ip])
-        }) { (completed) in
-            completion?()
-        }
+        self.sections[ip.section].items[ip.row] = updatedItem
+        self.collectionView.reloadItems(at: [ip])
+        completion?()
     }
 
     @MainActor
@@ -226,12 +212,9 @@ extension ChannelDataSource {
         }
 
         guard let indexPath = indexPath else { return }
-
-        await self.collectionView.performBatchUpdates(modifyItems: {
-            self.sections[indexPath.section].items[indexPath.row] = updatedItem
-        }, updates: {
-            self.collectionView.reloadItems(at: [indexPath])
-        })
+        
+        self.sections[indexPath.section].items[indexPath.row] = updatedItem
+        self.collectionView.reloadItems(at: [indexPath])
     }
     
     func delete(item: Messageable, in section: Int = 0) {
