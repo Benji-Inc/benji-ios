@@ -25,12 +25,7 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
 
     private var unclaimedCount: Int = 0
 
-    var didSelectReservations: CompletionOptional = nil 
-
-    override func initializeManager() {
-        super.initializeManager()
-
-    }
+    var didSelectReservations: CompletionOptional = nil
 
     @MainActor
     func load() async {

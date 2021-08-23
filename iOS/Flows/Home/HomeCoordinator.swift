@@ -72,7 +72,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
                 Task {
                     do {
-                        let connection = try await Connection.cachedQuery(for: connectionId)
+                        let connection = try await Connection.getObject(with: connectionId)
                         guard let channelId = connection.channelId,
                               let channel = ChannelSupplier.shared.getChannel(withSID: channelId) else {
                                   return
