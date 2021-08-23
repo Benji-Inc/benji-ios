@@ -25,12 +25,7 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
 
     private var unclaimedCount: Int = 0
 
-    var didSelectReservations: CompletionOptional = nil 
-
-    override func initializeManager() {
-        super.initializeManager()
-
-    }
+    var didSelectReservations: CompletionOptional = nil
 
     @MainActor
     func load() async {
@@ -45,9 +40,7 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
         self.unclaimedCount = await unclaimedReservationCount
         let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
 
-
         self.loadSnapshot(animationCycle: cycle).mainSink { _ in
-            // Begin auto scroll
             self.collectionView.animationView.stop()
         }.store(in: &self.cancellables)
     }
