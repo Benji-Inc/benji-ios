@@ -78,6 +78,7 @@ extension InputAccessoryView {
 
         self.textView.updateInputView(type: .confirmation)
 
+        #warning("Use users instead.")
         let members = channel.getNonMeMembers()
         self.textView.confirmationView.setAlertMessage(for: members)
 
