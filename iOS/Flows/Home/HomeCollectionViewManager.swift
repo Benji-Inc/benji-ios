@@ -25,32 +25,23 @@ class HomeCollectionViewManager: CollectionViewManager<HomeCollectionViewManager
 
     private var unclaimedCount: Int = 0
 
-    var didSelectReservations: CompletionOptional = nil 
+    var didSelectReservations: CompletionOptional = nil
 
-    override func initializeManager() {
-        super.initializeManager()
-
-    }
-
-    func load() {
+    @MainActor
+    func load() async {
         self.collectionView.animationView.play()
 
-        let combined = Publishers.Zip3(
-            Reservation.getUnclaimedReservationCount(for: User.current()!),
-            ChannelSupplier.shared.waitForInitialSync(),
-            NoticeSupplier.shared.loadNotices()
-        )
+        async let unclaimedReservationCount = Reservation.getUnclaimedReservationCount(for: User.current()!)
+        async let initialSyncFinished: Void = ChannelSupplier.shared.waitForInitialSync()
+        async let noticesLoaded: Void = NoticeSupplier.shared.loadNotices()
 
-        combined.mainSink { (value) in
-            switch value {
-            case (let count, _, _):
-                self.unclaimedCount = count
-                let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
-                self.loadSnapshot(animationCycle: cycle).mainSink { _ in
-                    // Begin auto scroll
-                    self.collectionView.animationView.stop()
-                }.store(in: &self.cancellables)
-            }
+        let _ = await (initialSyncFinished, noticesLoaded)
+
+        self.unclaimedCount = await unclaimedReservationCount
+        let cycle = AnimationCycle(inFromPosition: .inward, outToPosition: .inward, shouldConcatenate: true, scrollToEnd: false)
+
+        self.loadSnapshot(animationCycle: cycle).mainSink { _ in
+            self.collectionView.animationView.stop()
         }.store(in: &self.cancellables)
     }
 

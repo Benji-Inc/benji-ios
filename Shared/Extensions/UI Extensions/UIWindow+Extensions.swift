@@ -13,8 +13,19 @@ import UIKit
 extension UIWindow {
 
     static func topWindow() -> UIWindow? {
-        for window in UIApplication.shared.windows.reversed() {
-            if window.windowLevel == UIWindow.Level.normal && window.isKeyWindow && window.frame != CGRect.zero { return window }
+        guard let windowScene = UIApplication.shared.connectedScenes.first(where: { scene in
+            return scene is UIWindowScene
+        }) as? UIWindowScene else {
+            return nil
+        }
+
+        for window in windowScene.windows.reversed() {
+            if window.windowLevel == UIWindow.Level.normal
+                && window.isKeyWindow
+                && window.frame != CGRect.zero {
+
+                return window
+            }
         }
         return nil
     }

@@ -178,12 +178,17 @@ class ChannelSupplier {
 
     // MARK: GETTERS
 
-    func waitForInitialSync() -> Future<Void, Never> {
-        return Future { promise in
-            ChannelSupplier.shared.$isSynced.mainSink { (isSynced) in
-                guard isSynced else { return }
-                promise(.success(()))
-            }.store(in: &self.cancellables)
+    func waitForInitialSync() async {
+        var cancellable: AnyCancellable?
+
+        return await withCheckedContinuation { continuation in
+            cancellable = ChannelSupplier.shared.$isSynced
+                .mainSink { (isSynced) in
+                    guard isSynced else { return }
+
+                    continuation.resume(returning: ())
+                    cancellable?.cancel()
+                }
         }
     }
 
