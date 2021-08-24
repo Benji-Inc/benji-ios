@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CollectionViewManager<SectionType: Hashable, ItemIdentifier: Hashable> {
+class CollectionViewDataSource<SectionType: Hashable, ItemIdentifier: Hashable> {
 
     typealias DataSourceType = UICollectionViewDiffableDataSource<SectionType, ItemIdentifier>
 
@@ -28,13 +28,11 @@ class CollectionViewManager<SectionType: Hashable, ItemIdentifier: Hashable> {
 
         dataSource.supplementaryViewProvider =
         { (collectionView: UICollectionView, kind: String, IndexPath: IndexPath) -> UICollectionReusableView? in
-            return self.getSupplementaryView(with: collectionView, kind: kind, indexPath: IndexPath)
+            return self.dequeueSupplementaryView(with: collectionView, kind: kind, indexPath: IndexPath)
         }
 
         return dataSource
     }
-
-    func initializeData() { }
 
     func dequeueCell(with collectionView: UICollectionView,
                      indexPath: IndexPath,
@@ -42,9 +40,9 @@ class CollectionViewManager<SectionType: Hashable, ItemIdentifier: Hashable> {
         return nil
     }
 
-    func getSupplementaryView(with collectionView: UICollectionView,
-                              kind: String,
-                              indexPath: IndexPath) -> UICollectionReusableView? {
+    func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                  kind: String,
+                                  indexPath: IndexPath) -> UICollectionReusableView? {
         return nil
     }
 
@@ -61,8 +59,7 @@ class CollectionViewManager<SectionType: Hashable, ItemIdentifier: Hashable> {
     }
 }
 
-
-extension CollectionViewManager {
+extension CollectionViewDataSource {
 
     @MainActor
     func animateOut(position: AnimationPosition, concatenate: Bool) async {
