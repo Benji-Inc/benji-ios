@@ -25,11 +25,13 @@ extension CloudFunction {
                      delayInterval: TimeInterval = 2.0,
                      viewsToIgnore: [UIView]) async throws -> Any {
 
-        // Trigger the loading event for all statusables
-        await withTaskGroup(of: Void.self) { group in
-            for statusable in statusables {
-                group.addTask {
-                    await statusable.handleEvent(status: .loading)
+        Task {
+            // Trigger the loading event for all statusables
+            await withTaskGroup(of: Void.self) { group in
+                for statusable in statusables {
+                    group.addTask {
+                        await statusable.handleEvent(status: .loading)
+                    }
                 }
             }
         }
