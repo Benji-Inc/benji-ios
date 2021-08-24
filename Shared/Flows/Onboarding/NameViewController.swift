@@ -49,16 +49,17 @@ class NameViewController: TextInputViewController<Void> {
 
         guard text.isValidPersonName else { return }
 
-        self.textEntry.button.handleEvent(status: .loading)
         Task {
+            await self.textEntry.button.handleEvent(status: .loading)
+
             do {
                 User.current()?.formatName(from: text)
 
                 try await User.current()?.saveLocalThenServer()
-                self.textEntry.button.handleEvent(status: .complete)
+                await self.textEntry.button.handleEvent(status: .complete)
                 self.complete(with: .success(()))
             } catch {
-                self.textEntry.button.handleEvent(status: .error("Failed to update user name."))
+                await self.textEntry.button.handleEvent(status: .error("Failed to update user name."))
                 self.complete(with: .failure(error))
             }
         }

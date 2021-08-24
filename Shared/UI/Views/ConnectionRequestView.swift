@@ -118,7 +118,7 @@ class ConnectionRequestView: View {
                                   user: User,
                                   button: Button) async {
 
-        button.handleEvent(status: .loading)
+        await button.handleEvent(status: .loading)
 
         do {
             guard let connection = self.currentItem else {
@@ -128,12 +128,12 @@ class ConnectionRequestView: View {
             let updatedConnection = try await UpdateConnection(connectionId: connection.objectId!, status: status)
                 .makeRequest(andUpdate: [], viewsToIgnore: [self])
 
-            button.handleEvent(status: .complete)
+            await button.handleEvent(status: .complete)
             if let updated = updatedConnection as? Connection {
                 self.showSuccess(for: updated, user: user, shouldComplete: true)
             }
         } catch {
-            button.handleEvent(status: .error(error.localizedDescription))
+            await button.handleEvent(status: .error(error.localizedDescription))
         }
     }
 

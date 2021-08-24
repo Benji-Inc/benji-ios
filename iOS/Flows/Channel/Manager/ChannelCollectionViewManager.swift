@@ -217,7 +217,9 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
 
         moreHeader.button.didSelect { [weak self] in
             guard let `self` = self else { return }
-            moreHeader.button.handleEvent(status: .loading)
+            Task {
+                await moreHeader.button.handleEvent(status: .loading)
+            }
             self.didSelectLoadMore(for: index)
         }
 

@@ -37,8 +37,10 @@ class ReservationsViewController: NavigationBarViewController {
         self.contactsButton.didSelect { [unowned self] in
             self.didSelectShowContacts?()
         }
-        
-        self.loadUnclaimedReservations()
+
+        Task {
+            await self.loadUnclaimedReservations()
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -54,17 +56,21 @@ class ReservationsViewController: NavigationBarViewController {
         super.viewDidLayoutSubviews()
     }
 
-    private func loadUnclaimedReservations() {
+    private func loadUnclaimedReservations() async {
         guard let query = Reservation.query() else { return }
 
-        button.handleEvent(status: .loading)
+        await self.button.handleEvent(status: .loading)
+
         query.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
         query.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
-        query.findObjectsInBackground { objects, error in
+        do {
+            let objects = try await query.findObjectsInBackground()
+            await self.button.handleEvent(status: .complete)
             if let reservations = objects as? [Reservation] {
-                self.button.handleEvent(status: .complete)
                 self.show(reservations: reservations)
             }
+        } catch {
+            logDebug(error)
         }
     }
 
@@ -88,13 +94,13 @@ class ReservationsViewController: NavigationBarViewController {
     private func didSelect(reservation: Reservation) {
         Task {
             do {
-                self.button.handleEvent(status: .loading)
+                await self.button.handleEvent(status: .loading)
                 try await reservation.prepareMetadata(andUpdate: [])
 
-                self.button.handleEvent(status: .complete)
+                await self.button.handleEvent(status: .complete)
                 self.didSelectReservation?(reservation)
             } catch {
-                self.button.handleEvent(status: .error(error.localizedDescription))
+                await self.button.handleEvent(status: .error(error.localizedDescription))
             }
         }
     }

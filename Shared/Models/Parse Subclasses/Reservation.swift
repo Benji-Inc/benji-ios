@@ -114,39 +114,58 @@ extension Reservation: UIActivityItemSource {
     }
 
     func prepareMetadata(andUpdate statusables: [Statusable]) async throws {
-        return try await withCheckedThrowingContinuation { continuation in
-            let metadataProvider = LPMetadataProvider()
-
-            // Trigger the loading event for all statusables
+        // Trigger the loading event for all statusables
+        await withTaskGroup(of: Void.self) { group in
             for statusable in statusables {
-                statusable.handleEvent(status: .loading)
+                group.addTask {
+                    await statusable.handleEvent(status: .loading)
+                }
             }
+        }
 
-            let domainURL = "https://ourown.chat"
-            if let objectId = self.objectId {
-                self.link = domainURL + "/reservation?reservationId=\(objectId)"
-            }
+        do {
+            let _: Void = try await withCheckedThrowingContinuation { continuation in
+                let metadataProvider = LPMetadataProvider()
 
-            if let url = URL(string: domainURL) {
-                metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
-                    Task.onMainActor {
-                        if let e = error {
-                            for statusable in statusables {
-                                statusable.handleEvent(status: .error("Error"))
+                let domainURL = "https://ourown.chat"
+                if let objectId = self.objectId {
+                    self.link = domainURL + "/reservation?reservationId=\(objectId)"
+                }
+
+                if let url = URL(string: domainURL) {
+                    metadataProvider.startFetchingMetadata(for: url) { [unowned self] (metadata, error) in
+                        Task.onMainActor {
+                            if let e = error {
+
+                                continuation.resume(throwing: e)
+                            } else {
+                                self.metadata = metadata
+
+                                continuation.resume(returning: ())
                             }
-                            continuation.resume(throwing: e)
-                        } else {
-                            self.metadata = metadata
-                            for statusable in statusables {
-                                statusable.handleEvent(status: .complete)
-                            }
-                            continuation.resume(returning: ())
                         }
                     }
+                } else {
+                    continuation.resume(throwing: ClientError.generic)
                 }
-            } else {
-                continuation.resume(throwing: ClientError.generic)
             }
+
+            await withTaskGroup(of: Void.self) { group in
+                for statusable in statusables {
+                    group.addTask {
+                        await statusable.handleEvent(status: .complete)
+                    }
+                }
+            }
+        } catch {
+            await withTaskGroup(of: Void.self) { group in
+                for statusable in statusables {
+                    group.addTask {
+                        await statusable.handleEvent(status: .error(error.localizedDescription))
+                    }
+                }
+            }
+            throw error
         }
     }
 

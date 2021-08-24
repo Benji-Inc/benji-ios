@@ -69,7 +69,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     }
 
     private func sendCode(to phone: PhoneNumber, region: String) async {
-        self.textEntry.button.handleEvent(status: .loading)
+        await self.textEntry.button.handleEvent(status: .loading)
         self.isSendingCode = true
 
         do {
@@ -79,10 +79,10 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
                                        region: region,
                                        installationId: installation.installationId)
                 .makeRequest()
-            self.textEntry.button.handleEvent(status: .complete)
+            await self.textEntry.button.handleEvent(status: .complete)
             self.complete(with: .success(phone))
         } catch {
-            self.textEntry.button.handleEvent(status: .error(""))
+            await self.textEntry.button.handleEvent(status: .error(""))
             self.complete(with: .failure(error))
         }
     }
