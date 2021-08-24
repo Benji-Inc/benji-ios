@@ -1,6 +1,6 @@
 //
-//  new_CollectionViewManager.swift
-//  new_CollectionViewManager
+//  CollectionViewDataSource.swift
+//  CollectionViewDataSource
 //
 //  Created by Martin Young on 8/23/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
