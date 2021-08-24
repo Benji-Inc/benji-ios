@@ -3,14 +3,14 @@
 import Foundation
 import Combine
 
-protocol ManagerSectionType: Hashable, RawRepresentable where Self.RawValue == Int {}
+protocol old_ManagerSectionType: Hashable, RawRepresentable where Self.RawValue == Int {}
 
-class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollectionViewDelegate,
-                                                              UICollectionViewDelegateFlowLayout {
+class old_CollectionViewManager<old_SectionType: old_ManagerSectionType>: NSObject, UICollectionViewDelegate,
+                                                                          UICollectionViewDelegateFlowLayout {
 
-    lazy var dataSource: UICollectionViewDiffableDataSource<SectionType, AnyHashable> = {
-        let dataSource = UICollectionViewDiffableDataSource<SectionType, AnyHashable>(collectionView: self.collectionView) { (cv, indexPath, item) -> UICollectionViewCell? in
-            guard let type = SectionType.init(rawValue: indexPath.section),
+    lazy var dataSource: UICollectionViewDiffableDataSource<old_SectionType, AnyHashable> = {
+        let dataSource = UICollectionViewDiffableDataSource<old_SectionType, AnyHashable>(collectionView: self.collectionView) { (cv, indexPath, item) -> UICollectionViewCell? in
+            guard let type = old_SectionType.init(rawValue: indexPath.section),
                   let cell = self.getCell(for: type, indexPath: indexPath, item: self.getItem(for: indexPath)) else { return nil }
 
             self.managerDidConfigure(cell: cell, for: indexPath)
@@ -23,7 +23,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
         }
 
         dataSource.supplementaryViewProvider = { cv, kind, indexPath in
-            guard let type = SectionType.init(rawValue: indexPath.section) else { return nil }
+            guard let type = old_SectionType.init(rawValue: indexPath.section) else { return nil }
             return self.getSupplementaryView(for: type, kind: kind, indexPath: indexPath)
         }
 
@@ -49,7 +49,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
         return items
     }
 
-    @Published var onSelectedItem: (item: AnyHashable, section: SectionType)? = nil
+    @Published var onSelectedItem: (item: AnyHashable, section: old_SectionType)? = nil
     var didLongPress: ((AnyHashable, IndexPath) -> Void)? = nil
 
     unowned let collectionView: CollectionView
@@ -90,8 +90,8 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
         }
     }
 
-    func createSnapshot() -> NSDiffableDataSourceSnapshot<SectionType, AnyHashable> {
-        var snapshot = NSDiffableDataSourceSnapshot<SectionType, AnyHashable>()
+    func createSnapshot() -> NSDiffableDataSourceSnapshot<old_SectionType, AnyHashable> {
+        var snapshot = NSDiffableDataSourceSnapshot<old_SectionType, AnyHashable>()
 
         let allCases = self.getSections()
         snapshot.appendSections(allCases)
@@ -122,28 +122,28 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
 
     // MARK: Item Overrides
 
-    func getSections() -> [SectionType] {
+    func getSections() -> [old_SectionType] {
         fatalError("getSections() not implemented")
     }
 
-    func getItems(for section: SectionType) -> [AnyHashable] {
+    func getItems(for section: old_SectionType) -> [AnyHashable] {
         fatalError("getItems() not implemented")
     }
 
-    func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
+    func getCell(for section: old_SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {
         fatalError("getCell() not implemented")
     }
 
-    func getSupplementaryView(for section: SectionType, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
+    func getSupplementaryView(for section: old_SectionType, kind: String, indexPath: IndexPath) -> UICollectionReusableView? {
         return nil
     }
 
     func getItem(for indexPath: IndexPath) -> AnyHashable? {
-        guard let section = SectionType.init(rawValue: indexPath.section) else { return nil }
+        guard let section = old_SectionType.init(rawValue: indexPath.section) else { return nil }
         return self.getItem(for: section, index: indexPath.row)
     }
 
-    func getItem(for section: SectionType, index: Int) -> AnyHashable? {
+    func getItem(for section: old_SectionType, index: Int) -> AnyHashable? {
         return self.getItems(for: section)[safe: index]
     }
 
@@ -162,7 +162,7 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
 
         self.willScrollToSelected(indexPath: indexPath)
 
-        if let section = SectionType.init(rawValue: indexPath.section) {
+        if let section = old_SectionType.init(rawValue: indexPath.section) {
             self.onSelectedItem = (item, section)
         }
 
@@ -239,13 +239,13 @@ class CollectionViewManager<SectionType: ManagerSectionType>: NSObject, UICollec
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
-        return .zero 
+        return .zero
     }
 
     // MARK: CollectionView Menu
 
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        return nil 
+        return nil
     }
 
     // MARK: ScrollView Delegate (These are part of the collectionview delegate)

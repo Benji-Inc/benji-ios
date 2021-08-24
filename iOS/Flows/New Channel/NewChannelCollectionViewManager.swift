@@ -9,9 +9,9 @@
 import Foundation
 import Combine
 
-class NewChannelCollectionViewManager: CollectionViewManager<NewChannelCollectionViewManager.SectionType> {
+class NewChannelCollectionViewManager: old_CollectionViewManager<NewChannelCollectionViewManager.SectionType> {
 
-    enum SectionType: Int, ManagerSectionType, CaseIterable {
+    enum SectionType: Int, old_ManagerSectionType, CaseIterable {
         case users
     }
 
