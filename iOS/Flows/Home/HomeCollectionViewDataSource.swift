@@ -28,15 +28,15 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
     // MARK: - Cell Dequeueing
 
     override func dequeueCell(with collectionView: UICollectionView,
-                              section: SectionType,
                               indexPath: IndexPath,
-                              identifier: AnyHashable) -> UICollectionViewCell? {
+                              section: SectionType,
+                              item: AnyHashable) -> UICollectionViewCell? {
 
         switch section {
         case .notices:
-            return self.getNoticeCell(with: collectionView, indexPath: indexPath, identifier: identifier)
+            return self.getNoticeCell(with: collectionView, indexPath: indexPath, identifier: item)
         case .channels:
-            return self.getChannelCell(with: collectionView, indexPath: indexPath, identifier: identifier)
+            return self.getChannelCell(with: collectionView, indexPath: indexPath, identifier: item)
         }
     }
 

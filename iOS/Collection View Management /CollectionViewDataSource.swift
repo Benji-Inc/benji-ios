@@ -23,9 +23,9 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
             guard let section = self.sectionIdentifier(for: indexPath.section) else { return nil }
 
             return self.dequeueCell(with: collectionView,
-                                    section: section,
                                     indexPath: indexPath,
-                                    identifier: itemIdentifier)
+                                    section: section,
+                                    item: itemIdentifier)
         })
 
         self.diffableDataSource.supplementaryViewProvider =
@@ -41,9 +41,9 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
     }
     /// Returns a configured UICollectionViewCell dequeued from the passed in collection view.
     func dequeueCell(with collectionView: UICollectionView,
-                     section: SectionType,
                      indexPath: IndexPath,
-                     identifier: ItemType) -> UICollectionViewCell? {
+                     section: SectionType,
+                     item: ItemType) -> UICollectionViewCell? {
         fatalError()
     }
 
