@@ -87,7 +87,7 @@ class HomeViewController: ViewController {
                                    scrollToEnd: false)
 
         let snapshot = self.getInitialSnapshot()
-        await self.dataSource.apply(snapshot, animationCycle: cycle)
+        await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
 
         self.collectionView.animationView.stop()
     }

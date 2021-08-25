@@ -15,12 +15,9 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
 
     typealias DiffableDataSourceType = UICollectionViewDiffableDataSource<SectionType, ItemType>
 
-    private let collectionView: UICollectionView
     private var diffableDataSource: DiffableDataSourceType!
 
     init(collectionView: UICollectionView) {
-        self.collectionView = collectionView
-
         self.diffableDataSource = DiffableDataSourceType(collectionView: collectionView,
                                                          cellProvider: { collectionView, indexPath, itemIdentifier in
             guard let section = self.sectionIdentifier(for: indexPath.section) else { return nil }
@@ -106,18 +103,18 @@ extension CollectionViewDataSource {
 
 extension CollectionViewDataSource {
 
+    /// Animates the beginning of the animation cycle, applies the snapshot, then finishes the animation cycle.
     func apply(_ snapshot: NSDiffableDataSourceSnapshot<SectionType, ItemType>,
-               animationCycle: AnimationCycle? = nil,
+               collectionView: UICollectionView,
+               animationCycle: AnimationCycle,
                animatingDifferences: Bool = false) async {
 
-        if let cycle = animationCycle {
-            await self.collectionView.animateOut(position: cycle.outToPosition, concatenate: cycle.shouldConcatenate)
+        await collectionView.animateOut(position: animationCycle.outToPosition,
+                                        concatenate: animationCycle.shouldConcatenate)
 
-            await self.apply(snapshot, animatingDifferences: animatingDifferences)
-            await self.collectionView.animateIn(position: cycle.inFromPosition,
-                                                concatenate: cycle.shouldConcatenate)
-        } else {
-            await self.apply(snapshot, animatingDifferences: false)
-        }
+        await self.apply(snapshot, animatingDifferences: animatingDifferences)
+
+        await collectionView.animateIn(position: animationCycle.inFromPosition,
+                                       concatenate: animationCycle.shouldConcatenate)
     }
 }
