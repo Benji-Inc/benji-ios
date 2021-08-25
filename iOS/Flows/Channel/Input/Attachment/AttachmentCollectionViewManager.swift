@@ -8,9 +8,9 @@
 
 import Foundation
 
-class AttachmentCollectionViewManager: CollectionViewManager<AttachmentCollectionViewManager.SectionType> {
+class AttachmentCollectionViewManager: old_CollectionViewManager<AttachmentCollectionViewManager.SectionType> {
 
-    enum SectionType: Int, ManagerSectionType, CaseIterable {
+    enum SectionType: Int, old_ManagerSectionType, CaseIterable {
         case photos
     }
 

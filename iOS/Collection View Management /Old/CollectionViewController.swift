@@ -8,8 +8,8 @@
 
 import Foundation
 
-class CollectionViewController<SectionType: ManagerSectionType,
-                               ManagerType: CollectionViewManager<SectionType>>: ViewController {
+class CollectionViewController<SectionType: old_ManagerSectionType,
+                               ManagerType: old_CollectionViewManager<SectionType>>: ViewController {
 
     private var collectionView: CollectionView!
     lazy var collectionViewManager = ManagerType(with: self.collectionView)

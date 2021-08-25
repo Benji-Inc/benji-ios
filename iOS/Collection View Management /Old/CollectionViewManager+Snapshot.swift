@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension CollectionViewManager {
+extension old_CollectionViewManager {
 
     func updateUI(animate: Bool) {
         let snapShot = self.createSnapshot()

@@ -29,18 +29,22 @@ extension Task where Success == Void, Failure == Never {
 
 extension Task where Success == Never, Failure == Never {
 
+    /// Suspends the current task for _at least_ the given duration
+    /// in seconds.
+    static func sleep(seconds: TimeInterval) async {
+        await Task.sleep(UInt64(seconds * 1_000_000_000))
+    }
+
     /// Temporarily suspends the current task for at least the specified number of seconds.
     /// Unlike Task.sleep, this function will unsuspend early if the task is cancelled.
     /// By default it checks to see if the task is cancelled every "cancelInterval" number of seconds.
-    static func snooze(seconds: Double, cancelInterval: Double = 0.01) async {
-
+    static func snooze(seconds: TimeInterval, cancelInterval: Double = 0.01) async {
         let duration = UInt64(seconds * 1_000_000_000)
         let target = clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW) + duration
 
         repeat {
-            await Task.sleep(UInt64(cancelInterval * 1_000_000_000))
+            await Task.sleep(seconds: cancelInterval)
             if Task.isCancelled {
-                print("==== sleep was cancelled")
                 break
             }
         } while clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW) < target
