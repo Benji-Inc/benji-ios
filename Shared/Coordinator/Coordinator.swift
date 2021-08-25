@@ -78,7 +78,7 @@ class Coordinator<Result>: NSObject, CoordinatorType {
 
     func handle(launchActivity: LaunchActivity) {}
 }
-
+#warning("Does this really need to be solely on the main actor?")
 @MainActor
 class PresentableCoordinator<Result>: Coordinator<Result>, Presentable {
 

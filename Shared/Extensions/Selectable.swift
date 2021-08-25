@@ -42,7 +42,7 @@ extension Selectable where Self: UIControl {
     }
 
     func didSelect(_ completion: CompletionOptional) {
-        if let action =  self.action {
+        if let action = self.action {
             self.removeAction( action, for: .touchUpInside)
         }
         
@@ -55,7 +55,17 @@ extension Selectable where Self: UIControl {
     }
 }
 
+private var tapHandlerKey: UInt = 0
 extension Selectable where Self: UIView {
+
+    private(set) var tapRecognizer: UITapGestureRecognizer? {
+        get {
+            return self.getAssociatedObject(&tapHandlerKey)
+        }
+        set {
+            self.setAssociatedObject(key: &tapHandlerKey, value: newValue)
+        }
+    }
 
     private(set) var selectionImpact: UIImpactFeedbackGenerator? {
         get {
@@ -68,11 +78,17 @@ extension Selectable where Self: UIView {
 
     func didSelect(_ completion: CompletionOptional) {
         self.selectionImpact = UIImpactFeedbackGenerator()
-        let tap = UITapGestureRecognizer(taps: 1) { [unowned self] (_) in
+
+        // Remove the previous tap gesture recognizer so we don't call did select twice.
+        if let tapRecognizer = self.tapRecognizer {
+            self.removeGestureRecognizer(tapRecognizer)
+        }
+
+        let tapRecognizer = UITapGestureRecognizer(taps: 1) { [unowned self] (_) in
             self.selectionImpact?.impactOccurred()
             completion?()
         }
-
-        self.addGestureRecognizer(tap)
+        self.addGestureRecognizer(tapRecognizer)
+        self.tapRecognizer = tapRecognizer
     }
 }
