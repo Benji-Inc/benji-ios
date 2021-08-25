@@ -8,11 +8,17 @@
 
 import Foundation
 
-class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewDataSource.SectionType, AnyHashable> {
+class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewDataSource.SectionType,
+                                    HomeCollectionViewDataSource.ItemType> {
 
     enum SectionType: Int, CaseIterable {
         case notices
         case channels
+    }
+
+    enum ItemType: Hashable {
+        case notice(SystemNotice)
+        case channel(DisplayableChannel)
     }
 
     var unclaimedCount: Int = 0
@@ -30,13 +36,13 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
                               section: SectionType,
-                              item: AnyHashable) -> UICollectionViewCell? {
+                              item: ItemType) -> UICollectionViewCell? {
 
-        switch section {
-        case .notices:
-            return self.getNoticeCell(with: collectionView, indexPath: indexPath, identifier: item)
-        case .channels:
-            return self.getChannelCell(with: collectionView, indexPath: indexPath, identifier: item)
+        switch item {
+        case .notice(let notice):
+            return self.getNoticeCell(with: collectionView, indexPath: indexPath, notice: notice)
+        case .channel(let channel):
+            return self.getChannelCell(with: collectionView, indexPath: indexPath, channel: channel)
         }
     }
 
@@ -50,7 +56,7 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
 
     private func getNoticeCell(with collectionView: UICollectionView,
                                indexPath: IndexPath,
-                               identifier: AnyHashable) -> CollectionViewManagerCell? {
+                               notice: SystemNotice) -> CollectionViewManagerCell? {
 
         guard let type = NoticeSupplier.shared.notices[safe: indexPath.row]?.type else { return nil }
 
@@ -58,25 +64,25 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
         case .alert:
             return collectionView.dequeueConfiguredReusableCell(using: self.alertConfig,
                                                                 for: indexPath,
-                                                                item: identifier as? SystemNotice)
+                                                                item: notice)
         case .connectionRequest:
             return collectionView.dequeueConfiguredReusableCell(using: self.connectionConfig,
                                                                 for: indexPath,
-                                                                item: identifier as? SystemNotice)
+                                                                item: notice)
         default:
             return collectionView.dequeueConfiguredReusableCell(using: self.noticeConfig,
                                                                 for: indexPath,
-                                                                item: identifier as? SystemNotice)
+                                                                item: notice)
         }
     }
 
     private func getChannelCell(with collectionView: UICollectionView,
                                 indexPath: IndexPath,
-                                identifier: AnyHashable) -> CollectionViewManagerCell? {
-
+                                channel: DisplayableChannel) -> CollectionViewManagerCell? {
+        
         return collectionView.dequeueConfiguredReusableCell(using: self.channelConfig,
-                                                                       for: indexPath,
-                                                                       item: identifier as? DisplayableChannel)
+                                                            for: indexPath,
+                                                            item: channel)
     }
 
     private func getSupplementaryView(for collectionView: UICollectionView,

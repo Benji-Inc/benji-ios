@@ -12,7 +12,7 @@ import Parse
 protocol HomeViewControllerDelegate: AnyObject {
     func homeViewControllerDidTapAdd(_ controller: HomeViewController)
     func homeViewControllerDidSelectReservations(_ controller: HomeViewController)
-    func homeViewControllerDidSelect(section: HomeCollectionViewDataSource.SectionType, item: AnyHashable)
+    func homeViewControllerDidSelect(item: HomeCollectionViewDataSource.ItemType)
 }
 
 class HomeViewController: ViewController {
@@ -93,7 +93,7 @@ class HomeViewController: ViewController {
     }
 
     private func getInitialSnapshot() -> NSDiffableDataSourceSnapshot<HomeCollectionViewDataSource.SectionType,
-                                                                      AnyHashable> {
+                                                                      HomeCollectionViewDataSource.ItemType> {
         var snapshot = self.dataSource.snapshot()
 
         let allCases = HomeCollectionViewDataSource.SectionType.allCases
@@ -105,12 +105,18 @@ class HomeViewController: ViewController {
         return snapshot
     }
 
-    private func getItems(for section: HomeCollectionViewDataSource.SectionType) -> [AnyHashable] {
+    private func getItems(for section: HomeCollectionViewDataSource.SectionType)
+    -> [HomeCollectionViewDataSource.ItemType] {
+
         switch section {
         case .notices:
-            return NoticeSupplier.shared.notices
+            return NoticeSupplier.shared.notices.map { notice in
+                return .notice(notice)
+            }
         case .channels:
-            return ChannelSupplier.shared.allChannelsSorted
+            return ChannelSupplier.shared.allChannelsSorted.map { channel in
+                return .channel(channel)
+            }
         }
     }
 }
@@ -118,9 +124,9 @@ class HomeViewController: ViewController {
 extension HomeViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let identifiers = self.dataSource.sectionItemIdentifiers(for: indexPath) else { return }
+        guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
 
-        self.delegate?.homeViewControllerDidSelect(section: identifiers.section, item: identifiers.item)
+        self.delegate?.homeViewControllerDidSelect(item: identifier)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -170,8 +176,8 @@ extension HomeViewController: UICollectionViewDelegate {
                                 children: [confirm, neverMind])
 
         let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { [unowned self] _ in
-            guard let identifiers = self.dataSource.sectionItemIdentifiers(for: indexPath) else { return }
-            self.delegate?.homeViewControllerDidSelect(section: identifiers.section, item: identifiers.item)
+            guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
+            self.delegate?.homeViewControllerDidSelect(item: identifier)
         }
 
         // Create and return a UIMenu with the share action
@@ -208,8 +214,8 @@ extension HomeViewController: UICollectionViewDelegate {
                                 children: [confirm, neverMind])
 
         let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { [unowned self] _ in
-            guard let identifiers = self.dataSource.sectionItemIdentifiers(for: indexPath) else { return }
-            self.delegate?.homeViewControllerDidSelect(section: identifiers.section, item: identifiers.item)
+            guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
+            self.delegate?.homeViewControllerDidSelect(item: item)
         }
 
         // Create and return a UIMenu with the share action

@@ -173,14 +173,12 @@ extension HomeCoordinator: HomeViewControllerDelegate {
         self.router.present(coordinator, source: self.homeVC)
     }
 
-    nonisolated func homeViewControllerDidSelect(section: HomeCollectionViewDataSource.SectionType, item: AnyHashable) {
+    nonisolated func homeViewControllerDidSelect(item: HomeCollectionViewDataSource.ItemType) {
         Task.onMainActor {
-            switch section {
-            case .notices:
-                guard let notice = item as? SystemNotice else { return }
+            switch item {
+            case .notice(let notice):
                 self.handle(notice: notice)
-            case .channels:
-                guard let channel = item as? DisplayableChannel else { return }
+            case .channel(let channel):
                 self.startChannelFlow(for: channel.channelType)
             }
         }

@@ -57,8 +57,9 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
 }
 
 
-// MARK: - NSDiffableDataSource Interactions
+// MARK: - NSDiffableDataSource Functions
 
+// These functions just forward to the corresponding functions to the underlying NSDiffableDataSource
 extension CollectionViewDataSource {
 
     func apply(_ snapshot: NSDiffableDataSourceSnapshot<SectionType, ItemType>,
@@ -73,13 +74,6 @@ extension CollectionViewDataSource {
 
     func snapshot() -> NSDiffableDataSourceSnapshot<SectionType, ItemType> {
         return self.diffableDataSource.snapshot()
-    }
-
-    func sectionItemIdentifiers(for indexPath: IndexPath) -> (section: SectionType, item: ItemType)? {
-        guard let section = self.sectionIdentifier(for: indexPath.section) else { return nil }
-        guard let item = self.itemIdentifier(for: indexPath) else { return nil }
-
-        return (section, item)
     }
 
     func sectionIdentifier(for index: Int) -> SectionType? {
@@ -99,11 +93,12 @@ extension CollectionViewDataSource {
     }
 }
 
-// MARK: - Animated Snapshots
+// MARK: - Custom Animations for Snapshots
 
+// Functions to do custom animations to the collection view in conjunctions with applying snapshots.
 extension CollectionViewDataSource {
 
-    /// Animates the beginning of the animation cycle, applies the snapshot, then finishes the animation cycle.
+    /// Animates the first part of the animation cycle, applies the snapshot, then finishes the animation cycle.
     func apply(_ snapshot: NSDiffableDataSourceSnapshot<SectionType, ItemType>,
                collectionView: UICollectionView,
                animationCycle: AnimationCycle,
