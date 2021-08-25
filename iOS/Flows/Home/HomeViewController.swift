@@ -15,24 +15,14 @@ protocol HomeViewControllerDelegate: AnyObject {
     func homeViewControllerDidSelect(section: HomeCollectionViewDataSource.SectionType, item: AnyHashable)
 }
 
-class HomeViewController: ViewController, TransitionableViewController {
+class HomeViewController: ViewController {
 
     weak var delegate: HomeViewControllerDelegate?
-
-    // MARK: - TransitionableViewController
-
-    var receivingPresentationType: TransitionType {
-        return .home
-    }
-
-    var transitionColor: Color {
-        return .background1
-    }
 
     // MARK: - UI
 
     private lazy var dataSource = HomeCollectionViewDataSource(collectionView: self.collectionView)
-    private var collectionView = CollectionView(layout: HomeCollectionViewLayout.layout)
+    private var collectionView = CollectionView(layout: HomeCollectionViewLayout())
 
     let addButton = Button()
 
@@ -54,7 +44,7 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.dataSource.didSelectReservations = { [unowned self] in
             self.delegate?.homeViewControllerDidTapAdd(self)
         }
-        
+
         self.collectionView.delegate = self
     }
 
@@ -224,5 +214,15 @@ extension HomeViewController: UICollectionViewDelegate {
 
         // Create and return a UIMenu with the share action
         return UIMenu(title: "Options", children: [open, deleteMenu])
+    }
+}
+
+extension HomeViewController: TransitionableViewController {
+    var receivingPresentationType: TransitionType {
+        return .home
+    }
+
+    var transitionColor: Color {
+        return .background1
     }
 }

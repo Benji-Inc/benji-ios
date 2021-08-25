@@ -411,7 +411,6 @@
 		D6617CF526743DFE00439C06 /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D6617CF626743DFE00439C06 /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D6617CF726743DFE00439C06 /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
-		D6617CF926753E6800439C06 /* HomeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF826753E6800439C06 /* HomeCollectionView.swift */; };
 		D6617D012675411E00439C06 /* HomeCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */; };
 		D6617D042675737400439C06 /* HomeCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D032675737400439C06 /* HomeCoordinator+Extensions.swift */; };
 		D6617D0626757BD600439C06 /* ReservationsFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D0526757BD600439C06 /* ReservationsFooterView.swift */; };
@@ -943,7 +942,6 @@
 		D6617CE926741C4500439C06 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		D6617CEF26743DCF00439C06 /* SystemNotice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemNotice.swift; sourceTree = "<group>"; };
 		D6617CF426743DFE00439C06 /* Notice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
-		D6617CF826753E6800439C06 /* HomeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionView.swift; sourceTree = "<group>"; };
 		D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6617D032675737400439C06 /* HomeCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Extensions.swift"; sourceTree = "<group>"; };
 		D6617D0526757BD600439C06 /* ReservationsFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsFooterView.swift; sourceTree = "<group>"; };
@@ -2104,7 +2102,6 @@
 			isa = PBXGroup;
 			children = (
 				D6DADF6A2207DC90007D9EB1 /* Channels */,
-				D6617CF826753E6800439C06 /* HomeCollectionView.swift */,
 				80DACF9A26D6D7360048722A /* HomeCollectionViewDataSource.swift */,
 				D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */,
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
@@ -2731,7 +2728,6 @@
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
 				D61D38E7248C494A00BE457B /* ChannelViewController+Messaging.swift in Sources */,
-				D6617CF926753E6800439C06 /* HomeCollectionView.swift in Sources */,
 				D6AE0FAB267D037900C6B048 /* User+INPerson.swift in Sources */,
 				D61EC0E421D30E9100204BEE /* TextView.swift in Sources */,
 				D657175E2378CEBA00F8F96C /* ChannelCollectionViewManager.swift in Sources */,
