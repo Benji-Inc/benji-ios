@@ -1,6 +1,6 @@
 //
-//  HomeCollectionViewDataSourceCreator.swift
-//  HomeCollectionViewDataSourceCreator
+//  HomeCollectionViewDataSource.swift
+//  HomeCollectionViewDataSource
 //
 //  Created by Martin Young on 8/25/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
@@ -8,10 +8,15 @@
 
 import Foundation
 
-struct HomeCollectionViewDataSourceCreator: CollectionViewDataSourceCreator {
+class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewDataSource.SectionType, AnyHashable> {
 
-    typealias SectionType = HomeCollectionViewManager.SectionType
-    typealias ItemIdentifier = AnyHashable
+    enum SectionType: Int, CaseIterable {
+        case notices
+        case channels
+    }
+
+    var unclaimedCount: Int = 0
+    var didSelectReservations: CompletionOptional = nil
 
     private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
     private let connectionConfig = ManageableCellRegistration<ConnectionRequestCell>().provider
@@ -20,15 +25,12 @@ struct HomeCollectionViewDataSourceCreator: CollectionViewDataSourceCreator {
     private let footerConfig = ManageableFooterRegistration<ReservationsFooterView>().provider
     private let headerConfig = ManageableHeaderRegistration<UserHeaderView>().provider
 
-    // MARK: - CollectionViewDataSourceCreator Functions
+    // MARK: - Cell Dequeueing
 
-    func dequeueCell(with collectionView: UICollectionView,
-                     indexPath: IndexPath,
-                     identifier: AnyHashable) -> UICollectionViewCell? {
-
-        guard let section = HomeCollectionViewManager.SectionType(rawValue: indexPath.section) else {
-            return nil
-        }
+    override func dequeueCell(with collectionView: UICollectionView,
+                              section: SectionType,
+                              indexPath: IndexPath,
+                              identifier: AnyHashable) -> UICollectionViewCell? {
 
         switch section {
         case .notices:
@@ -38,18 +40,13 @@ struct HomeCollectionViewDataSourceCreator: CollectionViewDataSourceCreator {
         }
     }
 
-    func dequeueSupplementaryView(with collectionView: UICollectionView,
-                                  kind: String,
-                                  indexPath: IndexPath) -> UICollectionReusableView? {
-
-        guard let section = HomeCollectionViewManager.SectionType(rawValue: indexPath.section) else {
-            return nil
-        }
+    override func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                           kind: String,
+                                           section: SectionType,
+                                           indexPath: IndexPath) -> UICollectionReusableView? {
 
         return self.getSupplementaryView(for: collectionView, section: section, kind: kind, indexPath: indexPath)
     }
-
-    // MARK: - Cell Dequeueing
 
     private func getNoticeCell(with collectionView: UICollectionView,
                                indexPath: IndexPath,
@@ -83,9 +80,9 @@ struct HomeCollectionViewDataSourceCreator: CollectionViewDataSourceCreator {
     }
 
     private func getSupplementaryView(for collectionView: UICollectionView,
-                                       section: SectionType,
-                                       kind: String,
-                                       indexPath: IndexPath) -> UICollectionReusableView? {
+                                      section: SectionType,
+                                      kind: String,
+                                      indexPath: IndexPath) -> UICollectionReusableView? {
 
         switch kind {
         case UICollectionView.elementKindSectionHeader:
@@ -96,9 +93,9 @@ struct HomeCollectionViewDataSourceCreator: CollectionViewDataSourceCreator {
             guard section == .channels else { return nil }
 
             let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
-//            footer.configure(with: self.unclaimedCount)
+            footer.configure(with: self.unclaimedCount)
             footer.button.didSelect {
-//                self.didSelectReservations?()
+                self.didSelectReservations?()
             }
             return footer
         default:
