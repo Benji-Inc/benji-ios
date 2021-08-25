@@ -60,7 +60,7 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
 }
 
 
-// MARK: - Diffable Data Source Interactions
+// MARK: - NSDiffableDataSource Interactions
 
 extension CollectionViewDataSource {
 
