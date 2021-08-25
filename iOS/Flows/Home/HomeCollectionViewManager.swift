@@ -76,8 +76,6 @@ class HomeCollectionViewManager: old_CollectionViewManager<HomeCollectionViewMan
         default:
             return nil
         }
-        
-
     }
 
     override func getCell(for section: SectionType, indexPath: IndexPath, item: AnyHashable?) -> CollectionViewManagerCell? {

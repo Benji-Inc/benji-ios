@@ -10,6 +10,7 @@ import Foundation
 
 class HomeCollectionViewLayout: UICollectionViewLayout {
 
+    #warning("Should this be static?")
     static var layout: UICollectionViewCompositionalLayout = {
 
         let config = UICollectionViewCompositionalLayoutConfiguration()
@@ -79,4 +80,3 @@ class HomeCollectionViewLayout: UICollectionViewLayout {
         }, configuration: config)
     }()
 }
-

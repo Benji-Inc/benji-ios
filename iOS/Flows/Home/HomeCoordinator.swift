@@ -8,14 +8,15 @@
 
 import Foundation
 import Parse
-import Combine
 import PhotosUI
 
 class HomeCoordinator: PresentableCoordinator<Void> {
 
-    lazy var homeVC = HomeViewController()
-    
-    private var cancellables = Set<AnyCancellable>()
+    private lazy var homeVC: HomeViewController = {
+        let vc = HomeViewController()
+        vc.delegate = self
+        return vc
+    }()
 
     override func toPresentable() -> DismissableVC {
         return self.homeVC
@@ -27,26 +28,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         ToastScheduler.shared.delegate = self
 
         self.checkForNotifications()
-
-        self.homeVC.addButton.didSelect { [unowned self] in
-            self.didTapAdd()
-        }
-
-        self.homeVC.collectionViewManager.didSelectReservations = { [unowned self] in
-            self.didSelectReservations()
-        }
-
-        self.homeVC.collectionViewManager.$onSelectedItem.mainSink { selection in
-            guard let value = selection else { return }
-            switch value.section {
-            case .notices:
-                guard let notice = value.item as? SystemNotice else { return }
-                self.handle(notice: notice)
-            case .channels:
-                guard let channel = value.item as? DisplayableChannel else { return }
-                self.startChannelFlow(for: channel.channelType)
-            }
-        }.store(in: &self.cancellables)
 
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
@@ -131,26 +112,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-    func didSelectReservations() {
-        self.removeChild()
-        let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) {}
-        self.router.present(coordinator, source: self.homeVC)
-    }
-
-    func didTapAdd() {
-        self.removeChild()
-        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { result in
-            coordinator.toPresentable().dismiss(animated: true) {
-                if result {
-                    self.startChannelFlow(for: nil)
-                }
-            }
-        }
-        self.router.present(coordinator, source: self.homeVC)
-    }
-
     private func showSoftAskNotifications(for status: UNAuthorizationStatus) {
 
         let alert = UIAlertController(title: "Notifications that don't suck.", message: "Most other social apps design their notifications to be vague in order to suck you in for as long as possible. Ours are not. Get reminders about things that YOU set, and recieve important messages from REAL people. Ours is a far better experience with them turned on.", preferredStyle: .alert)
@@ -175,5 +136,53 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         alert.addAction(allow)
 
         self.router.topmostViewController.present(alert, animated: true, completion: nil)
+    }
+}
+
+extension HomeCoordinator: HomeViewControllerDelegate {
+
+    nonisolated func homeViewControllerDidTapAdd(_ controller: HomeViewController) {
+        Task.onMainActor {
+            self.didTapAdd()
+        }
+    }
+
+    func didTapAdd() {
+        self.removeChild()
+        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { result in
+            coordinator.toPresentable().dismiss(animated: true) {
+                if result {
+                    self.startChannelFlow(for: nil)
+                }
+            }
+        }
+        self.router.present(coordinator, source: self.homeVC)
+    }
+
+    nonisolated func homeViewControllerDidSelectReservations(_ controller: HomeViewController) {
+        Task.onMainActor {
+            self.didSelectReservations()
+        }
+    }
+
+    func didSelectReservations() {
+        self.removeChild()
+        let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) {}
+        self.router.present(coordinator, source: self.homeVC)
+    }
+
+    nonisolated func homeViewControllerDidSelect(section: HomeCollectionViewManager.SectionType, item: AnyHashable) {
+        Task.onMainActor {
+            switch section {
+            case .notices:
+                guard let notice = item as? SystemNotice else { return }
+                self.handle(notice: notice)
+            case .channels:
+                guard let channel = item as? DisplayableChannel else { return }
+                self.startChannelFlow(for: channel.channelType)
+            }
+        }
     }
 }
