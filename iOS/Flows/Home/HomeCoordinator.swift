@@ -173,7 +173,7 @@ extension HomeCoordinator: HomeViewControllerDelegate {
         self.router.present(coordinator, source: self.homeVC)
     }
 
-    nonisolated func homeViewControllerDidSelect(section: HomeCollectionViewManager.SectionType, item: AnyHashable) {
+    nonisolated func homeViewControllerDidSelect(section: HomeCollectionViewDataSource.SectionType, item: AnyHashable) {
         Task.onMainActor {
             switch section {
             case .notices:

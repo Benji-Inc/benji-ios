@@ -18,7 +18,7 @@ class HomeCollectionViewLayout: UICollectionViewLayout {
 
         return UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, enviroment in
 
-            guard let sectionType = HomeCollectionViewManager.SectionType(rawValue: sectionIndex) else { return nil }
+            guard let sectionType = HomeCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
             switch sectionType {
             case .notices:
                 // Item

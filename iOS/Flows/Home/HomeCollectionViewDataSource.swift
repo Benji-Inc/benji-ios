@@ -36,7 +36,7 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
         case .notices:
             return self.getNoticeCell(with: collectionView, indexPath: indexPath, identifier: identifier)
         case .channels:
-            return self.getUserCell(with: collectionView, indexPath: indexPath, identifier: identifier)
+            return self.getChannelCell(with: collectionView, indexPath: indexPath, identifier: identifier)
         }
     }
 
@@ -70,13 +70,13 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
         }
     }
 
-    private func getUserCell(with collectionView: UICollectionView,
-                             indexPath: IndexPath,
-                             identifier: AnyHashable?) -> CollectionViewManagerCell? {
+    private func getChannelCell(with collectionView: UICollectionView,
+                                indexPath: IndexPath,
+                                identifier: AnyHashable) -> CollectionViewManagerCell? {
 
         return collectionView.dequeueConfiguredReusableCell(using: self.channelConfig,
-                                                            for: indexPath,
-                                                            item: identifier as? DisplayableChannel)
+                                                                       for: indexPath,
+                                                                       item: identifier as? DisplayableChannel)
     }
 
     private func getSupplementaryView(for collectionView: UICollectionView,
@@ -94,7 +94,7 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
 
             let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
             footer.configure(with: self.unclaimedCount)
-            footer.button.didSelect {
+            footer.button.didSelect { [unowned self] in
                 self.didSelectReservations?()
             }
             return footer

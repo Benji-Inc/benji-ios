@@ -72,7 +72,6 @@
 		D61EC0F721D316F100204BEE /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* Color.swift */; };
 		D61EC0F921D317AB00204BEE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F821D317AB00204BEE /* Theme.swift */; };
 		D624296723A9EF4F00322ABE /* HomeTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D624296623A9EF4F00322ABE /* HomeTabView.swift */; };
-		D628424D25C1B18000603FA1 /* HomeCollectionViewManager+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D628424C25C1B18000603FA1 /* HomeCollectionViewManager+Menu.swift */; };
 		D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
 		D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */; };
 		D62BB743244DEEA400607677 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
@@ -413,7 +412,6 @@
 		D6617CF626743DFE00439C06 /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D6617CF726743DFE00439C06 /* Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF426743DFE00439C06 /* Notice.swift */; };
 		D6617CF926753E6800439C06 /* HomeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CF826753E6800439C06 /* HomeCollectionView.swift */; };
-		D6617CFD26753EAD00439C06 /* HomeCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */; };
 		D6617D012675411E00439C06 /* HomeCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */; };
 		D6617D042675737400439C06 /* HomeCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D032675737400439C06 /* HomeCoordinator+Extensions.swift */; };
 		D6617D0626757BD600439C06 /* ReservationsFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617D0526757BD600439C06 /* ReservationsFooterView.swift */; };
@@ -862,7 +860,6 @@
 		D61EC0F621D316F100204BEE /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		D61EC0F821D317AB00204BEE /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		D624296623A9EF4F00322ABE /* HomeTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabView.swift; sourceTree = "<group>"; };
-		D628424C25C1B18000603FA1 /* HomeCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
 		D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotificationContent+Extensions.swift"; sourceTree = "<group>"; };
 		D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UNNotification+Extensions.swift"; sourceTree = "<group>"; };
 		D62BB742244DEEA400607677 /* Optional+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Optional+Extensions.swift"; sourceTree = "<group>"; };
@@ -947,7 +944,6 @@
 		D6617CEF26743DCF00439C06 /* SystemNotice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemNotice.swift; sourceTree = "<group>"; };
 		D6617CF426743DFE00439C06 /* Notice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
 		D6617CF826753E6800439C06 /* HomeCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionView.swift; sourceTree = "<group>"; };
-		D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewManager.swift; sourceTree = "<group>"; };
 		D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6617D032675737400439C06 /* HomeCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeCoordinator+Extensions.swift"; sourceTree = "<group>"; };
 		D6617D0526757BD600439C06 /* ReservationsFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsFooterView.swift; sourceTree = "<group>"; };
@@ -2111,8 +2107,6 @@
 				D6617CF826753E6800439C06 /* HomeCollectionView.swift */,
 				80DACF9A26D6D7360048722A /* HomeCollectionViewDataSource.swift */,
 				D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */,
-				D6617CFC26753EAD00439C06 /* HomeCollectionViewManager.swift */,
-				D628424C25C1B18000603FA1 /* HomeCollectionViewManager+Menu.swift */,
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
 				D6617D032675737400439C06 /* HomeCoordinator+Extensions.swift */,
 				D624296623A9EF4F00322ABE /* HomeTabView.swift */,
@@ -2664,7 +2658,6 @@
 				D650C1E125B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				D639106F25D7344500D336D7 /* CollectionViewManager+Snapshot.swift in Sources */,
-				D6617CFD26753EAD00439C06 /* HomeCollectionViewManager.swift in Sources */,
 				D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */,
 				D6A401AB24F1952C00D78F1C /* TCHMessageOptions+Extensions.swift in Sources */,
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,
@@ -2864,7 +2857,6 @@
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,
 				80DACF9B26D6D7360048722A /* HomeCollectionViewDataSource.swift in Sources */,
-				D628424D25C1B18000603FA1 /* HomeCollectionViewManager+Menu.swift in Sources */,
 				D6F33C8024B15076009603FF /* AudioMessageCell.swift in Sources */,
 				D6792CE525FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
 				D61EC0E621D30EB300204BEE /* View.swift in Sources */,

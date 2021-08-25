@@ -78,6 +78,13 @@ extension CollectionViewDataSource {
         return self.diffableDataSource.snapshot()
     }
 
+    func sectionItemIdentifiers(for indexPath: IndexPath) -> (section: SectionType, item: ItemType)? {
+        guard let section = self.sectionIdentifier(for: indexPath.section) else { return nil }
+        guard let item = self.itemIdentifier(for: indexPath) else { return nil }
+
+        return (section, item)
+    }
+
     func sectionIdentifier(for index: Int) -> SectionType? {
         return self.diffableDataSource.sectionIdentifier(for: index)
     }

@@ -12,7 +12,7 @@ import Parse
 protocol HomeViewControllerDelegate: AnyObject {
     func homeViewControllerDidTapAdd(_ controller: HomeViewController)
     func homeViewControllerDidSelectReservations(_ controller: HomeViewController)
-    func homeViewControllerDidSelect(section: HomeCollectionViewManager.SectionType, item: AnyHashable)
+    func homeViewControllerDidSelect(section: HomeCollectionViewDataSource.SectionType, item: AnyHashable)
 }
 
 class HomeViewController: ViewController, TransitionableViewController {
@@ -54,6 +54,8 @@ class HomeViewController: ViewController, TransitionableViewController {
         self.dataSource.didSelectReservations = { [unowned self] in
             self.delegate?.homeViewControllerDidTapAdd(self)
         }
+        
+        self.collectionView.delegate = self
     }
 
     override func viewWasPresented() {
@@ -120,5 +122,107 @@ class HomeViewController: ViewController, TransitionableViewController {
         case .channels:
             return ChannelSupplier.shared.allChannelsSorted
         }
+    }
+}
+
+extension HomeViewController: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let identifiers = self.dataSource.sectionItemIdentifiers(for: indexPath) else { return }
+
+        self.delegate?.homeViewControllerDidSelect(section: identifiers.section, item: identifiers.item)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+
+        guard let channel = ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row],
+              let cell = collectionView.cellForItem(at: indexPath) as? ChannelCell else { return nil }
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+            return ChannelPreviewViewController(with: channel, size: cell.size)
+        }, actionProvider: { suggestedActions in
+            if channel.isFromCurrentUser {
+                return self.makeCurrentUserMenu(for: channel, at: indexPath)
+            } else {
+                return self.makeNonCurrentUserMenu(for: channel, at: indexPath)
+            }
+        })
+    }
+
+    func makeCurrentUserMenu(for channel: DisplayableChannel, at indexPath: IndexPath) -> UIMenu {
+        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
+
+        let confirm = UIAction(title: "Confirm",
+                               image: UIImage(systemName: "trash"),
+                               attributes: .destructive) { action in
+
+            switch channel.channelType {
+            case .system(_):
+                break
+            case .pending(_):
+                break
+            case .channel(let tchChannel):
+                Task {
+                    do {
+                        try await ChannelSupplier.shared.delete(channel: tchChannel)
+                    } catch {
+                        logDebug(error)
+                    }
+                }
+            }
+        }
+
+        let deleteMenu = UIMenu(title: "Delete",
+                                image: UIImage(systemName: "trash"),
+                                options: .destructive,
+                                children: [confirm, neverMind])
+
+        let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { [unowned self] _ in
+            guard let identifiers = self.dataSource.sectionItemIdentifiers(for: indexPath) else { return }
+            self.delegate?.homeViewControllerDidSelect(section: identifiers.section, item: identifiers.item)
+        }
+
+        // Create and return a UIMenu with the share action
+        return UIMenu(title: "Options", children: [open, deleteMenu])
+    }
+
+    func makeNonCurrentUserMenu(for channel: DisplayableChannel, at indexPath: IndexPath) -> UIMenu {
+
+        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
+
+        let confirm = UIAction(title: "Confirm",
+                               image: UIImage(systemName: "clear"),
+                               attributes: .destructive) { action in
+
+            switch channel.channelType {
+            case .system(_):
+                break
+            case .pending(_):
+                break
+            case .channel(let tchChannel):
+                Task {
+                    do {
+                        try await ChannelSupplier.shared.delete(channel: tchChannel)
+                    } catch {
+                        logDebug(error)
+                    }
+                }
+            }
+        }
+
+        let deleteMenu = UIMenu(title: "Leave",
+                                image: UIImage(systemName: "clear"),
+                                options: .destructive,
+                                children: [confirm, neverMind])
+
+        let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { [unowned self] _ in
+            guard let identifiers = self.dataSource.sectionItemIdentifiers(for: indexPath) else { return }
+            self.delegate?.homeViewControllerDidSelect(section: identifiers.section, item: identifiers.item)
+        }
+
+        // Create and return a UIMenu with the share action
+        return UIMenu(title: "Options", children: [open, deleteMenu])
     }
 }
