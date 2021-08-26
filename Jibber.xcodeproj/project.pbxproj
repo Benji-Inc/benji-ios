@@ -25,9 +25,6 @@
 		807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
 		807A7BCA26C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
 		807A7BCB26C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
-		808B62BC26D82E0100C9CB96 /* new_Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808B62BB26D82E0100C9CB96 /* new_Coordinator.swift */; };
-		808B62BD26D82E0100C9CB96 /* new_Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808B62BB26D82E0100C9CB96 /* new_Coordinator.swift */; };
-		808B62BE26D82E0100C9CB96 /* new_Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808B62BB26D82E0100C9CB96 /* new_Coordinator.swift */; };
 		8094D5DB26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8094D5DC26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
@@ -803,7 +800,6 @@
 		8051E16626D4537A0086A007 /* CollectionViewDataSourceCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSourceCreator.swift; sourceTree = "<group>"; };
 		807A7BC426C5B5A20023A71E /* Task+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Extensions.swift"; sourceTree = "<group>"; };
 		807A7BC826C5C8100023A71E /* Task+TaskPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+TaskPool.swift"; sourceTree = "<group>"; };
-		808B62BB26D82E0100C9CB96 /* new_Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = new_Coordinator.swift; sourceTree = "<group>"; };
 		8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFUser+Extensions.swift"; sourceTree = "<group>"; };
 		89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.debug.xcconfig"; sourceTree = "<group>"; };
 		8C8815B0EA9F1296FC57545F /* Pods_Notification_Content.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Notification_Content.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1234,14 +1230,6 @@
 			path = Old;
 			sourceTree = "<group>";
 		};
-		808B62BF26D8304E00C9CB96 /* New Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-				808B62BB26D82E0100C9CB96 /* new_Coordinator.swift */,
-			);
-			path = "New Coordinator";
-			sourceTree = "<group>";
-		};
 		856FD9BFAD8BA46208226C85 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1486,7 +1474,6 @@
 		D6356D8F25A36BD90015104F /* Coordinator */ = {
 			isa = PBXGroup;
 			children = (
-				808B62BF26D8304E00C9CB96 /* New Coordinator */,
 				D66F0FD722BF295A00BA277D /* Coordinator.swift */,
 				D66F0FD922BF297F00BA277D /* MainCoordinator.swift */,
 				D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */,
@@ -2940,7 +2927,6 @@
 				D61EC0E021D30E3F00204BEE /* FullScreenViewController.swift in Sources */,
 				D6FA622623F0B16F00048C4A /* ChannelDataSource+Animations.swift in Sources */,
 				D6D1502D21D6A08300CD8CE4 /* ChannelCollectionView.swift in Sources */,
-				808B62BC26D82E0100C9CB96 /* new_Coordinator.swift in Sources */,
 				D67934D723D9580F00536B44 /* MessagePreviewViewController.swift in Sources */,
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
 				D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */,
@@ -3002,7 +2988,6 @@
 				D679DE1826822FB70054DCAF /* FocusStatusViewController.swift in Sources */,
 				D63DB26925E9997800F6B323 /* UserNotificationManager.swift in Sources */,
 				D63D71B725F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
-				808B62BE26D82E0100C9CB96 /* new_Coordinator.swift in Sources */,
 				D63DB29A25E999B200F6B323 /* TextView.swift in Sources */,
 				D63DB28C25E999AB00F6B323 /* ViewController.swift in Sources */,
 				D63DB22425E9990500F6B323 /* DispatchQue+Extensions.swift in Sources */,
@@ -3152,7 +3137,6 @@
 				D65519562589125E00B901E4 /* ClientError.swift in Sources */,
 				D65519F42589591D00B901E4 /* Typealies.swift in Sources */,
 				D65519622589127A00B901E4 /* PushPayload.swift in Sources */,
-				808B62BD26D82E0100C9CB96 /* new_Coordinator.swift in Sources */,
 				D6551A4125895E9500B901E4 /* TextInputViewController.swift in Sources */,
 				D655195D2589126800B901E4 /* User.swift in Sources */,
 				D679DE1726822FB70054DCAF /* FocusStatusViewController.swift in Sources */,

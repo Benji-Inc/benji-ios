@@ -44,11 +44,14 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
         self.onboardingVC.reservationCreatorId = link.reservationCreatorId
         self.onboardingVC.updateNavigationBar()
     }
+}
 
-    override func handle(launchActivity: LaunchActivity) {
-        super.handle(launchActivity: launchActivity)
+extension OnboardingCoordinator: LaunchActivityHandler {
 
-        self.onboardingVC.handle(launchActivity: launchActivity)
+    nonisolated func handle(launchActivity: LaunchActivity) {
+        Task.onMainActor {
+            self.onboardingVC.handle(launchActivity: launchActivity)
+        }
     }
 }
 
