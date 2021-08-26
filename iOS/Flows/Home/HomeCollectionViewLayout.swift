@@ -14,9 +14,9 @@ class HomeCollectionViewLayout: UICollectionViewCompositionalLayout {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .vertical
 
-        super.init(sectionProvider: { sectionIndex, enviroment in
-
+        super.init(sectionProvider: { sectionIndex, environment in
             guard let sectionType = HomeCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
+
             switch sectionType {
             case .notices:
                 // Item
