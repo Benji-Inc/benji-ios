@@ -61,8 +61,11 @@ class Coordinator<Result>: NSObject, CoordinatorType {
         // prevent apps from getting locked up due to a coordinator not finishing or being presented
         // properly.
         if self.childCoordinator != nil {
-            print("WARNING!!!!! ATTEMPTING TO ADD CHILD COORDINATOR \(coordinator)"
-                  + " TO COORDINATOR \(self) THAT ALREADY HAS ONE \(self.childCoordinator!)")
+            let warning = """
+                    WARNING!!!!! ATTEMPTING TO ADD CHILD COORDINATOR \(coordinator) \
+                    TO COORDINATOR \(self) THAT ALREADY HAS ONE \(self.childCoordinator!)
+                    """
+            print(warning)
         }
 
         // Set the parent coordinator of the the previous child coordinator to nil
