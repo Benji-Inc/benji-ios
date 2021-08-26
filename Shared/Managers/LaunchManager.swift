@@ -8,12 +8,15 @@
 
 import Foundation
 import Parse
-import Combine
 import SDWebImageLinkPlugin
 
 enum LaunchActivity {
     case onboarding(phoneNumber: String)
     case reservation(reservationId: String)
+}
+
+protocol LaunchActivityHandler {
+    func handle(launchActivity: LaunchActivity)
 }
 
 enum LaunchStatus {

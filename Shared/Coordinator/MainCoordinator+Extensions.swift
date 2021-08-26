@@ -23,7 +23,9 @@ extension MainCoordinator: LaunchManagerDelegate {
 
     nonisolated func launchManager(_ manager: LaunchManager, didReceive activity: LaunchActivity) {
         Task.onMainActor {
-            self.furthestChild.handle(launchActivity: activity)
+            if let furthestChild = self.furthestChild as? LaunchActivityHandler {
+                furthestChild.handle(launchActivity: activity)
+            }
         }
     }
 
