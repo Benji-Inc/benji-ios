@@ -32,6 +32,7 @@ extension UICollectionView {
             longestDelay = delay
         }
 
+        // Wait for all of the cell animations to finish
         await Task.sleep(seconds: duration + longestDelay)
 
         self.alpha = 0
@@ -61,6 +62,7 @@ extension UICollectionView {
             longestDelay = delay
         }
 
+        // Wait for all of the cell animations to finish
         await Task.sleep(seconds: duration + longestDelay)
     }
 }
