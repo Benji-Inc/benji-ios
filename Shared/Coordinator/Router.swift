@@ -113,7 +113,7 @@ class Router: NSObject, UINavigationControllerDelegate {
         self.navController.pushViewController(viewController, animated: animated)
     }
 
-    /// Similar to a push, however the current view controller will removed from the stack once the new one is pushed, effectively making it a swap.
+    /// Similar to a push, however the current view controller will be removed from the stack once the new one is pushed, effectively making it a swap.
     /// From the user's point of view, this just means that if they tap the back button, they'll go back to the screen before last.
     func swapPush(_ module: Presentable,
                   cancelHandler: (() -> Void)? = nil,
