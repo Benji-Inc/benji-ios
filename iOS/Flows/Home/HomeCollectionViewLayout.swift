@@ -8,16 +8,15 @@
 
 import Foundation
 
-class HomeCollectionViewLayout: UICollectionViewLayout {
+class HomeCollectionViewLayout: UICollectionViewCompositionalLayout {
 
-    static var layout: UICollectionViewCompositionalLayout = {
-
+    init() {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .vertical
 
-        return UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, enviroment in
+        super.init(sectionProvider: { sectionIndex, environment in
+            guard let sectionType = HomeCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
 
-            guard let sectionType = HomeCollectionViewManager.SectionType(rawValue: sectionIndex) else { return nil }
             switch sectionType {
             case .notices:
                 // Item
@@ -45,7 +44,7 @@ class HomeCollectionViewLayout: UICollectionViewLayout {
 
                 let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120))
                 let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-                
+
                 section.boundarySupplementaryItems = [header]
 
                 return section
@@ -77,6 +76,9 @@ class HomeCollectionViewLayout: UICollectionViewLayout {
             }
 
         }, configuration: config)
-    }()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
-

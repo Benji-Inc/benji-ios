@@ -95,6 +95,7 @@ class Coordinator<Result>: NSObject, CoordinatorType {
     }
 }
 
+@MainActor
 class PresentableCoordinator<Result>: Coordinator<Result>, Presentable {
 
     func toPresentable() -> DismissableVC {
