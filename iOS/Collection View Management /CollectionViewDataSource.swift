@@ -65,11 +65,9 @@ extension CollectionViewDataSource {
 
     // MARK: - Standard DataSource Functions
 
-    func apply(_ snapshot: NSDiffableDataSourceSnapshot<SectionType, ItemType>,
-                    animatingDifferences: Bool = true,
-                    completion: (() -> Void)? = nil) {
+    func apply(_ snapshot: NSDiffableDataSourceSnapshot<SectionType, ItemType>, animatingDifferences: Bool = true) {
 
-        self.diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: completion)
+        self.diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: nil)
     }
 
     func apply(_ snapshot: NSDiffableDataSourceSnapshot<SectionType, ItemType>,
@@ -106,6 +104,112 @@ extension CollectionViewDataSource {
 // MARK: - Snapshot Convenience Functions
 
 extension CollectionViewDataSource {
+
+    // Synchronous Functions
+
+    func applyChanges(_ changes: (inout SnapshotType) -> Void) {
+        var snapshot = self.snapshot()
+        changes(&snapshot)
+        self.apply(snapshot)
+    }
+
+    func appendItems(_ identifiers: [ItemType], toSection sectionIdentifier: SectionType? = nil) {
+        self.applyChanges { snapshot in
+            snapshot.appendItems(identifiers, toSection: sectionIdentifier)
+        }
+    }
+
+    func insertItems(_ identifiers: [ItemType], beforeItem beforeIdentifier: ItemType) {
+        self.applyChanges { snapshot in
+            snapshot.insertItems(identifiers, beforeItem: beforeIdentifier)
+        }
+    }
+
+    func insertItems(_ identifiers: [ItemType], afterItem afterIdentifier: ItemType) {
+        self.applyChanges { snapshot in
+            snapshot.insertItems(identifiers, afterItem: afterIdentifier)
+        }
+    }
+
+    func deleteItems(_ identifiers: [ItemType]) {
+        self.applyChanges { snapshot in
+            snapshot.deleteItems(identifiers)
+        }
+    }
+
+    func deleteAllItems() {
+        self.applyChanges { snapshot in
+            snapshot.deleteAllItems()
+        }
+    }
+
+    func moveItem(_ identifier: ItemType, beforeItem toIdentifier: ItemType) {
+        self.applyChanges { snapshot in
+            snapshot.moveItem(identifier, beforeItem: toIdentifier)
+        }
+    }
+
+    func moveItem(_ identifier: ItemType, afterItem toIdentifier: ItemType) {
+        self.applyChanges { snapshot in
+            snapshot.moveItem(identifier, afterItem: toIdentifier)
+        }
+    }
+
+    func reloadItems(_ identifiers: [ItemType]) {
+        self.applyChanges { snapshot in
+            snapshot.reloadItems(identifiers)
+        }
+    }
+
+    func reconfigureItems(_ identifiers: [ItemType]) {
+        self.applyChanges { snapshot in
+            snapshot.reconfigureItems(identifiers)
+        }
+    }
+
+    func appendSections(_ identifiers: [SectionType]) {
+        self.applyChanges { snapshot in
+            snapshot.appendSections(identifiers)
+        }
+    }
+
+    func insertSections(_ identifiers: [SectionType], beforeSection toIdentifier: SectionType) {
+        self.applyChanges { snapshot in
+            snapshot.insertSections(identifiers, beforeSection: toIdentifier)
+        }
+    }
+
+    func insertSections(_ identifiers: [SectionType], afterSection toIdentifier: SectionType) {
+        self.applyChanges { snapshot in
+            snapshot.insertSections(identifiers, afterSection: toIdentifier)
+        }
+    }
+
+    func deleteSections(_ identifiers: [SectionType]) {
+        self.applyChanges { snapshot in
+            snapshot.deleteSections(identifiers)
+        }
+    }
+
+    func moveSection(_ identifier: SectionType, beforeSection toIdentifier: SectionType) {
+        self.applyChanges { snapshot in
+            snapshot.moveSection(identifier, beforeSection: toIdentifier)
+        }
+    }
+
+    func moveSection(_ identifier: SectionType, afterSection toIdentifier: SectionType) {
+        self.applyChanges { snapshot in
+            snapshot.moveSection(identifier, afterSection: toIdentifier)
+        }
+    }
+
+    func reloadSections(_ identifiers: [SectionType]) {
+        self.applyChanges { snapshot in
+            snapshot.reloadSections(identifiers)
+        }
+    }
+
+    // Asynchronous Functions
 
     func applyChanges(_ changes: (inout SnapshotType) -> Void) async {
         var snapshot = self.snapshot()
