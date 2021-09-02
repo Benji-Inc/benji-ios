@@ -1,5 +1,5 @@
 //
-//  ChannelPreviewViewController.swift
+//  ConversationPreviewViewController.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 1/22/20.
@@ -8,14 +8,14 @@
 
 import Foundation
 
-class ChannelPreviewViewController: ViewController {
+class ConversationPreviewViewController: ViewController {
 
-    let channel: DisplayableChannel
+    let channel: DisplayableConversation
     let channelSize: CGSize
 
-    private let content = ChannelContentView()
+    private let content = ConversationContentView()
 
-    init(with channel: DisplayableChannel, size: CGSize) {
+    init(with channel: DisplayableConversation, size: CGSize) {
         self.channel = channel
         self.channelSize = size
         super.init()

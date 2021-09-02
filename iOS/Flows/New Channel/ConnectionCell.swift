@@ -1,5 +1,5 @@
 //
-//  NewChannelCell.swift
+//  NewConversationCell.swift
 //  Ours
 //
 //  Created by Benji Dodgson on 2/17/21.

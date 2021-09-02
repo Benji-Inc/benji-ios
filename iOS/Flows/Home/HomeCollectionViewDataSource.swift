@@ -18,7 +18,7 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
 
     enum ItemType: Hashable {
         case notice(SystemNotice)
-        case channel(DisplayableChannel)
+        case channel(DisplayableConversation)
     }
 
     var unclaimedCount: Int = 0
@@ -27,7 +27,7 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
     private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
     private let connectionConfig = ManageableCellRegistration<ConnectionRequestCell>().provider
     private let alertConfig = ManageableCellRegistration<AlertCell>().provider
-    private let channelConfig = ManageableCellRegistration<ChannelCell>().provider
+    private let channelConfig = ManageableCellRegistration<ConversationCell>().provider
     private let footerConfig = ManageableFooterRegistration<ReservationsFooterView>().provider
     private let headerConfig = ManageableHeaderRegistration<UserHeaderView>().provider
 
@@ -42,7 +42,7 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
         case .notice(let notice):
             return self.getNoticeCell(with: collectionView, indexPath: indexPath, notice: notice)
         case .channel(let channel):
-            return self.getChannelCell(with: collectionView, indexPath: indexPath, channel: channel)
+            return self.getConversationCell(with: collectionView, indexPath: indexPath, channel: channel)
         }
     }
 
@@ -76,9 +76,9 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
         }
     }
 
-    private func getChannelCell(with collectionView: UICollectionView,
+    private func getConversationCell(with collectionView: UICollectionView,
                                 indexPath: IndexPath,
-                                channel: DisplayableChannel) -> CollectionViewManagerCell? {
+                                channel: DisplayableConversation) -> CollectionViewManagerCell? {
         
         return collectionView.dequeueConfiguredReusableCell(using: self.channelConfig,
                                                             for: indexPath,

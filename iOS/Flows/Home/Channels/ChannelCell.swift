@@ -1,5 +1,5 @@
 //
-//  ChannelCell.swift
+//  ConversationCell.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 2/3/19.
@@ -9,12 +9,12 @@
 import Foundation
 import TwilioChatClient
 
-class ChannelCell: CollectionViewManagerCell, ManageableCell {
-    typealias ItemType = DisplayableChannel
+class ConversationCell: CollectionViewManagerCell, ManageableCell {
+    typealias ItemType = DisplayableConversation
 
-    var currentItem: DisplayableChannel?
+    var currentItem: DisplayableConversation?
 
-    private let content = ChannelContentView()
+    private let content = ConversationContentView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -23,7 +23,7 @@ class ChannelCell: CollectionViewManagerCell, ManageableCell {
         self.content.set(backgroundColor: .purple)
     }
 
-    func configure(with item: DisplayableChannel) {
+    func configure(with item: DisplayableConversation) {
         self.content.configure(with: item)
     }
 

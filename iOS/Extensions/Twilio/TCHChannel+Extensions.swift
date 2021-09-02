@@ -9,7 +9,6 @@
 import Foundation
 import TwilioChatClient
 import Parse
-import Combine
 
 extension TCHChannel {
 
@@ -60,7 +59,7 @@ extension TCHChannel {
 
     var channelDescription: String {
         guard let attributes = self.attributes(),
-              let text = attributes.dictionary?[ChannelKey.description.rawValue] as? String else { return String() }
+              let text = attributes.dictionary?[ConversationKey.description.rawValue] as? String else { return String() }
         return text
     }
 

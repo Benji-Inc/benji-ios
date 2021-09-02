@@ -1,5 +1,5 @@
 //
-//  SystemChannel.swift
+//  SystemConversation.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 9/28/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SystemChannel: Hashable {
+struct SystemConversation: Hashable {
 
     var avatars: [Avatar]
     var context: MessageContext
@@ -25,7 +25,7 @@ struct SystemChannel: Hashable {
         return self.id as NSObjectProtocol
     }
 
-    static func == (lhs: SystemChannel, rhs: SystemChannel) -> Bool {
+    static func == (lhs: SystemConversation, rhs: SystemConversation) -> Bool {
         return lhs.id == rhs.id
     }
 

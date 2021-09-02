@@ -1,5 +1,5 @@
 //
-//  NewChannelViewController.swift
+//  NewConversationViewController.swift
 //  Ours
 //
 //  Created by Benji Dodgson on 2/17/21.
@@ -8,15 +8,15 @@
 
 import Foundation
 
-class NewChannelViewController: CollectionViewController<NewChannelCollectionViewManager.SectionType, NewChannelCollectionViewManager> {
+class NewConversationViewController: CollectionViewController<NewConversationCollectionViewManager.SectionType, NewConversationCollectionViewManager> {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    var didCreateChannel: CompletionOptional = nil
+    var didCreateConversation: CompletionOptional = nil
 
     private let createButton = Button()
 
     override func getCollectionView() -> CollectionView {
-        return NewChannelCollectionView()
+        return NewConversationCollectionView()
     }
 
     override func initializeViews() {
@@ -31,7 +31,7 @@ class NewChannelViewController: CollectionViewController<NewChannelCollectionVie
         self.view.insertSubview(self.createButton, aboveSubview: self.collectionViewManager.collectionView)
         self.createButton.set(style: .normal(color: .purple, text: "Create"))
         self.createButton.didSelect { [unowned self] in
-            self.createChannel()
+            self.createConversation()
         }
 
         self.createButton.transform = CGAffineTransform.init(translationX: 0, y: 100)
@@ -53,17 +53,17 @@ class NewChannelViewController: CollectionViewController<NewChannelCollectionVie
         self.createButton.centerOnX()
     }
 
-    func createChannel() {
+    func createConversation() {
 
         let members: [String] = self.collectionViewManager.selectedItems.compactMap { item in
             guard let connection = item as? Connection else { return nil }
             return connection.nonMeUser?.objectId
         }
 
-        ChannelSupplier.shared.createChannel(friendlyName: "",
+        ConversationSupplier.shared.createConversation(friendlyName: "",
                                              members: members,
                                              setActive: true)
 
-        self.didCreateChannel?()
+        self.didCreateConversation?()
     }
 }

@@ -602,7 +602,7 @@
 		D6B2601822E4208900143CF0 /* ChannelDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */; };
 		D6B2603822E6AB5E00143CF0 /* ChannelDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2603722E6AB5E00143CF0 /* ChannelDetailViewController.swift */; };
 		D6B26903264C7D2000EFDA17 /* AnimatingTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B26902264C7D2000EFDA17 /* AnimatingTapView.swift */; };
-		D6B3329325DD74EB00211044 /* Channel+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329225DD74EB00211044 /* Channel+Cloud.swift */; };
+		D6B3329325DD74EB00211044 /* Conversation+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329225DD74EB00211044 /* Conversation+Cloud.swift */; };
 		D6B3329525DDB9E300211044 /* NewChannelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329425DDB9E300211044 /* NewChannelHeaderView.swift */; };
 		D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
@@ -1057,7 +1057,7 @@
 		D6B2601722E4208900143CF0 /* ChannelDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDateLabel.swift; sourceTree = "<group>"; };
 		D6B2603722E6AB5E00143CF0 /* ChannelDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChannelDetailViewController.swift; sourceTree = "<group>"; };
 		D6B26902264C7D2000EFDA17 /* AnimatingTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatingTapView.swift; sourceTree = "<group>"; };
-		D6B3329225DD74EB00211044 /* Channel+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Channel+Cloud.swift"; sourceTree = "<group>"; };
+		D6B3329225DD74EB00211044 /* Conversation+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Conversation+Cloud.swift"; sourceTree = "<group>"; };
 		D6B3329425DDB9E300211044 /* NewChannelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewChannelHeaderView.swift; sourceTree = "<group>"; };
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
@@ -1359,7 +1359,7 @@
 			isa = PBXGroup;
 			children = (
 				D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */,
-				D6B3329225DD74EB00211044 /* Channel+Cloud.swift */,
+				D6B3329225DD74EB00211044 /* Conversation+Cloud.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -1613,10 +1613,10 @@
 			path = "Collection Extensions";
 			sourceTree = "<group>";
 		};
-		D6432BF122D8282E0016001A /* Channel */ = {
+		D6432BF122D8282E0016001A /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
-				D6D1500521D5E71E00CD8CE4 /* Channel Collection Views */,
+				D6D1500521D5E71E00CD8CE4 /* Conversation Collection Views */,
 				D67896CB2304524C0059BA75 /* ChannelCoordinator.swift */,
 				D6B2603722E6AB5E00143CF0 /* ChannelDetailViewController.swift */,
 				D6D1500621D5E73D00CD8CE4 /* ChannelViewController.swift */,
@@ -1625,7 +1625,7 @@
 				D6B2603622E6AA3800143CF0 /* Input */,
 				D6090E542377CB0F00833DA7 /* Manager */,
 			);
-			path = Channel;
+			path = Conversation;
 			sourceTree = "<group>";
 		};
 		D64C6A7F23294ED700DB7257 /* Twilio */ = {
@@ -2090,7 +2090,7 @@
 			isa = PBXGroup;
 			children = (
 				D671E1ED2640297900BF2B8D /* Toast */,
-				D6432BF122D8282E0016001A /* Channel */,
+				D6432BF122D8282E0016001A /* Conversation */,
 				D6D145F521D549A300CD8CE4 /* Home */,
 				D66A580325DD68F9001B3F64 /* New Channel */,
 				D68BEAD224831F7C00C95D31 /* Reservations */,
@@ -2113,7 +2113,7 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
-		D6D1500521D5E71E00CD8CE4 /* Channel Collection Views */ = {
+		D6D1500521D5E71E00CD8CE4 /* Conversation Collection Views */ = {
 			isa = PBXGroup;
 			children = (
 				D6C9CD2A2471D67B007376F7 /* Footers */,
@@ -2122,7 +2122,7 @@
 				D684840822CD2E1E00362AC3 /* Cells */,
 				D6D1502C21D6A08300CD8CE4 /* ChannelCollectionView.swift */,
 			);
-			path = "Channel Collection Views";
+			path = "Conversation Collection Views";
 			sourceTree = "<group>";
 		};
 		D6D1503A21D7F47600CD8CE4 /* UI Extensions */ = {
@@ -2720,7 +2720,7 @@
 				D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */,
 				D6432BF022D824BA0016001A /* ChannelCollectionViewLayoutAttributes.swift in Sources */,
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
-				D6B3329325DD74EB00211044 /* Channel+Cloud.swift in Sources */,
+				D6B3329325DD74EB00211044 /* Conversation+Cloud.swift in Sources */,
 				D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */,
 				D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */,
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,

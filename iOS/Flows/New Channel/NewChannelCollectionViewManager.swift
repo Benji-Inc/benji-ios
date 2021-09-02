@@ -1,5 +1,5 @@
 //
-//  NewChannelCollectionViewManger.swift
+//  NewConversationCollectionViewManger.swift
 //  Ours
 //
 //  Created by Benji Dodgson on 2/17/21.
@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class NewChannelCollectionViewManager: old_CollectionViewManager<NewChannelCollectionViewManager.SectionType> {
+class NewConversationCollectionViewManager: old_CollectionViewManager<NewConversationCollectionViewManager.SectionType> {
 
     enum SectionType: Int, old_ManagerSectionType, CaseIterable {
         case users
@@ -19,7 +19,7 @@ class NewChannelCollectionViewManager: old_CollectionViewManager<NewChannelColle
 
     private let connectionConfig = ManageableCellRegistration<ConnectionCell>().provider
     private let headerConfig = UICollectionView.SupplementaryRegistration
-    <NewChannelHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { (headerView, elementKind, indexPath) in }
+    <NewConversationHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { (headerView, elementKind, indexPath) in }
 
     var didLoadSnapshot: CompletionOptional = nil 
 

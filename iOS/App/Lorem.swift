@@ -81,7 +81,7 @@ class Lorem {
                             handle: String())
     }
 
-    class func systemChannel() -> SystemChannel {
+    class func systemConversation() -> SystemConversation {
         var avatars: [Avatar] = []
         for _ in 0...3 {
             avatars.append(self.avatar())
@@ -92,7 +92,7 @@ class Lorem {
             messages.append(self.systemMessage())
         }
 
-        let channel = SystemChannel(avatars: avatars,
+        let channel = SystemConversation(avatars: avatars,
                                     context: self.context(),
                                     id: String(self.randomString()),
                                     timeStampAsDate: self.dates.random(),

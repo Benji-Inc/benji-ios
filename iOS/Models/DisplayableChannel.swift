@@ -1,5 +1,5 @@
 //
-//  DisplayableChannel.swift
+//  DisplayableConversation.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 10/6/19.
@@ -14,11 +14,11 @@ extension Range: Comparable {
     }
 }
 
-class DisplayableChannel: Hashable, Comparable {
+class DisplayableConversation: Hashable, Comparable {
 
-    var channelType: ChannelType
+    var channelType: ConversationType
 
-    init(channelType: ChannelType) {
+    init(channelType: ConversationType) {
         self.channelType = channelType
     }
 
@@ -30,7 +30,7 @@ class DisplayableChannel: Hashable, Comparable {
         return self.channelType.isFromCurrentUser
     }
 
-    static func == (lhs: DisplayableChannel, rhs: DisplayableChannel) -> Bool {
+    static func == (lhs: DisplayableConversation, rhs: DisplayableConversation) -> Bool {
         return lhs.channelType.uniqueName == rhs.channelType.uniqueName 
     }
 
@@ -38,7 +38,7 @@ class DisplayableChannel: Hashable, Comparable {
         hasher.combine(self.channelType.uniqueName)
     }
 
-    static func < (lhs: DisplayableChannel, rhs: DisplayableChannel) -> Bool {
+    static func < (lhs: DisplayableConversation, rhs: DisplayableConversation) -> Bool {
         return lhs.channelType.dateUpdated < rhs.channelType.dateUpdated
     }
 }

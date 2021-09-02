@@ -1,5 +1,5 @@
 //
-//  ChannelType.swift
+//  ConversationType.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 6/24/19.
@@ -10,9 +10,9 @@ import Foundation
 import TwilioChatClient
 import TMROLocalization
 
-enum ChannelType: Hashable {
+enum ConversationType: Hashable {
 
-    case system(SystemChannel)
+    case system(SystemConversation)
     case channel(TCHChannel)
     case pending(String)
 

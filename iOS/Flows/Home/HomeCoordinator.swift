@@ -48,18 +48,18 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             break
         case .channel:
             if let channelId = deeplink.customMetadata["channelId"] as? String,
-               let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
-                self.startChannelFlow(for: channel.channelType)
+               let channel = ConversationSupplier.shared.getConversation(withSID: channelId) {
+                self.startConversationFlow(for: channel.channelType)
             } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
                 Task {
                     do {
                         let connection = try await Connection.getObject(with: connectionId)
                         guard let channelId = connection.channelId,
-                              let channel = ChannelSupplier.shared.getChannel(withSID: channelId) else {
+                              let channel = ConversationSupplier.shared.getConversation(withSID: channelId) else {
                                   return
                               }
 
-                        self.startChannelFlow(for: channel.channelType)
+                        self.startConversationFlow(for: channel.channelType)
                     } catch {
                         logDebug(error)
                     }
@@ -73,8 +73,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     private func handle(notice: SystemNotice) {
         switch notice.type {
         case .alert:
-            guard let channelId = notice.attributes?["channelId"] as? String, let channel = ChannelSupplier.shared.getChannel(withSID: channelId) else { return }
-            self.startChannelFlow(for: channel.channelType)
+            guard let channelId = notice.attributes?["channelId"] as? String, let channel = ConversationSupplier.shared.getConversation(withSID: channelId) else { return }
+            self.startConversationFlow(for: channel.channelType)
 
         case .connectionRequest:
             break
@@ -87,13 +87,13 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-    func startChannelFlow(for type: ChannelType?) {
+    func startConversationFlow(for type: ConversationType?) {
         self.removeChild()
-        var channel: DisplayableChannel?
+        var channel: DisplayableConversation?
         if let t = type {
-            channel = DisplayableChannel(channelType: t)
+            channel = DisplayableConversation(channelType: t)
         }
-        let coordinator = ChannelCoordinator(router: self.router, deepLink: self.deepLink, channel: channel)
+        let coordinator = ConversationCoordinator(router: self.router, deepLink: self.deepLink, channel: channel)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 self.finishFlow(with: ())
@@ -149,11 +149,11 @@ extension HomeCoordinator: HomeViewControllerDelegate {
 
     func didTapAdd() {
         self.removeChild()
-        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
+        let coordinator = NewConversationCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { result in
             coordinator.toPresentable().dismiss(animated: true) {
                 if result {
-                    self.startChannelFlow(for: nil)
+                    self.startConversationFlow(for: nil)
                 }
             }
         }
@@ -179,7 +179,7 @@ extension HomeCoordinator: HomeViewControllerDelegate {
             case .notice(let notice):
                 self.handle(notice: notice)
             case .channel(let channel):
-                self.startChannelFlow(for: channel.channelType)
+                self.startConversationFlow(for: channel.channelType)
             }
         }
     }

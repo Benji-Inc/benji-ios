@@ -1,5 +1,5 @@
 //
-//  NewChannelCollectionView.swift
+//  NewConversationCollectionView.swift
 //  Ours
 //
 //  Created by Benji Dodgson on 2/17/21.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class NewChannelCollectionView: CollectionView {
+class NewConversationCollectionView: CollectionView {
 
     init() {
         let layout = UICollectionViewFlowLayout()

@@ -1,5 +1,5 @@
 //
-//  ChannelDataSource.swift
+//  ConversationDataSource.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 7/11/19.
@@ -9,18 +9,18 @@
 import Foundation
 import TMROLocalization
 
-protocol ChannelDataSource: AnyObject {
+protocol ConversationDataSource: AnyObject {
 
     var numberOfMembers: Int { get set }
-    var sections: [ChannelSectionable] { get set }
-    var collectionView: ChannelCollectionView { get set }
+    var sections: [ConversationSectionable] { get set }
+    var collectionView: ConversationCollectionView { get set }
 
     func item(at indexPath: IndexPath) -> Messageable?
     func numberOfSections() -> Int
     func numberOfItems(inSection section: Int) -> Int
 
     func reset()
-    func set(newSections: [ChannelSectionable],
+    func set(newSections: [ConversationSectionable],
              keepOffset: Bool,
              animate: Bool,
              completion: CompletionOptional)
@@ -33,7 +33,7 @@ protocol ChannelDataSource: AnyObject {
     func delete(item: Messageable, in section: Int)
 }
 
-extension ChannelDataSource {
+extension ConversationDataSource {
 
     func item(at indexPath: IndexPath) -> Messageable? {
         guard let section = self.sections[safe: indexPath.section],
@@ -56,7 +56,7 @@ extension ChannelDataSource {
         self.collectionView.reloadData()
     }
 
-    func set(newSections: [ChannelSectionable],
+    func set(newSections: [ConversationSectionable],
              keepOffset: Bool = false,
              animate: Bool = false,
              completion: CompletionOptional) {
@@ -102,7 +102,7 @@ extension ChannelDataSource {
             completion?()
         } else {
             //Create new section
-            let new = ChannelSectionable(date: item.createdAt, items: [item])
+            let new = ConversationSectionable(date: item.createdAt, items: [item])
             self.sections.append(new)
             self.collectionView.reloadData()
             completion?()
@@ -128,7 +128,7 @@ extension ChannelDataSource {
             self.collectionView.insertItems(at: [indexPath])
         } else {
             //Create new section
-            let new = ChannelSectionable(date: item.createdAt, items: [item])
+            let new = ConversationSectionable(date: item.createdAt, items: [item])
             self.sections.append(new)
             self.collectionView.reloadData()
         }

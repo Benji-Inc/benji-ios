@@ -1,5 +1,5 @@
 //
-//  ChannelDataSource+Animations.swift
+//  ConversationDataSource+Animations.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 2/9/20.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension ChannelDataSource {
+extension ConversationDataSource {
 
     func animateIn(completion: CompletionOptional) {
         self.collectionView.scrollToEnd(animated: false) { [unowned self] in

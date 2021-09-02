@@ -1,5 +1,5 @@
 //
-//  ChannelKeys.swift
+//  ConversationKeys.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 9/11/19.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ChannelKey: String {
+enum ConversationKey: String {
     case description
     case context 
 }

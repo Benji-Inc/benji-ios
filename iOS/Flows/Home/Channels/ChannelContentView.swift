@@ -1,5 +1,5 @@
 //
-//  ChannelContentView.swift
+//  ConversationContentView.swift
 //  Ours
 //
 //  Created by Benji Dodgson on 5/6/21.
@@ -11,13 +11,13 @@ import TwilioChatClient
 import Combine
 
 @MainActor
-class ChannelContentView: View {
+class ConversationContentView: View {
 
     let stackedAvatarView = StackedAvatarView()
     let label = Label(font: .mediumThin, textColor: .background4)
 
     private var cancellables = Set<AnyCancellable>()
-    private var currentItem: DisplayableChannel?
+    private var currentItem: DisplayableConversation?
 
     deinit {
         self.cancellables.forEach { cancellable in
@@ -35,7 +35,7 @@ class ChannelContentView: View {
         self.stackedAvatarView.itemHeight = 70
     }
 
-    func configure(with item: DisplayableChannel) {
+    func configure(with item: DisplayableConversation) {
         self.currentItem = item
 
         switch item.channelType {

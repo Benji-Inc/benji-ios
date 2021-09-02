@@ -1,5 +1,5 @@
 //
-//  NewChannelHeaderView.swift
+//  NewConversationHeaderView.swift
 //  Ours
 //
 //  Created by Benji Dodgson on 2/17/21.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class NewChannelHeaderView: UICollectionReusableView {
+class NewConversationHeaderView: UICollectionReusableView {
 
     let titleLabel = Label(font: .regularBold)
     let descriptionLabel = Label(font: .small)

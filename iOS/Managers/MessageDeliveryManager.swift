@@ -19,7 +19,7 @@ class MessageDeliveryManager {
               attributes: [String: Any],
               systemMessageHandler: ((SystemMessage) -> Void)?) async throws -> SystemMessage {
 
-        guard let channelDisplayable = ChannelSupplier.shared.activeChannel else {
+        guard let channelDisplayable = ConversationSupplier.shared.activeConversation else {
             throw ClientError.message(detail: "No active channel found.")
         }
 
@@ -57,7 +57,7 @@ class MessageDeliveryManager {
     }
 
     func resend(message: Messageable, systemMessageHandler: ((SystemMessage) -> Void)?) async throws -> SystemMessage {
-        guard let channelDisplayable = ChannelSupplier.shared.activeChannel else {
+        guard let channelDisplayable = ConversationSupplier.shared.activeConversation else {
             throw ClientError.message(detail: "No active channel found.")
         }
 

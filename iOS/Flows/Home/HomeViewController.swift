@@ -74,7 +74,7 @@ class HomeViewController: ViewController {
         self.collectionView.animationView.play()
 
         async let unclaimedReservationCount = Reservation.getUnclaimedReservationCount(for: User.current()!)
-        async let initialSyncFinished: Void = ChannelSupplier.shared.waitForInitialSync()
+        async let initialSyncFinished: Void = ConversationSupplier.shared.waitForInitialSync()
         async let noticesLoaded: Void = NoticeSupplier.shared.loadNotices()
 
         let _ = await (initialSyncFinished, noticesLoaded)
@@ -114,7 +114,7 @@ class HomeViewController: ViewController {
                 return .notice(notice)
             }
         case .channels:
-            return ChannelSupplier.shared.allChannelsSorted.map { channel in
+            return ConversationSupplier.shared.allConversationsSorted.map { channel in
                 return .channel(channel)
             }
         }
@@ -133,11 +133,11 @@ extension HomeViewController: UICollectionViewDelegate {
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
 
-        guard let channel = ChannelSupplier.shared.allChannelsSorted[safe: indexPath.row],
-              let cell = collectionView.cellForItem(at: indexPath) as? ChannelCell else { return nil }
+        guard let channel = ConversationSupplier.shared.allConversationsSorted[safe: indexPath.row],
+              let cell = collectionView.cellForItem(at: indexPath) as? ConversationCell else { return nil }
 
         return UIContextMenuConfiguration(identifier: nil, previewProvider: {
-            return ChannelPreviewViewController(with: channel, size: cell.size)
+            return ConversationPreviewViewController(with: channel, size: cell.size)
         }, actionProvider: { suggestedActions in
             if channel.isFromCurrentUser {
                 return self.makeCurrentUserMenu(for: channel, at: indexPath)
@@ -147,7 +147,7 @@ extension HomeViewController: UICollectionViewDelegate {
         })
     }
 
-    func makeCurrentUserMenu(for channel: DisplayableChannel, at indexPath: IndexPath) -> UIMenu {
+    func makeCurrentUserMenu(for channel: DisplayableConversation, at indexPath: IndexPath) -> UIMenu {
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
 
         let confirm = UIAction(title: "Confirm",
@@ -159,10 +159,10 @@ extension HomeViewController: UICollectionViewDelegate {
                 break
             case .pending(_):
                 break
-            case .channel(let tchChannel):
+            case .channel(let tchConversation):
                 Task {
                     do {
-                        try await ChannelSupplier.shared.delete(channel: tchChannel)
+                        try await ConversationSupplier.shared.delete(channel: tchConversation)
                     } catch {
                         logDebug(error)
                     }
@@ -184,7 +184,7 @@ extension HomeViewController: UICollectionViewDelegate {
         return UIMenu(title: "Options", children: [open, deleteMenu])
     }
 
-    func makeNonCurrentUserMenu(for channel: DisplayableChannel, at indexPath: IndexPath) -> UIMenu {
+    func makeNonCurrentUserMenu(for channel: DisplayableConversation, at indexPath: IndexPath) -> UIMenu {
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
 
@@ -197,10 +197,10 @@ extension HomeViewController: UICollectionViewDelegate {
                 break
             case .pending(_):
                 break
-            case .channel(let tchChannel):
+            case .channel(let tchConversation):
                 Task {
                     do {
-                        try await ChannelSupplier.shared.delete(channel: tchChannel)
+                        try await ConversationSupplier.shared.delete(channel: tchConversation)
                     } catch {
                         logDebug(error)
                     }
