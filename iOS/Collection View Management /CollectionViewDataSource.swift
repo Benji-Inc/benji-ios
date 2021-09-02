@@ -65,21 +65,21 @@ extension CollectionViewDataSource {
 
     // MARK: - Standard DataSource Functions
 
-    func apply(_ snapshot: NSDiffableDataSourceSnapshot<SectionType, ItemType>, animatingDifferences: Bool = true) {
+    func apply(_ snapshot: SnapshotType, animatingDifferences: Bool = true) {
         self.diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: nil)
     }
 
-    func apply(_ snapshot: NSDiffableDataSourceSnapshot<SectionType, ItemType>,
+    func apply(_ snapshot: SnapshotType,
                animatingDifferences: Bool = true) async {
 
         await self.diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 
-    func applySnapshotUsingReloadData(_ snapshot: NSDiffableDataSourceSnapshot<SectionType, ItemType>) async {
+    func applySnapshotUsingReloadData(_ snapshot: SnapshotType) async {
         await self.diffableDataSource.applySnapshotUsingReloadData(snapshot)
     }
 
-    func snapshot() -> NSDiffableDataSourceSnapshot<SectionType, ItemType> {
+    func snapshot() -> SnapshotType {
         return self.diffableDataSource.snapshot()
     }
 
@@ -319,7 +319,7 @@ extension CollectionViewDataSource {
 extension CollectionViewDataSource {
 
     /// Animates the first part of the animation cycle, applies the snapshot, then finishes the animation cycle.
-    func apply(_ snapshot: NSDiffableDataSourceSnapshot<SectionType, ItemType>,
+    func apply(_ snapshot: SnapshotType,
                collectionView: UICollectionView,
                animationCycle: AnimationCycle,
                animatingDifferences: Bool = false) async {
