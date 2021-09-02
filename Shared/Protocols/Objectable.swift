@@ -17,7 +17,7 @@ enum ContainerName {
     var name: String {
         switch self {
         case .conversation(let identifier):
-            return "conversation\(identifier)"
+            return "channel\(identifier)"
         case .favorites:
             return "favorites"
         }
