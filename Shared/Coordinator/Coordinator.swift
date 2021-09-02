@@ -60,7 +60,7 @@ class Coordinator<Result>: NSObject, CoordinatorType {
         // If we already have a child coordinator, log a warning. While this isn't ideal, it helps
         // prevent apps from getting locked up due to a coordinator not finishing or being presented
         // properly.
-        if self.childCoordinator.isNil {
+        if !self.childCoordinator.isNil {
             let warning = """
                     WARNING!!!!! ATTEMPTING TO ADD CHILD COORDINATOR \(coordinator) \
                     TO COORDINATOR \(self) THAT ALREADY HAS ONE \(self.childCoordinator!)
