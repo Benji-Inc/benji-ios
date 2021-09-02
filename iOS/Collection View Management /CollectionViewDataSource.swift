@@ -66,7 +66,6 @@ extension CollectionViewDataSource {
     // MARK: - Standard DataSource Functions
 
     func apply(_ snapshot: NSDiffableDataSourceSnapshot<SectionType, ItemType>, animatingDifferences: Bool = true) {
-
         self.diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: nil)
     }
 
