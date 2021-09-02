@@ -13,12 +13,12 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
 
     enum SectionType: Int, CaseIterable {
         case notices
-        case channels
+        case conversations
     }
 
     enum ItemType: Hashable {
         case notice(SystemNotice)
-        case channel(DisplayableChannel)
+        case conversation(DisplayableConversation)
     }
 
     var unclaimedCount: Int = 0
@@ -27,7 +27,7 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
     private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
     private let connectionConfig = ManageableCellRegistration<ConnectionRequestCell>().provider
     private let alertConfig = ManageableCellRegistration<AlertCell>().provider
-    private let channelConfig = ManageableCellRegistration<ChannelCell>().provider
+    private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider
     private let footerConfig = ManageableFooterRegistration<ReservationsFooterView>().provider
     private let headerConfig = ManageableHeaderRegistration<UserHeaderView>().provider
 
@@ -41,8 +41,8 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
         switch item {
         case .notice(let notice):
             return self.getNoticeCell(with: collectionView, indexPath: indexPath, notice: notice)
-        case .channel(let channel):
-            return self.getChannelCell(with: collectionView, indexPath: indexPath, channel: channel)
+        case .conversation(let conversation):
+            return self.getConversationCell(with: collectionView, indexPath: indexPath, conversation: conversation)
         }
     }
 
@@ -76,13 +76,13 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
         }
     }
 
-    private func getChannelCell(with collectionView: UICollectionView,
+    private func getConversationCell(with collectionView: UICollectionView,
                                 indexPath: IndexPath,
-                                channel: DisplayableChannel) -> CollectionViewManagerCell? {
+                                conversation: DisplayableConversation) -> CollectionViewManagerCell? {
         
-        return collectionView.dequeueConfiguredReusableCell(using: self.channelConfig,
+        return collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
                                                             for: indexPath,
-                                                            item: channel)
+                                                            item: conversation)
     }
 
     private func getSupplementaryView(for collectionView: UICollectionView,
@@ -96,7 +96,7 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
             let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
             return header
         case UICollectionView.elementKindSectionFooter:
-            guard section == .channels else { return nil }
+            guard section == .conversations else { return nil }
 
             let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
             footer.configure(with: self.unclaimedCount)

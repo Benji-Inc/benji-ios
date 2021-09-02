@@ -19,8 +19,8 @@ class MessageDeliveryManager {
               attributes: [String: Any],
               systemMessageHandler: ((SystemMessage) -> Void)?) async throws -> SystemMessage {
 
-        guard let channelDisplayable = ChannelSupplier.shared.activeChannel else {
-            throw ClientError.message(detail: "No active channel found.")
+        guard let conversationDisplayable = ConversationSupplier.shared.activeConversation else {
+            throw ClientError.message(detail: "No active conversation found.")
         }
 
         guard let current = User.current(), let objectId = current.objectId else {
@@ -42,9 +42,9 @@ class MessageDeliveryManager {
                                           attributes: mutableAttributes)
         systemMessageHandler?(systemMessage)
 
-        if case .channel(let channel) = channelDisplayable.channelType {
+        if case .conversation(let conversation) = conversationDisplayable.conversationType {
             do {
-                try await self.sendMessage(to: channel,
+                try await self.sendMessage(to: conversation,
                                            context: object.context,
                                            kind: object.kind,
                                            attributes: mutableAttributes)
@@ -57,19 +57,19 @@ class MessageDeliveryManager {
     }
 
     func resend(message: Messageable, systemMessageHandler: ((SystemMessage) -> Void)?) async throws -> SystemMessage {
-        guard let channelDisplayable = ChannelSupplier.shared.activeChannel else {
-            throw ClientError.message(detail: "No active channel found.")
+        guard let conversationDisplayable = ConversationSupplier.shared.activeConversation else {
+            throw ClientError.message(detail: "No active conversation found.")
         }
 
-        guard case .channel(let channel) = channelDisplayable.channelType else {
-            throw ClientError.message(detail: "No active channel found.")
+        guard case .conversation(let conversation) = conversationDisplayable.conversationType else {
+            throw ClientError.message(detail: "No active conversation found.")
         }
 
         let systemMessage = SystemMessage(with: message)
         systemMessageHandler?(systemMessage)
         
         let attributes = message.attributes ?? [:]
-        try await self.sendMessage(to: channel,
+        try await self.sendMessage(to: conversation,
                                    context: message.context,
                                    kind: message.kind,
                                    attributes: attributes)
@@ -80,7 +80,7 @@ class MessageDeliveryManager {
     //MARK: MESSAGE HELPERS
 
     @discardableResult
-    private func sendMessage(to channel: TCHChannel,
+    private func sendMessage(to conversation: TCHChannel,
                              context: MessageContext = .passive,
                              kind: MessageKind,
                              attributes: [String : Any] = [:]) async throws -> Messageable {
@@ -89,11 +89,11 @@ class MessageDeliveryManager {
             throw ClientError.message(detail: "Chat service is disconnected.")
         }
 
-        if channel.status != .joined {
-            throw ClientError.message(detail: "You are not a channel member.")
+        if conversation.status != .joined {
+            throw ClientError.message(detail: "You are not a conversation member.")
         }
 
-        let messagesObject = channel.messages!
+        let messagesObject = conversation.messages!
         var mutableAttributes = attributes
         mutableAttributes["context"] = context.rawValue
 
@@ -102,7 +102,7 @@ class MessageDeliveryManager {
         let message: Messageable = try await withCheckedThrowingContinuation { continuation in
             messagesObject.sendMessage(with: options, completion: { (result, message) in
                 if result.isSuccessful(), let msg = message {
-                    self.donateIntent(for: msg, channel: channel)
+                    self.donateIntent(for: msg, conversation: conversation)
                     continuation.resume(returning: msg)
                 } else if let e = result.error {
                     continuation.resume(throwing: e)
@@ -115,7 +115,7 @@ class MessageDeliveryManager {
         return message
     }
 
-    private func donateIntent(for message: Messageable, channel: TCHChannel) {
+    private func donateIntent(for message: Messageable, conversation: TCHChannel) {
         let incomingMessageIntent: INSendMessageIntent = INSendMessageIntent(recipients: nil, outgoingMessageType: .outgoingMessageText, content: nil, speakableGroupName: nil, conversationIdentifier: nil, serviceName: nil, sender: nil, attachments: [])
         let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
         interaction.direction = .outgoing

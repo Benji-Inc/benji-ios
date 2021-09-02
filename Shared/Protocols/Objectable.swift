@@ -11,13 +11,13 @@ import Parse
 import Combine
 
 enum ContainerName {
-    case channel(identifier: String)
+    case conversation(identifier: String)
     case favorites
 
     var name: String {
         switch self {
-        case .channel(let identifier):
-            return "channel\(identifier)"
+        case .conversation(let identifier):
+            return "conversation\(identifier)"
         case .favorites:
             return "favorites"
         }

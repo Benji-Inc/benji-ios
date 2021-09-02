@@ -12,8 +12,8 @@ enum DeepLinkTarget : String, CaseIterable {
     
     case home
     case login
-    case channel
-    case channels
+    case conversation
+    case conversations
     case reservation
 
     func diffIdentifier() -> NSObjectProtocol {

@@ -46,26 +46,26 @@ class HomeCoordinator: PresentableCoordinator<Void> {
             break
         case .login:
             break
-        case .channel:
-            if let channelId = deeplink.customMetadata["channelId"] as? String,
-               let channel = ChannelSupplier.shared.getChannel(withSID: channelId) {
-                self.startChannelFlow(for: channel.channelType)
+        case .conversation:
+            if let conversationId = deeplink.customMetadata["conversationId"] as? String,
+               let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) {
+                self.startConversationFlow(for: conversation.conversationType)
             } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
                 Task {
                     do {
                         let connection = try await Connection.getObject(with: connectionId)
-                        guard let channelId = connection.channelId,
-                              let channel = ChannelSupplier.shared.getChannel(withSID: channelId) else {
+                        guard let conversationId = connection.conversationId,
+                              let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) else {
                                   return
                               }
 
-                        self.startChannelFlow(for: channel.channelType)
+                        self.startConversationFlow(for: conversation.conversationType)
                     } catch {
                         logDebug(error)
                     }
                 }
             }
-        case .channels:
+        case .conversations:
             break
         }
     }
@@ -73,8 +73,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     private func handle(notice: SystemNotice) {
         switch notice.type {
         case .alert:
-            guard let channelId = notice.attributes?["channelId"] as? String, let channel = ChannelSupplier.shared.getChannel(withSID: channelId) else { return }
-            self.startChannelFlow(for: channel.channelType)
+            guard let conversationId = notice.attributes?["conversationId"] as? String, let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) else { return }
+            self.startConversationFlow(for: conversation.conversationType)
 
         case .connectionRequest:
             break
@@ -87,13 +87,13 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-    func startChannelFlow(for type: ChannelType?) {
+    func startConversationFlow(for type: ConversationType?) {
         self.removeChild()
-        var channel: DisplayableChannel?
+        var conversation: DisplayableConversation?
         if let t = type {
-            channel = DisplayableChannel(channelType: t)
+            conversation = DisplayableConversation(conversationType: t)
         }
-        let coordinator = ChannelCoordinator(router: self.router, deepLink: self.deepLink, channel: channel)
+        let coordinator = ConversationCoordinator(router: self.router, deepLink: self.deepLink, conversation: conversation)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 self.finishFlow(with: ())
@@ -149,11 +149,11 @@ extension HomeCoordinator: HomeViewControllerDelegate {
 
     func didTapAdd() {
         self.removeChild()
-        let coordinator = NewChannelCoordinator(router: self.router, deepLink: self.deepLink)
+        let coordinator = NewConversationCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { result in
             coordinator.toPresentable().dismiss(animated: true) {
                 if result {
-                    self.startChannelFlow(for: nil)
+                    self.startConversationFlow(for: nil)
                 }
             }
         }
@@ -178,8 +178,8 @@ extension HomeCoordinator: HomeViewControllerDelegate {
             switch item {
             case .notice(let notice):
                 self.handle(notice: notice)
-            case .channel(let channel):
-                self.startChannelFlow(for: channel.channelType)
+            case .conversation(let conversation):
+                self.startConversationFlow(for: conversation.conversationType)
             }
         }
     }

@@ -1,5 +1,5 @@
 //
-//  ChannelManager.swift
+//  ConversationManager.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 1/29/19.
@@ -18,10 +18,10 @@ class ChatClientManager: NSObject {
 
     @Published var clientSyncUpdate: TCHClientSynchronizationStatus? = nil
     @Published var clientUpdate: ChatClientUpdate? = nil
-    @Published var channelSyncUpdate: ChannelSyncUpdate? = nil
-    @Published var channelsUpdate: ChannelUpdate? = nil
+    @Published var conversationSyncUpdate: ConversationSyncUpdate? = nil
+    @Published var conversationsUpdate: ConversationUpdate? = nil
     @Published var messageUpdate: MessageUpdate? = nil
-    @Published var memberUpdate: ChannelMemberUpdate? = nil
+    @Published var memberUpdate: ConversationMemberUpdate? = nil
 
     var isSynced: Bool {
         guard let client = self.client else { return false }
@@ -38,8 +38,8 @@ class ChatClientManager: NSObject {
     }
 
     func initialize(token: String) async throws {
-        // Initialize the ChannelSupplier so it can listen to the client updates.
-        _ = ChannelSupplier.shared
+        // Initialize the ConversationSupplier so it can listen to the client updates.
+        _ = ConversationSupplier.shared
 
         let result: Void = try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Void, Error>) in
             TwilioChatClient.chatClient(withToken: token,

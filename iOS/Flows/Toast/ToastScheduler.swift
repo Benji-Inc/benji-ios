@@ -42,9 +42,9 @@ class ToastScheduler {
                                      title: title,
                                      description: description,
                                      deepLink: deepLink)
-        case .newMessage(let msg, let channel):
+        case .newMessage(let msg, let conversation):
             Task {
-                await self.createMessageToast(for: msg, channel: channel)
+                await self.createMessageToast(for: msg, conversation: conversation)
             }
         }
     }
@@ -84,7 +84,7 @@ class ToastScheduler {
         ToastQueue.shared.add(toast: toast)
     }
 
-    private func createMessageToast(for message: TCHMessage, channel: TCHChannel) async {
+    private func createMessageToast(for message: TCHMessage, conversation: TCHChannel) async {
         guard let user = try? await message.getAuthorAsUser() else { return }
 
         guard let body = message.body, !body.isEmpty else { return }
@@ -94,12 +94,12 @@ class ToastScheduler {
                           title: user.fullName,
                           description: body,
                           displayable: user,
-                          deeplink: DeepLinkObject(target: .channel),
+                          deeplink: DeepLinkObject(target: .conversation),
                           didTap: { [unowned self] in
 
-            let deeplink = DeepLinkObject(target: .channel)
-            deeplink.customMetadata["channelId"] = channel.sid
-            self.delegate?.didInteractWith(type: .newMessage(message, channel), deeplink: deeplink)
+            let deeplink = DeepLinkObject(target: .conversation)
+            deeplink.customMetadata["conversationId"] = conversation.sid
+            self.delegate?.didInteractWith(type: .newMessage(message, conversation), deeplink: deeplink)
         })
 
         ToastQueue.shared.add(toast: toast)
