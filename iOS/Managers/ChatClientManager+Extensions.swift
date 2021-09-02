@@ -54,6 +54,7 @@ struct MessageUpdate {
 }
 
 struct ConversationMemberUpdate {
+    
     var conversation: TCHChannel
     var member: TCHMember
     var status: Status

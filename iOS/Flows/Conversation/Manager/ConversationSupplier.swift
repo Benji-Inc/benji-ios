@@ -56,7 +56,7 @@ class ConversationSupplier {
 
     private var subscribedConversations: [DisplayableConversation] {
         get {
-            guard let client = ChatClientManager.shared.client, let conversations = client.conversationsList() else { return [] }
+            guard let client = ChatClientManager.shared.client, let conversations = client.channelsList() else { return [] }
             return conversations.subscribedChannels().map { (conversation) -> DisplayableConversation in
                 return DisplayableConversation.init(conversationType: .conversation(conversation))
             }

@@ -25,7 +25,7 @@ class ChatClientManager: NSObject {
 
     var isSynced: Bool {
         guard let client = self.client else { return false }
-        if client.synchronizationStatus == .completed || client.synchronizationStatus == .conversationsListCompleted {
+        if client.synchronizationStatus == .completed || client.synchronizationStatus == .channelsListCompleted {
             return true
         }
 

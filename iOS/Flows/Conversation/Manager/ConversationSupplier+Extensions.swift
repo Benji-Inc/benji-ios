@@ -14,11 +14,11 @@ extension ConversationSupplier {
 
     func find(conversationId: String) async throws -> TCHChannel {
         let conversation: TCHChannel = try await withCheckedThrowingContinuation { continuation in
-            guard let conversations = ChatClientManager.shared.client?.conversationsList() else {
+            guard let conversations = ChatClientManager.shared.client?.channelsList() else {
                 return continuation.resume(throwing: ClientError.message(detail: "No conversations were found."))
             }
 
-            conversations.conversation(withSidOrUniqueName: conversationId) { (result, conversation) in
+            conversations.channel(withSidOrUniqueName: conversationId) { (result, conversation) in
                 if let strongConversation = conversation, result.isSuccessful() {
                     continuation.resume(returning: strongConversation)
                 } else if let error = result.error {
