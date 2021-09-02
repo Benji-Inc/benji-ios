@@ -127,7 +127,7 @@ extension ChatClientManager: TwilioChatClientDelegate {
         self.conversationsUpdate = ConversationUpdate(conversation: conversation, status: .deleted)
     }
 
-    func chatClient(_ client: TwilioChatClient, conversation: TCHChannel, synchronizationStatusUpdated status: TCHChannelSynchronizationStatus) {
+    func chatClient(_ client: TwilioChatClient, channel conversation: TCHChannel, synchronizationStatusUpdated status: TCHChannelSynchronizationStatus) {
         self.conversationSyncUpdate = ConversationSyncUpdate(conversation: conversation, status: status)
     }
 
