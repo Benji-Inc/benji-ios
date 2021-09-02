@@ -173,7 +173,7 @@
 		D63DB24B25E9993F00F6B323 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896BE2302683C0059BA75 /* PhotoViewController.swift */; };
 		D63DB24C25E9994400F6B323 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67A82DA230CCE3D0076152B /* SplashViewController.swift */; };
 		D63DB24D25E9994B00F6B323 /* Completeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A0B932351821200A0FFEA /* Completeable.swift */; };
-		D63DB24E25E9994B00F6B323 /* Typealies.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65519F22589591D00B901E4 /* Typealies.swift */; };
+		D63DB24E25E9994B00F6B323 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65519F22589591D00B901E4 /* Typealias.swift */; };
 		D63DB24F25E9994B00F6B323 /* Delegated.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AC90C92594F8F80032774D /* Delegated.swift */; };
 		D63DB25025E9995100F6B323 /* LaunchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66379C725A3704300A4A3B7 /* LaunchManager.swift */; };
 		D63DB25125E9995100F6B323 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */; };
@@ -369,8 +369,8 @@
 		D65519C725891B1D00B901E4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0C121D3071400204BEE /* ViewController.swift */; };
 		D65519CA258923E800B901E4 /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896B322FF75640059BA75 /* OnboardingCoordinator.swift */; };
 		D65519EF2589582C00B901E4 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E521D30EB300204BEE /* View.swift */; };
-		D65519F32589591D00B901E4 /* Typealies.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65519F22589591D00B901E4 /* Typealies.swift */; };
-		D65519F42589591D00B901E4 /* Typealies.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65519F22589591D00B901E4 /* Typealies.swift */; };
+		D65519F32589591D00B901E4 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65519F22589591D00B901E4 /* Typealias.swift */; };
+		D65519F42589591D00B901E4 /* Typealias.swift in Sources */ = {isa = PBXBuildFile; fileRef = D65519F22589591D00B901E4 /* Typealias.swift */; };
 		D65519FC258959CC00B901E4 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D65519FF25895A0800B901E4 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
 		D6551A1025895C0700B901E4 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E121D30E6000204BEE /* Label.swift */; };
@@ -934,7 +934,7 @@
 		D650C1F025B741EB0037C59A /* plusToX.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = plusToX.json; sourceTree = "<group>"; };
 		D650C20F25B7D6F20037C59A /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		D65519F22589591D00B901E4 /* Typealies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealies.swift; sourceTree = "<group>"; };
+		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D657175D2378CEBA00F8F96C /* ConversationCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCollectionViewManager.swift; sourceTree = "<group>"; };
 		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
@@ -1830,7 +1830,7 @@
 			isa = PBXGroup;
 			children = (
 				D66A0B932351821200A0FFEA /* Completeable.swift */,
-				D65519F22589591D00B901E4 /* Typealies.swift */,
+				D65519F22589591D00B901E4 /* Typealias.swift */,
 				D6AC90C92594F8F80032774D /* Delegated.swift */,
 				D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */,
 				D6AD7998266E870200ED7A93 /* MIMEType.swift */,
@@ -2680,7 +2680,7 @@
 				D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */,
 				D6F312A0266ADDA600E25FEE /* LinkView.swift in Sources */,
 				D650C1DA25B5EE3D0037C59A /* AvatarContextDelegate.swift in Sources */,
-				D65519F32589591D00B901E4 /* Typealies.swift in Sources */,
+				D65519F32589591D00B901E4 /* Typealias.swift in Sources */,
 				D64A8F46259008B2002948E1 /* ConversationSupplier+Extensions.swift in Sources */,
 				D6F37D6025B5D8610034C9C5 /* AvatarProfileViewController.swift in Sources */,
 				D61592DE24FAD7C600B63412 /* AttachmentHeaderView.swift in Sources */,
@@ -3001,7 +3001,7 @@
 				D63DB22C25E9991800F6B323 /* PFInstallation+Extensions.swift in Sources */,
 				D63DB25A25E9995E00F6B323 /* User+Objectable.swift in Sources */,
 				D6F312A2266ADDA600E25FEE /* LinkView.swift in Sources */,
-				D63DB24E25E9994B00F6B323 /* Typealies.swift in Sources */,
+				D63DB24E25E9994B00F6B323 /* Typealias.swift in Sources */,
 				D63DB23A25E9992600F6B323 /* UIScrollView+Extensions.swift in Sources */,
 				D63DB23025E9991F00F6B323 /* String+Extensions.swift in Sources */,
 				D63DB24F25E9994B00F6B323 /* Delegated.swift in Sources */,
@@ -3126,7 +3126,7 @@
 				D677589C25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
 				D6DA3193259B5B6D0078E769 /* Config.swift in Sources */,
 				D65519562589125E00B901E4 /* ClientError.swift in Sources */,
-				D65519F42589591D00B901E4 /* Typealies.swift in Sources */,
+				D65519F42589591D00B901E4 /* Typealias.swift in Sources */,
 				D65519622589127A00B901E4 /* PushPayload.swift in Sources */,
 				D6551A4125895E9500B901E4 /* TextInputViewController.swift in Sources */,
 				D655195D2589126800B901E4 /* User.swift in Sources */,
