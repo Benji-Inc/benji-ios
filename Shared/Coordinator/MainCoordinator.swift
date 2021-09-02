@@ -154,7 +154,7 @@ class MainCoordinator: Coordinator<Void> {
         guard let string = deeplink.customMetadata["target"] as? String,
               let target = DeepLinkTarget(rawValue: string)  else { return }
         switch target {
-        case .home, .channel, .channels:
+        case .home, .conversation, .conversations:
             if let user = User.current(), user.isAuthenticated {
 #if !APPCLIP && !NOTIFICATION
                 // Code you don't want to use in your App Clip.

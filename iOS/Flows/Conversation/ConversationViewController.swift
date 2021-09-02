@@ -15,29 +15,29 @@ typealias ConversationViewControllerDelegates = ConversationDetailViewController
 
 @MainActor
 protocol ConversationViewControllerDelegate: AnyObject {
-    func channelView(_ controller: ConversationViewController, didTapShare message: Messageable)
+    func conversationView(_ controller: ConversationViewController, didTapShare message: Messageable)
 }
 
 class ConversationViewController: FullScreenViewController, ActiveConversationAccessor, CollectionViewInputHandler {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     lazy var detailVC = ConversationDetailViewController(delegate: self.delegate)
-    lazy var channelCollectionView = ConversationCollectionView()
-    lazy var collectionViewManager = ConversationCollectionViewManager(with: self.channelCollectionView)
+    lazy var conversationCollectionView = ConversationCollectionView()
+    lazy var collectionViewManager = ConversationCollectionViewManager(with: self.conversationCollectionView)
 
     unowned let delegate: ConversationViewControllerDelegates
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
-            self.channelCollectionView.contentInset.bottom = self.collectionViewBottomInset
-            self.channelCollectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
+            self.conversationCollectionView.contentInset.bottom = self.collectionViewBottomInset
+            self.conversationCollectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
         }
     }
 
     var indexPathForEditing: IndexPath?
 
     var collectionView: CollectionView {
-        return self.channelCollectionView
+        return self.conversationCollectionView
     }
 
     var inputTextView: InputTextView {
@@ -75,12 +75,12 @@ class ConversationViewController: FullScreenViewController, ActiveConversationAc
         super.initializeViews()
 
         self.view.addSubview(self.blurView)
-        self.view.addSubview(self.channelCollectionView)
+        self.view.addSubview(self.conversationCollectionView)
 
         self.addChild(viewController: self.detailVC, toView: self.view)
 
-        self.channelCollectionView.dataSource = self.collectionViewManager
-        self.channelCollectionView.delegate = self.collectionViewManager
+        self.conversationCollectionView.dataSource = self.collectionViewManager
+        self.conversationCollectionView.delegate = self.collectionViewManager
 
         self.setupHandlers()
         self.subscribeToUpdates()
@@ -102,7 +102,7 @@ class ConversationViewController: FullScreenViewController, ActiveConversationAc
         }.store(in: &self.cancellables)
 
         self.collectionViewManager.didTapShare = { [unowned self] message in
-            self.delegate.channelView(self, didTapShare: message)
+            self.delegate.conversationView(self, didTapShare: message)
         }
 
         self.collectionViewManager.didTapResend = { [unowned self] message in
@@ -116,14 +116,14 @@ class ConversationViewController: FullScreenViewController, ActiveConversationAc
             self.messageInputAccessoryView.edit(message: message)
         }
 
-        self.channelCollectionView.onDoubleTap { [unowned self] (doubleTap) in
+        self.conversationCollectionView.onDoubleTap { [unowned self] (doubleTap) in
             if self.messageInputAccessoryView.textView.isFirstResponder {
                 self.messageInputAccessoryView.textView.resignFirstResponder()
             }
         }
 
-        ConversationSupplier.shared.$activeConversation.mainSink { [unowned self] (channel) in
-            guard let activeConversation = channel else {
+        ConversationSupplier.shared.$activeConversation.mainSink { [unowned self] (conversation) in
+            guard let activeConversation = conversation else {
                 self.collectionViewManager.reset()
                 return
             }
@@ -155,7 +155,7 @@ class ConversationViewController: FullScreenViewController, ActiveConversationAc
 
     func setupDetailAnimator() {
         self.detailVC.createAnimator()
-        self.channelCollectionView.publisher(for: \.contentOffset)
+        self.conversationCollectionView.publisher(for: \.contentOffset)
             .mainSink { (contentOffset) in
                 self.detailVC.animator.fractionComplete = self.getDetailProgress()
                 self.view.layoutNow()
@@ -171,14 +171,14 @@ class ConversationViewController: FullScreenViewController, ActiveConversationAc
         self.detailVC.view.pin(.top)
         self.detailVC.view.centerOnX()
 
-        self.channelCollectionView.expandToSuperviewSize()
+        self.conversationCollectionView.expandToSuperviewSize()
     }
 
     private func getDetailProgress() -> CGFloat {
         guard !KeyboardManger.shared.isKeyboardShowing else { return 0 }
 
         let threshold = ConversationDetailViewController.State.expanded.rawValue
-        let offset = self.channelCollectionView.contentOffset.y + self.channelCollectionView.contentInset.top
+        let offset = self.conversationCollectionView.contentOffset.y + self.conversationCollectionView.contentInset.top
 
         guard offset < threshold else { return 0 }
 

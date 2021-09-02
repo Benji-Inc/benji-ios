@@ -14,7 +14,7 @@ import Combine
 
 class ConversationCoordinator: PresentableCoordinator<Void> {
 
-    lazy var channelVC = ConversationViewController(delegate: self)
+    lazy var conversationVC = ConversationViewController(delegate: self)
     private lazy var cameraVC = ImagePickerViewController()
     private lazy var imagePickerVC: PHPickerViewController = {
         var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
@@ -27,9 +27,9 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
 
     init(router: Router,
          deepLink: DeepLinkable?,
-         channel: DisplayableConversation?) {
+         conversation: DisplayableConversation?) {
 
-        if let c = channel {
+        if let c = conversation {
             ConversationSupplier.shared.set(activeConversation: c)
         }
 
@@ -37,7 +37,7 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
     }
 
     override func toPresentable() -> DismissableVC {
-        return self.channelVC
+        return self.conversationVC
     }
 
     override func start() {
@@ -60,14 +60,14 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
 
 extension ConversationCoordinator: ConversationDetailViewControllerDelegate {
 
-    func channelDetailViewControllerDidTapMenu(_ view: ConversationDetailViewController) {
-        //Present channel menu
+    func conversationDetailViewControllerDidTapMenu(_ view: ConversationDetailViewController) {
+        //Present conversation menu
     }
 }
 
 extension ConversationCoordinator: ConversationViewControllerDelegate {
 
-    func channelView(_ controller: ConversationViewController, didTapShare message: Messageable) {
+    func conversationView(_ controller: ConversationViewController, didTapShare message: Messageable) {
         var items: [Any] = []
         switch message.kind {
         case .text(let text):
@@ -105,16 +105,16 @@ extension ConversationCoordinator: UIImagePickerControllerDelegate, UINavigation
 
         alert.addAction(ok)
 
-        self.channelVC.present(alert, animated: true, completion: nil)
+        self.conversationVC.present(alert, animated: true, completion: nil)
 //        guard self.router.topmostViewController != self.cameraVC, !self.cameraVC.isBeingPresented else { return }
 //
 //        self.cameraVC.sourceType = .camera
 ////        self.cameraVC.dismissHandlers.append { [unowned self] in
 ////            UIView.animate(withDuration: 0.2) {
-////                self.channelVC.messageInputAccessoryView.alpha = 1.0
+////                self.conversationVC.messageInputAccessoryView.alpha = 1.0
 ////            }
 ////        }
-//        self.channelVC.present(self.cameraVC, animated: true, completion: nil)
+//        self.conversationVC.present(self.cameraVC, animated: true, completion: nil)
     }
 
     func imagePickerController(_ picker: UIImagePickerController,
@@ -132,15 +132,15 @@ extension ConversationCoordinator: UIImagePickerControllerDelegate, UINavigation
 //        }
 //
 //        let attachment = Attachment(asset: asset)
-//        self.channelVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
-//        self.channelVC.messageInputAccessoryView.updateInputType()
+//        self.conversationVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
+//        self.conversationVC.messageInputAccessoryView.updateInputType()
     }
 
     private func presentPicker() {
         guard self.router.topmostViewController != self.imagePickerVC, !self.imagePickerVC.isBeingPresented else { return }
 
         self.imagePickerVC.delegate = self
-        self.channelVC.present(self.imagePickerVC, animated: true, completion: nil)
+        self.conversationVC.present(self.imagePickerVC, animated: true, completion: nil)
     }
 
     nonisolated func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
@@ -149,8 +149,8 @@ extension ConversationCoordinator: UIImagePickerControllerDelegate, UINavigation
             let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
             if let asset = fetchResult.firstObject {
                 let attachment = Attachment(asset: asset)
-                self.channelVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
-                self.channelVC.messageInputAccessoryView.updateInputType()
+                self.conversationVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
+                self.conversationVC.messageInputAccessoryView.updateInputType()
             }
 
             self.imagePickerVC.dismiss(animated: true, completion: nil)

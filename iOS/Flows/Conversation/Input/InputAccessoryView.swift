@@ -61,11 +61,11 @@ class InputAccessoryView: SwipeableInputAccessoryView, ActiveConversationAccesso
     override func handleTextChange(_ text: String) {
         super.handleTextChange(text)
 
-        guard let channelDisplayable = self.activeConversation,
+        guard let conversationDisplayable = self.activeConversation,
             text.count > 0,
-            case ConversationType.channel(let channel) = channelDisplayable.channelType else { return }
+            case ConversationType.conversation(let conversation) = conversationDisplayable.conversationType else { return }
         // Twilio throttles this call to every 5 seconds
-        channel.typing()
+        conversation.typing()
     }
 
     override func updateInputType() {

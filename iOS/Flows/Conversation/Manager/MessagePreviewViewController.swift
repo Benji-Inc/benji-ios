@@ -12,14 +12,14 @@ class MessagePreviewViewController: ViewController {
 
     let message: Messageable
     let messageTextView = MessageTextView()
-    let channelAttributes: ConversationCollectionViewLayoutAttributes
+    let conversationAttributes: ConversationCollectionViewLayoutAttributes
     let bubbleView = View()
 
     init(with message: Messageable,
          attributes: ConversationCollectionViewLayoutAttributes) {
 
         self.message = message
-        self.channelAttributes = attributes
+        self.conversationAttributes = attributes
         super.init()
     }
 
@@ -33,7 +33,7 @@ class MessagePreviewViewController: ViewController {
 
     override var preferredContentSize: CGSize {
         get {
-            return self.channelAttributes.attributes.bubbleViewFrame.size
+            return self.conversationAttributes.attributes.bubbleViewFrame.size
         }
         set {
             self.preferredContentSize = .zero 
@@ -47,7 +47,7 @@ class MessagePreviewViewController: ViewController {
         if case MessageKind.text(let text) = self.message.kind {
             self.messageTextView.set(text: text, messageContext: self.message.context)
         }
-        self.messageTextView.size = self.channelAttributes.attributes.textViewFrame.size
+        self.messageTextView.size = self.conversationAttributes.attributes.textViewFrame.size
 
     }
 

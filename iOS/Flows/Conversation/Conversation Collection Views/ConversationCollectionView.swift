@@ -10,7 +10,7 @@ import Foundation
 
 class ConversationCollectionView: CollectionView {
 
-    var channelLayout: ConversationCollectionViewFlowLayout {
+    var conversationLayout: ConversationCollectionViewFlowLayout {
         guard let layout = collectionViewLayout as? ConversationCollectionViewFlowLayout else {
             fatalError("ConversationCollectionViewFlowLayout NOT FOUND")
         }
@@ -18,7 +18,7 @@ class ConversationCollectionView: CollectionView {
     }
 
     var isTypingIndicatorHidden: Bool {
-        return self.channelLayout.isTypingIndicatorViewHidden
+        return self.conversationLayout.isTypingIndicatorViewHidden
     }
 
     init() {

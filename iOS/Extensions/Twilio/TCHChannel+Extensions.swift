@@ -53,11 +53,11 @@ extension TCHChannel {
         }
         let users = try await User.localThenNetworkArrayQuery(where: identifiers,
                                                                    isEqual: true,
-                                                                   container: .channel(identifier: self.sid!))
+                                                                   container: .conversation(identifier: self.sid!))
         return users
     }
 
-    var channelDescription: String {
+    var conversationDescription: String {
         guard let attributes = self.attributes(),
               let text = attributes.dictionary?[ConversationKey.description.rawValue] as? String else { return String() }
         return text
@@ -71,7 +71,7 @@ extension TCHChannel {
                 } else if let e = result.error {
                     continuation.resume(throwing: e)
                 } else {
-                    continuation.resume(throwing: ClientError.apiError(detail: "Failed to join channel"))
+                    continuation.resume(throwing: ClientError.apiError(detail: "Failed to join conversation"))
                 }
             }
         }

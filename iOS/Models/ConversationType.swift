@@ -13,15 +13,15 @@ import TMROLocalization
 enum ConversationType: Hashable {
 
     case system(SystemConversation)
-    case channel(TCHChannel)
+    case conversation(TCHChannel)
     case pending(String)
 
     var uniqueName: String {
         switch self {
-        case .system(let channel):
-            return channel.uniqueName
-        case .channel(let channel):
-            return String(optional: channel.friendlyName)
+        case .system(let conversation):
+            return conversation.uniqueName
+        case .conversation(let conversation):
+            return String(optional: conversation.friendlyName)
         case .pending(let uniqueName):
             return uniqueName
         }
@@ -29,10 +29,10 @@ enum ConversationType: Hashable {
 
     var displayName: String {
         switch self {
-        case .system(let channel):
-            return channel.displayName
-        case .channel(let channel):
-            return String(optional: channel.friendlyName)
+        case .system(let conversation):
+            return conversation.displayName
+        case .conversation(let conversation):
+            return String(optional: conversation.friendlyName)
         case .pending(_):
             return String()
         }
@@ -42,8 +42,8 @@ enum ConversationType: Hashable {
         switch self {
         case .system(let systemMessage):
             return systemMessage.timeStampAsDate
-        case .channel(let channel):
-            return channel.dateUpdatedAsDate ?? Date.distantPast
+        case .conversation(let conversation):
+            return conversation.dateUpdatedAsDate ?? Date.distantPast
         case .pending(_):
             return Date()
         }
@@ -53,8 +53,8 @@ enum ConversationType: Hashable {
         switch self {
         case .system(let systemMessage):
             return systemMessage.id
-        case .channel(let channel):
-            return channel.id
+        case .conversation(let conversation):
+            return conversation.id
         case .pending(let uniqueName):
             return uniqueName
         }
@@ -64,8 +64,8 @@ enum ConversationType: Hashable {
         switch self {
         case .system(_):
             return true
-        case .channel(let channel):
-            return channel.createdBy == User.current()?.objectId
+        case .conversation(let conversation):
+            return conversation.createdBy == User.current()?.objectId
         case .pending(_):
             return true 
         }

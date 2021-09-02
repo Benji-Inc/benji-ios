@@ -48,7 +48,7 @@ class HomeCollectionViewLayout: UICollectionViewCompositionalLayout {
                 section.boundarySupplementaryItems = [header]
 
                 return section
-            case .channels:
+            case .conversations:
                 let widthFraction: CGFloat = 0.5
                 let heightFraction: CGFloat = 0.45
 

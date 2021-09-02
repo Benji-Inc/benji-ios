@@ -13,7 +13,7 @@ class ConversationSectionable {
 
     var date: Date
     var items: [Messageable] = []
-    var channelType: ConversationType?
+    var conversationType: ConversationType?
 
     var firstMessageIndex: Int? {
         guard let message = self.items.first as? TCHMessage else { return nil }
@@ -22,10 +22,10 @@ class ConversationSectionable {
 
     init(date: Date,
          items: [Messageable],
-         channelType: ConversationType? = nil) {
+         conversationType: ConversationType? = nil) {
 
         self.date = date
         self.items = items
-        self.channelType = channelType
+        self.conversationType = conversationType
     }
 }

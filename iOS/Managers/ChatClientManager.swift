@@ -18,14 +18,14 @@ class ChatClientManager: NSObject {
 
     @Published var clientSyncUpdate: TCHClientSynchronizationStatus? = nil
     @Published var clientUpdate: ChatClientUpdate? = nil
-    @Published var channelSyncUpdate: ConversationSyncUpdate? = nil
-    @Published var channelsUpdate: ConversationUpdate? = nil
+    @Published var conversationSyncUpdate: ConversationSyncUpdate? = nil
+    @Published var conversationsUpdate: ConversationUpdate? = nil
     @Published var messageUpdate: MessageUpdate? = nil
     @Published var memberUpdate: ConversationMemberUpdate? = nil
 
     var isSynced: Bool {
         guard let client = self.client else { return false }
-        if client.synchronizationStatus == .completed || client.synchronizationStatus == .channelsListCompleted {
+        if client.synchronizationStatus == .completed || client.synchronizationStatus == .conversationsListCompleted {
             return true
         }
 

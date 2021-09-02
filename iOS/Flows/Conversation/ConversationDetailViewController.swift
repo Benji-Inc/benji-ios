@@ -14,7 +14,7 @@ import Combine
 
 @MainActor
 protocol ConversationDetailViewControllerDelegate: AnyObject {
-    func channelDetailViewControllerDidTapMenu(_ vc: ConversationDetailViewController)
+    func conversationDetailViewControllerDidTapMenu(_ vc: ConversationDetailViewController)
 }
 
 class ConversationDetailViewController: ViewController {
@@ -84,39 +84,39 @@ class ConversationDetailViewController: ViewController {
     }
 
     private func subscribeToConversationUpdates() {
-        ConversationSupplier.shared.$activeConversation.mainSink { [weak self] (channel) in
-            guard let `self` = self, let activeConversation = channel else { return }
-            switch activeConversation.channelType {
-            case .channel(let channel):
-                self.layoutViews(for: channel)
+        ConversationSupplier.shared.$activeConversation.mainSink { [weak self] (conversation) in
+            guard let `self` = self, let activeConversation = conversation else { return }
+            switch activeConversation.conversationType {
+            case .conversation(let conversation):
+                self.layoutViews(for: conversation)
             default:
                 break
             }
         }.store(in: &self.cancellables)
     }
 
-    private func layoutViews(for channel: TCHChannel) {
+    private func layoutViews(for conversation: TCHChannel) {
         Task {
-            guard let users = try? await channel.getUsers() else { return }
+            guard let users = try? await conversation.getUsers() else { return }
 
-            self.layout(forNonMe: users, channel: channel)
+            self.layout(forNonMe: users, conversation: conversation)
         }
     }
 
-    private func layout(forNonMe users: [User], channel: TCHChannel) {
-        guard let date = channel.dateCreatedAsDate else { return }
+    private func layout(forNonMe users: [User], conversation: TCHChannel) {
+        guard let date = conversation.dateCreatedAsDate else { return }
 
         self.stackedAvatarView.set(items: users)
         let message: Localized
         if users.count == 0 {
             message = "No one has joined yet."
-            // No one in the channel but the current user.
+            // No one in the conversation but the current user.
         } else if users.count == 1, let user = users.first {
             self.label.setText(user.fullName)
-            message = self.getMessage(for: user, date: date, channel: channel)
+            message = self.getMessage(for: user, date: date, conversation: conversation)
         } else {
             // Group chat
-            message = self.getMessage(for: users, date: date, channel: channel)
+            message = self.getMessage(for: users, date: date, conversation: conversation)
         }
 
         let attributed = AttributedString(message,
@@ -168,10 +168,10 @@ class ConversationDetailViewController: ViewController {
         self.animator.pauseAnimation()
     }
 
-    private func getMessage(for user: User, date: Date, channel: TCHChannel) -> LocalizedString {
+    private func getMessage(for user: User, date: Date, conversation: TCHChannel) -> LocalizedString {
 
         var author = ""
-        if channel.isOwnedByMe {
+        if conversation.isOwnedByMe {
             author = "You"
         } else {
             author = user.givenName
@@ -180,7 +180,7 @@ class ConversationDetailViewController: ViewController {
         return LocalizedString(id: "", arguments: [user.givenName, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). @(author) created this conversation on @(date)")
     }
 
-    private func getMessage(for users: [User], date: Date, channel: TCHChannel) -> LocalizedString {
+    private func getMessage(for users: [User], date: Date, conversation: TCHChannel) -> LocalizedString {
         
         var text = ""
         for (index, user) in users.enumerated() {
@@ -194,10 +194,10 @@ class ConversationDetailViewController: ViewController {
         }
 
         var author = ""
-        if channel.isOwnedByMe {
+        if conversation.isOwnedByMe {
             author = "You"
         } else if let user = users.first(where: { user in
-            return user.objectId == channel.createdBy
+            return user.objectId == conversation.createdBy
         }) {
             author = user.givenName
         }

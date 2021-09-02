@@ -10,14 +10,14 @@ import Foundation
 
 class ConversationPreviewViewController: ViewController {
 
-    let channel: DisplayableConversation
-    let channelSize: CGSize
+    let conversation: DisplayableConversation
+    let conversationSize: CGSize
 
     private let content = ConversationContentView()
 
-    init(with channel: DisplayableConversation, size: CGSize) {
-        self.channel = channel
-        self.channelSize = size
+    init(with conversation: DisplayableConversation, size: CGSize) {
+        self.conversation = conversation
+        self.conversationSize = size
         super.init()
     }
 
@@ -29,8 +29,8 @@ class ConversationPreviewViewController: ViewController {
         super.initializeViews()
 
         self.view.addSubview(self.content)
-        self.content.configure(with: self.channel)
-        self.preferredContentSize = self.channelSize
+        self.content.configure(with: self.conversation)
+        self.preferredContentSize = self.conversationSize
         self.view.set(backgroundColor: .background1)
     }
 

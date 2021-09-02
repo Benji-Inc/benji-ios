@@ -11,7 +11,7 @@ import Foundation
 protocol DeepLinkable {
     var customMetadata: NSMutableDictionary { get set }
     var deepLinkTarget: DeepLinkTarget? { get set }
-    var channelId: String? { get set }
+    var conversationId: String? { get set }
     var reservationId: String? { get set }
     var reservationCreatorId: String? { get set }
 }
@@ -30,12 +30,12 @@ extension DeepLinkable {
 
 extension DeepLinkable {
 
-    var channelId: String? {
+    var conversationId: String? {
         get {
             return self.customMetadata.value(forKey: "channeId") as? String
         }
         set {
-            self.customMetadata.setValue(newValue, forKey: "channelId")
+            self.customMetadata.setValue(newValue, forKey: "conversationId")
         }
     }
 

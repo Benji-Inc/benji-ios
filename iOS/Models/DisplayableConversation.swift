@@ -16,29 +16,29 @@ extension Range: Comparable {
 
 class DisplayableConversation: Hashable, Comparable {
 
-    var channelType: ConversationType
+    var conversationType: ConversationType
 
-    init(channelType: ConversationType) {
-        self.channelType = channelType
+    init(conversationType: ConversationType) {
+        self.conversationType = conversationType
     }
 
     var id: String {
-        self.channelType.id
+        self.conversationType.id
     }
 
     var isFromCurrentUser: Bool {
-        return self.channelType.isFromCurrentUser
+        return self.conversationType.isFromCurrentUser
     }
 
     static func == (lhs: DisplayableConversation, rhs: DisplayableConversation) -> Bool {
-        return lhs.channelType.uniqueName == rhs.channelType.uniqueName 
+        return lhs.conversationType.uniqueName == rhs.conversationType.uniqueName 
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(self.channelType.uniqueName)
+        hasher.combine(self.conversationType.uniqueName)
     }
 
     static func < (lhs: DisplayableConversation, rhs: DisplayableConversation) -> Bool {
-        return lhs.channelType.dateUpdated < rhs.channelType.dateUpdated
+        return lhs.conversationType.dateUpdated < rhs.conversationType.dateUpdated
     }
 }

@@ -52,11 +52,11 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         super.init()
         self.updateLayoutDataSource()
 
-        ConversationSupplier.shared.$activeConversation.mainSink { [weak self] (channel) in
-            guard let `self` = self, let activeConversation = channel else { return }
-            switch activeConversation.channelType {
-            case .channel(let channel):
-                channel.getMembersCount { (result, count) in
+        ConversationSupplier.shared.$activeConversation.mainSink { [weak self] (conversation) in
+            guard let `self` = self, let activeConversation = conversation else { return }
+            switch activeConversation.conversationType {
+            case .conversation(let conversation):
+                conversation.getMembersCount { (result, count) in
                     self.numberOfMembers = Int(count)
                 }
             default:
@@ -69,16 +69,16 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
 
     private func updateLayoutDataSource() {
         self.collectionView.prefetchDataSource = self 
-        self.collectionView.channelLayout.dataSource = self
+        self.collectionView.conversationLayout.dataSource = self
     }
 
     // MARK: DATA SOURCE
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        guard let channelCollectionView = collectionView as? ConversationCollectionView else { return 0 }
+        guard let conversationCollectionView = collectionView as? ConversationCollectionView else { return 0 }
         var numberOfSections = self.numberOfSections()
 
-        if !channelCollectionView.isTypingIndicatorHidden {
+        if !conversationCollectionView.isTypingIndicatorHidden {
             numberOfSections += 1
         }
 
@@ -109,10 +109,10 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        guard let channelCollectionView = collectionView as? ConversationCollectionView else { fatalError() }
+        guard let conversationCollectionView = collectionView as? ConversationCollectionView else { fatalError() }
 
         if self.isSectionReservedForTypingIndicator(indexPath.section) {
-            let cell = channelCollectionView.dequeueReusableCell(TypingIndicatorCell.self, for: indexPath)
+            let cell = conversationCollectionView.dequeueReusableCell(TypingIndicatorCell.self, for: indexPath)
             if let user = self.userTyping {
                 cell.configure(with: user)
             }
@@ -124,33 +124,33 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         let cell: BaseMessageCell
         switch message.kind {
         case .text(_):
-            cell = channelCollectionView.dequeueReusableCell(MessageCell.self, for: indexPath)
+            cell = conversationCollectionView.dequeueReusableCell(MessageCell.self, for: indexPath)
             if let msgCell = cell as? MessageCell {
                 msgCell.textView.delegate = self
                 let interaction = UIContextMenuInteraction(delegate: self)
                 msgCell.bubbleView.addInteraction(interaction)
             }
         case .attributedText(_):
-            cell = channelCollectionView.dequeueReusableCell(AttributedMessageCell.self, for: indexPath)
+            cell = conversationCollectionView.dequeueReusableCell(AttributedMessageCell.self, for: indexPath)
         case .photo(_, _):
-            cell = channelCollectionView.dequeueReusableCell(PhotoMessageCell.self, for: indexPath)
+            cell = conversationCollectionView.dequeueReusableCell(PhotoMessageCell.self, for: indexPath)
             if let photoCell = cell as? PhotoMessageCell {
                 photoCell.textView.delegate = self
                 let interaction = UIContextMenuInteraction(delegate: self)
                 photoCell.imageView.addInteraction(interaction)
             }
         case .video(_, _):
-            cell = channelCollectionView.dequeueReusableCell(VideoMessageCell.self, for: indexPath)
+            cell = conversationCollectionView.dequeueReusableCell(VideoMessageCell.self, for: indexPath)
         case .location(_):
-            cell = channelCollectionView.dequeueReusableCell(LocationMessageCell.self, for: indexPath)
+            cell = conversationCollectionView.dequeueReusableCell(LocationMessageCell.self, for: indexPath)
         case .emoji(_):
-            cell = channelCollectionView.dequeueReusableCell(EmojiMessageCell.self, for: indexPath)
+            cell = conversationCollectionView.dequeueReusableCell(EmojiMessageCell.self, for: indexPath)
         case .audio(_):
-            cell = channelCollectionView.dequeueReusableCell(AudioMessageCell.self, for: indexPath)
+            cell = conversationCollectionView.dequeueReusableCell(AudioMessageCell.self, for: indexPath)
         case .contact(_):
-            cell = channelCollectionView.dequeueReusableCell(ContactMessageCell.self, for: indexPath)
+            cell = conversationCollectionView.dequeueReusableCell(ContactMessageCell.self, for: indexPath)
         case .link(_):
-            cell = channelCollectionView.dequeueReusableCell(LinkCell.self, for: indexPath)
+            cell = conversationCollectionView.dequeueReusableCell(LinkCell.self, for: indexPath)
             if let msgCell = cell as? LinkCell {
                 let interaction = UIContextMenuInteraction(delegate: self)
                 msgCell.imageView.addInteraction(interaction)
@@ -187,21 +187,21 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     }
 
     private func header(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let channelCollectionView = collectionView as? ConversationCollectionView else { fatalError() }
+        guard let conversationCollectionView = collectionView as? ConversationCollectionView else { fatalError() }
 
         if self.isSectionReservedForTypingIndicator(indexPath.section) {
-            return channelCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "EmptyHeader", for: indexPath)
+            return conversationCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "EmptyHeader", for: indexPath)
         }
 
         guard let section = self.sections[safe: indexPath.section] else { fatalError() }
 
         if indexPath.section == 0 {
-           if let topHeader = self.getTopHeader(for: section, at: indexPath, in: channelCollectionView) {
+           if let topHeader = self.getTopHeader(for: section, at: indexPath, in: conversationCollectionView) {
                 return topHeader
             }
         }
 
-        let header = channelCollectionView.dequeueReusableHeaderView(ConversationSectionHeader.self, for: indexPath)
+        let header = conversationCollectionView.dequeueReusableHeaderView(ConversationSectionHeader.self, for: indexPath)
         header.configure(with: section.date)
         
         return header
@@ -239,13 +239,13 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     }
 
     private func footer(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let channelCollectionView = collectionView as? ConversationCollectionView else { fatalError() }
+        guard let conversationCollectionView = collectionView as? ConversationCollectionView else { fatalError() }
 
         guard indexPath.section == self.numberOfSections(in: collectionView) - 1 else {
-            return channelCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "EmptyFooter", for: indexPath)
+            return conversationCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "EmptyFooter", for: indexPath)
         }
 
-        let footer = channelCollectionView.dequeueReusableFooterView(ReadAllFooterView.self, for: indexPath)
+        let footer = conversationCollectionView.dequeueReusableFooterView(ReadAllFooterView.self, for: indexPath)
         footer.configure(hasUnreadMessages: MessageSupplier.shared.hasUnreadMessage) 
         self.footerView = footer
         footer.didCompleteAnimation = { [unowned self] in
@@ -260,32 +260,32 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        guard let channelLayout = collectionViewLayout as? ConversationCollectionViewFlowLayout else { return .zero }
+        guard let conversationLayout = collectionViewLayout as? ConversationCollectionViewFlowLayout else { return .zero }
 
         /// May not have a message because of the typing indicator
         let message = self.item(at: indexPath)
-        return channelLayout.sizeForItem(at: indexPath, with: message)
+        return conversationLayout.sizeForItem(at: indexPath, with: message)
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
 
-        guard let channelLayout = collectionViewLayout as? ConversationCollectionViewFlowLayout else {
+        guard let conversationLayout = collectionViewLayout as? ConversationCollectionViewFlowLayout else {
             return .zero
         }
 
-        return channelLayout.sizeForHeader(at: section, with: collectionView)
+        return conversationLayout.sizeForHeader(at: section, with: collectionView)
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
-        guard let channelLayout = collectionViewLayout as? ConversationCollectionViewFlowLayout,
+        guard let conversationLayout = collectionViewLayout as? ConversationCollectionViewFlowLayout,
             section == self.numberOfSections(in: collectionView) - 1,
             !self.isSettingReadAll else { return .zero }
 
-        return CGSize(width: collectionView.width, height: channelLayout.readFooterHeight)
+        return CGSize(width: collectionView.width, height: conversationLayout.readFooterHeight)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -311,18 +311,18 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     }
 
     func didSelectLoadMore(for messageIndex: Int) {
-        guard let channelDisplayable = ConversationSupplier.shared.activeConversation else { return }
+        guard let conversationDisplayable = ConversationSupplier.shared.activeConversation else { return }
 
-        switch channelDisplayable.channelType {
+        switch conversationDisplayable.conversationType {
         case .system(_):
             break
         case .pending(_):
             break 
-        case .channel(let channel):
+        case .conversation(let conversation):
             Task {
                 do {
                     let sections = try await MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1),
-                                                                                for: channel)
+                                                                                for: conversation)
                     self.set(newSections: sections,
                              keepOffset: true,
                              completion: nil)

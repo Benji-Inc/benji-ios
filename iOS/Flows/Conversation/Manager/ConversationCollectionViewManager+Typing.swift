@@ -30,7 +30,7 @@ extension ConversationCollectionViewManager {
         }
 
         let section = self.collectionView.numberOfSections
-        self.collectionView.channelLayout.setTypingIndicatorViewHidden(isHidden)
+        self.collectionView.conversationLayout.setTypingIndicatorViewHidden(isHidden)
 
         if animated {
             self.collectionView.performBatchUpdates({ [weak self] in

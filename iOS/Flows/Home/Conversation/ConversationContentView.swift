@@ -38,31 +38,31 @@ class ConversationContentView: View {
     func configure(with item: DisplayableConversation) {
         self.currentItem = item
 
-        switch item.channelType {
-        case .channel(let channel):
+        switch item.conversationType {
+        case .conversation(let conversation):
             Task {
-                await self.display(channel: channel)
+                await self.display(conversation: conversation)
             }
         default:
             break
         }
     }
 
-    private func display(channel: TCHChannel) async {
-        guard let users = try? await channel.getUsers(excludeMe: true) else { return }
+    private func display(conversation: TCHChannel) async {
+        guard let users = try? await conversation.getUsers(excludeMe: true) else { return }
 
-        guard self.currentItem?.id == channel.id else { return }
+        guard self.currentItem?.id == conversation.id else { return }
 
-        if let friendlyName = channel.friendlyName {
+        if let friendlyName = conversation.friendlyName {
             self.label.setText(friendlyName.capitalized)
         } else if users.count == 0 {
             self.label.setText("You")
         } else if users.count == 1, let user = users.first(where: { user in
             return user.objectId != User.current()?.objectId
         }) {
-            await self.displayDM(for: channel, with: user)
+            await self.displayDM(for: conversation, with: user)
         } else {
-            self.displayGroupChat(for: channel, with: users)
+            self.displayGroupChat(for: conversation, with: users)
         }
         self.stackedAvatarView.set(items: users)
         self.stackedAvatarView.layoutNow()
@@ -83,14 +83,14 @@ class ConversationContentView: View {
         self.label.pin(.left, padding: Theme.contentOffset.half)
     }
 
-    private func displayDM(for channel: TCHChannel, with user: User) async {
+    private func displayDM(for conversation: TCHChannel, with user: User) async {
         guard let user = try? await user.retrieveDataIfNeeded() else { return }
         self.label.setText(user.givenName)
         self.label.setFont(.largeThin)
         self.setNeedsLayout()
     }
 
-    func displayGroupChat(for channel: TCHChannel, with users: [User]) {
+    func displayGroupChat(for conversation: TCHChannel, with users: [User]) {
         var text = ""
         for (index, user) in users.enumerated() {
             if index < users.count - 1 {

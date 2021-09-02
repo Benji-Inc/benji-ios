@@ -34,9 +34,9 @@ class ConversationSupplier {
 
     var allJoinedConversations: [DisplayableConversation] {
         return self.allConversationsSorted.filter({ (displayableConversation) -> Bool in
-            switch displayableConversation.channelType {
-            case .channel(let channel):
-                return channel.status == .joined
+            switch displayableConversation.conversationType {
+            case .conversation(let conversation):
+                return conversation.status == .joined
             default:
                 return false
             }
@@ -45,9 +45,9 @@ class ConversationSupplier {
 
     var allInvitedConversations: [DisplayableConversation] {
         return self.allConversationsSorted.filter({ (displayableConversation) -> Bool in
-            switch displayableConversation.channelType {
-            case .channel(let channel):
-                return channel.status == .invited
+            switch displayableConversation.conversationType {
+            case .conversation(let conversation):
+                return conversation.status == .invited
             default:
                 return false
             }
@@ -56,9 +56,9 @@ class ConversationSupplier {
 
     private var subscribedConversations: [DisplayableConversation] {
         get {
-            guard let client = ChatClientManager.shared.client, let channels = client.channelsList() else { return [] }
-            return channels.subscribedChannels().map { (channel) -> DisplayableConversation in
-                return DisplayableConversation.init(channelType: .channel(channel))
+            guard let client = ChatClientManager.shared.client, let conversations = client.conversationsList() else { return [] }
+            return conversations.subscribedChannels().map { (conversation) -> DisplayableConversation in
+                return DisplayableConversation.init(conversationType: .conversation(conversation))
             }
         }
     }
@@ -66,7 +66,7 @@ class ConversationSupplier {
     private(set) var pendingConversationUniqueName: String?
     @Published private(set) var activeConversation: DisplayableConversation?
     @Published private(set) var isSynced: Bool = false
-    @Published private(set) var channelsUpdate: ConversationUpdate?
+    @Published private(set) var conversationsUpdate: ConversationUpdate?
 
     var cancellables = Set<AnyCancellable>()
 
@@ -84,7 +84,7 @@ class ConversationSupplier {
         self.pendingConversationUniqueName = nil
 
         if let displayable = activeConversation {
-            switch displayable.channelType {
+            switch displayable.conversationType {
             case .pending(let uniqueName):
                 self.pendingConversationUniqueName = uniqueName
             default:
@@ -106,24 +106,24 @@ class ConversationSupplier {
             }
         }.store(in: &self.cancellables)
 
-        ChatClientManager.shared.$channelsUpdate.mainSink { [weak self] (update) in
-            guard let `self` = self, let channelsUpdate = update, self.isSynced else { return }
-            switch channelsUpdate.status {
+        ChatClientManager.shared.$conversationsUpdate.mainSink { [weak self] (update) in
+            guard let `self` = self, let conversationsUpdate = update, self.isSynced else { return }
+            switch conversationsUpdate.status {
             case .added:
                 self.allConversations = self.subscribedConversations
-                if let uniqueName = self.pendingConversationUniqueName, channelsUpdate.channel.uniqueName == uniqueName {
-                    self.set(activeConversation: DisplayableConversation(channelType: .channel(channelsUpdate.channel)))
+                if let uniqueName = self.pendingConversationUniqueName, conversationsUpdate.conversation.uniqueName == uniqueName {
+                    self.set(activeConversation: DisplayableConversation(conversationType: .conversation(conversationsUpdate.conversation)))
                 }
             case .deleted:
-                // We pre-emptivley delete a channel from the client, so we dont have a delay, and a user doesn't select a deleted channel and cause a crash.
-                self.allConversations = self.subscribedConversations.filter { (channel) -> Bool in
-                    return channel.id != channelsUpdate.channel.id
+                // We pre-emptivley delete a conversation from the client, so we dont have a delay, and a user doesn't select a deleted conversation and cause a crash.
+                self.allConversations = self.subscribedConversations.filter { (conversation) -> Bool in
+                    return conversation.id != conversationsUpdate.conversation.id
                 }
 
                 if let activeConversation = self.activeConversation {
-                    switch activeConversation.channelType {
-                    case .channel(let channel):
-                        if channelsUpdate.channel == channel {
+                    switch activeConversation.conversationType {
+                    case .conversation(let conversation):
+                        if conversationsUpdate.conversation == conversation {
                             self.activeConversation = nil
                         }
                     default:
@@ -134,7 +134,7 @@ class ConversationSupplier {
                 break
             }
             // Forward the update once we have handled the update.
-            self.channelsUpdate = update
+            self.conversationsUpdate = update
         }.store(in: &self.cancellables)
 
         ChatClientManager.shared.$memberUpdate.mainSink { [weak self] (update) in
@@ -142,14 +142,14 @@ class ConversationSupplier {
 
             switch memberUpdate.status {
             case .left:
-                // We pre-emptivley leave a channel from the client, so we dont have a delay, and a user doesn't still see a channel they left.
-                self.allConversations = self.subscribedConversations.filter { (channel) -> Bool in
-                    return channel.id != memberUpdate.channel.id
+                // We pre-emptivley leave a conversation from the client, so we dont have a delay, and a user doesn't still see a conversation they left.
+                self.allConversations = self.subscribedConversations.filter { (conversation) -> Bool in
+                    return conversation.id != memberUpdate.conversation.id
                 }
                 if let activeConversation = self.activeConversation {
-                    switch activeConversation.channelType {
-                    case .channel(let channel):
-                        if memberUpdate.channel == channel {
+                    switch activeConversation.conversationType {
+                    case .conversation(let conversation):
+                        if memberUpdate.conversation == conversation {
                             self.activeConversation = nil
                         }
                     default:
@@ -157,19 +157,19 @@ class ConversationSupplier {
                     }
                 }
             case .joined, .changed:
-                self.channelsUpdate = ConversationUpdate(channel: memberUpdate.channel, status: .changed)
+                self.conversationsUpdate = ConversationUpdate(conversation: memberUpdate.conversation, status: .changed)
             default:
                 break
             }
         }.store(in: &self.cancellables)
     }
 
-    func isConversationEqualToActiveConversation(channel: TCHChannel) -> Bool {
+    func isConversationEqualToActiveConversation(conversation: TCHChannel) -> Bool {
         guard let activeConversation = self.activeConversation else { return false }
         
-        switch activeConversation.channelType {
-        case .channel(let currentConversation):
-            return currentConversation == channel
+        switch activeConversation.conversationType {
+        case .conversation(let currentConversation):
+            return currentConversation == conversation
         default:
             return false
         }
@@ -191,16 +191,16 @@ class ConversationSupplier {
         }
     }
 
-    func getConversation(withSID channelSID: String) -> DisplayableConversation? {
-        return self.subscribedConversations.first(where: { (channel) in
-            return channel.id == channelSID
+    func getConversation(withSID conversationSID: String) -> DisplayableConversation? {
+        return self.subscribedConversations.first(where: { (conversation) in
+            return conversation.id == conversationSID
         })
     }
 
     func getConversation(withUniqueName name: String) -> DisplayableConversation? {
-        return self.subscribedConversations.first(where: { (channel) in
-            switch channel.channelType {
-            case .channel(let tchConversation):
+        return self.subscribedConversations.first(where: { (conversation) in
+            switch conversation.conversationType {
+            case .conversation(let tchConversation):
                 return tchConversation.uniqueName == name
             default:
                 return false
@@ -209,9 +209,9 @@ class ConversationSupplier {
     }
 
     func getConversation(containingMember userID: String) -> DisplayableConversation? {
-        return self.subscribedConversations.first(where: { (channel) -> Bool in
-            switch channel.channelType {
-            case .channel(let tchConversation):
+        return self.subscribedConversations.first(where: { (conversation) -> Bool in
+            switch conversation.conversationType {
+            case .conversation(let tchConversation):
                 return tchConversation.member(withIdentity: userID) != nil
             default:
                 return false
@@ -225,7 +225,7 @@ class ConversationSupplier {
                        setActive: Bool = true) {
         
         if setActive {
-            self.set(activeConversation: DisplayableConversation(channelType: .pending(uniqueName)))
+            self.set(activeConversation: DisplayableConversation(conversationType: .pending(uniqueName)))
         }
 
         Task {

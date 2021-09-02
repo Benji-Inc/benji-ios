@@ -51,14 +51,14 @@ class MessageSupplier: NSObject {
     }
 
     private func subscribeToUpdates() {
-        ConversationSupplier.shared.$activeConversation.mainSink { [unowned self] (channel) in
-            guard let activeConversation = channel else {
+        ConversationSupplier.shared.$activeConversation.mainSink { [unowned self] (conversation) in
+            guard let activeConversation = conversation else {
                 return
             }
 
-            switch activeConversation.channelType {
-            case .channel(let channel):
-                channel.delegate = self
+            switch activeConversation.conversationType {
+            case .conversation(let conversation):
+                conversation.delegate = self
             default:
                 break
             }
@@ -67,7 +67,7 @@ class MessageSupplier: NSObject {
         ChatClientManager.shared.$messageUpdate.mainSink { [weak self] (update) in
             guard let `self` = self else { return }
 
-            guard let messageUpdate = update, ConversationSupplier.shared.isConversationEqualToActiveConversation(channel: messageUpdate.channel) else { return }
+            guard let messageUpdate = update, ConversationSupplier.shared.isConversationEqualToActiveConversation(conversation: messageUpdate.conversation) else { return }
 
             switch messageUpdate.status {
             case .added:
@@ -106,12 +106,12 @@ class MessageSupplier: NSObject {
 
     //MARK: GET MESSAGES
 
-    static func getMessage(from channelId: String, with index: NSNumber) async throws -> Messageable {
+    static func getMessage(from conversationId: String, with index: NSNumber) async throws -> Messageable {
         let messageable: Messageable = try await withCheckedThrowingContinuation { continuation in
-            // Get the channel
-            guard let channel = ConversationSupplier.shared.allConversationsSorted.first(where: { channel in
-                if case ConversationType.channel(let channel) = channel.channelType {
-                    return channel.sid == channelId
+            // Get the conversation
+            guard let conversation = ConversationSupplier.shared.allConversationsSorted.first(where: { conversation in
+                if case ConversationType.conversation(let conversation) = conversation.conversationType {
+                    return conversation.sid == conversationId
                 }
                 return false
             }) else {
@@ -119,9 +119,9 @@ class MessageSupplier: NSObject {
                 return
             }
 
-            // Get the messages off of the channel
-            guard case ConversationType.channel(let channel) = channel.channelType,
-                  let messages = channel.messages else {
+            // Get the messages off of the conversation
+            guard case ConversationType.conversation(let conversation) = conversation.conversationType,
+                  let messages = conversation.messages else {
                       continuation.resume(throwing: ClientError.apiError(detail: "No messages object"))
                       return
                   }
@@ -140,26 +140,26 @@ class MessageSupplier: NSObject {
 
     @discardableResult
     func getLastMessages(batchAmount: UInt = 20) async throws -> [ConversationSectionable] {
-        let channelSections: [ConversationSectionable] = try await withCheckedThrowingContinuation { continuation in
+        let conversationSections: [ConversationSectionable] = try await withCheckedThrowingContinuation { continuation in
             var tchConversation: TCHChannel?
 
             if let activeConversation = ConversationSupplier.shared.activeConversation {
-                switch activeConversation.channelType {
+                switch activeConversation.conversationType {
                 case .system(_):
                     break
                 case .pending(_):
                     break
-                case .channel(let channel):
-                    tchConversation = channel
+                case .conversation(let conversation):
+                    tchConversation = conversation
                 }
             }
 
-            if let channel = tchConversation, let messagesObject = channel.messages {
+            if let conversation = tchConversation, let messagesObject = conversation.messages {
                 self.messagesObject = messagesObject
                 messagesObject.getLastWithCount(batchAmount) { (result, messages) in
                     if let msgs = messages {
                         self.allMessages = msgs
-                        let sections = self.mapMessagesToSections(for: msgs, in: .channel(channel))
+                        let sections = self.mapMessagesToSections(for: msgs, in: .conversation(conversation))
                         self.sections = sections
                         continuation.resume(returning: sections)
                     } else {
@@ -170,20 +170,20 @@ class MessageSupplier: NSObject {
                 continuation.resume(throwing: ClientError.message(detail: "Failed to retrieve last messages."))
             }
         }
-        return channelSections
+        return conversationSections
     }
 
     func getMessages(before index: UInt,
                      batchAmount: UInt = 20,
-                     for channel: TCHChannel) async throws -> [ConversationSectionable] {
+                     for conversation: TCHChannel) async throws -> [ConversationSectionable] {
 
         let sections: [ConversationSectionable] = try await withCheckedThrowingContinuation { continuation in
-            if let messagesObject = channel.messages {
+            if let messagesObject = conversation.messages {
                 self.messagesObject = messagesObject
                 messagesObject.getBefore(index, withCount: batchAmount) { (result, messages) in
                     if let msgs = messages {
                         self.allMessages.insert(contentsOf: msgs, at: 0)
-                        let sections = self.mapMessagesToSections(for: self.allMessages, in: .channel(channel))
+                        let sections = self.mapMessagesToSections(for: self.allMessages, in: .conversation(conversation))
                         self.sections = sections
                         continuation.resume(returning: sections)
                     } else {
@@ -197,13 +197,13 @@ class MessageSupplier: NSObject {
         return sections
     }
 
-    func mapMessagesToSections(for messages: [Messageable], in channelable: ConversationType) -> [ConversationSectionable] {
+    func mapMessagesToSections(for messages: [Messageable], in conversationable: ConversationType) -> [ConversationSectionable] {
 
         var sections: [ConversationSectionable] = []
 
         messages.forEach { (message) in
 
-            // Determine if the message is a part of the latest channel section
+            // Determine if the message is a part of the latest conversation section
             let messageCreatedAt = message.createdAt
 
             if let latestSection = sections.last, latestSection.date.isSameDay(as: messageCreatedAt) {
@@ -213,7 +213,7 @@ class MessageSupplier: NSObject {
                 // Otherwise, create a new section with the date of this message
                 let section = ConversationSectionable(date: messageCreatedAt.beginningOfDay,
                                                  items: [message],
-                                                 channelType: channelable)
+                                                 conversationType: conversationable)
                 sections.append(section)
             }
         }
@@ -245,19 +245,19 @@ class MessageSupplier: NSObject {
 extension MessageSupplier: TCHChannelDelegate {
 
     func chatClient(_ client: TwilioChatClient,
-                    channel: TCHChannel,
+                    conversation: TCHChannel,
                     member: TCHMember,
                     updated: TCHMemberUpdate) {
     }
 
     func chatClient(_ client: TwilioChatClient,
-                    channel: TCHChannel,
+                    conversation: TCHChannel,
                     message: TCHMessage,
                     updated: TCHMessageUpdate) {
 
         guard let index = self.findMessageIndex(for: message) else { return }
         self.allMessages[index] = message
         self.hasUnreadMessage = self.unreadMessages.count > 0 
-        self.messageUpdate = MessageUpdate(channel: channel, message: message, status: .changed)
+        self.messageUpdate = MessageUpdate(conversation: conversation, message: message, status: .changed)
     }
 }

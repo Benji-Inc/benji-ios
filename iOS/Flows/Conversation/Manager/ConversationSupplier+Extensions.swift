@@ -12,36 +12,36 @@ import TwilioChatClient
 
 extension ConversationSupplier {
 
-    func find(channelId: String) async throws -> TCHChannel {
-        let channel: TCHChannel = try await withCheckedThrowingContinuation { continuation in
-            guard let channels = ChatClientManager.shared.client?.channelsList() else {
-                return continuation.resume(throwing: ClientError.message(detail: "No channels were found."))
+    func find(conversationId: String) async throws -> TCHChannel {
+        let conversation: TCHChannel = try await withCheckedThrowingContinuation { continuation in
+            guard let conversations = ChatClientManager.shared.client?.conversationsList() else {
+                return continuation.resume(throwing: ClientError.message(detail: "No conversations were found."))
             }
 
-            channels.channel(withSidOrUniqueName: channelId) { (result, channel) in
-                if let strongConversation = channel, result.isSuccessful() {
+            conversations.conversation(withSidOrUniqueName: conversationId) { (result, conversation) in
+                if let strongConversation = conversation, result.isSuccessful() {
                     continuation.resume(returning: strongConversation)
                 } else if let error = result.error {
                     continuation.resume(throwing: error)
                 } else {
-                    continuation.resume(throwing: ClientError.message(detail: "No channel with that ID was found."))
+                    continuation.resume(throwing: ClientError.message(detail: "No conversation with that ID was found."))
                 }
             }
         }
 
-        return channel
+        return conversation
     }
 
-    func delete(channel: TCHChannel) async throws {
+    func delete(conversation: TCHChannel) async throws {
         return try await withCheckedThrowingContinuation { continuation in
-            channel.destroy { result in
+            conversation.destroy { result in
                 if result.isSuccessful() {
                     continuation.resume(returning: ())
                 } else if let error = result.error {
                     if error.code == 50107 {
                         Task {
                             do {
-                                try await self.leave(channel: channel)
+                                try await self.leave(conversation: conversation)
                                 continuation.resume(returning: ())
                             } catch {
                                 continuation.resume(throwing: error)
@@ -51,21 +51,21 @@ extension ConversationSupplier {
                         continuation.resume(throwing: error)
                     }
                 } else {
-                    continuation.resume(throwing: ClientError.message(detail: "Failed to delete channel."))
+                    continuation.resume(throwing: ClientError.message(detail: "Failed to delete conversation."))
                 }
             }
         }
     }
 
-    private func leave(channel: TCHChannel) async throws  {
+    private func leave(conversation: TCHChannel) async throws  {
         return try await withCheckedThrowingContinuation { continuation in
-            channel.leave { result in
+            conversation.leave { result in
                 if result.isSuccessful() {
                     continuation.resume(returning: ())
                 } else if let error = result.error {
                     continuation.resume(throwing: error)
                 } else {
-                    continuation.resume(throwing: ClientError.message(detail: "Failed to leave channel."))
+                    continuation.resume(throwing: ClientError.message(detail: "Failed to leave conversation."))
                 }
             }
         }

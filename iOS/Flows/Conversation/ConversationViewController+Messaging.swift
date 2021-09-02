@@ -35,13 +35,13 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
     }
 
     func load(activeConversation: DisplayableConversation) {
-        switch activeConversation.channelType {
+        switch activeConversation.conversationType {
         case .system(_):
             break
         case .pending(_):
             break
-        case .channel(_):
-            self.loadMessages(for: activeConversation.channelType)
+        case .conversation(_):
+            self.loadMessages(for: activeConversation.conversationType)
         }
     }
 
@@ -58,7 +58,7 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
                     }
 
                     self.collectionViewManager.append(item: systemMessage) { [unowned self] in
-                        self.channelCollectionView.scrollToEnd()
+                        self.conversationCollectionView.scrollToEnd()
                     }
 
                     self.messageInputAccessoryView.reset()
@@ -102,17 +102,17 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
     private func showAlertSentToast(for message: SystemMessage) async {
         guard let displaybleConversation = self.activeConversation,
-              case ConversationType.channel(let channel) = displaybleConversation.channelType else { return }
+              case ConversationType.conversation(let conversation) = displaybleConversation.conversationType else { return }
 
         var displayable: ImageDisplayable = User.current()!
 
-        guard let users = try? await channel.getUsers(excludeMe: true) else {
+        guard let users = try? await conversation.getUsers(excludeMe: true) else {
             return
         }
 
         var name: String = ""
 
-        if let friendlyName = channel.friendlyName {
+        if let friendlyName = conversation.friendlyName {
             name = friendlyName
         } else if users.count == 0 {
             name = "You"
@@ -123,7 +123,7 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
             name = user.fullName
         } else {
             displayable = users.first!
-            name = self.displayGroupChat(for: channel, with: users)
+            name = self.displayGroupChat(for: conversation, with: users)
         }
 
         let description = "A notification linking to your message has been sent to: \(name)."
@@ -134,7 +134,7 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
                                                          deepLink: nil))
     }
 
-    private func displayGroupChat(for channel: TCHChannel, with users: [User]) -> String {
+    private func displayGroupChat(for conversation: TCHChannel, with users: [User]) -> String {
         var text = ""
         for (index, user) in users.enumerated() {
             if index < users.count - 1 {

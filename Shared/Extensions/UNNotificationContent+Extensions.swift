@@ -20,7 +20,7 @@ enum NotificationContentKey: String {
     case trigger = "trigger"
     case category = "categoryIdentifier"
     case thread = "threadIdentifier"
-    case channelId = "channelId"
+    case conversationId = "conversationId"
     case messageId = "messageId"
     case connectionId = "connectionId"
 }
