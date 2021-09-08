@@ -7,6 +7,11 @@
 //
 
 import UIKit
+import StreamChat
+
+extension ChatClient {
+    static var shared: ChatClient?
+}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

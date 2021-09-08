@@ -74,10 +74,10 @@ class HomeViewController: ViewController {
         self.collectionView.animationView.play()
 
         async let unclaimedReservationCount = Reservation.getUnclaimedReservationCount(for: User.current()!)
-        async let initialSyncFinished: Void = ConversationSupplier.shared.waitForInitialSync()
-        async let noticesLoaded: Void = NoticeSupplier.shared.loadNotices()
 
-        let _ = await (initialSyncFinished, noticesLoaded)
+        #warning("Figure out why async let isn't working here.")
+        await ConversationSupplier.shared.waitForInitialSync()
+        await NoticeSupplier.shared.loadNotices()
 
         self.dataSource.unclaimedCount = await unclaimedReservationCount
         

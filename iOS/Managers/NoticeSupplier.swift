@@ -26,17 +26,19 @@ class NoticeSupplier {
 
     func loadNotices() async {
         do {
-            async let localNotices = self.getLocalNotices()
-            async let serverNotices = Notice.fetchAll()
+            #warning("Figure out why async let isn't working here")
+            let localNotices = await self.getLocalNotices()
+            let serverNotices = try await Notice.fetchAll()
 
-            var allNotices = try await serverNotices.compactMap { notice in
+            var allNotices = serverNotices.compactMap { notice in
                 return SystemNotice(with: notice)
             }
 
-            await allNotices.append(contentsOf: localNotices)
+            allNotices.append(contentsOf: localNotices)
+
             self.notices = allNotices.sorted()
         } catch {
-            print(error)
+            logDebug(error)
         }
     }
 

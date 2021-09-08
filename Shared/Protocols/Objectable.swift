@@ -101,18 +101,23 @@ extension Objectable where Self: PFObject {
     }
 
     static func fetchAll() async throws -> [Self] {
+        print("fetching all the notices")
         let objects: [Self] = try await withCheckedThrowingContinuation { continuation in
             guard let query = self.query() else {
                 continuation.resume(throwing: ClientError.apiError(detail: "Query was nil"))
                 return
             }
-
+            print("finding the objects in the background")
             query.findObjectsInBackground { objects, error in
+
                 if let objs = objects as? [Self] {
+                    print("got the objects with object count \(objs.count)")
                     continuation.resume(returning: objs)
                 } else if let e = error {
+                    print(e)
                     continuation.resume(throwing: e)
                 } else {
+                    print("got no objects")
                     continuation.resume(returning: [])
                 }
             }

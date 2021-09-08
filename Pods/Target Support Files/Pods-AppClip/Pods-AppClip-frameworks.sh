@@ -181,6 +181,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Parse/Parse.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/ParseLiveQuery/ParseLiveQuery.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/StreamChat/StreamChat.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/TMROLocalization/TMROLocalization.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
@@ -190,6 +191,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/Parse/Parse.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/ParseLiveQuery/ParseLiveQuery.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/StreamChat/StreamChat.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/TMROLocalization/TMROLocalization.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then

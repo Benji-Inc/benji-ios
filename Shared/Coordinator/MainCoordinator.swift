@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Parse
+import StreamChat
 
 class MainCoordinator: Coordinator<Void> {
 
@@ -53,6 +54,28 @@ class MainCoordinator: Coordinator<Void> {
     func handle(result: LaunchStatus) {
         switch result {
         case .success(let object, let token):
+
+            let config = ChatClientConfig(apiKey: .init("b67pax5b2wdq"))
+            let token2 = Token(
+                stringLiteral: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidHV0b3JpYWwtZHJvaWQifQ.NhEr0hP9W9nwqV7ZkdShxvi02C5PR7SJE7Cs4y7kyqg"
+            )
+
+            /// create an instance of ChatClient and share it using the singleton
+
+            let client = ChatClient(config: config)
+            ChatClient.shared = client
+
+            /// connect to chat
+            ChatClient.shared?.connectUser(
+                userInfo: UserInfo(
+                    id: "tutorial-droid",
+                    name: "Tutorial Droid",
+                    imageURL: URL(string: "https://bit.ly/2TIt8NR")
+                ),
+                token: token2
+            )
+
+
             self.deepLink = object
 
             if User.current().isNil {

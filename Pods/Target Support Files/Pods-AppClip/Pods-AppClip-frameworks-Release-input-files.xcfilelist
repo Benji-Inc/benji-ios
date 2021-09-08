@@ -5,4 +5,5 @@ ${BUILT_PRODUCTS_DIR}/GestureRecognizerClosures/GestureRecognizerClosures.framew
 ${BUILT_PRODUCTS_DIR}/Parse/Parse.framework
 ${BUILT_PRODUCTS_DIR}/ParseLiveQuery/ParseLiveQuery.framework
 ${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework
+${BUILT_PRODUCTS_DIR}/StreamChat/StreamChat.framework
 ${BUILT_PRODUCTS_DIR}/TMROLocalization/TMROLocalization.framework
