@@ -10,32 +10,6 @@ import Foundation
 import Parse
 import PhotosUI
 
-import StreamChat
-import StreamChatUI
-
-class ChatChannelViewController: ChatChannelListVC, Dismissable {
-
-    var dismissHandlers: [DismissHandler] = []
-
-    override func setUp() {
-        let query = ChannelListQuery(filter: .containMembers(userIds: ["martinjibber"]))
-
-        /// create a controller and assign it to this view controller
-        self.controller = ChatClient.shared.channelListController(query: query)
-        super.setUp()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
-        if self.isBeingClosed {
-            self.dismissHandlers.forEach { (dismissHandler) in
-                dismissHandler.handler?()
-            }
-        }
-    }
-}
-
 class HomeCoordinator: PresentableCoordinator<Void> {
 
     private lazy var homeVC: HomeViewController = {
@@ -47,9 +21,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     lazy var chatVC = ChatChannelViewController()
 
     override func toPresentable() -> DismissableVC {
-        return self.chatVC
-        #warning("Restore this")
-//        return self.homeVC
+        return self.homeVC
     }
 
     override func start() {

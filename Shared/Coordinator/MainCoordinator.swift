@@ -73,14 +73,14 @@ class MainCoordinator: Coordinator<Void> {
                     }
                 }
 
-                #warning("Restore this if necessary")
-//                Task {
-//                    do {
-//                        try await self.initializeChat(with: token)
-//                    } catch {
-//                        print(error)
-//                    }
-//                }
+                // This will go away once we fully move over to Stream
+                Task {
+                    do {
+                        try await self.initializeChat(with: token)
+                    } catch {
+                        print(error)
+                    }
+                }
             } else if let deeplink = object {
                 self.handle(deeplink: deeplink)
             }
