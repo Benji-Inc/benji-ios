@@ -25,28 +25,6 @@ class ChatChannelViewController: ChatChannelListVC, Dismissable {
         super.setUp()
     }
 
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        /// Channels are watched automatically when they're synchronized.
-
-        /// 1: Create a `ChannelId` that represents the channel you want to watch.
-        let channelId = ChannelId(type: .messaging, id: "general")
-
-        /// 2: Use the `ChatClient` to create a `ChatChannelController` with the `ChannelId`.
-        let channelController = ChatClient.shared.channelController(for: channelId)
-
-        channelController.addMembers(userIds: ["martinjibber"])
-
-        /// 3: Call `ChatChannelController.synchronize` to watch the channel.
-        channelController.synchronize { error in
-            if let error = error {
-                /// 4: Handle possible errors
-                print(error)
-            }
-        }
-    }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 

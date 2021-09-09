@@ -55,9 +55,6 @@ class MainCoordinator: Coordinator<Void> {
         switch result {
         case .success(let object, let token):
 
-
-
-
             self.deepLink = object
 
             if User.current().isNil {

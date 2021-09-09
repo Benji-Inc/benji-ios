@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import Parse
-import Combine
 import StreamChat
 
 extension ChatClient {
@@ -21,12 +19,14 @@ extension ChatClient {
     }
 
     static func initialize(withToken token: String) async throws {
-        let config = ChatClientConfig(apiKey: .init("hvmd2mhxcres"))
+        // Create a shared chat client object if needed
+        if self.shared.isNil {
+            let config = ChatClientConfig(apiKey: .init("hvmd2mhxcres"))
+            self.shared = ChatClient(config: config)
+        }
+
         // userID: martinjibber
         let token = Token(stringLiteral: token)
-
-        /// create an instance of ChatClient and share it using the singleton
-        self.shared = ChatClient(config: config)
 
         /// connect to chat
         return try await withCheckedThrowingContinuation { continuation in
