@@ -14,13 +14,14 @@ import StreamChat
 import StreamChatUI
 
 class ChatChannelViewController: ChatChannelListVC, Dismissable {
+
     var dismissHandlers: [DismissHandler] = []
 
     override func setUp() {
         let query = ChannelListQuery(filter: .containMembers(userIds: ["martinjibber"]))
 
         /// create a controller and assign it to this view controller
-        self.controller = new_ChatClientManager.shared.client.channelListController(query: query)
+        self.controller = ChatClient.shared.channelListController(query: query)
         super.setUp()
     }
 
@@ -34,7 +35,7 @@ class ChatChannelViewController: ChatChannelListVC, Dismissable {
         let channelId = ChannelId(type: .messaging, id: "general")
 
         /// 2: Use the `ChatClient` to create a `ChatChannelController` with the `ChannelId`.
-        let channelController = new_ChatClientManager.shared.client.channelController(for: channelId)
+        let channelController = ChatClient.shared.channelController(for: channelId)
 
         channelController.addMembers(userIds: ["martinjibber"])
 

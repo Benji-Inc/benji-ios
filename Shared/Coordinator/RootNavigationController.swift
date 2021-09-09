@@ -16,7 +16,8 @@ class RootNavigationController: NavigationController, UINavigationControllerDele
 
         self.view.set(backgroundColor: .background1)
         self.delegate = self
-        self.setNavigationBarHidden(true, animated: false)
+        #warning("Restore this")
+//        self.setNavigationBarHidden(true, animated: false)
 
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(rotationDidChange),

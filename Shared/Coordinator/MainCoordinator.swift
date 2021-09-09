@@ -69,7 +69,7 @@ class MainCoordinator: Coordinator<Void> {
             } else if !token.isEmpty {
                 Task {
                     do {
-                        try await new_ChatClientManager.shared.initialize()
+                        try await ChatClient.initialize(withToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibWFydGluamliYmVyIn0.3gkQkf_oBGylx79R3GMvtUEXC74k5WB2epE23COPZdo")
                         self.runHomeFlow()
                     } catch {
                         logDebug(error)
