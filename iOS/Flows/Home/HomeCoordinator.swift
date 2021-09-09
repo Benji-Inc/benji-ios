@@ -10,6 +10,21 @@ import Foundation
 import Parse
 import PhotosUI
 
+import StreamChat
+import StreamChatUI
+
+class ChatChannelViewController: ChatChannelListVC {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let query = ChannelListQuery(filter: .containMembers(userIds: [ChatClient.shared!.currentUserId!]))
+
+        /// create a controller and assign it to this view controller
+        controller = ChatClient.shared!.channelListController(query: query)
+    }
+}
+
 class HomeCoordinator: PresentableCoordinator<Void> {
 
     private lazy var homeVC: HomeViewController = {

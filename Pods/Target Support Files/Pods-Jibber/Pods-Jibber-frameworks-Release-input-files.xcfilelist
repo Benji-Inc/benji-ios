@@ -2,8 +2,11 @@ ${PODS_ROOT}/Target Support Files/Pods-Jibber/Pods-Jibber-frameworks.sh
 ${BUILT_PRODUCTS_DIR}/Bolts-Swift/BoltsSwift.framework
 ${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework
 ${BUILT_PRODUCTS_DIR}/GestureRecognizerClosures/GestureRecognizerClosures.framework
+${BUILT_PRODUCTS_DIR}/Nuke/Nuke.framework
 ${BUILT_PRODUCTS_DIR}/Parse/Parse.framework
 ${BUILT_PRODUCTS_DIR}/ParseLiveQuery/ParseLiveQuery.framework
 ${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework
 ${BUILT_PRODUCTS_DIR}/StreamChat/StreamChat.framework
+${BUILT_PRODUCTS_DIR}/StreamChatUI/StreamChatUI.framework
+${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework
 ${BUILT_PRODUCTS_DIR}/TMROLocalization/TMROLocalization.framework
