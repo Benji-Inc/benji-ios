@@ -18,8 +18,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         return vc
     }()
 
-    lazy var chatVC = ChatChannelViewController()
-
     override func toPresentable() -> DismissableVC {
         return self.homeVC
     }
