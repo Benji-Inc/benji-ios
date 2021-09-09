@@ -13,15 +13,47 @@ import PhotosUI
 import StreamChat
 import StreamChatUI
 
-class ChatChannelViewController: ChatChannelListVC {
+class ChatChannelViewController: ChatChannelListVC, Dismissable {
+    var dismissHandlers: [DismissHandler] = []
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        let query = ChannelListQuery(filter: .containMembers(userIds: [ChatClient.shared!.currentUserId!]))
+    override func setUp() {
+        let query = ChannelListQuery(filter: .containMembers(userIds: ["martinjibber"]))
 
         /// create a controller and assign it to this view controller
-        controller = ChatClient.shared!.channelListController(query: query)
+        self.controller = new_ChatClientManager.shared.client.channelListController(query: query)
+        super.setUp()
+    }
+
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        /// Channels are watched automatically when they're synchronized.
+
+        /// 1: Create a `ChannelId` that represents the channel you want to watch.
+        let channelId = ChannelId(type: .messaging, id: "general")
+
+        /// 2: Use the `ChatClient` to create a `ChatChannelController` with the `ChannelId`.
+        let channelController = new_ChatClientManager.shared.client.channelController(for: channelId)
+
+        channelController.addMembers(userIds: ["martinjibber"])
+
+        /// 3: Call `ChatChannelController.synchronize` to watch the channel.
+        channelController.synchronize { error in
+            if let error = error {
+                /// 4: Handle possible errors
+                print(error)
+            }
+        }
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        if self.isBeingClosed {
+            self.dismissHandlers.forEach { (dismissHandler) in
+                dismissHandler.handler?()
+            }
+        }
     }
 }
 
@@ -33,8 +65,12 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         return vc
     }()
 
+    lazy var chatVC = ChatChannelViewController()
+
     override func toPresentable() -> DismissableVC {
-        return self.homeVC
+        return self.chatVC
+        #warning("Restore this")
+//        return self.homeVC
     }
 
     override func start() {
