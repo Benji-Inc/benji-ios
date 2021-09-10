@@ -9,6 +9,7 @@ def shared_pods
   pod 'TMROCoordinator'
   pod 'TMROLocalization'
 
+  pod 'StreamChatUI', '4.0.0-beta.11'
 end
 
 target 'Jibber' do

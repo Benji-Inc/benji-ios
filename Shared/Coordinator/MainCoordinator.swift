@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import Parse
+import StreamChat
 
 class MainCoordinator: Coordinator<Void> {
 
@@ -53,6 +54,7 @@ class MainCoordinator: Coordinator<Void> {
     func handle(result: LaunchStatus) {
         switch result {
         case .success(let object, let token):
+
             self.deepLink = object
 
             if User.current().isNil {
@@ -62,6 +64,16 @@ class MainCoordinator: Coordinator<Void> {
             } else if ChatClientManager.shared.isConnected {
                 self.runHomeFlow()
             } else if !token.isEmpty {
+                Task {
+                    do {
+                        try await ChatClient.initialize(withToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibWFydGluamliYmVyIn0.3gkQkf_oBGylx79R3GMvtUEXC74k5WB2epE23COPZdo")
+                        self.runHomeFlow()
+                    } catch {
+                        logDebug(error)
+                    }
+                }
+
+                // This will go away once we fully move over to Stream
                 Task {
                     do {
                         try await self.initializeChat(with: token)

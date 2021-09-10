@@ -106,7 +106,6 @@ extension Objectable where Self: PFObject {
                 continuation.resume(throwing: ClientError.apiError(detail: "Query was nil"))
                 return
             }
-
             query.findObjectsInBackground { objects, error in
                 if let objs = objects as? [Self] {
                     continuation.resume(returning: objs)
