@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import TwilioChatClient
 import Lottie
 import Combine
 

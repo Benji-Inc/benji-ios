@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import StreamChat
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -76,7 +77,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 #endif
 
 #if !APPCLIP && !NOTIFICATION
-        guard !ChatClientManager.shared.isConnected else { return }
+        guard !ChatClient.isConnected else { return }
 
         Task { await self.getChatToken() }
 #endif
@@ -84,17 +85,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 #if !APPCLIP && !NOTIFICATION
     func getChatToken() async {
-        do {
-            let token = try await GetChatToken().makeRequest()
-
-            if ChatClientManager.shared.client.isNil {
-                try await ChatClientManager.shared.initialize(token: token)
-            } else {
-                try await ChatClientManager.shared.update(token: token)
-            }
-        } catch {
-            print(error)
-        }
+        #warning("Replace")
+//        do {
+//            let token = try await GetChatToken().makeRequest()
+//
+//            if ChatClientManager.shared.client.isNil {
+//                try await ChatClientManager.shared.initialize(token: token)
+//            } else {
+//                try await ChatClientManager.shared.update(token: token)
+//            }
+//        } catch {
+//            print(error)
+//        }
     }
 #endif
 }

@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import TwilioChatClient
 import Combine
 
 typealias ConversationViewControllerDelegates = ConversationDetailViewControllerDelegate & ConversationViewControllerDelegate
@@ -18,7 +17,7 @@ protocol ConversationViewControllerDelegate: AnyObject {
     func conversationView(_ controller: ConversationViewController, didTapShare message: Messageable)
 }
 
-class ConversationViewController: FullScreenViewController, ActiveConversationAccessor, CollectionViewInputHandler {
+class ConversationViewController: FullScreenViewController, CollectionViewInputHandler {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     lazy var detailVC = ConversationDetailViewController(delegate: self.delegate)
@@ -29,8 +28,9 @@ class ConversationViewController: FullScreenViewController, ActiveConversationAc
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
-            self.conversationCollectionView.contentInset.bottom = self.collectionViewBottomInset
-            self.conversationCollectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
+            #warning("Replace")
+//            self.conversationCollectionView.contentInset.bottom = self.collectionViewBottomInset
+//            self.conversationCollectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
         }
     }
 
@@ -55,11 +55,6 @@ class ConversationViewController: FullScreenViewController, ActiveConversationAc
 
     override var canBecomeFirstResponder: Bool {
         return true 
-    }
-
-    // Remembers which keyboard a user uses for this conversation.
-    override var textInputContextIdentifier: String? {
-        return self.activeConversation?.id
     }
 
     init(delegate: ConversationViewControllerDelegates) {
@@ -106,9 +101,9 @@ class ConversationViewController: FullScreenViewController, ActiveConversationAc
         }
 
         self.collectionViewManager.didTapResend = { [unowned self] message in
-            Task {
-                await self.resend(message: message)
-            }
+//            Task {
+//                await self.resend(message: message)
+//            }
         }
 
         self.collectionViewManager.didTapEdit = { [unowned self] message, indexPath in
@@ -116,21 +111,22 @@ class ConversationViewController: FullScreenViewController, ActiveConversationAc
             self.messageInputAccessoryView.edit(message: message)
         }
 
-        self.conversationCollectionView.onDoubleTap { [unowned self] (doubleTap) in
-            if self.messageInputAccessoryView.textView.isFirstResponder {
-                self.messageInputAccessoryView.textView.resignFirstResponder()
-            }
-        }
-
-        ConversationSupplier.shared.$activeConversation.mainSink { [unowned self] (conversation) in
-            guard let activeConversation = conversation else {
-                self.collectionViewManager.reset()
-                return
-            }
-
-            self.load(activeConversation: activeConversation)
-
-        }.store(in: &self.cancellables)
+        #warning("Replace")
+//        self.conversationCollectionView.onDoubleTap { [unowned self] (doubleTap) in
+//            if self.messageInputAccessoryView.textView.isFirstResponder {
+//                self.messageInputAccessoryView.textView.resignFirstResponder()
+//            }
+//        }
+//
+//        ConversationSupplier.shared.$activeConversation.mainSink { [unowned self] (conversation) in
+//            guard let activeConversation = conversation else {
+//                self.collectionViewManager.reset()
+//                return
+//            }
+//
+//            self.load(activeConversation: activeConversation)
+//
+//        }.store(in: &self.cancellables)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -148,18 +144,20 @@ class ConversationViewController: FullScreenViewController, ActiveConversationAc
     override func viewWasDismissed() {
         super.viewWasDismissed()
 
-        MessageSupplier.shared.reset()
-        ConversationSupplier.shared.set(activeConversation: nil)
+        #warning("Replace")
+//        MessageSupplier.shared.reset()
+//        ConversationSupplier.shared.set(activeConversation: nil)
         self.collectionViewManager.reset()
     }
 
     func setupDetailAnimator() {
         self.detailVC.createAnimator()
-        self.conversationCollectionView.publisher(for: \.contentOffset)
-            .mainSink { (contentOffset) in
-                self.detailVC.animator.fractionComplete = self.getDetailProgress()
-                self.view.layoutNow()
-            }.store(in: &self.cancellables)
+        #warning("Replace")
+//        self.conversationCollectionView.publisher(for: \.contentOffset)
+//            .mainSink { (contentOffset) in
+//                self.detailVC.animator.fractionComplete = self.getDetailProgress()
+//                self.view.layoutNow()
+//            }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {

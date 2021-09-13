@@ -7,21 +7,22 @@
 //
 
 import Foundation
-import TwilioChatClient
 import TMROLocalization
 
 enum ConversationType: Hashable {
 
     case system(SystemConversation)
-    case conversation(TCHChannel)
+    #warning("Use stream for associated conversation values")
+    case conversation
     case pending(String)
 
     var uniqueName: String {
         switch self {
         case .system(let conversation):
             return conversation.uniqueName
-        case .conversation(let conversation):
-            return String(optional: conversation.friendlyName)
+        case .conversation:
+            return ""
+//            return String(optional: conversation.friendlyName)
         case .pending(let uniqueName):
             return uniqueName
         }
@@ -31,8 +32,8 @@ enum ConversationType: Hashable {
         switch self {
         case .system(let conversation):
             return conversation.displayName
-        case .conversation(let conversation):
-            return String(optional: conversation.friendlyName)
+        case .conversation:
+            return ""
         case .pending(_):
             return String()
         }
@@ -42,8 +43,8 @@ enum ConversationType: Hashable {
         switch self {
         case .system(let systemMessage):
             return systemMessage.timeStampAsDate
-        case .conversation(let conversation):
-            return conversation.dateUpdatedAsDate ?? Date.distantPast
+        case .conversation:
+            return Date()
         case .pending(_):
             return Date()
         }
@@ -53,8 +54,8 @@ enum ConversationType: Hashable {
         switch self {
         case .system(let systemMessage):
             return systemMessage.id
-        case .conversation(let conversation):
-            return conversation.id
+        case .conversation:
+            return ""
         case .pending(let uniqueName):
             return uniqueName
         }
@@ -64,8 +65,8 @@ enum ConversationType: Hashable {
         switch self {
         case .system(_):
             return true
-        case .conversation(let conversation):
-            return conversation.createdBy == User.current()?.objectId
+        case .conversation:
+            return true
         case .pending(_):
             return true 
         }

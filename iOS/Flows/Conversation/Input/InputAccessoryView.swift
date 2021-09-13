@@ -11,7 +11,7 @@ import Lottie
 import TMROLocalization
 import Combine
 
-class InputAccessoryView: SwipeableInputAccessoryView, ActiveConversationAccessor {
+class InputAccessoryView: SwipeableInputAccessoryView {
 
     let alertProgressView = AlertProgressView()
 
@@ -61,11 +61,12 @@ class InputAccessoryView: SwipeableInputAccessoryView, ActiveConversationAccesso
     override func handleTextChange(_ text: String) {
         super.handleTextChange(text)
 
-        guard let conversationDisplayable = self.activeConversation,
-            text.count > 0,
-            case ConversationType.conversation(let conversation) = conversationDisplayable.conversationType else { return }
-        // Twilio throttles this call to every 5 seconds
-        conversation.typing()
+        #warning("Replace")
+//        guard let conversationDisplayable = self.activeConversation,
+//            text.count > 0,
+//              case ConversationType.conversation = conversationDisplayable.conversationType else { return }
+//        // Twilio throttles this call to every 5 seconds
+//        conversation.typing()
     }
 
     override func updateInputType() {

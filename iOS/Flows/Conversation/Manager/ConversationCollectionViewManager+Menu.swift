@@ -8,12 +8,13 @@
 
 import Foundation
 import TMROLocalization
-import TwilioChatClient
 import SafariServices
 
 extension ConversationCollectionViewManager: UIContextMenuInteractionDelegate {
 
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+
         guard let indexView = interaction.view as? Indexable,
             let indexPath = indexView.indexPath,
             let message = self.item(at: indexPath) else { return nil }
@@ -51,7 +52,7 @@ extension ConversationCollectionViewManager: UIContextMenuInteractionDelegate {
 
         let confirm = UIAction(title: "Confirm", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
             self.delete(item: message, in: indexPath.section)
-            MessageSupplier.shared.delete(message: message)
+//            MessageSupplier.shared.delete(message: message)
         }
 
         let deleteMenu = UIMenu(title: "Delete", image: UIImage(systemName: "trash"), options: .destructive, children: [confirm, neverMind])
