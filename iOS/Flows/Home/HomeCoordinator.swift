@@ -27,7 +27,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         ToastScheduler.shared.delegate = self
 
-        self.checkForNotifications()
+//        self.checkForNotifications()
 
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
@@ -47,24 +47,25 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         case .login:
             break
         case .conversation:
-            if let conversationId = deeplink.customMetadata["conversationId"] as? String,
-               let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) {
-                self.startConversationFlow(for: conversation.conversationType)
-            } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
-                Task {
-                    do {
-                        let connection = try await Connection.getObject(with: connectionId)
-                        guard let conversationId = connection.conversationId,
-                              let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) else {
-                                  return
-                              }
-
-                        self.startConversationFlow(for: conversation.conversationType)
-                    } catch {
-                        logDebug(error)
-                    }
-                }
-            }
+            #warning("Replace")
+//            if let conversationId = deeplink.customMetadata["conversationId"] as? String,
+//               let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) {
+//                self.startConversationFlow(for: conversation.conversationType)
+//            } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
+//                Task {
+//                    do {
+//                        let connection = try await Connection.getObject(with: connectionId)
+//                        guard let conversationId = connection.conversationId,
+//                              let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) else {
+//                                  return
+//                              }
+//
+//                        self.startConversationFlow(for: conversation.conversationType)
+//                    } catch {
+//                        logDebug(error)
+//                    }
+//                }
+//            }
         case .conversations:
             break
         }
@@ -73,9 +74,10 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     private func handle(notice: SystemNotice) {
         switch notice.type {
         case .alert:
-            guard let conversationId = notice.attributes?["conversationId"] as? String, let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) else { return }
-            self.startConversationFlow(for: conversation.conversationType)
-
+            #warning("Replace")
+//            guard let conversationId = notice.attributes?["conversationId"] as? String, let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) else { return }
+//            self.startConversationFlow(for: conversation.conversationType)
+            break
         case .connectionRequest:
             break
         case .connectionConfirmed:

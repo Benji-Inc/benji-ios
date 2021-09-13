@@ -60,9 +60,10 @@ class NewConversationViewController: CollectionViewController<NewConversationCol
             return connection.nonMeUser?.objectId
         }
 
-        ConversationSupplier.shared.createConversation(friendlyName: "",
-                                             members: members,
-                                             setActive: true)
+        #warning("Replace")
+//        ConversationSupplier.shared.createConversation(friendlyName: "",
+//                                             members: members,
+//                                             setActive: true)
 
         self.didCreateConversation?()
     }

@@ -35,12 +35,13 @@ extension ConversationCollectionViewManager {
     }
 
     func setAllMessagesToRead() async {
-        do {
-            for message in MessageSupplier.shared.unreadMessages {
-                try await self.updateConsumers(for: message)
-            }
-        } catch {
-            logDebug(error)
-        }
+        #warning("Replace")
+//        do {
+//            for message in MessageSupplier.shared.unreadMessages {
+//                try await self.updateConsumers(for: message)
+//            }
+//        } catch {
+//            logDebug(error)
+//        }
     }
 }

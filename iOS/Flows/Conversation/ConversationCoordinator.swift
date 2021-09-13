@@ -30,7 +30,8 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
          conversation: DisplayableConversation?) {
 
         if let c = conversation {
-            ConversationSupplier.shared.set(activeConversation: c)
+            #warning("Remove or replace")
+//            ConversationSupplier.shared.set(activeConversation: c)
         }
 
         super.init(router: router, deepLink: deepLink)

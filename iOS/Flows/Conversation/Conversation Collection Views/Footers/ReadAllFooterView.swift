@@ -46,9 +46,10 @@ class ReadAllFooterView: UICollectionReusableView {
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
 
-        MessageSupplier.shared.$hasUnreadMessage.mainSink { [unowned self] (hasUnread) in
-            self.configure(hasUnreadMessages: hasUnread)
-        }.store(in: &self.cancellables)
+        #warning("Remove or replace")
+//        MessageSupplier.shared.$hasUnreadMessage.mainSink { [unowned self] (hasUnread) in
+//            self.configure(hasUnreadMessages: hasUnread)
+//        }.store(in: &self.cancellables)
     }
 
     func configure(hasUnreadMessages: Bool) {

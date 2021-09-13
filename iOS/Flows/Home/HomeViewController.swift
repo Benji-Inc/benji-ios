@@ -76,7 +76,8 @@ class HomeViewController: ViewController {
         async let unclaimedReservationCount = Reservation.getUnclaimedReservationCount(for: User.current()!)
 
         #warning("Figure out why async let isn't working here.")
-        await ConversationSupplier.shared.waitForInitialSync()
+        #warning("Replace")
+//        await ConversationSupplier.shared.waitForInitialSync()
         await NoticeSupplier.shared.loadNotices()
 
         self.dataSource.unclaimedCount = await unclaimedReservationCount
@@ -114,9 +115,11 @@ class HomeViewController: ViewController {
                 return .notice(notice)
             }
         case .conversations:
-            return ConversationSupplier.shared.allConversationsSorted.map { conversation in
-                return .conversation(conversation)
-            }
+            return []
+            #warning("Replace")
+//            return ConversationSupplier.shared.allConversationsSorted.map { conversation in
+//                return .conversation(conversation)
+//            }
         }
     }
 }
@@ -133,18 +136,20 @@ extension HomeViewController: UICollectionViewDelegate {
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
 
-        guard let conversation = ConversationSupplier.shared.allConversationsSorted[safe: indexPath.row],
-              let cell = collectionView.cellForItem(at: indexPath) as? ConversationCell else { return nil }
-
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
-            return ConversationPreviewViewController(with: conversation, size: cell.size)
-        }, actionProvider: { suggestedActions in
-            if conversation.isFromCurrentUser {
-                return self.makeCurrentUserMenu(for: conversation, at: indexPath)
-            } else {
-                return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
-            }
-        })
+        return nil
+        #warning("Replace")
+//        guard let conversation = ConversationSupplier.shared.allConversationsSorted[safe: indexPath.row],
+//              let cell = collectionView.cellForItem(at: indexPath) as? ConversationCell else { return nil }
+//
+//        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+//            return ConversationPreviewViewController(with: conversation, size: cell.size)
+//        }, actionProvider: { suggestedActions in
+//            if conversation.isFromCurrentUser {
+//                return self.makeCurrentUserMenu(for: conversation, at: indexPath)
+//            } else {
+//                return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
+//            }
+//        })
     }
 
     func makeCurrentUserMenu(for conversation: DisplayableConversation, at indexPath: IndexPath) -> UIMenu {
@@ -159,14 +164,15 @@ extension HomeViewController: UICollectionViewDelegate {
                 break
             case .pending(_):
                 break
-            case .conversation(let tchConversation):
-                Task {
-                    do {
-                        try await ConversationSupplier.shared.delete(conversation: tchConversation)
-                    } catch {
-                        logDebug(error)
-                    }
-                }
+            case .conversation:
+                #warning("Replace")
+//                Task {
+//                    do {
+//                        try await ConversationSupplier.shared.delete(conversation: tchConversation)
+//                    } catch {
+//                        logDebug(error)
+//                    }
+//                }
             }
         }
 
@@ -197,14 +203,15 @@ extension HomeViewController: UICollectionViewDelegate {
                 break
             case .pending(_):
                 break
-            case .conversation(let tchConversation):
-                Task {
-                    do {
-                        try await ConversationSupplier.shared.delete(conversation: tchConversation)
-                    } catch {
-                        logDebug(error)
-                    }
-                }
+            case .conversation:
+                #warning("Replace")
+//                Task {
+//                    do {
+//                        try await ConversationSupplier.shared.delete(conversation: tchConversation)
+//                    } catch {
+//                        logDebug(error)
+//                    }
+//                }
             }
         }
 

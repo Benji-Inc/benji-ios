@@ -61,7 +61,7 @@ class MainCoordinator: Coordinator<Void> {
                 self.runOnboardingFlow()
             } else if let user = User.current(), !user.isOnboarded {
                 self.runOnboardingFlow()
-            } else if ChatClientManager.shared.isConnected {
+            } else if ChatClient.isConnected {
                 self.runHomeFlow()
             } else if !token.isEmpty {
                 Task {
@@ -94,7 +94,7 @@ class MainCoordinator: Coordinator<Void> {
             if let deepLink = self.deepLink {
                 homeCoordinator.handle(deeplink: deepLink)
             }
-        } else if ChatClientManager.shared.isSynced {
+        } else if ChatClient.isConnected {
             self.removeChild()
             let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
             self.router.setRootModule(homeCoordinator, animated: true)
@@ -123,7 +123,8 @@ class MainCoordinator: Coordinator<Void> {
 
         self.isInitializingChat = true
 
-        try await ChatClientManager.shared.initialize(token: token)
+        #warning("Replace")
+//        try await ChatClientManager.shared.initialize(token: token)
 
         self.isInitializingChat = false
 
@@ -209,7 +210,8 @@ class MainCoordinator: Coordinator<Void> {
 
     private func logOut() {
 #if !APPCLIP && !NOTIFICATION
-        ChatClientManager.shared.client?.shutdown()
+        #warning("Replace")
+//        ChatClientManager.shared.client?.shutdown()
 #endif
         User.logOut()
         self.deepLink = nil

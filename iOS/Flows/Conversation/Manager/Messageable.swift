@@ -8,7 +8,6 @@
 
 import Foundation
 import TMROLocalization
-import TwilioChatClient
 
 enum MessageStatus: String {
     case sent //Message was sent as a system message

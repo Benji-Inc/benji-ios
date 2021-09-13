@@ -9,6 +9,7 @@
 import Foundation
 import Parse
 import SDWebImageLinkPlugin
+import StreamChat
 
 enum LaunchActivity {
     case onboarding(phoneNumber: String)
@@ -78,7 +79,7 @@ class LaunchManager {
 
     func getChatToken(with deeplink: DeepLinkable?) async -> LaunchStatus {
         // No need to get a new chat token if we're already connected.
-        guard !ChatClientManager.shared.isConnected else {
+        guard !ChatClient.isConnected else {
             return .success(object: deeplink, token: String())
         }
 

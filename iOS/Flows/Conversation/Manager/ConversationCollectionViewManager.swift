@@ -7,11 +7,10 @@
 //
 
 import Foundation
-import TwilioChatClient
 import Combine
 
 class ConversationCollectionViewManager: NSObject, UITextViewDelegate, ConversationDataSource,
-UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDataSourcePrefetching, ActiveConversationAccessor {
+UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDataSourcePrefetching {
 
     enum ScrollDirection {
         case up
@@ -52,23 +51,23 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         super.init()
         self.updateLayoutDataSource()
 
-        ConversationSupplier.shared.$activeConversation.mainSink { [weak self] (conversation) in
-            guard let `self` = self, let activeConversation = conversation else { return }
-            switch activeConversation.conversationType {
-            case .conversation(let conversation):
-                conversation.getMembersCount { (result, count) in
-                    self.numberOfMembers = Int(count)
-                }
-            default:
-                break
-            }
-        }.store(in: &self.cancellables)
+//        ConversationSupplier.shared.$activeConversation.mainSink { [weak self] (conversation) in
+//            guard let `self` = self, let activeConversation = conversation else { return }
+//            switch activeConversation.conversationType {
+//            case .conversation(let conversation):
+//                conversation.getMembersCount { (result, count) in
+//                    self.numberOfMembers = Int(count)
+//                }
+//            default:
+//                break
+//            }
+//        }.store(in: &self.cancellables)
 
-        self.collectionView.panGestureRecognizer.addTarget(self, action: #selector(handle(_:)))
+//        self.collectionView.panGestureRecognizer.addTarget(self, action: #selector(handle(_:)))
     }
 
     private func updateLayoutDataSource() {
-        self.collectionView.prefetchDataSource = self 
+//        self.collectionView.prefetchDataSource = self 
         self.collectionView.conversationLayout.dataSource = self
     }
 
@@ -133,12 +132,14 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         case .attributedText(_):
             cell = conversationCollectionView.dequeueReusableCell(AttributedMessageCell.self, for: indexPath)
         case .photo(_, _):
-            cell = conversationCollectionView.dequeueReusableCell(PhotoMessageCell.self, for: indexPath)
-            if let photoCell = cell as? PhotoMessageCell {
-                photoCell.textView.delegate = self
-                let interaction = UIContextMenuInteraction(delegate: self)
-                photoCell.imageView.addInteraction(interaction)
-            }
+            fatalError()
+            #warning("Replace")
+//            cell = conversationCollectionView.dequeueReusableCell(PhotoMessageCell.self, for: indexPath)
+//            if let photoCell = cell as? PhotoMessageCell {
+//                photoCell.textView.delegate = self
+//                let interaction = UIContextMenuInteraction(delegate: self)
+//                photoCell.imageView.addInteraction(interaction)
+//            }
         case .video(_, _):
             cell = conversationCollectionView.dequeueReusableCell(VideoMessageCell.self, for: indexPath)
         case .location(_):
@@ -246,7 +247,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
         }
 
         let footer = conversationCollectionView.dequeueReusableFooterView(ReadAllFooterView.self, for: indexPath)
-        footer.configure(hasUnreadMessages: MessageSupplier.shared.hasUnreadMessage) 
+//        footer.configure(hasUnreadMessages: MessageSupplier.shared.hasUnreadMessage) 
         self.footerView = footer
         footer.didCompleteAnimation = { [unowned self] in
             self.setAllMessagesToRead(for: footer)
@@ -311,26 +312,26 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
     }
 
     func didSelectLoadMore(for messageIndex: Int) {
-        guard let conversationDisplayable = ConversationSupplier.shared.activeConversation else { return }
-
-        switch conversationDisplayable.conversationType {
-        case .system(_):
-            break
-        case .pending(_):
-            break 
-        case .conversation(let conversation):
-            Task {
-                do {
-                    let sections = try await MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1),
-                                                                                for: conversation)
-                    self.set(newSections: sections,
-                             keepOffset: true,
-                             completion: nil)
-                } catch {
-                    logDebug(error)
-                }
-            }
-        }
+//        guard let conversationDisplayable = ConversationSupplier.shared.activeConversation else { return }
+//
+//        switch conversationDisplayable.conversationType {
+//        case .system(_):
+//            break
+//        case .pending(_):
+//            break
+//        case .conversation(let conversation):
+//            Task {
+//                do {
+//                    let sections = try await MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1),
+//                                                                                for: conversation)
+//                    self.set(newSections: sections,
+//                             keepOffset: true,
+//                             completion: nil)
+//                } catch {
+//                    logDebug(error)
+//                }
+//            }
+//        }
     }
 
     @objc func handle(_ recognizer: UIPanGestureRecognizer) {
@@ -381,7 +382,7 @@ UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFl
 
     private func setAllMessagesToRead(for footer: ReadAllFooterView) {
         if !self.isSettingReadAll,
-           MessageSupplier.shared.unreadMessages.count > 0,
+//           MessageSupplier.shared.unreadMessages.count > 0,
            self.lastScrollDirection == .up {
 
             self.isSettingReadAll = true

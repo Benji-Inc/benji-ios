@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import TwilioChatClient
 
 class ConversationSectionable {
 
@@ -16,8 +15,8 @@ class ConversationSectionable {
     var conversationType: ConversationType?
 
     var firstMessageIndex: Int? {
-        guard let message = self.items.first as? TCHMessage else { return nil }
-        return message.index?.intValue
+        #warning("Implement or delete")
+        return nil
     }
 
     init(date: Date,

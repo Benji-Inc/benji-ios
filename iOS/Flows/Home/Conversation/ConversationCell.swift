@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import TwilioChatClient
 
 class ConversationCell: CollectionViewManagerCell, ManageableCell {
+
     typealias ItemType = DisplayableConversation
 
     var currentItem: DisplayableConversation?
@@ -27,7 +27,9 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.content.configure(with: item)
     }
 
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes)
+    -> UICollectionViewLayoutAttributes {
+        
         layoutAttributes.size = CGSize(width: layoutAttributes.size.width, height: 60)
         return layoutAttributes
     }
