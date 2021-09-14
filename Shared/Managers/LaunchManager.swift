@@ -21,7 +21,7 @@ protocol LaunchActivityHandler {
 }
 
 enum LaunchStatus {
-    case success(object: DeepLinkable?, token: String)
+    case success(object: DeepLinkable?)
     case failed(error: ClientError?)
 }
 
@@ -38,8 +38,9 @@ class LaunchManager {
     weak var delegate: LaunchManagerDelegate?
 
     func launchApp(with options: [UIApplication.LaunchOptionsKey: Any]?) async -> LaunchStatus {
-        if Parse.currentConfiguration == nil  {
-            Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
+        // Initialize Parse if necessary
+        if Parse.currentConfiguration.isNil  {
+            Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) in
                 configuration.applicationGroupIdentifier = "group.com.BENJI"
                 configuration.server = Config.shared.environment.url
                 configuration.applicationId = Config.shared.environment.appID
@@ -64,29 +65,30 @@ class LaunchManager {
     }
 
     private func initializeUserData(with deeplink: DeepLinkable?) async -> LaunchStatus {
-        guard let _ = User.current()?.objectId else {
-            return .success(object: deeplink, token: String())
+        guard let user = User.current() else {
+            return .success(object: deeplink)
         }
 
 #if !APPCLIP && !NOTIFICATION
-        return await self.getChatToken(with: deeplink)
+        return await self.getChatToken(for: user, deepLink: deeplink)
 #else
-        return .success(object: deeplink, token: String())
+        return .success(object: deeplink)
 #endif
     }
     
 #if !APPCLIP && !NOTIFICATION
 
-    func getChatToken(with deeplink: DeepLinkable?) async -> LaunchStatus {
+    func getChatToken(for user: User, deepLink: DeepLinkable?) async -> LaunchStatus {
         // No need to get a new chat token if we're already connected.
         guard !ChatClient.isConnected else {
-            return .success(object: deeplink, token: String())
+            return .success(object: deepLink)
         }
 
         do {
-            let token = try await GetChatToken().makeRequest()
+            try await ChatClient.initialize(for: user)
+
             self.finishedInitialFetch = true
-            return .success(object: deeplink, token: token)
+            return .success(object: deepLink)
         } catch {
             return .failed(error: ClientError.apiError(detail: error.localizedDescription))
         }

@@ -18,22 +18,24 @@ extension ChatClient {
         return sharedClient.connectionStatus == .connected
     }
 
-    static func initialize(withToken token: String) async throws {
+    static func initialize(for user: User) async throws {
         // Create a shared chat client object if needed
         if self.shared.isNil {
             let config = ChatClientConfig(apiKey: .init("hvmd2mhxcres"))
-            self.shared = ChatClient(config: config)
+            self.shared = ChatClient(config: config, tokenProvider: { completion in
+                let token = Token.development(userId: user.userObjectID!)
+                completion(.success(token))
+            })
         }
 
-        // userID: martinjibber
-        let token = Token(stringLiteral: token)
+        let token = Token.development(userId: user.userObjectID!)
 
         /// connect to chat
         return try await withCheckedThrowingContinuation { continuation in
             self.shared.connectUser(
                 userInfo: UserInfo(
-                    id: "SpecialID",
-                    name: "Martin Jibber",
+                    id: user.userObjectID!,
+                    name: user.fullName,
                     imageURL: URL(string: "https://bit.ly/2TIt8NR")
                 ),
                 token: token,

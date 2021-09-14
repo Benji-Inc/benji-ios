@@ -27,7 +27,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         ToastScheduler.shared.delegate = self
 
-//        self.checkForNotifications()
+        self.checkForNotifications()
 
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
