@@ -37,6 +37,8 @@
 		80DACF9826D6D1B50048722A /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */; };
 		80DACF9926D6D1B50048722A /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */; };
 		80DACF9B26D6D7360048722A /* HomeCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9A26D6D7360048722A /* HomeCollectionViewDataSource.swift */; };
+		80F88BAE26F11F02006C7677 /* ChatChannel+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F88BAD26F11F02006C7677 /* ChatChannel+Async.swift */; };
+		80F88BAF26F11F02006C7677 /* ChatChannel+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F88BAD26F11F02006C7677 /* ChatChannel+Async.swift */; };
 		80FA868C26F111830053101B /* ChatMessage+Messageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FA868B26F111830053101B /* ChatMessage+Messageable.swift */; };
 		80FA869226F117C20053101B /* ChatUser+Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FA869126F117C20053101B /* ChatUser+Avatar.swift */; };
 		80FA869326F117C20053101B /* ChatUser+Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FA869126F117C20053101B /* ChatUser+Avatar.swift */; };
@@ -803,6 +805,7 @@
 		8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFUser+Extensions.swift"; sourceTree = "<group>"; };
 		80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
 		80DACF9A26D6D7360048722A /* HomeCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		80F88BAD26F11F02006C7677 /* ChatChannel+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatChannel+Async.swift"; sourceTree = "<group>"; };
 		80FA868B26F111830053101B /* ChatMessage+Messageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatMessage+Messageable.swift"; sourceTree = "<group>"; };
 		80FA869126F117C20053101B /* ChatUser+Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatUser+Avatar.swift"; sourceTree = "<group>"; };
 		89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.debug.xcconfig"; sourceTree = "<group>"; };
@@ -1223,6 +1226,7 @@
 			isa = PBXGroup;
 			children = (
 				808E3DC926F03AAB00F9F466 /* ChannelController+Async.swift */,
+				80F88BAD26F11F02006C7677 /* ChatChannel+Async.swift */,
 				800FAAC026F0585A00D3C3A0 /* ChatChannel+Extensions.swift */,
 				80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */,
 				80FA868B26F111830053101B /* ChatMessage+Messageable.swift */,
@@ -2776,6 +2780,7 @@
 				D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
 				D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */,
 				D67934D523D956BB00536B44 /* ConversationPreviewViewController.swift in Sources */,
+				80F88BAE26F11F02006C7677 /* ChatChannel+Async.swift in Sources */,
 				D66F0FD822BF295A00BA277D /* Coordinator.swift in Sources */,
 				D67934E523DE66FE00536B44 /* PushPayload.swift in Sources */,
 				D66F0FD422BF074C00BA277D /* DeeplinkObject.swift in Sources */,
@@ -3130,6 +3135,7 @@
 				D655195A2589126800B901E4 /* User+Objectable.swift in Sources */,
 				D65519C425891B0A00B901E4 /* FullScreenViewController.swift in Sources */,
 				D65519162589120C00B901E4 /* DispatchQue+Extensions.swift in Sources */,
+				80F88BAF26F11F02006C7677 /* ChatChannel+Async.swift in Sources */,
 				D65519372589122700B901E4 /* UIViewController+Extensions.swift in Sources */,
 				D6551A6A25895F9400B901E4 /* FaceView.swift in Sources */,
 				D6D3927E265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,

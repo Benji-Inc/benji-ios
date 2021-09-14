@@ -26,9 +26,9 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
     lazy var conversationCollectionView = ConversationCollectionView()
     lazy var collectionViewManager = ConversationCollectionViewManager(with: self.conversationCollectionView)
 
-    private var conversation: DisplayableConversation?
-    private var channelController: ChatChannelController?
-    private unowned let delegate: ConversationViewControllerDelegates
+    private(set) var conversation: DisplayableConversation?
+    private(set) var channelController: ChatChannelController?
+    unowned let delegate: ConversationViewControllerDelegates
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
