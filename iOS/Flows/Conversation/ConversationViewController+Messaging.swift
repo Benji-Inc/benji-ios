@@ -37,8 +37,6 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
         switch activeConversation.conversationType {
         case .system(_):
             break
-        case .pending(_):
-            break
         case .conversation:
             self.loadMessages(for: activeConversation.conversationType)
         }

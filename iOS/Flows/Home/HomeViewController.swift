@@ -8,6 +8,7 @@
 
 import Foundation
 import Parse
+import StreamChat
 
 protocol HomeViewControllerDelegate: AnyObject {
     func homeViewControllerDidTapAdd(_ controller: HomeViewController)
@@ -162,17 +163,14 @@ extension HomeViewController: UICollectionViewDelegate {
             switch conversation.conversationType {
             case .system(_):
                 break
-            case .pending(_):
-                break
-            case .conversation:
-                #warning("Replace")
-//                Task {
-//                    do {
-//                        try await ConversationSupplier.shared.delete(conversation: tchConversation)
-//                    } catch {
-//                        logDebug(error)
-//                    }
-//                }
+            case .conversation(let conversation):
+                Task {
+                    do {
+                        try await ChatClient.shared.deleteChannel(conversation)
+                    } catch {
+                        logDebug(error)
+                    }
+                }
             }
         }
 
@@ -201,17 +199,14 @@ extension HomeViewController: UICollectionViewDelegate {
             switch conversation.conversationType {
             case .system(_):
                 break
-            case .pending(_):
-                break
-            case .conversation:
-                #warning("Replace")
-//                Task {
-//                    do {
-//                        try await ConversationSupplier.shared.delete(conversation: tchConversation)
-//                    } catch {
-//                        logDebug(error)
-//                    }
-//                }
+            case .conversation(let conversation):
+                Task {
+                    do {
+                        try await  ChatClient.shared.deleteChannel(conversation)
+                    } catch {
+                        logDebug(error)
+                    }
+                }
             }
         }
 

@@ -49,4 +49,9 @@ extension ChatClient {
             )
         }
     }
+
+    func deleteChannel(_ channel: ChatChannel) async throws {
+        let controller = self.channelController(for: channel.cid)
+        try await controller.deleteChannel()
+    }
 }

@@ -10,7 +10,8 @@ import Foundation
 import Parse
 import Combine
 
-typealias ConversationViewControllerDelegates = ConversationDetailViewControllerDelegate & ConversationViewControllerDelegate
+typealias ConversationViewControllerDelegates
+= ConversationDetailViewControllerDelegate & ConversationViewControllerDelegate
 
 @MainActor
 protocol ConversationViewControllerDelegate: AnyObject {
@@ -28,9 +29,8 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
-            #warning("Replace")
-//            self.conversationCollectionView.contentInset.bottom = self.collectionViewBottomInset
-//            self.conversationCollectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
+            self.conversationCollectionView.contentInset.bottom = self.collectionViewBottomInset
+            self.conversationCollectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
         }
     }
 
@@ -100,11 +100,11 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
             self.delegate.conversationView(self, didTapShare: message)
         }
 
-        self.collectionViewManager.didTapResend = { [unowned self] message in
+//        self.collectionViewManager.didTapResend = { [unowned self] message in
 //            Task {
 //                await self.resend(message: message)
 //            }
-        }
+//        }
 
         self.collectionViewManager.didTapEdit = { [unowned self] message, indexPath in
             self.indexPathForEditing = indexPath
@@ -144,20 +144,17 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
     override func viewWasDismissed() {
         super.viewWasDismissed()
 
-        #warning("Replace")
-//        MessageSupplier.shared.reset()
-//        ConversationSupplier.shared.set(activeConversation: nil)
         self.collectionViewManager.reset()
     }
 
     func setupDetailAnimator() {
         self.detailVC.createAnimator()
-        #warning("Replace")
-//        self.conversationCollectionView.publisher(for: \.contentOffset)
-//            .mainSink { (contentOffset) in
-//                self.detailVC.animator.fractionComplete = self.getDetailProgress()
-//                self.view.layoutNow()
-//            }.store(in: &self.cancellables)
+
+        self.conversationCollectionView.publisher(for: \.contentOffset)
+            .mainSink { (contentOffset) in
+                self.detailVC.animator.fractionComplete = self.getDetailProgress()
+                self.view.layoutNow()
+            }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {

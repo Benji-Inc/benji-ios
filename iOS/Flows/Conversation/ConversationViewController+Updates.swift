@@ -31,8 +31,6 @@ extension ConversationViewController {
 //                    logDebug(error)
 //                }
 //            }
-        case .pending(_):
-            break 
         }
     }
 
