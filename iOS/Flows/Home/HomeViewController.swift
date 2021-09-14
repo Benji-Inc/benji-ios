@@ -24,6 +24,7 @@ class HomeViewController: ViewController {
 
     private lazy var dataSource = HomeCollectionViewDataSource(collectionView: self.collectionView)
     private var collectionView = CollectionView(layout: HomeCollectionViewLayout())
+    private var channelListController: ChatChannelListController?
 
     let addButton = Button()
 
@@ -76,9 +77,12 @@ class HomeViewController: ViewController {
 
         async let unclaimedReservationCount = Reservation.getUnclaimedReservationCount(for: User.current()!)
 
-        #warning("Figure out why async let isn't working here.")
-        #warning("Replace")
-//        await ConversationSupplier.shared.waitForInitialSync()
+        let userID = User.current()!.userObjectID!
+        let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
+                                     sort: [.init(key: .lastMessageAt, isAscending: false)])
+
+        self.channelListController = try? await ChatClient.shared.queryChannels(query: query)
+
         await NoticeSupplier.shared.loadNotices()
 
         self.dataSource.unclaimedCount = await unclaimedReservationCount
@@ -116,11 +120,10 @@ class HomeViewController: ViewController {
                 return .notice(notice)
             }
         case .conversations:
-            return []
-            #warning("Replace")
-//            return ConversationSupplier.shared.allConversationsSorted.map { conversation in
-//                return .conversation(conversation)
-//            }
+            guard let channelListController = self.channelListController else { return [] }
+            return channelListController.channels.map { chatChannel in
+                return .conversation(DisplayableConversation(conversationType: .conversation(chatChannel)))
+            }
         }
     }
 }
