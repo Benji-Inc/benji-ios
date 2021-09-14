@@ -27,6 +27,7 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
     lazy var collectionViewManager = ConversationCollectionViewManager(with: self.conversationCollectionView)
 
     private var conversation: DisplayableConversation?
+    private var channelController: ChatChannelController?
     private unowned let delegate: ConversationViewControllerDelegates
 
     var collectionViewBottomInset: CGFloat = 0 {
@@ -64,6 +65,15 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
         self.delegate = delegate
 
         super.init()
+
+        if let conversation = conversation {
+            switch conversation.conversationType {
+            case .system(let systemConversation):
+                break
+            case .conversation(let chatChannel):
+                self.channelController = ChatClient.shared.channelController(for: chatChannel.cid)
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -122,15 +132,9 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
 //            }
 //        }
 //
-//        ConversationSupplier.shared.$activeConversation.mainSink { [unowned self] (conversation) in
-//            guard let activeConversation = conversation else {
-//                self.collectionViewManager.reset()
-//                return
-//            }
-//
-//            self.load(activeConversation: activeConversation)
-//
-//        }.store(in: &self.cancellables)
+        if let conversation = self.conversation {
+            self.load(activeConversation: conversation)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

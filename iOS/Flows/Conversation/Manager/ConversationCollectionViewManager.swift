@@ -10,7 +10,8 @@ import Foundation
 import Combine
 
 class ConversationCollectionViewManager: NSObject, UITextViewDelegate, ConversationDataSource,
-UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDataSourcePrefetching {
+                                         UICollectionViewDelegate, UICollectionViewDataSource,
+                                         UICollectionViewDelegateFlowLayout, UICollectionViewDataSourcePrefetching {
 
     enum ScrollDirection {
         case up

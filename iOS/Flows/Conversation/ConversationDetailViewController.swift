@@ -102,16 +102,6 @@ class ConversationDetailViewController: ViewController {
         guard let channel = self.channelController?.channel else { return }
 
         self.layoutViews(for: channel)
-
-//        ConversationSupplier.shared.$activeConversation.mainSink { [weak self] (conversation) in
-//            guard let `self` = self, let activeConversation = conversation else { return }
-//            switch activeConversation.conversationType {
-//            case .conversation(let conversation):
-//                self.layoutViews(for: conversation)
-//            default:
-//                break
-//            }
-//        }.store(in: &self.cancellables)
     }
 
     private func layoutViews(for conversation: ChatChannel) {

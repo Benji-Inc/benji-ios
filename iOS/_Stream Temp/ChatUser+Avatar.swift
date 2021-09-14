@@ -1,15 +1,16 @@
 //
-//  ChatChannelMember+Avatar.swift
-//  ChatChannelMember+Avatar
+//  ChatUser+Avatar.swift
+//  ChatUser+Avatar
 //
-//  Created by Martin Young on 9/13/21.
+//  Created by Martin Young on 9/14/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
 import StreamChat
 
-extension ChatChannelMember: Avatar {
+extension ChatUser: Avatar {
+
     var givenName: String {
         return self.name ?? String()
     }

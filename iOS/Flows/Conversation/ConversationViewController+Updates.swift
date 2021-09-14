@@ -7,30 +7,36 @@
 //
 
 import Foundation
+import StreamChat
 
 extension ConversationViewController {
-
+    
     func loadMessages(for conversationType: ConversationType) {
         self.collectionViewManager.reset()
-        #warning("Replace")
-//        MessageSupplier.shared.reset()
         
         switch conversationType {
         case .system(let conversation):
             self.loadSystem(conversation: conversation)
-        case .conversation:
-            #warning("Replace")
-//            Task {
-//                do {
-//                    let sections = try await MessageSupplier.shared.getLastMessages()
-//                    self.collectionViewManager.set(newSections: sections,
-//                                                   animate: true) {
-//                        self.setupDetailAnimator()
-//                    }
-//                } catch {
-//                    logDebug(error)
-//                }
-//            }
+        case .conversation(let channel):
+            Task {
+                do {
+                    let controller = ChatClient.shared.channelController(for: channel.cid)
+                    try await controller.loadPreviousMessages()
+                    let messages = controller.messages.filter { _ in
+                        return true
+                    }
+                    let section = ConversationSectionable(date: channel.updatedAt,
+                                                          items: messages,
+                                                          conversationType: .conversation(channel))
+                    
+                    self.collectionViewManager.set(newSections: [section],
+                                                   animate: true) {
+                        self.setupDetailAnimator()
+                    }
+                } catch {
+                    logDebug(error)
+                }
+            }
         }
     }
 

@@ -14,7 +14,6 @@ class SystemMessage: Messageable {
 
     var createdAt: Date
     var authorID: String
-    var messageIndex: NSNumber?
     var attributes: [String : Any]?
     var avatar: Avatar
     var context: MessageContext
@@ -37,7 +36,6 @@ class SystemMessage: Messageable {
          isFromCurrentUser: Bool,
          createdAt: Date,
          authorId: String,
-         messageIndex: NSNumber?,
          status: MessageStatus,
          kind: MessageKind,
          id: String,
@@ -48,7 +46,6 @@ class SystemMessage: Messageable {
         self.isFromCurrentUser = isFromCurrentUser
         self.createdAt = createdAt
         self.authorID = authorId
-        self.messageIndex = messageIndex
         self.status = status
         self.id = id
         self.attributes = attributes
@@ -63,7 +60,6 @@ class SystemMessage: Messageable {
                   isFromCurrentUser: message.isFromCurrentUser,
                   createdAt: message.createdAt,
                   authorId: message.authorID,
-                  messageIndex: message.messageIndex,
                   status: message.status,
                   kind: message.kind,
                   id: message.id,
