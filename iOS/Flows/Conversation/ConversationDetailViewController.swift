@@ -48,7 +48,7 @@ class ConversationDetailViewController: ViewController {
             case .system(let systemConversation):
                 break
             case .conversation(let chatChannel):
-                self.channelController = ChatClient.shared.channelController(for: chatChannel.cid)
+                self.channelController = chatClient.channelController(for: chatChannel.cid)
             }
         }
     }
@@ -106,7 +106,7 @@ class ConversationDetailViewController: ViewController {
 
     private func layoutViews(for conversation: ChatChannel) {
         let members = conversation.lastActiveMembers.filter { member in
-            return member.id != ChatClient.shared.currentUserId
+            return member.id != chatClient.currentUserId
         }
         self.layout(members: members, conversation: conversation)
     }

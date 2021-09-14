@@ -12,6 +12,6 @@ import StreamChat
 extension ChatChannel {
 
     var isOwnedByMe: Bool {
-        return self.createdBy?.id == ChatClient.shared.currentUserId
+        return self.createdBy?.id == chatClient.currentUserId
     }
 }

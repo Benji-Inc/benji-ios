@@ -155,7 +155,7 @@ class MainCoordinator: Coordinator<Void> {
 
     private func logOut() {
 #if !APPCLIP && !NOTIFICATION
-        ChatClient.shared.disconnect()
+        chatClient.disconnect()
 #endif
         User.logOut()
         self.deepLink = nil
