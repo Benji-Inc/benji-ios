@@ -9,6 +9,7 @@
 import Foundation
 import Parse
 import Combine
+import StreamChat
 
 typealias ConversationViewControllerDelegates
 = ConversationDetailViewControllerDelegate & ConversationViewControllerDelegate
@@ -21,11 +22,12 @@ protocol ConversationViewControllerDelegate: AnyObject {
 class ConversationViewController: FullScreenViewController, CollectionViewInputHandler {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    lazy var detailVC = ConversationDetailViewController(delegate: self.delegate)
+    lazy var detailVC = ConversationDetailViewController(conversation: self.conversation, delegate: self.delegate)
     lazy var conversationCollectionView = ConversationCollectionView()
     lazy var collectionViewManager = ConversationCollectionViewManager(with: self.conversationCollectionView)
 
-    unowned let delegate: ConversationViewControllerDelegates
+    private var conversation: DisplayableConversation?
+    private unowned let delegate: ConversationViewControllerDelegates
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
@@ -57,8 +59,10 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
         return true 
     }
 
-    init(delegate: ConversationViewControllerDelegates) {
+    init(conversation: DisplayableConversation?, delegate: ConversationViewControllerDelegates) {
+        self.conversation = conversation
         self.delegate = delegate
+
         super.init()
     }
 

@@ -10,6 +10,7 @@ import Foundation
 import Parse
 import TMROLocalization
 import Combine
+import StreamChat
 
 @MainActor
 protocol ConversationDetailViewControllerDelegate: AnyObject {
@@ -33,10 +34,23 @@ class ConversationDetailViewController: ViewController {
     lazy var animator = UIViewPropertyAnimator(duration: 2.0, curve: .linear, animations: nil)
 
     unowned let delegate: ConversationDetailViewControllerDelegate
+    private var conversation: DisplayableConversation?
+    private var channelController: ChatChannelController?
 
-    init(delegate: ConversationDetailViewControllerDelegate) {
+    init(conversation: DisplayableConversation?, delegate: ConversationDetailViewControllerDelegate) {
+        self.conversation = conversation
         self.delegate = delegate
+
         super.init()
+
+        if let conversation = conversation {
+            switch conversation.conversationType {
+            case .system(let systemConversation):
+                break
+            case .conversation(let chatChannel):
+                self.channelController = ChatClient.shared.channelController(for: chatChannel.cid)
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -85,6 +99,10 @@ class ConversationDetailViewController: ViewController {
     }
 
     private func subscribeToConversationUpdates() {
+        guard let channel = self.channelController?.channel else { return }
+
+        self.layoutViews(for: channel)
+
 //        ConversationSupplier.shared.$activeConversation.mainSink { [weak self] (conversation) in
 //            guard let `self` = self, let activeConversation = conversation else { return }
 //            switch activeConversation.conversationType {
@@ -96,38 +114,37 @@ class ConversationDetailViewController: ViewController {
 //        }.store(in: &self.cancellables)
     }
 
-//    private func layoutViews(for conversation: TCHChannel) {
-//        Task {
-//            guard let users = try? await conversation.getUsers() else { return }
-//
-//            self.layout(forNonMe: users, conversation: conversation)
-//        }
-//    }
+    private func layoutViews(for conversation: ChatChannel) {
+        let members = conversation.lastActiveMembers.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        }
+        self.layout(members: members, conversation: conversation)
+    }
 
-//    private func layout(forNonMe users: [User], conversation: TCHChannel) {
-//        guard let date = conversation.dateCreatedAsDate else { return }
-//
-//        self.stackedAvatarView.set(items: users)
-//        let message: Localized
-//        if users.count == 0 {
-//            message = "No one has joined yet."
-//            // No one in the conversation but the current user.
-//        } else if users.count == 1, let user = users.first {
-//            self.label.setText(user.fullName)
-//            message = self.getMessage(for: user, date: date, conversation: conversation)
-//        } else {
-//            // Group chat
-//            message = self.getMessage(for: users, date: date, conversation: conversation)
-//        }
-//
-//        let attributed = AttributedString(message,
-//                                          fontType: .small,
-//                                          color: .background4)
-//        self.textView.set(attributed: attributed, linkColor: .teal)
-//        delay(0.1) { [unowned self] in
-//            self.view.layoutNow()
-//        }
-//    }
+    private func layout(members: [ChatChannelMember], conversation: ChatChannel) {
+        let date = conversation.createdAt
+
+        self.stackedAvatarView.set(items: members)
+        let message: Localized
+        if members.count == 0 {
+            message = "No one has joined yet."
+            // No one in the conversation but the current user.
+        } else if members.count == 1, let member = members.first {
+            self.label.setText(member.fullName)
+            message = self.getMessage(for: member, date: date, conversation: conversation)
+        } else {
+            // Group chat
+            message = self.getMessage(for: members, date: date, conversation: conversation)
+        }
+
+        let attributed = AttributedString(message,
+                                          fontType: .small,
+                                          color: .background4)
+        self.textView.set(attributed: attributed, linkColor: .teal)
+        delay(0.1) { [unowned self] in
+            self.view.layoutNow()
+        }
+    }
 
     func createAnimator() {
         self.animator.addAnimations { [weak self] in
@@ -169,43 +186,38 @@ class ConversationDetailViewController: ViewController {
         self.animator.pauseAnimation()
     }
 
-    #warning("Replace")
-//    private func getMessage(for user: User, date: Date, conversation: TCHChannel) -> LocalizedString {
-//
-//        var author = ""
-//        if conversation.isOwnedByMe {
-//            author = "You"
-//        } else {
-//            author = user.givenName
-//        }
-//
-//        return LocalizedString(id: "", arguments: [user.givenName, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). @(author) created this conversation on @(date)")
-//    }
-//
-//    private func getMessage(for users: [User], date: Date, conversation: TCHChannel) -> LocalizedString {
-//
-//        var text = ""
-//        for (index, user) in users.enumerated() {
-//            if index < users.count - 1 {
-//                text.append(String("\(user.givenName), "))
-//            } else if index == users.count - 1 && users.count > 1 {
-//                text.append(String("\(user.givenName)"))
-//            } else {
-//                text.append(user.givenName)
-//            }
-//        }
-//
-//        var author = ""
-//        if conversation.isOwnedByMe {
-//            author = "You"
-//        } else if let user = users.first(where: { user in
-//            return user.objectId == conversation.createdBy
-//        }) {
-//            author = user.givenName
-//        }
-//
-//        return LocalizedString(id: "", arguments: [text, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your group chat with [@(name)](userid). @(author) created this conversation on @(date)")
-//    }
+    private func getMessage(for member: ChatChannelMember, date: Date, conversation: ChatChannel) -> LocalizedString {
+        var author = ""
+        if conversation.isOwnedByMe {
+            author = "You"
+        } else {
+            author = member.givenName
+        }
+
+        return LocalizedString(id: "", arguments: [member.givenName, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your direct message history with [@(name)](userid). @(author) created this conversation on @(date)")
+    }
+
+    private func getMessage(for members: [ChatChannelMember], date: Date, conversation: ChatChannel) -> LocalizedString {
+        var text = ""
+        for (index, user) in members.enumerated() {
+            if index < members.count - 1 {
+                text.append(String("\(user.givenName), "))
+            } else if index == members.count - 1 && members.count > 1 {
+                text.append(String("\(user.givenName)"))
+            } else {
+                text.append(user.givenName)
+            }
+        }
+
+        var author = ""
+        if conversation.isOwnedByMe {
+            author = "You"
+        } else if let member = members.first {
+            author = member.givenName
+        }
+
+        return LocalizedString(id: "", arguments: [text, author, Date.monthDayYear.string(from: date)], default: "This is the very beginning of your group chat with [@(name)](userid). @(author) created this conversation on @(date)")
+    }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)

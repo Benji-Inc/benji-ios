@@ -8,6 +8,7 @@
 
 import Foundation
 
+#warning("Do we need this?")
 extension Range: Comparable {
     public static func < (lhs: Range<Bound>, rhs: Range<Bound>) -> Bool {
         return lhs.lowerBound < rhs.lowerBound
