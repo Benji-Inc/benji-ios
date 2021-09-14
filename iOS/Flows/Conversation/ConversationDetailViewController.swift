@@ -34,22 +34,17 @@ class ConversationDetailViewController: ViewController {
     lazy var animator = UIViewPropertyAnimator(duration: 2.0, curve: .linear, animations: nil)
 
     unowned let delegate: ConversationDetailViewControllerDelegate
-    private var conversation: DisplayableConversation?
+    private var conversation: Conversation?
     private var channelController: ChatChannelController?
 
-    init(conversation: DisplayableConversation?, delegate: ConversationDetailViewControllerDelegate) {
+    init(conversation: Conversation?, delegate: ConversationDetailViewControllerDelegate) {
         self.conversation = conversation
         self.delegate = delegate
 
         super.init()
 
         if let conversation = conversation {
-            switch conversation.conversationType {
-            case .system(let systemConversation):
-                break
-            case .conversation(let chatChannel):
-                self.channelController = chatClient.channelController(for: chatChannel.cid)
-            }
+            self.channelController = chatClient.channelController(for: conversation.cid)
         }
     }
 

@@ -64,7 +64,7 @@ class InputAccessoryView: SwipeableInputAccessoryView {
         #warning("Replace")
 //        guard let conversationDisplayable = self.activeConversation,
 //            text.count > 0,
-//              case ConversationType.conversation = conversationDisplayable.conversationType else { return }
+//              case Conversation.conversation = conversationDisplayable.conversationType else { return }
 //        // Twilio throttles this call to every 5 seconds
 //        conversation.typing()
     }

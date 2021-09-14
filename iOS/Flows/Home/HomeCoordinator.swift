@@ -89,12 +89,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-    func startConversationFlow(for type: ConversationType?) {
+    func startConversationFlow(for conversation: Conversation?) {
         self.removeChild()
-        var conversation: DisplayableConversation?
-        if let t = type {
-            conversation = DisplayableConversation(conversationType: t)
-        }
+
         let coordinator = ConversationCoordinator(router: self.router,
                                                   deepLink: self.deepLink,
                                                   conversation: conversation)
@@ -183,7 +180,7 @@ extension HomeCoordinator: HomeViewControllerDelegate {
             case .notice(let notice):
                 self.handle(notice: notice)
             case .conversation(let conversation):
-                self.startConversationFlow(for: conversation.conversationType)
+                self.startConversationFlow(for: conversation)
             }
         }
     }

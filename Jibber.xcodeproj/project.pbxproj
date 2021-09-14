@@ -44,7 +44,6 @@
 		80FA869326F117C20053101B /* ChatUser+Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FA869126F117C20053101B /* ChatUser+Avatar.swift */; };
 		876DD7048C07730CF091087A /* Pods_AppClip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B92BA452D2C2DB45DD711F86 /* Pods_AppClip.framework */; };
 		C03D8861C3D82A5BDDC5CF8C /* Pods_Intents_ExtensionUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */; };
-		D607400E23401B3E009633EB /* SystemConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D607400D23401B3E009633EB /* SystemConversation.swift */; };
 		D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E552377CB2F00833DA7 /* Messageable.swift */; };
 		D6090E582377D2CA00833DA7 /* ConversationSectionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E572377D2CA00833DA7 /* ConversationSectionable.swift */; };
 		D6090E5A2377D5CF00833DA7 /* ConversationCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6090E592377D5CF00833DA7 /* ConversationCellAttributesConfigurer.swift */; };
@@ -460,7 +459,6 @@
 		D66ED45D267D4B4000332BA3 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0DD21D30DAC00204BEE /* Array+Extensions.swift */; };
 		D66ED45E267D4B4000332BA3 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0DD21D30DAC00204BEE /* Array+Extensions.swift */; };
 		D66ED460267D50D300332BA3 /* ConnectionsManger.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66ED45F267D50D300332BA3 /* ConnectionsManger.swift */; };
-		D66F0FC922BF006D00BA277D /* SystemMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FC822BF006D00BA277D /* SystemMessage.swift */; };
 		D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FCE22BF060500BA277D /* Deeplinkable.swift */; };
 		D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
 		D66F0FD422BF074C00BA277D /* DeeplinkObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */; };
@@ -470,7 +468,6 @@
 		D66F0FDC22BF2ADC00BA277D /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */; };
 		D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE122C041AF00BA277D /* AvatarView.swift */; };
 		D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* Avatar.swift */; };
-		D66F0FF222C1D86800BA277D /* ConversationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FF122C1D86800BA277D /* ConversationType.swift */; };
 		D66F102622C7C6A900BA277D /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
 		D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1EE264029BC00BF2B8D /* Toast.swift */; };
 		D671E1F126402A2000BF2B8D /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F026402A2000BF2B8D /* ToastView.swift */; };
@@ -518,7 +515,6 @@
 		D679DE1726822FB70054DCAF /* FocusStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679DE1526822FB70054DCAF /* FocusStatusViewController.swift */; };
 		D679DE1826822FB70054DCAF /* FocusStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679DE1526822FB70054DCAF /* FocusStatusViewController.swift */; };
 		D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67A82DA230CCE3D0076152B /* SplashViewController.swift */; };
-		D6830222234AA35C006145FE /* DisplayableConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6830221234AA35C006145FE /* DisplayableConversation.swift */; };
 		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */; };
@@ -823,7 +819,6 @@
 		B92BA452D2C2DB45DD711F86 /* Pods_AppClip.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AppClip.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C93B258C6ACB241C6FA99005 /* Pods-JibberAppClip.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JibberAppClip.release.xcconfig"; path = "Pods/Target Support Files/Pods-JibberAppClip/Pods-JibberAppClip.release.xcconfig"; sourceTree = "<group>"; };
 		D33049F6417FECDE51BB13DB /* Pods-OursAppClip.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursAppClip.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OursAppClip/Pods-OursAppClip.debug.xcconfig"; sourceTree = "<group>"; };
-		D607400D23401B3E009633EB /* SystemConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemConversation.swift; sourceTree = "<group>"; };
 		D6090E552377CB2F00833DA7 /* Messageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Messageable.swift; sourceTree = "<group>"; };
 		D6090E572377D2CA00833DA7 /* ConversationSectionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSectionable.swift; sourceTree = "<group>"; };
 		D6090E592377D5CF00833DA7 /* ConversationCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCellAttributesConfigurer.swift; sourceTree = "<group>"; };
@@ -968,7 +963,6 @@
 		D66A580A25DD6990001B3F64 /* ConnectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionCell.swift; sourceTree = "<group>"; };
 		D66A580C25DD6B06001B3F64 /* NewConversationCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewConversationCollectionView.swift; sourceTree = "<group>"; };
 		D66ED45F267D50D300332BA3 /* ConnectionsManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionsManger.swift; sourceTree = "<group>"; };
-		D66F0FC822BF006D00BA277D /* SystemMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemMessage.swift; sourceTree = "<group>"; };
 		D66F0FCE22BF060500BA277D /* Deeplinkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplinkable.swift; sourceTree = "<group>"; };
 		D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkTarget.swift; sourceTree = "<group>"; };
 		D66F0FD322BF074C00BA277D /* DeeplinkObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkObject.swift; sourceTree = "<group>"; };
@@ -978,7 +972,6 @@
 		D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		D66F0FE122C041AF00BA277D /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
 		D66F0FE522C0640E00BA277D /* Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Avatar.swift; sourceTree = "<group>"; };
-		D66F0FF122C1D86800BA277D /* ConversationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationType.swift; sourceTree = "<group>"; };
 		D66F102522C7C6A900BA277D /* Lorem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lorem.swift; sourceTree = "<group>"; };
 		D671E1EE264029BC00BF2B8D /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		D671E1F026402A2000BF2B8D /* ToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastView.swift; sourceTree = "<group>"; };
@@ -1011,7 +1004,6 @@
 		D67934E423DE66FE00536B44 /* PushPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPayload.swift; sourceTree = "<group>"; };
 		D679DE1526822FB70054DCAF /* FocusStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusStatusViewController.swift; sourceTree = "<group>"; };
 		D67A82DA230CCE3D0076152B /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
-		D6830221234AA35C006145FE /* DisplayableConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableConversation.swift; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedAvatarView.swift; sourceTree = "<group>"; };
@@ -1725,12 +1717,8 @@
 				D6617CEF26743DCF00439C06 /* SystemNotice.swift */,
 				D695B44125BA398400843780 /* Attachments */,
 				D64C6A7D23294A8600DB7257 /* ConversationKey.swift */,
-				D66F0FF122C1D86800BA277D /* ConversationType.swift */,
-				D6830221234AA35C006145FE /* DisplayableConversation.swift */,
 				D642735022C857760088256B /* MessageContext.swift */,
 				D6B230D225BC7FCE0082A41A /* SendableType.swift */,
-				D607400D23401B3E009633EB /* SystemConversation.swift */,
-				D66F0FC822BF006D00BA277D /* SystemMessage.swift */,
 				D671E1EE264029BC00BF2B8D /* Toast.swift */,
 			);
 			path = Models;
@@ -2680,7 +2668,6 @@
 				D6F37D6425B5D9D50034C9C5 /* VibrancyView.swift in Sources */,
 				D67896BD23025FEC0059BA75 /* NameViewController.swift in Sources */,
 				D677588C25B09F9C007E0184 /* TransitionRouter.swift in Sources */,
-				D607400E23401B3E009633EB /* SystemConversation.swift in Sources */,
 				D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */,
 				D66A580D25DD6B06001B3F64 /* NewConversationCollectionView.swift in Sources */,
@@ -2690,7 +2677,6 @@
 				D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */,
 				D6D1460721D552B100CD8CE4 /* Character+Extensions.swift in Sources */,
 				D6D39279265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
-				D66F0FF222C1D86800BA277D /* ConversationType.swift in Sources */,
 				D6E4C7FB238E4217002B1330 /* ConversationHeaderAttributesConfigurer.swift in Sources */,
 				D66A0B942351821200A0FFEA /* Completeable.swift in Sources */,
 				D62C9CBF266BE50700BB9632 /* KeyboardDemoViewController.swift in Sources */,
@@ -2853,7 +2839,6 @@
 				D6405B67236E002E00FAA06B /* User.swift in Sources */,
 				D69B75FB264842D00007020D /* VideoView.swift in Sources */,
 				807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */,
-				D6830222234AA35C006145FE /* DisplayableConversation.swift in Sources */,
 				D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
 				D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */,
@@ -2870,7 +2855,6 @@
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D624296723A9EF4F00322ABE /* HomeTabView.swift in Sources */,
 				D66F102622C7C6A900BA277D /* Lorem.swift in Sources */,
-				D66F0FC922BF006D00BA277D /* SystemMessage.swift in Sources */,
 				D67896B422FF75640059BA75 /* OnboardingCoordinator.swift in Sources */,
 				D67896BF2302683C0059BA75 /* PhotoViewController.swift in Sources */,
 				D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,

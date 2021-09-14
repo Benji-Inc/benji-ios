@@ -9,6 +9,8 @@
 import Foundation
 import StreamChat
 
+typealias Conversation = ChatChannel
+
 extension ChatChannel {
 
     var isOwnedByMe: Bool {

@@ -25,11 +25,11 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
     }()
     private var cancellables = Set<AnyCancellable>()
 
-    var conversation: DisplayableConversation?
+    var conversation: Conversation?
 
     init(router: Router,
          deepLink: DeepLinkable?,
-         conversation: DisplayableConversation?) {
+         conversation: Conversation?) {
 
         self.conversation = conversation
         super.init(router: router, deepLink: deepLink)
