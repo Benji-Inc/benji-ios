@@ -57,6 +57,12 @@ extension ChatClient {
         return controller
     }
 
+    func queryMembers(query: ChannelMemberListQuery) async throws -> ChatChannelMemberListController {
+        let controller = self.memberListController(query: query)
+        try await controller.synchronize()
+        return controller
+    }
+
     func deleteChannel(_ channel: ChatChannel) async throws {
         let controller = self.channelController(for: channel.cid)
         try await controller.deleteChannel()

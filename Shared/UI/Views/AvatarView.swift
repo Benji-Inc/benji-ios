@@ -127,7 +127,10 @@ class AvatarView: DisplayableImageView {
         initials.draw(in: rect, withAttributes: textFontAttributes)
         context.restoreGState()
 
-        guard let renderedImage = UIGraphicsGetImageFromCurrentImageContext() else { assertionFailure("Could not create image from context"); return UIImage() }
+        guard let renderedImage = UIGraphicsGetImageFromCurrentImageContext() else {
+            assertionFailure("Could not create image from context");
+            return UIImage()
+        }
 
         return renderedImage
     }
