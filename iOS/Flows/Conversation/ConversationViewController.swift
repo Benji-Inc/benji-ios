@@ -67,7 +67,7 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
         super.init()
 
         if let conversation = conversation {
-            self.channelController = chatClient.channelController(for: conversation.cid)
+            self.channelController = ChatClient.shared.channelController(for: conversation.cid)
         }
     }
 

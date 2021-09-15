@@ -165,7 +165,7 @@ extension HomeViewController: UICollectionViewDelegate {
 
             Task {
                 do {
-                    try await chatClient.deleteChannel(conversation)
+                    try await ChatClient.shared.deleteChannel(conversation)
                 } catch {
                     logDebug(error)
                 }
@@ -196,7 +196,7 @@ extension HomeViewController: UICollectionViewDelegate {
 
             Task {
                 do {
-                    try await chatClient.deleteChannel(conversation)
+                    try await ChatClient.shared.deleteChannel(conversation)
                 } catch {
                     logDebug(error)
                 }

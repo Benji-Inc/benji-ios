@@ -16,7 +16,7 @@ extension ConversationViewController {
 
         Task {
             do {
-                let controller = chatClient.channelController(for: conversation.cid)
+                let controller = ChatClient.shared.channelController(for: conversation.cid)
                 try await controller.loadPreviousMessages()
                 let messages: [Messageable] = controller.messages.reversed()
                 let section = ConversationSectionable(date: conversation.updatedAt,
@@ -36,7 +36,7 @@ extension ConversationViewController {
     func subscribeToUpdates() {
         guard let conversation = self.conversation else { return }
 
-        let controller = chatClient.channelController(for: conversation.cid)
+        let controller = ChatClient.shared.channelController(for: conversation.cid)
         controller.messagesChangesPublisher.mainSink { [weak self] (changes: [ListChange<ChatMessage>]) in
             guard let `self` = self else { return }
 
