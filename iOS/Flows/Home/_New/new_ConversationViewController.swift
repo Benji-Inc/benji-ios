@@ -99,6 +99,66 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
         self.becomeFirstResponder()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+
+        guard let conversation = self.conversationController?.channel else { return }
+        let channelID = conversation.cid
+        guard let message = conversation.latestMessages.first else { return }
+        let messageID = message.id
+        let messageController = ChatClient.shared.messageController(cid: channelID,
+                                                                    messageId: messageID)
+
+        // Update UI with Reply
+//        messageController.repliesChangesPublisher
+//            .mainSink(receiveValue: { listChanges in
+//                for change in listChanges {
+//                    switch change {
+//                    case .insert(let reply, index: let index):
+//                        logDebug(index.debugDescription)
+//                        Task {
+//                            let item = ConversationCollectionViewDataSource.ItemType.message(reply)
+//                            await self.dataSource.appendItems([item], toSection: .messageThread(messageID))
+//                        }
+//                    default:
+//                        return
+//                    }
+//                }
+//            }).store(in: &self.cancellables)
+
+
+//        // Create reply
+//        if let conversation = self.conversationController?.channel {
+//            let channelID = conversation.cid
+//            if let message = conversation.latestMessages.first {
+//                let messageID = message.id
+//                let messageController
+//                = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
+//                let count = message.replyCount
+//                messageController.createNewReply(text: "Test reply \(count)")
+//            }
+//        }
+
+        // Load next replies
+        messageController.synchronize { error in
+            guard error == nil else { return }
+
+            messageController.loadNextReplies { error in
+                guard error == nil else { return }
+                let replies = message.latestReplies
+
+                let messages = replies.map { chatMessage in
+                    return ConversationCollectionViewDataSource.ItemType.message(chatMessage)
+                }
+
+                Task {
+                    await self.dataSource.appendItems(messages, toSection: .messageThread(messageID))
+                }
+            }
+        }
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
@@ -166,11 +226,14 @@ extension new_ConversationViewController {
             do {
                 let controller = ChatClient.shared.channelController(for: conversation.cid)
                 try await controller.loadPreviousMessages()
-                let messages: [ChatMessage] = controller.messages.reversed()
+                let messages: [ChatMessage] = Array(controller.messages)
 
                 var snapshot = self.dataSource.snapshot()
-                snapshot.appendSections([.messages])
-                snapshot.appendItems(messages.asConversationCollectionItems, toSection: .messages)
+                for message in messages {
+                    snapshot.appendSections([.messageThread(message.id)])
+                    snapshot.appendItems([message.asConversationCollectionItem],
+                                         toSection: .messageThread(message.id))
+                }
 
                 await self.dataSource.apply(snapshot)
             } catch {
@@ -187,6 +250,7 @@ extension new_ConversationViewController {
             guard let `self` = self else { return }
 
             for change in changes {
+                logDebug(change.description)
                 switch change {
                 case .insert(let message, index: let index):
                     return
