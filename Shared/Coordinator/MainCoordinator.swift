@@ -15,8 +15,6 @@ class MainCoordinator: Coordinator<Void> {
 
     var launchOptions: [UIApplication.LaunchOptionsKey : Any]?
 
-    var isInitializingChat: Bool = false
-
     lazy var splashVC = SplashViewController()
     lazy var userQuery = User.query() // Will crash if initialized before parse registers the subclass
 
@@ -53,8 +51,7 @@ class MainCoordinator: Coordinator<Void> {
 #if !APPCLIP && !NOTIFICATION
     func handle(result: LaunchStatus) {
         switch result {
-        case .success(let object, let token):
-
+        case .success(let object):
             self.deepLink = object
 
             if User.current().isNil {
@@ -62,27 +59,11 @@ class MainCoordinator: Coordinator<Void> {
             } else if let user = User.current(), !user.isOnboarded {
                 self.runOnboardingFlow()
             } else if ChatClient.isConnected {
-                self.runHomeFlow()
-            } else if !token.isEmpty {
-                Task {
-                    do {
-                        try await ChatClient.initialize(withToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoibWFydGluamliYmVyIn0.3gkQkf_oBGylx79R3GMvtUEXC74k5WB2epE23COPZdo")
-                        self.runHomeFlow()
-                    } catch {
-                        logDebug(error)
-                    }
+                if let deepLink = object {
+                    self.handle(deeplink: deepLink)
+                } else {
+                    self.runHomeFlow()
                 }
-
-                // This will go away once we fully move over to Stream
-                Task {
-                    do {
-                        try await self.initializeChat(with: token)
-                    } catch {
-                        print(error)
-                    }
-                }
-            } else if let deeplink = object {
-                self.handle(deeplink: deeplink)
             }
         case .failed(_):
             break
@@ -94,52 +75,16 @@ class MainCoordinator: Coordinator<Void> {
             if let deepLink = self.deepLink {
                 homeCoordinator.handle(deeplink: deepLink)
             }
-        } else if ChatClient.isConnected {
+        } else {
             self.removeChild()
             let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
             self.router.setRootModule(homeCoordinator, animated: true)
             self.addChildAndStart(homeCoordinator, finishedHandler: { _ in
                 // If the home coordinator ever finishes, put handling logic here.
             })
-        } else {
-            Task {
-                do {
-                    try await self.getChatToken()
-                } catch {
-                    print(error)
-                }
-            }
         }
     }
 
-    func getChatToken() async throws {
-        let token = try await GetChatToken().makeRequest(andUpdate: [], viewsToIgnore: [])
-        try await self.initializeChat(with: token)
-    }
-
-    private func initializeChat(with token: String) async throws {
-        // Fixes double loading.
-        guard !self.isInitializingChat else { return }
-
-        self.isInitializingChat = true
-
-        #warning("Replace")
-//        try await ChatClientManager.shared.initialize(token: token)
-
-        self.isInitializingChat = false
-
-        guard let user = User.current(), user.isOnboarded else { return }
-
-        if let user = User.current(), user.isOnboarded {
-            if let deeplink = self.deepLink {
-                self.handle(deeplink: deeplink)
-            } else {
-                self.runHomeFlow()
-            }
-        } else {
-            self.runOnboardingFlow()
-        }
-    }
 #endif
 
     func runOnboardingFlow() {

@@ -27,10 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        self.prepareCurrentUser()
-    }
-
     func applicationDidBecomeActive(_ application: UIApplication) {
         self.prepareCurrentUser()
     }
@@ -75,29 +71,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 #if !NOTIFICATION
         UserNotificationManager.shared.resetBadgeCount()
 #endif
-
-#if !APPCLIP && !NOTIFICATION
-        guard !ChatClient.isConnected else { return }
-
-        Task { await self.getChatToken() }
-#endif
     }
-
-#if !APPCLIP && !NOTIFICATION
-    func getChatToken() async {
-        #warning("Replace")
-//        do {
-//            let token = try await GetChatToken().makeRequest()
-//
-//            if ChatClientManager.shared.client.isNil {
-//                try await ChatClientManager.shared.initialize(token: token)
-//            } else {
-//                try await ChatClientManager.shared.update(token: token)
-//            }
-//        } catch {
-//            print(error)
-//        }
-    }
-#endif
 }
 
