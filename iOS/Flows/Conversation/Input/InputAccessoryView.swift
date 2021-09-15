@@ -10,6 +10,7 @@ import Foundation
 import Lottie
 import TMROLocalization
 import Combine
+import GestureRecognizerClosures
 
 class InputAccessoryView: SwipeableInputAccessoryView {
 

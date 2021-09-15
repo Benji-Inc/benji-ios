@@ -44,7 +44,7 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
         do {
             if case .text(let body) = object.kind {
-                let controller = chatClient.channelController(for: conversation.cid)
+                let controller = ChatClient.shared.channelController(for: conversation.cid)
                 try await controller.createNewMessage(text: body)
 
                 self.conversationCollectionView.scrollToEnd()
