@@ -13,7 +13,7 @@ extension ConversationViewController {
     
     func loadMessages(for conversation: Conversation) {
         self.collectionViewManager.reset()
-        
+
         Task {
             do {
                 let controller = chatClient.channelController(for: conversation.cid)

@@ -81,7 +81,7 @@ class HomeViewController: ViewController {
         let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
                                      sort: [.init(key: .lastMessageAt, isAscending: false)])
 
-        self.channelListController = try? await chatClient.queryChannels(query: query)
+        self.channelListController = try? await ChatClient.shared.queryChannels(query: query)
 
         await NoticeSupplier.shared.loadNotices()
 

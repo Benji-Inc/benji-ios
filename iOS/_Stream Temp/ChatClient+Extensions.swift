@@ -9,23 +9,24 @@
 import Foundation
 import StreamChat
 
-/// A shared chat client singleton.
-var chatClient: ChatClient!
 
 extension ChatClient {
 
+    /// A shared chat client singleton.
+    static var shared: ChatClient!
+
     /// Returns true if the shared client is connected to the chat service.
     static var isConnected: Bool {
-        guard let sharedClient = chatClient else { return false }
+        guard let sharedClient = self.shared else { return false }
         return sharedClient.connectionStatus == .connected
     }
 
     /// Initializes the shared chat client singleton.
     static func initialize(for user: User) async throws {
         // Create a shared chat client object if needed
-        if chatClient.isNil {
+        if self.shared.isNil {
             let config = ChatClientConfig(apiKey: .init("hvmd2mhxcres"))
-            chatClient = ChatClient(config: config, tokenProvider: { completion in
+            self.shared = ChatClient(config: config, tokenProvider: { completion in
                 let token = Token.development(userId: user.userObjectID!)
                 completion(.success(token))
             })
@@ -35,7 +36,7 @@ extension ChatClient {
 
         /// connect to chat
         return try await withCheckedThrowingContinuation { continuation in
-            chatClient.connectUser(
+            ChatClient.shared.connectUser(
                 userInfo: UserInfo(
                     id: user.userObjectID!,
                     name: user.fullName,

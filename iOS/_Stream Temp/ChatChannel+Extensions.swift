@@ -14,6 +14,6 @@ typealias Conversation = ChatChannel
 extension ChatChannel {
 
     var isOwnedByMe: Bool {
-        return self.createdBy?.id == chatClient.currentUserId
+        return self.createdBy?.id == ChatClient.shared.currentUserId
     }
 }

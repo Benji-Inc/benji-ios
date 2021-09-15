@@ -101,7 +101,7 @@ class ConversationDetailViewController: ViewController {
 
     private func layoutViews(for conversation: ChatChannel) {
         let members = conversation.lastActiveMembers.filter { member in
-            return member.id != chatClient.currentUserId
+            return member.id != ChatClient.shared.currentUserId
         }
         self.layout(members: members, conversation: conversation)
     }
