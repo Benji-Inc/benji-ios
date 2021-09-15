@@ -8,6 +8,7 @@
 
 import Foundation
 import Photos
+import StreamChat
 
 extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
@@ -24,20 +25,18 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
-//        if sendable.previousMessage.isNil {
-//            Task {
-//                await self.send(object: sendable)
-//            }
-//        } else {
-//            self.update(object: sendable)
-//        }
+        if sendable.previousMessage.isNil {
+            Task {
+                await self.send(object: sendable)
+            }
+        } else {
+            self.update(object: sendable)
+        }
     }
 
     func load(activeConversation: DisplayableConversation) {
         switch activeConversation.conversationType {
         case .system(_):
-            break
-        case .pending(_):
             break
         case .conversation:
             self.loadMessages(for: activeConversation.conversationType)
@@ -46,33 +45,23 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
     @MainActor
     func send(object: Sendable) async {
-//        do {
-//            let systemMessage = try await MessageDeliveryManager.shared.send(object: object,
-//                                                                             attributes: [:],
-//                                                                             systemMessageHandler: { (systemMessage) in
-//                // Update the UI immediately so the app feels more responsive.
-//                Task {
-//                    if systemMessage.context == .timeSensitive {
-//                        await self.showAlertSentToast(for: systemMessage)
-//                    }
-//
-//                    self.collectionViewManager.append(item: systemMessage) { [unowned self] in
-//                        self.conversationCollectionView.scrollToEnd()
-//                    }
-//
-//                    self.messageInputAccessoryView.reset()
-//                }
-//            })
-//
-//            // If the message comes back with an error, schedule a toast to let the user know.
-//            if systemMessage.status == .error {
-//                self.collectionViewManager.updateItemSync(with: systemMessage)
-//                if systemMessage.context == .timeSensitive {
-//                    await self.showAlertSentToast(for: systemMessage)
-//                }
-//            }
-//        } catch {
-//            logDebug(error)
+        guard let conversation = self.conversation else { return }
+
+        switch conversation.conversationType {
+        case .system(let conversation):
+            return
+        case .conversation(let channel):
+            do {
+                if case .text(let body) = object.kind {
+                    let controller = ChatClient.shared.channelController(for: channel.cid)
+                    try await controller.createNewMessage(text: body)
+
+                    self.conversationCollectionView.scrollToEnd()
+                }
+            } catch {
+                logDebug(error)
+            }
+
         }
     }
 
@@ -147,4 +136,4 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
 //
 //        return text
 //    }
-//}
+}

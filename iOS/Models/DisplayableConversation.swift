@@ -8,12 +8,6 @@
 
 import Foundation
 
-extension Range: Comparable {
-    public static func < (lhs: Range<Bound>, rhs: Range<Bound>) -> Bool {
-        return lhs.lowerBound < rhs.lowerBound
-    }
-}
-
 class DisplayableConversation: Hashable, Comparable {
 
     var conversationType: ConversationType
@@ -31,11 +25,11 @@ class DisplayableConversation: Hashable, Comparable {
     }
 
     static func == (lhs: DisplayableConversation, rhs: DisplayableConversation) -> Bool {
-        return lhs.conversationType.uniqueName == rhs.conversationType.uniqueName 
+        return lhs.conversationType.id == rhs.conversationType.id
     }
 
     func hash(into hasher: inout Hasher) {
-        hasher.combine(self.conversationType.uniqueName)
+        hasher.combine(self.conversationType.id)
     }
 
     static func < (lhs: DisplayableConversation, rhs: DisplayableConversation) -> Bool {

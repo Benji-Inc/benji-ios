@@ -16,12 +16,11 @@ enum MessageStatus: String {
     case error
 }
 
-protocol Messageable: AnyObject {
+protocol Messageable {
 
     var createdAt: Date { get }
     var isFromCurrentUser: Bool { get }
     var authorID: String { get }
-    var messageIndex: NSNumber? { get }
     var attributes: [String: Any]? { get }
     var avatar: Avatar { get }
     var id: String { get }
@@ -44,7 +43,6 @@ func ==(lhs: Messageable, rhs: Messageable) -> Bool {
     return lhs.createdAt == rhs.createdAt
         && lhs.kind == rhs.kind
         && lhs.authorID == rhs.authorID
-        && lhs.messageIndex == rhs.messageIndex
         && lhs.id == rhs.id
         && lhs.updateId == rhs.updateId
 }

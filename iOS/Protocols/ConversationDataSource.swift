@@ -28,8 +28,8 @@ protocol ConversationDataSource: AnyObject {
     @MainActor
     func append(item: Messageable) async
     func updateItemSync(with updatedItem: Messageable,
-                    replaceTypingIndicator: Bool,
-                    completion: CompletionOptional)
+                        replaceTypingIndicator: Bool,
+                        completion: CompletionOptional)
     func delete(item: Messageable, in section: Int)
 }
 
@@ -37,7 +37,7 @@ extension ConversationDataSource {
 
     func item(at indexPath: IndexPath) -> Messageable? {
         guard let section = self.sections[safe: indexPath.section],
-            let item = section.items[safe: indexPath.row] else { return nil }
+              let item = section.items[safe: indexPath.row] else { return nil }
 
         return item
     }
@@ -135,8 +135,8 @@ extension ConversationDataSource {
     }
 
     func updateItemSync(with updatedItem: Messageable,
-                    replaceTypingIndicator: Bool = false,
-                    completion: CompletionOptional = nil) {
+                        replaceTypingIndicator: Bool = false,
+                        completion: CompletionOptional = nil) {
 
         // If there is no update id and it's from the current user,
         // then we've already displayed this message and can safely return.

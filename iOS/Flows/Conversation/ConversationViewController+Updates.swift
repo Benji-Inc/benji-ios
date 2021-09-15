@@ -7,32 +7,34 @@
 //
 
 import Foundation
+import StreamChat
 
 extension ConversationViewController {
-
+    
     func loadMessages(for conversationType: ConversationType) {
         self.collectionViewManager.reset()
-        #warning("Replace")
-//        MessageSupplier.shared.reset()
         
         switch conversationType {
         case .system(let conversation):
             self.loadSystem(conversation: conversation)
-        case .conversation:
-            #warning("Replace")
-//            Task {
-//                do {
-//                    let sections = try await MessageSupplier.shared.getLastMessages()
-//                    self.collectionViewManager.set(newSections: sections,
-//                                                   animate: true) {
-//                        self.setupDetailAnimator()
-//                    }
-//                } catch {
-//                    logDebug(error)
-//                }
-//            }
-        case .pending(_):
-            break 
+        case .conversation(let channel):
+            Task {
+                do {
+                    let controller = ChatClient.shared.channelController(for: channel.cid)
+                    try await controller.loadPreviousMessages()
+                    let messages: [Messageable] = controller.messages.reversed()
+                    let section = ConversationSectionable(date: channel.updatedAt,
+                                                          items: messages,
+                                                          conversationType: .conversation(channel))
+                    
+                    self.collectionViewManager.set(newSections: [section],
+                                                   animate: true) {
+                        self.setupDetailAnimator()
+                    }
+                } catch {
+                    logDebug(error)
+                }
+            }
         }
     }
 
@@ -46,35 +48,30 @@ extension ConversationViewController {
     }
     
     func subscribeToUpdates() {
+        guard let conversation = self.conversation else { return }
 
-        #warning("Replace")
-//        MessageSupplier.shared.$messageUpdate.mainSink { [weak self] (update) in
-//            guard let `self` = self else { return }
-//
-//            guard let conversationUpdate = update, ConversationSupplier.shared.isConversationEqualToActiveConversation(conversation: conversationUpdate.conversation) else { return }
-//
-//            switch conversationUpdate.status {
-//            case .added:
-//                if self.conversationCollectionView.isTypingIndicatorHidden {
-//                    self.collectionViewManager.updateItemSync(with: conversationUpdate.message) {
-//                        self.conversationCollectionView.scrollToEnd()
-//                    }
-//                } else {
-//                    self.collectionViewManager.setTypingIndicatorViewHidden(true, performUpdates: { [weak self] in
-//                        guard let `self` = self else { return }
-//                        self.collectionViewManager.updateItemSync(with: conversationUpdate.message,
-//                                                              replaceTypingIndicator: true,
-//                                                              completion: nil)
-//                    })
-//                }
-//            case .changed:
-//                self.collectionViewManager.updateItemSync(with: conversationUpdate.message)
-//            case .deleted:
-//                self.collectionViewManager.delete(item: conversationUpdate.message)
-//            case .toastReceived:
-//                break
-//            }
-//        }.store(in: &self.cancellables)
+        switch conversation.conversationType {
+        case .system(_):
+            return
+        case .conversation(let conversation):
+            let controller = ChatClient.shared.channelController(for: conversation.cid)
+            controller.messagesChangesPublisher.mainSink { [weak self] (changes: [ListChange<ChatMessage>]) in
+                guard let `self` = self else { return }
+
+                for change in changes {
+                    switch change {
+                    case .insert(let message, index: let index):
+                        self.collectionViewManager.append(item: message, completion: nil)
+                    case .move(_, fromIndex: let fromIndex, toIndex: let toIndex):
+                        return
+                    case .update(_, index: let index):
+                        return
+                    case .remove(_, index: let index):
+                        return
+                    }
+                }
+            }.store(in: &self.cancellables)
+        }
 
 //        ChatClientManager.shared.$memberUpdate.mainSink { [weak self] (update) in
 //            guard let `self` = self else { return }

@@ -112,10 +112,10 @@ class DisplayableImageView: View {
 
         if let photo = displayable.image {
             self.showResult(for: photo)
-        } else if let objectID = displayable.userObjectID {
-            self.findUser(with: objectID)
         } else if let url = displayable.url {
             self.downloadAndSetImage(url: url)
+        } else if let objectID = displayable.userObjectID {
+            self.findUser(with: objectID)
         } else if let file = displayable as? PFFileObject {
             Task {
                 await self.downloadAndSet(file: file)

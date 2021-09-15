@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import StreamChat
 
 @MainActor
 class ConversationContentView: View {
@@ -38,36 +39,36 @@ class ConversationContentView: View {
         self.currentItem = item
 
         switch item.conversationType {
-        case .conversation:
-            break
-//            Task {
-//                await self.display(conversation: conversation)
-//            }
+        case .conversation(let conversation):
+            Task {
+                await self.display(conversation: conversation)
+            }
         default:
             break
         }
     }
 
-//    private func display(conversation: TCHChannel) async {
-//        guard let users = try? await conversation.getUsers(excludeMe: true) else { return }
-//
-//        guard self.currentItem?.id == conversation.id else { return }
-//
-//        if let friendlyName = conversation.friendlyName {
-//            self.label.setText(friendlyName.capitalized)
-//        } else if users.count == 0 {
-//            self.label.setText("You")
-//        } else if users.count == 1, let user = users.first(where: { user in
-//            return user.objectId != User.current()?.objectId
-//        }) {
-//            await self.displayDM(for: conversation, with: user)
-//        } else {
-//            self.displayGroupChat(for: conversation, with: users)
-//        }
-//        self.stackedAvatarView.set(items: users)
-//        self.stackedAvatarView.layoutNow()
-//        self.layoutNow()
-//    }
+    private func display(conversation: ChatChannel) async {
+        let members = conversation.lastActiveMembers.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        }
+
+        guard self.currentItem?.id == conversation.cid.description else { return }
+
+        if let friendlyName = conversation.name {
+            self.label.setText(friendlyName.capitalized)
+        } else if members.count == 0 {
+            self.label.setText("You")
+        } else if members.count == 1, let member = members.first  {
+            await self.displayDM(for: conversation, with: member)
+        } else {
+            self.displayGroupChat(for: conversation, with: members)
+        }
+
+        self.stackedAvatarView.set(items: members)
+        self.stackedAvatarView.layoutNow()
+        self.layoutNow()
+    }
 
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -83,27 +84,26 @@ class ConversationContentView: View {
         self.label.pin(.left, padding: Theme.contentOffset.half)
     }
 
-//    private func displayDM(for conversation: TCHChannel, with user: User) async {
-//        guard let user = try? await user.retrieveDataIfNeeded() else { return }
-//        self.label.setText(user.givenName)
-//        self.label.setFont(.largeThin)
-//        self.setNeedsLayout()
-//    }
+    private func displayDM(for conversation: ChatChannel, with member: ChatChannelMember) async {
+        self.label.setText(member.name)
+        self.label.setFont(.largeThin)
+        self.setNeedsLayout()
+    }
 
-//    func displayGroupChat(for conversation: TCHChannel, with users: [User]) {
-//        var text = ""
-//        for (index, user) in users.enumerated() {
-//            if index < users.count - 1 {
-//                text.append(String("\(user.givenName), "))
-//            } else if index == users.count - 1 && users.count > 1 {
-//                text.append(String("\(user.givenName)"))
-//            } else {
-//                text.append(user.givenName)
-//            }
-//        }
-//
-//        self.label.setText(text)
-//        self.label.setFont(.mediumThin)
-//        self.layoutNow()
-//    }
+    func displayGroupChat(for conversation: ChatChannel, with members: [ChatChannelMember]) {
+        var text = ""
+        for (index, member) in members.enumerated() {
+            if index < members.count - 1 {
+                text.append(String("\(member.givenName), "))
+            } else if index == members.count - 1 && members.count > 1 {
+                text.append(String("\(member.givenName)"))
+            } else {
+                text.append(member.givenName)
+            }
+        }
+
+        self.label.setText(text)
+        self.label.setFont(.mediumThin)
+        self.layoutNow()
+    }
 }

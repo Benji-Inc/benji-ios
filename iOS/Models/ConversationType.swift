@@ -7,24 +7,19 @@
 //
 
 import Foundation
-import TMROLocalization
+import StreamChat
 
 enum ConversationType: Hashable {
 
     case system(SystemConversation)
-    #warning("Use stream for associated conversation values")
-    case conversation
-    case pending(String)
+    case conversation(ChatChannel)
 
-    var uniqueName: String {
+    var id: String {
         switch self {
-        case .system(let conversation):
-            return conversation.uniqueName
-        case .conversation:
-            return ""
-//            return String(optional: conversation.friendlyName)
-        case .pending(let uniqueName):
-            return uniqueName
+        case .system(let systemMessage):
+            return systemMessage.id
+        case .conversation(let conversation):
+            return conversation.cid.description
         }
     }
 
@@ -32,10 +27,8 @@ enum ConversationType: Hashable {
         switch self {
         case .system(let conversation):
             return conversation.displayName
-        case .conversation:
-            return ""
-        case .pending(_):
-            return String()
+        case .conversation(let conversation):
+            return conversation.name ?? String()
         }
     }
 
@@ -43,21 +36,8 @@ enum ConversationType: Hashable {
         switch self {
         case .system(let systemMessage):
             return systemMessage.timeStampAsDate
-        case .conversation:
-            return Date()
-        case .pending(_):
-            return Date()
-        }
-    }
-
-    var id: String {
-        switch self {
-        case .system(let systemMessage):
-            return systemMessage.id
-        case .conversation:
-            return ""
-        case .pending(let uniqueName):
-            return uniqueName
+        case .conversation(let conversation):
+            return conversation.updatedAt
         }
     }
 
@@ -67,8 +47,6 @@ enum ConversationType: Hashable {
             return true
         case .conversation:
             return true
-        case .pending(_):
-            return true 
         }
     }
 }

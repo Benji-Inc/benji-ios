@@ -14,7 +14,7 @@ import Combine
 
 class ConversationCoordinator: PresentableCoordinator<Void> {
 
-    lazy var conversationVC = ConversationViewController(delegate: self)
+    lazy var conversationVC = ConversationViewController(conversation: self.conversation, delegate: self)
     private lazy var cameraVC = ImagePickerViewController()
     private lazy var imagePickerVC: PHPickerViewController = {
         var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
@@ -25,15 +25,13 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
     }()
     private var cancellables = Set<AnyCancellable>()
 
+    var conversation: DisplayableConversation?
+
     init(router: Router,
          deepLink: DeepLinkable?,
          conversation: DisplayableConversation?) {
 
-        if let c = conversation {
-            #warning("Remove or replace")
-//            ConversationSupplier.shared.set(activeConversation: c)
-        }
-
+        self.conversation = conversation
         super.init(router: router, deepLink: deepLink)
     }
 

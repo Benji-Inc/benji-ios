@@ -95,7 +95,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         if let t = type {
             conversation = DisplayableConversation(conversationType: t)
         }
-        let coordinator = ConversationCoordinator(router: self.router, deepLink: self.deepLink, conversation: conversation)
+        let coordinator = ConversationCoordinator(router: self.router,
+                                                  deepLink: self.deepLink,
+                                                  conversation: conversation)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 self.finishFlow(with: ())

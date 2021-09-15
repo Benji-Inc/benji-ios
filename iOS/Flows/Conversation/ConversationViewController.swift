@@ -9,8 +9,10 @@
 import Foundation
 import Parse
 import Combine
+import StreamChat
 
-typealias ConversationViewControllerDelegates = ConversationDetailViewControllerDelegate & ConversationViewControllerDelegate
+typealias ConversationViewControllerDelegates
+= ConversationDetailViewControllerDelegate & ConversationViewControllerDelegate
 
 @MainActor
 protocol ConversationViewControllerDelegate: AnyObject {
@@ -20,17 +22,18 @@ protocol ConversationViewControllerDelegate: AnyObject {
 class ConversationViewController: FullScreenViewController, CollectionViewInputHandler {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    lazy var detailVC = ConversationDetailViewController(delegate: self.delegate)
+    lazy var detailVC = ConversationDetailViewController(conversation: self.conversation, delegate: self.delegate)
     lazy var conversationCollectionView = ConversationCollectionView()
     lazy var collectionViewManager = ConversationCollectionViewManager(with: self.conversationCollectionView)
 
+    private(set) var conversation: DisplayableConversation?
+    private(set) var channelController: ChatChannelController?
     unowned let delegate: ConversationViewControllerDelegates
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
-            #warning("Replace")
-//            self.conversationCollectionView.contentInset.bottom = self.collectionViewBottomInset
-//            self.conversationCollectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
+            self.conversationCollectionView.contentInset.bottom = self.collectionViewBottomInset
+            self.conversationCollectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
         }
     }
 
@@ -57,9 +60,20 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
         return true 
     }
 
-    init(delegate: ConversationViewControllerDelegates) {
+    init(conversation: DisplayableConversation?, delegate: ConversationViewControllerDelegates) {
+        self.conversation = conversation
         self.delegate = delegate
+
         super.init()
+
+        if let conversation = conversation {
+            switch conversation.conversationType {
+            case .system(let systemConversation):
+                break
+            case .conversation(let chatChannel):
+                self.channelController = ChatClient.shared.channelController(for: chatChannel.cid)
+            }
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -100,11 +114,11 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
             self.delegate.conversationView(self, didTapShare: message)
         }
 
-        self.collectionViewManager.didTapResend = { [unowned self] message in
+//        self.collectionViewManager.didTapResend = { [unowned self] message in
 //            Task {
 //                await self.resend(message: message)
 //            }
-        }
+//        }
 
         self.collectionViewManager.didTapEdit = { [unowned self] message, indexPath in
             self.indexPathForEditing = indexPath
@@ -118,15 +132,9 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
 //            }
 //        }
 //
-//        ConversationSupplier.shared.$activeConversation.mainSink { [unowned self] (conversation) in
-//            guard let activeConversation = conversation else {
-//                self.collectionViewManager.reset()
-//                return
-//            }
-//
-//            self.load(activeConversation: activeConversation)
-//
-//        }.store(in: &self.cancellables)
+        if let conversation = self.conversation {
+            self.load(activeConversation: conversation)
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -144,20 +152,17 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
     override func viewWasDismissed() {
         super.viewWasDismissed()
 
-        #warning("Replace")
-//        MessageSupplier.shared.reset()
-//        ConversationSupplier.shared.set(activeConversation: nil)
         self.collectionViewManager.reset()
     }
 
     func setupDetailAnimator() {
         self.detailVC.createAnimator()
-        #warning("Replace")
-//        self.conversationCollectionView.publisher(for: \.contentOffset)
-//            .mainSink { (contentOffset) in
-//                self.detailVC.animator.fractionComplete = self.getDetailProgress()
-//                self.view.layoutNow()
-//            }.store(in: &self.cancellables)
+
+        self.conversationCollectionView.publisher(for: \.contentOffset)
+            .mainSink { (contentOffset) in
+                self.detailVC.animator.fractionComplete = self.getDetailProgress()
+                self.view.layoutNow()
+            }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
