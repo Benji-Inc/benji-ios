@@ -11,21 +11,21 @@ import Foundation
 class ConversationCollectionViewLayout: UICollectionViewCompositionalLayout {
 
     init() {
-        let config = UICollectionViewCompositionalLayoutConfiguration()
-        config.scrollDirection = .horizontal
-
-        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                              heightDimension: .fractionalHeight(1))
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .fractionalWidth(2/3))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                               heightDimension: .fractionalWidth(0.33))
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
-                                                       subitem: item,
-                                                       count: 1)
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(CGFloat(0.95)),
+                                               heightDimension: .fractionalWidth(CGFloat(0.66)))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+
         let section = NSCollectionLayoutSection(group: group)
-        
-        super.init(section: section)
+        section.orthogonalScrollingBehavior = .groupPaging
+
+        let config = UICollectionViewCompositionalLayoutConfiguration()
+        config.scrollDirection = .vertical
+
+        super.init(section: section, configuration: config)
     }
 
     required init?(coder: NSCoder) {
