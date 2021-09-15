@@ -50,7 +50,7 @@ class ConversationContentView: View {
 
     private func display(conversation: ChatChannel) async {
         let members = conversation.lastActiveMembers.filter { member in
-            return member.id != chatClient.currentUserId
+            return member.id != ChatClient.shared.currentUserId
         }
 
         guard self.currentItem?.id == conversation.cid.description else { return }

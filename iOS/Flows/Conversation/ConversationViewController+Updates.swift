@@ -20,7 +20,7 @@ extension ConversationViewController {
         case .conversation(let channel):
             Task {
                 do {
-                    let controller = chatClient.channelController(for: channel.cid)
+                    let controller = ChatClient.shared.channelController(for: channel.cid)
                     try await controller.loadPreviousMessages()
                     let messages: [Messageable] = controller.messages.reversed()
                     let section = ConversationSectionable(date: channel.updatedAt,
@@ -54,7 +54,7 @@ extension ConversationViewController {
         case .system(_):
             return
         case .conversation(let conversation):
-            let controller = chatClient.channelController(for: conversation.cid)
+            let controller = ChatClient.shared.channelController(for: conversation.cid)
             controller.messagesChangesPublisher.mainSink { [weak self] (changes: [ListChange<ChatMessage>]) in
                 guard let `self` = self else { return }
 

@@ -71,7 +71,7 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
             case .system(let systemConversation):
                 break
             case .conversation(let chatChannel):
-                self.channelController = chatClient.channelController(for: chatChannel.cid)
+                self.channelController = ChatClient.shared.channelController(for: chatChannel.cid)
             }
         }
     }

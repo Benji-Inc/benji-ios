@@ -81,7 +81,7 @@ class HomeViewController: ViewController {
         let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
                                      sort: [.init(key: .lastMessageAt, isAscending: false)])
 
-        self.channelListController = try? await chatClient.queryChannels(query: query)
+        self.channelListController = try? await ChatClient.shared.queryChannels(query: query)
 
         await NoticeSupplier.shared.loadNotices()
 
@@ -169,7 +169,7 @@ extension HomeViewController: UICollectionViewDelegate {
             case .conversation(let conversation):
                 Task {
                     do {
-                        try await chatClient.deleteChannel(conversation)
+                        try await ChatClient.shared.deleteChannel(conversation)
                     } catch {
                         logDebug(error)
                     }
@@ -205,7 +205,7 @@ extension HomeViewController: UICollectionViewDelegate {
             case .conversation(let conversation):
                 Task {
                     do {
-                        try await chatClient.deleteChannel(conversation)
+                        try await ChatClient.shared.deleteChannel(conversation)
                     } catch {
                         logDebug(error)
                     }
