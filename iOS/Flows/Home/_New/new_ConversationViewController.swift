@@ -51,11 +51,11 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
     }
 
     init(conversation: Conversation?) {
-        super.init()
-
         if let conversation = conversation {
             self.conversationController = ChatClient.shared.channelController(for: conversation.cid)
         }
+
+        super.init()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -166,10 +166,13 @@ extension new_ConversationViewController {
             do {
                 let controller = ChatClient.shared.channelController(for: conversation.cid)
                 try await controller.loadPreviousMessages()
-                let messages: [Messageable] = controller.messages.reversed()
-                let section = ConversationSectionable(date: conversation.updatedAt,
-                                                      items: messages,
-                                                      conversation: conversation)
+                let messages: [ChatMessage] = controller.messages.reversed()
+
+                var snapshot = self.dataSource.snapshot()
+                snapshot.appendSections([.messages])
+                snapshot.appendItems(messages.asConversationCollectionItems, toSection: .messages)
+
+                await self.dataSource.apply(snapshot)
             } catch {
                 logDebug(error)
             }
