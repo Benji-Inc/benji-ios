@@ -22,7 +22,8 @@ protocol ConversationViewControllerDelegate: AnyObject {
 class ConversationViewController: FullScreenViewController, CollectionViewInputHandler {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    lazy var detailVC = ConversationDetailViewController(conversation: self.conversation, delegate: self.delegate)
+    lazy var detailVC = ConversationDetailViewController(conversation: self.conversation,
+                                                         delegate: self.delegate)
     lazy var conversationCollectionView = ConversationCollectionView()
     lazy var collectionViewManager = ConversationCollectionViewManager(with: self.conversationCollectionView)
 

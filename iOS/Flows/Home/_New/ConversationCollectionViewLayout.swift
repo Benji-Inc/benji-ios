@@ -12,15 +12,20 @@ class ConversationCollectionViewLayout: UICollectionViewCompositionalLayout {
 
     init() {
         let config = UICollectionViewCompositionalLayoutConfiguration()
-        config.scrollDirection = .vertical
+        config.scrollDirection = .horizontal
 
-        super.init(sectionProvider: { sectionIndex, environment in
-            let group
-            = NSCollectionLayoutGroup(layoutSize: NSCollectionLayoutSize(widthDimension: .absolute(100),
-                                                                         heightDimension: .absolute(100)))
-            return NSCollectionLayoutSection(group: group)
-        },
-                   configuration: config)
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                              heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                               heightDimension: .fractionalWidth(0.33))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize,
+                                                       subitem: item,
+                                                       count: 1)
+        let section = NSCollectionLayoutSection(group: group)
+        
+        super.init(section: section)
     }
 
     required init?(coder: NSCoder) {

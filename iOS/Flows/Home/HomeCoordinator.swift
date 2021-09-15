@@ -115,7 +115,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
     private func showSoftAskNotifications(for status: UNAuthorizationStatus) {
 
-        let alert = UIAlertController(title: "Notifications that don't suck.", message: "Most other social apps design their notifications to be vague in order to suck you in for as long as possible. Ours are not. Get reminders about things that YOU set, and recieve important messages from REAL people. Ours is a far better experience with them turned on.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Notifications that don't suck.",
+                                      message: "Most other social apps design their notifications to be vague in order to suck you in for as long as possible. Ours are not. Get reminders about things that YOU set, and recieve important messages from REAL people. Ours is a far better experience with them turned on.",
+                                      preferredStyle: .alert)
 
         let allow = UIAlertAction(title: "Allow", style: .default) { action in
             if status == .denied {

@@ -14,7 +14,7 @@ import Combine
 
 class ConversationCoordinator: PresentableCoordinator<Void> {
 
-    lazy var conversationVC = ConversationViewController(conversation: self.conversation, delegate: self)
+    lazy var conversationVC = new_ConversationViewController(conversation: self.conversation)
     private lazy var cameraVC = ImagePickerViewController()
     private lazy var imagePickerVC: PHPickerViewController = {
         var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())

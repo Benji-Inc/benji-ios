@@ -17,6 +17,7 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
 
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     let collectionView = CollectionView(layout: ConversationCollectionViewLayout())
+    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
     var conversation: Conversation? {
         return self.conversationController?.channel
@@ -64,6 +65,7 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.addSubview(self.blurView)
         self.view.addSubview(self.collectionView)
 
         self.setupHandlers()
@@ -84,6 +86,13 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
         }
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.blurView.expandToSuperviewSize()
+        self.collectionView.expandToSuperviewSize()
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
@@ -94,12 +103,6 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
         super.viewWillDisappear(animated)
 
         self.resignFirstResponder()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        self.collectionView.expandToSuperviewSize()
     }
 }
 
@@ -147,21 +150,6 @@ extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
         }
     }
 
-    func resend(message: Messageable) async {
-        //        do {
-        //            let systemMessage = try await MessageDeliveryManager.shared.resend(message: message,
-        //                                                                               systemMessageHandler: { systemMessage in
-        //                self.collectionViewManager.updateItemSync(with: systemMessage)
-        //            })
-        //
-        //            if systemMessage.status == .error {
-        //                self.collectionViewManager.updateItemSync(with: systemMessage)
-        //            }
-        //        } catch {
-        //            logDebug(error)
-        //        }
-    }
-
     func update(object: Sendable) {
         //        if let updatedMessage = MessageSupplier.shared.update(object: object) {
         //            self.indexPathForEditing = nil
@@ -169,43 +157,23 @@ extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
         //            self.messageInputAccessoryView.reset()
         //        }
     }
-
-    //    private func displayGroupChat(for conversation: TCHChannel, with users: [User]) -> String {
-    //        var text = ""
-    //        for (index, user) in users.enumerated() {
-    //            if index < users.count - 1 {
-    //                text.append(String("\(user.givenName), "))
-    //            } else if index == users.count - 1 && users.count > 1 {
-    //                text.append(String("\(user.givenName)"))
-    //            } else {
-    //                text.append(user.givenName)
-    //            }
-    //        }
-    //
-    //        return text
-    //    }
 }
 
 extension new_ConversationViewController {
 
     func loadMessages(for conversation: Conversation) {
-//            Task {
-//            do {
-//                let controller = ChatClient.shared.channelController(for: conversation.cid)
-//                try await controller.loadPreviousMessages()
-//                let messages: [Messageable] = controller.messages.reversed()
-//                let section = ConversationSectionable(date: conversation.updatedAt,
-//                                                      items: messages,
-//                                                      conversation: conversation)
-//
-//                self.collectionViewManager.set(newSections: [section],
-//                                               animate: true) {
-//                    self.setupDetailAnimator()
-//                }
-//            } catch {
-//                logDebug(error)
-//            }
-//        }
+        Task {
+            do {
+                let controller = ChatClient.shared.channelController(for: conversation.cid)
+                try await controller.loadPreviousMessages()
+                let messages: [Messageable] = controller.messages.reversed()
+                let section = ConversationSectionable(date: conversation.updatedAt,
+                                                      items: messages,
+                                                      conversation: conversation)
+            } catch {
+                logDebug(error)
+            }
+        }
     }
 
     func subscribeToUpdates() {
