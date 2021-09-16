@@ -503,6 +503,7 @@
 		D67896BD23025FEC0059BA75 /* NameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896BC23025FEC0059BA75 /* NameViewController.swift */; };
 		D67896BF2302683C0059BA75 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896BE2302683C0059BA75 /* PhotoViewController.swift */; };
 		D67896CC2304524C0059BA75 /* ConversationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896CB2304524C0059BA75 /* ConversationCoordinator.swift */; };
+		D678EC1526F3E5BA0071DB0D /* ArchiveViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC1426F3E5BA0071DB0D /* ArchiveViewController+Extension.swift */; };
 		D6792CE525FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
 		D6792CE625FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
 		D6792CE725FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
@@ -1007,6 +1008,7 @@
 		D67896BC23025FEC0059BA75 /* NameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameViewController.swift; sourceTree = "<group>"; };
 		D67896BE2302683C0059BA75 /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
 		D67896CB2304524C0059BA75 /* ConversationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCoordinator.swift; sourceTree = "<group>"; };
+		D678EC1426F3E5BA0071DB0D /* ArchiveViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchiveViewController+Extension.swift"; sourceTree = "<group>"; };
 		D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAGradientLayer+Extensions.swift"; sourceTree = "<group>"; };
 		D67934D423D956BB00536B44 /* ConversationPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationPreviewViewController.swift; sourceTree = "<group>"; };
 		D67934D623D9580F00536B44 /* MessagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePreviewViewController.swift; sourceTree = "<group>"; };
@@ -2081,11 +2083,12 @@
 		D6C100D026F3DB8000F1ED7D /* Archives */ = {
 			isa = PBXGroup;
 			children = (
-				D6DADF6A2207DC90007D9EB1 /* Conversation */,
-				D6C100D126F3DC0000F1ED7D /* ArchiveCoordinator.swift */,
-				D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */,
 				D6C100D526F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift */,
 				D6C100D726F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift */,
+				D6C100D126F3DC0000F1ED7D /* ArchiveCoordinator.swift */,
+				D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */,
+				D678EC1426F3E5BA0071DB0D /* ArchiveViewController+Extension.swift */,
+				D6DADF6A2207DC90007D9EB1 /* Conversation */,
 			);
 			path = Archives;
 			sourceTree = "<group>";
@@ -2102,11 +2105,11 @@
 			isa = PBXGroup;
 			children = (
 				D6C100D026F3DB8000F1ED7D /* Archives */,
-				D671E1ED2640297900BF2B8D /* Toast */,
 				D6432BF122D8282E0016001A /* Conversation */,
 				D6D145F521D549A300CD8CE4 /* Home */,
 				D66A580325DD68F9001B3F64 /* New Conversation */,
 				D68BEAD224831F7C00C95D31 /* Reservations */,
+				D671E1ED2640297900BF2B8D /* Toast */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -2897,6 +2900,7 @@
 				D67896B422FF75640059BA75 /* OnboardingCoordinator.swift in Sources */,
 				D67896BF2302683C0059BA75 /* PhotoViewController.swift in Sources */,
 				D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */,
+				D678EC1526F3E5BA0071DB0D /* ArchiveViewController+Extension.swift in Sources */,
 				D66379D125A3704300A4A3B7 /* LaunchManager.swift in Sources */,
 				D6C9EF3F25BF6CB100A14DE5 /* MessageBubbleView.swift in Sources */,
 				D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */,
