@@ -81,12 +81,12 @@ class HomeViewController: ViewController {
 
         self.circlesButton.squaredSize = 60
         self.circlesButton.makeRound()
-        self.circlesButton.match(.right, to: .left, of: self.addButton, offset: -Theme.contentOffset)
+        self.circlesButton.match(.right, to: .left, of: self.addButton, offset: -Theme.contentOffset.doubled)
         self.circlesButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
 
         self.archiveButton.squaredSize = 60
         self.archiveButton.makeRound()
-        self.archiveButton.match(.left, to: .right, of: self.addButton, offset: Theme.contentOffset)
+        self.archiveButton.match(.left, to: .right, of: self.addButton, offset: Theme.contentOffset.doubled)
         self.archiveButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
     }
 
