@@ -85,6 +85,19 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
     }
 
+    func didTapAdd() {
+        self.removeChild()
+        let coordinator = NewConversationCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { result in
+            coordinator.toPresentable().dismiss(animated: true) {
+                if result {
+                    self.startConversationFlow(for: nil)
+                }
+            }
+        }
+        self.router.present(coordinator, source: self.homeVC)
+    }
+
     private func handle(notice: SystemNotice) {
         switch notice.type {
         case .alert:
@@ -159,31 +172,18 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
 extension HomeCoordinator: HomeViewControllerDelegate {
 
-    func didTapAdd() {
-        self.removeChild()
-        let coordinator = NewConversationCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { result in
-            coordinator.toPresentable().dismiss(animated: true) {
-                if result {
-                    self.startConversationFlow(for: nil)
-                }
-            }
-        }
-        self.router.present(coordinator, source: self.homeVC)
-    }
-
-    nonisolated func homeViewControllerDidSelectReservations(_ controller: HomeViewController) {
-        Task.onMainActor {
-            self.didSelectReservations()
-        }
-    }
-
-    func didSelectReservations() {
-        self.removeChild()
-        let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) {}
-        self.router.present(coordinator, source: self.homeVC)
-    }
+//    nonisolated func homeViewControllerDidSelectReservations(_ controller: HomeViewController) {
+//        Task.onMainActor {
+//            self.didSelectReservations()
+//        }
+//    }
+//
+//    func didSelectReservations() {
+//        self.removeChild()
+//        let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
+//        self.addChildAndStart(coordinator) {}
+//        self.router.present(coordinator, source: self.homeVC)
+//    }
 
     nonisolated func homeViewControllerDidSelect(item: HomeCollectionViewDataSource.ItemType) {
         Task.onMainActor {

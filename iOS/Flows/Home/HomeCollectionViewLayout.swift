@@ -32,20 +32,15 @@ class HomeCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let section = NSCollectionLayoutSection(group: group)
                 section.orthogonalScrollingBehavior = .groupPagingCentered
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-                section.visibleItemsInvalidationHandler = { (items, offset, environment) in
-                    items.forEach { item in
-                        let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
-                        let minScale: CGFloat = 0.7
-                        let maxScale: CGFloat = 1.0
-                        let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
-                        item.transform = CGAffineTransform(scaleX: scale, y: scale)
-                    }
-                }
-
-                let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120))
-                let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
-
-                section.boundarySupplementaryItems = [header]
+//                section.visibleItemsInvalidationHandler = { (items, offset, environment) in
+//                    items.forEach { item in
+//                        let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
+//                        let minScale: CGFloat = 0.7
+//                        let maxScale: CGFloat = 1.0
+//                        let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
+//                        item.transform = CGAffineTransform(scaleX: scale, y: scale)
+//                    }
+//                }
 
                 return section
             }

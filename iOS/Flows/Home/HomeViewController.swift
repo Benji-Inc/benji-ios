@@ -64,15 +64,13 @@ class HomeViewController: ViewController {
     override func viewWasPresented() {
         super.viewWasPresented()
 
-//        Task {
-//            await self.loadData()
-//        }
+        Task {
+            await self.loadData()
+        }
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        self.collectionView.expandToSuperviewSize()
 
         self.addButton.squaredSize = 60
         self.addButton.makeRound()
@@ -88,65 +86,59 @@ class HomeViewController: ViewController {
         self.archiveButton.makeRound()
         self.archiveButton.match(.left, to: .right, of: self.addButton, offset: Theme.contentOffset.doubled)
         self.archiveButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+
+        self.collectionView.expandToSuperviewSize()
+        self.collectionView.match(.bottom, to: .top, of: self.circlesButton, offset: -Theme.contentOffset)
     }
 
     // MARK: Data Loading
 
-//    @MainActor
-//    private func loadData() async {
-//        self.collectionView.animationView.play()
-//
-//        async let unclaimedReservationCount = Reservation.getUnclaimedReservationCount(for: User.current()!)
-//
+    @MainActor
+    private func loadData() async {
+        self.collectionView.animationView.play()
+
 //        let userID = User.current()!.userObjectID!
 //        let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
 //                                     sort: [.init(key: .lastMessageAt, isAscending: false)])
 //
 //        self.channelListController = try? await ChatClient.shared.queryChannels(query: query)
-//
-//        await NoticeSupplier.shared.loadNotices()
-//
-//        self.dataSource.unclaimedCount = await unclaimedReservationCount
-//        
-//        let cycle = AnimationCycle(inFromPosition: .inward,
-//                                   outToPosition: .inward,
-//                                   shouldConcatenate: true,
-//                                   scrollToEnd: false)
-//
-//        let snapshot = self.getInitialSnapshot()
-//        await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
-//
-//        self.collectionView.animationView.stop()
-//    }
 
-//    private func getInitialSnapshot() -> NSDiffableDataSourceSnapshot<HomeCollectionViewDataSource.SectionType,
-//                                                                      HomeCollectionViewDataSource.ItemType> {
-//        var snapshot = self.dataSource.snapshot()
-//
-//        let allCases = HomeCollectionViewDataSource.SectionType.allCases
-//        snapshot.appendSections(allCases)
-//        allCases.forEach { (section) in
-//            snapshot.appendItems(self.getItems(for: section), toSection: section)
-//        }
-//
-//        return snapshot
-//    }
-//
-//    private func getItems(for section: HomeCollectionViewDataSource.SectionType)
-//    -> [HomeCollectionViewDataSource.ItemType] {
-//
-//        switch section {
-//        case .notices:
-//            return NoticeSupplier.shared.notices.map { notice in
-//                return .notice(notice)
-//            }
-//        case .conversations:
-//            guard let channelListController = self.channelListController else { return [] }
-//            return channelListController.channels.map { chatChannel in
-//                return .conversation(DisplayableConversation(conversationType: .conversation(chatChannel)))
-//            }
-//        }
-//    }
+        await NoticeSupplier.shared.loadNotices()
+
+        let cycle = AnimationCycle(inFromPosition: .inward,
+                                   outToPosition: .inward,
+                                   shouldConcatenate: true,
+                                   scrollToEnd: false)
+
+        let snapshot = self.getInitialSnapshot()
+        await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
+
+        self.collectionView.animationView.stop()
+    }
+
+    private func getInitialSnapshot() -> NSDiffableDataSourceSnapshot<HomeCollectionViewDataSource.SectionType,
+                                                                      HomeCollectionViewDataSource.ItemType> {
+        var snapshot = self.dataSource.snapshot()
+
+        let allCases = HomeCollectionViewDataSource.SectionType.allCases
+        snapshot.appendSections(allCases)
+        allCases.forEach { (section) in
+            snapshot.appendItems(self.getItems(for: section), toSection: section)
+        }
+
+        return snapshot
+    }
+
+    private func getItems(for section: HomeCollectionViewDataSource.SectionType)
+    -> [HomeCollectionViewDataSource.ItemType] {
+
+        switch section {
+        case .notices:
+            return NoticeSupplier.shared.notices.map { notice in
+                return .notice(notice)
+            }
+        }
+    }
 }
 
 extension HomeViewController: UICollectionViewDelegate {
@@ -157,96 +149,96 @@ extension HomeViewController: UICollectionViewDelegate {
         self.delegate?.homeViewControllerDidSelect(item: identifier)
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        contextMenuConfigurationForItemAt indexPath: IndexPath,
-                        point: CGPoint) -> UIContextMenuConfiguration? {
-
-        return nil
-//        let conversation = chatClient.channelListController(query: )
-//        guard let conversation = ConversationSupplier.shared.allConversationsSorted[safe: indexPath.row],
-//              let cell = collectionView.cellForItem(at: indexPath) as? ConversationCell else { return nil }
+//    func collectionView(_ collectionView: UICollectionView,
+//                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+//                        point: CGPoint) -> UIContextMenuConfiguration? {
 //
-//        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
-//            return ConversationPreviewViewController(with: conversation, size: cell.size)
-//        }, actionProvider: { suggestedActions in
-//            if conversation.isFromCurrentUser {
-//                return self.makeCurrentUserMenu(for: conversation, at: indexPath)
-//            } else {
-//                return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
+//        return nil
+////        let conversation = chatClient.channelListController(query: )
+////        guard let conversation = ConversationSupplier.shared.allConversationsSorted[safe: indexPath.row],
+////              let cell = collectionView.cellForItem(at: indexPath) as? ConversationCell else { return nil }
+////
+////        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+////            return ConversationPreviewViewController(with: conversation, size: cell.size)
+////        }, actionProvider: { suggestedActions in
+////            if conversation.isFromCurrentUser {
+////                return self.makeCurrentUserMenu(for: conversation, at: indexPath)
+////            } else {
+////                return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
+////            }
+////        })
+//    }
+//
+//    func makeCurrentUserMenu(for conversation: DisplayableConversation, at indexPath: IndexPath) -> UIMenu {
+//        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
+//
+//        let confirm = UIAction(title: "Confirm",
+//                               image: UIImage(systemName: "trash"),
+//                               attributes: .destructive) { action in
+//
+//            switch conversation.conversationType {
+//            case .system(_):
+//                break
+//            case .conversation(let conversation):
+//                Task {
+//                    do {
+//                        try await ChatClient.shared.deleteChannel(conversation)
+//                    } catch {
+//                        logDebug(error)
+//                    }
+//                }
 //            }
-//        })
-    }
-
-    func makeCurrentUserMenu(for conversation: DisplayableConversation, at indexPath: IndexPath) -> UIMenu {
-        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
-
-        let confirm = UIAction(title: "Confirm",
-                               image: UIImage(systemName: "trash"),
-                               attributes: .destructive) { action in
-
-            switch conversation.conversationType {
-            case .system(_):
-                break
-            case .conversation(let conversation):
-                Task {
-                    do {
-                        try await ChatClient.shared.deleteChannel(conversation)
-                    } catch {
-                        logDebug(error)
-                    }
-                }
-            }
-        }
-
-        let deleteMenu = UIMenu(title: "Delete",
-                                image: UIImage(systemName: "trash"),
-                                options: .destructive,
-                                children: [confirm, neverMind])
-
-        let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { [unowned self] _ in
-            guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
-            self.delegate?.homeViewControllerDidSelect(item: identifier)
-        }
-
-        // Create and return a UIMenu with the share action
-        return UIMenu(title: "Options", children: [open, deleteMenu])
-    }
-
-    func makeNonCurrentUserMenu(for conversation: DisplayableConversation, at indexPath: IndexPath) -> UIMenu {
-
-        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
-
-        let confirm = UIAction(title: "Confirm",
-                               image: UIImage(systemName: "clear"),
-                               attributes: .destructive) { action in
-
-            switch conversation.conversationType {
-            case .system(_):
-                break
-            case .conversation(let conversation):
-                Task {
-                    do {
-                        try await ChatClient.shared.deleteChannel(conversation)
-                    } catch {
-                        logDebug(error)
-                    }
-                }
-            }
-        }
-
-        let deleteMenu = UIMenu(title: "Leave",
-                                image: UIImage(systemName: "clear"),
-                                options: .destructive,
-                                children: [confirm, neverMind])
-
-        let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { [unowned self] _ in
-            guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
-            self.delegate?.homeViewControllerDidSelect(item: item)
-        }
-
-        // Create and return a UIMenu with the share action
-        return UIMenu(title: "Options", children: [open, deleteMenu])
-    }
+//        }
+//
+//        let deleteMenu = UIMenu(title: "Delete",
+//                                image: UIImage(systemName: "trash"),
+//                                options: .destructive,
+//                                children: [confirm, neverMind])
+//
+//        let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { [unowned self] _ in
+//            guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
+//            self.delegate?.homeViewControllerDidSelect(item: identifier)
+//        }
+//
+//        // Create and return a UIMenu with the share action
+//        return UIMenu(title: "Options", children: [open, deleteMenu])
+//    }
+//
+//    func makeNonCurrentUserMenu(for conversation: DisplayableConversation, at indexPath: IndexPath) -> UIMenu {
+//
+//        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
+//
+//        let confirm = UIAction(title: "Confirm",
+//                               image: UIImage(systemName: "clear"),
+//                               attributes: .destructive) { action in
+//
+//            switch conversation.conversationType {
+//            case .system(_):
+//                break
+//            case .conversation(let conversation):
+//                Task {
+//                    do {
+//                        try await ChatClient.shared.deleteChannel(conversation)
+//                    } catch {
+//                        logDebug(error)
+//                    }
+//                }
+//            }
+//        }
+//
+//        let deleteMenu = UIMenu(title: "Leave",
+//                                image: UIImage(systemName: "clear"),
+//                                options: .destructive,
+//                                children: [confirm, neverMind])
+//
+//        let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { [unowned self] _ in
+//            guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
+//            self.delegate?.homeViewControllerDidSelect(item: item)
+//        }
+//
+//        // Create and return a UIMenu with the share action
+//        return UIMenu(title: "Options", children: [open, deleteMenu])
+//    }
 }
 
 extension HomeViewController: TransitionableViewController {
