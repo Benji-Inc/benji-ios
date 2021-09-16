@@ -72,7 +72,7 @@ class HomeViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        //self.collectionView.expandToSuperviewSize()
+        self.collectionView.expandToSuperviewSize()
 
         self.addButton.squaredSize = 60
         self.addButton.makeRound()

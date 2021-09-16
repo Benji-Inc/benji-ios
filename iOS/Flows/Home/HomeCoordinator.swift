@@ -32,6 +32,20 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
         }
+
+        self.homeVC.didTapAdd = { [unowned self] in
+            Task.onMainActor {
+                self.didTapAdd()
+            }
+        }
+
+        self.homeVC.didTapCircles = { [unowned self] in
+            // TODO:
+        }
+
+        self.homeVC.didTapArchive = { [unowned self] in
+            // TODO:
+        }
     }
 
     func handle(deeplink: DeepLinkable) {
