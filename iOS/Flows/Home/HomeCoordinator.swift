@@ -190,8 +190,6 @@ extension HomeCoordinator: HomeViewControllerDelegate {
             switch item {
             case .notice(let notice):
                 self.handle(notice: notice)
-            case .conversation(let conversation):
-                self.startConversationFlow(for: conversation.conversationType)
             }
         }
     }
