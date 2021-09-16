@@ -19,7 +19,7 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
     let collectionView = CollectionView(layout: ConversationCollectionViewLayout())
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
-    var conversation: Conversation? {
+    var conversation: Conversation! {
         return self.conversationController?.channel
     }
     private(set) var conversationController: ChatChannelController?
@@ -68,8 +68,10 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.collectionView)
 
-        self.setupHandlers()
         self.subscribeToUpdates()
+        self.setupHandlers()
+
+        self.loadMessages()
     }
 
     private func setupHandlers() {
@@ -80,10 +82,6 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
                 self.messageInputAccessoryView.textView.resignFirstResponder()
             }
         }
-
-        if let conversation = self.conversationController?.channel {
-            self.load(conversation: conversation)
-        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -91,78 +89,6 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
 
         self.blurView.expandToSuperviewSize()
         self.collectionView.expandToSuperviewSize()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        self.becomeFirstResponder()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-
-        guard let conversation = self.conversationController?.channel else { return }
-        let channelID = conversation.cid
-        guard let message = conversation.latestMessages.first else { return }
-        let messageID = message.id
-        let messageController = ChatClient.shared.messageController(cid: channelID,
-                                                                    messageId: messageID)
-
-        // Update UI with Reply
-//        messageController.repliesChangesPublisher
-//            .mainSink(receiveValue: { listChanges in
-//                for change in listChanges {
-//                    switch change {
-//                    case .insert(let reply, index: let index):
-//                        logDebug(index.debugDescription)
-//                        Task {
-//                            let item = ConversationCollectionViewDataSource.ItemType.message(reply)
-//                            await self.dataSource.appendItems([item], toSection: .messageThread(messageID))
-//                        }
-//                    default:
-//                        return
-//                    }
-//                }
-//            }).store(in: &self.cancellables)
-
-
-//        // Create reply
-//        if let conversation = self.conversationController?.channel {
-//            let channelID = conversation.cid
-//            if let message = conversation.latestMessages.first {
-//                let messageID = message.id
-//                let messageController
-//                = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
-//                let count = message.replyCount
-//                messageController.createNewReply(text: "Test reply \(count)")
-//            }
-//        }
-
-        // Load next replies
-        messageController.synchronize { error in
-            guard error == nil else { return }
-
-            messageController.loadNextReplies { error in
-                guard error == nil else { return }
-                let replies = message.latestReplies
-
-                let messages = replies.map { chatMessage in
-                    return ConversationCollectionViewDataSource.ItemType.message(chatMessage)
-                }
-
-                Task {
-                    await self.dataSource.appendItems(messages, toSection: .messageThread(messageID))
-                }
-            }
-        }
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        self.resignFirstResponder()
     }
 }
 
@@ -182,60 +108,51 @@ extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
         if sendable.previousMessage.isNil {
-            Task {
-                await self.send(object: sendable)
-            }
+            Task { await self.send(object: sendable) }
         } else {
-            self.update(object: sendable)
+            Task { await self.update(object: sendable) }
         }
     }
 
-    func load(conversation: Conversation) {
-        self.loadMessages(for: conversation)
-    }
-
-    @MainActor
     func send(object: Sendable) async {
-        guard let conversation = self.conversation else { return }
-
         do {
-            if case .text(let body) = object.kind {
-                let controller = ChatClient.shared.channelController(for: conversation.cid)
-                try await controller.createNewMessage(text: body)
-
-                self.collectionView.scrollToEnd()
-            }
+            try await self.conversationController?.createNewMessage(with: object)
         } catch {
             logDebug(error)
         }
     }
 
-    func update(object: Sendable) {
-        //        if let updatedMessage = MessageSupplier.shared.update(object: object) {
-        //            self.indexPathForEditing = nil
-        //            self.collectionViewManager.updateItemSync(with: updatedMessage)
-        //            self.messageInputAccessoryView.reset()
-        //        }
+    func update(object: Sendable) async {
+        do {
+            guard let messageID = object.previousMessage?.id else { return }
+            let messageController = ChatClient.shared.messageController(cid: self.conversation!.cid,
+                                                                        messageId: messageID)
+            try await messageController.editMessage(with: object)
+        } catch {
+            logDebug(error)
+        }
     }
 }
 
 extension new_ConversationViewController {
 
-    func loadMessages(for conversation: Conversation) {
+    func loadMessages() {
         Task {
             do {
-                let controller = ChatClient.shared.channelController(for: conversation.cid)
-                try await controller.loadPreviousMessages()
+                guard let controller = self.conversationController else { return }
+
                 let messages: [ChatMessage] = Array(controller.messages)
 
                 var snapshot = self.dataSource.snapshot()
-                for message in messages {
-                    snapshot.appendSections([.messageThread(message.id)])
-                    snapshot.appendItems([message.asConversationCollectionItem],
-                                         toSection: .messageThread(message.id))
-                }
+                snapshot.appendSections([.basic(controller.cid!)])
+                snapshot.appendItems(messages.asConversationCollectionItems,
+                                     toSection: .basic(controller.cid!))
 
-                await self.dataSource.apply(snapshot)
+                await self.dataSource.apply(snapshot, animatingDifferences: false)
+
+                await Task.sleep(seconds: 2)
+                let oldestMessage = controller.messages.last
+                try await controller.loadPreviousMessages(before: oldestMessage?.id)
             } catch {
                 logDebug(error)
             }
@@ -243,52 +160,44 @@ extension new_ConversationViewController {
     }
 
     func subscribeToUpdates() {
-        guard let conversation = self.conversation else { return }
+        guard let controller = self.conversationController else { return }
 
-        let controller = ChatClient.shared.channelController(for: conversation.cid)
-        controller.messagesChangesPublisher.mainSink { [weak self] (changes: [ListChange<ChatMessage>]) in
-            guard let `self` = self else { return }
-
-            for change in changes {
-                logDebug(change.description)
-                switch change {
-                case .insert(let message, index: let index):
-                    return
-                case .move(_, fromIndex: let fromIndex, toIndex: let toIndex):
-                    return
-                case .update(_, index: let index):
-                    return
-                case .remove(_, index: let index):
-                    return
-                }
-            }
-        }.store(in: &self.cancellables)
+        controller.delegate = self
     }
+}
 
-//        ChatClientManager.shared.$memberUpdate.mainSink { [weak self] (update) in
-//            guard let `self` = self else { return }
-//            guard let memberUpdate = update, ConversationSupplier.shared.isConversationEqualToActiveConversation(conversation: memberUpdate.conversation) else { return }
-//
-//            switch memberUpdate.status {
-//            case .joined, .left:
-//                memberUpdate.conversation.getMembersCount { [unowned self] (result, count) in
-//                    self.collectionViewManager.numberOfMembers = Int(count)
-//                }
-//            case .changed:
-//                break
-//            case .typingEnded:
-//                if let memberID = memberUpdate.member.identity, memberID != User.current()?.objectId {
-//                    self.collectionViewManager.userTyping = nil
-//                    self.collectionViewManager.setTypingIndicatorViewHidden(true)
-//                }
-//            case .typingStarted:
-//                if let memberID = memberUpdate.member.identity, memberID != User.current()?.objectId {
-//                    Task {
-//                        guard let user = try? await memberUpdate.member.getMemberAsUser() else { return }
-//                        self.collectionViewManager.userTyping = user
-//                        self.collectionViewManager.setTypingIndicatorViewHidden(false, performUpdates: nil)
-//                    }
-//                }
-//            }
-//        }.store(in: &self.cancellables)
+
+extension new_ConversationViewController: ChatChannelControllerDelegate {
+
+    /// The controller observed changes in the `Messages` of the observed channel.
+    func channelController(_ channelController: ChatChannelController,
+                           didUpdateMessages changes: [ListChange<ChatMessage>]) {
+
+        var snapshot = self.dataSource.snapshot()
+
+        for change in changes {
+            switch change {
+            case .insert:
+                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(channelController.cid!)))
+                let messages = Array(channelController.messages)
+                snapshot.appendItems(messages.asConversationCollectionItems, toSection: .basic(channelController.cid!))
+                self.dataSource.apply(snapshot)
+                return
+
+            case .move:
+                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(channelController.cid!)))
+                let messages = Array(channelController.messages)
+                snapshot.appendItems(messages.asConversationCollectionItems, toSection: .basic(channelController.cid!))
+                self.dataSource.apply(snapshot)
+                return
+
+            case .update(let message, _):
+                snapshot.reloadItems([message.asConversationCollectionItem])
+            case .remove(let message, _):
+                snapshot.deleteItems([message.asConversationCollectionItem])
+            }
+        }
+
+        self.dataSource.apply(snapshot)
+    }
 }

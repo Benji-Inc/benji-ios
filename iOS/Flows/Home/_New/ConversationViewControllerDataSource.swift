@@ -12,46 +12,24 @@ import StreamChat
 typealias ConversationCollectionSection = ConversationCollectionViewDataSource.SectionType
 typealias ConversationCollectionItem = ConversationCollectionViewDataSource.ItemType
 
-class new_MessageCell: UICollectionViewCell {
-
-    let textView = TextView()
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        self.contentView.addSubview(self.textView)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.textView.width = self.contentView.width
-        self.textView.sizeToFit()
-        self.textView.centerOnXAndY()
-    }
-}
-
 class ConversationCollectionViewDataSource: CollectionViewDataSource<ConversationCollectionViewDataSource.SectionType,
                                             ConversationCollectionViewDataSource.ItemType> {
 
     enum SectionType: Hashable {
+        case basic(ChannelId)
         case messageThread(MessageId)
     }
 
     enum ItemType: Hashable {
-        case message(ChatMessage)
+        case message(MessageId)
     }
 
-    private let messageCellConfig
-    = UICollectionView.CellRegistration<new_MessageCell, ChatMessage>
-    { cell, indexPath, itemIdentifier in
+    private let messageCellConfig = UICollectionView.CellRegistration<new_MessageCell, (ChannelId, MessageId)>
+    { cell, indexPath, item in
+        let messageController = ChatClient.shared.messageController(cid: item.0, messageId: item.1)
         // Configure the cell
         cell.contentView.set(backgroundColor: .red)
-        cell.textView.text = itemIdentifier.text
+        cell.textView.text = messageController.message?.text
         cell.contentView.setNeedsLayout()
     }
 
@@ -60,11 +38,16 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                               section: SectionType,
                               item: ItemType) -> UICollectionViewCell? {
 
-        switch item {
-        case .message(let message):
-            return collectionView.dequeueConfiguredReusableCell(using: self.messageCellConfig,
-                                                                for: indexPath,
-                                                                item: message)
+        switch section {
+        case .basic(let channelID):
+            switch item {
+            case .message(let messageID):
+                return collectionView.dequeueConfiguredReusableCell(using: self.messageCellConfig,
+                                                                    for: indexPath,
+                                                                    item: (channelID, messageID))
+            }
+        case .messageThread(_):
+            return nil
         }
     }
 
@@ -77,10 +60,21 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
 }
 
+
+extension Array where Element == ChatMessage {
+
+    /// Convenience function to convert Stream chat messages into the ItemType of a ConversationCollectionViewDataSource.
+    var asConversationCollectionItems: [ConversationCollectionItem] {
+        return self.map { message in
+            return message.asConversationCollectionItem
+        }
+    }
+}
+
 extension ChatMessage {
 
     /// Convenience function to convert Stream chat messages into the ItemType of a ConversationCollectionViewDataSource.
     var asConversationCollectionItem: ConversationCollectionItem {
-        return ConversationCollectionItem.message(self)
+        return ConversationCollectionItem.message(self.id)
     }
 }

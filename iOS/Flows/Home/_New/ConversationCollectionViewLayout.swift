@@ -21,7 +21,7 @@ class ConversationCollectionViewLayout: UICollectionViewCompositionalLayout {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems: [item])
 
         let section = NSCollectionLayoutSection(group: group)
-        section.orthogonalScrollingBehavior = .groupPaging
+        section.orthogonalScrollingBehavior = .none
 
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .horizontal
