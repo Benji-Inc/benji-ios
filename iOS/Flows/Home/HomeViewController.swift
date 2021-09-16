@@ -11,8 +11,6 @@ import Parse
 import StreamChat
 
 protocol HomeViewControllerDelegate: AnyObject {
-    func homeViewControllerDidTapAdd(_ controller: HomeViewController)
-    func homeViewControllerDidSelectReservations(_ controller: HomeViewController)
     func homeViewControllerDidSelect(item: HomeCollectionViewDataSource.ItemType)
 }
 
@@ -24,9 +22,14 @@ class HomeViewController: ViewController {
 
     private lazy var dataSource = HomeCollectionViewDataSource(collectionView: self.collectionView)
     private var collectionView = CollectionView(layout: HomeCollectionViewLayout())
-    private var channelListController: ChatChannelListController?
 
     let addButton = Button()
+    let circlesButton = Button()
+    let archiveButton = Button()
+
+    var didTapAdd: CompletionOptional = nil
+    var didTapCircles: CompletionOptional = nil
+    var didTapArchive: CompletionOptional = nil
 
     // MARK: - Lifecycle
 
@@ -40,11 +43,19 @@ class HomeViewController: ViewController {
         self.view.addSubview(self.addButton)
         self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightPurple))
         self.addButton.addAction(for: .touchUpInside) { [unowned self] in
-            self.delegate?.homeViewControllerDidTapAdd(self)
+            self.didTapAdd?()
         }
 
-        self.dataSource.didSelectReservations = { [unowned self] in
-            self.delegate?.homeViewControllerDidTapAdd(self)
+        self.view.addSubview(self.circlesButton)
+        self.circlesButton.set(style: .icon(image: UIImage(systemName: "circles.hexagongrid")!, color: .lightPurple))
+        self.circlesButton.addAction(for: .touchUpInside) { [unowned self] in
+            self.didTapCircles?()
+        }
+
+        self.view.addSubview(self.archiveButton)
+        self.archiveButton.set(style: .icon(image: UIImage(systemName: "message")!, color: .lightPurple))
+        self.archiveButton.addAction(for: .touchUpInside) { [unowned self] in
+            self.didTapArchive?()
         }
 
         self.collectionView.delegate = self
@@ -53,79 +64,89 @@ class HomeViewController: ViewController {
     override func viewWasPresented() {
         super.viewWasPresented()
 
-        Task {
-            await self.loadData()
-        }
+//        Task {
+//            await self.loadData()
+//        }
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.collectionView.expandToSuperviewSize()
+        //self.collectionView.expandToSuperviewSize()
 
         self.addButton.squaredSize = 60
         self.addButton.makeRound()
         self.addButton.centerOnX()
         self.addButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+
+        self.circlesButton.squaredSize = 60
+        self.circlesButton.makeRound()
+        self.circlesButton.match(.right, to: .left, of: self.addButton, offset: -Theme.contentOffset)
+        self.circlesButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+
+        self.archiveButton.squaredSize = 60
+        self.archiveButton.makeRound()
+        self.archiveButton.match(.left, to: .right, of: self.addButton, offset: Theme.contentOffset)
+        self.archiveButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
     }
 
     // MARK: Data Loading
 
-    @MainActor
-    private func loadData() async {
-        self.collectionView.animationView.play()
+//    @MainActor
+//    private func loadData() async {
+//        self.collectionView.animationView.play()
+//
+//        async let unclaimedReservationCount = Reservation.getUnclaimedReservationCount(for: User.current()!)
+//
+//        let userID = User.current()!.userObjectID!
+//        let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
+//                                     sort: [.init(key: .lastMessageAt, isAscending: false)])
+//
+//        self.channelListController = try? await ChatClient.shared.queryChannels(query: query)
+//
+//        await NoticeSupplier.shared.loadNotices()
+//
+//        self.dataSource.unclaimedCount = await unclaimedReservationCount
+//        
+//        let cycle = AnimationCycle(inFromPosition: .inward,
+//                                   outToPosition: .inward,
+//                                   shouldConcatenate: true,
+//                                   scrollToEnd: false)
+//
+//        let snapshot = self.getInitialSnapshot()
+//        await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
+//
+//        self.collectionView.animationView.stop()
+//    }
 
-        async let unclaimedReservationCount = Reservation.getUnclaimedReservationCount(for: User.current()!)
-
-        let userID = User.current()!.userObjectID!
-        let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
-                                     sort: [.init(key: .lastMessageAt, isAscending: false)])
-
-        self.channelListController = try? await ChatClient.shared.queryChannels(query: query)
-
-        await NoticeSupplier.shared.loadNotices()
-
-        self.dataSource.unclaimedCount = await unclaimedReservationCount
-        
-        let cycle = AnimationCycle(inFromPosition: .inward,
-                                   outToPosition: .inward,
-                                   shouldConcatenate: true,
-                                   scrollToEnd: false)
-
-        let snapshot = self.getInitialSnapshot()
-        await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
-
-        self.collectionView.animationView.stop()
-    }
-
-    private func getInitialSnapshot() -> NSDiffableDataSourceSnapshot<HomeCollectionViewDataSource.SectionType,
-                                                                      HomeCollectionViewDataSource.ItemType> {
-        var snapshot = self.dataSource.snapshot()
-
-        let allCases = HomeCollectionViewDataSource.SectionType.allCases
-        snapshot.appendSections(allCases)
-        allCases.forEach { (section) in
-            snapshot.appendItems(self.getItems(for: section), toSection: section)
-        }
-
-        return snapshot
-    }
-
-    private func getItems(for section: HomeCollectionViewDataSource.SectionType)
-    -> [HomeCollectionViewDataSource.ItemType] {
-
-        switch section {
-        case .notices:
-            return NoticeSupplier.shared.notices.map { notice in
-                return .notice(notice)
-            }
-        case .conversations:
-            guard let channelListController = self.channelListController else { return [] }
-            return channelListController.channels.map { chatChannel in
-                return .conversation(DisplayableConversation(conversationType: .conversation(chatChannel)))
-            }
-        }
-    }
+//    private func getInitialSnapshot() -> NSDiffableDataSourceSnapshot<HomeCollectionViewDataSource.SectionType,
+//                                                                      HomeCollectionViewDataSource.ItemType> {
+//        var snapshot = self.dataSource.snapshot()
+//
+//        let allCases = HomeCollectionViewDataSource.SectionType.allCases
+//        snapshot.appendSections(allCases)
+//        allCases.forEach { (section) in
+//            snapshot.appendItems(self.getItems(for: section), toSection: section)
+//        }
+//
+//        return snapshot
+//    }
+//
+//    private func getItems(for section: HomeCollectionViewDataSource.SectionType)
+//    -> [HomeCollectionViewDataSource.ItemType] {
+//
+//        switch section {
+//        case .notices:
+//            return NoticeSupplier.shared.notices.map { notice in
+//                return .notice(notice)
+//            }
+//        case .conversations:
+//            guard let channelListController = self.channelListController else { return [] }
+//            return channelListController.channels.map { chatChannel in
+//                return .conversation(DisplayableConversation(conversationType: .conversation(chatChannel)))
+//            }
+//        }
+//    }
 }
 
 extension HomeViewController: UICollectionViewDelegate {

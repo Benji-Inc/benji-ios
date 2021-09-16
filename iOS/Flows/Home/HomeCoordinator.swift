@@ -145,12 +145,6 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
 extension HomeCoordinator: HomeViewControllerDelegate {
 
-    nonisolated func homeViewControllerDidTapAdd(_ controller: HomeViewController) {
-        Task.onMainActor {
-            self.didTapAdd()
-        }
-    }
-
     func didTapAdd() {
         self.removeChild()
         let coordinator = NewConversationCoordinator(router: self.router, deepLink: self.deepLink)
