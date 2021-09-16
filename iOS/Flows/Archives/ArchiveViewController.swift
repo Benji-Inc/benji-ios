@@ -9,7 +9,13 @@
 import Foundation
 import StreamChat
 
+protocol ArchiveViewControllerDelegate: class {
+    func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType)
+}
+
 class ArchiveViewController: ViewController {
+
+    weak var delegate: ArchiveViewControllerDelegate?
 
     // MARK: - UI
 
