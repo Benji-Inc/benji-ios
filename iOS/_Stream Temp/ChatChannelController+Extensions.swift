@@ -93,6 +93,47 @@ extension ChatChannelController {
         }
     }
 
+    func editMessage(with sendable: Sendable) async throws {
+        guard let messageID = sendable.previousMessage?.id else {
+            throw(ClientError.apiError(detail: "No message id"))
+        }
+        switch sendable.kind {
+        case .text(let text):
+            return try await self.editMessage(messageID, text: text)
+        case .attributedText:
+            break
+        case .photo:
+            break
+        case .video:
+            break
+        case .location:
+            break
+        case .emoji:
+            break
+        case .audio:
+            break
+        case .contact:
+            break
+        case .link:
+            break
+        }
+
+        throw(ClientError.apiError(detail: "Message type not supported."))
+    }
+
+    /// Edits the specified message contained in this controller's channel with the provided value.
+    ///
+    /// - Parameters:
+    ///   - text: The updated message text.
+    func editMessage(_ messageID: MessageId, text: String) async throws {
+        guard let channelID = self.cid else {
+            throw(ClientError.apiError(detail: "No channel id"))
+        }
+
+        let messageController = self.client.messageController(cid: channelID, messageId: messageID)
+        try await messageController.editMessage(text: text)
+    }
+
     /// Delete the channel this controller manages.
     func deleteChannel() async throws {
         return try await withCheckedThrowingContinuation { continuation in

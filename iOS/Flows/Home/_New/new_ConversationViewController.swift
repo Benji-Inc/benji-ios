@@ -9,20 +9,14 @@
 import Foundation
 import StreamChat
 
-protocol new_ConversationViewControllerDelegate: AnyObject {
-
-}
-
 class new_ConversationViewController: FullScreenViewController, CollectionViewInputHandler {
 
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     let collectionView = CollectionView(layout: ConversationCollectionViewLayout())
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
-    var conversation: Conversation! {
-        return self.conversationController?.channel
-    }
-    private(set) var conversationController: ChatChannelController?
+    var conversation: Conversation! { return self.conversationController?.channel }
+    private(set) var conversationController: ChatChannelController!
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
@@ -69,13 +63,14 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
         self.view.addSubview(self.collectionView)
 
         self.subscribeToUpdates()
-        self.setupHandlers()
-
+        self.setupInputHandlers()
         self.loadMessages()
     }
 
-    private func setupHandlers() {
+    private func setupInputHandlers() {
         self.addKeyboardObservers()
+
+        self.collectionView.delegate = self
 
         self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
             if self.messageInputAccessoryView.textView.isFirstResponder {
@@ -92,19 +87,23 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
     }
 }
 
-extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
+extension new_ConversationViewController: UICollectionViewDelegate {
 
-    func handle(attachment: Attachment, body: String) {
-        Task {
-            do {
-                let kind = try await AttachmentsManager.shared.getMessageKind(for: attachment, body: body)
-                let object = SendableObject(kind: kind, context: .passive)
-                await self.send(object: object)
-            } catch {
-                logDebug(error)
-            }
-        }
+    func collectionView(_ collectionView: UICollectionView,
+                        willDisplay cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
+
+        // If all the messages are loaded, no need to fetch more.
+        guard !self.conversationController.hasLoadedAllPreviousMessages else { return }
+
+        // Only start fetching new messages once the user is nearing the end of the list.
+        guard indexPath.row >= self.conversationController.messages.count - 10 else { return }
+
+        self.conversationController.loadPreviousMessages()
     }
+}
+
+extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
         if sendable.previousMessage.isNil {
@@ -124,10 +123,7 @@ extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
     func update(object: Sendable) async {
         do {
-            guard let messageID = object.previousMessage?.id else { return }
-            let messageController = ChatClient.shared.messageController(cid: self.conversation!.cid,
-                                                                        messageId: messageID)
-            try await messageController.editMessage(with: object)
+            try await self.conversationController?.editMessage(with: object)
         } catch {
             logDebug(error)
         }
@@ -136,36 +132,24 @@ extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
 extension new_ConversationViewController {
 
+    func subscribeToUpdates() {
+        self.conversationController?.delegate = self
+    }
+
     func loadMessages() {
         Task {
-            do {
-                guard let controller = self.conversationController else { return }
+            guard let controller = self.conversationController else { return }
 
-                let messages: [ChatMessage] = Array(controller.messages)
+            let messages = controller.messages
 
-                var snapshot = self.dataSource.snapshot()
-                snapshot.appendSections([.basic(controller.cid!)])
-                snapshot.appendItems(messages.asConversationCollectionItems,
-                                     toSection: .basic(controller.cid!))
+            var snapshot = self.dataSource.snapshot()
+            snapshot.appendSections([.basic(conversation.cid)])
+            snapshot.appendItems(messages.asConversationCollectionItems)
 
-                await self.dataSource.apply(snapshot, animatingDifferences: false)
-
-                await Task.sleep(seconds: 2)
-                let oldestMessage = controller.messages.last
-                try await controller.loadPreviousMessages(before: oldestMessage?.id)
-            } catch {
-                logDebug(error)
-            }
+            await self.dataSource.apply(snapshot, animatingDifferences: false)
         }
     }
-
-    func subscribeToUpdates() {
-        guard let controller = self.conversationController else { return }
-
-        controller.delegate = self
-    }
 }
-
 
 extension new_ConversationViewController: ChatChannelControllerDelegate {
 
@@ -177,17 +161,10 @@ extension new_ConversationViewController: ChatChannelControllerDelegate {
 
         for change in changes {
             switch change {
-            case .insert:
-                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(channelController.cid!)))
-                let messages = Array(channelController.messages)
-                snapshot.appendItems(messages.asConversationCollectionItems, toSection: .basic(channelController.cid!))
-                self.dataSource.apply(snapshot)
-                return
-
-            case .move:
-                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(channelController.cid!)))
-                let messages = Array(channelController.messages)
-                snapshot.appendItems(messages.asConversationCollectionItems, toSection: .basic(channelController.cid!))
+            case .insert, .move:
+                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
+                snapshot.appendItems(channelController.messages.asConversationCollectionItems,
+                                     toSection: .basic(conversation.cid))
                 self.dataSource.apply(snapshot)
                 return
 

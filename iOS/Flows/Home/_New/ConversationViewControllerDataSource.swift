@@ -61,7 +61,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 }
 
 
-extension Array where Element == ChatMessage {
+extension LazyCachedMapCollection where Element == ChatMessage {
 
     /// Convenience function to convert Stream chat messages into the ItemType of a ConversationCollectionViewDataSource.
     var asConversationCollectionItems: [ConversationCollectionItem] {
