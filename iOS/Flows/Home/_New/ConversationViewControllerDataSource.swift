@@ -24,6 +24,16 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case message(MessageId)
     }
 
+    private let contextMenuDelegate: ContextMenuInteractionDelegate
+
+    override init(collectionView: UICollectionView) {
+        self.contextMenuDelegate = ContextMenuInteractionDelegate(collectionView: collectionView)
+
+        super.init(collectionView: collectionView)
+
+        self.contextMenuDelegate.dataSource = self
+    }
+
     private let messageCellConfig = UICollectionView.CellRegistration<new_MessageCell, (ChannelId, MessageId)>
     { cell, indexPath, item in
         let messageController = ChatClient.shared.messageController(cid: item.0, messageId: item.1)
@@ -42,9 +52,13 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case .basic(let channelID):
             switch item {
             case .message(let messageID):
-                return collectionView.dequeueConfiguredReusableCell(using: self.messageCellConfig,
+                let cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellConfig,
                                                                     for: indexPath,
                                                                     item: (channelID, messageID))
+
+                let interaction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
+                cell.addInteraction(interaction)
+                return cell
             }
         case .messageThread(_):
             return nil
@@ -60,6 +74,73 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
 }
 
+private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteractionDelegate {
+
+    weak var dataSource: ConversationCollectionViewDataSource?
+    let collectionView: UICollectionView
+
+    init(collectionView: UICollectionView) {
+        self.collectionView = collectionView
+    }
+
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+
+        guard let indexPath = self.collectionView.indexPathForItem(at: location) else { return nil }
+
+        // Get the conversation and message IDs.
+        guard let sectionItem = self.dataSource?.sectionIdentifier(for: indexPath.section),
+              let messageItem = self.dataSource?.itemIdentifier(for: indexPath) else { return nil }
+
+
+        switch sectionItem {
+        case .basic(let channelID):
+            switch messageItem {
+            case .message(let messageID):
+                let messageController = ChatClient.shared.messageController(cid: channelID,
+                                                                            messageId: messageID)
+
+                return UIContextMenuConfiguration(identifier: nil,
+                                                  previewProvider: nil) { elements in
+                    return self.makeContextMenu(for: messageController, at: indexPath)
+                }
+            }
+        case .messageThread:
+            fatalError()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        return false
+    }
+
+    private func makeContextMenu(for messageController: ChatMessageController, at indexPath: IndexPath) -> UIMenu {
+        guard let message = messageController.message else { return UIMenu() }
+
+        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
+
+        let confirmDelete = UIAction(title: "Confirm",
+                                     image: UIImage(systemName: "trash"),
+                                     attributes: .destructive) { action in
+            logDebug("Delete the message please!")
+        }
+
+        let deleteMenu = UIMenu(title: "Delete",
+                                image: UIImage(systemName: "trash"),
+                                options: .destructive,
+                                children: [confirmDelete, neverMind])
+
+
+        if message.isFromCurrentUser {
+            let children = [deleteMenu]
+            return UIMenu(title: "", children: children)
+        }
+
+        // Create and return a UIMenu with the share action
+        return UIMenu()
+    }
+}
 
 extension LazyCachedMapCollection where Element == ChatMessage {
 
