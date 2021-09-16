@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import StreamChat
 
 protocol HomeViewControllerDelegate: AnyObject {
     func homeViewControllerDidSelect(item: HomeCollectionViewDataSource.ItemType)
