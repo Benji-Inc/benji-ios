@@ -77,6 +77,10 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
                 self.messageInputAccessoryView.textView.resignFirstResponder()
             }
         }
+
+        self.dataSource.handleDeleteMessage = { [unowned self] message in
+            self.conversationController.deleteMessage(message.id)
+        }
     }
 
     override func viewDidLayoutSubviews() {

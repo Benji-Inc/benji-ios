@@ -17,12 +17,13 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
     enum SectionType: Hashable {
         case basic(ChannelId)
-        case messageThread(MessageId)
     }
 
     enum ItemType: Hashable {
         case message(MessageId)
     }
+
+    var handleDeleteMessage: ((ChatMessage) -> Void)?
 
     private let contextMenuDelegate: ContextMenuInteractionDelegate
 
@@ -36,10 +37,15 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
     private let messageCellConfig = UICollectionView.CellRegistration<new_MessageCell, (ChannelId, MessageId)>
     { cell, indexPath, item in
+
         let messageController = ChatClient.shared.messageController(cid: item.0, messageId: item.1)
         // Configure the cell
         cell.contentView.set(backgroundColor: .red)
-        cell.textView.text = messageController.message?.text
+        if messageController.message?.type == .deleted {
+            cell.textView.text = "DELETED"
+        } else {
+            cell.textView.text = messageController.message?.text
+        }
         cell.contentView.setNeedsLayout()
     }
 
@@ -60,8 +66,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 cell.addInteraction(interaction)
                 return cell
             }
-        case .messageThread(_):
-            return nil
         }
     }
 
@@ -105,8 +109,6 @@ private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteraction
                     return self.makeContextMenu(for: messageController, at: indexPath)
                 }
             }
-        case .messageThread:
-            fatalError()
         }
     }
 
@@ -115,7 +117,9 @@ private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteraction
         return false
     }
 
-    private func makeContextMenu(for messageController: ChatMessageController, at indexPath: IndexPath) -> UIMenu {
+    private func makeContextMenu(for messageController: ChatMessageController,
+                                 at indexPath: IndexPath) -> UIMenu {
+
         guard let message = messageController.message else { return UIMenu() }
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
@@ -123,7 +127,8 @@ private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteraction
         let confirmDelete = UIAction(title: "Confirm",
                                      image: UIImage(systemName: "trash"),
                                      attributes: .destructive) { action in
-            logDebug("Delete the message please!")
+
+            self.dataSource?.handleDeleteMessage?(message)
         }
 
         let deleteMenu = UIMenu(title: "Delete",

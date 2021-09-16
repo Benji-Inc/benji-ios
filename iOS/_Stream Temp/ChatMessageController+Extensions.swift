@@ -52,4 +52,17 @@ extension ChatMessageController {
             }
         }
     }
+
+    /// Deletes the message this controller manages.
+    func deleteMessage() async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.deleteMessage { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+    }
 }

@@ -134,6 +134,35 @@ extension ChatChannelController {
         try await messageController.editMessage(text: text)
     }
 
+    /// Deletes the specified message that this controller manages.
+    ///
+    /// - Parameters:
+    ///   - messageID: The id of the message to be deleted.
+    func deleteMessage(_ messageID: MessageId) async throws {
+        guard let channelID = self.cid else {
+            throw(ClientError.apiError(detail: "No channel id"))
+        }
+
+        let messageController = self.client.messageController(cid: channelID, messageId: messageID)
+        try await messageController.deleteMessage()
+    }
+
+    /// Deletes the specified message that this controller manages.
+    ///
+    /// - Parameters:
+    ///   - messageID: The id of the message to be deleted.
+    ///   - completion: The completion. Will be called on a **callbackQueue** when the network request is finished.
+    ///                 If request fails, the completion will be called with an error.
+    func deleteMessage(_ messageID: MessageId, completion: ((Error?) -> Void)? = nil) {
+        guard let channelID = self.cid else {
+            completion?(ClientError.apiError(detail: "No channel id"))
+            return
+        }
+
+        let messageController = self.client.messageController(cid: channelID, messageId: messageID)
+        messageController.deleteMessage(completion: completion)
+    }
+
     /// Delete the channel this controller manages.
     func deleteChannel() async throws {
         return try await withCheckedThrowingContinuation { continuation in
