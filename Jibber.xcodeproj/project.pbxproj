@@ -615,6 +615,10 @@
 		D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */; };
 		D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */; };
+		D6C100D226F3DC0000F1ED7D /* ArchiveCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C100D126F3DC0000F1ED7D /* ArchiveCoordinator.swift */; };
+		D6C100D426F3DC1100F1ED7D /* ArchiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */; };
+		D6C100D626F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C100D526F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift */; };
+		D6C100D826F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C100D726F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift */; };
 		D6C9CD2C2471D6BE007376F7 /* ReadAllFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */; };
 		D6C9EF3F25BF6CB100A14DE5 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */; };
 		D6C9EF4525BF6CF000A14DE5 /* Indexable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */; };
@@ -1064,6 +1068,10 @@
 		D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+Extensions.swift"; sourceTree = "<group>"; };
 		D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentsManager.swift; sourceTree = "<group>"; };
 		D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryView.swift; sourceTree = "<group>"; };
+		D6C100D126F3DC0000F1ED7D /* ArchiveCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCoordinator.swift; sourceTree = "<group>"; };
+		D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveViewController.swift; sourceTree = "<group>"; };
+		D6C100D526F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		D6C100D726F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadAllFooterView.swift; sourceTree = "<group>"; };
 		D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubbleView.swift; sourceTree = "<group>"; };
 		D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Indexable.swift; sourceTree = "<group>"; };
@@ -2070,6 +2078,18 @@
 			path = "Swipeable Input";
 			sourceTree = "<group>";
 		};
+		D6C100D026F3DB8000F1ED7D /* Archives */ = {
+			isa = PBXGroup;
+			children = (
+				D6DADF6A2207DC90007D9EB1 /* Conversation */,
+				D6C100D126F3DC0000F1ED7D /* ArchiveCoordinator.swift */,
+				D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */,
+				D6C100D526F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift */,
+				D6C100D726F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift */,
+			);
+			path = Archives;
+			sourceTree = "<group>";
+		};
 		D6C9CD2A2471D67B007376F7 /* Footers */ = {
 			isa = PBXGroup;
 			children = (
@@ -2081,6 +2101,7 @@
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				D6C100D026F3DB8000F1ED7D /* Archives */,
 				D671E1ED2640297900BF2B8D /* Toast */,
 				D6432BF122D8282E0016001A /* Conversation */,
 				D6D145F521D549A300CD8CE4 /* Home */,
@@ -2093,7 +2114,6 @@
 		D6D145F521D549A300CD8CE4 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				D6DADF6A2207DC90007D9EB1 /* Conversation */,
 				80DACF9A26D6D7360048722A /* HomeCollectionViewDataSource.swift */,
 				D6617D002675411E00439C06 /* HomeCollectionViewLayout.swift */,
 				D66F0FDB22BF2ADC00BA277D /* HomeCoordinator.swift */,
@@ -2697,6 +2717,7 @@
 				D6617D042675737400439C06 /* HomeCoordinator+Extensions.swift in Sources */,
 				D64C6AA2232EA06800DB7257 /* TypingCellAttributesConfigurer.swift in Sources */,
 				D66ED460267D50D300332BA3 /* ConnectionsManger.swift in Sources */,
+				D6C100D426F3DC1100F1ED7D /* ArchiveViewController.swift in Sources */,
 				D6F33C8224B15086009603FF /* VideoMessageCell.swift in Sources */,
 				D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */,
 				D64273A522CC05DD0088256B /* ExpandingTextView.swift in Sources */,
@@ -2764,6 +2785,7 @@
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
 				D6432BF522D82CDC0016001A /* ConversationCollectionViewFlowLayout.swift in Sources */,
 				D6AD7999266E870200ED7A93 /* MIMEType.swift in Sources */,
+				D6C100D826F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift in Sources */,
 				D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */,
 				D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */,
@@ -2857,6 +2879,7 @@
 				D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
 				D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */,
+				D6C100D226F3DC0000F1ED7D /* ArchiveCoordinator.swift in Sources */,
 				D66A580B25DD6990001B3F64 /* ConnectionCell.swift in Sources */,
 				D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */,
 				D639F61824B1566B007E63B7 /* AttibutedMessageCell.swift in Sources */,
@@ -2918,6 +2941,7 @@
 				D6DA3192259B5B6D0078E769 /* Config.swift in Sources */,
 				D67758A725B0A604007E0184 /* UIViewController+Presentable.swift in Sources */,
 				D63D71C125F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
+				D6C100D626F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift in Sources */,
 				D6F33C7324B14A5D009603FF /* AudioCellAttributesConfigurer.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
 				D6617CF026743DCF00439C06 /* SystemNotice.swift in Sources */,
