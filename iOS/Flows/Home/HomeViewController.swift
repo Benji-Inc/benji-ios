@@ -88,7 +88,6 @@ class HomeViewController: ViewController {
         self.archiveButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
 
         self.collectionView.expandToSuperviewSize()
-        self.collectionView.match(.bottom, to: .top, of: self.circlesButton, offset: -Theme.contentOffset)
     }
 
     // MARK: Data Loading
