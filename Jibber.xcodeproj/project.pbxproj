@@ -511,6 +511,11 @@
 		D678EC2226F50DC20071DB0D /* CircleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2126F50DC20071DB0D /* CircleCoordinator.swift */; };
 		D678EC2426F530850071DB0D /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2326F530850071DB0D /* Circle.swift */; };
 		D678EC2626F534430071DB0D /* CircleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2526F534430071DB0D /* CircleGroup.swift */; };
+		D678EC2926F538160071DB0D /* CirclesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2826F538160071DB0D /* CirclesCoordinator.swift */; };
+		D678EC2B26F538350071DB0D /* CirclesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2A26F538350071DB0D /* CirclesViewController.swift */; };
+		D678EC2D26F5384D0071DB0D /* CirclesCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2C26F5384D0071DB0D /* CirclesCollectionViewLayout.swift */; };
+		D678EC2F26F5386C0071DB0D /* CirclesCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2E26F5386C0071DB0D /* CirclesCollectionViewDataSource.swift */; };
+		D678EC3126F538980071DB0D /* CirclesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC3026F538980071DB0D /* CirclesCell.swift */; };
 		D6792CE525FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
 		D6792CE625FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
 		D6792CE725FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
@@ -1023,6 +1028,11 @@
 		D678EC2126F50DC20071DB0D /* CircleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCoordinator.swift; sourceTree = "<group>"; };
 		D678EC2326F530850071DB0D /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		D678EC2526F534430071DB0D /* CircleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleGroup.swift; sourceTree = "<group>"; };
+		D678EC2826F538160071DB0D /* CirclesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclesCoordinator.swift; sourceTree = "<group>"; };
+		D678EC2A26F538350071DB0D /* CirclesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclesViewController.swift; sourceTree = "<group>"; };
+		D678EC2C26F5384D0071DB0D /* CirclesCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclesCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D678EC2E26F5386C0071DB0D /* CirclesCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclesCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		D678EC3026F538980071DB0D /* CirclesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclesCell.swift; sourceTree = "<group>"; };
 		D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAGradientLayer+Extensions.swift"; sourceTree = "<group>"; };
 		D67934D423D956BB00536B44 /* ConversationPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationPreviewViewController.swift; sourceTree = "<group>"; };
 		D67934D623D9580F00536B44 /* MessagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePreviewViewController.swift; sourceTree = "<group>"; };
@@ -1947,6 +1957,18 @@
 			path = Circle;
 			sourceTree = "<group>";
 		};
+		D678EC2726F537F20071DB0D /* Circles */ = {
+			isa = PBXGroup;
+			children = (
+				D678EC2826F538160071DB0D /* CirclesCoordinator.swift */,
+				D678EC2A26F538350071DB0D /* CirclesViewController.swift */,
+				D678EC2C26F5384D0071DB0D /* CirclesCollectionViewLayout.swift */,
+				D678EC2E26F5386C0071DB0D /* CirclesCollectionViewDataSource.swift */,
+				D678EC3026F538980071DB0D /* CirclesCell.swift */,
+			);
+			path = Circles;
+			sourceTree = "<group>";
+		};
 		D67A82D9230CCE290076152B /* Splash */ = {
 			isa = PBXGroup;
 			children = (
@@ -2134,6 +2156,7 @@
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				D678EC2726F537F20071DB0D /* Circles */,
 				D678EC1626F50A730071DB0D /* Circle */,
 				D6C100D026F3DB8000F1ED7D /* Archives */,
 				D6432BF122D8282E0016001A /* Conversation */,
@@ -2695,6 +2718,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D650C1E125B5F1730037C59A /* AvatarView+Extensions.swift in Sources */,
+				D678EC2F26F5386C0071DB0D /* CirclesCollectionViewDataSource.swift in Sources */,
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				D639106F25D7344500D336D7 /* CollectionViewManager+Snapshot.swift in Sources */,
 				D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */,
@@ -2738,6 +2762,7 @@
 				D607400E23401B3E009633EB /* SystemConversation.swift in Sources */,
 				D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */,
+				D678EC3126F538980071DB0D /* CirclesCell.swift in Sources */,
 				D66A580D25DD6B06001B3F64 /* NewConversationCollectionView.swift in Sources */,
 				D6D1501C21D5F8AD00CD8CE4 /* MessageCell.swift in Sources */,
 				D6748CBE262DAF280095F4B1 /* ReservationsViewController.swift in Sources */,
@@ -2810,6 +2835,7 @@
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
 				D6F312A8266AE27D00E25FEE /* LinkCell.swift in Sources */,
+				D678EC2926F538160071DB0D /* CirclesCoordinator.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,
@@ -2887,6 +2913,7 @@
 				D62C9CC6266C417100BB9632 /* DemoView.swift in Sources */,
 				D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */,
 				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
+				D678EC2B26F538350071DB0D /* CirclesViewController.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6F33C7E24B15063009603FF /* LocationMessageCell.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
@@ -2961,6 +2988,7 @@
 				D6FC809C237A6ED30089AACC /* ConversationCollectionViewManager+Typing.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
+				D678EC2D26F5384D0071DB0D /* CirclesCollectionViewLayout.swift in Sources */,
 				D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,
 				D64A8F4C25900BA4002948E1 /* ConversationCollectionViewManager+Extensions.swift in Sources */,
