@@ -44,15 +44,16 @@ class StackedAvatarView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.setSize()
         for (index, imageView) in self.imageViews.enumerated() {
             let size = imageView.getSize(for: self.itemHeight)
             let offset = CGFloat(index) * size.width * self.offsetMultiplier
-            imageView.alpha = alpha
+            imageView.alpha = self.alpha
             imageView.size = size
             imageView.right = self.width - offset
             imageView.centerOnY()
         }
+
+        self.setSize()
     }
 
     func setSize() {
