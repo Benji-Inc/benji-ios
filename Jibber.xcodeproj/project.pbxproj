@@ -504,6 +504,11 @@
 		D67896BF2302683C0059BA75 /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896BE2302683C0059BA75 /* PhotoViewController.swift */; };
 		D67896CC2304524C0059BA75 /* ConversationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896CB2304524C0059BA75 /* ConversationCoordinator.swift */; };
 		D678EC1526F3E5BA0071DB0D /* ArchiveViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC1426F3E5BA0071DB0D /* ArchiveViewController+Extension.swift */; };
+		D678EC1826F50A8A0071DB0D /* CircleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC1726F50A8A0071DB0D /* CircleViewController.swift */; };
+		D678EC1A26F50B120071DB0D /* CircleCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC1926F50B120071DB0D /* CircleCollectionViewLayout.swift */; };
+		D678EC1C26F50B280071DB0D /* CircleCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC1B26F50B280071DB0D /* CircleCollectionViewDataSource.swift */; };
+		D678EC1E26F50BBC0071DB0D /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC1D26F50BBC0071DB0D /* UserCell.swift */; };
+		D678EC2026F50D520071DB0D /* CircleViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC1F26F50D520071DB0D /* CircleViewController+Extensions.swift */; };
 		D6792CE525FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
 		D6792CE625FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
 		D6792CE725FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */; };
@@ -1009,6 +1014,11 @@
 		D67896BE2302683C0059BA75 /* PhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
 		D67896CB2304524C0059BA75 /* ConversationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCoordinator.swift; sourceTree = "<group>"; };
 		D678EC1426F3E5BA0071DB0D /* ArchiveViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchiveViewController+Extension.swift"; sourceTree = "<group>"; };
+		D678EC1726F50A8A0071DB0D /* CircleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleViewController.swift; sourceTree = "<group>"; };
+		D678EC1926F50B120071DB0D /* CircleCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D678EC1B26F50B280071DB0D /* CircleCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		D678EC1D26F50BBC0071DB0D /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
+		D678EC1F26F50D520071DB0D /* CircleViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CircleViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D6792CE425FBE87600B6575C /* CAGradientLayer+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAGradientLayer+Extensions.swift"; sourceTree = "<group>"; };
 		D67934D423D956BB00536B44 /* ConversationPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationPreviewViewController.swift; sourceTree = "<group>"; };
 		D67934D623D9580F00536B44 /* MessagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePreviewViewController.swift; sourceTree = "<group>"; };
@@ -1918,6 +1928,18 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
+		D678EC1626F50A730071DB0D /* Circle */ = {
+			isa = PBXGroup;
+			children = (
+				D678EC1B26F50B280071DB0D /* CircleCollectionViewDataSource.swift */,
+				D678EC1926F50B120071DB0D /* CircleCollectionViewLayout.swift */,
+				D678EC1726F50A8A0071DB0D /* CircleViewController.swift */,
+				D678EC1D26F50BBC0071DB0D /* UserCell.swift */,
+				D678EC1F26F50D520071DB0D /* CircleViewController+Extensions.swift */,
+			);
+			path = Circle;
+			sourceTree = "<group>";
+		};
 		D67A82D9230CCE290076152B /* Splash */ = {
 			isa = PBXGroup;
 			children = (
@@ -2105,6 +2127,7 @@
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				D678EC1626F50A730071DB0D /* Circle */,
 				D6C100D026F3DB8000F1ED7D /* Archives */,
 				D6432BF122D8282E0016001A /* Conversation */,
 				D6D145F521D549A300CD8CE4 /* Home */,
@@ -2682,12 +2705,14 @@
 				D6AE0F9F267CFB7D00C6B048 /* MessageIntentHandler.swift in Sources */,
 				D6B2601822E4208900143CF0 /* ConversationDateLabel.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
+				D678EC1E26F50BBC0071DB0D /* UserCell.swift in Sources */,
 				D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
 				D6B26903264C7D2000EFDA17 /* AnimatingTapView.swift in Sources */,
 				800FAAC126F0585A00D3C3A0 /* ChatChannel+Extensions.swift in Sources */,
 				D61D38E3248C07F700BE457B /* InputAccessoryView+Animation.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
 				D642735122C857760088256B /* MessageContext.swift in Sources */,
+				D678EC2026F50D520071DB0D /* CircleViewController+Extensions.swift in Sources */,
 				D642735322C85B740088256B /* SystemAvatar.swift in Sources */,
 				D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */,
 				D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */,
@@ -2716,6 +2741,7 @@
 				D66F0FF222C1D86800BA277D /* ConversationType.swift in Sources */,
 				D6E4C7FB238E4217002B1330 /* ConversationHeaderAttributesConfigurer.swift in Sources */,
 				D66A0B942351821200A0FFEA /* Completeable.swift in Sources */,
+				D678EC1826F50A8A0071DB0D /* CircleViewController.swift in Sources */,
 				D62C9CBF266BE50700BB9632 /* KeyboardDemoViewController.swift in Sources */,
 				D6617D042675737400439C06 /* HomeCoordinator+Extensions.swift in Sources */,
 				D64C6AA2232EA06800DB7257 /* TypingCellAttributesConfigurer.swift in Sources */,
@@ -2847,6 +2873,7 @@
 				D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */,
 				D6D380C4257FC18300C562E8 /* Selectable.swift in Sources */,
 				D6D1460521D5524C00CD8CE4 /* StringCasing.swift in Sources */,
+				D678EC1C26F50B280071DB0D /* CircleCollectionViewDataSource.swift in Sources */,
 				D66379D725A3704300A4A3B7 /* SessionManager.swift in Sources */,
 				D66A580725DD691A001B3F64 /* NewConversationViewController.swift in Sources */,
 				D62C9CC6266C417100BB9632 /* DemoView.swift in Sources */,
@@ -2871,6 +2898,7 @@
 				D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */,
 				80FA868C26F111830053101B /* ChatMessage+Messageable.swift in Sources */,
 				D67758A025B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,
+				D678EC1A26F50B120071DB0D /* CircleCollectionViewLayout.swift in Sources */,
 				D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */,
 				D684840A22CD48D000362AC3 /* GradientView.swift in Sources */,
 				D6D1503E21DAF98500CD8CE4 /* TextField.swift in Sources */,
