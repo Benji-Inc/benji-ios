@@ -14,12 +14,24 @@ protocol CircleViewControllerDelegate: AnyObject {
 
 class CircleViewController: ViewController {
 
-    weak var delegate: CircleViewControllerDelegate?
+    unowned let delegate: CircleViewControllerDelegate
 
     // MARK: - UI
 
     private var collectionView = CollectionView(layout: CircleCollectionViewLayout())
     lazy var dataSource = CircleCollectionViewDataSource(collectionView: self.collectionView)
+
+    private let circleGroup: CircleGroup
+
+    init(with circleGroup: CircleGroup, delegate: CircleViewControllerDelegate) {
+        self.circleGroup = circleGroup
+        self.delegate = delegate
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func initializeViews() {
         super.initializeViews()
@@ -50,35 +62,30 @@ class CircleViewController: ViewController {
     @MainActor
     private func loadData() async {
 
-        do {
-            self.collectionView.animationView.play()
+        self.collectionView.animationView.play()
 
-            #warning("Get users from Circle")
-//            let snapshot = self.getInitialSnapshot(with: users)
-//
-//            let cycle = AnimationCycle(inFromPosition: .inward,
-//                                       outToPosition: .inward,
-//                                       shouldConcatenate: true,
-//                                       scrollToEnd: false)
-//
-//            await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
+        let snapshot = self.getInitialSnapshot()
 
-            self.collectionView.animationView.stop()
-        } catch {
-            print(error)
-        }
+        let cycle = AnimationCycle(inFromPosition: .inward,
+                                   outToPosition: .inward,
+                                   shouldConcatenate: true,
+                                   scrollToEnd: false)
+
+        await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
+
+        self.collectionView.animationView.stop()
     }
 
-    private func getInitialSnapshot(with users: [User]) -> NSDiffableDataSourceSnapshot<CircleCollectionViewDataSource.SectionType,
+    private func getInitialSnapshot() -> NSDiffableDataSourceSnapshot<CircleCollectionViewDataSource.SectionType,
                                                                       CircleCollectionViewDataSource.ItemType> {
         var snapshot = self.dataSource.snapshot()
 
         let allCases = CircleCollectionViewDataSource.SectionType.allCases
         snapshot.appendSections(allCases)
         allCases.forEach { (section) in
-            let items: [CircleCollectionViewDataSource.ItemType] = users.map { user in
+            let items: [CircleCollectionViewDataSource.ItemType] = self.circleGroup.circles?.first?.users?.compactMap { user in
                 return .user(user)
-            }
+            } ?? []
             snapshot.appendItems(items, toSection: section)
         }
 

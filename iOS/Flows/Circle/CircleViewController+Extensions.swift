@@ -9,5 +9,9 @@
 import Foundation
 
 extension CircleViewController: UICollectionViewDelegate {
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
+
+        self.delegate.circleView(self, didSelect: identifier)
+    }
 }

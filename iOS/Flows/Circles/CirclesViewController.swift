@@ -56,7 +56,10 @@ class CirclesViewController: ViewController {
         do {
             self.collectionView.animationView.play()
 
-            let circles = try await CircleGroup.query()?.findObjectsInBackground() as? [CircleGroup] ?? []
+            guard let circles = try await CircleGroup.query()?.findObjectsInBackground() as? [CircleGroup], !circles.isEmpty else {
+                self.collectionView.animationView.stop()
+                return
+            }
 
             let snapshot = self.getInitialSnapshot(with: circles)
 
@@ -92,4 +95,9 @@ class CirclesViewController: ViewController {
 
 extension CirclesViewController: UICollectionViewDelegate {
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
+
+        self.delegate?.circlesView(self, didSelect: identifier)
+    }
 }

@@ -10,11 +10,16 @@ import Foundation
 
 class CircleCoordinator: PresentableCoordinator<Void> {
 
-    private lazy var circleVC: CircleViewController = {
-        let vc = CircleViewController()
-        vc.delegate = self
-        return vc
-    }()
+    private lazy var circleVC = CircleViewController(with: self.circleGroup, delegate: self)
+    private let circleGroup: CircleGroup
+
+    init(with group: CircleGroup,
+         router: Router,
+         deepLink: DeepLinkable?) {
+
+        self.circleGroup = group
+        super.init(router: router, deepLink: deepLink)
+    }
 
     override func toPresentable() -> DismissableVC {
         return self.circleVC

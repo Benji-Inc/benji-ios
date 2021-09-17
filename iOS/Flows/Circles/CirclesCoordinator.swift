@@ -30,5 +30,25 @@ extension CirclesCoordinator: CirclesViewControllerDelegate {
 
     nonisolated func circlesView(_ controller: CirclesViewController, didSelect item: CirclesCollectionViewDataSource.ItemType) {
 
+        switch item {
+        case .circles(let group):
+            Task.onMainActor {
+                self.startCircleFlow(with: group)
+            }
+        }
+    }
+
+    func startCircleFlow(with group: CircleGroup) {
+        self.removeChild()
+        let coordinator = CircleCoordinator(with: group,
+                                            router: self.router,
+                                            deepLink: self.deepLink)
+
+        self.addChildAndStart(coordinator) { result in
+            coordinator.toPresentable().dismiss(animated: true) {
+
+            }
+        }
+        self.router.present(coordinator, source: self.circlesVC)
     }
 }
