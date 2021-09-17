@@ -11,7 +11,6 @@ import Parse
 
 enum CircleKey: String {
     case users
-    case name
     case type
 }
 
@@ -24,11 +23,6 @@ final class Circle: PFObject, PFSubclassing {
 
     static func parseClassName() -> String {
         return String(describing: self)
-    }
-
-    var name: String? {
-        get { self.getObject(for: .name) }
-        set { self.setObject(for: .name, with: newValue) }
     }
 
     var type: CircleType? {
