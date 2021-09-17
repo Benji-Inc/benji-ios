@@ -40,7 +40,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
 
         self.homeVC.didTapCircles = { [unowned self] in
-            // TODO:
+            self.startCirclesFlow()
         }
 
         self.homeVC.didTapArchive = { [unowned self] in
@@ -83,6 +83,17 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         case .archive:
             self.startArchiveFlow()
         }
+    }
+
+    func startCirclesFlow() {
+        self.removeChild()
+        let coordinator = CircleCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { result in
+            coordinator.toPresentable().dismiss(animated: true) {
+
+            }
+        }
+        self.router.present(coordinator, source: self.homeVC)
     }
 
     func didTapAdd() {
