@@ -22,7 +22,41 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
 
     override func start() {
         super.start()
-        
+
+        if let deeplink = self.deepLink {
+            self.handle(deeplink: deeplink)
+        }
+    }
+
+    func handle(deeplink: DeepLinkable) {
+        self.deepLink = deeplink
+
+        guard let target = deeplink.deepLinkTarget else { return }
+
+        switch target {
+        case .conversation:
+            #warning("Replace")
+//            if let conversationId = deeplink.customMetadata["conversationId"] as? String,
+//               let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) {
+//                self.startConversationFlow(for: conversation.conversationType)
+//            } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
+//                Task {
+//                    do {
+//                        let connection = try await Connection.getObject(with: connectionId)
+//                        guard let conversationId = connection.conversationId,
+//                              let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) else {
+//                                  return
+//                              }
+//
+//                        self.startConversationFlow(for: conversation.conversationType)
+//                    } catch {
+//                        logDebug(error)
+//                    }
+//                }
+//            }
+        default:
+            break
+        }
     }
 }
 
