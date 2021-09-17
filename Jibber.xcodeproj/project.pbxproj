@@ -1956,6 +1956,7 @@
 		D68BEAD224831F7C00C95D31 /* Reservations */ = {
 			isa = PBXGroup;
 			children = (
+				D6617D0526757BD600439C06 /* ReservationsFooterView.swift */,
 				D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */,
 				D6748CBD262DAF280095F4B1 /* ReservationsViewController.swift */,
 			);
@@ -2166,7 +2167,6 @@
 				D6DADF6F2207DF60007D9EB1 /* ConversationCell.swift */,
 				D672C31B2644342F00C9E878 /* ConversationContentView.swift */,
 				D67934D423D956BB00536B44 /* ConversationPreviewViewController.swift */,
-				D6617D0526757BD600439C06 /* ReservationsFooterView.swift */,
 			);
 			path = Conversation;
 			sourceTree = "<group>";

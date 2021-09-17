@@ -9,7 +9,7 @@
 import Foundation
 import StreamChat
 
-protocol ArchiveViewControllerDelegate: class {
+protocol ArchiveViewControllerDelegate: AnyObject {
     func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType)
 }
 
@@ -22,7 +22,13 @@ class ArchiveViewController: ViewController {
     private var collectionView = CollectionView(layout: ArchiveCollectionViewLayout())
     lazy var dataSource = ArchiveCollectionViewDataSource(collectionView: self.collectionView)
 
-    private var channelListController: ChatChannelListController?
+    private(set) var channelListController: ChatChannelListController?
+
+    var conversations: [DisplayableConversation] {
+        return self.channelListController?.channels.map({ chatChannel in
+            return DisplayableConversation(conversationType: .conversation(chatChannel))
+        }) ?? []
+    }
 
     override func initializeViews() {
         super.initializeViews()
@@ -89,9 +95,8 @@ class ArchiveViewController: ViewController {
 
         switch section {
         case .conversations:
-            guard let channelListController = self.channelListController else { return [] }
-            return channelListController.channels.map { chatChannel in
-                return .conversation(DisplayableConversation(conversationType: .conversation(chatChannel)))
+            return self.conversations.map { conversation in
+                return .conversation(conversation)
             }
         }
     }
