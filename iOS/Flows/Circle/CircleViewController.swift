@@ -49,36 +49,39 @@ class CircleViewController: ViewController {
 
     @MainActor
     private func loadData() async {
-        self.collectionView.animationView.play()
 
-        //Query users
+        do {
+            self.collectionView.animationView.play()
 
-        let cycle = AnimationCycle(inFromPosition: .inward,
-                                   outToPosition: .inward,
-                                   shouldConcatenate: true,
-                                   scrollToEnd: false)
+            #warning("Get users from Circle")
+//            let snapshot = self.getInitialSnapshot(with: users)
+//
+//            let cycle = AnimationCycle(inFromPosition: .inward,
+//                                       outToPosition: .inward,
+//                                       shouldConcatenate: true,
+//                                       scrollToEnd: false)
+//
+//            await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
 
-        let snapshot = self.getInitialSnapshot()
-        await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
-
-        self.collectionView.animationView.stop()
+            self.collectionView.animationView.stop()
+        } catch {
+            print(error)
+        }
     }
 
-    private func getInitialSnapshot() -> NSDiffableDataSourceSnapshot<CircleCollectionViewDataSource.SectionType,
+    private func getInitialSnapshot(with users: [User]) -> NSDiffableDataSourceSnapshot<CircleCollectionViewDataSource.SectionType,
                                                                       CircleCollectionViewDataSource.ItemType> {
         var snapshot = self.dataSource.snapshot()
 
         let allCases = CircleCollectionViewDataSource.SectionType.allCases
         snapshot.appendSections(allCases)
         allCases.forEach { (section) in
-            snapshot.appendItems(self.getItems(for: section), toSection: section)
+            let items: [CircleCollectionViewDataSource.ItemType] = users.map { user in
+                return .user(user)
+            }
+            snapshot.appendItems(items, toSection: section)
         }
 
         return snapshot
-    }
-
-    private func getItems(for section: CircleCollectionViewDataSource.SectionType)
-    -> [CircleCollectionViewDataSource.ItemType] {
-        return []
     }
 }

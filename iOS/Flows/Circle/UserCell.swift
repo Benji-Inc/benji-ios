@@ -14,21 +14,23 @@ class UserCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: User?
 
+    var imageView = AvatarView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-
+        self.contentView.addSubview(self.imageView)
     }
 
     func configure(with item: User) {
-        
+        self.imageView.displayable = item
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-
+        self.imageView.setSize(for: self.height)
+        self.imageView.centerOnXAndY()
     }
 
     override func prepareForReuse() {
