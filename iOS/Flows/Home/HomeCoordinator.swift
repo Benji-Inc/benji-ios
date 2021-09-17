@@ -44,7 +44,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
 
         self.homeVC.didTapArchive = { [unowned self] in
-            // TODO:
+            self.startArchiveFlow()
         }
     }
 
@@ -80,8 +80,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 //                    }
 //                }
 //            }
-        case .conversations:
-            break
+        case .archive:
+            self.startArchiveFlow()
         }
     }
 
@@ -114,6 +114,19 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         case .system:
             break
         }
+    }
+
+    func startArchiveFlow() {
+        self.removeChild()
+
+        let coordinator = ArchiveCoordinator(router: self.router,
+                                                  deepLink: self.deepLink)
+        self.addChildAndStart(coordinator, finishedHandler: { (_) in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+                self.finishFlow(with: ())
+            }
+        })
+        self.router.present(coordinator, source: self.homeVC, animated: true)
     }
 
     func startConversationFlow(for type: ConversationType?) {

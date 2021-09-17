@@ -34,12 +34,18 @@ class ArchiveViewController: ViewController {
         self.collectionView.delegate = self 
     }
 
-    override func viewWasPresented() {
-        super.viewWasPresented()
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
         Task {
             await self.loadData()
         }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.collectionView.expandToSuperviewSize()
     }
 
     // MARK: Data Loading
