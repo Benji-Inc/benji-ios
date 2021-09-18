@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CirclesCoordinator: PresentableCoordinator<Void> {
+class CircleGroupCoordinator: PresentableCoordinator<Void> {
 
     private lazy var circlesVC: CirclesViewController = {
         let vc = CirclesViewController()
@@ -26,7 +26,7 @@ class CirclesCoordinator: PresentableCoordinator<Void> {
     }
 }
 
-extension CirclesCoordinator: CirclesViewControllerDelegate {
+extension CircleGroupCoordinator: CirclesViewControllerDelegate {
 
     nonisolated func circlesView(_ controller: CirclesViewController, didSelect item: CirclesCollectionViewDataSource.ItemType) {
 

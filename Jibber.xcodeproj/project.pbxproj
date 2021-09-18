@@ -512,7 +512,7 @@
 		D678EC2226F50DC20071DB0D /* CircleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2126F50DC20071DB0D /* CircleCoordinator.swift */; };
 		D678EC2426F530850071DB0D /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2326F530850071DB0D /* Circle.swift */; };
 		D678EC2626F534430071DB0D /* CircleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2526F534430071DB0D /* CircleGroup.swift */; };
-		D678EC2926F538160071DB0D /* CirclesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2826F538160071DB0D /* CirclesCoordinator.swift */; };
+		D678EC2926F538160071DB0D /* CircleGroupCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2826F538160071DB0D /* CircleGroupCoordinator.swift */; };
 		D678EC2B26F538350071DB0D /* CirclesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2A26F538350071DB0D /* CirclesViewController.swift */; };
 		D678EC2D26F5384D0071DB0D /* CirclesCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2C26F5384D0071DB0D /* CirclesCollectionViewLayout.swift */; };
 		D678EC2F26F5386C0071DB0D /* CirclesCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2E26F5386C0071DB0D /* CirclesCollectionViewDataSource.swift */; };
@@ -1029,7 +1029,7 @@
 		D678EC2126F50DC20071DB0D /* CircleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCoordinator.swift; sourceTree = "<group>"; };
 		D678EC2326F530850071DB0D /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		D678EC2526F534430071DB0D /* CircleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleGroup.swift; sourceTree = "<group>"; };
-		D678EC2826F538160071DB0D /* CirclesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclesCoordinator.swift; sourceTree = "<group>"; };
+		D678EC2826F538160071DB0D /* CircleGroupCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleGroupCoordinator.swift; sourceTree = "<group>"; };
 		D678EC2A26F538350071DB0D /* CirclesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclesViewController.swift; sourceTree = "<group>"; };
 		D678EC2C26F5384D0071DB0D /* CirclesCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclesCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D678EC2E26F5386C0071DB0D /* CirclesCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CirclesCollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -1975,7 +1975,7 @@
 		D678EC2726F537F20071DB0D /* Circles */ = {
 			isa = PBXGroup;
 			children = (
-				D678EC2826F538160071DB0D /* CirclesCoordinator.swift */,
+				D678EC2826F538160071DB0D /* CircleGroupCoordinator.swift */,
 				D678EC2A26F538350071DB0D /* CirclesViewController.swift */,
 				D678EC2C26F5384D0071DB0D /* CirclesCollectionViewLayout.swift */,
 				D678EC2E26F5386C0071DB0D /* CirclesCollectionViewDataSource.swift */,
@@ -2840,7 +2840,7 @@
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
 				D6F312A8266AE27D00E25FEE /* LinkCell.swift in Sources */,
-				D678EC2926F538160071DB0D /* CirclesCoordinator.swift in Sources */,
+				D678EC2926F538160071DB0D /* CircleGroupCoordinator.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
 				D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */,

@@ -63,7 +63,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
     func startCirclesFlow() {
         self.removeChild()
-        let coordinator = CirclesCoordinator(router: self.router, deepLink: self.deepLink)
+        let coordinator = CircleGroupCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { result in
             coordinator.toPresentable().dismiss(animated: true) {
 
