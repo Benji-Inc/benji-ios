@@ -717,6 +717,7 @@
 		D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */; };
 		D6F80BE725C9C14000E9C75F /* CNContact+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */; };
+		D6F998D926F6A61B007A310A /* ChatChannel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F998D826F6A61B007A310A /* ChatChannel+Extensions.swift */; };
 		D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */; };
 		D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA622123F067A300048C4A /* AnimationDuration.swift */; };
 		D6FA622423F06AEF00048C4A /* AnimationCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA622323F06AEF00048C4A /* AnimationCycle.swift */; };
@@ -1164,6 +1165,7 @@
 		D6F733D923D37C6300FBC7BC /* TextEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryField.swift; sourceTree = "<group>"; };
 		D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsManager.swift; sourceTree = "<group>"; };
 		D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CNContact+Extensions.swift"; sourceTree = "<group>"; };
+		D6F998D826F6A61B007A310A /* ChatChannel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatChannel+Extensions.swift"; sourceTree = "<group>"; };
 		D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionViewManager+Animations.swift"; sourceTree = "<group>"; };
 		D6FA622123F067A300048C4A /* AnimationDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDuration.swift; sourceTree = "<group>"; };
 		D6FA622323F06AEF00048C4A /* AnimationCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationCycle.swift; sourceTree = "<group>"; };
@@ -1428,6 +1430,7 @@
 			isa = PBXGroup;
 			children = (
 				D6730ECA2649F14F00B5DC16 /* AVURLAsset+Extension.swift */,
+				D6F998D826F6A61B007A310A /* ChatChannel+Extensions.swift */,
 				D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */,
 				D6D804BA266A8B7D00741594 /* NSTextCheckingResult+Extension.swift */,
 			);
@@ -1975,11 +1978,11 @@
 		D678EC2726F537F20071DB0D /* Circles */ = {
 			isa = PBXGroup;
 			children = (
+				D678EC3026F538980071DB0D /* CircleGroupCell.swift */,
+				D678EC2E26F5386C0071DB0D /* CircleGroupCollectionViewDataSource.swift */,
+				D678EC2C26F5384D0071DB0D /* CircleGroupCollectionViewLayout.swift */,
 				D678EC2826F538160071DB0D /* CircleGroupCoordinator.swift */,
 				D678EC2A26F538350071DB0D /* CircleGroupViewController.swift */,
-				D678EC2C26F5384D0071DB0D /* CircleGroupCollectionViewLayout.swift */,
-				D678EC2E26F5386C0071DB0D /* CircleGroupCollectionViewDataSource.swift */,
-				D678EC3026F538980071DB0D /* CircleGroupCell.swift */,
 			);
 			path = Circles;
 			sourceTree = "<group>";
@@ -2822,6 +2825,7 @@
 				D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */,
 				D64C6AA0232DC2B700DB7257 /* TypingIndicatorCell.swift in Sources */,
 				D66F0FD622BF28A100BA277D /* AppDelegate+Initialization.swift in Sources */,
+				D6F998D926F6A61B007A310A /* ChatChannel+Extensions.swift in Sources */,
 				D67896AD22FF60190059BA75 /* TextInputViewController.swift in Sources */,
 				D6D1502921D6085200CD8CE4 /* ResourceObject.swift in Sources */,
 				D6D145FF21D5510400CD8CE4 /* StringStyle.swift in Sources */,
