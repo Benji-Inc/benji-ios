@@ -19,7 +19,7 @@ class CirclesCollectionViewDataSource: CollectionViewDataSource<CirclesCollectio
         case circles(CircleGroup)
     }
 
-    private let circlesConfig = ManageableCellRegistration<CirclesCell>().provider
+    private let circlesConfig = ManageableCellRegistration<CircleGroupCell>().provider
 
     // MARK: - Cell Dequeueing
 

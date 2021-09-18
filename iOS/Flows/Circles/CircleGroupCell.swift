@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CirclesCell: CollectionViewManagerCell, ManageableCell {
+class CircleGroupCell: CollectionViewManagerCell, ManageableCell {
 
     typealias ItemType = CircleGroup
 
