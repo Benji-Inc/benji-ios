@@ -18,7 +18,7 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
 
     enum ItemType: Hashable {
         case notice(SystemNotice)
-        case conversation(DisplayableConversation)
+        case conversation(Conversation)
     }
 
     var unclaimedCount: Int = 0
@@ -78,7 +78,7 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
 
     private func getConversationCell(with collectionView: UICollectionView,
                                 indexPath: IndexPath,
-                                conversation: DisplayableConversation) -> CollectionViewManagerCell? {
+                                conversation: Conversation) -> CollectionViewManagerCell? {
         
         return collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
                                                             for: indexPath,

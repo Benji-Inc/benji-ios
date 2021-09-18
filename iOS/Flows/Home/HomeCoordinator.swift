@@ -89,12 +89,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-    func startConversationFlow(for type: ConversationType?) {
+    func startConversationFlow(for conversation: Conversation?) {
         self.removeChild()
-        var conversation: DisplayableConversation?
-        if let t = type {
-            conversation = DisplayableConversation(conversationType: t)
-        }
+
         let coordinator = ConversationCoordinator(router: self.router,
                                                   deepLink: self.deepLink,
                                                   conversation: conversation)
@@ -118,7 +115,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
     private func showSoftAskNotifications(for status: UNAuthorizationStatus) {
 
-        let alert = UIAlertController(title: "Notifications that don't suck.", message: "Most other social apps design their notifications to be vague in order to suck you in for as long as possible. Ours are not. Get reminders about things that YOU set, and recieve important messages from REAL people. Ours is a far better experience with them turned on.", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Notifications that don't suck.",
+                                      message: "Most other social apps design their notifications to be vague in order to suck you in for as long as possible. Ours are not. Get reminders about things that YOU set, and recieve important messages from REAL people. Ours is a far better experience with them turned on.",
+                                      preferredStyle: .alert)
 
         let allow = UIAlertAction(title: "Allow", style: .default) { action in
             if status == .denied {
@@ -183,7 +182,7 @@ extension HomeCoordinator: HomeViewControllerDelegate {
             case .notice(let notice):
                 self.handle(notice: notice)
             case .conversation(let conversation):
-                self.startConversationFlow(for: conversation.conversationType)
+                self.startConversationFlow(for: conversation)
             }
         }
     }

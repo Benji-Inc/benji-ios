@@ -10,12 +10,12 @@ import Foundation
 
 class ConversationPreviewViewController: ViewController {
 
-    let conversation: DisplayableConversation
+    let conversation: Conversation
     let conversationSize: CGSize
 
     private let content = ConversationContentView()
 
-    init(with conversation: DisplayableConversation, size: CGSize) {
+    init(with conversation: Conversation, size: CGSize) {
         self.conversation = conversation
         self.conversationSize = size
         super.init()

@@ -22,11 +22,12 @@ protocol ConversationViewControllerDelegate: AnyObject {
 class ConversationViewController: FullScreenViewController, CollectionViewInputHandler {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    lazy var detailVC = ConversationDetailViewController(conversation: self.conversation, delegate: self.delegate)
+    lazy var detailVC = ConversationDetailViewController(conversation: self.conversation,
+                                                         delegate: self.delegate)
     lazy var conversationCollectionView = ConversationCollectionView()
     lazy var collectionViewManager = ConversationCollectionViewManager(with: self.conversationCollectionView)
 
-    private(set) var conversation: DisplayableConversation?
+    private(set) var conversation: Conversation?
     private(set) var channelController: ChatChannelController?
     unowned let delegate: ConversationViewControllerDelegates
 
@@ -60,19 +61,14 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
         return true 
     }
 
-    init(conversation: DisplayableConversation?, delegate: ConversationViewControllerDelegates) {
+    init(conversation: Conversation?, delegate: ConversationViewControllerDelegates) {
         self.conversation = conversation
         self.delegate = delegate
 
         super.init()
 
         if let conversation = conversation {
-            switch conversation.conversationType {
-            case .system(let systemConversation):
-                break
-            case .conversation(let chatChannel):
-                self.channelController = ChatClient.shared.channelController(for: chatChannel.cid)
-            }
+            self.channelController = ChatClient.shared.channelController(for: conversation.cid)
         }
     }
 
@@ -133,7 +129,7 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
 //        }
 //
         if let conversation = self.conversation {
-            self.load(activeConversation: conversation)
+            self.load(conversation: conversation)
         }
     }
 

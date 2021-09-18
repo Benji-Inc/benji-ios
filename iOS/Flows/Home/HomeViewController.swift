@@ -121,8 +121,8 @@ class HomeViewController: ViewController {
             }
         case .conversations:
             guard let channelListController = self.channelListController else { return [] }
-            return channelListController.channels.map { chatChannel in
-                return .conversation(DisplayableConversation(conversationType: .conversation(chatChannel)))
+            return channelListController.channels.map { conversation in
+                return .conversation(conversation)
             }
         }
     }
@@ -153,26 +153,21 @@ extension HomeViewController: UICollectionViewDelegate {
 //            } else {
 //                return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
 //            }
-//        })
+        //        })
     }
 
-    func makeCurrentUserMenu(for conversation: DisplayableConversation, at indexPath: IndexPath) -> UIMenu {
+    func makeCurrentUserMenu(for conversation: Conversation, at indexPath: IndexPath) -> UIMenu {
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
 
         let confirm = UIAction(title: "Confirm",
                                image: UIImage(systemName: "trash"),
                                attributes: .destructive) { action in
 
-            switch conversation.conversationType {
-            case .system(_):
-                break
-            case .conversation(let conversation):
-                Task {
-                    do {
-                        try await ChatClient.shared.deleteChannel(conversation)
-                    } catch {
-                        logDebug(error)
-                    }
+            Task {
+                do {
+                    try await ChatClient.shared.deleteChannel(conversation)
+                } catch {
+                    logDebug(error)
                 }
             }
         }
@@ -191,7 +186,7 @@ extension HomeViewController: UICollectionViewDelegate {
         return UIMenu(title: "Options", children: [open, deleteMenu])
     }
 
-    func makeNonCurrentUserMenu(for conversation: DisplayableConversation, at indexPath: IndexPath) -> UIMenu {
+    func makeNonCurrentUserMenu(for conversation: Conversation, at indexPath: IndexPath) -> UIMenu {
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
 
@@ -199,16 +194,11 @@ extension HomeViewController: UICollectionViewDelegate {
                                image: UIImage(systemName: "clear"),
                                attributes: .destructive) { action in
 
-            switch conversation.conversationType {
-            case .system(_):
-                break
-            case .conversation(let conversation):
-                Task {
-                    do {
-                        try await ChatClient.shared.deleteChannel(conversation)
-                    } catch {
-                        logDebug(error)
-                    }
+            Task {
+                do {
+                    try await ChatClient.shared.deleteChannel(conversation)
+                } catch {
+                    logDebug(error)
                 }
             }
         }

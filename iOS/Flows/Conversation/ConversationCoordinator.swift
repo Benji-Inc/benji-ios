@@ -14,7 +14,7 @@ import Combine
 
 class ConversationCoordinator: PresentableCoordinator<Void> {
 
-    lazy var conversationVC = ConversationViewController(conversation: self.conversation, delegate: self)
+    lazy var conversationVC = new_ConversationViewController(conversation: self.conversation)
     private lazy var cameraVC = ImagePickerViewController()
     private lazy var imagePickerVC: PHPickerViewController = {
         var config = PHPickerConfiguration(photoLibrary: PHPhotoLibrary.shared())
@@ -25,11 +25,11 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
     }()
     private var cancellables = Set<AnyCancellable>()
 
-    var conversation: DisplayableConversation?
+    var conversation: Conversation?
 
     init(router: Router,
          deepLink: DeepLinkable?,
-         conversation: DisplayableConversation?) {
+         conversation: Conversation?) {
 
         self.conversation = conversation
         super.init(router: router, deepLink: deepLink)

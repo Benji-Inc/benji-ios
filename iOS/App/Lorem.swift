@@ -81,56 +81,6 @@ class Lorem {
                             handle: String())
     }
 
-    class func systemConversation() -> SystemConversation {
-        var avatars: [Avatar] = []
-        for _ in 0...3 {
-            avatars.append(self.avatar())
-        }
-
-        var messages: [SystemMessage] = []
-        for _ in 0...50 {
-            messages.append(self.systemMessage())
-        }
-
-        let conversation = SystemConversation(avatars: avatars,
-                                    context: self.context(),
-                                    id: String(self.randomString()),
-                                    timeStampAsDate: self.dates.random(),
-                                    messages: messages,
-                                    uniqueName: self.conversationName())
-
-        return conversation 
-    }
-
-    class func systemMessage() -> SystemMessage {
-
-        let message = SystemMessage(avatar: self.avatar(),
-                                    context: self.context(),
-                                    isFromCurrentUser: self.isFromCurrentUserList.random(),
-                                    createdAt: self.dates.random(),
-                                    authorId: "testMessage",
-                                    status: .sent,
-                                    kind: .text(self.sentence()),
-                                    id: String(),
-                                    attributes: nil)
-
-        return message
-    }
-
-    class func systemParagraph() -> SystemMessage {
-
-        let message = SystemMessage(avatar: self.avatar(),
-                                    context: self.context(),
-                                    isFromCurrentUser: self.isFromCurrentUserList.random(),
-                                    createdAt: self.dates.random(),
-                                    authorId: "testMessage",
-                                    status: .sent,
-                                    kind: .text(self.paragraph()),
-                                    id: String(),
-                                    attributes: nil)
-        return message
-    }
-
     class func randomString(length: Int = 10) -> String {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         return String((0..<length).map{ _ in letters.randomElement()! })
