@@ -9,18 +9,18 @@
 import Foundation
 import UIKit
 
-protocol CirclesViewControllerDelegate: AnyObject {
-    func circlesView(_ controller: CirclesViewController, didSelect item: CirclesCollectionViewDataSource.ItemType)
+protocol CircleGroupViewControllerDelegate: AnyObject {
+    func circleGroupView(_ controller: CircleGroupViewController, didSelect item: CircleGroupCollectionViewDataSource.ItemType)
 }
 
-class CirclesViewController: ViewController {
+class CircleGroupViewController: ViewController {
 
-    weak var delegate: CirclesViewControllerDelegate?
+    weak var delegate: CircleGroupViewControllerDelegate?
 
     // MARK: - UI
 
-    private var collectionView = CollectionView(layout: CirclesCollectionViewLayout())
-    lazy var dataSource = CirclesCollectionViewDataSource(collectionView: self.collectionView)
+    private var collectionView = CollectionView(layout: CircleGroupCollectionViewLayout())
+    lazy var dataSource = CircleGroupCollectionViewDataSource(collectionView: self.collectionView)
 
     var circles: [CircleGroup] = []
 
@@ -76,14 +76,14 @@ class CirclesViewController: ViewController {
         }
     }
 
-    private func getInitialSnapshot(with circles: [CircleGroup]) -> NSDiffableDataSourceSnapshot<CirclesCollectionViewDataSource.SectionType,
-                                                                      CirclesCollectionViewDataSource.ItemType> {
+    private func getInitialSnapshot(with circles: [CircleGroup]) -> NSDiffableDataSourceSnapshot<CircleGroupCollectionViewDataSource.SectionType,
+                                                                      CircleGroupCollectionViewDataSource.ItemType> {
         var snapshot = self.dataSource.snapshot()
 
-        let allCases = CirclesCollectionViewDataSource.SectionType.allCases
+        let allCases = CircleGroupCollectionViewDataSource.SectionType.allCases
         snapshot.appendSections(allCases)
         allCases.forEach { (section) in
-            let items: [CirclesCollectionViewDataSource.ItemType] = circles.map { group in
+            let items: [CircleGroupCollectionViewDataSource.ItemType] = circles.map { group in
                 return .circles(group)
             }
             snapshot.appendItems(items, toSection: section)
@@ -93,11 +93,11 @@ class CirclesViewController: ViewController {
     }
 }
 
-extension CirclesViewController: UICollectionViewDelegate {
+extension CircleGroupViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
 
-        self.delegate?.circlesView(self, didSelect: identifier)
+        self.delegate?.circleGroupView(self, didSelect: identifier)
     }
 }

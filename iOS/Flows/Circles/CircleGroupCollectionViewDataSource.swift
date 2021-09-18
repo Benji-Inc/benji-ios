@@ -8,8 +8,8 @@
 
 import Foundation
 
-class CirclesCollectionViewDataSource: CollectionViewDataSource<CirclesCollectionViewDataSource.SectionType,
-                                      CirclesCollectionViewDataSource.ItemType> {
+class CircleGroupCollectionViewDataSource: CollectionViewDataSource<CircleGroupCollectionViewDataSource.SectionType,
+                                      CircleGroupCollectionViewDataSource.ItemType> {
 
     enum SectionType: Int, CaseIterable {
         case circles

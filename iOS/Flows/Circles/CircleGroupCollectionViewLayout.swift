@@ -8,14 +8,14 @@
 
 import Foundation
 
-class CirclesCollectionViewLayout: UICollectionViewCompositionalLayout {
+class CircleGroupCollectionViewLayout: UICollectionViewCompositionalLayout {
 
     init() {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .horizontal
 
         super.init(sectionProvider: { sectionIndex, environment in
-            guard let sectionType = CirclesCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
+            guard let sectionType = CircleGroupCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
 
             switch sectionType {
             case .circles:
