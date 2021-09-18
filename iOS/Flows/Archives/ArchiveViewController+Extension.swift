@@ -24,34 +24,30 @@ extension ArchiveViewController: UICollectionViewDelegate {
         guard let conversation = self.conversations[safe: indexPath.row],
               let cell = collectionView.cellForItem(at: indexPath) as? ConversationCell else { return nil }
 
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
-            return ConversationPreviewViewController(with: conversation, size: cell.size)
-        }, actionProvider: { suggestedActions in
-            if conversation.isFromCurrentUser {
-                return self.makeCurrentUserMenu(for: conversation, at: indexPath)
-            } else {
-                return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
-            }
-        })
+        return nil 
+//        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+//            return ConversationPreviewViewController(with: conversation, size: cell.size)
+//        }, actionProvider: { suggestedActions in
+////            if conversation.isFromCurrentUser {
+////                return self.makeCurrentUserMenu(for: conversation, at: indexPath)
+////            } else {
+////                return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
+////            }
+//        })
     }
 
-    func makeCurrentUserMenu(for conversation: DisplayableConversation, at indexPath: IndexPath) -> UIMenu {
+    func makeCurrentUserMenu(for conversation: Conversation, at indexPath: IndexPath) -> UIMenu {
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
 
         let confirm = UIAction(title: "Confirm",
                                image: UIImage(systemName: "trash"),
                                attributes: .destructive) { action in
 
-            switch conversation.conversationType {
-            case .system(_):
-                break
-            case .conversation(let conversation):
-                Task {
-                    do {
-                        try await ChatClient.shared.deleteChannel(conversation)
-                    } catch {
-                        logDebug(error)
-                    }
+            Task {
+                do {
+                    try await ChatClient.shared.deleteChannel(conversation)
+                } catch {
+                    logDebug(error)
                 }
             }
         }
@@ -70,24 +66,18 @@ extension ArchiveViewController: UICollectionViewDelegate {
         return UIMenu(title: "Options", children: [open, deleteMenu])
     }
 
-    func makeNonCurrentUserMenu(for conversation: DisplayableConversation, at indexPath: IndexPath) -> UIMenu {
+    func makeNonCurrentUserMenu(for conversation: Conversation, at indexPath: IndexPath) -> UIMenu {
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
 
         let confirm = UIAction(title: "Confirm",
                                image: UIImage(systemName: "clear"),
                                attributes: .destructive) { action in
-
-            switch conversation.conversationType {
-            case .system(_):
-                break
-            case .conversation(let conversation):
-                Task {
-                    do {
-                        try await ChatClient.shared.deleteChannel(conversation)
-                    } catch {
-                        logDebug(error)
-                    }
+            Task {
+                do {
+                    try await ChatClient.shared.deleteChannel(conversation)
+                } catch {
+                    logDebug(error)
                 }
             }
         }

@@ -98,12 +98,9 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         self.router.present(coordinator, source: self.homeVC, animated: true)
     }
 
-    func startConversationFlow(for type: ConversationType?) {
+    func startConversationFlow(for conversation: Conversation?) {
         self.removeChild()
-        var conversation: DisplayableConversation?
-        if let t = type {
-            conversation = DisplayableConversation(conversationType: t)
-        }
+
         let coordinator = ConversationCoordinator(router: self.router,
                                                   deepLink: self.deepLink,
                                                   conversation: conversation)

@@ -67,17 +67,14 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
         switch item {
         case .conversation(let conversation):
             Task.onMainActor {
-                self.startConversationFlow(for: conversation.conversationType)
+                self.startConversationFlow(for: conversation)
             }
         }
     }
 
-    func startConversationFlow(for type: ConversationType?) {
+    func startConversationFlow(for conversation: Conversation?) {
         self.removeChild()
-        var conversation: DisplayableConversation?
-        if let t = type {
-            conversation = DisplayableConversation(conversationType: t)
-        }
+
         let coordinator = ConversationCoordinator(router: self.router,
                                                   deepLink: self.deepLink,
                                                   conversation: conversation)

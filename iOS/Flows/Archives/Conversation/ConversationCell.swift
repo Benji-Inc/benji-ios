@@ -10,9 +10,9 @@ import Foundation
 
 class ConversationCell: CollectionViewManagerCell, ManageableCell {
 
-    typealias ItemType = DisplayableConversation
+    typealias ItemType = Conversation
 
-    var currentItem: DisplayableConversation?
+    var currentItem: Conversation?
 
     private let content = ConversationContentView()
 
@@ -23,7 +23,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.content.set(backgroundColor: .purple)
     }
 
-    func configure(with item: DisplayableConversation) {
+    func configure(with item: Conversation) {
         self.content.configure(with: item)
     }
 

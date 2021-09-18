@@ -24,10 +24,8 @@ class ArchiveViewController: ViewController {
 
     private(set) var channelListController: ChatChannelListController?
 
-    var conversations: [DisplayableConversation] {
-        return self.channelListController?.channels.map({ chatChannel in
-            return DisplayableConversation(conversationType: .conversation(chatChannel))
-        }) ?? []
+    var conversations: [Conversation] {
+        return []//self.channelListController?.channels ?? []
     }
 
     override func initializeViews() {

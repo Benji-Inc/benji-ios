@@ -18,7 +18,7 @@ class ConversationContentView: View {
     let messageLabel = Label(font: .smallBold, textColor: .background4)
 
     private var cancellables = Set<AnyCancellable>()
-    private var currentItem: DisplayableConversation?
+    private var currentItem: Conversation?
 
     deinit {
         self.cancellables.forEach { cancellable in
@@ -41,17 +41,11 @@ class ConversationContentView: View {
         self.stackedAvatarView.itemHeight = 70
     }
 
-    func configure(with item: DisplayableConversation) {
+    func configure(with item: Conversation) {
         self.currentItem = item
 
-        switch item.conversationType {
-        case .conversation(let conversation):
-            Task {
-                await self.display(conversation: conversation)
-            }
-            self.layoutNow()
-        default:
-            break
+        Task {
+            await self.display(conversation: item)
         }
     }
 
@@ -60,7 +54,7 @@ class ConversationContentView: View {
             return member.id != ChatClient.shared.currentUserId
         }
 
-        guard self.currentItem?.id == conversation.cid.description else { return }
+        guard self.currentItem?.cid == conversation.cid else { return }
 
         if let friendlyName = conversation.name {
             self.label.setText(friendlyName.capitalized)

@@ -16,7 +16,7 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
     }
 
     enum ItemType: Hashable {
-        case conversation(DisplayableConversation)
+        case conversation(Conversation)
     }
 
     private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider

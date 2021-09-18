@@ -75,7 +75,7 @@ extension InputAccessoryView {
 
     private func showAlertConfirmation() {
         #warning("Replace")
-//        guard let c = self.activeConversation, case ConversationType.conversation = c.conversationType else { return }
+//        guard let c = self.activeConversation, case Conversation.conversation = c.conversationType else { return }
 //
 //        self.textView.updateInputView(type: .confirmation)
 //

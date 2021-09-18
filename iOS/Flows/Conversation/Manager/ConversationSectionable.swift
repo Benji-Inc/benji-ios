@@ -12,7 +12,7 @@ class ConversationSectionable {
 
     var date: Date
     var items: [Messageable] = []
-    var conversationType: ConversationType?
+    var conversation: Conversation?
 
     var firstMessageIndex: Int? {
         #warning("Implement or delete")
@@ -21,10 +21,10 @@ class ConversationSectionable {
 
     init(date: Date,
          items: [Messageable],
-         conversationType: ConversationType? = nil) {
+         conversation: Conversation? = nil) {
 
         self.date = date
         self.items = items
-        self.conversationType = conversationType
+        self.conversation = conversation
     }
 }
