@@ -27,7 +27,7 @@ extension ArchiveViewController: UICollectionViewDelegate {
         return UIContextMenuConfiguration(identifier: nil, previewProvider: {
             return ConversationPreviewViewController(with: conversation, size: cell.size)
         }, actionProvider: { suggestedActions in
-            if conversation.isFromCurrentUser {
+            if conversation.isOwnedByMe {
                 return self.makeCurrentUserMenu(for: conversation, at: indexPath)
             } else {
                 return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
