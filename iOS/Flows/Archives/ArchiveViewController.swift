@@ -24,10 +24,6 @@ class ArchiveViewController: ViewController {
 
     private(set) var channelListController: ChatChannelListController?
 
-    var conversations: [Conversation] {
-        return []//self.channelListController?.channels ?? []
-    }
-
     override func initializeViews() {
         super.initializeViews()
 
@@ -93,7 +89,8 @@ class ArchiveViewController: ViewController {
 
         switch section {
         case .conversations:
-            return self.conversations.map { conversation in
+            guard let channels = self.channelListController?.channels else { return [] }
+            return channels.map { conversation in
                 return .conversation(conversation)
             }
         }

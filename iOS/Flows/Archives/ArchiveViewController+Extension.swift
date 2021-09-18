@@ -21,19 +21,18 @@ extension ArchiveViewController: UICollectionViewDelegate {
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
 
-        guard let conversation = self.conversations[safe: indexPath.row],
+        guard let conversation = self.channelListController?.channels[indexPath.row],
               let cell = collectionView.cellForItem(at: indexPath) as? ConversationCell else { return nil }
 
-        return nil 
-//        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
-//            return ConversationPreviewViewController(with: conversation, size: cell.size)
-//        }, actionProvider: { suggestedActions in
-////            if conversation.isFromCurrentUser {
-////                return self.makeCurrentUserMenu(for: conversation, at: indexPath)
-////            } else {
-////                return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
-////            }
-//        })
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+            return ConversationPreviewViewController(with: conversation, size: cell.size)
+        }, actionProvider: { suggestedActions in
+            if conversation.isOwnedByMe {
+                return self.makeCurrentUserMenu(for: conversation, at: indexPath)
+            } else {
+                return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
+            }
+        })
     }
 
     func makeCurrentUserMenu(for conversation: Conversation, at indexPath: IndexPath) -> UIMenu {
