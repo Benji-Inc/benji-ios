@@ -45,7 +45,5 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         super.prepareForReuse()
 
         self.currentItem = nil
-        self.content.stackedAvatarView.reset()
-        self.content.label.text = nil 
     }
 }

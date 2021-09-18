@@ -15,6 +15,7 @@ class ConversationContentView: View {
 
     let stackedAvatarView = StackedAvatarView()
     let label = Label(font: .mediumThin, textColor: .background4)
+    let messageLabel = Label(font: .smallBold, textColor: .background4)
 
     private var cancellables = Set<AnyCancellable>()
     private var currentItem: Conversation?
@@ -30,8 +31,13 @@ class ConversationContentView: View {
 
         self.addSubview(self.stackedAvatarView)
         self.addSubview(self.label)
+        self.addSubview(self.messageLabel)
         self.label.textAlignment = .left
         self.label.lineBreakMode = .byTruncatingTail
+
+        self.messageLabel.textAlignment = .left
+        self.messageLabel.lineBreakMode = .byTruncatingTail
+
         self.stackedAvatarView.itemHeight = 70
     }
 
@@ -60,23 +66,31 @@ class ConversationContentView: View {
             self.displayGroupChat(for: conversation, with: members)
         }
 
+        if let msg = conversation.latestMessages.first {
+            self.messageLabel.setText(msg.text)
+        }
+
         self.stackedAvatarView.set(items: members)
         self.stackedAvatarView.layoutNow()
-        self.layoutNow()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.stackedAvatarView.setSize()
-        self.stackedAvatarView.pin(.top, padding: Theme.contentOffset.half)
+        self.stackedAvatarView.centerOnY()
         self.stackedAvatarView.pin(.left, padding: Theme.contentOffset.half)
 
-        let maxWidth = self.width - Theme.contentOffset
+        let maxWidth = self.width - Theme.contentOffset - self.stackedAvatarView.width
         self.label.setSize(withWidth: maxWidth)
 
-        self.label.pin(.bottom, padding: Theme.contentOffset.half)
-        self.label.pin(.left, padding: Theme.contentOffset.half)
+        self.label.pin(.top, padding: Theme.contentOffset.half)
+        self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset.half)
+
+        let maxHeight = self.height - self.label.height - Theme.contentOffset
+        self.messageLabel.setSize(withWidth: maxWidth, height: maxHeight)
+        self.messageLabel.match(.top, to: .bottom, of: self.label, offset: 4)
+        self.messageLabel.match(.left, to: .left, of: self.label)
     }
 
     private func displayDM(for conversation: ChatChannel, with member: ChatChannelMember) async {

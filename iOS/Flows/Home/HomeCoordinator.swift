@@ -27,10 +27,24 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
         ToastScheduler.shared.delegate = self
 
-//        self.checkForNotifications()
+        self.checkForNotifications()
 
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
+        }
+
+        self.homeVC.didTapAdd = { [unowned self] in
+            Task.onMainActor {
+                self.didTapAdd()
+            }
+        }
+
+        self.homeVC.didTapCircles = { [unowned self] in
+            self.startCirclesFlow()
+        }
+
+        self.homeVC.didTapArchive = { [unowned self] in
+            self.startArchiveFlow()
         }
     }
 
@@ -40,114 +54,22 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         guard let target = deeplink.deepLinkTarget else { return }
 
         switch target {
-        case .reservation:
-            break // show a reservation alert.
-        case .home:
-            break
-        case .login:
-            break
-        case .conversation:
-            #warning("Replace")
-//            if let conversationId = deeplink.customMetadata["conversationId"] as? String,
-//               let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) {
-//                self.startConversationFlow(for: conversation.conversationType)
-//            } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
-//                Task {
-//                    do {
-//                        let connection = try await Connection.getObject(with: connectionId)
-//                        guard let conversationId = connection.conversationId,
-//                              let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) else {
-//                                  return
-//                              }
-//
-//                        self.startConversationFlow(for: conversation.conversationType)
-//                    } catch {
-//                        logDebug(error)
-//                    }
-//                }
-//            }
-        case .conversations:
+        case .conversation, .archive:
+            self.startArchiveFlow()
+        default:
             break
         }
     }
 
-    private func handle(notice: SystemNotice) {
-        switch notice.type {
-        case .alert:
-            #warning("Replace")
-//            guard let conversationId = notice.attributes?["conversationId"] as? String, let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) else { return }
-//            self.startConversationFlow(for: conversation.conversationType)
-            break
-        case .connectionRequest:
-            break
-        case .connectionConfirmed:
-            break
-        case .messageRead:
-            break
-        case .system:
-            break
-        }
-    }
-
-    func startConversationFlow(for conversation: Conversation?) {
+    func startCirclesFlow() {
         self.removeChild()
+        let coordinator = CirclesCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { result in
+            coordinator.toPresentable().dismiss(animated: true) {
 
-        let coordinator = ConversationCoordinator(router: self.router,
-                                                  deepLink: self.deepLink,
-                                                  conversation: conversation)
-        self.addChildAndStart(coordinator, finishedHandler: { (_) in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
-                self.finishFlow(with: ())
-            }
-        })
-        self.router.present(coordinator, source: self.homeVC, animated: true)
-    }
-
-    private func checkForNotifications() {
-        Task {
-            let settings = await UserNotificationManager.shared.getNotificationSettings()
-
-            if settings.authorizationStatus != .authorized {
-                self.showSoftAskNotifications(for: settings.authorizationStatus)
             }
         }
-    }
-
-    private func showSoftAskNotifications(for status: UNAuthorizationStatus) {
-
-        let alert = UIAlertController(title: "Notifications that don't suck.",
-                                      message: "Most other social apps design their notifications to be vague in order to suck you in for as long as possible. Ours are not. Get reminders about things that YOU set, and recieve important messages from REAL people. Ours is a far better experience with them turned on.",
-                                      preferredStyle: .alert)
-
-        let allow = UIAlertAction(title: "Allow", style: .default) { action in
-            if status == .denied {
-                if let bundleIdentifier = Bundle.main.bundleIdentifier, let appSettings = URL(string: UIApplication.openSettingsURLString + bundleIdentifier) {
-                    if UIApplication.shared.canOpenURL(appSettings) {
-                        UIApplication.shared.open(appSettings)
-                    }
-                }
-            } else {
-                Task {
-                    await UserNotificationManager.shared.register(application: UIApplication.shared)
-                }
-            }
-        }
-
-        let cancel = UIAlertAction(title: "Maybe Later", style: .cancel) { action in}
-
-        alert.addAction(cancel)
-        alert.addAction(allow)
-
-        self.router.topmostViewController.present(alert, animated: true, completion: nil)
-    }
-}
-
-extension HomeCoordinator: HomeViewControllerDelegate {
-
-    nonisolated func homeViewControllerDidTapAdd(_ controller: HomeViewController) {
-        Task.onMainActor {
-            self.didTapAdd()
-        }
+        self.router.present(coordinator, source: self.homeVC)
     }
 
     func didTapAdd() {
@@ -163,27 +85,30 @@ extension HomeCoordinator: HomeViewControllerDelegate {
         self.router.present(coordinator, source: self.homeVC)
     }
 
-    nonisolated func homeViewControllerDidSelectReservations(_ controller: HomeViewController) {
-        Task.onMainActor {
-            self.didSelectReservations()
-        }
-    }
-
-    func didSelectReservations() {
+    func startArchiveFlow() {
         self.removeChild()
-        let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) {}
-        self.router.present(coordinator, source: self.homeVC)
+
+        let coordinator = ArchiveCoordinator(router: self.router,
+                                                  deepLink: self.deepLink)
+        self.addChildAndStart(coordinator, finishedHandler: { (_) in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+                self.finishFlow(with: ())
+            }
+        })
+        self.router.present(coordinator, source: self.homeVC, animated: true)
     }
 
-    nonisolated func homeViewControllerDidSelect(item: HomeCollectionViewDataSource.ItemType) {
-        Task.onMainActor {
-            switch item {
-            case .notice(let notice):
-                self.handle(notice: notice)
-            case .conversation(let conversation):
-                self.startConversationFlow(for: conversation)
+    func startConversationFlow(for conversation: Conversation?) {
+        self.removeChild()
+
+        let coordinator = ConversationCoordinator(router: self.router,
+                                                  deepLink: self.deepLink,
+                                                  conversation: conversation)
+        self.addChildAndStart(coordinator, finishedHandler: { (_) in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+                self.finishFlow(with: ())
             }
-        }
+        })
+        self.router.present(coordinator, source: self.homeVC, animated: true)
     }
 }

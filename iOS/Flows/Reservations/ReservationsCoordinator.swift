@@ -37,6 +37,19 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
         }
     }
 
+    //    nonisolated func homeViewControllerDidSelectReservations(_ controller: HomeViewController) {
+    //        Task.onMainActor {
+    //            self.didSelectReservations()
+    //        }
+    //    }
+    //
+    //    func didSelectReservations() {
+    //        self.removeChild()
+    //        let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
+    //        self.addChildAndStart(coordinator) {}
+    //        self.router.present(coordinator, source: self.homeVC)
+    //    }
+
     private func presentShare(for reservation: Reservation) {
         let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
         ac.completionWithItemsHandler = { activityType, completed, items, error in

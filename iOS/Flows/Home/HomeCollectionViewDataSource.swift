@@ -13,23 +13,15 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
 
     enum SectionType: Int, CaseIterable {
         case notices
-        case conversations
     }
 
     enum ItemType: Hashable {
         case notice(SystemNotice)
-        case conversation(Conversation)
     }
-
-    var unclaimedCount: Int = 0
-    var didSelectReservations: CompletionOptional = nil
 
     private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
     private let connectionConfig = ManageableCellRegistration<ConnectionRequestCell>().provider
     private let alertConfig = ManageableCellRegistration<AlertCell>().provider
-    private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider
-    private let footerConfig = ManageableFooterRegistration<ReservationsFooterView>().provider
-    private let headerConfig = ManageableHeaderRegistration<UserHeaderView>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -41,17 +33,7 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
         switch item {
         case .notice(let notice):
             return self.getNoticeCell(with: collectionView, indexPath: indexPath, notice: notice)
-        case .conversation(let conversation):
-            return self.getConversationCell(with: collectionView, indexPath: indexPath, conversation: conversation)
         }
-    }
-
-    override func dequeueSupplementaryView(with collectionView: UICollectionView,
-                                           kind: String,
-                                           section: SectionType,
-                                           indexPath: IndexPath) -> UICollectionReusableView? {
-
-        return self.getSupplementaryView(for: collectionView, section: section, kind: kind, indexPath: indexPath)
     }
 
     private func getNoticeCell(with collectionView: UICollectionView,
@@ -73,39 +55,6 @@ class HomeCollectionViewDataSource: CollectionViewDataSource<HomeCollectionViewD
             return collectionView.dequeueConfiguredReusableCell(using: self.noticeConfig,
                                                                 for: indexPath,
                                                                 item: notice)
-        }
-    }
-
-    private func getConversationCell(with collectionView: UICollectionView,
-                                indexPath: IndexPath,
-                                conversation: Conversation) -> CollectionViewManagerCell? {
-        
-        return collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
-                                                            for: indexPath,
-                                                            item: conversation)
-    }
-
-    private func getSupplementaryView(for collectionView: UICollectionView,
-                                      section: SectionType,
-                                      kind: String,
-                                      indexPath: IndexPath) -> UICollectionReusableView? {
-
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            guard section == .notices else { return nil }
-            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
-            return header
-        case UICollectionView.elementKindSectionFooter:
-            guard section == .conversations else { return nil }
-
-            let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
-            footer.configure(with: self.unclaimedCount)
-            footer.button.didSelect { [unowned self] in
-                self.didSelectReservations?()
-            }
-            return footer
-        default:
-            return nil
         }
     }
 }
