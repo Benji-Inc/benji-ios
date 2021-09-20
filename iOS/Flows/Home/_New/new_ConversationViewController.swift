@@ -12,7 +12,7 @@ import StreamChat
 class new_ConversationViewController: FullScreenViewController, CollectionViewInputHandler {
 
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
-    let collectionView = CollectionView(layout: ConversationCollectionViewLayout())
+    lazy var collectionView = CollectionView(layout: new_ConversationCollectionViewLayout())
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
@@ -101,8 +101,7 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
     }
 }
 
-extension new_ConversationViewController: UICollectionViewDelegate {
-
+extension new_ConversationViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
@@ -122,6 +121,61 @@ extension new_ConversationViewController: UICollectionViewDelegate {
                 logDebug(error)
             }
         }
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        return CGSize(width: 0.8 * collectionView.width,
+                      height: 0.6 * collectionView.width)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+
+        var verticalSpacing = (collectionView.height - 0.6 * collectionView.width)
+        verticalSpacing -= collectionView.contentInset.top + collectionView.contentInset.bottom + 1
+        return UIEdgeInsets(top: verticalSpacing.half,
+                            left: collectionView.width * 0.1,
+                            bottom: verticalSpacing.half,
+                            right: collectionView.width * 0.1)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return collectionView.width * 0.05
+    }
+
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView,
+                                   withVelocity velocity: CGPoint,
+                                   targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+
+        // Always scroll so that a message is centered when we stop scrolling.
+        var newXOffset = CGFloat.greatestFiniteMagnitude
+        let targetOffset = targetContentOffset.pointee
+
+        let targetRect = CGRect(x: targetOffset.x,
+                                y: targetOffset.y,
+                                width: scrollView.width,
+                                height: scrollView.height)
+
+        let layout = self.collectionView.collectionViewLayout
+        guard let layoutAttributes = layout.layoutAttributesForElements(in: targetRect) else {
+            return
+        }
+
+        // Find the item whose center is closest to the proposed offset
+        for elementAttributes in layoutAttributes {
+            let possibleNewOffset = elementAttributes.frame.centerX - collectionView.halfWidth
+            if abs(possibleNewOffset - targetOffset.x) < abs(newXOffset - targetOffset.x) {
+                newXOffset = possibleNewOffset
+            }
+        }
+
+        targetContentOffset.pointee = CGPoint(x: newXOffset, y: targetOffset.y)
     }
 }
 

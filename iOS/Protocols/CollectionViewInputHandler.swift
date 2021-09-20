@@ -55,7 +55,6 @@ extension CollectionViewInputHandler {
     // MARK: - Register / Unregister Observers
 
     func addKeyboardObservers() {
-
         KeyboardManger.shared.inputAccessoryView = self.inputAccessoryView
         KeyboardManger.shared.$currentEvent.mainSink { event in
             switch event {
