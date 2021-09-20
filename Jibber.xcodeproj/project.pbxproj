@@ -317,6 +317,7 @@
 		D652061D26F9249800EC685D /* BlurredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652061C26F9249800EC685D /* BlurredViewController.swift */; };
 		D652061E26F9249800EC685D /* BlurredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652061C26F9249800EC685D /* BlurredViewController.swift */; };
 		D652061F26F9249800EC685D /* BlurredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652061C26F9249800EC685D /* BlurredViewController.swift */; };
+		D652062226F9269900EC685D /* SearchInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652062126F9269900EC685D /* SearchInputAccessoryView.swift */; };
 		D65518F125890E3D00B901E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
 		D65518F82589109100B901E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0BF21D3071400204BEE /* AppDelegate.swift */; };
 		D6551901258910D700B901E4 /* AppDelegate+Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */; };
@@ -963,6 +964,7 @@
 		D650C1F025B741EB0037C59A /* plusToX.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = plusToX.json; sourceTree = "<group>"; };
 		D650C20F25B7D6F20037C59A /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		D652061C26F9249800EC685D /* BlurredViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredViewController.swift; sourceTree = "<group>"; };
+		D652062126F9269900EC685D /* SearchInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInputAccessoryView.swift; sourceTree = "<group>"; };
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
@@ -1703,6 +1705,14 @@
 			path = Typing;
 			sourceTree = "<group>";
 		};
+		D652062026F9264500EC685D /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				D652062126F9269900EC685D /* SearchInputAccessoryView.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		D6617CF326743DFE00439C06 /* Parse Subclasses */ = {
 			isa = PBXGroup;
 			children = (
@@ -2155,6 +2165,7 @@
 		D6C100D026F3DB8000F1ED7D /* Archives */ = {
 			isa = PBXGroup;
 			children = (
+				D652062026F9264500EC685D /* Search */,
 				D605C30126F683E400C86DAD /* Conversation */,
 				D6C100D526F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift */,
 				D6C100D726F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift */,
@@ -2925,6 +2936,7 @@
 				D62C9CC6266C417100BB9632 /* DemoView.swift in Sources */,
 				D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */,
 				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
+				D652062226F9269900EC685D /* SearchInputAccessoryView.swift in Sources */,
 				D678EC2B26F538350071DB0D /* CircleGroupViewController.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6F33C7E24B15063009603FF /* LocationMessageCell.swift in Sources */,

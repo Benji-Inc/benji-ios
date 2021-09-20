@@ -24,6 +24,17 @@ class ArchiveViewController: BlurredViewController {
 
     private(set) var channelListController: ChatChannelListController?
 
+    // Custom Input Accessory View
+    lazy var searchInputAccessoryView = SearchInputAccessoryView()
+
+    override var inputAccessoryView: UIView? {
+        return self.searchInputAccessoryView
+    }
+
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+
     override func initializeViews() {
         super.initializeViews()
 
