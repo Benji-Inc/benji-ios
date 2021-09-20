@@ -13,6 +13,9 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
 
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     let collectionView = CollectionView(layout: ConversationCollectionViewLayout())
+    /// If true, the conversation controller should be allowed to load more messages.
+    @Atomic private var isReadyToLoadMoreMessage: Bool = false
+
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
     var conversation: Conversation! { return self.conversationController?.channel }
@@ -46,7 +49,8 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
 
     init(conversation: Conversation?) {
         if let conversation = conversation {
-            self.conversationController = ChatClient.shared.channelController(for: conversation.cid)
+            self.conversationController
+            = ChatClient.shared.channelController(for: conversation.cid, messageOrdering: .bottomToTop)
         }
 
         super.init()
@@ -61,10 +65,26 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
 
         self.view.addSubview(self.blurView)
         self.view.addSubview(self.collectionView)
+    }
 
-        self.subscribeToUpdates()
-        self.setupInputHandlers()
-        self.loadMessages()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.blurView.expandToSuperviewSize()
+        self.collectionView.expandToSuperviewSize()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        once(caller: self, token: "intializeCollectionView") {
+            Task {
+                self.setupInputHandlers()
+                await self.loadInitialMessages()
+                self.subscribeToConversationUpdates()
+                self.isReadyToLoadMoreMessage = true
+            }
+        }
     }
 
     private func setupInputHandlers() {
@@ -82,16 +102,10 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
             self.conversationController.deleteMessage(message.id)
         }
     }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        self.blurView.expandToSuperviewSize()
-        self.collectionView.expandToSuperviewSize()
-    }
 }
 
 extension new_ConversationViewController: UICollectionViewDelegate {
+
 
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
@@ -100,58 +114,48 @@ extension new_ConversationViewController: UICollectionViewDelegate {
         // If all the messages are loaded, no need to fetch more.
         guard !self.conversationController.hasLoadedAllPreviousMessages else { return }
 
-        // Only start fetching new messages once the user is nearing the end of the list.
-        guard indexPath.row >= self.conversationController.messages.count - 10 else { return }
+        // Don't attempt to load more messages until all the initial messages are loaded.
+        guard self.isReadyToLoadMoreMessage else { return }
 
-        self.conversationController.loadPreviousMessages()
-    }
-}
+        // Start fetching new messages once the user is nearing the end of the list.
+        guard indexPath.row < 10 else { return }
 
-extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
-        if sendable.previousMessage.isNil {
-            Task { await self.send(object: sendable) }
-        } else {
-            Task { await self.update(object: sendable) }
-        }
-    }
-
-    func send(object: Sendable) async {
-        do {
-            try await self.conversationController?.createNewMessage(with: object)
-        } catch {
-            logDebug(error)
-        }
-    }
-
-    func update(object: Sendable) async {
-        do {
-            try await self.conversationController?.editMessage(with: object)
-        } catch {
-            logDebug(error)
+        logDebug("loading more messages")
+        Task {
+            do {
+                let oldestMessageID = self.conversationController.messages.first?.id
+                try await self.conversationController.loadPreviousMessages(before: oldestMessageID)
+            } catch {
+                logDebug(error)
+            }
         }
     }
 }
 
 extension new_ConversationViewController {
 
-    func subscribeToUpdates() {
+    func subscribeToConversationUpdates() {
         self.conversationController?.delegate = self
     }
 
-    func loadMessages() {
-        Task {
-            guard let controller = self.conversationController else { return }
+    @MainActor
+    func loadInitialMessages() async {
+        guard let controller = self.conversationController else { return }
 
-            let messages = controller.messages
+        let messages = controller.messages
 
-            var snapshot = self.dataSource.snapshot()
-            snapshot.appendSections([.basic(conversation.cid)])
-            snapshot.appendItems(messages.asConversationCollectionItems)
+        var snapshot = self.dataSource.snapshot()
+        snapshot.appendSections([.basic(conversation.cid)])
+        snapshot.appendItems(messages.asConversationCollectionItems)
 
-            await self.dataSource.apply(snapshot, animatingDifferences: false)
-        }
+        let animationCycle = AnimationCycle(inFromPosition: .left,
+                                            outToPosition: .right,
+                                            shouldConcatenate: true,
+                                            scrollToEnd: true)
+
+        await self.dataSource.apply(snapshot,
+                                    collectionView: self.collectionView,
+                                    animationCycle: animationCycle)
     }
 }
 
@@ -180,5 +184,34 @@ extension new_ConversationViewController: ChatChannelControllerDelegate {
         }
 
         self.dataSource.apply(snapshot)
+    }
+}
+
+extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
+
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
+        Task {
+            if sendable.previousMessage.isNil {
+                await self.send(object: sendable)
+            } else {
+                await self.update(object: sendable)
+            }
+        }
+    }
+
+    private func send(object: Sendable) async {
+        do {
+            try await self.conversationController?.createNewMessage(with: object)
+        } catch {
+            logDebug(error)
+        }
+    }
+
+    private func update(object: Sendable) async {
+        do {
+            try await self.conversationController?.editMessage(with: object)
+        } catch {
+            logDebug(error)
+        }
     }
 }
