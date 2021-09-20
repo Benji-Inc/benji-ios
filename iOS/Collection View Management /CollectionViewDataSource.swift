@@ -327,15 +327,28 @@ extension CollectionViewDataSource {
         await collectionView.animateOut(position: animationCycle.outToPosition,
                                         concatenate: animationCycle.shouldConcatenate)
 
+        // HACK: If we want to scroll to the end of the content, push the content way past the edge
+        // so we don't preload any cells undesired cells when the snapshop is applied.
+        if animationCycle.scrollToEnd {
+            collectionView.contentOffset = CGPoint(x: 999_999_999_999,
+                                                   y: 999_999_999_999)
+        }
+
         await self.applySnapshotUsingReloadData(snapshot)
 
+        // If specified, scroll to the last item in the collection view.
         if animationCycle.scrollToEnd {
-            let offset = CGPoint(x: collectionView.contentSize.width - collectionView.bounds.width,
-                                 y: 0)
-            collectionView.setContentOffset(offset, animated: false)
-            // Reload the data to update the visible cells. This ensures that the following animations
-            // are applied to the right cells.
-            collectionView.reloadData()
+            let sectionIndex = collectionView.numberOfSections - 1
+            let itemIndex = collectionView.numberOfItems(inSection: sectionIndex) - 1
+            let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+
+            // Make sure the index path is valid
+            if sectionIndex >= 0 && itemIndex >= 0 {
+                collectionView.scrollToItem(at: indexPath,
+                                            at: [.centeredHorizontally, .centeredVertically], animated: false)
+            } else {
+                collectionView.setContentOffset(.zero, animated: false)
+            }
         }
         
         await collectionView.animateIn(position: animationCycle.inFromPosition,
