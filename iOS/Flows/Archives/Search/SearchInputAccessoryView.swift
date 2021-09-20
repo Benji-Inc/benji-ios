@@ -10,7 +10,9 @@ import Foundation
 
 class SearchInputAccessoryView: View {
 
-    private let searchBar = UISearchBar()
+    let searchBar = ConversationsSearchBar()
+
+    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
 
     override var intrinsicContentSize: CGSize {
         return CGSize(width: 300, height: 100)
@@ -19,19 +21,26 @@ class SearchInputAccessoryView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .red)
-        self.addSubview(self.searchBar)
+        self.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
-        self.setupConstraits()
+        self.set(backgroundColor: .clear)
+        self.addSubview(self.blurView)
+        self.blurView.roundCorners()
+
+        self.addSubview(self.searchBar)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.searchBar.expandToSuperviewSize()
-    }
+        self.blurView.width = self.width - Theme.contentOffset
+        self.blurView.centerOnX()
+        self.blurView.height = 60
+        self.blurView.pin(.top, padding: 10)
 
-    private func setupConstraits() {
-
+        self.searchBar.width = self.width - Theme.contentOffset
+        self.searchBar.centerOnX()
+        self.searchBar.height = 80
+        self.searchBar.pin(.top)
     }
 }

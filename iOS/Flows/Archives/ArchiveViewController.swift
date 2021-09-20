@@ -53,6 +53,12 @@ class ArchiveViewController: BlurredViewController {
                                          pageSize: 20)
             await self.loadData(with: query)
         }
+
+        self.collectionView.onDoubleTap { [unowned self] _ in
+            if self.searchInputAccessoryView.searchBar.isFirstResponder {
+                self.searchInputAccessoryView.searchBar.resignFirstResponder()
+            }
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

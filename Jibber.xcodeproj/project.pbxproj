@@ -318,6 +318,7 @@
 		D652061E26F9249800EC685D /* BlurredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652061C26F9249800EC685D /* BlurredViewController.swift */; };
 		D652061F26F9249800EC685D /* BlurredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652061C26F9249800EC685D /* BlurredViewController.swift */; };
 		D652062226F9269900EC685D /* SearchInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652062126F9269900EC685D /* SearchInputAccessoryView.swift */; };
+		D652062426F9341E00EC685D /* ConversationsSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652062326F9341E00EC685D /* ConversationsSearchBar.swift */; };
 		D65518F125890E3D00B901E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
 		D65518F82589109100B901E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0BF21D3071400204BEE /* AppDelegate.swift */; };
 		D6551901258910D700B901E4 /* AppDelegate+Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */; };
@@ -965,6 +966,7 @@
 		D650C20F25B7D6F20037C59A /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		D652061C26F9249800EC685D /* BlurredViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredViewController.swift; sourceTree = "<group>"; };
 		D652062126F9269900EC685D /* SearchInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInputAccessoryView.swift; sourceTree = "<group>"; };
+		D652062326F9341E00EC685D /* ConversationsSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsSearchBar.swift; sourceTree = "<group>"; };
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
@@ -1709,6 +1711,7 @@
 			isa = PBXGroup;
 			children = (
 				D652062126F9269900EC685D /* SearchInputAccessoryView.swift */,
+				D652062326F9341E00EC685D /* ConversationsSearchBar.swift */,
 			);
 			path = Search;
 			sourceTree = "<group>";
@@ -2765,6 +2768,7 @@
 				800FAAC126F0585A00D3C3A0 /* ChatChannel+Extensions.swift in Sources */,
 				D61D38E3248C07F700BE457B /* InputAccessoryView+Animation.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
+				D652062426F9341E00EC685D /* ConversationsSearchBar.swift in Sources */,
 				D642735122C857760088256B /* MessageContext.swift in Sources */,
 				D678EC2026F50D520071DB0D /* CircleViewController+Extensions.swift in Sources */,
 				D642735322C85B740088256B /* SystemAvatar.swift in Sources */,
