@@ -55,6 +55,18 @@ class ArchiveViewController: BlurredViewController {
         }
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.becomeFirstResponder()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        self.resignFirstResponder()
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 

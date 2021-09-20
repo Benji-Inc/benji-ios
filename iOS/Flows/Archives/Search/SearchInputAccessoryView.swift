@@ -13,12 +13,7 @@ class SearchInputAccessoryView: View {
     private let searchBar = UISearchBar()
 
     override var intrinsicContentSize: CGSize {
-        var newSize = self.bounds.size
-
-        newSize.height = 60
-        newSize.width = 300
-
-        return newSize
+        return CGSize(width: 300, height: 100)
     }
 
     override func initializeSubviews() {
@@ -26,11 +21,17 @@ class SearchInputAccessoryView: View {
 
         self.set(backgroundColor: .red)
         self.addSubview(self.searchBar)
+
+        self.setupConstraits()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.searchBar.expandToSuperviewSize()
+    }
+
+    private func setupConstraits() {
+
     }
 }
