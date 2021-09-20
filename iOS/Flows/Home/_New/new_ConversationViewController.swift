@@ -13,8 +13,6 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
 
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     let collectionView = CollectionView(layout: ConversationCollectionViewLayout())
-    /// If true, the conversation controller should be allowed to load more messages.
-    @Atomic private var isReadyToLoadMoreMessage: Bool = false
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
@@ -82,7 +80,6 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
                 self.setupInputHandlers()
                 await self.loadInitialMessages()
                 self.subscribeToConversationUpdates()
-                self.isReadyToLoadMoreMessage = true
             }
         }
     }
@@ -114,13 +111,9 @@ extension new_ConversationViewController: UICollectionViewDelegate {
         // If all the messages are loaded, no need to fetch more.
         guard !self.conversationController.hasLoadedAllPreviousMessages else { return }
 
-        // Don't attempt to load more messages until all the initial messages are loaded.
-        guard self.isReadyToLoadMoreMessage else { return }
-
         // Start fetching new messages once the user is nearing the end of the list.
         guard indexPath.row < 10 else { return }
 
-        logDebug("loading more messages")
         Task {
             do {
                 let oldestMessageID = self.conversationController.messages.first?.id
