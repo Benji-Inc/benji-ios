@@ -319,16 +319,25 @@ extension CollectionViewDataSource {
 extension CollectionViewDataSource {
 
     /// Animates the first part of the animation cycle, applies the snapshot, then finishes the animation cycle.
+    @MainActor
     func apply(_ snapshot: SnapshotType,
                collectionView: UICollectionView,
-               animationCycle: AnimationCycle,
-               animatingDifferences: Bool = false) async {
+               animationCycle: AnimationCycle) async {
 
         await collectionView.animateOut(position: animationCycle.outToPosition,
                                         concatenate: animationCycle.shouldConcatenate)
 
-        await self.apply(snapshot, animatingDifferences: animatingDifferences)
+        await self.applySnapshotUsingReloadData(snapshot)
 
+        if animationCycle.scrollToEnd {
+            let offset = CGPoint(x: collectionView.contentSize.width - collectionView.bounds.width,
+                                 y: 0)
+            collectionView.setContentOffset(offset, animated: false)
+            // Reload the data to update the visible cells. This ensures that the following animations
+            // are applied to the right cells.
+            collectionView.reloadData()
+        }
+        
         await collectionView.animateIn(position: animationCycle.inFromPosition,
                                        concatenate: animationCycle.shouldConcatenate)
     }

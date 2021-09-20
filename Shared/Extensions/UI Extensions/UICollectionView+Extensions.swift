@@ -25,7 +25,11 @@ extension UICollectionView {
         for (index, cell) in visibleCells.enumerated() {
             cell.alpha = 1.0
             let delay: TimeInterval = concatenate ? duration/Double(visibleCells.count)*Double(index) : 0
-            UIView.animate(withDuration: duration, delay: delay, options: .curveEaseInOut, animations: {
+            UIView.animate(withDuration: duration,
+                           delay: delay,
+                           options: .curveEaseInOut,
+                           animations: {
+                
                 cell.transform = position.getTransform(for: cell)
                 cell.alpha = 0.0
             })
