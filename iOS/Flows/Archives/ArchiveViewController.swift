@@ -40,7 +40,8 @@ class ArchiveViewController: BlurredViewController {
 
         self.view.addSubview(self.collectionView)
 
-        self.collectionView.delegate = self 
+        self.collectionView.delegate = self
+        self.searchInputAccessoryView.searchBar.delegate = self 
     }
 
     override func viewDidLoad() {

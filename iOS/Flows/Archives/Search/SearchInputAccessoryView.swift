@@ -15,6 +15,8 @@ class SearchInputAccessoryView: View {
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
 
     override var intrinsicContentSize: CGSize {
+        var newSize = self.bounds.size
+        newSize.height = 100
         return CGSize(width: 300, height: 100)
     }
 
@@ -33,12 +35,12 @@ class SearchInputAccessoryView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.blurView.width = self.width - Theme.contentOffset
+        self.blurView.width = self.width - Theme.contentOffset.doubled
         self.blurView.centerOnX()
         self.blurView.height = 60
         self.blurView.pin(.top, padding: 10)
 
-        self.searchBar.width = self.width - Theme.contentOffset
+        self.searchBar.width = self.width - Theme.contentOffset.doubled
         self.searchBar.centerOnX()
         self.searchBar.height = 80
         self.searchBar.pin(.top)

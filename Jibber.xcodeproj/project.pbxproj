@@ -319,6 +319,7 @@
 		D652061F26F9249800EC685D /* BlurredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652061C26F9249800EC685D /* BlurredViewController.swift */; };
 		D652062226F9269900EC685D /* SearchInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652062126F9269900EC685D /* SearchInputAccessoryView.swift */; };
 		D652062426F9341E00EC685D /* ConversationsSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652062326F9341E00EC685D /* ConversationsSearchBar.swift */; };
+		D652062626F93B7200EC685D /* ArchiveViewController+Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652062526F93B7200EC685D /* ArchiveViewController+Search.swift */; };
 		D65518F125890E3D00B901E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
 		D65518F82589109100B901E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0BF21D3071400204BEE /* AppDelegate.swift */; };
 		D6551901258910D700B901E4 /* AppDelegate+Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */; };
@@ -967,6 +968,7 @@
 		D652061C26F9249800EC685D /* BlurredViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredViewController.swift; sourceTree = "<group>"; };
 		D652062126F9269900EC685D /* SearchInputAccessoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchInputAccessoryView.swift; sourceTree = "<group>"; };
 		D652062326F9341E00EC685D /* ConversationsSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationsSearchBar.swift; sourceTree = "<group>"; };
+		D652062526F93B7200EC685D /* ArchiveViewController+Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchiveViewController+Search.swift"; sourceTree = "<group>"; };
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
@@ -2175,6 +2177,7 @@
 				D6C100D126F3DC0000F1ED7D /* ArchiveCoordinator.swift */,
 				D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */,
 				D678EC1426F3E5BA0071DB0D /* ArchiveViewController+Extension.swift */,
+				D652062526F93B7200EC685D /* ArchiveViewController+Search.swift */,
 			);
 			path = Archives;
 			sourceTree = "<group>";
@@ -2820,6 +2823,7 @@
 				D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */,
 				D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */,
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,
+				D652062626F93B7200EC685D /* ArchiveViewController+Search.swift in Sources */,
 				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
 				D6D1501A21D5F5D100CD8CE4 /* CollectionView.swift in Sources */,
