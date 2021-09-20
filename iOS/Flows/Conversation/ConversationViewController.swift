@@ -19,9 +19,8 @@ protocol ConversationViewControllerDelegate: AnyObject {
     func conversationView(_ controller: ConversationViewController, didTapShare message: Messageable)
 }
 
-class ConversationViewController: FullScreenViewController, CollectionViewInputHandler {
+class ConversationViewController: BlurredViewController, CollectionViewInputHandler {
 
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     lazy var detailVC = ConversationDetailViewController(conversation: self.conversation,
                                                          delegate: self.delegate)
     lazy var conversationCollectionView = ConversationCollectionView()
@@ -79,7 +78,6 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.addSubview(self.blurView)
         self.view.addSubview(self.conversationCollectionView)
 
         self.addChild(viewController: self.detailVC, toView: self.view)
@@ -163,8 +161,6 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        self.blurView.expandToSuperviewSize()
 
         self.detailVC.view.expandToSuperviewWidth()
         self.detailVC.view.pin(.top)

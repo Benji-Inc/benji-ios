@@ -314,6 +314,9 @@
 		D650C1F125B741EB0037C59A /* plusToX.json in Resources */ = {isa = PBXBuildFile; fileRef = D650C1F025B741EB0037C59A /* plusToX.json */; };
 		D650C1F225B741EB0037C59A /* plusToX.json in Resources */ = {isa = PBXBuildFile; fileRef = D650C1F025B741EB0037C59A /* plusToX.json */; };
 		D650C21025B7D6F20037C59A /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D650C20F25B7D6F20037C59A /* Attachment.swift */; };
+		D652061D26F9249800EC685D /* BlurredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652061C26F9249800EC685D /* BlurredViewController.swift */; };
+		D652061E26F9249800EC685D /* BlurredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652061C26F9249800EC685D /* BlurredViewController.swift */; };
+		D652061F26F9249800EC685D /* BlurredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652061C26F9249800EC685D /* BlurredViewController.swift */; };
 		D65518F125890E3D00B901E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
 		D65518F82589109100B901E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0BF21D3071400204BEE /* AppDelegate.swift */; };
 		D6551901258910D700B901E4 /* AppDelegate+Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */; };
@@ -959,6 +962,7 @@
 		D650C1E025B5F1730037C59A /* AvatarView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AvatarView+Extensions.swift"; sourceTree = "<group>"; };
 		D650C1F025B741EB0037C59A /* plusToX.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = plusToX.json; sourceTree = "<group>"; };
 		D650C20F25B7D6F20037C59A /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
+		D652061C26F9249800EC685D /* BlurredViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredViewController.swift; sourceTree = "<group>"; };
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
@@ -1913,6 +1917,7 @@
 				D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */,
 				D6D1461221D583E500CD8CE4 /* NavigationController.swift */,
 				D61EC0C121D3071400204BEE /* ViewController.swift */,
+				D652061C26F9249800EC685D /* BlurredViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -2887,6 +2892,7 @@
 				D6D1503721D7E74500CD8CE4 /* UIViewController+Extensions.swift in Sources */,
 				D64A1F07258C16470097817C /* WaitlistViewController.swift in Sources */,
 				D6090E5A2377D5CF00833DA7 /* ConversationCellAttributesConfigurer.swift in Sources */,
+				D652061D26F9249800EC685D /* BlurredViewController.swift in Sources */,
 				D6A4A1F625E9550A007F3E15 /* UserNotificationCategory.swift in Sources */,
 				D6090E582377D2CA00833DA7 /* ConversationSectionable.swift in Sources */,
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
@@ -3164,6 +3170,7 @@
 				D63DB29325E999B200F6B323 /* TextField.swift in Sources */,
 				D63DB29525E999B200F6B323 /* Button+Extensions.swift in Sources */,
 				D63DB26F25E9997F00F6B323 /* Statusable.swift in Sources */,
+				D652061F26F9249800EC685D /* BlurredViewController.swift in Sources */,
 				8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */,
 				D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
 				D63DB22125E9990100F6B323 /* Array+Extensions.swift in Sources */,
@@ -3280,6 +3287,7 @@
 				D6551A1325895C4F00B901E4 /* Theme.swift in Sources */,
 				D6551A2525895D7700B901E4 /* AvatarView.swift in Sources */,
 				D65519322589122700B901E4 /* UIView+Layout.swift in Sources */,
+				D652061E26F9249800EC685D /* BlurredViewController.swift in Sources */,
 				D65519592589126800B901E4 /* Connection.swift in Sources */,
 				D65519212589121500B901E4 /* NSAttributedString+Extensions.swift in Sources */,
 				D655196F2589128300B901E4 /* FontType.swift in Sources */,

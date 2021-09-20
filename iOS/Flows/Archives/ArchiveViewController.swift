@@ -13,7 +13,7 @@ protocol ArchiveViewControllerDelegate: AnyObject {
     func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType)
 }
 
-class ArchiveViewController: ViewController {
+class ArchiveViewController: BlurredViewController {
 
     weak var delegate: ArchiveViewControllerDelegate?
 
@@ -27,8 +27,6 @@ class ArchiveViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.set(backgroundColor: .background1)
-
         self.view.addSubview(self.collectionView)
 
         self.collectionView.delegate = self 
@@ -38,7 +36,11 @@ class ArchiveViewController: ViewController {
         super.viewDidLoad()
 
         Task {
-            await self.loadData()
+            let userID = User.current()!.userObjectID!
+            let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
+                                         sort: [.init(key: .lastMessageAt, isAscending: false)],
+                                         pageSize: 20)
+            await self.loadData(with: query)
         }
     }
 
@@ -51,12 +53,11 @@ class ArchiveViewController: ViewController {
     // MARK: Data Loading
 
     @MainActor
-    private func loadData() async {
-        self.collectionView.animationView.play()
+    private func loadData(with query: ChannelListQuery) async {
 
-        let userID = User.current()!.userObjectID!
-        let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
-                                     sort: [.init(key: .lastMessageAt, isAscending: false)])
+        await self.dataSource.deleteAllItems()
+
+        self.collectionView.animationView.play()
 
         self.channelListController = try? await ChatClient.shared.queryChannels(query: query)
 
