@@ -38,7 +38,6 @@ class ArchiveViewController: ViewController {
         super.viewDidLoad()
 
         Task {
-            print(self.collectionView)
             await self.loadData()
         }
     }
