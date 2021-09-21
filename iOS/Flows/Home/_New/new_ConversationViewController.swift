@@ -228,6 +228,7 @@ extension new_ConversationViewController {
     }
 }
 
+// MARK: - SwipeableInputAccessoryViewDelegate
 
 extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
