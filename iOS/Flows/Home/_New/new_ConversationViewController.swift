@@ -65,7 +65,7 @@ class new_ConversationViewController: FullScreenViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
-        once(caller: self, token: "intializeCollectionView") {
+        once(caller: self, token: "initializeCollectionView") {
             Task {
                 self.setupInputHandlers()
                 await self.loadInitialMessages()
