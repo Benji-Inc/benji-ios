@@ -171,7 +171,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
     private func setupHandlers() {
 
-        KeyboardManger.shared.$currentEvent
+        KeyboardManager.shared.$currentEvent
             .mainSink { event in
             switch event {
             case .didHide(_):

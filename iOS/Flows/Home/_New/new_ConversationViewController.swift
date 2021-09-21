@@ -9,7 +9,7 @@
 import Foundation
 import StreamChat
 
-class new_ConversationViewController: FullScreenViewController, CollectionViewInputHandler {
+class new_ConversationViewController: FullScreenViewController {
 
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = CollectionView(layout: new_ConversationCollectionViewLayout())
@@ -18,19 +18,8 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
 
     var conversation: Conversation! { return self.conversationController?.channel }
     private(set) var conversationController: ChatChannelController!
-
-    var collectionViewBottomInset: CGFloat = 0 {
-        didSet {
-            self.collectionView.contentInset.bottom = self.collectionViewBottomInset
-            self.collectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
-        }
-    }
-
-    // TODO: Remove this if not needed
-    var indexPathForEditing: IndexPath?
-    var inputTextView: InputTextView {
-        return self.messageInputAccessoryView.textView
-    }
+    /// If true, the conversation controller is currently loading messages.
+    @Atomic private var isLoadingMessages = false
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView = InputAccessoryView(with: self)
@@ -86,8 +75,6 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
     }
 
     private func setupInputHandlers() {
-        self.addKeyboardObservers()
-
         self.collectionView.delegate = self
 
         self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
@@ -108,8 +95,6 @@ extension new_ConversationViewController: UICollectionViewDelegate, UICollection
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
 
-        #warning("Remove this")
-//        logDebug("index path \(indexPath)")
         // If all the messages are loaded, there's no need to fetch more.
         guard !self.conversationController.hasLoadedAllPreviousMessages else { return }
 
@@ -117,12 +102,16 @@ extension new_ConversationViewController: UICollectionViewDelegate, UICollection
         guard indexPath.row < 2 else { return }
 
         Task {
+            guard !isLoadingMessages else { return }
+
+            self.isLoadingMessages = true
             do {
                 let oldestMessageID = self.conversationController.messages.first?.id
                 try await self.conversationController.loadPreviousMessages(before: oldestMessageID)
             } catch {
                 logDebug(error)
             }
+            self.isLoadingMessages = false
         }
     }
 
@@ -130,19 +119,18 @@ extension new_ConversationViewController: UICollectionViewDelegate, UICollection
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        return CGSize(width: 0.8 * collectionView.width,
-                      height: 0.6 * collectionView.width)
+        return CGSize(width: collectionView.width * 0.8,
+                      height: 200)
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
 
-        var verticalSpacing = (collectionView.height - 0.6 * collectionView.width)
-        verticalSpacing -= collectionView.contentInset.top + collectionView.contentInset.bottom + 1
-        return UIEdgeInsets(top: verticalSpacing.half,
+        let verticalSpacing = (collectionView.height - 200)
+        return UIEdgeInsets(top: verticalSpacing * 0.3,
                             left: collectionView.width * 0.1,
-                            bottom: verticalSpacing.half,
+                            bottom: verticalSpacing * 0.7,
                             right: collectionView.width * 0.1)
     }
 
@@ -206,43 +194,61 @@ extension new_ConversationViewController {
 
     func subscribeToConversationUpdates() {
         self.conversationController.messagesChangesPublisher.mainSink { [unowned self] changes in
-            guard let conversationController = self.conversationController else { return }
+            Task {
+                await self.updateMessages(with: changes)
+            }
+        }.store(in: &self.cancellables)
+    }
 
-            var snapshot = self.dataSource.snapshot()
+    func updateMessages(with changes: [ListChange<ChatMessage>]) async {
 
-            logDebug("Making some changes here")
-            // If there's more than one change, reload all of the data.
-            guard changes.count == 1 else {
+        guard let conversationController = self.conversationController else { return }
+
+        var snapshot = self.dataSource.snapshot()
+
+        // If there's more than one change, reload all of the data.
+        guard changes.count == 1 else {
+            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
+            snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
+                                 toSection: .basic(conversation.cid))
+            await self.dataSource.applySnapshotKeepingVisualOffset(snapshot,
+                                                                   collectionView: self.collectionView)
+            return
+        }
+
+        // If this gets set to true, we should scroll to the most recent message after applying the snapshot
+        var scrollToLatestMessage = false
+
+        for change in changes {
+            switch change {
+            case .insert(let message, let index):
+                let section = ConversationCollectionSection.basic(self.conversation.cid)
+                snapshot.insertItems([.message(message.id)],
+                                     in: section,
+                                     atIndex: index.item)
+                scrollToLatestMessage = true
+            case .move:
                 snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
                 snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
                                      toSection: .basic(conversation.cid))
-                self.dataSource.apply(snapshot)
-                return
+            case .update(let message, _):
+                snapshot.reloadItems([message.asConversationCollectionItem])
+            case .remove(let message, _):
+                snapshot.deleteItems([message.asConversationCollectionItem])
             }
+        }
 
-            for change in changes {
-                switch change {
-                case .insert(let message, let index):
-                    let section = ConversationCollectionSection.basic(self.conversation.cid)
-                    snapshot.insertItems([.message(message.id)],
-                                         in: section,
-                                         atIndex: index.item)
-
-                case .move:
-                    snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
-                    snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
-                                         toSection: .basic(conversation.cid))
-                    self.dataSource.apply(snapshot)
-                    return
-                case .update(let message, _):
-                    snapshot.reloadItems([message.asConversationCollectionItem])
-                case .remove(let message, _):
-                    snapshot.deleteItems([message.asConversationCollectionItem])
-                }
-            }
-
+        await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
             self.dataSource.apply(snapshot)
-        }.store(in: &self.cancellables)
+
+            if scrollToLatestMessage {
+                let items = snapshot.itemIdentifiers(inSection: .basic(self.conversation.cid))
+                let lastIndex = IndexPath(item: items.count - 1, section: 0)
+                self.collectionView.scrollToItem(at: lastIndex, at: .centeredHorizontally, animated: true)
+            }
+        }
+
+        self.isLoadingMessages = false
     }
 }
 
