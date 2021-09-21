@@ -9,17 +9,17 @@
 import Foundation
 import StreamChat
 
-class new_ConversationViewController: FullScreenViewController {
+class new_ConversationViewController: FullScreenViewController,
+                                      UICollectionViewDelegate,
+                                      UICollectionViewDelegateFlowLayout {
 
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     var collectionView = CollectionView(layout: new_ConversationCollectionViewLayout())
 
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
     var conversation: Conversation! { return self.conversationController?.channel }
     private(set) var conversationController: ChatChannelController!
-    /// If true, the conversation controller is currently loading messages.
-    @Atomic private var isLoadingMessages = false
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView = InputAccessoryView(with: self)
@@ -87,10 +87,11 @@ class new_ConversationViewController: FullScreenViewController {
             self.conversationController.deleteMessage(message.id)
         }
     }
-}
 
-extension new_ConversationViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    // MARK: - UICollectionViewDelegate
 
+    /// If true, the conversation controller is currently loading messages.
+    @Atomic private var isLoadingMessages = false
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
@@ -113,31 +114,6 @@ extension new_ConversationViewController: UICollectionViewDelegate, UICollection
             }
             self.isLoadingMessages = false
         }
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        return CGSize(width: collectionView.width * 0.8,
-                      height: 200)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-
-        let verticalSpacing = (collectionView.height - 200)
-        return UIEdgeInsets(top: verticalSpacing * 0.3,
-                            left: collectionView.width * 0.1,
-                            bottom: verticalSpacing * 0.7,
-                            right: collectionView.width * 0.1)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return collectionView.width * 0.05
     }
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView,
@@ -169,6 +145,8 @@ extension new_ConversationViewController: UICollectionViewDelegate, UICollection
         targetContentOffset.pointee = CGPoint(x: newXOffset, y: targetOffset.y)
     }
 }
+
+// MARK: - Message Loading and Updates
 
 extension new_ConversationViewController {
 
