@@ -108,11 +108,13 @@ extension new_ConversationViewController: UICollectionViewDelegate, UICollection
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
 
-        // If all the messages are loaded, no need to fetch more.
+        #warning("Remove this")
+//        logDebug("index path \(indexPath)")
+        // If all the messages are loaded, there's no need to fetch more.
         guard !self.conversationController.hasLoadedAllPreviousMessages else { return }
 
         // Start fetching new messages once the user is nearing the end of the list.
-        guard indexPath.row < 10 else { return }
+        guard indexPath.row < 2 else { return }
 
         Task {
             do {
@@ -182,10 +184,6 @@ extension new_ConversationViewController: UICollectionViewDelegate, UICollection
 
 extension new_ConversationViewController {
 
-    func subscribeToConversationUpdates() {
-        self.conversationController?.delegate = self
-    }
-
     @MainActor
     func loadInitialMessages() async {
         guard let controller = self.conversationController else { return }
@@ -205,35 +203,49 @@ extension new_ConversationViewController {
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
     }
-}
 
-extension new_ConversationViewController: ChatChannelControllerDelegate {
+    func subscribeToConversationUpdates() {
+        self.conversationController.messagesChangesPublisher.mainSink { [unowned self] changes in
+            guard let conversationController = self.conversationController else { return }
 
-    /// The controller observed changes in the `Messages` of the observed channel.
-    func channelController(_ channelController: ChatChannelController,
-                           didUpdateMessages changes: [ListChange<ChatMessage>]) {
+            var snapshot = self.dataSource.snapshot()
 
-        var snapshot = self.dataSource.snapshot()
-
-        for change in changes {
-            switch change {
-            case .insert, .move:
+            logDebug("Making some changes here")
+            // If there's more than one change, reload all of the data.
+            guard changes.count == 1 else {
                 snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
-                snapshot.appendItems(channelController.messages.asConversationCollectionItems,
+                snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
                                      toSection: .basic(conversation.cid))
                 self.dataSource.apply(snapshot)
                 return
-
-            case .update(let message, _):
-                snapshot.reloadItems([message.asConversationCollectionItem])
-            case .remove(let message, _):
-                snapshot.deleteItems([message.asConversationCollectionItem])
             }
-        }
 
-        self.dataSource.apply(snapshot)
+            for change in changes {
+                switch change {
+                case .insert(let message, let index):
+                    let section = ConversationCollectionSection.basic(self.conversation.cid)
+                    snapshot.insertItems([.message(message.id)],
+                                         in: section,
+                                         atIndex: index.item)
+
+                case .move:
+                    snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
+                    snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
+                                         toSection: .basic(conversation.cid))
+                    self.dataSource.apply(snapshot)
+                    return
+                case .update(let message, _):
+                    snapshot.reloadItems([message.asConversationCollectionItem])
+                case .remove(let message, _):
+                    snapshot.deleteItems([message.asConversationCollectionItem])
+                }
+            }
+
+            self.dataSource.apply(snapshot)
+        }.store(in: &self.cancellables)
     }
 }
+
 
 extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
 

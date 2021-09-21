@@ -45,6 +45,9 @@
 		80FA868C26F111830053101B /* ChatMessage+Messageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FA868B26F111830053101B /* ChatMessage+Messageable.swift */; };
 		80FA869226F117C20053101B /* ChatUser+Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FA869126F117C20053101B /* ChatUser+Avatar.swift */; };
 		80FA869326F117C20053101B /* ChatUser+Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FA869126F117C20053101B /* ChatUser+Avatar.swift */; };
+		80FD049F26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FD049E26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift */; };
+		80FD04A026FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FD049E26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift */; };
+		80FD04A126FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FD049E26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift */; };
 		876DD7048C07730CF091087A /* Pods_AppClip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B92BA452D2C2DB45DD711F86 /* Pods_AppClip.framework */; };
 		C03D8861C3D82A5BDDC5CF8C /* Pods_Intents_ExtensionUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */; };
 		D605C30626F683E400C86DAD /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605C30226F683E400C86DAD /* ConversationCell.swift */; };
@@ -829,6 +832,7 @@
 		80F88BAD26F11F02006C7677 /* ChatChannelController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatChannelController+Extensions.swift"; sourceTree = "<group>"; };
 		80FA868B26F111830053101B /* ChatMessage+Messageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatMessage+Messageable.swift"; sourceTree = "<group>"; };
 		80FA869126F117C20053101B /* ChatUser+Avatar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatUser+Avatar.swift"; sourceTree = "<group>"; };
+		80FD049E26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDiffableDataSourceSnapshot+Extensions.swift"; sourceTree = "<group>"; };
 		89A8B85319CDB8E1F26EAC7A /* Pods-Ours.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Ours.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Ours/Pods-Ours.debug.xcconfig"; sourceTree = "<group>"; };
 		8C8815B0EA9F1296FC57545F /* Pods_Notification_Content.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Notification_Content.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Intents_ExtensionUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2236,6 +2240,7 @@
 			isa = PBXGroup;
 			children = (
 				80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */,
+				80FD049E26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift */,
 				801EC74C26D5748A00B52F31 /* Old */,
 			);
 			path = "Collection View Management ";
@@ -2835,6 +2840,7 @@
 				D63D5C97265811B000543200 /* URL+Extensions.swift in Sources */,
 				802C448A26CC76CC00A333A4 /* Logger.swift in Sources */,
 				D64DD8B223CE403D0039DC5A /* SwitchableContentViewController.swift in Sources */,
+				80FD049F26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
 				D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */,
 				D61D38E5248C0BA600BE457B /* InputAccessoryView+Connection.swift in Sources */,
 				D6730ECB2649F14F00B5DC16 /* AVURLAsset+Extension.swift in Sources */,
@@ -3113,6 +3119,7 @@
 				D63DB25F25E9995E00F6B323 /* QuePositions.swift in Sources */,
 				D63DB24325E9993F00F6B323 /* NameViewController.swift in Sources */,
 				D63DB29925E999B200F6B323 /* Label.swift in Sources */,
+				80FD04A126FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
 				D63DB25425E9995700F6B323 /* AnimationDuration.swift in Sources */,
 				D63DB25025E9995100F6B323 /* LaunchManager.swift in Sources */,
 				D63DB23525E9992600F6B323 /* UIView+Layout.swift in Sources */,
@@ -3236,6 +3243,7 @@
 				D65519762589129B00B901E4 /* Deeplinkable.swift in Sources */,
 				D655195A2589126800B901E4 /* User+Objectable.swift in Sources */,
 				D65519C425891B0A00B901E4 /* FullScreenViewController.swift in Sources */,
+				80FD04A026FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
 				D65519162589120C00B901E4 /* DispatchQue+Extensions.swift in Sources */,
 				D65519372589122700B901E4 /* UIViewController+Extensions.swift in Sources */,
 				D6551A6A25895F9400B901E4 /* FaceView.swift in Sources */,
