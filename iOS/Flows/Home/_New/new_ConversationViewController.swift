@@ -12,7 +12,7 @@ import StreamChat
 class new_ConversationViewController: FullScreenViewController {
 
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
-    lazy var collectionView = CollectionView(layout: new_ConversationCollectionViewLayout())
+    var collectionView = CollectionView(layout: new_ConversationCollectionViewLayout())
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
