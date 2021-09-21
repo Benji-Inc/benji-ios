@@ -21,7 +21,6 @@ extension ArchiveViewController: UISearchBarDelegate {
 
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         self.dataSource.deleteAllItems()
-        // Show categories
         searchBar.setShowsCancelButton(true, animated: true)
     }
 
@@ -30,22 +29,22 @@ extension ArchiveViewController: UISearchBarDelegate {
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        self.loadQuery(with: searchText)
+        guard let search = searchBar as? ConversationsSearchBar else { return }
+        self.loadQuery(with: searchText, scope: search.currentScope)
     }
 
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        guard let search = searchBar as? ConversationsSearchBar else { return }
 
+        self.loadQuery(with: search.text ?? "", scope: search.currentScope)
     }
 
-    private func loadQuery(with searchText: String) {
-
+    private func loadQuery(with searchText: String, scope: ConversationsSearchBar.Scope) {
 
         let userID = User.current()!.userObjectID!
         let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
                                      sort: [.init(key: .lastMessageAt, isAscending: false)],
                                      pageSize: 20)
-
-        //let q = ChannelMemberListQuery
 
         Task {
             await self.loadData(with: query)

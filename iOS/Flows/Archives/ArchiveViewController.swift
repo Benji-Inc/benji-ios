@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import TMROLocalization
 
 protocol ArchiveViewControllerDelegate: AnyObject {
     func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType)
