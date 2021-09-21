@@ -27,26 +27,31 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
     private let contextMenuDelegate: ContextMenuInteractionDelegate
 
+    private let messageCellConfig = UICollectionView.CellRegistration<new_MessageCell, (ChannelId, MessageId)>
+    { cell, indexPath, item in
+        let messageController = ChatClient.shared.messageController(cid: item.0, messageId: item.1)
+        guard let message = messageController.message else { return }
+
+        // Configure the cell
+        cell.contentView.set(backgroundColor: .red)
+
+        if message.type == .deleted {
+            cell.textView.text = "DELETED"
+            cell.replyCountLabel.text = nil
+        } else {
+            cell.textView.text = messageController.message?.text
+            cell.replyCountLabel.setText("\(message.replyCount)")
+        }
+
+        cell.contentView.setNeedsLayout()
+    }
+
     override init(collectionView: UICollectionView) {
         self.contextMenuDelegate = ContextMenuInteractionDelegate(collectionView: collectionView)
 
         super.init(collectionView: collectionView)
 
         self.contextMenuDelegate.dataSource = self
-    }
-
-    private let messageCellConfig = UICollectionView.CellRegistration<new_MessageCell, (ChannelId, MessageId)>
-    { cell, indexPath, item in
-
-        let messageController = ChatClient.shared.messageController(cid: item.0, messageId: item.1)
-        // Configure the cell
-        cell.contentView.set(backgroundColor: .red)
-        if messageController.message?.type == .deleted {
-            cell.textView.text = "DELETED"
-        } else {
-            cell.textView.text = messageController.message?.text
-        }
-        cell.contentView.setNeedsLayout()
     }
 
     override func dequeueCell(with collectionView: UICollectionView,
@@ -59,8 +64,8 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             switch item {
             case .message(let messageID):
                 let cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellConfig,
-                                                                    for: indexPath,
-                                                                    item: (channelID, messageID))
+                                                                        for: indexPath,
+                                                                        item: (channelID, messageID))
 
                 let interaction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
                 cell.addInteraction(interaction)
@@ -75,7 +80,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                                            indexPath: IndexPath) -> UICollectionReusableView? {
         return nil
     }
-
 }
 
 private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteractionDelegate {

@@ -134,6 +134,73 @@ extension ChatChannelController {
         try await messageController.editMessage(text: text)
     }
 
+    @discardableResult
+    func createNewReply(for messageID: MessageId, with sendable: Sendable) async throws -> MessageId {
+        switch sendable.kind {
+        case .text(let text):
+            return try await self.createNewReply(for: messageID, text: text)
+        case .attributedText:
+            break
+        case .photo:
+            break
+        case .video:
+            break
+        case .location:
+            break
+        case .emoji:
+            break
+        case .audio:
+            break
+        case .contact:
+            break
+        case .link:
+            break
+        }
+
+        throw(ClientError.apiError(detail: "Message type not supported."))
+    }
+
+    /// Creates a new reply message locally and schedules it for send.
+    ///
+    /// - Parameters:
+    ///   - messageID: The id of the message we're replying to.
+    ///   - text: Text of the message.
+    ///   - pinning: Pins the new message. `nil` if should not be pinned.
+    ///   - attachments: An array of the attachments for the message.
+    ///    `Note`: can be built-in types, custom attachment types conforming to `AttachmentEnvelope` protocol
+    ///     and `ChatMessageAttachmentSeed`s.
+    ///   - showReplyInChannel: Set this flag to `true` if you want the message to be also visible in the channel, not only
+    ///   in the response thread.
+    ///   - quotedMessageId: An id of the message new message quotes. (inline reply)
+    ///   - extraData: Additional extra data of the message object.
+    ///   - completion: Called when saving the message to the local DB finishes.
+    @discardableResult
+    func createNewReply(for messageID: MessageId,
+                        text: String,
+                        pinning: MessagePinning? = nil,
+                        attachments: [AnyAttachmentPayload] = [],
+                        mentionedUserIds: [UserId] = [],
+                        showReplyInChannel: Bool = false,
+                        isSilent: Bool = false,
+                        quotedMessageId: MessageId? = nil,
+                        extraData: [String: RawJSON] = [:]) async throws -> MessageId {
+
+        guard let channelID = self.cid else {
+            throw(ClientError.apiError(detail: "No channel id"))
+        }
+
+        let messageController = self.client.messageController(cid: channelID, messageId: messageID)
+        return try await messageController.createNewReply(text: text,
+                                                          pinning: pinning,
+                                                          attachments: attachments,
+                                                          mentionedUserIds: mentionedUserIds,
+                                                          showReplyInChannel: showReplyInChannel,
+                                                          isSilent: isSilent,
+                                                          quotedMessageId: quotedMessageId,
+                                                          extraData: extraData)
+
+    }
+
     /// Deletes the specified message that this controller manages.
     ///
     /// - Parameters:

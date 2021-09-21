@@ -7,13 +7,17 @@
 //
 
 import Foundation
+import StreamChat
 
 class new_MessageCell: UICollectionViewCell {
 
     let textView = TextView()
+    let replyCountLabel = Label(font: .regular)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        self.contentView.addSubview(self.replyCountLabel)
 
         self.contentView.addSubview(self.textView)
         self.textView.isScrollEnabled = false
@@ -25,6 +29,10 @@ class new_MessageCell: UICollectionViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+
+        self.replyCountLabel.sizeToFit()
+        self.replyCountLabel.pin(.right)
+        self.replyCountLabel.pin(.top)
 
         self.textView.width = self.contentView.width
         self.textView.sizeToFit()
