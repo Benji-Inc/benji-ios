@@ -2170,14 +2170,14 @@
 		D6C100D026F3DB8000F1ED7D /* Archives */ = {
 			isa = PBXGroup;
 			children = (
-				D652062026F9264500EC685D /* Search */,
-				D605C30126F683E400C86DAD /* Conversation */,
 				D6C100D526F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift */,
 				D6C100D726F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift */,
 				D6C100D126F3DC0000F1ED7D /* ArchiveCoordinator.swift */,
 				D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */,
 				D678EC1426F3E5BA0071DB0D /* ArchiveViewController+Extension.swift */,
 				D652062526F93B7200EC685D /* ArchiveViewController+Search.swift */,
+				D605C30126F683E400C86DAD /* Conversation */,
+				D652062026F9264500EC685D /* Search */,
 			);
 			path = Archives;
 			sourceTree = "<group>";

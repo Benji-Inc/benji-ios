@@ -27,6 +27,14 @@ class ArchiveViewController: BlurredViewController {
     // Custom Input Accessory View
     lazy var searchInputAccessoryView = SearchInputAccessoryView()
 
+    lazy var initialQuery: ChannelListQuery = {
+        let userID = User.current()!.userObjectID!
+        let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
+                                     sort: [.init(key: .lastMessageAt, isAscending: false)],
+                                     pageSize: 20)
+        return query
+    }()
+
     override var inputAccessoryView: UIView? {
         return self.searchInputAccessoryView
     }
@@ -48,11 +56,7 @@ class ArchiveViewController: BlurredViewController {
         super.viewDidLoad()
 
         Task {
-            let userID = User.current()!.userObjectID!
-            let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
-                                         sort: [.init(key: .lastMessageAt, isAscending: false)],
-                                         pageSize: 20)
-            await self.loadData(with: query)
+            await self.loadData(with: self.initialQuery)
         }
 
         self.collectionView.onDoubleTap { [unowned self] _ in
@@ -83,7 +87,7 @@ class ArchiveViewController: BlurredViewController {
     // MARK: Data Loading
 
     @MainActor
-    private func loadData(with query: ChannelListQuery) async {
+    func loadData(with query: ChannelListQuery) async {
 
         await self.dataSource.deleteAllItems()
 

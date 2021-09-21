@@ -7,17 +7,21 @@
 //
 
 import Foundation
+import StreamChat
+import StreamChatUI
 
 extension ArchiveViewController: UISearchBarDelegate {
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+        Task {
+            await self.loadData(with: self.initialQuery)
+        }
     }
 
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        // Clear query
+        self.dataSource.deleteAllItems()
         // Show categories
-
         searchBar.setShowsCancelButton(true, animated: true)
     }
 
@@ -26,10 +30,23 @@ extension ArchiveViewController: UISearchBarDelegate {
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(searchText)
+        self.loadQuery(with: searchText)
     }
 
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
 
+    }
+
+    private func loadQuery(with searchText: String) {
+//        let userID = User.current()!.userObjectID!
+//        let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
+//                                     sort: [.init(key: .lastMessageAt, isAscending: false)],
+//                                     pageSize: 20)
+//
+//        //let q = ChannelMemberListQuery
+//
+//        Task {
+//            await self.loadData(with: query)
+//        }
     }
 }
