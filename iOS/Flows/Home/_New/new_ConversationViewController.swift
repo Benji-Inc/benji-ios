@@ -247,8 +247,6 @@ extension new_ConversationViewController {
                 self.collectionView.scrollToItem(at: lastIndex, at: .centeredHorizontally, animated: true)
             }
         }
-
-        self.isLoadingMessages = false
     }
 }
 
