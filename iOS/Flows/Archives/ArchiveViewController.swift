@@ -57,7 +57,7 @@ class ArchiveViewController: BlurredViewController {
 
         Task {
             await self.loadData(with: self.initialQuery)
-        }
+        }.add(to: self.taskPool)
 
         self.collectionView.onDoubleTap { [unowned self] _ in
             if self.searchInputAccessoryView.searchBar.isFirstResponder {
@@ -89,11 +89,18 @@ class ArchiveViewController: BlurredViewController {
     @MainActor
     func loadData(with query: ChannelListQuery) async {
 
-        await self.dataSource.deleteAllItems()
+        await self.taskPool.cancelAndRemoveAll()
 
         self.collectionView.animationView.play()
 
-        self.channelListController = try? await ChatClient.shared.queryChannels(query: query)
+        let controller = try? await ChatClient.shared.queryChannels(query: query)
+
+        guard !Task.isCancelled else {
+            self.collectionView.animationView.stop()
+            return
+        }
+
+        self.channelListController = controller
 
         let cycle = AnimationCycle(inFromPosition: .inward,
                                    outToPosition: .inward,

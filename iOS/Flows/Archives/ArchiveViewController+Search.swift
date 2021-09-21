@@ -38,15 +38,17 @@ extension ArchiveViewController: UISearchBarDelegate {
     }
 
     private func loadQuery(with searchText: String) {
-//        let userID = User.current()!.userObjectID!
-//        let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
-//                                     sort: [.init(key: .lastMessageAt, isAscending: false)],
-//                                     pageSize: 20)
-//
-//        //let q = ChannelMemberListQuery
-//
-//        Task {
-//            await self.loadData(with: query)
-//        }
+
+
+        let userID = User.current()!.userObjectID!
+        let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
+                                     sort: [.init(key: .lastMessageAt, isAscending: false)],
+                                     pageSize: 20)
+
+        //let q = ChannelMemberListQuery
+
+        Task {
+            await self.loadData(with: query)
+        }.add(to: self.taskPool)
     }
 }
