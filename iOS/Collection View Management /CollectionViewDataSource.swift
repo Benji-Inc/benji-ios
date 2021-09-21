@@ -331,7 +331,7 @@ extension CollectionViewDataSource {
         // so we don't preload any cells undesired cells when the snapshop is applied.
         if animationCycle.scrollToEnd {
             collectionView.contentOffset = CGPoint(x: 999_999_999_999,
-                                                   y: 999_999_999_999)
+                                                   y: 0)
         }
 
         await self.applySnapshotUsingReloadData(snapshot)
@@ -345,7 +345,7 @@ extension CollectionViewDataSource {
             // Make sure the index path is valid
             if sectionIndex >= 0 && itemIndex >= 0 {
                 collectionView.scrollToItem(at: indexPath,
-                                            at: [.centeredHorizontally, .centeredVertically], animated: false)
+                                            at: [.centeredHorizontally], animated: false)
             } else {
                 collectionView.setContentOffset(.zero, animated: false)
             }

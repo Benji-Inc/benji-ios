@@ -61,8 +61,9 @@ class new_ConversationViewController: FullScreenViewController, CollectionViewIn
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.addSubview(self.blurView)
-        self.view.addSubview(self.collectionView)
+        self.view.insertSubview(self.blurView, belowSubview: self.contentContainer)
+        self.contentContainer.addSubview(self.collectionView)
+        self.collectionView.decelerationRate = .fast
     }
 
     override func viewDidLayoutSubviews() {
