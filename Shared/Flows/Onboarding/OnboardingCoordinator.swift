@@ -41,7 +41,7 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
         guard let link = deeplink else { return }
         self.onboardingVC.deeplink = link
         self.onboardingVC.reservationId = link.reservationId
-        self.onboardingVC.reservationCreatorId = link.reservationCreatorId
+        self.onboardingVC.reservationOwnerId = link.reservationCreatorId
         self.onboardingVC.updateNavigationBar()
     }
 }
