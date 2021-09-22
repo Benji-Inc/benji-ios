@@ -39,9 +39,15 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             cell.textView.text = "DELETED"
             cell.replyCountLabel.text = nil
         } else {
-            cell.textView.text = messageController.message?.text
+            cell.textView.text = message.text
             cell.replyCountLabel.setText("\(message.replyCount)")
+
+//            if message.replyCount > message.latestReplies.count {
+//                logDebug("loading up some more replies for message \(message.text)")
+//                messageController.loadPreviousReplies()
+//            }
         }
+
 
         cell.contentView.setNeedsLayout()
     }
@@ -79,6 +85,58 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                                            section: SectionType,
                                            indexPath: IndexPath) -> UICollectionReusableView? {
         return nil
+    }
+
+    /// Updates the datasource with the passed in array of message changes.
+    func updateMessages(with changes: [ListChange<ChatMessage>],
+                        conversationController: ChatChannelController,
+                        collectionView: UICollectionView) async {
+
+        guard let conversation = conversationController.channel else { return }
+
+        var snapshot = self.snapshot()
+
+        // If there's more than one change, reload all of the data.
+        guard changes.count == 1 else {
+            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
+            snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
+                                 toSection: .basic(conversation.cid))
+            await self.applySnapshotKeepingVisualOffset(snapshot,
+                                                        collectionView: collectionView)
+            return
+        }
+
+        // If this gets set to true, we should scroll to the most recent message after applying the snapshot
+        var scrollToLatestMessage = false
+
+        for change in changes {
+            switch change {
+            case .insert(let message, let index):
+                let section = ConversationCollectionSection.basic(conversation.cid)
+                snapshot.insertItems([.message(message.id)],
+                                     in: section,
+                                     atIndex: index.item)
+                scrollToLatestMessage = true
+            case .move:
+                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
+                snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
+                                     toSection: .basic(conversation.cid))
+            case .update(let message, _):
+                snapshot.reloadItems([message.asConversationCollectionItem])
+            case .remove(let message, _):
+                snapshot.deleteItems([message.asConversationCollectionItem])
+            }
+        }
+
+        await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
+            self.apply(snapshot)
+
+            if scrollToLatestMessage {
+                let items = snapshot.itemIdentifiers(inSection: .basic(conversation.cid))
+                let lastIndex = IndexPath(item: items.count - 1, section: 0)
+                collectionView.scrollToItem(at: lastIndex, at: .centeredHorizontally, animated: true)
+            }
+        }
     }
 }
 

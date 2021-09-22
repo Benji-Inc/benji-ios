@@ -96,6 +96,23 @@ class new_ConversationViewController: FullScreenViewController,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
 
+        if let item = self.dataSource.itemIdentifier(for: indexPath) {
+            switch item {
+            case .message(let messageID):
+                let messageController = ChatClient.shared.messageController(cid: self.conversation.cid,
+                                                                            messageId: messageID)
+                guard let message = messageController.message else { break }
+                if message.replyCount > message.latestReplies.count {
+                    messageController.loadPreviousReplies { error in
+                        guard let newMessage = messageController.message else { return }
+                        self.dataSource.reconfigureItems([.message(newMessage.id)])
+                    }
+                }
+            }
+
+        }
+
+
         // If all the messages are loaded, there's no need to fetch more.
         guard !self.conversationController.hasLoadedAllPreviousMessages else { return }
 
@@ -173,58 +190,12 @@ extension new_ConversationViewController {
     func subscribeToConversationUpdates() {
         self.conversationController.messagesChangesPublisher.mainSink { [unowned self] changes in
             Task {
-                await self.updateMessages(with: changes)
+                guard let conversationController = self.conversationController else { return }
+                await self.dataSource.updateMessages(with: changes,
+                                                     conversationController: conversationController,
+                                                     collectionView: self.collectionView)
             }
         }.store(in: &self.cancellables)
-    }
-
-    func updateMessages(with changes: [ListChange<ChatMessage>]) async {
-
-        guard let conversationController = self.conversationController else { return }
-
-        var snapshot = self.dataSource.snapshot()
-
-        // If there's more than one change, reload all of the data.
-        guard changes.count == 1 else {
-            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
-            snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
-                                 toSection: .basic(conversation.cid))
-            await self.dataSource.applySnapshotKeepingVisualOffset(snapshot,
-                                                                   collectionView: self.collectionView)
-            return
-        }
-
-        // If this gets set to true, we should scroll to the most recent message after applying the snapshot
-        var scrollToLatestMessage = false
-
-        for change in changes {
-            switch change {
-            case .insert(let message, let index):
-                let section = ConversationCollectionSection.basic(self.conversation.cid)
-                snapshot.insertItems([.message(message.id)],
-                                     in: section,
-                                     atIndex: index.item)
-                scrollToLatestMessage = true
-            case .move:
-                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
-                snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
-                                     toSection: .basic(conversation.cid))
-            case .update(let message, _):
-                snapshot.reloadItems([message.asConversationCollectionItem])
-            case .remove(let message, _):
-                snapshot.deleteItems([message.asConversationCollectionItem])
-            }
-        }
-
-        await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
-            self.dataSource.apply(snapshot)
-
-            if scrollToLatestMessage {
-                let items = snapshot.itemIdentifiers(inSection: .basic(self.conversation.cid))
-                let lastIndex = IndexPath(item: items.count - 1, section: 0)
-                self.collectionView.scrollToItem(at: lastIndex, at: .centeredHorizontally, animated: true)
-            }
-        }
     }
 }
 
@@ -244,7 +215,12 @@ extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
     private func send(object: Sendable) async {
         do {
-            try await self.conversationController?.createNewMessage(with: object)
+            guard let latestMessage = self.conversationController.messages.last else { return }
+
+            #warning("Revert")
+            try await self.conversationController.createNewReply(for: latestMessage.id,
+                                                                    with: object)
+//            try await self.conversationController?.createNewMessage(with: object)
         } catch {
             logDebug(error)
         }
