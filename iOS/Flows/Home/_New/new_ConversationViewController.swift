@@ -96,23 +96,6 @@ class new_ConversationViewController: FullScreenViewController,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
 
-        if let item = self.dataSource.itemIdentifier(for: indexPath) {
-            switch item {
-            case .message(let messageID):
-                let messageController = ChatClient.shared.messageController(cid: self.conversation.cid,
-                                                                            messageId: messageID)
-                guard let message = messageController.message else { break }
-                if message.replyCount > message.latestReplies.count {
-                    messageController.loadPreviousReplies { error in
-                        guard let newMessage = messageController.message else { return }
-                        self.dataSource.reconfigureItems([.message(newMessage.id)])
-                    }
-                }
-            }
-
-        }
-
-
         // If all the messages are loaded, there's no need to fetch more.
         guard !self.conversationController.hasLoadedAllPreviousMessages else { return }
 
