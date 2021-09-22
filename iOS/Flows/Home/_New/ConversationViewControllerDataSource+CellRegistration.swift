@@ -25,16 +25,18 @@ extension ConversationCollectionViewDataSource {
             guard let message = messageController.message else { return }
             let dataSource = item.dataSource
 
-            // Configure the cell
-            cell.contentView.set(backgroundColor: .red)
 
             if message.type == .deleted {
-                cell.textView.text = "DELETED"
-                cell.replyCountLabel.text = nil
+                cell.setIsDeleted()
             } else {
-                cell.textView.text = message.text
-                cell.replyCountLabel.setText("\(message.latestReplies.count)")
+                cell.setMessage(message.text)
 
+                let replies = message.latestReplies.map { message in
+                    return message.text
+                }
+                cell.setReplies(replies)
+
+                // Load in the messages replies if needed, then reconfigure the cell so they show up.
                 if message.replyCount > message.latestReplies.count {
                     Task {
                         try? await messageController.loadPreviousReplies()

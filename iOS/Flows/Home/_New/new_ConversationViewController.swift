@@ -198,12 +198,7 @@ extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
     private func send(object: Sendable) async {
         do {
-            guard let latestMessage = self.conversationController.messages.last else { return }
-
-            #warning("Revert")
-            try await self.conversationController.createNewReply(for: latestMessage.id,
-                                                                    with: object)
-//            try await self.conversationController?.createNewMessage(with: object)
+            try await self.conversationController?.createNewMessage(with: object)
         } catch {
             logDebug(error)
         }
