@@ -26,31 +26,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     var handleDeleteMessage: ((ChatMessage) -> Void)?
 
     private let contextMenuDelegate: ContextMenuInteractionDelegate
-
-    private let messageCellConfig = UICollectionView.CellRegistration<new_MessageCell, (ChannelId, MessageId)>
-    { cell, indexPath, item in
-        let messageController = ChatClient.shared.messageController(cid: item.0, messageId: item.1)
-        guard let message = messageController.message else { return }
-
-        // Configure the cell
-        cell.contentView.set(backgroundColor: .red)
-
-        if message.type == .deleted {
-            cell.textView.text = "DELETED"
-            cell.replyCountLabel.text = nil
-        } else {
-            cell.textView.text = message.text
-            cell.replyCountLabel.setText("\(message.replyCount)")
-
-//            if message.replyCount > message.latestReplies.count {
-//                logDebug("loading up some more replies for message \(message.text)")
-//                messageController.loadPreviousReplies()
-//            }
-        }
-
-
-        cell.contentView.setNeedsLayout()
-    }
+    private let messageCellConfig = ConversationCollectionViewDataSource.createMessageCellRegistration()
 
     override init(collectionView: UICollectionView) {
         self.contextMenuDelegate = ContextMenuInteractionDelegate(collectionView: collectionView)
@@ -71,7 +47,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             case .message(let messageID):
                 let cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellConfig,
                                                                         for: indexPath,
-                                                                        item: (channelID, messageID))
+                                                                        item: (channelID, messageID, self))
 
                 let interaction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
                 cell.addInteraction(interaction)
