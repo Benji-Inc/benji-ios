@@ -49,7 +49,7 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
                                            for: UIControl.Event.editingChanged)
         self.textEntry.textField.delegate = self
 
-        KeyboardManger.shared.$currentEvent.mainSink { event in
+        KeyboardManager.shared.$currentEvent.mainSink { event in
             switch event {
             case .willShow(_):
                 UIView.animate(withDuration: 0.2) {
@@ -79,7 +79,7 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
         self.textEntry.size = CGSize(width: width, height: height)
         self.textEntry.centerOnX()
 
-        let defaultOffset = self.view.height - KeyboardManger.shared.cachedKeyboardFrame.height
+        let defaultOffset = self.view.height - KeyboardManager.shared.cachedKeyboardFrame.height
         self.textEntry.bottom = defaultOffset
     }
 

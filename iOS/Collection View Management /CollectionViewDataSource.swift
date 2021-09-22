@@ -318,6 +318,28 @@ extension CollectionViewDataSource {
 // Functions to do custom animations to the collection view in conjunctions with applying snapshots.
 extension CollectionViewDataSource {
 
+    /// Applies the snapshot while adjusting the related collectionview's content offset so that the visible cells don't move.
+    /// For example, say there are 4 cells and cells 1 and 2 are visible:  0 [1  2] 3 (brackets symbolize viewport)
+    /// If 2 more items are are added to the beginning of the collectionview, the viewport will stay centered on the items like so:
+    /// -2 -1 0 [1 2] 3
+    @MainActor
+    func applySnapshotKeepingVisualOffset(_ snapshot: SnapshotType, collectionView: UICollectionView) async {
+        // Note the content size before any updates are applied
+        let beforeContentSize = collectionView.contentSize
+
+        // Reload
+        await self.apply(snapshot, animatingDifferences: false)
+
+        collectionView.layoutIfNeeded()
+        let afterContentSize = collectionView.contentSize
+
+        // reset the contentOffset after data is updated
+        let newOffset = CGPoint(
+            x: collectionView.contentOffset.x + (afterContentSize.width - beforeContentSize.width),
+            y: collectionView.contentOffset.y + (afterContentSize.height - beforeContentSize.height))
+        collectionView.setContentOffset(newOffset, animated: false)
+    }
+
     /// Animates the first part of the animation cycle, applies the snapshot, then finishes the animation cycle.
     @MainActor
     func apply(_ snapshot: SnapshotType,
@@ -331,7 +353,7 @@ extension CollectionViewDataSource {
         // so we don't preload any cells undesired cells when the snapshop is applied.
         if animationCycle.scrollToEnd {
             collectionView.contentOffset = CGPoint(x: 999_999_999_999,
-                                                   y: 999_999_999_999)
+                                                   y: 0)
         }
 
         await self.applySnapshotUsingReloadData(snapshot)
@@ -345,7 +367,7 @@ extension CollectionViewDataSource {
             // Make sure the index path is valid
             if sectionIndex >= 0 && itemIndex >= 0 {
                 collectionView.scrollToItem(at: indexPath,
-                                            at: [.centeredHorizontally, .centeredVertically], animated: false)
+                                            at: [.centeredHorizontally], animated: false)
             } else {
                 collectionView.setContentOffset(.zero, animated: false)
             }

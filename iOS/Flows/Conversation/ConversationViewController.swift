@@ -102,7 +102,7 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
             }
         }.store(in: &self.cancellables)
 
-        KeyboardManger.shared.$isKeyboardShowing.mainSink { isShowing in
+        KeyboardManager.shared.$isKeyboardShowing.mainSink { isShowing in
             self.detailVC.animator.fractionComplete = self.getDetailProgress()
         }.store(in: &self.cancellables)
 
@@ -174,7 +174,7 @@ class ConversationViewController: FullScreenViewController, CollectionViewInputH
     }
 
     private func getDetailProgress() -> CGFloat {
-        guard !KeyboardManger.shared.isKeyboardShowing else { return 0 }
+        guard !KeyboardManager.shared.isKeyboardShowing else { return 0 }
 
         let threshold = ConversationDetailViewController.State.expanded.rawValue
         let offset = self.conversationCollectionView.contentOffset.y + self.conversationCollectionView.contentInset.top
