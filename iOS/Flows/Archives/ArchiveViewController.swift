@@ -25,72 +25,95 @@ class ArchiveViewController: BlurredViewController {
 
     private(set) var channelListController: ChatChannelListController?
 
-    // Custom Input Accessory View
-    lazy var searchInputAccessoryView = SearchInputAccessoryView()
+    lazy var segmentedControl: UISegmentedControl = {
+        let actions: [UIAction] = Scope.allCases.map { scope in
+            return UIAction.init(title: localized(scope.title)) { action in
+                self.loadQuery(with: scope)
+            }
+        }
 
-    lazy var initialQuery: ChannelListQuery = {
-        let userID = User.current()!.userObjectID!
-        let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
-                                     sort: [.init(key: .lastMessageAt, isAscending: false)],
-                                     pageSize: 20)
-        return query
+        let control = UISegmentedControl.init(frame: .zero, actions: actions)
+        return control
     }()
 
-    override var inputAccessoryView: UIView? {
-        return self.searchInputAccessoryView
-    }
+    enum Scope: Int, CaseIterable {
+        case recents
+        case dms
+        case groups
 
-    override var canBecomeFirstResponder: Bool {
-        return true
+        var title: Localized {
+            switch self {
+            case .recents:
+                return "Recents"
+            case .dms:
+                return "DMs"
+            case .groups:
+                return "Groups"
+            }
+        }
     }
 
     override func initializeViews() {
         super.initializeViews()
 
         self.view.addSubview(self.collectionView)
-
         self.collectionView.delegate = self
-        self.searchInputAccessoryView.searchBar.delegate = self 
+
+        self.view.addSubview(self.segmentedControl)
+        self.segmentedControl.selectedSegmentIndex = 0
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        Task {
-            await self.loadData(with: self.initialQuery)
-        }.add(to: self.taskPool)
-
-        self.collectionView.onDoubleTap { [unowned self] _ in
-            if self.searchInputAccessoryView.searchBar.isFirstResponder {
-                self.searchInputAccessoryView.searchBar.resignFirstResponder()
-            }
-        }
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        self.becomeFirstResponder()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        self.resignFirstResponder()
+        self.loadQuery(with: .recents)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
         self.collectionView.expandToSuperviewSize()
+
+        self.segmentedControl.width = self.view.width - Theme.contentOffset.doubled
+        self.segmentedControl.centerOnX()
+        self.segmentedControl.height = 44
+        self.segmentedControl.pinToSafeArea(.bottom, padding: 20)
     }
 
     // MARK: Data Loading
 
+    func loadQuery(with scope: Scope) {
+        guard let userId = User.current()?.objectId else { return }
+
+        var query: ChannelListQuery? = nil
+
+        switch scope {
+        case .recents:
+            query = ChannelListQuery(filter: .containMembers(userIds: [userId]),
+                                         sort: [.init(key: .lastMessageAt, isAscending: false)],
+                                         pageSize: 20)
+        case .dms:
+            query = ChannelListQuery(filter: .and([.containMembers(userIds: [userId]), .lessOrEqual(.memberCount, than: 2)]),
+                                         sort: [.init(key: .lastMessageAt, isAscending: false)],
+                                         pageSize: 20)
+        case .groups:
+            query = ChannelListQuery(filter: .and([.containMembers(userIds: [userId]), .greaterOrEqual(.memberCount, than: 3)]),
+                                         sort: [.init(key: .lastMessageAt, isAscending: false)],
+                                         pageSize: 20)
+        }
+
+
+
+
+        guard let q = query else { return }
+
+        Task {
+            await self.loadData(with: q)
+        }.add(to: self.taskPool)
+    }
+
     @MainActor
     func loadData(with query: ChannelListQuery) async {
-
-        await self.taskPool.cancelAndRemoveAll()
 
         self.collectionView.animationView.play()
 
@@ -117,7 +140,8 @@ class ArchiveViewController: BlurredViewController {
     private func getInitialSnapshot() -> NSDiffableDataSourceSnapshot<ArchiveCollectionViewDataSource.SectionType,
                                                                       ArchiveCollectionViewDataSource.ItemType> {
         var snapshot = self.dataSource.snapshot()
-
+                                                                          snapshot.deleteAllItems()
+                                                                          
         let allCases = ArchiveCollectionViewDataSource.SectionType.allCases
         snapshot.appendSections(allCases)
         allCases.forEach { (section) in
