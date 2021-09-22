@@ -325,9 +325,9 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
 //                do {
 //                    let sections = try await MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1),
 //                                                                                for: conversation)
-                    self.set(newSections: sections,
-                             keepOffset: true,
-                             completion: nil)
+//                    self.set(newSections: sections,
+//                             keepOffset: true,
+//                             completion: nil)
 //                } catch {
 //                    logDebug(error)
 //                }

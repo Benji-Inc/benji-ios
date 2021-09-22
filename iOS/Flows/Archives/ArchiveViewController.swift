@@ -103,9 +103,6 @@ class ArchiveViewController: BlurredViewController {
                                          pageSize: 20)
         }
 
-
-
-
         guard let q = query else { return }
 
         Task {
