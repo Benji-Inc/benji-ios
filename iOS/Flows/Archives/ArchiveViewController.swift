@@ -33,6 +33,7 @@ class ArchiveViewController: BlurredViewController {
         }
 
         let control = UISegmentedControl.init(frame: .zero, actions: actions)
+        control.backgroundColor = Color.background2.color.withAlphaComponent(0.8)
         return control
     }()
 
