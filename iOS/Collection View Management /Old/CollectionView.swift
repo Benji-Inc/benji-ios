@@ -35,7 +35,6 @@ class CollectionView: UICollectionView {
     }
 
     func scrollToEnd(animated: Bool = true, completion: CompletionOptional = nil) {
-
         var rect: CGRect = .zero
         if let flowLayout = self.collectionViewLayout as? UICollectionViewFlowLayout,
             flowLayout.scrollDirection == .vertical {

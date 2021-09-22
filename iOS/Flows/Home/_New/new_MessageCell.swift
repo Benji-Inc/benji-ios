@@ -16,6 +16,7 @@ class new_MessageCell: UICollectionViewCell {
         super.init(frame: frame)
 
         self.contentView.addSubview(self.textView)
+        self.textView.isScrollEnabled = false
     }
 
     required init?(coder: NSCoder) {

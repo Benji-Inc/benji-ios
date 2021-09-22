@@ -9,9 +9,9 @@
 import Foundation
 import Combine
 
-class KeyboardManger {
+class KeyboardManager {
 
-    static let shared = KeyboardManger()
+    static let shared = KeyboardManager()
 
     private var cancellables = Set<AnyCancellable>()
 
