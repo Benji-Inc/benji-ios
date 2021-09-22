@@ -77,7 +77,7 @@ class ArchiveViewController: BlurredViewController {
         self.segmentedControl.width = self.view.width - Theme.contentOffset.doubled
         self.segmentedControl.centerOnX()
         self.segmentedControl.height = 44
-        self.segmentedControl.pinToSafeArea(.bottom, padding: 20)
+        self.segmentedControl.pinToSafeArea(.bottom, padding: Theme.contentOffset)
     }
 
     // MARK: Data Loading
