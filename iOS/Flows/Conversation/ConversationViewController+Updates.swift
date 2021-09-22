@@ -42,13 +42,13 @@ extension ConversationViewController {
 
             for change in changes {
                 switch change {
-                case .insert(let message, index: let index):
+                case .insert(let message, _):
                     self.collectionViewManager.append(item: message, completion: nil)
-                case .move(_, fromIndex: let fromIndex, toIndex: let toIndex):
+                case .move(_, _, _):
                     return
-                case .update(_, index: let index):
+                case .update(_, _):
                     return
-                case .remove(_, index: let index):
+                case .remove(_, _):
                     return
                 }
             }

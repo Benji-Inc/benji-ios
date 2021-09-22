@@ -173,58 +173,12 @@ extension new_ConversationViewController {
     func subscribeToConversationUpdates() {
         self.conversationController.messagesChangesPublisher.mainSink { [unowned self] changes in
             Task {
-                await self.updateMessages(with: changes)
+                guard let conversationController = self.conversationController else { return }
+                await self.dataSource.updateMessages(with: changes,
+                                                     conversationController: conversationController,
+                                                     collectionView: self.collectionView)
             }
         }.store(in: &self.cancellables)
-    }
-
-    func updateMessages(with changes: [ListChange<ChatMessage>]) async {
-
-        guard let conversationController = self.conversationController else { return }
-
-        var snapshot = self.dataSource.snapshot()
-
-        // If there's more than one change, reload all of the data.
-        guard changes.count == 1 else {
-            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
-            snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
-                                 toSection: .basic(conversation.cid))
-            await self.dataSource.applySnapshotKeepingVisualOffset(snapshot,
-                                                                   collectionView: self.collectionView)
-            return
-        }
-
-        // If this gets set to true, we should scroll to the most recent message after applying the snapshot
-        var scrollToLatestMessage = false
-
-        for change in changes {
-            switch change {
-            case .insert(let message, let index):
-                let section = ConversationCollectionSection.basic(self.conversation.cid)
-                snapshot.insertItems([.message(message.id)],
-                                     in: section,
-                                     atIndex: index.item)
-                scrollToLatestMessage = true
-            case .move:
-                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
-                snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
-                                     toSection: .basic(conversation.cid))
-            case .update(let message, _):
-                snapshot.reloadItems([message.asConversationCollectionItem])
-            case .remove(let message, _):
-                snapshot.deleteItems([message.asConversationCollectionItem])
-            }
-        }
-
-        await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
-            self.dataSource.apply(snapshot)
-
-            if scrollToLatestMessage {
-                let items = snapshot.itemIdentifiers(inSection: .basic(self.conversation.cid))
-                let lastIndex = IndexPath(item: items.count - 1, section: 0)
-                self.collectionView.scrollToItem(at: lastIndex, at: .centeredHorizontally, animated: true)
-            }
-        }
     }
 }
 

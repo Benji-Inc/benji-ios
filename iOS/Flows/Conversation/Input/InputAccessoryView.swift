@@ -1,5 +1,5 @@
 //
-//  MessageInputAccessoryView.swift
+//  InputAccessoryView.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 6/2/20.

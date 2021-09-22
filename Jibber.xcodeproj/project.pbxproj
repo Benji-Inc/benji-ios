@@ -35,6 +35,7 @@
 		8094D5DB26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8094D5DC26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
+		80D044B526FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */; };
 		80D7721B26F93B17009F0344 /* new_ConversationCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7721A26F93B17009F0344 /* new_ConversationCollectionViewLayout.swift */; };
 		80DACF9726D6D1B50048722A /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */; };
 		80DACF9826D6D1B50048722A /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */; };
@@ -317,6 +318,9 @@
 		D650C1F125B741EB0037C59A /* plusToX.json in Resources */ = {isa = PBXBuildFile; fileRef = D650C1F025B741EB0037C59A /* plusToX.json */; };
 		D650C1F225B741EB0037C59A /* plusToX.json in Resources */ = {isa = PBXBuildFile; fileRef = D650C1F025B741EB0037C59A /* plusToX.json */; };
 		D650C21025B7D6F20037C59A /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D650C20F25B7D6F20037C59A /* Attachment.swift */; };
+		D652061D26F9249800EC685D /* BlurredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652061C26F9249800EC685D /* BlurredViewController.swift */; };
+		D652061E26F9249800EC685D /* BlurredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652061C26F9249800EC685D /* BlurredViewController.swift */; };
+		D652061F26F9249800EC685D /* BlurredViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D652061C26F9249800EC685D /* BlurredViewController.swift */; };
 		D65518F125890E3D00B901E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
 		D65518F82589109100B901E4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0BF21D3071400204BEE /* AppDelegate.swift */; };
 		D6551901258910D700B901E4 /* AppDelegate+Initialization.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */; };
@@ -827,6 +831,7 @@
 		807A7BC426C5B5A20023A71E /* Task+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Extensions.swift"; sourceTree = "<group>"; };
 		807A7BC826C5C8100023A71E /* Task+TaskPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+TaskPool.swift"; sourceTree = "<group>"; };
 		8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFUser+Extensions.swift"; sourceTree = "<group>"; };
+		80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewControllerDataSource+CellRegistration.swift"; sourceTree = "<group>"; };
 		80D7721A26F93B17009F0344 /* new_ConversationCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = new_ConversationCollectionViewLayout.swift; sourceTree = "<group>"; };
 		80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
 		80DACF9A26D6D7360048722A /* HomeCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -966,6 +971,7 @@
 		D650C1E025B5F1730037C59A /* AvatarView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AvatarView+Extensions.swift"; sourceTree = "<group>"; };
 		D650C1F025B741EB0037C59A /* plusToX.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = plusToX.json; sourceTree = "<group>"; };
 		D650C20F25B7D6F20037C59A /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
+		D652061C26F9249800EC685D /* BlurredViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurredViewController.swift; sourceTree = "<group>"; };
 		D65519B02589167E00B901E4 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCellAttributesConfigurer.swift; sourceTree = "<group>"; };
@@ -1266,9 +1272,10 @@
 			isa = PBXGroup;
 			children = (
 				8024B95026F278C8008ABF7F /* ConversationViewControllerDataSource.swift */,
+				80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */,
+				80D7721A26F93B17009F0344 /* new_ConversationCollectionViewLayout.swift */,
 				8024B95126F278C8008ABF7F /* new_ConversationViewController.swift */,
 				8015CA7626F3D907000F3C60 /* new_MessageCell.swift */,
-				80D7721A26F93B17009F0344 /* new_ConversationCollectionViewLayout.swift */,
 			);
 			path = _New;
 			sourceTree = "<group>";
@@ -1921,6 +1928,7 @@
 				D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */,
 				D6D1461221D583E500CD8CE4 /* NavigationController.swift */,
 				D61EC0C121D3071400204BEE /* ViewController.swift */,
+				D652061C26F9249800EC685D /* BlurredViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -2159,12 +2167,12 @@
 		D6C100D026F3DB8000F1ED7D /* Archives */ = {
 			isa = PBXGroup;
 			children = (
-				D605C30126F683E400C86DAD /* Conversation */,
 				D6C100D526F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift */,
 				D6C100D726F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift */,
 				D6C100D126F3DC0000F1ED7D /* ArchiveCoordinator.swift */,
 				D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */,
 				D678EC1426F3E5BA0071DB0D /* ArchiveViewController+Extension.swift */,
+				D605C30126F683E400C86DAD /* Conversation */,
 			);
 			path = Archives;
 			sourceTree = "<group>";
@@ -2867,6 +2875,7 @@
 				D605C30926F683E400C86DAD /* ConversationContentView.swift in Sources */,
 				D6AD7999266E870200ED7A93 /* MIMEType.swift in Sources */,
 				D6C100D826F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift in Sources */,
+				80D044B526FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift in Sources */,
 				D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */,
 				D677589125B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D6405B5E236BCB4D00FAA06B /* AlertConfirmationView.swift in Sources */,
@@ -2899,6 +2908,7 @@
 				D6D1503721D7E74500CD8CE4 /* UIViewController+Extensions.swift in Sources */,
 				D64A1F07258C16470097817C /* WaitlistViewController.swift in Sources */,
 				D6090E5A2377D5CF00833DA7 /* ConversationCellAttributesConfigurer.swift in Sources */,
+				D652061D26F9249800EC685D /* BlurredViewController.swift in Sources */,
 				D6A4A1F625E9550A007F3E15 /* UserNotificationCategory.swift in Sources */,
 				D6090E582377D2CA00833DA7 /* ConversationSectionable.swift in Sources */,
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
@@ -3178,6 +3188,7 @@
 				D63DB29325E999B200F6B323 /* TextField.swift in Sources */,
 				D63DB29525E999B200F6B323 /* Button+Extensions.swift in Sources */,
 				D63DB26F25E9997F00F6B323 /* Statusable.swift in Sources */,
+				D652061F26F9249800EC685D /* BlurredViewController.swift in Sources */,
 				8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */,
 				D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
 				D63DB22125E9990100F6B323 /* Array+Extensions.swift in Sources */,
@@ -3295,6 +3306,7 @@
 				D6551A1325895C4F00B901E4 /* Theme.swift in Sources */,
 				D6551A2525895D7700B901E4 /* AvatarView.swift in Sources */,
 				D65519322589122700B901E4 /* UIView+Layout.swift in Sources */,
+				D652061E26F9249800EC685D /* BlurredViewController.swift in Sources */,
 				D65519592589126800B901E4 /* Connection.swift in Sources */,
 				D65519212589121500B901E4 /* NSAttributedString+Extensions.swift in Sources */,
 				D655196F2589128300B901E4 /* FontType.swift in Sources */,
