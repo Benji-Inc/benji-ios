@@ -42,7 +42,7 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
         self.onboardingVC.deeplink = link
         self.onboardingVC.reservationId = link.reservationId
         self.onboardingVC.reservationOwnerId = link.reservationCreatorId
-        self.onboardingVC.updateNavigationBar()
+        self.onboardingVC.updateUI()
     }
 }
 

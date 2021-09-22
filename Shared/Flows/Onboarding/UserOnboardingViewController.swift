@@ -13,10 +13,10 @@ import Lottie
 class UserOnboardingViewController: ViewController {
 
     private(set) var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    private(set) var animationView = AnimationView.with(animation: .arrow)
-    private(set) var backButton = Button()
     private(set) var avatarView = AvatarView()
-    private var textBubbleView = TextBubbleView()
+
+    private(set) var bubbleView = View()
+    private(set) var textBubbleView = UserMessageView()
 
     let scrollView = UIScrollView()
 
@@ -28,29 +28,31 @@ class UserOnboardingViewController: ViewController {
         super.initializeViews()
 
         self.view.addSubview(self.blurView)
-        self.animationView.transform = CGAffineTransform(rotationAngle: halfPi * -1)
-        self.view.addSubview(self.backButton)
-        self.backButton.set(style: .animation(view: self.animationView))
-        self.backButton.didSelect { [unowned self] in
+
+        self.view.addSubview(self.avatarView)
+        self.avatarView.didSelect { [unowned self] in
             self.didSelectBackButton()
         }
 
-        self.view.addSubview(self.avatarView)
-        self.view.addSubview(self.textBubbleView)
+        self.view.addSubview(self.bubbleView)
+
+        self.bubbleView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMaxXMinYCorner]
+        self.bubbleView.set(backgroundColor: .lightPurple)
+
+        self.bubbleView.addSubview(self.textBubbleView)
 
         self.updateUI()
     }
 
-    func updateUI(animateBackButton: Bool = true) {
+    func updateUI(animateTyping: Bool = true) {
         self.textBubbleView.set(text: self.getMessage())
 
-        self.animationView.alpha = self.shouldShowBackButton() ? 1.0 : 0.0
 
-        if animateBackButton {
-            delay(1.5) {
-                self.animationView.play(fromFrame: 0, toFrame: 160, loopMode: nil, completion: nil)
-            }
-        }
+//        if animateTyping {
+//            delay(1.5) {
+////                self.animationView.play(fromFrame: 0, toFrame: 160, loopMode: nil, completion: nil)
+//            }
+//        }
 
         self.view.layoutNow()
     }
@@ -58,28 +60,26 @@ class UserOnboardingViewController: ViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.backButton.size = CGSize(width: 40, height: 40)
-        self.backButton.left = Theme.contentOffset - 10
-        self.backButton.top = Theme.contentOffset
-
-        self.avatarView.setSize(for: 100)
+        self.avatarView.setSize(for: 80)
         self.avatarView.pin(.left, padding: Theme.contentOffset)
-        self.avatarView.match(.top, to: .bottom, of: self.backButton)
+        self.avatarView.pin(.top, padding: Theme.contentOffset)
 
-        let maxWidth = self.view.width - Theme.contentOffset.doubled
+        let maxWidth = self.view.width - (Theme.contentOffset.doubled + Theme.contentOffset + 28)
+
         self.textBubbleView.setSize(withWidth: maxWidth)
-        self.textBubbleView.pin(.left, padding: Theme.contentOffset)
 
-        self.textBubbleView.match(.top, to: .bottom, of: self.avatarView, offset: 10)
+        self.bubbleView.height = self.textBubbleView.height + 20
+        self.bubbleView.width = self.textBubbleView.width + 28
+        self.bubbleView.match(.top, to: .bottom, of: self.avatarView, offset: 6)
+        self.bubbleView.match(.left, to: .left, of: self.avatarView)
+        self.bubbleView.roundCorners()
+
+        self.textBubbleView.centerOnXAndY()
 
         self.blurView.expandToSuperviewSize()
     }
 
     // MARK: PUBLIC
-
-    func shouldShowBackButton() -> Bool {
-        return true
-    }
 
     func getMessage() -> Localized {
         return LocalizedString.empty
@@ -88,7 +88,7 @@ class UserOnboardingViewController: ViewController {
     func didSelectBackButton() { }
 }
 
-private class TextBubbleView: TextView {
+class UserMessageView: TextView {
 
     override func initializeViews() {
         super.initializeViews()
@@ -96,14 +96,12 @@ private class TextBubbleView: TextView {
         self.isEditable = false
         self.isScrollEnabled = false
         self.isSelectable = false
-
-        self.set(backgroundColor: .background2)
     }
 
     func set(text: Localized) {
         let textColor: Color = .white
         let attributedString = AttributedString(text,
-                                                fontType: .smallBold,
+                                                fontType: .regularBold,
                                                 color: textColor)
 
         self.set(attributed: attributedString,

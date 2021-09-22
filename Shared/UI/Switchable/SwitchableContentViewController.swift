@@ -10,7 +10,7 @@ import Foundation
 import TMROLocalization
 import Combine
 
-class SwitchableContentViewController<ContentType: Switchable>: NavigationBarViewController {
+class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingViewController {
 
     @Published var current: ContentType?
 
@@ -40,7 +40,7 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
 
         guard let current = self.current else { return }
 
-        let yOffset = self.descriptionLabel.bottom
+        let yOffset = self.bubbleView.bottom
         var vcHeight = current.viewController.getHeight(for: self.scrollView.width)
         if vcHeight <= .zero {
             vcHeight = self.scrollView.height - yOffset - self.view.safeAreaInsets.top - self.view.safeAreaInsets.bottom
@@ -82,7 +82,7 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
 
                 self.currentCenterVC?.removeFromParentSuperview()
 
-                self.updateNavigationBar()
+                self.updateUI()
 
                 self.currentCenterVC = content.viewController
                 let showBackButton = content.shouldShowBackButton
@@ -103,14 +103,9 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
     }
 
     private func prepareForPresentation() {
-        self.titleLabel.alpha = 0
-        self.titleLabel.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-
-        self.descriptionLabel.alpha = 0
-        self.descriptionLabel.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+        self.bubbleView.alpha = 0
 
         self.currentCenterVC?.view.alpha = 0
-        self.backButton.alpha = 0
     }
 
     private func animatePresentation(showBackButton: Bool) {
@@ -119,14 +114,9 @@ class SwitchableContentViewController<ContentType: Switchable>: NavigationBarVie
                                                            curve: .easeOut,
                                                            animations: {
 
-                                                            self.titleLabel.alpha = 1
-                                                            self.titleLabel.transform = .identity
-
-                                                            self.descriptionLabel.alpha = 1
-                                                            self.descriptionLabel.transform = .identity
+                                                            self.bubbleView.alpha = 1
 
                                                             self.currentCenterVC?.view.alpha = 1
-                                                            self.backButton.alpha = showBackButton ? 1 : 0
                                                            })
         
         self.presentAnimator?.startAnimation()

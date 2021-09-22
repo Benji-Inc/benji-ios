@@ -720,6 +720,7 @@
 		D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
 		D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */; };
 		D6F7DEF726FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */; };
+		D6F7DEF826FBDD8600F72A5C /* UserOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */; };
 		D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */; };
 		D6F80BE725C9C14000E9C75F /* CNContact+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */; };
 		D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */; };
@@ -3102,6 +3103,7 @@
 				D63DB24F25E9994B00F6B323 /* Delegated.swift in Sources */,
 				D69B75FD264842D00007020D /* VideoView.swift in Sources */,
 				D63DB23725E9992600F6B323 /* UIView+ScalingAnimation.swift in Sources */,
+				D6F7DEF826FBDD8600F72A5C /* UserOnboardingViewController.swift in Sources */,
 				801EC75026D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */,
 				D63DB26825E9997800F6B323 /* UserNotificationManager+Extensions.swift in Sources */,
 				D63DB22E25E9991F00F6B323 /* PhoneKit.swift in Sources */,

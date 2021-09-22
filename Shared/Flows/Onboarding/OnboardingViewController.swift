@@ -39,7 +39,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     let blurEffect = UIBlurEffect(style: .systemMaterial)
     let loadingAnimationView = AnimationView()
     
-    let avatarView = AvatarView()
     private let confettiView = ConfettiView()
     
     unowned let delegate: OnboardingViewControllerDelegate
@@ -78,17 +77,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.scrollView.insertSubview(self.confettiView, aboveSubview: self.blurView)
 
-        self.scrollView.addSubview(self.avatarView)
-        self.avatarView.isHidden = true
-
         self.welcomeVC.$state.mainSink { (state) in
             switch state {
             case .welcome:
-                self.updateNavigationBar()
+                self.updateUI()
             case .signup:
                 self.current = .phone(self.phoneVC)
             case .reservationInput:
-                self.updateNavigationBar()
+                self.updateUI()
             case .foundReservation(let reservation):
                 self.reservationId = reservation.objectId
                 if let identity = reservation.createdBy?.objectId {
@@ -96,7 +92,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 }
                 self.current = .phone(self.phoneVC)
             case .reservationError:
-                self.updateNavigationBar()
+                self.updateUI()
             }
         }.store(in: &self.cancellables)
 
@@ -181,10 +177,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.confettiView.expandToSuperviewSize()
         self.loadingBlur.expandToSuperviewSize()
 
-        self.avatarView.setSize(for: 60)
-        self.avatarView.centerOnX()
-        self.avatarView.pin(.top)
-
         self.loadingAnimationView.size = CGSize(width: 18, height: 18)
         self.loadingAnimationView.centerOnXAndY()
     }
@@ -207,7 +199,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             self.reservationOwner = user
             self.avatarView.set(avatar: user)
             self.avatarView.isHidden = false
-            self.updateNavigationBar()
+            self.updateUI()
             self.view.layoutNow()
         }
     }
@@ -238,23 +230,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         }
     }
 
-    override func getTitle() -> Localized {
-        guard let content = self.current else { return "" }
-        return content.title
-    }
-
     override func willUpdateContent() {
         super.willUpdateContent()
-        guard let current = self.current else { return }
-        switch current {
-        case .phone(_), .code(_):
-            self.avatarView.isHidden = self.reservationOwner.isNil
-        default:
-            self.avatarView.isHidden = true
-        }
+
+        self.avatarView.isHidden = self.reservationOwner.isNil
     }
 
-    override func getDescription() -> Localized {
+    override func getMessage() -> Localized {
         super.willUpdateContent()
         guard let content = self.current else { return "" }
         return content.getDescription(with: self.reservationOwner)

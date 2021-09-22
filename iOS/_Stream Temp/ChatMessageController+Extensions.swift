@@ -11,7 +11,6 @@ import StreamChat
 
 extension ChatMessageController {
 
-    @discardableResult
     func editMessage(with sendable: Sendable) async throws {
         switch sendable.kind {
         case .text(let text):
