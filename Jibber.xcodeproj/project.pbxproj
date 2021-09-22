@@ -718,6 +718,8 @@
 		D6F37D6525B5D9D50034C9C5 /* VibrancyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */; };
 		D6F37D6C25B5EC350034C9C5 /* AvatarProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F37D5F25B5D8610034C9C5 /* AvatarProfileViewController.swift */; };
 		D6F733DA23D37C6300FBC7BC /* TextEntryField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F733D923D37C6300FBC7BC /* TextEntryField.swift */; };
+		D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */; };
+		D6F7DEF726FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */; };
 		D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */; };
 		D6F80BE725C9C14000E9C75F /* CNContact+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */; };
 		D6FA622023F0676600048C4A /* CollectionViewManager+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */; };
@@ -1166,6 +1168,7 @@
 		D6F37D5F25B5D8610034C9C5 /* AvatarProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarProfileViewController.swift; sourceTree = "<group>"; };
 		D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VibrancyView.swift; sourceTree = "<group>"; };
 		D6F733D923D37C6300FBC7BC /* TextEntryField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextEntryField.swift; sourceTree = "<group>"; };
+		D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOnboardingViewController.swift; sourceTree = "<group>"; };
 		D6F80BE025C9BE1400E9C75F /* ContactsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsManager.swift; sourceTree = "<group>"; };
 		D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CNContact+Extensions.swift"; sourceTree = "<group>"; };
 		D6FA621F23F0676600048C4A /* CollectionViewManager+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CollectionViewManager+Animations.swift"; sourceTree = "<group>"; };
@@ -1957,6 +1960,7 @@
 				D67896A822FF51170059BA75 /* PhoneViewController.swift */,
 				D67896BE2302683C0059BA75 /* PhotoViewController.swift */,
 				D67896AC22FF60190059BA75 /* TextInputViewController.swift */,
+				D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */,
 				D64A1F06258C16470097817C /* WaitlistViewController.swift */,
 				D640325F25AE5CD400139396 /* WelcomeViewController.swift */,
 			);
@@ -3026,6 +3030,7 @@
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
 				D6617CF026743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D6D1500721D5E73D00CD8CE4 /* ConversationViewController.swift in Sources */,
+				D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,
 				D66A580925DD6954001B3F64 /* NewConversationCollectionViewManager.swift in Sources */,
 				80616E3526EAD2F300C077BA /* DataController+Async.swift in Sources */,
 			);
@@ -3301,6 +3306,7 @@
 				D6A49A77260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D65519172589120C00B901E4 /* Date+Extensions.swift in Sources */,
 				D6D3927A265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
+				D6F7DEF726FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,
 				D65519222589121500B901E4 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D65519FF25895A0800B901E4 /* Statusable.swift in Sources */,
 				D677589725B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,

@@ -91,8 +91,8 @@ class MainCoordinator: Coordinator<Void> {
         if let onboardingCoordinator = self.childCoordinator as? OnboardingCoordinator {
             onboardingCoordinator.handle(deeplink: deepLink)
         } else {
-            let coordinator = OnboardingCoordinator(reservationId: self.deepLink?.reservationId,
-                                                    reservationCreatorId: self.deepLink?.reservationCreatorId,
+            let coordinator = OnboardingCoordinator(reservationId: "3fx7TOiQey",//self.deepLink?.reservationId,
+                                                    reservationCreatorId: "FZr3kzCeT9",//self.deepLink?.reservationCreatorId,
                                                     router: self.router,
                                                     deepLink: self.deepLink)
             self.router.setRootModule(coordinator, animated: true)
