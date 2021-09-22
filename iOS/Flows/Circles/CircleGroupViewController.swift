@@ -13,7 +13,7 @@ protocol CircleGroupViewControllerDelegate: AnyObject {
     func circleGroupView(_ controller: CircleGroupViewController, didSelect item: CircleGroupCollectionViewDataSource.ItemType)
 }
 
-class CircleGroupViewController: ViewController {
+class CircleGroupViewController: BlurredViewController {
 
     weak var delegate: CircleGroupViewControllerDelegate?
 
@@ -26,8 +26,6 @@ class CircleGroupViewController: ViewController {
 
     override func initializeViews() {
         super.initializeViews()
-
-        self.view.set(backgroundColor: .background1)
 
         self.view.addSubview(self.collectionView)
 

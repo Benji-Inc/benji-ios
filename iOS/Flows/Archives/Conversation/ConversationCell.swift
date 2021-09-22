@@ -20,7 +20,6 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         super.initializeSubviews()
 
         self.contentView.addSubview(self.content)
-        self.content.set(backgroundColor: .purple)
     }
 
     func configure(with item: Conversation) {
