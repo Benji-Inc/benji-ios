@@ -33,14 +33,12 @@ extension ConversationCollectionViewDataSource {
                 cell.replyCountLabel.text = nil
             } else {
                 cell.textView.text = message.text
-                cell.replyCountLabel.setText("\(message.replyCount)")
+                cell.replyCountLabel.setText("\(message.latestReplies.count)")
 
                 if message.replyCount > message.latestReplies.count {
-                    logDebug("loading up some more replies for message \(message.text)")
-                    messageController.loadPreviousReplies { error in
-                        if error.isNil {
-                            dataSource.reconfigureItems([.message(item.messageID)])
-                        }
+                    Task {
+                        try? await messageController.loadPreviousReplies()
+                        await dataSource.reconfigureItems([.message(item.messageID)])
                     }
                 }
             }
