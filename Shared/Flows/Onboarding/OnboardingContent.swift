@@ -166,7 +166,7 @@ enum OnboardingContent: Switchable {
         case .focus(_):
             return LocalizedString(id: "",
                                    arguments: [],
-                                   default: "Ours works with your focus to better help others know how to communicate with you.")
+                                   default: "Jibber doesn't make the trivial urgent, by letting others know you're focused.")
         }
     }
 }
