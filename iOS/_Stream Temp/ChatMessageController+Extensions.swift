@@ -93,6 +93,41 @@ extension ChatMessageController {
         }
     }
 
+    /// Loads previous messages from backend.
+    ///
+    /// - Parameters:
+    ///   - messageId: ID of the last fetched message. You will get messages `older` than the provided ID.
+    ///     In case no replies are fetched you will get the first `limit` number of replies.
+    ///   - limit: Limit for page size.
+    func loadPreviousReplies(before messageId: MessageId? = nil, limit: Int = 25) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.loadPreviousReplies(before: messageId, limit: limit) { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+    }
+
+    /// Loads new messages from backend.
+    ///
+    /// - Parameters:
+    ///   - messageId: ID of the current first message. You will get messages `newer` then the provided ID.
+    ///   - limit: Limit for page size.
+    func loadNextReplies(after messageId: MessageId? = nil, limit: Int = 25) async throws{
+        return try await withCheckedThrowingContinuation { continuation in
+            self.loadNextReplies(after: messageId, limit: limit) { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+    }
+
     /// Deletes the message this controller manages.
     func deleteMessage() async throws {
         return try await withCheckedThrowingContinuation { continuation in
