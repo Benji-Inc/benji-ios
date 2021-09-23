@@ -2,6 +2,37 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>Intent Phrases</key>
+	<array>
+		<dict>
+			<key>Intent Name</key>
+			<string>INSetMessageAttributeIntent</string>
+			<key>Intent Examples</key>
+			<array>
+				<string>Read my messages on Jibber</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Intent Name</key>
+			<string>INSendMessageIntent</string>
+			<key>Intent Examples</key>
+			<array>
+				<string>Send a message with Jibber</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Intent Name</key>
+			<string>INSearchForMessagesIntent</string>
+			<key>Intent Examples</key>
+			<array>
+				<string>Search for a message in Jibber</string>
+			</array>
+		</dict>
+	</array>
+	<key>NSUserActivityTypes</key>
+	<array>
+		<string>\</string>
+	</array>
 	<key>aps-environment</key>
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
