@@ -39,68 +39,6 @@ enum OnboardingContent: Switchable {
         }
     }
 
-    var shouldShowBackButton: Bool {
-        switch self {
-        case .welcome(_):
-            return false
-        case .phone(_):
-            return true 
-        case .code(_):
-            return true
-        case .name(_):
-            return false
-        case .waitlist(_):
-            return false 
-        case .photo(_):
-            return true
-        case .focus(_):
-            return false 
-        }
-    }
-
-    var title: Localized {
-        switch self {
-        case .welcome(let vc):
-            switch vc.state {
-            case .reservationInput:
-                return "Enter RSVP"
-            default:
-                return "Welcome!"
-            }
-        case .phone(_):
-            return "Enter Phone"
-        case .code(_):
-            return "Vefify Code"
-        case .name(_):
-            return "Add your name"
-        case .waitlist(_):
-            return "Congrats! 🎉"
-        case .photo(let vc):
-            switch vc.currentState {
-            case .initial:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Verify Indentity")
-            case .scan:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Scanning...")
-            case .capture:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Identity Verified")
-            case .error:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Error!")
-            case .finish:
-                return LocalizedString.empty
-            }
-        case .focus(_):
-            return LocalizedString(id: "", arguments: [], default: "Add Focus")
-        }
-    }
-
     func getDescription(with user: User?) -> Localized {
         switch self {
         case .welcome(let vc):

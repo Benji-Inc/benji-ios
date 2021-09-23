@@ -46,14 +46,6 @@ class UserOnboardingViewController: ViewController {
 
     func updateUI(animateTyping: Bool = true) {
         self.textBubbleView.set(text: self.getMessage())
-
-
-//        if animateTyping {
-//            delay(1.5) {
-////                self.animationView.play(fromFrame: 0, toFrame: 160, loopMode: nil, completion: nil)
-//            }
-//        }
-
         self.view.layoutNow()
     }
 

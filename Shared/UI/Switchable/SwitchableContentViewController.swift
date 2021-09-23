@@ -85,7 +85,6 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
                 self.updateUI()
 
                 self.currentCenterVC = content.viewController
-                let showBackButton = content.shouldShowBackButton
 
                 if let contentVC = self.currentCenterVC {
                     self.addChild(viewController: contentVC, toView: self.scrollView)
@@ -95,7 +94,7 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
 
                 self.view.layoutNow()
 
-                self.animatePresentation(showBackButton: showBackButton)
+                self.animatePresentation()
             }
         })
 
@@ -108,7 +107,7 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
         self.currentCenterVC?.view.alpha = 0
     }
 
-    private func animatePresentation(showBackButton: Bool) {
+    private func animatePresentation() {
 
         self.presentAnimator = UIViewPropertyAnimator.init(duration: Theme.animationDuration,
                                                            curve: .easeOut,
