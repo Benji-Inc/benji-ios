@@ -11,6 +11,7 @@ import TMROLocalization
 import Photos
 import PhotosUI
 import Combine
+import StreamChat
 
 class ConversationCoordinator: PresentableCoordinator<Void> {
 
@@ -36,6 +37,9 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
     }
 
     override func toPresentable() -> DismissableVC {
+        self.conversationVC.onSelectedThread = { [unowned self] (channelID, messageID) in
+            self.presentThread(for: channelID, messageID: messageID)
+        }
         return self.conversationVC
     }
 
@@ -55,6 +59,11 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
 
         self.cameraVC.delegate = self
     }
+
+    func presentThread(for channelID: ChannelId, messageID: MessageId) {
+        let threadVC = ConversationThreadViewController(channelID: channelID, messageID: messageID)
+        self.router.present(threadVC, source: self.conversationVC)
+    }
 }
 
 extension ConversationCoordinator: ConversationDetailViewControllerDelegate {
@@ -64,37 +73,8 @@ extension ConversationCoordinator: ConversationDetailViewControllerDelegate {
     }
 }
 
-extension ConversationCoordinator: ConversationViewControllerDelegate {
-
-    func conversationView(_ controller: ConversationViewController, didTapShare message: Messageable) {
-        var items: [Any] = []
-        switch message.kind {
-        case .text(let text):
-            items = [text]
-        case .attributedText(_):
-            break
-        case .photo(_, _):
-            break
-        case .video(_, _):
-            break
-        case .location(_):
-            break
-        case .emoji(_):
-            break
-        case .audio(_):
-            break
-        case .contact(_):
-            break
-        case .link(let link):
-            items = [link]
-        }
-
-        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        controller.present(ac, animated: true, completion: nil)
-    }
-}
-
-extension ConversationCoordinator: UIImagePickerControllerDelegate, UINavigationControllerDelegate, PHPickerViewControllerDelegate {
+extension ConversationCoordinator: UIImagePickerControllerDelegate, UINavigationControllerDelegate,
+                                   PHPickerViewControllerDelegate {
 
     private func presentCamera() {
 

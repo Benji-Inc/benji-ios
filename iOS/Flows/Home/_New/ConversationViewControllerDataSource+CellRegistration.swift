@@ -34,10 +34,11 @@ extension ConversationCollectionViewDataSource {
                 let replies = message.latestReplies.map { message in
                     return message.text
                 }
+                cell.setReplyCount(message.replyCount)
                 cell.setReplies(replies)
 
                 // Load in the messages replies if needed, then reconfigure the cell so they show up.
-                if message.replyCount > message.latestReplies.count {
+                if message.replyCount > 0 && message.latestReplies.isEmpty {
                     Task {
                         try? await messageController.loadPreviousReplies()
                         await dataSource.reconfigureItems([.message(item.messageID)])
