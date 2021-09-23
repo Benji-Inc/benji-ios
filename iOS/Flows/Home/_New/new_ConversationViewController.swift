@@ -27,8 +27,6 @@ class new_ConversationViewController: FullScreenViewController,
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
 
     override var inputAccessoryView: UIView? {
-        // This is a hack to make the input hide during the presentation of the image picker.
-        self.messageInputAccessoryView.alpha = UIWindow.topMostController() == self ? 1.0 : 0.0
         return self.messageInputAccessoryView
     }
 
@@ -226,7 +224,6 @@ extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
         alert.addAction(sendNew)
 
         self.present(alert, animated: true)
-
     }
 
     private func send(_ sendable: Sendable) async {
