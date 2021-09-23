@@ -200,26 +200,55 @@ extension new_ConversationViewController {
 extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
-        Task {
-            if sendable.previousMessage.isNil {
-                await self.send(object: sendable)
-            } else {
-                await self.update(object: sendable)
+        let alert = UIAlertController(title: "Send Method",
+                                      message: "Would you like to send your message?",
+                                      preferredStyle: .actionSheet)
+
+
+
+        let currentIndex = self.collectionView.currentXIndex
+        if let currentItem = self.dataSource.itemIdentifier(for: IndexPath(item: currentIndex,
+                                                                           section: 0)) {
+            if case let .message(messageID) = currentItem {
+                let reply = UIAlertAction(title: "Reply", style: .default) { [unowned self] _ in
+                    Task {
+                        await self.reply(to: messageID, sendable: sendable)
+                    }
+                }
+                alert.addAction(reply)
             }
         }
+
+        let sendNew = UIAlertAction(title: "Send New", style: .default) { [unowned self] _ in
+            Task {
+                await self.send(sendable)
+            }
+        }
+        alert.addAction(sendNew)
+
+        self.present(alert, animated: true)
+
     }
 
-    private func send(object: Sendable) async {
+    private func send(_ sendable: Sendable) async {
         do {
-            try await self.conversationController?.createNewMessage(with: object)
+            try await self.conversationController?.createNewMessage(with: sendable)
         } catch {
             logDebug(error)
         }
     }
 
-    private func update(object: Sendable) async {
+    private func reply(to messageID: MessageId, sendable: Sendable) async {
         do {
-            try await self.conversationController?.editMessage(with: object)
+            try await self.conversationController?.createNewReply(for: messageID, with: sendable)
+        } catch {
+            logDebug(error)
+        }
+    }
+
+    private func update(_ sendable: Sendable) async {
+        do {
+            try await self.conversationController?.editMessage(with: sendable)
         } catch {
             logDebug(error)
         }
