@@ -24,12 +24,20 @@ class CircleGroupViewController: BlurredViewController {
 
     var circles: [CircleGroup] = []
 
+    var button = Button()
+    var didSelectReservations: CompletionOptional = nil
+
     override func initializeViews() {
         super.initializeViews()
 
         self.view.addSubview(self.collectionView)
-
         self.collectionView.delegate = self
+
+        self.view.addSubview(self.button)
+        self.button.set(style: .normal(color: .purple, text: "Send Invites"))
+        self.button.didSelect { [unowned self] in
+            self.didSelectReservations?()
+        }
     }
 
     override func viewDidLoad() {
@@ -44,6 +52,10 @@ class CircleGroupViewController: BlurredViewController {
         super.viewDidLayoutSubviews()
 
         self.collectionView.expandToSuperviewSize()
+
+        self.button.setSize(with: self.view.width)
+        self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+        self.button.centerOnX()
     }
 
     // MARK: Data Loading

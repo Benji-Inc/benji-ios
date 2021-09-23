@@ -1,6 +1,6 @@
 //
 //  ConnectionPreference.swift
-//  Ours
+//  Jibber
 //
 //  Created by Benji Dodgson on 3/3/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.

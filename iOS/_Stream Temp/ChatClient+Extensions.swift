@@ -40,7 +40,7 @@ extension ChatClient {
                 userInfo: UserInfo(
                     id: user.userObjectID!,
                     name: user.fullName,
-                    imageURL: URL(string: "https://bit.ly/2TIt8NR")),
+                    imageURL: user.smallImage?.url),
                 token: token,
                 completion: { error in
                     if let error = error {

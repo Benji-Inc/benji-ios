@@ -1,6 +1,6 @@
 //
 //  ReservationsViewController.swift
-//  Ours
+//  Jibber
 //
 //  Created by Benji Dodgson on 4/19/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
@@ -56,6 +56,7 @@ class ReservationsViewController: NavigationBarViewController {
         super.viewDidLayoutSubviews()
     }
 
+    @MainActor
     private func loadUnclaimedReservations() async {
         guard let query = Reservation.query() else { return }
 
@@ -79,7 +80,7 @@ class ReservationsViewController: NavigationBarViewController {
     }
 
     override func getDescription() -> Localized {
-        return "Our's is an exclusive community that cares about quality over quantity when it comes to its users, so invite the people you are most social with. (iOS only)"
+        return "Jibber is an exclusive community that cares about quality over quantity, especially with its users, so invite the people you are most social with. (iOS only)"
     }
 
     override func shouldShowBackButton() -> Bool {

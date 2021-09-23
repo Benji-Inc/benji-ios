@@ -110,7 +110,7 @@ extension Reservation: UIActivityItemSource {
 
     var reminderMessage: String? {
         guard let link = self.link else { return nil }
-        return "RSVP code: \(String(optional: self.objectId))\nOurs an is an exclusive place to be social. I saved you a spot. Tap👇\n\(link)"
+        return "RSVP code: \(String(optional: self.objectId))\nJibber is an exclusive place to be social. I saved you a spot. Tap👇\n\(link)"
     }
 
     func prepareMetadata(andUpdate statusables: [Statusable]) async throws {

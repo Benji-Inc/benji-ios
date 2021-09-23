@@ -1,6 +1,6 @@
 //
 //  LinkView.swift
-//  Ours
+//  Jibber
 //
 //  Created by Benji Dodgson on 6/4/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.

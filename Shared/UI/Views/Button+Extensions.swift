@@ -10,6 +10,7 @@ import Foundation
 
 extension Button {
 
+    @MainActor
     /// Starts a loading animation on the button and hides the text.
     func handleLoadingState() async {
         return await withCheckedContinuation { continuation in

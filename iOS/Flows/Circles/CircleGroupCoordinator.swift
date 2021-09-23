@@ -23,6 +23,16 @@ class CircleGroupCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
+        self.circlesVC.didSelectReservations = { [unowned self] in
+            self.startReservationsFlow()
+        }
+    }
+
+    func startReservationsFlow() {
+        self.removeChild()
+        let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { result in }
+        self.router.present(coordinator, source: self.circlesVC)
     }
 }
 
