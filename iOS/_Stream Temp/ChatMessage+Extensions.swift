@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 
+typealias Message = ChatMessage
 extension ChatMessage: Messageable {
 
     var isFromCurrentUser: Bool {

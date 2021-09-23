@@ -13,7 +13,7 @@ import Lottie
 import Intents
 
 protocol OnboardingViewControllerDelegate: AnyObject {
-    func onboardingView(_ controller: OnboardingViewController, didVerify user: PFUser)
+    func onboardingView(_ controller: OnboardingViewController, didVerify user: User)
     func onboardingViewControllerNeedsAuthorization(_ controller: OnboardingViewController)
 }
 
@@ -39,7 +39,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     let blurEffect = UIBlurEffect(style: .systemMaterial)
     let loadingAnimationView = AnimationView()
     
-    let avatarView = AvatarView()
     private let confettiView = ConfettiView()
     
     unowned let delegate: OnboardingViewControllerDelegate
@@ -50,8 +49,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             self.codeVC.reservationId = self.reservationId
         }
     }
-    var reservationUser: User? 
-    var reservationCreatorId: String?
+    var reservationOwner: User? 
+    var reservationOwnerId: String?
 
     init(with reservationId: String?,
          reservationCreatorId: String?,
@@ -60,7 +59,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.deeplink = deeplink
         self.reservationId = reservationId
-        self.reservationCreatorId = reservationCreatorId
+        self.reservationOwnerId = reservationCreatorId
         self.delegate = delegate
         super.init()
     }
@@ -78,17 +77,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.scrollView.insertSubview(self.confettiView, aboveSubview: self.blurView)
 
-        self.scrollView.addSubview(self.avatarView)
-        self.avatarView.isHidden = true
-
         self.welcomeVC.$state.mainSink { (state) in
             switch state {
             case .welcome:
-                self.updateNavigationBar()
+                self.updateUI()
             case .signup:
                 self.current = .phone(self.phoneVC)
             case .reservationInput:
-                self.updateNavigationBar()
+                self.updateUI()
             case .foundReservation(let reservation):
                 self.reservationId = reservation.objectId
                 if let identity = reservation.createdBy?.objectId {
@@ -96,7 +92,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 }
                 self.current = .phone(self.phoneVC)
             case .reservationError:
-                self.updateNavigationBar()
+                self.updateUI()
             }
         }.store(in: &self.cancellables)
 
@@ -170,7 +166,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
         }.store(in: &self.cancellables)
 
-        if let userId = self.reservationCreatorId {
+        if let userId = self.reservationOwnerId {
             self.updateReservationCreator(with: userId)
         }
     }
@@ -180,10 +176,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.confettiView.expandToSuperviewSize()
         self.loadingBlur.expandToSuperviewSize()
-
-        self.avatarView.setSize(for: 60)
-        self.avatarView.centerOnX()
-        self.avatarView.pin(.top)
 
         self.loadingAnimationView.size = CGSize(width: 18, height: 18)
         self.loadingAnimationView.centerOnXAndY()
@@ -204,10 +196,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         Task {
             guard let user = try? await User.localThenNetworkQuery(for: userId) else { return }
 
-            self.reservationUser = user
+            self.reservationOwner = user
             self.avatarView.set(avatar: user)
             self.avatarView.isHidden = false
-            self.updateNavigationBar()
+            self.updateUI()
             self.view.layoutNow()
         }
     }
@@ -238,130 +230,16 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         }
     }
 
-    override func getTitle() -> Localized {
-        guard let content = self.current else { return "" }
-        switch content {
-        case .welcome(let vc):
-            switch vc.state {
-            case .reservationInput:
-                return "Enter RSVP"
-            default:
-                return "Welcome!"
-            }
-        case .phone(_):
-            return "Enter Phone"
-        case .code(_):
-            return "Vefify Code"
-        case .name(_):
-            return "Add your name"
-        case .waitlist(_):
-            return "Congrats! 🎉"
-        case .photo(let vc):
-            switch vc.currentState {
-            case .initial:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Verify Indentity")
-            case .scan:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Scanning...")
-            case .capture:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Identity Verified")
-            case .error:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Error!")
-            case .finish:
-                return LocalizedString.empty
-            }
-        case .focus(_):
-            return LocalizedString(id: "", arguments: [], default: "Add Focus")
-        }
-    }
-
     override func willUpdateContent() {
         super.willUpdateContent()
-        guard let current = self.current else { return }
-        switch current {
-        case .phone(_), .code(_):
-            self.avatarView.isHidden = self.reservationUser.isNil
-        default:
-            self.avatarView.isHidden = true
-        }
+
+        self.avatarView.isHidden = self.reservationOwner.isNil
     }
 
-    override func getDescription() -> Localized {
+    override func getMessage() -> Localized {
         super.willUpdateContent()
-
         guard let content = self.current else { return "" }
-
-        switch content {
-        case .welcome(let vc):
-
-            switch vc.state {
-            case .reservationInput:
-                return "Enter the RSVP code, to get immediate access and connect with the person who invited you."
-            default:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Jibber is an exclusive community of people building a better place to be social online. To best serve this community, we currently require an RSVP for access OR you can tap JOIN to be added to the waitlist.")
-            }
-        case .phone(_):
-            if let user = self.reservationUser {
-                return LocalizedString(id: "",
-                                       arguments: [user.fullName],
-                                       default: "Please verify your mobile number, to accept @(fullname)'s reservation.")
-            } else {
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Please verify your account using the mobile number for this device.")
-            }
-        case .code(_):
-            if let user = self.reservationUser {
-                return LocalizedString(id: "",
-                                       arguments: [user.givenName],
-                                       default: "Enter the 4 digit code from the text message, to accept your reservation from @(name).")
-            } else {
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Enter the 4 digit code from the text message.")
-            }
-
-        case .name(_):
-            return LocalizedString(id: "",
-                                   arguments: [],
-                                   default: "Please use your legal first and last name.")
-        case .waitlist(_):
-            #if APPCLIP
-            if User.current()?.status == .inactive || User.current()?.status == .active {
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "You no longer have to wait! Tap the banner below to download the full app.")
-            } else {
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "You are on the list. Sit tight and we will let you know when your slot opens up.")
-            }
-            #else
-            return LocalizedString(id: "",
-                                   arguments: [],
-                                   default: "You are on the list. Sit tight and we will let you know when your slot opens up.")
-            #endif
-
-        case .photo(_):
-            if self.photoVC.currentState == .initial {
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "To ensure everyone is who they say they are we require a photo. No 🤖's!")
-            } else {
-                return LocalizedString.empty
-            }
-        case .focus(_):
-            return LocalizedString(id: "", arguments: [], default: "Jibber works with your focus to better help others know how to communicate with you.")
-        }
+        return content.getDescription(with: self.reservationOwner)
     }
 
     override func didSelectBackButton() {

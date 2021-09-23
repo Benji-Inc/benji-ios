@@ -41,8 +41,8 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
         guard let link = deeplink else { return }
         self.onboardingVC.deeplink = link
         self.onboardingVC.reservationId = link.reservationId
-        self.onboardingVC.reservationCreatorId = link.reservationCreatorId
-        self.onboardingVC.updateNavigationBar()
+        self.onboardingVC.reservationOwnerId = link.reservationCreatorId
+        self.onboardingVC.updateUI()
     }
 }
 
@@ -56,8 +56,8 @@ extension OnboardingCoordinator: LaunchActivityHandler {
 }
 
 extension OnboardingCoordinator: OnboardingViewControllerDelegate {
-
-    nonisolated func onboardingView(_ controller: OnboardingViewController, didVerify user: PFUser) {
+    
+    nonisolated func onboardingView(_ controller: OnboardingViewController, didVerify user: User) {
         Task {
             await self.finishFlow(with: ())
         }

@@ -52,6 +52,32 @@ extension ChatMessageController {
         }
     }
 
+    @discardableResult
+    func createNewReply(with sendable: Sendable) async throws -> MessageId {
+        switch sendable.kind {
+        case .text(let text):
+            return try await self.createNewReply(text: text)
+        case .attributedText:
+            break
+        case .photo:
+            break
+        case .video:
+            break
+        case .location:
+            break
+        case .emoji:
+            break
+        case .audio:
+            break
+        case .contact:
+            break
+        case .link:
+            break
+        }
+
+        throw(ClientError.apiError(detail: "Message type not supported."))
+    }
+
     /// Creates a new reply message locally and schedules it for send.
     ///
     /// - Parameters:

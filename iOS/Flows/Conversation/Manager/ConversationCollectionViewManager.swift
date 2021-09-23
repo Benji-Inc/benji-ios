@@ -51,24 +51,10 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
         self.collectionView = collectionView
         super.init()
         self.updateLayoutDataSource()
-
-//        ConversationSupplier.shared.$activeConversation.mainSink { [weak self] (conversation) in
-//            guard let `self` = self, let activeConversation = conversation else { return }
-//            switch activeConversation.conversationType {
-//            case .conversation(let conversation):
-//                conversation.getMembersCount { (result, count) in
-//                    self.numberOfMembers = Int(count)
-//                }
-//            default:
-//                break
-//            }
-//        }.store(in: &self.cancellables)
-
-//        self.collectionView.panGestureRecognizer.addTarget(self, action: #selector(handle(_:)))
     }
 
     private func updateLayoutDataSource() {
-//        self.collectionView.prefetchDataSource = self 
+        self.collectionView.prefetchDataSource = self
         self.collectionView.conversationLayout.dataSource = self
     }
 
@@ -134,7 +120,6 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
             cell = conversationCollectionView.dequeueReusableCell(AttributedMessageCell.self, for: indexPath)
         case .photo(_, _):
             fatalError()
-            #warning("Replace")
 //            cell = conversationCollectionView.dequeueReusableCell(PhotoMessageCell.self, for: indexPath)
 //            if let photoCell = cell as? PhotoMessageCell {
 //                photoCell.textView.delegate = self
@@ -212,20 +197,20 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     private func getTopHeader(for section: ConversationSectionable,
                               at indexPath: IndexPath,
                               in collectionView: ConversationCollectionView) -> UICollectionReusableView? {
-
-        guard let index = section.firstMessageIndex, index > 0 else { return nil }
-
-        let moreHeader = collectionView.dequeueReusableHeaderView(LoadMoreSectionHeader.self, for: indexPath)
-
-        moreHeader.button.didSelect { [weak self] in
-            guard let `self` = self else { return }
-            Task {
-                await moreHeader.button.handleEvent(status: .loading)
-            }
-            self.didSelectLoadMore(for: index)
-        }
-
-        return moreHeader
+        return nil
+//        guard let index = section.firstMessageIndex, index > 0 else { return nil }
+//
+//        let moreHeader = collectionView.dequeueReusableHeaderView(LoadMoreSectionHeader.self, for: indexPath)
+//
+//        moreHeader.button.didSelect { [weak self] in
+//            guard let `self` = self else { return }
+//            Task {
+//                await moreHeader.button.handleEvent(status: .loading)
+//            }
+//            self.didSelectLoadMore(for: index)
+//        }
+//
+//        return moreHeader
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -313,26 +298,7 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     }
 
     func didSelectLoadMore(for messageIndex: Int) {
-//        guard let conversationDisplayable = ConversationSupplier.shared.activeConversation else { return }
-//
-//        switch conversationDisplayable.conversationType {
-//        case .system(_):
-//            break
-//        case .pending(_):
-//            break
-//        case .conversation(let conversation):
-//            Task {
-//                do {
-//                    let sections = try await MessageSupplier.shared.getMessages(before: UInt(messageIndex - 1),
-//                                                                                for: conversation)
-//                    self.set(newSections: sections,
-//                             keepOffset: true,
-//                             completion: nil)
-//                } catch {
-//                    logDebug(error)
-//                }
-//            }
-//        }
+
     }
 
     @objc func handle(_ recognizer: UIPanGestureRecognizer) {
@@ -383,7 +349,6 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
 
     private func setAllMessagesToRead(for footer: ReadAllFooterView) {
         if !self.isSettingReadAll,
-//           MessageSupplier.shared.unreadMessages.count > 0,
            self.lastScrollDirection == .up {
 
             self.isSettingReadAll = true

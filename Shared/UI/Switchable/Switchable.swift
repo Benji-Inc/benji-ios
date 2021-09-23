@@ -11,5 +11,4 @@ import TMROLocalization
 
 protocol Switchable: Equatable {
     var viewController: UIViewController & Sizeable { get }
-    var shouldShowBackButton: Bool { get }
 }

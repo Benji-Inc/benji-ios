@@ -32,6 +32,7 @@ class FocusStatusViewController: ViewController, Sizeable, Completable {
         super.viewDidLayoutSubviews()
 
         self.button.setSize(with: self.view.width)
-        self.button.pinToSafeArea(.bottom, padding: 0)
+        self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+        self.button.centerOnX()
     }
 }

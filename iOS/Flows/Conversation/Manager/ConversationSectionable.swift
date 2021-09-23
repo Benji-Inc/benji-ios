@@ -14,11 +14,6 @@ class ConversationSectionable {
     var items: [Messageable] = []
     var conversation: Conversation?
 
-    var firstMessageIndex: Int? {
-        #warning("Implement or delete")
-        return nil
-    }
-
     init(date: Date,
          items: [Messageable],
          conversation: Conversation? = nil) {
