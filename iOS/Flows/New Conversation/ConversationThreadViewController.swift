@@ -88,10 +88,6 @@ class ConversationThreadViewController: BlurredViewController, CollectionViewInp
                 self.messageInputAccessoryView.textView.resignFirstResponder()
             }
         }
-
-//        if let conversation = self.conversation {
-//            self.load(conversation: conversation)
-//        }
     }
 
     override func viewWillAppear(_ animated: Bool) {

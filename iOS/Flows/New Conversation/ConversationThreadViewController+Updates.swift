@@ -10,7 +10,8 @@ import Foundation
 import StreamChat
 
 extension ConversationThreadViewController {
-    
+
+    @MainActor
     func loadReplies(for message: Message) async {
         self.collectionViewManager.reset()
 
