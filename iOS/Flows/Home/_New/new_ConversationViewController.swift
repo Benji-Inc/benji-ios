@@ -198,13 +198,12 @@ extension new_ConversationViewController {
 extension new_ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
-        guard let currentIndex = self.collectionView.getCentermostVisibleIndex()?.item else { return }
-
         let alert = UIAlertController(title: "Send Method",
                                       message: "Would you like to send your message?",
                                       preferredStyle: .actionSheet)
 
-        if let currentItem = self.dataSource.itemIdentifier(for: IndexPath(item: currentIndex,
+        if let currentIndex = self.collectionView.getCentermostVisibleIndex()?.item,
+           let currentItem = self.dataSource.itemIdentifier(for: IndexPath(item: currentIndex,
                                                                            section: 0)) {
             if case let .message(messageID) = currentItem {
                 let reply = UIAlertAction(title: "Reply", style: .default) { [unowned self] _ in
