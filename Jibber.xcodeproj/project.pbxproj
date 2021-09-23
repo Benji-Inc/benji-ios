@@ -11,7 +11,6 @@
 		6FBC3C8F68FC243D6E1A42F6 /* Pods_Notification_Service.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FBC4612F5436670D960DB97 /* Pods_Notification_Service.framework */; };
 		7F227B8576E160C9469E08D1 /* Pods_Intents_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C50C41C9E4C24DF432E0D86 /* Pods_Intents_Extension.framework */; };
 		800FAAC126F0585A00D3C3A0 /* ChatChannel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800FAAC026F0585A00D3C3A0 /* ChatChannel+Extensions.swift */; };
-		800FAAC226F0585A00D3C3A0 /* ChatChannel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800FAAC026F0585A00D3C3A0 /* ChatChannel+Extensions.swift */; };
 		8015CA7726F3D907000F3C60 /* new_MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8015CA7626F3D907000F3C60 /* new_MessageCell.swift */; };
 		801EC74E26D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */; };
 		801EC74F26D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */; };
@@ -23,9 +22,7 @@
 		802C448B26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		802C448C26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */; };
-		80616E2F26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */; };
 		80616E3526EAD2F300C077BA /* DataController+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E3426EAD2F300C077BA /* DataController+Async.swift */; };
-		80616E3626EAD2F300C077BA /* DataController+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E3426EAD2F300C077BA /* DataController+Async.swift */; };
 		807A7BC526C5B5A20023A71E /* Task+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC426C5B5A20023A71E /* Task+Extensions.swift */; };
 		807A7BC626C5B5A20023A71E /* Task+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC426C5B5A20023A71E /* Task+Extensions.swift */; };
 		807A7BC726C5B5A20023A71E /* Task+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC426C5B5A20023A71E /* Task+Extensions.swift */; };
@@ -44,7 +41,6 @@
 		80F88BAE26F11F02006C7677 /* ChatChannelController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F88BAD26F11F02006C7677 /* ChatChannelController+Extensions.swift */; };
 		80FA868C26F111830053101B /* ChatMessage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FA868B26F111830053101B /* ChatMessage+Extensions.swift */; };
 		80FA869226F117C20053101B /* ChatUser+Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FA869126F117C20053101B /* ChatUser+Avatar.swift */; };
-		80FA869326F117C20053101B /* ChatUser+Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FA869126F117C20053101B /* ChatUser+Avatar.swift */; };
 		80FD049F26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FD049E26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift */; };
 		80FD04A026FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FD049E26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift */; };
 		80FD04A126FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FD049E26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift */; };
@@ -64,6 +60,8 @@
 		D60C814A2209360400A127A3 /* DisplayableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81492209360400A127A3 /* DisplayableImageView.swift */; };
 		D60F95EE2665A5C400CF8766 /* AlertCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60F95ED2665A5C400CF8766 /* AlertCell.swift */; };
 		D60F95F02665A5E400CF8766 /* ConnectionRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */; };
+		D611D97426FD184700E51ABC /* LaunchManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97326FD184700E51ABC /* LaunchManager+Extensions.swift */; };
+		D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
@@ -867,6 +865,8 @@
 		D60C81492209360400A127A3 /* DisplayableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayableImageView.swift; sourceTree = "<group>"; };
 		D60F95ED2665A5C400CF8766 /* AlertCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertCell.swift; sourceTree = "<group>"; };
 		D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestCell.swift; sourceTree = "<group>"; };
+		D611D97326FD184700E51ABC /* LaunchManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LaunchManager+Extensions.swift"; sourceTree = "<group>"; };
+		D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Launch.swift"; sourceTree = "<group>"; };
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewManager.swift; sourceTree = "<group>"; };
 		D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
@@ -962,7 +962,7 @@
 		D64C6A9F232DC2B700DB7257 /* TypingIndicatorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingIndicatorCell.swift; sourceTree = "<group>"; };
 		D64C6AA1232EA06800DB7257 /* TypingCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingCellAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D64C6AA3232EA13300DB7257 /* UIEdgeInsets+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Extensions.swift"; sourceTree = "<group>"; };
-		D64C6AA523307DB300DB7257 /* Ours.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Ours.entitlements; sourceTree = "<group>"; };
+		D64C6AA523307DB300DB7257 /* Jibber.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Jibber.entitlements; sourceTree = "<group>"; };
 		D64DD8AB23CE2C180039DC5A /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		D64DD8AF23CE3E7F0039DC5A /* OnboardingContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingContent.swift; sourceTree = "<group>"; };
 		D64DD8B123CE403D0039DC5A /* SwitchableContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchableContentViewController.swift; sourceTree = "<group>"; };
@@ -1065,7 +1065,7 @@
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
 		D69972F825EA8C80000AEE6A /* ConnectionRequestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestView.swift; sourceTree = "<group>"; };
-		D69972FD25EAFC18000AEE6A /* OursNotificationContent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OursNotificationContent.entitlements; sourceTree = "<group>"; };
+		D69972FD25EAFC18000AEE6A /* NotificationContent.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationContent.entitlements; sourceTree = "<group>"; };
 		D69B75FA264842D00007020D /* VideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoView.swift; sourceTree = "<group>"; };
 		D69EB4492457EB4500473530 /* Error+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Error+Extensions.swift"; sourceTree = "<group>"; };
 		D6A301A923808252006655E0 /* ConversationCollectionViewManager+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationCollectionViewManager+Menu.swift"; sourceTree = "<group>"; };
@@ -1521,7 +1521,7 @@
 				D61EC0CB21D3071500204BEE /* Info.plist */,
 				D66379DC25A39BC200A4A3B7 /* Managers */,
 				D6637A0925A39E0C00A4A3B7 /* Models */,
-				D64C6AA523307DB300DB7257 /* Ours.entitlements */,
+				D64C6AA523307DB300DB7257 /* Jibber.entitlements */,
 				D6637A0525A39D3700A4A3B7 /* Protocols */,
 				D6637A3325A3AC0500A4A3B7 /* UI */,
 			);
@@ -1546,6 +1546,7 @@
 				D66F0FD722BF295A00BA277D /* Coordinator.swift */,
 				D66F0FD922BF297F00BA277D /* MainCoordinator.swift */,
 				D64A1EF4258AFF330097817C /* MainCoordinator+Extensions.swift */,
+				D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */,
 				D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */,
 				D691794122F6418700340AA3 /* Router.swift */,
 				D67758A625B0A604007E0184 /* UIViewController+Presentable.swift */,
@@ -1648,7 +1649,7 @@
 		D63DB1FC25E968C300F6B323 /* Notification Content */ = {
 			isa = PBXGroup;
 			children = (
-				D69972FD25EAFC18000AEE6A /* OursNotificationContent.entitlements */,
+				D69972FD25EAFC18000AEE6A /* NotificationContent.entitlements */,
 				D63DB1FD25E968C300F6B323 /* NotificationViewController.swift */,
 				D63DB1FF25E968C300F6B323 /* MainInterface.storyboard */,
 				D63DB20225E968C300F6B323 /* Info.plist */,
@@ -1723,6 +1724,7 @@
 			children = (
 				D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */,
 				D66379C725A3704300A4A3B7 /* LaunchManager.swift */,
+				D611D97326FD184700E51ABC /* LaunchManager+Extensions.swift */,
 				D66379CD25A3704300A4A3B7 /* SessionManager.swift */,
 				D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */,
 			);
@@ -2808,6 +2810,7 @@
 				D671E1F126402A2000BF2B8D /* ToastView.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
 				D6617D012675411E00439C06 /* HomeCollectionViewLayout.swift in Sources */,
+				D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */,
 				D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */,
 				D6432BF022D824BA0016001A /* ConversationCollectionViewLayoutAttributes.swift in Sources */,
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
@@ -2864,6 +2867,7 @@
 				D61EC0DE21D30DAC00204BEE /* Array+Extensions.swift in Sources */,
 				D6CD4F3D23F3A618004818B6 /* Connection+Cloud.swift in Sources */,
 				D61EC0F121D313F500204BEE /* ScreenSize.swift in Sources */,
+				D611D97426FD184700E51ABC /* LaunchManager+Extensions.swift in Sources */,
 				D64C6A9E232D6DD500DB7257 /* TypingIndicatorView.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationCoordinator.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
@@ -3232,7 +3236,6 @@
 				D6DA3193259B5B6D0078E769 /* Config.swift in Sources */,
 				D65519562589125E00B901E4 /* ClientError.swift in Sources */,
 				D65519F42589591D00B901E4 /* Typealias.swift in Sources */,
-				80616E2F26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */,
 				D65519622589127A00B901E4 /* PushPayload.swift in Sources */,
 				D6551A4125895E9500B901E4 /* TextInputViewController.swift in Sources */,
 				D655195D2589126800B901E4 /* User.swift in Sources */,
@@ -3287,7 +3290,6 @@
 				D677589225B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D65519202589121500B901E4 /* NSObject+Extensions.swift in Sources */,
 				D655195B2589126800B901E4 /* User+Extensions.swift in Sources */,
-				80FA869326F117C20053101B /* ChatUser+Avatar.swift in Sources */,
 				D6AE0FAC267D037900C6B048 /* User+INPerson.swift in Sources */,
 				D655190E2589120100B901E4 /* Character+Extensions.swift in Sources */,
 				D65519292589122000B901E4 /* PhoneKit.swift in Sources */,
@@ -3327,7 +3329,6 @@
 				D65519052589110A00B901E4 /* DeeplinkTarget.swift in Sources */,
 				D6966518263D96D70009114B /* PFFileObject+Extensions.swift in Sources */,
 				D65519442589123200B901E4 /* Completeable.swift in Sources */,
-				800FAAC226F0585A00D3C3A0 /* ChatChannel+Extensions.swift in Sources */,
 				D65519152589120C00B901E4 /* Error+Extensions.swift in Sources */,
 				D67758AF25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */,
 				D6D804B12667E06700741594 /* StationaryPressRecognizer.swift in Sources */,
@@ -3339,7 +3340,6 @@
 				D677588D25B09F9C007E0184 /* TransitionRouter.swift in Sources */,
 				D6F37D6525B5D9D50034C9C5 /* VibrancyView.swift in Sources */,
 				D65519EF2589582C00B901E4 /* View.swift in Sources */,
-				80616E3626EAD2F300C077BA /* DataController+Async.swift in Sources */,
 				D65519302589122700B901E4 /* UIImage+Extensions.swift in Sources */,
 				D65519332589122700B901E4 /* UIScreen+Extensions.swift in Sources */,
 				D650C1DB25B5EE3D0037C59A /* AvatarContextDelegate.swift in Sources */,
@@ -3610,9 +3610,9 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				API_TARGET = STAGING;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = iOS/Ours.entitlements;
+				CODE_SIGN_ENTITLEMENTS = iOS/Jibber.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -3620,7 +3620,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
@@ -3638,9 +3638,9 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				API_TARGET = PRODUCTION;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = iOS/Ours.entitlements;
+				CODE_SIGN_ENTITLEMENTS = iOS/Jibber.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				INFOPLIST_FILE = iOS/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -3648,7 +3648,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
@@ -3665,9 +3665,9 @@
 			baseConfigurationReference = A3CADF63BD070CECA92FE13C /* Pods-Notification Content.debug.xcconfig */;
 			buildSettings = {
 				API_TARGET = STAGING;
-				CODE_SIGN_ENTITLEMENTS = "Notification Content/OursNotificationContent.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Notification Content/NotificationContent.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				INFOPLIST_FILE = "Notification Content/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -3676,7 +3676,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.NotificationContent";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3692,9 +3692,9 @@
 			baseConfigurationReference = AAB09C4EA47F17569C0AF6D6 /* Pods-Notification Content.release.xcconfig */;
 			buildSettings = {
 				API_TARGET = PRODUCTION;
-				CODE_SIGN_ENTITLEMENTS = "Notification Content/OursNotificationContent.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Notification Content/NotificationContent.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				INFOPLIST_FILE = "Notification Content/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -3703,7 +3703,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.NotificationContent";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3723,7 +3723,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "App Clip/AppClip.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				INFOPLIST_FILE = "App Clip/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -3731,7 +3731,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.AppClip";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
@@ -3751,7 +3751,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "App Clip/AppClip.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				INFOPLIST_FILE = "App Clip/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -3759,7 +3759,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.AppClip";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
@@ -3777,7 +3777,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Notification Service/NotificationService.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Notification Service/Info.plist";
@@ -3792,7 +3792,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.NotificationService";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3809,7 +3809,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Notification Service/NotificationService.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Notification Service/Info.plist";
@@ -3824,7 +3824,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.NotificationService";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3842,7 +3842,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Intents ExtensionUI/Intents ExtensionUI.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents ExtensionUI/Info.plist";
@@ -3857,7 +3857,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3874,7 +3874,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Intents ExtensionUI/Intents ExtensionUI.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents ExtensionUI/Info.plist";
@@ -3889,7 +3889,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3907,7 +3907,7 @@
 				API_TARGET = STAGING;
 				CODE_SIGN_ENTITLEMENTS = "Intents Extension/Intents Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents Extension/Info.plist";
@@ -3922,7 +3922,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3940,7 +3940,7 @@
 				API_TARGET = PRODUCTION;
 				CODE_SIGN_ENTITLEMENTS = "Intents Extension/Intents Extension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = LSXDX8B86V;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Intents Extension/Info.plist";
@@ -3955,7 +3955,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.4.6;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

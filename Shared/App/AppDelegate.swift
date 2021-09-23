@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import StreamChat
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
