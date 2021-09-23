@@ -9,7 +9,13 @@
 import Foundation
 import StreamChat
 
+typealias ConversationController = ChatChannelController
+
 extension ChatChannelController {
+
+    var conversation: Conversation? {
+        return self.channel
+    }
 
     /// Loads previous messages from backend.
     /// - Parameters:
