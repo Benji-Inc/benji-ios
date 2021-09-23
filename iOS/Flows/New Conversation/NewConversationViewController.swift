@@ -7,13 +7,19 @@
 //
 
 import Foundation
+import StreamChat
+
+protocol NewConversationViewControllerDelegate: AnyObject {
+    func newConversationView(_ controller: NewConversationViewController, didCreate conversationController: ChatChannelController)
+}
 
 class NewConversationViewController: CollectionViewController<NewConversationCollectionViewManager.SectionType, NewConversationCollectionViewManager> {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    var didCreateConversation: CompletionOptional = nil
 
     private let createButton = Button()
+
+    weak var delegate: NewConversationViewControllerDelegate?
 
     override func getCollectionView() -> CollectionView {
         return NewConversationCollectionView()
@@ -31,7 +37,9 @@ class NewConversationViewController: CollectionViewController<NewConversationCol
         self.view.insertSubview(self.createButton, aboveSubview: self.collectionViewManager.collectionView)
         self.createButton.set(style: .normal(color: .purple, text: "Create"))
         self.createButton.didSelect { [unowned self] in
-            self.createConversation()
+            Task {
+                await self.createConversation()
+            }
         }
 
         self.createButton.transform = CGAffineTransform.init(translationX: 0, y: 100)
@@ -53,16 +61,24 @@ class NewConversationViewController: CollectionViewController<NewConversationCol
         self.createButton.centerOnX()
     }
 
-    func createConversation() {
-//        let members: [String] = self.collectionViewManager.selectedItems.compactMap { item in
-//            guard let connection = item as? Connection else { return nil }
-//            return connection.nonMeUser?.objectId
-//        }
+    func createConversation() async {
 
-//        ConversationSupplier.shared.createConversation(friendlyName: "",
-//                                             members: members,
-//                                             setActive: true)
+        let members: [UserId] = self.collectionViewManager.selectedItems.compactMap { item in
+            guard let connection = item as? Connection else { return nil }
+            return connection.nonMeUser?.objectId
+        }
 
-        self.didCreateConversation?()
+        let memberSet = Set(members)
+
+        let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
+
+        do {
+           let controller = try ChatClient.shared.channelController(createChannelWithId: channelId, name: "", imageURL: nil, team: nil, members: memberSet, isCurrentUserMember: true, messageOrdering: .bottomToTop, invites: [], extraData: [:])
+
+            try await controller.synchronize()
+            self.delegate?.newConversationView(self, didCreate: controller)
+        } catch {
+            print(error)
+        }
     }
 }
