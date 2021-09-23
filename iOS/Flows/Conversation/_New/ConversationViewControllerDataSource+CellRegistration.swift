@@ -12,7 +12,7 @@ import StreamChat
 extension ConversationCollectionViewDataSource {
 
     typealias MessageCellRegistration
-    = UICollectionView.CellRegistration<new_MessageCell,
+    = UICollectionView.CellRegistration<MessageCell,
                                         (channelID: ChannelId,
                                          messageID: MessageId,
                                          dataSource: ConversationCollectionViewDataSource)>
@@ -24,7 +24,6 @@ extension ConversationCollectionViewDataSource {
                                                                         messageId: item.messageID)
             guard let message = messageController.message else { return }
             let dataSource = item.dataSource
-
 
             if message.type == .deleted {
                 cell.setIsDeleted()

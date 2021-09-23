@@ -32,7 +32,7 @@ extension ConversationDataSource {
         for (index, cell) in visibleCells.enumerated() {
             let animationDelay: TimeInterval = duration/Double(visibleCells.count)*Double(index)
             
-            if let messageCell = cell as? MessageCell, let message = messageCell.currentMessage {
+            if let messageCell = cell as? old_MessageCell, let message = messageCell.currentMessage {
                 /// Set the initial transform and alpha for cells
                 cell.alpha = 0.0
                 let direction: AnimationPosition = message.isFromCurrentUser ? .right : .left
