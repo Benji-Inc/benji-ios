@@ -32,16 +32,32 @@ extension ConversationThreadViewController {
             .mainSink { [weak self] (changes: [ListChange<ChatMessage>]) in
                 guard let `self` = self else { return }
 
+                // If there's more than one change, reload all of the data.
+                guard changes.count == 1 else {
+                    let messages: [Messageable] = self.messageController.replies.reversed()
+                    let section = ConversationSectionable(date: self.message.updatedAt,
+                                                          items: messages)
+                    self.collectionViewManager.set(newSections: [section], animate: true, completion: nil)
+                    return
+                }
+
+
                 for change in changes {
                     switch change {
                     case .insert(let message, _):
-                        self.collectionViewManager.append(item: message, completion: nil)
-                    case .move(_, _, _):
+                        self.collectionViewManager.append(item: message) {
+                            self.collectionView.scrollToEnd()
+                        }
+                    case .move:
+                        let messages: [Messageable] = self.messageController.replies.reversed()
+                        let section = ConversationSectionable(date: self.message.updatedAt,
+                                                              items: messages)
+                        self.collectionViewManager.set(newSections: [section], animate: true, completion: nil)
                         return
-                    case .update(_, _):
-                        return
-                    case .remove(_, _):
-                        return
+                    case .update(let message, _):
+                        self.collectionViewManager.updateItemSync(with: message)
+                    case .remove(let message, _):
+                        self.collectionViewManager.delete(item: message)
                     }
                 }
             }.store(in: &self.cancellables)

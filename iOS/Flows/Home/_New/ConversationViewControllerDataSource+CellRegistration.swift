@@ -34,6 +34,7 @@ extension ConversationCollectionViewDataSource {
                 let replies = message.latestReplies.map { message in
                     return message.text
                 }
+                cell.setReplyCount(message.replyCount)
                 cell.setReplies(replies)
 
                 // Load in the messages replies if needed, then reconfigure the cell so they show up.

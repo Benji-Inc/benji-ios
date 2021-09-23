@@ -71,9 +71,11 @@ class new_MessageCell: UICollectionViewCell {
         self.setNeedsLayout()
     }
 
+    func setReplyCount(_ count: Int) {
+        self.replyCountLabel.setText("\(count)")
+    }
+    
     func setReplies(_ replies: [String]) {
-        self.replyCountLabel.setText("\(replies.count)")
-
         guard let latestReply = replies.first else {
             self.repliesTextView.text = nil
             self.repliesContainerView.isHidden = true
@@ -86,6 +88,7 @@ class new_MessageCell: UICollectionViewCell {
 
         self.setNeedsLayout()
     }
+
 
     func setIsDeleted() {
         self.messageTextView.text = "DELETED"

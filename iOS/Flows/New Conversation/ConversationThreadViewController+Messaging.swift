@@ -34,6 +34,10 @@ extension ConversationThreadViewController: SwipeableInputAccessoryViewDelegate 
 
     @MainActor
     func send(object: Sendable) async {
-
+        do {
+            try await self.messageController.createNewReply(with: object)
+        } catch {
+            logDebug(error)
+        }
     }
 }
