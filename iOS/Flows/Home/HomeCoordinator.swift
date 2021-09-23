@@ -77,8 +77,8 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         let coordinator = NewConversationCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { result in
             coordinator.toPresentable().dismiss(animated: true) {
-                if result {
-                    self.startConversationFlow(for: nil)
+                if let controller = result {
+                    self.startConversationFlow(for: controller.channel)
                 }
             }
         }
