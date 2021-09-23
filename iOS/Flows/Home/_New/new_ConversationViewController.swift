@@ -14,7 +14,7 @@ class new_ConversationViewController: FullScreenViewController,
                                       UICollectionViewDelegateFlowLayout {
 
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
-    var collectionView = CollectionView(layout: new_ConversationCollectionViewLayout())
+    private var collectionView = CollectionView(layout: new_ConversationCollectionViewLayout())
 
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
@@ -23,6 +23,8 @@ class new_ConversationViewController: FullScreenViewController,
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView = InputAccessoryView(with: self)
+
+    var onSelectedThread: ((ChannelId, MessageId) -> Void)?
 
     override var inputAccessoryView: UIView? {
         // This is a hack to make the input hide during the presentation of the image picker.
@@ -115,6 +117,17 @@ class new_ConversationViewController: FullScreenViewController,
             self.isLoadingMessages = false
         }
     }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let messageItem = self.dataSource.itemIdentifier(for: indexPath) else { return }
+
+        switch messageItem {
+        case .message(let messageID):
+            self.onSelectedThread?(self.conversation.cid, messageID)
+        }
+    }
+
+    // MARK: - UIScrollViewDelegate
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView,
                                    withVelocity velocity: CGPoint,

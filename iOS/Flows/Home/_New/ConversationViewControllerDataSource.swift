@@ -23,7 +23,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case message(MessageId)
     }
 
-    var handleDeleteMessage: ((ChatMessage) -> Void)?
+    var handleDeleteMessage: ((Message) -> Void)?
 
     private let contextMenuDelegate: ContextMenuInteractionDelegate
     private let messageCellConfig = ConversationCollectionViewDataSource.createMessageCellRegistration()
@@ -64,7 +64,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     }
 
     /// Updates the datasource with the passed in array of message changes.
-    func updateMessages(with changes: [ListChange<ChatMessage>],
+    func updateMessages(with changes: [ListChange<Message>],
                         conversationController: ChatChannelController,
                         collectionView: UICollectionView) async {
 
@@ -185,7 +185,7 @@ private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteraction
     }
 }
 
-extension LazyCachedMapCollection where Element == ChatMessage {
+extension LazyCachedMapCollection where Element == Message {
 
     /// Convenience function to convert Stream chat messages into the ItemType of a ConversationCollectionViewDataSource.
     var asConversationCollectionItems: [ConversationCollectionItem] {

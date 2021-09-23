@@ -54,13 +54,11 @@ class NewConversationViewController: CollectionViewController<NewConversationCol
     }
 
     func createConversation() {
+//        let members: [String] = self.collectionViewManager.selectedItems.compactMap { item in
+//            guard let connection = item as? Connection else { return nil }
+//            return connection.nonMeUser?.objectId
+//        }
 
-        let members: [String] = self.collectionViewManager.selectedItems.compactMap { item in
-            guard let connection = item as? Connection else { return nil }
-            return connection.nonMeUser?.objectId
-        }
-
-        #warning("Replace")
 //        ConversationSupplier.shared.createConversation(friendlyName: "",
 //                                             members: members,
 //                                             setActive: true)
