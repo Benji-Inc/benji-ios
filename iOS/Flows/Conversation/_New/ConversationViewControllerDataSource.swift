@@ -128,12 +128,14 @@ private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteraction
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
 
-        guard let indexPath = self.collectionView.indexPathForItem(at: location) else { return nil }
+        let locationInCollectionView = interaction.location(in: self.collectionView)
+        guard let indexPath = self.collectionView.indexPathForItem(at: locationInCollectionView) else {
+            return nil
+        }
 
         // Get the conversation and message IDs.
         guard let sectionItem = self.dataSource?.sectionIdentifier(for: indexPath.section),
               let messageItem = self.dataSource?.itemIdentifier(for: indexPath) else { return nil }
-
 
         switch sectionItem {
         case .basic(let channelID):
