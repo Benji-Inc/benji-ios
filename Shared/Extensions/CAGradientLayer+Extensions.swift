@@ -1,6 +1,6 @@
 //
 //  CAGradientLayer+Extensions.swift
-//  Ours
+//  Jibber
 //
 //  Created by Benji Dodgson on 3/12/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.

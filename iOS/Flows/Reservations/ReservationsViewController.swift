@@ -38,7 +38,7 @@ class ReservationsViewController: NavigationBarViewController {
             self.didSelectShowContacts?()
         }
 
-        Task {
+        Task.onMainActor {
             await self.loadUnclaimedReservations()
         }
     }
@@ -79,7 +79,7 @@ class ReservationsViewController: NavigationBarViewController {
     }
 
     override func getDescription() -> Localized {
-        return "Our's is an exclusive community that cares about quality over quantity when it comes to its users, so invite the people you are most social with. (iOS only)"
+        return "Jibber is an exclusive community that cares about quality over quantity when it comes to its users, so invite the people you are most social with. (iOS only)"
     }
 
     override func shouldShowBackButton() -> Bool {

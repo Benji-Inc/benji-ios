@@ -307,7 +307,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             default:
                 return LocalizedString(id: "",
                                        arguments: [],
-                                       default: "Ours is an exclusive community of people building a better place to be social online. To best serve this community, we currently require an RSVP for access OR you can tap JOIN to be added to the waitlist.")
+                                       default: "Jibber is an exclusive community of people building a better place to be social online. To best serve this community, we currently require an RSVP for access OR you can tap JOIN to be added to the waitlist.")
             }
         case .phone(_):
             if let user = self.reservationUser {
@@ -360,7 +360,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 return LocalizedString.empty
             }
         case .focus(_):
-            return LocalizedString(id: "", arguments: [], default: "Ours works with your focus to better help others know how to communicate with you.")
+            return LocalizedString(id: "", arguments: [], default: "Jibber works with your focus to better help others know how to communicate with you.")
         }
     }
 
