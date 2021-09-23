@@ -9,7 +9,6 @@
 import Foundation
 import StreamChat
 
-
 extension ChatClient {
 
     /// A shared chat client singleton.

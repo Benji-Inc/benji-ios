@@ -45,7 +45,6 @@ extension ConversationCollectionViewDataSource {
                 }
             }
 
-
             cell.contentView.setNeedsLayout()
         }
     }

@@ -9,6 +9,8 @@
 import Foundation
 import StreamChat
 
+typealias MessageController = ChatMessageController
+
 extension ChatMessageController {
 
     func editMessage(with sendable: Sendable) async throws {
