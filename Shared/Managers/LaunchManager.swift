@@ -9,7 +9,6 @@
 import Foundation
 import Parse
 import SDWebImageLinkPlugin
-import StreamChat
 
 enum LaunchActivity {
     case onboarding(phoneNumber: String)
@@ -33,7 +32,7 @@ class LaunchManager {
     
     static let shared = LaunchManager()
     
-    private(set) var finishedInitialFetch = false
+    var finishedInitialFetch = false
     
     weak var delegate: LaunchManagerDelegate?
 
@@ -75,25 +74,6 @@ class LaunchManager {
         return .success(object: deeplink)
 #endif
     }
-    
-#if !APPCLIP && !NOTIFICATION
-
-    func getChatToken(for user: User, deepLink: DeepLinkable?) async -> LaunchStatus {
-        // No need to get a new chat token if we're already connected.
-        guard !ChatClient.isConnected else {
-            return .success(object: deepLink)
-        }
-
-        do {
-            try await ChatClient.initialize(for: user)
-
-            self.finishedInitialFetch = true
-            return .success(object: deepLink)
-        } catch {
-            return .failed(error: ClientError.apiError(detail: error.localizedDescription))
-        }
-    }
-#endif
     
     func continueUser(activity: NSUserActivity) -> Bool {
         if activity.activityType == NSUserActivityTypeBrowsingWeb,

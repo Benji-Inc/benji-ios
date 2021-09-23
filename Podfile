@@ -8,13 +8,12 @@ def shared_pods
 
   pod 'TMROCoordinator'
   pod 'TMROLocalization'
-
-  pod 'StreamChatUI', '4.0.0-beta.11'
 end
 
 target 'Jibber' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
+  pod 'StreamChatUI', '4.0.0-beta.11'
   shared_pods
 end
 
@@ -46,4 +45,12 @@ target 'Intents ExtensionUI' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
   shared_pods
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.0'
+    end
+  end
 end
