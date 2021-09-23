@@ -10,6 +10,38 @@ import Foundation
 
 extension UICollectionView {
 
+    /// Returns the indexpath of the item whose cell is closest to the center of this collectionview. If there are no items visible, then nil is returned.
+    func getCentermostVisibleIndex() -> IndexPath? {
+        let visibleCells = self.visibleCells
+
+        let centerPoint = CGPoint(x: self.contentOffset.x + self.centerX,
+                                  y: self.contentOffset.y + self.centerY)
+        var closestCell: UICollectionViewCell? = nil
+        var lowestDistanceToCenter: CGFloat = .greatestFiniteMagnitude
+
+        for visibleCell in visibleCells {
+            let centerOfCell = visibleCell.center
+            let distanceToCenter = centerPoint.distanceTo(centerOfCell)
+
+            if closestCell.isNil {
+                lowestDistanceToCenter = distanceToCenter
+                closestCell = visibleCell
+                continue
+            }
+
+            if distanceToCenter < lowestDistanceToCenter {
+                lowestDistanceToCenter = distanceToCenter
+                closestCell = visibleCell
+            }
+        }
+
+        if let closestCell = closestCell {
+            return self.indexPath(for: closestCell)
+        }
+
+        return nil
+    }
+
     @MainActor
     func animateOut(position: AnimationPosition, concatenate: Bool) async {
         let visibleCells = self.visibleCells

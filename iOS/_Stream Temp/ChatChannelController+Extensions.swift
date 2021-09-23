@@ -97,6 +97,7 @@ extension ChatChannelController {
         guard let messageID = sendable.previousMessage?.id else {
             throw(ClientError.apiError(detail: "No message id"))
         }
+
         switch sendable.kind {
         case .text(let text):
             return try await self.editMessage(messageID, text: text)
