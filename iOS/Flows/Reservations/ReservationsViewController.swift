@@ -38,9 +38,9 @@ class ReservationsViewController: NavigationBarViewController {
             self.didSelectShowContacts?()
         }
 
-//        Task.onMainActor {
-//            await self.loadUnclaimedReservations()
-//        }
+        Task {
+            await self.loadUnclaimedReservations()
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -56,6 +56,7 @@ class ReservationsViewController: NavigationBarViewController {
         super.viewDidLayoutSubviews()
     }
 
+    @MainActor
     private func loadUnclaimedReservations() async {
         guard let query = Reservation.query() else { return }
 
