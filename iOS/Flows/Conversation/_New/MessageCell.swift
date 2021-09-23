@@ -1,6 +1,6 @@
 //
-//  new_MessageCell.swift
-//  new_MessageCell
+//  MessageCell.swift
+//  MessageCell
 //
 //  Created by Martin Young on 9/16/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class new_MessageCell: UICollectionViewCell {
+class MessageCell: UICollectionViewCell {
 
     private let messageContainerView = UIView()
     private let messageTextView = TextView()

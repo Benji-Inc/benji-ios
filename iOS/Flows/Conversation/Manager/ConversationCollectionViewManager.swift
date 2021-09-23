@@ -110,8 +110,8 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
         let cell: BaseMessageCell
         switch message.kind {
         case .text(_):
-            cell = conversationCollectionView.dequeueReusableCell(MessageCell.self, for: indexPath)
-            if let msgCell = cell as? MessageCell {
+            cell = conversationCollectionView.dequeueReusableCell(old_MessageCell.self, for: indexPath)
+            if let msgCell = cell as? old_MessageCell {
                 msgCell.textView.delegate = self
                 let interaction = UIContextMenuInteraction(delegate: self)
                 msgCell.bubbleView.addInteraction(interaction)

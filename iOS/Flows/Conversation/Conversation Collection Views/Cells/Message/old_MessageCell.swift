@@ -9,7 +9,7 @@
 import Foundation
 import Parse
 
-class MessageCell: BaseMessageCell {
+class old_MessageCell: BaseMessageCell {
 
     let bubbleView = MessageBubbleView()
     let textView = MessageTextView()

@@ -33,7 +33,7 @@ class ConversationCollectionView: CollectionView {
     }
 
     private func registerReusableViews() {
-        self.register(MessageCell.self)
+        self.register(old_MessageCell.self)
         self.register(AudioMessageCell.self)
         self.register(LocationMessageCell.self)
         self.register(ContactMessageCell.self)
