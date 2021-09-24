@@ -24,6 +24,8 @@ class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionV
 
     private let connectionConfig = ManageableCellRegistration<ConnectionCell>().provider
     private let contactConfig = ManageableCellRegistration<ContactCell>().provider
+    private let headerConfig = UICollectionView.SupplementaryRegistration
+    <PeopleHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { (headerView, elementKind, indexPath) in }
 
     // MARK: - Cell Dequeueing
 
@@ -42,6 +44,18 @@ class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionV
             return collectionView.dequeueConfiguredReusableCell(using: self.contactConfig,
                                                                 for: indexPath,
                                                                 item: contact)
+        }
+    }
+
+    override func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                           kind: String, section: SectionType,
+                                           indexPath: IndexPath) -> UICollectionReusableView? {
+
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            return collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+        default: 
+            return nil
         }
     }
 }

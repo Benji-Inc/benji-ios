@@ -1,5 +1,5 @@
 //
-//  NewConversationHeaderView.swift
+//  PeopleHeaderView.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 2/17/21.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class NewConversationHeaderView: UICollectionReusableView {
+class PeopleHeaderView: UICollectionReusableView {
 
     let titleLabel = Label(font: .regularBold)
     let descriptionLabel = Label(font: .small)
