@@ -43,11 +43,7 @@ extension ArchiveViewController: UICollectionViewDelegate {
                                attributes: .destructive) { action in
 
             Task {
-                do {
-                    try await ChatClient.shared.deleteChannel(conversation)
-                } catch {
-                    logDebug(error)
-                }
+                await self.delete(conversation: conversation)
             }
         }
 
@@ -73,11 +69,7 @@ extension ArchiveViewController: UICollectionViewDelegate {
                                image: UIImage(systemName: "clear"),
                                attributes: .destructive) { action in
             Task {
-                do {
-                    try await ChatClient.shared.deleteChannel(conversation)
-                } catch {
-                    logDebug(error)
-                }
+                await self.delete(conversation: conversation)
             }
         }
 
@@ -93,5 +85,16 @@ extension ArchiveViewController: UICollectionViewDelegate {
 
         // Create and return a UIMenu with the share action
         return UIMenu(title: "Options", children: [open, deleteMenu])
+    }
+
+    private func delete(conversation: Conversation) async {
+        Task {
+            do {
+                try await ChatClient.shared.deleteChannel(conversation)
+                await self.dataSource.deleteItems([.conversation(conversation)])
+            } catch {
+                logDebug(error)
+            }
+        }
     }
 }

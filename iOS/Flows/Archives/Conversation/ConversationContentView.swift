@@ -58,15 +58,7 @@ class ConversationContentView: View {
 
         guard self.currentItem?.cid == conversation.cid else { return }
 
-        if let friendlyName = conversation.name {
-            self.label.setText(friendlyName.capitalized)
-        } else if members.count == 0 {
-            self.label.setText("You")
-        } else if members.count == 1, let member = members.first  {
-            await self.displayDM(for: conversation, with: member)
-        } else {
-            self.displayGroupChat(for: conversation, with: members)
-        }
+        self.label.setText(conversation.title)
 
         if let msg = conversation.latestMessages.first {
             self.messageLabel.setText(msg.text)
@@ -93,28 +85,5 @@ class ConversationContentView: View {
         self.messageLabel.setSize(withWidth: maxWidth, height: maxHeight)
         self.messageLabel.match(.top, to: .bottom, of: self.label, offset: 4)
         self.messageLabel.match(.left, to: .left, of: self.label)
-    }
-
-    private func displayDM(for conversation: ChatChannel, with member: ChatChannelMember) async {
-        self.label.setText(member.name)
-        self.label.setFont(.largeThin)
-        self.setNeedsLayout()
-    }
-
-    func displayGroupChat(for conversation: ChatChannel, with members: [ChatChannelMember]) {
-        var text = ""
-        for (index, member) in members.enumerated() {
-            if index < members.count - 1 {
-                text.append(String("\(member.givenName), "))
-            } else if index == members.count - 1 && members.count > 1 {
-                text.append(String("\(member.givenName)"))
-            } else {
-                text.append(member.givenName)
-            }
-        }
-
-        self.label.setText(text)
-        self.label.setFont(.mediumThin)
-        self.layoutNow()
     }
 }
