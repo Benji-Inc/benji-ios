@@ -74,6 +74,8 @@ class AvatarView: DisplayableImageView {
     private func setImageFrom(initials: String?) {
         guard let initials = initials else { return }
         self.imageView.image = self.getImageFrom(initials: initials)
+        self.layoutNow()
+        self.animationView.stop()
     }
 
     func getSize(for height: CGFloat) -> CGSize {
@@ -131,6 +133,8 @@ class AvatarView: DisplayableImageView {
             assertionFailure("Could not create image from context");
             return UIImage()
         }
+
+        self.animationView.stop()
 
         return renderedImage
     }

@@ -18,6 +18,7 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
     private let titleLabel = Label(font: .regularBold, textColor: .lightPurple)
     private let subTitleLabel = Label(font: .small)
     private let animationView = AnimationView.with(animation: .checkbox)
+    private let content = View()
 
     var didTapButton: CompletionOptional = nil
     var currentItem: CNContact?
@@ -25,12 +26,14 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.contentView.addSubview(self.avatarView)
-        self.contentView.addSubview(self.titleLabel)
-        self.contentView.addSubview(self.subTitleLabel)
-        self.contentView.addSubview(self.animationView)
-    }
+        self.contentView.addSubview(self.content)
+        self.content.set(backgroundColor: .background3)
 
+        self.content.addSubview(self.avatarView)
+        self.content.addSubview(self.titleLabel)
+        self.content.addSubview(self.subTitleLabel)
+        self.content.addSubview(self.animationView)
+    }
 
     func configure(with item: CNContact) {
 
@@ -49,8 +52,11 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        self.content.expandToSuperviewSize()
+        self.content.roundCorners()
+
         self.avatarView.setSize(for: self.contentView.height - Theme.contentOffset)
-        self.avatarView.pin(.left, padding: Theme.contentOffset)
+        self.avatarView.pin(.left, padding: Theme.contentOffset.half)
         self.avatarView.centerOnY()
 
         self.subTitleLabel.setSize(withWidth: self.contentView.width * 0.6)

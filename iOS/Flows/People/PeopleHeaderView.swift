@@ -42,15 +42,15 @@ class PeopleHeaderView: UICollectionReusableView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.titleLabel.setSize(withWidth: self.width * 0.8)
+        self.titleLabel.setSize(withWidth: self.width)
         self.titleLabel.pin(.top, padding: Theme.contentOffset)
         self.titleLabel.centerOnX()
 
-        self.descriptionLabel.setSize(withWidth: self.width * 0.8)
+        self.descriptionLabel.setSize(withWidth: self.width)
         self.descriptionLabel.top = self.titleLabel.bottom + 20
         self.descriptionLabel.centerOnX()
 
-        self.lineView.size = CGSize(width: self.width - Theme.contentOffset.doubled, height: 2)
+        self.lineView.size = CGSize(width: self.width, height: 2)
         self.lineView.top = self.descriptionLabel.bottom + 20
         self.lineView.centerOnX()
     }

@@ -15,9 +15,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
 
     private let avatarView = AvatarView()
     private let titleLabel = Label(font: .regularBold, textColor: .lightPurple)
-    private let animationView = AnimationView.with(animation: .checkbox)
 
-    var didTapButton: CompletionOptional = nil
     var currentItem: Connection?
 
     override func initializeSubviews() {
@@ -25,9 +23,8 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
 
         self.contentView.addSubview(self.avatarView)
         self.contentView.addSubview(self.titleLabel)
-        self.contentView.addSubview(self.animationView)
+        self.titleLabel.textAlignment = .center
     }
-
 
     func configure(with item: Connection) {
         guard let nonMeUser = item.nonMeUser else { return }
@@ -47,24 +44,15 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         }
     }
 
-    override func update(isSelected: Bool) {
-        let progress: AnimationProgressTime = isSelected ? 1.0 : 0.0
-        self.animationView.play(toProgress: progress)
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.avatarView.setSize(for: self.contentView.height - Theme.contentOffset)
-        self.avatarView.pin(.left, padding: Theme.contentOffset)
-        self.avatarView.centerOnY()
+        self.avatarView.setSize(for: self.contentView.height)
+        self.avatarView.pin(.top)
+        self.avatarView.centerOnX()
 
-        self.titleLabel.setSize(withWidth: self.contentView.width - Theme.contentOffset)
+        self.titleLabel.setSize(withWidth: self.contentView.width)
         self.titleLabel.match(.top, to: .bottom, of: self.avatarView, offset: 4)
         self.titleLabel.centerOnX()
-
-        self.animationView.squaredSize = 20
-        self.animationView.pin(.right, padding: Theme.contentOffset)
-        self.animationView.centerOnY()
     }
 }
