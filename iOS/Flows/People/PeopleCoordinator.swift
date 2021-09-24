@@ -31,7 +31,7 @@ extension PeopleCoordinator: PeopleViewControllerDelegate {
         // Do stuff
 
         switch item {
-        case .connection(_):
+        case .connection(let connection):
             break
         case .contact(let contact):
             Task {

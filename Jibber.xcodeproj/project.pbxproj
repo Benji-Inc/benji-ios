@@ -1689,6 +1689,7 @@
 		D6432BF122D8282E0016001A /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
+				D67896CB2304524C0059BA75 /* ConversationCoordinator.swift */,
 				8024B94E26F278C8008ABF7F /* _New */,
 				D6D1500521D5E71E00CD8CE4 /* Conversation Collection Views */,
 				D6B2603722E6AB5E00143CF0 /* ConversationDetailViewController.swift */,
@@ -1896,7 +1897,6 @@
 		D66A580325DD68F9001B3F64 /* Threaded Conversation */ = {
 			isa = PBXGroup;
 			children = (
-				D67896CB2304524C0059BA75 /* ConversationCoordinator.swift */,
 				D6D1500621D5E73D00CD8CE4 /* ConversationThreadViewController.swift */,
 				D61D38E6248C494A00BE457B /* ConversationThreadViewController+Messaging.swift */,
 				D6FC8099237A68F50089AACC /* ConversationThreadViewController+Updates.swift */,

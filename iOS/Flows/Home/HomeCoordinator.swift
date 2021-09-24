@@ -9,6 +9,7 @@
 import Foundation
 import Parse
 import PhotosUI
+import StreamChat
 
 class HomeCoordinator: PresentableCoordinator<Void> {
 
@@ -73,23 +74,16 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     }
 
     func didTapAdd() {
-        self.removeChild()
-        let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { result in
-            coordinator.toPresentable().dismiss(animated: true) {
-                if let controller = result {
-                    self.startConversationFlow(for: controller.channel)
-                }
-            }
+        Task {
+            await self.createConversation()
         }
-        self.router.present(coordinator, source: self.homeVC)
     }
 
     func startArchiveFlow() {
         self.removeChild()
 
         let coordinator = ArchiveCoordinator(router: self.router,
-                                                  deepLink: self.deepLink)
+                                             deepLink: self.deepLink)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 self.finishFlow(with: ())
@@ -112,24 +106,25 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         self.router.present(coordinator, source: self.homeVC, animated: true)
     }
 
-    //    func createConversation() async {
-    //
-    //        let members: [UserId] = self.collectionViewManager.selectedItems.compactMap { item in
-    //            guard let connection = item as? Connection else { return nil }
-    //            return connection.nonMeUser?.objectId
-    //        }
-    //
-    //        let memberSet = Set(members)
-    //
-    //        let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
-    //
-    //        do {
-    //           let controller = try ChatClient.shared.channelController(createChannelWithId: channelId, name: "", imageURL: nil, team: nil, members: memberSet, isCurrentUserMember: true, messageOrdering: .bottomToTop, invites: [], extraData: [:])
-    //
-    //            try await controller.synchronize()
-    //            self.delegate?.peopleView(self, didCreate: controller)
-    //        } catch {
-    //            print(error)
-    //        }
-    //    }
+    func createConversation() async {
+
+        let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
+
+        do {
+            let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
+                                                                     name: nil,
+                                                                     imageURL: nil,
+                                                                     team: nil,
+                                                                     members: [],
+                                                                     isCurrentUserMember: true,
+                                                                     messageOrdering: .bottomToTop,
+                                                                     invites: [],
+                                                                     extraData: [:])
+
+            try await controller.synchronize()
+            self.startConversationFlow(for: controller.conversation)
+        } catch {
+            print(error)
+        }
+    }
 }
