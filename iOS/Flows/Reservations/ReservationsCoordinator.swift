@@ -27,29 +27,10 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
-//        self.reservationsVC.didSelectReservation = { [unowned self] reservation in
-//            self.presentShare(for: reservation)
-//        }
-
         self.reservationsVC.didSelectShowContacts = { [unowned self] in
             self.showContacts()
         }
     }
-
-//    private func presentShare(for reservation: Reservation) {
-//        let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
-//        ac.completionWithItemsHandler = { activityType, completed, items, error in
-//            if completed {
-//                self.showSentToast()
-//            }
-//        }
-//
-//        let exclusions: [UIActivity.ActivityType] = [.postToFacebook, .postToTwitter, .postToWeibo, .mail, .print, .assignToContact, .saveToCameraRoll, .addToReadingList, .postToFlickr, .postToVimeo, .postToTencentWeibo, .openInIBooks, .markupAsPDF, .airDrop]
-//
-//        ac.excludedActivityTypes = exclusions
-//
-//        self.reservationsVC.present(ac, animated: true, completion: nil)
-//    }
 
     private func showSentToast() {
         ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: UIImage(systemName: "envelope")!, title: "RSVP Sent", description: "Your RSVP has been sent. As soon as someone accepts using your link, a conversation will be created between the two of you.", deepLink: nil))
