@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class NewConversationCollectionViewManager: old_CollectionViewManager<NewConversationCollectionViewManager.SectionType> {
+class PeopleCollectionViewManager: old_CollectionViewManager<PeopleCollectionViewManager.SectionType> {
 
     enum SectionType: Int, old_ManagerSectionType, CaseIterable {
         case users

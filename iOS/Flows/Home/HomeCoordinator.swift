@@ -74,7 +74,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
 
     func didTapAdd() {
         self.removeChild()
-        let coordinator = NewConversationCoordinator(router: self.router, deepLink: self.deepLink)
+        let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { result in
             coordinator.toPresentable().dismiss(animated: true) {
                 if let controller = result {

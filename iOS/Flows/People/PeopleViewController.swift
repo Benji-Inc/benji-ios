@@ -10,10 +10,10 @@ import Foundation
 import StreamChat
 
 protocol NewConversationViewControllerDelegate: AnyObject {
-    func newConversationView(_ controller: NewConversationViewController, didCreate conversationController: ChatChannelController)
+    func peopleView(_ controller: PeopleViewController, didCreate conversationController: ChatChannelController)
 }
 
-class NewConversationViewController: CollectionViewController<NewConversationCollectionViewManager.SectionType, NewConversationCollectionViewManager> {
+class PeopleViewController: CollectionViewController<PeopleCollectionViewManager.SectionType, PeopleCollectionViewManager> {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
@@ -22,7 +22,7 @@ class NewConversationViewController: CollectionViewController<NewConversationCol
     weak var delegate: NewConversationViewControllerDelegate?
 
     override func getCollectionView() -> CollectionView {
-        return NewConversationCollectionView()
+        return PeopleCollectionView()
     }
 
     override func initializeViews() {
@@ -76,7 +76,7 @@ class NewConversationViewController: CollectionViewController<NewConversationCol
            let controller = try ChatClient.shared.channelController(createChannelWithId: channelId, name: "", imageURL: nil, team: nil, members: memberSet, isCurrentUserMember: true, messageOrdering: .bottomToTop, invites: [], extraData: [:])
 
             try await controller.synchronize()
-            self.delegate?.newConversationView(self, didCreate: controller)
+            self.delegate?.peopleView(self, didCreate: controller)
         } catch {
             print(error)
         }

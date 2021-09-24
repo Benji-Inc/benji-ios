@@ -9,9 +9,9 @@
 import Foundation
 import StreamChat
 
-class NewConversationCoordinator: PresentableCoordinator<ChatChannelController?> {
+class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
 
-    lazy var newConversationVC = NewConversationViewController()
+    lazy var newConversationVC = PeopleViewController()
 
     override func toPresentable() -> DismissableVC {
         return self.newConversationVC
@@ -24,8 +24,8 @@ class NewConversationCoordinator: PresentableCoordinator<ChatChannelController?>
     }
 }
 
-extension NewConversationCoordinator: NewConversationViewControllerDelegate {
-    nonisolated func newConversationView(_ controller: NewConversationViewController, didCreate conversationController: ChatChannelController) {
+extension PeopleCoordinator: NewConversationViewControllerDelegate {
+    nonisolated func peopleView(_ controller: PeopleViewController, didCreate conversationController: ChatChannelController) {
 
         Task.onMainActor {
             self.finishFlow(with: conversationController)

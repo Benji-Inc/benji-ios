@@ -8,7 +8,7 @@
 
 import Foundation
 
-class NewConversationCollectionView: CollectionView {
+class PeopleCollectionView: CollectionView {
 
     init() {
         let layout = UICollectionViewFlowLayout()
