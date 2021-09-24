@@ -36,7 +36,6 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
     }
 
     func configure(with item: CNContact) {
-
         self.avatarView.set(avatar: item)
         self.titleLabel.setText(item.fullName)
         let phone = item.findBestPhoneNumber().phone?.stringValue ?? ""
@@ -60,11 +59,11 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
         self.avatarView.centerOnY()
 
         self.subTitleLabel.setSize(withWidth: self.contentView.width * 0.6)
-        self.subTitleLabel.match(.bottom, to: .bottom, of: self.avatarView)
+        self.subTitleLabel.top = self.avatarView.centerY + 4
         self.subTitleLabel.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset.half)
 
         self.titleLabel.setSize(withWidth: self.contentView.width * 0.6)
-        self.titleLabel.match(.bottom, to: .top, of: self.subTitleLabel, offset: -4)
+        self.titleLabel.bottom = self.avatarView.centerY
         self.titleLabel.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset.half)
 
         self.animationView.squaredSize = 20

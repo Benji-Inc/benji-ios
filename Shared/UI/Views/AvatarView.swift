@@ -25,24 +25,7 @@ class AvatarView: DisplayableImageView {
         }
     }
 
-    var placeholderFont: UIFont = FontType.regularBold.font {
-        didSet {
-            self.setImageFrom(initials: self.initials)
-        }
-    }
-
-    var placeholderTextColor: UIColor = Color.purple.color {
-        didSet {
-            self.setImageFrom(initials: self.initials)
-        }
-    }
-
-    var fontMinimumScaleFactor: CGFloat = 0.5
-    var adjustsFontSizeToFitWidth = true
-
-    private var minimumFontSize: CGFloat {
-        return self.placeholderFont.pointSize * self.fontMinimumScaleFactor
-    }
+    private let label = Label(font: .regularBold, textColor: .purple)
 
     private var radius: CGFloat?
 
@@ -73,9 +56,13 @@ class AvatarView: DisplayableImageView {
 
     private func setImageFrom(initials: String?) {
         guard let initials = initials else { return }
-        self.imageView.image = self.getImageFrom(initials: initials)
+
+        self.imageView.isHidden = true
+        self.label.isHidden = false
+        self.label.setText(initials.uppercased())
+        self.label.textAlignment = .center
+        self.state = .success
         self.layoutNow()
-        self.animationView.stop()
     }
 
     func getSize(for height: CGFloat) -> CGSize {
@@ -86,100 +73,8 @@ class AvatarView: DisplayableImageView {
         self.size = self.getSize(for: height)
     }
 
-    private func getImageFrom(initials: String) -> UIImage {
-        let width = self.frame.width
-        let height = self.frame.height
-        if width == 0 || height == 0 { return UIImage() }
-        var font = self.placeholderFont
-
-        UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, UIScreen.main.scale)
-        defer { UIGraphicsEndImageContext() }
-        let context = UIGraphicsGetCurrentContext()!
-
-        //// Text Drawing
-        let textRect = self.calculateTextRect(outerViewWidth: width, outerViewHeight: height)
-        let initialsText = NSAttributedString(string: initials, attributes: [.font: font,
-                                                                             .foregroundColor: Color.purple.color])
-        if self.adjustsFontSizeToFitWidth,
-            initialsText.width(considering: textRect.height) > textRect.width {
-            let newFontSize = self.calculateFontSize(text: initials,
-                                                     font: font,
-                                                     width: textRect.width,
-                                                     height: textRect.height)
-            font = self.placeholderFont.withSize(newFontSize)
-        }
-
-        let textStyle = NSMutableParagraphStyle()
-        textStyle.alignment = .center
-        let textFontAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: font,
-                                                                 NSAttributedString.Key.foregroundColor: self.placeholderTextColor,
-                                                                 NSAttributedString.Key.paragraphStyle: textStyle]
-
-        let textTextHeight: CGFloat = initials.boundingRect(with: CGSize(width: textRect.width, height: CGFloat.infinity),
-                                                            options: .usesLineFragmentOrigin,
-                                                            attributes: textFontAttributes,
-                                                            context: nil).height
-        context.saveGState()
-        context.clip(to: textRect)
-
-        let rect = CGRect(x: textRect.minX,
-                          y: textRect.minY + (textRect.height - textTextHeight) / 2,
-                          width: textRect.width,
-                          height: textTextHeight)
-        initials.draw(in: rect, withAttributes: textFontAttributes)
-        context.restoreGState()
-
-        guard let renderedImage = UIGraphicsGetImageFromCurrentImageContext() else {
-            assertionFailure("Could not create image from context");
-            return UIImage()
-        }
-
-        self.animationView.stop()
-
-        return renderedImage
-    }
-
-    /**
-     Recursively find the biggest size to fit the text with a given width and height
-     */
-    private func calculateFontSize(text: String,
-                                   font: UIFont,
-                                   width: CGFloat,
-                                   height: CGFloat) -> CGFloat {
-
-        let attributedText = NSAttributedString(string: text, attributes: [.font: font])
-        if attributedText.width(considering: height) > width {
-            let newFont = font.withSize(font.pointSize - 1)
-            if newFont.pointSize > self.minimumFontSize {
-                return font.pointSize
-            } else {
-                return calculateFontSize(text: text, font: newFont, width: width, height: height)
-            }
-        }
-        return font.pointSize
-    }
-
-    /**
-     Calculates the inner circle's width.
-     Note: Assumes corner radius cannot be more than width/2 (this creates circle).
-     */
-    private func calculateTextRect(outerViewWidth: CGFloat, outerViewHeight: CGFloat) -> CGRect {
-        guard outerViewWidth > 0 else {
-            return CGRect.zero
-        }
-        let shortEdge = min(outerViewHeight, outerViewWidth)
-        // Converts degree to radian degree and calculate the
-        // Assumes, it is a perfect circle based on the shorter part of ellipsoid
-        // calculate a rectangle
-        let w = shortEdge * sin(CGFloat(45).degreesToRadians) * 2
-        let h = shortEdge * cos(CGFloat(45).degreesToRadians) * 2
-        let startX = (outerViewWidth - w)/2
-        let startY = (outerViewHeight - h)/2
-        // In case the font exactly fits to the region, put 2 pixel both left and right
-        return CGRect(x: startX+2, y: startY, width: w-4, height: h)
-    }
-
     private func prepareView() {
+        self.insertSubview(self.label, belowSubview: self.imageView)
         self.imageView.contentMode = .scaleAspectFill
         self.layer.masksToBounds = true
         self.clipsToBounds = true
@@ -217,6 +112,20 @@ class AvatarView: DisplayableImageView {
     func setBorder(color: Color) {
         self.layer.borderColor = color.color.cgColor
         self.layer.borderWidth = 2
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.label.expandToSuperviewSize()
+    }
+
+    override func reset() {
+        super.reset()
+
+        self.label.isHidden = true
+        self.imageView.isHidden = false
+        self.label.text = nil
     }
 }
 
