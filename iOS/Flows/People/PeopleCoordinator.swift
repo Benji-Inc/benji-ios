@@ -11,20 +11,20 @@ import StreamChat
 
 class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
 
-    lazy var newConversationVC = PeopleViewController()
+    lazy var peopleVC = PeopleViewController()
 
     override func toPresentable() -> DismissableVC {
-        return self.newConversationVC
+        return self.peopleVC
     }
 
     override func start() {
         super.start()
 
-        self.newConversationVC.delegate = self
+        self.peopleVC.delegate = self
     }
 }
 
-extension PeopleCoordinator: NewConversationViewControllerDelegate {
+extension PeopleCoordinator: PeopleViewControllerDelegate {
     nonisolated func peopleView(_ controller: PeopleViewController, didCreate conversationController: ChatChannelController) {
 
         Task.onMainActor {

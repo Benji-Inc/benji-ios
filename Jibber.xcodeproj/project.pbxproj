@@ -453,7 +453,6 @@
 		D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580625DD691A001B3F64 /* PeopleViewController.swift */; };
 		D66A580925DD6954001B3F64 /* PeopleCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580825DD6954001B3F64 /* PeopleCollectionViewManager.swift */; };
 		D66A580B25DD6990001B3F64 /* ConnectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580A25DD6990001B3F64 /* ConnectionCell.swift */; };
-		D66A580D25DD6B06001B3F64 /* PeopleCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A580C25DD6B06001B3F64 /* PeopleCollectionView.swift */; };
 		D66ED456267D35E100332BA3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
 		D66ED457267D35E100332BA3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
 		D66ED458267D35E200332BA3 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6DA3191259B5B6D0078E769 /* Config.swift */; };
@@ -997,7 +996,6 @@
 		D66A580625DD691A001B3F64 /* PeopleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleViewController.swift; sourceTree = "<group>"; };
 		D66A580825DD6954001B3F64 /* PeopleCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleCollectionViewManager.swift; sourceTree = "<group>"; };
 		D66A580A25DD6990001B3F64 /* ConnectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionCell.swift; sourceTree = "<group>"; };
-		D66A580C25DD6B06001B3F64 /* PeopleCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleCollectionView.swift; sourceTree = "<group>"; };
 		D66ED45F267D50D300332BA3 /* ConnectionsManger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionsManger.swift; sourceTree = "<group>"; };
 		D66F0FCE22BF060500BA277D /* Deeplinkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplinkable.swift; sourceTree = "<group>"; };
 		D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkTarget.swift; sourceTree = "<group>"; };
@@ -2031,7 +2029,6 @@
 				D66A580A25DD6990001B3F64 /* ConnectionCell.swift */,
 				D687F3C726FE4E4B000E4734 /* ContactCell.swift */,
 				D6B3329425DDB9E300211044 /* NewConversationHeaderView.swift */,
-				D66A580C25DD6B06001B3F64 /* PeopleCollectionView.swift */,
 				D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */,
 				D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */,
 				D66A580825DD6954001B3F64 /* PeopleCollectionViewManager.swift */,
@@ -2802,7 +2799,6 @@
 				D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */,
 				D66F0FE222C041AF00BA277D /* AvatarView.swift in Sources */,
 				D678EC3126F538980071DB0D /* CircleGroupCell.swift in Sources */,
-				D66A580D25DD6B06001B3F64 /* PeopleCollectionView.swift in Sources */,
 				D6D1501C21D5F8AD00CD8CE4 /* old_MessageCell.swift in Sources */,
 				D6748CBE262DAF280095F4B1 /* ReservationsViewController.swift in Sources */,
 				D61EC0F521D3151400204BEE /* NSAttributedString+Extensions.swift in Sources */,
