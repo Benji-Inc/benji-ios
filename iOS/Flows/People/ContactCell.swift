@@ -33,22 +33,12 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
 
 
     func configure(with item: CNContact) {
-//        guard let nonMeUser = item.nonMeUser else { return }
-//
-//        Task {
-//            do {
-//                let userWithData = try await nonMeUser.retrieveDataIfNeeded()
-//
-//                Task.onMainActor {
-//                    self.avatarView.set(avatar: userWithData)
-//                    self.titleLabel.setText(userWithData.fullName)
-//                    self.subTitleLabel.setText(userWithData.handle)
-//                    self.layoutNow()
-//                }
-//            } catch {
-//                logDebug(error)
-//            }
-//        }
+
+        self.avatarView.set(avatar: item)
+        self.titleLabel.setText(item.fullName)
+        let phone = item.findBestPhoneNumber().phone?.stringValue ?? ""
+        self.subTitleLabel.setText(phone)
+        self.layoutNow()
     }
 
     override func update(isSelected: Bool) {

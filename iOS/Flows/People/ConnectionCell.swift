@@ -15,7 +15,6 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
 
     private let avatarView = AvatarView()
     private let titleLabel = Label(font: .regularBold, textColor: .lightPurple)
-    private let subTitleLabel = Label(font: .small)
     private let animationView = AnimationView.with(animation: .checkbox)
 
     var didTapButton: CompletionOptional = nil
@@ -26,7 +25,6 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
 
         self.contentView.addSubview(self.avatarView)
         self.contentView.addSubview(self.titleLabel)
-        self.contentView.addSubview(self.subTitleLabel)
         self.contentView.addSubview(self.animationView)
     }
 
@@ -40,8 +38,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
 
                 Task.onMainActor {
                     self.avatarView.set(avatar: userWithData)
-                    self.titleLabel.setText(userWithData.fullName)
-                    self.subTitleLabel.setText(userWithData.handle)
+                    self.titleLabel.setText(userWithData.givenName)
                     self.layoutNow()
                 }
             } catch {
@@ -62,13 +59,9 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         self.avatarView.pin(.left, padding: Theme.contentOffset)
         self.avatarView.centerOnY()
 
-        self.subTitleLabel.setSize(withWidth: self.contentView.width * 0.6)
-        self.subTitleLabel.match(.bottom, to: .bottom, of: self.avatarView)
-        self.subTitleLabel.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset.half)
-
-        self.titleLabel.setSize(withWidth: self.contentView.width * 0.6)
-        self.titleLabel.match(.bottom, to: .top, of: self.subTitleLabel, offset: -4)
-        self.titleLabel.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset.half)
+        self.titleLabel.setSize(withWidth: self.contentView.width - Theme.contentOffset)
+        self.titleLabel.match(.top, to: .bottom, of: self.avatarView, offset: 4)
+        self.titleLabel.centerOnX()
 
         self.animationView.squaredSize = 20
         self.animationView.pin(.right, padding: Theme.contentOffset)

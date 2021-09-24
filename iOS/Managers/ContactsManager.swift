@@ -51,7 +51,8 @@ class ContactsManger {
         do {
             if try await self.store.requestAccess(for: .contacts) {
                 // 2.
-                let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactIdentifierKey]
+                let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactIdentifierKey, CNContactThumbnailImageDataKey]
+
                 let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
                 
                 do {
