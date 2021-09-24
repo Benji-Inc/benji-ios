@@ -51,30 +51,34 @@ class PeopleViewController: BlurredViewController {
 
         self.collectionView.animationView.play()
 
-        // load connections
-        // load contacts
-
-        //let controller = try? await ChatClient.shared.queryChannels(query: query)
-
         guard !Task.isCancelled else {
             self.collectionView.animationView.stop()
             return
         }
 
-        //self.channelListController = controller
+        let contacts = await ContactsManger.shared.fetchContacts()
+        var connections: [Connection] = []
+        do {
+            connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
+                return !connection.nonMeUser.isNil
+            }
+        } catch {
+            print(error)
+        }
 
         let cycle = AnimationCycle(inFromPosition: .inward,
                                    outToPosition: .inward,
                                    shouldConcatenate: true,
                                    scrollToEnd: false)
 
-        let snapshot = self.getInitialSnapshot()
+        let snapshot = self.getInitialSnapshot(withConnecitons: connections, and: contacts)
         await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
 
         self.collectionView.animationView.stop()
     }
 
-    private func getInitialSnapshot() -> NSDiffableDataSourceSnapshot<PeopleCollectionViewDataSource.SectionType,
+    private func getInitialSnapshot(withConnecitons connections: [Connection],
+                                    and contacts: [CNContact]) -> NSDiffableDataSourceSnapshot<PeopleCollectionViewDataSource.SectionType,
                                                                       PeopleCollectionViewDataSource.ItemType> {
         var snapshot = self.dataSource.snapshot()
                                                                           snapshot.deleteAllItems()
@@ -82,20 +86,20 @@ class PeopleViewController: BlurredViewController {
         let allCases = PeopleCollectionViewDataSource.SectionType.allCases
         snapshot.appendSections(allCases)
         allCases.forEach { (section) in
-            snapshot.appendItems(self.getItems(for: section), toSection: section)
+            switch section {
+            case .connections:
+                let items: [PeopleCollectionViewDataSource.ItemType] = connections.map { connection in
+                    return .connection(connection)
+                }
+                snapshot.appendItems(items, toSection: section)
+            case .contacts:
+                let items: [PeopleCollectionViewDataSource.ItemType] = contacts.map { contact in
+                    return .contact(contact)
+                }
+                snapshot.appendItems(items, toSection: section)
+            }
         }
 
         return snapshot
-    }
-
-    private func getItems(for section: PeopleCollectionViewDataSource.SectionType)
-    -> [PeopleCollectionViewDataSource.ItemType] {
-
-        switch section {
-        case .connections:
-            return []
-        case .contacts:
-            return []
-        }
     }
 }

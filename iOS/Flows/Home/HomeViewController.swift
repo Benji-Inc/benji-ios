@@ -95,12 +95,6 @@ class HomeViewController: ViewController {
     private func loadData() async {
         self.collectionView.animationView.play()
 
-//        let userID = User.current()!.userObjectID!
-//        let query = ChannelListQuery(filter: .containMembers(userIds: [userID]),
-//                                     sort: [.init(key: .lastMessageAt, isAscending: false)])
-//
-//        self.channelListController = try? await ChatClient.shared.queryChannels(query: query)
-
         await NoticeSupplier.shared.loadNotices()
 
         let cycle = AnimationCycle(inFromPosition: .inward,
