@@ -15,6 +15,9 @@ class ConversationViewController: FullScreenViewController,
     
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     private var collectionView = CollectionView(layout: new_ConversationCollectionViewLayout())
+
+    private let stackedAvatarView = StackedAvatarView()
+    private let titleLabel = Label(font: .mediumThin, textColor: .background4)
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     
@@ -53,6 +56,21 @@ class ConversationViewController: FullScreenViewController,
         self.view.insertSubview(self.blurView, belowSubview: self.contentContainer)
         self.contentContainer.addSubview(self.collectionView)
         self.collectionView.decelerationRate = .fast
+        self.collectionView.showsHorizontalScrollIndicator = false
+
+        self.contentContainer.addSubview(self.stackedAvatarView)
+        self.contentContainer.addSubview(self.titleLabel)
+        self.titleLabel.textAlignment = .left
+        self.titleLabel.lineBreakMode = .byTruncatingTail
+
+        self.stackedAvatarView.itemHeight = 70
+
+        let members = self.conversation.lastActiveMembers.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        }
+
+        self.titleLabel.setText(self.conversation.title)
+        self.stackedAvatarView.set(items: members)
     }
     
     override func viewDidLayoutSubviews() {
@@ -60,6 +78,15 @@ class ConversationViewController: FullScreenViewController,
         
         self.blurView.expandToSuperviewSize()
         self.collectionView.expandToSuperviewSize()
+
+        self.stackedAvatarView.setSize()
+        self.stackedAvatarView.pin(.top, padding: Theme.contentOffset.half)
+        self.stackedAvatarView.pin(.left, padding: Theme.contentOffset.half)
+
+        let maxWidth = self.view.width - Theme.contentOffset - self.stackedAvatarView.width
+        self.titleLabel.setSize(withWidth: maxWidth)
+        self.titleLabel.match(.bottom, to: .bottom, of: self.stackedAvatarView)
+        self.titleLabel.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset.half)
     }
     
     override func viewDidAppear(_ animated: Bool) {
