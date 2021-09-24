@@ -24,9 +24,12 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     }
 
     var handleDeleteMessage: ((Message) -> Void)?
+    var handleLoadMoreMessages: CompletionOptional = nil
 
     private let contextMenuDelegate: ContextMenuInteractionDelegate
-    private let messageCellConfig = ConversationCollectionViewDataSource.createMessageCellRegistration()
+    private let messageCellRegistration = ConversationCollectionViewDataSource.createMessageCellRegistration()
+    private let loadMoreHeaderRegistration
+    = ConversationCollectionViewDataSource.createLoadMoreHeaderRegistration()
 
     override init(collectionView: UICollectionView) {
         self.contextMenuDelegate = ContextMenuInteractionDelegate(collectionView: collectionView)
@@ -45,7 +48,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case .basic(let channelID):
             switch item {
             case .message(let messageID):
-                let cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellConfig,
+                let cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                         for: indexPath,
                                                                         item: (channelID, messageID, self))
 
@@ -60,7 +63,11 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                                            kind: String,
                                            section: SectionType,
                                            indexPath: IndexPath) -> UICollectionReusableView? {
-        return nil
+        let header
+        = collectionView.dequeueConfiguredReusableSupplementary(using: self.loadMoreHeaderRegistration,
+                                                                for: indexPath)
+
+        return header
     }
 
     /// Updates the datasource with the passed in array of message changes.

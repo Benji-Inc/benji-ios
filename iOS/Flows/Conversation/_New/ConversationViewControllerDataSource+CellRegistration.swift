@@ -16,9 +16,10 @@ extension ConversationCollectionViewDataSource {
                                         (channelID: ChannelId,
                                          messageID: MessageId,
                                          dataSource: ConversationCollectionViewDataSource)>
+    typealias LoadMoreHeaderRegistration
+    = UICollectionView.SupplementaryRegistration<LoadMoreSectionHeader>
 
     static func createMessageCellRegistration() -> MessageCellRegistration {
-
         return MessageCellRegistration { cell, indexPath, item in
             let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                         messageId: item.messageID)
@@ -46,6 +47,13 @@ extension ConversationCollectionViewDataSource {
             }
 
             cell.contentView.setNeedsLayout()
+        }
+    }
+
+    static func createLoadMoreHeaderRegistration() -> LoadMoreHeaderRegistration {
+        return LoadMoreHeaderRegistration(elementKind: CollectionView.elementKindSectionHeader)
+        { supplementaryView, elementKind, indexPath in
+
         }
     }
 }

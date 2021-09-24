@@ -1269,10 +1269,10 @@
 		8024B94E26F278C8008ABF7F /* _New */ = {
 			isa = PBXGroup;
 			children = (
-				8024B95026F278C8008ABF7F /* ConversationViewControllerDataSource.swift */,
-				80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */,
 				80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */,
 				8024B95126F278C8008ABF7F /* ConversationViewController.swift */,
+				8024B95026F278C8008ABF7F /* ConversationViewControllerDataSource.swift */,
+				80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */,
 				8015CA7626F3D907000F3C60 /* MessageCell.swift */,
 			);
 			path = _New;
@@ -1629,7 +1629,6 @@
 			children = (
 				D6B2601522E41BE700143CF0 /* ConversationSectionHeader.swift */,
 				D6B2601722E4208900143CF0 /* ConversationDateLabel.swift */,
-				D63844112337C3CD0072227B /* LoadMoreSectionHeader.swift */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -1902,6 +1901,7 @@
 				D6D1500621D5E73D00CD8CE4 /* ConversationThreadViewController.swift */,
 				D61D38E6248C494A00BE457B /* ConversationThreadViewController+Messaging.swift */,
 				D6FC8099237A68F50089AACC /* ConversationThreadViewController+Updates.swift */,
+				D63844112337C3CD0072227B /* LoadMoreSectionHeader.swift */,
 				D66A580C25DD6B06001B3F64 /* NewConversationCollectionView.swift */,
 				D66A580825DD6954001B3F64 /* NewConversationCollectionViewManager.swift */,
 				D66A580425DD68F9001B3F64 /* NewConversationCoordinator.swift */,

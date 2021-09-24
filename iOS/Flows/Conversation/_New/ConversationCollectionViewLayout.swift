@@ -23,6 +23,9 @@ class new_ConversationCollectionViewLayout: UICollectionViewFlowLayout {
     override func prepare() {
         guard let collectionView = self.collectionView else { return }
 
+        self.headerReferenceSize = CGSize(width: collectionView.width * 0.8,
+                                          height: 200)
+        
         let itemHeight: CGFloat = 200
 
         self.itemSize = CGSize(width: collectionView.width * 0.8, height: itemHeight)
