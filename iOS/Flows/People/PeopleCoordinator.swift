@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Contacts
 
 class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
 
@@ -25,10 +26,21 @@ class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
 }
 
 extension PeopleCoordinator: PeopleViewControllerDelegate {
-    nonisolated func peopleView(_ controller: PeopleViewController, didCreate conversationController: ChatChannelController) {
 
-        Task.onMainActor {
-            self.finishFlow(with: conversationController)
+    nonisolated func peopleView(_ controller: PeopleViewController, didSelect item: PeopleCollectionViewDataSource.ItemType) {
+        // Do stuff
+
+        switch item {
+        case .connection(_):
+            break
+        case .contact(let contact):
+            Task {
+                await self.didSelect(contact: contact)
+            }
         }
+    }
+
+    private func didSelect(contact: CNContact) {
+        // Trigger invite flow
     }
 }

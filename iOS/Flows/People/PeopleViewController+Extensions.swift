@@ -11,8 +11,7 @@ import Foundation
 extension PeopleViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-       // guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
-
-        //self.delegate?.archiveView(self, didSelect: identifier)
+        guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
+        self.delegate?.peopleView(self, didSelect: identifier)
     }
 }

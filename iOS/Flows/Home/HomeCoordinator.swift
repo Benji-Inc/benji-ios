@@ -111,4 +111,25 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         })
         self.router.present(coordinator, source: self.homeVC, animated: true)
     }
+
+    //    func createConversation() async {
+    //
+    //        let members: [UserId] = self.collectionViewManager.selectedItems.compactMap { item in
+    //            guard let connection = item as? Connection else { return nil }
+    //            return connection.nonMeUser?.objectId
+    //        }
+    //
+    //        let memberSet = Set(members)
+    //
+    //        let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
+    //
+    //        do {
+    //           let controller = try ChatClient.shared.channelController(createChannelWithId: channelId, name: "", imageURL: nil, team: nil, members: memberSet, isCurrentUserMember: true, messageOrdering: .bottomToTop, invites: [], extraData: [:])
+    //
+    //            try await controller.synchronize()
+    //            self.delegate?.peopleView(self, didCreate: controller)
+    //        } catch {
+    //            print(error)
+    //        }
+    //    }
 }
