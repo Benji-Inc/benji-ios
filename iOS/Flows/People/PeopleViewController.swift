@@ -13,6 +13,10 @@ protocol NewConversationViewControllerDelegate: AnyObject {
     func peopleView(_ controller: PeopleViewController, didCreate conversationController: ChatChannelController)
 }
 
+// Implement new data source
+// Add new item type
+// update layout with Connections at the top, and contacts at the bottom
+
 class PeopleViewController: CollectionViewController<PeopleCollectionViewManager.SectionType, PeopleCollectionViewManager> {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))

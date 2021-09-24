@@ -536,6 +536,8 @@
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */; };
 		D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
+		D687F3C626FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */; };
+		D687F3C826FE4E4B000E4734 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C726FE4E4B000E4734 /* ContactCell.swift */; };
 		D6884B222587D25D00DA380E /* AppClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = D6884B0E2587D25C00DA380E /* AppClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D68B362C25BB1F86005AEB4C /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68B362B25BB1F86005AEB4C /* AttachmentView.swift */; };
 		D68BEAD424831FA000C95D31 /* ReservationsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */; };
@@ -1052,6 +1054,8 @@
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedAvatarView.swift; sourceTree = "<group>"; };
 		D686DA5C25799EB6000B4C04 /* Statusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statusable.swift; sourceTree = "<group>"; };
+		D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		D687F3C726FE4E4B000E4734 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		D6884B0E2587D25C00DA380E /* AppClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6884B1E2587D25D00DA380E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D6884B1F2587D25D00DA380E /* AppClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClip.entitlements; sourceTree = "<group>"; };
@@ -2021,10 +2025,12 @@
 			isa = PBXGroup;
 			children = (
 				D66A580A25DD6990001B3F64 /* ConnectionCell.swift */,
+				D687F3C726FE4E4B000E4734 /* ContactCell.swift */,
+				D6B3329425DDB9E300211044 /* NewConversationHeaderView.swift */,
 				D66A580C25DD6B06001B3F64 /* PeopleCollectionView.swift */,
+				D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */,
 				D66A580825DD6954001B3F64 /* PeopleCollectionViewManager.swift */,
 				D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */,
-				D6B3329425DDB9E300211044 /* NewConversationHeaderView.swift */,
 				D66A580625DD691A001B3F64 /* PeopleViewController.swift */,
 			);
 			path = People;
@@ -2861,6 +2867,7 @@
 				D6D1460B21D5547000CD8CE4 /* FontType.swift in Sources */,
 				D6F33C6B24AFCF24009603FF /* MessageKind.swift in Sources */,
 				D6F312A8266AE27D00E25FEE /* LinkCell.swift in Sources */,
+				D687F3C626FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift in Sources */,
 				D678EC2926F538160071DB0D /* CircleGroupCoordinator.swift in Sources */,
 				D6D1461321D583E500CD8CE4 /* NavigationController.swift in Sources */,
 				D6EE715B23B84C5C000ED221 /* AnyHashableDisplayable.swift in Sources */,
@@ -3002,6 +3009,7 @@
 				D6FA622423F06AEF00048C4A /* AnimationCycle.swift in Sources */,
 				D64DD8AC23CE2C180039DC5A /* OnboardingViewController.swift in Sources */,
 				80FA869226F117C20053101B /* ChatUser+Avatar.swift in Sources */,
+				D687F3C826FE4E4B000E4734 /* ContactCell.swift in Sources */,
 				D66379CF25A3704300A4A3B7 /* UserNotificationManager+Extensions.swift in Sources */,
 				D66F0FDA22BF297F00BA277D /* MainCoordinator.swift in Sources */,
 				D6F33C8824B150F9009603FF /* BaseMessageCell.swift in Sources */,
