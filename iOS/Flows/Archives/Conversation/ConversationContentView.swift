@@ -58,7 +58,7 @@ class ConversationContentView: View {
 
         guard self.currentItem?.cid == conversation.cid else { return }
 
-        if let friendlyName = conversation.name {
+        if let friendlyName = conversation.name, !friendlyName.isEmpty {
             self.label.setText(friendlyName.capitalized)
         } else if members.count == 0 {
             self.label.setText("You")
