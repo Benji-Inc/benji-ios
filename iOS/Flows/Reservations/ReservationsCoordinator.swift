@@ -19,7 +19,6 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     private var selectedReservation: Reservation?
     private lazy var messageComposer = MessageComposerViewController()
     lazy var contactPicker = CNContactPickerViewController()
-    private var cancellables = Set<AnyCancellable>()
 
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.reservationsVC
@@ -28,46 +27,32 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
-        self.reservationsVC.didSelectReservation = { [unowned self] reservation in 
-            self.presentShare(for: reservation)
-        }
+//        self.reservationsVC.didSelectReservation = { [unowned self] reservation in
+//            self.presentShare(for: reservation)
+//        }
 
         self.reservationsVC.didSelectShowContacts = { [unowned self] in
             self.showContacts()
         }
     }
 
-    //    nonisolated func homeViewControllerDidSelectReservations(_ controller: HomeViewController) {
-    //        Task.onMainActor {
-    //            self.didSelectReservations()
-    //        }
-    //    }
-    //
-    //    func didSelectReservations() {
-    //        self.removeChild()
-    //        let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
-    //        self.addChildAndStart(coordinator) {}
-    //        self.router.present(coordinator, source: self.homeVC)
-    //    }
+//    private func presentShare(for reservation: Reservation) {
+//        let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
+//        ac.completionWithItemsHandler = { activityType, completed, items, error in
+//            if completed {
+//                self.showSentToast()
+//            }
+//        }
+//
+//        let exclusions: [UIActivity.ActivityType] = [.postToFacebook, .postToTwitter, .postToWeibo, .mail, .print, .assignToContact, .saveToCameraRoll, .addToReadingList, .postToFlickr, .postToVimeo, .postToTencentWeibo, .openInIBooks, .markupAsPDF, .airDrop]
+//
+//        ac.excludedActivityTypes = exclusions
+//
+//        self.reservationsVC.present(ac, animated: true, completion: nil)
+//    }
 
-    private func presentShare(for reservation: Reservation) {
-        let ac = UIActivityViewController(activityItems: [reservation], applicationActivities: nil)
-        ac.completionWithItemsHandler = { activityType, completed, items, error in
-            if completed {
-                self.showSentAlert()
-            }
-        }
-
-        let exclusions: [UIActivity.ActivityType] = [.postToFacebook, .postToTwitter, .postToWeibo, .mail, .print, .assignToContact, .saveToCameraRoll, .addToReadingList, .postToFlickr, .postToVimeo, .postToTencentWeibo, .openInIBooks, .markupAsPDF, .airDrop]
-
-        ac.excludedActivityTypes = exclusions
-
-        self.reservationsVC.present(ac, animated: true, completion: nil)
-    }
-
-    private func showSentAlert() {
+    private func showSentToast() {
         ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: UIImage(systemName: "envelope")!, title: "RSVP Sent", description: "Your RSVP has been sent. As soon as someone accepts using your link, a conversation will be created between the two of you.", deepLink: nil))
-        self.finishFlow(with: ())
     }
 
     private func showContacts() {
@@ -80,7 +65,6 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     private func showSentAlert(for avatar: Avatar) {
         let text = LocalizedString(id: "", arguments: [avatar.fullName], default: "Your RSVP has been sent to @(name). As soon as they accept, a conversation will be created between the two of you.")
         ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: avatar, title: "RSVP Sent", description: text, deepLink: nil))
-        self.finishFlow(with: ())
     }
 
     private func sendText(with message: String?, phone: String) {
@@ -100,9 +84,7 @@ extension ReservationsCoordinator: MFMessageComposeViewControllerDelegate {
                                       didFinishWith result: MessageComposeResult) {
         switch result {
         case .cancelled, .failed:
-            self.messageComposer.dismiss(animated: true) {
-                self.finishFlow(with: ())
-            }
+            self.messageComposer.dismiss(animated: true)
         case .sent:
             self.messageComposer.dismiss(animated: true) {
                 if let contact = self.selectedContact {
@@ -132,9 +114,7 @@ private class MessageComposerViewController: MFMessageComposeViewController, Dis
 extension ReservationsCoordinator: CNContactPickerDelegate {
 
     func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
-        picker.dismiss(animated: true) {
-            self.finishFlow(with: ())
-        }
+        picker.dismiss(animated: true)
     }
 
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
@@ -157,7 +137,9 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
 
         picker.dismiss(animated: true) {
             Task {
+                await self.reservationsVC.contactsButton.handleEvent(status: .loading)
                 await self.findUser(for: contact)
+                await self.reservationsVC.contactsButton.handleEvent(status: .complete)
             }
         }
     }
@@ -197,7 +179,7 @@ extension ReservationsCoordinator: CNContactPickerDelegate {
                                       preferredStyle: .alert)
 
         let cancel = UIAlertAction(title: "Cancel", style: .cancel) { (_) in
-            self.finishFlow(with: ())
+
         }
 
         let ok = UIAlertAction(title: "Ok", style: .default) { (_) in
