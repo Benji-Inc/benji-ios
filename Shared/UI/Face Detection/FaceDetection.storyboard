@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="18121" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18091"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -10,29 +10,14 @@
         <!--Face Detection View Controller-->
         <scene sceneID="x8p-Ye-x1A">
             <objects>
-                <viewController storyboardIdentifier="FaceDetection" useStoryboardIdentifierAsRestorationIdentifier="YES" id="SaZ-hT-7kw" customClass="FaceDetectionViewController" customModule="Ours" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FaceDetection" useStoryboardIdentifierAsRestorationIdentifier="YES" id="SaZ-hT-7kw" customClass="FaceDetectionViewController" customModule="AppClip" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="zPV-5F-fQv">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PVc-wi-uHa" customClass="FaceView" customModule="Ours" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
-                        </subviews>
                         <viewLayoutGuide key="safeArea" id="atn-5z-uHZ"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
-                        <constraints>
-                            <constraint firstItem="PVc-wi-uHa" firstAttribute="leading" secondItem="atn-5z-uHZ" secondAttribute="leading" id="EGn-LC-Usa"/>
-                            <constraint firstItem="PVc-wi-uHa" firstAttribute="trailing" secondItem="atn-5z-uHZ" secondAttribute="trailing" id="QkP-RK-aZy"/>
-                            <constraint firstAttribute="bottom" secondItem="PVc-wi-uHa" secondAttribute="bottom" id="SS1-9n-toc"/>
-                            <constraint firstItem="PVc-wi-uHa" firstAttribute="top" secondItem="zPV-5F-fQv" secondAttribute="top" id="qdh-dg-FZw"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="faceView" destination="PVc-wi-uHa" id="u8F-gp-xuE"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GS6-fw-PG0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

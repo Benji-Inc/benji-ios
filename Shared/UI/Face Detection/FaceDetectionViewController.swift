@@ -14,21 +14,7 @@ import UIKit
 class FaceDetectionViewController: ImageCaptureViewController {
     var sequenceHandler = VNSequenceRequestHandler()
 
-    @IBOutlet var faceView: FaceView!
-
     @Published var faceDetected = false
-
-    var maxX: CGFloat = 0.0
-    var midY: CGFloat = 0.0
-    var maxY: CGFloat = 0.0
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.maxX = self.view.bounds.maxX
-        self.midY = self.view.bounds.midY
-        self.maxY = self.view.bounds.maxY
-    }
 
     override func captureOutput(_ output: AVCaptureOutput,
                                 didOutput sampleBuffer: CMSampleBuffer,
@@ -46,5 +32,14 @@ class FaceDetectionViewController: ImageCaptureViewController {
         } catch {
 
         }
+    }
+
+    func detectedFace(request: VNRequest, error: Error?) {
+        guard let results = request.results as? [VNFaceObservation], let _ = results.first else {
+            self.faceDetected = false
+            return
+        }
+
+        self.faceDetected = true
     }
 }
