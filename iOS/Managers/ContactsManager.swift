@@ -60,7 +60,9 @@ class ContactsManger {
                     // 3.
                     var contacts: [CNContact] = []
                     try self.store.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
-                        contacts.append(contact)
+                        if contact.phoneNumbers.count > 0 {
+                            contacts.append(contact)
+                        }
                     })
                     return contacts
                 } catch let error {

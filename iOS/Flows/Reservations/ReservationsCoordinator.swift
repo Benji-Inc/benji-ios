@@ -16,7 +16,6 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
 
     lazy var reservationsVC = ReservationsViewController()
     private var selectedContact: CNContact?
-    private var selectedReservation: Reservation?
     private lazy var messageComposer = MessageComposerViewController()
 
     private lazy var contactsVC = ContactsViewController()
@@ -135,10 +134,7 @@ extension ReservationsCoordinator: PeopleViewControllerDelegate {
 
     func findUser(with contact: CNContact, for reservation: Reservation) async {
         // Search for user with phone number
-        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers(),
-              let reservation = self.selectedReservation else {
-                  return
-              }
+        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
         
         do {
             async let matchingUser = User.getFirstObject(where: "phoneNumber", contains: phone)
