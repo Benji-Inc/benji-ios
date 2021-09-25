@@ -31,6 +31,8 @@ class PeopleViewController: BlurredViewController {
 
     private let includedSections: [PeopleCollectionViewDataSource.SectionType]
 
+    let button = Button()
+
     init(includedSections: [PeopleCollectionViewDataSource.SectionType] = [.connections, .contacts]) {
         self.includedSections = includedSections
         super.init()
@@ -45,6 +47,19 @@ class PeopleViewController: BlurredViewController {
 
         self.view.addSubview(self.collectionView)
         self.collectionView.delegate = self
+
+        self.view.addSubview(self.button)
+        self.button.set(style: .normal(color: .purple, text: "Add"))
+
+        self.button.didSelect { [unowned self] in
+            self.delegate?.peopleView(self, didSelect: self.selectedItems)
+        }
+
+        self.collectionView.publisher(for: \.indexPathsForSelectedItems)
+            .removeDuplicates()
+            .mainSink { _ in
+            self.updateButton()
+        }.store(in: &self.cancellables)
     }
 
     override func viewDidLoad() {
@@ -59,6 +74,25 @@ class PeopleViewController: BlurredViewController {
         super.viewDidLayoutSubviews()
 
         self.collectionView.expandToSuperviewSize()
+
+        self.button.setSize(with: self.view.width)
+        self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+    }
+
+    private func updateButton() {
+
+        let transform: CGAffineTransform
+        if self.selectedItems.count == 0 {
+            transform = CGAffineTransform.init(translationX: 0, y: 100)
+        } else {
+            transform = .identity
+        }
+
+        self.button.set(style: .normal(color: .purple, text: "Add \(self.selectedItems.count)"))
+
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.button.transform = transform
+        }
     }
 
     // MARK: Data Loading
