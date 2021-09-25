@@ -49,7 +49,7 @@ class PeopleViewController: BlurredViewController {
         self.dataSource.headerTitle = self.getHeaderTitle()
         self.dataSource.headerDescription = self.getHeaderDescription()
 
-        self.collectionView.allowsMultipleSelection = true 
+        self.collectionView.allowsMultipleSelection = true
 
         self.view.addSubview(self.collectionView)
         self.collectionView.delegate = self
@@ -131,6 +131,7 @@ class PeopleViewController: BlurredViewController {
         }
 
         let contacts = await ContactsManger.shared.fetchContacts()
+        await self.loadUnclaimedReservations()
 
         let cycle = AnimationCycle(inFromPosition: .inward,
                                    outToPosition: .inward,
@@ -141,6 +142,21 @@ class PeopleViewController: BlurredViewController {
         await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
 
         self.collectionView.animationView.stop()
+    }
+
+    private func loadUnclaimedReservations() async {
+
+        let query = Reservation.query()
+        query?.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
+        query?.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
+        do {
+            let objects = try await query?.findObjectsInBackground()
+            if let reservations = objects as? [Reservation] {
+                //self.show(reservations: reservations)
+            }
+        } catch {
+            logDebug(error)
+        }
     }
 
     private func getInitialSnapshot(withConnecitons connections: [Connection],

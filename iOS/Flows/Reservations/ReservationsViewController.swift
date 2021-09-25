@@ -21,14 +21,10 @@ class ReservationsViewController: NavigationBarViewController {
         super.initializeViews()
 
         self.view.addSubview(self.contactsButton)
-        self.contactsButton.set(style: .normal(color: .purple, text: "Invite Contact"))
+        self.contactsButton.set(style: .normal(color: .purple, text: "Invite Contacts"))
         self.contactsButton.didSelect { [unowned self] in
             self.didSelectShowContacts?()
         }
-
-//        Task {
-//            await self.loadUnclaimedReservations()
-//        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -38,25 +34,6 @@ class ReservationsViewController: NavigationBarViewController {
         self.contactsButton.centerOnX()
         self.contactsButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
     }
-
-//    @MainActor
-//    private func loadUnclaimedReservations() async {
-//        guard let query = Reservation.query() else { return }
-//
-//        await self.contactsButton.handleEvent(status: .loading)
-//
-//        query.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
-//        query.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
-//        do {
-//            let objects = try await query.findObjectsInBackground()
-//            await self.contactsButton.handleEvent(status: .complete)
-//            if let reservations = objects as? [Reservation] {
-//                self.show(reservations: reservations)
-//            }
-//        } catch {
-//            logDebug(error)
-//        }
-//    }
 
     override func getTitle() -> Localized {
         return "Friends don't send, they swipe."
@@ -69,23 +46,4 @@ class ReservationsViewController: NavigationBarViewController {
     override func shouldShowBackButton() -> Bool {
         return false
     }
-
-//    private func show(reservations: [Reservation]) {
-//        self.reservations = reservations
-//        self.updateNavigationBar()
-//    }
-
-//    private func didSelect(reservation: Reservation) {
-//        Task {
-//            do {
-//                await self.contactsButton.handleEvent(status: .loading)
-//                try await reservation.prepareMetadata(andUpdate: [])
-//
-//                await self.contactsButton.handleEvent(status: .complete)
-//                self.didSelectReservation?(reservation)
-//            } catch {
-//                await self.contactsButton.handleEvent(status: .error(error.localizedDescription))
-//            }
-//        }
-//    }
 }

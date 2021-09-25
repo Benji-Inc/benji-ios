@@ -54,6 +54,7 @@ class ContactsManger {
                 let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactIdentifierKey, CNContactThumbnailImageDataKey]
 
                 let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
+                request.sortOrder = .familyName
                 
                 do {
                     // 3.

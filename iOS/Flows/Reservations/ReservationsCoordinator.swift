@@ -95,6 +95,7 @@ extension ReservationsCoordinator: PeopleViewControllerDelegate {
 
     nonisolated func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
 
+        // Go throught each contact and invite them
     }
 
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
