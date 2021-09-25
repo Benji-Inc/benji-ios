@@ -15,14 +15,14 @@ extension PeopleViewController: UICollectionViewDelegate {
             cell.update(isSelected: true )
         }
 
-        if !collectionView.allowsMultipleSelection {
-            self.delegate?.peopleView(self, didSelect: self.selectedItems)
-        }
+        self.updateButton()
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewManagerCell {
             cell.update(isSelected: false)
         }
+
+        self.updateButton()
     }
 }

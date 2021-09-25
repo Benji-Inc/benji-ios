@@ -29,12 +29,12 @@ class PeopleViewController: BlurredViewController {
         }) ?? []
     }
 
-    private let includedSections: [PeopleCollectionViewDataSource.SectionType]
+    private let includeConnections: Bool
 
     let button = Button()
 
-    init(includedSections: [PeopleCollectionViewDataSource.SectionType] = [.connections, .contacts]) {
-        self.includedSections = includedSections
+    init(includeConnections: Bool = true) {
+        self.includeConnections = includeConnections
         super.init()
     }
 
@@ -45,6 +45,8 @@ class PeopleViewController: BlurredViewController {
     override func initializeViews() {
         super.initializeViews()
 
+        self.collectionView.allowsMultipleSelection = true 
+
         self.view.addSubview(self.collectionView)
         self.collectionView.delegate = self
 
@@ -54,12 +56,7 @@ class PeopleViewController: BlurredViewController {
         self.button.didSelect { [unowned self] in
             self.delegate?.peopleView(self, didSelect: self.selectedItems)
         }
-
-        self.collectionView.publisher(for: \.indexPathsForSelectedItems)
-            .removeDuplicates()
-            .mainSink { _ in
-            self.updateButton()
-        }.store(in: &self.cancellables)
+        self.updateButton()
     }
 
     override func viewDidLoad() {
@@ -76,22 +73,22 @@ class PeopleViewController: BlurredViewController {
         self.collectionView.expandToSuperviewSize()
 
         self.button.setSize(with: self.view.width)
-        self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+        self.button.centerOnX()
     }
 
-    private func updateButton() {
-
-        let transform: CGAffineTransform
-        if self.selectedItems.count == 0 {
-            transform = CGAffineTransform.init(translationX: 0, y: 100)
-        } else {
-            transform = .identity
-        }
+    func updateButton() {
 
         self.button.set(style: .normal(color: .purple, text: "Add \(self.selectedItems.count)"))
 
         UIView.animate(withDuration: Theme.animationDuration) {
-            self.button.transform = transform
+
+            if self.selectedItems.count == 0 {
+                self.button.top = self.view.height
+            } else {
+                self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+            }
+            
+            self.view.layoutNow()
         }
     }
 
@@ -108,7 +105,7 @@ class PeopleViewController: BlurredViewController {
         }
 
         var connections: [Connection] = []
-        if self.includedSections.contains(.connections) {
+        if self.includeConnections {
             do {
                 connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
                     return !connection.nonMeUser.isNil
@@ -118,10 +115,7 @@ class PeopleViewController: BlurredViewController {
             }
         }
 
-        var contacts: [CNContact] = []
-        if self.includedSections.contains(.contacts) {
-            contacts = await ContactsManger.shared.fetchContacts()
-        }
+        let contacts = await ContactsManger.shared.fetchContacts()
 
         let cycle = AnimationCycle(inFromPosition: .inward,
                                    outToPosition: .inward,
@@ -139,12 +133,14 @@ class PeopleViewController: BlurredViewController {
                                                                       PeopleCollectionViewDataSource.ItemType> {
         var snapshot = self.dataSource.snapshot()
                                                                           snapshot.deleteAllItems()
+                                                                          let allSections = PeopleCollectionViewDataSource.SectionType.allCases
 
 
-                                                                          snapshot.appendSections(self.includedSections)
-                                                                          self.includedSections.forEach { (section) in
+                                                                          snapshot.appendSections(allSections)
+                                                                          allSections.forEach { (section) in
             switch section {
             case .connections:
+                guard self.includeConnections else { return }
                 let items: [PeopleCollectionViewDataSource.ItemType] = connections.map { connection in
                     return .connection(connection)
                 }

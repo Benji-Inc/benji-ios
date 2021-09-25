@@ -19,7 +19,7 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     private var selectedReservation: Reservation?
     private lazy var messageComposer = MessageComposerViewController()
 
-    private lazy var peopleVC = PeopleViewController(includedSections: [.contacts])
+    private lazy var peopleVC = PeopleViewController(includeConnections: false)
 
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.reservationsVC
