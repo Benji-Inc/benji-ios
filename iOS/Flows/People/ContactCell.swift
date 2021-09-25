@@ -10,6 +10,7 @@ import Foundation
 import TMROLocalization
 import Lottie
 import Contacts
+import PhoneNumberKit
 
 class ContactCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = CNContact
@@ -39,7 +40,8 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
         self.avatarView.set(avatar: item)
         self.titleLabel.setText(item.fullName)
         let phone = item.findBestPhoneNumber().phone?.stringValue ?? ""
-        self.subTitleLabel.setText(phone)
+        let phoneString = PartialFormatter().formatPartial(phone)
+        self.subTitleLabel.setText(phoneString)
         self.layoutNow()
     }
 
