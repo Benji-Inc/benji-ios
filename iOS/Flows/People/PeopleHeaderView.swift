@@ -31,12 +31,10 @@ class PeopleHeaderView: UICollectionReusableView {
         self.addSubview(self.lineView)
         self.lineView.set(backgroundColor: .background3)
 
-        self.titleLabel.setText("Create Conversation")
         self.titleLabel.textAlignment = .center
         self.titleLabel.stringCasing = .uppercase
 
         self.descriptionLabel.textAlignment = .center
-        self.descriptionLabel.setText("Tap people below to add them to a new conversation.")
     }
 
     override func layoutSubviews() {

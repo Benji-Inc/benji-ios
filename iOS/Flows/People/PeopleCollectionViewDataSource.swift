@@ -8,6 +8,7 @@
 
 import Foundation
 import Contacts
+import TMROLocalization
 
 class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionViewDataSource.SectionType,
                                        PeopleCollectionViewDataSource.ItemType> {
@@ -21,6 +22,9 @@ class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionV
         case connection(Connection)
         case contact(CNContact)
     }
+
+    var headerTitle: Localized = ""
+    var headerDescription: Localized = ""
 
     private let connectionConfig = ManageableCellRegistration<ConnectionCell>().provider
     private let contactConfig = ManageableCellRegistration<ContactCell>().provider
@@ -53,7 +57,10 @@ class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionV
 
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            return collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+            header.titleLabel.setText(self.headerTitle)
+            header.descriptionLabel.setText(self.headerDescription)
+            return header 
         default: 
             return nil
         }

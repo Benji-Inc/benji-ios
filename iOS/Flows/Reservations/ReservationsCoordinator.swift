@@ -19,7 +19,7 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     private var selectedReservation: Reservation?
     private lazy var messageComposer = MessageComposerViewController()
 
-    private lazy var peopleVC = PeopleViewController(includeConnections: false)
+    private lazy var contactsVC = ContactsViewController()
 
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.reservationsVC
@@ -38,8 +38,8 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     }
 
     private func showContacts() {
-        self.peopleVC.delegate = self
-        self.router.present(self.peopleVC, source: self.reservationsVC)
+        self.contactsVC.delegate = self
+        self.router.present(self.contactsVC, source: self.reservationsVC)
     }
 
     private func showSentAlert(for avatar: Avatar) {

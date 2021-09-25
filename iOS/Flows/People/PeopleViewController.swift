@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 import Contacts
+import TMROLocalization
 
 protocol PeopleViewControllerDelegate: AnyObject {
     func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType])
@@ -45,13 +46,15 @@ class PeopleViewController: BlurredViewController {
     override func initializeViews() {
         super.initializeViews()
 
+        self.dataSource.headerTitle = self.getHeaderTitle()
+        self.dataSource.headerDescription = self.getHeaderDescription()
+
         self.collectionView.allowsMultipleSelection = true 
 
         self.view.addSubview(self.collectionView)
         self.collectionView.delegate = self
 
         self.view.addSubview(self.button)
-        self.button.set(style: .normal(color: .purple, text: "Add"))
 
         self.button.didSelect { [unowned self] in
             self.delegate?.peopleView(self, didSelect: self.selectedItems)
@@ -78,7 +81,7 @@ class PeopleViewController: BlurredViewController {
 
     func updateButton() {
 
-        self.button.set(style: .normal(color: .purple, text: "Add \(self.selectedItems.count)"))
+        self.button.set(style: .normal(color: .purple, text: self.getButtonTitle()))
 
         UIView.animate(withDuration: Theme.animationDuration) {
 
@@ -87,9 +90,21 @@ class PeopleViewController: BlurredViewController {
             } else {
                 self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
             }
-            
+
             self.view.layoutNow()
         }
+    }
+
+    func getHeaderTitle() -> Localized {
+        return "Add People"
+    }
+
+    func getHeaderDescription() -> Localized {
+        return "Tap anyone below to add/invite them to the conversation."
+    }
+
+    func getButtonTitle() -> Localized {
+        return "Add \(self.selectedItems.count)"
     }
 
     // MARK: Data Loading
