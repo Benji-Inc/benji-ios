@@ -21,6 +21,10 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
 
     private lazy var contactsVC = ContactsViewController()
 
+    private var reservations: [Reservation] = []
+    private var contactsToInvite: [CNContact] = []
+    private var inviteIndex: Int = 0
+
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.reservationsVC
     }
@@ -95,37 +99,41 @@ extension ReservationsCoordinator: PeopleViewControllerDelegate {
 
     nonisolated func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
 
-        // Go throught each contact and invite them
-    }
+        Task.onMainActor {
 
-    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
-        self.selectedContact = contact
+            self.reservations = controller.reservations
 
-        // Find the RSVP that has been used for the contact before
-        self.selectedReservation = self.reservationsVC.reservations.first(where: { reservation in
-            reservation.contactId == contact.identifier
-        })
-
-        if self.selectedReservation.isNil {
-            self.selectedReservation = self.reservationsVC.reservations.first(where: { reservation in
-                reservation.contactId.isNil
+            self.contactsToInvite = items.compactMap({ item in
+                switch item {
+                case .connection(_):
+                    return nil
+                case .contact(let contact):
+                    return contact
+                }
             })
-        }
 
-        if self.selectedReservation.isNil {
-            self.selectedReservation = self.reservationsVC.reservations.first
-        }
-
-        picker.dismiss(animated: true) {
-            Task {
-                await self.reservationsVC.contactsButton.handleEvent(status: .loading)
-                await self.findUser(for: contact)
-                await self.reservationsVC.contactsButton.handleEvent(status: .complete)
-            }
+            self.updateInvitation()
         }
     }
 
-    func findUser(for contact: CNContact) async {
+    func updateInvitation() {
+        if let contact = self.contactsToInvite[safe: self.inviteIndex],
+           let rsvp = self.reservations[safe: self.inviteIndex] {
+            self.invite(contact: contact, with: rsvp)
+        }
+
+        self.inviteIndex += 1
+    }
+
+    func invite(contact: CNContact, with reservation: Reservation) {
+        Task {
+            await self.reservationsVC.contactsButton.handleEvent(status: .loading)
+            await self.findUser(with: contact, for: reservation)
+            await self.reservationsVC.contactsButton.handleEvent(status: .complete)
+        }
+    }
+
+    func findUser(with contact: CNContact, for reservation: Reservation) async {
         // Search for user with phone number
         guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers(),
               let reservation = self.selectedReservation else {

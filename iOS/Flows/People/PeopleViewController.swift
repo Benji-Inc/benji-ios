@@ -31,7 +31,7 @@ class PeopleViewController: BlurredViewController {
     }
 
     private let includeConnections: Bool
-
+    private(set) var reservations: [Reservation] = []
     let button = Button()
 
     init(includeConnections: Bool = true) {
@@ -152,7 +152,7 @@ class PeopleViewController: BlurredViewController {
         do {
             let objects = try await query?.findObjectsInBackground()
             if let reservations = objects as? [Reservation] {
-                //self.show(reservations: reservations)
+                self.reservations = reservations
             }
         } catch {
             logDebug(error)

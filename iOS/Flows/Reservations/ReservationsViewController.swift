@@ -12,10 +12,7 @@ import TMROLocalization
 class ReservationsViewController: NavigationBarViewController {
 
     let contactsButton = Button()
-
     var didSelectShowContacts: CompletionOptional = nil
-
-    private(set) var reservations: [Reservation] = []
 
     override func initializeViews() {
         super.initializeViews()
