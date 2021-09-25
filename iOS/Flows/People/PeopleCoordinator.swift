@@ -27,17 +27,17 @@ class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
 
 extension PeopleCoordinator: PeopleViewControllerDelegate {
 
-    nonisolated func peopleView(_ controller: PeopleViewController, didSelect item: PeopleCollectionViewDataSource.ItemType) {
+    nonisolated func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
         // Do stuff
 
-        switch item {
-        case .connection(let connection):
-            break
-        case .contact(let contact):
-            Task {
-                await self.didSelect(contact: contact)
-            }
-        }
+//        switch item {
+//        case .connection(let connection):
+//            break
+//        case .contact(let contact):
+//            Task {
+//                await self.didSelect(contact: contact)
+//            }
+//        }
     }
 
     private func didSelect(contact: CNContact) {

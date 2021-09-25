@@ -18,7 +18,8 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     private var selectedContact: CNContact?
     private var selectedReservation: Reservation?
     private lazy var messageComposer = MessageComposerViewController()
-    lazy var contactPicker = CNContactPickerViewController()
+
+    private lazy var peopleVC = PeopleViewController(includedSections: [.contacts])
 
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.reservationsVC
@@ -37,10 +38,8 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     }
 
     private func showContacts() {
-        self.contactPicker.displayedPropertyKeys = [CNContactPhoneNumbersKey, CNContactGivenNameKey, CNContactFamilyNameKey]
-        self.contactPicker.predicateForEnablingContact = NSPredicate(format: "phoneNumbers.@count > 0")
-        self.contactPicker.delegate = self
-        self.router.topmostViewController.present(self.contactPicker, animated: true, completion: nil)
+        self.peopleVC.delegate = self
+        self.router.present(self.peopleVC, source: self.reservationsVC)
     }
 
     private func showSentAlert(for avatar: Avatar) {
@@ -92,10 +91,10 @@ private class MessageComposerViewController: MFMessageComposeViewController, Dis
     }
 }
 
-extension ReservationsCoordinator: CNContactPickerDelegate {
+extension ReservationsCoordinator: PeopleViewControllerDelegate {
 
-    func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
-        picker.dismiss(animated: true)
+    nonisolated func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
+
     }
 
     func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {

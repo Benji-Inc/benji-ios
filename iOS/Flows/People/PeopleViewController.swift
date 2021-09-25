@@ -11,7 +11,7 @@ import StreamChat
 import Contacts
 
 protocol PeopleViewControllerDelegate: AnyObject {
-    func peopleView(_ controller: PeopleViewController, didSelect item: PeopleCollectionViewDataSource.ItemType)
+    func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType])
 }
 
 class PeopleViewController: BlurredViewController {
@@ -20,8 +20,25 @@ class PeopleViewController: BlurredViewController {
 
     // MARK: - UI
 
-    private var collectionView = CollectionView(layout: PeopleCollectionViewLayout())
+    var collectionView = CollectionView(layout: PeopleCollectionViewLayout())
     lazy var dataSource = PeopleCollectionViewDataSource(collectionView: self.collectionView)
+
+    var selectedItems: [PeopleCollectionViewDataSource.ItemType] {
+        return self.collectionView.indexPathsForSelectedItems?.compactMap({ ip in
+            return self.dataSource.itemIdentifier(for: ip)
+        }) ?? []
+    }
+
+    private let includedSections: [PeopleCollectionViewDataSource.SectionType]
+
+    init(includedSections: [PeopleCollectionViewDataSource.SectionType] = [.connections, .contacts]) {
+        self.includedSections = includedSections
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func initializeViews() {
         super.initializeViews()
@@ -56,14 +73,20 @@ class PeopleViewController: BlurredViewController {
             return
         }
 
-        let contacts = await ContactsManger.shared.fetchContacts()
         var connections: [Connection] = []
-        do {
-            connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
-                return !connection.nonMeUser.isNil
+        if self.includedSections.contains(.connections) {
+            do {
+                connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
+                    return !connection.nonMeUser.isNil
+                }
+            } catch {
+                print(error)
             }
-        } catch {
-            print(error)
+        }
+
+        var contacts: [CNContact] = []
+        if self.includedSections.contains(.contacts) {
+            contacts = await ContactsManger.shared.fetchContacts()
         }
 
         let cycle = AnimationCycle(inFromPosition: .inward,
@@ -83,9 +106,9 @@ class PeopleViewController: BlurredViewController {
         var snapshot = self.dataSource.snapshot()
                                                                           snapshot.deleteAllItems()
 
-        let allCases = PeopleCollectionViewDataSource.SectionType.allCases
-        snapshot.appendSections(allCases)
-        allCases.forEach { (section) in
+
+                                                                          snapshot.appendSections(self.includedSections)
+                                                                          self.includedSections.forEach { (section) in
             switch section {
             case .connections:
                 let items: [PeopleCollectionViewDataSource.ItemType] = connections.map { connection in
