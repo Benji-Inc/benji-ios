@@ -112,6 +112,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             } catch {
                 print(error)
             }
+        } else {
+            data[.connections] = []
         }
 
         data[.contacts] = await ContactsManger.shared.fetchContacts().map({ contact in

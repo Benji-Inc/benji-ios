@@ -95,9 +95,11 @@ class DiffableCollectionViewController<SectionType: DiffableSectionType, ItemTyp
         return snapshot
     }
 
-    //MARK: Overrides
+    // MARK: Overrides
 
-    //Used to capture and store any data needed for the snapshot
+    // Used to capture and store any data needed for the snapshot
+    // Dictionary must include all SectionType's in order to be properly displayed
+    // Empty array may be returned for sections that dont have items. 
     func retrieveDataForSnapshot() async -> [SectionType: [ItemType]] {
         fatalError("retrieveDataForSnapshot NOT IMPLEMENTED")
     }

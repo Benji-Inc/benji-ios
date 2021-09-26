@@ -14,8 +14,8 @@ class PeopleCollectionViewDataSource: newDataSource<PeopleCollectionViewDataSour
                                        PeopleCollectionViewDataSource.ItemType> {
 
     enum SectionType: Int, CaseIterable {
-        case connections
-        case contacts
+        case connections = 0
+        case contacts = 1
     }
 
     enum ItemType: Hashable {
