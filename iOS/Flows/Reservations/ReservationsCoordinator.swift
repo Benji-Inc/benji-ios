@@ -16,7 +16,7 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
 
     lazy var reservationsVC = ReservationsViewController()
     private var selectedContact: CNContact?
-    private lazy var messageComposer = MessageComposerViewController()
+    private var messageComposer: MessageComposerViewController?
 
     private lazy var contactsVC = ContactsViewController()
 
@@ -51,12 +51,13 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     }
 
     private func sendText(with message: String?, phone: String) {
-        self.messageComposer.recipients = [phone]
-        self.messageComposer.body = message
-        self.messageComposer.messageComposeDelegate = self
+        self.messageComposer = MessageComposerViewController()
+        self.messageComposer?.recipients = [phone]
+        self.messageComposer?.body = message
+        self.messageComposer?.messageComposeDelegate = self
 
         if MFMessageComposeViewController.canSendText() {
-            self.router.topmostViewController.present(self.messageComposer, animated: true, completion: nil)
+            self.router.topmostViewController.present(self.messageComposer!, animated: true, completion: nil)
         }
     }
 }
@@ -67,11 +68,14 @@ extension ReservationsCoordinator: MFMessageComposeViewControllerDelegate {
                                       didFinishWith result: MessageComposeResult) {
         switch result {
         case .cancelled, .failed:
-            self.messageComposer.dismiss(animated: true)
+            controller.dismiss(animated: true) {
+                self.updateInvitation()
+            }
         case .sent:
-            self.messageComposer.dismiss(animated: true) {
+            controller.dismiss(animated: true) {
                 if let contact = self.selectedContact {
                     self.showSentAlert(for: contact)
+                    self.updateInvitation()
                 }
             }
         @unknown default:

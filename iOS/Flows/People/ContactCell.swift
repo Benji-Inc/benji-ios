@@ -40,8 +40,9 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
         self.avatarView.set(avatar: item)
         self.titleLabel.setText(item.fullName)
         let phone = item.findBestPhoneNumber().phone?.stringValue ?? ""
-        let phoneString = PartialFormatter().formatPartial(phone)
-        self.subTitleLabel.setText(phoneString)
+        #warning("PartialFormatter is a huge hit to performance.")
+        //let phoneString = PartialFormatter().formatPartial(phone)
+        self.subTitleLabel.setText(phone)
         self.layoutNow()
     }
 
