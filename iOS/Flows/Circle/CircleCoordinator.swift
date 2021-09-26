@@ -10,7 +10,7 @@ import Foundation
 
 class CircleCoordinator: PresentableCoordinator<Void> {
 
-    private lazy var circleVC = CircleViewController(with: self.circleGroup, delegate: self)
+    private lazy var circleVC = CircleViewController(with: self.circleGroup)
     private let circleGroup: CircleGroup
 
     init(with group: CircleGroup,
@@ -27,13 +27,6 @@ class CircleCoordinator: PresentableCoordinator<Void> {
 
     override func start() {
         super.start()
-
-    }
-}
-
-extension CircleCoordinator: CircleViewControllerDelegate {
-
-    nonisolated func circleView(_ controller: CircleViewController, didSelect item: CircleCollectionViewDataSource.ItemType) {
 
     }
 }

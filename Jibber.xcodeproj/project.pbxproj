@@ -509,7 +509,6 @@
 		D678EC1A26F50B120071DB0D /* CircleCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC1926F50B120071DB0D /* CircleCollectionViewLayout.swift */; };
 		D678EC1C26F50B280071DB0D /* CircleCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC1B26F50B280071DB0D /* CircleCollectionViewDataSource.swift */; };
 		D678EC1E26F50BBC0071DB0D /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC1D26F50BBC0071DB0D /* UserCell.swift */; };
-		D678EC2026F50D520071DB0D /* CircleViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC1F26F50D520071DB0D /* CircleViewController+Extensions.swift */; };
 		D678EC2226F50DC20071DB0D /* CircleCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2126F50DC20071DB0D /* CircleCoordinator.swift */; };
 		D678EC2426F530850071DB0D /* Circle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2326F530850071DB0D /* Circle.swift */; };
 		D678EC2626F534430071DB0D /* CircleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = D678EC2526F534430071DB0D /* CircleGroup.swift */; };
@@ -1035,7 +1034,6 @@
 		D678EC1926F50B120071DB0D /* CircleCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D678EC1B26F50B280071DB0D /* CircleCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D678EC1D26F50BBC0071DB0D /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
-		D678EC1F26F50D520071DB0D /* CircleViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CircleViewController+Extensions.swift"; sourceTree = "<group>"; };
 		D678EC2126F50DC20071DB0D /* CircleCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCoordinator.swift; sourceTree = "<group>"; };
 		D678EC2326F530850071DB0D /* Circle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Circle.swift; sourceTree = "<group>"; };
 		D678EC2526F534430071DB0D /* CircleGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleGroup.swift; sourceTree = "<group>"; };
@@ -1979,7 +1977,6 @@
 				D678EC1926F50B120071DB0D /* CircleCollectionViewLayout.swift */,
 				D678EC2126F50DC20071DB0D /* CircleCoordinator.swift */,
 				D678EC1726F50A8A0071DB0D /* CircleViewController.swift */,
-				D678EC1F26F50D520071DB0D /* CircleViewController+Extensions.swift */,
 				D678EC1D26F50BBC0071DB0D /* UserCell.swift */,
 			);
 			path = Circle;
@@ -2779,7 +2776,6 @@
 				D61D38E3248C07F700BE457B /* InputAccessoryView+Animation.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
 				D642735122C857760088256B /* MessageContext.swift in Sources */,
-				D678EC2026F50D520071DB0D /* CircleViewController+Extensions.swift in Sources */,
 				D642735322C85B740088256B /* SystemAvatar.swift in Sources */,
 				D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */,
 				D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */,
