@@ -19,17 +19,16 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     weak var delegate: PeopleViewControllerDelegate?
 
-
     private let includeConnections: Bool
     private(set) var reservations: [Reservation] = []
-    private(set) var connections: [Connection] = []
-    private(set) var contacts: [CNContact] = []
+
+    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
     let button = Button()
 
     init(includeConnections: Bool = true) {
         self.includeConnections = includeConnections
-        super.init(collectionView: CollectionView(layout: PeopleCollectionViewLayout()))
+        super.init(with: CollectionView(layout: PeopleCollectionViewLayout()))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -43,13 +42,10 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
+
         self.dataSource.headerTitle = self.getHeaderTitle()
         self.dataSource.headerDescription = self.getHeaderDescription()
-
-        self.collectionView.allowsMultipleSelection = true
-
-        self.view.addSubview(self.collectionView)
-        self.collectionView.delegate = self
 
         self.view.addSubview(self.button)
 
@@ -65,6 +61,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        self.blurView.expandToSuperviewSize()
         self.collectionView.expandToSuperviewSize()
 
         self.button.setSize(with: self.view.width)
@@ -101,33 +98,29 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     // MARK: Data Loading
 
-    override func retrieveDataForSnapshot() async {
+    override func retrieveDataForSnapshot() async -> [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] {
+
+        var data: [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] = [:]
+
         if self.includeConnections {
             do {
-                self.connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
+                data[.connections] = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
                     return !connection.nonMeUser.isNil
-                }
+                }.map({ connection in
+                    return .connection(connection)
+                })
             } catch {
                 print(error)
             }
         }
 
-        self.contacts = await ContactsManger.shared.fetchContacts()
-        await self.loadUnclaimedReservations()
-    }
+        data[.contacts] = await ContactsManger.shared.fetchContacts().map({ contact in
+            return .contact(contact)
+        })
 
-    override func getItems(for section: PeopleCollectionViewDataSource.SectionType) -> [PeopleCollectionViewDataSource.ItemType] {
-        switch section {
-        case .connections:
-            guard self.includeConnections else { return [] }
-            return connections.map { connection in
-                return .connection(connection)
-            }
-        case .contacts:
-            return self.contacts.map { contact in
-                return .contact(contact)
-            }
-        }
+        await self.loadUnclaimedReservations()
+
+        return data
     }
 
     private func loadUnclaimedReservations() async {

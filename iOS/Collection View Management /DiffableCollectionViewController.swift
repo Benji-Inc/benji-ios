@@ -15,10 +15,6 @@ class newDataSource<SectionType: Hashable & CaseIterable, ItemType: Hashable>: C
 }
 
 class DiffableCollectionViewController<SectionType: DiffableSectionType, ItemType: Hashable, DataSource: newDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
-
-    required init(collectionView: UICollectionView) {
-        fatalError("init(collectionView:) has not been implemented")
-    }
     
     lazy var dataSource = DataSource.init(collectionView: self.collectionView)
 
@@ -72,9 +68,9 @@ class DiffableCollectionViewController<SectionType: DiffableSectionType, ItemTyp
             return
         }
 
-        await self.retrieveDataForSnapshot()
+        let dataDictionary =  await self.retrieveDataForSnapshot()
 
-        let snapshot = self.getInitialSnapshot()
+        let snapshot = self.getInitialSnapshot(with: dataDictionary)
         await self.dataSource.apply(snapshot,
                                     collectionView: self.collectionView,
                                     animationCycle: self.getAnimationCycle())
@@ -82,15 +78,17 @@ class DiffableCollectionViewController<SectionType: DiffableSectionType, ItemTyp
         self.collectionView.animationView.stop()
     }
 
-    private func getInitialSnapshot() -> NSDiffableDataSourceSnapshot<SectionType, ItemType> {
+    private func getInitialSnapshot(with dictionary: [SectionType: [ItemType]]) -> NSDiffableDataSourceSnapshot<SectionType, ItemType> {
+
         var snapshot = self.dataSource.snapshot()
         snapshot.deleteAllItems()
 
-        if let allSections = SectionType.allCases as? [SectionType] {
-            snapshot.appendSections(allSections)
+        let allSections = Array(dictionary.keys)
+        snapshot.appendSections(allSections)
 
-            allSections.forEach { section in
-                snapshot.appendItems(self.getItems(for: section), toSection: section)
+        allSections.forEach { section in
+            if let items = dictionary[section] {
+                snapshot.appendItems(items, toSection: section)
             }
         }
 
@@ -100,13 +98,8 @@ class DiffableCollectionViewController<SectionType: DiffableSectionType, ItemTyp
     //MARK: Overrides
 
     //Used to capture and store any data needed for the snapshot
-    func retrieveDataForSnapshot() async {
-
-    }
-
-    //Use the data retieved to display in the appropriate section
-    func getItems(for section: SectionType) -> [ItemType] {
-        return []
+    func retrieveDataForSnapshot() async -> [SectionType: [ItemType]] {
+        fatalError("retrieveDataForSnapshot NOT IMPLEMENTED")
     }
 
     func getAnimationCycle() -> AnimationCycle {
@@ -115,6 +108,8 @@ class DiffableCollectionViewController<SectionType: DiffableSectionType, ItemTyp
                               shouldConcatenate: true,
                               scrollToEnd: false)
     }
+
+    //MARK: CollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewManagerCell {
