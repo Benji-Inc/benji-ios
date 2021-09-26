@@ -8,11 +8,7 @@
 
 import Foundation
 
-class newDataSource<SectionType: Hashable, ItemType: Hashable>: CollectionViewDataSource<SectionType, ItemType> {
-
-}
-
-class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable, DataSource: newDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
+class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable, DataSource: CollectionViewDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
     
     lazy var dataSource = DataSource.init(collectionView: self.collectionView)
 
