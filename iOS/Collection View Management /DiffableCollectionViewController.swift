@@ -1,0 +1,131 @@
+//
+//  DiffableCollectionViewController.swift
+//  Jibber
+//
+//  Created by Benji Dodgson on 9/25/21.
+//  Copyright © 2021 Benjamin Dodgson. All rights reserved.
+//
+
+import Foundation
+
+class newDataSource<SectionType: Hashable & CaseIterable, ItemType: Hashable>: CollectionViewDataSource<SectionType, ItemType> {
+
+    required init(with cv: UICollectionView) {
+        super.init(collectionView: cv)
+    }
+}
+
+class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable, DataSource: newDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
+
+    lazy var dataSource = DataSource.init(with: self.collectionView)
+
+    @Published var selectedItems: [ItemType] = []
+
+    private var __selectedItems: [ItemType] {
+        return self.collectionView.indexPathsForSelectedItems?.compactMap({ ip in
+            return self.dataSource.itemIdentifier(for: ip)
+        }) ?? []
+    }
+
+    let collectionView: CollectionView
+
+    init(with collectionView: CollectionView) {
+        self.collectionView = collectionView
+        super.init()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func initializeViews() {
+        super.initializeViews()
+
+        self.collectionView.allowsMultipleSelection = true
+
+        self.view.addSubview(self.collectionView)
+        self.collectionView.delegate = self
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        Task {
+            await self.loadData()
+        }.add(to: self.taskPool)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.collectionView.expandToSuperviewSize()
+    }
+
+    @MainActor
+    private func loadData() async {
+
+        guard !Task.isCancelled else {
+            self.collectionView.animationView.stop()
+            return
+        }
+
+        await self.retrieveDataForSnapshot()
+
+        let snapshot = self.getInitialSnapshot()
+        await self.dataSource.apply(snapshot,
+                                    collectionView: self.collectionView,
+                                    animationCycle: self.getAnimationCycle())
+
+        self.collectionView.animationView.stop()
+    }
+
+    private func getInitialSnapshot() -> NSDiffableDataSourceSnapshot<SectionType, ItemType> {
+        var snapshot = self.dataSource.snapshot()
+        snapshot.deleteAllItems()
+
+        if let allSections = SectionType.allCases as? [SectionType] {
+            snapshot.appendSections(allSections)
+
+            allSections.forEach { section in
+                snapshot.appendItems(self.getItems(for: section), toSection: section)
+            }
+        }
+
+        return snapshot
+    }
+
+    //MARK: Overrides
+
+    //Used to capture and store any data needed for the snapshot
+    func retrieveDataForSnapshot() async {
+
+    }
+
+    //Use the data retieved to display in the appropriate section
+    func getItems(for section: SectionType) -> [ItemType] {
+        return []
+    }
+
+    func getAnimationCycle() -> AnimationCycle {
+        return AnimationCycle(inFromPosition: .inward,
+                              outToPosition: .inward,
+                              shouldConcatenate: true,
+                              scrollToEnd: false)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewManagerCell {
+            cell.update(isSelected: true )
+        }
+
+        self.selectedItems = self.__selectedItems
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewManagerCell {
+            cell.update(isSelected: false)
+        }
+
+        self.selectedItems = self.__selectedItems
+    }
+}
