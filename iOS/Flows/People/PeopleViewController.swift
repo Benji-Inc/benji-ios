@@ -1,5 +1,5 @@
 //
-//  NewConversationViewController.swift
+//  PeopleViewController.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 2/17/21.
@@ -62,7 +62,6 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         super.viewDidLayoutSubviews()
 
         self.blurView.expandToSuperviewSize()
-        self.collectionView.expandToSuperviewSize()
 
         self.button.setSize(with: self.view.width)
         self.button.centerOnX()
