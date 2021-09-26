@@ -41,6 +41,7 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     }
 
     private func showContacts() {
+        self.inviteIndex = 0 
         self.contactsVC.delegate = self
         self.router.present(self.contactsVC, source: self.reservationsVC)
     }

@@ -49,7 +49,7 @@ class PeopleCollectionViewLayout: UICollectionViewCompositionalLayout {
 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: Theme.contentOffset, leading: Theme.contentOffset, bottom: Theme.contentOffset, trailing: Theme.contentOffset)
+                section.contentInsets = NSDirectionalEdgeInsets(top: Theme.contentOffset, leading: Theme.contentOffset, bottom: 120, trailing: Theme.contentOffset)
 
                 return section
             }
