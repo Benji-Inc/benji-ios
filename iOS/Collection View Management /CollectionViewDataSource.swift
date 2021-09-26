@@ -19,7 +19,7 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
 
     private var diffableDataSource: DiffableDataSourceType!
 
-    init(collectionView: UICollectionView) {
+    required init(collectionView: UICollectionView) {
         self.diffableDataSource = DiffableDataSourceType(collectionView: collectionView,
                                                          cellProvider: { collectionView, indexPath, itemIdentifier in
             guard let section = self.sectionIdentifier(for: indexPath.section) else { return nil }

@@ -8,16 +8,19 @@
 
 import Foundation
 
+typealias DiffableSectionType = Hashable & CaseIterable
+
 class newDataSource<SectionType: Hashable & CaseIterable, ItemType: Hashable>: CollectionViewDataSource<SectionType, ItemType> {
 
-    required init(with cv: UICollectionView) {
-        super.init(collectionView: cv)
-    }
 }
 
-class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable, DataSource: newDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
+class DiffableCollectionViewController<SectionType: DiffableSectionType, ItemType: Hashable, DataSource: newDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
 
-    lazy var dataSource = DataSource.init(with: self.collectionView)
+    required init(collectionView: UICollectionView) {
+        fatalError("init(collectionView:) has not been implemented")
+    }
+    
+    lazy var dataSource = DataSource.init(collectionView: self.collectionView)
 
     @Published var selectedItems: [ItemType] = []
 
