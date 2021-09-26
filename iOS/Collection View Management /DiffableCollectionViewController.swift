@@ -8,13 +8,11 @@
 
 import Foundation
 
-typealias DiffableSectionType = Hashable & CaseIterable
-
-class newDataSource<SectionType: Hashable & CaseIterable, ItemType: Hashable>: CollectionViewDataSource<SectionType, ItemType> {
+class newDataSource<SectionType: Hashable, ItemType: Hashable>: CollectionViewDataSource<SectionType, ItemType> {
 
 }
 
-class DiffableCollectionViewController<SectionType: DiffableSectionType, ItemType: Hashable, DataSource: newDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
+class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable, DataSource: newDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
     
     lazy var dataSource = DataSource.init(collectionView: self.collectionView)
 
@@ -99,7 +97,7 @@ class DiffableCollectionViewController<SectionType: DiffableSectionType, ItemTyp
 
     // Used to capture and store any data needed for the snapshot
     // Dictionary must include all SectionType's in order to be properly displayed
-    // Empty array may be returned for sections that dont have items. 
+    // Empty array may be returned for sections that dont have items.
     func retrieveDataForSnapshot() async -> [SectionType: [ItemType]] {
         fatalError("retrieveDataForSnapshot NOT IMPLEMENTED")
     }

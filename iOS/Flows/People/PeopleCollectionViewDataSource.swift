@@ -13,9 +13,9 @@ import TMROLocalization
 class PeopleCollectionViewDataSource: newDataSource<PeopleCollectionViewDataSource.SectionType,
                                        PeopleCollectionViewDataSource.ItemType> {
 
-    enum SectionType: Int, CaseIterable {
-        case connections = 0
-        case contacts = 1
+    enum SectionType: Int {
+        case connections
+        case contacts
     }
 
     enum ItemType: Hashable {
