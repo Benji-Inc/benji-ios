@@ -15,32 +15,29 @@ protocol PeopleViewControllerDelegate: AnyObject {
     func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType])
 }
 
-class PeopleViewController: BlurredViewController {
+class PeopleViewController: DiffableCollectionViewController<PeopleCollectionViewDataSource.SectionType, PeopleCollectionViewDataSource.ItemType, PeopleCollectionViewDataSource> {
 
     weak var delegate: PeopleViewControllerDelegate?
 
-    // MARK: - UI
-
-    var collectionView = CollectionView(layout: PeopleCollectionViewLayout())
-    lazy var dataSource = PeopleCollectionViewDataSource(collectionView: self.collectionView)
-
-    var selectedItems: [PeopleCollectionViewDataSource.ItemType] {
-        return self.collectionView.indexPathsForSelectedItems?.compactMap({ ip in
-            return self.dataSource.itemIdentifier(for: ip)
-        }) ?? []
-    }
 
     private let includeConnections: Bool
     private(set) var reservations: [Reservation] = []
+    private(set) var connections: [Connection] = []
+    private(set) var contacts: [CNContact] = []
+
     let button = Button()
 
     init(includeConnections: Bool = true) {
         self.includeConnections = includeConnections
-        super.init()
+        super.init(collectionView: CollectionView(layout: PeopleCollectionViewLayout()))
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    required init(collectionView: UICollectionView) {
+        fatalError("init(collectionView:) has not been implemented")
     }
 
     override func initializeViews() {
@@ -59,15 +56,10 @@ class PeopleViewController: BlurredViewController {
         self.button.didSelect { [unowned self] in
             self.delegate?.peopleView(self, didSelect: self.selectedItems)
         }
-        self.updateButton()
-    }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        Task {
-            await self.loadData()
-        }.add(to: self.taskPool)
+        self.$selectedItems.mainSink { _ in
+            self.updateButton()
+        }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
@@ -109,20 +101,10 @@ class PeopleViewController: BlurredViewController {
 
     // MARK: Data Loading
 
-    @MainActor
-    func loadData() async {
-
-        self.collectionView.animationView.play()
-
-        guard !Task.isCancelled else {
-            self.collectionView.animationView.stop()
-            return
-        }
-
-        var connections: [Connection] = []
+    override func retrieveDataForSnapshot() async {
         if self.includeConnections {
             do {
-                connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
+                self.connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: []).filter { (connection) -> Bool in
                     return !connection.nonMeUser.isNil
                 }
             } catch {
@@ -130,22 +112,25 @@ class PeopleViewController: BlurredViewController {
             }
         }
 
-        let contacts = await ContactsManger.shared.fetchContacts()
+        self.contacts = await ContactsManger.shared.fetchContacts()
         await self.loadUnclaimedReservations()
+    }
 
-        let cycle = AnimationCycle(inFromPosition: .inward,
-                                   outToPosition: .inward,
-                                   shouldConcatenate: true,
-                                   scrollToEnd: false)
-
-        let snapshot = self.getInitialSnapshot(withConnecitons: connections, and: contacts)
-        await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
-
-        self.collectionView.animationView.stop()
+    override func getItems(for section: PeopleCollectionViewDataSource.SectionType) -> [PeopleCollectionViewDataSource.ItemType] {
+        switch section {
+        case .connections:
+            guard self.includeConnections else { return [] }
+            return connections.map { connection in
+                return .connection(connection)
+            }
+        case .contacts:
+            return self.contacts.map { contact in
+                return .contact(contact)
+            }
+        }
     }
 
     private func loadUnclaimedReservations() async {
-
         let query = Reservation.query()
         query?.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
         query?.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
@@ -157,33 +142,5 @@ class PeopleViewController: BlurredViewController {
         } catch {
             logDebug(error)
         }
-    }
-
-    private func getInitialSnapshot(withConnecitons connections: [Connection],
-                                    and contacts: [CNContact]) -> NSDiffableDataSourceSnapshot<PeopleCollectionViewDataSource.SectionType,
-                                                                      PeopleCollectionViewDataSource.ItemType> {
-        var snapshot = self.dataSource.snapshot()
-                                                                          snapshot.deleteAllItems()
-                                                                          let allSections = PeopleCollectionViewDataSource.SectionType.allCases
-
-
-                                                                          snapshot.appendSections(allSections)
-                                                                          allSections.forEach { (section) in
-            switch section {
-            case .connections:
-                guard self.includeConnections else { return }
-                let items: [PeopleCollectionViewDataSource.ItemType] = connections.map { connection in
-                    return .connection(connection)
-                }
-                snapshot.appendItems(items, toSection: section)
-            case .contacts:
-                let items: [PeopleCollectionViewDataSource.ItemType] = contacts.map { contact in
-                    return .contact(contact)
-                }
-                snapshot.appendItems(items, toSection: section)
-            }
-        }
-
-        return snapshot
     }
 }

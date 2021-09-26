@@ -19,6 +19,10 @@ class ContactsViewController: PeopleViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    required init(collectionView: UICollectionView) {
+        fatalError("init(collectionView:) has not been implemented")
+    }
+    
     override func getHeaderTitle() -> Localized {
         return "Send invites"
     }

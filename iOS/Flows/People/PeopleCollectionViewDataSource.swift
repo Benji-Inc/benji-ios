@@ -10,7 +10,7 @@ import Foundation
 import Contacts
 import TMROLocalization
 
-class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionViewDataSource.SectionType,
+class PeopleCollectionViewDataSource: newDataSource<PeopleCollectionViewDataSource.SectionType,
                                        PeopleCollectionViewDataSource.ItemType> {
 
     enum SectionType: Int, CaseIterable {
