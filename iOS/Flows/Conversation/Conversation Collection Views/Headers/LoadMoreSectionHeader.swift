@@ -23,10 +23,8 @@ class LoadMoreSectionHeader: UICollectionReusableView {
     }
 
     private func initializeViews() {
-
         self.addSubview(self.button)
 
-        self.set(backgroundColor: .clear)
         self.button.set(style: .rounded(color: .orange, text: "LOAD MORE"))
     }
 

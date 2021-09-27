@@ -16,8 +16,8 @@ extension ConversationCollectionViewDataSource {
                                         (channelID: ChannelId,
                                          messageID: MessageId,
                                          dataSource: ConversationCollectionViewDataSource)>
-    typealias LoadMoreHeaderRegistration
-    = UICollectionView.SupplementaryRegistration<LoadMoreSectionHeader>
+    typealias LoadMoreMessagesCellRegistration
+    = UICollectionView.CellRegistration<LoadMoreMessagesCell, String>
 
     static func createMessageCellRegistration() -> MessageCellRegistration {
         return MessageCellRegistration { cell, indexPath, item in
@@ -50,10 +50,9 @@ extension ConversationCollectionViewDataSource {
         }
     }
 
-    static func createLoadMoreHeaderRegistration() -> LoadMoreHeaderRegistration {
-        return LoadMoreHeaderRegistration(elementKind: CollectionView.elementKindSectionHeader)
-        { supplementaryView, elementKind, indexPath in
-
+    static func createLoadMoreCellRegistration() -> LoadMoreMessagesCellRegistration {
+        return LoadMoreMessagesCellRegistration { cell, indexPath, itemIdentifier in
+            
         }
     }
 }

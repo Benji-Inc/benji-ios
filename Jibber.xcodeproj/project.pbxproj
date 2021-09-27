@@ -32,6 +32,7 @@
 		8094D5DB26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8094D5DC26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
+		80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */; };
 		80D044B526FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */; };
 		80D7721B26F93B17009F0344 /* ConversationCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */; };
 		80DACF9726D6D1B50048722A /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */; };
@@ -828,6 +829,7 @@
 		807A7BC426C5B5A20023A71E /* Task+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Extensions.swift"; sourceTree = "<group>"; };
 		807A7BC826C5C8100023A71E /* Task+TaskPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+TaskPool.swift"; sourceTree = "<group>"; };
 		8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFUser+Extensions.swift"; sourceTree = "<group>"; };
+		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
 		80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewControllerDataSource+CellRegistration.swift"; sourceTree = "<group>"; };
 		80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCollectionViewLayout.swift; sourceTree = "<group>"; };
 		80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -1276,6 +1278,7 @@
 				8024B95026F278C8008ABF7F /* ConversationViewControllerDataSource.swift */,
 				80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */,
 				8015CA7626F3D907000F3C60 /* MessageCell.swift */,
+				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 			);
 			path = _New;
 			sourceTree = "<group>";
@@ -1629,8 +1632,9 @@
 		D63844102337C3900072227B /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				D6B2601522E41BE700143CF0 /* ConversationSectionHeader.swift */,
 				D6B2601722E4208900143CF0 /* ConversationDateLabel.swift */,
+				D6B2601522E41BE700143CF0 /* ConversationSectionHeader.swift */,
+				D63844112337C3CD0072227B /* LoadMoreSectionHeader.swift */,
 			);
 			path = Headers;
 			sourceTree = "<group>";
@@ -1690,9 +1694,9 @@
 		D6432BF122D8282E0016001A /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
-				D67896CB2304524C0059BA75 /* ConversationCoordinator.swift */,
 				8024B94E26F278C8008ABF7F /* _New */,
 				D6D1500521D5E71E00CD8CE4 /* Conversation Collection Views */,
+				D67896CB2304524C0059BA75 /* ConversationCoordinator.swift */,
 				D6B2603722E6AB5E00143CF0 /* ConversationDetailViewController.swift */,
 				D6B2603622E6AA3800143CF0 /* Input */,
 				D6090E542377CB0F00833DA7 /* Manager */,
@@ -1901,7 +1905,6 @@
 				D6D1500621D5E73D00CD8CE4 /* ConversationThreadViewController.swift */,
 				D61D38E6248C494A00BE457B /* ConversationThreadViewController+Messaging.swift */,
 				D6FC8099237A68F50089AACC /* ConversationThreadViewController+Updates.swift */,
-				D63844112337C3CD0072227B /* LoadMoreSectionHeader.swift */,
 			);
 			path = "Threaded Conversation";
 			sourceTree = "<group>";
@@ -2784,6 +2787,7 @@
 				D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */,
 				D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */,
 				D6F312A0266ADDA600E25FEE /* LinkView.swift in Sources */,
+				80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */,
 				D650C1DA25B5EE3D0037C59A /* AvatarContextDelegate.swift in Sources */,
 				D65519F32589591D00B901E4 /* Typealias.swift in Sources */,
 				D6F37D6025B5D8610034C9C5 /* AvatarProfileViewController.swift in Sources */,

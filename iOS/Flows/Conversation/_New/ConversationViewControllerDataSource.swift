@@ -16,11 +16,13 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                                             ConversationCollectionViewDataSource.ItemType> {
 
     enum SectionType: Hashable {
-        case basic(ChannelId)
+        case conversation(ChannelId)
+        case loadMore
     }
 
     enum ItemType: Hashable {
         case message(MessageId)
+        case loadMore
     }
 
     var handleDeleteMessage: ((Message) -> Void)?
@@ -28,8 +30,8 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
     private let contextMenuDelegate: ContextMenuInteractionDelegate
     private let messageCellRegistration = ConversationCollectionViewDataSource.createMessageCellRegistration()
-    private let loadMoreHeaderRegistration
-    = ConversationCollectionViewDataSource.createLoadMoreHeaderRegistration()
+    private let loadMoreMessagesCellRegistration
+    = ConversationCollectionViewDataSource.createLoadMoreCellRegistration()
 
     required init(collectionView: UICollectionView) {
         self.contextMenuDelegate = ContextMenuInteractionDelegate(collectionView: collectionView)
@@ -44,35 +46,27 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                               section: SectionType,
                               item: ItemType) -> UICollectionViewCell? {
 
-        switch section {
-        case .basic(let channelID):
-            switch item {
-            case .message(let messageID):
-                let cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
-                                                                        for: indexPath,
-                                                                        item: (channelID, messageID, self))
+        switch item {
+        case .message(let messageID):
+            guard case let .conversation(channelID) = section else { return nil }
 
-                let interaction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
-                cell.addInteraction(interaction)
-                return cell
-            }
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
+                                                                    for: indexPath,
+                                                                    item: (channelID, messageID, self))
+
+            let interaction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
+            cell.addInteraction(interaction)
+            return cell
+        case .loadMore:
+            return collectionView.dequeueConfiguredReusableCell(using: self.loadMoreMessagesCellRegistration,
+                                                                for: indexPath,
+                                                                item: "Test")
         }
-    }
-
-    override func dequeueSupplementaryView(with collectionView: UICollectionView,
-                                           kind: String,
-                                           section: SectionType,
-                                           indexPath: IndexPath) -> UICollectionReusableView? {
-        let header
-        = collectionView.dequeueConfiguredReusableSupplementary(using: self.loadMoreHeaderRegistration,
-                                                                for: indexPath)
-
-        return header
     }
 
     /// Updates the datasource with the passed in array of message changes.
     func updateMessages(with changes: [ListChange<Message>],
-                        conversationController: ChatChannelController,
+                        conversationController: ConversationController,
                         collectionView: UICollectionView) async {
 
         guard let conversation = conversationController.channel else { return }
@@ -81,9 +75,9 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
         // If there's more than one change, reload all of the data.
         guard changes.count == 1 else {
-            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
+            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .conversation(conversation.cid)))
             snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
-                                 toSection: .basic(conversation.cid))
+                                 toSection: .conversation(conversation.cid))
             await self.applySnapshotKeepingVisualOffset(snapshot,
                                                         collectionView: collectionView)
             return
@@ -95,15 +89,15 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         for change in changes {
             switch change {
             case .insert(let message, let index):
-                let section = ConversationCollectionSection.basic(conversation.cid)
+                let section = ConversationCollectionSection.conversation(conversation.cid)
                 snapshot.insertItems([.message(message.id)],
                                      in: section,
                                      atIndex: index.item)
                 scrollToLatestMessage = true
             case .move:
-                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .basic(conversation.cid)))
+                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .conversation(conversation.cid)))
                 snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
-                                     toSection: .basic(conversation.cid))
+                                     toSection: .conversation(conversation.cid))
             case .update(let message, _):
                 snapshot.reloadItems([message.asConversationCollectionItem])
             case .remove(let message, _):
@@ -115,7 +109,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             self.apply(snapshot)
 
             if scrollToLatestMessage {
-                let items = snapshot.itemIdentifiers(inSection: .basic(conversation.cid))
+                let items = snapshot.itemIdentifiers(inSection: .conversation(conversation.cid))
                 let lastIndex = IndexPath(item: items.count - 1, section: 0)
                 collectionView.scrollToItem(at: lastIndex, at: .centeredHorizontally, animated: true)
             }
@@ -144,18 +138,18 @@ private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteraction
         guard let sectionItem = self.dataSource?.sectionIdentifier(for: indexPath.section),
               let messageItem = self.dataSource?.itemIdentifier(for: indexPath) else { return nil }
 
-        switch sectionItem {
-        case .basic(let channelID):
-            switch messageItem {
-            case .message(let messageID):
-                let messageController = ChatClient.shared.messageController(cid: channelID,
-                                                                            messageId: messageID)
+        switch messageItem {
+        case .message(let messageID):
+            guard case let .conversation(channelID) = sectionItem else { return nil }
+            let messageController = ChatClient.shared.messageController(cid: channelID,
+                                                                        messageId: messageID)
 
-                return UIContextMenuConfiguration(identifier: nil,
-                                                  previewProvider: nil) { elements in
-                    return self.makeContextMenu(for: messageController, at: indexPath)
-                }
+            return UIContextMenuConfiguration(identifier: nil,
+                                              previewProvider: nil) { elements in
+                return self.makeContextMenu(for: messageController, at: indexPath)
             }
+        case .loadMore:
+            return nil
         }
     }
 

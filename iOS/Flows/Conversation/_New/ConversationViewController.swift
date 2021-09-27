@@ -162,16 +162,19 @@ class ConversationViewController: FullScreenViewController,
         switch messageItem {
         case .message(let messageID):
             self.onSelectedThread?(self.conversation.cid, messageID)
+        case .loadMore:
+            // Load more messages
+            break
         }
     }
-    
+
     // MARK: - UIScrollViewDelegate
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView,
                                    withVelocity velocity: CGPoint,
                                    targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
-        // Always scroll so that a message is centered when we stop scrolling.
+        // Always scroll so that a cell is centered when we stop scrolling.
         var newXOffset = CGFloat.greatestFiniteMagnitude
         let targetOffset = targetContentOffset.pointee
         
@@ -208,7 +211,10 @@ extension ConversationViewController {
         let messages = controller.messages
         
         var snapshot = self.dataSource.snapshot()
-        snapshot.appendSections([.basic(conversation.cid)])
+        snapshot.appendSections([.loadMore])
+        snapshot.appendItems([.loadMore], toSection: .loadMore)
+
+        snapshot.appendSections([.conversation(conversation.cid)])
         snapshot.appendItems(messages.asConversationCollectionItems)
         
         let animationCycle = AnimationCycle(inFromPosition: .left,
