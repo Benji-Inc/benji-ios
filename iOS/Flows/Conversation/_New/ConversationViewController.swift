@@ -210,6 +210,14 @@ extension ConversationViewController {
                                                      collectionView: self.collectionView)
             }
         }.store(in: &self.cancellables)
+
+        self.conversationController.channelChangePublisher.mainSink { [unowned self] _ in
+            self.conversationHeader.configure(with: self.conversation)
+        }.store(in: &self.cancellables)
+
+        self.conversationController.memberEventPublisher.mainSink { [unowned self] _ in
+            self.conversationHeader.configure(with: self.conversation)
+        }.store(in: &self.cancellables)
     }
 }
 

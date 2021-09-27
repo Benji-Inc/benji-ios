@@ -79,9 +79,9 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
 
     func presentConversationTitleAlert(for controller: ChatChannelController) {
 
-        let alertController = UIAlertController(title: "Update Conversation Name", message: "", preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
-            textField.placeholder = "Enter Name"
+            textField.placeholder = "New Name"
         }
         let saveAction = UIAlertAction(title: "Save", style: .default, handler: { alert -> Void in
             if let textField = alertController.textFields?.first,
