@@ -9,29 +9,21 @@
 import Foundation
 import UIKit
 
-protocol CircleGroupViewControllerDelegate: AnyObject {
-    func circleGroupView(_ controller: CircleGroupViewController, didSelect item: CircleGroupCollectionViewDataSource.ItemType)
-}
-
-class CircleGroupViewController: BlurredViewController {
-
-    weak var delegate: CircleGroupViewControllerDelegate?
-
-    // MARK: - UI
-
-    private var collectionView = CollectionView(layout: CircleGroupCollectionViewLayout())
-    lazy var dataSource = CircleGroupCollectionViewDataSource(collectionView: self.collectionView)
-
-    var circles: [CircleGroup] = []
+class CircleGroupViewController: DiffableCollectionViewController<CircleGroupCollectionViewDataSource.SectionType, CircleGroupCollectionViewDataSource.ItemType, CircleGroupCollectionViewDataSource> {
 
     var button = Button()
     var didSelectReservations: CompletionOptional = nil
 
+    init() {
+        super.init(with: CollectionView(layout: CircleGroupCollectionViewLayout()))
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func initializeViews() {
         super.initializeViews()
-
-        self.view.addSubview(self.collectionView)
-        self.collectionView.delegate = self
 
         self.view.addSubview(self.button)
         self.button.set(style: .normal(color: .purple, text: "Send Invites"))
@@ -40,18 +32,8 @@ class CircleGroupViewController: BlurredViewController {
         }
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        Task {
-            await self.loadData()
-        }
-    }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        self.collectionView.expandToSuperviewSize()
 
         self.button.setSize(with: self.view.width)
         self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
@@ -60,54 +42,19 @@ class CircleGroupViewController: BlurredViewController {
 
     // MARK: Data Loading
 
-    @MainActor
-    private func loadData() async {
+    override func retrieveDataForSnapshot() async -> [CircleGroupCollectionViewDataSource.SectionType : [CircleGroupCollectionViewDataSource.ItemType]] {
 
-        do {
-            self.collectionView.animationView.play()
-
-            guard let circles = try await CircleGroup.query()?.findObjectsInBackground() as? [CircleGroup], !circles.isEmpty else {
-                self.collectionView.animationView.stop()
-                return
-            }
-
-            let snapshot = self.getInitialSnapshot(with: circles)
-
-            let cycle = AnimationCycle(inFromPosition: .inward,
-                                       outToPosition: .inward,
-                                       shouldConcatenate: true,
-                                       scrollToEnd: false)
-
-            await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
-
+        guard let circles = try? await CircleGroup.query()?.findObjectsInBackground() as? [CircleGroup], !circles.isEmpty else {
             self.collectionView.animationView.stop()
-        } catch {
-            print(error)
-        }
-    }
-
-    private func getInitialSnapshot(with circles: [CircleGroup]) -> NSDiffableDataSourceSnapshot<CircleGroupCollectionViewDataSource.SectionType,
-                                                                      CircleGroupCollectionViewDataSource.ItemType> {
-        var snapshot = self.dataSource.snapshot()
-
-        let allCases = CircleGroupCollectionViewDataSource.SectionType.allCases
-        snapshot.appendSections(allCases)
-        allCases.forEach { (section) in
-            let items: [CircleGroupCollectionViewDataSource.ItemType] = circles.map { group in
-                return .circles(group)
-            }
-            snapshot.appendItems(items, toSection: section)
+            return [:]
         }
 
-        return snapshot
-    }
-}
+        var data: [CircleGroupCollectionViewDataSource.SectionType : [CircleGroupCollectionViewDataSource.ItemType]] = [:]
 
-extension CircleGroupViewController: UICollectionViewDelegate {
+        data[.circles] = circles.map({ group in
+            return .circles(group)
+        })
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
-
-        self.delegate?.circleGroupView(self, didSelect: identifier)
+        return data
     }
 }

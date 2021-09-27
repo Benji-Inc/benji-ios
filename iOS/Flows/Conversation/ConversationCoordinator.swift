@@ -58,6 +58,23 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
             }.store(in: &self.cancellables)
 
         self.cameraVC.delegate = self
+
+        self.conversationVC.didTapMoreButton = { [unowned self] in
+            self.presentPeoplePicker()
+        }
+    }
+
+    func presentPeoplePicker() {
+        self.removeChild()
+        let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { result in
+            coordinator.toPresentable().dismiss(animated: true) {
+                if let controller = result {
+                   // self.startConversationFlow(for: controller.channel)
+                }
+            }
+        }
+        self.router.present(coordinator, source: self.conversationVC)
     }
 
     func presentThread(for channelID: ChannelId, messageID: MessageId) {
@@ -85,15 +102,15 @@ extension ConversationCoordinator: UIImagePickerControllerDelegate, UINavigation
         alert.addAction(ok)
 
         self.conversationVC.present(alert, animated: true, completion: nil)
-//        guard self.router.topmostViewController != self.cameraVC, !self.cameraVC.isBeingPresented else { return }
-//
-//        self.cameraVC.sourceType = .camera
-////        self.cameraVC.dismissHandlers.append { [unowned self] in
-////            UIView.animate(withDuration: 0.2) {
-////                self.conversationVC.messageInputAccessoryView.alpha = 1.0
-////            }
-////        }
-//        self.conversationVC.present(self.cameraVC, animated: true, completion: nil)
+        //        guard self.router.topmostViewController != self.cameraVC, !self.cameraVC.isBeingPresented else { return }
+        //
+        //        self.cameraVC.sourceType = .camera
+        ////        self.cameraVC.dismissHandlers.append { [unowned self] in
+        ////            UIView.animate(withDuration: 0.2) {
+        ////                self.conversationVC.messageInputAccessoryView.alpha = 1.0
+        ////            }
+        ////        }
+        //        self.conversationVC.present(self.cameraVC, animated: true, completion: nil)
     }
 
     func imagePickerController(_ picker: UIImagePickerController,
@@ -101,18 +118,18 @@ extension ConversationCoordinator: UIImagePickerControllerDelegate, UINavigation
 
         // Need to convert UIImage to an Attachment
 
-////        defer {
-////            self.cameraVC.dismiss(animated: true, completion: nil)
-////        }
-//
-//        guard let asset = info[.phAsset] as? PHAsset else {
-//            print("Image not found!")
-//            return
-//        }
-//
-//        let attachment = Attachment(asset: asset)
-//        self.conversationVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
-//        self.conversationVC.messageInputAccessoryView.updateInputType()
+        ////        defer {
+        ////            self.cameraVC.dismiss(animated: true, completion: nil)
+        ////        }
+        //
+        //        guard let asset = info[.phAsset] as? PHAsset else {
+        //            print("Image not found!")
+        //            return
+        //        }
+        //
+        //        let attachment = Attachment(asset: asset)
+        //        self.conversationVC.messageInputAccessoryView.attachmentView.configure(with: attachment)
+        //        self.conversationVC.messageInputAccessoryView.updateInputType()
     }
 
     private func presentPicker() {

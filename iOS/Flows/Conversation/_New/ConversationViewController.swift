@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import UIKit
 
 class ConversationViewController: FullScreenViewController,
                                   UICollectionViewDelegate,
@@ -18,6 +19,7 @@ class ConversationViewController: FullScreenViewController,
 
     private let stackedAvatarView = StackedAvatarView()
     private let titleLabel = Label(font: .mediumThin, textColor: .background4)
+    private let moreButton = Button()
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     
@@ -28,6 +30,7 @@ class ConversationViewController: FullScreenViewController,
     lazy var messageInputAccessoryView = InputAccessoryView(with: self)
     
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
+    var didTapMoreButton: CompletionOptional = nil
     
     override var inputAccessoryView: UIView? {
         return self.messageInputAccessoryView
@@ -71,6 +74,12 @@ class ConversationViewController: FullScreenViewController,
 
         self.titleLabel.setText(self.conversation.title)
         self.stackedAvatarView.set(items: members)
+
+        self.contentContainer.addSubview(self.moreButton)
+        self.moreButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .purple))
+        self.moreButton.didSelect { [unowned self] in
+            self.didTapMoreButton?()
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -87,6 +96,10 @@ class ConversationViewController: FullScreenViewController,
         self.titleLabel.setSize(withWidth: maxWidth)
         self.titleLabel.match(.bottom, to: .bottom, of: self.stackedAvatarView)
         self.titleLabel.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset.half)
+
+        self.moreButton.squaredSize = 50
+        self.moreButton.pin(.right, padding: Theme.contentOffset)
+        self.moreButton.match(.top, to: .top, of: self.stackedAvatarView)
     }
     
     override func viewDidAppear(_ animated: Bool) {

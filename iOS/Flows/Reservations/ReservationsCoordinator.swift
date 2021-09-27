@@ -16,9 +16,13 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
 
     lazy var reservationsVC = ReservationsViewController()
     private var selectedContact: CNContact?
-    private var selectedReservation: Reservation?
-    private lazy var messageComposer = MessageComposerViewController()
-    lazy var contactPicker = CNContactPickerViewController()
+    private var messageComposer: MessageComposerViewController?
+
+    private lazy var contactsVC = ContactsViewController()
+
+    private var reservations: [Reservation] = []
+    private var contactsToInvite: [CNContact] = []
+    private var inviteIndex: Int = 0
 
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.reservationsVC
@@ -37,10 +41,9 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     }
 
     private func showContacts() {
-        self.contactPicker.displayedPropertyKeys = [CNContactPhoneNumbersKey, CNContactGivenNameKey, CNContactFamilyNameKey]
-        self.contactPicker.predicateForEnablingContact = NSPredicate(format: "phoneNumbers.@count > 0")
-        self.contactPicker.delegate = self
-        self.router.topmostViewController.present(self.contactPicker, animated: true, completion: nil)
+        self.inviteIndex = 0 
+        self.contactsVC.delegate = self
+        self.router.present(self.contactsVC, source: self.reservationsVC)
     }
 
     private func showSentAlert(for avatar: Avatar) {
@@ -49,12 +52,13 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     }
 
     private func sendText(with message: String?, phone: String) {
-        self.messageComposer.recipients = [phone]
-        self.messageComposer.body = message
-        self.messageComposer.messageComposeDelegate = self
+        self.messageComposer = MessageComposerViewController()
+        self.messageComposer?.recipients = [phone]
+        self.messageComposer?.body = message
+        self.messageComposer?.messageComposeDelegate = self
 
         if MFMessageComposeViewController.canSendText() {
-            self.router.topmostViewController.present(self.messageComposer, animated: true, completion: nil)
+            self.router.topmostViewController.present(self.messageComposer!, animated: true, completion: nil)
         }
     }
 }
@@ -65,11 +69,14 @@ extension ReservationsCoordinator: MFMessageComposeViewControllerDelegate {
                                       didFinishWith result: MessageComposeResult) {
         switch result {
         case .cancelled, .failed:
-            self.messageComposer.dismiss(animated: true)
+            controller.dismiss(animated: true) {
+                self.updateInvitation()
+            }
         case .sent:
-            self.messageComposer.dismiss(animated: true) {
+            controller.dismiss(animated: true) {
                 if let contact = self.selectedContact {
                     self.showSentAlert(for: contact)
+                    self.updateInvitation()
                 }
             }
         @unknown default:
@@ -92,45 +99,47 @@ private class MessageComposerViewController: MFMessageComposeViewController, Dis
     }
 }
 
-extension ReservationsCoordinator: CNContactPickerDelegate {
+extension ReservationsCoordinator: PeopleViewControllerDelegate {
 
-    func contactPickerDidCancel(_ picker: CNContactPickerViewController) {
-        picker.dismiss(animated: true)
-    }
+    nonisolated func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
 
-    func contactPicker(_ picker: CNContactPickerViewController, didSelect contact: CNContact) {
-        self.selectedContact = contact
+        Task.onMainActor {
 
-        // Find the RSVP that has been used for the contact before
-        self.selectedReservation = self.reservationsVC.reservations.first(where: { reservation in
-            reservation.contactId == contact.identifier
-        })
+            self.reservations = controller.reservations
 
-        if self.selectedReservation.isNil {
-            self.selectedReservation = self.reservationsVC.reservations.first(where: { reservation in
-                reservation.contactId.isNil
+            self.contactsToInvite = items.compactMap({ item in
+                switch item {
+                case .connection(_):
+                    return nil
+                case .contact(let contact):
+                    return contact
+                }
             })
-        }
 
-        if self.selectedReservation.isNil {
-            self.selectedReservation = self.reservationsVC.reservations.first
-        }
-
-        picker.dismiss(animated: true) {
-            Task {
-                await self.reservationsVC.contactsButton.handleEvent(status: .loading)
-                await self.findUser(for: contact)
-                await self.reservationsVC.contactsButton.handleEvent(status: .complete)
-            }
+            self.updateInvitation()
         }
     }
 
-    func findUser(for contact: CNContact) async {
+    func updateInvitation() {
+        if let contact = self.contactsToInvite[safe: self.inviteIndex],
+           let rsvp = self.reservations[safe: self.inviteIndex] {
+            self.invite(contact: contact, with: rsvp)
+        }
+
+        self.inviteIndex += 1
+    }
+
+    func invite(contact: CNContact, with reservation: Reservation) {
+        Task {
+            await self.reservationsVC.contactsButton.handleEvent(status: .loading)
+            await self.findUser(with: contact, for: reservation)
+            await self.reservationsVC.contactsButton.handleEvent(status: .complete)
+        }
+    }
+
+    func findUser(with contact: CNContact, for reservation: Reservation) async {
         // Search for user with phone number
-        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers(),
-              let reservation = self.selectedReservation else {
-                  return
-              }
+        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
         
         do {
             async let matchingUser = User.getFirstObject(where: "phoneNumber", contains: phone)

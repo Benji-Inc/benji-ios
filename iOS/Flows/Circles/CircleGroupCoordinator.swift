@@ -10,11 +10,7 @@ import Foundation
 
 class CircleGroupCoordinator: PresentableCoordinator<Void> {
 
-    private lazy var circlesVC: CircleGroupViewController = {
-        let vc = CircleGroupViewController()
-        vc.delegate = self
-        return vc
-    }()
+    private lazy var circlesVC = CircleGroupViewController()
 
     override func toPresentable() -> DismissableVC {
         return self.circlesVC
@@ -33,19 +29,6 @@ class CircleGroupCoordinator: PresentableCoordinator<Void> {
         let coordinator = ReservationsCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { result in }
         self.router.present(coordinator, source: self.circlesVC)
-    }
-}
-
-extension CircleGroupCoordinator: CircleGroupViewControllerDelegate {
-
-    nonisolated func circleGroupView(_ controller: CircleGroupViewController, didSelect item: CircleGroupCollectionViewDataSource.ItemType) {
-
-        switch item {
-        case .circles(let group):
-            Task.onMainActor {
-                self.startCircleFlow(with: group)
-            }
-        }
     }
 
     func startCircleFlow(with group: CircleGroup) {

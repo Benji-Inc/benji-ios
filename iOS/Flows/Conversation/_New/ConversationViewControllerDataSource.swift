@@ -31,7 +31,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     private let loadMoreHeaderRegistration
     = ConversationCollectionViewDataSource.createLoadMoreHeaderRegistration()
 
-    override init(collectionView: UICollectionView) {
+    required init(collectionView: UICollectionView) {
         self.contextMenuDelegate = ContextMenuInteractionDelegate(collectionView: collectionView)
 
         super.init(collectionView: collectionView)
