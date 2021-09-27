@@ -36,8 +36,6 @@
 		80D044B526FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */; };
 		80D7721B26F93B17009F0344 /* ConversationCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */; };
 		80DACF9726D6D1B50048722A /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */; };
-		80DACF9826D6D1B50048722A /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */; };
-		80DACF9926D6D1B50048722A /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */; };
 		80DACF9B26D6D7360048722A /* HomeCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9A26D6D7360048722A /* HomeCollectionViewDataSource.swift */; };
 		80F88BAE26F11F02006C7677 /* ChatChannelController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F88BAD26F11F02006C7677 /* ChatChannelController+Extensions.swift */; };
 		80FA868C26F111830053101B /* ChatMessage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FA868B26F111830053101B /* ChatMessage+Extensions.swift */; };
@@ -3106,7 +3104,6 @@
 				D63DB28C25E999AB00F6B323 /* ViewController.swift in Sources */,
 				D63DB22425E9990500F6B323 /* DispatchQue+Extensions.swift in Sources */,
 				D63DB23B25E9992600F6B323 /* UIView+Extensions.swift in Sources */,
-				80DACF9926D6D1B50048722A /* CollectionViewDataSource.swift in Sources */,
 				D63DB26425E9997200F6B323 /* AttributedString.swift in Sources */,
 				D63DB21D25E998F000F6B323 /* Coordinator.swift in Sources */,
 				D63DB28A25E999A600F6B323 /* Switchable.swift in Sources */,
@@ -3374,7 +3371,6 @@
 				D65518F82589109100B901E4 /* AppDelegate.swift in Sources */,
 				D6617CF126743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D6551A4A25895EB200B901E4 /* Switchable.swift in Sources */,
-				80DACF9826D6D1B50048722A /* CollectionViewDataSource.swift in Sources */,
 				D65519412589122C00B901E4 /* UNNotification+Extensions.swift in Sources */,
 				D63D71B625F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
 				D655192D2589122700B901E4 /* UIScrollView+Extensions.swift in Sources */,
