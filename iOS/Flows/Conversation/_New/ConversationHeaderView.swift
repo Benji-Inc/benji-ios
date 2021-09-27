@@ -59,8 +59,6 @@ class ConversationHeaderView: View {
 
     private func display(conversation: ChatChannel) async {
         Task.onMainActor {
-
-
             guard self.currentItem?.cid == conversation.cid else { return }
 
             self.label.setText(conversation.title)
