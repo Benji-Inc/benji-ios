@@ -15,7 +15,7 @@ class ConversationHeaderView: View {
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     let stackedAvatarView = StackedAvatarView()
-    let label = Label(font: .mediumUnderlined, textColor: .background4)
+    let label = Label(font: .medium, textColor: .background4)
     let descriptionLabel = Label(font: .small, textColor: .background3)
     let button = Button()
 

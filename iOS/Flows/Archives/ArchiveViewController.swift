@@ -117,10 +117,20 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
     }
 
     func subscribeToUpdates() {
-        self.channelListController?.channelsChangesPublisher.mainSink(receiveValue: { [unowned self] _ in
-            Task {
-                await self.loadData()
-            }.add(to: self.taskPool)
+        self.channelListController?.channelsChangesPublisher.mainSink(receiveValue: { changes in
+
+            changes.forEach { change in
+                switch change {
+                case .insert(let conversation, let ip):
+                    self.dataSource.insertItems([.conversation(conversation)], in: .conversations, atIndex: ip.row)
+                case .update(let conversation, _):
+                    self.dataSource.reconfigureItems([.conversation(conversation)])
+                case .remove(let conversation, _):
+                    self.dataSource.deleteItems([.conversation(conversation)])
+                default:
+                    break
+                }
+            }
         }).store(in: &self.cancellables)
     }
 }

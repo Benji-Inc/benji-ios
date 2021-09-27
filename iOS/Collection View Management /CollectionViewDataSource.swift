@@ -120,6 +120,12 @@ extension CollectionViewDataSource {
         }
     }
 
+    func insertItems(_ identifiers: [ItemType], in section: SectionType, atIndex index: Int) {
+        self.applyChanges { snapshot in
+            snapshot.insertItems(identifiers, in: section, atIndex: index)
+        }
+    }
+
     func insertItems(_ identifiers: [ItemType], beforeItem beforeIdentifier: ItemType) {
         self.applyChanges { snapshot in
             snapshot.insertItems(identifiers, beforeItem: beforeIdentifier)
@@ -221,6 +227,12 @@ extension CollectionViewDataSource {
     func appendItems(_ identifiers: [ItemType], toSection sectionIdentifier: SectionType? = nil) async {
         await self.applyChanges { snapshot in
             snapshot.appendItems(identifiers, toSection: sectionIdentifier)
+        }
+    }
+
+    func insertItems(_ identifiers: [ItemType], in section: SectionType, atIndex index: Int) async {
+        await self.applyChanges { snapshot in
+            snapshot.insertItems(identifiers, in: section, atIndex: index)
         }
     }
 

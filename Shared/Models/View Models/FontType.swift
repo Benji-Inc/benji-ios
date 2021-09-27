@@ -16,7 +16,6 @@ enum FontType {
     case displayThin
     case largeThin
     case medium
-    case mediumUnderlined
     case mediumThin
     case mediumBold
     case regular
@@ -30,7 +29,7 @@ enum FontType {
             return UIFont.systemFont(ofSize: self.size, weight: .heavy)
         case .displayThin, .mediumThin, .largeThin:
             return UIFont.systemFont(ofSize: self.size, weight: .ultraLight)
-        case .medium, .regular, .small, .mediumUnderlined:
+        case .medium, .regular, .small:
             return UIFont.systemFont(ofSize: self.size, weight: .regular)
         case .mediumBold, .regularBold, .smallBold:
             return UIFont.systemFont(ofSize: self.size, weight: .bold)
@@ -47,7 +46,7 @@ enum FontType {
             return 32
         case .largeThin:
             return 30
-        case .medium, .mediumBold, .mediumThin, .mediumUnderlined:
+        case .medium, .mediumBold, .mediumThin:
             return 24
         case .regular, .regularBold:
             return 20
@@ -68,8 +67,6 @@ enum FontType {
     var underlineStyle: NSUnderlineStyle {
         switch self {
         case .displayUnderlined:
-            return .single
-        case .mediumUnderlined:
             return .single
         default:
             return []
