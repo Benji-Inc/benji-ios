@@ -13,10 +13,10 @@ import Lottie
 
 class ConversationHeaderView: View {
 
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     let stackedAvatarView = StackedAvatarView()
-    let label = Label(font: .mediumThin, textColor: .background4)
-    let animationView = AnimationView()
+    let label = Label(font: .mediumUnderlined, textColor: .background4)
+    let button = Button()
 
     private var cancellables = Set<AnyCancellable>()
     private var currentItem: Conversation?
@@ -30,14 +30,17 @@ class ConversationHeaderView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        self.set(backgroundColor: .background1)
+
         self.addSubview(self.blurView)
         self.addSubview(self.stackedAvatarView)
+        self.stackedAvatarView.itemHeight = 40
+
         self.addSubview(self.label)
         self.label.textAlignment = .left
         self.label.lineBreakMode = .byTruncatingTail
-        self.addSubview(self.animationView)
-
-        self.stackedAvatarView.itemHeight = 70
+        self.addSubview(self.button)
+        self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .background3))
     }
 
     func configure(with item: Conversation) {
@@ -49,23 +52,25 @@ class ConversationHeaderView: View {
     }
 
     private func display(conversation: ChatChannel) async {
-        let members = conversation.lastActiveMembers.filter { member in
-            return member.id != ChatClient.shared.currentUserId
+        Task.onMainActor {
+            let members = conversation.lastActiveMembers.filter { member in
+                return member.id != ChatClient.shared.currentUserId
+            }
+
+            guard self.currentItem?.cid == conversation.cid else { return }
+
+            self.label.setText(conversation.title)
+
+            self.stackedAvatarView.set(items: members)
+            self.stackedAvatarView.layoutNow()
         }
-
-        guard self.currentItem?.cid == conversation.cid else { return }
-
-        self.label.setText(conversation.title)
-
-        self.stackedAvatarView.set(items: members)
-        self.stackedAvatarView.layoutNow()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.blurView.expandToSuperviewSize()
-        self.blurView.roundCorners()
+        self.roundCorners()
 
         self.stackedAvatarView.setSize()
         self.stackedAvatarView.centerOnY()
@@ -74,11 +79,11 @@ class ConversationHeaderView: View {
         let maxWidth = self.width - Theme.contentOffset - self.stackedAvatarView.width
         self.label.setSize(withWidth: maxWidth)
 
-        self.label.pin(.top, padding: Theme.contentOffset.half)
+        self.label.centerOnY()
         self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset.half)
 
-        self.animationView.squaredSize = 40
-        self.animationView.pin(.right, padding: Theme.contentOffset)
-        self.animationView.centerOnY()
+        self.button.squaredSize = self.height - Theme.contentOffset
+        self.button.pin(.right, padding: Theme.contentOffset.half)
+        self.button.centerOnY()
     }
 }

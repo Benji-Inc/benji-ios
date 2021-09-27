@@ -1271,12 +1271,12 @@
 		8024B94E26F278C8008ABF7F /* _New */ = {
 			isa = PBXGroup;
 			children = (
+				80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */,
+				D6A3E24827025AC900CEBAC0 /* ConversationHeaderView.swift */,
+				8024B95126F278C8008ABF7F /* ConversationViewController.swift */,
 				8024B95026F278C8008ABF7F /* ConversationViewControllerDataSource.swift */,
 				80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */,
-				80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */,
-				8024B95126F278C8008ABF7F /* ConversationViewController.swift */,
 				8015CA7626F3D907000F3C60 /* MessageCell.swift */,
-				D6A3E24827025AC900CEBAC0 /* ConversationHeaderView.swift */,
 			);
 			path = _New;
 			sourceTree = "<group>";
