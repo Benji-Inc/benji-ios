@@ -148,7 +148,7 @@ class ConversationViewController: FullScreenViewController,
     private func loadMoreMessageIfNeeded() {
         // If all the messages are loaded, there's no need to fetch more.
         guard !self.conversationController.hasLoadedAllPreviousMessages else { return }
-        
+
         Task {
             guard !isLoadingMessages else { return }
 
@@ -249,10 +249,9 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
         let alert = UIAlertController(title: "Send Method",
                                       message: "Would you like to send your message?",
                                       preferredStyle: .actionSheet)
-        
-        if let currentIndex = self.collectionView.getCentermostVisibleIndex()?.item,
-           let currentItem = self.dataSource.itemIdentifier(for: IndexPath(item: currentIndex,
-                                                                           section: 0)) {
+
+        if let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
+           let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath) {
             if case let .message(messageID) = currentItem {
                 let reply = UIAlertAction(title: "Reply", style: .default) { [unowned self] _ in
                     Task {

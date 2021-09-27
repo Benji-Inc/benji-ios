@@ -79,11 +79,13 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             snapshot.appendItems([.loadMore], toSection: .loadMore)
         }
 
+        let sectionID = ConversationCollectionSection.conversation(conversation.cid)
+
         // If there's more than one change, reload all of the data.
         guard changes.count == 1 else {
-            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .conversation(conversation.cid)))
+            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
             snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
-                                 toSection: .conversation(conversation.cid))
+                                 toSection: sectionID)
             await self.applySnapshotKeepingVisualOffset(snapshot,
                                                         collectionView: collectionView)
             return
@@ -95,15 +97,14 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         for change in changes {
             switch change {
             case .insert(let message, let index):
-                let section = ConversationCollectionSection.conversation(conversation.cid)
                 snapshot.insertItems([.message(message.id)],
-                                     in: section,
+                                     in: sectionID,
                                      atIndex: index.item)
                 scrollToLatestMessage = true
             case .move:
-                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .conversation(conversation.cid)))
+                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
                 snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
-                                     toSection: .conversation(conversation.cid))
+                                     toSection: sectionID)
             case .update(let message, _):
                 snapshot.reloadItems([message.asConversationCollectionItem])
             case .remove(let message, _):
@@ -114,9 +115,9 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
             self.apply(snapshot)
 
-            if scrollToLatestMessage {
+            if scrollToLatestMessage, let sectionIndex = snapshot.indexOfSection(sectionID) {
                 let items = snapshot.itemIdentifiers(inSection: .conversation(conversation.cid))
-                let lastIndex = IndexPath(item: items.count - 1, section: 0)
+                let lastIndex = IndexPath(item: items.count - 1, section: sectionIndex)
                 collectionView.scrollToItem(at: lastIndex, at: .centeredHorizontally, animated: true)
             }
         }
