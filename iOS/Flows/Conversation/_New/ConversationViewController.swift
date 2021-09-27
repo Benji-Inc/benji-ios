@@ -28,6 +28,7 @@ class ConversationViewController: FullScreenViewController,
     
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
     var didTapMoreButton: CompletionOptional = nil
+    var didTapConversationTitle: CompletionOptional = nil 
     
     override var inputAccessoryView: UIView? {
         return self.messageInputAccessoryView
@@ -62,6 +63,10 @@ class ConversationViewController: FullScreenViewController,
         self.conversationHeader.configure(with: self.conversation)
         self.conversationHeader.button.didSelect { [unowned self] in
             self.didTapMoreButton?()
+        }
+
+        self.conversationHeader.didSelect { [unowned self] in
+            self.didTapConversationTitle?()
         }
     }
     

@@ -40,7 +40,7 @@ class ConversationHeaderView: View {
         self.label.textAlignment = .left
         self.label.lineBreakMode = .byTruncatingTail
         self.addSubview(self.button)
-        self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .background3))
+        self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .background4))
     }
 
     func configure(with item: Conversation) {
