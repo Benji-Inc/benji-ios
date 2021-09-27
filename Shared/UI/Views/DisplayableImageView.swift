@@ -137,6 +137,7 @@ class DisplayableImageView: View {
         }
     }
 
+    @MainActor
     private func downloadAndSetImage(url: URL) {
         self.imageView.sd_setImage(with: url, placeholderImage: nil, options: [.refreshCached]) { received, expected, url in
             if self.animationView.microAnimation == .pie {

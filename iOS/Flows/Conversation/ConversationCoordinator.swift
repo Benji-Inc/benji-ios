@@ -62,19 +62,47 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
         self.conversationVC.didTapMoreButton = { [unowned self] in
             self.presentPeoplePicker()
         }
+
+        self.conversationVC.didTapConversationTitle = { [unowned self] in
+            self.presentConversationTitleAlert(for: self.conversationVC.conversationController)
+        }
     }
 
     func presentPeoplePicker() {
         self.removeChild()
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { result in
-            coordinator.toPresentable().dismiss(animated: true) {
-                if let controller = result {
-                   // self.startConversationFlow(for: controller.channel)
-                }
-            }
+            coordinator.toPresentable().dismiss(animated: true)
         }
         self.router.present(coordinator, source: self.conversationVC)
+    }
+
+    func presentConversationTitleAlert(for controller: ChatChannelController) {
+
+        let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
+        alertController.addTextField { (textField : UITextField!) -> Void in
+            textField.placeholder = "New Name"
+        }
+        let saveAction = UIAlertAction(title: "Save", style: .default, handler: { alert -> Void in
+            if let textField = alertController.textFields?.first,
+                let text = textField.text,
+                !text.isEmpty {
+
+                controller.updateChannel(name: text, imageURL: nil, team: nil) { error in
+                    // Do Stuff
+                    alertController.dismiss(animated: true, completion: nil)
+                }
+            }
+        })
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+            (action : UIAlertAction!) -> Void in })
+
+        alertController.addAction(saveAction)
+        alertController.addAction(cancelAction)
+
+
+        self.conversationVC.present(alertController, animated: true, completion: nil)
     }
 
     func presentThread(for channelID: ChannelId, messageID: MessageId) {
