@@ -52,13 +52,13 @@ class ConversationContentView: View {
     }
 
     private func display(conversation: ChatChannel) async {
-        let members = conversation.lastActiveMembers.filter { member in
-            return member.id != ChatClient.shared.currentUserId
-        }
-
         guard self.currentItem?.cid == conversation.cid else { return }
 
         self.label.setText(conversation.title)
+
+        let members = conversation.lastActiveMembers.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        }
 
         if let msg = conversation.latestMessages.first {
             self.messageLabel.setText(msg.text)
@@ -66,6 +66,7 @@ class ConversationContentView: View {
 
         self.stackedAvatarView.set(items: members)
         self.stackedAvatarView.layoutNow()
+        self.layoutNow()
     }
 
     override func layoutSubviews() {
@@ -77,7 +78,6 @@ class ConversationContentView: View {
 
         let maxWidth = self.width - Theme.contentOffset - self.stackedAvatarView.width
         self.label.setSize(withWidth: maxWidth)
-
         self.label.pin(.top, padding: Theme.contentOffset.half)
         self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset.half)
 

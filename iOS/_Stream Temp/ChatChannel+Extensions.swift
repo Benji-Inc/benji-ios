@@ -20,14 +20,41 @@ extension ChatChannel {
 
     var title: String {
 
+        let date = self.createdAt
+        let now = Date()
+
+        if let friendlyName = self.name, !friendlyName.isEmpty {
+            return localized(friendlyName.capitalized)
+        } else if date.isSameDay(as: now) {
+            return "Today"
+        } else if let yesterday = now.subtract(component: .day, amount: 1), date.isSameDay(as: yesterday) {
+            return "Yesterday"
+        } else if let weekAgo = now.subtract(component: .weekOfMonth, amount: 1), date.isBetween(now, and: weekAgo) {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE"
+            return "Last " + formatter.string(from: date)
+        } else if let twoWeeksAgo = now.subtract(component: .weekOfMonth, amount: 2), date.isBetween(now, and: twoWeeksAgo) {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE"
+            return "Last Week" + formatter.string(from: date)
+        } else if let yearAgo = now.subtract(component: .year, amount: 1), date.isBetween(now, and: yearAgo) {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMM d"
+            return formatter.string(from: date)
+        } else {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMM d, yyyy"
+            return formatter.string(from: date)
+        }
+    }
+
+    var description: Localized {
         let members = self.lastActiveMembers.filter { member in
             return member.id != ChatClient.shared.currentUserId
         }
 
-        if let friendlyName = self.name, !friendlyName.isEmpty {
-            return localized(friendlyName.capitalized)
-        } else if members.count == 0 {
-            return "You"
+        if members.count == 0 {
+            return "Just You"
         } else if members.count == 1, let member = members.first {
             return member.name ?? "No name"
         } else {
