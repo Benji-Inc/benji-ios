@@ -1,14 +1,14 @@
 //
-//  LoadMoreSectionHeader.swift
-//  Benji
+//  LoadMoreMessagesCell.swift
+//  Jibber
 //
-//  Created by Benji Dodgson on 9/22/19.
-//  Copyright © 2019 Benjamin Dodgson. All rights reserved.
+//  Created by Martin Young on 9/27/21.
+//  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
 
-class LoadMoreSectionHeader: UICollectionReusableView {
+class LoadMoreMessagesCell: UICollectionViewCell {
 
     private(set) var button = Button()
 
@@ -35,3 +35,4 @@ class LoadMoreSectionHeader: UICollectionReusableView {
         self.button.centerOnXAndY()
     }
 }
+

@@ -88,7 +88,9 @@ class ConversationViewController: FullScreenViewController,
         once(caller: self, token: "initializeCollectionView") {
             Task {
                 self.setupInputHandlers()
-                await self.loadInitialMessages()
+                // Initialize the datasource before listening for updates to ensure that the sections
+                // are set up.
+                await self.initializeDataSource()
                 self.subscribeToConversationUpdates()
             }
         }
@@ -110,21 +112,26 @@ class ConversationViewController: FullScreenViewController,
     
     // MARK: - UICollectionViewDelegate
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let messageItem = self.dataSource.itemIdentifier(for: indexPath) else { return }
+        
+        switch messageItem {
+        case .message(let messageID):
+            self.onSelectedThread?(self.conversation.cid, messageID)
+        case .loadMore:
+            self.loadMoreMessageIfNeeded()
+        }
+    }
+
     /// If true, the conversation controller is currently loading messages.
     @Atomic private var isLoadingMessages = false
-    func collectionView(_ collectionView: UICollectionView,
-                        willDisplay cell: UICollectionViewCell,
-                        forItemAt indexPath: IndexPath) {
-        
+    private func loadMoreMessageIfNeeded() {
         // If all the messages are loaded, there's no need to fetch more.
         guard !self.conversationController.hasLoadedAllPreviousMessages else { return }
-        
-        // Start fetching new messages once the user is nearing the end of the list.
-        guard indexPath.row < 2 else { return }
-        
+
         Task {
             guard !isLoadingMessages else { return }
-            
+
             self.isLoadingMessages = true
             do {
                 let oldestMessageID = self.conversationController.messages.first?.id
@@ -135,23 +142,14 @@ class ConversationViewController: FullScreenViewController,
             self.isLoadingMessages = false
         }
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let messageItem = self.dataSource.itemIdentifier(for: indexPath) else { return }
-        
-        switch messageItem {
-        case .message(let messageID):
-            self.onSelectedThread?(self.conversation.cid, messageID)
-        }
-    }
-    
+
     // MARK: - UIScrollViewDelegate
     
     func scrollViewWillEndDragging(_ scrollView: UIScrollView,
                                    withVelocity velocity: CGPoint,
                                    targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
-        // Always scroll so that a message is centered when we stop scrolling.
+        // Always scroll so that a cell is centered when we stop scrolling.
         var newXOffset = CGFloat.greatestFiniteMagnitude
         let targetOffset = targetContentOffset.pointee
         
@@ -182,13 +180,23 @@ class ConversationViewController: FullScreenViewController,
 extension ConversationViewController {
     
     @MainActor
-    func loadInitialMessages() async {
+    func initializeDataSource() async {
         guard let controller = self.conversationController else { return }
-        
+
+        // Make sure messages are loaded before initializing the data.
+        if let mostRecentMessage = controller.messages.last {
+            try? await controller.loadPreviousMessages(before: mostRecentMessage.id)
+        }
+
         let messages = controller.messages
-        
         var snapshot = self.dataSource.snapshot()
-        snapshot.appendSections([.basic(conversation.cid)])
+
+        snapshot.appendSections([.loadMore])
+        if !controller.hasLoadedAllPreviousMessages {
+            snapshot.appendItems([.loadMore], toSection: .loadMore)
+        }
+
+        snapshot.appendSections([.conversation(conversation.cid)])
         snapshot.appendItems(messages.asConversationCollectionItems)
         
         let animationCycle = AnimationCycle(inFromPosition: .left,
@@ -205,9 +213,9 @@ extension ConversationViewController {
         self.conversationController.messagesChangesPublisher.mainSink { [unowned self] changes in
             Task {
                 guard let conversationController = self.conversationController else { return }
-                await self.dataSource.updateMessages(with: changes,
-                                                     conversationController: conversationController,
-                                                     collectionView: self.collectionView)
+                await self.dataSource.update(with: changes,
+                                             conversationController: conversationController,
+                                             collectionView: self.collectionView)
             }
         }.store(in: &self.cancellables)
 
@@ -229,10 +237,9 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
         let alert = UIAlertController(title: "Send Method",
                                       message: "Would you like to send your message?",
                                       preferredStyle: .actionSheet)
-        
-        if let currentIndex = self.collectionView.getCentermostVisibleIndex()?.item,
-           let currentItem = self.dataSource.itemIdentifier(for: IndexPath(item: currentIndex,
-                                                                           section: 0)) {
+
+        if let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
+           let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath) {
             if case let .message(messageID) = currentItem {
                 let reply = UIAlertAction(title: "Reply", style: .default) { [unowned self] _ in
                     Task {
