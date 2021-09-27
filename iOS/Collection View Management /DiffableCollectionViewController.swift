@@ -55,7 +55,7 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
     }
 
     @MainActor
-    private func loadData() async {
+    func loadData() async {
 
         guard !Task.isCancelled else {
             self.collectionView.animationView.stop()
@@ -121,5 +121,11 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
         }
 
         self.selectedItems = self.__selectedItems
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+        return nil 
     }
 }

@@ -14,21 +14,22 @@ protocol ArchiveViewControllerDelegate: AnyObject {
     func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType)
 }
 
-class ArchiveViewController: BlurredViewController {
+class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionViewDataSource.SectionType, ArchiveCollectionViewDataSource.ItemType, ArchiveCollectionViewDataSource> {
 
     weak var delegate: ArchiveViewControllerDelegate?
 
-    // MARK: - UI
+    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
-    private var collectionView = CollectionView(layout: ArchiveCollectionViewLayout())
-    lazy var dataSource = ArchiveCollectionViewDataSource(collectionView: self.collectionView)
+    // MARK: - UI
 
     private(set) var channelListController: ChatChannelListController?
 
     lazy var segmentedControl: UISegmentedControl = {
-        let actions: [UIAction] = Scope.allCases.map { scope in
+        let actions: [UIAction] = ArchiveScope.allCases.map { scope in
             return UIAction.init(title: localized(scope.title)) { action in
-                self.loadQuery(with: scope)
+                Task {
+                   await self.loadData()
+                }.add(to: self.taskPool)
             }
         }
 
@@ -37,43 +38,27 @@ class ArchiveViewController: BlurredViewController {
         return control
     }()
 
-    enum Scope: Int, CaseIterable {
-        case recents
-        case dms
-        case groups
+    init() {
+        super.init(with: CollectionView(layout: ArchiveCollectionViewLayout()))
+    }
 
-        var title: Localized {
-            switch self {
-            case .recents:
-                return "Recents"
-            case .dms:
-                return "DMs"
-            case .groups:
-                return "Groups"
-            }
-        }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.addSubview(self.collectionView)
-        self.collectionView.delegate = self
+        self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
 
         self.view.addSubview(self.segmentedControl)
         self.segmentedControl.selectedSegmentIndex = 0
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        self.loadQuery(with: .recents)
-    }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.collectionView.expandToSuperviewSize()
+        self.blurView.expandToSuperviewSize()
 
         self.segmentedControl.width = self.view.width - Theme.contentOffset.doubled
         self.segmentedControl.centerOnX()
@@ -83,81 +68,46 @@ class ArchiveViewController: BlurredViewController {
 
     // MARK: Data Loading
 
-    func loadQuery(with scope: Scope) {
-        guard let userId = User.current()?.objectId else { return }
+    override func retrieveDataForSnapshot() async -> [ArchiveCollectionViewDataSource.SectionType : [ArchiveCollectionViewDataSource.ItemType]] {
 
-        var query: ChannelListQuery? = nil
+        guard let query = ArchiveScope(rawValue: self.segmentedControl.selectedSegmentIndex)?.query else { return [:] }
 
-        switch scope {
-        case .recents:
-            query = ChannelListQuery(filter: .containMembers(userIds: [userId]),
-                                         sort: [.init(key: .lastMessageAt, isAscending: false)],
-                                         pageSize: 20)
-        case .dms:
-            query = ChannelListQuery(filter: .and([.containMembers(userIds: [userId]), .lessOrEqual(.memberCount, than: 2)]),
-                                         sort: [.init(key: .lastMessageAt, isAscending: false)],
-                                         pageSize: 20)
-        case .groups:
-            query = ChannelListQuery(filter: .and([.containMembers(userIds: [userId]), .greaterOrEqual(.memberCount, than: 3)]),
-                                         sort: [.init(key: .lastMessageAt, isAscending: false)],
-                                         pageSize: 20)
+        self.channelListController = try? await ChatClient.shared.queryChannels(query: query)
+
+        guard let channels = self.channelListController?.channels else { return [:] }
+
+        var data: [ArchiveCollectionViewDataSource.SectionType : [ArchiveCollectionViewDataSource.ItemType]] = [:]
+
+        data[.conversations] = channels.map { conversation in
+            return .conversation(conversation)
         }
 
-        guard let q = query else { return }
-
-        Task {
-            await self.loadData(with: q)
-        }.add(to: self.taskPool)
+        return data
     }
 
-    @MainActor
-    func loadData(with query: ChannelListQuery) async {
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        super.collectionView(collectionView, didSelectItemAt: indexPath)
 
-        self.collectionView.animationView.play()
+        guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
 
-        let controller = try? await ChatClient.shared.queryChannels(query: query)
-
-        guard !Task.isCancelled else {
-            self.collectionView.animationView.stop()
-            return
-        }
-
-        self.channelListController = controller
-
-        let cycle = AnimationCycle(inFromPosition: .inward,
-                                   outToPosition: .inward,
-                                   shouldConcatenate: true,
-                                   scrollToEnd: false)
-
-        let snapshot = self.getInitialSnapshot()
-        await self.dataSource.apply(snapshot, collectionView: self.collectionView, animationCycle: cycle)
-
-        self.collectionView.animationView.stop()
+        self.delegate?.archiveView(self, didSelect: identifier)
     }
 
-    private func getInitialSnapshot() -> NSDiffableDataSourceSnapshot<ArchiveCollectionViewDataSource.SectionType,
-                                                                      ArchiveCollectionViewDataSource.ItemType> {
-        var snapshot = self.dataSource.snapshot()
-                                                                          snapshot.deleteAllItems()
-                                                                          
-        let allCases = ArchiveCollectionViewDataSource.SectionType.allCases
-        snapshot.appendSections(allCases)
-        allCases.forEach { (section) in
-            snapshot.appendItems(self.getItems(for: section), toSection: section)
-        }
+    override func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemAt indexPath: IndexPath,
+                        point: CGPoint) -> UIContextMenuConfiguration? {
 
-        return snapshot
-    }
+        guard let conversation = self.channelListController?.channels[indexPath.row],
+              let cell = collectionView.cellForItem(at: indexPath) as? ConversationCell else { return nil }
 
-    private func getItems(for section: ArchiveCollectionViewDataSource.SectionType)
-    -> [ArchiveCollectionViewDataSource.ItemType] {
-
-        switch section {
-        case .conversations:
-            guard let channels = self.channelListController?.channels else { return [] }
-            return channels.map { conversation in
-                return .conversation(conversation)
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+            return ConversationPreviewViewController(with: conversation, size: cell.size)
+        }, actionProvider: { suggestedActions in
+            if conversation.isOwnedByMe {
+                return self.makeCurrentUserMenu(for: conversation, at: indexPath)
+            } else {
+                return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
             }
-        }
+        })
     }
 }
