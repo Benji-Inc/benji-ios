@@ -65,13 +65,19 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     }
 
     /// Updates the datasource with the passed in array of message changes.
-    func updateMessages(with changes: [ListChange<Message>],
-                        conversationController: ConversationController,
-                        collectionView: UICollectionView) async {
+    func update(with changes: [ListChange<Message>],
+                conversationController: ConversationController,
+                collectionView: UICollectionView) async {
 
-        guard let conversation = conversationController.channel else { return }
+        guard let conversation = conversationController.conversation else { return }
 
         var snapshot = self.snapshot()
+
+        // Only show the load more cell if there are previous messages to load.
+        snapshot.deleteItems([.loadMore])
+        if !conversationController.hasLoadedAllPreviousMessages {
+            snapshot.appendItems([.loadMore], toSection: .loadMore)
+        }
 
         // If there's more than one change, reload all of the data.
         guard changes.count == 1 else {
