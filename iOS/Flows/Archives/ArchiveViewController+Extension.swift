@@ -9,31 +9,7 @@
 import Foundation
 import StreamChat
 
-extension ArchiveViewController: UICollectionViewDelegate {
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
-
-        self.delegate?.archiveView(self, didSelect: identifier)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        contextMenuConfigurationForItemAt indexPath: IndexPath,
-                        point: CGPoint) -> UIContextMenuConfiguration? {
-
-        guard let conversation = self.channelListController?.channels[indexPath.row],
-              let cell = collectionView.cellForItem(at: indexPath) as? ConversationCell else { return nil }
-
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
-            return ConversationPreviewViewController(with: conversation, size: cell.size)
-        }, actionProvider: { suggestedActions in
-            if conversation.isOwnedByMe {
-                return self.makeCurrentUserMenu(for: conversation, at: indexPath)
-            } else {
-                return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
-            }
-        })
-    }
+extension ArchiveViewController {
 
     func makeCurrentUserMenu(for conversation: Conversation, at indexPath: IndexPath) -> UIMenu {
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }

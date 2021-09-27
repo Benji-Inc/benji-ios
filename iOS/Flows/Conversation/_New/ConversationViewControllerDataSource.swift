@@ -28,7 +28,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     private let contextMenuDelegate: ContextMenuInteractionDelegate
     private let messageCellConfig = ConversationCollectionViewDataSource.createMessageCellRegistration()
 
-    override init(collectionView: UICollectionView) {
+    required init(collectionView: UICollectionView) {
         self.contextMenuDelegate = ContextMenuInteractionDelegate(collectionView: collectionView)
 
         super.init(collectionView: collectionView)

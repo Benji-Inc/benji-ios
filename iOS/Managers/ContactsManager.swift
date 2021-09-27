@@ -23,7 +23,6 @@ class ContactsManger {
     }
 
     func searchForContact(with predicateType: ContactPredicateType) -> [CNContact] {
-        var contacts: [CNContact] = [CNContact]()
         let predicate: NSPredicate
 
         let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactIdentifierKey, CNContactThumbnailImageDataKey] as [CNKeyDescriptor]
@@ -41,42 +40,41 @@ class ContactsManger {
         }
 
         do {
-            contacts = try self.store.unifiedContacts(matching: predicate, keysToFetch: keys)
-            return contacts
+            return try self.store.unifiedContacts(matching: predicate, keysToFetch: keys)
         } catch {
             return []
         }
     }
 
-    func fetchContacts() {
-        // 1.
-        self.store.requestAccess(for: .contacts) { (granted, error) in
-            if let error = error {
-                print("failed to request access", error)
-                return
-            }
-            if granted {
+    func fetchContacts() async -> [CNContact] {
+            // 1.
+        do {
+            if try await self.store.requestAccess(for: .contacts) {
                 // 2.
-                let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactIdentifierKey]
+                let keys = [CNContactGivenNameKey, CNContactFamilyNameKey, CNContactPhoneNumbersKey, CNContactIdentifierKey, CNContactThumbnailImageDataKey]
+
                 let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
+                request.sortOrder = .familyName
+                
                 do {
                     // 3.
+                    var contacts: [CNContact] = []
                     try self.store.enumerateContacts(with: request, usingBlock: { (contact, stopPointer) in
-                        if contact.fullName == "benjamin dodgson" {
-                            print(contact.identifier)
+                        if contact.phoneNumbers.count > 0 {
+                            contacts.append(contact)
                         }
-
-//                        if contact.identifier == "448C2146-D60F-4991-BB59-173261FA25E6:ABPerson" {
-//                            print("Found contact")
-//                        }
-//                        print(contact.fullName)
                     })
+                    return contacts
                 } catch let error {
                     print("Failed to enumerate contact", error)
                 }
             } else {
                 print("access denied")
             }
+        } catch {
+            print(error)
         }
+
+        return []
     }
 }

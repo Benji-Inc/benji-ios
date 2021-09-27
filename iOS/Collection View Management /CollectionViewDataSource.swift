@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 /// A base class for types that can act as a data source for a UICollectionview.
 /// Subclasses should override functions related to dequeuing cells and supplementary views.
@@ -19,7 +20,7 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
 
     private var diffableDataSource: DiffableDataSourceType!
 
-    init(collectionView: UICollectionView) {
+    required init(collectionView: UICollectionView) {
         self.diffableDataSource = DiffableDataSourceType(collectionView: collectionView,
                                                          cellProvider: { collectionView, indexPath, itemIdentifier in
             guard let section = self.sectionIdentifier(for: indexPath.section) else { return nil }
@@ -39,8 +40,8 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
                                                  section: section,
                                                  indexPath: indexPath)
         }
-
     }
+
     /// Returns a configured UICollectionViewCell dequeued from the passed in collection view.
     func dequeueCell(with collectionView: UICollectionView,
                      indexPath: IndexPath,
