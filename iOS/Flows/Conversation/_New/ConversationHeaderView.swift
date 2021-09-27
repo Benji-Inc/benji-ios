@@ -16,6 +16,7 @@ class ConversationHeaderView: View {
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     let stackedAvatarView = StackedAvatarView()
     let label = Label(font: .mediumUnderlined, textColor: .background4)
+    let descriptionLabel = Label(font: .small, textColor: .background3)
     let button = Button()
 
     private var cancellables = Set<AnyCancellable>()
@@ -34,11 +35,16 @@ class ConversationHeaderView: View {
 
         self.addSubview(self.blurView)
         self.addSubview(self.stackedAvatarView)
-        self.stackedAvatarView.itemHeight = 40
+        self.stackedAvatarView.itemHeight = 50
 
         self.addSubview(self.label)
         self.label.textAlignment = .left
         self.label.lineBreakMode = .byTruncatingTail
+
+        self.addSubview(self.descriptionLabel)
+        self.descriptionLabel.textAlignment = .left
+        self.descriptionLabel.lineBreakMode = .byTruncatingTail
+
         self.addSubview(self.button)
         self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .background4))
     }
@@ -53,15 +59,23 @@ class ConversationHeaderView: View {
 
     private func display(conversation: ChatChannel) async {
         Task.onMainActor {
-            let members = conversation.lastActiveMembers.filter { member in
-                return member.id != ChatClient.shared.currentUserId
-            }
+
 
             guard self.currentItem?.cid == conversation.cid else { return }
 
             self.label.setText(conversation.title)
+            self.descriptionLabel.setText(conversation.description)
 
-            self.stackedAvatarView.set(items: members)
+            let members = conversation.lastActiveMembers.filter { member in
+                return member.id != ChatClient.shared.currentUserId
+            }
+
+            if !members.isEmpty {
+                self.stackedAvatarView.set(items: members)
+            } else {
+                self.stackedAvatarView.set(items: [User.current()!])
+            }
+
             self.stackedAvatarView.layoutNow()
         }
     }
@@ -79,8 +93,12 @@ class ConversationHeaderView: View {
         let maxWidth = self.width - Theme.contentOffset - self.stackedAvatarView.width
         self.label.setSize(withWidth: maxWidth)
 
-        self.label.centerOnY()
+        self.label.match(.top, to: .top, of: self.stackedAvatarView)
         self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset.half)
+
+        self.descriptionLabel.setSize(withWidth: maxWidth)
+        self.descriptionLabel.match(.bottom, to: .bottom, of: self.stackedAvatarView)
+        self.descriptionLabel.match(.left, to: .left, of: self.label)
 
         self.button.squaredSize = self.height - Theme.contentOffset
         self.button.pin(.right, padding: Theme.contentOffset.half)

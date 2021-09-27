@@ -28,7 +28,8 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
         let actions: [UIAction] = ArchiveScope.allCases.map { scope in
             return UIAction.init(title: localized(scope.title)) { action in
                 Task {
-                   await self.loadData()
+                    await self.loadData()
+                    self.subscribeToUpdates()
                 }.add(to: self.taskPool)
             }
         }
@@ -53,6 +54,14 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
 
         self.view.addSubview(self.segmentedControl)
         self.segmentedControl.selectedSegmentIndex = 0
+
+        guard let query = ArchiveScope(rawValue: self.segmentedControl.selectedSegmentIndex)?.query else { return }
+
+        Task {
+            self.channelListController = try? await ChatClient.shared.queryChannels(query: query)
+            await self.loadData()
+            self.subscribeToUpdates()
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -69,10 +78,6 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
     // MARK: Data Loading
 
     override func retrieveDataForSnapshot() async -> [ArchiveCollectionViewDataSource.SectionType : [ArchiveCollectionViewDataSource.ItemType]] {
-
-        guard let query = ArchiveScope(rawValue: self.segmentedControl.selectedSegmentIndex)?.query else { return [:] }
-
-        self.channelListController = try? await ChatClient.shared.queryChannels(query: query)
 
         guard let channels = self.channelListController?.channels else { return [:] }
 
@@ -109,5 +114,13 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
                 return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
             }
         })
+    }
+
+    func subscribeToUpdates() {
+        self.channelListController?.channelsChangesPublisher.mainSink(receiveValue: { [unowned self] _ in
+            Task {
+                await self.loadData()
+            }.add(to: self.taskPool)
+        }).store(in: &self.cancellables)
     }
 }

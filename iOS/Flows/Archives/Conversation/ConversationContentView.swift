@@ -64,7 +64,12 @@ class ConversationContentView: View {
             self.messageLabel.setText(msg.text)
         }
 
-        self.stackedAvatarView.set(items: members)
+        if !members.isEmpty {
+            self.stackedAvatarView.set(items: members)
+        } else {
+            self.stackedAvatarView.set(items: [User.current()!])
+        }
+
         self.stackedAvatarView.layoutNow()
         self.layoutNow()
     }
