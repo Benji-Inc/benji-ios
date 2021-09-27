@@ -8,7 +8,7 @@
 
 import Foundation
 
-class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable, DataSource: CollectionViewDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
+class DiffableCollectionViewController<SectionType: Hashable & CaseIterable, ItemType: Hashable, DataSource: CollectionViewDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
     
     lazy var dataSource = DataSource.init(collectionView: self.collectionView)
 
@@ -72,12 +72,13 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
         self.collectionView.animationView.stop()
     }
 
-    private func getInitialSnapshot(with dictionary: [SectionType: [ItemType]]) -> NSDiffableDataSourceSnapshot<SectionType, ItemType> {
+    func getInitialSnapshot(with dictionary: [SectionType: [ItemType]]) -> NSDiffableDataSourceSnapshot<SectionType, ItemType> {
 
         var snapshot = self.dataSource.snapshot()
         snapshot.deleteAllItems()
 
-        let allSections = Array(dictionary.keys)
+        let allSections = SectionType.allCases as! [SectionType]
+
         snapshot.appendSections(allSections)
 
         allSections.forEach { section in
@@ -126,6 +127,6 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
     func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemAt indexPath: IndexPath,
                         point: CGPoint) -> UIContextMenuConfiguration? {
-        return nil 
+        return nil
     }
 }

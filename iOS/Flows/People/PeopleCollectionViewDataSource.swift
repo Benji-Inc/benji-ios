@@ -13,7 +13,7 @@ import TMROLocalization
 class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionViewDataSource.SectionType,
                                        PeopleCollectionViewDataSource.ItemType> {
 
-    enum SectionType: Int {
+    enum SectionType: Int, CaseIterable {
         case connections
         case contacts
     }
