@@ -30,7 +30,7 @@ class InvitationLoadingView: View {
     @MainActor
     func initiateLoading(with contact: Contact) async {
 
-        self.resetAnimation()
+        self.resetAllViews()
         self.set(contact: contact)
 
         await UIView.animateKeyframes(withDuration: 1.0, delay: 0.1, options: []) {
@@ -54,15 +54,58 @@ class InvitationLoadingView: View {
         await Task.sleep(seconds: 2.2)
     }
 
+    @MainActor
+    func update(contact: Contact) async {
+
+        self.set(contact: contact)
+
+        await UIView.animateKeyframes(withDuration: 1.0, delay: 0.1, options: []) {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+                self.resetAnimation()
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+                self.avatarView.alpha = 1.0
+                self.avatarView.transform = .identity
+                self.label.alpha = 1.0
+                self.label.transform = .identity
+                self.progressView.alpha = 1.0
+            }
+        }
+
+        UIView.animate(withDuration: 2.0) {
+            self.progressView.setProgress(1.0, animated: true)
+        }
+
+        await Task.sleep(seconds: 2.2)
+    }
+
+    func hideAllViews() async {
+        await UIView.animateKeyframes(withDuration: 1.0, delay: 0.1, options: []) {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+                self.resetAnimation()
+            }
+
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+                self.blurView.effect = nil
+            }
+        }
+    }
+
     private func set(contact: Contact) {
+        self.avatarView.reset()
         self.avatarView.set(avatar: contact)
         let text = LocalizedString(id: "", arguments: [contact.fullName], default: "Preparing message for: @(contact)")
         self.label.setText(text)
         self.layoutNow()
     }
 
-    private func resetAnimation() {
+    private func resetAllViews() {
         self.blurView.effect = nil
+        self.resetAnimation()
+    }
+
+    private func resetAnimation() {
         self.avatarView.alpha = 0
         self.avatarView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
         self.label.alpha = 0

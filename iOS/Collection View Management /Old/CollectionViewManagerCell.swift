@@ -12,6 +12,7 @@ import Combine
 struct ManageableCellRegistration<Cell: UICollectionViewCell & ManageableCell> {
     let provider = UICollectionView.CellRegistration<Cell, Cell.ItemType> { (cell, indexPath, model)  in
         cell.configure(with: model)
+        cell.update(isSelected: cell.isSelected)
         cell.currentItem = model
     }
 }
@@ -44,7 +45,7 @@ class CollectionViewManagerCell: UICollectionViewListCell {
         self.initializeSubviews()
     }
 
-    func initializeSubviews() { }
+    func initializeSubviews() {}
 
     private func initializeLongPressGesture() {
 

@@ -10,6 +10,7 @@ import Foundation
 import StreamChat
 import Contacts
 import TMROLocalization
+import UIKit
 
 // Create contactItem
 // Implement contactItem
@@ -76,10 +77,22 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
 
     func showLoading(for contact: Contact) async {
-        self.view.addSubview(self.loadingView)
-        self.view.layoutNow()
 
-        await self.loadingView.initiateLoading(with: contact)
+        if self.loadingView.superview.isNil {
+            self.view.addSubview(self.loadingView)
+            self.view.layoutNow()
+            await self.loadingView.initiateLoading(with: contact)
+        } else {
+            await self.loadingView.update(contact: contact)
+        }
+    }
+
+    func finishInviting() {
+        Task {
+            await self.loadingView.hideAllViews()
+            self.loadingView.removeFromSuperview()
+            await self.loadData()
+        }
     }
 
     func updateButton() {

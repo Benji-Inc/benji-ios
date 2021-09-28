@@ -43,6 +43,8 @@ extension PeopleCoordinator {
         if let contact = self.contactsToInvite[safe: self.inviteIndex],
            let rsvp = self.reservations[safe: self.inviteIndex] {
             self.invite(contact: contact, with: rsvp)
+        } else {
+            self.peopleVC.finishInviting()
         }
 
         self.inviteIndex += 1
@@ -51,10 +53,7 @@ extension PeopleCoordinator {
     func invite(contact: Contact, with reservation: Reservation) {
         Task {
             await self.peopleVC.showLoading(for: contact)
-            // Show loading on screen
-            //await self.reservationsVC.contactsButton.handleEvent(status: .loading)
             await self.findUser(with: contact.cnContact, for: reservation)
-            //await self.reservationsVC.contactsButton.handleEvent(status: .complete)
         }
     }
 
