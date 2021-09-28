@@ -12,7 +12,7 @@ import Contacts
 
 class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
 
-    lazy var peopleVC = PeopleViewController()
+    lazy var peopleVC = PeopleViewController(includeConnections: self.includeConnections)
 
     var messageComposer: MessageComposerViewController?
     lazy var contactsVC = ContactsViewController()
@@ -21,6 +21,16 @@ class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
     var reservations: [Reservation] = []
     var contactsToInvite: [Contact] = []
     var inviteIndex: Int = 0
+
+    private let includeConnections: Bool
+
+    init(includeConnections: Bool = true,
+         router: Router,
+         deepLink: DeepLinkable?) {
+
+        self.includeConnections = includeConnections
+        super.init(router: router, deepLink: deepLink)
+    }
 
     override func toPresentable() -> DismissableVC {
         return self.peopleVC
