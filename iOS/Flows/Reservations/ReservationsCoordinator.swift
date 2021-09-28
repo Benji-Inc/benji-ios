@@ -21,7 +21,7 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     private lazy var contactsVC = ContactsViewController()
 
     private var reservations: [Reservation] = []
-    private var contactsToInvite: [CNContact] = []
+    private var contactsToInvite: [Contact] = []
     private var inviteIndex: Int = 0
 
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
@@ -123,7 +123,7 @@ extension ReservationsCoordinator: PeopleViewControllerDelegate {
     func updateInvitation() {
         if let contact = self.contactsToInvite[safe: self.inviteIndex],
            let rsvp = self.reservations[safe: self.inviteIndex] {
-            self.invite(contact: contact, with: rsvp)
+            self.invite(contact: contact.cnContact, with: rsvp)
         }
 
         self.inviteIndex += 1

@@ -32,14 +32,14 @@ struct Contact: Avatar, Hashable {
         return self.cnContact.image
     }
 
-    private let cnContact: CNContact
-    private let pendingReservation: Reservation?
-    private let phoneNumber: String?
+    let cnContact: CNContact
+    let pendingReservation: Reservation?
+    let phoneNumber: String
 
     init(with contact: CNContact, reservation: Reservation? = nil) {
         self.cnContact = contact
         self.pendingReservation = reservation
         let phone = contact.findBestPhoneNumber().phone?.stringValue ?? ""
-        self.phoneNumber = PartialFormatter().formatPartial(phone)
+        self.phoneNumber = PartialFormatter().formatPartial(phone) 
     }
 }

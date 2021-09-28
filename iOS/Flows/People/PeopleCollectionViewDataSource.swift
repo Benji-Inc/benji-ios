@@ -20,7 +20,7 @@ class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionV
 
     enum ItemType: Hashable {
         case connection(Connection)
-        case contact(CNContact)
+        case contact(Contact)
     }
 
     var headerTitle: Localized = ""

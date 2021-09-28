@@ -121,11 +121,11 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             data[.connections] = []
         }
 
-        data[.contacts] = await ContactsManger.shared.fetchContacts().map({ contact in
-            return .contact(contact)
-        })
-
         await self.loadUnclaimedReservations()
+
+        data[.contacts] = await ContactsManger.shared.fetchContacts().map({ contact in
+            return .contact(Contact(with: contact, reservation: nil))
+        })
 
         return data
     }
