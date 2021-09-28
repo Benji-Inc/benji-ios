@@ -11,6 +11,12 @@ import StreamChat
 import Contacts
 import TMROLocalization
 
+// Create contactItem
+// Implement contactItem
+// Show contacts that have/have not been invited
+// Combine reservations/people coordinator
+// Cycle through invites then connections when adding to channel
+
 protocol PeopleViewControllerDelegate: AnyObject {
     func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType])
 }
