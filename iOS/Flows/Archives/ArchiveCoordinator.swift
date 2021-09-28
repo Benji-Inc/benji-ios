@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StreamChat
 
 class ArchiveCoordinator: PresentableCoordinator<Void> {
 
@@ -65,9 +66,11 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
     nonisolated func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType) {
 
         switch item {
-        case .conversation(let conversation):
+        case .conversation(let conversationID):
             Task.onMainActor {
-                self.startConversationFlow(for: conversation)
+                if let conversation = ChatClient.shared.channelController(for: conversationID).conversation {
+                    self.startConversationFlow(for: conversation)
+                }
             }
         }
     }

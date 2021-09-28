@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StreamChat
 
 class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectionViewDataSource.SectionType,
                                        ArchiveCollectionViewDataSource.ItemType> {
@@ -16,7 +17,7 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
     }
 
     enum ItemType: Hashable {
-        case conversation(Conversation)
+        case conversation(ChannelId)
     }
 
     private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider

@@ -67,7 +67,7 @@ extension ArchiveViewController {
         Task {
             do {
                 try await ChatClient.shared.deleteChannel(conversation)
-                await self.dataSource.deleteItems([.conversation(conversation)])
+                await self.dataSource.deleteItems([.conversation(conversation.cid)])
             } catch {
                 logDebug(error)
             }

@@ -7,12 +7,13 @@
 //
 
 import Foundation
+import StreamChat
 
 class ConversationCell: CollectionViewManagerCell, ManageableCell {
 
-    typealias ItemType = Conversation
+    typealias ItemType = ChannelId
 
-    var currentItem: Conversation?
+    var currentItem: ChannelId?
 
     private let content = ConversationContentView()
 
@@ -22,8 +23,10 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         self.contentView.addSubview(self.content)
     }
 
-    func configure(with item: Conversation) {
-        self.content.configure(with: item)
+    func configure(with item: ChannelId) {
+        if let conversation = ChatClient.shared.channelController(for: item).conversation {
+            self.content.configure(with: conversation)
+        }
     }
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes)

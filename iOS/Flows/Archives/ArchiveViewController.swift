@@ -84,7 +84,7 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
         var data: [ArchiveCollectionViewDataSource.SectionType : [ArchiveCollectionViewDataSource.ItemType]] = [:]
 
         data[.conversations] = channels.map { conversation in
-            return .conversation(conversation)
+            return .conversation(conversation.cid)
         }
 
         return data
@@ -122,11 +122,11 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
             changes.forEach { change in
                 switch change {
                 case .insert(let conversation, let ip):
-                    self.dataSource.insertItems([.conversation(conversation)], in: .conversations, atIndex: ip.row)
+                    self.dataSource.insertItems([.conversation(conversation.cid)], in: .conversations, atIndex: ip.row)
                 case .update(let conversation, _):
-                    self.dataSource.reconfigureItems([.conversation(conversation)])
+                    self.dataSource.reconfigureItems([.conversation(conversation.cid)])
                 case .remove(let conversation, _):
-                    self.dataSource.deleteItems([.conversation(conversation)])
+                    self.dataSource.deleteItems([.conversation(conversation.cid)])
                 default:
                     break
                 }
