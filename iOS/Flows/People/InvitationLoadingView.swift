@@ -14,7 +14,7 @@ class InvitationLoadingView: View {
 
     let blurView = UIVisualEffectView(effect: nil)
     let avatarView = AvatarView()
-    let label = Label(font: .medium)
+    let label = Label(font: .small)
     let progressView = UIProgressView()
 
     override func initializeSubviews() {
@@ -23,6 +23,7 @@ class InvitationLoadingView: View {
         self.addSubview(self.blurView)
         self.addSubview(self.avatarView)
         self.addSubview(self.label)
+        self.label.textAlignment = .center
         self.addSubview(self.progressView)
     }
 
@@ -45,11 +46,17 @@ class InvitationLoadingView: View {
                 self.progressView.alpha = 1.0
             }
         }
+
+        UIView.animate(withDuration: 2.0) {
+            self.progressView.setProgress(1.0, animated: true)
+        }
+
+        await Task.sleep(seconds: 2.2)
     }
 
     private func set(contact: Contact) {
         self.avatarView.set(avatar: contact)
-        let text = LocalizedString(id: "", arguments: [contact.fullName], default: "Preparing message to: @(contact)")
+        let text = LocalizedString(id: "", arguments: [contact.fullName], default: "Preparing message for: @(contact)")
         self.label.setText(text)
         self.layoutNow()
     }
@@ -69,7 +76,7 @@ class InvitationLoadingView: View {
 
         self.blurView.expandToSuperviewSize()
 
-        self.avatarView.setSize(for: 60)
+        self.avatarView.setSize(for: 100)
         self.avatarView.centerOnX()
         self.avatarView.centerY = self.height * 0.4
 
