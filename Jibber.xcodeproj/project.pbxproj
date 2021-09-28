@@ -298,6 +298,8 @@
 		D64A1F13258D598B0097817C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C821D3071500204BEE /* LaunchScreen.storyboard */; };
 		D64A8F4C25900BA4002948E1 /* ConversationCollectionViewManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A8F4B25900BA4002948E1 /* ConversationCollectionViewManager+Extensions.swift */; };
 		D64C323E270391AE004BC1BD /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C323D270391AE004BC1BD /* Contact.swift */; };
+		D64C32402703957D004BC1BD /* PeopleCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C323F2703957D004BC1BD /* PeopleCoordinator+Extensions.swift */; };
+		D64C324227039646004BC1BD /* MessageComposerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C324127039646004BC1BD /* MessageComposerViewController.swift */; };
 		D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D64C6A7E23294A8600DB7257 /* ConversationKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A7D23294A8600DB7257 /* ConversationKey.swift */; };
 		D64C6A99232D6C0200DB7257 /* TypingBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A98232D6C0200DB7257 /* TypingBubbleView.swift */; };
@@ -958,6 +960,8 @@
 		D64A1F06258C16470097817C /* WaitlistViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitlistViewController.swift; sourceTree = "<group>"; };
 		D64A8F4B25900BA4002948E1 /* ConversationCollectionViewManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationCollectionViewManager+Extensions.swift"; sourceTree = "<group>"; };
 		D64C323D270391AE004BC1BD /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
+		D64C323F2703957D004BC1BD /* PeopleCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PeopleCoordinator+Extensions.swift"; sourceTree = "<group>"; };
+		D64C324127039646004BC1BD /* MessageComposerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageComposerViewController.swift; sourceTree = "<group>"; };
 		D64C6A79232883FE00DB7257 /* CloudFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudFunction.swift; sourceTree = "<group>"; };
 		D64C6A7D23294A8600DB7257 /* ConversationKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationKey.swift; sourceTree = "<group>"; };
 		D64C6A98232D6C0200DB7257 /* TypingBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingBubbleView.swift; sourceTree = "<group>"; };
@@ -2034,11 +2038,13 @@
 			children = (
 				D66A580A25DD6990001B3F64 /* ConnectionCell.swift */,
 				D687F3C726FE4E4B000E4734 /* ContactCell.swift */,
-				D6B3329425DDB9E300211044 /* PeopleHeaderView.swift */,
 				D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */,
 				D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */,
 				D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */,
+				D64C323F2703957D004BC1BD /* PeopleCoordinator+Extensions.swift */,
+				D6B3329425DDB9E300211044 /* PeopleHeaderView.swift */,
 				D66A580625DD691A001B3F64 /* PeopleViewController.swift */,
+				D64C324127039646004BC1BD /* MessageComposerViewController.swift */,
 			);
 			path = People;
 			sourceTree = "<group>";
@@ -2825,6 +2831,7 @@
 				D64273A522CC05DD0088256B /* ExpandingTextView.swift in Sources */,
 				D642739F22CAFD680088256B /* MessageTextView.swift in Sources */,
 				D677588325B09F4D007E0184 /* Transitionable.swift in Sources */,
+				D64C324227039646004BC1BD /* MessageComposerViewController.swift in Sources */,
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
 				D671E1F126402A2000BF2B8D /* ToastView.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
@@ -2974,6 +2981,7 @@
 				D6D3927D265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,
 				80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
+				D64C32402703957D004BC1BD /* PeopleCoordinator+Extensions.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,
 				80DACF9B26D6D7360048722A /* HomeCollectionViewDataSource.swift in Sources */,

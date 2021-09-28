@@ -1,5 +1,5 @@
 //
-//  NewConversationCoordinator.swift
+//  PeopleCoordinator.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 10/5/19.
@@ -13,6 +13,14 @@ import Contacts
 class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
 
     lazy var peopleVC = PeopleViewController()
+
+    var messageComposer: MessageComposerViewController?
+    lazy var contactsVC = ContactsViewController()
+
+    var selectedContact: CNContact?
+    var reservations: [Reservation] = []
+    var contactsToInvite: [Contact] = []
+    var inviteIndex: Int = 0
 
     override func toPresentable() -> DismissableVC {
         return self.peopleVC
@@ -28,19 +36,22 @@ class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
 extension PeopleCoordinator: PeopleViewControllerDelegate {
 
     nonisolated func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
-        // Do stuff
 
-//        switch item {
-//        case .connection(let connection):
-//            break
-//        case .contact(let contact):
-//            Task {
-//                await self.didSelect(contact: contact)
-//            }
-//        }
-    }
+        Task.onMainActor {
 
-    private func didSelect(contact: CNContact) {
-        // Trigger invite flow
+            self.reservations = controller.reservations
+
+            self.contactsToInvite = items.compactMap({ item in
+                switch item {
+                case .connection(_):
+                    return nil
+                case .contact(let contact):
+                    return contact
+                }
+            })
+
+            self.updateInvitation()
+        }
     }
 }
+
