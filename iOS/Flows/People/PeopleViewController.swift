@@ -31,6 +31,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
     let button = Button()
+    private let loadingView = InvitationLoadingView()
 
     init(includeConnections: Bool = true) {
         self.includeConnections = includeConnections
@@ -68,9 +69,17 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         super.viewDidLayoutSubviews()
 
         self.blurView.expandToSuperviewSize()
+        self.loadingView.expandToSuperviewSize()
 
         self.button.setSize(with: self.view.width)
         self.button.centerOnX()
+    }
+
+    func showLoading(for contact: Contact) async {
+        self.view.addSubview(self.loadingView)
+        self.view.layoutNow()
+
+        await self.loadingView.initiateLoading(with: contact)
     }
 
     func updateButton() {

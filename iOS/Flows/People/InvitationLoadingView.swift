@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import TMROLocalization
 
 class InvitationLoadingView: View {
 
@@ -29,6 +30,7 @@ class InvitationLoadingView: View {
     func initiateLoading(with contact: Contact) async {
 
         self.resetAnimation()
+        self.set(contact: contact)
 
         await UIView.animateKeyframes(withDuration: 1.0, delay: 0.1, options: []) {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
@@ -44,19 +46,13 @@ class InvitationLoadingView: View {
             }
         }
     }
-//
-//    func showLoading(for contact: Contact) async {
-//        await UIView.animateKeyframes(withDuration: 5.0, delay: 0.1, options: []) {
-//            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-//                self.blurView.effect = UIBlurEffect(style: .dark)
-//            }
-//
-//            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-//                self.blurView.effect = UIBlurEffect(style: .dark)
-//            }
-//        }
-//
-//    }
+
+    private func set(contact: Contact) {
+        self.avatarView.set(avatar: contact)
+        let text = LocalizedString(id: "", arguments: [contact.fullName], default: "Preparing message to: @(contact)")
+        self.label.setText(text)
+        self.layoutNow()
+    }
 
     private func resetAnimation() {
         self.blurView.effect = nil
@@ -65,7 +61,7 @@ class InvitationLoadingView: View {
         self.label.alpha = 0
         self.label.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
         self.progressView.alpha = 0
-        self.layoutNow()
+        self.progressView.progress = 0.0
     }
 
     override func layoutSubviews() {

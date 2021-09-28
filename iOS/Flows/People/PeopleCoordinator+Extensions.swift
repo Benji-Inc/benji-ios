@@ -42,17 +42,18 @@ extension PeopleCoordinator {
     func updateInvitation() {
         if let contact = self.contactsToInvite[safe: self.inviteIndex],
            let rsvp = self.reservations[safe: self.inviteIndex] {
-            self.invite(contact: contact.cnContact, with: rsvp)
+            self.invite(contact: contact, with: rsvp)
         }
 
         self.inviteIndex += 1
     }
 
-    func invite(contact: CNContact, with reservation: Reservation) {
+    func invite(contact: Contact, with reservation: Reservation) {
         Task {
+            await self.peopleVC.showLoading(for: contact)
             // Show loading on screen
             //await self.reservationsVC.contactsButton.handleEvent(status: .loading)
-            await self.findUser(with: contact, for: reservation)
+            await self.findUser(with: contact.cnContact, for: reservation)
             //await self.reservationsVC.contactsButton.handleEvent(status: .complete)
         }
     }
