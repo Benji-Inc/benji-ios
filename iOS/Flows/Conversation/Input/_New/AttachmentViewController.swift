@@ -42,18 +42,24 @@ class AttachmentViewController: ViewController {
             NotificationCenter.default.post(name: .didTapPhotoLibrary, object: UUID().uuidString)
         }
 
+        // CollectionView setup
+        self.view.addSubview(self.collectionView)
         self.collectionView.didTapAuthorize = { [unowned self] in
             Task {
                 await self.handleAttachmentAuthorized()
             }
         }
+        self.dataSource.appendSections([.photos])
     }
 
     private func handleAttachmentAuthorized() async {
         do {
-            try await AttachmentsManager.shared.requestAttachements()
-            #warning("load the initial snapshot")
-//            await self.collectionViewManager.loadSnapshot()
+            try await AttachmentsManager.shared.requestAttachments()
+
+            let attachmentItems = AttachmentsManager.shared.attachments.map { attachment in
+                return AttachmentCollectionItem.attachment(attachment: attachment)
+            }
+            await self.dataSource.appendItems(attachmentItems, toSection: .photos)
         } catch {
             if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
                 await UIApplication.shared.open(url)
@@ -67,9 +73,12 @@ class AttachmentViewController: ViewController {
         Task {
             do {
                 if AttachmentsManager.shared.isAuthorized {
-                    try await AttachmentsManager.shared.requestAttachements()
-                    #warning("load the initial snapshot")
-//                    await self.collectionViewManager.loadSnapshot()
+                    try await AttachmentsManager.shared.requestAttachments()
+
+                    let attachmentItems = AttachmentsManager.shared.attachments.map { attachment in
+                        return AttachmentCollectionItem.attachment(attachment: attachment)
+                    }
+                    await self.dataSource.appendItems(attachmentItems, toSection: .photos)
                 }
             } catch {
                 logDebug(error)

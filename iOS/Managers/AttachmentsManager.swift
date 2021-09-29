@@ -39,7 +39,7 @@ class AttachmentsManager {
         }
     }
 
-    func requestAttachements() async throws {
+    func requestAttachments() async throws {
         return try await withCheckedThrowingContinuation { continuation in
             if self.isAuthorized {
                 self.fetchAttachments()

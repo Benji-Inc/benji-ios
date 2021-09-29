@@ -49,8 +49,14 @@ class AttachmentCollectionView: CollectionView {
             self.didTapAuthorize?()
         }
 
-        self.publisher(for: \.contentSize).mainSink { (size) in
+        self.publisher(for: \.contentSize).mainSink { [unowned self] (size) in
             self.emptyView.alpha = size.width > 0.0 ? 0.0 : 1.0
+        }.store(in: &self.cancellables)
+
+        self.publisher(for: \.frame).mainSink { (rect) in
+            layout.itemSize = CGSize(width: rect.height.half - layout.minimumInteritemSpacing,
+                                     height: rect.height.half - layout.minimumInteritemSpacing)
+            layout.invalidateLayout()
         }.store(in: &self.cancellables)
     }
 
@@ -64,8 +70,5 @@ class AttachmentCollectionView: CollectionView {
         self.bounces = false
         self.set(backgroundColor: .clear)
         self.showsHorizontalScrollIndicator = false
-
-        #warning("Move this into the data source")
-        self.register(AttachmentHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
     }
 }
