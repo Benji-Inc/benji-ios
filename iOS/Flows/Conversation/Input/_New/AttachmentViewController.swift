@@ -11,10 +11,13 @@ import Photos
 import Combine
 
 protocol AttachmentViewControllerDelegate: AnyObject {
-    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment)
+    func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachment)
 }
 
-class AttachmentViewController: CollectionViewController<AttachmentCollectionViewManager.SectionType, AttachmentCollectionViewManager> {
+class AttachmentViewController: ViewController {
+
+    private lazy var dataSource = AttachmentCollectionViewDataSource(collectionView: self.collectionView)
+    private var collectionView = AttachmentCollectionView()
 
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
 
@@ -29,31 +32,20 @@ class AttachmentViewController: CollectionViewController<AttachmentCollectionVie
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func getCollectionView() -> CollectionView {
-        return AttachmentCollectionView()
-    }
-
     override func initializeViews() {
         super.initializeViews()
 
-        self.collectionViewManager.didSelectPhotoOption = {
+        self.dataSource.didSelectPhotoOption = {
             NotificationCenter.default.post(name: .didTapPhotoCamera, object: nil)
         }
 
-        self.collectionViewManager.didSelectLibraryOption = {
+        self.dataSource.didSelectLibraryOption = {
             NotificationCenter.default.post(name: .didTapPhotoLibrary, object: UUID().uuidString)
         }
 
-        self.collectionViewManager.$onSelectedItem.mainSink { (cellItem) in
-            guard let attachment = cellItem?.item as? Attachment else { return }
-            self.delegate.attachementView(self, didSelect: attachment)
-        }.store(in: &self.cancellables)
-
-        if let attachmentCollectionView = self.collectionViewManager.collectionView as? AttachmentCollectionView {
-            attachmentCollectionView.didTapAuthorize = { [unowned self] in
-                Task {
-                    await self.handleAttachmentAuthorized()
-                }
+        self.collectionView.didTapAuthorize = { [unowned self] in
+            Task {
+                await self.handleAttachmentAuthorized()
             }
         }
     }
@@ -61,7 +53,8 @@ class AttachmentViewController: CollectionViewController<AttachmentCollectionVie
     private func handleAttachmentAuthorized() async {
         do {
             try await AttachmentsManager.shared.requestAttachements()
-            await self.collectionViewManager.loadSnapshot()
+            #warning("load the initial snapshot")
+//            await self.collectionViewManager.loadSnapshot()
         } catch {
             if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
                 await UIApplication.shared.open(url)
@@ -76,7 +69,8 @@ class AttachmentViewController: CollectionViewController<AttachmentCollectionVie
             do {
                 if AttachmentsManager.shared.isAuthorized {
                     try await AttachmentsManager.shared.requestAttachements()
-                    await self.collectionViewManager.loadSnapshot()
+                    #warning("load the initial snapshot")
+//                    await self.collectionViewManager.loadSnapshot()
                 }
             } catch {
                 logDebug(error)
@@ -89,9 +83,21 @@ class AttachmentViewController: CollectionViewController<AttachmentCollectionVie
 
         self.blurView.expandToSuperviewSize()
 
-        self.collectionViewManager.collectionView.expandToSuperviewWidth()
-        self.collectionViewManager.collectionView.pin(.top, padding: 10)
-        self.collectionViewManager.collectionView.height = self.view.height - self.view.safeAreaInsets.bottom - 10
+        self.collectionView.expandToSuperviewWidth()
+        self.collectionView.pin(.top, padding: 10)
+        self.collectionView.height = self.view.height - self.view.safeAreaInsets.bottom - 10
+    }
+}
+
+extension AttachmentViewController: UICollectionViewDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
+
+        switch item {
+        case .attachment(let attachment):
+            self.delegate.attachmentView(self, didSelect: attachment)
+        }
     }
 }
 

@@ -127,8 +127,8 @@ class InputAccessoryView: SwipeableInputAccessoryView {
         }
     }
 
-    override func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
-        super.attachementView(controller, didSelect: attachment)
+    override func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
+        super.attachmentView(controller, didSelect: attachment)
 
         self.attachmentView.configure(with: attachment)
         self.updateInputType() // Needs to be called after configure

@@ -10,6 +10,7 @@
 		2C9DC2F4715948651C293215 /* Pods_Notification_Content.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C8815B0EA9F1296FC57545F /* Pods_Notification_Content.framework */; };
 		6FBC3C8F68FC243D6E1A42F6 /* Pods_Notification_Service.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FBC4612F5436670D960DB97 /* Pods_Notification_Service.framework */; };
 		7F227B8576E160C9469E08D1 /* Pods_Intents_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C50C41C9E4C24DF432E0D86 /* Pods_Intents_Extension.framework */; };
+		8007CB642703CE0600FEA511 /* AttachmentCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8007CB632703CE0600FEA511 /* AttachmentCollectionViewDataSource.swift */; };
 		800FAAC126F0585A00D3C3A0 /* ChatChannel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800FAAC026F0585A00D3C3A0 /* ChatChannel+Extensions.swift */; };
 		8015CA7726F3D907000F3C60 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8015CA7626F3D907000F3C60 /* MessageCell.swift */; };
 		801EC74E26D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */; };
@@ -816,6 +817,7 @@
 		69BD6F6BD1555BE5571F430F /* Pods-OursNotificationContent.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OursNotificationContent.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OursNotificationContent/Pods-OursNotificationContent.debug.xcconfig"; sourceTree = "<group>"; };
 		6EBB237D17BE8FEF541EA89F /* Pods-Notification Service.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Notification Service.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Notification Service/Pods-Notification Service.debug.xcconfig"; sourceTree = "<group>"; };
 		6FBC4612F5436670D960DB97 /* Pods_Notification_Service.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Notification_Service.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8007CB632703CE0600FEA511 /* AttachmentCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		800FAAC026F0585A00D3C3A0 /* ChatChannel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatChannel+Extensions.swift"; sourceTree = "<group>"; };
 		8015CA7626F3D907000F3C60 /* MessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
 		801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extensions.swift"; sourceTree = "<group>"; };
@@ -1256,6 +1258,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8007CB622703CDB200FEA511 /* _New */ = {
+			isa = PBXGroup;
+			children = (
+				D61592DB24FAD7B400B63412 /* AttachmentCell.swift */,
+				8007CB632703CE0600FEA511 /* AttachmentCollectionViewDataSource.swift */,
+				D61592D524FACD9200B63412 /* AttachmentViewController.swift */,
+			);
+			path = _New;
+			sourceTree = "<group>";
+		};
 		801EC74C26D5748A00B52F31 /* Old */ = {
 			isa = PBXGroup;
 			children = (
@@ -1387,10 +1399,8 @@
 		D61592D424FACD7700B63412 /* Attachment */ = {
 			isa = PBXGroup;
 			children = (
-				D61592D524FACD9200B63412 /* AttachmentViewController.swift */,
 				D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */,
 				D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */,
-				D61592DB24FAD7B400B63412 /* AttachmentCell.swift */,
 				D61592DD24FAD7C600B63412 /* AttachmentHeaderView.swift */,
 				D68B362B25BB1F86005AEB4C /* AttachmentView.swift */,
 			);
@@ -2155,6 +2165,7 @@
 		D6B2603622E6AA3800143CF0 /* Input */ = {
 			isa = PBXGroup;
 			children = (
+				8007CB622703CDB200FEA511 /* _New */,
 				D6405B5D236BCB4D00FAA06B /* AlertConfirmationView.swift */,
 				D61592D424FACD7700B63412 /* Attachment */,
 				D67934DA23DC011D00536B44 /* CharacterCountView.swift */,
@@ -3030,6 +3041,7 @@
 				D6D145F421D5493000CD8CE4 /* HomeViewController.swift in Sources */,
 				D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */,
 				D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */,
+				8007CB642703CE0600FEA511 /* AttachmentCollectionViewDataSource.swift in Sources */,
 				D6FC809C237A6ED30089AACC /* ConversationCollectionViewManager+Typing.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
