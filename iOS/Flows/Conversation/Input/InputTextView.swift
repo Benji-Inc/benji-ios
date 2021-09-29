@@ -55,7 +55,8 @@ class InputTextView: ExpandingTextView {
 
         switch type {
         case .attachments:
-            self.attachmentInputVC.collectionViewManager.reset()
+            #warning("Reset the datasource")
+//            self.attachmentInputVC.collectionViewManager.reset()
             self.inputView = self.attachmentInputVC.view
         case .confirmation:
             self.inputView = self.confirmationView

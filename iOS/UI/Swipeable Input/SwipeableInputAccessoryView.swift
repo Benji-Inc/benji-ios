@@ -290,7 +290,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.textView.countView.isHidden = true
     }
 
-    func attachementView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {}
+    func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {}
 
     func shouldHandlePan() -> Bool {
         let object = SendableObject(kind: self.currentMessageKind, context: self.currentContext, previousMessage: self.editableMessage)

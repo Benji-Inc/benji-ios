@@ -65,6 +65,7 @@ class AttachmentCollectionView: CollectionView {
         self.set(backgroundColor: .clear)
         self.showsHorizontalScrollIndicator = false
 
+        #warning("Move this into the data source")
         self.register(AttachmentHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
     }
 }

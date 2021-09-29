@@ -12,8 +12,8 @@ import StreamChat
 typealias ConversationCollectionSection = ConversationCollectionViewDataSource.SectionType
 typealias ConversationCollectionItem = ConversationCollectionViewDataSource.ItemType
 
-class ConversationCollectionViewDataSource: CollectionViewDataSource<ConversationCollectionViewDataSource.SectionType,
-                                            ConversationCollectionViewDataSource.ItemType> {
+class ConversationCollectionViewDataSource: CollectionViewDataSource<ConversationCollectionSection,
+                                            ConversationCollectionItem> {
 
     enum SectionType: Hashable {
         case conversation(ChannelId)
