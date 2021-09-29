@@ -20,7 +20,7 @@ class AttachmentCollectionViewManager: old_CollectionViewManager<AttachmentColle
     private let cellConfig = ManageableCellRegistration<AttachmentCell>().provider
 
     private let headerConfig = UICollectionView.SupplementaryRegistration
-    <AttachmentHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { (headerView, elementKind, indexPath) in }
+    <AttachmentHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { (_, _, _) in }
 
     override func getItems(for section: SectionType) -> [AnyHashable] {
         return AttachmentsManager.shared.attachments

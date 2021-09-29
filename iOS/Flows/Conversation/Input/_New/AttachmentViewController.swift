@@ -8,7 +8,6 @@
 
 import Foundation
 import Photos
-import Combine
 
 protocol AttachmentViewControllerDelegate: AnyObject {
     func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachment)
