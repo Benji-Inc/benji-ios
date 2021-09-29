@@ -26,6 +26,9 @@ class AttachmentCollectionViewDataSource: CollectionViewDataSource<AttachmentCol
     var didSelectLibraryOption: CompletionOptional = nil
 
     private let attachmentCellRegistration = ManageableCellRegistration<AttachmentCell>().provider
+    private let headerRegistration
+    = UICollectionView.SupplementaryRegistration<AttachmentHeaderView>(elementKind: UICollectionView.elementKindSectionHeader)
+    { (headerView, elementKind, indexPath) in }
 
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
@@ -39,5 +42,24 @@ class AttachmentCollectionViewDataSource: CollectionViewDataSource<AttachmentCol
                                                                 item: attachment)
 
         }
+    }
+
+    override func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                           kind: String,
+                                           section: AttachmentCollectionSection,
+                                           indexPath: IndexPath) -> UICollectionReusableView? {
+
+        let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration,
+                                                                           for: indexPath)
+
+        header.photoButton.didSelect { [unowned self] in
+            self.didSelectPhotoOption?()
+        }
+
+        header.libraryButton.didSelect { [unowned self] in
+            self.didSelectLibraryOption?()
+        }
+
+        return header
     }
 }
