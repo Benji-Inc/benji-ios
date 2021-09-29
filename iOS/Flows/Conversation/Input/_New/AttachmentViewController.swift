@@ -43,45 +43,22 @@ class AttachmentViewController: ViewController {
         }
 
         // CollectionView setup
+        self.collectionView.delegate = self
         self.view.addSubview(self.collectionView)
         self.collectionView.didTapAuthorize = { [unowned self] in
             Task {
                 await self.handleAttachmentAuthorized()
             }
         }
-        self.dataSource.appendSections([.photos])
     }
 
     private func handleAttachmentAuthorized() async {
         do {
             try await AttachmentsManager.shared.requestAttachments()
-
-            let attachmentItems = AttachmentsManager.shared.attachments.map { attachment in
-                return AttachmentCollectionItem.attachment(attachment: attachment)
-            }
-            await self.dataSource.appendItems(attachmentItems, toSection: .photos)
+            await self.loadInitialAttachmentData()
         } catch {
             if let url = URL(string: UIApplication.openSettingsURLString), UIApplication.shared.canOpenURL(url) {
                 await UIApplication.shared.open(url)
-            }
-        }
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        Task {
-            do {
-                if AttachmentsManager.shared.isAuthorized {
-                    try await AttachmentsManager.shared.requestAttachments()
-
-                    let attachmentItems = AttachmentsManager.shared.attachments.map { attachment in
-                        return AttachmentCollectionItem.attachment(attachment: attachment)
-                    }
-                    await self.dataSource.appendItems(attachmentItems, toSection: .photos)
-                }
-            } catch {
-                logDebug(error)
             }
         }
     }
@@ -94,6 +71,35 @@ class AttachmentViewController: ViewController {
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.pin(.top, padding: 10)
         self.collectionView.height = self.view.height - self.view.safeAreaInsets.bottom - 10
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        Task {
+            do {
+                if AttachmentsManager.shared.isAuthorized {
+                    try await AttachmentsManager.shared.requestAttachments()
+                    await self.loadInitialAttachmentData()
+                }
+            } catch {
+                logDebug(error)
+            }
+        }
+    }
+
+    private func loadInitialAttachmentData() async {
+        await self.dataSource.appendSections([.photos])
+        let attachmentItems = AttachmentsManager.shared.attachments.map { attachment in
+            return AttachmentCollectionItem.attachment(attachment: attachment)
+        }
+        await self.dataSource.appendItems(attachmentItems, toSection: .photos)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        self.dataSource.deleteSections([.photos])
     }
 }
 
