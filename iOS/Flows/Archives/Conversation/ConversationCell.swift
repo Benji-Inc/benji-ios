@@ -46,6 +46,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.content.stackedAvatarView.reset()
         self.currentItem = nil
     }
 }

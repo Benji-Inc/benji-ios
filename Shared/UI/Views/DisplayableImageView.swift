@@ -113,13 +113,15 @@ class DisplayableImageView: View {
         if let photo = displayable.image {
             self.showResult(for: photo)
         } else if let url = displayable.url {
-            self.downloadAndSetImage(url: url)
+            Task {
+                await self.downloadAndSetImage(url: url)
+            }.add(to: self.taskPool)
         } else if let objectID = displayable.userObjectID {
             self.findUser(with: objectID)
         } else if let file = displayable as? PFFileObject {
             Task {
                 await self.downloadAndSet(file: file)
-            }
+            }.add(to: self.taskPool)
         }
     }
 
@@ -138,8 +140,9 @@ class DisplayableImageView: View {
     }
 
     @MainActor
-    private func downloadAndSetImage(url: URL) {
-        self.imageView.sd_setImage(with: url, placeholderImage: nil, options: [.refreshCached]) { received, expected, url in
+    private func downloadAndSetImage(url: URL) async {
+        let downloadedImage: UIImage?
+        = try? await self.imageView.setImageWithURL(url, progressHandler: { received, expected, url in
             if self.animationView.microAnimation == .pie {
                 let progress: Float
                 if received > 0 {
@@ -149,14 +152,11 @@ class DisplayableImageView: View {
                 }
                 self.animationView.currentProgress = AnimationProgressTime(progress)
             }
-        } completed: { [weak self] image, error, cacheType, url in
-            guard let `self` = self, let downloadedImage = image else {
-                self?.showResult(for: nil)
-                return
-            }
+        })
 
-            self.showResult(for: downloadedImage)
-        }
+        guard !Task.isCancelled else { return }
+
+        self.showResult(for: downloadedImage)
     }
 
     @MainActor
@@ -188,6 +188,10 @@ class DisplayableImageView: View {
             cancellable.cancel()
         }
 
+        Task {
+            await self.taskPool.cancelAndRemoveAll()
+        }
+
         self.displayable = nil
         self.animationView.stop()
         self.blurView.effect = self.blurEffect
@@ -196,5 +200,25 @@ class DisplayableImageView: View {
     func showResult(for image: UIImage?) {
         self.state = image.isNil ? .error : .success
         self.imageView.image = image
+    }
+}
+
+fileprivate extension UIImageView {
+
+    func setImageWithURL(_ url: URL,
+                         progressHandler: @escaping SDImageLoaderProgressBlock) async throws -> UIImage? {
+
+        let image: UIImage? = try await withCheckedThrowingContinuation { continuation in
+            self.sd_setImage(with: url, placeholderImage: nil, progress: progressHandler)
+            { (image, error, cacheType, url) in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                }
+
+                continuation.resume(returning: image)
+            }
+        }
+
+        return image
     }
 }
