@@ -10,7 +10,7 @@ import Foundation
 import StreamChat
 import Contacts
 
-class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
+class PeopleCoordinator: PresentableCoordinator<Void> {
 
     lazy var peopleVC = PeopleViewController(includeConnections: self.includeConnections)
 
@@ -23,11 +23,14 @@ class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
     var inviteIndex: Int = 0
 
     private let includeConnections: Bool
+    private let conversation: Conversation?
 
     init(includeConnections: Bool = true,
+         conversation: Conversation? = nil,
          router: Router,
          deepLink: DeepLinkable?) {
 
+        self.conversation = conversation
         self.includeConnections = includeConnections
         super.init(router: router, deepLink: deepLink)
     }

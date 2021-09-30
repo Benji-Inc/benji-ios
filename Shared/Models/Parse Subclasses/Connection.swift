@@ -14,6 +14,7 @@ enum ConnectionKey: String {
     case to
     case from
     case conversationSid
+    case initialConversations
 }
 
 final class Connection: PFObject, PFSubclassing {
@@ -45,6 +46,11 @@ final class Connection: PFObject, PFSubclassing {
 
     var conversationId: String? {
         return self.getObject(for: .conversationSid)
+    }
+
+    var initialConversations: [String] {
+        get { return self.getObject(for: .initialConversations) ?? [] }
+        set { self.setObject(for: .initialConversations, with: newValue) }
     }
 
     var nonMeUser: User? {
