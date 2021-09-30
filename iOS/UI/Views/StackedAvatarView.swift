@@ -76,6 +76,9 @@ class StackedAvatarView: View {
     }
 
     func reset() {
+        self.imageViews.forEach { imageView in
+            imageView.reset()
+        }
         self.imageViews = []
         self.setSize()
     }
