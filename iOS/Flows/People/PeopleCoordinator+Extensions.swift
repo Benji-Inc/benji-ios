@@ -44,7 +44,10 @@ extension PeopleCoordinator {
            let rsvp = self.reservations[safe: self.inviteIndex] {
             self.invite(contact: contact, with: rsvp)
         } else {
-            self.peopleVC.finishInviting()
+            Task {
+                await self.peopleVC.finishInviting()
+                self.finishFlow(with: self.selectedConnections)
+            }
         }
 
         self.inviteIndex += 1
@@ -105,7 +108,10 @@ extension PeopleCoordinator {
     func createConnection(with user: User) {
         Task {
             do {
-                try await CreateConnection(to: user).makeRequest(andUpdate: [], viewsToIgnore: [])
+                let value = try await CreateConnection(to: user).makeRequest(andUpdate: [], viewsToIgnore: [])
+                if let connection = value as? Connection {
+                    self.selectedConnections.append(connection)
+                }
                 self.showSentAlert(for: user)
             } catch {
                 print(error)

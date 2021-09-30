@@ -10,7 +10,7 @@ import Foundation
 import StreamChat
 import Contacts
 
-class PeopleCoordinator: PresentableCoordinator<Void> {
+class PeopleCoordinator: PresentableCoordinator<[Connection]> {
 
     lazy var peopleVC = PeopleViewController(includeConnections: self.includeConnections)
 
@@ -23,14 +23,12 @@ class PeopleCoordinator: PresentableCoordinator<Void> {
     var inviteIndex: Int = 0
 
     private let includeConnections: Bool
-    private let conversation: Conversation?
+    var selectedConnections: [Connection] = []
 
     init(includeConnections: Bool = true,
-         conversation: Conversation? = nil,
          router: Router,
          deepLink: DeepLinkable?) {
 
-        self.conversation = conversation
         self.includeConnections = includeConnections
         super.init(router: router, deepLink: deepLink)
     }
@@ -56,7 +54,8 @@ extension PeopleCoordinator: PeopleViewControllerDelegate {
 
             self.contactsToInvite = items.compactMap({ item in
                 switch item {
-                case .connection(_):
+                case .connection(let connection):
+                    self.selectedConnections.append(connection)
                     return nil
                 case .contact(let contact):
                     return contact

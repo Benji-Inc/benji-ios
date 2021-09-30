@@ -87,12 +87,10 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         }
     }
 
-    func finishInviting() {
-        Task {
-            await self.loadingView.hideAllViews()
-            self.loadingView.removeFromSuperview()
-            await self.loadData()
-        }
+    @MainActor
+    func finishInviting() async {
+        await self.loadingView.hideAllViews()
+        self.loadingView.removeFromSuperview()
     }
 
     func updateButton() {
