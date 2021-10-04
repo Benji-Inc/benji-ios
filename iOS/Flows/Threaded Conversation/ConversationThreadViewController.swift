@@ -38,7 +38,7 @@ class ConversationThreadViewController: BlurredViewController, CollectionViewInp
     }
 
     // Custom Input Accessory View
-    lazy var messageInputAccessoryView = InputAccessoryView(with: self)
+    lazy var messageInputAccessoryView = ConversationInputAccessoryView(with: self)
 
     override var inputAccessoryView: UIView? {
         // This is a hack to make the input hide during the presentation of the image picker. 

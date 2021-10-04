@@ -13,6 +13,7 @@ import Combine
 
 protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable)
+//    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirmReply reply: Sendable)
 }
 
 class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGestureRecognizerDelegate {
@@ -22,7 +23,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
     private(set) var previewAnimator: UIViewPropertyAnimator?
     private(set) var previewView: PreviewMessageView?
-    private(set) var interactiveStartingPoint: CGPoint?
 
     var alertAnimator: UIViewPropertyAnimator?
     var selectionFeedback = UIImpactFeedbackGenerator(style: .rigid)
@@ -34,7 +34,9 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
     let inputContainerView = View()
     let attachmentView = AttachmentView()
+    /// A blue view placed behind the text input field.
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
+    /// Text view for users to input their message.
     lazy var textView = InputTextView(with: self)
     let animationView = AnimationView.with(animation: .loading)
     let plusAnimationView = AnimationView.with(animation: .plusToX)
@@ -55,7 +57,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     private(set) var attachmentHeightAnchor: NSLayoutConstraint?
 
     override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return CGSize(width: size.width, height: InputAccessoryView.preferredHeight)
+        return CGSize(width: size.width, height: ConversationInputAccessoryView.preferredHeight)
     }
 
     override var intrinsicContentSize: CGSize {
@@ -69,12 +71,12 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
             newSize.height += self.attachmentView.height + 10
         }
 
-        if newSize.height < InputAccessoryView.preferredHeight || newSize.height > 120.0 {
-            newSize.height = InputAccessoryView.preferredHeight
+        if newSize.height < ConversationInputAccessoryView.preferredHeight || newSize.height > 120.0 {
+            newSize.height = ConversationInputAccessoryView.preferredHeight
         }
 
-        if newSize.height > InputAccessoryView.maxHeight {
-            newSize.height = InputAccessoryView.maxHeight
+        if newSize.height > ConversationInputAccessoryView.maxHeight {
+            newSize.height = ConversationInputAccessoryView.maxHeight
         }
 
         return newSize
@@ -115,7 +117,9 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
         self.inputContainerView.layer.masksToBounds = true
         self.inputContainerView.layer.borderWidth = Theme.borderWidth
-        self.inputContainerView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
+        self.inputContainerView.layer.maskedCorners = [.layerMinXMaxYCorner,
+                                                       .layerMaxXMinYCorner,
+                                                       .layerMinXMinYCorner]
         self.inputContainerView.layer.cornerRadius = Theme.cornerRadius
 
         self.setupConstraints()
@@ -170,7 +174,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     }
 
     private func setupHandlers() {
-
         KeyboardManager.shared.$currentEvent
             .mainSink { event in
             switch event {
@@ -292,47 +295,18 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
     func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {}
 
-    func shouldHandlePan() -> Bool {
-        let object = SendableObject(kind: self.currentMessageKind, context: self.currentContext, previousMessage: self.editableMessage)
-        self.sendableObject = object
-        return object.isSendable
-    }
-
-    func panDidBegin() {
-        self.previewView?.set(backgroundColor: self.currentContext.color)
-        self.previewView?.messageKind = self.currentMessageKind
-    }
-
-    func previewAnimatorDidEnd() {
-        self.reset()
-        self.previewView?.removeFromSuperview()
-
-        if let object = self.sendableObject {
-            self.delegate.swipeableInputAccessory(self, didConfirm: object)
-        }
-
-        self.sendableObject = nil
-    }
+    // MARK: - Pan Gesture Handling
 
     func handle(pan: UIPanGestureRecognizer) {
         guard self.shouldHandlePan() else { return }
 
-        let currentLocation = pan.location(in: nil)
-        let startingPoint: CGPoint
+        let maxOffset: CGFloat
+        = clamp(self.halfHeight,
+                SwipeableInputAccessoryView.preferredHeight,
+                SwipeableInputAccessoryView.maxHeight * 0.5)
 
-        if let point = self.interactiveStartingPoint {
-            startingPoint = point
-        } else {
-            // Initial location
-            startingPoint = pan.location(in: nil)
-            self.interactiveStartingPoint = startingPoint
-        }
-
-        let totalOffset: CGFloat = clamp(self.halfHeight, InputAccessoryView.preferredHeight, InputAccessoryView.maxHeight * 0.5)
-        var diff = (startingPoint.y - currentLocation.y)
-        diff -= totalOffset
-        var progress = diff / 100
-        progress = clamp(progress, 0.0, 1.0)
+        let offset = -pan.translation(in: nil).y
+        let progress = clamp(offset/maxOffset, 0.0, 1.0)
 
         switch pan.state {
         case .possible:
@@ -344,7 +318,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
             self.addSubview(self.previewView!)
             self.previewView?.frame = self.inputContainerView.frame
             self.previewView?.layoutNow()
-            let top = self.top - totalOffset
+            let top = self.top - maxOffset
 
             self.previewAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
                                                           curve: .easeInOut,
@@ -372,25 +346,19 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
             }
 
             self.previewAnimator?.addCompletion({ (position) in
-                if position == .end {
-                    self.previewAnimatorDidEnd()
-                }
                 if position == .start {
                     self.previewView?.removeFromSuperview()
                 }
-
+                if position == .end {
+                    self.previewAnimatorDidEnd()
+                }
                 self.selectionFeedback.impactOccurred()
-                self.interactiveStartingPoint = nil
             })
 
             self.previewAnimator?.pauseAnimation()
 
         case .changed:
-            if let preview = self.previewView {
-                let translation = pan.translation(in: preview)
-                preview.x = self.x + translation.x
-                self.previewAnimator?.fractionComplete = (translation.y * -1) / 100
-            }
+            self.previewAnimator?.fractionComplete = progress
         case .ended:
             self.previewAnimator?.isReversed = progress <= 0.02
             self.previewAnimator?.continueAnimation(withTimingParameters: nil, durationFactor: 0)
@@ -403,6 +371,30 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         }
     }
 
+    func shouldHandlePan() -> Bool {
+        let object = SendableObject(kind: self.currentMessageKind,
+                                    context: self.currentContext,
+                                    previousMessage: self.editableMessage)
+        self.sendableObject = object
+        return object.isSendable
+    }
+
+    func panDidBegin() {
+        self.previewView?.set(backgroundColor: self.currentContext.color)
+        self.previewView?.messageKind = self.currentMessageKind
+    }
+
+    func previewAnimatorDidEnd() {
+        self.reset()
+        self.previewView?.removeFromSuperview()
+
+        if let object = self.sendableObject {
+            self.delegate.swipeableInputAccessory(self, didConfirm: object)
+        }
+
+        self.sendableObject = nil
+    }
+
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer is UILongPressGestureRecognizer {
             return self.textView.isFirstResponder
@@ -411,7 +403,8 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         return true
     }
 
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
 
         if gestureRecognizer is UIPanGestureRecognizer {
             return false

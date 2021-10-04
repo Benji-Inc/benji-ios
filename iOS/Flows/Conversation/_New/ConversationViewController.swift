@@ -23,13 +23,12 @@ class ConversationViewController: FullScreenViewController,
     var conversation: Conversation! { return self.conversationController?.channel }
     private(set) var conversationController: ChatChannelController!
     
-    // Custom Input Accessory View
-    lazy var messageInputAccessoryView = InputAccessoryView(with: self)
-    
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
     var didTapMoreButton: CompletionOptional = nil
     var didTapConversationTitle: CompletionOptional = nil 
-    
+
+    // Custom Input Accessory View
+    lazy var messageInputAccessoryView = ConversationInputAccessoryView(with: self)
     override var inputAccessoryView: UIView? {
         return self.messageInputAccessoryView
     }
