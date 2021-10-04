@@ -12,13 +12,14 @@ import TMROLocalization
 import Combine
 import GestureRecognizerClosures
 
-class InputAccessoryView: SwipeableInputAccessoryView {
+class ConversationInputAccessoryView: SwipeableInputAccessoryView {
 
     let alertProgressView = AlertProgressView()
 
     override var borderColor: CGColor? {
         didSet {
-            self.inputContainerView.layer.borderColor = self.borderColor ?? self.currentContext.color.color.cgColor
+            self.inputContainerView.layer.borderColor
+            = self.borderColor ?? self.currentContext.color.color.cgColor
         }
     }
 
@@ -76,7 +77,6 @@ class InputAccessoryView: SwipeableInputAccessoryView {
         // If keyboard, then show attachments
         // If attachments & currentKind != .text, Then still show x
         // If progess is greater than 0 and pressed, reset attachment view.
-
         let currentType = self.textView.currentInputView
         let currentProgress = self.plusAnimationView.currentProgress
 
@@ -148,7 +148,6 @@ class InputAccessoryView: SwipeableInputAccessoryView {
     // MARK: PUBLIC
 
     func edit(message: Messageable) {
-
         switch message.kind {
         case .text(let body):
             self.textView.text = body

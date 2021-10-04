@@ -8,10 +8,9 @@
 
 import Foundation
 
-extension InputAccessoryView {
+extension ConversationInputAccessoryView {
 
     func handle(longPress: UILongPressGestureRecognizer) {
-
         switch longPress.state {
         case .possible:
             break
