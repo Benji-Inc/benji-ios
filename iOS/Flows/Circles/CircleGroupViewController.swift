@@ -11,6 +11,8 @@ import UIKit
 
 class CircleGroupViewController: DiffableCollectionViewController<CircleGroupCollectionViewDataSource.SectionType, CircleGroupCollectionViewDataSource.ItemType, CircleGroupCollectionViewDataSource> {
 
+    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+
     var button = Button()
     var didSelectReservations: CompletionOptional = nil
 
@@ -25,6 +27,8 @@ class CircleGroupViewController: DiffableCollectionViewController<CircleGroupCol
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
+
         self.view.addSubview(self.button)
         self.button.set(style: .normal(color: .purple, text: "Send Invites"))
         self.button.didSelect { [unowned self] in
@@ -34,6 +38,8 @@ class CircleGroupViewController: DiffableCollectionViewController<CircleGroupCol
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+
+        self.blurView.expandToSuperviewSize()
 
         self.button.setSize(with: self.view.width)
         self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)

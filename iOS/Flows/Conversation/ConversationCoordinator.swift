@@ -71,10 +71,51 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
     func presentPeoplePicker() {
         self.removeChild()
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { result in
+
+        self.addChildAndStart(coordinator) { connections in
             coordinator.toPresentable().dismiss(animated: true)
+            self.add(connections: connections, to: self.conversationVC.conversationController)
         }
         self.router.present(coordinator, source: self.conversationVC)
+    }
+
+    func add(connections: [Connection], to controller: ChatChannelController) {
+        let acceptedConnections = connections.filter { connection in
+            return connection.status == .accepted
+        }
+
+        let pendingConnections = connections.filter { connection in
+            return connection.status == .invited || connection.status == .pending
+        }
+
+        for connection in pendingConnections {
+            if let conversationID = controller.conversation?.cid.id {
+                connection.initialConversations.append(conversationID)
+                #warning("Update to use async save function")
+                connection.saveEventually()
+            }
+        }
+
+        if !acceptedConnections.isEmpty {
+            let members = acceptedConnections.compactMap { connection in
+                return connection.nonMeUser?.objectId
+            }
+            controller.addMembers(userIds: Set(members)) { error in
+                if error.isNil {
+                    self.showPeopleAddedToast(for: acceptedConnections)
+                }
+            }
+        }
+    }
+
+    private func showPeopleAddedToast(for connections: [Connection]) {
+        if connections.count == 1, let first = connections.first?.nonMeUser {
+            let text = LocalizedString(id: "", arguments: [first.fullName], default: "@(name) has been added to the conversation.")
+            ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: first, title: "\(first.givenName.capitalized) Added", description: text, deepLink: nil))
+        } else {
+            let text = LocalizedString(id: "", arguments: [String(connections.count)], default: " @(count) people have been added to the conversation.")
+            ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: User.current()!, title: "\(String(connections.count)) Added", description: text, deepLink: nil))
+        }
     }
 
     func presentConversationTitleAlert(for controller: ChatChannelController) {

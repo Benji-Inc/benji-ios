@@ -1,5 +1,5 @@
 //
-//  NewConversationCoordinator.swift
+//  PeopleCoordinator.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 10/5/19.
@@ -10,9 +10,28 @@ import Foundation
 import StreamChat
 import Contacts
 
-class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
+class PeopleCoordinator: PresentableCoordinator<[Connection]> {
 
-    lazy var peopleVC = PeopleViewController()
+    lazy var peopleVC = PeopleViewController(includeConnections: self.includeConnections)
+
+    var messageComposer: MessageComposerViewController?
+    lazy var contactsVC = ContactsViewController()
+
+    var selectedContact: CNContact?
+    var reservations: [Reservation] = []
+    var contactsToInvite: [Contact] = []
+    var inviteIndex: Int = 0
+
+    private let includeConnections: Bool
+    var selectedConnections: [Connection] = []
+
+    init(includeConnections: Bool = true,
+         router: Router,
+         deepLink: DeepLinkable?) {
+
+        self.includeConnections = includeConnections
+        super.init(router: router, deepLink: deepLink)
+    }
 
     override func toPresentable() -> DismissableVC {
         return self.peopleVC
@@ -28,19 +47,23 @@ class PeopleCoordinator: PresentableCoordinator<ChatChannelController?> {
 extension PeopleCoordinator: PeopleViewControllerDelegate {
 
     nonisolated func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType]) {
-        // Do stuff
 
-//        switch item {
-//        case .connection(let connection):
-//            break
-//        case .contact(let contact):
-//            Task {
-//                await self.didSelect(contact: contact)
-//            }
-//        }
-    }
+        Task.onMainActor {
 
-    private func didSelect(contact: CNContact) {
-        // Trigger invite flow
+            self.reservations = controller.reservations
+
+            self.contactsToInvite = items.compactMap({ item in
+                switch item {
+                case .connection(let connection):
+                    self.selectedConnections.append(connection)
+                    return nil
+                case .contact(let contact):
+                    return contact
+                }
+            })
+
+            self.updateInvitation()
+        }
     }
 }
+

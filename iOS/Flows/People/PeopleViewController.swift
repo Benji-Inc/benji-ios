@@ -10,6 +10,7 @@ import Foundation
 import StreamChat
 import Contacts
 import TMROLocalization
+import UIKit
 
 protocol PeopleViewControllerDelegate: AnyObject {
     func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType])
@@ -25,6 +26,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
     let button = Button()
+    private let loadingView = InvitationLoadingView()
 
     init(includeConnections: Bool = true) {
         self.includeConnections = includeConnections
@@ -62,9 +64,27 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         super.viewDidLayoutSubviews()
 
         self.blurView.expandToSuperviewSize()
+        self.loadingView.expandToSuperviewSize()
 
         self.button.setSize(with: self.view.width)
         self.button.centerOnX()
+    }
+
+    func showLoading(for contact: Contact) async {
+
+        if self.loadingView.superview.isNil {
+            self.view.addSubview(self.loadingView)
+            self.view.layoutNow()
+            await self.loadingView.initiateLoading(with: contact)
+        } else {
+            await self.loadingView.update(contact: contact)
+        }
+    }
+
+    @MainActor
+    func finishInviting() async {
+        await self.loadingView.hideAllViews()
+        self.loadingView.removeFromSuperview()
     }
 
     func updateButton() {
@@ -115,11 +135,16 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             data[.connections] = []
         }
 
-        data[.contacts] = await ContactsManger.shared.fetchContacts().map({ contact in
-            return .contact(contact)
-        })
-
         await self.loadUnclaimedReservations()
+
+        data[.contacts] = await ContactsManger.shared.fetchContacts().map({ contact in
+            let reservation = self.reservations.first { reservation in
+                return reservation.contactId == contact.identifier
+            }
+
+            let item = Contact(with: contact, reservation: reservation)
+            return .contact(item)
+        })
 
         return data
     }

@@ -13,7 +13,7 @@ import Contacts
 import PhoneNumberKit
 
 class ContactCell: CollectionViewManagerCell, ManageableCell {
-    typealias ItemType = CNContact
+    typealias ItemType = Contact
 
     private let avatarView = AvatarView()
     private let titleLabel = Label(font: .regularBold, textColor: .lightPurple)
@@ -22,7 +22,7 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
     private let content = View()
 
     var didTapButton: CompletionOptional = nil
-    var currentItem: CNContact?
+    var currentItem: Contact?
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -36,13 +36,10 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
         self.content.addSubview(self.animationView)
     }
 
-    func configure(with item: CNContact) {
+    func configure(with item: Contact) {
         self.avatarView.set(avatar: item)
         self.titleLabel.setText(item.fullName)
-        let phone = item.findBestPhoneNumber().phone?.stringValue ?? ""
-        #warning("PartialFormatter is a huge hit to performance.")
-        //let phoneString = PartialFormatter().formatPartial(phone)
-        self.subTitleLabel.setText(phone)
+        self.subTitleLabel.setText(item.phoneNumber)
         self.layoutNow()
     }
 
