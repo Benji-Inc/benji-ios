@@ -140,8 +140,8 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
         self.resetAlertProgress()
     }
 
-    override func reset() {
-        super.reset()
+    override func resetInputViews() {
+        super.resetInputViews()
         self.resetAlertProgress()
     }
 

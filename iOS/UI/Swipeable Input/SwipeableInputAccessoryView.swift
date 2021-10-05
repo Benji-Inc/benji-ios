@@ -21,9 +21,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     static let preferredHeight: CGFloat = 54.0
     static let maxHeight: CGFloat = 200.0
 
-    private(set) var previewAnimator: UIViewPropertyAnimator?
-    private(set) var previewView: PreviewMessageView?
-
     var alertAnimator: UIViewPropertyAnimator?
     var selectionFeedback = UIImpactFeedbackGenerator(style: .rigid)
     var borderColor: CGColor? {
@@ -284,7 +281,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
     func animateInputViews(with text: String) {}
 
-    func reset() {
+    func resetInputViews() {
         self.textView.reset()
         self.textView.alpha = 1
         self.attachmentView.alpha = 1
@@ -297,75 +294,31 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
     // MARK: - Pan Gesture Handling
 
+    private var previewView: PreviewMessageView?
+    private var initialPreviewOrigin: CGPoint?
+
     func handle(pan: UIPanGestureRecognizer) {
         guard self.shouldHandlePan() else { return }
 
-        let maxOffset: CGFloat
-        = clamp(self.halfHeight,
-                SwipeableInputAccessoryView.preferredHeight,
-                SwipeableInputAccessoryView.maxHeight * 0.5)
-
-        let offset = -pan.translation(in: nil).y
-        let progress = clamp(offset/maxOffset, 0.0, 1.0)
+        // How far the preview view can be dragged left or right.
+        let maxXOffset: CGFloat = 100
+        // How far the preview view can be dragged vertically
+        let maxYOffset: CGFloat = SwipeableInputAccessoryView.maxHeight.half
+        let panOffset = pan.translation(in: nil)
+        // The percentage of the max y offset that the preview view has been dragged.
+        let progress = clamp(-panOffset.y/maxYOffset, 0, 1)
 
         switch pan.state {
         case .possible:
             break
         case .began:
-            self.previewView = PreviewMessageView()
-            self.panDidBegin()
-            self.previewView?.backgroundView.alpha = 0.0
-            self.addSubview(self.previewView!)
-            self.previewView?.frame = self.inputContainerView.frame
-            self.previewView?.layoutNow()
-            let top = self.top - maxOffset
-
-            self.previewAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
-                                                          curve: .easeInOut,
-                                                          animations: nil)
-            self.previewAnimator?.addAnimations {
-                UIView.animateKeyframes(withDuration: 0,
-                                        delay: 0,
-                                        animations: {
-                                            UIView.addKeyframe(withRelativeStartTime: 0,
-                                                               relativeDuration: 0.3,
-                                                               animations: {
-                                                                self.attachmentView.alpha = 0
-                                                                self.textView.alpha = 0
-                                                                self.previewView?.backgroundView.alpha = 1
-                                            })
-
-                                            UIView.addKeyframe(withRelativeStartTime: 0,
-                                                               relativeDuration: 1,
-                                                               animations: {
-                                                                self.previewView?.top = top
-                                                                self.setNeedsLayout()
-                                            })
-
-                }) { (completed) in }
-            }
-
-            self.previewAnimator?.addCompletion({ (position) in
-                if position == .start {
-                    self.previewView?.removeFromSuperview()
-                }
-                if position == .end {
-                    self.previewAnimatorDidEnd()
-                }
-                self.selectionFeedback.impactOccurred()
-            })
-
-            self.previewAnimator?.pauseAnimation()
-
+            self.handlePanBegan()
         case .changed:
-            self.previewAnimator?.fractionComplete = progress
+            self.handlePanChanged(withOffset: panOffset, maxXOffset: maxXOffset, maxYOffset: maxYOffset)
         case .ended:
-            self.previewAnimator?.isReversed = progress <= 0.02
-            self.previewAnimator?.continueAnimation(withTimingParameters: nil, durationFactor: 0)
-        case .cancelled:
-            self.previewAnimator?.finishAnimation(at: .end)
-        case .failed:
-            self.previewAnimator?.finishAnimation(at: .end)
+            self.handlePanEnded(withProgress: progress)
+        case .cancelled, .failed:
+            self.handlePanFailed()
         @unknown default:
             break
         }
@@ -375,25 +328,73 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         let object = SendableObject(kind: self.currentMessageKind,
                                     context: self.currentContext,
                                     previousMessage: self.editableMessage)
-        self.sendableObject = object
+
         return object.isSendable
     }
 
-    func panDidBegin() {
+    private func handlePanBegan() {
+        let object = SendableObject(kind: self.currentMessageKind,
+                                    context: self.currentContext,
+                                    previousMessage: self.editableMessage)
+        self.sendableObject = object
+
+        self.attachmentView.alpha = 0
+        self.textView.alpha = 0
+
+        // Initialize the preview view for the user to drag up the screen.
+        self.previewView = PreviewMessageView()
+        self.previewView?.frame = self.inputContainerView.frame
         self.previewView?.set(backgroundColor: self.currentContext.color)
         self.previewView?.messageKind = self.currentMessageKind
+        self.addSubview(self.previewView!)
+
+        self.initialPreviewOrigin = self.previewView?.origin
     }
 
-    func previewAnimatorDidEnd() {
-        self.reset()
-        self.previewView?.removeFromSuperview()
+    private func handlePanChanged(withOffset offset: CGPoint, maxXOffset: CGFloat, maxYOffset: CGFloat) {
+        guard let initialPosition = self.initialPreviewOrigin else { return }
 
-        if let object = self.sendableObject {
-            self.delegate.swipeableInputAccessory(self, didConfirm: object)
+        let offsetX = clamp(offset.x, -maxXOffset, maxXOffset)
+        let offsetY = clamp(offset.y, -maxYOffset, 0)
+        self.previewView?.origin = initialPosition + CGPoint(x: offsetX, y: offsetY)
+    }
+
+    private func handlePanEnded(withProgress progress: CGFloat) {
+        let didFinish = progress > 0.5
+
+        if didFinish {
+            self.selectionFeedback.impactOccurred()
+            self.previewView?.removeFromSuperview()
+
+            if let object = self.sendableObject {
+                self.delegate.swipeableInputAccessory(self, didConfirm: object)
+                self.resetInputViews()
+            }
+        } else {
+            guard let initialOrigin = self.initialPreviewOrigin else { return }
+
+            // If the user didn't swipe far enough to send a message, then animate the preview view back
+            // to where it started, then reveal the text view to allow input again.
+            UIView.animate(withDuration: Theme.animationDuration) {
+                if !didFinish {
+                    self.previewView?.origin = initialOrigin
+                    self.previewView?.set(backgroundColor: .clear)
+                }
+            } completion: { completed in
+                self.textView.alpha = 1
+                self.attachmentView.alpha = 1
+                self.previewView?.removeFromSuperview()
+            }
         }
-
-        self.sendableObject = nil
     }
+
+    private func handlePanFailed() {
+        self.textView.alpha = 1
+        self.attachmentView.alpha = 1
+        self.previewView?.removeFromSuperview()
+    }
+
+    // MARK: - UIGestureRecognizerDelegate
 
     override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         if gestureRecognizer is UILongPressGestureRecognizer {
