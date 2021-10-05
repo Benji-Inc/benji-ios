@@ -32,6 +32,10 @@ extension ConversationThreadViewController: SwipeableInputAccessoryViewDelegate 
         }
     }
 
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirmReply reply: Sendable) {
+        self.swipeableInputAccessory(view, didConfirm: reply)
+    }
+
     @MainActor
     func send(object: Sendable) async {
         do {

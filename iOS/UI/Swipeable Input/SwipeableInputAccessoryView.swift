@@ -13,7 +13,7 @@ import Combine
 
 protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable)
-//    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirmReply reply: Sendable)
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirmReply reply: Sendable)
 }
 
 class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGestureRecognizerDelegate {
@@ -367,7 +367,12 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
             self.previewView?.removeFromSuperview()
 
             if let object = self.sendableObject {
-                self.delegate.swipeableInputAccessory(self, didConfirm: object)
+                if progress > 0.99 {
+                    self.delegate.swipeableInputAccessory(self, didConfirmReply: object)
+                } else {
+                    self.delegate.swipeableInputAccessory(self, didConfirm: object)
+                }
+
                 self.resetInputViews()
             }
         } else {
