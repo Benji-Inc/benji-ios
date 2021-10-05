@@ -231,32 +231,22 @@ extension ConversationViewController {
 // MARK: - SwipeableInputAccessoryViewDelegate
 
 extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
-    
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
-        let alert = UIAlertController(title: "Send Method",
-                                      message: "Would you like to send your message?",
-                                      preferredStyle: .actionSheet)
 
-        if let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
-           let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath) {
-            if case let .message(messageID) = currentItem {
-                let reply = UIAlertAction(title: "Reply", style: .default) { [unowned self] _ in
-                    Task {
-                        await self.reply(to: messageID, sendable: sendable)
-                    }
-                }
-                alert.addAction(reply)
-            }
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
+        Task {
+            await self.send(sendable)
         }
-        
-        let sendNew = UIAlertAction(title: "Send New", style: .default) { [unowned self] _ in
+    }
+
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirmReply reply: Sendable) {
+        guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
+              let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath) else { return }
+
+        if case let .message(messageID) = currentItem {
             Task {
-                await self.send(sendable)
+                await self.reply(to: messageID, sendable: reply)
             }
         }
-        alert.addAction(sendNew)
-        
-        self.present(alert, animated: true)
     }
     
     private func send(_ sendable: Sendable) async {
