@@ -57,6 +57,8 @@ class DiffableCollectionViewController<SectionType: Hashable & CaseIterable, Ite
     @MainActor
     func loadData() async {
 
+        self.collectionView.animationView.play()
+
         guard !Task.isCancelled else {
             self.collectionView.animationView.stop()
             return
