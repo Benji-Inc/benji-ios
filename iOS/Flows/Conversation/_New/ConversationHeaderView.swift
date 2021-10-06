@@ -20,7 +20,6 @@ class ConversationHeaderView: View {
     let button = Button()
 
     private var cancellables = Set<AnyCancellable>()
-    private var currentItem: Conversation?
 
     deinit {
         self.cancellables.forEach { cancellable in
@@ -49,32 +48,18 @@ class ConversationHeaderView: View {
         self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .background4))
     }
 
-    func configure(with item: Conversation) {
-        self.currentItem = item
+    func configure(with conversation: Conversation) {
+        self.label.setText(conversation.title)
+        self.descriptionLabel.setText(conversation.description)
 
-        Task {
-            await self.display(conversation: item)
+        let members = conversation.lastActiveMembers.filter { member in
+            return member.id != ChatClient.shared.currentUserId
         }
-    }
 
-    private func display(conversation: ChatChannel) async {
-        Task.onMainActor {
-            guard self.currentItem?.cid == conversation.cid else { return }
-
-            self.label.setText(conversation.title)
-            self.descriptionLabel.setText(conversation.description)
-
-            let members = conversation.lastActiveMembers.filter { member in
-                return member.id != ChatClient.shared.currentUserId
-            }
-
-            if !members.isEmpty {
-                self.stackedAvatarView.set(items: members)
-            } else {
-                self.stackedAvatarView.set(items: [User.current()!])
-            }
-
-            self.stackedAvatarView.layoutNow()
+        if !members.isEmpty {
+            self.stackedAvatarView.set(items: members)
+        } else {
+            self.stackedAvatarView.set(items: [User.current()!])
         }
     }
 

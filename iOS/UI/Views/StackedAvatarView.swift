@@ -38,7 +38,7 @@ class StackedAvatarView: View {
             }
         }
 
-        self.layoutNow()
+        self.setNeedsLayout()
     }
 
     override func layoutSubviews() {
