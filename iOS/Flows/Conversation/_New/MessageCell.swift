@@ -21,14 +21,14 @@ class MessageCell: UICollectionViewCell {
         super.init(frame: frame)
 
         self.contentView.addSubview(self.messageContainerView)
-        self.messageContainerView.set(backgroundColor: .red)
+        self.messageContainerView.set(backgroundColor: .lightPurple)
 
         self.messageContainerView.addSubview(self.messageTextView)
         self.messageTextView.isScrollEnabled = false
         self.messageTextView.isEditable = false
 
         self.contentView.addSubview(self.repliesContainerView)
-        self.repliesContainerView.set(backgroundColor: .green)
+        self.repliesContainerView.set(backgroundColor: .lightPurple)
 
         self.repliesContainerView.addSubview(self.replyCountLabel)
         self.repliesContainerView.addSubview(self.repliesTextView)
@@ -46,6 +46,7 @@ class MessageCell: UICollectionViewCell {
         self.messageContainerView.expandToSuperviewWidth()
         self.messageContainerView.expand(.bottom, padding: 20)
         self.messageContainerView.roundCorners()
+        self.messageContainerView.alpha = self.repliesContainerView.isVisible ? 0.8 : 1
 
         self.messageTextView.expandToSuperviewWidth()
         self.messageTextView.sizeToFit()

@@ -12,13 +12,16 @@ import TMROLocalization
 import Combine
 
 protocol SwipeableInputAccessoryViewDelegate: AnyObject {
+    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView)
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didPrepare sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition)
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didConfirm sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition)
-    func swipeableInputAccessoryDidCancelSwipe(_ view: SwipeableInputAccessoryView)
+    func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView)
+    func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView)
+
 }
 
 class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGestureRecognizerDelegate {
@@ -305,9 +308,9 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     private var initialPreviewOrigin: CGPoint?
     private var currentSendPosition: SendPosition?
     /// How far the preview view can be dragged left or right.
-    private var maxXOffset: CGFloat = 100
+    private let maxXOffset: CGFloat = 100
     /// How far the preview view can be dragged vertically
-    let maxYOffset: CGFloat = SwipeableInputAccessoryView.maxHeight.half
+    private let maxYOffset: CGFloat = SwipeableInputAccessoryView.maxHeight.half
 
     func handle(pan: UIPanGestureRecognizer) {
         guard self.shouldHandlePan() else { return }
@@ -356,6 +359,8 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
         self.initialPreviewOrigin = self.previewView?.origin
         self.currentSendPosition = nil
+
+        self.delegate.swipeableInputAccessoryDidBeginSwipe(self)
     }
 
     private func handlePanChanged(withOffset panOffset: CGPoint) {
@@ -370,7 +375,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         let newSendPosition = self.getSendPosition(forPanOffset: panOffset)
 
         // Detect if the send position has changed. If so, let the delegate know so it can prepare
-        // for a send.
+        // for a send or cancel the current send.
         if newSendPosition != self.currentSendPosition {
             self.currentSendPosition = newSendPosition
 
@@ -379,7 +384,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
                                                       didPrepare: sendable,
                                                       at: newSendPosition)
             } else {
-                self.delegate.swipeableInputAccessoryDidCancelSwipe(self)
+                self.delegate.swipeableInputAccessoryDidUnprepareSendable(self)
             }
         }
     }
@@ -390,13 +395,13 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
            let sendable = self.sendable {
 
             self.selectionFeedback.impactOccurred()
-            self.previewView?.removeFromSuperview()
-
             self.delegate.swipeableInputAccessory(self, didConfirm: sendable, at: swipePosition)
+
+            self.previewView?.removeFromSuperview()
             self.resetInputViews()
         } else {
-            // If the user didn't swipe far enough to send a message, then animate the preview view back
-            // to where it started, then reveal the text view to allow input again.
+            // If the user didn't swipe far enough to send a message, animate the preview view back
+            // to where it started, then reveal the text view to allow for input again.
             UIView.animate(withDuration: Theme.animationDuration) {
                 guard let initialOrigin = self.initialPreviewOrigin else { return }
                 self.previewView?.origin = initialOrigin
@@ -407,12 +412,14 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
                 self.previewView?.removeFromSuperview()
             }
         }
+        self.delegate.swipeableInputAccessoryDidFinishSwipe(self)
     }
 
     private func handlePanFailed() {
         self.textView.alpha = 1
         self.attachmentView.alpha = 1
         self.previewView?.removeFromSuperview()
+        self.delegate.swipeableInputAccessoryDidFinishSwipe(self)
     }
 
     /// Gets the send position for the given panOffset. If the pan offset doesn't correspond to a valid send position, nil is returned.

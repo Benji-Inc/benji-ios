@@ -12,6 +12,15 @@ import StreamChat
 
 extension ConversationThreadViewController: SwipeableInputAccessoryViewDelegate {
 
+    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
+        // TODO:
+    }
+
+    func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
+        // TODO:
+    }
+
+
     func handle(attachment: Attachment, body: String) {
         Task {
             do {
@@ -39,8 +48,8 @@ extension ConversationThreadViewController: SwipeableInputAccessoryViewDelegate 
         }
     }
 
-    func swipeableInputAccessoryDidCancelSwipe(_ view: SwipeableInputAccessoryView) {
-        // TODO: Cancel send
+    func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
+
     }
 
     @MainActor
