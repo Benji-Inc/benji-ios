@@ -13,7 +13,7 @@ import UIKit
 class ConversationViewController: FullScreenViewController,
                                   UICollectionViewDelegate,
                                   UICollectionViewDelegateFlowLayout,
-                                  SwipeableInputAccessoryViewDelegate{
+                                  SwipeableInputAccessoryViewDelegate {
     
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     private lazy var collectionView = CollectionView(layout: self.layout)
