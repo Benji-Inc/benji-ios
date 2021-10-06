@@ -16,7 +16,8 @@ class ConversationViewController: FullScreenViewController,
                                   SwipeableInputAccessoryViewDelegate{
     
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
-    private var collectionView = CollectionView(layout: new_ConversationCollectionViewLayout())
+    private lazy var collectionView = CollectionView(layout: self.layout)
+    private let layout = new_ConversationCollectionViewLayout()
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private let conversationHeader = ConversationHeaderView()
@@ -210,11 +211,9 @@ class ConversationViewController: FullScreenViewController,
                                 height: scrollView.height)
         
         let layout = self.collectionView.collectionViewLayout
-        guard let layoutAttributes = layout.layoutAttributesForElements(in: targetRect) else {
-            return
-        }
+        guard let layoutAttributes = layout.layoutAttributesForElements(in: targetRect) else { return }
         
-        // Find the item whose center is closest to the proposed offset
+        // Find the item whose center is closest to the proposed offset and set that as the new scroll target
         for elementAttributes in layoutAttributes {
             let possibleNewOffset = elementAttributes.frame.centerX - collectionView.halfWidth
             if abs(possibleNewOffset - targetOffset.x) < abs(newXOffset - targetOffset.x) {
@@ -225,44 +224,38 @@ class ConversationViewController: FullScreenViewController,
         targetContentOffset.pointee = CGPoint(x: newXOffset, y: targetOffset.y)
     }
 
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+
+    }
+
     // MARK: - SwipeableInputAccessoryViewDelegate
 
+    /// The collection view's content offset at the first call to prepare for a swipe. Used to reset the the content offset after a swipe is cancelled.
     private var initialContentOffset: CGPoint?
+
+    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
+        self.initialContentOffset = self.collectionView.contentOffset
+        self.view.isUserInteractionEnabled = false
+    }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didPrepare sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition) {
-
-        logDebug("prepare for position \(position)")
-
-        if self.initialContentOffset.isNil {
-            self.initialContentOffset = self.collectionView.contentOffset
-        }
-
         switch position {
         case .left, .middle:
-            self.collectionView.setContentOffset(self.initialContentOffset!, animated: true)
+            if let initialContentOffset = self.initialContentOffset {
+                self.collectionView.setContentOffset(initialContentOffset, animated: true)
+            }
         case .right:
-            let newXOffset = self.collectionView.contentSize.width - 100
+            let newXOffset = self.collectionView.contentSize.width - self.layout.minimumLineSpacing
             self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
         }
-    }
-
-    func swipeableInputAccessoryDidCancelSwipe(_ view: SwipeableInputAccessoryView) {
-        logDebug("cancel send")
-        if let initialContentOffset = self.initialContentOffset {
-            self.collectionView.setContentOffset(initialContentOffset, animated: true)
-        }
-        self.initialContentOffset = nil
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didConfirm sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition) {
 
-        logDebug("send at position \(position)")
-        self.initialContentOffset = nil
-        
         switch position {
         case .left, .middle:
             guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
@@ -279,6 +272,16 @@ class ConversationViewController: FullScreenViewController,
         }
     }
 
+    func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
+        guard let initialContentOffset = self.initialContentOffset else { return }
+        self.collectionView.setContentOffset(initialContentOffset, animated: true)
+    }
+
+    func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
+        self.view.isUserInteractionEnabled = true
+    }
+
+    // MARK: - Send Message Functions
     private func send(_ sendable: Sendable) async {
         do {
             try await self.conversationController?.createNewMessage(with: sendable)
