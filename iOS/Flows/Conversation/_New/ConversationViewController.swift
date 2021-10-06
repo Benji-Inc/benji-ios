@@ -153,7 +153,7 @@ class ConversationViewController: FullScreenViewController,
             }
         }.store(in: &self.cancellables)
 
-        self.conversationController.channelChangePublisher.mainSink { [unowned self] _ in
+        self.conversationController.channelChangePublisher.mainSink { [unowned self] change in
             self.conversationHeader.configure(with: self.conversation)
         }.store(in: &self.cancellables)
 
@@ -265,7 +265,7 @@ class ConversationViewController: FullScreenViewController,
         UIView.animate(withDuration: Theme.animationDuration) {
             self.collectionView.alpha = 1
         }
-        
+
         guard let initialContentOffset = self.initialContentOffset else { return }
         self.collectionView.setContentOffset(initialContentOffset, animated: true)
     }
