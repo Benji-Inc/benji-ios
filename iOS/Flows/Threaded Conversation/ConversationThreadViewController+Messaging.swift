@@ -39,7 +39,7 @@ extension ConversationThreadViewController: SwipeableInputAccessoryViewDelegate 
         }
     }
 
-    func swipeableInputAccessoryDidCancel(_ view: SwipeableInputAccessoryView) {
+    func swipeableInputAccessoryDidCancelSwipe(_ view: SwipeableInputAccessoryView) {
         // TODO: Cancel send
     }
 

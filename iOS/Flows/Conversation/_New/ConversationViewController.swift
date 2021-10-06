@@ -12,7 +12,8 @@ import UIKit
 
 class ConversationViewController: FullScreenViewController,
                                   UICollectionViewDelegate,
-                                  UICollectionViewDelegateFlowLayout {
+                                  UICollectionViewDelegateFlowLayout,
+                                  SwipeableInputAccessoryViewDelegate{
     
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     private var collectionView = CollectionView(layout: new_ConversationCollectionViewLayout())
@@ -25,7 +26,7 @@ class ConversationViewController: FullScreenViewController,
     
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
     var didTapMoreButton: CompletionOptional = nil
-    var didTapConversationTitle: CompletionOptional = nil 
+    var didTapConversationTitle: CompletionOptional = nil
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView = ConversationInputAccessoryView(with: self)
@@ -108,6 +109,57 @@ class ConversationViewController: FullScreenViewController,
             self.conversationController.deleteMessage(message.id)
         }
     }
+
+    // MARK: - Message Loading and Updates
+
+    @MainActor
+    func initializeDataSource() async {
+        guard let controller = self.conversationController else { return }
+
+        // Make sure messages are loaded before initializing the data.
+        if let mostRecentMessage = controller.messages.last {
+            try? await controller.loadPreviousMessages(before: mostRecentMessage.id)
+        }
+
+        let messages = controller.messages
+        var snapshot = self.dataSource.snapshot()
+
+        snapshot.appendSections([.loadMore])
+        if !controller.hasLoadedAllPreviousMessages {
+            snapshot.appendItems([.loadMore], toSection: .loadMore)
+        }
+
+        snapshot.appendSections([.conversation(conversation.cid)])
+        snapshot.appendItems(messages.asConversationCollectionItems)
+
+        let animationCycle = AnimationCycle(inFromPosition: .left,
+                                            outToPosition: .right,
+                                            shouldConcatenate: true,
+                                            scrollToEnd: true)
+
+        await self.dataSource.apply(snapshot,
+                                    collectionView: self.collectionView,
+                                    animationCycle: animationCycle)
+    }
+
+    func subscribeToConversationUpdates() {
+        self.conversationController.messagesChangesPublisher.mainSink { [unowned self] changes in
+            Task {
+                guard let conversationController = self.conversationController else { return }
+                await self.dataSource.update(with: changes,
+                                             conversationController: conversationController,
+                                             collectionView: self.collectionView)
+            }
+        }.store(in: &self.cancellables)
+
+        self.conversationController.channelChangePublisher.mainSink { [unowned self] _ in
+            self.conversationHeader.configure(with: self.conversation)
+        }.store(in: &self.cancellables)
+
+        self.conversationController.memberEventPublisher.mainSink { [unowned self] _ in
+            self.conversationHeader.configure(with: self.conversation)
+        }.store(in: &self.cancellables)
+    }
     
     // MARK: - UICollectionViewDelegate
     
@@ -172,77 +224,36 @@ class ConversationViewController: FullScreenViewController,
         
         targetContentOffset.pointee = CGPoint(x: newXOffset, y: targetOffset.y)
     }
-}
 
-// MARK: - Message Loading and Updates
+    // MARK: - SwipeableInputAccessoryViewDelegate
 
-extension ConversationViewController {
-    
-    @MainActor
-    func initializeDataSource() async {
-        guard let controller = self.conversationController else { return }
-
-        // Make sure messages are loaded before initializing the data.
-        if let mostRecentMessage = controller.messages.last {
-            try? await controller.loadPreviousMessages(before: mostRecentMessage.id)
-        }
-
-        let messages = controller.messages
-        var snapshot = self.dataSource.snapshot()
-
-        snapshot.appendSections([.loadMore])
-        if !controller.hasLoadedAllPreviousMessages {
-            snapshot.appendItems([.loadMore], toSection: .loadMore)
-        }
-
-        snapshot.appendSections([.conversation(conversation.cid)])
-        snapshot.appendItems(messages.asConversationCollectionItems)
-        
-        let animationCycle = AnimationCycle(inFromPosition: .left,
-                                            outToPosition: .right,
-                                            shouldConcatenate: true,
-                                            scrollToEnd: true)
-        
-        await self.dataSource.apply(snapshot,
-                                    collectionView: self.collectionView,
-                                    animationCycle: animationCycle)
-    }
-    
-    func subscribeToConversationUpdates() {
-        self.conversationController.messagesChangesPublisher.mainSink { [unowned self] changes in
-            Task {
-                guard let conversationController = self.conversationController else { return }
-                await self.dataSource.update(with: changes,
-                                             conversationController: conversationController,
-                                             collectionView: self.collectionView)
-            }
-        }.store(in: &self.cancellables)
-
-        self.conversationController.channelChangePublisher.mainSink { [unowned self] _ in
-            self.conversationHeader.configure(with: self.conversation)
-        }.store(in: &self.cancellables)
-
-        self.conversationController.memberEventPublisher.mainSink { [unowned self] _ in
-            self.conversationHeader.configure(with: self.conversation)
-        }.store(in: &self.cancellables)
-    }
-}
-
-// MARK: - SwipeableInputAccessoryViewDelegate
-
-extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
+    private var initialContentOffset: CGPoint?
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didPrepare sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition) {
 
-        // TODO: Prepare for send
         logDebug("prepare for position \(position)")
+
+        if self.initialContentOffset.isNil {
+            self.initialContentOffset = self.collectionView.contentOffset
+        }
+
+        switch position {
+        case .left, .middle:
+            self.collectionView.setContentOffset(self.initialContentOffset!, animated: true)
+        case .right:
+            let newXOffset = self.collectionView.contentSize.width - 100
+            self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
+        }
     }
 
-    func swipeableInputAccessoryDidCancel(_ view: SwipeableInputAccessoryView) {
-        // TODO: Cancel send
+    func swipeableInputAccessoryDidCancelSwipe(_ view: SwipeableInputAccessoryView) {
         logDebug("cancel send")
+        if let initialContentOffset = self.initialContentOffset {
+            self.collectionView.setContentOffset(initialContentOffset, animated: true)
+        }
+        self.initialContentOffset = nil
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -250,6 +261,8 @@ extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
                                  at position: SwipeableInputAccessoryView.SendPosition) {
 
         logDebug("send at position \(position)")
+        self.initialContentOffset = nil
+        
         switch position {
         case .left, .middle:
             guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
