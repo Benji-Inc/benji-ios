@@ -18,7 +18,7 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didConfirm sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition)
-    func swipeableInputAccessoryDidCancel(_ view: SwipeableInputAccessoryView)
+    func swipeableInputAccessoryDidCancelSwipe(_ view: SwipeableInputAccessoryView)
 }
 
 class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGestureRecognizerDelegate {
@@ -379,7 +379,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
                                                       didPrepare: sendable,
                                                       at: newSendPosition)
             } else {
-                self.delegate.swipeableInputAccessoryDidCancel(self)
+                self.delegate.swipeableInputAccessoryDidCancelSwipe(self)
             }
         }
     }
@@ -415,6 +415,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.previewView?.removeFromSuperview()
     }
 
+    /// Gets the send position for the given panOffset. If the pan offset doesn't correspond to a valid send position, nil is returned.
     private func getSendPosition(forPanOffset panOffset: CGPoint) -> SendPosition? {
         // The percentage of the max y offset that the preview view has been dragged up.
         let progress = clamp(-panOffset.y/self.maxYOffset, 0, 1)
