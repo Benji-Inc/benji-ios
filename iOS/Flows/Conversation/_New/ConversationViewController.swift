@@ -224,25 +224,32 @@ class ConversationViewController: FullScreenViewController,
         targetContentOffset.pointee = CGPoint(x: newXOffset, y: targetOffset.y)
     }
 
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-
-    }
-
     // MARK: - SwipeableInputAccessoryViewDelegate
 
     /// The collection view's content offset at the first call to prepare for a swipe. Used to reset the the content offset after a swipe is cancelled.
     private var initialContentOffset: CGPoint?
+    private var lastPreparedPosition: SwipeableInputAccessoryView.SendPosition?
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
         self.initialContentOffset = self.collectionView.contentOffset
-        self.view.isUserInteractionEnabled = false
+        self.lastPreparedPosition = nil
+
+        self.collectionView.isUserInteractionEnabled = false
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didPrepare sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition) {
+
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.collectionView.alpha = 0.5
+        }
+
         switch position {
         case .left, .middle:
+            // Avoid animating content offset twice for redundant states
+            guard self.lastPreparedPosition.equalsOneOf(these: .left, .middle) else { break }
+
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
@@ -250,6 +257,8 @@ class ConversationViewController: FullScreenViewController,
             let newXOffset = self.collectionView.contentSize.width - self.layout.minimumLineSpacing
             self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
         }
+
+        self.lastPreparedPosition = position
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -273,12 +282,19 @@ class ConversationViewController: FullScreenViewController,
     }
 
     func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.collectionView.alpha = 1
+        }
         guard let initialContentOffset = self.initialContentOffset else { return }
         self.collectionView.setContentOffset(initialContentOffset, animated: true)
     }
 
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
-        self.view.isUserInteractionEnabled = true
+        self.collectionView.isUserInteractionEnabled = true
+
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.collectionView.alpha = 1
+        }
     }
 
     // MARK: - Send Message Functions
