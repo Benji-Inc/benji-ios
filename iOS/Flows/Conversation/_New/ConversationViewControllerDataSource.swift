@@ -86,8 +86,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
             snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
                                  toSection: sectionID)
-            await self.applySnapshotKeepingVisualOffset(snapshot,
-                                                        collectionView: collectionView)
+            await self.apply(snapshot)
             return
         }
 
@@ -100,7 +99,9 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 snapshot.insertItems([.message(message.id)],
                                      in: sectionID,
                                      atIndex: index.item)
-                scrollToLatestMessage = true
+                if message.isFromCurrentUser {
+                    scrollToLatestMessage = true
+                }
             case .move:
                 snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
                 snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
@@ -116,9 +117,8 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             self.apply(snapshot)
 
             if scrollToLatestMessage, let sectionIndex = snapshot.indexOfSection(sectionID) {
-                let items = snapshot.itemIdentifiers(inSection: .conversation(conversation.cid))
-                let lastIndex = IndexPath(item: items.count - 1, section: sectionIndex)
-                collectionView.scrollToItem(at: lastIndex, at: .centeredHorizontally, animated: true)
+                let firstIndex = IndexPath(item: 0, section: sectionIndex)
+                collectionView.scrollToItem(at: firstIndex, at: .centeredHorizontally, animated: true)
             }
         }
     }

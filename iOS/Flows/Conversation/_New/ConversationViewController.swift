@@ -42,7 +42,7 @@ class ConversationViewController: FullScreenViewController,
     init(conversation: Conversation?) {
         if let conversation = conversation {
             self.conversationController
-            = ChatClient.shared.channelController(for: conversation.cid, messageOrdering: .bottomToTop)
+            = ChatClient.shared.channelController(for: conversation.cid, messageOrdering: .topToBottom)
         }
         
         super.init()
@@ -59,6 +59,7 @@ class ConversationViewController: FullScreenViewController,
         self.contentContainer.addSubview(self.collectionView)
         self.collectionView.decelerationRate = .fast
         self.collectionView.showsHorizontalScrollIndicator = false
+        self.collectionView.semanticContentAttribute = .forceRightToLeft
 
         self.contentContainer.addSubview(self.conversationHeader)
         self.conversationHeader.configure(with: self.conversation)
@@ -118,25 +119,25 @@ class ConversationViewController: FullScreenViewController,
         guard let controller = self.conversationController else { return }
 
         // Make sure messages are loaded before initializing the data.
-        if let mostRecentMessage = controller.messages.last {
+        if let mostRecentMessage = controller.messages.first {
             try? await controller.loadPreviousMessages(before: mostRecentMessage.id)
         }
 
         let messages = controller.messages
         var snapshot = self.dataSource.snapshot()
 
+        snapshot.appendSections([.conversation(conversation.cid)])
+        snapshot.appendItems(messages.asConversationCollectionItems)
+
         snapshot.appendSections([.loadMore])
         if !controller.hasLoadedAllPreviousMessages {
             snapshot.appendItems([.loadMore], toSection: .loadMore)
         }
 
-        snapshot.appendSections([.conversation(conversation.cid)])
-        snapshot.appendItems(messages.asConversationCollectionItems)
-
-        let animationCycle = AnimationCycle(inFromPosition: .left,
-                                            outToPosition: .right,
+        let animationCycle = AnimationCycle(inFromPosition: .right,
+                                            outToPosition: .left,
                                             shouldConcatenate: true,
-                                            scrollToEnd: true)
+                                            scrollToEnd: false)
 
         await self.dataSource.apply(snapshot,
                                     collectionView: self.collectionView,
@@ -186,7 +187,7 @@ class ConversationViewController: FullScreenViewController,
 
             self.isLoadingMessages = true
             do {
-                let oldestMessageID = self.conversationController.messages.first?.id
+                let oldestMessageID = self.conversationController.messages.last?.id
                 try await self.conversationController.loadPreviousMessages(before: oldestMessageID)
             } catch {
                 logDebug(error)
@@ -254,7 +255,7 @@ class ConversationViewController: FullScreenViewController,
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
         case .right:
-            let newXOffset = self.collectionView.contentSize.width - self.layout.minimumLineSpacing
+            let newXOffset = -self.collectionView.width + self.layout.minimumLineSpacing
             self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
         }
 
@@ -273,7 +274,6 @@ class ConversationViewController: FullScreenViewController,
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didConfirm sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition) {
-
         switch position {
         case .left, .middle:
             guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
