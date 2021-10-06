@@ -21,7 +21,6 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
                                  didConfirm sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition)
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView)
-
 }
 
 class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGestureRecognizerDelegate {

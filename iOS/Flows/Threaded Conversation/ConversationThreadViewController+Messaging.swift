@@ -12,15 +12,6 @@ import StreamChat
 
 extension ConversationThreadViewController: SwipeableInputAccessoryViewDelegate {
 
-    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
-        // TODO:
-    }
-
-    func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
-        // TODO:
-    }
-
-
     func handle(attachment: Attachment, body: String) {
         Task {
             do {
@@ -33,10 +24,18 @@ extension ConversationThreadViewController: SwipeableInputAccessoryViewDelegate 
         }
     }
 
+    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
+
+    }
+
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didPrepare sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition) {
-        // TODO: Prepare for send
+
+    }
+
+    func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
+
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
