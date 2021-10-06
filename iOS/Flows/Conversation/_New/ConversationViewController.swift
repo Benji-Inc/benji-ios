@@ -228,6 +228,7 @@ class ConversationViewController: FullScreenViewController,
 
     /// The collection view's content offset at the first call to prepare for a swipe. Used to reset the the content offset after a swipe is cancelled.
     private var initialContentOffset: CGPoint?
+    /// The last swipe position type that was registersed, if any.
     private var lastPreparedPosition: SwipeableInputAccessoryView.SendPosition?
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {

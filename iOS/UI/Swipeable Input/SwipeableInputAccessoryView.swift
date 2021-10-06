@@ -12,14 +12,19 @@ import TMROLocalization
 import Combine
 
 protocol SwipeableInputAccessoryViewDelegate: AnyObject {
+    /// The accessory has begun a swipe interaction.
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView)
+    /// The accessory is ready to confirm a sendable, but has not yet done so.
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didPrepare sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition)
+    /// The accessory has moved from being prepared to confirm a sendable, to not being prepared.
     func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView)
+    /// The accesory  has is intending to send a sendable. The swipe is at the specified position.
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didConfirm sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition)
+    /// The accessory finished a swipe interaction. This occurs regardless of whether a message was sent.
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView)
 }
 
