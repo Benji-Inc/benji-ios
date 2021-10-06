@@ -12,11 +12,22 @@ import TMROLocalization
 import Combine
 
 protocol SwipeableInputAccessoryViewDelegate: AnyObject {
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable)
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirmReply reply: Sendable)
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 didPrepare sendable: Sendable,
+                                 at position: SwipeableInputAccessoryView.SendPosition)
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 didConfirm sendable: Sendable,
+                                 at position: SwipeableInputAccessoryView.SendPosition)
+    func swipeableInputAccessoryDidCancel(_ view: SwipeableInputAccessoryView)
 }
 
 class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGestureRecognizerDelegate {
+
+    enum SendPosition {
+        case left
+        case middle
+        case right
+    }
 
     static let preferredHeight: CGFloat = 54.0
     static let maxHeight: CGFloat = 200.0
@@ -48,7 +59,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     
     var editableMessage: Messageable?
     var currentMessageKind: MessageKind = .text(String())
-    private var sendableObject: SendableObject?
+    private var sendable: SendableObject?
 
     private(set) var inputLeadingContstaint: NSLayoutConstraint?
     private(set) var attachmentHeightAnchor: NSLayoutConstraint?
@@ -152,7 +163,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.inputContainerView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
         self.inputContainerView.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -10).isActive = true
 
-        let leadingConstant: CGFloat = self.shouldShowPlusButton() ? 53 : 0
+        let leadingConstant: CGFloat = 53
         self.inputLeadingContstaint = self.inputContainerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: leadingConstant)
         self.inputLeadingContstaint?.isActive = true
         self.inputContainerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
@@ -173,16 +184,16 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     private func setupHandlers() {
         KeyboardManager.shared.$currentEvent
             .mainSink { event in
-            switch event {
-            case .didHide(_):
-                self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
-                self.plusAnimationView.play(toProgress: 0.0)
-            case .didShow(_):
-                break
-            default:
-                break
-            }
-        }.store(in: &self.cancellables)
+                switch event {
+                case .didHide(_):
+                    self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
+                    self.plusAnimationView.play(toProgress: 0.0)
+                case .didShow(_):
+                    break
+                default:
+                    break
+                }
+            }.store(in: &self.cancellables)
 
         self.textView.demoVC.exitButton.didSelect { [unowned self] in
             UserDefaultsManager.update(key: .hasShownKeyboardInstructions, with: true)
@@ -218,10 +229,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     }
 
     // MARK: OVERRIDES
-
-    func shouldShowPlusButton() -> Bool {
-        return true
-    }
 
     func setupGestures() {
         let panRecognizer = UIPanGestureRecognizer { [unowned self] (recognizer) in
@@ -296,17 +303,16 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
     private var previewView: PreviewMessageView?
     private var initialPreviewOrigin: CGPoint?
+    private var currentSendPosition: SendPosition?
+    /// How far the preview view can be dragged left or right.
+    private var maxXOffset: CGFloat = 100
+    /// How far the preview view can be dragged vertically
+    let maxYOffset: CGFloat = SwipeableInputAccessoryView.maxHeight.half
 
     func handle(pan: UIPanGestureRecognizer) {
         guard self.shouldHandlePan() else { return }
 
-        // How far the preview view can be dragged left or right.
-        let maxXOffset: CGFloat = 100
-        // How far the preview view can be dragged vertically
-        let maxYOffset: CGFloat = SwipeableInputAccessoryView.maxHeight.half
         let panOffset = pan.translation(in: nil)
-        // The percentage of the max y offset that the preview view has been dragged.
-        let progress = clamp(-panOffset.y/maxYOffset, 0, 1)
 
         switch pan.state {
         case .possible:
@@ -314,9 +320,9 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         case .began:
             self.handlePanBegan()
         case .changed:
-            self.handlePanChanged(withOffset: panOffset, maxXOffset: maxXOffset, maxYOffset: maxYOffset)
+            self.handlePanChanged(withOffset: panOffset)
         case .ended:
-            self.handlePanEnded(withProgress: progress)
+            self.handlePanEnded(withOffset: panOffset)
         case .cancelled, .failed:
             self.handlePanFailed()
         @unknown default:
@@ -336,7 +342,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         let object = SendableObject(kind: self.currentMessageKind,
                                     context: self.currentContext,
                                     previousMessage: self.editableMessage)
-        self.sendableObject = object
+        self.sendable = object
 
         self.attachmentView.alpha = 0
         self.textView.alpha = 0
@@ -349,42 +355,52 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.addSubview(self.previewView!)
 
         self.initialPreviewOrigin = self.previewView?.origin
+        self.currentSendPosition = nil
     }
 
-    private func handlePanChanged(withOffset offset: CGPoint, maxXOffset: CGFloat, maxYOffset: CGFloat) {
+    private func handlePanChanged(withOffset panOffset: CGPoint) {
         guard let initialPosition = self.initialPreviewOrigin else { return }
 
-        let offsetX = clamp(offset.x, -maxXOffset, maxXOffset)
-        let offsetY = clamp(offset.y, -maxYOffset, 0)
+        let offsetX = clamp(panOffset.x, -self.maxXOffset, self.maxXOffset)
+        let offsetY = clamp(panOffset.y, -self.maxYOffset, 0)
         self.previewView?.origin = initialPosition + CGPoint(x: offsetX, y: offsetY)
+
+        guard let sendable = self.sendable else { return }
+
+        let newSendPosition = self.getSendPosition(forPanOffset: panOffset)
+
+        // Detect if the send position has changed. If so, let the delegate know so it can prepare
+        // for a send.
+        if newSendPosition != self.currentSendPosition {
+            self.currentSendPosition = newSendPosition
+
+            if let newSendPosition = newSendPosition {
+                self.delegate.swipeableInputAccessory(self,
+                                                      didPrepare: sendable,
+                                                      at: newSendPosition)
+            } else {
+                self.delegate.swipeableInputAccessoryDidCancel(self)
+            }
+        }
     }
 
-    private func handlePanEnded(withProgress progress: CGFloat) {
-        let didFinish = progress > 0.5
+    private func handlePanEnded(withOffset panOffset: CGPoint) {
+        // Only attempt to send a message if we have a valid swipe position.
+        if let swipePosition = self.getSendPosition(forPanOffset: panOffset),
+           let sendable = self.sendable {
 
-        if didFinish {
             self.selectionFeedback.impactOccurred()
             self.previewView?.removeFromSuperview()
 
-            if let object = self.sendableObject {
-                if progress > 0.99 {
-                    self.delegate.swipeableInputAccessory(self, didConfirmReply: object)
-                } else {
-                    self.delegate.swipeableInputAccessory(self, didConfirm: object)
-                }
-
-                self.resetInputViews()
-            }
+            self.delegate.swipeableInputAccessory(self, didConfirm: sendable, at: swipePosition)
+            self.resetInputViews()
         } else {
-            guard let initialOrigin = self.initialPreviewOrigin else { return }
-
             // If the user didn't swipe far enough to send a message, then animate the preview view back
             // to where it started, then reveal the text view to allow input again.
             UIView.animate(withDuration: Theme.animationDuration) {
-                if !didFinish {
-                    self.previewView?.origin = initialOrigin
-                    self.previewView?.set(backgroundColor: .clear)
-                }
+                guard let initialOrigin = self.initialPreviewOrigin else { return }
+                self.previewView?.origin = initialOrigin
+                self.previewView?.set(backgroundColor: .clear)
             } completion: { completed in
                 self.textView.alpha = 1
                 self.attachmentView.alpha = 1
@@ -397,6 +413,23 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.textView.alpha = 1
         self.attachmentView.alpha = 1
         self.previewView?.removeFromSuperview()
+    }
+
+    private func getSendPosition(forPanOffset panOffset: CGPoint) -> SendPosition? {
+        // The percentage of the max y offset that the preview view has been dragged up.
+        let progress = clamp(-panOffset.y/self.maxYOffset, 0, 1)
+
+        // Make sure the user has dragged up far enough, otherwise this isn't a valid send position.
+        guard progress > 0.5 else { return nil }
+
+        switch panOffset.x {
+        case -CGFloat.greatestFiniteMagnitude ... -self.maxXOffset.half:
+            return .left
+        case self.maxXOffset.half ... CGFloat.greatestFiniteMagnitude:
+            return .right
+        default:
+            return .middle
+        }
     }
 
     // MARK: - UIGestureRecognizerDelegate
@@ -419,4 +452,3 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         return true
     }
 }
-

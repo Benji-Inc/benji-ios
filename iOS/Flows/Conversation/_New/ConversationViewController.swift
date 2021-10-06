@@ -232,23 +232,40 @@ extension ConversationViewController {
 
 extension ConversationViewController: SwipeableInputAccessoryViewDelegate {
 
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirm sendable: Sendable) {
-        Task {
-            await self.send(sendable)
-        }
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 didPrepare sendable: Sendable,
+                                 at position: SwipeableInputAccessoryView.SendPosition) {
+
+        // TODO: Prepare for send
+        logDebug("prepare for position \(position)")
     }
 
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, didConfirmReply reply: Sendable) {
-        guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
-              let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath) else { return }
+    func swipeableInputAccessoryDidCancel(_ view: SwipeableInputAccessoryView) {
+        // TODO: Cancel send
+        logDebug("cancel send")
+    }
 
-        if case let .message(messageID) = currentItem {
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 didConfirm sendable: Sendable,
+                                 at position: SwipeableInputAccessoryView.SendPosition) {
+
+        logDebug("send at position \(position)")
+        switch position {
+        case .left, .middle:
+            guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
+                  let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath) else { return }
+
+            guard case let .message(messageID) = currentItem else { return }
             Task {
-                await self.reply(to: messageID, sendable: reply)
+                await self.reply(to: messageID, sendable: sendable)
+            }
+        case .right:
+            Task {
+                await self.send(sendable)
             }
         }
     }
-    
+
     private func send(_ sendable: Sendable) async {
         do {
             try await self.conversationController?.createNewMessage(with: sendable)
