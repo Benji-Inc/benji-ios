@@ -16,10 +16,10 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didPrepare sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition)
+    func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView)
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didConfirm sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition)
-    func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView)
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView)
 
 }

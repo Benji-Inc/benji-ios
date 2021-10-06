@@ -261,6 +261,15 @@ class ConversationViewController: FullScreenViewController,
         self.lastPreparedPosition = position
     }
 
+    func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.collectionView.alpha = 1
+        }
+        
+        guard let initialContentOffset = self.initialContentOffset else { return }
+        self.collectionView.setContentOffset(initialContentOffset, animated: true)
+    }
+
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didConfirm sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition) {
@@ -279,14 +288,6 @@ class ConversationViewController: FullScreenViewController,
                 await self.send(sendable)
             }
         }
-    }
-
-    func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.collectionView.alpha = 1
-        }
-        guard let initialContentOffset = self.initialContentOffset else { return }
-        self.collectionView.setContentOffset(initialContentOffset, animated: true)
     }
 
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
