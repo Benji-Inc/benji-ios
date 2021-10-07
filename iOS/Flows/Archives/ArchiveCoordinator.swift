@@ -108,12 +108,15 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
     nonisolated func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType) {
 
         switch item {
+        case .notice(let notice):
+            break 
         case .conversation(let conversationID):
             Task.onMainActor {
                 if let conversation = ChatClient.shared.channelController(for: conversationID).conversation {
                     self.startConversationFlow(for: conversation)
                 }
             }
+
         }
     }
 

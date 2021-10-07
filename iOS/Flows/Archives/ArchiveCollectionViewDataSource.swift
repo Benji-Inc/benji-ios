@@ -13,14 +13,19 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
                                        ArchiveCollectionViewDataSource.ItemType> {
 
     enum SectionType: Int, CaseIterable {
+        case notices
         case conversations
     }
 
     enum ItemType: Hashable {
+        case notice(SystemNotice)
         case conversation(ChannelId)
     }
 
     private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider
+
+    #warning("Remove after beta")
+    private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -34,6 +39,10 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
             return collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
                                                                 for: indexPath,
                                                                 item: conversation)
+        case .notice(let notice):
+            return collectionView.dequeueConfiguredReusableCell(using: self.noticeConfig,
+                                                                for: indexPath,
+                                                                item: notice)
         }
     }
 }

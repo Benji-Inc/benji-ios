@@ -99,6 +99,12 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
             return .conversation(conversation.cid)
         }
 
+        await NoticeSupplier.shared.loadNotices()
+
+        data[.notices] = NoticeSupplier.shared.notices.map { notice in
+            return .notice(notice)
+        }
+
         return data
     }
 
