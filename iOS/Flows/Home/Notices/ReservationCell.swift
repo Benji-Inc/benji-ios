@@ -10,15 +10,27 @@ import Foundation
 
 class ReservationCell: NoticeCell {
 
+    let label = Label(font: .mediumBold)
+
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.contentView.set(backgroundColor: .red)
+        self.contentView.set(backgroundColor: .background3)
+        self.contentView.addSubview(self.label)
+
+        self.label.textAlignment = .center
     }
 
     override func configure(with item: SystemNotice) {
         super.configure(with: item)
 
+        self.label.setText(item.body)
+    }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.label.setSize(withWidth: self.contentView.width - Theme.contentOffset)
+        self.label.centerOnXAndY()
     }
 }

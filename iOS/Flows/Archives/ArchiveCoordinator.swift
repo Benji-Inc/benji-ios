@@ -149,7 +149,18 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
         case .system:
             break
         case .rsvps:
-            break
+            self.startPeopleFlow()
         }
+    }
+
+    func startPeopleFlow() {
+        self.removeChild()
+        let coordinator = PeopleCoordinator(includeConnections: false,
+                                            router: self.router,
+                                            deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { result in
+            coordinator.toPresentable().dismiss(animated: true)
+        }
+        self.router.present(coordinator, source: self.archiveVC)
     }
 }

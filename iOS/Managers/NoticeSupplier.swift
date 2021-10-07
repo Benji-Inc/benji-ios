@@ -10,6 +10,7 @@ import Foundation
 import Combine
 import ParseLiveQuery
 import Parse
+import TMROLocalization
 
 class NoticeSupplier {
 
@@ -44,12 +45,28 @@ class NoticeSupplier {
 
     private func getLocalNotices() async -> [SystemNotice] {
         do {
+            var notices: [SystemNotice] = []
+
             let connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])
-            return connections.filter({ connection in
+            notices = connections.filter({ connection in
                 return connection.status == .invited
             }).compactMap { connection in
                 return SystemNotice(withConneciton: connection)
             }
+
+            let reservations = await Reservation.getAllUnclaimed()
+            if reservations.count > 0 {
+                let text = LocalizedString(id: "", arguments: [String(reservations.count)], default: "You have @(count) RSVP's left.\nTap to invite someone.")
+                let reservationNotice = SystemNotice(createdAt: Date(),
+                                                     notice: nil,
+                                                     type: .rsvps,
+                                                     priority: 2,
+                                                     body: localized(text),
+                                                     attributes: nil)
+                notices.append(reservationNotice)
+            }
+
+            return notices
         } catch {
             return []
         }
