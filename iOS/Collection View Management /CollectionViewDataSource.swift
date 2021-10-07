@@ -62,7 +62,7 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
 
 // MARK: - NSDiffableDataSource Functions
 
-// These functions just forward to the corresponding functions to the underlying NSDiffableDataSource
+// These functions just forward to the corresponding functions in the underlying NSDiffableDataSource
 extension CollectionViewDataSource {
 
     // MARK: - Standard DataSource Functions
@@ -71,9 +71,7 @@ extension CollectionViewDataSource {
         self.diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences, completion: nil)
     }
 
-    func apply(_ snapshot: SnapshotType,
-               animatingDifferences: Bool = true) async {
-
+    func apply(_ snapshot: SnapshotType, animatingDifferences: Bool = true) async {
         await self.diffableDataSource.apply(snapshot, animatingDifferences: animatingDifferences)
     }
 
@@ -332,28 +330,6 @@ extension CollectionViewDataSource {
 // Functions to do custom animations to the collection view in conjunctions with applying snapshots.
 extension CollectionViewDataSource {
 
-    /// Applies the snapshot while adjusting the related collectionview's content offset so that the visible cells don't move.
-    /// For example, say there are 4 cells and cells 1 and 2 are visible:  0 [1  2] 3 (brackets symbolize viewport)
-    /// If 2 more items are are added to the beginning of the collectionview, the viewport will stay centered on the items like so:
-    /// -2 -1 0 [1 2] 3
-    @MainActor
-    func applySnapshotKeepingVisualOffset(_ snapshot: SnapshotType, collectionView: UICollectionView) async {
-        // Note the content size before any updates are applied
-        let beforeContentSize = collectionView.contentSize
-
-        // Reload
-        await self.apply(snapshot, animatingDifferences: false)
-
-        collectionView.layoutIfNeeded()
-        let afterContentSize = collectionView.contentSize
-
-        // reset the contentOffset after data is updated
-        let newOffset = CGPoint(
-            x: collectionView.contentOffset.x + (afterContentSize.width - beforeContentSize.width),
-            y: collectionView.contentOffset.y + (afterContentSize.height - beforeContentSize.height))
-        collectionView.setContentOffset(newOffset, animated: false)
-    }
-
     /// Animates the first part of the animation cycle, applies the snapshot, then finishes the animation cycle.
     @MainActor
     func apply(_ snapshot: SnapshotType,
@@ -362,13 +338,6 @@ extension CollectionViewDataSource {
 
         await collectionView.animateOut(position: animationCycle.outToPosition,
                                         concatenate: animationCycle.shouldConcatenate)
-
-        // HACK: If we want to scroll to the end of the content, push the content way past the edge
-        // so we don't preload any cells undesired cells when the snapshop is applied.
-        if animationCycle.scrollToEnd {
-            collectionView.contentOffset = CGPoint(x: 999_999_999_999,
-                                                   y: 0)
-        }
 
         await self.applySnapshotUsingReloadData(snapshot)
 

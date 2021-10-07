@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// A custom layout class for conversation collection views. It lays out its contents in a single horizontal row.
+/// If the conversation collectionview's semantic content attribute is rightToLeft, the first cell will be on the far right.
 class new_ConversationCollectionViewLayout: UICollectionViewFlowLayout {
 
     override init() {
@@ -20,6 +22,7 @@ class new_ConversationCollectionViewLayout: UICollectionViewFlowLayout {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // IMPORTANT: This allows us to layout the cells right to left.
     override var flipsHorizontallyInOppositeLayoutDirection: Bool {
         return true
     }
@@ -43,5 +46,4 @@ class new_ConversationCollectionViewLayout: UICollectionViewFlowLayout {
                                          right: 0)
         self.minimumLineSpacing = collectionView.width * 0.05
     }
-
 }

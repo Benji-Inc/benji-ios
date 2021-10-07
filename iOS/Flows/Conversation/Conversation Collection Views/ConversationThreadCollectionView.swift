@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConversationCollectionView: CollectionView {
+class ConversationThreadCollectionView: CollectionView {
 
     var conversationLayout: ConversationCollectionViewFlowLayout {
         guard let layout = collectionViewLayout as? ConversationCollectionViewFlowLayout else {

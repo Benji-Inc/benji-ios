@@ -13,7 +13,7 @@ protocol ConversationDataSource: AnyObject {
 
     var numberOfMembers: Int { get set }
     var sections: [ConversationSectionable] { get set }
-    var collectionView: ConversationCollectionView { get set }
+    var collectionView: ConversationThreadCollectionView { get set }
 
     func item(at indexPath: IndexPath) -> Messageable?
     func numberOfSections() -> Int

@@ -36,7 +36,7 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
         }
     }
 
-    var collectionView: ConversationCollectionView
+    var collectionView: ConversationThreadCollectionView
     var didSelectURL: ((URL) -> Void)?
     var didTapShare: ((Messageable) -> Void)?
     var didTapResend: ((Messageable) -> Void)?
@@ -47,7 +47,7 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     private var isSettingReadAll = false
     var cancellables = Set<AnyCancellable>()
 
-    init(with collectionView: ConversationCollectionView) {
+    init(with collectionView: ConversationThreadCollectionView) {
         self.collectionView = collectionView
         super.init()
         self.updateLayoutDataSource()
@@ -61,7 +61,7 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     // MARK: DATA SOURCE
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        guard let conversationCollectionView = collectionView as? ConversationCollectionView else { return 0 }
+        guard let conversationCollectionView = collectionView as? ConversationThreadCollectionView else { return 0 }
         var numberOfSections = self.numberOfSections()
 
         if !conversationCollectionView.isTypingIndicatorHidden {
@@ -95,7 +95,7 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        guard let conversationCollectionView = collectionView as? ConversationCollectionView else { fatalError() }
+        guard let conversationCollectionView = collectionView as? ConversationThreadCollectionView else { fatalError() }
 
         if self.isSectionReservedForTypingIndicator(indexPath.section) {
             let cell = conversationCollectionView.dequeueReusableCell(TypingIndicatorCell.self, for: indexPath)
@@ -174,7 +174,7 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     }
 
     private func header(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let conversationCollectionView = collectionView as? ConversationCollectionView else { fatalError() }
+        guard let conversationCollectionView = collectionView as? ConversationThreadCollectionView else { fatalError() }
 
         if self.isSectionReservedForTypingIndicator(indexPath.section) {
             return conversationCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "EmptyHeader", for: indexPath)
@@ -196,7 +196,7 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
 
     private func getTopHeader(for section: ConversationSectionable,
                               at indexPath: IndexPath,
-                              in collectionView: ConversationCollectionView) -> UICollectionReusableView? {
+                              in collectionView: ConversationThreadCollectionView) -> UICollectionReusableView? {
         return nil
 //        guard let index = section.firstMessageIndex, index > 0 else { return nil }
 //
@@ -226,7 +226,7 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     }
 
     private func footer(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let conversationCollectionView = collectionView as? ConversationCollectionView else { fatalError() }
+        guard let conversationCollectionView = collectionView as? ConversationThreadCollectionView else { fatalError() }
 
         guard indexPath.section == self.numberOfSections(in: collectionView) - 1 else {
             return conversationCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "EmptyFooter", for: indexPath)

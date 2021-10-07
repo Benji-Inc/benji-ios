@@ -17,7 +17,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
     enum SectionType: Hashable {
         case conversation(ChannelId)
-        case loadMore
     }
 
     enum ItemType: Hashable {
@@ -73,12 +72,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
         var snapshot = self.snapshot()
 
-        // Only show the load more cell if there are previous messages to load.
-        snapshot.deleteItems([.loadMore])
-        if !conversationController.hasLoadedAllPreviousMessages {
-            snapshot.appendItems([.loadMore], toSection: .loadMore)
-        }
-
         let sectionID = ConversationCollectionSection.conversation(conversation.cid)
 
         // If there's more than one change, reload all of the data.
@@ -86,6 +79,9 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
             snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
                                  toSection: sectionID)
+            if !conversationController.hasLoadedAllPreviousMessages {
+                snapshot.appendItems([.loadMore], toSection: sectionID)
+            }
             await self.apply(snapshot)
             return
         }
@@ -107,10 +103,16 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
                                      toSection: sectionID)
             case .update(let message, _):
-                snapshot.reloadItems([message.asConversationCollectionItem])
+                snapshot.reconfigureItems([message.asConversationCollectionItem])
             case .remove(let message, _):
                 snapshot.deleteItems([message.asConversationCollectionItem])
             }
+        }
+
+        // Only show the load more cell if there are previous messages to load.
+        snapshot.deleteItems([.loadMore])
+        if !conversationController.hasLoadedAllPreviousMessages {
+            snapshot.appendItems([.loadMore], toSection: sectionID)
         }
 
         await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in

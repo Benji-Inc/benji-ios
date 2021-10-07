@@ -10,7 +10,7 @@ import Foundation
 
 class LoadMoreMessagesCell: UICollectionViewCell {
 
-    private(set) var button = Button()
+    private(set) var label = Label(font: FontType.mediumBold, textColor: .white)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -23,16 +23,16 @@ class LoadMoreMessagesCell: UICollectionViewCell {
     }
 
     private func initializeViews() {
-        self.addSubview(self.button)
+        self.addSubview(self.label)
 
-        self.button.set(style: .rounded(color: .orange, text: "LOAD MORE"))
+        self.label.textAlignment = .center
+        self.label.setText("LOAD MORE")
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.button.size = CGSize(width: 140, height: 34)
-        self.button.centerOnXAndY()
+        self.label.size = CGSize(width: 200, height: 34)
+        self.label.centerOnXAndY()
     }
 }
-
