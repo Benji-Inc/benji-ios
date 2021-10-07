@@ -45,7 +45,9 @@ class NoticeSupplier {
     private func getLocalNotices() async -> [SystemNotice] {
         do {
             let connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])
-            return connections.compactMap { connection in
+            return connections.filter({ connection in
+                return connection.status == .invited
+            }).compactMap { connection in
                 return SystemNotice(withConneciton: connection)
             }
         } catch {

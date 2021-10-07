@@ -55,7 +55,7 @@ struct SystemNotice: Noticeable, Comparable {
                   type: .connectionRequest,
                   priority: 1,
                   body: nil,
-                  attributes: nil)
+                  attributes: ["connectionId": connection.objectId!])
     }
 
     static func == (lhs: SystemNotice, rhs: SystemNotice) -> Bool {
