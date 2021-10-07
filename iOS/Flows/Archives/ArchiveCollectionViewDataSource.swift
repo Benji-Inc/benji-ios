@@ -25,7 +25,7 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
     private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider
 
     #warning("Remove after beta")
-    private let noticeConfig = ManageableCellRegistration<NoticeCell>().provider
+    private let connectionConfig = ManageableCellRegistration<ConnectionRequestCell>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -40,9 +40,14 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
                                                                 for: indexPath,
                                                                 item: conversation)
         case .notice(let notice):
-            return collectionView.dequeueConfiguredReusableCell(using: self.noticeConfig,
-                                                                for: indexPath,
-                                                                item: notice)
+            switch notice.type {
+            case .connectionRequest:
+                return collectionView.dequeueConfiguredReusableCell(using: self.connectionConfig,
+                                                                    for: indexPath,
+                                                                    item: notice)
+            default:
+                return nil
+            }
         }
     }
 }
