@@ -64,7 +64,8 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
         }
 
         self.conversationVC.didTapConversationTitle = { [unowned self] in
-            self.presentConversationTitleAlert(for: self.conversationVC.conversationController)
+            guard let conversationController = self.conversationVC.conversationController else { return }
+            self.presentConversationTitleAlert(for: conversationController)
         }
     }
 
@@ -74,7 +75,8 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
 
         self.addChildAndStart(coordinator) { connections in
             coordinator.toPresentable().dismiss(animated: true)
-            self.add(connections: connections, to: self.conversationVC.conversationController)
+            guard let conversationController = self.conversationVC.conversationController else { return }
+            self.add(connections: connections, to: conversationController)
         }
         self.router.present(coordinator, source: self.conversationVC)
     }

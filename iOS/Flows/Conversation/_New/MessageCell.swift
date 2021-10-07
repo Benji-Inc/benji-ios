@@ -74,6 +74,7 @@ class MessageCell: UICollectionViewCell {
 
     func setReplyCount(_ count: Int) {
         self.replyCountLabel.setText("\(count)")
+        self.setNeedsLayout()
     }
     
     func setReplies(_ replies: [String]) {

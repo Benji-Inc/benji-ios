@@ -17,7 +17,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
     enum SectionType: Hashable {
         case conversation(ChannelId)
-        case loadMore
     }
 
     enum ItemType: Hashable {
@@ -73,12 +72,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
         var snapshot = self.snapshot()
 
-        // Only show the load more cell if there are previous messages to load.
-        snapshot.deleteItems([.loadMore])
-        if !conversationController.hasLoadedAllPreviousMessages {
-            snapshot.appendItems([.loadMore], toSection: .loadMore)
-        }
-
         let sectionID = ConversationCollectionSection.conversation(conversation.cid)
 
         // If there's more than one change, reload all of the data.
@@ -86,8 +79,10 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
             snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
                                  toSection: sectionID)
-            await self.applySnapshotKeepingVisualOffset(snapshot,
-                                                        collectionView: collectionView)
+            if !conversationController.hasLoadedAllPreviousMessages {
+                snapshot.appendItems([.loadMore], toSection: sectionID)
+            }
+            await self.apply(snapshot)
             return
         }
 
@@ -100,25 +95,32 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 snapshot.insertItems([.message(message.id)],
                                      in: sectionID,
                                      atIndex: index.item)
-                scrollToLatestMessage = true
+                if message.isFromCurrentUser {
+                    scrollToLatestMessage = true
+                }
             case .move:
                 snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
                 snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
                                      toSection: sectionID)
             case .update(let message, _):
-                snapshot.reloadItems([message.asConversationCollectionItem])
+                snapshot.reconfigureItems([message.asConversationCollectionItem])
             case .remove(let message, _):
                 snapshot.deleteItems([message.asConversationCollectionItem])
             }
+        }
+
+        // Only show the load more cell if there are previous messages to load.
+        snapshot.deleteItems([.loadMore])
+        if !conversationController.hasLoadedAllPreviousMessages {
+            snapshot.appendItems([.loadMore], toSection: sectionID)
         }
 
         await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
             self.apply(snapshot)
 
             if scrollToLatestMessage, let sectionIndex = snapshot.indexOfSection(sectionID) {
-                let items = snapshot.itemIdentifiers(inSection: .conversation(conversation.cid))
-                let lastIndex = IndexPath(item: items.count - 1, section: sectionIndex)
-                collectionView.scrollToItem(at: lastIndex, at: .centeredHorizontally, animated: true)
+                let firstIndex = IndexPath(item: 0, section: sectionIndex)
+                collectionView.scrollToItem(at: firstIndex, at: .centeredHorizontally, animated: true)
             }
         }
     }

@@ -24,6 +24,7 @@ extension ConversationCollectionViewDataSource {
             let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                         messageId: item.messageID)
             guard let message = messageController.message else { return }
+
             let dataSource = item.dataSource
 
             if message.type == .deleted {
@@ -37,7 +38,7 @@ extension ConversationCollectionViewDataSource {
                 cell.setReplyCount(message.replyCount)
                 cell.setReplies(replies)
 
-                // Load in the messages replies if needed, then reconfigure the cell so they show up.
+                // Load in the message's replies if needed, then reconfigure the cell so they show up.
                 if message.replyCount > 0 && message.latestReplies.isEmpty {
                     Task {
                         try? await messageController.loadPreviousReplies()
@@ -45,8 +46,6 @@ extension ConversationCollectionViewDataSource {
                     }
                 }
             }
-
-            cell.contentView.setNeedsLayout()
         }
     }
 

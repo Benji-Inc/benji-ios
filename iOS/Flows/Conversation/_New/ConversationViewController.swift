@@ -16,14 +16,13 @@ class ConversationViewController: FullScreenViewController,
                                   SwipeableInputAccessoryViewDelegate {
     
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
-    private lazy var collectionView = CollectionView(layout: self.layout)
-    private let layout = new_ConversationCollectionViewLayout()
+    private lazy var collectionView = ConversationCollectionView()
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private let conversationHeader = ConversationHeaderView()
 
     var conversation: Conversation! { return self.conversationController?.channel }
-    private(set) var conversationController: ChatChannelController!
+    private(set) var conversationController: ChatChannelController?
     
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
     var didTapMoreButton: CompletionOptional = nil
@@ -34,7 +33,6 @@ class ConversationViewController: FullScreenViewController,
     override var inputAccessoryView: UIView? {
         return self.messageInputAccessoryView
     }
-    
     override var canBecomeFirstResponder: Bool {
         return true
     }
@@ -42,7 +40,7 @@ class ConversationViewController: FullScreenViewController,
     init(conversation: Conversation?) {
         if let conversation = conversation {
             self.conversationController
-            = ChatClient.shared.channelController(for: conversation.cid, messageOrdering: .bottomToTop)
+            = ChatClient.shared.channelController(for: conversation.cid, messageOrdering: .topToBottom)
         }
         
         super.init()
@@ -57,8 +55,6 @@ class ConversationViewController: FullScreenViewController,
         
         self.view.insertSubview(self.blurView, belowSubview: self.contentContainer)
         self.contentContainer.addSubview(self.collectionView)
-        self.collectionView.decelerationRate = .fast
-        self.collectionView.showsHorizontalScrollIndicator = false
 
         self.contentContainer.addSubview(self.conversationHeader)
         self.conversationHeader.configure(with: self.conversation)
@@ -107,7 +103,7 @@ class ConversationViewController: FullScreenViewController,
         }
         
         self.dataSource.handleDeleteMessage = { [unowned self] message in
-            self.conversationController.deleteMessage(message.id)
+            self.conversationController?.deleteMessage(message.id)
         }
     }
 
@@ -118,25 +114,24 @@ class ConversationViewController: FullScreenViewController,
         guard let controller = self.conversationController else { return }
 
         // Make sure messages are loaded before initializing the data.
-        if let mostRecentMessage = controller.messages.last {
+        if let mostRecentMessage = controller.messages.first {
             try? await controller.loadPreviousMessages(before: mostRecentMessage.id)
         }
 
         let messages = controller.messages
         var snapshot = self.dataSource.snapshot()
 
-        snapshot.appendSections([.loadMore])
-        if !controller.hasLoadedAllPreviousMessages {
-            snapshot.appendItems([.loadMore], toSection: .loadMore)
-        }
-
         snapshot.appendSections([.conversation(conversation.cid)])
         snapshot.appendItems(messages.asConversationCollectionItems)
 
-        let animationCycle = AnimationCycle(inFromPosition: .left,
-                                            outToPosition: .right,
+        if !controller.hasLoadedAllPreviousMessages {
+            snapshot.appendItems([.loadMore], toSection: .conversation(conversation.cid))
+        }
+
+        let animationCycle = AnimationCycle(inFromPosition: .right,
+                                            outToPosition: .left,
                                             shouldConcatenate: true,
-                                            scrollToEnd: true)
+                                            scrollToEnd: false)
 
         await self.dataSource.apply(snapshot,
                                     collectionView: self.collectionView,
@@ -144,7 +139,7 @@ class ConversationViewController: FullScreenViewController,
     }
 
     func subscribeToConversationUpdates() {
-        self.conversationController.messagesChangesPublisher.mainSink { [unowned self] changes in
+        self.conversationController?.messagesChangesPublisher.mainSink { [unowned self] changes in
             Task {
                 guard let conversationController = self.conversationController else { return }
                 await self.dataSource.update(with: changes,
@@ -153,11 +148,16 @@ class ConversationViewController: FullScreenViewController,
             }
         }.store(in: &self.cancellables)
 
-        self.conversationController.channelChangePublisher.mainSink { [unowned self] change in
-            self.conversationHeader.configure(with: self.conversation)
+        self.conversationController?.channelChangePublisher.mainSink { [unowned self] change in
+            switch change {
+            case .update(let conversation):
+                self.conversationHeader.configure(with: conversation)
+            case .create, .remove:
+                break
+            }
         }.store(in: &self.cancellables)
 
-        self.conversationController.memberEventPublisher.mainSink { [unowned self] _ in
+        self.conversationController?.memberEventPublisher.mainSink { [unowned self] _ in
             self.conversationHeader.configure(with: self.conversation)
         }.store(in: &self.cancellables)
     }
@@ -178,16 +178,18 @@ class ConversationViewController: FullScreenViewController,
     /// If true, the conversation controller is currently loading messages.
     @Atomic private var isLoadingMessages = false
     private func loadMoreMessageIfNeeded() {
+        guard let conversationController = self.conversationController else { return }
+
         // If all the messages are loaded, there's no need to fetch more.
-        guard !self.conversationController.hasLoadedAllPreviousMessages else { return }
+        guard !conversationController.hasLoadedAllPreviousMessages else { return }
 
         Task {
             guard !isLoadingMessages else { return }
 
             self.isLoadingMessages = true
             do {
-                let oldestMessageID = self.conversationController.messages.first?.id
-                try await self.conversationController.loadPreviousMessages(before: oldestMessageID)
+                let oldestMessageID = conversationController.messages.last?.id
+                try await conversationController.loadPreviousMessages(before: oldestMessageID)
             } catch {
                 logDebug(error)
             }
@@ -210,7 +212,7 @@ class ConversationViewController: FullScreenViewController,
                                 width: scrollView.width,
                                 height: scrollView.height)
         
-        let layout = self.collectionView.collectionViewLayout
+        let layout = self.collectionView.conversationLayout
         guard let layoutAttributes = layout.layoutAttributesForElements(in: targetRect) else { return }
         
         // Find the item whose center is closest to the proposed offset and set that as the new scroll target
@@ -255,7 +257,9 @@ class ConversationViewController: FullScreenViewController,
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
         case .right:
-            let newXOffset = self.collectionView.contentSize.width - self.layout.minimumLineSpacing
+            let newXOffset
+            = -self.collectionView.width + self.collectionView.conversationLayout.minimumLineSpacing
+            
             self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
         }
 
@@ -274,7 +278,6 @@ class ConversationViewController: FullScreenViewController,
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didConfirm sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition) {
-
         switch position {
         case .left, .middle:
             guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),

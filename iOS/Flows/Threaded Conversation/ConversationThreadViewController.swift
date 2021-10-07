@@ -13,7 +13,7 @@ import StreamChat
 
 class ConversationThreadViewController: BlurredViewController, CollectionViewInputHandler {
 
-    lazy var conversationCollectionView = ConversationCollectionView()
+    lazy var conversationCollectionView = ConversationThreadCollectionView()
     lazy var collectionViewManager = ConversationCollectionViewManager(with: self.conversationCollectionView)
 
     let messageController: ChatMessageController
