@@ -24,7 +24,8 @@ extension MainCoordinator {
                 if let deepLink = object {
                     self.handle(deeplink: deepLink)
                 } else {
-                    self.runHomeFlow()
+                    self.runArchiveFlow()
+                    //self.runHomeFlow()
                 }
             }
         case .failed(_):
@@ -32,20 +33,36 @@ extension MainCoordinator {
         }
     }
 
-    func runHomeFlow() {
-        if let homeCoordinator = self.childCoordinator as? HomeCoordinator {
+    #warning("Replace with HomeCoordinator after beta features are complete.")
+    func runArchiveFlow() {
+        if let coordinator = self.childCoordinator as? ArchiveCoordinator {
             if let deepLink = self.deepLink {
-                homeCoordinator.handle(deeplink: deepLink)
+                coordinator.handle(deeplink: deepLink)
             }
         } else {
             self.removeChild()
-            let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
-            self.router.setRootModule(homeCoordinator, animated: true)
-            self.addChildAndStart(homeCoordinator, finishedHandler: { _ in
+            let coordinator = ArchiveCoordinator(router: self.router, deepLink: self.deepLink)
+            self.router.setRootModule(coordinator, animated: true)
+            self.addChildAndStart(coordinator, finishedHandler: { _ in
                 // If the home coordinator ever finishes, put handling logic here.
             })
         }
     }
+
+//    func runHomeFlow() {
+//        if let homeCoordinator = self.childCoordinator as? HomeCoordinator {
+//            if let deepLink = self.deepLink {
+//                homeCoordinator.handle(deeplink: deepLink)
+//            }
+//        } else {
+//            self.removeChild()
+//            let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
+//            self.router.setRootModule(homeCoordinator, animated: true)
+//            self.addChildAndStart(homeCoordinator, finishedHandler: { _ in
+//                // If the home coordinator ever finishes, put handling logic here.
+//            })
+//        }
+//    }
 
     func logOutChat() {
         ChatClient.shared.disconnect()

@@ -9,6 +9,17 @@
 import Foundation
 import StreamChat
 
+#warning("Remove after beta features are complete.")
+extension ArchiveCoordinator: ToastSchedulerDelegate {
+
+    nonisolated func didInteractWith(type: ToastType, deeplink: DeepLinkable?) {
+        Task.onMainActor {
+            guard let link = deeplink else { return }
+            self.handle(deeplink: link)
+        }
+    }
+}
+
 class ArchiveCoordinator: PresentableCoordinator<Void> {
 
     private lazy var archiveVC: ArchiveViewController = {
@@ -27,6 +38,8 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
         }
+
+        ToastScheduler.shared.delegate = self
     }
 
     func handle(deeplink: DeepLinkable) {
