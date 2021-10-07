@@ -26,6 +26,7 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
 
     #warning("Remove after beta")
     private let connectionConfig = ManageableCellRegistration<ConnectionRequestCell>().provider
+    var didUpdateConnection: CompletionOptional = nil
 
     // MARK: - Cell Dequeueing
 
@@ -42,9 +43,13 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
         case .notice(let notice):
             switch notice.type {
             case .connectionRequest:
-                return collectionView.dequeueConfiguredReusableCell(using: self.connectionConfig,
-                                                                    for: indexPath,
-                                                                    item: notice)
+                let cell = collectionView.dequeueConfiguredReusableCell(using: self.connectionConfig,
+                                                                        for: indexPath,
+                                                                        item: notice)
+                cell.content.didUpdateConnection = { [unowned self] _ in
+                    self.didUpdateConnection?()
+                }
+                return cell
             default:
                 return nil
             }

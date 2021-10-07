@@ -32,10 +32,11 @@ extension HomeCoordinator: HomeViewControllerDelegate {
     private func handle(notice: SystemNotice) {
         switch notice.type {
         case .alert:
-            #warning("Replace")
-//            guard let conversationId = notice.attributes?["conversationId"] as? String, let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) else { return }
-//            self.startConversationFlow(for: conversation.conversationType)
             break
+//            if let conversationID = notice.attributes?["conversationId"] as? ChannelId,
+//                let conversation = ChatClient.shared.channelController(for: conversationID).conversation {
+//                self.startConversationFlow(for: conversation)
+//            }
         case .connectionRequest:
             break
         case .connectionConfirmed:
@@ -44,6 +45,8 @@ extension HomeCoordinator: HomeViewControllerDelegate {
             break
         case .system:
             break
+        case .rsvps:
+            break 
         }
     }
 

@@ -107,16 +107,15 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
 
     nonisolated func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType) {
 
-        switch item {
-        case .notice(let notice):
-            break 
-        case .conversation(let conversationID):
-            Task.onMainActor {
+        Task.onMainActor {
+            switch item {
+            case .notice(let notice):
+                self.handle(notice: notice)
+            case .conversation(let conversationID):
                 if let conversation = ChatClient.shared.channelController(for: conversationID).conversation {
                     self.startConversationFlow(for: conversation)
                 }
             }
-
         }
     }
 
@@ -132,5 +131,25 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
             }
         })
         self.router.present(coordinator, source: self.archiveVC, animated: true)
+    }
+
+    private func handle(notice: SystemNotice) {
+        switch notice.type {
+        case .alert:
+            if let conversationID = notice.attributes?["conversationId"] as? ChannelId,
+                let conversation = ChatClient.shared.channelController(for: conversationID).conversation {
+                self.startConversationFlow(for: conversation)
+            }
+        case .connectionRequest:
+            break
+        case .connectionConfirmed:
+            break
+        case .messageRead:
+            break
+        case .system:
+            break
+        case .rsvps:
+            break
+        }
     }
 }

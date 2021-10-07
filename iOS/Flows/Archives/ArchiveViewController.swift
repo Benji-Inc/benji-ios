@@ -150,5 +150,9 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
                 }
             }
         }).store(in: &self.cancellables)
+
+        self.dataSource.didUpdateConnection = { [unowned self] in
+            self.dataSource.reloadSections([.notices])
+        }
     }
 }
