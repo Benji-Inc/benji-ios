@@ -18,6 +18,32 @@ class ArchiveCollectionViewLayout: UICollectionViewCompositionalLayout {
             guard let sectionType = ArchiveCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
 
             switch sectionType {
+            case .notices:
+                // Item
+                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+                let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                item.contentInsets = NSDirectionalEdgeInsets(top: Theme.contentOffset, leading: Theme.contentOffset, bottom: 0, trailing: Theme.contentOffset)
+
+                // Group
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(200))
+                let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+
+                // Section
+                let section = NSCollectionLayoutSection(group: group)
+                section.orthogonalScrollingBehavior = .groupPagingCentered
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+                section.visibleItemsInvalidationHandler = { (items, offset, environment) in
+                    items.forEach { item in
+                        let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
+                        let minScale: CGFloat = 0.95
+                        let maxScale: CGFloat = 1.0
+                        let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
+                        item.transform = CGAffineTransform(scaleX: scale, y: scale)
+                    }
+                }
+
+                return section
+                
             case .conversations:
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120))
@@ -30,7 +56,7 @@ class ArchiveCollectionViewLayout: UICollectionViewCompositionalLayout {
 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: Theme.contentOffset - 8, leading: 0, bottom: Theme.contentOffset.doubled + Theme.contentOffset, trailing: 0)
+                section.contentInsets = NSDirectionalEdgeInsets(top: Theme.contentOffset - 8, leading: 0, bottom: Theme.contentOffset.doubled.doubled, trailing: 0)
 
                 return section
             }

@@ -81,10 +81,8 @@ class CollectionViewManagerCell: UICollectionViewListCell {
         // Get the system default background configuration for a plain style list cell in the current state.
         var backgroundConfig = UIBackgroundConfiguration.listPlainCell().updated(for: state)
 
-        // Customize the background color to use the tint color when the cell is highlighted or selected.
-        if state.isHighlighted || state.isSelected {
-            backgroundConfig.backgroundColor = Color.clear.color
-        }
+        // Customize the background color to be clear, no matter the state.
+        backgroundConfig.backgroundColor = Color.clear.color
 
         // Apply the background configuration to the cell.
         self.backgroundConfiguration = backgroundConfig

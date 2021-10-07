@@ -1,5 +1,5 @@
 //
-//  NewConversationCell.swift
+//  ConversationCell.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 2/17/21.

@@ -10,6 +10,7 @@ import Foundation
 import Combine
 import ParseLiveQuery
 import Parse
+import TMROLocalization
 
 class NoticeSupplier {
 
@@ -25,25 +26,50 @@ class NoticeSupplier {
     @Published private(set) var noticeStatus: NoticeStatus? = nil
 
     func loadNotices() async {
-        do {
+//        do {
             #warning("Figure out why async let isn't working here")
-            let localNotices = await self.getLocalNotices()
-            let serverNotices = try await Notice.fetchAll()
-
-            var allNotices = serverNotices.compactMap { notice in
-                return SystemNotice(with: notice)
-            }
-
-            allNotices.append(contentsOf: localNotices)
-
-            self.notices = allNotices.sorted()
-        } catch {
-            logDebug(error)
-        }
+            self.notices = await self.getLocalNotices().sorted()
+//            let serverNotices = try await Notice.fetchAll()
+//
+//            var allNotices = serverNotices.compactMap { notice in
+//                return SystemNotice(with: notice)
+//            }
+//
+//            allNotices.append(contentsOf: localNotices)
+//
+//            self.notices = allNotices.sorted()
+//        } catch {
+//            logDebug(error)
+//        }
     }
 
     private func getLocalNotices() async -> [SystemNotice] {
-        return []
+        do {
+            var notices: [SystemNotice] = []
+
+            let connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])
+            notices = connections.filter({ connection in
+                return connection.status == .invited
+            }).compactMap { connection in
+                return SystemNotice(withConneciton: connection)
+            }
+
+            let reservations = await Reservation.getAllUnclaimed()
+            if reservations.count > 0 {
+                let text = LocalizedString(id: "", arguments: [String(reservations.count)], default: "You have @(count) RSVP's left.\nTap to invite someone.")
+                let reservationNotice = SystemNotice(createdAt: Date(),
+                                                     notice: nil,
+                                                     type: .rsvps,
+                                                     priority: 2,
+                                                     body: localized(text),
+                                                     attributes: nil)
+                notices.append(reservationNotice)
+            }
+
+            return notices
+        } catch {
+            return []
+        }
     }
 
     private func subscribeToUpdates() {

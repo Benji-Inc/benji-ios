@@ -60,7 +60,8 @@ class MainCoordinator: Coordinator<Void> {
                 self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
 #if APPCLIP
 #elseif !NOTIFICATION
-                    self.runHomeFlow()
+                    self.runArchiveFlow()
+                    //self.runHomeFlow()
 #endif
                     self.subscribeToUserUpdates()
                 }
@@ -76,7 +77,8 @@ class MainCoordinator: Coordinator<Void> {
             if let user = User.current(), user.isAuthenticated {
 #if !APPCLIP && !NOTIFICATION
                 // Code you don't want to use in your App Clip.
-                self.runHomeFlow()
+                self.runArchiveFlow()
+                //self.runHomeFlow()
 #else
                 // Code your App Clip may access.
 #endif
@@ -87,7 +89,8 @@ class MainCoordinator: Coordinator<Void> {
             if let user = User.current(), user.isAuthenticated {
 #if !APPCLIP && !NOTIFICATION
                 // Code you don't want to use in your App Clip.
-                self.runHomeFlow()
+                self.runArchiveFlow()
+                //self.runHomeFlow()
 #else
                 // Code your App Clip may access.
 #endif

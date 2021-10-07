@@ -9,6 +9,17 @@
 import Foundation
 import StreamChat
 
+#warning("Remove after beta features are complete.")
+extension ArchiveCoordinator: ToastSchedulerDelegate {
+
+    nonisolated func didInteractWith(type: ToastType, deeplink: DeepLinkable?) {
+        Task.onMainActor {
+            guard let link = deeplink else { return }
+            self.handle(deeplink: link)
+        }
+    }
+}
+
 class ArchiveCoordinator: PresentableCoordinator<Void> {
 
     private lazy var archiveVC: ArchiveViewController = {
@@ -26,6 +37,14 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
 
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
+        }
+
+        ToastScheduler.shared.delegate = self
+
+        self.archiveVC.addButton.didSelect { [unowned self] in
+            Task {
+                await self.createConversation()
+            }.add(to: self.archiveVC.taskPool)
         }
     }
 
@@ -59,15 +78,40 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
             break
         }
     }
+
+    #warning("Remove after Beta")
+    func createConversation() async {
+
+        let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
+
+        do {
+            let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
+                                                                     name: nil,
+                                                                     imageURL: nil,
+                                                                     team: nil,
+                                                                     members: [],
+                                                                     isCurrentUserMember: true,
+                                                                     messageOrdering: .bottomToTop,
+                                                                     invites: [],
+                                                                     extraData: [:])
+
+            try await controller.synchronize()
+            self.startConversationFlow(for: controller.conversation)
+        } catch {
+            print(error)
+        }
+    }
 }
 
 extension ArchiveCoordinator: ArchiveViewControllerDelegate {
 
     nonisolated func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType) {
 
-        switch item {
-        case .conversation(let conversationID):
-            Task.onMainActor {
+        Task.onMainActor {
+            switch item {
+            case .notice(let notice):
+                self.handle(notice: notice)
+            case .conversation(let conversationID):
                 if let conversation = ChatClient.shared.channelController(for: conversationID).conversation {
                     self.startConversationFlow(for: conversation)
                 }
@@ -87,5 +131,36 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
             }
         })
         self.router.present(coordinator, source: self.archiveVC, animated: true)
+    }
+
+    private func handle(notice: SystemNotice) {
+        switch notice.type {
+        case .alert:
+            if let conversationID = notice.attributes?["conversationId"] as? ChannelId,
+                let conversation = ChatClient.shared.channelController(for: conversationID).conversation {
+                self.startConversationFlow(for: conversation)
+            }
+        case .connectionRequest:
+            break
+        case .connectionConfirmed:
+            break
+        case .messageRead:
+            break
+        case .system:
+            break
+        case .rsvps:
+            self.startPeopleFlow()
+        }
+    }
+
+    func startPeopleFlow() {
+        self.removeChild()
+        let coordinator = PeopleCoordinator(includeConnections: false,
+                                            router: self.router,
+                                            deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { result in
+            coordinator.toPresentable().dismiss(animated: true)
+        }
+        self.router.present(coordinator, source: self.archiveVC)
     }
 }
