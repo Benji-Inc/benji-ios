@@ -181,5 +181,22 @@ extension Reservation: UIActivityItemSource {
     func activityViewControllerLinkMetadata(_: UIActivityViewController) -> LPLinkMetadata? {
         return self.metadata
     }
+
+    static func getAllUnclaimed() async -> [Reservation] {
+        let query = Reservation.query()
+        query?.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
+        query?.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
+        do {
+            let objects = try await query?.findObjectsInBackground()
+            if let reservations = objects as? [Reservation] {
+                return reservations
+            } else {
+                return []
+            }
+        } catch {
+            logDebug(error)
+            return []
+        }
+    }
 }
 

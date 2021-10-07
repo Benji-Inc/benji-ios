@@ -135,7 +135,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             data[.connections] = []
         }
 
-        await self.loadUnclaimedReservations()
+        self.reservations = await Reservation.getAllUnclaimed()
 
         data[.contacts] = await ContactsManger.shared.fetchContacts().map({ contact in
             let reservation = self.reservations.first { reservation in
@@ -147,19 +147,5 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
         })
 
         return data
-    }
-
-    private func loadUnclaimedReservations() async {
-        let query = Reservation.query()
-        query?.whereKey(ReservationKey.createdBy.rawValue, equalTo: User.current()!)
-        query?.whereKey(ReservationKey.isClaimed.rawValue, equalTo: false)
-        do {
-            let objects = try await query?.findObjectsInBackground()
-            if let reservations = objects as? [Reservation] {
-                self.reservations = reservations
-            }
-        } catch {
-            logDebug(error)
-        }
     }
 }

@@ -25,6 +25,7 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
     private let conversationConfig = ManageableCellRegistration<ConversationCell>().provider
 
     #warning("Remove after beta")
+    private let reservationConfig = ManageableCellRegistration<ReservationCell>().provider
     private let connectionConfig = ManageableCellRegistration<ConnectionRequestCell>().provider
     var didUpdateConnection: CompletionOptional = nil
 
@@ -50,6 +51,10 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
                     self.didUpdateConnection?()
                 }
                 return cell
+            case .rsvps:
+                return collectionView.dequeueConfiguredReusableCell(using: self.reservationConfig,
+                                                                    for: indexPath,
+                                                                    item: notice)
             default:
                 return nil
             }
