@@ -30,7 +30,7 @@ class ArchiveCollectionViewLayout: UICollectionViewCompositionalLayout {
 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
-                //section.orthogonalScrollingBehavior = .groupPagingCentered
+                section.orthogonalScrollingBehavior = .groupPagingCentered
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
                 section.visibleItemsInvalidationHandler = { (items, offset, environment) in
                     items.forEach { item in
