@@ -27,7 +27,7 @@ struct SystemNotice: Noticeable, Comparable {
     init(createdAt: Date?,
          notice: Notice?,
          type: Notice.NoticeType,
-         priority: Int?,
+         priority: Int,
          body: String?,
          attributes: [String: AnyHashable]?) {
 
@@ -47,6 +47,15 @@ struct SystemNotice: Noticeable, Comparable {
                   priority: notice.priority!,
                   body: notice.body,
                   attributes: notice.attributes)
+    }
+
+    init(withConneciton connection: Connection) {
+        self.init(createdAt: connection.createdAt,
+                  notice: nil,
+                  type: .connectionRequest,
+                  priority: 1,
+                  body: nil,
+                  attributes: nil)
     }
 
     static func == (lhs: SystemNotice, rhs: SystemNotice) -> Bool {
