@@ -40,6 +40,12 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         }
 
         ToastScheduler.shared.delegate = self
+
+        self.archiveVC.addButton.didSelect { [unowned self] in
+            Task {
+                await self.createConversation()
+            }.add(to: self.archiveVC.taskPool)
+        }
     }
 
     func handle(deeplink: DeepLinkable) {
@@ -70,6 +76,29 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
 //            }
         default:
             break
+        }
+    }
+
+    #warning("Remove after Beta")
+    func createConversation() async {
+
+        let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
+
+        do {
+            let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
+                                                                     name: nil,
+                                                                     imageURL: nil,
+                                                                     team: nil,
+                                                                     members: [],
+                                                                     isCurrentUserMember: true,
+                                                                     messageOrdering: .bottomToTop,
+                                                                     invites: [],
+                                                                     extraData: [:])
+
+            try await controller.synchronize()
+            self.startConversationFlow(for: controller.conversation)
+        } catch {
+            print(error)
         }
     }
 }

@@ -22,6 +22,9 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
 
     // MARK: - UI
 
+    #warning("Remove after Beta")
+    let addButton = Button()
+
     private(set) var channelListController: ChatChannelListController?
 
     lazy var segmentedControl: UISegmentedControl = {
@@ -52,7 +55,8 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
 
-        self.view.addSubview(self.segmentedControl)
+        #warning("Add segmentcontrol back in when Beta is complete.")
+       // self.view.addSubview(self.segmentedControl)
         self.segmentedControl.selectedSegmentIndex = 0
 
         guard let query = ArchiveScope(rawValue: self.segmentedControl.selectedSegmentIndex)?.query else { return }
@@ -62,6 +66,9 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
             await self.loadData()
             self.subscribeToUpdates()
         }
+
+        self.view.addSubview(self.addButton)
+        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightPurple))
     }
 
     override func viewDidLayoutSubviews() {
@@ -73,6 +80,11 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
         self.segmentedControl.centerOnX()
         self.segmentedControl.height = 44
         self.segmentedControl.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+
+        self.addButton.squaredSize = 60
+        self.addButton.makeRound()
+        self.addButton.centerOnX()
+        self.addButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
     }
 
     // MARK: Data Loading
