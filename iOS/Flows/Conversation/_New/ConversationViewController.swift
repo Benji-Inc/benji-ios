@@ -168,7 +168,10 @@ class ConversationViewController: FullScreenViewController,
         }.store(in: &self.cancellables)
 
         self.conversationController?.typingUsersPublisher.mainSink { [unowned self] users in
-            self.messageInputAccessoryView.updateTypingActivity(with: users)
+            let nonMeUsers = users.filter { user in
+                return user.userObjectID != User.current()?.objectId
+            }
+            self.messageInputAccessoryView.updateTypingActivity(with: nonMeUsers)
         }.store(in: &self.cancellables)
     }
     
