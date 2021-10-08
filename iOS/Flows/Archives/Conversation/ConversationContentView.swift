@@ -44,9 +44,6 @@ class ConversationContentView: View {
     }
 
     func configure(with item: Conversation) {
-        guard self.currentItem?.title != item.title ||
-                self.currentItem?.lastActiveMembers != item.lastActiveMembers ||
-                self.currentItem?.latestMessages.first != item.latestMessages.first else { return }
 
         defer {
             self.currentItem = item
