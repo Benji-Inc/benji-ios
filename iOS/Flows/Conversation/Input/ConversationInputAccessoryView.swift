@@ -32,8 +32,6 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
         self.inputContainerView.insertSubview(self.alertProgressView, belowSubview: self.textView)
         self.alertProgressView.set(backgroundColor: .red)
         self.alertProgressView.size = .zero
-
-        self.activityBar.update(text: "This is a bit of text that is long.")
     }
 
     override func layoutSubviews() {
@@ -121,16 +119,18 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
 
     func updateTypingActivity(with users: Set<ChatUser>) {
         var text: String = ""
-
+        var names: [String] = []
         for (index, user) in users.enumerated() {
             if users.count == 1 || index == users.count - 1 {
-                text.append("\(user.givenName) is typing")
+                text.append("\(user.givenName) is typing...")
             } else {
                 text.append("\(user.givenName), ")
             }
+
+            names.append(user.givenName)
         }
 
-        self.activityBar.update(text: text)
+        self.activityBar.update(text: text, with: names)
     }
 
     func edit(message: Messageable) {
