@@ -31,6 +31,8 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
         self.inputContainerView.insertSubview(self.alertProgressView, belowSubview: self.textView)
         self.alertProgressView.set(backgroundColor: .red)
         self.alertProgressView.size = .zero
+
+        self.activityBar.update(text: "This is a bit of text that is long.")
     }
 
     override func layoutSubviews() {

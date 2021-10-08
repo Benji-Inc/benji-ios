@@ -36,7 +36,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         case right
     }
 
-    static let preferredHeight: CGFloat = 54.0
+    static let preferredHeight: CGFloat = 54.0 + InputActivityBar.height
     static let maxHeight: CGFloat = 200.0
 
     var alertAnimator: UIViewPropertyAnimator?
@@ -71,7 +71,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     private(set) var attachmentHeightAnchor: NSLayoutConstraint?
 
     override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return CGSize(width: size.width, height: ConversationInputAccessoryView.preferredHeight)
+        return CGSize(width: size.width, height: SwipeableInputAccessoryView.preferredHeight)
     }
 
     override var intrinsicContentSize: CGSize {
@@ -158,8 +158,14 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         let guide = self.layoutMarginsGuide
         let horizontalOffset: CGFloat = Theme.contentOffset
 
+        self.activityBar.translatesAutoresizingMaskIntoConstraints = false
+        self.activityBar.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
+        self.activityBar.heightAnchor.constraint(equalToConstant: InputActivityBar.height).isActive = true
+        self.activityBar.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -horizontalOffset).isActive = true
+        self.activityBar.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: horizontalOffset).isActive = true
+
         self.inputContainerView.translatesAutoresizingMaskIntoConstraints = false
-        self.inputContainerView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
+        self.inputContainerView.topAnchor.constraint(equalTo: self.activityBar.bottomAnchor).isActive = true
         self.inputContainerView.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -10).isActive = true
 
         self.inputContainerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -horizontalOffset).isActive = true

@@ -7,14 +7,30 @@
 //
 
 import Foundation
+import TMROLocalization
 
 class InputActivityBar: View {
 
-    static let height: CGFloat = 50
+    static let height: CGFloat = 28
+    private let label = Label(font: .small, textColor: .background4)
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .red)
+        self.set(backgroundColor: .clear)
+        self.addSubview(self.label)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.label.setSize(withWidth: self.width - Theme.contentOffset)
+        self.label.centerOnY()
+        self.label.pin(.left, padding: 6)
+    }
+
+    func update(text: Localized) {
+        self.label.setText(text)
+        self.layoutNow()
     }
 }
