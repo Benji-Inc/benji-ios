@@ -62,17 +62,6 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
         self.textView.setPlaceholder(for: self.currentMessageKind)
     }
 
-    override func handleTextChange(_ text: String) {
-        super.handleTextChange(text)
-
-        #warning("Replace")
-//        guard let conversationDisplayable = self.activeConversation,
-//            text.count > 0,
-//              case Conversation.conversation = conversationDisplayable.conversationType else { return }
-//        // Twilio throttles this call to every 5 seconds
-//        conversation.typing()
-    }
-
     override func updateInputType() {
         super.updateInputType()
 //

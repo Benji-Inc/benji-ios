@@ -65,6 +65,12 @@ class ConversationViewController: FullScreenViewController,
         self.conversationHeader.didSelect { [unowned self] in
             self.didTapConversationTitle?()
         }
+
+        self.messageInputAccessoryView.textView.textDidUpdate = { [unowned self] text in
+            if let enabled = self.conversationController?.areTypingEventsEnabled, enabled {
+                self.conversationController?.sendKeystrokeEvent(completion: nil)
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -159,6 +165,10 @@ class ConversationViewController: FullScreenViewController,
 
         self.conversationController?.memberEventPublisher.mainSink { [unowned self] _ in
             self.conversationHeader.configure(with: self.conversation)
+        }.store(in: &self.cancellables)
+
+        self.conversationController?.typingUsersPublisher.mainSink { [unowned self] users in
+            print(users)
         }.store(in: &self.cancellables)
     }
     
