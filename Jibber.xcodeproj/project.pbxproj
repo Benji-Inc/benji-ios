@@ -66,6 +66,7 @@
 		D60F95F02665A5E400CF8766 /* ConnectionRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */; };
 		D611D97426FD184700E51ABC /* LaunchManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97326FD184700E51ABC /* LaunchManager+Extensions.swift */; };
 		D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */; };
+		D6123E522710BFB000F90D30 /* InputActivityBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6123E512710BFB000F90D30 /* InputActivityBar.swift */; };
 		D614F831270F9FCE0000D15F /* ReservationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614F830270F9FCE0000D15F /* ReservationCell.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592D824FAD78600B63412 /* AttachmentCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */; };
@@ -880,6 +881,7 @@
 		D60F95EF2665A5E400CF8766 /* ConnectionRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionRequestCell.swift; sourceTree = "<group>"; };
 		D611D97326FD184700E51ABC /* LaunchManager+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LaunchManager+Extensions.swift"; sourceTree = "<group>"; };
 		D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCoordinator+Launch.swift"; sourceTree = "<group>"; };
+		D6123E512710BFB000F90D30 /* InputActivityBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputActivityBar.swift; sourceTree = "<group>"; };
 		D614F830270F9FCE0000D15F /* ReservationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationCell.swift; sourceTree = "<group>"; };
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D724FAD78600B63412 /* AttachmentCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewManager.swift; sourceTree = "<group>"; };
@@ -2204,6 +2206,7 @@
 			isa = PBXGroup;
 			children = (
 				D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */,
+				D6123E512710BFB000F90D30 /* InputActivityBar.swift */,
 			);
 			path = "Swipeable Input";
 			sourceTree = "<group>";
@@ -2898,6 +2901,7 @@
 				D63D5C97265811B000543200 /* URL+Extensions.swift in Sources */,
 				802C448A26CC76CC00A333A4 /* Logger.swift in Sources */,
 				D64DD8B223CE403D0039DC5A /* SwitchableContentViewController.swift in Sources */,
+				D6123E522710BFB000F90D30 /* InputActivityBar.swift in Sources */,
 				80FD049F26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
 				D6629C7525AD254C002C3B92 /* ConfettiView.swift in Sources */,
 				D6730ECB2649F14F00B5DC16 /* AVURLAsset+Extension.swift in Sources */,

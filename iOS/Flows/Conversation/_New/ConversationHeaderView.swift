@@ -21,6 +21,8 @@ class ConversationHeaderView: View {
 
     private var cancellables = Set<AnyCancellable>()
 
+    private var currentConversation: Conversation?
+
     deinit {
         self.cancellables.forEach { cancellable in
             cancellable.cancel()
@@ -49,8 +51,17 @@ class ConversationHeaderView: View {
     }
 
     func configure(with conversation: Conversation) {
-        self.label.setText(conversation.title)
-        self.descriptionLabel.setText(conversation.description)
+
+        defer {
+            self.currentConversation = conversation
+        }
+
+        if self.currentConversation?.title != conversation.title {
+            self.label.setText(conversation.title)
+            self.descriptionLabel.setText(conversation.description)
+        }
+
+        guard self.currentConversation?.lastActiveMembers != conversation.lastActiveMembers else { return }
 
         let members = conversation.lastActiveMembers.filter { member in
             return member.id != ChatClient.shared.currentUserId

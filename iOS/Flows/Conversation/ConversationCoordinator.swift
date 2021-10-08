@@ -64,7 +64,8 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
         }
 
         self.conversationVC.didTapConversationTitle = { [unowned self] in
-            guard let conversationController = self.conversationVC.conversationController else { return }
+            guard let conversationController = self.conversationVC.conversationController,
+            conversationController.conversation?.membership?.memberRole.rawValue == "owner" else { return }
             self.presentConversationTitleAlert(for: conversationController)
         }
     }

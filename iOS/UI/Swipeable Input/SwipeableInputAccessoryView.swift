@@ -36,7 +36,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         case right
     }
 
-    static let preferredHeight: CGFloat = 54.0
+    static let preferredHeight: CGFloat = 54.0 + InputActivityBar.height
     static let maxHeight: CGFloat = 200.0
 
     var alertAnimator: UIViewPropertyAnimator?
@@ -47,6 +47,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         }
     }
 
+    let activityBar = InputActivityBar()
     let inputContainerView = View()
     let attachmentView = AttachmentView()
     /// A blue view placed behind the text input field.
@@ -54,7 +55,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     /// Text view for users to input their message.
     lazy var textView = InputTextView(with: self)
     let animationView = AnimationView.with(animation: .loading)
-    let plusAnimationView = AnimationView.with(animation: .plusToX)
     let overlayButton = UIButton()
     var cancellables = Set<AnyCancellable>()
 
@@ -68,18 +68,17 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     var currentMessageKind: MessageKind = .text(String())
     private var sendable: SendableObject?
 
-    private(set) var inputLeadingContstaint: NSLayoutConstraint?
     private(set) var attachmentHeightAnchor: NSLayoutConstraint?
 
     override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return CGSize(width: size.width, height: ConversationInputAccessoryView.preferredHeight)
+        return CGSize(width: size.width, height: SwipeableInputAccessoryView.preferredHeight)
     }
 
     override var intrinsicContentSize: CGSize {
         var newSize = self.bounds.size
 
         if self.textView.bounds.size.height > 0.0 {
-            newSize.height = self.textView.bounds.size.height + 20.0
+            newSize.height = self.textView.bounds.size.height + 20.0 + InputActivityBar.height
         }
 
         if let constraint = self.attachmentHeightAnchor, constraint.constant > 0 {
@@ -113,9 +112,10 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
         self.set(backgroundColor: .clear)
 
-        self.addSubview(self.plusAnimationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .autoReverse
+
+        self.addSubview(self.activityBar)
 
         self.addSubview(self.inputContainerView)
         self.inputContainerView.set(backgroundColor: .clear)
@@ -132,9 +132,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
         self.inputContainerView.layer.masksToBounds = true
         self.inputContainerView.layer.borderWidth = Theme.borderWidth
-        self.inputContainerView.layer.maskedCorners = [.layerMinXMaxYCorner,
-                                                       .layerMaxXMinYCorner,
-                                                       .layerMinXMinYCorner]
         self.inputContainerView.layer.cornerRadius = Theme.cornerRadius
 
         self.setupConstraints()
@@ -159,21 +156,20 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.translatesAutoresizingMaskIntoConstraints = false
 
         let guide = self.layoutMarginsGuide
+        let horizontalOffset: CGFloat = Theme.contentOffset
 
-        self.plusAnimationView.translatesAutoresizingMaskIntoConstraints = false
-        self.plusAnimationView.bottomAnchor.constraint(equalTo: self.textView.bottomAnchor).isActive = true
-        self.plusAnimationView.heightAnchor.constraint(equalToConstant: 43).isActive = true
-        self.plusAnimationView.widthAnchor.constraint(equalToConstant: 43).isActive = true
-        self.plusAnimationView.leadingAnchor.constraint(equalTo: guide.leadingAnchor).isActive = true
+        self.activityBar.translatesAutoresizingMaskIntoConstraints = false
+        self.activityBar.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
+        self.activityBar.heightAnchor.constraint(equalToConstant: InputActivityBar.height).isActive = true
+        self.activityBar.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -horizontalOffset).isActive = true
+        self.activityBar.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: horizontalOffset).isActive = true
 
         self.inputContainerView.translatesAutoresizingMaskIntoConstraints = false
-        self.inputContainerView.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
+        self.inputContainerView.topAnchor.constraint(equalTo: self.activityBar.bottomAnchor).isActive = true
         self.inputContainerView.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -10).isActive = true
 
-        let leadingConstant: CGFloat = 53
-        self.inputLeadingContstaint = self.inputContainerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: leadingConstant)
-        self.inputLeadingContstaint?.isActive = true
-        self.inputContainerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor).isActive = true
+        self.inputContainerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -horizontalOffset).isActive = true
+        self.inputContainerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: horizontalOffset).isActive = true
 
         self.attachmentView.leadingAnchor.constraint(equalTo: self.inputContainerView.leadingAnchor).isActive = true
         self.attachmentView.trailingAnchor.constraint(equalTo: self.inputContainerView.trailingAnchor).isActive = true
@@ -194,7 +190,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
                 switch event {
                 case .didHide(_):
                     self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
-                    self.plusAnimationView.play(toProgress: 0.0)
                 case .didShow(_):
                     break
                 default:
@@ -220,10 +215,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
                 }
             }
-        }
-
-        self.plusAnimationView.didSelect { [unowned self] in
-            self.updateInputType()
         }
 
         self.textView.confirmationView.button.didSelect { [unowned self] in

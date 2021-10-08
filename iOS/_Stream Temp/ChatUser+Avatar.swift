@@ -11,12 +11,13 @@ import StreamChat
 
 extension ChatUser: Avatar {
 
+    #warning("We need to only be accessing the Parse user")
     var givenName: String {
-        return self.name ?? String()
+        return self.name?.components(separatedBy: " ").first ?? String()
     }
 
     var familyName: String {
-        return self.name ?? String()
+        return self.name?.components(separatedBy: " ").last ?? String()
     }
 
     var handle: String {
