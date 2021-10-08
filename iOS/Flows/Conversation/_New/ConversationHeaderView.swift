@@ -51,13 +51,17 @@ class ConversationHeaderView: View {
     }
 
     func configure(with conversation: Conversation) {
-        guard self.currentConversation?.title != conversation.title ||
-              self.currentConversation?.lastActiveMembers != conversation.lastActiveMembers else { return }
 
-        self.currentConversation = conversation
+        defer {
+            self.currentConversation = conversation
+        }
 
-        self.label.setText(conversation.title)
-        self.descriptionLabel.setText(conversation.description)
+        if self.currentConversation?.title != conversation.title {
+            self.label.setText(conversation.title)
+            self.descriptionLabel.setText(conversation.description)
+        }
+
+        guard self.currentConversation?.lastActiveMembers != conversation.lastActiveMembers else { return }
 
         let members = conversation.lastActiveMembers.filter { member in
             return member.id != ChatClient.shared.currentUserId
