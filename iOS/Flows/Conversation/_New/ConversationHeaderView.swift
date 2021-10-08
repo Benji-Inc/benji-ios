@@ -21,6 +21,8 @@ class ConversationHeaderView: View {
 
     private var cancellables = Set<AnyCancellable>()
 
+    private var currentConversation: Conversation?
+
     deinit {
         self.cancellables.forEach { cancellable in
             cancellable.cancel()
@@ -49,6 +51,11 @@ class ConversationHeaderView: View {
     }
 
     func configure(with conversation: Conversation) {
+        guard self.currentConversation?.title != conversation.title ||
+              self.currentConversation?.lastActiveMembers != conversation.lastActiveMembers else { return }
+
+        self.currentConversation = conversation
+
         self.label.setText(conversation.title)
         self.descriptionLabel.setText(conversation.description)
 
