@@ -73,58 +73,38 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
 
     override func updateInputType() {
         super.updateInputType()
-
-        // If keyboard, then show attachments
-        // If attachments & currentKind != .text, Then still show x
-        // If progess is greater than 0 and pressed, reset attachment view.
-        let currentType = self.textView.currentInputView
-        let currentProgress = self.plusAnimationView.currentProgress
-
-        if currentType == .keyboard {
-            if self.attachmentView.attachment.isNil {
-                let newType: InputViewType = .attachments
-                self.textView.updateInputView(type: newType)
-            } else {
-                self.attachmentView.configure(with: nil)
-            }
-
-            let toProgress: CGFloat = currentProgress == 0 ? 1.0 : 0.0
-            self.plusAnimationView.play(fromProgress: currentProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
-
-        } else if currentProgress > 0 {
-
-            let newType: InputViewType = .keyboard
-
-            if self.attachmentView.attachment.isNil {
-                let toProgress: CGFloat = currentProgress == 0 ? 1.0 : 0.0
-                self.plusAnimationView.play(fromProgress: currentProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
-            }
-            self.textView.updateInputView(type: newType)
-
-        } else {
-            // progress is greater that 0 and input type is attachments
-            self.attachmentView.messageKind = nil
-        }
-    }
-
-    override func animateInputViews(with text: String) {
-        super.animateInputViews(with: text)
-
-        let inputOffset: CGFloat
-        if text.count > 0 {
-            inputOffset = 0
-        } else {
-            inputOffset = 53
-        }
-
-        guard let constraint = self.inputLeadingContstaint, inputOffset != constraint.constant else { return }
-
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.plusAnimationView.transform = inputOffset == 0 ? CGAffineTransform(scaleX: 0.5, y: 0.5) : .identity
-            self.plusAnimationView.alpha = inputOffset == 0 ? 0.0 : 1.0
-            self.inputLeadingContstaint?.constant = inputOffset
-            self.layoutNow()
-        }
+//
+//        // If keyboard, then show attachments
+//        // If attachments & currentKind != .text, Then still show x
+//        // If progess is greater than 0 and pressed, reset attachment view.
+//        let currentType = self.textView.currentInputView
+//        let currentProgress = self.plusAnimationView.currentProgress
+//
+//        if currentType == .keyboard {
+//            if self.attachmentView.attachment.isNil {
+//                let newType: InputViewType = .attachments
+//                self.textView.updateInputView(type: newType)
+//            } else {
+//                self.attachmentView.configure(with: nil)
+//            }
+//
+//            let toProgress: CGFloat = currentProgress == 0 ? 1.0 : 0.0
+//            self.plusAnimationView.play(fromProgress: currentProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
+//
+//        } else if currentProgress > 0 {
+//
+//            let newType: InputViewType = .keyboard
+//
+//            if self.attachmentView.attachment.isNil {
+//                let toProgress: CGFloat = currentProgress == 0 ? 1.0 : 0.0
+//                self.plusAnimationView.play(fromProgress: currentProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
+//            }
+//            self.textView.updateInputView(type: newType)
+//
+//        } else {
+//            // progress is greater that 0 and input type is attachments
+//            self.attachmentView.messageKind = nil
+//        }
     }
 
     override func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
