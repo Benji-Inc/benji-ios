@@ -11,6 +11,7 @@ import Lottie
 import TMROLocalization
 import Combine
 import GestureRecognizerClosures
+import StreamChat
 
 class ConversationInputAccessoryView: SwipeableInputAccessoryView {
 
@@ -117,6 +118,20 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
     }
 
     // MARK: PUBLIC
+
+    func updateTypingActivity(with users: Set<ChatUser>) {
+        var text: String = ""
+
+        for (index, user) in users.enumerated() {
+            if users.count == 1 || index == users.count - 1 {
+                text.append("\(user.givenName) is typing")
+            } else {
+                text.append("\(user.givenName), ")
+            }
+        }
+
+        self.activityBar.update(text: text)
+    }
 
     func edit(message: Messageable) {
         switch message.kind {
