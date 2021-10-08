@@ -14,6 +14,15 @@ typealias Conversation = ChatChannel
 
 extension ChatChannel {
 
+    enum Role: String {
+        case owner
+        case member
+    }
+
+    var currentRole: Role? {
+        return Role(rawValue: self.membership?.memberRole.rawValue ?? "")
+    }
+
     var isOwnedByMe: Bool {
         return self.createdBy?.id == ChatClient.shared.currentUserId
     }
@@ -32,11 +41,11 @@ extension ChatChannel {
         } else if let weekAgo = now.subtract(component: .weekOfMonth, amount: 1), date.isBetween(now, and: weekAgo) {
             let formatter = DateFormatter()
             formatter.dateFormat = "EEEE"
-            return "Last " + formatter.string(from: date)
+            return "This " + formatter.string(from: date)
         } else if let twoWeeksAgo = now.subtract(component: .weekOfMonth, amount: 2), date.isBetween(now, and: twoWeeksAgo) {
             let formatter = DateFormatter()
             formatter.dateFormat = "EEEE"
-            return "Last Week" + formatter.string(from: date)
+            return "Last " + formatter.string(from: date)
         } else if let yearAgo = now.subtract(component: .year, amount: 1), date.isBetween(now, and: yearAgo) {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMM d"

@@ -48,33 +48,34 @@ class ConversationContentView: View {
                 self.currentItem?.lastActiveMembers != item.lastActiveMembers ||
                 self.currentItem?.latestMessages.first != item.latestMessages.first else { return }
 
-        self.currentItem = item
-
-        Task {
-            await self.display(conversation: item)
-        }
-    }
-
-    private func display(conversation: ChatChannel) async {
-        guard self.currentItem?.cid == conversation.cid else { return }
-
-        self.label.setText(conversation.title)
-
-        let members = conversation.lastActiveMembers.filter { member in
-            return member.id != ChatClient.shared.currentUserId
+        defer {
+            self.currentItem = item
         }
 
-        if let msg = conversation.latestMessages.first {
-            self.messageLabel.setText(msg.text)
+        if self.currentItem?.title != item.title {
+            self.label.setText(item.title)
         }
 
-        if !members.isEmpty {
-            self.stackedAvatarView.set(items: members)
-        } else {
-            self.stackedAvatarView.set(items: [User.current()!])
+        if self.currentItem?.lastActiveMembers != item.lastActiveMembers {
+            let members = item.lastActiveMembers.filter { member in
+                return member.id != ChatClient.shared.currentUserId
+            }
+
+            if !members.isEmpty {
+                self.stackedAvatarView.set(items: members)
+            } else {
+                self.stackedAvatarView.set(items: [User.current()!])
+            }
+
+            self.stackedAvatarView.layoutNow()
         }
 
-        self.stackedAvatarView.layoutNow()
+        if self.currentItem?.latestMessages.first != item.latestMessages.first {
+            if let msg = item.latestMessages.first {
+                self.messageLabel.setText(msg.text)
+            }
+        }
+
         self.layoutNow()
     }
 
