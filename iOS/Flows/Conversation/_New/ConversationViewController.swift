@@ -73,18 +73,46 @@ class ConversationViewController: FullScreenViewController,
                 self.conversationController?.sendKeystrokeEvent(completion: nil)
             }
         }.store(in: &self.cancellables)
+
+        self.contentContainer.addSubview(self.dateLabel)
+
+        self.collectionView.publisher(for: \.contentOffset).mainSink { _ in
+            if let ip = self.collectionView.getCentermostVisibleIndex(),
+                let itemIdendifiter = self.dataSource.itemIdentifier(for: ip) {
+
+                switch itemIdendifiter {
+                case .message(let messageID):
+                    let messageController = ChatClient.shared.messageController(cid: self.conversation.cid,
+                                                                                messageId: messageID)
+                    if let message = messageController.message {
+                        self.dateLabel.set(date: message.createdAt)
+                        self.view.layoutNow()
+                    }
+                case .loadMore:
+                    break
+                }
+            }
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         self.blurView.expandToSuperviewSize()
-        self.collectionView.expandToSuperviewSize()
 
         self.conversationHeader.height = self.conversationHeader.stackedAvatarView.itemHeight + Theme.contentOffset
         self.conversationHeader.width = self.view.width - Theme.contentOffset
         self.conversationHeader.pin(.top, padding: Theme.contentOffset.half)
         self.conversationHeader.pin(.left, padding: Theme.contentOffset.half)
+
+        self.dateLabel.setSize(withWidth: self.view.width)
+        self.dateLabel.centerOnX()
+        self.dateLabel.match(.bottom, to: .top, of: self.collectionView)
+
+        self.collectionView.expandToSuperviewWidth()
+        let padding = self.conversationHeader.height + self.dateLabel.height + 100
+        self.collectionView.pin(.top, padding: padding)
+        self.collectionView.height = self.view.height - padding
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -1,5 +1,5 @@
 //
-//  new_ConversationCollectionViewLayout.swift
+//  ConversationCollectionViewLayout.swift
 //  Jibber
 //
 //  Created by Martin Young on 9/20/21.
@@ -40,7 +40,7 @@ class ConversationCollectionViewLayout: UICollectionViewFlowLayout {
         self.itemSize = CGSize(width: collectionView.width * 0.8, height: itemHeight)
 
         let verticalSpacing = (collectionView.height - itemHeight)
-        self.sectionInset = UIEdgeInsets(top: verticalSpacing * 0.5,
+        self.sectionInset = UIEdgeInsets(top: verticalSpacing * 0.02,
                                          left: 0,
                                          bottom: verticalSpacing * 0.8,
                                          right: 0)
