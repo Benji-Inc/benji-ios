@@ -16,20 +16,20 @@ class LinkCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     override func configure(with message: Messageable,
                             previousMessage: Messageable?,
                             nextMessage: Messageable?,
-                            for layout: ConversationCollectionViewFlowLayout,
+                            for layout: ConversationThreadCollectionViewFlowLayout,
                             attributes: ConversationCollectionViewLayoutAttributes) {
 
         attributes.attributes.avatarFrame = self.getAvatarFrame(with: message, layout: layout)
         attributes.attributes.attachmentFrame = self.getAttachmentFrame(with: message, layout: layout)
     }
 
-    override func size(with message: Messageable?, for layout: ConversationCollectionViewFlowLayout) -> CGSize {
+    override func size(with message: Messageable?, for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize {
         guard let msg = message else { return .zero }
 
         return CGSize(width: layout.itemWidth, height: self.getAttachmentFrame(with: msg, layout: layout).height)
     }
 
-    private func getAttachmentFrame(with message: Messageable, layout: ConversationCollectionViewFlowLayout) -> CGRect {
+    private func getAttachmentFrame(with message: Messageable, layout: ConversationThreadCollectionViewFlowLayout) -> CGRect {
 
         let attachmentWidth = layout.itemWidth * 0.8
 
@@ -47,7 +47,7 @@ class LinkCellAttributesConfigurer: ConversationCellAttributesConfigurer {
         return rect
     }
 
-    private func getAvatarFrame(with message: Messageable, layout: ConversationCollectionViewFlowLayout) -> CGRect {
+    private func getAvatarFrame(with message: Messageable, layout: ConversationThreadCollectionViewFlowLayout) -> CGRect {
         guard let dataSource = layout.dataSource else { return .zero }
 
         var size: CGSize = .zero
@@ -61,7 +61,7 @@ class LinkCellAttributesConfigurer: ConversationCellAttributesConfigurer {
                       height: size.height)
     }
 
-    private func getAvatarPadding(for layout: ConversationCollectionViewFlowLayout) -> CGFloat {
+    private func getAvatarPadding(for layout: ConversationThreadCollectionViewFlowLayout) -> CGFloat {
         guard let dataSource = layout.dataSource else { return .zero }
         return dataSource.numberOfMembers > 2 ? 8 : 8
     }

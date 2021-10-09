@@ -20,7 +20,7 @@ class ConversationCellAttributesConfigurer {
     func configure(with message: Messageable,
                    previousMessage: Messageable?,
                    nextMessage: Messageable?,
-                   for layout: ConversationCollectionViewFlowLayout,
+                   for layout: ConversationThreadCollectionViewFlowLayout,
                    attributes: ConversationCollectionViewLayoutAttributes) {}
 
     /// Used to size an item at a given `IndexPath`.
@@ -28,6 +28,6 @@ class ConversationCellAttributesConfigurer {
     /// - Parameters:
     /// - indexPath: The `IndexPath` of the item to be displayed.
     /// The default return .zero
-    func size(with message: Messageable?, for layout: ConversationCollectionViewFlowLayout) -> CGSize { return .zero }
+    func size(with message: Messageable?, for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize { return .zero }
 }
 

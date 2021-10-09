@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConversationCollectionViewFlowLayout: UICollectionViewFlowLayout {
+class ConversationThreadCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
     private(set) var isTypingIndicatorViewHidden: Bool = true
     private var insertingIndexPaths: [IndexPath] = []

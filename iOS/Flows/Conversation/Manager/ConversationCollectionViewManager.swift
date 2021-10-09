@@ -247,7 +247,7 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        guard let conversationLayout = collectionViewLayout as? ConversationCollectionViewFlowLayout else { return .zero }
+        guard let conversationLayout = collectionViewLayout as? ConversationThreadCollectionViewFlowLayout else { return .zero }
 
         /// May not have a message because of the typing indicator
         let message = self.item(at: indexPath)
@@ -258,7 +258,7 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
 
-        guard let conversationLayout = collectionViewLayout as? ConversationCollectionViewFlowLayout else {
+        guard let conversationLayout = collectionViewLayout as? ConversationThreadCollectionViewFlowLayout else {
             return .zero
         }
 
@@ -268,7 +268,7 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
-        guard let conversationLayout = collectionViewLayout as? ConversationCollectionViewFlowLayout,
+        guard let conversationLayout = collectionViewLayout as? ConversationThreadCollectionViewFlowLayout,
             section == self.numberOfSections(in: collectionView) - 1,
             !self.isSettingReadAll else { return .zero }
 

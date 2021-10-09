@@ -21,7 +21,7 @@ class PhotoCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     override func configure(with message: Messageable,
                             previousMessage: Messageable?,
                             nextMessage: Messageable?,
-                            for layout: ConversationCollectionViewFlowLayout,
+                            for layout: ConversationThreadCollectionViewFlowLayout,
                             attributes: ConversationCollectionViewLayoutAttributes) {
 
         let avatarFrame = self.getAvatarFrame(with: message, layout: layout)
@@ -49,14 +49,14 @@ class PhotoCellAttributesConfigurer: ConversationCellAttributesConfigurer {
         }
     }
 
-    override func size(with message: Messageable?, for layout: ConversationCollectionViewFlowLayout) -> CGSize {
+    override func size(with message: Messageable?, for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize {
         guard let msg = message, let cv = layout.collectionView else { return .zero }
         let size = CGSize(width: cv.width, height: self.cellContentHeight(with: msg, for: layout))
         return size
     }
 
     private func cellContentHeight(with message: Messageable,
-                                   for layout: ConversationCollectionViewFlowLayout) -> CGFloat {
+                                   for layout: ConversationThreadCollectionViewFlowLayout) -> CGFloat {
         let attachmentFrame = self.getAttachmentFrame(for: layout)
         let size = self.getTextViewSize(with: message, for: layout)
         let bubbleFrame = self.getBubbleViewFrame(with: message, textViewSize: size, yOffset: attachmentFrame.minY, for: layout)
@@ -65,7 +65,7 @@ class PhotoCellAttributesConfigurer: ConversationCellAttributesConfigurer {
         return height
     }
 
-    private func getAttachmentFrame(for layout: ConversationCollectionViewFlowLayout) -> CGRect {
+    private func getAttachmentFrame(for layout: ConversationThreadCollectionViewFlowLayout) -> CGRect {
         guard let cv = layout.collectionView else { return .zero }
         return CGRect(x: self.horizontalPadding,
                       y: 0,
@@ -73,7 +73,7 @@ class PhotoCellAttributesConfigurer: ConversationCellAttributesConfigurer {
                       height: cv.height * 0.3)
     }
 
-    private func getAvatarFrame(with message: Messageable, layout: ConversationCollectionViewFlowLayout) -> CGRect {
+    private func getAvatarFrame(with message: Messageable, layout: ConversationThreadCollectionViewFlowLayout) -> CGRect {
         guard let cv = layout.collectionView else { return .zero }
         let xOffset: CGFloat = message.isFromCurrentUser ? cv.width - self.horizontalPadding - self.avatarSize.width - 5 : self.horizontalPadding + 5
         return CGRect(x: xOffset,
@@ -93,7 +93,7 @@ class PhotoCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     private func getBubbleViewFrame(with message: Messageable,
                                     textViewSize: CGSize,
                                     yOffset: CGFloat,
-                                    for layout: ConversationCollectionViewFlowLayout) -> CGRect {
+                                    for layout: ConversationThreadCollectionViewFlowLayout) -> CGRect {
 
         guard !message.kind.text.isEmpty else { return .zero }
 
@@ -111,7 +111,7 @@ class PhotoCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     }
 
     private func getTextViewSize(with message: Messageable,
-                                 for layout: ConversationCollectionViewFlowLayout) -> CGSize {
+                                 for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize {
         guard !message.kind.text.isEmpty else { return .zero }
         let attributed = AttributedString(message.kind.text,
                                           fontType: .smallBold,

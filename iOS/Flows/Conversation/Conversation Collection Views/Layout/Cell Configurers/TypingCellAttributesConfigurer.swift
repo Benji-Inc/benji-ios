@@ -12,7 +12,7 @@ class TypingCellAttributesConfigurer: ConversationCellAttributesConfigurer {
 
     var height: CGFloat = 44
 
-    override func size(with message: Messageable?, for layout: ConversationCollectionViewFlowLayout) -> CGSize {
+    override func size(with message: Messageable?, for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize {
         let collectionViewWidth = layout.collectionView?.bounds.width ?? 0
         let contentInset = layout.collectionView?.contentInset ?? .zero
         let inset = layout.sectionInset.horizontal + contentInset.horizontal

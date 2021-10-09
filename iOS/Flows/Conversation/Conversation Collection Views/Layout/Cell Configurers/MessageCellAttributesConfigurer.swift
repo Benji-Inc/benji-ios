@@ -19,7 +19,7 @@ class MessageCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     override func configure(with message: Messageable,
                             previousMessage: Messageable?,
                             nextMessage: Messageable?,
-                            for layout: ConversationCollectionViewFlowLayout,
+                            for layout: ConversationThreadCollectionViewFlowLayout,
                             attributes: ConversationCollectionViewLayoutAttributes) {
 
         // If no data types then display text
@@ -49,7 +49,7 @@ class MessageCellAttributesConfigurer: ConversationCellAttributesConfigurer {
         }
     }
 
-    override func size(with message: Messageable?, for layout: ConversationCollectionViewFlowLayout) -> CGSize {
+    override func size(with message: Messageable?, for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize {
         guard let msg = message else { return .zero }
 
         let itemHeight = self.cellContentHeight(with: msg, for: layout)
@@ -59,12 +59,12 @@ class MessageCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     // PRIVATE
 
     private func cellContentHeight(with message: Messageable,
-                                   for layout: ConversationCollectionViewFlowLayout) -> CGFloat {
+                                   for layout: ConversationThreadCollectionViewFlowLayout) -> CGFloat {
         let size = self.getTextViewSize(with: message, for: layout)
         return self.getBubbleViewFrame(with: message, textViewSize: size, for: layout).height
     }
 
-    private func getAvatarFrame(with message: Messageable, layout: ConversationCollectionViewFlowLayout) -> CGRect {
+    private func getAvatarFrame(with message: Messageable, layout: ConversationThreadCollectionViewFlowLayout) -> CGRect {
         guard let dataSource = layout.dataSource else { return .zero }
 
         var size: CGSize = .zero
@@ -87,7 +87,7 @@ class MessageCellAttributesConfigurer: ConversationCellAttributesConfigurer {
 
     private func getBubbleViewFrame(with message: Messageable,
                                     textViewSize: CGSize,
-                                    for layout: ConversationCollectionViewFlowLayout) -> CGRect {
+                                    for layout: ConversationThreadCollectionViewFlowLayout) -> CGRect {
 
         var xOffset: CGFloat = 0
         if message.isFromCurrentUser {
@@ -103,7 +103,7 @@ class MessageCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     }
 
     private func getTextViewSize(with message: Messageable,
-                                 for layout: ConversationCollectionViewFlowLayout) -> CGSize {
+                                 for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize {
         guard case MessageKind.text(let text) = message.kind else { return .zero }
         let attributed = AttributedString(text,
                                           fontType: .smallBold,
@@ -119,7 +119,7 @@ class MessageCellAttributesConfigurer: ConversationCellAttributesConfigurer {
         return size
     }
 
-    private func getAvatarPadding(for layout: ConversationCollectionViewFlowLayout) -> CGFloat {
+    private func getAvatarPadding(for layout: ConversationThreadCollectionViewFlowLayout) -> CGFloat {
         guard let dataSource = layout.dataSource else { return .zero }
         return dataSource.numberOfMembers > 2 ? 8 : 8
     }

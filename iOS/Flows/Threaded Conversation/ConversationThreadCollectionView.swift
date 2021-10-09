@@ -10,8 +10,8 @@ import Foundation
 
 class ConversationThreadCollectionView: CollectionView {
 
-    var conversationLayout: ConversationCollectionViewFlowLayout {
-        guard let layout = collectionViewLayout as? ConversationCollectionViewFlowLayout else {
+    var conversationLayout: ConversationThreadCollectionViewFlowLayout {
+        guard let layout = collectionViewLayout as? ConversationThreadCollectionViewFlowLayout else {
             fatalError("ConversationCollectionViewFlowLayout NOT FOUND")
         }
         return layout
@@ -22,7 +22,7 @@ class ConversationThreadCollectionView: CollectionView {
     }
 
     init() {
-        super.init(layout: ConversationCollectionViewFlowLayout())
+        super.init(layout: ConversationThreadCollectionViewFlowLayout())
         self.registerReusableViews()
         self.keyboardDismissMode = .interactive
         self.automaticallyAdjustsScrollIndicatorInsets = true 
@@ -67,7 +67,7 @@ class ConversationThreadCollectionView: CollectionView {
     override func scrollToEnd(animated: Bool = true, completion: CompletionOptional = nil) {
         var rect: CGRect = .zero
         
-        if let flowLayout = self.collectionViewLayout as? ConversationCollectionViewFlowLayout,
+        if let flowLayout = self.collectionViewLayout as? ConversationThreadCollectionViewFlowLayout,
             flowLayout.scrollDirection == .vertical {
 
             let contentHeight = flowLayout.collectionViewContentSize.height - flowLayout.readFooterHeight

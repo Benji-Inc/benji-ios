@@ -10,11 +10,11 @@ import Foundation
 
 class ContactCellAttributesConfigurer: ConversationCellAttributesConfigurer {
 
-    override func configure(with message: Messageable, previousMessage: Messageable?, nextMessage: Messageable?, for layout: ConversationCollectionViewFlowLayout, attributes: ConversationCollectionViewLayoutAttributes) {
+    override func configure(with message: Messageable, previousMessage: Messageable?, nextMessage: Messageable?, for layout: ConversationThreadCollectionViewFlowLayout, attributes: ConversationCollectionViewLayoutAttributes) {
 
     }
 
-    override func size(with message: Messageable?, for layout: ConversationCollectionViewFlowLayout) -> CGSize {
+    override func size(with message: Messageable?, for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize {
         return .zero 
     }
 }

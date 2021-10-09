@@ -13,16 +13,16 @@ class EmojiCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     private let widthRatio: CGFloat = 0.8
     var avatarSize = CGSize(width: 30, height: 36)
     
-    override func configure(with message: Messageable, previousMessage: Messageable?, nextMessage: Messageable?, for layout: ConversationCollectionViewFlowLayout, attributes: ConversationCollectionViewLayoutAttributes) {
+    override func configure(with message: Messageable, previousMessage: Messageable?, nextMessage: Messageable?, for layout: ConversationThreadCollectionViewFlowLayout, attributes: ConversationCollectionViewLayoutAttributes) {
 
     }
 
-    override func size(with message: Messageable?, for layout: ConversationCollectionViewFlowLayout) -> CGSize {
+    override func size(with message: Messageable?, for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize {
         guard let msg = message, case MessageKind.emoji(let emoji) = msg.kind else { return .zero }
         return self.getSize(for: emoji, for: layout)
     }
 
-    private func getSize(for emoji: String, for layout: ConversationCollectionViewFlowLayout) -> CGSize {
+    private func getSize(for emoji: String, for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize {
         let attributed = AttributedString(emoji,
                                           fontType: .regularBold,
                                           color: .white)
@@ -37,7 +37,7 @@ class EmojiCellAttributesConfigurer: ConversationCellAttributesConfigurer {
         return size
     }
 
-    private func getAvatarPadding(for layout: ConversationCollectionViewFlowLayout) -> CGFloat {
+    private func getAvatarPadding(for layout: ConversationThreadCollectionViewFlowLayout) -> CGFloat {
         guard let dataSource = layout.dataSource else { return .zero }
         return dataSource.numberOfMembers > 2 ? .zero : 8
     }
