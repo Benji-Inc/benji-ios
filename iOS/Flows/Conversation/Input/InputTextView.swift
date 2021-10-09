@@ -22,8 +22,8 @@ class InputTextView: ExpandingTextView {
     lazy var demoVC = KeyboardDemoViewController()
     lazy var confirmationView = AlertConfirmationView()
 
-    private(set) var currentInputView: InputViewType? 
-    var textDidUpdate: ((String) -> Void)?
+    private(set) var currentInputView: InputViewType?
+    @Published var inputText: String = ""
 
     unowned let attachmentDelegate: AttachmentViewControllerDelegate
 
@@ -72,7 +72,7 @@ class InputTextView: ExpandingTextView {
     override func textDidChange() {
         super.textDidChange()
 
-        self.textDidUpdate?(self.text)
+        self.inputText = self.text
         self.countView.udpate(with: self.text.count, max: self.maxLength)
     }
 
