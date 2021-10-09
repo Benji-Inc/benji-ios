@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 import UIKit
+import SwiftUI
 
 class ConversationViewController: FullScreenViewController,
                                   UICollectionViewDelegate,
@@ -20,6 +21,7 @@ class ConversationViewController: FullScreenViewController,
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private let conversationHeader = ConversationHeaderView()
+    private let dateLabel = ConversationDateLabel()
 
     var conversation: Conversation! { return self.conversationController?.channel }
     private(set) var conversationController: ChatChannelController?

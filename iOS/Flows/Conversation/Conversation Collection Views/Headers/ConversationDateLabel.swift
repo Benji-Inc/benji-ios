@@ -36,12 +36,29 @@ class ConversationDateLabel: Label {
     }
 
     private func getString(for date: Date) -> String {
-        
-        if date.isSameDay(as: Date.today) {
-            return "Today"
-        }
 
-        let stringDate = Date.monthAndDay.string(from: date)
-        return stringDate
+        let now = Date()
+
+        if date.isSameDay(as: now) {
+            return "Today"
+        } else if let yesterday = now.subtract(component: .day, amount: 1), date.isSameDay(as: yesterday) {
+            return "Yesterday"
+        } else if let weekAgo = now.subtract(component: .weekOfMonth, amount: 1), date.isBetween(now, and: weekAgo) {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE"
+            return "This " + formatter.string(from: date)
+        } else if let twoWeeksAgo = now.subtract(component: .weekOfMonth, amount: 2), date.isBetween(now, and: twoWeeksAgo) {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "EEEE"
+            return "Last " + formatter.string(from: date)
+        } else if let yearAgo = now.subtract(component: .year, amount: 1), date.isBetween(now, and: yearAgo) {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMM d"
+            return formatter.string(from: date)
+        } else {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMM d, yyyy"
+            return formatter.string(from: date)
+        }
     }
 }

@@ -13,10 +13,10 @@ import Foundation
 /// It automatically creates its own custom layout object.
 class ConversationCollectionView: CollectionView {
 
-    let conversationLayout: new_ConversationCollectionViewLayout
+    let conversationLayout: ConversationCollectionViewLayout
 
     init() {
-        self.conversationLayout = new_ConversationCollectionViewLayout()
+        self.conversationLayout = ConversationCollectionViewLayout()
 
         super.init(layout: self.conversationLayout)
 
