@@ -202,9 +202,9 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
             self.textView.updateInputView(type: .keyboard)
         }
 
-        self.textView.textDidUpdate = { [unowned self] text in
+        self.textView.$inputText.mainSink { text in
             self.handleTextChange(text)
-        }
+        }.store(in: &self.cancellables)
 
         self.overlayButton.didSelect { [unowned self] in
             if !self.textView.isFirstResponder {

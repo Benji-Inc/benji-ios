@@ -66,11 +66,11 @@ class ConversationViewController: FullScreenViewController,
             self.didTapConversationTitle?()
         }
 
-        self.messageInputAccessoryView.textView.textDidUpdate = { [unowned self] text in
+        self.messageInputAccessoryView.textView.$inputText.mainSink { _ in
             if let enabled = self.conversationController?.areTypingEventsEnabled, enabled {
                 self.conversationController?.sendKeystrokeEvent(completion: nil)
             }
-        }
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
