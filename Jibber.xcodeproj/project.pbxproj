@@ -1680,10 +1680,8 @@
 			isa = PBXGroup;
 			children = (
 				8024B94E26F278C8008ABF7F /* _New */,
-				D6D1500521D5E71E00CD8CE4 /* Conversation Collection Views */,
 				D67896CB2304524C0059BA75 /* ConversationCoordinator.swift */,
 				D6B2603622E6AA3800143CF0 /* Input */,
-				D6090E542377CB0F00833DA7 /* Manager */,
 			);
 			path = Conversation;
 			sourceTree = "<group>";
@@ -1876,6 +1874,8 @@
 		D66A580325DD68F9001B3F64 /* Threaded Conversation */ = {
 			isa = PBXGroup;
 			children = (
+				D6D1500521D5E71E00CD8CE4 /* Conversation Collection Views */,
+				D6090E542377CB0F00833DA7 /* Manager */,
 				D6432BF422D82CDC0016001A /* ConversationCollectionViewFlowLayout.swift */,
 				D6D1502C21D6A08300CD8CE4 /* ConversationThreadCollectionView.swift */,
 				D6D1500621D5E73D00CD8CE4 /* ConversationThreadViewController.swift */,
