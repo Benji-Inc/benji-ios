@@ -1569,6 +1569,15 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		D635F0A927136C2600A02D17 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
+				8015CA7626F3D907000F3C60 /* MessageCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		D63752C723133AC700214F63 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1669,8 +1678,7 @@
 				8024B95026F278C8008ABF7F /* ConversationViewControllerDataSource.swift */,
 				80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */,
 				D6B2603622E6AA3800143CF0 /* Input */,
-				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
-				8015CA7626F3D907000F3C60 /* MessageCell.swift */,
+				D635F0A927136C2600A02D17 /* Cells */,
 				D66A580325DD68F9001B3F64 /* Threaded Conversation */,
 			);
 			path = Conversation;
