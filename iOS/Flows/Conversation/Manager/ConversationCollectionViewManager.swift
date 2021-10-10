@@ -43,8 +43,6 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     var didTapEdit: ((Messageable, IndexPath) -> Void)?
     var willDisplayCell: ((Messageable, IndexPath) -> Void)?
     var userTyping: User?
-    private var footerView: ReadAllFooterView?
-    private var isSettingReadAll = false
     var cancellables = Set<AnyCancellable>()
 
     init(with collectionView: ConversationThreadCollectionView) {
@@ -160,60 +158,6 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     }
 
     func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath) -> UICollectionReusableView {
-
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            return self.header(for: collectionView, at: indexPath)
-        case UICollectionView.elementKindSectionFooter:
-            return self.footer(for: collectionView, at: indexPath)
-        default:
-            fatalError("UNRECOGNIZED SECTION KIND")
-        }
-    }
-
-    private func header(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let conversationCollectionView = collectionView as? ConversationThreadCollectionView else { fatalError() }
-
-        if self.isSectionReservedForTypingIndicator(indexPath.section) {
-            return conversationCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "EmptyHeader", for: indexPath)
-        }
-
-        guard let section = self.sections[safe: indexPath.section] else { fatalError() }
-
-        if indexPath.section == 0 {
-           if let topHeader = self.getTopHeader(for: section, at: indexPath, in: conversationCollectionView) {
-                return topHeader
-            }
-        }
-
-        let header = conversationCollectionView.dequeueReusableHeaderView(ConversationSectionHeader.self, for: indexPath)
-        header.configure(with: section.date)
-        
-        return header
-    }
-
-    private func getTopHeader(for section: ConversationSectionable,
-                              at indexPath: IndexPath,
-                              in collectionView: ConversationThreadCollectionView) -> UICollectionReusableView? {
-        return nil
-//        guard let index = section.firstMessageIndex, index > 0 else { return nil }
-//
-//        let moreHeader = collectionView.dequeueReusableHeaderView(LoadMoreSectionHeader.self, for: indexPath)
-//
-//        moreHeader.button.didSelect { [weak self] in
-//            guard let `self` = self else { return }
-//            Task {
-//                await moreHeader.button.handleEvent(status: .loading)
-//            }
-//            self.didSelectLoadMore(for: index)
-//        }
-//
-//        return moreHeader
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         if let cell = cell as? TypingIndicatorCell {
@@ -223,22 +167,6 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
         } else if let message = self.item(at: indexPath){
             self.willDisplayCell?(message, indexPath)
         }
-    }
-
-    private func footer(for collectionView: UICollectionView, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let conversationCollectionView = collectionView as? ConversationThreadCollectionView else { fatalError() }
-
-        guard indexPath.section == self.numberOfSections(in: collectionView) - 1 else {
-            return conversationCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: "EmptyFooter", for: indexPath)
-        }
-
-        let footer = conversationCollectionView.dequeueReusableFooterView(ReadAllFooterView.self, for: indexPath)
-//        footer.configure(hasUnreadMessages: MessageSupplier.shared.hasUnreadMessage) 
-        self.footerView = footer
-        footer.didCompleteAnimation = { [unowned self] in
-            self.setAllMessagesToRead(for: footer)
-        }
-        return footer
     }
 
     // MARK: FLOW LAYOUT
@@ -265,29 +193,6 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
         return conversationLayout.sizeForHeader(at: section, with: collectionView)
     }
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForFooterInSection section: Int) -> CGSize {
-        guard let conversationLayout = collectionViewLayout as? ConversationThreadCollectionViewFlowLayout,
-            section == self.numberOfSections(in: collectionView) - 1,
-            !self.isSettingReadAll else { return .zero }
-
-        return CGSize(width: collectionView.width, height: conversationLayout.readFooterHeight)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        willDisplaySupplementaryView view: UICollectionReusableView,
-                        forElementKind elementKind: String,
-                        at indexPath: IndexPath) {
-        guard let footerView = self.footerView else { return }
-
-        if elementKind == UICollectionView.elementKindSectionFooter {
-            if footerView.animator.isNil {
-                footerView.createAnimator()
-            }
-        }
-    }
-
     // MARK: TEXT VIEW DELEGATE
 
     func textView(_ textView: UITextView,
@@ -299,71 +204,6 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
 
     func didSelectLoadMore(for messageIndex: Int) {
 
-    }
-
-    @objc func handle(_ recognizer: UIPanGestureRecognizer) {
-        guard let footer = self.footerView else { return }
-
-        if footer.animator.isNil {
-            footer.createAnimator()
-        }
-
-        guard let animator = footer.animator else { return }
-        switch recognizer.state {
-        case .began:
-            animator.isReversed = false
-            animator.pauseAnimation()
-        case .changed:
-            animator.pauseAnimation()
-            animator.fractionComplete = self.getProgress(for: footer)
-        case .ended:
-            animator.startAnimation()
-            if animator.fractionComplete < 0.99 || self.lastScrollDirection == .down {
-                if animator.fractionComplete > 0.1, self.lastScrollDirection == .up {
-                    self.collectionView.scrollToLastItem()
-                }
-                animator.isReversed = true
-                let provider = UICubicTimingParameters(animationCurve: .linear)
-                animator.continueAnimation(withTimingParameters: provider, durationFactor: 0.25)
-            } else if self.lastScrollDirection == .up {
-                animator.isReversed = false
-                let provider = UICubicTimingParameters(animationCurve: .linear)
-                animator.continueAnimation(withTimingParameters: provider, durationFactor: 0.25)
-            }
-        default:
-            break
-        }
-    }
-
-    private func getProgress(for footer: ReadAllFooterView) -> CGFloat {
-        let threshold: CGFloat = 80
-        let contentOffset = self.collectionView.contentOffset.y
-        let contentHeight = self.collectionView.contentSize.height
-        let diffHeight = contentHeight - contentOffset
-        let frameHeight = self.collectionView.bounds.size.height - self.collectionView.adjustedContentInset.bottom - 10 //Additional bottom inset
-        var triggerThreshold = (diffHeight - frameHeight)/threshold
-        triggerThreshold = min(triggerThreshold, 0.0)
-        let pullRatio = min(abs(triggerThreshold), 1.0)
-        return pullRatio
-    }
-
-    private func setAllMessagesToRead(for footer: ReadAllFooterView) {
-        if !self.isSettingReadAll,
-           self.lastScrollDirection == .up {
-
-            self.isSettingReadAll = true
-            footer.animationView.play()
-
-            Task {
-                await self.setAllMessagesToRead()
-                footer.stop()
-                self.isSettingReadAll = false
-                self.collectionView.scrollToLastItem()
-            }
-        } else if self.lastScrollDirection == .up {
-            footer.stop()
-            self.collectionView.scrollToLastItem()
-        }
     }
 
     // this delegate is called when the scrollView (i.e your UITableView) will start scrolling

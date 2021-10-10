@@ -46,8 +46,6 @@ class ConversationThreadCollectionView: CollectionView {
                       forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
         self.register(LoadMoreSectionHeader.self,
                       forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
-        self.register(ReadAllFooterView.self,
-                      forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter)
     }
 
     // NOTE: It's possible for small content size this wouldn't work - https://github.com/MessageKit/MessageKit/issues/725

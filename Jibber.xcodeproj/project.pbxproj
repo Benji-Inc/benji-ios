@@ -643,7 +643,6 @@
 		D6C100D426F3DC1100F1ED7D /* ArchiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */; };
 		D6C100D626F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C100D526F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift */; };
 		D6C100D826F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C100D726F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift */; };
-		D6C9CD2C2471D6BE007376F7 /* ReadAllFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */; };
 		D6C9EF3F25BF6CB100A14DE5 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */; };
 		D6C9EF4525BF6CF000A14DE5 /* Indexable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */; };
 		D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */; };
@@ -1124,7 +1123,6 @@
 		D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveViewController.swift; sourceTree = "<group>"; };
 		D6C100D526F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D6C100D726F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCollectionViewLayout.swift; sourceTree = "<group>"; };
-		D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadAllFooterView.swift; sourceTree = "<group>"; };
 		D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubbleView.swift; sourceTree = "<group>"; };
 		D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Indexable.swift; sourceTree = "<group>"; };
 		D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GetChatToken+Cloud.swift"; sourceTree = "<group>"; };
@@ -2204,14 +2202,6 @@
 			path = Archives;
 			sourceTree = "<group>";
 		};
-		D6C9CD2A2471D67B007376F7 /* Footers */ = {
-			isa = PBXGroup;
-			children = (
-				D6C9CD2B2471D6BE007376F7 /* ReadAllFooterView.swift */,
-			);
-			path = Footers;
-			sourceTree = "<group>";
-		};
 		D6D145F121D548F600CD8CE4 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
@@ -2244,7 +2234,6 @@
 		D6D1500521D5E71E00CD8CE4 /* Conversation Collection Views */ = {
 			isa = PBXGroup;
 			children = (
-				D6C9CD2A2471D67B007376F7 /* Footers */,
 				D63844102337C3900072227B /* Headers */,
 				D6B2603522E6A97400143CF0 /* Layout */,
 				D684840822CD2E1E00362AC3 /* Cells */,
@@ -2957,7 +2946,6 @@
 				D6F33C8624B150C3009603FF /* EmojiMessageCell.swift in Sources */,
 				D66656BD23D13C9A009E4BDF /* Switchable.swift in Sources */,
 				D62C9CC1266C3CA800BB9632 /* UserDefaultsManager.swift in Sources */,
-				D6C9CD2C2471D6BE007376F7 /* ReadAllFooterView.swift in Sources */,
 				D64C6A99232D6C0200DB7257 /* TypingBubbleView.swift in Sources */,
 				D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */,
 				D609AE3A236F44A8004FA89A /* User+Extensions.swift in Sources */,
