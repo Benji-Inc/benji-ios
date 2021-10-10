@@ -11,7 +11,6 @@ import TMROLocalization
 
 protocol ConversationDataSource: AnyObject {
 
-    var numberOfMembers: Int { get set }
     var sections: [ConversationSectionable] { get set }
     var collectionView: ConversationThreadCollectionView { get set }
 

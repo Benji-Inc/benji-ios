@@ -38,7 +38,6 @@ class EmojiCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     }
 
     private func getAvatarPadding(for layout: ConversationThreadCollectionViewFlowLayout) -> CGFloat {
-        guard let dataSource = layout.dataSource else { return .zero }
-        return dataSource.numberOfMembers > 2 ? .zero : 8
+        return 8
     }
 }

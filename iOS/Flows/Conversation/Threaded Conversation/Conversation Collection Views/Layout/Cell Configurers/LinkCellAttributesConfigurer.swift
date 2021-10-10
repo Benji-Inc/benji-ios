@@ -48,21 +48,14 @@ class LinkCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     }
 
     private func getAvatarFrame(with message: Messageable, layout: ConversationThreadCollectionViewFlowLayout) -> CGRect {
-        guard let dataSource = layout.dataSource else { return .zero }
-
-        var size: CGSize = .zero
-        if !message.isFromCurrentUser, dataSource.numberOfMembers > 2 {
-            size = self.avatarSize
-        }
         let xOffset: CGFloat = self.getAvatarPadding(for: layout)
         return CGRect(x: xOffset,
                       y: 0,
-                      width: size.width,
-                      height: size.height)
+                      width: .zero,
+                      height: .zero)
     }
 
     private func getAvatarPadding(for layout: ConversationThreadCollectionViewFlowLayout) -> CGFloat {
-        guard let dataSource = layout.dataSource else { return .zero }
-        return dataSource.numberOfMembers > 2 ? 8 : 8
+        return  8
     }
 }

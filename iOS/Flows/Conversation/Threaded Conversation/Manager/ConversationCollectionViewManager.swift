@@ -13,23 +13,6 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
                                          UICollectionViewDelegate, UICollectionViewDataSource,
                                          UICollectionViewDelegateFlowLayout, UICollectionViewDataSourcePrefetching {
 
-    enum ScrollDirection {
-        case up
-        case down
-        case noMovement
-    }
-
-    private var lastContentOffset: CGFloat = 0
-    private var lastScrollDirection: ScrollDirection = .noMovement
-
-    var numberOfMembers: Int = 0 {
-        didSet {
-            if self.numberOfMembers != oldValue {
-                self.collectionView.reloadDataAndKeepOffset()
-            }
-        }
-    }
-
     var sections: [ConversationSectionable] = [] {
         didSet {
             self.updateLayoutDataSource()
@@ -180,21 +163,5 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
 
     func didSelectLoadMore(for messageIndex: Int) {
 
-    }
-
-    // this delegate is called when the scrollView (i.e your UITableView) will start scrolling
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.lastContentOffset = scrollView.contentOffset.y
-    }
-
-    // while scrolling this delegate is being called so you may now check which direction your scrollView is being scrolled to
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if self.lastContentOffset < scrollView.contentOffset.y {
-            self.lastScrollDirection = .up
-        } else if self.lastContentOffset > scrollView.contentOffset.y {
-            self.lastScrollDirection = .down
-        } else {
-            self.lastScrollDirection = .noMovement
-        }
     }
 }
