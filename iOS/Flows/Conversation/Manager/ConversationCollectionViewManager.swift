@@ -42,7 +42,6 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     var didTapResend: ((Messageable) -> Void)?
     var didTapEdit: ((Messageable, IndexPath) -> Void)?
     var willDisplayCell: ((Messageable, IndexPath) -> Void)?
-    var userTyping: User?
     var cancellables = Set<AnyCancellable>()
 
     init(with collectionView: ConversationThreadCollectionView) {
@@ -59,22 +58,10 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     // MARK: DATA SOURCE
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        guard let conversationCollectionView = collectionView as? ConversationThreadCollectionView else { return 0 }
-        var numberOfSections = self.numberOfSections()
-
-        if !conversationCollectionView.isTypingIndicatorHidden {
-            numberOfSections += 1
-        }
-
-        return numberOfSections
+        return self.numberOfSections()
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-
-        if self.isSectionReservedForTypingIndicator(section) {
-            return 1
-        }
-
         return self.numberOfItems(inSection: section)
     }
 
@@ -94,14 +81,6 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         guard let conversationCollectionView = collectionView as? ConversationThreadCollectionView else { fatalError() }
-
-        if self.isSectionReservedForTypingIndicator(indexPath.section) {
-            let cell = conversationCollectionView.dequeueReusableCell(TypingIndicatorCell.self, for: indexPath)
-            if let user = self.userTyping {
-                cell.configure(with: user)
-            }
-            return cell
-        }
 
         guard let message = self.item(at: indexPath) else { return UICollectionViewCell() }
 
@@ -160,11 +139,8 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
     func collectionView(_ collectionView: UICollectionView,
                         willDisplay cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
-        if let cell = cell as? TypingIndicatorCell {
-            if let _ = self.userTyping {
-                cell.startAnimating()
-            }
-        } else if let message = self.item(at: indexPath){
+        
+        if let message = self.item(at: indexPath){
             self.willDisplayCell?(message, indexPath)
         }
     }

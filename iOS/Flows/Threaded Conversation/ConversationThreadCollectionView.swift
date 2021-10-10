@@ -17,10 +17,6 @@ class ConversationThreadCollectionView: CollectionView {
         return layout
     }
 
-    var isTypingIndicatorHidden: Bool {
-        return self.conversationLayout.isTypingIndicatorViewHidden
-    }
-
     init() {
         super.init(layout: ConversationThreadCollectionViewFlowLayout())
         self.registerReusableViews()
@@ -39,7 +35,6 @@ class ConversationThreadCollectionView: CollectionView {
         self.register(ContactMessageCell.self)
         self.register(EmojiMessageCell.self)
         self.register(VideoMessageCell.self)
-        self.register(TypingIndicatorCell.self)
         self.register(LinkCell.self)
     }
 
