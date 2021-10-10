@@ -10,15 +10,15 @@ import Foundation
 
 class ConversationThreadCollectionView: CollectionView {
 
-    var conversationLayout: ConversationThreadCollectionViewFlowLayout {
-        guard let layout = collectionViewLayout as? ConversationThreadCollectionViewFlowLayout else {
-            fatalError("ConversationCollectionViewFlowLayout NOT FOUND")
+    var conversationLayout: ConversationThreadCollectionViewLayout {
+        guard let layout = collectionViewLayout as? ConversationThreadCollectionViewLayout else {
+            fatalError("ConversationThreadCollectionViewLayout NOT FOUND")
         }
         return layout
     }
 
     init() {
-        super.init(layout: ConversationThreadCollectionViewFlowLayout())
+        super.init(layout: ConversationThreadCollectionViewLayout())
         self.registerReusableViews()
         self.keyboardDismissMode = .interactive
         self.automaticallyAdjustsScrollIndicatorInsets = true 

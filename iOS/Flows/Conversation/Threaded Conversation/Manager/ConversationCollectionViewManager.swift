@@ -35,7 +35,7 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
 
     private func updateLayoutDataSource() {
         self.collectionView.prefetchDataSource = self
-        self.collectionView.conversationLayout.dataSource = self
+        //self.collectionView.conversationLayout.dataSource = self
     }
 
     // MARK: DATA SOURCE
@@ -80,12 +80,6 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
             cell = conversationCollectionView.dequeueReusableCell(AttributedMessageCell.self, for: indexPath)
         case .photo(_, _):
             fatalError()
-//            cell = conversationCollectionView.dequeueReusableCell(PhotoMessageCell.self, for: indexPath)
-//            if let photoCell = cell as? PhotoMessageCell {
-//                photoCell.textView.delegate = self
-//                let interaction = UIContextMenuInteraction(delegate: self)
-//                photoCell.imageView.addInteraction(interaction)
-//            }
         case .video(_, _):
             cell = conversationCollectionView.dequeueReusableCell(VideoMessageCell.self, for: indexPath)
         case .location(_):

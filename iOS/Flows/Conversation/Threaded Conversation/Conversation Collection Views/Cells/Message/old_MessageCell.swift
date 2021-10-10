@@ -49,6 +49,8 @@ class old_MessageCell: BaseMessageCell {
         if case MessageKind.text(let text) = message.kind {
             self.textView.set(text: text, messageContext: message.context)
         }
+
+        self.layoutNow()
     }
 
     override func handleIsConsumed(for message: Messageable) {
@@ -67,13 +69,12 @@ class old_MessageCell: BaseMessageCell {
         }
     }
 
-    override func layoutContent(with attributes: ConversationCollectionViewLayoutAttributes) {
-        super.layoutContent(with: attributes)
-        
-        self.textView.frame = attributes.attributes.textViewFrame
-        self.bubbleView.frame = attributes.attributes.bubbleViewFrame
-        self.bubbleView.layer.maskedCorners = attributes.attributes.maskedCorners
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.bubbleView.expandToSuperviewSize()
         self.bubbleView.roundCorners()
-        self.bubbleView.indexPath = attributes.indexPath
+        self.textView.setSize(withWidth: self.contentView.width)
+        self.textView.centerOnXAndY()
     }
 }
