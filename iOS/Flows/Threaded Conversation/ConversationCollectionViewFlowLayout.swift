@@ -12,7 +12,6 @@ class ConversationThreadCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
     private(set) var isTypingIndicatorViewHidden: Bool = true
     private var insertingIndexPaths: [IndexPath] = []
-    let readFooterHeight: CGFloat = 40
 
     override class var layoutAttributesClass: AnyClass {
         return ConversationCollectionViewLayoutAttributes.self
@@ -49,7 +48,6 @@ class ConversationThreadCollectionViewFlowLayout: UICollectionViewFlowLayout {
         super.prepare()
 
         self.collectionView?.contentInsetAdjustmentBehavior = .automatic
-        self.footerReferenceSize = CGSize(width: self.itemWidth, height: self.readFooterHeight)
     }
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {

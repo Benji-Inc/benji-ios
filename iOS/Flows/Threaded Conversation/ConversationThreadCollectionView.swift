@@ -41,11 +41,6 @@ class ConversationThreadCollectionView: CollectionView {
         self.register(VideoMessageCell.self)
         self.register(TypingIndicatorCell.self)
         self.register(LinkCell.self)
-        
-        self.register(ConversationSectionHeader.self,
-                      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
-        self.register(LoadMoreSectionHeader.self,
-                      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader)
     }
 
     // NOTE: It's possible for small content size this wouldn't work - https://github.com/MessageKit/MessageKit/issues/725
@@ -68,7 +63,7 @@ class ConversationThreadCollectionView: CollectionView {
         if let flowLayout = self.collectionViewLayout as? ConversationThreadCollectionViewFlowLayout,
             flowLayout.scrollDirection == .vertical {
 
-            let contentHeight = flowLayout.collectionViewContentSize.height - flowLayout.readFooterHeight
+            let contentHeight = flowLayout.collectionViewContentSize.height
             rect = CGRect(x: 0.0,
                           y: contentHeight - 1.0,
                           width: 1.0,
