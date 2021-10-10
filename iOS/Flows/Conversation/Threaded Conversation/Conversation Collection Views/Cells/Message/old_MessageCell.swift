@@ -77,4 +77,10 @@ class old_MessageCell: BaseMessageCell {
         self.textView.setSize(withWidth: self.contentView.width)
         self.textView.centerOnXAndY()
     }
+
+    override func layoutContent(with attributes: ConversationCollectionViewLayoutAttributes) {
+        super.layoutContent(with: attributes)
+
+        self.bubbleView.indexPath = attributes.indexPath
+    }
 }
