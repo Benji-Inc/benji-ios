@@ -307,7 +307,6 @@
 		D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C32432703AC5A004BC1BD /* InvitationLoadingView.swift */; };
 		D64C6A7A232883FE00DB7257 /* CloudFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A79232883FE00DB7257 /* CloudFunction.swift */; };
 		D64C6A7E23294A8600DB7257 /* ConversationKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6A7D23294A8600DB7257 /* ConversationKey.swift */; };
-		D64C6AA2232EA06800DB7257 /* TypingCellAttributesConfigurer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6AA1232EA06800DB7257 /* TypingCellAttributesConfigurer.swift */; };
 		D64C6AA4232EA13300DB7257 /* UIEdgeInsets+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6AA3232EA13300DB7257 /* UIEdgeInsets+Extensions.swift */; };
 		D64DD8AC23CE2C180039DC5A /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64DD8AB23CE2C180039DC5A /* OnboardingViewController.swift */; };
 		D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64DD8AF23CE3E7F0039DC5A /* OnboardingContent.swift */; };
@@ -963,7 +962,6 @@
 		D64C32432703AC5A004BC1BD /* InvitationLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvitationLoadingView.swift; sourceTree = "<group>"; };
 		D64C6A79232883FE00DB7257 /* CloudFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudFunction.swift; sourceTree = "<group>"; };
 		D64C6A7D23294A8600DB7257 /* ConversationKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationKey.swift; sourceTree = "<group>"; };
-		D64C6AA1232EA06800DB7257 /* TypingCellAttributesConfigurer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingCellAttributesConfigurer.swift; sourceTree = "<group>"; };
 		D64C6AA3232EA13300DB7257 /* UIEdgeInsets+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIEdgeInsets+Extensions.swift"; sourceTree = "<group>"; };
 		D64C6AA523307DB300DB7257 /* Jibber.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Jibber.entitlements; sourceTree = "<group>"; };
 		D64DD8AB23CE2C180039DC5A /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
@@ -1609,7 +1607,6 @@
 				D6F33C7024B14A3F009603FF /* LocationCellAttributesConfigurer.swift */,
 				D657175B2378C78500F8F96C /* MessageCellAttributesConfigurer.swift */,
 				D6F33C6C24B14988009603FF /* PhotoCellAttributesConfigurer.swift */,
-				D64C6AA1232EA06800DB7257 /* TypingCellAttributesConfigurer.swift */,
 				D6F33C7424B14A7B009603FF /* VideoAttributesCellConfigurer.swift */,
 				D6F312A3266AE1E600E25FEE /* LinkCellAttributesConfigurer.swift */,
 			);
@@ -2782,7 +2779,6 @@
 				D678EC1826F50A8A0071DB0D /* CircleViewController.swift in Sources */,
 				D62C9CBF266BE50700BB9632 /* KeyboardDemoViewController.swift in Sources */,
 				D6617D042675737400439C06 /* HomeCoordinator+Extensions.swift in Sources */,
-				D64C6AA2232EA06800DB7257 /* TypingCellAttributesConfigurer.swift in Sources */,
 				D66ED460267D50D300332BA3 /* ConnectionsManger.swift in Sources */,
 				D6C100D426F3DC1100F1ED7D /* ArchiveViewController.swift in Sources */,
 				D6F33C8224B15086009603FF /* VideoMessageCell.swift in Sources */,

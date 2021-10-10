@@ -10,7 +10,6 @@ import Foundation
 
 class ConversationThreadCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
-    private(set) var isTypingIndicatorViewHidden: Bool = true
     private var insertingIndexPaths: [IndexPath] = []
 
     override class var layoutAttributesClass: AnyClass {
@@ -147,10 +146,6 @@ class ConversationThreadCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
     private func configurer(for message: Messageable?, at indexPath: IndexPath) -> ConversationCellAttributesConfigurer {
 
-        if self.isSectionReservedForTypingIndicator(indexPath.section) {
-            return TypingCellAttributesConfigurer()
-        }
-
         if let kind = message?.kind {
             switch kind {
             case .text(let text):
@@ -203,36 +198,11 @@ class ConversationThreadCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
     func sizeForHeader(at section: Int, with collectionView: UICollectionView) -> CGSize {
 
-        if self.isSectionReservedForTypingIndicator(section) {
-            return .zero
-        }
-
         if let configurer = self.headerConfigurer(for: section) {
             return configurer.sizeForHeader(at: section, for: self)
         }
 
         return CGSize(width: collectionView.width, height: 60)
-    }
-
-    // MARK: - Typing Indicator API
-
-    /// Notifies the layout that the typing indicator will change state
-    ///
-    /// - Parameters:
-    ///   - isHidden: A Boolean value that is to be the new state of the typing indicator
-    func setTypingIndicatorViewHidden(_ isHidden: Bool) {
-        self.isTypingIndicatorViewHidden = isHidden
-    }
-
-    /// A method that by default checks if the section is the last in the
-    /// `messagesCollectionView` and that `isTypingIndicatorViewHidden`
-    /// is FALSE
-    ///
-    /// - Parameter section
-    /// - Returns: A Boolean indicating if the TypingIndicator should be presented at the given section
-    func isSectionReservedForTypingIndicator(_ section: Int) -> Bool {
-        guard let collectionView = self.collectionView else { return false }
-        return !self.isTypingIndicatorViewHidden && section == collectionView.numberOfSections - 1
     }
 }
 
