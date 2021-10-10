@@ -631,7 +631,6 @@
 		D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B230D225BC7FCE0082A41A /* SendableType.swift */; };
 		D6B2601622E41BE700143CF0 /* ConversationSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601522E41BE700143CF0 /* ConversationSectionHeader.swift */; };
 		D6B2601822E4208900143CF0 /* ConversationDateLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2601722E4208900143CF0 /* ConversationDateLabel.swift */; };
-		D6B2603822E6AB5E00143CF0 /* ConversationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B2603722E6AB5E00143CF0 /* ConversationDetailViewController.swift */; };
 		D6B26903264C7D2000EFDA17 /* AnimatingTapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B26902264C7D2000EFDA17 /* AnimatingTapView.swift */; };
 		D6B3329325DD74EB00211044 /* Conversation+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329225DD74EB00211044 /* Conversation+Cloud.swift */; };
 		D6B3329525DDB9E300211044 /* PeopleHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B3329425DDB9E300211044 /* PeopleHeaderView.swift */; };
@@ -1113,7 +1112,6 @@
 		D6B230D225BC7FCE0082A41A /* SendableType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendableType.swift; sourceTree = "<group>"; };
 		D6B2601522E41BE700143CF0 /* ConversationSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSectionHeader.swift; sourceTree = "<group>"; };
 		D6B2601722E4208900143CF0 /* ConversationDateLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDateLabel.swift; sourceTree = "<group>"; };
-		D6B2603722E6AB5E00143CF0 /* ConversationDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationDetailViewController.swift; sourceTree = "<group>"; };
 		D6B26902264C7D2000EFDA17 /* AnimatingTapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatingTapView.swift; sourceTree = "<group>"; };
 		D6B3329225DD74EB00211044 /* Conversation+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Conversation+Cloud.swift"; sourceTree = "<group>"; };
 		D6B3329425DDB9E300211044 /* PeopleHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleHeaderView.swift; sourceTree = "<group>"; };
@@ -1705,7 +1703,6 @@
 				8024B94E26F278C8008ABF7F /* _New */,
 				D6D1500521D5E71E00CD8CE4 /* Conversation Collection Views */,
 				D67896CB2304524C0059BA75 /* ConversationCoordinator.swift */,
-				D6B2603722E6AB5E00143CF0 /* ConversationDetailViewController.swift */,
 				D6B2603622E6AA3800143CF0 /* Input */,
 				D6090E542377CB0F00833DA7 /* Manager */,
 			);
@@ -2946,7 +2943,6 @@
 				D6A4A1F625E9550A007F3E15 /* UserNotificationCategory.swift in Sources */,
 				D6090E582377D2CA00833DA7 /* ConversationSectionable.swift in Sources */,
 				D64DD8B023CE3E7F0039DC5A /* OnboardingContent.swift in Sources */,
-				D6B2603822E6AB5E00143CF0 /* ConversationDetailViewController.swift in Sources */,
 				D66F0FCF22BF060500BA277D /* Deeplinkable.swift in Sources */,
 				D6F33C7924B14AF0009603FF /* EmojiCellAttributesConfigurer.swift in Sources */,
 				80DACF9726D6D1B50048722A /* CollectionViewDataSource.swift in Sources */,

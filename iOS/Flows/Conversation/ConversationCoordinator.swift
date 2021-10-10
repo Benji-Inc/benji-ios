@@ -155,13 +155,6 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
     }
 }
 
-extension ConversationCoordinator: ConversationDetailViewControllerDelegate {
-
-    func conversationDetailViewControllerDidTapMenu(_ view: ConversationDetailViewController) {
-        //Present conversation menu
-    }
-}
-
 extension ConversationCoordinator: UIImagePickerControllerDelegate, UINavigationControllerDelegate,
                                    PHPickerViewControllerDelegate {
 

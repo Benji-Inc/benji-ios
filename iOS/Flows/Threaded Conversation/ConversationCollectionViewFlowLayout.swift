@@ -49,7 +49,6 @@ class ConversationThreadCollectionViewFlowLayout: UICollectionViewFlowLayout {
         super.prepare()
 
         self.collectionView?.contentInsetAdjustmentBehavior = .automatic
-        self.collectionView?.contentInset.top = ConversationDetailViewController.State.expanded.rawValue
         self.footerReferenceSize = CGSize(width: self.itemWidth, height: self.readFooterHeight)
     }
 
