@@ -17,13 +17,13 @@ public struct AudioAttachmentPayload: AttachmentPayload {
     public static let type: AttachmentType = .audio
     
     /// A title, usually the name of the audio.
-    public let title: String?
+    public var title: String?
     /// A link to the audio.
-    public internal(set) var audioURL: URL
+    public var audioURL: URL
     /// The audio itself.
-    public let file: AttachmentFile
+    public var file: AttachmentFile
     /// An extra data.
-    let extraData: [String: RawJSON]?
+    public var extraData: [String: RawJSON]?
     
     /// Decodes extra data as an instance of the given type.
     /// - Parameter ofType: The type an extra data should be decoded as.
@@ -33,9 +33,19 @@ public struct AudioAttachmentPayload: AttachmentPayload {
             .flatMap { try? JSONEncoder.stream.encode($0) }
             .flatMap { try? JSONDecoder.stream.decode(T.self, from: $0) }
     }
+    
+    /// Creates `AudioAttachmentPayload` instance.
+    ///
+    /// Use this initializer if the attachment is already uploaded and you have the remote URLs.
+    public init(title: String?, audioRemoteURL: URL, file: AttachmentFile, extraData: [String: RawJSON]?) {
+        self.title = title
+        audioURL = audioRemoteURL
+        self.file = file
+        self.extraData = extraData
+    }
 }
 
-extension AudioAttachmentPayload: Equatable {}
+extension AudioAttachmentPayload: Hashable {}
 
 // MARK: - Encodable
 
@@ -44,7 +54,7 @@ extension AudioAttachmentPayload: Encodable {
         var values = extraData ?? [:]
         values[AttachmentCodingKeys.title.rawValue] = title.map { .string($0) }
         values[AttachmentCodingKeys.assetURL.rawValue] = .string(audioURL.absoluteString)
-        values[AttachmentFile.CodingKeys.size.rawValue] = .integer(Int(file.size))
+        values[AttachmentFile.CodingKeys.size.rawValue] = .number(Double(file.size))
         values[AttachmentFile.CodingKeys.mimeType.rawValue] = file.mimeType.map { .string($0) }
         try values.encode(to: encoder)
     }
@@ -58,7 +68,7 @@ extension AudioAttachmentPayload: Decodable {
         
         self.init(
             title: try container.decodeIfPresent(String.self, forKey: .title),
-            audioURL: try container.decode(URL.self, forKey: .assetURL),
+            audioRemoteURL: try container.decode(URL.self, forKey: .assetURL),
             file: try AttachmentFile(from: decoder),
             extraData: try Self.decodeExtraData(from: decoder)
         )

@@ -81,12 +81,17 @@ class ConnectionRecoveryUpdater: EventWorker {
         connectionObserver = EventObserver(
             notificationCenter: eventNotificationCenter,
             transform: { $0 as? ConnectionStatusUpdated },
-            callback: { [unowned self] in
+            callback: { [weak self] in
+                guard let self = self else {
+                    log.warning("Callback called while self is nil")
+                    return
+                }
+
                 switch $0.webSocketConnectionState {
                 case .connecting:
                     self.obtainLastSyncDate()
                 case .connected:
-                    fetchAndReplayMissingEvents()
+                    self.fetchAndReplayMissingEvents()
                 default:
                     break
                 }
@@ -113,7 +118,7 @@ class ConnectionRecoveryUpdater: EventWorker {
             }
         }
     }
-    
+
     private func sync(completion: @escaping () -> Void) {
         guard let lastSyncedAt = lastSyncedAt else { return }
         
@@ -168,7 +173,9 @@ class ConnectionRecoveryUpdater: EventWorker {
     
     private var allChannels: [ChannelDTO] {
         do {
-            return try database.backgroundReadOnlyContext.fetch(ChannelDTO.allChannelsFetchRequest)
+            let request = ChannelDTO.allChannelsFetchRequest
+            request.fetchLimit = 1000
+            return try database.backgroundReadOnlyContext.fetch(request)
         } catch {
             log.error("Internal error: Failed to fetch [ChannelDTO]: \(error)")
             return []
@@ -178,7 +185,7 @@ class ConnectionRecoveryUpdater: EventWorker {
 
 // MARK: - Extensions
 
-private extension EventNotificationCenter {
+extension EventNotificationCenter {
     /// The method is used to convert incoming event payloads into events and calls `process(_:)` for each event
     /// that was successfully decoded.
     ///

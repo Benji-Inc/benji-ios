@@ -178,7 +178,7 @@ class MessageUpdater: Worker {
         cid: ChannelId,
         messageId: MessageId,
         pagination: MessagesPagination,
-        completion: ((Error?) -> Void)? = nil
+        completion: ((Result<MessageRepliesPayload, Error>) -> Void)? = nil
     ) {
         let endpoint: Endpoint<MessageRepliesPayload> = .loadReplies(messageId: messageId, pagination: pagination)
         apiClient.request(endpoint: endpoint) {
@@ -187,10 +187,14 @@ class MessageUpdater: Worker {
                 self.database.write({ session in
                     try payload.messages.forEach { try session.saveMessage(payload: $0, for: cid) }
                 }, completion: { error in
-                    completion?(error)
+                    if let error = error {
+                        completion?(.failure(error))
+                    } else {
+                        completion?(.success(payload))
+                    }
                 })
             case let .failure(error):
-                completion?(error)
+                completion?(.failure(error))
             }
         }
     }
@@ -427,6 +431,23 @@ class MessageUpdater: Worker {
         }, completion: { error in
             completion?(error)
         })
+    }
+    
+    func search(query: MessageSearchQuery, completion: ((Error?) -> Void)? = nil) {
+        apiClient.request(endpoint: .search(query: query)) { result in
+            switch result {
+            case let .success(payload):
+                self.database.write { session in
+                    for boxedMessage in payload.results {
+                        try session.saveMessage(payload: boxedMessage.message, for: query)
+                    }
+                } completion: { error in
+                    completion?(error)
+                }
+            case let .failure(error):
+                completion?(error)
+            }
+        }
     }
 }
 

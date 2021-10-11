@@ -73,6 +73,12 @@ public class ChatMessageController: DataController, DelegateCallable, DataStoreP
         }
     }
     
+    /// Shows whether the controller has received first batch of replies from remote
+    private var loadedRepliesHead = false
+    
+    /// A Boolean value that returns wether pagination is finished
+    public private(set) var hasLoadedAllPreviousReplies: Bool = false
+
     private let environment: Environment
     
     /// An internal backing object for all publicly available Combine publishers. We use it to simplify the way we expose
@@ -92,8 +98,13 @@ public class ChatMessageController: DataController, DelegateCallable, DataStoreP
     
     /// The observer used to listen to message updates
     private lazy var messageObserver = createMessageObserver()
-        .onChange { [unowned self] change in
-            self.delegateCallback {
+        .onChange { [weak self] change in
+            self?.delegateCallback { [weak self] in
+                guard let self = self else {
+                    log.warning("Callback called while self is nil")
+                    return
+                }
+                
                 $0.messageController(self, didChangeMessage: change)
             }
         }
@@ -244,14 +255,26 @@ public extension ChatMessageController {
         limit: Int = 25,
         completion: ((Error?) -> Void)? = nil
     ) {
-        let lastMessageId = messageId ?? replies.last?.id
-    
+        if hasLoadedAllPreviousReplies {
+            completion?(nil)
+            return
+        }
+        
+        let lastMessageId = messageId ?? (loadedRepliesHead ? replies.last?.id : nil)
+        
         messageUpdater.loadReplies(
             cid: cid,
             messageId: self.messageId,
             pagination: MessagesPagination(pageSize: limit, parameter: lastMessageId.map { PaginationParameter.lessThan($0) })
-        ) { error in
-            self.callback { completion?(error) }
+        ) { result in
+            switch result {
+            case let .success(payload):
+                self.loadedRepliesHead = true
+                self.hasLoadedAllPreviousReplies = payload.messages.count < limit
+                self.callback { completion?(nil) }
+            case let .failure(error):
+                self.callback { completion?(error) }
+            }
         }
     }
     
@@ -278,8 +301,8 @@ public extension ChatMessageController {
             cid: cid,
             messageId: self.messageId,
             pagination: MessagesPagination(pageSize: limit, parameter: .greaterThan(messageId))
-        ) { error in
-            self.callback { completion?(error) }
+        ) { result in
+            self.callback { completion?(result.error) }
         }
     }
     
@@ -424,6 +447,13 @@ extension ChatMessageController {
             _ fetchedResultsControllerType: NSFetchedResultsController<MessageDTO>.Type
         ) -> EntityDatabaseObserver<ChatMessage, MessageDTO> = EntityDatabaseObserver.init
         
+        var repliesObserverBuilder: (
+            _ context: NSManagedObjectContext,
+            _ fetchRequest: NSFetchRequest<MessageDTO>,
+            _ itemCreator: @escaping (MessageDTO) -> ChatMessage,
+            _ fetchedResultsControllerType: NSFetchedResultsController<MessageDTO>.Type
+        ) -> ListDatabaseObserver<ChatMessage, MessageDTO> = ListDatabaseObserver.init
+        
         var messageUpdaterBuilder: (
             _ database: DatabaseContainer,
             _ apiClient: APIClient
@@ -446,22 +476,33 @@ private extension ChatMessageController {
     }
     
     func setRepliesObserver() {
-        _repliesObserver.computeValue = { [unowned self] in
+        _repliesObserver.computeValue = { [weak self] in
+            guard let self = self else {
+                log.warning("Callback called while self is nil")
+                return nil
+            }
+
             let sortAscending = self.listOrdering == .topToBottom ? false : true
             let deletedMessageVisibility = self.client.databaseContainer.viewContext
                 .deletedMessagesVisibility ?? .visibleForCurrentUser
 
-            let observer = ListDatabaseObserver(
-                context: self.client.databaseContainer.viewContext,
-                fetchRequest: MessageDTO.repliesFetchRequest(
+            let observer = self.environment.repliesObserverBuilder(
+                self.client.databaseContainer.viewContext,
+                MessageDTO.repliesFetchRequest(
                     for: self.messageId,
                     sortAscending: sortAscending,
                     deletedMessagesVisibility: deletedMessageVisibility
                 ),
-                itemCreator: { $0.asModel() as ChatMessage }
+                { $0.asModel() as ChatMessage },
+                NSFetchedResultsController<MessageDTO>.self
             )
-            observer.onChange = { changes in
-                self.delegateCallback {
+            observer.onChange = { [weak self] changes in
+                self?.delegateCallback { [weak self] in
+                    guard let self = self else {
+                        log.warning("Callback called while self is nil")
+                        return
+                    }
+                    
                     $0.messageController(self, didChangeReplies: changes)
                 }
             }
