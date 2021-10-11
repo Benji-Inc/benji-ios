@@ -42,17 +42,6 @@ extension ChatMessage: Messageable {
     }
 
     var kind: MessageKind {
-
-
-
-        // Get the first attachment
-
-        // if no attachments, then this is probably text
-
-        // determine the attachment type
-
-        // return message kind based on type
-        self.text
         return .text(self.text)
     }
 
