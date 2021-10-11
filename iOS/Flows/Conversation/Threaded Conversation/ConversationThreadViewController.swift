@@ -11,15 +11,17 @@ import Parse
 import Combine
 import StreamChat
 
-class ConversationThreadViewController: BlurredViewController, CollectionViewInputHandler {
+class ConversationThreadViewController: BlurredViewController, CollectionViewInputHandler, UICollectionViewDelegate {
 
     lazy var conversationCollectionView = ConversationThreadCollectionView()
-    lazy var collectionViewManager = ConversationCollectionViewManager(with: self.conversationCollectionView)
+    //lazy var collectionViewManager = ConversationCollectionViewManager(with: self.conversationCollectionView)
+    lazy var collectionViewDataSource = ConversationCollectionViewDataSource(collectionView: self.conversationCollectionView)
 
     let messageController: ChatMessageController
     var message: Message! {
         return self.messageController.message
     }
+
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
             self.conversationCollectionView.contentInset.bottom = self.collectionViewBottomInset
@@ -65,8 +67,7 @@ class ConversationThreadViewController: BlurredViewController, CollectionViewInp
 
         self.view.addSubview(self.conversationCollectionView)
 
-        self.conversationCollectionView.dataSource = self.collectionViewManager
-        self.conversationCollectionView.delegate = self.collectionViewManager
+        self.conversationCollectionView.delegate = self
 
         Task {
             self.setupHandlers()
@@ -78,16 +79,16 @@ class ConversationThreadViewController: BlurredViewController, CollectionViewInp
     private func setupHandlers() {
         self.addKeyboardObservers()
 
-        self.collectionViewManager.didTapEdit = { [unowned self] message, indexPath in
-            self.indexPathForEditing = indexPath
-            self.messageInputAccessoryView.edit(message: message)
-        }
-
-        self.conversationCollectionView.onDoubleTap { [unowned self] (doubleTap) in
-            if self.messageInputAccessoryView.textView.isFirstResponder {
-                self.messageInputAccessoryView.textView.resignFirstResponder()
-            }
-        }
+//        self.collectionViewManager.didTapEdit = { [unowned self] message, indexPath in
+//            self.indexPathForEditing = indexPath
+//            self.messageInputAccessoryView.edit(message: message)
+//        }
+//
+//        self.conversationCollectionView.onDoubleTap { [unowned self] (doubleTap) in
+//            if self.messageInputAccessoryView.textView.isFirstResponder {
+//                self.messageInputAccessoryView.textView.resignFirstResponder()
+//            }
+//        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -100,12 +101,6 @@ class ConversationThreadViewController: BlurredViewController, CollectionViewInp
         super.viewWillDisappear(animated)
 
         self.resignFirstResponder()
-    }
-
-    override func viewWasDismissed() {
-        super.viewWasDismissed()
-
-        self.collectionViewManager.reset()
     }
     
     override func viewDidLayoutSubviews() {

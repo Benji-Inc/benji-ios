@@ -13,53 +13,89 @@ extension ConversationThreadViewController {
 
     @MainActor
     func loadReplies(for message: Message) async {
-        self.collectionViewManager.reset()
 
         do {
             try await self.messageController.loadPreviousReplies()
-            let messages: [Messageable] = self.messageController.replies.reversed()
-            let section = ConversationSectionable(date: message.updatedAt,
-                                                  items: messages)
+            let messages = Array(self.messageController.replies.asConversationCollectionItems.reversed())
 
-            self.collectionViewManager.set(newSections: [section], animate: true, completion: nil)
+            if let channelId = message.cid {
+                await self.collectionViewDataSource.appendSections([.conversation(channelId)])
+                await self.collectionViewDataSource.appendItems(messages, toSection: .conversation(channelId))
+            }
         } catch {
             logDebug(error)
         }
     }
 
     func subscribeToUpdates() {
-        self.messageController.repliesChangesPublisher
-            .mainSink { [weak self] (changes: [ListChange<ChatMessage>]) in
-                guard let `self` = self else { return }
+        self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
+            Task {
+                await self.update(with: changes,
+                                  controller: self.messageController,
+                                  collectionView: self.collectionView)
+            }
+        }.store(in: &self.cancellables)
+    }
 
-                // If there's more than one change, reload all of the data.
-                guard changes.count == 1 else {
-                    let messages: [Messageable] = self.messageController.replies.reversed()
-                    let section = ConversationSectionable(date: self.message.updatedAt,
-                                                          items: messages)
-                    self.collectionViewManager.set(newSections: [section], animate: true, completion: nil)
-                    return
+    /// Updates the datasource with the passed in array of message changes.
+    func update(with changes: [ListChange<Message>],
+                controller: MessageController,
+                collectionView: UICollectionView) async {
+
+        guard let conversation = controller.message?.cid else { return }
+
+        var snapshot = self.collectionViewDataSource.snapshot()
+
+        let sectionID = ConversationCollectionSection.conversation(conversation)
+
+        // If there's more than one change, reload all of the data.
+        guard changes.count == 1 else {
+            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
+            snapshot.appendItems(controller.replies.asConversationCollectionItems,
+                                 toSection: sectionID)
+//            if !controller.hasLoadedAllPreviousMessages {
+//                snapshot.appendItems([.loadMore], toSection: sectionID)
+//            }
+            await self.collectionViewDataSource.apply(snapshot)
+            return
+        }
+
+        // If this gets set to true, we should scroll to the most recent message after applying the snapshot
+        var scrollToLatestMessage = false
+
+        for change in changes {
+            switch change {
+            case .insert(let message, let index):
+                snapshot.insertItems([.message(message.id)],
+                                     in: sectionID,
+                                     atIndex: index.item)
+                if message.isFromCurrentUser {
+                    scrollToLatestMessage = true
                 }
+            case .move:
+                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
+                snapshot.appendItems(controller.replies.asConversationCollectionItems,
+                                     toSection: sectionID)
+            case .update(let message, _):
+                snapshot.reconfigureItems([message.asConversationCollectionItem])
+            case .remove(let message, _):
+                snapshot.deleteItems([message.asConversationCollectionItem])
+            }
+        }
 
+        // Only show the load more cell if there are previous messages to load.
+        snapshot.deleteItems([.loadMore])
+//        if !controller.hasLoadedAllPreviousMessages {
+//            snapshot.appendItems([.loadMore], toSection: sectionID)
+//        }
 
-                for change in changes {
-                    switch change {
-                    case .insert(let message, _):
-                        self.collectionViewManager.append(item: message) {
-                            self.collectionView.scrollToEnd()
-                        }
-                    case .move:
-                        let messages: [Messageable] = self.messageController.replies.reversed()
-                        let section = ConversationSectionable(date: self.message.updatedAt,
-                                                              items: messages)
-                        self.collectionViewManager.set(newSections: [section], animate: true, completion: nil)
-                        return
-                    case .update(let message, _):
-                        self.collectionViewManager.updateItemSync(with: message)
-                    case .remove(let message, _):
-                        self.collectionViewManager.delete(item: message)
-                    }
-                }
-            }.store(in: &self.cancellables)
+        await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
+            self.collectionViewDataSource.apply(snapshot)
+
+            if scrollToLatestMessage, let sectionIndex = snapshot.indexOfSection(sectionID) {
+                let firstIndex = IndexPath(item: 0, section: sectionIndex)
+                collectionView.scrollToItem(at: firstIndex, at: .centeredHorizontally, animated: true)
+            }
+        }
     }
 }
