@@ -15,7 +15,7 @@ class ChannelListUpdater: Worker {
     func update(
         channelListQuery: ChannelListQuery,
         trumpExistingChannels: Bool = false,
-        completion: ((Error?) -> Void)? = nil
+        completion: ((Result<ChannelListPayload, Error>) -> Void)? = nil
     ) {
         apiClient
             .request(endpoint: .channels(query: channelListQuery)) { [weak self] (result: Result<
@@ -25,10 +25,15 @@ class ChannelListUpdater: Worker {
                 switch result {
                 case let .success(channelListPayload):
                     self?.database.write { session in
+//                        if trumpExistingChannels {
+//                            try session.deleteChannels(query: channelListQuery)
+//                        }
                         
-                        if trumpExistingChannels {
-                            try session.deleteChannels(query: channelListQuery)
-                        }
+                        // The query will be saved during `saveChannel` call
+                        // but in case this query does not have any channels,
+                        // the query won't be saved, which will cause any future
+                        // channels to not become linked to this query
+                        session.saveQuery(query: channelListQuery)
                         
                         try channelListPayload.channels.forEach {
                             try session.saveChannel(payload: $0, query: channelListQuery)
@@ -36,13 +41,13 @@ class ChannelListUpdater: Worker {
                     } completion: { error in
                         if let error = error {
                             log.error("Failed to save `ChannelListPayload` to the database. Error: \(error)")
-                            completion?(error)
+                            completion?(.failure(error))
                         } else {
-                            completion?(nil)
+                            completion?(.success(channelListPayload))
                         }
                     }
                 case let .failure(error):
-                    completion?(error)
+                    completion?(.failure(error))
                 }
             }
     }

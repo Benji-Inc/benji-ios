@@ -17,6 +17,8 @@ open class ChatChannelListVC: _ViewController,
     /// The `ChatChannelListController` instance that provides channels data.
     public var controller: ChatChannelListController!
 
+    @Atomic private var loadingPreviousMessages: Bool = false
+
     open private(set) lazy var loadingIndicator: UIActivityIndicatorView = {
         if #available(iOS 13.0, *) {
             return UIActivityIndicatorView(style: .large).withoutAutoresizingMaskConstraints
@@ -79,7 +81,23 @@ open class ChatChannelListVC: _ViewController,
         userAvatarView.controller = controller.client.currentUserController()
         userAvatarView.addTarget(self, action: #selector(didTapOnCurrentUserAvatar), for: .touchUpInside)
     }
-    
+
+    open func collectionView(
+        _ collectionView: UICollectionView,
+        willDisplay cell: UICollectionViewCell,
+        forItemAt indexPath: IndexPath
+    ) {
+        if controller.state != .remoteDataFetched {
+            return
+        }
+
+        if indexPath.row < collectionView.numberOfItems(inSection: 0) - 10 {
+            return
+        }
+
+        loadMoreChannels()
+    }
+
     override open func setUpLayout() {
         super.setUpLayout()
         view.embed(collectionView)
@@ -147,13 +165,7 @@ open class ChatChannelListVC: _ViewController,
         
     open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let channel = controller.channels[indexPath.row]
-        router.showMessageList(for: channel.cid)
-    }
-        
-    open func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let bottomEdge = scrollView.contentOffset.y + scrollView.bounds.height
-        guard bottomEdge >= scrollView.contentSize.height else { return }
-        controller.loadNextChannels()
+        router.showChannel(for: channel.cid)
     }
         
     @objc open func didTapOnCurrentUserAvatar(_ sender: Any) {
@@ -173,6 +185,17 @@ open class ChatChannelListVC: _ViewController,
 
         if #available(iOS 13.0, *) {
             setupParentNavigation(parent: parent)
+        }
+    }
+
+    open func loadMoreChannels() {
+        if _loadingPreviousMessages.compareAndSwap(old: false, new: true) {
+            controller.loadNextChannels(completion: { [weak self] _ in
+                guard let self = self else {
+                    return
+                }
+                self.loadingPreviousMessages = false
+            })
         }
     }
 
@@ -254,6 +277,14 @@ open class ChatChannelListVC: _ViewController,
                 self.collectionView.reloadItems(at: Array(indices.move.map(\.toIndex)))
             }
         )
+    }
+    
+    open func controller(_ controller: ChatChannelListController, shouldAddNewChannelToList channel: ChatChannel) -> Bool {
+        true
+    }
+    
+    open func controller(_ controller: ChatChannelListController, shouldListUpdatedChannel channel: ChatChannel) -> Bool {
+        true
     }
     
     // MARK: - DataControllerStateDelegate

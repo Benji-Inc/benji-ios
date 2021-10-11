@@ -12,11 +12,6 @@ public enum AttachmentValidationError: Error {
     case maxFileSizeExceeded
 }
 
-/// The delegate of the ComposerVC that notifies composer events.
-public protocol ComposerVCDelegate: AnyObject {
-    func composerDidCreateNewMessage()
-}
-
 /// The possible composer states. An Enum is not used so it does not cause
 /// future breaking changes and is possible to extend with new cases.
 public struct ComposerState: RawRepresentable, Equatable {
@@ -157,9 +152,6 @@ open class ComposerVC: _ViewController,
         }
     }
 
-    /// The delegate of the ComposerVC that notifies composer events.
-    open weak var delegate: ComposerVCDelegate?
-
     /// A symbol that is used to recognise when the user is mentioning a user.
     open var mentionSymbol = "@"
 
@@ -169,6 +161,11 @@ open class ComposerVC: _ViewController,
     /// A Boolean value indicating whether the commands are enabled.
     open var isCommandsEnabled: Bool {
         channelConfig?.commands.isEmpty == false
+    }
+
+    /// A Boolean value indicating whether the user mentions are enabled.
+    open var isMentionsEnabled: Bool {
+        true
     }
 
     /// A Boolean value indicating whether the attachments are enabled.
@@ -236,10 +233,6 @@ open class ComposerVC: _ViewController,
         picker.allowsMultipleSelection = true
         return picker
     }()
-    
-    public func setDelegate(_ delegate: ComposerVCDelegate) {
-        self.delegate = delegate
-    }
 
     override open func setUp() {
         super.setUp()
@@ -355,12 +348,12 @@ open class ComposerVC: _ViewController,
             self.composerView.bottomContainer.isHidden = !self.content.isInsideThread
         }
 
-        if let typingCommand = typingCommand(in: composerView.inputMessageView.textView) {
+        if isCommandsEnabled, let typingCommand = typingCommand(in: composerView.inputMessageView.textView) {
             showCommandSuggestions(for: typingCommand)
             return
         }
 
-        if let (typingMention, mentionRange) = typingMention(in: composerView.inputMessageView.textView) {
+        if isMentionsEnabled, let (typingMention, mentionRange) = typingMention(in: composerView.inputMessageView.textView) {
             showMentionSuggestions(for: typingMention, mentionRange: mentionRange)
             return
         }
@@ -511,9 +504,7 @@ open class ComposerVC: _ViewController,
                 mentionedUserIds: content.mentionedUsers.map(\.id),
                 showReplyInChannel: composerView.checkboxControl.isSelected,
                 quotedMessageId: content.quotingMessage?.id
-            ) { _ in
-                self.delegate?.composerDidCreateNewMessage()
-            }
+            )
             return
         }
 
@@ -523,9 +514,7 @@ open class ComposerVC: _ViewController,
             attachments: content.attachments,
             mentionedUserIds: content.mentionedUsers.map(\.id),
             quotedMessageId: content.quotingMessage?.id
-        ) { _ in
-            self.delegate?.composerDidCreateNewMessage()
-        }
+        )
     }
 
     /// Updates an existing message.
@@ -646,7 +635,7 @@ open class ComposerVC: _ViewController,
             )
         } else {
             usersCache = searchUsers(
-                channel.watchers.map { $0 } + channel.cachedMembers.map { $0 },
+                channel.lastActiveWatchers.map { $0 } + channel.lastActiveMembers.map { $0 },
                 by: typingMention,
                 excludingId: currentUserId
             )
@@ -832,17 +821,18 @@ func searchUsers(_ users: [ChatUser], by searchInput: String, excludingId: Strin
     let searchInput = normalize(searchInput)
 
     let matchingUsers = users.filter { $0.id != excludingId }
-        .filter { $0.id.contains(searchInput) || (normalize($0.name ?? "").contains(searchInput)) }
-
-    let uniqueUsers = matchingUsers.reduce(into: [String: ChatUser]()) {
-        $0[$1.id] = $1
-    }
+        .filter { searchInput == "" || $0.id.contains(searchInput) || (normalize($0.name ?? "").contains(searchInput)) }
 
     let distance: (ChatUser) -> Int = {
         min($0.id.levenshtein(searchInput), $0.name?.levenshtein(searchInput) ?? 1000)
     }
 
-    return uniqueUsers.values.map { $0 }.sorted {
-        distance($0) < distance($1)
+    return Array(Set(matchingUsers)).sorted {
+        /// a tie breaker is needed here to avoid results from flickering
+        let dist = distance($0) - distance($1)
+        if dist == 0 {
+            return $0.id < $1.id
+        }
+        return dist < 0
     }
 }

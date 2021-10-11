@@ -26,13 +26,14 @@ class MessageDTO: NSManagedObject {
     
     @NSManaged var user: UserDTO
     @NSManaged var mentionedUsers: Set<UserDTO>
-    @NSManaged var threadParticipants: Set<UserDTO>
+    @NSManaged var threadParticipants: NSOrderedSet
     @NSManaged var channel: ChannelDTO?
     @NSManaged var replies: Set<MessageDTO>
     @NSManaged var flaggedBy: CurrentUserDTO?
     @NSManaged var reactions: Set<MessageReactionDTO>
     @NSManaged var attachments: Set<AttachmentDTO>
     @NSManaged var quotedMessage: MessageDTO?
+    @NSManaged var searches: Set<MessageSearchQueryDTO>
 
     @NSManaged var pinned: Bool
     @NSManaged var pinnedBy: UserDTO?
@@ -200,6 +201,13 @@ class MessageDTO: NSManagedObject {
         return request
     }
     
+    static func messagesFetchRequest(for query: MessageSearchQuery) -> NSFetchRequest<MessageDTO> {
+        let request = NSFetchRequest<MessageDTO>(entityName: MessageDTO.entityName)
+        request.predicate = NSPredicate(format: "ANY searches.filterHash == %@", query.filterHash)
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \MessageDTO.defaultSortingKey, ascending: true)]
+        return request
+    }
+    
     /// Returns a fetch request for the dto with a specific `messageId`.
     static func message(withID messageId: MessageId) -> NSFetchRequest<MessageDTO> {
         let request = NSFetchRequest<MessageDTO>(entityName: MessageDTO.entityName)
@@ -249,49 +257,6 @@ class MessageDTO: NSManagedObject {
         request.fetchLimit = limit
         request.fetchOffset = offset
         return load(by: request, context: context)
-    }
-
-    static func loadAttachmentCounts(
-        for messageId: MessageId,
-        context: NSManagedObjectContext
-    ) -> [AttachmentType: Int] {
-        enum AttachmentScoreKey: String {
-            case type
-            case count
-        }
-
-        let count = NSExpressionDescription()
-        count.name = AttachmentScoreKey.count.rawValue
-        count.expressionResultType = .integer64AttributeType
-        count.expression = NSExpression(
-            forFunction: "count:",
-            arguments: [NSExpression(forKeyPath: AttachmentScoreKey.type.rawValue)]
-        )
-
-        let request = NSFetchRequest<NSDictionary>(entityName: AttachmentDTO.entityName)
-        request.propertiesToFetch = [AttachmentScoreKey.type.rawValue, count]
-        request.propertiesToGroupBy = [AttachmentScoreKey.type.rawValue]
-        request.resultType = .dictionaryResultType
-        request.predicate = NSPredicate(
-            format: "%K.%K == %@",
-            #keyPath(AttachmentDTO.message),
-            #keyPath(MessageDTO.id),
-            messageId
-        )
-
-        do {
-            return try context.fetch(request).reduce(into: [:]) { counts, entry in
-                guard
-                    let type = entry.value(forKey: AttachmentScoreKey.type.rawValue) as? String,
-                    let count = entry.value(forKey: AttachmentScoreKey.count.rawValue) as? Int
-                else { return }
-
-                counts[.init(rawValue: type)] = count
-            }
-        } catch {
-            log.error("Failed to fetch attachment counts for the message with id: \(messageId), error: \(error)")
-            return [:]
-        }
     }
 }
 
@@ -453,8 +418,8 @@ extension NSManagedObjectContext: MessageDatabaseSession {
         })
 
         // If user participated in thread, but deleted message later, we need to get rid of it if backends does
-        dto.threadParticipants = try Set(
-            payload.threadParticipants.map { try saveUser(payload: $0) }
+        dto.threadParticipants = try NSOrderedSet(
+            array: payload.threadParticipants.map { try saveUser(payload: $0) }
         )
 
         var channelDTO: ChannelDTO?
@@ -508,6 +473,12 @@ extension NSManagedObjectContext: MessageDatabaseSession {
         }
         
         return dto
+    }
+    
+    func saveMessage(payload: MessagePayload, for query: MessageSearchQuery) throws -> MessageDTO {
+        let messageDTO = try saveMessage(payload: payload, for: nil)
+        messageDTO.searches.insert(saveQuery(query: query))
+        return messageDTO
     }
     
     func message(id: MessageId) -> MessageDTO? { .load(id: id, context: self) }
@@ -635,11 +606,14 @@ private extension ChatMessage {
             $_currentUserReactions = ({ [] }, nil)
         }
         
-        if dto.threadParticipants.isEmpty {
+        if dto.threadParticipants.array.isEmpty {
             $_threadParticipants = ({ [] }, nil)
         } else {
             $_threadParticipants = (
-                { Set(dto.threadParticipants.map { $0.asModel() }) },
+                {
+                    let threadParticipants = dto.threadParticipants.array as? [UserDTO] ?? []
+                    return threadParticipants.map { $0.asModel() }
+                },
                 dto.managedObjectContext
             )
         }
@@ -675,10 +649,6 @@ private extension ChatMessage {
         }
         
         $_quotedMessage = ({ dto.quotedMessage?.asModel() }, dto.managedObjectContext)
-
-        $_attachmentCounts = ({ [id] in
-            MessageDTO.loadAttachmentCounts(for: id, context: context)
-        }, context)
     }
 }
 
