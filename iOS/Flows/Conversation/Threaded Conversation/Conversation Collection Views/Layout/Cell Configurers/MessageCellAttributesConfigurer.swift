@@ -19,7 +19,7 @@ class MessageCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     override func configure(with message: Messageable,
                             previousMessage: Messageable?,
                             nextMessage: Messageable?,
-                            for layout: ConversationThreadCollectionViewFlowLayout,
+                            for layout: ConversationThreadCollectionViewLayout,
                             attributes: ConversationCollectionViewLayoutAttributes) {
 
         // If no data types then display text
@@ -49,22 +49,22 @@ class MessageCellAttributesConfigurer: ConversationCellAttributesConfigurer {
         }
     }
 
-    override func size(with message: Messageable?, for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize {
+    override func size(with message: Messageable?, for layout: ConversationThreadCollectionViewLayout) -> CGSize {
         guard let msg = message else { return .zero }
 
         let itemHeight = self.cellContentHeight(with: msg, for: layout)
-        return CGSize(width: layout.itemWidth, height: itemHeight)
+        return CGSize(width: 10, height: itemHeight)
     }
 
     // PRIVATE
 
     private func cellContentHeight(with message: Messageable,
-                                   for layout: ConversationThreadCollectionViewFlowLayout) -> CGFloat {
+                                   for layout: ConversationThreadCollectionViewLayout) -> CGFloat {
         let size = self.getTextViewSize(with: message, for: layout)
         return self.getBubbleViewFrame(with: message, textViewSize: size, for: layout).height
     }
 
-    private func getAvatarFrame(with message: Messageable, layout: ConversationThreadCollectionViewFlowLayout) -> CGRect {
+    private func getAvatarFrame(with message: Messageable, layout: ConversationThreadCollectionViewLayout) -> CGRect {
 
         let xOffset: CGFloat = self.getAvatarPadding(for: layout)
         return CGRect(x: xOffset,
@@ -82,11 +82,11 @@ class MessageCellAttributesConfigurer: ConversationCellAttributesConfigurer {
 
     private func getBubbleViewFrame(with message: Messageable,
                                     textViewSize: CGSize,
-                                    for layout: ConversationThreadCollectionViewFlowLayout) -> CGRect {
+                                    for layout: ConversationThreadCollectionViewLayout) -> CGRect {
 
         var xOffset: CGFloat = 0
         if message.isFromCurrentUser {
-            xOffset = layout.itemWidth - textViewSize.width - (self.textViewHorizontalPadding * 2)
+            xOffset = 10 - textViewSize.width - (self.textViewHorizontalPadding * 2)
         } else {
             xOffset = self.getAvatarFrame(with: message, layout: layout).width + (self.getAvatarPadding(for: layout) * 2) + Theme.contentOffset.half
         }
@@ -98,7 +98,7 @@ class MessageCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     }
 
     private func getTextViewSize(with message: Messageable,
-                                 for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize {
+                                 for layout: ConversationThreadCollectionViewLayout) -> CGSize {
         guard case MessageKind.text(let text) = message.kind else { return .zero }
         let attributed = AttributedString(text,
                                           fontType: .smallBold,
@@ -109,12 +109,12 @@ class MessageCellAttributesConfigurer: ConversationCellAttributesConfigurer {
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 2
         attributedString.addAttributes([NSAttributedString.Key.paragraphStyle: style])
-        let maxWidth = (layout.itemWidth * self.widthRatio) - self.getAvatarPadding(for: layout) - self.avatarSize.width
+        let maxWidth = (10 * self.widthRatio) - self.getAvatarPadding(for: layout) - self.avatarSize.width
         let size = attributedString.getSize(withWidth: maxWidth)
         return size
     }
 
-    private func getAvatarPadding(for layout: ConversationThreadCollectionViewFlowLayout) -> CGFloat {
+    private func getAvatarPadding(for layout: ConversationThreadCollectionViewLayout) -> CGFloat {
         return 8
     }
 }

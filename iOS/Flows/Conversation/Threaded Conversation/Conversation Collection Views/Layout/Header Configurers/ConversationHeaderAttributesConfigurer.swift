@@ -16,12 +16,12 @@ class ConversationHeaderAttributesConfigurer {
     /// - attributes: The attributes of the header.
     /// The default does nothing
     func configure(attributes: ConversationCollectionViewLayoutAttributes,
-                   for layout: ConversationThreadCollectionViewFlowLayout) {}
+                   for layout: ConversationThreadCollectionViewLayout) {}
 
     /// Used to size an item at a given `IndexPath`.
     ///
     /// - Parameters:
     /// - indexPath: The `IndexPath` of the item to be displayed.
     /// The default return .zero
-    func sizeForHeader(at section: Int, for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize { return .zero }
+    func sizeForHeader(at section: Int, for layout: ConversationThreadCollectionViewLayout) -> CGSize { return .zero }
 }

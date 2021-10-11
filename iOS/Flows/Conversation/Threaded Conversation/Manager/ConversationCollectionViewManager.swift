@@ -124,27 +124,27 @@ class ConversationCollectionViewManager: NSObject, UITextViewDelegate, Conversat
 
     // MARK: FLOW LAYOUT
 
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+//    func collectionView(_ collectionView: UICollectionView,
+//                        layout collectionViewLayout: UICollectionViewLayout,
+//                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+//
+//        guard let conversationLayout = collectionViewLayout as? ConversationThreadCollectionViewLayout else { return .zero }
+//
+//        /// May not have a message because of the typing indicator
+//        let message = self.item(at: indexPath)
+//        return conversationLayout.sizeForItem(at: indexPath, with: message)
+//    }
 
-        guard let conversationLayout = collectionViewLayout as? ConversationThreadCollectionViewFlowLayout else { return .zero }
-
-        /// May not have a message because of the typing indicator
-        let message = self.item(at: indexPath)
-        return conversationLayout.sizeForItem(at: indexPath, with: message)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForHeaderInSection section: Int) -> CGSize {
-
-        guard let conversationLayout = collectionViewLayout as? ConversationThreadCollectionViewFlowLayout else {
-            return .zero
-        }
-
-        return conversationLayout.sizeForHeader(at: section, with: collectionView)
-    }
+//    func collectionView(_ collectionView: UICollectionView,
+//                        layout collectionViewLayout: UICollectionViewLayout,
+//                        referenceSizeForHeaderInSection section: Int) -> CGSize {
+//
+//        guard let conversationLayout = collectionViewLayout as? ConversationThreadCollectionViewLayout else {
+//            return .zero
+//        }
+//
+//        return conversationLayout.sizeForHeader(at: section, with: collectionView)
+//    }
 
     // MARK: TEXT VIEW DELEGATE
 

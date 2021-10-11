@@ -55,8 +55,7 @@ class ConversationThreadCollectionView: CollectionView {
     override func scrollToEnd(animated: Bool = true, completion: CompletionOptional = nil) {
         var rect: CGRect = .zero
         
-        if let flowLayout = self.collectionViewLayout as? ConversationThreadCollectionViewFlowLayout,
-            flowLayout.scrollDirection == .vertical {
+        if let flowLayout = self.collectionViewLayout as? ConversationThreadCollectionViewLayout {
 
             let contentHeight = flowLayout.collectionViewContentSize.height
             rect = CGRect(x: 0.0,

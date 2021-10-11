@@ -16,26 +16,26 @@ class LinkCellAttributesConfigurer: ConversationCellAttributesConfigurer {
     override func configure(with message: Messageable,
                             previousMessage: Messageable?,
                             nextMessage: Messageable?,
-                            for layout: ConversationThreadCollectionViewFlowLayout,
+                            for layout: ConversationThreadCollectionViewLayout,
                             attributes: ConversationCollectionViewLayoutAttributes) {
 
         attributes.attributes.avatarFrame = self.getAvatarFrame(with: message, layout: layout)
         attributes.attributes.attachmentFrame = self.getAttachmentFrame(with: message, layout: layout)
     }
 
-    override func size(with message: Messageable?, for layout: ConversationThreadCollectionViewFlowLayout) -> CGSize {
+    override func size(with message: Messageable?, for layout: ConversationThreadCollectionViewLayout) -> CGSize {
         guard let msg = message else { return .zero }
 
-        return CGSize(width: layout.itemWidth, height: self.getAttachmentFrame(with: msg, layout: layout).height)
+        return CGSize(width: 19, height: self.getAttachmentFrame(with: msg, layout: layout).height)
     }
 
-    private func getAttachmentFrame(with message: Messageable, layout: ConversationThreadCollectionViewFlowLayout) -> CGRect {
+    private func getAttachmentFrame(with message: Messageable, layout: ConversationThreadCollectionViewLayout) -> CGRect {
 
-        let attachmentWidth = layout.itemWidth * 0.8
+        let attachmentWidth = 19 * 0.8
 
         var xOffset: CGFloat = 0
         if message.isFromCurrentUser {
-            xOffset = layout.itemWidth - attachmentWidth - Theme.contentOffset.half
+            xOffset = 10 - attachmentWidth - Theme.contentOffset.half
         } else {
             xOffset = self.getAvatarFrame(with: message, layout: layout).width + (self.getAvatarPadding(for: layout) * 2) + Theme.contentOffset.half
         }
@@ -47,7 +47,7 @@ class LinkCellAttributesConfigurer: ConversationCellAttributesConfigurer {
         return rect
     }
 
-    private func getAvatarFrame(with message: Messageable, layout: ConversationThreadCollectionViewFlowLayout) -> CGRect {
+    private func getAvatarFrame(with message: Messageable, layout: ConversationThreadCollectionViewLayout) -> CGRect {
         let xOffset: CGFloat = self.getAvatarPadding(for: layout)
         return CGRect(x: xOffset,
                       y: 0,
@@ -55,7 +55,7 @@ class LinkCellAttributesConfigurer: ConversationCellAttributesConfigurer {
                       height: .zero)
     }
 
-    private func getAvatarPadding(for layout: ConversationThreadCollectionViewFlowLayout) -> CGFloat {
+    private func getAvatarPadding(for layout: ConversationThreadCollectionViewLayout) -> CGFloat {
         return  8
     }
 }
