@@ -817,6 +817,8 @@
 		807A7BC426C5B5A20023A71E /* Task+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Extensions.swift"; sourceTree = "<group>"; };
 		807A7BC826C5C8100023A71E /* Task+TaskPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+TaskPool.swift"; sourceTree = "<group>"; };
 		8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFUser+Extensions.swift"; sourceTree = "<group>"; };
+		8096144C2714CDB600BC948E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
+		8096144E2714CDB800BC948E /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		8098CC60270F8A2300636484 /* ConversationCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCollectionView.swift; sourceTree = "<group>"; };
 		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
 		80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewControllerDataSource+CellRegistration.swift"; sourceTree = "<group>"; };
@@ -1480,6 +1482,7 @@
 				D61EC0D721D30C1400204BEE /* Extensions */,
 				D6D145F121D548F600CD8CE4 /* Flows */,
 				D61EC0CB21D3071500204BEE /* Info.plist */,
+				8096144D2714CDB600BC948E /* AppIntentVocabulary.plist */,
 				D66379DC25A39BC200A4A3B7 /* Managers */,
 				D6637A0925A39E0C00A4A3B7 /* Models */,
 				D64C6AA523307DB300DB7257 /* Jibber.entitlements */,
@@ -3398,6 +3401,15 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		8096144D2714CDB600BC948E /* AppIntentVocabulary.plist */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8096144C2714CDB600BC948E /* en */,
+				8096144E2714CDB800BC948E /* Base */,
+			);
+			name = AppIntentVocabulary.plist;
+			sourceTree = "<group>";
+		};
 		D61EC0C821D3071500204BEE /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
