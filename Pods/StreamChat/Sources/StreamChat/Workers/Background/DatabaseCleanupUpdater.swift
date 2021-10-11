@@ -58,10 +58,9 @@ class DatabaseCleanupUpdater: Worker {
                 let queries: [ChannelListQuery] = try queriesDTOs.map {
                     try $0.asChannelListQuery()
                 }
-                
                 queries.forEach {
-                    self?.channelListUpdater.update(channelListQuery: $0) { error in
-                        if let error = error {
+                    self?.channelListUpdater.update(channelListQuery: $0) { result in
+                        if case let .failure(error) = result {
                             log.error("Internal error. Failed to update ChannelListQueries for the new channel: \(error)")
                         }
                     }
@@ -84,9 +83,6 @@ private extension ChannelDTO {
         oldestMessageAt = nil
         hiddenAt = nil
         truncatedAt = nil
-        // We should not set `needsRefreshQueries` to `true` because in that case NewChannelQueryUpdater
-        // triggers, which leads to `Too many requests for user` backend error
-        needsRefreshQueries = false
         currentlyTypingUsers = []
         reads = []
         queries = []

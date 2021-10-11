@@ -85,18 +85,21 @@ public struct ChatMessage {
     
     @CoreDataLazy internal var _mentionedUsers: Set<ChatUser>
 
-    /// A list of users that participated in this message thread
-    public var threadParticipants: Set<ChatUser> { _threadParticipants }
+    /// A list of users that participated in this message thread.
+    /// The last user in the list is the author of the most recent reply.
+    public var threadParticipants: [ChatUser] { _threadParticipants }
     
-    @CoreDataLazy internal var _threadParticipants: Set<ChatUser>
+    @CoreDataLazy internal var _threadParticipants: [ChatUser]
 
     @CoreDataLazy internal var _attachments: [AnyChatMessageAttachment]
 
     /// The overall attachment count by attachment type.
-    public var attachmentCounts: [AttachmentType: Int] { _attachmentCounts }
+    public var attachmentCounts: [AttachmentType: Int] {
+        _attachments.reduce(into: [:]) { counts, attachment in
+            counts[attachment.type] = (counts[attachment.type] ?? 0) + 1
+        }
+    }
 
-    @CoreDataLazy internal var _attachmentCounts: [AttachmentType: Int]
-        
     /// A list of latest 25 replies to this message.
     ///
     /// - Important: The `latestReplies` property is loaded and evaluated lazily to maintain high performance.
@@ -158,7 +161,7 @@ public struct ChatMessage {
         reactionScores: [MessageReactionType: Int],
         author: @escaping () -> ChatUser,
         mentionedUsers: @escaping () -> Set<ChatUser>,
-        threadParticipants: @escaping () -> Set<ChatUser>,
+        threadParticipants: @escaping () -> [ChatUser],
         attachments: @escaping () -> [AnyChatMessageAttachment],
         latestReplies: @escaping () -> [ChatMessage],
         localState: LocalMessageState?,
@@ -167,7 +170,6 @@ public struct ChatMessage {
         currentUserReactions: @escaping () -> Set<ChatMessageReaction>,
         isSentByCurrentUser: Bool,
         pinDetails: MessagePinDetails?,
-        attachmentCounts: @escaping () -> [AttachmentType: Int],
         underlyingContext: NSManagedObjectContext?
     ) {
         self.id = id
@@ -199,7 +201,6 @@ public struct ChatMessage {
         $_latestReactions = (latestReactions, underlyingContext)
         $_currentUserReactions = (currentUserReactions, underlyingContext)
         $_quotedMessage = (quotedMessage, underlyingContext)
-        $_attachmentCounts = (attachmentCounts, underlyingContext)
     }
 }
 

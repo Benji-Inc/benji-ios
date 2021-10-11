@@ -4,51 +4,209 @@
 
 import Foundation
 
-public extension ChatChannel {
-    /// A list of locally cached members objects.
-    ///
-    /// - Important: This list doesn't have to contain all members of the channel. To access the full list of members, create
-    /// a `ChatChannelController` for this channel and use it to query all channel members.
-    ///
-    @available(*, renamed: "lastActiveMembers")
-    var cachedMembers: Set<ChatChannelMember> { Set(lastActiveMembers) }
-    
-    /// A list of channel members currently online actively watching the channel.
-    ///
-    /// - Important: This list doesn't have to contain all members of the channel. To access the full list of watchers, create
-    /// a `ChatChannelController` for this channel and use it to query all channel watchers.
-    ///
-    /// - Note: This property will contain no more than 25 watchers
-    @available(*, renamed: "lastActiveWatchers")
-    var watchers: Set<ChatUser> { Set(lastActiveWatchers) }
-    
-    /// A list of currently typing users.
-    @available(*, renamed: "currentlyTypingUsers")
-    var currentlyTypingMembers: Set<ChatChannelMember> { [] }
+/// - NOTE: Deprecations of the next major release.
+
+public extension UserPresenceChangedEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
 }
 
-public extension ChatMessage {
-    /// Quoted message id.
-    ///
-    /// If message is inline reply this property will contain id of the message quoted by this reply.
-    ///
-    @available(*, deprecated, message: "Use quotedMessage?.id instead")
-    var quotedMessageId: MessageId? { quotedMessage?.id }
+public extension UserUpdatedEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
 }
 
-public extension Logger {
-    /// Stops program execution with `Swift.assertionFailure`. In RELEASE builds only
-    /// logs the failure.
-    ///
-    /// - Parameters:
-    ///   - message: A custom message to log if `condition` is evaluated to false.
-    @available(*, deprecated, renamed: "assertionFailure")
-    func assertationFailure(
-        _ message: @autoclosure () -> Any,
-        functionName: StaticString = #function,
-        fileName: StaticString = #file,
-        lineNumber: UInt = #line
-    ) {
-        assertionFailure(message(), functionName: functionName, fileName: fileName, lineNumber: lineNumber)
+public extension UserWatchingEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
+}
+
+public extension UserBannedEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
+}
+
+public extension UserUnbannedEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
+}
+
+public extension ChannelHiddenEvent {
+    @available(*, deprecated, message: "Please, switch to `createdAt`")
+    var hiddenAt: Date { createdAt }
+}
+
+public extension ChannelDeletedEvent {
+    @available(*, deprecated, message: "Please, switch to `createdAt`")
+    var deletedAt: Date { channel.deletedAt ?? createdAt }
+}
+
+public extension MemberAddedEvent {
+    @available(*, deprecated, message: "`member: ChatChannelMember` is now accessible. Please, switch to `member.id`")
+    var memberUserId: UserId { member.id }
+}
+
+public extension MemberUpdatedEvent {
+    @available(*, deprecated, message: "`member: ChatChannelMember` is now accessible. Please, switch to `member.id`")
+    var memberUserId: UserId { member.id }
+}
+
+public extension MemberRemovedEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var memberUserId: UserId { user.id }
+}
+
+public extension MessageNewEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
+    
+    @available(*, deprecated, message: "`message: ChatMessage` is now accessible. Please, switch to `message.id`")
+    var messageId: UserId { message.id }
+}
+
+public extension MessageUpdatedEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
+    
+    @available(*, deprecated, message: "`message: ChatMessage` is now accessible. Please, switch to `message.id`")
+    var messageId: UserId { message.id }
+    
+    @available(*, deprecated, message: "Use message.updatedAt")
+    var updatedAt: Date { message.updatedAt }
+}
+
+public extension MessageDeletedEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user?.id`")
+    var userId: UserId {
+        guard let user = user else {
+            log.warning("The `message.deleted` event is triggered server-side and has no `user`. Empty `userId` will be returned.")
+            return ""
+        }
+        
+        return user.id
     }
+    
+    @available(*, deprecated, message: "`message: ChatMessage` is now accessible. Please, switch to `message.id`")
+    var messageId: UserId { message.id }
+    
+    @available(*, deprecated, message: "Use message.deletedAt")
+    var deletedAt: Date { message.deletedAt ?? createdAt }
 }
+
+public extension MessageReadEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
+    
+    @available(*, deprecated, message: "Please, switch to `createdAt`")
+    var readAt: Date { createdAt }
+}
+
+public extension NotificationMessageNewEvent {
+    @available(*, deprecated, message: "`message: ChatMessage` is now accessible. Please, switch to `message.author.id`")
+    var userId: UserId { message.author.id }
+    
+    @available(*, deprecated, message: "`message: ChatMessage` is now accessible. Please, switch to `message.id`")
+    var messageId: MessageId { message.id }
+}
+
+public extension NotificationMarkAllReadEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
+    
+    @available(*, deprecated, message: "Please, switch to `createdAt`")
+    var readAt: Date { createdAt }
+}
+
+public extension NotificationMarkReadEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
+    
+    @available(*, deprecated, message: "Please, switch to `createdAt`")
+    var readAt: Date { createdAt }
+}
+
+public extension NotificationMutesUpdatedEvent {
+    @available(*, deprecated, message: "`user: CurrentChatUser` is now accessible. Please, switch to `currentUser.id`")
+    var currentUserId: UserId { currentUser.id }
+}
+
+public extension NotificationRemovedFromChannelEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var currentUserId: UserId { user.id }
+}
+
+public extension NotificationChannelMutesUpdatedEvent {
+    @available(*, deprecated, message: "`user: CurrentChatUser` is now accessible. Please, switch to `currentUser.id`")
+    var userId: UserId { currentUser.id }
+}
+
+public extension NotificationInvitedEvent {
+    @available(*, deprecated, message: "`member: ChatChannelMember` is now accessible. Please, switch to `member.id`")
+    var memberUserId: UserId { member.id }
+}
+
+public extension NotificationInviteAcceptedEvent {
+    @available(*, deprecated, message: "`member: ChatChannelMember` is now accessible. Please, switch to `member.id`")
+    var memberUserId: UserId { member.id }
+}
+
+public extension NotificationInviteRejectedEvent {
+    @available(*, deprecated, message: "`member: ChatChannelMember` is now accessible. Please, switch to `member.id`")
+    var memberUserId: UserId { member.id }
+}
+
+public extension ReactionNewEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
+    
+    @available(*, deprecated, message: "`message: ChatMessage` is now accessible. Please, switch to `message.id`")
+    var messageId: UserId { message.id }
+
+    @available(*, deprecated, message: "`reaction: ChatMessageReaction` is now accessible. Please, switch to `reaction.type`")
+    var reactionType: MessageReactionType { reaction.type }
+    
+    @available(*, deprecated, message: "`reaction: ChatMessageReaction` is now accessible. Please, switch to `reaction.score`")
+    var reactionScore: Int { reaction.score }
+}
+
+public extension ReactionUpdatedEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
+    
+    @available(*, deprecated, message: "`message: ChatMessage` is now accessible. Please, switch to `message.id`")
+    var messageId: UserId { message.id }
+
+    @available(*, deprecated, message: "`reaction: ChatMessageReaction` is now accessible. Please, switch to `reaction.type`")
+    var reactionType: MessageReactionType { reaction.type }
+    
+    @available(*, deprecated, message: "`reaction: ChatMessageReaction` is now accessible. Please, switch to `reaction.score`")
+    var reactionScore: Int { reaction.score }
+    
+    @available(*, deprecated, message: "`reaction: ChatMessageReaction` is now accessible. Please, switch to `reaction.updatedAt`")
+    var updatedAt: Date { reaction.updatedAt }
+}
+
+public extension ReactionDeletedEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
+    
+    @available(*, deprecated, message: "`message: ChatMessage` is now accessible. Please, switch to `message.id`")
+    var messageId: UserId { message.id }
+
+    @available(*, deprecated, message: "`reaction: ChatMessageReaction` is now accessible. Please, switch to `reaction.type`")
+    var reactionType: MessageReactionType { reaction.type }
+    
+    @available(*, deprecated, message: "`reaction: ChatMessageReaction` is now accessible. Please, switch to `reaction.score`")
+    var reactionScore: Int { reaction.score }
+}
+
+public extension TypingEvent {
+    @available(*, deprecated, message: "`user: ChatUser` is now accessible. Please, switch to `user.id`")
+    var userId: UserId { user.id }
+}
+
+@available(*, deprecated, renamed: "NotificationInviteRejectedEvent")
+public typealias NotificationInviteRejected = NotificationInviteRejectedEvent
+
+@available(*, deprecated, renamed: "NotificationInviteAcceptedEvent")
+public typealias NotificationInviteAccepted = NotificationInviteAcceptedEvent

@@ -64,8 +64,22 @@ class ChannelUpdater: Worker {
     ///   - cid: The channel identifier.
     ///   - completion: Called when the API call is finished. Called with `Error` if the remote update fails.
     func deleteChannel(cid: ChannelId, completion: ((Error?) -> Void)? = nil) {
-        apiClient.request(endpoint: .deleteChannel(cid: cid)) {
-            completion?($0.error)
+        apiClient.request(endpoint: .deleteChannel(cid: cid)) { [weak self] result in
+            switch (result) {
+            case .success:
+                self?.database.write {
+                    if let channel = $0.channel(cid: cid) {
+                        channel.truncatedAt = channel.lastMessageAt ?? channel.createdAt
+                    }
+                } completion: { error in
+                    completion?(error)
+                }
+
+            case let .failure(error):
+                log.error("Delete Channel on request fail \(error)")
+                // Note: not removing local channel if not removed on backend
+                completion?(result.error)
+            }
         }
     }
 
@@ -337,6 +351,31 @@ class ChannelUpdater: Worker {
     func freezeChannel(_ freeze: Bool, cid: ChannelId, completion: ((Error?) -> Void)? = nil) {
         apiClient.request(endpoint: .freezeChannel(freeze, cid: cid)) {
             completion?($0.error)
+        }
+    }
+    
+    func uploadFile(
+        type: AttachmentType,
+        localFileURL: URL,
+        cid: ChannelId,
+        progress: ((Double) -> Void)? = nil,
+        completion: @escaping ((Result<URL, Error>) -> Void)
+    ) {
+        do {
+            let attachmentFile = try AttachmentFile(url: localFileURL)
+            let attachment = AnyChatMessageAttachment(
+                id: .init(cid: cid, messageId: "", index: 0), // messageId and index won't be used for uploading
+                type: type,
+                payload: .init(), // payload won't be used for uploading
+                uploadingState: .init(
+                    localFileURL: localFileURL,
+                    state: .pendingUpload, // will not be used
+                    file: attachmentFile
+                )
+            )
+            apiClient.uploadAttachment(attachment, progress: progress, completion: completion)
+        } catch {
+            completion(.failure(ClientError.InvalidAttachmentFileURL(localFileURL)))
         }
     }
 }

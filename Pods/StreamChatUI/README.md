@@ -4,6 +4,7 @@
 
 <p align="center">
   <a href="https://cocoapods.org/pods/StreamChatUI"><img src="https://img.shields.io/cocoapods/v/StreamChatUI.svg" /></a>
+  <a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat" /></a>
   <a href="https://swift.org"><img src="https://img.shields.io/badge/Swift-5.2-orange.svg" /></a>
   <a href="https://github.com/GetStream/stream-chat-swift/actions"><img src="https://github.com/GetStream/stream-chat-swift/workflows/CI/badge.svg" /></a>
   <a href="https://codecov.io/gh/GetStream/stream-chat-swift"><img src="https://codecov.io/gh/GetStream/stream-chat-swift/branch/main/graph/badge.svg" /></a>
@@ -13,53 +14,43 @@
 
 The **StreamChatUI SDK**  is the official iOS SDK for [Stream Chat](https://getstream.io/chat/sdk/ios/), a service for building chat and messaging applications.
 
---- 
+---
 
 ## Which Version Should I Choose?
 
-- **4.x** is the next major version. The final release is expected to be before 15 August 2021. It's mostly compatible with **3.x**, while exposing many more customization options. Beta versions are released on a weekly basis. We recommend using the latest beta for new projects.
-- **3.x** is the current production version. This version doesn't allow full customizability of the UI elements.
-- **2.x** is in maintenance mode. We strongly encourage you to plan an upgrade. 
-
-### 4.x Beta Available
-[The upcoming v4 has a public beta available](https://github.com/GetStream/stream-chat-swift/releases). If your development timeline fits our release schedule, we strongly encourage you to give it a try and share your feedback with us by opening an issue.
+- **4.x** is the current production version. (Recommended)
+- **3.x** is the previous production version and in maintenance mode.
+- **2.x** is in maintenance mode.
 
 ## Main Features
 
 - **Uses `UIKit` patterns and paradigms:** The API follows the design of native system SDKs. It makes integration with your existing code easy and familiar.
-- **First-class support for `SwiftUI` and `Combine`:** Built-it wrappers make using the SDK with the latest Apple UI framework a seamless experience. (coming 4/2021)
+- **First-class support for `Combine`**
 - **Offline support:** Browse channels and send messages while offline.
 - **Familiar behavior**: The UI elements are good platform citizens and behave like native elements; they respect `tintColor`, `layoutMargins`, light/dark mode, dynamic font sizes, etc.
 - **Swift native API:** Uses Swift's powerful language features to make the SDK usage easy and type-safe.
-- **Fully open source implementation:** You have access to the comple source code of the SDK here on GitHub.
+- **Fully open-source implementation:** You have access to the complete source code of the SDK here on GitHub.
 - **Supports iOS 11+, Swift 5.2:** We proudly support older versions of iOS, so your app can stay available to almost everyone.
 
 ## **Quick Links**
 
 * [iOS/Swift Chat Tutorial](https://getstream.io/tutorials/ios-chat/): Learn how to use the SDK by following our simple tutorial.
-
-&nbsp;
-
 * [Register](https://getstream.io/chat/trial/) to get an API key for Stream Chat.
 * [Installation](https://github.com/GetStream/stream-chat-swift/blob/main/Documentation/Installation.MD): Learn more about how to install the SDK using CocoaPods or SPM.
-* [Cheat Sheet](https://github.com/GetStream/stream-chat-swift/wiki/UI-Cheat-Sheet): Learn how to use the SDK by real world examples.
+* [Cheat Sheet](https://github.com/GetStream/stream-chat-swift/wiki/UI-Cheat-Sheet): Learn how to use the SDK by real-world examples.
 * [Demo app](https://github.com/GetStream/stream-chat-swift/tree/main/DemoApp): This repo includes a fully functional demo app with example usage of the SDK.
-
-&nbsp;
-
-* [StreamChat SDK (low-level)](https://github.com/GetStream/stream-chat-swift/tree/main/Sources/StreamChat): An SDK to use if you want to build fully-custom UI. `StreamChatUI` uses `StreamChat` for communicating with Stream chat backend.
-* [Wiki](https://github.com/GetStream/stream-chat-swift/wiki) and [Platform Documentation](https://getstream.io/chat/docs/ios-swift/?language=swift)
+* [Example apps](https://github.com/GetStream/stream-chat-swift/tree/main/Examples): This section of the repo includes fully functional sample apps that you can use as reference.
+* [Documentation](https://getstream.io/chat/docs/ios-swift/?language=swift)
 
 * Information about the 2.x version can be found at [v2.x README](https://github.com/GetStream/stream-chat-swift/tree/main_v2/).
 
 ## Free for Makers
 
-Stream is free for most side and hobby projects. To qualify your project/company needs to have < 5 team members and < $10k in monthly revenue.
-For complete pricing details visit our [Chat Pricing Page](https://getstream.io/chat/pricing/)
+Stream is free for most side and hobby projects. You can use Stream Chat for free if you have less than five team members and no more than $10,000 in monthly revenue.
 
 ## Main Principles
 
-* **Progressive disclosure:** The SDK can be used easily with very minimal knowledge of it. As you become more familiar with it, you can dig deeper and start customizing it on all levels. 
+* **Progressive disclosure:** The SDK can be used easily with very minimal knowledge of it. As you become more familiar with it, you can dig deeper and start customizing it on all levels.
 
 * **Highly customizable:** Every element is designed to be easily customizable. You can modify the brand color by setting `tintColor`, apply appearance changes using custom UI rules, or subclass existing elements and inject them everywhere in the system, no matter how deep is the logic heirarchy.
 
@@ -67,7 +58,7 @@ For complete pricing details visit our [Chat Pricing Page](https://getstream.io/
 
 * **Good platform citizen:** The UI elements behave like good platform citizens. They use existing iOS patterns; their beahavior is predictable and matches system UI components; they respect `tintColor`, `layourMargins`, dynamic font sizes, and other system-defined UI constants.
 
---- 
+---
 
 ## We are hiring
 We've recently closed a [\$38 million Series B funding round](https://techcrunch.com/2021/03/04/stream-raises-38m-as-its-chat-and-activity-feed-apis-power-communications-for-1b-users/) and we keep actively growing.
@@ -145,7 +136,7 @@ Check out our current openings and apply via [Stream's website](https://getstrea
 </table>
 
 ---
-  
+
 ### Message Composer
 
 <table>
@@ -167,7 +158,7 @@ Check out our current openings and apply via [Stream's website](https://getstrea
 
 ---
 
-### Chat Commands 
+### Chat Commands
 
 <table>
   <tr>
@@ -187,7 +178,7 @@ Check out our current openings and apply via [Stream's website](https://getstrea
 
 ---
 
-### User Tagging Suggestion 
+### User Tagging Suggestion
 
 <table>
   <tr>
