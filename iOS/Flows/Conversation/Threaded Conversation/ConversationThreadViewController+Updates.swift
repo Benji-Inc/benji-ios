@@ -53,9 +53,9 @@ extension ConversationThreadViewController {
             snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
             snapshot.appendItems(controller.replies.asConversationCollectionItems,
                                  toSection: sectionID)
-//            if !controller.hasloadallpreviousreples {
-//                snapshot.appendItems([.loadMore], toSection: sectionID)
-//            }
+            if !controller.hasLoadedAllPreviousReplies {
+                snapshot.appendItems([.loadMore], toSection: sectionID)
+            }
             await self.collectionViewDataSource.apply(snapshot)
             return
         }
@@ -85,9 +85,9 @@ extension ConversationThreadViewController {
 
         // Only show the load more cell if there are previous messages to load.
         snapshot.deleteItems([.loadMore])
-//        if !controller.hasLoadedAllPreviousMessages {
-//            snapshot.appendItems([.loadMore], toSection: sectionID)
-//        }
+        if !controller.hasLoadedAllPreviousReplies {
+            snapshot.appendItems([.loadMore], toSection: sectionID)
+        }
 
         await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
             self.collectionViewDataSource.apply(snapshot)
