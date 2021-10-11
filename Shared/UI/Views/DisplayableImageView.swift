@@ -213,9 +213,9 @@ fileprivate extension UIImageView {
             { (image, error, cacheType, url) in
                 if let error = error {
                     continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: image)
                 }
-
-                continuation.resume(returning: image)
             }
         }
 
