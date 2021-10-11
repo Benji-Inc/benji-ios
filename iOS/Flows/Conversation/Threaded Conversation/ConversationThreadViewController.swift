@@ -14,7 +14,6 @@ import StreamChat
 class ConversationThreadViewController: BlurredViewController, CollectionViewInputHandler, UICollectionViewDelegate {
 
     lazy var conversationCollectionView = ConversationThreadCollectionView()
-    //lazy var collectionViewManager = ConversationCollectionViewManager(with: self.conversationCollectionView)
     lazy var collectionViewDataSource = ConversationCollectionViewDataSource(collectionView: self.conversationCollectionView)
 
     let messageController: ChatMessageController

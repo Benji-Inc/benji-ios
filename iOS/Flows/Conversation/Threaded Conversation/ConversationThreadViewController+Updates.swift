@@ -53,7 +53,7 @@ extension ConversationThreadViewController {
             snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
             snapshot.appendItems(controller.replies.asConversationCollectionItems,
                                  toSection: sectionID)
-//            if !controller.hasLoadedAllPreviousMessages {
+//            if !controller.hasloadallpreviousreples {
 //                snapshot.appendItems([.loadMore], toSection: sectionID)
 //            }
             await self.collectionViewDataSource.apply(snapshot)
