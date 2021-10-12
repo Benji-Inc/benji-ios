@@ -10,30 +10,28 @@ import Foundation
 
 class MessageCell: UICollectionViewCell {
 
-    private let messageContainerView = UIView()
-    private let messageTextView = TextView()
-
-    private let repliesContainerView = UIView()
     private let replyCountLabel = Label(font: .regular)
-    private let repliesTextView = TextView()
+
+    private let layout = UICollectionViewFlowLayout()
+    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
+    private let cellRegistration = UICollectionView.CellRegistration<TextViewCell, Messageable>
+    { (cell, indexPath, item) in
+        cell.setText(with: item)
+    }
+
+    private var message: Messageable?
+    private var replies: [Messageable] = []
+    private let maxShownReplies = 2
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.contentView.addSubview(self.messageContainerView)
-        self.messageContainerView.set(backgroundColor: .lightPurple)
+        self.addSubview(self.collectionView)
 
-        self.messageContainerView.addSubview(self.messageTextView)
-        self.messageTextView.isScrollEnabled = false
-        self.messageTextView.isEditable = false
+        self.collectionView.dataSource = self
+        self.collectionView.delegate = self
 
-        self.contentView.addSubview(self.repliesContainerView)
-        self.repliesContainerView.set(backgroundColor: .lightPurple)
-
-        self.repliesContainerView.addSubview(self.replyCountLabel)
-        self.repliesContainerView.addSubview(self.repliesTextView)
-        self.repliesTextView.isScrollEnabled = false
-        self.repliesTextView.isEditable = false
+        self.layout.scrollDirection = .vertical
     }
 
     required init?(coder: NSCoder) {
@@ -43,59 +41,132 @@ class MessageCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.messageContainerView.expandToSuperviewWidth()
-        self.messageContainerView.expand(.bottom, padding: 20)
-        self.messageContainerView.roundCorners()
-        self.messageContainerView.alpha = self.repliesContainerView.isVisible ? 0.8 : 1
-
-        self.messageTextView.expandToSuperviewWidth()
-        self.messageTextView.sizeToFit()
-        self.messageTextView.centerOnXAndY()
-
-        self.repliesContainerView.expandToSuperviewWidth()
-        self.repliesContainerView.top = 10
-        self.repliesContainerView.expand(.bottom)
-        self.repliesContainerView.roundCorners()
-
-        self.replyCountLabel.setSize(withWidth: self.repliesContainerView.width)
-        self.replyCountLabel.pin(.right)
-        self.replyCountLabel.pin(.top)
-
-        self.repliesTextView.expandToSuperviewWidth()
-        self.repliesTextView.sizeToFit()
-        self.repliesTextView.centerOnXAndY()
+        self.collectionView.expandToSuperviewSize()
     }
 
-    func setMessage(_ text: String) {
-        self.messageTextView.text = text
+    func setMessage(_ message: Messageable) {
+        self.message = message
+        self.collectionView.reloadData()
+    }
 
-        self.setNeedsLayout()
+    func setReplies(_ replies: [Messageable]) {
+        self.replies = replies.suffix(self.maxShownReplies)
+        self.collectionView.reloadData()
     }
 
     func setReplyCount(_ count: Int) {
         self.replyCountLabel.setText("\(count)")
         self.setNeedsLayout()
     }
-    
-    func setReplies(_ replies: [String]) {
-        guard let latestReply = replies.first else {
-            self.repliesTextView.text = nil
-            self.repliesContainerView.isHidden = true
-            return
+}
+
+extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.replies.count + 1
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+        let message: Messageable?
+        if indexPath.item == 0 {
+            message = self.message
+        } else {
+            message = self.replies[safe: indexPath.item - 1]
         }
 
+        guard let message = message else { return UICollectionViewCell() }
 
-        self.repliesTextView.text = latestReply
-        self.repliesContainerView.isHidden = false
+        let cell = collectionView.dequeueConfiguredReusableCell(using: self.cellRegistration,
+                                                                for: indexPath,
+                                                                item: message)
 
+        let totalCells = self.collectionView(collectionView, numberOfItemsInSection: indexPath.section)
+        let index = totalCells - indexPath.item - 1
+        cell.configureBackground(withIndex: index, message: message)
+
+        return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+
+        let width = collectionView.width
+        let height = collectionView.height - 40
+
+        return CGSize(width: width, height: height)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+
+        return -collectionView.height + 60
+    }
+}
+
+private class TextViewCell: UICollectionViewCell {
+
+    let backgroundColorView = UIView()
+    let textView = TextView()
+    var index = 0
+    var scaleFactor: CGFloat {
+        return 1 - CGFloat(self.index) * 0.05
+    }
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        self.intitializeViews()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+
+        self.intitializeViews()
+    }
+
+    private func intitializeViews() {
+        self.contentView.addSubview(self.backgroundColorView)
+        self.backgroundColorView.roundCorners()
+        self.backgroundColorView.set(backgroundColor: .lightPurple)
+
+        self.backgroundColorView.addSubview(self.textView)
+        self.textView.isScrollEnabled = false
+        self.textView.isEditable = false
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.backgroundColorView.alpha = self.scaleFactor
+        self.backgroundColorView.width = self.width * self.scaleFactor
+        self.backgroundColorView.expandToSuperviewHeight()
+        self.backgroundColorView.centerOnXAndY()
+
+        self.textView.expandToSuperviewWidth()
+        self.textView.sizeToFit()
+        self.textView.centerOnXAndY()
+    }
+
+    func setText(with message: Messageable) {
+        self.textView.text = message.kind.text
         self.setNeedsLayout()
     }
 
-
-    func setIsDeleted() {
-        self.messageTextView.text = "DELETED"
-        self.repliesContainerView.isHidden = true
-
+    func configureBackground(withIndex index: Int, message: Messageable) {
+        if message.isFromCurrentUser {
+            self.backgroundColorView.set(backgroundColor: .lightPurple)
+        } else {
+            self.backgroundColorView.set(backgroundColor: .orange)
+        }
+        self.index = index
         self.setNeedsLayout()
     }
 }

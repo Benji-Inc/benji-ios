@@ -32,6 +32,7 @@ protocol Messageable {
     var hasBeenConsumedBy: [String] { get }
     var color: Color { get }
     var kind: MessageKind { get }
+    var isDeleted: Bool { get }
 
     @discardableResult
     func updateConsumers(with consumer: Avatar) async throws -> Messageable
