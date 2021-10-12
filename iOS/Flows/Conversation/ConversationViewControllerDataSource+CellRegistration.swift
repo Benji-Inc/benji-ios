@@ -25,11 +25,8 @@ extension ConversationCollectionViewDataSource {
                                                                         messageId: item.messageID)
             guard let message = messageController.message else { return }
 
-            cell.setMessage(message)
-
             let replies = message.latestReplies
-            cell.setReplies(replies)
-            cell.setReplyCount(message.replyCount)
+            cell.set(message: message, replies: replies, totalReplyCount: message.replyCount)
 
             // Load in the message's replies if needed, then reconfigure the cell so they show up.
             if message.replyCount > 0 && message.latestReplies.isEmpty {

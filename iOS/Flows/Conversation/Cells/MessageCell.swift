@@ -10,28 +10,31 @@ import Foundation
 
 class MessageCell: UICollectionViewCell {
 
-    private let replyCountLabel = Label(font: .regular)
-
-    private let layout = UICollectionViewFlowLayout()
-    private lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: self.layout)
-    private let cellRegistration = UICollectionView.CellRegistration<TextViewCell, Messageable>
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        return UICollectionView(frame: .zero, collectionViewLayout: layout)
+    }()
+    private let cellRegistration = UICollectionView.CellRegistration<MessageSubcell, Messageable>
     { (cell, indexPath, item) in
         cell.setText(with: item)
     }
 
     private var message: Messageable?
     private var replies: [Messageable] = []
+    /// The total number of replies to the root message. This may be more than the number of replies passed in.
+    private var totalReplyCount: Int = 0
+    /// The maximum number of replies we'll show.
     private let maxShownReplies = 2
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.addSubview(self.collectionView)
-
+        self.collectionView.isUserInteractionEnabled = false
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
-
-        self.layout.scrollDirection = .vertical
+        self.collectionView.set(backgroundColor: .clear)
+        self.contentView.addSubview(self.collectionView)
     }
 
     required init?(coder: NSCoder) {
@@ -44,19 +47,18 @@ class MessageCell: UICollectionViewCell {
         self.collectionView.expandToSuperviewSize()
     }
 
-    func setMessage(_ message: Messageable) {
+    /// Configures the cell to display the given messages.
+    ///
+    /// - Parameters:
+    ///     - message: The root message to display, which may have replies.
+    ///     - replies: The currently loaded replies to the message. These should be order by newest to oldest.
+    ///     - totalReplyCount: The total number of replies that this message has. It may be more than the passed in replies.
+    func set(message: Messageable, replies: [Messageable], totalReplyCount: Int) {
         self.message = message
-        self.collectionView.reloadData()
-    }
+        self.replies = replies.prefix(self.maxShownReplies).reversed()
+        self.totalReplyCount = totalReplyCount
 
-    func setReplies(_ replies: [Messageable]) {
-        self.replies = replies.suffix(self.maxShownReplies)
         self.collectionView.reloadData()
-    }
-
-    func setReplyCount(_ count: Int) {
-        self.replyCountLabel.setText("\(count)")
-        self.setNeedsLayout()
     }
 }
 
@@ -67,6 +69,7 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        // Add one to account for the base message.
         return self.replies.count + 1
     }
 
@@ -74,6 +77,7 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let message: Messageable?
+        // The first item is always the base message.
         if indexPath.item == 0 {
             message = self.message
         } else {
@@ -87,8 +91,16 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
                                                                 item: message)
 
         let totalCells = self.collectionView(collectionView, numberOfItemsInSection: indexPath.section)
-        let index = totalCells - indexPath.item - 1
-        cell.configureBackground(withIndex: index, message: message)
+
+        let stackIndex = totalCells - indexPath.item - 1
+        cell.configureBackground(withStackIndex: stackIndex, message: message)
+
+        // Only show the reply count on the top cell in the stack, and only if there is more than one reply.
+        if stackIndex == 0 && self.totalReplyCount > 1 {
+            cell.setReplyCount(self.totalReplyCount)
+        } else {
+            cell.setReplyCount(nil)
+        }
 
         return cell
     }
@@ -107,45 +119,52 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
 
+        // Return a negative spacing so that the cells overlap.
         return -collectionView.height + 60
     }
 }
 
-private class TextViewCell: UICollectionViewCell {
+/// A cell for displaying individual the root message and replies within the MessageCell.
+private class MessageSubcell: UICollectionViewCell {
 
+    /// A rounded and colored background view for the message. Changes color based on the sender.
     let backgroundColorView = UIView()
+    /// Text view for displaying the text of the message.
     let textView = TextView()
-    var index = 0
-    var scaleFactor: CGFloat {
-        return 1 - CGFloat(self.index) * 0.05
+    /// A label to show the total number of replies for the root message.
+    let replyCountLabel = Label(font: .small)
+
+    /// Where this cell appears on the z-axis stack of messages. 0 means the item closest to the user.
+    private var stackIndex = 0
+    /// How much to scale the size of the background view.
+    private var scaleFactor: CGFloat {
+        return 1 - CGFloat(self.stackIndex) * 0.05
     }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
         self.intitializeViews()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-
         self.intitializeViews()
     }
 
     private func intitializeViews() {
         self.contentView.addSubview(self.backgroundColorView)
         self.backgroundColorView.roundCorners()
-        self.backgroundColorView.set(backgroundColor: .lightPurple)
 
         self.backgroundColorView.addSubview(self.textView)
         self.textView.isScrollEnabled = false
         self.textView.isEditable = false
+
+        self.backgroundColorView.addSubview(self.replyCountLabel)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.backgroundColorView.alpha = self.scaleFactor
         self.backgroundColorView.width = self.width * self.scaleFactor
         self.backgroundColorView.expandToSuperviewHeight()
         self.backgroundColorView.centerOnXAndY()
@@ -153,6 +172,10 @@ private class TextViewCell: UICollectionViewCell {
         self.textView.expandToSuperviewWidth()
         self.textView.sizeToFit()
         self.textView.centerOnXAndY()
+
+        self.replyCountLabel.sizeToFit()
+        self.replyCountLabel.pin(.right,padding: 8)
+        self.replyCountLabel.pin(.top, padding: 8)
     }
 
     func setText(with message: Messageable) {
@@ -160,13 +183,41 @@ private class TextViewCell: UICollectionViewCell {
         self.setNeedsLayout()
     }
 
-    func configureBackground(withIndex index: Int, message: Messageable) {
+    func configureBackground(withStackIndex stackIndex: Int, message: Messageable) {
+        // How much to scale the brightness of the background view.
+        let colorFactor = 1 - CGFloat(stackIndex) * 0.05
+
+        var backgroundColor: UIColor
         if message.isFromCurrentUser {
-            self.backgroundColorView.set(backgroundColor: .lightPurple)
+            backgroundColor = Color.lightPurple.color
         } else {
-            self.backgroundColorView.set(backgroundColor: .orange)
+            backgroundColor = Color.orange.color
         }
-        self.index = index
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+
+        if backgroundColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
+            backgroundColor = UIColor(red: red * colorFactor,
+                                      green: green * colorFactor,
+                                      blue: blue * colorFactor,
+                                      alpha: alpha)
+        }
+
+        self.backgroundColorView.backgroundColor = backgroundColor
+
+        self.stackIndex = stackIndex
+        self.setNeedsLayout()
+    }
+
+    func setReplyCount(_ count: Int?) {
+        guard let count = count else {
+            self.replyCountLabel.text = nil
+            return
+        }
+
+        self.replyCountLabel.setText("\(count) replies")
         self.setNeedsLayout()
     }
 }
