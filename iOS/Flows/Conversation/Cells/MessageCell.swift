@@ -8,6 +8,8 @@
 
 import Foundation
 
+/// A cell to display a message along with a limited number of replies to that message.
+/// The root message and replies are stacked along the z-axis, with the most recent reply at the front (visually obscuring the others).
 class MessageCell: UICollectionViewCell {
 
     private lazy var collectionView: UICollectionView = {
@@ -20,16 +22,19 @@ class MessageCell: UICollectionViewCell {
         cell.setText(with: item)
     }
 
+    /// The root message to display.
     private var message: Messageable?
+    /// A subset of replies to the root message that we want to display. The count is no more than the maxShownReplies.
     private var replies: [Messageable] = []
-    /// The total number of replies to the root message. This may be more than the number of replies passed in.
-    private var totalReplyCount: Int = 0
     /// The maximum number of replies we'll show.
     private let maxShownReplies = 2
+    /// The total number of replies to the root message. This may be more than the number of replies displayed.
+    private var totalReplyCount: Int = 0
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        // Don't allow the user to interact with the collectionview so that the cell can be tapped on.
         self.collectionView.isUserInteractionEnabled = false
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
@@ -51,7 +56,7 @@ class MessageCell: UICollectionViewCell {
     ///
     /// - Parameters:
     ///     - message: The root message to display, which may have replies.
-    ///     - replies: The currently loaded replies to the message. These should be order by newest to oldest.
+    ///     - replies: The currently loaded replies to the message. These should be ordered by newest to oldest.
     ///     - totalReplyCount: The total number of replies that this message has. It may be more than the passed in replies.
     func set(message: Messageable, replies: [Messageable], totalReplyCount: Int) {
         self.message = message
@@ -64,12 +69,21 @@ class MessageCell: UICollectionViewCell {
 
 extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
+    /// The space between the top of a cell and tops of adjacent cells.
+    var spaceBetweenCellTops: CGFloat { return 20 }
+    var cellHeight: CGFloat {
+        // Cell height should allow for one base message, plus the max number of replies to fit vertically.
+        let height = collectionView.height - self.spaceBetweenCellTops * CGFloat(self.maxShownReplies)
+        return height
+    }
+
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // Add one to account for the base message.
+        guard self.message.exists else { return 0 }
+        // Add 1 to account for the base message.
         return self.replies.count + 1
     }
 
@@ -92,6 +106,7 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
 
         let totalCells = self.collectionView(collectionView, numberOfItemsInSection: indexPath.section)
 
+        // The higher the cells index, the closer it is to the front of the message stack.
         let stackIndex = totalCells - indexPath.item - 1
         cell.configureBackground(withStackIndex: stackIndex, message: message)
 
@@ -110,9 +125,7 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let width = collectionView.width
-        let height = collectionView.height - 40
-
-        return CGSize(width: width, height: height)
+        return CGSize(width: width, height: self.cellHeight)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -120,7 +133,7 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
 
         // Return a negative spacing so that the cells overlap.
-        return -collectionView.height + 60
+        return -self.cellHeight + self.spaceBetweenCellTops
     }
 }
 
