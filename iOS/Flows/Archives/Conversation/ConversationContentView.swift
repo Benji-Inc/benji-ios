@@ -44,11 +44,6 @@ class ConversationContentView: View {
     }
 
     func configure(with item: Conversation) {
-
-        defer {
-            self.currentItem = item
-        }
-
         if self.currentItem?.title != item.title {
             self.label.setText(item.title)
         }
@@ -74,6 +69,8 @@ class ConversationContentView: View {
         }
 
         self.layoutNow()
+
+        self.currentItem = item
     }
 
     override func layoutSubviews() {

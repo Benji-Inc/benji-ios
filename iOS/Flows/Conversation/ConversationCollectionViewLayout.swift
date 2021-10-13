@@ -22,7 +22,7 @@ class ConversationCollectionViewLayout: UICollectionViewFlowLayout {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // IMPORTANT: This allows us to layout the cells right to left.
+    // IMPORTANT: Returning true allows us to layout the cells right to left.
     override var flipsHorizontallyInOppositeLayoutDirection: Bool {
         return true
     }
@@ -35,14 +35,14 @@ class ConversationCollectionViewLayout: UICollectionViewFlowLayout {
                                                    bottom: 0,
                                                    right: collectionView.width * 0.1)
 
-        let itemHeight: CGFloat = 200
+        let itemHeight: CGFloat = collectionView.height * 0.27
 
         self.itemSize = CGSize(width: collectionView.width * 0.8, height: itemHeight)
 
         let verticalSpacing = (collectionView.height - itemHeight)
-        self.sectionInset = UIEdgeInsets(top: verticalSpacing * 0.02,
+        self.sectionInset = UIEdgeInsets(top: 0,
                                          left: 0,
-                                         bottom: verticalSpacing * 0.8,
+                                         bottom: verticalSpacing,
                                          right: 0)
         self.minimumLineSpacing = collectionView.width * 0.05
     }

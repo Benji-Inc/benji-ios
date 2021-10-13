@@ -68,12 +68,6 @@ class ConversationViewController: FullScreenViewController,
             self.didTapConversationTitle?()
         }
 
-        self.messageInputAccessoryView.textView.$inputText.mainSink { _ in
-            if let enabled = self.conversationController?.areTypingEventsEnabled, enabled {
-                self.conversationController?.sendKeystrokeEvent(completion: nil)
-            }
-        }.store(in: &self.cancellables)
-
         self.contentContainer.addSubview(self.dateLabel)
 
         self.collectionView.publisher(for: \.contentOffset).mainSink { _ in
@@ -93,6 +87,11 @@ class ConversationViewController: FullScreenViewController,
                 }
             }
         }.store(in: &self.cancellables)
+
+        self.messageInputAccessoryView.textView.$inputText.mainSink { _ in
+            guard let enabled = self.conversationController?.areTypingEventsEnabled, enabled else { return }
+            self.conversationController?.sendKeystrokeEvent(completion: nil)
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
@@ -107,12 +106,14 @@ class ConversationViewController: FullScreenViewController,
 
         self.dateLabel.setSize(withWidth: self.view.width)
         self.dateLabel.centerOnX()
-        self.dateLabel.match(.bottom, to: .top, of: self.collectionView)
 
         self.collectionView.expandToSuperviewWidth()
-        let padding = self.conversationHeader.height + self.dateLabel.height + 100
-        self.collectionView.pin(.top, padding: padding)
+        let padding = self.dateLabel.height + 40
+        self.collectionView.match(.top, to: .bottom, of: self.conversationHeader, offset: padding)
         self.collectionView.height = self.view.height - padding
+
+        // Base the Y position of the date label on the top of the collection view.
+        self.dateLabel.match(.bottom, to: .top, of: self.collectionView, offset: -20)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -321,12 +322,20 @@ class ConversationViewController: FullScreenViewController,
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didConfirm sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition) {
+
+        guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
+              let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath),
+              case let .message(messageID) = currentItem else {
+
+                  // If there is no current message to reply to, assume we're sending a new message
+                  Task {
+                      await self.send(sendable)
+                  }
+                  return
+              }
+
         switch position {
         case .left, .middle:
-            guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
-                  let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath) else { return }
-
-            guard case let .message(messageID) = currentItem else { return }
             Task {
                 await self.reply(to: messageID, sendable: sendable)
             }
