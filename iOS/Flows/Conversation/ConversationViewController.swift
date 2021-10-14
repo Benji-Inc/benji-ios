@@ -293,17 +293,17 @@ class ConversationViewController: FullScreenViewController,
             self.sendMessageOverlay.alpha = 1
         }
 
-        if let currentCell = self.collectionView.getCentermostVisibleCell() {
-            self.sendMessageOverlay.frame = self.contentContainer.convert(currentCell.frame,
-                                                                          from: currentCell)
-            self.sendMessageOverlay.centerOnX()
-        }
+        self.sendMessageOverlay.size = CGSize(width: self.collectionView.width * 0.8,
+                                              height: self.collectionView.height * 0.27)
+        self.sendMessageOverlay.match(.top, to: .top, of: self.collectionView)
+        self.sendMessageOverlay.centerOnX()
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didPrepare sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition) {
 
+        // Alpha out the collection view to let the user know they can send a message from this position.
         UIView.animate(withDuration: Theme.animationDuration) {
             self.collectionView.alpha = 0.5
         }
