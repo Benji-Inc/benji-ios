@@ -18,6 +18,7 @@ class ConversationViewController: FullScreenViewController,
     
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     private lazy var collectionView = ConversationCollectionView()
+    private lazy var sendMessageOverlay = ConversationSendOverlayView()
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private let conversationHeader = ConversationHeaderView()
@@ -25,7 +26,8 @@ class ConversationViewController: FullScreenViewController,
 
     var conversation: Conversation! { return self.conversationController?.channel }
     private(set) var conversationController: ChatChannelController?
-    
+
+    // Input handlers
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
     var didTapMoreButton: CompletionOptional = nil
     var didTapConversationTitle: CompletionOptional = nil
@@ -56,19 +58,6 @@ class ConversationViewController: FullScreenViewController,
         super.initializeViews()
         
         self.view.insertSubview(self.blurView, belowSubview: self.contentContainer)
-        self.contentContainer.addSubview(self.collectionView)
-
-        self.contentContainer.addSubview(self.conversationHeader)
-        self.conversationHeader.configure(with: self.conversation)
-        self.conversationHeader.button.didSelect { [unowned self] in
-            self.didTapMoreButton?()
-        }
-
-        self.conversationHeader.didSelect { [unowned self] in
-            self.didTapConversationTitle?()
-        }
-
-        self.contentContainer.addSubview(self.dateLabel)
 
         self.collectionView.publisher(for: \.contentOffset).mainSink { _ in
             if let ip = self.collectionView.getCentermostVisibleIndex(),
@@ -87,6 +76,19 @@ class ConversationViewController: FullScreenViewController,
                 }
             }
         }.store(in: &self.cancellables)
+        self.contentContainer.addSubview(self.collectionView)
+
+        self.contentContainer.addSubview(self.conversationHeader)
+        self.conversationHeader.configure(with: self.conversation)
+        self.conversationHeader.button.didSelect { [unowned self] in
+            self.didTapMoreButton?()
+        }
+
+        self.conversationHeader.didSelect { [unowned self] in
+            self.didTapConversationTitle?()
+        }
+
+        self.contentContainer.addSubview(self.dateLabel)
 
         self.messageInputAccessoryView.textView.$inputText.mainSink { _ in
             guard let enabled = self.conversationController?.areTypingEventsEnabled, enabled else { return }
@@ -282,6 +284,13 @@ class ConversationViewController: FullScreenViewController,
         self.lastPreparedPosition = nil
 
         self.collectionView.isUserInteractionEnabled = false
+
+        self.contentContainer.addSubview(self.sendMessageOverlay)
+
+        if let currentCell = self.collectionView.getCentermostVisibleCell() {
+            self.sendMessageOverlay.frame = self.contentContainer.convert(currentCell.frame,
+                                                                          from: currentCell)
+        }
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -348,6 +357,7 @@ class ConversationViewController: FullScreenViewController,
 
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
         self.collectionView.isUserInteractionEnabled = true
+        self.sendMessageOverlay.removeFromSuperview()
 
         UIView.animate(withDuration: Theme.animationDuration) {
             self.collectionView.alpha = 1
