@@ -288,6 +288,7 @@ class ConversationViewController: FullScreenViewController,
         // Animate in the send overlay
         self.contentContainer.addSubview(self.sendMessageOverlay)
         self.sendMessageOverlay.alpha = 0
+        self.sendMessageOverlay.setState(nil)
         UIView.animate(withDuration: Theme.animationDuration) {
             self.sendMessageOverlay.alpha = 1
         }
@@ -310,15 +311,17 @@ class ConversationViewController: FullScreenViewController,
         switch position {
         case .left, .middle:
             // Avoid animating content offset twice for redundant states
-            guard self.lastPreparedPosition.equalsOneOf(these: .left, .middle) else { break }
+            guard !self.lastPreparedPosition.equalsOneOf(these: .left, .middle) else { break }
 
+            self.sendMessageOverlay.setState(.reply)
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
         case .right:
             let newXOffset
             = -self.collectionView.width + self.collectionView.conversationLayout.minimumLineSpacing
-            
+
+            self.sendMessageOverlay.setState(.newMessage)
             self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
         }
 
@@ -326,6 +329,7 @@ class ConversationViewController: FullScreenViewController,
     }
 
     func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
+        self.sendMessageOverlay.setState(nil)
         UIView.animate(withDuration: Theme.animationDuration) {
             self.collectionView.alpha = 1
         }
