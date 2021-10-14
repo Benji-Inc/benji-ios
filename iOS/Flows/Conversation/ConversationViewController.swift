@@ -285,11 +285,17 @@ class ConversationViewController: FullScreenViewController,
 
         self.collectionView.isUserInteractionEnabled = false
 
+        // Animate in the send overlay
         self.contentContainer.addSubview(self.sendMessageOverlay)
+        self.sendMessageOverlay.alpha = 0
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.sendMessageOverlay.alpha = 1
+        }
 
         if let currentCell = self.collectionView.getCentermostVisibleCell() {
             self.sendMessageOverlay.frame = self.contentContainer.convert(currentCell.frame,
                                                                           from: currentCell)
+            self.sendMessageOverlay.centerOnX()
         }
     }
 
@@ -357,10 +363,12 @@ class ConversationViewController: FullScreenViewController,
 
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
         self.collectionView.isUserInteractionEnabled = true
-        self.sendMessageOverlay.removeFromSuperview()
 
         UIView.animate(withDuration: Theme.animationDuration) {
             self.collectionView.alpha = 1
+            self.sendMessageOverlay.alpha = 0
+        } completion: { didFinish in
+            self.sendMessageOverlay.removeFromSuperview()
         }
     }
 

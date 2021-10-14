@@ -10,35 +10,18 @@ import Foundation
 
 class ConversationSendOverlayView: View {
 
-    private var borderLayer: CAShapeLayer?
-
-    override init() {
-        super.init()
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private let borderLayer = CAShapeLayer()
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let borderLayer: CAShapeLayer
+        self.borderLayer.strokeColor = UIColor(white: 1, alpha: 0.5).cgColor
+        self.borderLayer.lineDashPattern = [10, 10]
+        self.borderLayer.fillColor = nil
+        self.borderLayer.lineWidth = 4
+        self.borderLayer.frame = self.bounds
+        self.borderLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 20).cgPath
 
-        if let borderLayerStrong = self.borderLayer {
-            borderLayer = borderLayerStrong
-        } else {
-            borderLayer = CAShapeLayer()
-            borderLayer.strokeColor = UIColor.white.cgColor
-            borderLayer.lineDashPattern = [10, 10]
-            borderLayer.fillColor = nil
-            borderLayer.lineWidth = 4
-
-            self.borderLayer = borderLayer
-            self.layer.addSublayer(borderLayer)
-        }
-
-        borderLayer.frame = self.bounds
-        borderLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 20).cgPath
+        self.layer.addSublayer(self.borderLayer)
     }
 }
