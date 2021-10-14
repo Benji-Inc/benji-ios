@@ -18,7 +18,7 @@ class ConversationViewController: FullScreenViewController,
     
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     private lazy var collectionView = ConversationCollectionView()
-    private lazy var sendMessageOverlay = ConversationSendOverlayView()
+    private let sendMessageOverlay = ConversationSendOverlayView()
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private let conversationHeader = ConversationHeaderView()
