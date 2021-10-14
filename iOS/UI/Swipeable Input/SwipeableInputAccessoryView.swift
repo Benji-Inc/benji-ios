@@ -303,7 +303,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     private var initialPreviewOrigin: CGPoint?
     private var currentSendPosition: SendPosition?
     /// How far the preview view can be dragged left or right.
-    private let maxXOffset: CGFloat = 100
+    private let maxXOffset: CGFloat = 40
     /// How far the preview view can be dragged vertically
     private let maxYOffset: CGFloat = SwipeableInputAccessoryView.maxHeight.half
 

@@ -39,7 +39,8 @@ class ConversationCollectionViewLayout: UICollectionViewFlowLayout {
 
         self.itemSize = CGSize(width: collectionView.width * 0.8, height: itemHeight)
 
-        let verticalSpacing = (collectionView.height - itemHeight)
+        // NOTE: Subtracting 1 to ensure there's enough vertical space for the cells.
+        let verticalSpacing = (collectionView.height - itemHeight - 1)
         self.sectionInset = UIEdgeInsets(top: 0,
                                          left: 0,
                                          bottom: verticalSpacing,
