@@ -13,6 +13,8 @@ import StreamChat
 
 class ConversationThreadViewController: DiffableCollectionViewController<ConversationCollectionViewDataSource.SectionType, ConversationCollectionViewDataSource.ItemType, ConversationCollectionViewDataSource>, CollectionViewInputHandler {
 
+    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+
     let messageController: ChatMessageController
     var message: Message! {
         return self.messageController.message
@@ -55,6 +57,8 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
+
         Task {
             self.setupHandlers()
             self.subscribeToUpdates()
@@ -83,6 +87,12 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
         self.resignFirstResponder()
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.blurView.expandToSuperviewSize()
+    }
+
     // MARK: Data Loading
 
     override func getAllSections() -> [ConversationCollectionViewDataSource.SectionType] {
@@ -99,7 +109,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
         do {
             try await self.messageController.loadPreviousReplies()
-            let messages = Array(self.messageController.replies.asConversationCollectionItems.reversed())
+            let messages = Array(self.messageController.replies.asConversationCollectionItems)
 
             if let channelId = self.message.cid {
                 data[.conversation(channelId)] = messages
