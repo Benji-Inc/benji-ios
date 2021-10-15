@@ -19,6 +19,17 @@ extension ConversationThreadViewController {
                                   collectionView: self.collectionView)
             }
         }.store(in: &self.cancellables)
+
+        self.dataSource.handleDeleteMessage = { [unowned self] message in
+            self.conversationController?.deleteMessage(message.id)
+        }
+
+        self.conversationController?.typingUsersPublisher.mainSink { [unowned self] users in
+            let nonMeUsers = users.filter { user in
+                return user.userObjectID != User.current()?.objectId
+            }
+            self.messageInputAccessoryView.updateTypingActivity(with: nonMeUsers)
+        }.store(in: &self.cancellables)
     }
 
     /// Updates the datasource with the passed in array of message changes.

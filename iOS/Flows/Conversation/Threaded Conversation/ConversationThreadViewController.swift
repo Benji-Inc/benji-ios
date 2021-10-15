@@ -20,6 +20,8 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
         return self.messageController.message
     }
 
+    private(set) var conversationController: ChatChannelController?
+
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
             self.collectionView.contentInset.bottom = self.collectionViewBottomInset
@@ -46,7 +48,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
     init(channelID: ChannelId, messageID: MessageId) {
         self.messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
-
+        self.conversationController = ChatClient.shared.channelController(for: channelID, messageOrdering: .topToBottom)
         super.init(with: ConversationThreadCollectionView())
     }
 
