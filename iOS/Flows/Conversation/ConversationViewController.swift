@@ -18,6 +18,7 @@ class ConversationViewController: FullScreenViewController,
     
     private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     private lazy var collectionView = ConversationCollectionView()
+    private let sendMessageOverlay = ConversationSendOverlayView()
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private let conversationHeader = ConversationHeaderView()
@@ -25,7 +26,8 @@ class ConversationViewController: FullScreenViewController,
 
     var conversation: Conversation! { return self.conversationController?.channel }
     private(set) var conversationController: ChatChannelController?
-    
+
+    // Input handlers
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
     var didTapMoreButton: CompletionOptional = nil
     var didTapConversationTitle: CompletionOptional = nil
@@ -56,25 +58,6 @@ class ConversationViewController: FullScreenViewController,
         super.initializeViews()
         
         self.view.insertSubview(self.blurView, belowSubview: self.contentContainer)
-        self.contentContainer.addSubview(self.collectionView)
-
-        self.contentContainer.addSubview(self.conversationHeader)
-        self.conversationHeader.configure(with: self.conversation)
-        self.conversationHeader.button.didSelect { [unowned self] in
-            self.didTapMoreButton?()
-        }
-
-        self.conversationHeader.didSelect { [unowned self] in
-            self.didTapConversationTitle?()
-        }
-
-        self.messageInputAccessoryView.textView.$inputText.mainSink { _ in
-            if let enabled = self.conversationController?.areTypingEventsEnabled, enabled {
-                self.conversationController?.sendKeystrokeEvent(completion: nil)
-            }
-        }.store(in: &self.cancellables)
-
-        self.contentContainer.addSubview(self.dateLabel)
 
         self.collectionView.publisher(for: \.contentOffset).mainSink { _ in
             if let ip = self.collectionView.getCentermostVisibleIndex(),
@@ -93,6 +76,24 @@ class ConversationViewController: FullScreenViewController,
                 }
             }
         }.store(in: &self.cancellables)
+        self.contentContainer.addSubview(self.collectionView)
+
+        self.contentContainer.addSubview(self.conversationHeader)
+        self.conversationHeader.configure(with: self.conversation)
+        self.conversationHeader.button.didSelect { [unowned self] in
+            self.didTapMoreButton?()
+        }
+
+        self.conversationHeader.didSelect { [unowned self] in
+            self.didTapConversationTitle?()
+        }
+
+        self.contentContainer.addSubview(self.dateLabel)
+
+        self.messageInputAccessoryView.textView.$inputText.mainSink { _ in
+            guard let enabled = self.conversationController?.areTypingEventsEnabled, enabled else { return }
+            self.conversationController?.sendKeystrokeEvent(completion: nil)
+        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
@@ -107,12 +108,14 @@ class ConversationViewController: FullScreenViewController,
 
         self.dateLabel.setSize(withWidth: self.view.width)
         self.dateLabel.centerOnX()
-        self.dateLabel.match(.bottom, to: .top, of: self.collectionView)
 
         self.collectionView.expandToSuperviewWidth()
-        let padding = self.conversationHeader.height + self.dateLabel.height + 100
-        self.collectionView.pin(.top, padding: padding)
+        let padding = self.dateLabel.height + 40
+        self.collectionView.match(.top, to: .bottom, of: self.conversationHeader, offset: padding)
         self.collectionView.height = self.view.height - padding
+
+        // Base the Y position of the date label on the top of the collection view.
+        self.dateLabel.match(.bottom, to: .top, of: self.collectionView, offset: -20)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -281,12 +284,26 @@ class ConversationViewController: FullScreenViewController,
         self.lastPreparedPosition = nil
 
         self.collectionView.isUserInteractionEnabled = false
+
+        // Animate in the send overlay
+        self.contentContainer.addSubview(self.sendMessageOverlay)
+        self.sendMessageOverlay.alpha = 0
+        self.sendMessageOverlay.setState(nil)
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.sendMessageOverlay.alpha = 1
+        }
+
+        self.sendMessageOverlay.size = CGSize(width: self.collectionView.width * 0.8,
+                                              height: self.collectionView.height * 0.27)
+        self.sendMessageOverlay.match(.top, to: .top, of: self.collectionView)
+        self.sendMessageOverlay.centerOnX()
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didPrepare sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition) {
 
+        // Alpha out the collection view to let the user know they can send a message from this position.
         UIView.animate(withDuration: Theme.animationDuration) {
             self.collectionView.alpha = 0.5
         }
@@ -294,15 +311,17 @@ class ConversationViewController: FullScreenViewController,
         switch position {
         case .left, .middle:
             // Avoid animating content offset twice for redundant states
-            guard self.lastPreparedPosition.equalsOneOf(these: .left, .middle) else { break }
+            guard !self.lastPreparedPosition.equalsOneOf(these: .left, .middle) else { break }
 
+            self.sendMessageOverlay.setState(.reply)
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
         case .right:
             let newXOffset
             = -self.collectionView.width + self.collectionView.conversationLayout.minimumLineSpacing
-            
+
+            self.sendMessageOverlay.setState(.newMessage)
             self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
         }
 
@@ -310,6 +329,7 @@ class ConversationViewController: FullScreenViewController,
     }
 
     func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
+        self.sendMessageOverlay.setState(nil)
         UIView.animate(withDuration: Theme.animationDuration) {
             self.collectionView.alpha = 1
         }
@@ -321,12 +341,20 @@ class ConversationViewController: FullScreenViewController,
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didConfirm sendable: Sendable,
                                  at position: SwipeableInputAccessoryView.SendPosition) {
+
+        guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
+              let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath),
+              case let .message(messageID) = currentItem else {
+
+                  // If there is no current message to reply to, assume we're sending a new message
+                  Task {
+                      await self.send(sendable)
+                  }
+                  return
+              }
+
         switch position {
         case .left, .middle:
-            guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
-                  let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath) else { return }
-
-            guard case let .message(messageID) = currentItem else { return }
             Task {
                 await self.reply(to: messageID, sendable: sendable)
             }
@@ -342,6 +370,9 @@ class ConversationViewController: FullScreenViewController,
 
         UIView.animate(withDuration: Theme.animationDuration) {
             self.collectionView.alpha = 1
+            self.sendMessageOverlay.alpha = 0
+        } completion: { didFinish in
+            self.sendMessageOverlay.removeFromSuperview()
         }
     }
 
