@@ -12,6 +12,20 @@ import StreamChat
 extension ConversationThreadViewController {
 
     func subscribeToUpdates() {
+        
+        self.addKeyboardObservers()
+
+        self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
+            if self.messageInputAccessoryView.textView.isFirstResponder {
+                self.messageInputAccessoryView.textView.resignFirstResponder()
+            }
+        }
+
+        self.messageInputAccessoryView.textView.$inputText.mainSink { _ in
+            guard let enabled = self.conversationController?.areTypingEventsEnabled, enabled else { return }
+            self.conversationController?.sendKeystrokeEvent(completion: nil)
+        }.store(in: &self.cancellables)
+
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
             Task {
                 await self.update(with: changes,

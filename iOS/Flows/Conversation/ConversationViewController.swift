@@ -11,18 +11,23 @@ import StreamChat
 import UIKit
 import SwiftUI
 
+enum ConversationUIState {
+    case read // Keyboard is NOT shown
+    case write // Keyboard IS shown
+}
+
 class ConversationViewController: FullScreenViewController,
                                   UICollectionViewDelegate,
                                   UICollectionViewDelegateFlowLayout,
                                   SwipeableInputAccessoryViewDelegate {
     
-    private lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
-    private lazy var collectionView = ConversationCollectionView()
+    lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
+    lazy var collectionView = ConversationCollectionView()
     private let sendMessageOverlay = ConversationSendOverlayView()
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    private let conversationHeader = ConversationHeaderView()
-    private let dateLabel = ConversationDateLabel()
+    let conversationHeader = ConversationHeaderView()
+    let dateLabel = ConversationDateLabel()
 
     var conversation: Conversation! { return self.conversationController?.channel }
     private(set) var conversationController: ChatChannelController?
@@ -37,9 +42,12 @@ class ConversationViewController: FullScreenViewController,
     override var inputAccessoryView: UIView? {
         return self.messageInputAccessoryView
     }
+
     override var canBecomeFirstResponder: Bool {
         return true
     }
+
+    @Published var state: ConversationUIState = .read
     
     init(conversation: Conversation?) {
         if let conversation = conversation {
@@ -59,41 +67,13 @@ class ConversationViewController: FullScreenViewController,
         
         self.view.insertSubview(self.blurView, belowSubview: self.contentContainer)
 
-        self.collectionView.publisher(for: \.contentOffset).mainSink { _ in
-            if let ip = self.collectionView.getCentermostVisibleIndex(),
-                let itemIdendifiter = self.dataSource.itemIdentifier(for: ip) {
-
-                switch itemIdendifiter {
-                case .message(let messageID):
-                    let messageController = ChatClient.shared.messageController(cid: self.conversation.cid,
-                                                                                messageId: messageID)
-                    if let message = messageController.message {
-                        self.dateLabel.set(date: message.createdAt)
-                        self.view.layoutNow()
-                    }
-                case .loadMore:
-                    break
-                }
-            }
-        }.store(in: &self.cancellables)
         self.contentContainer.addSubview(self.collectionView)
+        self.collectionView.delegate = self
 
         self.contentContainer.addSubview(self.conversationHeader)
         self.conversationHeader.configure(with: self.conversation)
-        self.conversationHeader.button.didSelect { [unowned self] in
-            self.didTapMoreButton?()
-        }
-
-        self.conversationHeader.didSelect { [unowned self] in
-            self.didTapConversationTitle?()
-        }
 
         self.contentContainer.addSubview(self.dateLabel)
-
-        self.messageInputAccessoryView.textView.$inputText.mainSink { _ in
-            guard let enabled = self.conversationController?.areTypingEventsEnabled, enabled else { return }
-            self.conversationController?.sendKeystrokeEvent(completion: nil)
-        }.store(in: &self.cancellables)
     }
     
     override func viewDidLayoutSubviews() {
@@ -123,26 +103,12 @@ class ConversationViewController: FullScreenViewController,
         
         once(caller: self, token: "initializeCollectionView") {
             Task {
-                self.setupInputHandlers()
+                self.setupCompletionHandlers()
                 // Initialize the datasource before listening for updates to ensure that the sections
                 // are set up.
                 await self.initializeDataSource()
-                self.subscribeToConversationUpdates()
+                self.subscribeToUpdates()
             }
-        }
-    }
-    
-    private func setupInputHandlers() {
-        self.collectionView.delegate = self
-        
-        self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
-            if self.messageInputAccessoryView.textView.isFirstResponder {
-                self.messageInputAccessoryView.textView.resignFirstResponder()
-            }
-        }
-        
-        self.dataSource.handleDeleteMessage = { [unowned self] message in
-            self.conversationController?.deleteMessage(message.id)
         }
     }
 
@@ -175,37 +141,6 @@ class ConversationViewController: FullScreenViewController,
         await self.dataSource.apply(snapshot,
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
-    }
-
-    func subscribeToConversationUpdates() {
-        self.conversationController?.messagesChangesPublisher.mainSink { [unowned self] changes in
-            Task {
-                guard let conversationController = self.conversationController else { return }
-                await self.dataSource.update(with: changes,
-                                             conversationController: conversationController,
-                                             collectionView: self.collectionView)
-            }
-        }.store(in: &self.cancellables)
-
-        self.conversationController?.channelChangePublisher.mainSink { [unowned self] change in
-            switch change {
-            case .update(let conversation):
-                self.conversationHeader.configure(with: conversation)
-            case .create, .remove:
-                break
-            }
-        }.store(in: &self.cancellables)
-
-        self.conversationController?.memberEventPublisher.mainSink { [unowned self] _ in
-            self.conversationHeader.configure(with: self.conversation)
-        }.store(in: &self.cancellables)
-
-        self.conversationController?.typingUsersPublisher.mainSink { [unowned self] users in
-            let nonMeUsers = users.filter { user in
-                return user.userObjectID != User.current()?.objectId
-            }
-            self.messageInputAccessoryView.updateTypingActivity(with: nonMeUsers)
-        }.store(in: &self.cancellables)
     }
     
     // MARK: - UICollectionViewDelegate
