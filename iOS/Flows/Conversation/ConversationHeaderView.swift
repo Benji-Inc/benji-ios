@@ -10,6 +10,7 @@ import Foundation
 import StreamChat
 import Combine
 import Lottie
+import UIKit
 
 class ConversationHeaderView: View {
 
@@ -22,6 +23,7 @@ class ConversationHeaderView: View {
     private var cancellables = Set<AnyCancellable>()
 
     private var currentConversation: Conversation?
+    private var state: ConversationUIState = .read
 
     deinit {
         self.cancellables.forEach { cancellable in
@@ -31,8 +33,6 @@ class ConversationHeaderView: View {
 
     override func initializeSubviews() {
         super.initializeSubviews()
-
-        self.set(backgroundColor: .background1)
 
         self.addSubview(self.blurView)
         self.addSubview(self.stackedAvatarView)
@@ -77,12 +77,24 @@ class ConversationHeaderView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.blurView.expandToSuperviewSize()
-        self.roundCorners()
-
         self.stackedAvatarView.setSize()
-        self.stackedAvatarView.centerOnY()
-        self.stackedAvatarView.pin(.left, padding: Theme.contentOffset.half)
+
+        switch self.state {
+        case .read:
+            self.stackedAvatarView.pin(.left, padding: Theme.contentOffset.half)
+            self.blurView.expandToSuperviewSize()
+            self.stackedAvatarView.centerOnY()
+        case .write:
+            self.blurView.height = self.stackedAvatarView.height + Theme.contentOffset.half
+            self.blurView.width = self.stackedAvatarView.width + Theme.contentOffset.half
+            self.blurView.pin(.left)
+            self.blurView.pin(.top)
+
+            self.stackedAvatarView.pin(.left, padding: Theme.contentOffset.half.half)
+            self.stackedAvatarView.centerY = self.blurView.centerY
+        }
+
+        self.blurView.roundCorners()
 
         let maxWidth = self.width - Theme.contentOffset - self.stackedAvatarView.width
         self.label.setSize(withWidth: maxWidth)
@@ -97,5 +109,33 @@ class ConversationHeaderView: View {
         self.button.squaredSize = self.height - Theme.contentOffset
         self.button.pin(.right, padding: Theme.contentOffset.half)
         self.button.centerOnY()
+    }
+
+    func update(for state: ConversationUIState) {
+        self.state = state
+
+        switch state {
+        case .read:
+            self.stackedAvatarView.itemHeight = 50
+        case .write:
+            self.stackedAvatarView.itemHeight = 40
+        }
+
+        UIView.animate(withDuration: Theme.animationDuration) {
+            switch state {
+            case .read:
+                self.label.alpha = 1.0
+                self.descriptionLabel.alpha = 1.0
+                self.button.alpha = 1.0
+            case .write:
+                self.label.alpha = 0.0
+                self.descriptionLabel.alpha = 0.0
+                self.button.alpha = 0.0
+            }
+
+            self.layoutNow()
+        } completion: { completed in
+
+        }
     }
 }

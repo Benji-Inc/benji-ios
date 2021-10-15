@@ -113,6 +113,7 @@ class ConversationViewController: FullScreenViewController,
     }
 
     func updateUI(for state: ConversationUIState) {
+        self.conversationHeader.update(for: state)
         switch state {
         case .read:
             break
