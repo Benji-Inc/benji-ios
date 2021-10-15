@@ -34,11 +34,11 @@ extension ConversationViewController {
 
     func subscribeToUpdates() {
 
-        KeyboardManager.shared.inputAccessoryView = self.inputAccessoryView
+        KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
+
         KeyboardManager.shared.$isKeyboardShowing
-            .removeDuplicates()
             .mainSink { isShowing in
-            self.state = isShowing ? .write : .read
+                self.state = isShowing ? .write : .read
         }.store(in: &self.cancellables)
 
         self.$state
