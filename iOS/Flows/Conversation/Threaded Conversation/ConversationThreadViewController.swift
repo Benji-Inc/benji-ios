@@ -11,10 +11,7 @@ import Parse
 import Combine
 import StreamChat
 
-class ConversationThreadViewController: BlurredViewController, CollectionViewInputHandler, UICollectionViewDelegate {
-
-    lazy var conversationCollectionView = ConversationThreadCollectionView()
-    lazy var collectionViewDataSource = ConversationCollectionViewDataSource(collectionView: self.conversationCollectionView)
+class ConversationThreadViewController: DiffableCollectionViewController<ConversationCollectionViewDataSource.SectionType, ConversationCollectionViewDataSource.ItemType, ConversationCollectionViewDataSource>, CollectionViewInputHandler {
 
     let messageController: ChatMessageController
     var message: Message! {
@@ -23,16 +20,12 @@ class ConversationThreadViewController: BlurredViewController, CollectionViewInp
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
-            self.conversationCollectionView.contentInset.bottom = self.collectionViewBottomInset
-            self.conversationCollectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
+            self.collectionView.contentInset.bottom = self.collectionViewBottomInset
+            self.collectionView.verticalScrollIndicatorInsets.bottom = self.collectionViewBottomInset
         }
     }
 
     var indexPathForEditing: IndexPath?
-
-    var collectionView: CollectionView {
-        return self.conversationCollectionView
-    }
 
     var inputTextView: InputTextView {
         return self.messageInputAccessoryView.textView
@@ -42,8 +35,6 @@ class ConversationThreadViewController: BlurredViewController, CollectionViewInp
     lazy var messageInputAccessoryView = ConversationInputAccessoryView(with: self)
 
     override var inputAccessoryView: UIView? {
-        // This is a hack to make the input hide during the presentation of the image picker. 
-        self.messageInputAccessoryView.alpha = UIWindow.topMostController() == self ? 1.0 : 0.0
         return self.messageInputAccessoryView
     }
 
@@ -54,7 +45,7 @@ class ConversationThreadViewController: BlurredViewController, CollectionViewInp
     init(channelID: ChannelId, messageID: MessageId) {
         self.messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
 
-        super.init()
+        super.init(with: ConversationThreadCollectionView())
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -63,10 +54,6 @@ class ConversationThreadViewController: BlurredViewController, CollectionViewInp
 
     override func initializeViews() {
         super.initializeViews()
-
-        self.view.addSubview(self.conversationCollectionView)
-
-        self.conversationCollectionView.delegate = self
 
         Task {
             self.setupHandlers()
@@ -78,16 +65,11 @@ class ConversationThreadViewController: BlurredViewController, CollectionViewInp
     private func setupHandlers() {
         self.addKeyboardObservers()
 
-//        self.collectionViewManager.didTapEdit = { [unowned self] message, indexPath in
-//            self.indexPathForEditing = indexPath
-//            self.messageInputAccessoryView.edit(message: message)
-//        }
-//
-//        self.conversationCollectionView.onDoubleTap { [unowned self] (doubleTap) in
-//            if self.messageInputAccessoryView.textView.isFirstResponder {
-//                self.messageInputAccessoryView.textView.resignFirstResponder()
-//            }
-//        }
+        self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
+            if self.messageInputAccessoryView.textView.isFirstResponder {
+                self.messageInputAccessoryView.textView.resignFirstResponder()
+            }
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -101,10 +83,29 @@ class ConversationThreadViewController: BlurredViewController, CollectionViewInp
 
         self.resignFirstResponder()
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
 
-        self.conversationCollectionView.expandToSuperviewSize()
+    // MARK: Data Loading
+
+    override func getAllSections() -> [ConversationCollectionViewDataSource.SectionType] {
+        return []
     }
+
+//    override func retrieveDataForSnapshot() async -> [ArchiveCollectionViewDataSource.SectionType : [ArchiveCollectionViewDataSource.ItemType]] {
+//
+//        guard let channels = self.channelListController?.channels else { return [:] }
+//
+//        var data: [ArchiveCollectionViewDataSource.SectionType : [ArchiveCollectionViewDataSource.ItemType]] = [:]
+//
+//        data[.conversations] = channels.map { conversation in
+//            return .conversation(conversation.cid)
+//        }
+//
+//        await NoticeSupplier.shared.loadNotices()
+//
+//        data[.notices] = NoticeSupplier.shared.notices.map { notice in
+//            return .notice(notice)
+//        }
+//
+//        return data
+//    }
 }

@@ -48,6 +48,10 @@ class CircleGroupViewController: DiffableCollectionViewController<CircleGroupCol
 
     // MARK: Data Loading
 
+    override func getAllSections() -> [CircleGroupCollectionViewDataSource.SectionType] {
+        return CircleGroupCollectionViewDataSource.SectionType.allCases
+    }
+
     override func retrieveDataForSnapshot() async -> [CircleGroupCollectionViewDataSource.SectionType : [CircleGroupCollectionViewDataSource.ItemType]] {
 
         guard let circles = try? await CircleGroup.query()?.findObjectsInBackground() as? [CircleGroup], !circles.isEmpty else {

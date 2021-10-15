@@ -25,6 +25,10 @@ class CircleViewController: DiffableCollectionViewController<CircleCollectionVie
 
     // MARK: Data Loading
 
+    override func getAllSections() -> [CircleCollectionViewDataSource.SectionType] {
+        return CircleGroupCollectionViewDataSource.SectionType.allCases as! [CircleCollectionViewDataSource.SectionType]
+    }
+
     override func retrieveDataForSnapshot() async -> [CircleCollectionViewDataSource.SectionType : [CircleCollectionViewDataSource.ItemType]] {
 
         let items: [CircleCollectionViewDataSource.ItemType] = self.circleGroup.circles?.first?.users?.compactMap { user in

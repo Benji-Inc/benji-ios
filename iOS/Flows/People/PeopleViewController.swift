@@ -117,6 +117,10 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     // MARK: Data Loading
 
+    override func getAllSections() -> [PeopleCollectionViewDataSource.SectionType] {
+        return PeopleCollectionViewDataSource.SectionType.allCases
+    }
+
     override func retrieveDataForSnapshot() async -> [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] {
 
         var data: [PeopleCollectionViewDataSource.SectionType: [PeopleCollectionViewDataSource.ItemType]] = [:]

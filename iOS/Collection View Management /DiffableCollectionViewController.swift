@@ -8,7 +8,7 @@
 
 import Foundation
 
-class DiffableCollectionViewController<SectionType: Hashable & CaseIterable, ItemType: Hashable, DataSource: CollectionViewDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
+class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable, DataSource: CollectionViewDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
     
     lazy var dataSource = DataSource.init(collectionView: self.collectionView)
 
@@ -79,7 +79,7 @@ class DiffableCollectionViewController<SectionType: Hashable & CaseIterable, Ite
         var snapshot = self.dataSource.snapshot()
         snapshot.deleteAllItems()
 
-        let allSections = SectionType.allCases as! [SectionType]
+        let allSections: [SectionType] = self.getAllSections()
 
         snapshot.appendSections(allSections)
 
@@ -99,6 +99,10 @@ class DiffableCollectionViewController<SectionType: Hashable & CaseIterable, Ite
     // Empty array may be returned for sections that dont have items.
     func retrieveDataForSnapshot() async -> [SectionType: [ItemType]] {
         fatalError("retrieveDataForSnapshot NOT IMPLEMENTED")
+    }
+
+    func getAllSections() -> [SectionType] {
+        fatalError("getAllSections NOT IMPLEMENTED")
     }
 
     func getAnimationCycle() -> AnimationCycle {

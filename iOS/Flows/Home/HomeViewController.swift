@@ -82,6 +82,10 @@ class HomeViewController: DiffableCollectionViewController<HomeCollectionViewDat
 
     // MARK: Data Loading
 
+    override func getAllSections() -> [HomeCollectionViewDataSource.SectionType] {
+        return HomeCollectionViewDataSource.SectionType.allCases
+    }
+
     override func retrieveDataForSnapshot() async -> [HomeCollectionViewDataSource.SectionType : [HomeCollectionViewDataSource.ItemType]] {
         await NoticeSupplier.shared.loadNotices()
 

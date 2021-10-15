@@ -89,6 +89,10 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
 
     // MARK: Data Loading
 
+    override func getAllSections() -> [ArchiveCollectionViewDataSource.SectionType] {
+        return ArchiveCollectionViewDataSource.SectionType.allCases
+    }
+
     override func retrieveDataForSnapshot() async -> [ArchiveCollectionViewDataSource.SectionType : [ArchiveCollectionViewDataSource.ItemType]] {
 
         guard let channels = self.channelListController?.channels else { return [:] }
