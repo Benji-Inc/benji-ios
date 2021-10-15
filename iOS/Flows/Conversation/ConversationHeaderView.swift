@@ -35,18 +35,19 @@ class ConversationHeaderView: View {
         super.initializeSubviews()
 
         self.addSubview(self.blurView)
-        self.addSubview(self.stackedAvatarView)
+
+        self.blurView.contentView.addSubview(self.stackedAvatarView)
         self.stackedAvatarView.itemHeight = 50
 
-        self.addSubview(self.label)
+        self.blurView.contentView.addSubview(self.label)
         self.label.textAlignment = .left
         self.label.lineBreakMode = .byTruncatingTail
 
-        self.addSubview(self.descriptionLabel)
+        self.blurView.contentView.addSubview(self.descriptionLabel)
         self.descriptionLabel.textAlignment = .left
         self.descriptionLabel.lineBreakMode = .byTruncatingTail
 
-        self.addSubview(self.button)
+        self.blurView.contentView.addSubview(self.button)
         self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .background4))
     }
 
@@ -96,7 +97,7 @@ class ConversationHeaderView: View {
 
         self.blurView.roundCorners()
 
-        let maxWidth = self.width - Theme.contentOffset - self.stackedAvatarView.width
+        let maxWidth = self.blurView.contentView.width - Theme.contentOffset - self.stackedAvatarView.width
         self.label.setSize(withWidth: maxWidth)
 
         self.label.match(.top, to: .top, of: self.stackedAvatarView)
@@ -106,7 +107,7 @@ class ConversationHeaderView: View {
         self.descriptionLabel.match(.bottom, to: .bottom, of: self.stackedAvatarView)
         self.descriptionLabel.match(.left, to: .left, of: self.label)
 
-        self.button.squaredSize = self.height - Theme.contentOffset
+        self.button.squaredSize = self.blurView.contentView.height - Theme.contentOffset
         self.button.pin(.right, padding: Theme.contentOffset.half)
         self.button.centerOnY()
     }
