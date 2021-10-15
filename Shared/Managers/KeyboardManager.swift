@@ -21,6 +21,9 @@ class KeyboardManager {
     // Does not include the inputAccessoryViews size
     @Published var isKeyboardShowing: Bool = false
 
+    // Does not include the inputAccessoryViews size
+    @Published var willKeyboardShow: Bool = false
+
     private weak var inputAccessoryView: UIView?
 
     /// Keyboard events that can happen. Translates directly to `UIKeyboard` notifications from UIKit.
@@ -47,6 +50,13 @@ class KeyboardManager {
             .mainSink { (notification) in
                 self.currentEvent = .willShow(notification)
                 self.cachedKeyboardEndFrame = self.getFrame(for: notification)
+
+                if let inputView = self.inputAccessoryView {
+                    let willShow = self.cachedKeyboardEndFrame.height > inputView.height
+                    self.willKeyboardShow = willShow
+                } else {
+                    self.willKeyboardShow = true
+                }
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)
@@ -67,6 +77,12 @@ class KeyboardManager {
             .mainSink { (notification) in
                 self.currentEvent = .willHide(notification)
                 self.cachedKeyboardEndFrame = self.getFrame(for: notification)
+                if let inputView = self.inputAccessoryView {
+                    let willShow = self.cachedKeyboardEndFrame.height > inputView.height
+                    self.willKeyboardShow = willShow
+                } else {
+                    self.willKeyboardShow = true
+                }
             }.store(in: &self.cancellables)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardDidHideNotification)

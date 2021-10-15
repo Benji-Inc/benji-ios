@@ -36,9 +36,9 @@ extension ConversationViewController {
 
         KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
 
-        KeyboardManager.shared.$isKeyboardShowing
-            .mainSink { isShowing in
-                self.state = isShowing ? .write : .read
+        KeyboardManager.shared.$willKeyboardShow
+            .mainSink { willShow in
+                self.state = willShow ? .write : .read
         }.store(in: &self.cancellables)
 
         self.$state
