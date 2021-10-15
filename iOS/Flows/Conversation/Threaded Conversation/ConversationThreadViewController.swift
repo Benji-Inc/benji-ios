@@ -57,7 +57,6 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
         Task {
             self.setupHandlers()
-            await self.loadReplies(for: self.message)
             self.subscribeToUpdates()
         }
     }
@@ -87,25 +86,28 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
     // MARK: Data Loading
 
     override func getAllSections() -> [ConversationCollectionViewDataSource.SectionType] {
+        if let channelId = self.message.cid {
+           return [.conversation(channelId)]
+        }
+
         return []
     }
 
-//    override func retrieveDataForSnapshot() async -> [ArchiveCollectionViewDataSource.SectionType : [ArchiveCollectionViewDataSource.ItemType]] {
-//
-//        guard let channels = self.channelListController?.channels else { return [:] }
-//
-//        var data: [ArchiveCollectionViewDataSource.SectionType : [ArchiveCollectionViewDataSource.ItemType]] = [:]
-//
-//        data[.conversations] = channels.map { conversation in
-//            return .conversation(conversation.cid)
-//        }
-//
-//        await NoticeSupplier.shared.loadNotices()
-//
-//        data[.notices] = NoticeSupplier.shared.notices.map { notice in
-//            return .notice(notice)
-//        }
-//
-//        return data
-//    }
+    override func retrieveDataForSnapshot() async -> [ConversationCollectionViewDataSource.SectionType : [ConversationCollectionViewDataSource.ItemType]] {
+
+        var data: [ConversationCollectionViewDataSource.SectionType: [ConversationCollectionViewDataSource.ItemType]] = [:]
+
+        do {
+            try await self.messageController.loadPreviousReplies()
+            let messages = Array(self.messageController.replies.asConversationCollectionItems.reversed())
+
+            if let channelId = self.message.cid {
+                data[.conversation(channelId)] = messages
+            }
+        } catch {
+            logDebug(error)
+        }
+        
+        return data
+    }
 }

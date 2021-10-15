@@ -11,22 +11,6 @@ import StreamChat
 
 extension ConversationThreadViewController {
 
-    @MainActor
-    func loadReplies(for message: Message) async {
-
-        do {
-            try await self.messageController.loadPreviousReplies()
-            let messages = Array(self.messageController.replies.asConversationCollectionItems.reversed())
-
-            if let channelId = message.cid {
-//                await self.collectionViewDataSource.appendSections([.conversation(channelId)])
-//                await self.collectionViewDataSource.appendItems(messages, toSection: .conversation(channelId))
-            }
-        } catch {
-            logDebug(error)
-        }
-    }
-
     func subscribeToUpdates() {
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
             Task {
