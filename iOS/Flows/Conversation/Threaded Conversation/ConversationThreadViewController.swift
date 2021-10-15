@@ -62,18 +62,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
 
         Task {
-            self.setupHandlers()
             self.subscribeToUpdates()
-        }
-    }
-
-    private func setupHandlers() {
-        self.addKeyboardObservers()
-
-        self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
-            if self.messageInputAccessoryView.textView.isFirstResponder {
-                self.messageInputAccessoryView.textView.resignFirstResponder()
-            }
         }
     }
 

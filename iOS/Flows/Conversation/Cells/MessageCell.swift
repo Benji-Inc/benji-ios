@@ -40,6 +40,8 @@ class MessageCell: UICollectionViewCell {
         self.collectionView.delegate = self
         self.collectionView.set(backgroundColor: .clear)
         self.contentView.addSubview(self.collectionView)
+        self.collectionView.clipsToBounds = false
+        self.clipsToBounds = false 
     }
 
     required init?(coder: NSCoder) {

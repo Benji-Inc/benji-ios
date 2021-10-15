@@ -48,7 +48,7 @@ class ConversationDateLabel: Label {
         } else if let twoWeeksAgo = now.subtract(component: .weekOfMonth, amount: 2), date.isBetween(now, and: twoWeeksAgo) {
             let formatter = DateFormatter()
             formatter.dateFormat = "EEEE"
-            return "Last week" + formatter.string(from: date)
+            return "Last week " + formatter.string(from: date)
         } else if let yearAgo = now.subtract(component: .year, amount: 1), date.isBetween(now, and: yearAgo) {
             let formatter = DateFormatter()
             formatter.dateFormat = "MMM d"

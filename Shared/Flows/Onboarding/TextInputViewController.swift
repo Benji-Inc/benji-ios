@@ -79,7 +79,7 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
         self.textEntry.size = CGSize(width: width, height: height)
         self.textEntry.centerOnX()
 
-        let defaultOffset = self.view.height - KeyboardManager.shared.cachedKeyboardFrame.height
+        let defaultOffset = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
         self.textEntry.bottom = defaultOffset
     }
 
