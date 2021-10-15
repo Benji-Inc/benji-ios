@@ -112,6 +112,16 @@ class ConversationViewController: FullScreenViewController,
         }
     }
 
+    func updateUI(for state: ConversationUIState) {
+        switch state {
+        case .read:
+            break
+        case .write:
+            break 
+        }
+        print("###### \(state)")
+    }
+
     // MARK: - Message Loading and Updates
 
     @MainActor

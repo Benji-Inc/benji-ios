@@ -33,6 +33,19 @@ extension ConversationViewController {
     }
 
     func subscribeToUpdates() {
+
+        KeyboardManager.shared.inputAccessoryView = self.inputAccessoryView
+        KeyboardManager.shared.$isKeyboardShowing
+            .removeDuplicates()
+            .mainSink { isShowing in
+            self.state = isShowing ? .write : .read
+        }.store(in: &self.cancellables)
+
+        self.$state
+            .removeDuplicates()
+            .mainSink { state in
+                self.updateUI(for: state)
+            }.store(in: &self.cancellables)
         
         self.conversationController?.messagesChangesPublisher.mainSink { [unowned self] changes in
             Task {
