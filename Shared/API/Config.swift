@@ -33,6 +33,10 @@ enum Environment: String {
         case .production: return "prod"
         }
     }
+
+    var groudID: String {
+        return "group.com.Jibber"
+    }
 }
 
 enum BuildType: String, CaseIterable {

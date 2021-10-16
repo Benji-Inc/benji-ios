@@ -23,8 +23,8 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
     private func initializeParse() {
         if Parse.currentConfiguration == nil  {
             let config = ParseClientConfiguration { configuration in
-                configuration.applicationGroupIdentifier = "group.com.BENJI"
-                configuration.containingApplicationBundleIdentifier = "com.Benji.Ours"
+                configuration.applicationGroupIdentifier = Config.shared.environment.groudID
+                configuration.containingApplicationBundleIdentifier = "com.Jibber-Inc.Jibber"
                 configuration.server = Config.shared.environment.url
                 configuration.applicationId = Config.shared.environment.appID
                 configuration.isLocalDatastoreEnabled = true
