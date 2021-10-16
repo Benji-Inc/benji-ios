@@ -13,7 +13,7 @@ class ConversationDateLabel: Label {
     private(set) var currentDate: Date?
 
     init() {
-        super.init(font: .smallBold)
+        super.init(font: .small)
     }
 
     required init?(coder: NSCoder) {
@@ -23,7 +23,7 @@ class ConversationDateLabel: Label {
     func set(date: Date) {
 
         let attributed = AttributedString(self.getString(for: date),
-                                          fontType: .smallBold,
+                                          fontType: .small,
                                           color: .background3)
         self.set(attributed: attributed,
                  alignment: .center,

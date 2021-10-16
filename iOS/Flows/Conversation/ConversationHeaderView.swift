@@ -14,10 +14,9 @@ import UIKit
 
 class ConversationHeaderView: View {
 
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     let stackedAvatarView = StackedAvatarView()
-    let label = Label(font: .medium, textColor: .background4)
-    let descriptionLabel = Label(font: .small, textColor: .background3)
+    let label = Label(font: .largeThin, textColor: .background4)
+    //let descriptionLabel = Label(font: .small, textColor: .background4)
     let button = Button()
 
     private var cancellables = Set<AnyCancellable>()
@@ -36,20 +35,19 @@ class ConversationHeaderView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.addSubview(self.blurView)
+        self.addSubview(self.stackedAvatarView)
 
-        self.blurView.contentView.addSubview(self.stackedAvatarView)
-        self.stackedAvatarView.itemHeight = 50
+        self.stackedAvatarView.itemHeight = 30
 
-        self.blurView.contentView.addSubview(self.label)
+        self.addSubview(self.label)
         self.label.textAlignment = .left
         self.label.lineBreakMode = .byTruncatingTail
 
-        self.blurView.contentView.addSubview(self.descriptionLabel)
-        self.descriptionLabel.textAlignment = .left
-        self.descriptionLabel.lineBreakMode = .byTruncatingTail
+//        self.addSubview(self.descriptionLabel)
+//        self.descriptionLabel.textAlignment = .left
+//        self.descriptionLabel.lineBreakMode = .byTruncatingTail
 
-        self.blurView.contentView.addSubview(self.button)
+        self.addSubview(self.button)
         self.button.set(style: .noborder(image: UIImage(systemName: "ellipsis.circle")!, color: .background4))
 
         let add = UIAction.init(title: "Add people", image: UIImage(systemName: "person.badge.plus")) { _ in
@@ -69,7 +67,7 @@ class ConversationHeaderView: View {
 
         if self.currentConversation?.title != conversation.title {
             self.label.setText(conversation.title)
-            self.descriptionLabel.setText(conversation.description)
+            //self.descriptionLabel.setText(conversation.description)
         }
 
         guard self.currentConversation?.lastActiveMembers != conversation.lastActiveMembers else { return }
@@ -88,59 +86,63 @@ class ConversationHeaderView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        guard let superview = self.superview else { return }
+
+        self.pin(.top, padding: Theme.contentOffset.half)
+        self.pin(.left, padding: Theme.contentOffset.half)
+
         self.stackedAvatarView.setSize()
 
         switch self.state {
         case .read:
-            self.stackedAvatarView.pin(.left, padding: Theme.contentOffset.half)
-            self.blurView.expandToSuperviewSize()
+            self.height = self.stackedAvatarView.itemHeight
+            self.width = superview.width - Theme.contentOffset
+
+            self.stackedAvatarView.pin(.left)
             self.stackedAvatarView.centerOnY()
         case .write:
-            self.blurView.height = self.stackedAvatarView.height + Theme.contentOffset.half
-            self.blurView.width = self.stackedAvatarView.width + Theme.contentOffset.half
-            self.blurView.pin(.left)
-            self.blurView.pin(.top)
+            self.height = self.stackedAvatarView.height
+            self.width = self.stackedAvatarView.width
 
-            self.stackedAvatarView.pin(.left, padding: Theme.contentOffset.half.half)
-            self.stackedAvatarView.centerY = self.blurView.centerY
+            self.stackedAvatarView.pin(.left)
+            self.stackedAvatarView.centerOnY()
         }
 
-        self.blurView.roundCorners()
 
-        let maxWidth = self.blurView.contentView.width - Theme.contentOffset - self.stackedAvatarView.width
+        let maxWidth = self.width - Theme.contentOffset - self.stackedAvatarView.width
         self.label.setSize(withWidth: maxWidth)
 
-        self.label.match(.top, to: .top, of: self.stackedAvatarView)
+        self.label.centerY = self.stackedAvatarView.centerY 
         self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset.half)
 
-        self.descriptionLabel.setSize(withWidth: maxWidth)
-        self.descriptionLabel.match(.bottom, to: .bottom, of: self.stackedAvatarView)
-        self.descriptionLabel.match(.left, to: .left, of: self.label)
+//        self.descriptionLabel.setSize(withWidth: maxWidth)
+//        self.descriptionLabel.match(.bottom, to: .bottom, of: self.stackedAvatarView)
+//        self.descriptionLabel.match(.left, to: .left, of: self.label)
 
-        self.button.squaredSize = self.blurView.contentView.height - Theme.contentOffset
-        self.button.pin(.right, padding: Theme.contentOffset.half)
+        self.button.squaredSize = self.height
+        self.button.pin(.right)
         self.button.centerOnY()
     }
 
     func update(for state: ConversationUIState) {
         self.state = state
 
-        switch state {
-        case .read:
-            self.stackedAvatarView.itemHeight = 50
-        case .write:
-            self.stackedAvatarView.itemHeight = 40
-        }
+//        switch state {
+//        case .read:
+//            self.stackedAvatarView.itemHeight = 40
+//        case .write:
+//            self.stackedAvatarView.itemHeight = 30
+//        }
 
         UIView.animate(withDuration: Theme.animationDuration) {
             switch state {
             case .read:
                 self.label.alpha = 1.0
-                self.descriptionLabel.alpha = 1.0
+                //self.descriptionLabel.alpha = 1.0
                 self.button.alpha = 1.0
             case .write:
                 self.label.alpha = 0.0
-                self.descriptionLabel.alpha = 0.0
+                //self.descriptionLabel.alpha = 0.0
                 self.button.alpha = 0.0
             }
 
@@ -148,16 +150,5 @@ class ConversationHeaderView: View {
         } completion: { completed in
 
         }
-    }
-}
-
-extension ConversationHeaderView: UIToolTipInteractionDelegate {
-    // If both delegate methods are implemented, this one takes precedence
-    func toolTipInteraction(_ interaction: UIToolTipInteraction, toolTipAt point: CGPoint) -> String? {
-        return "Hi There - I'm showing a tooltip"
-    }
-
-    func toolTipInteraction(_ interaction: UIToolTipInteraction, toolTipAt point: CGPoint, boundingRect outRect: UnsafeMutablePointer<CGRect>) -> String? {
-        return "Bounding rect delegate function"
     }
 }

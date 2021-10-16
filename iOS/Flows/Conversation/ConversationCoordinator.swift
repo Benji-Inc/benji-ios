@@ -133,18 +133,21 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
                 !text.isEmpty {
 
                 controller.updateChannel(name: text, imageURL: nil, team: nil) { error in
-                    // Do Stuff
-                    alertController.dismiss(animated: true, completion: nil)
+                    self.conversationVC.conversationHeader.layoutNow()
+                    alertController.dismiss(animated: true, completion: {
+                        self.conversationVC.becomeFirstResponder()
+                    })
                 }
             }
         })
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
-            (action : UIAlertAction!) -> Void in })
+            (action : UIAlertAction!) -> Void in
+            self.conversationVC.becomeFirstResponder()
+        })
 
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
-
 
         self.conversationVC.present(alertController, animated: true, completion: nil)
     }

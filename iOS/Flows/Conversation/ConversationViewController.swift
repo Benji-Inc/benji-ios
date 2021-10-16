@@ -40,11 +40,11 @@ class ConversationViewController: FullScreenViewController,
     // Custom Input Accessory View
     lazy var messageInputAccessoryView = ConversationInputAccessoryView(with: self)
     override var inputAccessoryView: UIView? {
-        return self.messageInputAccessoryView
+        return self.presentedViewController.isNil ? self.messageInputAccessoryView : nil 
     }
 
     override var canBecomeFirstResponder: Bool {
-        return true
+        return self.presentedViewController.isNil
     }
 
     @Published var state: ConversationUIState = .read
@@ -81,11 +81,6 @@ class ConversationViewController: FullScreenViewController,
         
         self.blurView.expandToSuperviewSize()
 
-        self.conversationHeader.height = self.conversationHeader.stackedAvatarView.itemHeight + Theme.contentOffset
-        self.conversationHeader.width = self.view.width - Theme.contentOffset
-        self.conversationHeader.pin(.top, padding: Theme.contentOffset.half)
-        self.conversationHeader.pin(.left, padding: Theme.contentOffset.half)
-
         self.dateLabel.setSize(withWidth: self.view.width)
         self.dateLabel.centerOnX()
 
@@ -113,6 +108,8 @@ class ConversationViewController: FullScreenViewController,
     }
 
     func updateUI(for state: ConversationUIState) {
+        guard self.presentedViewController.isNil else { return }
+
         self.conversationHeader.update(for: state)
         switch state {
         case .read:
