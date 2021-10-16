@@ -120,7 +120,6 @@ class ConversationViewController: FullScreenViewController,
         case .write:
             break 
         }
-        print("###### \(state)")
     }
 
     // MARK: - Message Loading and Updates

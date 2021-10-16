@@ -25,6 +25,8 @@ class ConversationHeaderView: View {
     private var currentConversation: Conversation?
     private var state: ConversationUIState = .read
 
+    var didTapAddPeople: CompletionOptional = nil
+
     deinit {
         self.cancellables.forEach { cancellable in
             cancellable.cancel()
@@ -48,7 +50,15 @@ class ConversationHeaderView: View {
         self.descriptionLabel.lineBreakMode = .byTruncatingTail
 
         self.blurView.contentView.addSubview(self.button)
-        self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .background4))
+        self.button.set(style: .noborder(image: UIImage(systemName: "ellipsis.circle")!, color: .background4))
+
+        let add = UIAction.init(title: "Add people", image: UIImage(systemName: "person.badge.plus")) { _ in
+            self.didTapAddPeople?()
+        }
+
+        let menu = UIMenu(title: "Menu", image: UIImage(systemName: "ellipsis.circle"), identifier: nil, options: [], children: [add])
+        self.button.showsMenuAsPrimaryAction = true
+        self.button.menu = menu
     }
 
     func configure(with conversation: Conversation) {
@@ -138,5 +148,16 @@ class ConversationHeaderView: View {
         } completion: { completed in
 
         }
+    }
+}
+
+extension ConversationHeaderView: UIToolTipInteractionDelegate {
+    // If both delegate methods are implemented, this one takes precedence
+    func toolTipInteraction(_ interaction: UIToolTipInteraction, toolTipAt point: CGPoint) -> String? {
+        return "Hi There - I'm showing a tooltip"
+    }
+
+    func toolTipInteraction(_ interaction: UIToolTipInteraction, toolTipAt point: CGPoint, boundingRect outRect: UnsafeMutablePointer<CGRect>) -> String? {
+        return "Bounding rect delegate function"
     }
 }
