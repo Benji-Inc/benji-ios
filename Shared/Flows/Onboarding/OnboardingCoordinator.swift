@@ -27,8 +27,11 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
          router: Router,
          deepLink: DeepLinkable?) {
 
-        self.reservationId = "3fx7TOiQey"//reservationId
-        self.reservationCreatorId = "FZr3kzCeT9" //reservationCreatorId
+        self.reservationId = reservationId
+        self.reservationCreatorId = reservationCreatorId
+
+        //self.reservationId = "3fx7TOiQey"//reservationId
+        //self.reservationCreatorId = "FZr3kzCeT9" //reservationCreatorId
 
         super.init(router: router, deepLink: deepLink)
     }

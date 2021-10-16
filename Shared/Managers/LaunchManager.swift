@@ -13,6 +13,7 @@ import SDWebImageLinkPlugin
 enum LaunchActivity {
     case onboarding(phoneNumber: String)
     case reservation(reservationId: String)
+    case pass(passId: String)
 }
 
 protocol LaunchActivityHandler {
@@ -40,7 +41,7 @@ class LaunchManager {
         // Initialize Parse if necessary
         if Parse.currentConfiguration.isNil  {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) in
-                configuration.applicationGroupIdentifier = "group.com.BENJI"
+                configuration.applicationGroupIdentifier = Config.shared.environment.groudID
                 configuration.server = Config.shared.environment.url
                 configuration.applicationId = Config.shared.environment.appID
                 configuration.isLocalDatastoreEnabled = true
@@ -90,6 +91,11 @@ class LaunchManager {
                 if let item = components.queryItems?.first,
                    let reservationId = item.value {
                     self.delegate?.launchManager(self, didReceive: .reservation(reservationId: reservationId))
+                }
+            case "/pass":
+                if let item = components.queryItems?.first,
+                   let passID = item.value {
+                    self.delegate?.launchManager(self, didReceive: .pass(passId: passID))
                 }
             default:
                 break

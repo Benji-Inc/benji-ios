@@ -277,6 +277,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             delay(0.25) {
                 vc.didTapButton()
             }
+        case .pass(passId: let passId):
+            break
         }
     }
 

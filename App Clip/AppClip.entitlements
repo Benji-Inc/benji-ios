@@ -9,6 +9,7 @@
 		<string>appclips:jibber.wtf</string>
 		<string>appclips:jibber.wtf/onboarding</string>
 		<string>appclips:jibber.wtf/reservation</string>
+		<string>appclips:jibber.wtf/pass</string>
 	</array>
 	<key>com.apple.developer.parent-application-identifiers</key>
 	<array>
@@ -16,7 +17,7 @@
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.BENJI</string>
+		<string>group.com.Jibber</string>
 	</array>
 </dict>
 </plist>
