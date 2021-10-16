@@ -35,7 +35,7 @@ class ConversationCollectionViewLayout: UICollectionViewFlowLayout {
                                                    bottom: 0,
                                                    right: collectionView.width * 0.1)
 
-        let itemHeight: CGFloat = collectionView.height * 0.27
+        let itemHeight: CGFloat = collectionView.height
 
         self.itemSize = CGSize(width: collectionView.width * 0.8, height: itemHeight)
 

@@ -75,7 +75,7 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
     var spaceBetweenCellTops: CGFloat { return 20 }
     var cellHeight: CGFloat {
         // Cell height should allow for one base message, plus the max number of replies to fit vertically.
-        let height = collectionView.height - self.spaceBetweenCellTops * CGFloat(self.maxShownReplies)
+        let height = (collectionView.height * 0.33) - self.spaceBetweenCellTops * CGFloat(self.maxShownReplies)
         return height
     }
 

@@ -85,9 +85,9 @@ class ConversationViewController: FullScreenViewController,
         self.dateLabel.centerOnX()
 
         self.collectionView.expandToSuperviewWidth()
-        let padding = self.dateLabel.height + 40
+        let padding = self.dateLabel.height + (self.view.height * 0.15)
         self.collectionView.match(.top, to: .bottom, of: self.conversationHeader, offset: padding)
-        self.collectionView.height = self.view.height - padding
+        self.collectionView.height = self.view.height - padding - self.conversationHeader.bottom
 
         // Base the Y position of the date label on the top of the collection view.
         self.dateLabel.match(.bottom, to: .top, of: self.collectionView, offset: -20)

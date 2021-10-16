@@ -14,6 +14,8 @@ class ConversationDateLabel: Label {
 
     init() {
         super.init(font: .small)
+
+        self.setText(" ")
     }
 
     required init?(coder: NSCoder) {
