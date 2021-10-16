@@ -49,6 +49,10 @@ class ConversationHeaderView: View {
 
         self.blurView.contentView.addSubview(self.button)
         self.button.set(style: .icon(image: UIImage(systemName: "plus")!, color: .background4))
+
+        let menu = UIMenu.init(title: "Title", subtitle: "Subtitle", image: UIImage(systemName: "plus"), identifier: nil, options: [], children: [])
+
+        self.button.menu = menu
     }
 
     func configure(with conversation: Conversation) {
