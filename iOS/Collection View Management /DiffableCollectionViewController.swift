@@ -40,9 +40,9 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
         self.collectionView.delegate = self
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
+    override func viewWasPresented() {
+        super.viewWasPresented()
+        
         Task {
             await self.loadData()
         }.add(to: self.taskPool)

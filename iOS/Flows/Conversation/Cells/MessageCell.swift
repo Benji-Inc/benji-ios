@@ -22,6 +22,8 @@ class MessageCell: UICollectionViewCell {
         cell.setText(with: item)
     }
 
+    private var state: ConversationUIState = .read
+
     /// The root message to display.
     private var message: Messageable?
     /// A subset of replies to the root message that we want to display. The count is no more than the maxShownReplies.
