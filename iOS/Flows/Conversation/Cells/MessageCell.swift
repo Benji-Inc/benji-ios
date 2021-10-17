@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StreamChat
 
 /// A cell to display a message along with a limited number of replies to that message.
 /// The root message and replies are stacked along the z-axis, with the most recent reply at the front (visually obscuring the others).
@@ -76,9 +77,10 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
     /// The space between the top of a cell and tops of adjacent cells.
     var spaceBetweenCellTops: CGFloat { return 20 }
     var cellHeight: CGFloat {
+        guard let msg = self.message as? ChatMessage, msg.type != .reply else { return collectionView.height }
         // Cell height should allow for one base message, plus the max number of replies to fit vertically.
         let height = (collectionView.height * 0.33) - self.spaceBetweenCellTops * CGFloat(self.maxShownReplies)
-        return height
+        return clamp(height, min: 1)
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
