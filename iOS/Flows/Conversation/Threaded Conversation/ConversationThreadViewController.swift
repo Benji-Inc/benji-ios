@@ -61,9 +61,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
 
-        Task {
-            self.subscribeToUpdates()
-        }
+        self.subscribeToUpdates()
     }
 
     override func viewWillAppear(_ animated: Bool) {

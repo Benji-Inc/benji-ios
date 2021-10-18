@@ -40,11 +40,11 @@ class ConversationViewController: FullScreenViewController,
     // Custom Input Accessory View
     lazy var messageInputAccessoryView = ConversationInputAccessoryView(with: self)
     override var inputAccessoryView: UIView? {
-        return self.messageInputAccessoryView
+        return self.presentedViewController.isNil ? self.messageInputAccessoryView : nil 
     }
 
     override var canBecomeFirstResponder: Bool {
-        return true
+        return self.presentedViewController.isNil
     }
 
     @Published var state: ConversationUIState = .read
@@ -81,18 +81,13 @@ class ConversationViewController: FullScreenViewController,
         
         self.blurView.expandToSuperviewSize()
 
-        self.conversationHeader.height = self.conversationHeader.stackedAvatarView.itemHeight + Theme.contentOffset
-        self.conversationHeader.width = self.view.width - Theme.contentOffset
-        self.conversationHeader.pin(.top, padding: Theme.contentOffset.half)
-        self.conversationHeader.pin(.left, padding: Theme.contentOffset.half)
-
         self.dateLabel.setSize(withWidth: self.view.width)
         self.dateLabel.centerOnX()
 
         self.collectionView.expandToSuperviewWidth()
-        let padding = self.dateLabel.height + 40
+        let padding = self.dateLabel.height + (self.view.height * 0.15)
         self.collectionView.match(.top, to: .bottom, of: self.conversationHeader, offset: padding)
-        self.collectionView.height = self.view.height - padding
+        self.collectionView.height = self.view.height - padding - self.conversationHeader.bottom
 
         // Base the Y position of the date label on the top of the collection view.
         self.dateLabel.match(.bottom, to: .top, of: self.collectionView, offset: -20)
@@ -113,6 +108,8 @@ class ConversationViewController: FullScreenViewController,
     }
 
     func updateUI(for state: ConversationUIState) {
+        guard self.presentedViewController.isNil else { return }
+
         self.conversationHeader.update(for: state)
         switch state {
         case .read:
@@ -120,7 +117,6 @@ class ConversationViewController: FullScreenViewController,
         case .write:
             break 
         }
-        print("###### \(state)")
     }
 
     // MARK: - Message Loading and Updates

@@ -59,6 +59,12 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
        // self.view.addSubview(self.segmentedControl)
         self.segmentedControl.selectedSegmentIndex = 0
 
+        self.view.addSubview(self.addButton)
+        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightPurple))
+    }
+
+    override func viewWasPresented() {
+
         guard let query = ArchiveScope(rawValue: self.segmentedControl.selectedSegmentIndex)?.query else { return }
 
         Task {
@@ -66,9 +72,6 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
             await self.loadData()
             self.subscribeToUpdates()
         }
-
-        self.view.addSubview(self.addButton)
-        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightPurple))
     }
 
     override func viewDidLayoutSubviews() {

@@ -13,7 +13,7 @@ extension ConversationViewController {
 
     func setupCompletionHandlers() {
 
-        self.conversationHeader.button.didSelect { [unowned self] in
+        self.conversationHeader.didTapAddPeople = { [unowned self] in
             self.didTapMoreButton?()
         }
 

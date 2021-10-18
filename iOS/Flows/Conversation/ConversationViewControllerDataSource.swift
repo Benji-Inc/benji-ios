@@ -26,6 +26,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
     var handleDeleteMessage: ((Message) -> Void)?
     var handleLoadMoreMessages: CompletionOptional = nil
+    @Published var conversationUIState: ConversationUIState = .read 
 
     private let contextMenuDelegate: ContextMenuInteractionDelegate
     private let messageCellRegistration = ConversationCollectionViewDataSource.createMessageCellRegistration()
