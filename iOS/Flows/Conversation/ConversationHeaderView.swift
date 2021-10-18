@@ -16,7 +16,6 @@ class ConversationHeaderView: View {
 
     let stackedAvatarView = StackedAvatarView()
     let label = Label(font: .largeThin, textColor: .background4)
-    //let descriptionLabel = Label(font: .small, textColor: .background4)
     let button = Button()
 
     private var cancellables = Set<AnyCancellable>()
@@ -43,10 +42,6 @@ class ConversationHeaderView: View {
         self.label.textAlignment = .left
         self.label.lineBreakMode = .byTruncatingTail
 
-//        self.addSubview(self.descriptionLabel)
-//        self.descriptionLabel.textAlignment = .left
-//        self.descriptionLabel.lineBreakMode = .byTruncatingTail
-
         self.addSubview(self.button)
         self.button.set(style: .noborder(image: UIImage(systemName: "ellipsis.circle")!, color: .background4))
 
@@ -67,7 +62,6 @@ class ConversationHeaderView: View {
 
         if self.currentConversation?.title != conversation.title {
             self.label.setText(conversation.title)
-            //self.descriptionLabel.setText(conversation.description)
         }
 
         guard self.currentConversation?.lastActiveMembers != conversation.lastActiveMembers else { return }
@@ -115,10 +109,6 @@ class ConversationHeaderView: View {
         self.label.centerY = self.stackedAvatarView.centerY 
         self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset.half)
 
-//        self.descriptionLabel.setSize(withWidth: maxWidth)
-//        self.descriptionLabel.match(.bottom, to: .bottom, of: self.stackedAvatarView)
-//        self.descriptionLabel.match(.left, to: .left, of: self.label)
-
         self.button.squaredSize = self.height
         self.button.pin(.right)
         self.button.centerOnY()
@@ -127,22 +117,13 @@ class ConversationHeaderView: View {
     func update(for state: ConversationUIState) {
         self.state = state
 
-//        switch state {
-//        case .read:
-//            self.stackedAvatarView.itemHeight = 40
-//        case .write:
-//            self.stackedAvatarView.itemHeight = 30
-//        }
-
         UIView.animate(withDuration: Theme.animationDuration) {
             switch state {
             case .read:
                 self.label.alpha = 1.0
-                //self.descriptionLabel.alpha = 1.0
                 self.button.alpha = 1.0
             case .write:
                 self.label.alpha = 0.0
-                //self.descriptionLabel.alpha = 0.0
                 self.button.alpha = 0.0
             }
 
