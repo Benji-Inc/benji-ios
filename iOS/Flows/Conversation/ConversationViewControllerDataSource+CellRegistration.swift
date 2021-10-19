@@ -45,11 +45,32 @@ extension ConversationCollectionViewDataSource {
                                                                         messageId: item.messageID)
             guard let message = messageController.message else { return }
 
-            let replies = message.latestReplies
-            cell.set(message: message, replies: replies, totalReplyCount: message.replyCount)
+            cell.set(message: message, replies: [], totalReplyCount: 0)
 
             let messageAuthor = message.author
-            cell.setAuthor(with: messageAuthor)
+
+            guard let parentMessage = messageController.parentMessage else { return }
+
+            let replies = parentMessage.latestReplies
+
+            var showTopLine = false
+            var showBottomLine = false
+
+            if let previousReply = replies[safe: indexPath.item - 1] {
+                if previousReply.author == messageAuthor {
+                    showTopLine = true
+                }
+            }
+
+            if let nextReply = replies[safe: indexPath.item + 1] {
+                if nextReply.author == messageAuthor {
+                    showBottomLine = true
+                }
+            }
+
+            cell.setAuthor(with: messageAuthor,
+                           showTopLine: showTopLine,
+                           showBottomLine: showBottomLine)
         }
     }
 

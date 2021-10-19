@@ -24,7 +24,8 @@ class MessageCell: UICollectionViewCell {
     }
 
     private let authorView = AvatarView()
-    private let verticalLine = UIView()
+    private let topVerticalLine = UIView()
+    private let bottomVerticalLine = UIView()
 
     private var state: ConversationUIState = .read
 
@@ -40,8 +41,10 @@ class MessageCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.verticalLine.set(backgroundColor: .white)
-        self.contentView.addSubview(self.verticalLine)
+        self.bottomVerticalLine.set(backgroundColor: .white)
+        self.contentView.addSubview(self.topVerticalLine)
+        self.bottomVerticalLine.set(backgroundColor: .white)
+        self.contentView.addSubview(self.bottomVerticalLine)
         self.contentView.addSubview(self.authorView)
 
         // Don't allow the user to interact with the collectionview so that the cell can be tapped on.
@@ -77,16 +80,20 @@ class MessageCell: UICollectionViewCell {
         self.collectionView.expandToSuperviewHeight()
 
         if shouldShowAvatar {
-            self.authorView.setSize(for: self.cellHeight * 40)
+            self.authorView.setSize(for: 40)
             self.authorView.pin(.left)
             self.authorView.centerY = self.cellHeight * 0.5
 
-            self.verticalLine.expandToSuperviewHeight()
-            self.verticalLine.width = 2
-            self.verticalLine.centerX = self.authorView.centerX
+            self.topVerticalLine.height = self.contentView.halfHeight
+            self.topVerticalLine.width = 2
+
+            self.bottomVerticalLine.height = self.contentView.halfHeight
+            self.bottomVerticalLine.width = 2
+            self.bottomVerticalLine.pin(.bottom)
         } else {
             self.authorView.frame = .zero
-            self.verticalLine.frame = .zero
+            self.topVerticalLine.frame = .zero
+            self.bottomVerticalLine.frame = .zero
         }
     }
 
@@ -104,8 +111,13 @@ class MessageCell: UICollectionViewCell {
         self.collectionView.reloadData()
     }
 
-    func setAuthor(with avatar: Avatar) {
+    func setAuthor(with avatar: Avatar, showTopLine: Bool, showBottomLine: Bool) {
         self.authorView.set(avatar: avatar)
+
+        self.topVerticalLine.isHidden = !showTopLine
+        self.bottomVerticalLine.isHidden = !showBottomLine
+
+        self.setNeedsLayout()
     }
 }
 
