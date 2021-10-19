@@ -33,7 +33,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }()
 
     private let animationView = AnimationView.with(animation: .faceScan)
-    private let avatarView = AvatarView()
 
     private let beginButton = Button()
     private let confirmButton = Button()
@@ -53,7 +52,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         self.view.addSubview(self.animationView)
         self.animationView.alpha = 0
-        self.view.addSubview(self.avatarView)
         self.addChild(viewController: self.cameraVC)
 
         self.hideAvatar(with: 0)
@@ -117,19 +115,11 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.avatarView.layer.borderColor = nil
-        self.avatarView.layer.borderWidth = 0
-
         self.animationView.size = CGSize(width: 140, height: 140)
         self.animationView.centerY = self.view.halfHeight * 0.8
         self.animationView.centerOnX()
 
-        let cameraHeight = self.view.height * 0.7
-        self.cameraVC.view.size = CGSize(width: cameraHeight * 0.74, height: cameraHeight)
-        self.cameraVC.view.centerOnX()
-        self.cameraVC.view.top = 30
-
-        self.avatarView.frame = self.cameraVC.view.frame
+        self.cameraVC.view.expandToSuperviewSize()
 
         let rect = self.buttonContainerRect ?? CGRect(x: Theme.contentOffset,
                                                       y: self.view.bottom,
@@ -263,29 +253,25 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     func showAvatar() {
-        UIView.animate(withDuration: Theme.animationDuration,
-                       animations: {
-            self.avatarView.transform = .identity
-            self.avatarView.alpha = 1
-            self.cameraVC.view.alpha = 0
-            self.view.setNeedsLayout()
-        }) { (completed) in }
+//        UIView.animate(withDuration: Theme.animationDuration,
+//                       animations: {
+//            self.cameraVC.view.alpha = 0
+//            self.view.setNeedsLayout()
+//        }) { (completed) in }
     }
 
     func hideAvatar(with duration: TimeInterval = Theme.animationDuration) {
-        UIView.animate(withDuration: duration,
-                       animations: {
-            self.avatarView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-            self.avatarView.alpha = 0
-            self.cameraVC.view.alpha = 1
-            self.view.setNeedsLayout()
-        }) { (completed) in }
+//        UIView.animate(withDuration: duration,
+//                       animations: {
+//
+//            self.cameraVC.view.alpha = 1
+//            self.view.setNeedsLayout()
+//        }) { (completed) in }
     }
 
     private func update(image: UIImage) {
         self.cameraVC.stop()
 
-        self.avatarView.set(avatar: image)
         self.image = image
 
         self.showAvatar()

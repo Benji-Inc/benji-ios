@@ -42,10 +42,17 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         ToastScheduler.shared.delegate = self
 
         self.archiveVC.addButton.didSelect { [unowned self] in
-            Task {
-                await self.createConversation()
-            }.add(to: self.archiveVC.taskPool)
+
+            self.presentPhoto()
+//            Task {
+//                await self.createConversation()
+//            }.add(to: self.archiveVC.taskPool)
         }
+    }
+
+    func presentPhoto() {
+        let vc = ProfilePhotoViewController()
+        self.router.topmostViewController.present(vc, animated: true, completion: nil)
     }
 
     func handle(deeplink: DeepLinkable) {
@@ -162,5 +169,22 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
             coordinator.toPresentable().dismiss(animated: true)
         }
         self.router.present(coordinator, source: self.archiveVC)
+    }
+}
+
+private class ProfilePhotoViewController: PhotoViewController {
+
+    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+
+    override func initializeViews() {
+        super.initializeViews()
+
+        self.view.insertSubview(self.blurView, at: 0)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.blurView.expandToSuperviewSize()
     }
 }
