@@ -55,7 +55,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                                                                     item: (channelID, messageID, self))
 
             let interaction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
-            cell.addInteraction(interaction)
+            cell.contentView.addInteraction(interaction)
             return cell
         case .loadMore:
             return collectionView.dequeueConfiguredReusableCell(using: self.loadMoreMessagesCellRegistration,
@@ -161,11 +161,6 @@ private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteraction
         case .loadMore:
             return nil
         }
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return false
     }
 
     private func makeContextMenu(for messageController: ChatMessageController,
