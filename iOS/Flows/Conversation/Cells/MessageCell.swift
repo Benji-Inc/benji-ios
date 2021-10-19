@@ -41,10 +41,11 @@ class MessageCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.bottomVerticalLine.set(backgroundColor: .white)
+        self.topVerticalLine.set(backgroundColor: .white)
         self.contentView.addSubview(self.topVerticalLine)
         self.bottomVerticalLine.set(backgroundColor: .white)
         self.contentView.addSubview(self.bottomVerticalLine)
+
         self.contentView.addSubview(self.authorView)
 
         // Don't allow the user to interact with the collectionview so that the cell can be tapped on.
@@ -86,9 +87,11 @@ class MessageCell: UICollectionViewCell {
 
             self.topVerticalLine.height = self.contentView.halfHeight
             self.topVerticalLine.width = 2
+            self.topVerticalLine.centerX = self.authorView.centerX
 
             self.bottomVerticalLine.height = self.contentView.halfHeight
             self.bottomVerticalLine.width = 2
+            self.bottomVerticalLine.centerX = self.authorView.centerX
             self.bottomVerticalLine.pin(.bottom)
         } else {
             self.authorView.frame = .zero
