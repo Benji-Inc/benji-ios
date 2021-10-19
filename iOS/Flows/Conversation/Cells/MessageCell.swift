@@ -26,6 +26,7 @@ class MessageCell: UICollectionViewCell {
     private let authorView = AvatarView()
     private let topVerticalLine = UIView()
     private let bottomVerticalLine = UIView()
+    private let dotView = UIView()
 
     private var state: ConversationUIState = .read
 
@@ -45,6 +46,9 @@ class MessageCell: UICollectionViewCell {
         self.contentView.addSubview(self.topVerticalLine)
         self.bottomVerticalLine.set(backgroundColor: .white)
         self.contentView.addSubview(self.bottomVerticalLine)
+
+        self.contentView.addSubview(self.dotView)
+        self.dotView.set(backgroundColor: .white)
 
         self.contentView.addSubview(self.authorView)
 
@@ -93,6 +97,10 @@ class MessageCell: UICollectionViewCell {
             self.bottomVerticalLine.width = 2
             self.bottomVerticalLine.centerX = self.authorView.centerX
             self.bottomVerticalLine.pin(.bottom)
+
+            self.dotView.size = CGSize(width: 6, height: 6)
+            self.dotView.layer.cornerRadius = 3
+            self.dotView.center = self.authorView.center
         } else {
             self.authorView.frame = .zero
             self.topVerticalLine.frame = .zero
@@ -116,9 +124,12 @@ class MessageCell: UICollectionViewCell {
 
     func setAuthor(with avatar: Avatar, showTopLine: Bool, showBottomLine: Bool) {
         self.authorView.set(avatar: avatar)
+        self.authorView.isVisible = showBottomLine && !showTopLine
 
         self.topVerticalLine.isHidden = !showTopLine
         self.bottomVerticalLine.isHidden = !showBottomLine
+
+        self.dotView.isVisible = showTopLine && !showBottomLine
 
         self.setNeedsLayout()
     }
