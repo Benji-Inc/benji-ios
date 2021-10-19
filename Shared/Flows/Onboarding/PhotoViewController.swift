@@ -35,7 +35,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private let animationView = AnimationView.with(animation: .faceScan)
     private let button = Button()
     private let instructionLabel = Label(font: .smallBold, textColor: .background4)
-    private let errorLabel = Label(font: .regular, textColor: .background4)
+    private let errorLabel = Label(font: .smallBold, textColor: .background4)
     private let gradientView = GradientView(with: [Color.background2.color.cgColor, Color.clear.color.cgColor], startPoint: .bottomCenter, endPoint: .topCenter)
 
     private var image: UIImage?
@@ -71,15 +71,25 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             case .scan:
                 break
             case .capture:
-                break
-            case .error:
-                break
-            case .finish:
                 guard let fixed = self.image else { return }
                 Task {
                     await self.saveProfilePicture(image: fixed)
                 }
+            case .error:
+                break
+            case .finish:
+                break
             }
+        }
+
+        self.view.onDoubleTap { [unowned self] _ in
+            guard self.currentState == .capture else { return }
+            self.currentState = .scan
+        }
+
+        self.view.didSelect { [unowned self] in
+            guard self.currentState == .scan, self.cameraVC.faceDetected else { return }
+            self.currentState = .capture
         }
 
         self.cameraVC.didCapturePhoto = { [unowned self] image in
@@ -93,6 +103,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             }.store(in: &self.cancellables)
 
         self.cameraVC.$faceDetected
+            .removeDuplicates()
             .mainSink(receiveValue: { [unowned self] (faceDetected) in
                 guard self.currentState == .scan else { return }
                 self.handleFace(isDetected: faceDetected)
@@ -153,7 +164,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private func handleInitialState() {
 
-        self.button.isEnabled = true
         self.button.set(style: .normal(color: .green, text: "Begin"))
 
         if self.animationView.alpha == 0 {
@@ -172,7 +182,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private func handleFace(isDetected: Bool) {
 
-        UIView.animate(withDuration: 0.2, delay: 0.0, options: []) {
+        UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
             self.errorLabel.alpha = isDetected ? 0.0 : 1.0
             self.instructionLabel.alpha = isDetected ? 1.0 : 0.0
             self.cameraVC.previewLayer.opacity = isDetected ? 1.0 : 0.5
@@ -189,12 +199,19 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.animationView.alpha = 0
             self.instructionLabel.alpha = 1
         }) { (completed) in
-            self.button.isEnabled = false
+
         }
     }
 
     private func handleCaptureState() {
         self.cameraVC.capturePhoto()
+
+        self.button.set(style: .normal(color: .purple, text: "Continue"))
+
+        UIView.animate(withDuration: 0.2) {
+            self.button.alpha = 1.0
+            self.instructionLabel.alpha = 0.0
+        }
     }
 
     private func handleErrorState() {
@@ -227,7 +244,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         do {
             try await currentUser.saveToServer()
-            try await ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
             self.currentState = .finish
         } catch {
             self.currentState = .error
