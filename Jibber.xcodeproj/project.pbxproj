@@ -36,6 +36,7 @@
 		8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8098CC61270F8A2300636484 /* ConversationCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8098CC60270F8A2300636484 /* ConversationCollectionView.swift */; };
 		80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */; };
+		80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */; };
 		80D044B526FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */; };
 		80D7721B26F93B17009F0344 /* ConversationCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */; };
 		80DACF9726D6D1B50048722A /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */; };
@@ -817,6 +818,7 @@
 		8096144E2714CDB800BC948E /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		8098CC60270F8A2300636484 /* ConversationCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCollectionView.swift; sourceTree = "<group>"; };
 		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
+		80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationControllerType.swift; sourceTree = "<group>"; };
 		80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewControllerDataSource+CellRegistration.swift"; sourceTree = "<group>"; };
 		80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCollectionViewLayout.swift; sourceTree = "<group>"; };
 		80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -1240,6 +1242,7 @@
 				80FA868B26F111830053101B /* ChatMessage+Extensions.swift */,
 				80251FF726F3D362006D7873 /* ChatMessageController+Extensions.swift */,
 				80FA869126F117C20053101B /* ChatUser+Avatar.swift */,
+				80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */,
 				80616E3426EAD2F300C077BA /* DataController+Async.swift */,
 			);
 			path = "_Stream Temp";
@@ -2692,6 +2695,7 @@
 				800FAAC126F0585A00D3C3A0 /* ChatChannel+Extensions.swift in Sources */,
 				D61D38E3248C07F700BE457B /* ConversationInputAccessoryView+Animation.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
+				80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */,
 				D642735122C857760088256B /* MessageContext.swift in Sources */,
 				D6A3E247270142B400CEBAC0 /* ArchiveScope.swift in Sources */,
 				D642735322C85B740088256B /* SystemAvatar.swift in Sources */,

@@ -66,7 +66,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
     /// Updates the datasource with the passed in array of message changes.
     func update(with changes: [ListChange<Message>],
-                conversationController: ConversationController,
+                conversationController: ConversationControllerType,
                 collectionView: UICollectionView) async {
 
         guard let conversation = conversationController.conversation else { return }
