@@ -1,0 +1,35 @@
+//
+//  ConversationControllerType.swift
+//  ConversationControllerType
+//
+//  Created by Martin Young on 10/19/21.
+//  Copyright © 2021 Benjamin Dodgson. All rights reserved.
+//
+
+import Foundation
+import StreamChat
+
+/// A common protocol to handle differnt conversation controller types. This allows you to interface with
+/// message threads (MessageController) and conversations (ConversationController) in a unified way.
+protocol ConversationControllerType {
+    /// The conversation related to this controller.
+    var conversation: Conversation? { get }
+    /// The messages currenlty loaded on this controller. In a thread, these would be reply messages.
+    var messages: LazyCachedMapCollection<ChatMessage> { get }
+    /// True if all messages (or replies) have been loaded.
+    var hasLoadedAllPreviousMessages: Bool { get }
+}
+
+extension ConversationController: ConversationControllerType { }
+
+extension MessageController: ConversationControllerType {
+    var messages: LazyCachedMapCollection<ChatMessage> {
+        return self.replies
+    }
+    var conversation: Conversation? {
+        return ChatClient.shared.channelController(for: self.cid).conversation
+    }
+    var hasLoadedAllPreviousMessages: Bool {
+        return self.hasLoadedAllPreviousReplies
+    }
+}
