@@ -63,9 +63,22 @@ class MessageCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        if self.authorView.displayable.exists {
-            self.authorView.setSize(for: self.cellHeight * 0.5)
-            self.authorView.pin(.left, padding: 10)
+        let shouldShowAvatar = self.authorView.displayable.exists
+
+        // Let the collection view know we're about to invalidate the layout so there aren't item size
+        // conflicts.
+        self.collectionView.collectionViewLayout.invalidateLayout()
+        if shouldShowAvatar {
+            self.collectionView.left = 40
+        } else {
+            self.collectionView.left = 0
+        }
+        self.collectionView.expand(.right)
+        self.collectionView.expandToSuperviewHeight()
+
+        if shouldShowAvatar {
+            self.authorView.setSize(for: self.cellHeight * 40)
+            self.authorView.pin(.left)
             self.authorView.centerY = self.cellHeight * 0.5
 
             self.verticalLine.expandToSuperviewHeight()
@@ -75,11 +88,6 @@ class MessageCell: UICollectionViewCell {
             self.authorView.frame = .zero
             self.verticalLine.frame = .zero
         }
-
-        self.collectionView.collectionViewLayout.invalidateLayout()
-        self.collectionView.match(.left, to: .right, of: self.authorView, offset: 0)
-        self.collectionView.expand(.right)
-        self.collectionView.expand(.bottom)
     }
 
     /// Configures the cell to display the given messages.
@@ -98,8 +106,6 @@ class MessageCell: UICollectionViewCell {
 
     func setAuthor(with avatar: Avatar) {
         self.authorView.set(avatar: avatar)
-
-        self.setNeedsLayout()
     }
 }
 

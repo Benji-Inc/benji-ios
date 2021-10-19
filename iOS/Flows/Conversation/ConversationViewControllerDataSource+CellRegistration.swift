@@ -47,6 +47,9 @@ extension ConversationCollectionViewDataSource {
 
             let replies = message.latestReplies
             cell.set(message: message, replies: replies, totalReplyCount: message.replyCount)
+
+            let messageAuthor = message.author
+            cell.setAuthor(with: messageAuthor)
         }
     }
 
