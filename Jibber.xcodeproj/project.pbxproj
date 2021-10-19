@@ -93,6 +93,10 @@
 		D61EC0F521D3151400204BEE /* NSAttributedString+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F421D3151400204BEE /* NSAttributedString+Extensions.swift */; };
 		D61EC0F721D316F100204BEE /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* Color.swift */; };
 		D61EC0F921D317AB00204BEE /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F821D317AB00204BEE /* Theme.swift */; };
+		D621A217271F549400BAD7C2 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
+		D621A218271F54A100BAD7C2 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
+		D621A219271F54EC00BAD7C2 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
+		D621A21A271F54EF00BAD7C2 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D624636C2710F83D0011D11D /* AttachmentCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D624636B2710F83D0011D11D /* AttachmentCollectionViewLayout.swift */; };
 		D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
 		D62BB741244D3BA100607677 /* UNNotification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */; };
@@ -1738,6 +1742,8 @@
 		D6637A2425A3A7A000A4A3B7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D684840922CD48D000362AC3 /* GradientView.swift */,
+				D684840B22CD48FA00362AC3 /* PassThroughView.swift */,
 				D642735422C87CCA0088256B /* ImageViewButton.swift */,
 				D66F0FE122C041AF00BA277D /* AvatarView.swift */,
 				D650C1E025B5F1730037C59A /* AvatarView+Extensions.swift */,
@@ -1834,8 +1840,6 @@
 		D66F0FDF22C0412300BA277D /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				D684840922CD48D000362AC3 /* GradientView.swift */,
-				D684840B22CD48FA00362AC3 /* PassThroughView.swift */,
 				D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */,
 				D6B26902264C7D2000EFDA17 /* AnimatingTapView.swift */,
 			);
@@ -3005,9 +3009,11 @@
 				D63DB27225E9997F00F6B323 /* ResourceObject.swift in Sources */,
 				D63DB26725E9997200F6B323 /* ScreenSize.swift in Sources */,
 				D63DB25E25E9995E00F6B323 /* Connection.swift in Sources */,
+				D621A21A271F54EF00BAD7C2 /* PassThroughView.swift in Sources */,
 				D6617CF726743DFE00439C06 /* Notice.swift in Sources */,
 				D63D71C325F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
 				D63DB29725E999B200F6B323 /* ConfettiView.swift in Sources */,
+				D621A219271F54EC00BAD7C2 /* GradientView.swift in Sources */,
 				D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */,
 				D63DB28625E999A100F6B323 /* FaceDetectionViewController.swift in Sources */,
 				D6D3927F265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,
@@ -3201,6 +3207,7 @@
 				D6A4A1F725E9550A007F3E15 /* UserNotificationCategory.swift in Sources */,
 				D677589225B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
 				D65519202589121500B901E4 /* NSObject+Extensions.swift in Sources */,
+				D621A218271F54A100BAD7C2 /* PassThroughView.swift in Sources */,
 				D655195B2589126800B901E4 /* User+Extensions.swift in Sources */,
 				D6AE0FAC267D037900C6B048 /* User+INPerson.swift in Sources */,
 				D655190E2589120100B901E4 /* Character+Extensions.swift in Sources */,
@@ -3229,6 +3236,7 @@
 				D65519282589122000B901E4 /* String+Extensions.swift in Sources */,
 				D6A49A77260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D65519172589120C00B901E4 /* Date+Extensions.swift in Sources */,
+				D621A217271F549400BAD7C2 /* GradientView.swift in Sources */,
 				D6D3927A265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
 				D6F7DEF726FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,
 				D65519222589121500B901E4 /* NSMutableAttributedString+Extensions.swift in Sources */,

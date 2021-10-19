@@ -33,13 +33,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }()
 
     private let animationView = AnimationView.with(animation: .faceScan)
-
-    private let beginButton = Button()
-    private let confirmButton = Button()
-    private let retakeButton = Button()
-
-    private let buttonContainer = View()
-    private var buttonContainerRect: CGRect?
+    private let button = Button()
+    private let instructionLabel = Label(font: .smallBold, textColor: .background4)
+    private let errorLabel = Label(font: .regular, textColor: .background4)
+    private let gradientView = GradientView(with: [Color.background2.color.cgColor, Color.clear.color.cgColor], startPoint: .bottomCenter, endPoint: .topCenter)
 
     private var image: UIImage?
 
@@ -54,14 +51,35 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animationView.alpha = 0
         self.addChild(viewController: self.cameraVC)
 
-        self.hideAvatar(with: 0)
-        self.view.addSubview(self.buttonContainer)
+        self.view.addSubview(self.errorLabel)
+        self.errorLabel.alpha = 0
+        self.errorLabel.textAlignment = .center
 
-        self.cameraVC.view.clipsToBounds = true
-        self.cameraVC.view.layer.cornerRadius = 5
-        self.cameraVC.view.layer.borderColor = Color.background2.color.cgColor
-        self.cameraVC.view.layer.borderWidth = 2
-        self.cameraVC.view.alpha = 1
+        self.view.addSubview(self.gradientView)
+
+        self.view.addSubview(self.instructionLabel)
+        self.instructionLabel.alpha = 0
+        self.instructionLabel.textAlignment = .center
+
+        self.view.addSubview(self.button)
+        self.button.didSelect { [unowned self] in
+            switch self.currentState {
+            case .initial:
+                self.currentState = .scan
+            case .scan:
+                break
+            case .capture:
+                break
+            case .error:
+                break
+            case .finish:
+                guard let fixed = self.image else { return }
+                Task {
+                    await self.saveProfilePicture(image: fixed)
+                }
+            }
+        }
+
         self.cameraVC.didCapturePhoto = { [unowned self] image in
             self.update(image: image)
         }
@@ -74,36 +92,14 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         self.cameraVC.$faceDetected
             .mainSink(receiveValue: { [unowned self] (faceDetected) in
-                self.beginButton.isEnabled = faceDetected
 
                 guard self.currentState == .scan else { return }
                 if faceDetected {
-                    self.beginButton.set(style: .normal(color: .lightPurple, text: "Capture"))
+                    //self.beginButton.set(style: .normal(color: .lightPurple, text: "Capture"))
                 } else {
-                    self.beginButton.set(style: .normal(color: .red, text: "NO face detected"))
+                    //self.beginButton.set(style: .normal(color: .red, text: "NO face detected"))
                 }
             }).store(in: &self.cancellables)
-
-        self.beginButton.didSelect { [unowned self] in
-            if self.currentState == .initial {
-                self.currentState = .scan
-            } else if self.currentState == .scan {
-                self.currentState = .capture
-            }
-        }
-
-        self.retakeButton.set(style: .normal(color: .red, text: "Retake"))
-        self.retakeButton.didSelect { [unowned self] in
-            self.currentState = .scan
-        }
-
-        self.confirmButton.set(style: .normal(color: .purple, text: "Continue"))
-        self.confirmButton.didSelect { [unowned self] in
-            guard let fixed = self.image else { return }
-            Task {
-                await self.saveProfilePicture(image: fixed)
-            }
-        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -121,12 +117,13 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         self.cameraVC.view.expandToSuperviewSize()
 
-        let rect = self.buttonContainerRect ?? CGRect(x: Theme.contentOffset,
-                                                      y: self.view.bottom,
-                                                      width: self.view.width - (Theme.contentOffset * 2),
-                                                      height: Theme.buttonHeight)
+        self.button.setSize(with: self.view.width)
+        self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+        self.button.centerOnX()
 
-        self.buttonContainer.frame = rect
+        self.gradientView.height = self.view.height - self.button.top
+        self.gradientView.expandToSuperviewWidth()
+        self.gradientView.pin(.bottom)
     }
 
     private func handle(state: PhotoState) {
@@ -147,12 +144,29 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             }
         }
 
+        self.updateButton(for: state)
+
         self.view.layoutNow()
     }
 
+    private func updateButton(for state: PhotoState) {
+
+        switch state {
+        case .initial:
+            self.button.isEnabled = true
+            self.button.set(style: .normal(color: .green, text: "Begin"))
+        case .scan:
+            break
+        case .capture:
+            break
+        case .error:
+            break
+        case .finish:
+            break
+        }
+    }
+
     private func handleInitialState() {
-        self.beginButton.isEnabled = true
-        self.beginButton.set(style: .normal(color: .green, text: "Begin"))
 
         if self.animationView.alpha == 0 {
             UIView.animate(withDuration: Theme.animationDuration, animations: {
@@ -165,54 +179,21 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 self.animationView.play()
             }
         }
-
-        self.buttonContainer.removeAllSubviews()
-        self.buttonContainer.addSubview(self.beginButton)
-        self.beginButton.expandToSuperviewSize()
-        self.showButtons()
     }
 
     private func handleScanState() {
-        self.hideAvatar()
-        self.beginButton.isEnabled = true
+        self.button.isEnabled = false
+        self.cameraVC.begin()
 
-        self.hideButtons { [unowned self] in
-            //Hide animation view
-            UIView.animate(withDuration: 0.2, animations: {
-                self.animationView.alpha = 0
-                self.beginButton.set(style: .normal(color: .lightPurple, text: "Capture"))
-            }) { (completed) in
-                // Begin capture
-                self.cameraVC.begin()
-            }
-
-            self.buttonContainer.addSubview(self.beginButton)
-            self.beginButton.expandToSuperviewSize()
-            self.showButtons()
+        UIView.animate(withDuration: 0.2, animations: {
+            self.button.alpha = 0
+            self.animationView.alpha = 0
+        }) { (completed) in
         }
     }
 
     private func handleCaptureState() {
         self.cameraVC.capturePhoto()
-
-        //Hide button container
-        self.hideButtons { [unowned self] in
-            //Add buttons
-            self.buttonContainer.addSubview(self.retakeButton)
-            let size = CGSize(width: self.buttonContainer.halfWidth - Theme.contentOffset,
-                              height: self.buttonContainer.height)
-            self.retakeButton.size = size
-            self.retakeButton.left = 0
-            self.retakeButton.top = 0
-
-            self.buttonContainer.addSubview(self.confirmButton)
-            self.confirmButton.size = size
-            self.confirmButton.right = self.buttonContainer.width
-            self.confirmButton.top = 0
-
-            //Show buttons
-            self.showButtons()
-        }
     }
 
     private func handleErrorState() {
@@ -222,66 +203,23 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     @MainActor
     private func handleFinishState() async {
         self.complete(with: .success(()))
-        await self.confirmButton.handleEvent(status: .loading)
+        await self.button.handleEvent(status: .loading)
         self.cancellables.forEach { (cancellable) in
             cancellable.cancel()
         }
-    }
-
-    private func showButtons() {
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.buttonContainerRect = CGRect(x: Theme.contentOffset,
-                                              y: self.view.height - self.view.safeAreaInsets.bottom - Theme.buttonHeight - Theme.contentOffset,
-                                              width: self.view.width - (Theme.contentOffset * 2),
-                                              height: Theme.buttonHeight)
-            self.view.layoutNow()
-        }
-    }
-
-    private func hideButtons(completion: CompletionOptional = nil) {
-        UIView.animate(withDuration: Theme.animationDuration, animations: {
-            self.buttonContainerRect = CGRect(x: Theme.contentOffset,
-                                              y: self.view.height - self.view.safeAreaInsets.bottom,
-                                              width: self.view.width - (Theme.contentOffset * 2),
-                                              height: Theme.buttonHeight)
-            self.view.layoutNow()
-        }) { (completed) in
-            guard completed else { return }
-            self.buttonContainer.removeAllSubviews()
-            completion?()
-        }
-    }
-
-    func showAvatar() {
-//        UIView.animate(withDuration: Theme.animationDuration,
-//                       animations: {
-//            self.cameraVC.view.alpha = 0
-//            self.view.setNeedsLayout()
-//        }) { (completed) in }
-    }
-
-    func hideAvatar(with duration: TimeInterval = Theme.animationDuration) {
-//        UIView.animate(withDuration: duration,
-//                       animations: {
-//
-//            self.cameraVC.view.alpha = 1
-//            self.view.setNeedsLayout()
-//        }) { (completed) in }
     }
 
     private func update(image: UIImage) {
         self.cameraVC.stop()
 
         self.image = image
-
-        self.showAvatar()
     }
 
     private func saveProfilePicture(image: UIImage) async {
         guard let currentUser = User.current(), let data = image.previewData else { return }
 
         let file = PFFileObject(name:"small_image.jpeg", data: data)
-        await self.confirmButton.handleEvent(status: .loading)
+        await self.button.handleEvent(status: .loading)
 
         currentUser.smallImage = file
 
