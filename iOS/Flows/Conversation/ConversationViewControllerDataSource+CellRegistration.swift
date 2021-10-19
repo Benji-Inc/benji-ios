@@ -54,6 +54,7 @@ extension ConversationCollectionViewDataSource {
             var showTopLine = false
             var showBottomLine = false
 
+            // Connect messages from the same author with a vertical line.
             if let previousItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item - 1,
                                                                            section: indexPath.section)) {
                 if case .message(let messageID) = previousItem {
