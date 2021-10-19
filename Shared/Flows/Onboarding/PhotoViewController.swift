@@ -54,12 +54,14 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.view.addSubview(self.errorLabel)
         self.errorLabel.alpha = 0
         self.errorLabel.textAlignment = .center
+        self.errorLabel.setText("No face detected")
 
         self.view.addSubview(self.gradientView)
 
         self.view.addSubview(self.instructionLabel)
         self.instructionLabel.alpha = 0
         self.instructionLabel.textAlignment = .center
+        self.instructionLabel.setText("Tap to take photo")
 
         self.view.addSubview(self.button)
         self.button.didSelect { [unowned self] in
@@ -92,13 +94,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         self.cameraVC.$faceDetected
             .mainSink(receiveValue: { [unowned self] (faceDetected) in
-
                 guard self.currentState == .scan else { return }
-                if faceDetected {
-                    //self.beginButton.set(style: .normal(color: .lightPurple, text: "Capture"))
-                } else {
-                    //self.beginButton.set(style: .normal(color: .red, text: "NO face detected"))
-                }
+                self.handleFace(isDetected: faceDetected)
             }).store(in: &self.cancellables)
     }
 
@@ -124,6 +121,13 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.gradientView.height = self.view.height - self.button.top
         self.gradientView.expandToSuperviewWidth()
         self.gradientView.pin(.bottom)
+
+        self.errorLabel.setSize(withWidth: self.view.width - Theme.contentOffset.doubled)
+        self.errorLabel.centerOnXAndY()
+
+        self.instructionLabel.setSize(withWidth: self.view.width - Theme.contentOffset.doubled)
+        self.instructionLabel.centerOnX()
+        self.instructionLabel.centerY = self.gradientView.centerY
     }
 
     private func handle(state: PhotoState) {
@@ -144,33 +148,18 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             }
         }
 
-        self.updateButton(for: state)
-
         self.view.layoutNow()
-    }
-
-    private func updateButton(for state: PhotoState) {
-
-        switch state {
-        case .initial:
-            self.button.isEnabled = true
-            self.button.set(style: .normal(color: .green, text: "Begin"))
-        case .scan:
-            break
-        case .capture:
-            break
-        case .error:
-            break
-        case .finish:
-            break
-        }
     }
 
     private func handleInitialState() {
 
+        self.button.isEnabled = true
+        self.button.set(style: .normal(color: .green, text: "Begin"))
+
         if self.animationView.alpha == 0 {
             UIView.animate(withDuration: Theme.animationDuration, animations: {
                 self.animationView.alpha = 1
+                self.button.alpha = 1
             }) { (completed) in
                 self.animationView.play()
             }
@@ -181,14 +170,26 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         }
     }
 
+    private func handleFace(isDetected: Bool) {
+
+        UIView.animate(withDuration: 0.2, delay: 0.0, options: []) {
+            self.errorLabel.alpha = isDetected ? 0.0 : 1.0
+            self.instructionLabel.alpha = isDetected ? 1.0 : 0.0
+            self.cameraVC.previewLayer.opacity = isDetected ? 1.0 : 0.5
+        } completion: { completed in
+
+        }
+    }
+
     private func handleScanState() {
-        self.button.isEnabled = false
         self.cameraVC.begin()
 
         UIView.animate(withDuration: 0.2, animations: {
             self.button.alpha = 0
             self.animationView.alpha = 0
+            self.instructionLabel.alpha = 1
         }) { (completed) in
+            self.button.isEnabled = false
         }
     }
 
@@ -202,11 +203,12 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     @MainActor
     private func handleFinishState() async {
-        self.complete(with: .success(()))
         await self.button.handleEvent(status: .loading)
         self.cancellables.forEach { (cancellable) in
             cancellable.cancel()
         }
+
+        self.complete(with: .success(()))
     }
 
     private func update(image: UIImage) {
