@@ -24,10 +24,17 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case loadMore
     }
 
+    enum MessageStyle {
+        case conversation
+        case thread
+    }
+
     var handleDeleteMessage: ((Message) -> Void)?
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read 
 
+    var messageStyle: MessageStyle = .conversation
+    
     private let contextMenuDelegate: ContextMenuInteractionDelegate
     private let messageCellRegistration = ConversationCollectionViewDataSource.createMessageCellRegistration()
     private let loadMoreMessagesCellRegistration

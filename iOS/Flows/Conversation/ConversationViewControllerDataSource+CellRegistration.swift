@@ -39,6 +39,17 @@ extension ConversationCollectionViewDataSource {
         }
     }
 
+    static func createThreadMessageCellRegistration() -> MessageCellRegistration {
+        return MessageCellRegistration { cell, indexPath, item in
+            let messageController = ChatClient.shared.messageController(cid: item.channelID,
+                                                                        messageId: item.messageID)
+            guard let message = messageController.message else { return }
+
+            let replies = message.latestReplies
+            cell.set(message: message, replies: replies, totalReplyCount: message.replyCount)
+        }
+    }
+
     static func createLoadMoreCellRegistration() -> LoadMoreMessagesCellRegistration {
         return LoadMoreMessagesCellRegistration { cell, indexPath, itemIdentifier in
             

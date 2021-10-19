@@ -23,6 +23,9 @@ class MessageCell: UICollectionViewCell {
         cell.setText(with: item)
     }
 
+    private let authorView = AvatarView()
+    private let verticalLine = UIView()
+
     private var state: ConversationUIState = .read
 
     /// The root message to display.
@@ -37,6 +40,10 @@ class MessageCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        self.verticalLine.set(backgroundColor: .white)
+        self.contentView.addSubview(self.verticalLine)
+        self.contentView.addSubview(self.authorView)
+
         // Don't allow the user to interact with the collectionview so that the cell can be tapped on.
         self.collectionView.isUserInteractionEnabled = false
         self.collectionView.dataSource = self
@@ -44,6 +51,8 @@ class MessageCell: UICollectionViewCell {
         self.collectionView.set(backgroundColor: .clear)
         self.contentView.addSubview(self.collectionView)
         self.collectionView.clipsToBounds = false
+        self.collectionView.contentInset = UIEdgeInsets()
+
         self.clipsToBounds = false 
     }
 
@@ -54,7 +63,23 @@ class MessageCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.collectionView.expandToSuperviewSize()
+        if self.authorView.displayable.exists {
+            self.authorView.setSize(for: self.cellHeight * 0.5)
+            self.authorView.pin(.left, padding: 10)
+            self.authorView.centerY = self.cellHeight * 0.5
+
+            self.verticalLine.expandToSuperviewHeight()
+            self.verticalLine.width = 2
+            self.verticalLine.centerX = self.authorView.centerX
+        } else {
+            self.authorView.frame = .zero
+            self.verticalLine.frame = .zero
+        }
+
+        self.collectionView.collectionViewLayout.invalidateLayout()
+        self.collectionView.match(.left, to: .right, of: self.authorView, offset: 0)
+        self.collectionView.expand(.right)
+        self.collectionView.expand(.bottom)
     }
 
     /// Configures the cell to display the given messages.
@@ -70,12 +95,19 @@ class MessageCell: UICollectionViewCell {
 
         self.collectionView.reloadData()
     }
+
+    func setAuthor(with avatar: Avatar) {
+        self.authorView.set(avatar: avatar)
+
+        self.setNeedsLayout()
+    }
 }
 
 extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     /// The space between the top of a cell and tops of adjacent cells.
     var spaceBetweenCellTops: CGFloat { return 20 }
+    /// The height of each message subcell
     var cellHeight: CGFloat {
         guard let msg = self.message as? ChatMessage, msg.type != .reply else { return collectionView.height }
         // Cell height should allow for one base message, plus the max number of replies to fit vertically.
