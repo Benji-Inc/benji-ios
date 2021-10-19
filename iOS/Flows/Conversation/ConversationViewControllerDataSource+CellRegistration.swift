@@ -49,22 +49,30 @@ extension ConversationCollectionViewDataSource {
 
             let messageAuthor = message.author
 
-            guard let parentMessage = messageController.parentMessage else { return }
-
-            let replies = parentMessage.latestReplies
+            let dataSource = item.dataSource
 
             var showTopLine = false
             var showBottomLine = false
 
-            if let previousReply = replies[safe: indexPath.item - 1] {
-                if previousReply.author == messageAuthor {
-                    showTopLine = true
+            if let previousItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item - 1,
+                                                                           section: indexPath.section)) {
+                if case .message(let messageID) = previousItem {
+                    let previousMessageController = ChatClient.shared.messageController(cid: item.channelID,
+                                                                                        messageId: messageID)
+                    if previousMessageController.message?.author == messageAuthor {
+                        showTopLine = true
+                    }
                 }
             }
 
-            if let nextReply = replies[safe: indexPath.item + 1] {
-                if nextReply.author == messageAuthor {
-                    showBottomLine = true
+            if let nextItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item + 1,
+                                                                       section: indexPath.section)) {
+                if case .message(let messageID) = nextItem {
+                    let nextMessageController = ChatClient.shared.messageController(cid: item.channelID,
+                                                                                    messageId: messageID)
+                    if nextMessageController.message?.author == messageAuthor {
+                        showBottomLine = true
+                    }
                 }
             }
 
