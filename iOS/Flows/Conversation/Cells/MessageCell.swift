@@ -24,9 +24,9 @@ class MessageCell: UICollectionViewCell {
     }
 
     private let authorView = AvatarView()
-    private let topVerticalLine = UIView()
-    private let bottomVerticalLine = UIView()
-    private let dotView = UIView()
+    private let topVerticalLine = View()
+    private let bottomVerticalLine = View()
+    private let dotView = View()
 
     private var state: ConversationUIState = .read
 
