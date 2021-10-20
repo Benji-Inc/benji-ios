@@ -89,14 +89,17 @@ class MessageCell: UICollectionViewCell {
             self.authorView.pin(.left)
             self.authorView.centerY = self.cellHeight * 0.5
 
-            self.topVerticalLine.height = self.contentView.halfHeight
+            let lineOffset: CGFloat = 10
+
+            self.topVerticalLine.height = self.contentView.halfHeight + lineOffset
             self.topVerticalLine.width = 2
+            self.topVerticalLine.top = -lineOffset
             self.topVerticalLine.centerX = self.authorView.centerX
 
-            self.bottomVerticalLine.height = self.contentView.halfHeight
+            self.bottomVerticalLine.height = self.contentView.halfHeight + lineOffset
             self.bottomVerticalLine.width = 2
             self.bottomVerticalLine.centerX = self.authorView.centerX
-            self.bottomVerticalLine.pin(.bottom)
+            self.bottomVerticalLine.pin(.bottom, padding: -lineOffset)
 
             self.dotView.size = CGSize(width: 6, height: 6)
             self.dotView.layer.cornerRadius = 3
