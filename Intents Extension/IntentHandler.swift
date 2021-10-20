@@ -20,6 +20,7 @@ import Intents
 class IntentHandler: INExtension {
     
     override func handler(for intent: INIntent) -> Any {
+        print("########## INTENTS")
         switch intent {
             case is INSendMessageIntent, is INSearchForMessagesIntent, is INSetMessageAttributeIntent:
                 return MessageIntentHandler()
