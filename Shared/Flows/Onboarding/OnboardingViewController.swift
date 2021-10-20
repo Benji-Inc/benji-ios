@@ -142,6 +142,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.photoVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
+                Task {
+                    try await ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
+                }
+
                 self.current = .focus(self.focusVC)
             case .failure(_):
                 break

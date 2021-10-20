@@ -31,7 +31,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
     var handleDeleteMessage: ((Message) -> Void)?
     var handleLoadMoreMessages: CompletionOptional = nil
-    @Published var conversationUIState: ConversationUIState = .read 
+    @Published var conversationUIState: ConversationUIState = .read
 
     var messageStyle: MessageStyle = .conversation
     
