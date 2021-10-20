@@ -56,8 +56,6 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         self.session.outputs.forEach { output in
             self.session.removeOutput(output)
         }
-
-        self.previewLayer.removeFromSuperlayer()
     }
 
     func toggleFlash() {

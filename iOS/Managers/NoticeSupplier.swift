@@ -49,7 +49,7 @@ class NoticeSupplier {
 
             let connections = try await GetAllConnections().makeRequest(andUpdate: [], viewsToIgnore: [])
             notices = connections.filter({ connection in
-                return connection.status == .invited
+                return connection.status == .invited && connection.from != User.current()
             }).compactMap { connection in
                 return SystemNotice(withConneciton: connection)
             }

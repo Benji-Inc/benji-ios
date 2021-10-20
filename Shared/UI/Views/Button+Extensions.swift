@@ -44,6 +44,7 @@ extension Button {
         }
     }
 
+    @MainActor
     /// Stops any loading animations and shows the button in its standard color with whatever text is assigned to it.
     func handleNormalState() async {
         return await withCheckedContinuation { continuation in
@@ -73,6 +74,7 @@ extension Button {
         }
     }
 
+    @MainActor
     /// Changes the button to the error color and displays a provided error message on the button.
     func handleError(_ description: String) async {
         return await withCheckedContinuation { continuation in
