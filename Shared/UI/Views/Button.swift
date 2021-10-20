@@ -156,7 +156,9 @@ class Button: UIButton, Statusable {
     }
 
     func setBackground(color: UIColor, forUIControlState state: UIControl.State) {
-        self.setBackgroundImage(UIImage.imageWithColor(color: color), for: state)
+        Task.onMainActor {
+            self.setBackgroundImage(UIImage.imageWithColor(color: color), for: state)
+        }
     }
 
     func setSize(with width: CGFloat) {

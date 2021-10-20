@@ -35,17 +35,24 @@ extension MainCoordinator {
 
     #warning("Replace with HomeCoordinator after beta features are complete.")
     func runArchiveFlow() {
-        if let coordinator = self.childCoordinator as? ArchiveCoordinator {
-            if let deepLink = self.deepLink {
-                coordinator.handle(deeplink: deepLink)
+        if ChatClient.isConnected {
+            if let coordinator = self.childCoordinator as? ArchiveCoordinator {
+                if let deepLink = self.deepLink {
+                    coordinator.handle(deeplink: deepLink)
+                }
+            } else {
+                self.removeChild()
+                let coordinator = ArchiveCoordinator(router: self.router, deepLink: self.deepLink)
+                self.router.setRootModule(coordinator, animated: true)
+                self.addChildAndStart(coordinator, finishedHandler: { _ in
+                    // If the home coordinator ever finishes, put handling logic here.
+                })
             }
         } else {
-            self.removeChild()
-            let coordinator = ArchiveCoordinator(router: self.router, deepLink: self.deepLink)
-            self.router.setRootModule(coordinator, animated: true)
-            self.addChildAndStart(coordinator, finishedHandler: { _ in
-                // If the home coordinator ever finishes, put handling logic here.
-            })
+            Task {
+                try await ChatClient.initialize(for: User.current()!)
+                self.runArchiveFlow()
+            }
         }
     }
 
