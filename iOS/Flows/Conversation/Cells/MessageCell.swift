@@ -127,10 +127,10 @@ class MessageCell: UICollectionViewCell {
 
     func setAuthor(with avatar: Avatar, showTopLine: Bool, showBottomLine: Bool) {
         self.authorView.set(avatar: avatar)
-        self.authorView.isVisible = showBottomLine && !showTopLine
+        self.authorView.isVisible = !showTopLine
 
-        self.topVerticalLine.isHidden = !showTopLine
-        self.bottomVerticalLine.isHidden = !showBottomLine
+        self.topVerticalLine.isVisible = showTopLine
+        self.bottomVerticalLine.isVisible = showBottomLine
 
         self.dotView.isVisible = showTopLine && !showBottomLine
 
