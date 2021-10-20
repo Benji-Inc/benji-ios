@@ -31,7 +31,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
     var handleDeleteMessage: ((Message) -> Void)?
     var handleLoadMoreMessages: CompletionOptional = nil
-    @Published var conversationUIState: ConversationUIState = .read 
+    @Published var conversationUIState: ConversationUIState = .read
 
     var messageStyle: MessageStyle = .conversation
     
@@ -137,8 +137,22 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             self.apply(snapshot)
 
             if scrollToLatestMessage, let sectionIndex = snapshot.indexOfSection(sectionID) {
-                let firstIndex = IndexPath(item: 0, section: sectionIndex)
-                collectionView.scrollToItem(at: firstIndex, at: .centeredHorizontally, animated: true)
+                let latestMessageIndex: IndexPath
+                switch self.messageStyle {
+                case .conversation:
+                    // Conversations have the latest message at the first index.
+                    latestMessageIndex = IndexPath(item: 0, section: sectionIndex)
+                    collectionView.scrollToItem(at: latestMessageIndex, at: .centeredHorizontally, animated: true)
+                case .thread:
+                    // Threads have the latest message on the last index.
+                    let lastIndex = snapshot.numberOfItems(inSection: sectionID) - 1
+                    latestMessageIndex = IndexPath(item: lastIndex, section: sectionIndex)
+                    // Inserting a message can cause the visual state of the previous message to change.
+                    if self.messageStyle == .thread {
+                        self.reconfigureItem(atIndex: lastIndex - 1, in: sectionID)
+                    }
+                    collectionView.scrollToItem(at: latestMessageIndex, at: .bottom, animated: true)
+                }
             }
         }
     }

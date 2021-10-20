@@ -33,7 +33,6 @@ extension ConversationViewController {
     }
 
     func subscribeToUpdates() {
-
         KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
 
         KeyboardManager.shared.$willKeyboardShow
