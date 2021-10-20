@@ -11,7 +11,10 @@ import Parse
 import Combine
 import StreamChat
 
-class ConversationThreadViewController: DiffableCollectionViewController<ConversationCollectionViewDataSource.SectionType, ConversationCollectionViewDataSource.ItemType, ConversationCollectionViewDataSource>, CollectionViewInputHandler {
+class ConversationThreadViewController: DiffableCollectionViewController<ConversationCollectionSection,
+                                        ConversationCollectionItem,
+                                        ConversationCollectionViewDataSource>,
+                                        CollectionViewInputHandler {
 
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
 
@@ -48,7 +51,9 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
     init(channelID: ChannelId, messageID: MessageId) {
         self.messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
-        self.conversationController = ChatClient.shared.channelController(for: channelID, messageOrdering: .topToBottom)
+        self.messageController.listOrdering = .bottomToTop
+        self.conversationController = ChatClient.shared.channelController(for: channelID,
+                                                                             messageOrdering: .topToBottom)
         super.init(with: ConversationThreadCollectionView())
     }
 
@@ -86,7 +91,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
     // MARK: Data Loading
 
-    override func getAllSections() -> [ConversationCollectionViewDataSource.SectionType] {
+    override func getAllSections() -> [ConversationCollectionSection] {
         if let channelId = self.message.cid {
            return [.conversation(channelId)]
         }
@@ -95,8 +100,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
     }
 
     override func retrieveDataForSnapshot() async -> [ConversationCollectionSection : [ConversationCollectionItem]] {
-
-        var data: [ConversationCollectionViewDataSource.SectionType: [ConversationCollectionViewDataSource.ItemType]] = [:]
+        var data: [ConversationCollectionSection: [ConversationCollectionItem]] = [:]
 
         do {
             try await self.messageController.loadPreviousReplies()

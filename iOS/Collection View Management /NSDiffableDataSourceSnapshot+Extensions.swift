@@ -23,4 +23,22 @@ extension NSDiffableDataSourceSnapshot {
             self.appendItems(identifiers, toSection: section)
         }
     }
+
+    /// Reloads the item contained in the specified section at that section's specified index.
+    /// If no item exists at that index, this function does nothing.
+    mutating func reloadItem(atIndex index: Int, in section: SectionIdentifierType) {
+        let itemsInSection = self.itemIdentifiers(inSection: section)
+        if let itemAtIndex = itemsInSection[safe: index] {
+            self.reloadItems([itemAtIndex])
+        }
+    }
+
+    /// Reconfigures the item contained in the specified section at that section's specified index.
+    /// If no item exists at that index, this function does nothing.
+    mutating func reconfigureItem(atIndex index: Int, in section: SectionIdentifierType) {
+        let itemsInSection = self.itemIdentifiers(inSection: section)
+        if let itemAtIndex = itemsInSection[safe: index] {
+            self.reconfigureItems([itemAtIndex])
+        }
+    }
 }

@@ -104,7 +104,7 @@ extension CollectionViewDataSource {
 
 extension CollectionViewDataSource {
 
-    // Synchronous Functions
+    // MARK: - Synchronous Functions
 
     func applyChanges(_ changes: (inout SnapshotType) -> Void) {
         var snapshot = self.snapshot()
@@ -169,6 +169,12 @@ extension CollectionViewDataSource {
     func reconfigureItems(_ identifiers: [ItemType]) {
         self.applyChanges { snapshot in
             snapshot.reconfigureItems(identifiers)
+        }
+    }
+
+    func reconfigureItem(atIndex index: Int, in section: SectionType) {
+        self.applyChanges { snapshot in
+            snapshot.reconfigureItem(atIndex: index, in: section)
         }
     }
 
