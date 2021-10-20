@@ -59,6 +59,8 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
     override func initializeViews() {
         super.initializeViews()
 
+        self.dataSource.messageStyle = .thread
+
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
 
         self.subscribeToUpdates()
@@ -92,7 +94,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
         return []
     }
 
-    override func retrieveDataForSnapshot() async -> [ConversationCollectionViewDataSource.SectionType : [ConversationCollectionViewDataSource.ItemType]] {
+    override func retrieveDataForSnapshot() async -> [ConversationCollectionSection : [ConversationCollectionItem]] {
 
         var data: [ConversationCollectionViewDataSource.SectionType: [ConversationCollectionViewDataSource.ItemType]] = [:]
 

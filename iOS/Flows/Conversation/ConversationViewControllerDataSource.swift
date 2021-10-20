@@ -24,12 +24,21 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case loadMore
     }
 
+    enum MessageStyle {
+        case conversation
+        case thread
+    }
+
     var handleDeleteMessage: ((Message) -> Void)?
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read 
 
+    var messageStyle: MessageStyle = .conversation
+    
     private let contextMenuDelegate: ContextMenuInteractionDelegate
     private let messageCellRegistration = ConversationCollectionViewDataSource.createMessageCellRegistration()
+    private let threadMessageCellRegistration
+    = ConversationCollectionViewDataSource.createThreadMessageCellRegistration()
     private let loadMoreMessagesCellRegistration
     = ConversationCollectionViewDataSource.createLoadMoreCellRegistration()
 
@@ -50,9 +59,17 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case .message(let messageID):
             guard case let .conversation(channelID) = section else { return nil }
 
-            let cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
+            let cell: MessageCell
+            switch self.messageStyle {
+            case .conversation:
+                cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                     for: indexPath,
                                                                     item: (channelID, messageID, self))
+            case .thread:
+                cell = collectionView.dequeueConfiguredReusableCell(using: self.threadMessageCellRegistration,
+                                                                    for: indexPath,
+                                                                    item: (channelID, messageID, self))
+            }
 
             let interaction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
             cell.contentView.addInteraction(interaction)

@@ -39,6 +39,50 @@ extension ConversationCollectionViewDataSource {
         }
     }
 
+    static func createThreadMessageCellRegistration() -> MessageCellRegistration {
+        return MessageCellRegistration { cell, indexPath, item in
+            let messageController = ChatClient.shared.messageController(cid: item.channelID,
+                                                                        messageId: item.messageID)
+            guard let message = messageController.message else { return }
+
+            cell.set(message: message, replies: [], totalReplyCount: 0)
+
+            let messageAuthor = message.author
+
+            let dataSource = item.dataSource
+
+            var showTopLine = false
+            var showBottomLine = false
+
+            // Connect messages from the same author with a vertical line.
+            if let previousItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item - 1,
+                                                                           section: indexPath.section)) {
+                if case .message(let messageID) = previousItem {
+                    let previousMessageController = ChatClient.shared.messageController(cid: item.channelID,
+                                                                                        messageId: messageID)
+                    if previousMessageController.message?.author == messageAuthor {
+                        showTopLine = true
+                    }
+                }
+            }
+
+            if let nextItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item + 1,
+                                                                       section: indexPath.section)) {
+                if case .message(let messageID) = nextItem {
+                    let nextMessageController = ChatClient.shared.messageController(cid: item.channelID,
+                                                                                    messageId: messageID)
+                    if nextMessageController.message?.author == messageAuthor {
+                        showBottomLine = true
+                    }
+                }
+            }
+
+            cell.setAuthor(with: messageAuthor,
+                           showTopLine: showTopLine,
+                           showBottomLine: showBottomLine)
+        }
+    }
+
     static func createLoadMoreCellRegistration() -> LoadMoreMessagesCellRegistration {
         return LoadMoreMessagesCellRegistration { cell, indexPath, itemIdentifier in
             

@@ -23,6 +23,11 @@ class MessageCell: UICollectionViewCell {
         cell.setText(with: item)
     }
 
+    private let authorView = AvatarView()
+    private let topVerticalLine = View()
+    private let bottomVerticalLine = View()
+    private let dotView = View()
+
     private var state: ConversationUIState = .read
 
     /// The root message to display.
@@ -37,6 +42,16 @@ class MessageCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        self.topVerticalLine.set(backgroundColor: .white)
+        self.contentView.addSubview(self.topVerticalLine)
+        self.bottomVerticalLine.set(backgroundColor: .white)
+        self.contentView.addSubview(self.bottomVerticalLine)
+
+        self.contentView.addSubview(self.dotView)
+        self.dotView.set(backgroundColor: .white)
+
+        self.contentView.addSubview(self.authorView)
+
         // Don't allow the user to interact with the collectionview so that the cell can be tapped on.
         self.collectionView.isUserInteractionEnabled = false
         self.collectionView.dataSource = self
@@ -44,6 +59,8 @@ class MessageCell: UICollectionViewCell {
         self.collectionView.set(backgroundColor: .clear)
         self.contentView.addSubview(self.collectionView)
         self.collectionView.clipsToBounds = false
+        self.collectionView.contentInset = UIEdgeInsets()
+
         self.clipsToBounds = false 
     }
 
@@ -54,7 +71,41 @@ class MessageCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.collectionView.expandToSuperviewSize()
+        let shouldShowAvatar = self.authorView.displayable.exists
+
+        // Let the collection view know we're about to invalidate the layout so there aren't item size
+        // conflicts.
+        self.collectionView.collectionViewLayout.invalidateLayout()
+        if shouldShowAvatar {
+            self.collectionView.left = 40
+        } else {
+            self.collectionView.left = 0
+        }
+        self.collectionView.expand(.right)
+        self.collectionView.expandToSuperviewHeight()
+
+        if shouldShowAvatar {
+            self.authorView.setSize(for: 40)
+            self.authorView.pin(.left)
+            self.authorView.centerY = self.cellHeight * 0.5
+
+            self.topVerticalLine.height = self.contentView.halfHeight
+            self.topVerticalLine.width = 2
+            self.topVerticalLine.centerX = self.authorView.centerX
+
+            self.bottomVerticalLine.height = self.contentView.halfHeight
+            self.bottomVerticalLine.width = 2
+            self.bottomVerticalLine.centerX = self.authorView.centerX
+            self.bottomVerticalLine.pin(.bottom)
+
+            self.dotView.size = CGSize(width: 6, height: 6)
+            self.dotView.layer.cornerRadius = 3
+            self.dotView.center = self.authorView.center
+        } else {
+            self.authorView.frame = .zero
+            self.topVerticalLine.frame = .zero
+            self.bottomVerticalLine.frame = .zero
+        }
     }
 
     /// Configures the cell to display the given messages.
@@ -70,12 +121,25 @@ class MessageCell: UICollectionViewCell {
 
         self.collectionView.reloadData()
     }
+
+    func setAuthor(with avatar: Avatar, showTopLine: Bool, showBottomLine: Bool) {
+        self.authorView.set(avatar: avatar)
+        self.authorView.isVisible = showBottomLine && !showTopLine
+
+        self.topVerticalLine.isHidden = !showTopLine
+        self.bottomVerticalLine.isHidden = !showBottomLine
+
+        self.dotView.isVisible = showTopLine && !showBottomLine
+
+        self.setNeedsLayout()
+    }
 }
 
 extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     /// The space between the top of a cell and tops of adjacent cells.
     var spaceBetweenCellTops: CGFloat { return 20 }
+    /// The height of each message subcell
     var cellHeight: CGFloat {
         guard let msg = self.message as? ChatMessage, msg.type != .reply else { return collectionView.height }
         // Cell height should allow for one base message, plus the max number of replies to fit vertically.
