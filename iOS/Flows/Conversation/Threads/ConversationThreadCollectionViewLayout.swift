@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConversationThreadCollectionViewLayout: ReversedCollectionViewLayout {
+class ConversationThreadCollectionViewLayout: BottomToTopColumnCollectionViewLayout {
 
     override class var layoutAttributesClass: AnyClass {
         return ConversationCollectionViewLayoutAttributes.self
@@ -27,7 +27,7 @@ class ConversationThreadCollectionViewLayout: ReversedCollectionViewLayout {
         self.itemSize = CGSize(width: collectionView.width * 0.8, height: 120)
         self.itemSpacing = collectionView.width * 0.05
 
-        // Call prepare after setting the item size and spacing so the super call can use them.
+        // Call prepare after setting the item size and spacing so the super call can use those values.
         super.prepare()
     }
 
