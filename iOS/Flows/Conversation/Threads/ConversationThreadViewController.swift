@@ -102,7 +102,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
         var data: [ConversationCollectionSection: [ConversationCollectionItem]] = [:]
 
         do {
-            try await self.messageController.loadPreviousReplies(before: nil, limit: 2)
+            try await self.messageController.loadPreviousReplies()
             let messages = Array(self.messageController.replies.asConversationCollectionItems)
 
             if let channelId = self.message.cid {

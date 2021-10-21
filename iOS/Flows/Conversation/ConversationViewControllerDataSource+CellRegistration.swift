@@ -32,7 +32,6 @@ extension ConversationCollectionViewDataSource {
             if message.replyCount > 0 && message.latestReplies.isEmpty {
                 let dataSource = item.dataSource
                 Task {
-                    #warning("Testing area")
                     try? await messageController.loadPreviousReplies()
                     await dataSource.reconfigureItems([.message(item.messageID)])
                 }
@@ -56,23 +55,23 @@ extension ConversationCollectionViewDataSource {
             var showBottomLine = false
 
             // Connect messages from the same author with a vertical line.
-            if let previousItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item - 1,
-                                                                           section: indexPath.section)) {
-                if case .message(let messageID) = previousItem {
-                    let previousMessageController = ChatClient.shared.messageController(cid: item.channelID,
-                                                                                        messageId: messageID)
-                    if previousMessageController.message?.author == messageAuthor {
-                        showTopLine = true
-                    }
-                }
-            }
-
             if let nextItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item + 1,
                                                                        section: indexPath.section)) {
                 if case .message(let messageID) = nextItem {
                     let nextMessageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                                     messageId: messageID)
                     if nextMessageController.message?.author == messageAuthor {
+                        showTopLine = true
+                    }
+                }
+            }
+
+            if let previousItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item - 1,
+                                                                           section: indexPath.section)) {
+                if case .message(let messageID) = previousItem {
+                    let previousMessageController = ChatClient.shared.messageController(cid: item.channelID,
+                                                                                        messageId: messageID)
+                    if previousMessageController.message?.author == messageAuthor {
                         showBottomLine = true
                     }
                 }
