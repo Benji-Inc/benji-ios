@@ -20,6 +20,19 @@ class ReversedCollectionViewFlowLayout: UICollectionViewFlowLayout {
         }
     }
 
+    var previousContentSize: CGSize?
+
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        if let previousContentSize = self.previousContentSize {
+            if previousContentSize.height != self.collectionViewContentSize.height {
+                return true
+            }
+        }
+
+        self.previousContentSize = self.collectionViewContentSize
+        return super.shouldInvalidateLayout(forBoundsChange: newBounds)
+    }
+
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         let reversedRect = self.reversedRect(forRect: rect)
         let attributes = super.layoutAttributesForElements(in: reversedRect)
