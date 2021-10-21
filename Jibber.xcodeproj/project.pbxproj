@@ -718,7 +718,6 @@
 		D6F80BE725C9C14000E9C75F /* CNContact+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */; };
 		D6FA622223F067A300048C4A /* AnimationDuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA622123F067A300048C4A /* AnimationDuration.swift */; };
 		D6FA622423F06AEF00048C4A /* AnimationCycle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FA622323F06AEF00048C4A /* AnimationCycle.swift */; };
-		D6FC809A237A68F50089AACC /* ConversationThreadViewController+Updates.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FC8099237A68F50089AACC /* ConversationThreadViewController+Updates.swift */; };
 		D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF02C257EB71700F9789B /* Button+Extensions.swift */; };
 		D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */; };
 		E09AAFB2C502C558A3890EC4 /* Pods_Jibber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37E2F7DB90EF2AB2CB1624D0 /* Pods_Jibber.framework */; };
@@ -1157,7 +1156,6 @@
 		D6F80BE625C9C14000E9C75F /* CNContact+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CNContact+Extensions.swift"; sourceTree = "<group>"; };
 		D6FA622123F067A300048C4A /* AnimationDuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationDuration.swift; sourceTree = "<group>"; };
 		D6FA622323F06AEF00048C4A /* AnimationCycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationCycle.swift; sourceTree = "<group>"; };
-		D6FC8099237A68F50089AACC /* ConversationThreadViewController+Updates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationThreadViewController+Updates.swift"; sourceTree = "<group>"; };
 		D6FEF02C257EB71700F9789B /* Button+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Button+Extensions.swift"; sourceTree = "<group>"; };
 		D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIControl+Extensions.swift"; sourceTree = "<group>"; };
 		F3CB2AFC202AF9758DB4EBDE /* Pods-Intents Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Intents Extension.release.xcconfig"; path = "Pods/Target Support Files/Pods-Intents Extension/Pods-Intents Extension.release.xcconfig"; sourceTree = "<group>"; };
@@ -1837,7 +1835,6 @@
 				D635F0A527135BAB00A02D17 /* ConversationThreadCollectionViewLayout.swift */,
 				D6D1500621D5E73D00CD8CE4 /* ConversationThreadViewController.swift */,
 				D61D38E6248C494A00BE457B /* ConversationThreadViewController+Messaging.swift */,
-				D6FC8099237A68F50089AACC /* ConversationThreadViewController+Updates.swift */,
 				80958C1F2721ED55007196BD /* BottomToTopColumnCollectionViewLayout.swift */,
 			);
 			path = Threads;
@@ -2833,7 +2830,6 @@
 				D635F0A627135BAB00A02D17 /* ConversationThreadCollectionViewLayout.swift in Sources */,
 				D66F0FD422BF074C00BA277D /* DeeplinkObject.swift in Sources */,
 				8024B95426F278C8008ABF7F /* ConversationViewController.swift in Sources */,
-				D6FC809A237A68F50089AACC /* ConversationThreadViewController+Updates.swift in Sources */,
 				D6D39288265F15B800E49F1E /* NoticeCell.swift in Sources */,
 				D6D1461121D583D200CD8CE4 /* RootNavigationController.swift in Sources */,
 				D61EC0EC21D312B600204BEE /* UIView+Extensions.swift in Sources */,
