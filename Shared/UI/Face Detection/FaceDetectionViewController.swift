@@ -56,7 +56,8 @@ class FaceDetectionViewController: ImageCaptureViewController {
               let imageData = photo.fileDataRepresentation(),
               let image = UIImage.init(data: imageData , scale: 1.0) else { return }
 
-        let imageOptions =  NSDictionary(object: NSNumber(value: 5) as NSNumber, forKey: CIDetectorImageOrientation as NSString)
+        let imageOptions =  NSMutableDictionary(object: NSNumber(value: 5) as NSNumber, forKey: CIDetectorImageOrientation as NSString)
+        imageOptions[CIDetectorEyeBlink] = true
         let personciImage = CIImage(cgImage: image.cgImage!)
         let accuracy = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
         let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: accuracy)
