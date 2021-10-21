@@ -10,13 +10,6 @@ import Foundation
 
 class ConversationThreadCollectionView: CollectionView {
 
-    var conversationLayout: ConversationThreadCollectionViewLayout {
-        guard let layout = self.collectionViewLayout as? ConversationThreadCollectionViewLayout else {
-            fatalError("ConversationThreadCollectionViewLayout NOT FOUND")
-        }
-        return layout
-    }
-
     init() {
         super.init(layout: ConversationThreadCollectionViewLayout())
         

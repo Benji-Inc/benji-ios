@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConversationThreadCollectionViewLayout: ReversedCollectionViewFlowLayout {
+class ConversationThreadCollectionViewLayout: ReversedCollectionViewLayout {
 
     override class var layoutAttributesClass: AnyClass {
         return ConversationCollectionViewLayoutAttributes.self
@@ -16,28 +16,19 @@ class ConversationThreadCollectionViewLayout: ReversedCollectionViewFlowLayout {
     
     private var insertingIndexPaths: [IndexPath] = []
 
-    override init() {
-        super.init()
-
-        self.scrollDirection = .vertical
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     override func prepare() {
-        super.prepare()
-
         guard let collectionView = self.collectionView else { return }
 
-        collectionView.contentInset = UIEdgeInsets(top: 0,
+        collectionView.contentInset = UIEdgeInsets(top: collectionView.contentInset.top,
                                                    left: collectionView.width * 0.1,
-                                                   bottom: 0,
+                                                   bottom: collectionView.contentInset.bottom,
                                                    right: collectionView.width * 0.1)
 
         self.itemSize = CGSize(width: collectionView.width * 0.8, height: 120)
-        self.minimumLineSpacing = collectionView.width * 0.05
+        self.itemSpacing = collectionView.width * 0.05
+
+        // Call prepare after setting the item size and spacing so the super call can use them.
+        super.prepare()
     }
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
