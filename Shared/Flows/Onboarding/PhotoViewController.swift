@@ -16,7 +16,8 @@ import Combine
 enum PhotoState {
     case initial
     case scan
-    case capture
+    case captureEyesOpen
+    case captureEyesClosed
     case error
     case finish
 }
@@ -38,7 +39,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private let errorLabel = Label(font: .smallBold, textColor: .background4)
     private let gradientView = GradientView(with: [Color.background2.color.cgColor, Color.clear.color.cgColor], startPoint: .bottomCenter, endPoint: .topCenter)
 
-    private var image: UIImage?
+    private var eyesOpenImage: UIImage?
+    private var eyesClosedImage: UIImage?
 
     @Published private(set) var currentState: PhotoState = .initial
 
@@ -70,8 +72,13 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 self.currentState = .scan
             case .scan:
                 break
-            case .capture:
-                guard let fixed = self.image else { return }
+            case .captureEyesOpen:
+                guard let fixed = self.eyesOpenImage else { return }
+                Task {
+                    await self.saveProfilePicture(image: fixed)
+                }
+            case .captureEyesClosed:
+                guard let fixed = self.eyesOpenImage else { return }
                 Task {
                     await self.saveProfilePicture(image: fixed)
                 }
@@ -83,13 +90,13 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         }
 
         self.view.onDoubleTap { [unowned self] _ in
-            guard self.currentState == .capture else { return }
+            guard self.currentState == .captureEyesOpen else { return }
             self.currentState = .scan
         }
 
         self.view.didSelect { [unowned self] in
             guard self.currentState == .scan, self.cameraVC.faceDetected else { return }
-            self.currentState = .capture
+            self.currentState = .captureEyesOpen
         }
 
         self.cameraVC.didCapturePhoto = { [unowned self] image in
@@ -149,8 +156,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             }
         case .scan:
             self.handleScanState()
-        case .capture:
-            self.handleCaptureState()
+        case .captureEyesOpen:
+            self.handleEyesOpenCaptureState()
+        case .captureEyesClosed:
+            break
         case .error:
             self.handleErrorState()
         case .finish:
@@ -203,7 +212,18 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         }
     }
 
-    private func handleCaptureState() {
+    private func handleEyesOpenCaptureState() {
+        self.cameraVC.capturePhoto()
+
+        self.button.set(style: .normal(color: .purple, text: "Continue"))
+
+        UIView.animate(withDuration: 0.2) {
+            self.button.alpha = 1.0
+            self.instructionLabel.alpha = 0.0
+        }
+    }
+
+    private func handleEyesClosedCaptureState() {
         self.cameraVC.capturePhoto()
 
         self.button.set(style: .normal(color: .purple, text: "Continue"))
@@ -229,24 +249,54 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func update(image: UIImage) {
-        self.cameraVC.stop()
+       // self.cameraVC.stop()
 
-        self.image = image
+        if self.currentState == .captureEyesOpen {
+            self.eyesOpenImage = image
+        } else if self.currentState == .captureEyesClosed {
+            self.eyesClosedImage = image
+        }
     }
 
     private func saveProfilePicture(image: UIImage) async {
         guard let currentUser = User.current(), let data = image.previewData else { return }
 
-        let file = PFFileObject(name:"small_image.jpeg", data: data)
-        await self.button.handleEvent(status: .loading)
+        if self.currentState == .captureEyesOpen {
+            let file = PFFileObject(name:"small_image.jpeg", data: data)
+            currentUser.smallImage = file
+        } else if self.currentState == .captureEyesClosed {
+            let file = PFFileObject(name:"focus_image.jpeg", data: data)
+            currentUser.focusImage = file
+        }
 
-        currentUser.smallImage = file
+        await self.button.handleEvent(status: .loading)
 
         do {
             try await currentUser.saveToServer()
+            self.scheduleToast(with: image)
             self.currentState = .finish
         } catch {
             self.currentState = .error
+        }
+    }
+
+    private func scheduleToast(with image: UIImage) {
+        let description: Localized
+
+        if self.currentState == .captureEyesOpen {
+            description = "You have successfully updated your profile image."
+        } else {
+            description = "You have successfully updated your focus image."
+        }
+
+        let toast = ToastType.basic(identifier: UUID().uuidString,
+                                    displayable: image,
+                                    title: "Success",
+                                    description: description,
+                                    deepLink: nil)
+
+        Task {
+            await ToastScheduler.shared.schedule(toastType: toast)
         }
     }
 }

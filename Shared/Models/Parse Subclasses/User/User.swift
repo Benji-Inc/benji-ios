@@ -23,6 +23,7 @@ enum UserKey: String {
     case givenName
     case familyName
     case smallImage
+    case focusImage
     case quePosition
     case status
     case handle
@@ -67,6 +68,11 @@ final class User: PFUser {
     var smallImage: PFFileObject? {
         get { return self.getObject(for: .smallImage) }
         set { self.setObject(for: .smallImage, with: newValue) }
+    }
+
+    var focusImage: PFFileObject? {
+        get { return self.getObject(for: .focusImage) }
+        set { self.setObject(for: .focusImage, with: newValue) }
     }
 
     var quePosition: Int? {
