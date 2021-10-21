@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 import TMROLocalization
+import Intents
 
 protocol ArchiveViewControllerDelegate: AnyObject {
     func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType)
@@ -61,6 +62,15 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
 
         self.view.addSubview(self.addButton)
         self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightPurple))
+
+
+        #warning("Move these requests to more appropriate place")
+        /// Request authorization to check Focus Status
+        INFocusStatusCenter.default.requestAuthorization { status in
+            /// Provides a INFocusStatusAuthorizationStatus
+        }
+
+        UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
     }
 
     override func viewWasPresented() {
