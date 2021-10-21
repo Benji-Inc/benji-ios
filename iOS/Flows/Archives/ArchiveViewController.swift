@@ -67,6 +67,8 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
         INFocusStatusCenter.default.requestAuthorization { status in
             /// Provides a INFocusStatusAuthorizationStatus
         }
+
+        UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
     }
 
     override func viewWasPresented() {
