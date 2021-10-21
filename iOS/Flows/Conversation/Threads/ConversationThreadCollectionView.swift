@@ -18,8 +18,8 @@ class ConversationThreadCollectionView: CollectionView {
     }
 
     init() {
-//        super.init(layout: ConversationThreadCollectionViewLayout())
-        super.init(layout: ReversedCollectionViewFlowLayout())
+        super.init(layout: ConversationThreadCollectionViewLayout())
+        
         self.registerReusableViews()
         self.keyboardDismissMode = .interactive
         self.automaticallyAdjustsScrollIndicatorInsets = true 

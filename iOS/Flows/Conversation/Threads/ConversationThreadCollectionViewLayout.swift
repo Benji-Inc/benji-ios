@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConversationThreadCollectionViewLayout: UICollectionViewCompositionalLayout {
+class ConversationThreadCollectionViewLayout: ReversedCollectionViewFlowLayout {
 
     override class var layoutAttributesClass: AnyClass {
         return ConversationCollectionViewLayoutAttributes.self
@@ -16,32 +16,28 @@ class ConversationThreadCollectionViewLayout: UICollectionViewCompositionalLayou
     
     private var insertingIndexPaths: [IndexPath] = []
 
-    init() {
-        let config = UICollectionViewCompositionalLayoutConfiguration()
-        config.scrollDirection = .vertical
+    override init() {
+        super.init()
 
-        super.init(sectionProvider: { sectionIndex, environment in
-
-            // Item
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
-            item.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: Theme.contentOffset, bottom: 8, trailing: Theme.contentOffset)
-
-            // Group
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(120))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
-            // Section
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: Theme.contentOffset - 8, leading: 0, bottom: Theme.contentOffset.doubled.doubled, trailing: 0)
-            
-            return section
-
-        }, configuration: config)
+        self.scrollDirection = .vertical
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func prepare() {
+        super.prepare()
+
+        guard let collectionView = self.collectionView else { return }
+
+        collectionView.contentInset = UIEdgeInsets(top: 0,
+                                                   left: collectionView.width * 0.1,
+                                                   bottom: 0,
+                                                   right: collectionView.width * 0.1)
+
+        self.itemSize = CGSize(width: collectionView.width * 0.8, height: 120)
+        self.minimumLineSpacing = collectionView.width * 0.05
     }
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
@@ -63,7 +59,9 @@ class ConversationThreadCollectionViewLayout: UICollectionViewCompositionalLayou
         self.insertingIndexPaths.removeAll()
     }
 
-    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
+    -> UICollectionViewLayoutAttributes? {
+
         let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
 
         if self.insertingIndexPaths.contains(itemIndexPath) {

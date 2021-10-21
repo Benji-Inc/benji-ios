@@ -130,12 +130,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         // Only show the load more cell if there are previous messages to load.
         snapshot.deleteItems([.loadMore])
         if !conversationController.hasLoadedAllPreviousMessages {
-            switch self.messageStyle {
-            case .conversation:
-                snapshot.appendItems([.loadMore], toSection: sectionID)
-            case .thread:
-                snapshot.insertItems([.loadMore], in: sectionID, atIndex: 0)
-            }
+            snapshot.appendItems([.loadMore], toSection: sectionID)
         }
 
         await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
@@ -143,19 +138,15 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
             // Scroll to the latest message if needed and reconfigure cells as needed.
             if scrollToLatestMessage, let sectionIndex = snapshot.indexOfSection(sectionID) {
-                let latestMessageIndex: IndexPath
+                let latestMessageIndex = IndexPath(item: 0, section: sectionIndex)
                 switch self.messageStyle {
                 case .conversation:
                     // Conversations have the latest message at the first index.
-                    latestMessageIndex = IndexPath(item: 0, section: sectionIndex)
                     collectionView.scrollToItem(at: latestMessageIndex, at: .centeredHorizontally, animated: true)
                 case .thread:
-                    // Threads have the latest message on the last index.
-                    let lastIndex = snapshot.numberOfItems(inSection: sectionID) - 1
-                    latestMessageIndex = IndexPath(item: lastIndex, section: sectionIndex)
                     // Inserting a message can cause the visual state of the previous message to change.
                     if self.messageStyle == .thread {
-                        self.reconfigureItem(atIndex: lastIndex - 1, in: sectionID)
+                        self.reconfigureItem(atIndex: 1, in: sectionID)
                     }
                     collectionView.scrollToItem(at: latestMessageIndex, at: .bottom, animated: true)
                 }
