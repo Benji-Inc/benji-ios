@@ -20,6 +20,7 @@ class ReversedCollectionViewFlowLayout: UICollectionViewFlowLayout {
         }
     }
 
+#warning("This should be moved to a thread subclass")
     override func prepare() {
         guard let collectionView = self.collectionView else { return }
 
@@ -30,7 +31,7 @@ class ReversedCollectionViewFlowLayout: UICollectionViewFlowLayout {
 
         let itemHeight: CGFloat = collectionView.height * 0.2
 
-        self.itemSize = CGSize(width: collectionView.width * 0.8, height: itemHeight)
+        self.itemSize = CGSize(width: collectionView.width, height: 120)
 
         // NOTE: Subtracting 1 to ensure there's enough vertical space for the cells.
         let verticalSpacing = (collectionView.height - itemHeight - 1)
@@ -46,23 +47,30 @@ class ReversedCollectionViewFlowLayout: UICollectionViewFlowLayout {
             return super.shouldInvalidateLayout(forBoundsChange: newBounds)
         }
 
-        if fabsf(Float(collectionView.bounds.size.height - newBounds.size.height)) > Float.ulpOfOne {
+        // Make sure the change isn't just floating point error.
+        if abs(collectionView.height - newBounds.height) > CGFloat.ulpOfOne {
             return true
         } else {
+            logDebug("floating point errors")
             return super.shouldInvalidateLayout(forBoundsChange: newBounds)
         }
     }
 
     override var collectionViewContentSize: CGSize {
         var expandedSize = super.collectionViewContentSize
-        expandedSize.height = max(self.collectionView!.bounds.size.height, expandedSize.height)
+
+        guard let collectionView = self.collectionView else {
+            return expandedSize
+        }
+
+        // Make sure the content size is always at least the height of the collection view.
+        // If the content size is less than the collection view, items won't start layout at the bottom.
+        expandedSize.height = max(collectionView.height, expandedSize.height)
         return expandedSize
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        guard let attributes = super.layoutAttributesForItem(at: indexPath)?.copy() as? UICollectionViewLayoutAttributes else {
-            return super.layoutAttributesForItem(at: indexPath)
-        }
+        guard let attributes = super.layoutAttributesForItem(at: indexPath) else { return nil }
 
         self.modifyLayoutAttributes(attributes)
         return attributes
@@ -71,18 +79,14 @@ class ReversedCollectionViewFlowLayout: UICollectionViewFlowLayout {
     override func layoutAttributesForElements(in reversedRect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         let normalRect = self.normalRect(forReversedRect: reversedRect)
         let attributes = super.layoutAttributesForElements(in: normalRect)
+
         var result: [UICollectionViewLayoutAttributes] = []
         for attribute in attributes ?? [] {
-            guard let attr = attribute.copy() as? UICollectionViewLayoutAttributes else {
-                continue
-            }
-            self.modifyLayoutAttributes(attr)
-            result.append(attr)
+            self.modifyLayoutAttributes(attribute)
+            result.append(attribute)
         }
         return result
     }
-
-    //    #pragma mark - helpers
 
     func modifyLayoutAttributes(_ attributes: UICollectionViewLayoutAttributes) {
         let normalCenter = attributes.center
@@ -90,7 +94,7 @@ class ReversedCollectionViewFlowLayout: UICollectionViewFlowLayout {
         attributes.center = reversedCenter;
     }
 
-    //    // rect transform
+    // MARK: - Rect transform
 
     /// Returns the reversed-layout rect corresponding to the normal-layout rect
     func reversedRect(forNormalRect normalRect: CGRect) -> CGRect {
@@ -111,11 +115,11 @@ class ReversedCollectionViewFlowLayout: UICollectionViewFlowLayout {
     // point transforms
 
     /// Returns the reversed-layout point corresponding to the normal-layout point
-    func reversedPointForNormalPoint(_ normalPoint: CGPoint) -> CGPoint {
+    private func reversedPointForNormalPoint(_ normalPoint: CGPoint) -> CGPoint {
         return CGPoint(x: normalPoint.x, y: self.reversedYforNormalY(normalPoint.y))
     }
     /// Returns the normal-layout point corresponding to the reversed-layout point
-    func normalPoint(forReversedPoint reversedPoint: CGPoint) -> CGPoint {
+    private func normalPoint(forReversedPoint reversedPoint: CGPoint) -> CGPoint {
         // reflection is its own inverse
         return self.reversedPointForNormalPoint(reversedPoint)
     }
@@ -123,16 +127,15 @@ class ReversedCollectionViewFlowLayout: UICollectionViewFlowLayout {
     // y transforms
 
     /// Returns the reversed-layout y-offset, corresponding the normal-layout y-offset
-
-    func reversedYforNormalY(_ normalY: CGFloat) -> CGFloat {
+    private func reversedYforNormalY(_ normalY: CGFloat) -> CGFloat {
         let YreversedAroundContentSizeCenter = collectionViewContentSize.height - normalY
         return YreversedAroundContentSizeCenter
     }
 
-    //    /// Returns the normal-layout y-offset, correspoding the reversed-layout y-offset
-    func normalYforReversedY(_ reversedY: CGFloat) -> CGFloat {
+    /// Returns the normal-layout y-offset, correspoding the reversed-layout y-offset
+    private func normalYforReversedY(_ reversedY: CGFloat) -> CGFloat {
         // reflection is its own inverse
-        return reversedYforNormalY(reversedY)
+        return self.reversedYforNormalY(reversedY)
     }
 
 }
