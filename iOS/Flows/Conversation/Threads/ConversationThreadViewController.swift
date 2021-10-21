@@ -46,7 +46,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
     }
 
     override var canBecomeFirstResponder: Bool {
-        return true 
+        return true
     }
 
     init(channelID: ChannelId, messageID: MessageId) {
