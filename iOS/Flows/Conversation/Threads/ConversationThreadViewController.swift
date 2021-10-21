@@ -51,7 +51,6 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
     init(channelID: ChannelId, messageID: MessageId) {
         self.messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
-        self.messageController.listOrdering = .bottomToTop
         self.conversationController = ChatClient.shared.channelController(for: channelID,
                                                                              messageOrdering: .topToBottom)
         super.init(with: ConversationThreadCollectionView())
@@ -103,11 +102,15 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
         var data: [ConversationCollectionSection: [ConversationCollectionItem]] = [:]
 
         do {
-            try await self.messageController.loadPreviousReplies()
+            try await self.messageController.loadPreviousReplies(before: nil, limit: 2)
             let messages = Array(self.messageController.replies.asConversationCollectionItems)
 
             if let channelId = self.message.cid {
-                data[.conversation(channelId)] = messages
+                data[.conversation(channelId)] = []
+                data[.conversation(channelId)]?.append(contentsOf: messages)
+                if !self.messageController.hasLoadedAllPreviousReplies {
+                    data[.conversation(channelId)]?.append(contentsOf: [.loadMore])
+                }
             }
         } catch {
             logDebug(error)

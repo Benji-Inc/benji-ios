@@ -28,8 +28,8 @@ extension ConversationThreadViewController {
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
             Task {
                 await self.dataSource.update(with: changes,
-                                       conversationController: self.messageController,
-                                       collectionView: self.collectionView)
+                                             conversationController: self.messageController,
+                                             collectionView: self.collectionView)
             }
         }.store(in: &self.cancellables)
 

@@ -32,6 +32,7 @@ extension ConversationCollectionViewDataSource {
             if message.replyCount > 0 && message.latestReplies.isEmpty {
                 let dataSource = item.dataSource
                 Task {
+                    #warning("Testing area")
                     try? await messageController.loadPreviousReplies()
                     await dataSource.reconfigureItems([.message(item.messageID)])
                 }

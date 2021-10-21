@@ -44,7 +44,6 @@ class ConversationThreadCollectionViewLayout: UICollectionViewCompositionalLayou
         fatalError("init(coder:) has not been implemented")
     }
 
-
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
 

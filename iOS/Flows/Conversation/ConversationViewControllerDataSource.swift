@@ -130,12 +130,18 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         // Only show the load more cell if there are previous messages to load.
         snapshot.deleteItems([.loadMore])
         if !conversationController.hasLoadedAllPreviousMessages {
-            snapshot.appendItems([.loadMore], toSection: sectionID)
+            switch self.messageStyle {
+            case .conversation:
+                snapshot.appendItems([.loadMore], toSection: sectionID)
+            case .thread:
+                snapshot.insertItems([.loadMore], in: sectionID, atIndex: 0)
+            }
         }
 
         await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
             self.apply(snapshot)
 
+            // Scroll to the latest message if needed and reconfigure cells as needed.
             if scrollToLatestMessage, let sectionIndex = snapshot.indexOfSection(sectionID) {
                 let latestMessageIndex: IndexPath
                 switch self.messageStyle {
