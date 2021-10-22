@@ -29,7 +29,7 @@ class PeopleHeaderView: UICollectionReusableView {
         self.addSubview(self.titleLabel)
         self.addSubview(self.descriptionLabel)
         self.addSubview(self.lineView)
-        self.lineView.set(backgroundColor: .lightGray)
+        self.lineView.set(backgroundColor: .gray)
 
         self.titleLabel.textAlignment = .center
         self.titleLabel.stringCasing = .uppercase

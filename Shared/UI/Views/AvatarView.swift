@@ -88,11 +88,13 @@ class AvatarView: DisplayableImageView {
 
     func set(avatar: Avatar) {
 
-        UserStore.shared.$userUpdated.filter { user in
-            user?.objectId == avatar.userObjectID
-        }.mainSink { user in
-            self.displayable = user 
-        }.store(in: &self.cancellables)
+        if avatar is User {
+            UserStore.shared.$userUpdated.filter { user in
+                user?.objectId == avatar.userObjectID
+            }.mainSink { user in
+                self.displayable = user
+            }.store(in: &self.cancellables)
+        }
 
         self.displayable = avatar
 

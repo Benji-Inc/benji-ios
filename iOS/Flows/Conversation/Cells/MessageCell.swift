@@ -42,13 +42,13 @@ class MessageCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.topVerticalLine.set(backgroundColor: .white)
+        self.topVerticalLine.set(backgroundColor: .lightGray)
         self.contentView.addSubview(self.topVerticalLine)
-        self.bottomVerticalLine.set(backgroundColor: .white)
+        self.bottomVerticalLine.set(backgroundColor: .lightGray)
         self.contentView.addSubview(self.bottomVerticalLine)
 
         self.contentView.addSubview(self.dotView)
-        self.dotView.set(backgroundColor: .white)
+        self.dotView.set(backgroundColor: .lightGray)
 
         self.contentView.addSubview(self.authorView)
 
@@ -218,7 +218,7 @@ private class MessageSubcell: UICollectionViewCell {
     /// Text view for displaying the text of the message.
     let textView = TextView()
     /// A label to show the total number of replies for the root message.
-    let replyCountLabel = Label(font: .small)
+    let replyCountLabel = Label(font: .smallBold, textColor: .lightGray)
 
     /// Where this cell appears on the z-axis stack of messages. 0 means the item closest to the user.
     private var stackIndex = 0
@@ -275,9 +275,9 @@ private class MessageSubcell: UICollectionViewCell {
 
         var backgroundColor: UIColor
         if message.isFromCurrentUser {
-            backgroundColor = Color.lightGray.color
+            backgroundColor = Color.gray.color
         } else {
-            backgroundColor = Color.white.color
+            backgroundColor = Color.lightGray.color
         }
         var red: CGFloat = 0
         var green: CGFloat = 0
@@ -303,7 +303,7 @@ private class MessageSubcell: UICollectionViewCell {
             return
         }
 
-        self.replyCountLabel.setText("\(count) replies")
+        self.replyCountLabel.setText("\(count)")
         self.setNeedsLayout()
     }
 }

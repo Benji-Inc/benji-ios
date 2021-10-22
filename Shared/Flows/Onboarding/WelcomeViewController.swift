@@ -46,7 +46,7 @@ class WelcomeViewController: TextInputViewController<Void> {
         self.textEntry.alpha = 0
 
         self.view.addSubview(self.signupButton)
-        self.signupButton.set(style: .normal(color: .lightGray, text: "Login / Join"))
+        self.signupButton.set(style: .normal(color: .gray, text: "Login / Join"))
 
         self.signupButton.didSelect { [unowned self] in
             self.state = .signup

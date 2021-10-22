@@ -13,6 +13,7 @@ enum Color: String, CaseIterable {
 
     case background
     case darkGray
+    case gray
     case lightGray
     case textColor
     case white
@@ -21,17 +22,19 @@ enum Color: String, CaseIterable {
     var color: UIColor {
         switch self {
         case .background:
-            return UIColor(named: "Background1")!
+            return UIColor(named: "BACKGROUND")!
         case .darkGray:
-            return UIColor(named: "Background2")!
+            return UIColor(named: "DARKGRAY")!
+        case .gray:
+            return UIColor(named: "GRAY")!
         case .lightGray:
-            return UIColor(named: "Background3")!
+            return UIColor(named: "LIGHTGRAY")!
         case .textColor:
-            return UIColor(named: "Background4")!
+            return UIColor(named: "TEXTCOLOR")!
         case .white:
-            return UIColor(named: "White")!
+            return UIColor(named: "WHITE")!
         case .clear:
-            return UIColor(named: "Clear")!
+            return UIColor(named: "CLEAR")!
         }
     }
 }

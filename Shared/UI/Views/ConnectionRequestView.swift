@@ -34,7 +34,7 @@ class ConnectionRequestView: View {
         self.addSubview(self.successLabel)
         self.successLabel.textAlignment = .center
         self.addSubview(self.containerView)
-        self.containerView.set(backgroundColor: .lightGray)
+        self.containerView.set(backgroundColor: .gray)
 
         self.containerView.addSubview(self.textView)
         self.containerView.addSubview(self.avatarView)

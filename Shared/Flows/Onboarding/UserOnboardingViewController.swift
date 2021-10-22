@@ -37,7 +37,7 @@ class UserOnboardingViewController: ViewController {
         self.view.addSubview(self.bubbleView)
 
         self.bubbleView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMaxXMinYCorner]
-        self.bubbleView.set(backgroundColor: .lightGray)
+        self.bubbleView.set(backgroundColor: .gray)
 
         self.bubbleView.addSubview(self.textBubbleView)
 

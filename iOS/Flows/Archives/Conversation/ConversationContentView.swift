@@ -29,7 +29,7 @@ class ConversationContentView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .lightGray)
+        self.set(backgroundColor: .gray)
 
         self.addSubview(self.stackedAvatarView)
         self.addSubview(self.label)

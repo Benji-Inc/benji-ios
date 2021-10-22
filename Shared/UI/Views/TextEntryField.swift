@@ -47,7 +47,7 @@ class TextEntryField: View, Sizeable {
         if let placeholder = self.placeholder {
             let attributed = AttributedString(placeholder, fontType: .medium, color: .lightGray)
             self.textField.setPlaceholder(attributed: attributed)
-            self.textField.setDefaultAttributes(style: StringStyle(font: .medium, color: .white))
+            self.textField.setDefaultAttributes(style: StringStyle(font: .medium, color: .textColor))
         }
 
         if let tf = self.textField as? TextField {
