@@ -634,6 +634,14 @@
 		D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
 		D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53F8C25B9D39600B6A569 /* AttachmentsManager.swift */; };
 		D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6BEDE4B2625D754009BA131 /* SwipeableInputAccessoryView.swift */; };
+		D6BF814A2721EE81006D7760 /* ToastScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F426402B9800BF2B8D /* ToastScheduler.swift */; };
+		D6BF814B2721EE84006D7760 /* ToastScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F426402B9800BF2B8D /* ToastScheduler.swift */; };
+		D6BF814C2721EE9B006D7760 /* ToastQue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F226402B1F00BF2B8D /* ToastQue.swift */; };
+		D6BF814D2721EE9B006D7760 /* ToastQue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F226402B1F00BF2B8D /* ToastQue.swift */; };
+		D6BF814E2721EEBE006D7760 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1EE264029BC00BF2B8D /* Toast.swift */; };
+		D6BF814F2721EEBF006D7760 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1EE264029BC00BF2B8D /* Toast.swift */; };
+		D6BF81502721EEE1006D7760 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F026402A2000BF2B8D /* ToastView.swift */; };
+		D6BF81512721EEE1006D7760 /* ToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D671E1F026402A2000BF2B8D /* ToastView.swift */; };
 		D6C100D226F3DC0000F1ED7D /* ArchiveCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C100D126F3DC0000F1ED7D /* ArchiveCoordinator.swift */; };
 		D6C100D426F3DC1100F1ED7D /* ArchiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */; };
 		D6C100D626F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C100D526F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift */; };
@@ -1770,6 +1778,7 @@
 		D6637A3225A3AB1700A4A3B7 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				D671E1ED2640297900BF2B8D /* Toast */,
 				D6F37D5E25B5D8300034C9C5 /* Avatar Profile */,
 				D67896A122FF40AB0059BA75 /* Onboarding */,
 				D67A82D9230CCE290076152B /* Splash */,
@@ -2130,7 +2139,6 @@
 				D6432BF122D8282E0016001A /* Conversation */,
 				D6D145F521D549A300CD8CE4 /* Home */,
 				D68BEAD224831F7C00C95D31 /* Reservations */,
-				D671E1ED2640297900BF2B8D /* Toast */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -3065,6 +3073,7 @@
 				D63DB24D25E9994B00F6B323 /* Completeable.swift in Sources */,
 				D63DB23425E9992600F6B323 /* UIEdgeInsets+Extensions.swift in Sources */,
 				807A7BC726C5B5A20023A71E /* Task+Extensions.swift in Sources */,
+				D6BF814F2721EEBF006D7760 /* Toast.swift in Sources */,
 				D63DB26025E9996C00F6B323 /* PushPayload.swift in Sources */,
 				D63DB21225E998D700F6B323 /* Config.swift in Sources */,
 				D63DB26125E9996C00F6B323 /* SystemAvatar.swift in Sources */,
@@ -3075,6 +3084,7 @@
 				D63DB1FE25E968C300F6B323 /* NotificationViewController.swift in Sources */,
 				D63DB27125E9997F00F6B323 /* ImageDisplayable.swift in Sources */,
 				D63DB25225E9995100F6B323 /* SessionManager.swift in Sources */,
+				D6BF814B2721EE84006D7760 /* ToastScheduler.swift in Sources */,
 				D63DB29825E999B200F6B323 /* DisplayableImageView.swift in Sources */,
 				D63DB21925E998F000F6B323 /* MainCoordinator.swift in Sources */,
 				D63DB29025E999B200F6B323 /* View.swift in Sources */,
@@ -3103,6 +3113,7 @@
 				D63DB24C25E9994400F6B323 /* SplashViewController.swift in Sources */,
 				D63DB21E25E998FC00F6B323 /* CGFloat+Extensions.swift in Sources */,
 				D63DB28325E9999C00F6B323 /* TransitionRouter+Fade.swift in Sources */,
+				D6BF814D2721EE9B006D7760 /* ToastQue.swift in Sources */,
 				D63DB28925E999A600F6B323 /* Sizeable.swift in Sources */,
 				D63DB26225E9997200F6B323 /* FontType.swift in Sources */,
 				D6A6691F271A44FB0001D218 /* Pass.swift in Sources */,
@@ -3124,6 +3135,7 @@
 				D63DB21725E998E200F6B323 /* AppDelegate+Initialization.swift in Sources */,
 				D6966519263D96D70009114B /* PFFileObject+Extensions.swift in Sources */,
 				D63DB22725E9990900F6B323 /* MathFunctions.swift in Sources */,
+				D6BF81512721EEE1006D7760 /* ToastView.swift in Sources */,
 				D63DB28F25E999AB00F6B323 /* FullScreenViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3140,6 +3152,7 @@
 				D6551A5C25895F0900B901E4 /* NameViewController.swift in Sources */,
 				D65519522589125500B901E4 /* AnimationDuration.swift in Sources */,
 				D655196A2589128300B901E4 /* Color.swift in Sources */,
+				D6BF814A2721EE81006D7760 /* ToastScheduler.swift in Sources */,
 				D6551901258910D700B901E4 /* AppDelegate+Initialization.swift in Sources */,
 				D6551A1025895C0700B901E4 /* Label.swift in Sources */,
 				D6AC90CB2594F8F80032774D /* Delegated.swift in Sources */,
@@ -3150,6 +3163,7 @@
 				D6AD799A266E870200ED7A93 /* MIMEType.swift in Sources */,
 				807A7BC626C5B5A20023A71E /* Task+Extensions.swift in Sources */,
 				D6551A3A25895E6E00B901E4 /* FaceDetectionViewController.swift in Sources */,
+				D6BF814C2721EE9B006D7760 /* ToastQue.swift in Sources */,
 				D66379E225A39C0400A4A3B7 /* UserNotificationManager.swift in Sources */,
 				D6DF870725A5214D0089B0CF /* QuePositions.swift in Sources */,
 				D655196D2589128300B901E4 /* ScreenSize.swift in Sources */,
@@ -3210,6 +3224,7 @@
 				D655192A2589122000B901E4 /* Selectable.swift in Sources */,
 				D6A4A1F725E9550A007F3E15 /* UserNotificationCategory.swift in Sources */,
 				D677589225B09FC8007E0184 /* TransitionRouter+Fade.swift in Sources */,
+				D6BF81502721EEE1006D7760 /* ToastView.swift in Sources */,
 				D65519202589121500B901E4 /* NSObject+Extensions.swift in Sources */,
 				D621A218271F54A100BAD7C2 /* PassThroughView.swift in Sources */,
 				D655195B2589126800B901E4 /* User+Extensions.swift in Sources */,
@@ -3285,6 +3300,7 @@
 				D65519412589122C00B901E4 /* UNNotification+Extensions.swift in Sources */,
 				D63D71B625F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
 				D655192D2589122700B901E4 /* UIScrollView+Extensions.swift in Sources */,
+				D6BF814E2721EEBE006D7760 /* Toast.swift in Sources */,
 				D65519402589122C00B901E4 /* UNNotificationContent+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

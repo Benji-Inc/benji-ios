@@ -11,7 +11,7 @@ import Foundation
 class ToastQueue {
     static let shared = ToastQueue()
 
-    private let toaster = TomorrowToaster()
+    private let toaster = Toaster()
     private(set) var allViewed: [String] = []
     private var scheduled: [Toast] = []
 
@@ -47,7 +47,7 @@ class ToastQueue {
     }
 }
 
-fileprivate class TomorrowToaster {
+fileprivate class Toaster {
 
     var items: [ToastView] = []
     var didDismiss: (String) -> Void = {_ in }

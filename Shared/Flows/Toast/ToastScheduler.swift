@@ -32,7 +32,9 @@ class ToastScheduler {
 
     weak var delegate: ToastSchedulerDelegate?
 
-    func schedule(toastType: ToastType) {
+    @MainActor
+    func schedule(toastType: ToastType) async {
+        
         switch toastType {
         case .error(let error):
             self.createErrorToast(for: error)

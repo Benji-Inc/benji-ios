@@ -85,6 +85,7 @@ class ToastView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        #if !NOTIFICATION
         guard let superview = UIWindow.topWindow() else { return }
         superview.addSubview(self)
 
@@ -112,6 +113,7 @@ class ToastView: View {
         } else {
             self.screenOffset = superview.safeAreaInsets.bottom
         }
+        #endif
     }
 
     func configure(toast: Toast) {
@@ -212,6 +214,7 @@ class ToastView: View {
     }
 
     private func updateFor(state: ToastState) {
+        #if !NOTIFICATION
         guard let superView = UIWindow.topWindow() else { return }
         switch state {
         case .hidden:
@@ -252,11 +255,12 @@ class ToastView: View {
                 self.top = superView.bottom - 10
             }
         }
-
+        #endif
         self.layoutNow()
     }
 
     private func handle(panRecognizer: UIPanGestureRecognizer) {
+        #if !NOTIFICATION
         guard let superview = UIWindow.topWindow() else { return }
 
         switch panRecognizer.state {
@@ -280,13 +284,16 @@ class ToastView: View {
         @unknown default:
             break
         }
+        #endif
     }
 
     private func initializePanIfNeeded(panRecognizer: UIPanGestureRecognizer) {
+        #if !NOTIFICATION
         if self.panStart == nil, let superview = UIWindow.topWindow() {
             self.startY = self.centerY
             self.panStart = panRecognizer.translation(in: superview)
         }
+        #endif
     }
 
     override func layoutSubviews() {

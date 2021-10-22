@@ -112,12 +112,14 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
     }
 
     private func showPeopleAddedToast(for connections: [Connection]) {
-        if connections.count == 1, let first = connections.first?.nonMeUser {
-            let text = LocalizedString(id: "", arguments: [first.fullName], default: "@(name) has been added to the conversation.")
-            ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: first, title: "\(first.givenName.capitalized) Added", description: text, deepLink: nil))
-        } else {
-            let text = LocalizedString(id: "", arguments: [String(connections.count)], default: " @(count) people have been added to the conversation.")
-            ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: User.current()!, title: "\(String(connections.count)) Added", description: text, deepLink: nil))
+        Task {
+            if connections.count == 1, let first = connections.first?.nonMeUser {
+                let text = LocalizedString(id: "", arguments: [first.fullName], default: "@(name) has been added to the conversation.")
+                await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: first, title: "\(first.givenName.capitalized) Added", description: text, deepLink: nil))
+            } else {
+                let text = LocalizedString(id: "", arguments: [String(connections.count)], default: " @(count) people have been added to the conversation.")
+                await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: User.current()!, title: "\(String(connections.count)) Added", description: text, deepLink: nil))
+            }
         }
     }
 
