@@ -87,21 +87,11 @@ class ConversationHeaderView: View {
 
         self.stackedAvatarView.setSize()
 
-        switch self.state {
-        case .read:
-            self.height = self.stackedAvatarView.itemHeight
-            self.width = superview.width - Theme.contentOffset
+        self.height = self.stackedAvatarView.itemHeight
+        self.width = superview.width - Theme.contentOffset
 
-            self.stackedAvatarView.pin(.left)
-            self.stackedAvatarView.centerOnY()
-        case .write:
-            self.height = self.stackedAvatarView.height
-            self.width = self.stackedAvatarView.width
-
-            self.stackedAvatarView.pin(.left)
-            self.stackedAvatarView.centerOnY()
-        }
-
+        self.stackedAvatarView.pin(.left)
+        self.stackedAvatarView.centerOnY()
 
         let maxWidth = self.width - Theme.contentOffset - self.stackedAvatarView.width
         self.label.setSize(withWidth: maxWidth)

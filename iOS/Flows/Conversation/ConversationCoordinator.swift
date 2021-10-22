@@ -134,6 +134,9 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
 
     func presentThread(for channelID: ChannelId, messageID: MessageId) {
         let threadVC = ConversationThreadViewController(channelID: channelID, messageID: messageID)
+        threadVC.dismissHandlers.append { [unowned self] in
+            self.conversationVC.becomeFirstResponder()
+        }
         self.router.present(threadVC, source: self.conversationVC)
     }
 }

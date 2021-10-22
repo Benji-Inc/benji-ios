@@ -20,6 +20,7 @@ class ConversationCollectionView: CollectionView {
 
         super.init(layout: self.conversationLayout)
 
+        self.keyboardDismissMode = .interactive
         self.decelerationRate = .normal
         self.showsHorizontalScrollIndicator = false
         self.semanticContentAttribute = .forceRightToLeft

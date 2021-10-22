@@ -16,7 +16,9 @@ class MessageCell: UICollectionViewCell {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        return UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.keyboardDismissMode = .interactive
+        return cv
     }()
     private let cellRegistration = UICollectionView.CellRegistration<MessageSubcell, Messageable>
     { (cell, indexPath, item) in
