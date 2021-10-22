@@ -14,8 +14,8 @@ import StreamChat
 class ConversationContentView: View {
 
     let stackedAvatarView = StackedAvatarView()
-    let label = Label(font: .mediumThin, textColor: .background4)
-    let messageLabel = Label(font: .smallBold, textColor: .background4)
+    let label = Label(font: .mediumThin, textColor: .textColor)
+    let messageLabel = Label(font: .smallBold, textColor: .textColor)
 
     private var cancellables = Set<AnyCancellable>()
     private var currentItem: Conversation?
@@ -29,7 +29,7 @@ class ConversationContentView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .background3)
+        self.set(backgroundColor: .gray)
 
         self.addSubview(self.stackedAvatarView)
         self.addSubview(self.label)

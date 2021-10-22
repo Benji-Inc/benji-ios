@@ -23,7 +23,7 @@ class AlertConfirmationView: View {
         self.label.textAlignment = .center
 
         self.addSubview(self.button)
-        self.button.set(style: .normal(color: .purple, text: "Cancel"))
+        self.button.set(style: .normal(color: .darkGray, text: "Cancel"))
     }
 
     func setAlertMessage(for avatars: [Avatar]) {

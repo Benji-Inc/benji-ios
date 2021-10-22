@@ -26,7 +26,7 @@ class ConversationDateLabel: Label {
 
         let attributed = AttributedString(self.getString(for: date),
                                           fontType: .small,
-                                          color: .background3)
+                                          color: .lightGray)
         self.set(attributed: attributed,
                  alignment: .center,
                  lineCount: 1,

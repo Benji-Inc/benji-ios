@@ -46,14 +46,14 @@ class WelcomeViewController: TextInputViewController<Void> {
         self.textEntry.alpha = 0
 
         self.view.addSubview(self.signupButton)
-        self.signupButton.set(style: .normal(color: .lightPurple, text: "Login / Join"))
+        self.signupButton.set(style: .normal(color: .gray, text: "Login / Join"))
 
         self.signupButton.didSelect { [unowned self] in
             self.state = .signup
         }
 
         self.view.addSubview(self.reservationButton)
-        self.reservationButton.set(style: .normal(color: .purple, text: "Claim RSVP"))
+        self.reservationButton.set(style: .normal(color: .darkGray, text: "Claim RSVP"))
         self.reservationButton.didSelect { [unowned self] in
             self.state = .reservationInput
         }

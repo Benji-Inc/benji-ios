@@ -23,7 +23,7 @@ class AttachmentCell: CollectionViewManagerCell, ManageableCell {
         self.imageView.layer.cornerRadius = 5
 
         self.contentView.addSubview(self.selectedView)
-        self.selectedView.backgroundColor = Color.lightPurple.color.withAlphaComponent(0.5)
+        self.selectedView.backgroundColor = Color.gray.color.withAlphaComponent(0.5)
         self.selectedView.alpha = 0
         self.selectedView.layer.cornerRadius = 5
     }

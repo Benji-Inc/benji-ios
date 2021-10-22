@@ -40,22 +40,22 @@ class HomeViewController: DiffableCollectionViewController<HomeCollectionViewDat
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.set(backgroundColor: .background1)
+        self.view.set(backgroundColor: .background)
 
         self.view.addSubview(self.addButton)
-        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightPurple))
+        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightGray))
         self.addButton.addAction(for: .touchUpInside) { [unowned self] in
             self.didTapAdd?()
         }
 
         self.view.addSubview(self.circlesButton)
-        self.circlesButton.set(style: .icon(image: UIImage(systemName: "circles.hexagongrid")!, color: .lightPurple))
+        self.circlesButton.set(style: .icon(image: UIImage(systemName: "circles.hexagongrid")!, color: .lightGray))
         self.circlesButton.addAction(for: .touchUpInside) { [unowned self] in
             self.didTapCircles?()
         }
 
         self.view.addSubview(self.archiveButton)
-        self.archiveButton.set(style: .icon(image: UIImage(systemName: "message")!, color: .lightPurple))
+        self.archiveButton.set(style: .icon(image: UIImage(systemName: "message")!, color: .lightGray))
         self.archiveButton.addAction(for: .touchUpInside) { [unowned self] in
             self.didTapArchive?()
         }
@@ -109,6 +109,6 @@ extension HomeViewController: TransitionableViewController {
     }
 
     var transitionColor: Color {
-        return .background1
+        return .background
     }
 }
