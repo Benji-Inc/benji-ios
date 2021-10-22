@@ -72,11 +72,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             }
         }
 
-//        self.view.onDoubleTap { [unowned self] _ in
-//            guard self.currentState == .captureEyesOpen else { return }
-//            self.currentState = .scan
-//        }
-
         self.view.didSelect { [unowned self] in
             guard self.cameraVC.faceDetected else { return }
 
@@ -171,7 +166,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private func handleInitialState() {
 
-        self.button.set(style: .normal(color: .textColor, text: "Begin"))
+        self.button.set(style: .normal(color: .lightGray, text: "Begin"))
 
         if self.animationView.alpha == 0 {
             UIView.animate(withDuration: Theme.animationDuration, animations: {
@@ -250,7 +245,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private func handleEyesClosedCaptureState() {
         self.cameraVC.capturePhoto()
 
-        self.button.set(style: .normal(color: .darkGray, text: "Continue"))
+        self.button.set(style: .normal(color: .lightGray, text: "Continue"))
 
         UIView.animate(withDuration: 0.2) {
             self.button.alpha = 1.0
