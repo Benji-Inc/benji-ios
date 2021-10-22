@@ -23,7 +23,7 @@ class AlertCell: NoticeCell {
         self.bubbleView.addSubview(self.textView)
 
         self.bubbleView.layer.borderWidth = 2
-        self.bubbleView.layer.borderColor = Color.red.color.cgColor
+        self.bubbleView.layer.borderColor = Color.white.color.cgColor
         self.bubbleView.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner, .layerMaxXMinYCorner]
     }
 

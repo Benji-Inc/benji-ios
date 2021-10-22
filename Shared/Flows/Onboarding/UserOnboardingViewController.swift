@@ -102,7 +102,7 @@ class UserMessageView: TextView {
                  lineBreakMode: .byWordWrapping,
                  stringCasing: .unchanged,
                  isEditable: false,
-                 linkColor: .teal)
+                 linkColor: .white)
 
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 2

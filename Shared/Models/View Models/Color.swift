@@ -15,16 +15,10 @@ enum Color: String, CaseIterable {
     case background2
     case background3
     case background4
-    case backgroundWithAlpha
     case purple
     case lightPurple
-    case teal
-    case orange
-    case green
-    case red
     case white
     case clear
-    case keyboardBackground
 
     var color: UIColor {
         switch self {
@@ -36,26 +30,14 @@ enum Color: String, CaseIterable {
             return UIColor(named: "Background3")!
         case .background4:
             return UIColor(named: "Background4")!
-        case .backgroundWithAlpha:
-            return UIColor(named: "BackgroundWithAlpha")!
         case .purple:
             return UIColor(named: "Purple")!
         case .lightPurple:
             return UIColor(named: "LightPurple")!
-        case .red:
-            return UIColor(named: "Red")!
-        case .teal:
-            return UIColor(named: "Teal")!
-        case .green:
-            return UIColor(named: "Green")!
         case .white:
             return UIColor(named: "White")!
         case .clear:
             return UIColor(named: "Clear")!
-        case .orange:
-            return UIColor(named: "Orange")!
-        case .keyboardBackground:
-            return UIColor(named: "Keyboard")!
         }
     }
 }

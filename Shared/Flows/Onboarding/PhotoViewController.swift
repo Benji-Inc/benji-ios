@@ -171,7 +171,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private func handleInitialState() {
 
-        self.button.set(style: .normal(color: .green, text: "Begin"))
+        self.button.set(style: .normal(color: .background4, text: "Begin"))
 
         if self.animationView.alpha == 0 {
             UIView.animate(withDuration: Theme.animationDuration, animations: {

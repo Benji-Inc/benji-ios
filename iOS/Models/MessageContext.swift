@@ -18,9 +18,9 @@ enum MessageContext: String, CaseIterable {
     var color: Color {
         switch self {
         case .timeSensitive:
-            return .orange
+            return .background4
         case .passive:
-            return .lightPurple
+            return .white
         case .status:
             return .background3
         }
