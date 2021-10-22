@@ -30,21 +30,13 @@ extension MainCoordinator: LaunchManagerDelegate {
     }
 
     func subscribeToUserUpdates() {
-        if let query = self.userQuery, let objectId = User.current()?.objectId {
-
-            query.whereKey("objectId", equalTo: objectId)
-
-            let subscription = Client.shared.subscribe(query)
-
-            subscription.handleEvent { query, event in
-                switch event {
-                case .deleted(_):
-                    self.showLogOutAlert()
-                default:
-                    break
-                }
-            }
-        }
+        UserStore.shared.$userDeleted
+            .filter({ user in
+                user?.isCurrentUser ?? false
+            })
+            .mainSink { user in
+                self.showLogOutAlert()
+            }.store(in: &self.cancellables)
     }
 
 #if APPCLIP

@@ -15,7 +15,6 @@ class MainCoordinator: Coordinator<Void> {
     var launchOptions: [UIApplication.LaunchOptionsKey : Any]?
 
     lazy var splashVC = SplashViewController()
-    lazy var userQuery = User.query() // Will crash if initialized before parse registers the subclass
 
     override func start() {
         super.start()

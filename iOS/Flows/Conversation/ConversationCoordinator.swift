@@ -24,7 +24,6 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
         let vc = PHPickerViewController.init(configuration: config)
         return vc
     }()
-    private var cancellables = Set<AnyCancellable>()
 
     var conversation: Conversation?
 

@@ -17,6 +17,7 @@ class UserStore {
     private var cancellables = Set<AnyCancellable>()
 
     @Published var userUpdated: User?
+    @Published var userDeleted: User?
 
     private(set) var users: [User] = []
 
@@ -59,8 +60,10 @@ class UserStore {
 
             subscription.handleEvent { query, event in
                 switch event {
-                case .deleted(_):
-                    break
+                case .deleted(let object):
+                    if let user = object as? User {
+                        self.userDeleted = user
+                    }
                 case .entered(_):
                     break
                 case .left(_):
