@@ -67,7 +67,7 @@ class TextView: UITextView {
             }.store(in: &self.cancellables)
     }
 
-    func set(placeholder: Localized, color: Color = .background4) {
+    func set(placeholder: Localized, color: Color = .textColor) {
         let styleAttributes = StringStyle(font: .smallBold, color: color).attributes
         let string = NSAttributedString(string: localized(placeholder), attributes: styleAttributes)
         self.attributedPlaceholder = string

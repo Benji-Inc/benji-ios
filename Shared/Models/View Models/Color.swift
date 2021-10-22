@@ -11,29 +11,23 @@ import UIKit
 
 enum Color: String, CaseIterable {
 
-    case background1
-    case background2
-    case background3
-    case background4
-    case purple
-    case lightPurple
+    case background
+    case darkGray
+    case lightGray
+    case textColor
     case white
     case clear
 
     var color: UIColor {
         switch self {
-        case .background1:
+        case .background:
             return UIColor(named: "Background1")!
-        case .background2:
+        case .darkGray:
             return UIColor(named: "Background2")!
-        case .background3:
+        case .lightGray:
             return UIColor(named: "Background3")!
-        case .background4:
+        case .textColor:
             return UIColor(named: "Background4")!
-        case .purple:
-            return UIColor(named: "Purple")!
-        case .lightPurple:
-            return UIColor(named: "LightPurple")!
         case .white:
             return UIColor(named: "White")!
         case .clear:

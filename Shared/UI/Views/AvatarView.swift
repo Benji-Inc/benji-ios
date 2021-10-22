@@ -13,7 +13,7 @@ class AvatarView: DisplayableImageView {
 
     // MARK: - Properties
 
-    var borderColor: Color = .background2 {
+    var borderColor: Color = .darkGray {
         didSet {
             self.setBorder(color: self.borderColor)
         }
@@ -25,7 +25,7 @@ class AvatarView: DisplayableImageView {
         }
     }
 
-    private let label = Label(font: .regularBold, textColor: .purple)
+    private let label = Label(font: .regularBold, textColor: .textColor)
 
     private var radius: CGFloat?
 

@@ -34,12 +34,12 @@ class ConnectionRequestView: View {
         self.addSubview(self.successLabel)
         self.successLabel.textAlignment = .center
         self.addSubview(self.containerView)
-        self.containerView.set(backgroundColor: .background3)
+        self.containerView.set(backgroundColor: .lightGray)
 
         self.containerView.addSubview(self.textView)
         self.containerView.addSubview(self.avatarView)
         self.containerView.addSubview(self.acceptButton)
-        self.acceptButton.set(style: .normal(color: .purple, text: "Accept"))
+        self.acceptButton.set(style: .normal(color: .darkGray, text: "Accept"))
         self.acceptButton.didSelect { [unowned self] in
             guard let from = self.currentItem?.from else { return }
             Task {
@@ -75,7 +75,7 @@ class ConnectionRequestView: View {
                 let attributedString = AttributedString(text,
                                                         fontType: .regular,
                                                         color: .white)
-                self.textView.set(attributed: attributedString, linkColor: .lightPurple)
+                self.textView.set(attributed: attributedString, linkColor: .lightGray)
                 self.avatarView.set(avatar: userWithData)
                 self.layoutNow()
             } else {

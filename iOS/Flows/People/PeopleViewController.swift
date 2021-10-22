@@ -89,7 +89,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     func updateButton() {
 
-        self.button.set(style: .normal(color: .purple, text: self.getButtonTitle()))
+        self.button.set(style: .normal(color: .darkGray, text: self.getButtonTitle()))
 
         UIView.animate(withDuration: Theme.animationDuration) {
 

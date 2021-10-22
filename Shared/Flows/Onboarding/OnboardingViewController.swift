@@ -24,7 +24,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     var transitionColor: Color {
-        return .background1
+        return .background
     }
 
     lazy var welcomeVC = WelcomeViewController()

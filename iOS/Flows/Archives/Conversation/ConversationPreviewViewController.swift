@@ -31,7 +31,7 @@ class ConversationPreviewViewController: ViewController {
         self.view.addSubview(self.content)
         self.content.configure(with: self.conversation)
         self.preferredContentSize = self.conversationSize
-        self.view.set(backgroundColor: .background1)
+        self.view.set(backgroundColor: .background)
     }
 
     override func viewDidLayoutSubviews() {

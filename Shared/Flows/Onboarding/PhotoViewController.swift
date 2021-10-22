@@ -37,9 +37,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private let animationView = AnimationView.with(animation: .faceScan)
     private let button = Button()
-    private let instructionLabel = Label(font: .smallBold, textColor: .background4)
-    private let errorLabel = Label(font: .smallBold, textColor: .background4)
-    private let gradientView = GradientView(with: [Color.background2.color.cgColor, Color.clear.color.cgColor], startPoint: .bottomCenter, endPoint: .topCenter)
+    private let instructionLabel = Label(font: .smallBold, textColor: .textColor)
+    private let errorLabel = Label(font: .smallBold, textColor: .textColor)
+    private let gradientView = GradientView(with: [Color.darkGray.color.cgColor, Color.clear.color.cgColor], startPoint: .bottomCenter, endPoint: .topCenter)
 
     @Published private(set) var currentState: PhotoState = .initial
 
@@ -171,7 +171,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private func handleInitialState() {
 
-        self.button.set(style: .normal(color: .background4, text: "Begin"))
+        self.button.set(style: .normal(color: .textColor, text: "Begin"))
 
         if self.animationView.alpha == 0 {
             UIView.animate(withDuration: Theme.animationDuration, animations: {
@@ -250,7 +250,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private func handleEyesClosedCaptureState() {
         self.cameraVC.capturePhoto()
 
-        self.button.set(style: .normal(color: .purple, text: "Continue"))
+        self.button.set(style: .normal(color: .darkGray, text: "Continue"))
 
         UIView.animate(withDuration: 0.2) {
             self.button.alpha = 1.0

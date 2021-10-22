@@ -38,7 +38,7 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
 
         self.view.addSubview(self.textEntry)
 
-        self.textEntry.button.set(style: .normal(color: .purple, text: "Next"))
+        self.textEntry.button.set(style: .normal(color: .darkGray, text: "Next"))
         self.textEntry.button.didSelect { [unowned self] in
             self.didTapButton()
         }

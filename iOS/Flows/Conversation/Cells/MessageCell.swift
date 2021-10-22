@@ -275,7 +275,7 @@ private class MessageSubcell: UICollectionViewCell {
 
         var backgroundColor: UIColor
         if message.isFromCurrentUser {
-            backgroundColor = Color.lightPurple.color
+            backgroundColor = Color.lightGray.color
         } else {
             backgroundColor = Color.white.color
         }

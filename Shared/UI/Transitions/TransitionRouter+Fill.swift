@@ -27,7 +27,7 @@ extension TransitionRouter {
 
             circle.layer.cornerRadius = circle.halfHeight
             circle.center = startingPoint
-            circle.set(backgroundColor: .purple)
+            circle.set(backgroundColor: .darkGray)
             circle.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
             containerView.addSubview(circle)
 

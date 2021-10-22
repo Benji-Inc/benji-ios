@@ -17,7 +17,7 @@ class EmptyAttachmentView: View {
 
         self.set(backgroundColor: .clear)
         self.addSubview(self.button)
-        self.button.set(style: .normal(color: .purple, text: "Authorize"))
+        self.button.set(style: .normal(color: .darkGray, text: "Authorize"))
     }
 
     override func layoutSubviews() {

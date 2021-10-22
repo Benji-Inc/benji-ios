@@ -30,11 +30,11 @@ class AttachmentHeaderView: UICollectionReusableView {
         self.addSubview(self.photoImageView)
         self.photoImageView.image = UIImage(systemName: "camera")
         self.photoImageView.contentMode = .scaleAspectFit
-        self.photoImageView.tintColor = Color.lightPurple.color
+        self.photoImageView.tintColor = Color.lightGray.color
 
         self.addSubview(self.libraryImageView)
         self.libraryImageView.image = UIImage(systemName: "square.grid.2x2")
-        self.libraryImageView.tintColor = Color.lightPurple.color
+        self.libraryImageView.tintColor = Color.lightGray.color
         self.libraryImageView.contentMode = .scaleAspectFit
 
         self.addSubview(self.photoButton)
