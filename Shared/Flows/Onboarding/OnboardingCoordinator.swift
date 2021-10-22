@@ -13,8 +13,6 @@ import Combine
 
 class OnboardingCoordinator: PresentableCoordinator<Void> {
 
-    private var cancellables = Set<AnyCancellable>()
-
     lazy var onboardingVC = OnboardingViewController(with: self.reservationId,
                                                      reservationCreatorId: self.reservationCreatorId,
                                                      deeplink: self.deepLink,
