@@ -43,7 +43,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     var selectionFeedback = UIImpactFeedbackGenerator(style: .rigid)
     var borderColor: CGColor? {
         didSet {
-            self.inputContainerView.layer.borderColor = self.borderColor ?? Color.purple.color.cgColor
+            self.inputContainerView.layer.borderColor = self.borderColor ?? Color.darkGray.color.cgColor
         }
     }
 

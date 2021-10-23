@@ -16,7 +16,9 @@ class MessageCell: UICollectionViewCell {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        return UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.keyboardDismissMode = .interactive
+        return cv
     }()
     private let cellRegistration = UICollectionView.CellRegistration<MessageSubcell, Messageable>
     { (cell, indexPath, item) in
@@ -159,7 +161,7 @@ class MessageSubcell: UICollectionViewCell {
     /// Text view for displaying the text of the message.
     let textView = TextView()
     /// A label to show the total number of replies for the root message.
-    let replyCountLabel = Label(font: .small)
+    let replyCountLabel = Label(font: .smallBold, textColor: .lightGray)
 
     /// Where this cell appears on the z-axis stack of messages. 0 means the item closest to the user.
     private var stackIndex = 0
@@ -217,9 +219,9 @@ class MessageSubcell: UICollectionViewCell {
 
         var backgroundColor: UIColor
         if message.isFromCurrentUser {
-            backgroundColor = Color.lightPurple.color
+            backgroundColor = Color.gray.color
         } else {
-            backgroundColor = Color.orange.color
+            backgroundColor = Color.lightGray.color
         }
         var red: CGFloat = 0
         var green: CGFloat = 0
@@ -245,7 +247,7 @@ class MessageSubcell: UICollectionViewCell {
             return
         }
 
-        self.replyCountLabel.setText("\(count) replies")
+        self.replyCountLabel.setText("\(count)")
         self.setNeedsLayout()
     }
 }

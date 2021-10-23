@@ -39,7 +39,7 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
         }
 
         let control = UISegmentedControl.init(frame: .zero, actions: actions)
-        control.backgroundColor = Color.background2.color.withAlphaComponent(0.8)
+        control.backgroundColor = Color.darkGray.color.withAlphaComponent(0.8)
         return control
     }()
 
@@ -61,7 +61,7 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
         self.segmentedControl.selectedSegmentIndex = 0
 
         self.view.addSubview(self.addButton)
-        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightPurple))
+        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightGray))
 
 
         #warning("Move these requests to more appropriate place")

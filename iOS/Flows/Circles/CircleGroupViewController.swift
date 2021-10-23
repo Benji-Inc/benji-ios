@@ -30,7 +30,7 @@ class CircleGroupViewController: DiffableCollectionViewController<CircleGroupCol
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
 
         self.view.addSubview(self.button)
-        self.button.set(style: .normal(color: .purple, text: "Send Invites"))
+        self.button.set(style: .normal(color: .darkGray, text: "Send Invites"))
         self.button.didSelect { [unowned self] in
             self.didSelectReservations?()
         }

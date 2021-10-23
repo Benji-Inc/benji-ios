@@ -43,17 +43,17 @@ class ExpandingTextView: TextView {
         }
 
         self.initialPlaceholder = placeholderText
-        self.set(placeholder: placeholderText, color: .lightPurple)
+        self.set(placeholder: placeholderText, color: .lightGray)
     }
 
     func setPlaceholder(for kind: MessageKind) {
         switch kind {
         case .text(_):
             if let placeholder = self.initialPlaceholder {
-                self.set(placeholder: placeholder, color: .lightPurple)
+                self.set(placeholder: placeholder, color: .lightGray)
             }
         case .photo(_, _), .video(_, _):
-            self.set(placeholder: "Add comment", color: .lightPurple)
+            self.set(placeholder: "Add comment", color: .lightGray)
         default:
             break
         }

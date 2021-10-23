@@ -28,12 +28,16 @@ class ThreadMessageCell: UICollectionViewCell {
 
         self.contentView.addSubview(self.messageView)
 
-        self.topVerticalLine.set(backgroundColor: .white)
+        self.topVerticalLine.set(backgroundColor: .lightGray)
         self.contentView.addSubview(self.topVerticalLine)
-        self.bottomVerticalLine.set(backgroundColor: .white)
+        self.bottomVerticalLine.set(backgroundColor: .lightGray)
         self.contentView.addSubview(self.bottomVerticalLine)
 
         self.contentView.addSubview(self.dotView)
+        self.dotView.set(backgroundColor: .lightGray)
+
+        self.contentView.addSubview(self.authorView)
+
         self.dotView.set(backgroundColor: .white)
 
         self.contentView.addSubview(self.authorView)

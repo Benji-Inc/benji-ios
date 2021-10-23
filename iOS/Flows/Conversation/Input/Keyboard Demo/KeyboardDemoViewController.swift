@@ -57,7 +57,7 @@ class KeyboardDemoViewController: ViewController {
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.set(backgroundColor: .background2)
+        self.view.set(backgroundColor: .darkGray)
 
         self.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 

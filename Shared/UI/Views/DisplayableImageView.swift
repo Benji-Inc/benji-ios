@@ -16,7 +16,7 @@ import Lottie
 class DisplayableImageView: View {
 
     private(set) var imageView = UIImageView()
-    private(set) var cancellables = Set<AnyCancellable>()
+    var cancellables = Set<AnyCancellable>()
 
     lazy var blurEffect = UIBlurEffect(style: .systemMaterialDark)
     lazy var blurView = BlurView(effect: self.blurEffect)
@@ -126,17 +126,23 @@ class DisplayableImageView: View {
     }
 
     private func downloadAndSetImage(for user: User) {
-        guard let file = user.smallImage else { return }
-        Task {
-            await self.downloadAndSet(file: file)
+        if user.focusStatus == .focused, let file = user.focusImage {
+            Task {
+                await self.downloadAndSet(file: file)
+            }
+        } else if let file = user.smallImage {
+            Task {
+                await self.downloadAndSet(file: file)
+            }
         }
     }
 
     private func findUser(with objectID: String) {
-        Task {
-            guard let user = try? await User.localThenNetworkQuery(for: objectID) else { return }
-            self.downloadAndSetImage(for: user)
-        }
+        guard let user = UserStore.shared.users.first(where: { user in
+            return user.objectId == objectID
+        }) else { return }
+
+        self.downloadAndSetImage(for: user)
     }
 
     @MainActor

@@ -11,17 +11,22 @@ import StreamChat
 
 extension ChatUser: Avatar {
 
-    #warning("We need to only be accessing the Parse user")
+    private var parseUser: User? {
+        return UserStore.shared.users.first { user in
+            return user.objectId == self.userObjectID
+        }
+    }
+
     var givenName: String {
-        return self.name?.components(separatedBy: " ").first ?? String()
+        return self.parseUser?.givenName ?? String()
     }
 
     var familyName: String {
-        return self.name?.components(separatedBy: " ").last ?? String()
+        return self.parseUser?.familyName ?? String()
     }
 
     var handle: String {
-        return self.name ?? String()
+        return self.parseUser?.handle ?? String()
     }
 
     var userObjectID: String? {
@@ -29,10 +34,10 @@ extension ChatUser: Avatar {
     }
 
     var image: UIImage? {
-        return nil
+        return self.parseUser?.image
     }
 
     var url: URL? {
-        return self.imageURL
+        return self.parseUser?.url
     }
 }

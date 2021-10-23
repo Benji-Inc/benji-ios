@@ -20,7 +20,7 @@ class MessageTextView: TextView {
     }
 
     func set(text: Localized, messageContext: MessageContext) {
-        let textColor: Color = messageContext == .status ? .background2 : .white
+        let textColor: Color = messageContext == .status ? .darkGray : .white
         let attributedString = AttributedString(text,
                                                 fontType: .smallBold,
                                                 color: textColor)
@@ -31,7 +31,7 @@ class MessageTextView: TextView {
                  lineBreakMode: .byWordWrapping,
                  stringCasing: .unchanged,
                  isEditable: false,
-                 linkColor: .teal)
+                 linkColor: .white)
 
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 2

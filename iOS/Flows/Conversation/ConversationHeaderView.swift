@@ -15,7 +15,7 @@ import UIKit
 class ConversationHeaderView: View {
 
     let stackedAvatarView = StackedAvatarView()
-    let label = Label(font: .largeThin, textColor: .background4)
+    let label = Label(font: .largeThin, textColor: .textColor)
     let button = Button()
 
     private var cancellables = Set<AnyCancellable>()
@@ -43,7 +43,7 @@ class ConversationHeaderView: View {
         self.label.lineBreakMode = .byTruncatingTail
 
         self.addSubview(self.button)
-        self.button.set(style: .noborder(image: UIImage(systemName: "ellipsis.circle")!, color: .background4))
+        self.button.set(style: .noborder(image: UIImage(systemName: "ellipsis.circle")!, color: .textColor))
 
         let add = UIAction.init(title: "Add people", image: UIImage(systemName: "person.badge.plus")) { _ in
             self.didTapAddPeople?()
@@ -87,21 +87,11 @@ class ConversationHeaderView: View {
 
         self.stackedAvatarView.setSize()
 
-        switch self.state {
-        case .read:
-            self.height = self.stackedAvatarView.itemHeight
-            self.width = superview.width - Theme.contentOffset
+        self.height = self.stackedAvatarView.itemHeight
+        self.width = superview.width - Theme.contentOffset
 
-            self.stackedAvatarView.pin(.left)
-            self.stackedAvatarView.centerOnY()
-        case .write:
-            self.height = self.stackedAvatarView.height
-            self.width = self.stackedAvatarView.width
-
-            self.stackedAvatarView.pin(.left)
-            self.stackedAvatarView.centerOnY()
-        }
-
+        self.stackedAvatarView.pin(.left)
+        self.stackedAvatarView.centerOnY()
 
         let maxWidth = self.width - Theme.contentOffset - self.stackedAvatarView.width
         self.label.setSize(withWidth: maxWidth)

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 @MainActor
 protocol CoordinatorType: AnyObject {
@@ -40,10 +41,17 @@ class Coordinator<Result>: NSObject, CoordinatorType {
 
     weak var parentCoordinator: CoordinatorType?
     private(set) var childCoordinator: CoordinatorType?
+    var cancellables = Set<AnyCancellable>()
 
     init(router: Router, deepLink: DeepLinkable?) {
         self.router = router
         self.deepLink = deepLink
+    }
+
+    deinit {
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
     }
 
     /// Called by the addChildAndStart method. Override this method to check state requirements for coordinator flow.

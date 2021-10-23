@@ -11,51 +11,30 @@ import UIKit
 
 enum Color: String, CaseIterable {
 
-    case background1
-    case background2
-    case background3
-    case background4
-    case backgroundWithAlpha
-    case purple
-    case lightPurple
-    case teal
-    case orange
-    case green
-    case red
+    case background
+    case darkGray
+    case gray
+    case lightGray
+    case textColor
     case white
     case clear
-    case keyboardBackground
 
     var color: UIColor {
         switch self {
-        case .background1:
-            return UIColor(named: "Background1")!
-        case .background2:
-            return UIColor(named: "Background2")!
-        case .background3:
-            return UIColor(named: "Background3")!
-        case .background4:
-            return UIColor(named: "Background4")!
-        case .backgroundWithAlpha:
-            return UIColor(named: "BackgroundWithAlpha")!
-        case .purple:
-            return UIColor(named: "Purple")!
-        case .lightPurple:
-            return UIColor(named: "LightPurple")!
-        case .red:
-            return UIColor(named: "Red")!
-        case .teal:
-            return UIColor(named: "Teal")!
-        case .green:
-            return UIColor(named: "Green")!
+        case .background:
+            return UIColor(named: "BACKGROUND")!
+        case .darkGray:
+            return UIColor(named: "DARKGRAY")!
+        case .gray:
+            return UIColor(named: "GRAY")!
+        case .lightGray:
+            return UIColor(named: "LIGHTGRAY")!
+        case .textColor:
+            return UIColor(named: "TEXTCOLOR")!
         case .white:
-            return UIColor(named: "White")!
+            return UIColor(named: "WHITE")!
         case .clear:
-            return UIColor(named: "Clear")!
-        case .orange:
-            return UIColor(named: "Orange")!
-        case .keyboardBackground:
-            return UIColor(named: "Keyboard")!
+            return UIColor(named: "CLEAR")!
         }
     }
 }

@@ -85,12 +85,29 @@ class ConversationViewController: FullScreenViewController,
         self.dateLabel.centerOnX()
 
         self.collectionView.expandToSuperviewWidth()
-        let padding = self.dateLabel.height + (self.view.height * 0.15)
+        let padding: CGFloat
+        if self.state == .read {
+            padding = self.dateLabel.height + (self.view.height * 0.15)
+        } else {
+            padding = self.dateLabel.height + 20
+        }
         self.collectionView.match(.top, to: .bottom, of: self.conversationHeader, offset: padding)
         self.collectionView.height = self.view.height - padding - self.conversationHeader.bottom
 
         // Base the Y position of the date label on the top of the collection view.
         self.dateLabel.match(.bottom, to: .top, of: self.collectionView, offset: -20)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        self.becomeFirstResponder()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        self.resignFirstResponder()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -111,11 +128,9 @@ class ConversationViewController: FullScreenViewController,
         guard self.presentedViewController.isNil else { return }
 
         self.conversationHeader.update(for: state)
-        switch state {
-        case .read:
-            break
-        case .write:
-            break 
+
+        UIView.animate(withDuration: 0.25) {
+            self.view.layoutNow()
         }
     }
 

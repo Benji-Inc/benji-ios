@@ -37,7 +37,7 @@ class UserOnboardingViewController: ViewController {
         self.view.addSubview(self.bubbleView)
 
         self.bubbleView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMaxXMinYCorner]
-        self.bubbleView.set(backgroundColor: .lightPurple)
+        self.bubbleView.set(backgroundColor: .gray)
 
         self.bubbleView.addSubview(self.textBubbleView)
 
@@ -102,7 +102,7 @@ class UserMessageView: TextView {
                  lineBreakMode: .byWordWrapping,
                  stringCasing: .unchanged,
                  isEditable: false,
-                 linkColor: .teal)
+                 linkColor: .white)
 
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 2

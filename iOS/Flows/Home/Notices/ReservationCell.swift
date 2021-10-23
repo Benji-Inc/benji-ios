@@ -15,7 +15,7 @@ class ReservationCell: NoticeCell {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.contentView.set(backgroundColor: .background3)
+        self.contentView.set(backgroundColor: .gray)
         self.contentView.addSubview(self.label)
 
         self.label.textAlignment = .center

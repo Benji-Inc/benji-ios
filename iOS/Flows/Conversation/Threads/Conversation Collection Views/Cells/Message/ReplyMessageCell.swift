@@ -60,7 +60,7 @@ class ReplyMessageCell: BaseMessageCell {
         if !message.isFromCurrentUser, !message.isConsumed, message.context != .status {
 
             if !message.isFromCurrentUser, message.context == .passive {
-                self.bubbleView.layer.borderColor = Color.purple.color.cgColor
+                self.bubbleView.layer.borderColor = Color.darkGray.color.cgColor
             } else {
                 self.bubbleView.layer.borderColor = message.context.color.color.cgColor
             }

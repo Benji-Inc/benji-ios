@@ -31,11 +31,11 @@ class CharacterCountView: View {
         if count >= max {
             self.isHidden = false
             self.label.setText(self.getText(from: count, max: max))
-            self.label.setTextColor(.red)
+            self.label.setTextColor(.white)
         } else if count >= max - 20 {
             self.isHidden = false
             self.label.setText(self.getText(from: count, max: max))
-            self.label.setTextColor(.orange)
+            self.label.setTextColor(.white)
         } else {
             self.isHidden = true
         }

@@ -12,7 +12,7 @@ import TMROLocalization
 class InputActivityBar: View {
 
     static let height: CGFloat = 28
-    private let label = Label(font: .small, textColor: .background4)
+    private let label = Label(font: .small, textColor: .textColor)
 
     override func initializeSubviews() {
         super.initializeSubviews()
