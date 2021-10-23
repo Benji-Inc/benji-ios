@@ -44,7 +44,7 @@ class ToastScheduler {
                                      description: description,
                                      deepLink: deepLink)
         case .newMessage(let message):
-            await self.createMessageToast(for: message)
+            self.createMessageToast(for: message)
         }
     }
 
@@ -83,16 +83,19 @@ class ToastScheduler {
         ToastQueue.shared.add(toast: toast)
     }
 
-    private func createMessageToast(for message: Messageable) async {
-        //guard let user = try? await message.getAuthorAsUser() else { return }
+    private func createMessageToast(for message: Messageable) {
 
-        //guard let body = message.body, !body.isEmpty else { return }
+        guard case MessageKind.text(let text) = message.kind,
+                !text.isEmpty,
+        let author = UserStore.shared.users.first(where: { user in
+            return user.userObjectID == message.authorID
+        }) else { return }
 
         let toast = Toast(id: message.id,
                           priority: 1,
-                          title: User.current()!.fullName,
-                          description: "body",
-                          displayable: User.current()!,
+                          title: author.fullName,
+                          description: text,
+                          displayable: author,
                           deeplink: DeepLinkObject(target: .conversation),
                           didTap: { [unowned self] in
 
