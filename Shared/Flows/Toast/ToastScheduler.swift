@@ -12,7 +12,7 @@ import Combine
 
 enum ToastType {
     #warning("Add associated values to newMessage")
-    case newMessage
+    case newMessage(Messageable)
     case error(ClientError)
     case basic(identifier: String,
                displayable: ImageDisplayable,
