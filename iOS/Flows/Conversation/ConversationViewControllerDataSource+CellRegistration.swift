@@ -23,8 +23,6 @@ extension ConversationCollectionViewDataSource {
                                          dataSource: ConversationCollectionViewDataSource)>
     typealias LoadMoreMessagesCellRegistration
     = UICollectionView.CellRegistration<LoadMoreMessagesCell, String>
-    typealias MessageHeaderRegistration
-    = UICollectionView.SupplementaryRegistration<ThreadMessageCell>
 
     static func createMessageCellRegistration() -> MessageCellRegistration {
         return MessageCellRegistration { cell, indexPath, item in
@@ -93,13 +91,6 @@ extension ConversationCollectionViewDataSource {
     static func createLoadMoreCellRegistration() -> LoadMoreMessagesCellRegistration {
         return LoadMoreMessagesCellRegistration { cell, indexPath, itemIdentifier in
             
-        }
-    }
-
-    static func createThreadMessageHeaderRegistration() -> MessageHeaderRegistration {
-        return MessageHeaderRegistration(elementKind: UICollectionView.elementKindSectionHeader)
-        { supplementaryView, elementKind, indexPath in
-
         }
     }
 }

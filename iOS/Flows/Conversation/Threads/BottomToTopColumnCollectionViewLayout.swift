@@ -102,12 +102,17 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
     override func layoutAttributesForSupplementaryView(ofKind elementKind: String,
                                                        at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 
+        if self.headerSize == .zero {
+            return nil
+        }
+
         // Returned the cached attributes if we've already calculated these attributes
         if let attributes = self.headerLayoutAttributes[indexPath.section] {
             return attributes
         }
 
         let frame = self.frameForHeaderSupplementaryView(inSection: indexPath.section)
+
         let attributes
         = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                            with: indexPath)

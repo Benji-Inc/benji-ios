@@ -52,8 +52,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     = ConversationCollectionViewDataSource.createThreadMessageCellRegistration()
     private let loadMoreMessagesCellRegistration
     = ConversationCollectionViewDataSource.createLoadMoreCellRegistration()
-    private let messageHeaderCellRegistration
-    = ConversationCollectionViewDataSource.createThreadMessageHeaderRegistration()
 
     required init(collectionView: UICollectionView) {
         self.contextMenuDelegate = ContextMenuInteractionDelegate(collectionView: collectionView)
@@ -90,31 +88,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                                                                 for: indexPath,
                                                                 item: String())
         }
-    }
-
-    override func dequeueSupplementaryView(with collectionView: UICollectionView,
-                                           kind: String,
-                                           section: ConversationSection,
-                                           indexPath: IndexPath) -> UICollectionReusableView? {
-
-        if kind == UICollectionView.elementKindSectionHeader {
-            guard let parentMessageID = section.parentMessageID else { return nil }
-            guard let parentMessage = ChatClient.shared.messageController(cid: section.cid,
-                                                                          messageId: parentMessageID).message else {
-                return nil
-            }
-
-            // Get the first message in this section to determine the parent
-            let messageCell
-            = collectionView.dequeueConfiguredReusableSupplementary(using: self.messageHeaderCellRegistration,
-                                                                    for: indexPath)
-
-            messageCell.set(message: parentMessage, replies: [], totalReplyCount: 0)
-            messageCell.setAuthor(with: parentMessage.author, showTopLine: false, showBottomLine: false)
-            return messageCell
-        }
-
-        return nil
     }
 
     /// Updates the datasource with the passed in array of message changes.
