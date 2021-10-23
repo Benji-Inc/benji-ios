@@ -56,6 +56,7 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
 
         let sectionCount = collectionView.numberOfSections
         for section in 0..<sectionCount {
+            // Calculate and cache all of the header layout attributes
             self.headerLayoutAttributes[section]
             = self.layoutAttributesForSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                         at: IndexPath(item: 0, section: section))
@@ -65,6 +66,7 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
             for item in 0..<itemCount {
                 let indexPath = IndexPath(item: item, section: section)
 
+                // Calculate and cache the layout attributes for the items in each section.
                 let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
                 attributes.frame = self.frameForItem(at: indexPath)
                 self.cellLayoutAttributes[indexPath] = attributes
