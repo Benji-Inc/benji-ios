@@ -13,6 +13,10 @@ typealias Message = ChatMessage
 
 extension ChatMessage: Messageable {
 
+    var conversationId: String {
+        return self.cid?.description ?? String()
+    }
+
     var isFromCurrentUser: Bool {
         return self.isSentByCurrentUser
     }
