@@ -27,9 +27,13 @@ class ConversationsManager: EventsControllerDelegate {
 
         switch event {
         case let event as MessageNewEvent:
-            break
+            Task {
+                await ToastScheduler.shared.schedule(toastType: .newMessage(event.message))
+            }
         case let event as ReactionNewEvent:
-            break
+            Task {
+                await ToastScheduler.shared.schedule(toastType: .newMessage(event.message))
+            }
         default:
             break
         }

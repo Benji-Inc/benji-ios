@@ -658,6 +658,7 @@
 		D6C3892F2724B8E5004D29D5 /* MessageContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735022C857760088256B /* MessageContext.swift */; };
 		D6C389302724B8F9004D29D5 /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
 		D6C389312724B8F9004D29D5 /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
+		D6C389332724C091004D29D5 /* ArchiveCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C389322724C091004D29D5 /* ArchiveCoordinator+Extensions.swift */; };
 		D6C9EF3F25BF6CB100A14DE5 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */; };
 		D6C9EF4525BF6CF000A14DE5 /* Indexable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */; };
 		D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */; };
@@ -1119,6 +1120,7 @@
 		D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveViewController.swift; sourceTree = "<group>"; };
 		D6C100D526F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D6C100D726F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D6C389322724C091004D29D5 /* ArchiveCoordinator+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArchiveCoordinator+Extensions.swift"; sourceTree = "<group>"; };
 		D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubbleView.swift; sourceTree = "<group>"; };
 		D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Indexable.swift; sourceTree = "<group>"; };
 		D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GetChatToken+Cloud.swift"; sourceTree = "<group>"; };
@@ -2145,6 +2147,7 @@
 				D6C100D526F3DC3A00F1ED7D /* ArchiveCollectionViewDataSource.swift */,
 				D6C100D726F3DC6500F1ED7D /* ArchiveCollectionViewLayout.swift */,
 				D6C100D126F3DC0000F1ED7D /* ArchiveCoordinator.swift */,
+				D6C389322724C091004D29D5 /* ArchiveCoordinator+Extensions.swift */,
 				D6A3E246270142B400CEBAC0 /* ArchiveScope.swift */,
 				D6C100D326F3DC1100F1ED7D /* ArchiveViewController.swift */,
 				D678EC1426F3E5BA0071DB0D /* ArchiveViewController+Extension.swift */,
@@ -2853,6 +2856,7 @@
 				D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */,
 				80251FF826F3D362006D7873 /* ChatMessageController+Extensions.swift in Sources */,
+				D6C389332724C091004D29D5 /* ArchiveCoordinator+Extensions.swift in Sources */,
 				D61EC0C221D3071400204BEE /* ViewController.swift in Sources */,
 				D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
 				80F88BAE26F11F02006C7677 /* ChatChannelController+Extensions.swift in Sources */,
