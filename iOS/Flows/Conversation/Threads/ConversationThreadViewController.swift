@@ -11,8 +11,8 @@ import Parse
 import Combine
 import StreamChat
 
-class ConversationThreadViewController: DiffableCollectionViewController<ConversationCollectionSection,
-                                        ConversationCollectionItem,
+class ConversationThreadViewController: DiffableCollectionViewController<ConversationSection,
+                                        ConversationItem,
                                         ConversationCollectionViewDataSource>,
                                         CollectionViewInputHandler {
 
@@ -90,26 +90,27 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
     // MARK: Data Loading
 
-    override func getAllSections() -> [ConversationCollectionSection] {
+    override func getAllSections() -> [ConversationSection] {
         if let channelId = self.message.cid {
-           return [.conversation(channelId)]
+            return [ConversationSection(cid: channelId, parentMessageID: self.message.id)]
         }
 
         return []
     }
 
-    override func retrieveDataForSnapshot() async -> [ConversationCollectionSection : [ConversationCollectionItem]] {
-        var data: [ConversationCollectionSection: [ConversationCollectionItem]] = [:]
+    override func retrieveDataForSnapshot() async -> [ConversationSection : [ConversationItem]] {
+        var data: [ConversationSection: [ConversationItem]] = [:]
 
         do {
             try await self.messageController.loadPreviousReplies()
             let messages = Array(self.messageController.replies.asConversationCollectionItems)
 
             if let channelId = self.message.cid {
-                data[.conversation(channelId)] = []
-                data[.conversation(channelId)]?.append(contentsOf: messages)
+                let section = ConversationSection(cid: channelId, parentMessageID: self.message.id)
+                data[section] = []
+                data[section]?.append(contentsOf: messages)
                 if !self.messageController.hasLoadedAllPreviousReplies {
-                    data[.conversation(channelId)]?.append(contentsOf: [.loadMore])
+                    data[section]?.append(contentsOf: [.loadMore])
                 }
             }
         } catch {

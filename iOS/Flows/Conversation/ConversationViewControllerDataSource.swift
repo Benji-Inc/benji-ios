@@ -9,14 +9,23 @@
 import Foundation
 import StreamChat
 
-typealias ConversationCollectionSection = ConversationCollectionViewDataSource.SectionType
-typealias ConversationCollectionItem = ConversationCollectionViewDataSource.ItemType
+typealias ConversationSection = ConversationCollectionViewDataSource.SectionType
+typealias ConversationItem = ConversationCollectionViewDataSource.ItemType
 
-class ConversationCollectionViewDataSource: CollectionViewDataSource<ConversationCollectionSection,
-                                            ConversationCollectionItem> {
+class ConversationCollectionViewDataSource: CollectionViewDataSource<ConversationSection,
+                                            ConversationItem> {
 
-    enum SectionType: Hashable {
-        case conversation(ChannelId)
+    // Model for the main section of the conversation or thread.
+    // The parent message is root message that has replies in a thread. It is nil for a conversation.
+    struct SectionType: Hashable {
+        let cid: ConversationID
+        let parentMessageID: MessageId?
+
+        var isThread: Bool { return self.parentMessageID.exists }
+        init(cid: ConversationID, parentMessageID: MessageId? = nil) {
+            self.cid = cid
+            self.parentMessageID = parentMessageID
+        }
     }
 
     enum ItemType: Hashable {
@@ -36,11 +45,15 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     var messageStyle: MessageStyle = .conversation
     
     private let contextMenuDelegate: ContextMenuInteractionDelegate
+
+    // Cell registration
     private let messageCellRegistration = ConversationCollectionViewDataSource.createMessageCellRegistration()
     private let threadMessageCellRegistration
     = ConversationCollectionViewDataSource.createThreadMessageCellRegistration()
     private let loadMoreMessagesCellRegistration
     = ConversationCollectionViewDataSource.createLoadMoreCellRegistration()
+    private let messageHeaderCellRegistration
+    = ConversationCollectionViewDataSource.createThreadMessageHeaderRegistration()
 
     required init(collectionView: UICollectionView) {
         self.contextMenuDelegate = ContextMenuInteractionDelegate(collectionView: collectionView)
@@ -57,18 +70,16 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
         switch item {
         case .message(let messageID):
-            guard case let .conversation(channelID) = section else { return nil }
-
-            let cell: MessageCell
+            let cell: UICollectionViewCell
             switch self.messageStyle {
             case .conversation:
                 cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                     for: indexPath,
-                                                                    item: (channelID, messageID, self))
+                                                                    item: (section.cid, messageID, self))
             case .thread:
                 cell = collectionView.dequeueConfiguredReusableCell(using: self.threadMessageCellRegistration,
                                                                     for: indexPath,
-                                                                    item: (channelID, messageID, self))
+                                                                    item: (section.cid, messageID, self))
             }
 
             let interaction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
@@ -77,8 +88,33 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case .loadMore:
             return collectionView.dequeueConfiguredReusableCell(using: self.loadMoreMessagesCellRegistration,
                                                                 for: indexPath,
-                                                                item: "Test")
+                                                                item: String())
         }
+    }
+
+    override func dequeueSupplementaryView(with collectionView: UICollectionView,
+                                           kind: String,
+                                           section: ConversationSection,
+                                           indexPath: IndexPath) -> UICollectionReusableView? {
+
+        if kind == UICollectionView.elementKindSectionHeader {
+            guard let parentMessageID = section.parentMessageID else { return nil }
+            guard let parentMessage = ChatClient.shared.messageController(cid: section.cid,
+                                                                          messageId: parentMessageID).message else {
+                return nil
+            }
+
+            // Get the first message in this section to determine the parent
+            let messageCell
+            = collectionView.dequeueConfiguredReusableSupplementary(using: self.messageHeaderCellRegistration,
+                                                                    for: indexPath)
+
+            messageCell.set(message: parentMessage, replies: [], totalReplyCount: 0)
+            messageCell.setAuthor(with: parentMessage.author, showTopLine: false, showBottomLine: false)
+            return messageCell
+        }
+
+        return nil
     }
 
     /// Updates the datasource with the passed in array of message changes.
@@ -86,11 +122,12 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 conversationController: ConversationControllerType,
                 collectionView: UICollectionView) async {
 
-        guard let conversation = conversationController.conversation else { return }
+        let conversation = conversationController.conversation
 
         var snapshot = self.snapshot()
 
-        let sectionID = ConversationCollectionSection.conversation(conversation.cid)
+        let sectionID = ConversationSection(cid: conversation.cid,
+                                            parentMessageID: conversationController.rootMessage?.id)
 
         // If there's more than one change, reload all of the data.
         guard changes.count == 1 else {
@@ -145,9 +182,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                     collectionView.scrollToItem(at: latestMessageIndex, at: .centeredHorizontally, animated: true)
                 case .thread:
                     // Inserting a message can cause the visual state of the previous message to change.
-                    if self.messageStyle == .thread {
-                        self.reconfigureItem(atIndex: 1, in: sectionID)
-                    }
+                    self.reconfigureItem(atIndex: 1, in: sectionID)
                     collectionView.scrollToItem(at: latestMessageIndex, at: .bottom, animated: true)
                 }
             }
@@ -178,8 +213,7 @@ private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteraction
 
         switch messageItem {
         case .message(let messageID):
-            guard case let .conversation(channelID) = sectionItem else { return nil }
-            let messageController = ChatClient.shared.messageController(cid: channelID,
+            let messageController = ChatClient.shared.messageController(cid: sectionItem.cid,
                                                                         messageId: messageID)
 
             return UIContextMenuConfiguration(identifier: nil,
@@ -224,7 +258,7 @@ private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteraction
 extension LazyCachedMapCollection where Element == Message {
 
     /// Convenience function to convert Stream chat messages into the ItemType of a ConversationCollectionViewDataSource.
-    var asConversationCollectionItems: [ConversationCollectionItem] {
+    var asConversationCollectionItems: [ConversationItem] {
         return self.map { message in
             return message.asConversationCollectionItem
         }
@@ -234,7 +268,7 @@ extension LazyCachedMapCollection where Element == Message {
 extension ChatMessage {
 
     /// Convenience function to convert Stream chat messages into the ItemType of a ConversationCollectionViewDataSource.
-    var asConversationCollectionItem: ConversationCollectionItem {
-        return ConversationCollectionItem.message(self.id)
+    var asConversationCollectionItem: ConversationItem {
+        return ConversationItem.message(self.id)
     }
 }

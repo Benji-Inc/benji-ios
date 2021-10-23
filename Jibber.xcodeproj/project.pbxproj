@@ -31,6 +31,7 @@
 		807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
 		807A7BCA26C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
 		807A7BCB26C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
+		808313B52723694B00BAEBE0 /* ThreadMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808313B42723694B00BAEBE0 /* ThreadMessageCell.swift */; };
 		8094D5DB26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8094D5DC26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
@@ -817,6 +818,7 @@
 		8070E74F271747DE004873D9 /* ConversationSendOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSendOverlayView.swift; sourceTree = "<group>"; };
 		807A7BC426C5B5A20023A71E /* Task+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Extensions.swift"; sourceTree = "<group>"; };
 		807A7BC826C5C8100023A71E /* Task+TaskPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+TaskPool.swift"; sourceTree = "<group>"; };
+		808313B42723694B00BAEBE0 /* ThreadMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadMessageCell.swift; sourceTree = "<group>"; };
 		8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFUser+Extensions.swift"; sourceTree = "<group>"; };
 		80958C1F2721ED55007196BD /* BottomToTopColumnCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomToTopColumnCollectionViewLayout.swift; sourceTree = "<group>"; };
 		8096144C2714CDB600BC948E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
@@ -1546,6 +1548,7 @@
 			children = (
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				8015CA7626F3D907000F3C60 /* MessageCell.swift */,
+				808313B42723694B00BAEBE0 /* ThreadMessageCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1830,12 +1833,12 @@
 		D66A580325DD68F9001B3F64 /* Threads */ = {
 			isa = PBXGroup;
 			children = (
+				80958C1F2721ED55007196BD /* BottomToTopColumnCollectionViewLayout.swift */,
 				D6D1500521D5E71E00CD8CE4 /* Conversation Collection Views */,
 				D6D1502C21D6A08300CD8CE4 /* ConversationThreadCollectionView.swift */,
 				D635F0A527135BAB00A02D17 /* ConversationThreadCollectionViewLayout.swift */,
 				D6D1500621D5E73D00CD8CE4 /* ConversationThreadViewController.swift */,
 				D61D38E6248C494A00BE457B /* ConversationThreadViewController+Messaging.swift */,
-				80958C1F2721ED55007196BD /* BottomToTopColumnCollectionViewLayout.swift */,
 			);
 			path = Threads;
 			sourceTree = "<group>";
@@ -2935,6 +2938,7 @@
 				D6090E562377CB2F00833DA7 /* Messageable.swift in Sources */,
 				D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */,
 				8007CB642703CE0600FEA511 /* AttachmentCollectionViewDataSource.swift in Sources */,
+				808313B52723694B00BAEBE0 /* ThreadMessageCell.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
 				D678EC2D26F5384D0071DB0D /* CircleGroupCollectionViewLayout.swift in Sources */,

@@ -23,11 +23,6 @@ class MessageCell: UICollectionViewCell {
         cell.setText(with: item)
     }
 
-    private let authorView = AvatarView()
-    private let topVerticalLine = View()
-    private let bottomVerticalLine = View()
-    private let dotView = View()
-
     private var state: ConversationUIState = .read
 
     /// The root message to display.
@@ -41,16 +36,6 @@ class MessageCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
-        self.topVerticalLine.set(backgroundColor: .white)
-        self.contentView.addSubview(self.topVerticalLine)
-        self.bottomVerticalLine.set(backgroundColor: .white)
-        self.contentView.addSubview(self.bottomVerticalLine)
-
-        self.contentView.addSubview(self.dotView)
-        self.dotView.set(backgroundColor: .white)
-
-        self.contentView.addSubview(self.authorView)
 
         // Don't allow the user to interact with the collectionview so that the cell can be tapped on.
         self.collectionView.isUserInteractionEnabled = false
@@ -71,44 +56,10 @@ class MessageCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let shouldShowAvatar = self.authorView.displayable.exists
-
         // Let the collection view know we're about to invalidate the layout so there aren't item size
         // conflicts.
         self.collectionView.collectionViewLayout.invalidateLayout()
-        if shouldShowAvatar {
-            self.collectionView.left = 40
-        } else {
-            self.collectionView.left = 0
-        }
-        self.collectionView.expand(.right)
-        self.collectionView.expandToSuperviewHeight()
-
-        if shouldShowAvatar {
-            self.authorView.setSize(for: 40)
-            self.authorView.pin(.left)
-            self.authorView.centerY = self.cellHeight * 0.5
-
-            let lineOffset: CGFloat = 10
-
-            self.topVerticalLine.height = self.contentView.halfHeight + lineOffset
-            self.topVerticalLine.width = 2
-            self.topVerticalLine.top = -lineOffset
-            self.topVerticalLine.centerX = self.authorView.centerX
-
-            self.bottomVerticalLine.height = self.contentView.halfHeight + lineOffset
-            self.bottomVerticalLine.width = 2
-            self.bottomVerticalLine.centerX = self.authorView.centerX
-            self.bottomVerticalLine.pin(.bottom, padding: -lineOffset)
-
-            self.dotView.size = CGSize(width: 6, height: 6)
-            self.dotView.layer.cornerRadius = 3
-            self.dotView.center = self.authorView.center
-        } else {
-            self.authorView.frame = .zero
-            self.topVerticalLine.frame = .zero
-            self.bottomVerticalLine.frame = .zero
-        }
+        self.collectionView.expandToSuperviewSize()
     }
 
     /// Configures the cell to display the given messages.
@@ -124,18 +75,6 @@ class MessageCell: UICollectionViewCell {
 
         self.collectionView.reloadData()
     }
-
-    func setAuthor(with avatar: Avatar, showTopLine: Bool, showBottomLine: Bool) {
-        self.authorView.set(avatar: avatar)
-        self.authorView.isVisible = !showTopLine
-
-        self.topVerticalLine.isVisible = showTopLine
-        self.bottomVerticalLine.isVisible = showBottomLine
-
-        self.dotView.isVisible = showTopLine && !showBottomLine
-
-        self.setNeedsLayout()
-    }
 }
 
 extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -144,9 +83,11 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
     var spaceBetweenCellTops: CGFloat { return 20 }
     /// The height of each message subcell
     var cellHeight: CGFloat {
-        guard let msg = self.message as? ChatMessage, msg.type != .reply else { return collectionView.height }
+        guard let msg = self.message as? ChatMessage, msg.type != .reply else {
+            return self.collectionView.height
+        }
         // Cell height should allow for one base message, plus the max number of replies to fit vertically.
-        let height = (collectionView.height * 0.33) - self.spaceBetweenCellTops * CGFloat(self.maxShownReplies)
+        let height = (self.collectionView.height * 0.33) - self.spaceBetweenCellTops * CGFloat(self.maxShownReplies)
         return clamp(height, min: 1)
     }
 
@@ -211,7 +152,7 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
 }
 
 /// A cell for displaying individual the root message and replies within the MessageCell.
-private class MessageSubcell: UICollectionViewCell {
+class MessageSubcell: UICollectionViewCell {
 
     /// A rounded and colored background view for the message. Changes color based on the sender.
     let backgroundColorView = UIView()
@@ -269,6 +210,7 @@ private class MessageSubcell: UICollectionViewCell {
         self.setNeedsLayout()
     }
 
+    /// Adjusts the background color of the cell to be appropriate for its position in the stack. Cells that are further back in the stack are darkened.
     func configureBackground(withStackIndex stackIndex: Int, message: Messageable) {
         // How much to scale the brightness of the background view.
         let colorFactor = 1 - CGFloat(stackIndex) * 0.05

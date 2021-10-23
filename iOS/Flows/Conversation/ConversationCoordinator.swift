@@ -65,7 +65,7 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
 
         self.conversationVC.didTapConversationTitle = { [unowned self] in
             guard let conversationController = self.conversationVC.conversationController,
-            conversationController.conversation?.membership?.memberRole.rawValue == "owner" else { return }
+            conversationController.conversation.membership?.memberRole.rawValue == "owner" else { return }
             self.presentConversationTitleAlert(for: conversationController)
         }
     }
@@ -92,11 +92,9 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
         }
 
         for connection in pendingConnections {
-            if let conversationID = controller.conversation?.cid.id {
-                connection.initialConversations.append(conversationID)
-                #warning("Update to use async save function")
-                connection.saveEventually()
-            }
+            let conversationID = controller.conversation.cid.id
+            connection.initialConversations.append(conversationID)
+            connection.saveEventually()
         }
 
         if !acceptedConnections.isEmpty {

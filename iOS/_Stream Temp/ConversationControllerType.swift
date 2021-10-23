@@ -13,22 +13,51 @@ import StreamChat
 /// message threads (MessageController) and conversations (ConversationController) in a unified way.
 protocol ConversationControllerType {
     /// The conversation related to this controller.
-    var conversation: Conversation? { get }
+    var conversation: Conversation { get }
+    /// The original message if this is controller for message  thread.
+    var rootMessage: Message? { get }
     /// The messages currenlty loaded on this controller. In a thread, these would be reply messages.
     var messages: LazyCachedMapCollection<ChatMessage> { get }
     /// True if all messages (or replies) have been loaded.
     var hasLoadedAllPreviousMessages: Bool { get }
 }
 
-extension ConversationController: ConversationControllerType { }
+extension ConversationControllerType {
+
+    var isThread: Bool {
+        return self.rootMessage.exists
+    }
+
+    var cid: ConversationID {
+        return self.conversation.cid
+    }
+
+    var rootMessageID: MessageId? {
+        return self.rootMessage?.id
+    }
+}
+
+extension ConversationController: ConversationControllerType {
+
+    var rootMessage: Message? {
+        return nil
+    }
+}
 
 extension MessageController: ConversationControllerType {
+
     var messages: LazyCachedMapCollection<ChatMessage> {
         return self.replies
     }
-    var conversation: Conversation? {
+
+    var rootMessage: Message? {
+        return self.message
+    }
+
+    var conversation: Conversation {
         return ChatClient.shared.channelController(for: self.cid).conversation
     }
+    
     var hasLoadedAllPreviousMessages: Bool {
         return self.hasLoadedAllPreviousReplies
     }

@@ -119,9 +119,8 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
             case .notice(let notice):
                 self.handle(notice: notice)
             case .conversation(let conversationID):
-                if let conversation = ChatClient.shared.channelController(for: conversationID).conversation {
-                    self.startConversationFlow(for: conversation)
-                }
+                let conversation = ChatClient.shared.channelController(for: conversationID).conversation
+                self.startConversationFlow(for: conversation)
             }
         }
     }
@@ -143,8 +142,8 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
     private func handle(notice: SystemNotice) {
         switch notice.type {
         case .alert:
-            if let conversationID = notice.attributes?["conversationId"] as? ChannelId,
-                let conversation = ChatClient.shared.channelController(for: conversationID).conversation {
+            if let conversationID = notice.attributes?["conversationId"] as? ChannelId {
+                let conversation = ChatClient.shared.channelController(for: conversationID).conversation
                 self.startConversationFlow(for: conversation)
             }
         case .connectionRequest:

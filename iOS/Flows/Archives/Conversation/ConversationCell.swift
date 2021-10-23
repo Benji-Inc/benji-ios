@@ -24,9 +24,8 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
     }
 
     func configure(with item: ChannelId) {
-        if let conversation = ChatClient.shared.channelController(for: item).conversation {
-            self.content.configure(with: conversation)
-        }
+        let conversation = ChatClient.shared.channelController(for: item).conversation
+        self.content.configure(with: conversation)
     }
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes)

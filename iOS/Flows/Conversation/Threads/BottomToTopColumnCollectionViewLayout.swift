@@ -74,9 +74,14 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         // Return all items whose frames intersect with the given rect.
-        return self.cellLayoutAttributes.values.filter { attributes in
-            rect.intersects(attributes.frame)
+        let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
+            return rect.intersects(attributes.frame)
         }
+        let headerAttributes = self.headerLayoutAttributes.values.filter { attributes in
+            return rect.intersects(attributes.frame)
+        }
+
+        return itemAttributes + headerAttributes
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
@@ -144,7 +149,8 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         // Get the number items above this item to determine how far down the item should be pushed.
         // The lowest index will have the most items on top, and the highest index will be on the top.
         let itemsAboveCount = CGFloat(collectionView.numberOfItems(inSection: 0) - index.item - 1)
-        let y = itemsAboveCount * (self.itemSize.height + self.itemSpacing) + (self.headerSize.height + self.itemSpacing)
+        let headerSpace = self.headerSize.height + self.itemSpacing
+        let y = itemsAboveCount * (self.itemSize.height + self.itemSpacing) + headerSpace
         return CGPoint(x: 0, y: y)
     }
 
@@ -153,7 +159,8 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         guard let collectionView = self.collectionView else { return 0 }
 
         let numberInSection = CGFloat(collectionView.numberOfItems(inSection: section))
-        return (self.itemSpacing + self.itemSize.height) * numberInSection + (self.headerSize.height + self.itemSpacing)
+        let headerSpace = self.headerSize.height + self.itemSpacing
+        return (self.itemSpacing + self.itemSize.height) * numberInSection + headerSpace
     }
 
     // MARK: - Header Layout Calculations
@@ -161,7 +168,7 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
     /// Gets the frame rect for a header.
     private func frameForHeaderSupplementaryView(inSection section: Int) -> CGRect {
         let origin = self.originForHeader(at: section)
-        let size = CGSize(width: self.itemSize.width, height: self.itemSize.height)
+        let size = CGSize(width: self.headerSize.width, height: self.headerSize.height)
 
         return CGRect(origin: origin, size: size)
     }
@@ -172,7 +179,7 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
 
         // Get the height of all the sections above this one.
         var heightOfPreviousSections: CGFloat = 0
-        for sectionIndex in index..<collectionView.numberOfSections {
+        for sectionIndex in index+1..<collectionView.numberOfSections {
             heightOfPreviousSections += self.heightOfSection(sectionIndex)
         }
 

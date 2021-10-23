@@ -16,8 +16,15 @@ extension ConversationCollectionViewDataSource {
                                         (channelID: ChannelId,
                                          messageID: MessageId,
                                          dataSource: ConversationCollectionViewDataSource)>
+    typealias ThreadMessageCellRegistration
+    = UICollectionView.CellRegistration<ThreadMessageCell,
+                                        (channelID: ChannelId,
+                                         messageID: MessageId,
+                                         dataSource: ConversationCollectionViewDataSource)>
     typealias LoadMoreMessagesCellRegistration
     = UICollectionView.CellRegistration<LoadMoreMessagesCell, String>
+    typealias MessageHeaderRegistration
+    = UICollectionView.SupplementaryRegistration<ThreadMessageCell>
 
     static func createMessageCellRegistration() -> MessageCellRegistration {
         return MessageCellRegistration { cell, indexPath, item in
@@ -39,8 +46,8 @@ extension ConversationCollectionViewDataSource {
         }
     }
 
-    static func createThreadMessageCellRegistration() -> MessageCellRegistration {
-        return MessageCellRegistration { cell, indexPath, item in
+    static func createThreadMessageCellRegistration() -> ThreadMessageCellRegistration {
+        return ThreadMessageCellRegistration { cell, indexPath, item in
             let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                         messageId: item.messageID)
             guard let message = messageController.message else { return }
@@ -86,6 +93,13 @@ extension ConversationCollectionViewDataSource {
     static func createLoadMoreCellRegistration() -> LoadMoreMessagesCellRegistration {
         return LoadMoreMessagesCellRegistration { cell, indexPath, itemIdentifier in
             
+        }
+    }
+
+    static func createThreadMessageHeaderRegistration() -> MessageHeaderRegistration {
+        return MessageHeaderRegistration(elementKind: UICollectionView.elementKindSectionHeader)
+        { supplementaryView, elementKind, indexPath in
+
         }
     }
 }
