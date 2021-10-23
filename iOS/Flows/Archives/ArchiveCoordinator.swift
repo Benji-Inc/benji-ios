@@ -123,6 +123,7 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
                                                   conversation: conversation)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+                _ = ConversationsManager.shared.activeConversations.popLast()
                 self.finishFlow(with: ())
             }
         })
