@@ -15,15 +15,13 @@ import StreamChat
 
 class ConversationCoordinator: PresentableCoordinator<Void> {
 
-    lazy var conversationVC = ConversationViewController(conversation: self.conversation)
-
-    var conversation: Conversation?
+    lazy var conversationVC = ConversationViewController(conversation: ConversationsManager.shared.topMostConversation)
 
     init(router: Router,
          deepLink: DeepLinkable?,
          conversation: Conversation?) {
 
-        self.conversation = conversation
+        ConversationsManager.shared.topMostConversation = conversation
         super.init(router: router, deepLink: deepLink)
     }
 

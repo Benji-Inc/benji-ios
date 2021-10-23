@@ -15,6 +15,8 @@ class ConversationsManager: EventsControllerDelegate {
 
     private let controller = ChatClient.shared.eventsController()
 
+    var topMostConversation: Conversation?
+
     init() {
         self.initialize()
     }
@@ -27,10 +29,12 @@ class ConversationsManager: EventsControllerDelegate {
 
         switch event {
         case let event as MessageNewEvent:
+            guard event.channel != self.topMostConversation else { return }
             Task {
                 await ToastScheduler.shared.schedule(toastType: .newMessage(event.message))
             }
         case let event as ReactionNewEvent:
+            guard event.cid != self.topMostConversation?.cid else { return }
             Task {
                 await ToastScheduler.shared.schedule(toastType: .newMessage(event.message))
             }
