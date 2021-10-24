@@ -70,7 +70,11 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
             /// Provides a INFocusStatusAuthorizationStatus
         }
 
-        UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+        Task {
+            await UserNotificationManager.shared.register(application: UIApplication.shared)
+        }
+
+        _ = ConversationsManager.shared
     }
 
     override func viewWasPresented() {

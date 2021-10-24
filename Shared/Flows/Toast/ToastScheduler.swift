@@ -11,8 +11,7 @@ import TMROLocalization
 import Combine
 
 enum ToastType {
-    #warning("Add associated values to newMessage")
-    case newMessage
+    case newMessage(Messageable)
     case error(ClientError)
     case basic(identifier: String,
                displayable: ImageDisplayable,
@@ -44,11 +43,8 @@ class ToastScheduler {
                                      title: title,
                                      description: description,
                                      deepLink: deepLink)
-        case .newMessage:
-            #warning("Replace")
-//            Task {
-//                await self.createMessageToast(for: msg, conversation: conversation)
-//            }
+        case .newMessage(let message):
+            self.createMessageToast(for: message)
         }
     }
 
@@ -87,25 +83,27 @@ class ToastScheduler {
         ToastQueue.shared.add(toast: toast)
     }
 
-    #warning("Replace")
-//    private func createMessageToast(for message: TCHMessage, conversation: TCHChannel) async {
-//        guard let user = try? await message.getAuthorAsUser() else { return }
-//
-//        guard let body = message.body, !body.isEmpty else { return }
-//
-//        let toast = Toast(id: message.id,
-//                          priority: 1,
-//                          title: user.fullName,
-//                          description: body,
-//                          displayable: user,
-//                          deeplink: DeepLinkObject(target: .conversation),
-//                          didTap: { [unowned self] in
-//
-//            let deeplink = DeepLinkObject(target: .conversation)
-//            deeplink.customMetadata["conversationId"] = conversation.sid
-//            self.delegate?.didInteractWith(type: .newMessage(message, conversation), deeplink: deeplink)
-//        })
-//
-//        ToastQueue.shared.add(toast: toast)
-//    }
+    private func createMessageToast(for message: Messageable) {
+
+        guard case MessageKind.text(let text) = message.kind,
+                !text.isEmpty,
+        let author = UserStore.shared.users.first(where: { user in
+            return user.userObjectID == message.authorID
+        }) else { return }
+
+        let toast = Toast(id: message.id,
+                          priority: 1,
+                          title: author.fullName,
+                          description: text,
+                          displayable: author,
+                          deeplink: DeepLinkObject(target: .conversation),
+                          didTap: { [unowned self] in
+
+            let deeplink = DeepLinkObject(target: .conversation)
+            deeplink.customMetadata["conversationId"] = message.conversationId
+            self.delegate?.didInteractWith(type: .newMessage(message), deeplink: deeplink)
+        })
+
+        ToastQueue.shared.add(toast: toast)
+    }
 }

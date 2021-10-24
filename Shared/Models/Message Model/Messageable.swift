@@ -24,7 +24,6 @@ protocol Messageable {
     var attributes: [String: Any]? { get }
     var avatar: Avatar { get }
     var id: String { get }
-    var updateId: String? { get }
     var status: MessageStatus { get }
     var context: MessageContext { get }
     var canBeConsumed: Bool { get }
@@ -33,6 +32,7 @@ protocol Messageable {
     var color: Color { get }
     var kind: MessageKind { get }
     var isDeleted: Bool { get }
+    var conversationId: String { get }
 
     @discardableResult
     func updateConsumers(with consumer: Avatar) async throws -> Messageable
@@ -45,14 +45,10 @@ func ==(lhs: Messageable, rhs: Messageable) -> Bool {
         && lhs.kind == rhs.kind
         && lhs.authorID == rhs.authorID
         && lhs.id == rhs.id
-        && lhs.updateId == rhs.updateId
+        && lhs.conversationId == rhs.conversationId
 }
 
 extension Messageable {
-
-    var updateId: String? {
-        return nil 
-    }
 
     var canBeConsumed: Bool {
         return self.context != .status

@@ -9,17 +9,6 @@
 import Foundation
 import StreamChat
 
-#warning("Remove after beta features are complete.")
-extension ArchiveCoordinator: ToastSchedulerDelegate {
-
-    nonisolated func didInteractWith(type: ToastType, deeplink: DeepLinkable?) {
-        Task.onMainActor {
-            guard let link = deeplink else { return }
-            self.handle(deeplink: link)
-        }
-    }
-}
-
 class ArchiveCoordinator: PresentableCoordinator<Void> {
 
     private lazy var archiveVC: ArchiveViewController = {
@@ -43,7 +32,7 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
 
         self.archiveVC.addButton.didSelect { [unowned self] in
 
-//            self.presentPhoto()
+            //            self.presentPhoto()
             Task {
                 await self.createConversation()
             }.add(to: self.archiveVC.taskPool)
@@ -62,31 +51,31 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
 
         switch target {
         case .conversation:
-            #warning("Replace")
-//            if let conversationId = deeplink.customMetadata["conversationId"] as? String,
-//               let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) {
-//                self.startConversationFlow(for: conversation.conversationType)
-//            } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
-//                Task {
-//                    do {
-//                        let connection = try await Connection.getObject(with: connectionId)
-//                        guard let conversationId = connection.conversationId,
-//                              let conversation = ConversationSupplier.shared.getConversation(withSID: conversationId) else {
-//                                  return
-//                              }
-//
-//                        self.startConversationFlow(for: conversation.conversationType)
-//                    } catch {
-//                        logDebug(error)
-//                    }
-//                }
-//            }
+            if let identifier = deeplink.customMetadata["conversationId"] as? String {
+                guard let conversationId = try? ChannelId.init(cid: identifier),
+                      let conversation = ChatClient.shared.channelController(for: conversationId).conversation else {
+                          return
+                      }
+
+                self.startConversationFlow(for: conversation)
+            } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
+
+                guard let connection = ConnectionStore.shared.connections.first { connection in
+                    return connection.objectId == connectionId
+                }, let identifier = connection.conversationId,
+                    let conversationId = try? ChannelId.init(cid: identifier),
+                      let conversation = ChatClient.shared.channelController(for: conversationId).conversation else {
+                          return
+                      }
+
+                self.startConversationFlow(for: conversation)
+            }
         default:
             break
         }
     }
 
-    #warning("Remove after Beta")
+#warning("Remove after Beta")
     func createConversation() async {
 
         let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
@@ -134,17 +123,18 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
                                                   conversation: conversation)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+                _ = ConversationsManager.shared.activeConversations.popLast()
                 self.finishFlow(with: ())
             }
         })
-        self.router.present(coordinator, source: self.archiveVC, animated: true)
+        self.router.present(coordinator, source: self.router.topmostViewController, animated: true)
     }
 
     private func handle(notice: SystemNotice) {
         switch notice.type {
         case .alert:
             if let conversationID = notice.attributes?["conversationId"] as? ChannelId,
-                let conversation = ChatClient.shared.channelController(for: conversationID).conversation {
+               let conversation = ChatClient.shared.channelController(for: conversationID).conversation {
                 self.startConversationFlow(for: conversation)
             }
         case .connectionRequest:
