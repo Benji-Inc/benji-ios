@@ -15,8 +15,8 @@ typealias ConversationItem = ConversationCollectionViewDataSource.ItemType
 class ConversationCollectionViewDataSource: CollectionViewDataSource<ConversationSection,
                                             ConversationItem> {
 
-    // Model for the main section of the conversation or thread.
-    // The parent message is root message that has replies in a thread. It is nil for a conversation.
+    /// Model for the main section of the conversation or thread.
+    /// The parent message is root message that has replies in a thread. It is nil for a conversation.
     struct SectionType: Hashable {
         let cid: ConversationID
         let parentMessageID: MessageId?
