@@ -13,8 +13,8 @@ typealias ConversationController = ChatChannelController
 
 extension ChatChannelController {
 
-    var conversation: Conversation? {
-        return self.channel
+    var conversation: Conversation {
+        return self.channel!
     }
 
     /// Loads previous messages from backend.

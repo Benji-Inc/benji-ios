@@ -11,15 +11,17 @@ import Parse
 import Combine
 import StreamChat
 
-class ConversationThreadViewController: DiffableCollectionViewController<ConversationCollectionSection,
-                                        ConversationCollectionItem,
+class ConversationThreadViewController: DiffableCollectionViewController<ConversationSection,
+                                        ConversationItem,
                                         ConversationCollectionViewDataSource>,
                                         CollectionViewInputHandler {
 
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    private let parentMessageView = ThreadMessageCell()
 
+    /// A controller for message that all the replies in the thread are responding.
     let messageController: ChatMessageController
-    var message: Message! {
+    var parentMessage: Message! {
         return self.messageController.message
     }
 
@@ -63,11 +65,27 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
     override func initializeViews() {
         super.initializeViews()
 
-        self.dataSource.messageStyle = .thread
-
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
+        self.view.addSubview(self.parentMessageView)
+
+        self.parentMessageView.set(message: self.parentMessage, replies: [], totalReplyCount: 0)
+        self.parentMessageView.setAuthor(with: self.parentMessage.avatar,
+                                         showTopLine: false,
+                                         showBottomLine: false)
 
         self.subscribeToUpdates()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.blurView.expandToSuperviewSize()
+
+        self.parentMessageView.width = self.view.width * 0.8
+        self.parentMessageView.height = 120
+        self.parentMessageView.centerOnX()
+
+        self.collectionView.contentInset.top = 120
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -82,34 +100,29 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
         self.resignFirstResponder()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        self.blurView.expandToSuperviewSize()
-    }
-
     // MARK: Data Loading
 
-    override func getAllSections() -> [ConversationCollectionSection] {
-        if let channelId = self.message.cid {
-           return [.conversation(channelId)]
+    override func getAllSections() -> [ConversationSection] {
+        if let channelId = self.parentMessage.cid {
+            return [ConversationSection(cid: channelId, parentMessageID: self.parentMessage.id)]
         }
 
         return []
     }
 
-    override func retrieveDataForSnapshot() async -> [ConversationCollectionSection : [ConversationCollectionItem]] {
-        var data: [ConversationCollectionSection: [ConversationCollectionItem]] = [:]
+    override func retrieveDataForSnapshot() async -> [ConversationSection : [ConversationItem]] {
+        var data: [ConversationSection: [ConversationItem]] = [:]
 
         do {
             try await self.messageController.loadPreviousReplies()
             let messages = Array(self.messageController.replies.asConversationCollectionItems)
 
-            if let channelId = self.message.cid {
-                data[.conversation(channelId)] = []
-                data[.conversation(channelId)]?.append(contentsOf: messages)
+            if let channelId = self.parentMessage.cid {
+                let section = ConversationSection(cid: channelId, parentMessageID: self.parentMessage.id)
+                data[section] = []
+                data[section]?.append(contentsOf: messages)
                 if !self.messageController.hasLoadedAllPreviousReplies {
-                    data[.conversation(channelId)]?.append(contentsOf: [.loadMore])
+                    data[section]?.append(contentsOf: [.loadMore])
                 }
             }
         } catch {

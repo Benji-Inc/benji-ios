@@ -13,10 +13,13 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
 
     /// The size of the cells.
     var itemSize = CGSize(width: 20, height: 20)
+    /// The size of the header
+    var headerSize = CGSize(width: 20, height: 20)
     /// The vertical spacing between cells.
     var itemSpacing: CGFloat = 0
 
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
+    private var headerLayoutAttributes: [Int : UICollectionViewLayoutAttributes] = [:]
 
     override var collectionViewContentSize: CGSize {
         get {
@@ -53,10 +56,17 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
 
         let sectionCount = collectionView.numberOfSections
         for section in 0..<sectionCount {
+            // Calculate and cache all of the header layout attributes
+            self.headerLayoutAttributes[section]
+            = self.layoutAttributesForSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
+                                                        at: IndexPath(item: 0, section: section))
+
+
             let itemCount = collectionView.numberOfItems(inSection: section)
             for item in 0..<itemCount {
                 let indexPath = IndexPath(item: item, section: section)
 
+                // Calculate and cache the layout attributes for the items in each section.
                 let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
                 attributes.frame = self.frameForItem(at: indexPath)
                 self.cellLayoutAttributes[indexPath] = attributes
@@ -66,15 +76,20 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         // Return all items whose frames intersect with the given rect.
-        return self.cellLayoutAttributes.values.filter { attributes in
-            rect.intersects(attributes.frame)
+        let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
+            return rect.intersects(attributes.frame)
         }
+        let headerAttributes = self.headerLayoutAttributes.values.filter { attributes in
+            return rect.intersects(attributes.frame)
+        }
+
+        return itemAttributes + headerAttributes
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         // If the attributes are cached already, just return those.
-        if self.cellLayoutAttributes[indexPath] != nil {
-            return self.cellLayoutAttributes[indexPath]
+        if let attributes = self.cellLayoutAttributes[indexPath]  {
+            return attributes
         }
 
         let frame = self.frameForItem(at: indexPath)
@@ -84,7 +99,29 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         return attributes
     }
 
-    // MARK: - Layout calculations
+    override func layoutAttributesForSupplementaryView(ofKind elementKind: String,
+                                                       at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+
+        if self.headerSize == .zero {
+            return nil
+        }
+
+        // Returned the cached attributes if we've already calculated these attributes
+        if let attributes = self.headerLayoutAttributes[indexPath.section] {
+            return attributes
+        }
+
+        let frame = self.frameForHeaderSupplementaryView(inSection: indexPath.section)
+
+        let attributes
+        = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                           with: indexPath)
+        attributes.frame = frame
+
+        return attributes
+    }
+
+    // MARK: - Item Layout Calculations
 
     /// Get the layout attributes for the first item in the collection. This should be the bottom most item.
     private func firstItemLayoutAttributes() -> UICollectionViewLayoutAttributes? {
@@ -116,10 +153,11 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
             heightOfPreviousSections += self.heightOfSection(sectionIndex)
         }
 
-        // Get the number items above this item to determine how down the item should be pushed.
+        // Get the number items above this item to determine how far down the item should be pushed.
         // The lowest index will have the most items on top, and the highest index will be on the top.
         let itemsAboveCount = CGFloat(collectionView.numberOfItems(inSection: 0) - index.item - 1)
-        let y = itemsAboveCount * (self.itemSize.height + self.itemSpacing)
+        let headerSpace = self.headerSize.height + self.itemSpacing
+        let y = itemsAboveCount * (self.itemSize.height + self.itemSpacing) + headerSpace
         return CGPoint(x: 0, y: y)
     }
 
@@ -128,6 +166,31 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         guard let collectionView = self.collectionView else { return 0 }
 
         let numberInSection = CGFloat(collectionView.numberOfItems(inSection: section))
-        return (self.itemSpacing + self.itemSize.height) * numberInSection
+        let headerSpace = self.headerSize.height + self.itemSpacing
+        return (self.itemSpacing + self.itemSize.height) * numberInSection + headerSpace
     }
+
+    // MARK: - Header Layout Calculations
+
+    /// Gets the frame rect for a header.
+    private func frameForHeaderSupplementaryView(inSection section: Int) -> CGRect {
+        let origin = self.originForHeader(at: section)
+        let size = CGSize(width: self.headerSize.width, height: self.headerSize.height)
+
+        return CGRect(origin: origin, size: size)
+    }
+
+    /// Gets the top left corner position for the header in the given section.
+    private func originForHeader(at index: Int) -> CGPoint {
+        guard let collectionView = self.collectionView else { return .zero }
+
+        // Get the height of all the sections above this one.
+        var heightOfPreviousSections: CGFloat = 0
+        for sectionIndex in index+1..<collectionView.numberOfSections {
+            heightOfPreviousSections += self.heightOfSection(sectionIndex)
+        }
+
+        return CGPoint(x: 0, y: heightOfPreviousSections)
+    }
+
 }

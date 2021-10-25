@@ -148,11 +148,12 @@ class ConversationViewController: FullScreenViewController,
         let messages = controller.messages
         var snapshot = self.dataSource.snapshot()
 
-        snapshot.appendSections([.conversation(conversation.cid)])
+        let section = ConversationSection(cid: controller.cid)
+        snapshot.appendSections([section])
         snapshot.appendItems(messages.asConversationCollectionItems)
 
         if !controller.hasLoadedAllPreviousMessages {
-            snapshot.appendItems([.loadMore], toSection: .conversation(conversation.cid))
+            snapshot.appendItems([.loadMore], toSection: section)
         }
 
         let animationCycle = AnimationCycle(inFromPosition: .right,

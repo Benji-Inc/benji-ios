@@ -9,14 +9,23 @@
 import Foundation
 import StreamChat
 
-typealias ConversationCollectionSection = ConversationCollectionViewDataSource.SectionType
-typealias ConversationCollectionItem = ConversationCollectionViewDataSource.ItemType
+typealias ConversationSection = ConversationCollectionViewDataSource.SectionType
+typealias ConversationItem = ConversationCollectionViewDataSource.ItemType
 
-class ConversationCollectionViewDataSource: CollectionViewDataSource<ConversationCollectionSection,
-                                            ConversationCollectionItem> {
+class ConversationCollectionViewDataSource: CollectionViewDataSource<ConversationSection,
+                                            ConversationItem> {
 
-    enum SectionType: Hashable {
-        case conversation(ChannelId)
+    /// Model for the main section of the conversation or thread.
+    /// The parent message is root message that has replies in a thread. It is nil for a conversation.
+    struct SectionType: Hashable {
+        let cid: ConversationID
+        let parentMessageID: MessageId?
+
+        var isThread: Bool { return self.parentMessageID.exists }
+        init(cid: ConversationID, parentMessageID: MessageId? = nil) {
+            self.cid = cid
+            self.parentMessageID = parentMessageID
+        }
     }
 
     enum ItemType: Hashable {
@@ -32,10 +41,10 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     var handleDeleteMessage: ((Message) -> Void)?
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
-
-    var messageStyle: MessageStyle = .conversation
     
     private let contextMenuDelegate: ContextMenuInteractionDelegate
+
+    // Cell registration
     private let messageCellRegistration = ConversationCollectionViewDataSource.createMessageCellRegistration()
     private let threadMessageCellRegistration
     = ConversationCollectionViewDataSource.createThreadMessageCellRegistration()
@@ -57,18 +66,15 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
         switch item {
         case .message(let messageID):
-            guard case let .conversation(channelID) = section else { return nil }
-
-            let cell: MessageCell
-            switch self.messageStyle {
-            case .conversation:
-                cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
-                                                                    for: indexPath,
-                                                                    item: (channelID, messageID, self))
-            case .thread:
+            let cell: UICollectionViewCell
+            if section.isThread {
                 cell = collectionView.dequeueConfiguredReusableCell(using: self.threadMessageCellRegistration,
                                                                     for: indexPath,
-                                                                    item: (channelID, messageID, self))
+                                                                    item: (section.cid, messageID, self))
+            } else {
+                cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
+                                                                    for: indexPath,
+                                                                    item: (section.cid, messageID, self))
             }
 
             let interaction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
@@ -77,7 +83,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case .loadMore:
             return collectionView.dequeueConfiguredReusableCell(using: self.loadMoreMessagesCellRegistration,
                                                                 for: indexPath,
-                                                                item: "Test")
+                                                                item: String())
         }
     }
 
@@ -86,11 +92,12 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 conversationController: ConversationControllerType,
                 collectionView: UICollectionView) async {
 
-        guard let conversation = conversationController.conversation else { return }
+        let conversation = conversationController.conversation
 
         var snapshot = self.snapshot()
 
-        let sectionID = ConversationCollectionSection.conversation(conversation.cid)
+        let sectionID = ConversationSection(cid: conversation.cid,
+                                            parentMessageID: conversationController.parentMessage?.id)
 
         // If there's more than one change, reload all of the data.
         guard changes.count == 1 else {
@@ -139,16 +146,15 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             // Scroll to the latest message if needed and reconfigure cells as needed.
             if scrollToLatestMessage, let sectionIndex = snapshot.indexOfSection(sectionID) {
                 let latestMessageIndex = IndexPath(item: 0, section: sectionIndex)
-                switch self.messageStyle {
-                case .conversation:
-                    // Conversations have the latest message at the first index.
-                    collectionView.scrollToItem(at: latestMessageIndex, at: .centeredHorizontally, animated: true)
-                case .thread:
+                if sectionID.isThread {
                     // Inserting a message can cause the visual state of the previous message to change.
-                    if self.messageStyle == .thread {
-                        self.reconfigureItem(atIndex: 1, in: sectionID)
-                    }
+                    self.reconfigureItem(atIndex: 1, in: sectionID)
                     collectionView.scrollToItem(at: latestMessageIndex, at: .bottom, animated: true)
+                } else {
+                    // Conversations have the latest message at the first index.
+                    collectionView.scrollToItem(at: latestMessageIndex,
+                                                at: .centeredHorizontally,
+                                                animated: true)
                 }
             }
         }
@@ -178,8 +184,7 @@ private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteraction
 
         switch messageItem {
         case .message(let messageID):
-            guard case let .conversation(channelID) = sectionItem else { return nil }
-            let messageController = ChatClient.shared.messageController(cid: channelID,
+            let messageController = ChatClient.shared.messageController(cid: sectionItem.cid,
                                                                         messageId: messageID)
 
             return UIContextMenuConfiguration(identifier: nil,
@@ -224,7 +229,7 @@ private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteraction
 extension LazyCachedMapCollection where Element == Message {
 
     /// Convenience function to convert Stream chat messages into the ItemType of a ConversationCollectionViewDataSource.
-    var asConversationCollectionItems: [ConversationCollectionItem] {
+    var asConversationCollectionItems: [ConversationItem] {
         return self.map { message in
             return message.asConversationCollectionItem
         }
@@ -234,7 +239,7 @@ extension LazyCachedMapCollection where Element == Message {
 extension ChatMessage {
 
     /// Convenience function to convert Stream chat messages into the ItemType of a ConversationCollectionViewDataSource.
-    var asConversationCollectionItem: ConversationCollectionItem {
-        return ConversationCollectionItem.message(self.id)
+    var asConversationCollectionItem: ConversationItem {
+        return ConversationItem.message(self.id)
     }
 }
