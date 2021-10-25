@@ -65,8 +65,6 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
     override func initializeViews() {
         super.initializeViews()
 
-        self.dataSource.messageStyle = .thread
-
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
 

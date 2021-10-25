@@ -41,8 +41,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     var handleDeleteMessage: ((Message) -> Void)?
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
-
-    var messageStyle: MessageStyle = .conversation
     
     private let contextMenuDelegate: ContextMenuInteractionDelegate
 
@@ -69,13 +67,12 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         switch item {
         case .message(let messageID):
             let cell: UICollectionViewCell
-            switch self.messageStyle {
-            case .conversation:
-                cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
+            if section.isThread {
+                cell = collectionView.dequeueConfiguredReusableCell(using: self.threadMessageCellRegistration,
                                                                     for: indexPath,
                                                                     item: (section.cid, messageID, self))
-            case .thread:
-                cell = collectionView.dequeueConfiguredReusableCell(using: self.threadMessageCellRegistration,
+            } else {
+                cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                     for: indexPath,
                                                                     item: (section.cid, messageID, self))
             }
@@ -149,14 +146,15 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             // Scroll to the latest message if needed and reconfigure cells as needed.
             if scrollToLatestMessage, let sectionIndex = snapshot.indexOfSection(sectionID) {
                 let latestMessageIndex = IndexPath(item: 0, section: sectionIndex)
-                switch self.messageStyle {
-                case .conversation:
-                    // Conversations have the latest message at the first index.
-                    collectionView.scrollToItem(at: latestMessageIndex, at: .centeredHorizontally, animated: true)
-                case .thread:
+                if sectionID.isThread {
                     // Inserting a message can cause the visual state of the previous message to change.
                     self.reconfigureItem(atIndex: 1, in: sectionID)
                     collectionView.scrollToItem(at: latestMessageIndex, at: .bottom, animated: true)
+                } else {
+                    // Conversations have the latest message at the first index.
+                    collectionView.scrollToItem(at: latestMessageIndex,
+                                                at: .centeredHorizontally,
+                                                animated: true)
                 }
             }
         }
