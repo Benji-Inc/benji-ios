@@ -13,14 +13,6 @@ typealias MessageController = ChatMessageController
 
 extension ChatMessageController {
 
-    var parentMessage: Message? {
-        guard let parentMessageID = self.message?.parentMessageId else { return nil }
-        let parentMessageController = ChatClient.shared.messageController(cid: self.cid,
-                                                                          messageId: parentMessageID)
-
-        return parentMessageController.message
-    }
-
     func editMessage(with sendable: Sendable) async throws {
         switch sendable.kind {
         case .text(let text):

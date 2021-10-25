@@ -97,7 +97,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         var snapshot = self.snapshot()
 
         let sectionID = ConversationSection(cid: conversation.cid,
-                                            parentMessageID: conversationController.parentMessage?.id)
+                                            parentMessageID: conversationController.rootMessage?.id)
 
         // If there's more than one change, reload all of the data.
         guard changes.count == 1 else {

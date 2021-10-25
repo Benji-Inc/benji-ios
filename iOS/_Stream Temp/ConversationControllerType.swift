@@ -15,7 +15,7 @@ protocol ConversationControllerType {
     /// The conversation related to this controller.
     var conversation: Conversation { get }
     /// The original message if this is controller for message  thread.
-    var parentMessage: Message? { get }
+    var rootMessage: Message? { get }
     /// The messages currenlty loaded on this controller. In a thread, these would be reply messages.
     var messages: LazyCachedMapCollection<ChatMessage> { get }
     /// True if all messages (or replies) have been loaded.
@@ -25,7 +25,7 @@ protocol ConversationControllerType {
 extension ConversationControllerType {
 
     var isThread: Bool {
-        return self.parentMessage.exists
+        return self.rootMessage.exists
     }
 
     var cid: ConversationID {
@@ -33,18 +33,22 @@ extension ConversationControllerType {
     }
 
     var rootMessageID: MessageId? {
-        return self.parentMessage?.id
+        return self.rootMessage?.id
     }
 }
 
 extension ConversationController: ConversationControllerType {
 
-    var parentMessage: Message? {
+    var rootMessage: Message? {
         return nil
     }
 }
 
 extension MessageController: ConversationControllerType {
+
+    var rootMessage: Message? {
+        return self.message
+    }
 
     var messages: LazyCachedMapCollection<ChatMessage> {
         return self.replies
