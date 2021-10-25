@@ -9,7 +9,7 @@
 import Foundation
 import StreamChat
 
-/// A cell to display a message with a thread along with the sender of the message..
+/// A cell to display a message within a thread along with the sender of the message..
 class ThreadMessageCell: UICollectionViewCell {
 
     private let messageView = MessageSubcell(frame: .zero)
