@@ -52,10 +52,8 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         switch target {
         case .conversation:
             if let identifier = deeplink.customMetadata["conversationId"] as? String {
-                guard let conversationId = try? ChannelId.init(cid: identifier),
-                      let conversation = ChatClient.shared.channelController(for: conversationId).conversation else {
-                          return
-                      }
+                guard let conversationId = try? ChannelId.init(cid: identifier) else { return }
+                let conversation = ChatClient.shared.channelController(for: conversationId).conversation
 
                 self.startConversationFlow(for: conversation)
             } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
@@ -63,10 +61,10 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
                 guard let connection = ConnectionStore.shared.connections.first { connection in
                     return connection.objectId == connectionId
                 }, let identifier = connection.conversationId,
-                    let conversationId = try? ChannelId.init(cid: identifier),
-                      let conversation = ChatClient.shared.channelController(for: conversationId).conversation else {
-                          return
-                      }
+                       let conversationId = try? ChannelId.init(cid: identifier)  else {
+                           return
+                       }
+                let conversation = ChatClient.shared.channelController(for: conversationId).conversation
 
                 self.startConversationFlow(for: conversation)
             }
@@ -75,9 +73,8 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-#warning("Remove after Beta")
+    #warning("Remove after Beta")
     func createConversation() async {
-
         let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
 
         do {
@@ -132,8 +129,8 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
     private func handle(notice: SystemNotice) {
         switch notice.type {
         case .alert:
-            if let conversationID = notice.attributes?["conversationId"] as? ChannelId,
-               let conversation = ChatClient.shared.channelController(for: conversationID).conversation {
+            if let conversationID = notice.attributes?["conversationId"] as? ChannelId {
+                let conversation = ChatClient.shared.channelController(for: conversationID).conversation
                 self.startConversationFlow(for: conversation)
             }
         case .connectionRequest:
