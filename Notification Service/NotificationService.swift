@@ -6,31 +6,42 @@
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
+//{
+//    "aps" : {
+//        "alert" : {
+//            "title" : "Time-Sensitive",
+//            "body" : "I'm a time sensitive notification"
+//        }
+//        "interruption-level" : "time-sensitive"
+//    }
+//}
+
 import UserNotifications
+import Intents
 
 class NotificationService: UNNotificationServiceExtension {
 
-    var contentHandler: ((UNNotificationContent) -> Void)?
-    var bestAttemptContent: UNMutableNotificationContent?
+    override func didReceive(_ request: UNNotificationRequest,
+                             withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
 
-    override func didReceive(_ request: UNNotificationRequest, withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-        self.contentHandler = contentHandler
-        bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
-        
-        if let bestAttemptContent = bestAttemptContent {
-            // Modify the notification content here...
-            bestAttemptContent.title = "\(bestAttemptContent.title) [modified]"
-            
-            contentHandler(bestAttemptContent)
-        }
+//        let incomingMessageIntent = INSendMessageIntent(recipients: <#T##[INPerson]?#>,
+//                                                        outgoingMessageType: <#T##INOutgoingMessageType#>,
+//                                                        content: <#T##String?#>,
+//                                                        speakableGroupName: <#T##INSpeakableString?#>,
+//                                                        conversationIdentifier: <#T##String?#>,
+//                                                        serviceName: <#T##String?#>,
+//                                                        sender: <#T##INPerson?#>,
+//                                                        attachments: <#T##[INSendMessageAttachment]?#>)
+//
+//        let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
+//        interaction.direction = .incoming
+//        interaction.donate(completion: nil)
+//
+//        do {
+//            let messageContent = try request.content.updating(from: incomingMessageIntent)
+//            contentHandler(messageContent)
+//        } catch {
+//            print(error)
+//        }
     }
-    
-    override func serviceExtensionTimeWillExpire() {
-        // Called just before the extension will be terminated by the system.
-        // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
-        if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
-            contentHandler(bestAttemptContent)
-        }
-    }
-
 }

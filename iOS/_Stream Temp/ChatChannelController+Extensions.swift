@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Intents
 
 typealias ConversationController = ChatChannelController
 
@@ -31,6 +32,13 @@ extension ChatChannelController {
                 }
             }
         }
+    }
+
+    func donateIntent(for sendable: Sendable) {
+        let intent = INSendMessageIntent()
+        let interaction = INInteraction(intent: intent, response: nil)
+        interaction.direction = .outgoing
+        interaction.donate(completion: nil)
     }
 
     @discardableResult
