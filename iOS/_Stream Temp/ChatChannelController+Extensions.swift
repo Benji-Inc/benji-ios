@@ -17,6 +17,10 @@ extension ChatChannelController {
         return self.channel!
     }
 
+    func getOldestUnreadMessage(withUserID userID: UserId) -> Message? {
+        return self.conversation.getOldestUnreadMessage(withUserID: userID)
+    }
+
     /// Loads previous messages from backend.
     /// - Parameters:
     ///   - messageId: ID of the last fetched message. You will get messages `older` than the provided ID.
