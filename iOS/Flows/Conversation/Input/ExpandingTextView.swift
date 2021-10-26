@@ -20,6 +20,7 @@ class ExpandingTextView: TextView {
         self.isScrollEnabled = false
         self.keyboardType = .twitter
         self.tintColor = Color.white.color
+        self.textAlignment = .center
 
         self.textContainerInset.left = 10
         self.textContainerInset.right = 10
