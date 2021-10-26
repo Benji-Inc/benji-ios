@@ -352,6 +352,10 @@ extension CollectionViewDataSource {
             collectionView.scrollToItem(at: scrollToIndexPath,
                                         at: [.centeredHorizontally],
                                         animated: false)
+
+            // Minor hack. Wait a tick so that the collection view has time to update its visible cells.
+            // This ensures that the animate in animations work properly.
+            await Task.sleep(seconds: 0.01)
         }
         
         await collectionView.animateIn(position: animationCycle.inFromPosition,
