@@ -98,7 +98,8 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
 
 extension ArchiveCoordinator: ArchiveViewControllerDelegate {
 
-    nonisolated func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType) {
+    nonisolated func archiveView(_ controller: ArchiveViewController,
+                                 didSelect item: ArchiveCollectionViewDataSource.ItemType) {
 
         Task.onMainActor {
             switch item {
