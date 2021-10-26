@@ -348,18 +348,10 @@ extension CollectionViewDataSource {
         await self.applySnapshotUsingReloadData(snapshot)
 
         // If specified, scroll to the last item in the collection view.
-        if animationCycle.scrollToEnd {
-            let sectionIndex = collectionView.numberOfSections - 1
-            let itemIndex = collectionView.numberOfItems(inSection: sectionIndex) - 1
-            let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
-
-            // Make sure the index path is valid
-            if sectionIndex >= 0 && itemIndex >= 0 {
-                collectionView.scrollToItem(at: indexPath,
-                                            at: [.centeredHorizontally], animated: false)
-            } else {
-                collectionView.setContentOffset(.zero, animated: false)
-            }
+        if let scrollToIndexPath = animationCycle.scrollToIndexPath {
+            collectionView.scrollToItem(at: scrollToIndexPath,
+                                        at: [.centeredHorizontally],
+                                        animated: false)
         }
         
         await collectionView.animateIn(position: animationCycle.inFromPosition,
