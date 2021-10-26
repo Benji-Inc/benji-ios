@@ -18,6 +18,8 @@
 
 import UserNotifications
 import Intents
+import StreamChat
+import Parse
 
 class NotificationService: UNNotificationServiceExtension {
 
@@ -25,6 +27,15 @@ class NotificationService: UNNotificationServiceExtension {
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
 
         guard let conversationId = request.content.conversationId else { return }
+
+        self.initializeParse()
+        self.initializeChat()
+
+        guard let conversation = self.getConversation(with: conversationId) else { return }
+
+        // Intialize Parse
+        // Initialize Chat
+        // Get conversation
 
 //        let incomingMessageIntent = INSendMessageIntent(recipients: <#T##[INPerson]?#>,
 //                                                        outgoingMessageType: <#T##INOutgoingMessageType#>,
@@ -45,5 +56,25 @@ class NotificationService: UNNotificationServiceExtension {
 //        } catch {
 //            print(error)
 //        }
+    }
+
+    private func initializeParse() {
+        if Parse.currentConfiguration.isNil  {
+            Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
+                configuration.applicationGroupIdentifier = Config.shared.environment.groudID
+                configuration.containingApplicationBundleIdentifier = "com.Jibber-Inc.Jibber"
+                configuration.server = Config.shared.environment.url
+                configuration.applicationId = Config.shared.environment.appID
+                configuration.isLocalDatastoreEnabled = true
+            }))
+        }
+    }
+
+    private func initializeChat() {
+
+    }
+
+    private func getConversation(with identifier: String) -> ChatChannel? {
+        return nil//ChatClient.shared.channelController(for: identifier).conversation
     }
 }

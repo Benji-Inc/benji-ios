@@ -538,6 +538,7 @@
 		D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
 		D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
 		D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
+		D687595427289CAE00AF7C07 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
 		D687F3C626FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */; };
 		D687F3C826FE4E4B000E4734 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C726FE4E4B000E4734 /* ContactCell.swift */; };
 		D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */; };
@@ -3371,6 +3372,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */,
+				D687595427289CAE00AF7C07 /* Optional+Extensions.swift in Sources */,
 				D6AE0FF1267D2CC900C6B048 /* ClientError.swift in Sources */,
 				D6AE0FEB267D2CA900C6B048 /* ConnectionPreference.swift in Sources */,
 				D66ED456267D35E100332BA3 /* Config.swift in Sources */,
