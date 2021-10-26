@@ -12,5 +12,5 @@ struct AnimationCycle {
     var inFromPosition: AnimationPosition
     var outToPosition: AnimationPosition
     var shouldConcatenate: Bool
-    var scrollToEnd: Bool
+    var scrollToIndexPath: IndexPath?
 }

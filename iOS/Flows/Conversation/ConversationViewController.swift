@@ -156,14 +156,38 @@ class ConversationViewController: FullScreenViewController,
             snapshot.appendItems([.loadMore], toSection: section)
         }
 
+        let initialIndexPath = self.getFirstUnreadIndexPath()
         let animationCycle = AnimationCycle(inFromPosition: .right,
                                             outToPosition: .left,
                                             shouldConcatenate: true,
-                                            scrollToEnd: false)
+                                            scrollToIndexPath: initialIndexPath)
 
         await self.dataSource.apply(snapshot,
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
+    }
+
+    private func getFirstUnreadIndexPath() -> IndexPath? {
+        guard let conversation = self.conversationController?.conversation else {
+            return nil
+        }
+
+        guard let readState = conversation.reads.first(where: { readState in
+            return readState.user.id == ChatClient.shared.currentUserId
+        }) else {
+            return nil
+        }
+
+        let lastReadDate = readState.lastReadAt
+
+        guard let latestUnreadMessage = conversation.latestMessages.reversed().first(where: { message in
+            return message.createdAt > lastReadDate
+        }) else {
+            return nil
+        }
+
+        guard let index = conversation.latestMessages.firstIndex(of: latestUnreadMessage) else { return nil }
+        return IndexPath(item: index, section: 0)
     }
     
     // MARK: - UICollectionViewDelegate

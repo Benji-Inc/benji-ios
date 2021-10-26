@@ -52,7 +52,7 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
         self.removeChild()
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
 
-        self.addChildAndStart(coordinator) { connections in
+        self.addChildAndStart(coordinator) { [unowned self] connections in
             coordinator.toPresentable().dismiss(animated: true)
             guard let conversationController = self.conversationVC.conversationController else { return }
             self.add(connections: connections, to: conversationController)
@@ -100,17 +100,16 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
     }
 
     func presentConversationTitleAlert(for controller: ChatChannelController) {
-
         let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "New Name"
         }
-        let saveAction = UIAlertAction(title: "Save", style: .default, handler: { alert -> Void in
+        let saveAction = UIAlertAction(title: "Save", style: .default, handler: { [unowned self] alert -> Void in
             if let textField = alertController.textFields?.first,
                 let text = textField.text,
                 !text.isEmpty {
 
-                controller.updateChannel(name: text, imageURL: nil, team: nil) { error in
+                controller.updateChannel(name: text, imageURL: nil, team: nil) { [unowned self] error in
                     self.conversationVC.conversationHeader.layoutNow()
                     alertController.dismiss(animated: true, completion: {
                         self.conversationVC.becomeFirstResponder()
