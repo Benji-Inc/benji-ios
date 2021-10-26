@@ -9,10 +9,6 @@
 import Foundation
 import StreamChat
 import TMROLocalization
-import Intents
-
-typealias Conversation = ChatChannel
-typealias ConversationID = ChannelId
 
 extension ChatChannel {
 
@@ -86,9 +82,5 @@ extension ChatChannel {
         }
 
         return text
-    }
-
-    var speakableGroupName: INSpeakableString {
-        return INSpeakableString.init(vocabularyIdentifier: String(), spokenPhrase: self.title, pronunciationHint: nil)
     }
 }

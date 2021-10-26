@@ -539,6 +539,9 @@
 		D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
 		D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
 		D687595427289CAE00AF7C07 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
+		D687595A27289E7F00AF7C07 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
+		D687595C2728A0C400AF7C07 /* ChatChannel+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* ChatChannel+Intents.swift */; };
+		D687595D2728A0C400AF7C07 /* ChatChannel+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* ChatChannel+Intents.swift */; };
 		D687F3C626FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */; };
 		D687F3C826FE4E4B000E4734 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C726FE4E4B000E4734 /* ContactCell.swift */; };
 		D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */; };
@@ -1070,6 +1073,7 @@
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedAvatarView.swift; sourceTree = "<group>"; };
 		D686DA5C25799EB6000B4C04 /* Statusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statusable.swift; sourceTree = "<group>"; };
+		D687595B2728A0C400AF7C07 /* ChatChannel+Intents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatChannel+Intents.swift"; sourceTree = "<group>"; };
 		D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D687F3C726FE4E4B000E4734 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleCollectionViewLayout.swift; sourceTree = "<group>"; };
@@ -1278,6 +1282,7 @@
 			isa = PBXGroup;
 			children = (
 				800FAAC026F0585A00D3C3A0 /* ChatChannel+Extensions.swift */,
+				D687595B2728A0C400AF7C07 /* ChatChannel+Intents.swift */,
 				80F88BAD26F11F02006C7677 /* ChatChannelController+Extensions.swift */,
 				80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */,
 				80FA868B26F111830053101B /* ChatMessage+Extensions.swift */,
@@ -2743,6 +2748,7 @@
 				D678EC2626F534430071DB0D /* CircleGroup.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
 				D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
+				D687595C2728A0C400AF7C07 /* ChatChannel+Intents.swift in Sources */,
 				D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */,
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
@@ -3371,6 +3377,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D687595D2728A0C400AF7C07 /* ChatChannel+Intents.swift in Sources */,
 				D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */,
 				D687595427289CAE00AF7C07 /* Optional+Extensions.swift in Sources */,
 				D6AE0FF1267D2CC900C6B048 /* ClientError.swift in Sources */,
@@ -3385,6 +3392,7 @@
 				D66ED459267D4B1200332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0F70267CF9CA00C6B048 /* NotificationService.swift in Sources */,
 				D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */,
+				D687595A27289E7F00AF7C07 /* Publisher+Extensions.swift in Sources */,
 				D6AE0FFC267D2D9500C6B048 /* Objectable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
