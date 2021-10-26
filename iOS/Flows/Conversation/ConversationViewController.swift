@@ -120,6 +120,11 @@ class ConversationViewController: FullScreenViewController,
                 // are set up.
                 await self.initializeDataSource()
                 self.subscribeToUpdates()
+
+                // Mark the conversation as read if we're looking at the latest message.
+                if self.collectionView.contentOffset.x < 0 {
+                    await self.markConversationReadIfNeeded()
+                }
             }
         }
     }
@@ -241,6 +246,30 @@ class ConversationViewController: FullScreenViewController,
         }
         
         targetContentOffset.pointee = CGPoint(x: newXOffset, y: targetOffset.y)
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard self.conversation.isUnread else { return }
+        // Once the user sees the latest message, set the conversation as read.
+        guard scrollView.contentOffset.x < 0 else { return }
+
+        Task {
+            await self.markConversationReadIfNeeded()
+        }
+    }
+
+    @Atomic private var isSettingChannelRead = false
+    private func markConversationReadIfNeeded() async {
+        guard self.conversation.isUnread,
+              let conversationController = self.conversationController else { return }
+
+        self.isSettingChannelRead = true
+        do {
+            try await conversationController.markRead()
+        } catch {
+            logDebug(error)
+        }
+        self.isSettingChannelRead = false
     }
 
     // MARK: - SwipeableInputAccessoryViewDelegate
