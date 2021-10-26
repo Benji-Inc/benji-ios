@@ -1,0 +1,29 @@
+//
+//  String+PhoneNumbers.swift
+//  Jibber
+//
+//  Created by Benji Dodgson on 10/26/21.
+//  Copyright © 2021 Benjamin Dodgson. All rights reserved.
+//
+
+import Foundation
+import PhoneNumberKit
+
+extension String {
+
+    func isValidPhoneNumber(for region: String) -> Bool {
+        return !self.parsePhoneNumber(for: region).isNil
+    }
+
+    func parsePhoneNumber(for region: String) -> PhoneNumber? {
+        return try? PhoneKit.shared.parse(self, withRegion: region)
+    }
+
+    func formatPhoneNumber() -> String? {
+        return try? PhoneKit.shared.parse(self, withRegion: PhoneKit.formatter.currentRegion).numberString
+    }
+
+    func removeAllNonNumbers() -> String {
+        return self.filter("0123456789".contains)
+    }
+}

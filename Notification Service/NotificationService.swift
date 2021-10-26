@@ -36,37 +36,48 @@ class NotificationService: UNNotificationServiceExtension {
         self.initializeChat()
 
         guard let conversation = self.getConversation(with: conversationId),
-            let message = self.getMessage(with: messageId) else { return }
+              let message = self.getMessage(with: conversation.cid, messageId: messageId) else { return }
 
         let memberIDs = conversation.lastActiveMembers.compactMap { member in
             return member.id
         }
 
-//        let recipients = UserStore.shared.users.filter { user in
-//            return memberIDs.contains(user.objectId ?? String())
-//        }.compactMap { user in
-//            return user.inPerson
-//        }
+        let query = User.query()
+        query?.whereKey("objectId", containedIn: memberIDs)
+        query?.findObjectsInBackground(block: { objects, error in
+            if let users = objects as? [User] {
 
-        let incomingMessageIntent = INSendMessageIntent(recipients: nil,
-                                                        outgoingMessageType: .outgoingMessageText,
-                                                        content: message.text,
-                                                        speakableGroupName: conversation.speakableGroupName,
-                                                        conversationIdentifier: conversationId,
-                                                        serviceName: nil,
-                                                        sender: nil, //message.createdBy,
-                                                        attachments: nil)
+                let recipients = users.filter { user in
+                    return memberIDs.contains(user.objectId ?? String())
+                }.compactMap { user in
+                    return user.inPerson
+                }
 
-        let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
-        interaction.direction = .incoming
-        interaction.donate(completion: nil)
+                let sender = users.first { user in
+                    return user.objectId == message.author.id
+                }?.inPerson
 
-        do {
-            let messageContent = try request.content.updating(from: incomingMessageIntent)
-            contentHandler(messageContent)
-        } catch {
-            print(error)
-        }
+                let incomingMessageIntent = INSendMessageIntent(recipients: recipients,
+                                                                outgoingMessageType: .outgoingMessageText,
+                                                                content: message.text,
+                                                                speakableGroupName: conversation.speakableGroupName,
+                                                                conversationIdentifier: conversationId,
+                                                                serviceName: nil,
+                                                                sender: sender,
+                                                                attachments: nil)
+
+                let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
+                interaction.direction = .incoming
+                interaction.donate(completion: nil)
+
+                do {
+                    let messageContent = try request.content.updating(from: incomingMessageIntent)
+                    contentHandler(messageContent)
+                } catch {
+                    print(error)
+                }
+            }
+        })
     }
 
     private func initializeParse() {
@@ -82,14 +93,14 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     private func initializeChat() {
-
+        #warning("Initialize ChatClient")
     }
 
     private func getConversation(with identifier: String) -> ChatChannel? {
         return nil//ChatClient.shared.channelController(for: identifier).conversation
     }
 
-    private func getMessage(with identifier: String) -> ChatMessage? {
-        return nil
+    private func getMessage(with channelId: ChannelId, messageId: String) -> ChatMessage? {
+        return nil//ChatClient.shared.messageController(cid: channelId, messageId: messageId)
     }
 }
