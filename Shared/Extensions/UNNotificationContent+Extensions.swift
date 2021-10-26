@@ -27,6 +27,11 @@ enum NotificationContentKey: String {
 
 extension UNNotificationContent {
 
+    var conversationId: String? {
+        guard let value: String = self.value(for: .conversationId) else { return nil }
+        return value
+    }
+
     var connectionId: String? {
         guard let value: String = self.value(for: .connectionId) else { return nil }
         return value
