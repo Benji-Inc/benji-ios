@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Intents
 
 protocol Sendable: AnyObject {
     var kind: MessageKind { get set }
