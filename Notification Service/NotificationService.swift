@@ -29,13 +29,41 @@ class NotificationService: UNNotificationServiceExtension {
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
 
+        Task {
+            self.initializeParse()
+            await self.initializeChat()
+            await self.updateContent(with: request, contentHandler: contentHandler)
+        }
+    }
+
+    private func initializeParse() {
+        if Parse.currentConfiguration.isNil  {
+            Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
+                configuration.applicationGroupIdentifier = Config.shared.environment.groudID
+                configuration.containingApplicationBundleIdentifier = "com.Jibber-Inc.Jibber"
+                configuration.server = Config.shared.environment.url
+                configuration.applicationId = Config.shared.environment.appID
+                configuration.isLocalDatastoreEnabled = true
+            }))
+        }
+    }
+
+    private func initializeChat() async {
+        guard let user = User.current(), !ChatClient.isConnected else { return }
+
+        do {
+            try await ChatClient.initialize(for: user)
+        } catch {
+            print(error)
+        }
+    }
+
+    private func updateContent(with request: UNNotificationRequest,
+                               contentHandler: @escaping (UNNotificationContent) -> Void) async {
+
         guard let conversationId = request.content.conversationId,
-              let messageId = request.content.messageId else { return }
-
-        self.initializeParse()
-        self.initializeChat()
-
-        guard let conversation = self.getConversation(with: conversationId),
+              let messageId = request.content.messageId,
+              let conversation = await self.getConversation(with: conversationId),
               let message = self.getMessage(with: conversation.cid, messageId: messageId) else { return }
 
         let memberIDs = conversation.lastActiveMembers.compactMap { member in
@@ -44,9 +72,8 @@ class NotificationService: UNNotificationServiceExtension {
 
         let query = User.query()
         query?.whereKey("objectId", containedIn: memberIDs)
-        query?.findObjectsInBackground(block: { objects, error in
-            if let users = objects as? [User] {
-
+        do {
+            if let users = try await query?.findObjectsInBackground() as? [User] {
                 let recipients = users.filter { user in
                     return memberIDs.contains(user.objectId ?? String())
                 }.compactMap { user in
@@ -68,7 +95,7 @@ class NotificationService: UNNotificationServiceExtension {
 
                 let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
                 interaction.direction = .incoming
-                interaction.donate(completion: nil)
+                try await interaction.donate()
 
                 do {
                     let messageContent = try request.content.updating(from: incomingMessageIntent)
@@ -77,30 +104,30 @@ class NotificationService: UNNotificationServiceExtension {
                     print(error)
                 }
             }
-        })
-    }
+        } catch {
 
-    private func initializeParse() {
-        if Parse.currentConfiguration.isNil  {
-            Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) -> Void in
-                configuration.applicationGroupIdentifier = Config.shared.environment.groudID
-                configuration.containingApplicationBundleIdentifier = "com.Jibber-Inc.Jibber"
-                configuration.server = Config.shared.environment.url
-                configuration.applicationId = Config.shared.environment.appID
-                configuration.isLocalDatastoreEnabled = true
-            }))
         }
     }
 
-    private func initializeChat() {
-        #warning("Initialize ChatClient")
+    private func getConversation(with identifier: String) async -> ChatChannel? {
+        do {
+            let cid = try ChannelId.init(cid: identifier)
+            let controller = ChatClient.shared.channelController(for: cid)
+            return try await withCheckedThrowingContinuation({ continuation in
+                controller.synchronize { error in
+                    if let e = error {
+                        continuation.resume(throwing: e)
+                    } else {
+                        continuation.resume(returning: controller.channel)
+                    }
+                }
+            })
+        } catch {
+            return nil
+        }
     }
 
-    private func getConversation(with identifier: String) -> ChatChannel? {
-        return nil//ChatClient.shared.channelController(for: identifier).conversation
-    }
-
-    private func getMessage(with channelId: ChannelId, messageId: String) -> ChatMessage? {
-        return nil//ChatClient.shared.messageController(cid: channelId, messageId: messageId)
+    private func getMessage(with channelId: ChannelId, messageId: MessageId) -> ChatMessage? {
+        return ChatClient.shared.messageController(cid: channelId, messageId: messageId).message
     }
 }
