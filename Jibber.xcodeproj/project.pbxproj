@@ -559,6 +559,10 @@
 		D6884B222587D25D00DA380E /* AppClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = D6884B0E2587D25C00DA380E /* AppClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D68B362C25BB1F86005AEB4C /* AttachmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68B362B25BB1F86005AEB4C /* AttachmentView.swift */; };
 		D68BEAD424831FA000C95D31 /* ReservationsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */; };
+		D68C081B2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
+		D68C081C2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
+		D68C081D2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
+		D68C081E2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
 		D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
@@ -1094,6 +1098,7 @@
 		D6884B1F2587D25D00DA380E /* AppClip.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AppClip.entitlements; sourceTree = "<group>"; };
 		D68B362B25BB1F86005AEB4C /* AttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
 		D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsCoordinator.swift; sourceTree = "<group>"; };
+		D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosureModalViewController.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
@@ -1293,9 +1298,9 @@
 		80616E3326EAD1A900C077BA /* _Stream Temp */ = {
 			isa = PBXGroup;
 			children = (
-				800FAAC026F0585A00D3C3A0 /* ChatChannel+Extensions.swift */,
+				800FAAC026F0585A00D3C3A0 /* Conversation+Extensions.swift */,
 				D687595B2728A0C400AF7C07 /* ChatChannel+Intents.swift */,
-				80F88BAD26F11F02006C7677 /* ChatChannelController+Extensions.swift */,
+				80F88BAD26F11F02006C7677 /* ConversationController+Extensions.swift */,
 				80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */,
 				80FA868B26F111830053101B /* ChatMessage+Extensions.swift */,
 				80251FF726F3D362006D7873 /* ChatMessageController+Extensions.swift */,
@@ -1827,6 +1832,7 @@
 		D6637A3225A3AB1700A4A3B7 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				D68C08192729CF190033C8AE /* Disclosure */,
 				D671E1ED2640297900BF2B8D /* Toast */,
 				D6F37D5E25B5D8300034C9C5 /* Avatar Profile */,
 				D67896A122FF40AB0059BA75 /* Onboarding */,
@@ -2045,6 +2051,14 @@
 				D63BEF5F26FFA5BB004243AB /* ContactsViewController.swift */,
 			);
 			path = Reservations;
+			sourceTree = "<group>";
+		};
+		D68C08192729CF190033C8AE /* Disclosure */ = {
+			isa = PBXGroup;
+			children = (
+				D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */,
+			);
+			path = Disclosure;
 			sourceTree = "<group>";
 		};
 		D695B44125BA398400843780 /* Attachments */ = {
@@ -2950,6 +2964,7 @@
 				D642737122C991A60088256B /* ClosedRange+Extensions.swift in Sources */,
 				D66379D025A3704300A4A3B7 /* UserNotificationFactory.swift in Sources */,
 				D6D3927D265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,
+				D68C081B2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */,
 				80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
 				D64C32402703957D004BC1BD /* PeopleCoordinator+Extensions.swift in Sources */,
@@ -3203,6 +3218,7 @@
 				D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
 				D63DB22125E9990100F6B323 /* Array+Extensions.swift in Sources */,
 				D6617CF226743DCF00439C06 /* SystemNotice.swift in Sources */,
+				D68C081D2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */,
 				D63DB25C25E9995E00F6B323 /* Reservation.swift in Sources */,
 				D63DB28E25E999AB00F6B323 /* NavigationController.swift in Sources */,
 				D63D5C99265811B000543200 /* URL+Extensions.swift in Sources */,
@@ -3338,6 +3354,7 @@
 				D65519282589122000B901E4 /* String+Extensions.swift in Sources */,
 				D6A49A77260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D65519172589120C00B901E4 /* Date+Extensions.swift in Sources */,
+				D68C081C2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */,
 				D621A217271F549400BAD7C2 /* GradientView.swift in Sources */,
 				D6D3927A265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
 				D6F7DEF726FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,
@@ -3410,6 +3427,7 @@
 				D679DE0C26821EE70054DCAF /* NSObject+Extensions.swift in Sources */,
 				D687596C2728A64500AF7C07 /* String+Extensions.swift in Sources */,
 				D6AE0FFD267D2D9A00C6B048 /* User+Objectable.swift in Sources */,
+				D68C081E2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */,
 				D66ED459267D4B1200332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0F70267CF9CA00C6B048 /* NotificationService.swift in Sources */,
 				D687596E2728AFB900AF7C07 /* ChatClient+Extensions.swift in Sources */,
