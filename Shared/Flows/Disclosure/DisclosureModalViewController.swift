@@ -8,12 +8,13 @@
 
 import Foundation
 import SwiftUI
+import TMROLocalization
 
 class DisclosureModalViewController: ViewController {
 
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private let titleLabel = Label(font: .display)
-    private let descriptionLabel = Label(font: .mediumBold)
+    private let descriptionLabel = Label(font: .medium)
     private let contentView = View()
 
     override func initializeViews() {
@@ -35,9 +36,10 @@ class DisclosureModalViewController: ViewController {
         }
 
         self.titleLabel.setText(Lorem.name())
-        self.descriptionLabel.setText(Lorem.paragraph())
-        self.contentView.set(backgroundColor: .white)
+        let paragraph = "This is a paragraph about something super important that must be stated in a timely manner."
 
+        self.updateDescription(text: paragraph, with: ["timely", "important"])
+        self.contentView.set(backgroundColor: .white)
     }
 
     override func viewDidLayoutSubviews() {
@@ -59,5 +61,13 @@ class DisclosureModalViewController: ViewController {
         self.contentView.size = CGSize(width: maxWidth, height: contentHeight)
         self.contentView.match(.top, to: .bottom, of: self.descriptionLabel, offset: Theme.contentOffset)
         self.contentView.centerOnX()
+    }
+
+    func updateDescription(text: Localized, with hightlightedWords: [String] = []) {
+        self.descriptionLabel.setText(text)
+        hightlightedWords.forEach { highlight in
+            self.descriptionLabel.add(attributes: [.font: FontType.mediumBold.font], to: highlight)
+        }
+        self.view.layoutNow()
     }
 }
