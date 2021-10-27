@@ -32,7 +32,7 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
 
         self.archiveVC.addButton.didSelect { [unowned self] in
 
-            //self.presentDisclouser()
+//            self.presentDisclouser()
             //            self.presentPhoto()
             Task {
                 await self.createConversation()
@@ -41,8 +41,16 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
     }
 
     func presentDisclouser() {
-        let vc = DisclosureModalViewController()
+        let vc = FaceDisclosureViewController(with: .eyesClosed)
+        vc.button.didSelect {
+            vc.dismiss(animated: true, completion: nil)
+        }
         self.router.topmostViewController.present(vc, animated: true, completion: nil)
+//        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
+//        self.addChildAndStart(coordinator) { [unowned self] result in
+//            self.router.dismiss(source: self.archiveVC)
+//        }
+//        self.router.present(coordinator, source: self.archiveVC)
     }
 
     func presentPhoto() {
