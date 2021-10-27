@@ -570,6 +570,9 @@
 		D68C08282729D9980033C8AE /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08272729D9980033C8AE /* PermissionsViewController.swift */; };
 		D68C08292729D9980033C8AE /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08272729D9980033C8AE /* PermissionsViewController.swift */; };
 		D68C082A2729D9980033C8AE /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08272729D9980033C8AE /* PermissionsViewController.swift */; };
+		D68C082C2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
+		D68C082D2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
+		D68C082E2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
 		D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
@@ -1108,6 +1111,7 @@
 		D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosureModalViewController.swift; sourceTree = "<group>"; };
 		D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsCoordinator.swift; sourceTree = "<group>"; };
 		D68C08272729D9980033C8AE /* PermissionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsViewController.swift; sourceTree = "<group>"; };
+		D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionSwitchView.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
@@ -2068,6 +2072,7 @@
 				D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */,
 				D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */,
 				D68C08272729D9980033C8AE /* PermissionsViewController.swift */,
+				D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */,
 			);
 			path = Disclosures;
 			sourceTree = "<group>";
@@ -2847,6 +2852,7 @@
 				D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */,
 				D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */,
 				D6432BF022D824BA0016001A /* ConversationCollectionViewLayoutAttributes.swift in Sources */,
+				D68C082C2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */,
 				D61EC0EA21D3111600204BEE /* String+Extensions.swift in Sources */,
 				D6B3329325DD74EB00211044 /* Conversation+Cloud.swift in Sources */,
 				D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */,
@@ -3173,6 +3179,7 @@
 				D63DB28825E999A100F6B323 /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D63DB26325E9997200F6B323 /* StringStyle.swift in Sources */,
 				D63DB25825E9995700F6B323 /* AnimationCycle.swift in Sources */,
+				D68C082E2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */,
 				D6AD799B266E870200ED7A93 /* MIMEType.swift in Sources */,
 				D68C08222729D3DF0033C8AE /* Lorem.swift in Sources */,
 				807A7BCB26C5C8100023A71E /* Task+TaskPool.swift in Sources */,
@@ -3321,6 +3328,7 @@
 				D65519122589120600B901E4 /* ClosedRange+Extensions.swift in Sources */,
 				D64A1F08258C16470097817C /* WaitlistViewController.swift in Sources */,
 				D6551A2D25895E3C00B901E4 /* OnboardingViewController.swift in Sources */,
+				D68C082D2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */,
 				D6F312A1266ADDA600E25FEE /* LinkView.swift in Sources */,
 				D6551A3325895E4C00B901E4 /* PhoneViewController.swift in Sources */,
 				D655193D2589122700B901E4 /* UIWindow+Extensions.swift in Sources */,
