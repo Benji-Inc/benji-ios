@@ -48,7 +48,7 @@ class PermissionsViewController: DisclosureModalViewController {
 
     private let focusSwitchView = PermissionSwitchView(with: .focus)
     private let notificationSwitchView = PermissionSwitchView(with: .notificaitons)
-    private let button = Button()
+    let button = Button()
 
     override func initializeViews() {
         super.initializeViews()

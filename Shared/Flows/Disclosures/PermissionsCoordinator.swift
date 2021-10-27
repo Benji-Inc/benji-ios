@@ -15,4 +15,12 @@ class PermissionsCoordinator: PresentableCoordinator<Void> {
     override func toPresentable() -> DismissableVC {
         return self.permissionsVC
     }
+
+    override func start() {
+        super.start()
+
+        self.permissionsVC.button.didSelect { [unowned self] in
+            self.finishFlow(with: ())
+        }
+    }
 }
