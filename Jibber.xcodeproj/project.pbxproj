@@ -564,6 +564,12 @@
 		D68C081D2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
 		D68C08212729D3DE0033C8AE /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
 		D68C08222729D3DF0033C8AE /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
+		D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */; };
+		D68C08252729D9280033C8AE /* PermissionsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */; };
+		D68C08262729D9280033C8AE /* PermissionsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */; };
+		D68C08282729D9980033C8AE /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08272729D9980033C8AE /* PermissionsViewController.swift */; };
+		D68C08292729D9980033C8AE /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08272729D9980033C8AE /* PermissionsViewController.swift */; };
+		D68C082A2729D9980033C8AE /* PermissionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C08272729D9980033C8AE /* PermissionsViewController.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
 		D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
@@ -1100,6 +1106,8 @@
 		D68B362B25BB1F86005AEB4C /* AttachmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentView.swift; sourceTree = "<group>"; };
 		D68BEAD324831FA000C95D31 /* ReservationsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsCoordinator.swift; sourceTree = "<group>"; };
 		D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisclosureModalViewController.swift; sourceTree = "<group>"; };
+		D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsCoordinator.swift; sourceTree = "<group>"; };
+		D68C08272729D9980033C8AE /* PermissionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsViewController.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
@@ -1833,7 +1841,7 @@
 		D6637A3225A3AB1700A4A3B7 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
-				D68C08192729CF190033C8AE /* Disclosure */,
+				D68C08192729CF190033C8AE /* Disclosures */,
 				D671E1ED2640297900BF2B8D /* Toast */,
 				D6F37D5E25B5D8300034C9C5 /* Avatar Profile */,
 				D67896A122FF40AB0059BA75 /* Onboarding */,
@@ -2054,12 +2062,14 @@
 			path = Reservations;
 			sourceTree = "<group>";
 		};
-		D68C08192729CF190033C8AE /* Disclosure */ = {
+		D68C08192729CF190033C8AE /* Disclosures */ = {
 			isa = PBXGroup;
 			children = (
 				D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */,
+				D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */,
+				D68C08272729D9980033C8AE /* PermissionsViewController.swift */,
 			);
-			path = Disclosure;
+			path = Disclosures;
 			sourceTree = "<group>";
 		};
 		D695B44125BA398400843780 /* Attachments */ = {
@@ -2955,6 +2965,7 @@
 				D66A580725DD691A001B3F64 /* PeopleViewController.swift in Sources */,
 				D62C9CC6266C417100BB9632 /* DemoView.swift in Sources */,
 				D6D8A48C235D154500F0CC4B /* NavigationBarViewController.swift in Sources */,
+				D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
 				D678EC2B26F538350071DB0D /* CircleGroupViewController.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
@@ -3002,6 +3013,7 @@
 				D60F95EE2665A5C400CF8766 /* AlertCell.swift in Sources */,
 				D6B53B00258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
 				807A7BC526C5B5A20023A71E /* Task+Extensions.swift in Sources */,
+				D68C08282729D9980033C8AE /* PermissionsViewController.swift in Sources */,
 				D6A49A76260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */,
 				D6D1460D21D5693100CD8CE4 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D66F102622C7C6A900BA277D /* Lorem.swift in Sources */,
@@ -3113,6 +3125,7 @@
 				D621A21A271F54EF00BAD7C2 /* PassThroughView.swift in Sources */,
 				D6617CF726743DFE00439C06 /* Notice.swift in Sources */,
 				D63D71C325F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
+				D68C08262729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D63DB29725E999B200F6B323 /* ConfettiView.swift in Sources */,
 				D621A219271F54EC00BAD7C2 /* GradientView.swift in Sources */,
 				D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */,
@@ -3228,6 +3241,7 @@
 				D63DB29125E999B200F6B323 /* Button.swift in Sources */,
 				D6617CEC26741C4500439C06 /* UITextField+Extensions.swift in Sources */,
 				D63DB25625E9995700F6B323 /* ClientError.swift in Sources */,
+				D68C082A2729D9980033C8AE /* PermissionsViewController.swift in Sources */,
 				D63DB21725E998E200F6B323 /* AppDelegate+Initialization.swift in Sources */,
 				D6966519263D96D70009114B /* PFFileObject+Extensions.swift in Sources */,
 				D63DB22725E9990900F6B323 /* MathFunctions.swift in Sources */,
@@ -3267,6 +3281,7 @@
 				D677589C25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
 				D6DA3193259B5B6D0078E769 /* Config.swift in Sources */,
 				D65519562589125E00B901E4 /* ClientError.swift in Sources */,
+				D68C08252729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D65519F42589591D00B901E4 /* Typealias.swift in Sources */,
 				D65519622589127A00B901E4 /* PushPayload.swift in Sources */,
 				D6551A4125895E9500B901E4 /* TextInputViewController.swift in Sources */,
@@ -3316,6 +3331,7 @@
 				D69B75FC264842D00007020D /* VideoView.swift in Sources */,
 				8094D5DC26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */,
 				D6792CE625FBE87600B6575C /* CAGradientLayer+Extensions.swift in Sources */,
+				D68C08292729D9980033C8AE /* PermissionsViewController.swift in Sources */,
 				D6C3892E2724B8E4004D29D5 /* MessageContext.swift in Sources */,
 				D65519062589110A00B901E4 /* Coordinator.swift in Sources */,
 				80F1C4D7270E505E00616F01 /* Equatable+Extensions.swift in Sources */,
