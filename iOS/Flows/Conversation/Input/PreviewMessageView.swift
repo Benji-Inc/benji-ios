@@ -9,32 +9,20 @@
 import Foundation
 import Combine
 
-class PreviewMessageView: View {
+class PreviewMessageView: SpeechBubbleView {
 
     private let minHeight: CGFloat = 52
     private let textView = ExpandingTextView()
     private let imageView = DisplayableImageView()
-    private(set) var backgroundView = View()
     @Published var messageKind: MessageKind?
     private var cancellables = Set<AnyCancellable>()
-    private let triangleView = TriangleView(orientation: .down)
-
-    override var backgroundColor: UIColor? {
-        didSet {
-            // Ensure that the triangle view is always the same color as the background
-            self.triangleView.spikeColor = self.backgroundColor
-        }
-    }
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        // Don't clip bounds so that the triangle view is visible
-        self.clipsToBounds = false
         self.layer.cornerRadius = Theme.cornerRadius
         self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
 
-        self.addSubview(self.backgroundView)
         self.addSubview(self.textView)
         self.addSubview(self.imageView)
 
@@ -67,14 +55,10 @@ class PreviewMessageView: View {
             }
             self.layoutNow()
         }.store(in: &self.cancellables)
-
-        self.addSubview(self.triangleView)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        self.backgroundView.expandToSuperviewSize()
 
         self.imageView.expandToSuperviewWidth()
         self.imageView.pin(.top)
@@ -85,10 +69,5 @@ class PreviewMessageView: View {
         self.textView.height = self.height - self.imageView.height
         self.textView.pin(.left)
         self.textView.match(.top, to: .bottom, of: self.imageView)
-
-        self.triangleView.width = 10
-        self.triangleView.height = 8.6
-        self.triangleView.centerOnX()
-        self.triangleView.top = self.height
     }
 }
