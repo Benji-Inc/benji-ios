@@ -573,6 +573,9 @@
 		D68C082C2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
 		D68C082D2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
 		D68C082E2729FFA70033C8AE /* PermissionSwitchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */; };
+		D68C0830272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */; };
+		D68C0831272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */; };
+		D68C0832272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
 		D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
@@ -1112,6 +1115,7 @@
 		D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsCoordinator.swift; sourceTree = "<group>"; };
 		D68C08272729D9980033C8AE /* PermissionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsViewController.swift; sourceTree = "<group>"; };
 		D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionSwitchView.swift; sourceTree = "<group>"; };
+		D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDisclosureViewController.swift; sourceTree = "<group>"; };
 		D691794122F6418700340AA3 /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		D695B44225BA399600843780 /* PhotoAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAttachment.swift; sourceTree = "<group>"; };
 		D6966516263D96D70009114B /* PFFileObject+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFFileObject+Extensions.swift"; sourceTree = "<group>"; };
@@ -2070,6 +2074,7 @@
 			isa = PBXGroup;
 			children = (
 				D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */,
+				D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */,
 				D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */,
 				D68C08272729D9980033C8AE /* PermissionsViewController.swift */,
 				D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */,
@@ -2985,6 +2990,7 @@
 				D68C081B2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */,
 				80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */,
 				D6B53F8D25B9D39600B6A569 /* AttachmentsManager.swift in Sources */,
+				D68C0830272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */,
 				D64C32402703957D004BC1BD /* PeopleCoordinator+Extensions.swift in Sources */,
 				D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */,
 				D6D1502B21D69C3300CD8CE4 /* NSObject+Extensions.swift in Sources */,
@@ -3110,6 +3116,7 @@
 				D63DB27025E9997F00F6B323 /* Deeplinkable.swift in Sources */,
 				D63DB24825E9993F00F6B323 /* OnboardingViewController.swift in Sources */,
 				D63DB22825E9991300F6B323 /* Optional+Extensions.swift in Sources */,
+				D68C0832272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */,
 				D63DB24A25E9993F00F6B323 /* OnboardingContent.swift in Sources */,
 				D62C9CC3266C3CAC00BB9632 /* UserDefaultsManager.swift in Sources */,
 				D63DB21F25E998FC00F6B323 /* CGRect+Extensions.swift in Sources */,
@@ -3389,6 +3396,7 @@
 				D65519FF25895A0800B901E4 /* Statusable.swift in Sources */,
 				D677589725B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,
 				D65519FC258959CC00B901E4 /* CloudFunction.swift in Sources */,
+				D68C0831272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */,
 				D655193C2589122700B901E4 /* UIView+ScalingAnimation.swift in Sources */,
 				D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */,
 				D65519112589120600B901E4 /* Array+Extensions.swift in Sources */,

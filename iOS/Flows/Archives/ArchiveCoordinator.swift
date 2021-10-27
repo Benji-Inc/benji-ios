@@ -41,11 +41,16 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
     }
 
     func presentDisclouser() {
-        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { result in
-            self.router.dismiss(source: self.archiveVC)
+        let vc = FaceDisclosureViewController(with: .eyesClosed)
+        vc.button.didSelect {
+            vc.dismiss(animated: true, completion: nil)
         }
-        self.router.present(coordinator, source: self.archiveVC)
+        self.router.topmostViewController.present(vc, animated: true, completion: nil)
+//        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
+//        self.addChildAndStart(coordinator) { result in
+//            self.router.dismiss(source: self.archiveVC)
+//        }
+//        self.router.present(coordinator, source: self.archiveVC)
     }
 
     func presentPhoto() {
