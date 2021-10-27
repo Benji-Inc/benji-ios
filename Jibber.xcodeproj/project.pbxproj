@@ -562,7 +562,8 @@
 		D68C081B2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
 		D68C081C2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
 		D68C081D2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
-		D68C081E2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */; };
+		D68C08212729D3DE0033C8AE /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
+		D68C08222729D3DF0033C8AE /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F102522C7C6A900BA277D /* Lorem.swift */; };
 		D691794222F6418700340AA3 /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = D691794122F6418700340AA3 /* Router.swift */; };
 		D695B44325BA399600843780 /* PhotoAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = D695B44225BA399600843780 /* PhotoAttachment.swift */; };
 		D6966517263D96D70009114B /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
@@ -1435,7 +1436,6 @@
 		D61EC0D321D30BBF00204BEE /* App */ = {
 			isa = PBXGroup;
 			children = (
-				D66F102522C7C6A900BA277D /* Lorem.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -1549,6 +1549,7 @@
 				D66F0FD522BF28A100BA277D /* AppDelegate+Initialization.swift */,
 				D61EC0DC21D30CF700204BEE /* Bridging-Header.h */,
 				D61EC0C821D3071500204BEE /* LaunchScreen.storyboard */,
+				D66F102522C7C6A900BA277D /* Lorem.swift */,
 				D61EC0F821D317AB00204BEE /* Theme.swift */,
 			);
 			path = App;
@@ -3160,6 +3161,7 @@
 				D63DB26325E9997200F6B323 /* StringStyle.swift in Sources */,
 				D63DB25825E9995700F6B323 /* AnimationCycle.swift in Sources */,
 				D6AD799B266E870200ED7A93 /* MIMEType.swift in Sources */,
+				D68C08222729D3DF0033C8AE /* Lorem.swift in Sources */,
 				807A7BCB26C5C8100023A71E /* Task+TaskPool.swift in Sources */,
 				D63DB24D25E9994B00F6B323 /* Completeable.swift in Sources */,
 				D63DB23425E9992600F6B323 /* UIEdgeInsets+Extensions.swift in Sources */,
@@ -3271,6 +3273,7 @@
 				D655195D2589126800B901E4 /* User.swift in Sources */,
 				D679DE1726822FB70054DCAF /* FocusStatusViewController.swift in Sources */,
 				D667C08E25E559D500BED8B7 /* KeyboardManager.swift in Sources */,
+				D68C08212729D3DE0033C8AE /* Lorem.swift in Sources */,
 				D6551A3B25895E7E00B901E4 /* NavigationBarViewController.swift in Sources */,
 				D655197E2589129B00B901E4 /* Objectable.swift in Sources */,
 				D655195C2589126800B901E4 /* Reservation.swift in Sources */,
@@ -3427,7 +3430,6 @@
 				D679DE0C26821EE70054DCAF /* NSObject+Extensions.swift in Sources */,
 				D687596C2728A64500AF7C07 /* String+Extensions.swift in Sources */,
 				D6AE0FFD267D2D9A00C6B048 /* User+Objectable.swift in Sources */,
-				D68C081E2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */,
 				D66ED459267D4B1200332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0F70267CF9CA00C6B048 /* NotificationService.swift in Sources */,
 				D687596E2728AFB900AF7C07 /* ChatClient+Extensions.swift in Sources */,
