@@ -47,7 +47,7 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         }
         self.router.topmostViewController.present(vc, animated: true, completion: nil)
 //        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
-//        self.addChildAndStart(coordinator) { result in
+//        self.addChildAndStart(coordinator) { [unowned self] result in
 //            self.router.dismiss(source: self.archiveVC)
 //        }
 //        self.router.present(coordinator, source: self.archiveVC)
