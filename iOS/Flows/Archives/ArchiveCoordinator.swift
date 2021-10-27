@@ -32,16 +32,16 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
 
         self.archiveVC.addButton.didSelect { [unowned self] in
 
-            //self.presentDisclouser()
+            self.presentDisclouser()
             //            self.presentPhoto()
-            Task {
-                await self.createConversation()
-            }.add(to: self.archiveVC.taskPool)
+//            Task {
+//                await self.createConversation()
+//            }.add(to: self.archiveVC.taskPool)
         }
     }
 
     func presentDisclouser() {
-        let vc = DisclosureModalViewController()
+        let vc = PermissionsViewController()
         self.router.topmostViewController.present(vc, animated: true, completion: nil)
     }
 

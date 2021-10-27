@@ -15,7 +15,7 @@ class DisclosureModalViewController: ViewController {
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private let titleLabel = Label(font: .display)
     private let descriptionLabel = Label(font: .medium)
-    private let contentView = View()
+    let contentView = View()
 
     override func initializeViews() {
         super.initializeViews()
@@ -39,7 +39,6 @@ class DisclosureModalViewController: ViewController {
         let paragraph = "This is a paragraph about something super important that must be stated in a timely manner."
 
         self.updateDescription(text: paragraph, with: ["timely", "important"])
-        self.contentView.set(backgroundColor: .white)
     }
 
     override func viewDidLayoutSubviews() {
