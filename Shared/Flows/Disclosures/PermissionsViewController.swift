@@ -9,6 +9,7 @@
 import Foundation
 import Intents
 import TMROLocalization
+import Combine
 
 class PermissionsViewController: DisclosureModalViewController {
 
@@ -21,11 +22,21 @@ class PermissionsViewController: DisclosureModalViewController {
     @Published var state: State = .focusAsk
 
     private let focusSwitchView = PermissionSwitchView(with: .focus)
+    private let notificationSwitchView = PermissionSwitchView(with: .notificaitons)
 
     override func initializeViews() {
         super.initializeViews()
 
         self.contentView.addSubview(self.focusSwitchView)
+
+        self.focusSwitchView.switchView.addAction(UIAction(handler: { action in
+            self.handleFocus(isON: self.focusSwitchView.isON)
+        }), for: .valueChanged)
+
+        self.contentView.addSubview(self.notificationSwitchView)
+        self.notificationSwitchView.switchView.addAction(UIAction(handler: { action in
+            self.handleNotifications(isON: self.notificationSwitchView.isON)
+        }), for: .valueChanged)
 
         self.$state.mainSink { [unowned self] state in
             self.updateUI(for: state)
@@ -42,6 +53,10 @@ class PermissionsViewController: DisclosureModalViewController {
         self.focusSwitchView.expandToSuperviewWidth()
         self.focusSwitchView.height = 60
         self.focusSwitchView.pin(.top)
+
+        self.notificationSwitchView.expandToSuperviewWidth()
+        self.notificationSwitchView.height = 60
+        self.notificationSwitchView.match(.top, to: .bottom, of: self.focusSwitchView, offset: Theme.contentOffset)
     }
 
     @MainActor
@@ -74,6 +89,14 @@ class PermissionsViewController: DisclosureModalViewController {
 
         self.view.layoutNow()
     }
+
+    private func handleFocus(isON: Bool) {
+        print("Focus isON \(isON)")
+    }
+
+    private func handleNotifications(isON: Bool) {
+        print("Notificaiton isON \(isON)")
+    }
 }
 
 class PermissionSwitchView: View {
@@ -99,6 +122,10 @@ class PermissionSwitchView: View {
                 return "Notificaitons"
             }
         }
+    }
+
+    var isON: Bool {
+        return self.switchView.isOn
     }
 
     let type: PermissionType
