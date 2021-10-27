@@ -37,7 +37,7 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     }
 
     static let preferredHeight: CGFloat = 54.0 + InputActivityBar.height
-    static let maxHeight: CGFloat = 200.0
+    static let maxHeight: CGFloat = 500.0
 
     var alertAnimator: UIViewPropertyAnimator?
     var selectionFeedback = UIImpactFeedbackGenerator(style: .rigid)
