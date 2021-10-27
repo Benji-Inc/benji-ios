@@ -10,11 +10,16 @@ import Foundation
 import SwiftUI
 import TMROLocalization
 
+struct HightlightedPhrase {
+    var text: Localized
+    var highlightedWords: [Localized]
+}
+
 class DisclosureModalViewController: ViewController {
 
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-    private let titleLabel = Label(font: .display)
-    private let descriptionLabel = Label(font: .medium)
+    let titleLabel = Label(font: .display)
+    let descriptionLabel = Label(font: .regular)
     let contentView = View()
 
     override func initializeViews() {
@@ -34,11 +39,6 @@ class DisclosureModalViewController: ViewController {
             sheet.detents = [.medium()]
             sheet.prefersGrabberVisible = true
         }
-
-        self.titleLabel.setText(Lorem.name())
-        let paragraph = "This is a paragraph about something super important that must be stated in a timely manner."
-
-        self.updateDescription(text: paragraph, with: ["timely", "important"])
     }
 
     override func viewDidLayoutSubviews() {
@@ -62,10 +62,10 @@ class DisclosureModalViewController: ViewController {
         self.contentView.centerOnX()
     }
 
-    func updateDescription(text: Localized, with hightlightedWords: [String] = []) {
-        self.descriptionLabel.setText(text)
-        hightlightedWords.forEach { highlight in
-            self.descriptionLabel.add(attributes: [.font: FontType.mediumBold.font], to: highlight)
+    func updateDescription(with phrase: HightlightedPhrase) {
+        self.descriptionLabel.setText(phrase.text)
+        phrase.highlightedWords.forEach { highlight in
+            self.descriptionLabel.add(attributes: [.font: FontType.regularBold.font], to: localized(highlight))
         }
         self.view.layoutNow()
     }

@@ -17,6 +17,7 @@ class PermissionSwitchView: View {
     enum State {
         case enabled
         case disabled
+        case hidden
     }
 
     enum PermissionType {
@@ -50,7 +51,7 @@ class PermissionSwitchView: View {
     private let imageView = DisplayableImageView()
     private let label = Label(font: .smallBold)
     private(set) var  switchView = UISwitch()
-    @Published var state: State = .disabled
+    @Published var state: State = .hidden
 
     init(with type: PermissionType) {
         self.type = type
@@ -70,6 +71,8 @@ class PermissionSwitchView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        self.alpha = 0 
+
         self.addSubview(self.imageView)
         self.imageView.displayable = self.type.image
         self.imageView.tintColor = Color.white.color
@@ -78,7 +81,9 @@ class PermissionSwitchView: View {
         self.label.setText(self.type.text)
         self.addSubview(self.switchView)
 
-        self.$state.mainSink { [unowned self] state in
+        self.$state
+            .removeDuplicates()
+            .mainSink { [unowned self] state in
             self.updateUI(for: state)
         }.store(in: &self.cancellables)
 
@@ -108,7 +113,7 @@ class PermissionSwitchView: View {
         switch state {
         case .enabled:
             self.isUserInteractionEnabled = true
-        case .disabled:
+        case .disabled, .hidden:
             self.isUserInteractionEnabled = false
         }
 
@@ -118,6 +123,8 @@ class PermissionSwitchView: View {
                 self.alpha = 1.0
             case .disabled:
                 self.alpha = 0.25
+            case .hidden:
+                self.alpha = 0.0
             }
         }
     }
