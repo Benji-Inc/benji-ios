@@ -109,7 +109,7 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
         return AnimationCycle(inFromPosition: .inward,
                               outToPosition: .inward,
                               shouldConcatenate: true,
-                              scrollToEnd: false)
+                              scrollToIndexPath: nil)
     }
 
     //MARK: CollectionViewDelegate

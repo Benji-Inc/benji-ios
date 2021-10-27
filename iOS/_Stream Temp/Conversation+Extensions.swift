@@ -83,4 +83,19 @@ extension ChatChannel {
 
         return text
     }
+
+    /// Returns the oldest message that the passed in used has not yet read.
+    func getOldestUnreadMessage(withUserID userID: UserId) -> Message? {
+        guard let readState = self.reads.first(where: { readState in
+            return readState.user.id == userID
+        }) else {
+            return nil
+        }
+
+        let lastReadDate = readState.lastReadAt
+
+        return self.latestMessages.reversed().first(where: { message in
+            return message.createdAt > lastReadDate
+        })
+    }
 }

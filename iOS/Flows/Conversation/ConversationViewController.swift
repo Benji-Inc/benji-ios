@@ -120,6 +120,11 @@ class ConversationViewController: FullScreenViewController,
                 // are set up.
                 await self.initializeDataSource()
                 self.subscribeToUpdates()
+
+                // Mark the conversation as read if we're looking at the latest message.
+                if self.collectionView.contentOffset.x < 0 {
+                    await self.markConversationReadIfNeeded()
+                }
             }
         }
     }
@@ -156,14 +161,27 @@ class ConversationViewController: FullScreenViewController,
             snapshot.appendItems([.loadMore], toSection: section)
         }
 
+        let initialIndexPath = self.getFirstUnreadIndexPath()
         let animationCycle = AnimationCycle(inFromPosition: .right,
                                             outToPosition: .left,
                                             shouldConcatenate: true,
-                                            scrollToEnd: false)
+                                            scrollToIndexPath: initialIndexPath)
 
         await self.dataSource.apply(snapshot,
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
+    }
+
+    private func getFirstUnreadIndexPath() -> IndexPath? {
+        guard let conversation = self.conversationController?.conversation else { return nil }
+
+        guard let userID = ChatClient.shared.currentUserId,
+              let message = conversation.getOldestUnreadMessage(withUserID: userID) else {
+            return nil
+        }
+
+        guard let index = conversation.latestMessages.firstIndex(of: message) else { return nil }
+        return IndexPath(item: index, section: 0)
     }
     
     // MARK: - UICollectionViewDelegate
@@ -228,6 +246,30 @@ class ConversationViewController: FullScreenViewController,
         }
         
         targetContentOffset.pointee = CGPoint(x: newXOffset, y: targetOffset.y)
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard self.conversation.isUnread else { return }
+        // Once the user sees the latest message, set the conversation as read.
+        guard scrollView.contentOffset.x < 0 else { return }
+
+        Task {
+            await self.markConversationReadIfNeeded()
+        }
+    }
+
+    @Atomic private var isSettingChannelRead = false
+    private func markConversationReadIfNeeded() async {
+        guard self.conversation.isUnread,
+              let conversationController = self.conversationController else { return }
+
+        self.isSettingChannelRead = true
+        do {
+            try await conversationController.markRead()
+        } catch {
+            logDebug(error)
+        }
+        self.isSettingChannelRead = false
     }
 
     // MARK: - SwipeableInputAccessoryViewDelegate

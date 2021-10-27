@@ -18,6 +18,10 @@ extension ChatChannelController {
         return self.channel!
     }
 
+    func getOldestUnreadMessage(withUserID userID: UserId) -> Message? {
+        return self.conversation.getOldestUnreadMessage(withUserID: userID)
+    }
+
     /// Loads previous messages from backend.
     /// - Parameters:
     ///   - messageId: ID of the last fetched message. You will get messages `older` than the provided ID.
@@ -297,6 +301,19 @@ extension ChatChannelController {
     func deleteChannel() async throws {
         return try await withCheckedThrowingContinuation { continuation in
             self.deleteChannel { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+    }
+
+    /// Marks the channel as read.
+    func markRead() async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.markRead { error in
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else {

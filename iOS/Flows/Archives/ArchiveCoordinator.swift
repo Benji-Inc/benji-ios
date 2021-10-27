@@ -58,9 +58,9 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
                 self.startConversationFlow(for: conversation)
             } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
 
-                guard let connection = ConnectionStore.shared.connections.first { connection in
+                guard let connection = ConnectionStore.shared.connections.first(where: { connection in
                     return connection.objectId == connectionId
-                }, let identifier = connection.conversationId,
+                }), let identifier = connection.conversationId,
                        let conversationId = try? ChannelId.init(cid: identifier)  else {
                            return
                        }
@@ -98,7 +98,8 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
 
 extension ArchiveCoordinator: ArchiveViewControllerDelegate {
 
-    nonisolated func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType) {
+    nonisolated func archiveView(_ controller: ArchiveViewController,
+                                 didSelect item: ArchiveCollectionViewDataSource.ItemType) {
 
         Task.onMainActor {
             switch item {
@@ -117,13 +118,15 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
         let coordinator = ConversationCoordinator(router: self.router,
                                                   deepLink: self.deepLink,
                                                   conversation: conversation)
-        self.addChildAndStart(coordinator, finishedHandler: { (_) in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
-                _ = ConversationsManager.shared.activeConversations.popLast()
-                self.finishFlow(with: ())
-            }
+        self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+            self.router.dismiss(source: self.archiveVC, animated: true)
+            _ = ConversationsManager.shared.activeConversations.popLast()
         })
-        self.router.present(coordinator, source: self.router.topmostViewController, animated: true)
+        self.router.present(coordinator,
+                            source: self.router.topmostViewController,
+                            cancelHandler: {
+            _ = ConversationsManager.shared.activeConversations.popLast()
+        })
     }
 
     private func handle(notice: SystemNotice) {
