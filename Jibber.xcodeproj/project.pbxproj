@@ -539,6 +539,23 @@
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */; };
 		D686DA5D25799EB6000B4C04 /* Statusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D686DA5C25799EB6000B4C04 /* Statusable.swift */; };
+		D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
+		D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FD122BF065F00BA277D /* DeeplinkTarget.swift */; };
+		D687595427289CAE00AF7C07 /* Optional+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB742244DEEA400607677 /* Optional+Extensions.swift */; };
+		D687595A27289E7F00AF7C07 /* Publisher+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */; };
+		D687595C2728A0C400AF7C07 /* ChatChannel+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* ChatChannel+Intents.swift */; };
+		D687595D2728A0C400AF7C07 /* ChatChannel+Intents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687595B2728A0C400AF7C07 /* ChatChannel+Intents.swift */; };
+		D687595E2728A4BA00AF7C07 /* User+INPerson.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE0FAA267D037900C6B048 /* User+INPerson.swift */; };
+		D68759612728A54000AF7C07 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* Avatar.swift */; };
+		D68759622728A54300AF7C07 /* ImageDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1501121D5EA0400CD8CE4 /* ImageDisplayable.swift */; };
+		D68759642728A55A00AF7C07 /* FontType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460A21D5547000CD8CE4 /* FontType.swift */; };
+		D68759652728A56300AF7C07 /* Character+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1460621D552B100CD8CE4 /* Character+Extensions.swift */; };
+		D68759672728A59600AF7C07 /* User+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE39236F44A8004FA89A /* User+Extensions.swift */; };
+		D68759692728A60700AF7C07 /* String+PhoneNumbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68759682728A60700AF7C07 /* String+PhoneNumbers.swift */; };
+		D687596A2728A60700AF7C07 /* String+PhoneNumbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68759682728A60700AF7C07 /* String+PhoneNumbers.swift */; };
+		D687596B2728A60700AF7C07 /* String+PhoneNumbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68759682728A60700AF7C07 /* String+PhoneNumbers.swift */; };
+		D687596C2728A64500AF7C07 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E921D3111600204BEE /* String+Extensions.swift */; };
+		D687596E2728AFB900AF7C07 /* ChatClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */; };
 		D687F3C626FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */; };
 		D687F3C826FE4E4B000E4734 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C726FE4E4B000E4734 /* ContactCell.swift */; };
 		D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */; };
@@ -663,6 +680,10 @@
 		D6C389302724B8F9004D29D5 /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
 		D6C389312724B8F9004D29D5 /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
 		D6C389332724C091004D29D5 /* ArchiveCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C389322724C091004D29D5 /* ArchiveCoordinator+Extensions.swift */; };
+		D6C3893627287307004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893527287307004D29D5 /* StreamChat */; };
+		D6C3893827287307004D29D5 /* StreamChatUI in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893727287307004D29D5 /* StreamChatUI */; };
+		D6C3893A27287491004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893927287491004D29D5 /* StreamChat */; };
+		D6C3893C2728749C004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893B2728749C004D29D5 /* StreamChat */; };
 		D6C9EF3F25BF6CB100A14DE5 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */; };
 		D6C9EF4525BF6CF000A14DE5 /* Indexable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */; };
 		D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */; };
@@ -1067,6 +1088,8 @@
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedAvatarView.swift; sourceTree = "<group>"; };
 		D686DA5C25799EB6000B4C04 /* Statusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statusable.swift; sourceTree = "<group>"; };
+		D687595B2728A0C400AF7C07 /* ChatChannel+Intents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatChannel+Intents.swift"; sourceTree = "<group>"; };
+		D68759682728A60700AF7C07 /* String+PhoneNumbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+PhoneNumbers.swift"; sourceTree = "<group>"; };
 		D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D687F3C726FE4E4B000E4734 /* ContactCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactCell.swift; sourceTree = "<group>"; };
 		D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeopleCollectionViewLayout.swift; sourceTree = "<group>"; };
@@ -1196,8 +1219,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6C3893827287307004D29D5 /* StreamChatUI in Frameworks */,
 				D6AE0F5D267CF80C00C6B048 /* Lottie in Frameworks */,
 				D6D804B526693AE700741594 /* SDWebImageLinkPlugin in Frameworks */,
+				D6C3893627287307004D29D5 /* StreamChat in Frameworks */,
 				D6AE0F64267CF8A400C6B048 /* PhoneNumberKit in Frameworks */,
 				E09AAFB2C502C558A3890EC4 /* Pods_Jibber.framework in Frameworks */,
 			);
@@ -1211,6 +1236,7 @@
 				D63DB1FB25E968C300F6B323 /* UserNotificationsUI.framework in Frameworks */,
 				D6D804B92669416E00741594 /* SDWebImageLinkPlugin in Frameworks */,
 				D6AE0F68267CF8D900C6B048 /* PhoneNumberKit in Frameworks */,
+				D6C3893A27287491004D29D5 /* StreamChat in Frameworks */,
 				D63DB1F925E968C300F6B323 /* UserNotifications.framework in Frameworks */,
 				2C9DC2F4715948651C293215 /* Pods_Notification_Content.framework in Frameworks */,
 			);
@@ -1231,6 +1257,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6C3893C2728749C004D29D5 /* StreamChat in Frameworks */,
 				6FBC3C8F68FC243D6E1A42F6 /* Pods_Notification_Service.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1270,8 +1297,9 @@
 		80616E3326EAD1A900C077BA /* _Stream Temp */ = {
 			isa = PBXGroup;
 			children = (
-				800FAAC026F0585A00D3C3A0 /* Conversation+Extensions.swift */,
-				80F88BAD26F11F02006C7677 /* ConversationController+Extensions.swift */,
+				800FAAC026F0585A00D3C3A0 /* ChatChannel+Extensions.swift */,
+				D687595B2728A0C400AF7C07 /* ChatChannel+Intents.swift */,
+				80F88BAD26F11F02006C7677 /* ChatChannelController+Extensions.swift */,
 				80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */,
 				80FA868B26F111830053101B /* ChatMessage+Extensions.swift */,
 				80251FF726F3D362006D7873 /* ChatMessageController+Extensions.swift */,
@@ -1563,6 +1591,7 @@
 				D6B53AFF258FE73D00593670 /* Publisher+Extensions.swift */,
 				D6D380C3257FC18300C562E8 /* Selectable.swift */,
 				D61EC0E921D3111600204BEE /* String+Extensions.swift */,
+				D68759682728A60700AF7C07 /* String+PhoneNumbers.swift */,
 				807A7BC426C5B5A20023A71E /* Task+Extensions.swift */,
 				807A7BC826C5C8100023A71E /* Task+TaskPool.swift */,
 				D6D1503A21D7F47600CD8CE4 /* UI Extensions */,
@@ -2280,6 +2309,8 @@
 				D6D804B426693AE700741594 /* SDWebImageLinkPlugin */,
 				D6AE0F5C267CF80C00C6B048 /* Lottie */,
 				D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */,
+				D6C3893527287307004D29D5 /* StreamChat */,
+				D6C3893727287307004D29D5 /* StreamChatUI */,
 			);
 			productName = Benji;
 			productReference = D61EC0BC21D3071400204BEE /* Jibber.app */;
@@ -2303,6 +2334,7 @@
 				D6D804B82669416E00741594 /* SDWebImageLinkPlugin */,
 				D6AE0F60267CF82C00C6B048 /* Lottie */,
 				D6AE0F67267CF8D900C6B048 /* PhoneNumberKit */,
+				D6C3893927287491004D29D5 /* StreamChat */,
 			);
 			productName = OursNotificationContent;
 			productReference = D63DB1F725E968C300F6B323 /* Notification Content.appex */;
@@ -2346,6 +2378,9 @@
 			dependencies = (
 			);
 			name = "Notification Service";
+			packageProductDependencies = (
+				D6C3893B2728749C004D29D5 /* StreamChat */,
+			);
 			productName = NotificationService;
 			productReference = D6AE0F6D267CF9CA00C6B048 /* Notification Service.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -2435,6 +2470,7 @@
 				D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */,
 				D6AE0F5B267CF80C00C6B048 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */,
+				D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */,
 			);
 			productRefGroup = D61EC0BD21D3071400204BEE /* Products */;
 			projectDirPath = "";
@@ -2730,6 +2766,7 @@
 				D678EC2626F534430071DB0D /* CircleGroup.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
 				D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
+				D687595C2728A0C400AF7C07 /* ChatChannel+Intents.swift in Sources */,
 				D6E65F19237791650061AA67 /* ManageableCell.swift in Sources */,
 				D6BEDE4C2625D754009BA131 /* SwipeableInputAccessoryView.swift in Sources */,
 				D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */,
@@ -2785,6 +2822,7 @@
 				D642739922CA79B60088256B /* UIWindow+Extensions.swift in Sources */,
 				D671E1F126402A2000BF2B8D /* ToastView.swift in Sources */,
 				D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */,
+				D68759692728A60700AF7C07 /* String+PhoneNumbers.swift in Sources */,
 				D6617D012675411E00439C06 /* HomeCollectionViewLayout.swift in Sources */,
 				D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */,
 				D60C81482209314200A127A3 /* UIImage+Extensions.swift in Sources */,
@@ -3138,6 +3176,7 @@
 				D63DB22525E9990500F6B323 /* Error+Extensions.swift in Sources */,
 				D63DB24525E9993F00F6B323 /* CodeViewController.swift in Sources */,
 				D63DB29425E999B200F6B323 /* AvatarView.swift in Sources */,
+				D687596B2728A60700AF7C07 /* String+PhoneNumbers.swift in Sources */,
 				802C448C26CC76CC00A333A4 /* Logger.swift in Sources */,
 				D63DB23325E9992600F6B323 /* UIControl+Extensions.swift in Sources */,
 				D6D3927B265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
@@ -3242,6 +3281,7 @@
 				D65519162589120C00B901E4 /* DispatchQue+Extensions.swift in Sources */,
 				D65519372589122700B901E4 /* UIViewController+Extensions.swift in Sources */,
 				D6D3927E265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,
+				D687596A2728A60700AF7C07 /* String+PhoneNumbers.swift in Sources */,
 				D65519532589125500B901E4 /* AnimationCycle.swift in Sources */,
 				D66379DF25A39BFD00A4A3B7 /* LaunchManager.swift in Sources */,
 				D640326125AE5CD400139396 /* WelcomeViewController.swift in Sources */,
@@ -3361,18 +3401,31 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D687595D2728A0C400AF7C07 /* ChatChannel+Intents.swift in Sources */,
+				D68759642728A55A00AF7C07 /* FontType.swift in Sources */,
+				D68759672728A59600AF7C07 /* User+Extensions.swift in Sources */,
+				D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */,
+				D687595427289CAE00AF7C07 /* Optional+Extensions.swift in Sources */,
 				D6AE0FF1267D2CC900C6B048 /* ClientError.swift in Sources */,
 				D6AE0FEB267D2CA900C6B048 /* ConnectionPreference.swift in Sources */,
 				D66ED456267D35E100332BA3 /* Config.swift in Sources */,
+				D68759652728A56300AF7C07 /* Character+Extensions.swift in Sources */,
 				D66ED45C267D4B3F00332BA3 /* Array+Extensions.swift in Sources */,
 				D6AE0FF4267D2CD700C6B048 /* SessionManager.swift in Sources */,
 				D6AE0FF7267D2CE400C6B048 /* Error+Extensions.swift in Sources */,
 				D6AE0FE8267D2C1800C6B048 /* User.swift in Sources */,
+				D68759622728A54300AF7C07 /* ImageDisplayable.swift in Sources */,
 				D679DE0C26821EE70054DCAF /* NSObject+Extensions.swift in Sources */,
+				D687596C2728A64500AF7C07 /* String+Extensions.swift in Sources */,
 				D6AE0FFD267D2D9A00C6B048 /* User+Objectable.swift in Sources */,
 				D66ED459267D4B1200332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0F70267CF9CA00C6B048 /* NotificationService.swift in Sources */,
+				D687596E2728AFB900AF7C07 /* ChatClient+Extensions.swift in Sources */,
+				D687595E2728A4BA00AF7C07 /* User+INPerson.swift in Sources */,
+				D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */,
+				D687595A27289E7F00AF7C07 /* Publisher+Extensions.swift in Sources */,
 				D6AE0FFC267D2D9500C6B048 /* Objectable.swift in Sources */,
+				D68759612728A54000AF7C07 /* Avatar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4051,6 +4104,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/GetStream/stream-chat-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		D6D804B326693AE700741594 /* XCRemoteSwiftPackageReference "SDWebImageLinkPlugin" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageLinkPlugin.git";
@@ -4091,6 +4152,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D6AE0F62267CF8A400C6B048 /* XCRemoteSwiftPackageReference "PhoneNumberKit" */;
 			productName = PhoneNumberKit;
+		};
+		D6C3893527287307004D29D5 /* StreamChat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */;
+			productName = StreamChat;
+		};
+		D6C3893727287307004D29D5 /* StreamChatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */;
+			productName = StreamChatUI;
+		};
+		D6C3893927287491004D29D5 /* StreamChat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */;
+			productName = StreamChat;
+		};
+		D6C3893B2728749C004D29D5 /* StreamChat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */;
+			productName = StreamChat;
 		};
 		D6D804B426693AE700741594 /* SDWebImageLinkPlugin */ = {
 			isa = XCSwiftPackageProductDependency;

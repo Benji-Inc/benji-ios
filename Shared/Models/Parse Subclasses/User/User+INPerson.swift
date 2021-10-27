@@ -28,7 +28,7 @@ extension User {
     }
 
     private var inHandle: INPersonHandle {
-        return INPersonHandle(value: self.handle, type: .unknown, label: .main)
+        return INPersonHandle(value: self.phoneNumber, type: .phoneNumber, label: .iPhone)
     }
 
     private var nameComponents: PersonNameComponents? {

@@ -10,9 +10,6 @@ import Foundation
 import StreamChat
 import TMROLocalization
 
-typealias Conversation = ChatChannel
-typealias ConversationID = ChannelId
-
 extension ChatChannel {
 
     enum Role: String {

@@ -67,14 +67,6 @@ extension String {
         return trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    func isValidPhoneNumber(for region: String) -> Bool {
-        return !self.parsePhoneNumber(for: region).isNil
-    }
-
-    func parsePhoneNumber(for region: String) -> PhoneNumber? {
-        return try? PhoneKit.shared.parse(self, withRegion: region)
-    }
-
     var isValidPersonName: Bool {
         let components: [String] = self.extraWhitespaceRemoved()
             .components(separatedBy: CharacterSet.whitespaces)
@@ -85,14 +77,6 @@ extension String {
         }
 
         return false
-    }
-
-    func formatPhoneNumber() -> String? {
-        return try? PhoneKit.shared.parse(self, withRegion: PhoneKit.formatter.currentRegion).numberString
-    }
-
-    func removeAllNonNumbers() -> String {
-        return self.filter("0123456789".contains)
     }
 }
 
