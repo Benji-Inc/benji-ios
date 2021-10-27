@@ -37,6 +37,9 @@
 		8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		80958C202721ED55007196BD /* BottomToTopColumnCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80958C1F2721ED55007196BD /* BottomToTopColumnCollectionViewLayout.swift */; };
 		8098CC61270F8A2300636484 /* ConversationCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8098CC60270F8A2300636484 /* ConversationCollectionView.swift */; };
+		80B17CCC2728CA59000860F2 /* TriangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B17CCB2728CA59000860F2 /* TriangleView.swift */; };
+		80B17CCD2728CA59000860F2 /* TriangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B17CCB2728CA59000860F2 /* TriangleView.swift */; };
+		80B17CCE2728CA59000860F2 /* TriangleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B17CCB2728CA59000860F2 /* TriangleView.swift */; };
 		80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */; };
 		80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */; };
 		80D044B526FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */; };
@@ -845,6 +848,7 @@
 		8096144C2714CDB600BC948E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		8096144E2714CDB800BC948E /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		8098CC60270F8A2300636484 /* ConversationCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCollectionView.swift; sourceTree = "<group>"; };
+		80B17CCB2728CA59000860F2 /* TriangleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriangleView.swift; sourceTree = "<group>"; };
 		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
 		80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationControllerType.swift; sourceTree = "<group>"; };
 		80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewControllerDataSource+CellRegistration.swift"; sourceTree = "<group>"; };
@@ -1791,6 +1795,7 @@
 				D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */,
 				D69B75FA264842D00007020D /* VideoView.swift */,
 				D61EC0E521D30EB300204BEE /* View.swift */,
+				80B17CCB2728CA59000860F2 /* TriangleView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2859,6 +2864,7 @@
 				D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */,
 				80251FF826F3D362006D7873 /* ChatMessageController+Extensions.swift in Sources */,
+				80B17CCC2728CA59000860F2 /* TriangleView.swift in Sources */,
 				D6C389332724C091004D29D5 /* ArchiveCoordinator+Extensions.swift in Sources */,
 				D61EC0C221D3071400204BEE /* ViewController.swift in Sources */,
 				D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
@@ -3081,6 +3087,7 @@
 				D63DB26825E9997800F6B323 /* UserNotificationManager+Extensions.swift in Sources */,
 				D63DB22E25E9991F00F6B323 /* PhoneKit.swift in Sources */,
 				D63DB22225E9990100F6B323 /* ClosedRange+Extensions.swift in Sources */,
+				80B17CCE2728CA59000860F2 /* TriangleView.swift in Sources */,
 				D6617CEE267439FD00439C06 /* ImageViewButton.swift in Sources */,
 				D63DB28025E9999C00F6B323 /* TransitionRouter+Move.swift in Sources */,
 				D63DB24425E9993F00F6B323 /* WelcomeViewController.swift in Sources */,
@@ -3280,6 +3287,7 @@
 				D6617CED267439FC00439C06 /* ImageViewButton.swift in Sources */,
 				D66379E825A39C2900A4A3B7 /* UserNotificationManager+Extensions.swift in Sources */,
 				D655196C2589128300B901E4 /* StringCasing.swift in Sources */,
+				80B17CCD2728CA59000860F2 /* TriangleView.swift in Sources */,
 				D62C9CC2266C3CAB00BB9632 /* UserDefaultsManager.swift in Sources */,
 				D65519702589128300B901E4 /* StringStyle.swift in Sources */,
 				D6551A1325895C4F00B901E4 /* Theme.swift in Sources */,

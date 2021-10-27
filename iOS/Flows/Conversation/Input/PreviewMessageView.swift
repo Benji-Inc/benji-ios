@@ -17,17 +17,28 @@ class PreviewMessageView: View {
     private(set) var backgroundView = View()
     @Published var messageKind: MessageKind?
     private var cancellables = Set<AnyCancellable>()
+    private let triangleView = TriangleView(orientation: .down)
+
+    override var backgroundColor: UIColor? {
+        didSet {
+            // Ensure that the triangle view is always the same color as the background
+            self.triangleView.spikeColor = self.backgroundColor
+        }
+    }
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        // Don't clip bounds so that the triangle view is visible
+        self.clipsToBounds = false
+        self.layer.cornerRadius = Theme.cornerRadius
+        self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
+
         self.addSubview(self.backgroundView)
         self.addSubview(self.textView)
         self.addSubview(self.imageView)
-        self.imageView.clipsToBounds = true 
-        self.layer.masksToBounds = true
-        self.layer.cornerRadius = Theme.cornerRadius
-        self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
+
+        self.imageView.clipsToBounds = true
 
         self.$messageKind.mainSink { (kind) in
             guard let messageKind = kind else { return }
@@ -56,6 +67,8 @@ class PreviewMessageView: View {
             }
             self.layoutNow()
         }.store(in: &self.cancellables)
+
+        self.addSubview(self.triangleView)
     }
 
     override func layoutSubviews() {
@@ -72,5 +85,10 @@ class PreviewMessageView: View {
         self.textView.height = self.height - self.imageView.height
         self.textView.pin(.left)
         self.textView.match(.top, to: .bottom, of: self.imageView)
+
+        self.triangleView.width = 10
+        self.triangleView.height = 8.6
+        self.triangleView.centerOnX()
+        self.triangleView.top = self.height
     }
 }
