@@ -2,7 +2,6 @@ PODS:
   - Bolts-Swift (1.5.0)
   - Bolts/Tasks (1.9.1)
   - GestureRecognizerClosures (5.0.0)
-  - Nuke (10.4.1)
   - Parse (1.19.2):
     - Parse/Core (= 1.19.2)
   - Parse/Core (1.19.2):
@@ -12,13 +11,6 @@ PODS:
     - Parse (~> 1.19.0)
     - Starscream (~> 4.0.4)
   - Starscream (4.0.4)
-  - StreamChat (4.0.4):
-    - Starscream (~> 4.0)
-  - StreamChatUI (4.0.4):
-    - Nuke (~> 10.0)
-    - StreamChat (= 4.0.4)
-    - SwiftyGif (~> 5.0)
-  - SwiftyGif (5.4.0)
   - TMROCoordinator (0.0.3)
   - TMROLocalization (0.0.2)
 
@@ -26,7 +18,6 @@ DEPENDENCIES:
   - GestureRecognizerClosures
   - Parse
   - ParseLiveQuery
-  - StreamChatUI (~> 4.0)
   - TMROCoordinator
   - TMROLocalization
 
@@ -35,13 +26,9 @@ SPEC REPOS:
     - Bolts
     - Bolts-Swift
     - GestureRecognizerClosures
-    - Nuke
     - Parse
     - ParseLiveQuery
     - Starscream
-    - StreamChat
-    - StreamChatUI
-    - SwiftyGif
     - TMROCoordinator
     - TMROLocalization
 
@@ -49,16 +36,12 @@ SPEC CHECKSUMS:
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
   Bolts-Swift: afbbaf8c8186e7f769be4afa656949c14087ba44
   GestureRecognizerClosures: 0dcafb45e669e7a775c840383e54b3d16983037b
-  Nuke: fa2d83b3ee99bb88eccc62ab6c7590e207b50096
   Parse: 081fb8755c3000fd11df817eec235def233d0af3
   ParseLiveQuery: 7bc437c3b986880ffe5f241a9921e37f45df0677
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
-  StreamChat: 5f849859ba70a522d43412181ce77241e4ee0f4d
-  StreamChatUI: f8ed5b08502a55ab16ae8f10f7b9383448e6429d
-  SwiftyGif: 5d4af95df24caf1c570dbbcb32a3b8a0763bc6d7
   TMROCoordinator: 8e675e45c895feafdd548e1dd2de35430d3ea146
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
 
-PODFILE CHECKSUM: cf4855f668df83e0f174fd29a3a0e59c951ce043
+PODFILE CHECKSUM: a12fd7dcff2e245b2104b071d1f0d065a8a80eb0
 
-COCOAPODS: 1.10.2
+COCOAPODS: 1.10.1

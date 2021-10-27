@@ -32,14 +32,13 @@ extension ChatClient {
         }
 
         let token = Token.development(userId: user.userObjectID!)
+        let userId = User.current()?.userObjectID ?? String() as UserId
+        let userInfo = UserInfo(id: userId, name: nil, imageURL: nil, extraData: [:])
 
         /// connect to chat
         return try await withCheckedThrowingContinuation { continuation in
             ChatClient.shared.connectUser(
-                userInfo: UserInfo(
-                    id: user.userObjectID!,
-                    name: user.fullName,
-                    imageURL: user.smallImage?.url),
+                userInfo: userInfo,
                 token: token,
                 completion: { error in
                     if let error = error {
@@ -55,20 +54,42 @@ extension ChatClient {
     /// Returns a ChatChannelListController synchronized using the provided query.
     func queryChannels(query: ChannelListQuery) async throws -> ChatChannelListController {
         let controller = self.channelListController(query: query)
-        try await controller.synchronize()
-        return controller
+        return try await withCheckedThrowingContinuation({ continuation in
+            controller.synchronize { error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: controller)
+                }
+            }
+        })
     }
 
     /// Returns a ChatChannelMemberListController synchronized with the members requested with the query.
     func queryMembers(query: ChannelMemberListQuery) async throws -> ChatChannelMemberListController {
         let controller = self.memberListController(query: query)
-        try await controller.synchronize()
-        return controller
+        return try await withCheckedThrowingContinuation({ continuation in
+            controller.synchronize { error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: controller)
+                }
+            }
+        })
     }
 
     /// Deletes the specified channel.
     func deleteChannel(_ channel: ChatChannel) async throws {
         let controller = self.channelController(for: channel.cid)
-        try await controller.deleteChannel()
+        return try await withCheckedThrowingContinuation({ continuation in
+            controller.deleteChannel { error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        })
     }
 }

@@ -11,7 +11,7 @@ import StreamChat
 
 extension ChatUser: Avatar {
 
-    private var parseUser: User? {
+    var parseUser: User? {
         return UserStore.shared.users.first { user in
             return user.objectId == self.userObjectID
         }

@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Intents
 
 typealias ConversationController = ChatChannelController
 
@@ -37,11 +38,37 @@ extension ChatChannelController {
         }
     }
 
+    func donateIntent(for sendable: Sendable) {
+        guard case MessageKind.text(let text) = sendable.kind else { return }
+        let memberIDs = self.conversation.lastActiveMembers.compactMap { member in
+            return member.id
+        }
+
+        let recipients = UserStore.shared.users.filter { user in
+            return memberIDs.contains(user.objectId ?? String())
+        }.compactMap { user in
+            return user.inPerson
+        }
+
+        let intent = INSendMessageIntent(recipients: recipients,
+                                         outgoingMessageType: .outgoingMessageText,
+                                         content: text,
+                                         speakableGroupName: self.conversation.speakableGroupName,
+                                         conversationIdentifier: self.conversation.cid.id,
+                                         serviceName: nil,
+                                         sender: self.conversation.createdBy?.parseUser?.inPerson,
+                                         attachments: nil)
+
+        let interaction = INInteraction(intent: intent, response: nil)
+        interaction.direction = .outgoing
+        interaction.donate(completion: nil)
+    }
+
     @discardableResult
     func createNewMessage(with sendable: Sendable) async throws -> MessageId {
         switch sendable.kind {
         case .text(let text):
-            return try await self.createNewMessage(text: text)
+            return try await self.createNewMessage(sendable: sendable, text: text)
         case .attributedText:
             break
         case .photo:
@@ -76,7 +103,8 @@ extension ChatChannelController {
     ///   - quotedMessageId: An id of the message new message quotes. (inline reply)
     ///   - extraData: Additional extra data of the message object.
     @discardableResult
-    func createNewMessage(text: String,
+    func createNewMessage(sendable: Sendable,
+                          text: String,
                           pinning: MessagePinning? = nil,
                           isSilent: Bool = false,
                           attachments: [AnyAttachmentPayload] = [],
@@ -95,6 +123,7 @@ extension ChatChannelController {
 
                 switch result {
                 case .success(let messageID):
+                    self.donateIntent(for: sendable)
                     continuation.resume(returning: messageID)
                 case .failure(let error):
                     continuation.resume(throwing: error)
@@ -110,7 +139,9 @@ extension ChatChannelController {
 
         switch sendable.kind {
         case .text(let text):
-            return try await self.editMessage(messageID, text: text)
+            return try await self.editMessage(sendable: sendable,
+                                              messageID: messageID,
+                                              text: text)
         case .attributedText:
             break
         case .photo:
@@ -136,20 +167,34 @@ extension ChatChannelController {
     ///
     /// - Parameters:
     ///   - text: The updated message text.
-    func editMessage(_ messageID: MessageId, text: String) async throws {
+    func editMessage(sendable: Sendable,
+                     messageID: MessageId,
+                     text: String) async throws {
+
         guard let channelID = self.cid else {
             throw(ClientError.apiError(detail: "No channel id"))
         }
 
         let messageController = self.client.messageController(cid: channelID, messageId: messageID)
-        try await messageController.editMessage(text: text)
+        return try await withCheckedThrowingContinuation({ continuation in
+            messageController.editMessage(text: text) { error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    self.donateIntent(for: sendable)
+                    continuation.resume(returning: ())
+                }
+            }
+        })
     }
 
     @discardableResult
     func createNewReply(for messageID: MessageId, with sendable: Sendable) async throws -> MessageId {
         switch sendable.kind {
         case .text(let text):
-            return try await self.createNewReply(for: messageID, text: text)
+            return try await self.createNewReply(sendable: sendable,
+                                                 messageID: messageID,
+                                                 text: text)
         case .attributedText:
             break
         case .photo:
@@ -186,7 +231,8 @@ extension ChatChannelController {
     ///   - extraData: Additional extra data of the message object.
     ///   - completion: Called when saving the message to the local DB finishes.
     @discardableResult
-    func createNewReply(for messageID: MessageId,
+    func createNewReply(sendable: Sendable,
+                        messageID: MessageId,
                         text: String,
                         pinning: MessagePinning? = nil,
                         attachments: [AnyAttachmentPayload] = [],
@@ -201,15 +247,25 @@ extension ChatChannelController {
         }
 
         let messageController = self.client.messageController(cid: channelID, messageId: messageID)
-        return try await messageController.createNewReply(text: text,
-                                                          pinning: pinning,
-                                                          attachments: attachments,
-                                                          mentionedUserIds: mentionedUserIds,
-                                                          showReplyInChannel: showReplyInChannel,
-                                                          isSilent: isSilent,
-                                                          quotedMessageId: quotedMessageId,
-                                                          extraData: extraData)
 
+        return try await withCheckedThrowingContinuation({ continuation in
+            messageController.createNewReply(text: text,
+                                             pinning: pinning,
+                                             attachments: attachments,
+                                             mentionedUserIds: mentionedUserIds,
+                                             showReplyInChannel: showReplyInChannel,
+                                             isSilent: isSilent,
+                                             quotedMessageId: quotedMessageId,
+                                             extraData: extraData) { result in
+                switch result {
+                case .success(let messageId):
+                    self.donateIntent(for: sendable)
+                    continuation.resume(returning: messageId)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        })
     }
 
     /// Deletes the specified message that this controller manages.
