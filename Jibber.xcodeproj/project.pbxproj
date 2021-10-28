@@ -1845,11 +1845,12 @@
 		D6637A3225A3AB1700A4A3B7 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
-				D68C08192729CF190033C8AE /* Disclosures */,
-				D671E1ED2640297900BF2B8D /* Toast */,
 				D6F37D5E25B5D8300034C9C5 /* Avatar Profile */,
+				D68C08192729CF190033C8AE /* Disclosures */,
+				D68C0833272B2EAB0033C8AE /* Face */,
 				D67896A122FF40AB0059BA75 /* Onboarding */,
 				D67A82D9230CCE290076152B /* Splash */,
+				D671E1ED2640297900BF2B8D /* Toast */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -1971,7 +1972,6 @@
 				D64DD8AB23CE2C180039DC5A /* OnboardingViewController.swift */,
 				D63C67D823D3927500EA373A /* PhoneTextField.swift */,
 				D67896A822FF51170059BA75 /* PhoneViewController.swift */,
-				D67896BE2302683C0059BA75 /* PhotoViewController.swift */,
 				D67896AC22FF60190059BA75 /* TextInputViewController.swift */,
 				D6F7DEF526FBD85C00F72A5C /* UserOnboardingViewController.swift */,
 				D64A1F06258C16470097817C /* WaitlistViewController.swift */,
@@ -2069,12 +2069,20 @@
 			isa = PBXGroup;
 			children = (
 				D68C081A2729CF430033C8AE /* DisclosureModalViewController.swift */,
+			);
+			path = Disclosures;
+			sourceTree = "<group>";
+		};
+		D68C0833272B2EAB0033C8AE /* Face */ = {
+			isa = PBXGroup;
+			children = (
+				D67896BE2302683C0059BA75 /* PhotoViewController.swift */,
 				D68C082F272A17E60033C8AE /* FaceDisclosureViewController.swift */,
 				D68C08232729D9280033C8AE /* PermissionsCoordinator.swift */,
 				D68C08272729D9980033C8AE /* PermissionsViewController.swift */,
 				D68C082B2729FFA70033C8AE /* PermissionSwitchView.swift */,
 			);
-			path = Disclosures;
+			path = Face;
 			sourceTree = "<group>";
 		};
 		D695B44125BA398400843780 /* Attachments */ = {
