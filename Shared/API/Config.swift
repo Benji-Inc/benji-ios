@@ -14,17 +14,19 @@ enum Environment: String {
     case production = "production"
 
     var url: String {
-        switch self {
-        case .staging: return "https://jibber-development-backend.herokuapp.com/parse"
-        case .production: return "https://ours-backend.herokuapp.com/parse"
-        }
+        return "https://jibber-development-backend.herokuapp.com/parse"
+//        switch self {
+//        case .staging: return "https://jibber-development-backend.herokuapp.com/parse"
+//        case .production: return "https://ours-backend.herokuapp.com/parse"
+//        }
     }
 
     var appID: String {
-        switch self {
-        case .staging: return "jibber-development"
-        case .production: return "bd263ac3-c8d9-4145-be8a-7d8eedbd5fcf"
-        }
+        return "jibber-development"
+//        switch self {
+//        case .staging: return "jibber-development"
+//        case .production: return "bd263ac3-c8d9-4145-be8a-7d8eedbd5fcf"
+//        }
     }
 
     var displayName: String {

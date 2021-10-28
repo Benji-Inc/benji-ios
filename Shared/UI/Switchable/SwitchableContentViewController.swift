@@ -39,22 +39,7 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
         super.viewDidLayoutSubviews()
 
         guard let current = self.current else { return }
-
-        let yOffset = self.bubbleView.bottom
-        var vcHeight = current.viewController.getHeight(for: self.scrollView.width)
-        if vcHeight <= .zero {
-            vcHeight = self.scrollView.height - yOffset - self.view.safeAreaInsets.top - self.view.safeAreaInsets.bottom
-        }
-
-        let contentHeight = yOffset + vcHeight
-        self.scrollView.contentSize = CGSize(width: self.scrollView.width, height: contentHeight)
-
-        current.viewController.view.frame = CGRect(x: 0,
-                                                   y: yOffset,
-                                                   width: self.scrollView.width,
-                                                   height: vcHeight)
-
-        current.viewController.view.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+        current.viewController.view.expandToSuperviewSize()
     }
 
     func getInitialContent() -> ContentType {
@@ -87,7 +72,8 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
                 self.currentCenterVC = content.viewController
 
                 if let contentVC = self.currentCenterVC {
-                    self.addChild(viewController: contentVC, toView: self.scrollView)
+                    self.addChild(contentVC)
+                    self.view.insertSubview(contentVC.view, belowSubview: self.nameLabel)
                 }
 
                 self.willUpdateContent()

@@ -138,11 +138,13 @@ class DisplayableImageView: View {
     }
 
     private func findUser(with objectID: String) {
-        guard let user = UserStore.shared.users.first(where: { user in
-            return user.objectId == objectID
-        }) else { return }
+        guard let query = User.query() else { return }
 
-        self.downloadAndSetImage(for: user)
+        query.getObjectInBackground(withId: objectID) { [unowned self] object, error in
+            if let user = object as? User {
+                self.downloadAndSetImage(for: user)
+            }
+        }
     }
 
     @MainActor

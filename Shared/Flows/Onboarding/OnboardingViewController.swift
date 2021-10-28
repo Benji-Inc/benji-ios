@@ -14,7 +14,6 @@ import Intents
 
 protocol OnboardingViewControllerDelegate: AnyObject {
     func onboardingView(_ controller: OnboardingViewController, didVerify user: User)
-    func onboardingViewControllerNeedsAuthorization(_ controller: OnboardingViewController)
 }
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent>, TransitionableViewController {
@@ -33,10 +32,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var nameVC = NameViewController()
     lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
-    lazy var focusVC = FocusStatusViewController()
 
     let loadingBlur = BlurView()
     let blurEffect = UIBlurEffect(style: .systemMaterial)
+    
     let loadingAnimationView = AnimationView()
     
     private let confettiView = ConfettiView()
@@ -75,7 +74,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingAnimationView.loopMode = .loop
         self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
 
-        self.scrollView.insertSubview(self.confettiView, aboveSubview: self.blurView)
+        self.view.insertSubview(self.confettiView, aboveSubview: self.blurView)
 
         self.welcomeVC.$state.mainSink { (state) in
             switch state {
@@ -139,23 +138,16 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
         }
 
+        self.photoVC.$currentState.mainSink { [unowned self] _ in
+            self.updateUI()
+        }.store(in: &self.cancellables)
+
         self.photoVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
                 Task {
                     try await ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
-                }
-
-                self.current = .focus(self.focusVC)
-            case .failure(_):
-                break
-            }
-        }
-
-        self.focusVC.onDidComplete = { [unowned self] result in
-            switch result {
-            case .success(let status):
-                if status == .authorized, let user = User.current() {
+                    guard let user = User.current(), user.status == .active else { return }
                     self.delegate.onboardingView(self, didVerify: user)
                 }
             case .failure(_):
@@ -202,6 +194,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
             self.reservationOwner = user
             self.avatarView.set(avatar: user)
+            self.nameLabel.setText(user.givenName.capitalized)
             self.avatarView.isHidden = false
             self.updateUI()
             self.view.layoutNow()
@@ -223,7 +216,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             #else
             if current.fullName.isEmpty {
                 return .name(self.nameVC)
-            } else if current.smallImage.isNil {
+            } else if current.smallImage.isNil || current.focusImage.isNil {
                 return .photo(self.photoVC)
             } else {
                 return .name(self.nameVC)
@@ -241,7 +234,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getMessage() -> Localized {
-        super.willUpdateContent()
         guard let content = self.current else { return "" }
         return content.getDescription(with: self.reservationOwner)
     }
