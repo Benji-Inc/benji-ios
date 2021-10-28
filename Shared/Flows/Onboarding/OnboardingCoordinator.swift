@@ -61,49 +61,14 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
         }
     }
 
-    nonisolated func onboardingViewControllerNeedsAuthorization(_ controller: OnboardingViewController) {
-#if !NOTIFICATION
-        Task {
-            await self.checkForNotifications()
-        }
-#endif
-    }
-
-#if !NOTIFICATION
-    private func checkForNotifications() async {
-        let settings = await UserNotificationManager.shared.getNotificationSettings()
-
-        if settings.authorizationStatus != .authorized {
-            await self.showSoftAskNotifications(for: settings.authorizationStatus)
-        }
-    }
-
-    private func showSoftAskNotifications(for status: UNAuthorizationStatus) async {
-        let alert = UIAlertController(title: "Notifications that don't suck.",
-                                      message: "Most other social apps design their notifications to be vague in order to suck you in for as long as possible. Ours are not. Get reminders about things that YOU set, and recieve important messages from REAL people. Jibber is a far better experience with them turned on.",
-                                      preferredStyle: .alert)
-
-        let allow = UIAlertAction(title: "Allow", style: .default) { action in
-            if status == .denied {
-                if let bundleIdentifier = Bundle.main.bundleIdentifier, let appSettings = URL(string: UIApplication.openSettingsURLString + bundleIdentifier) {
-                    if UIApplication.shared.canOpenURL(appSettings) {
-                        UIApplication.shared.open(appSettings)
-                    }
-                }
-            } else {
-                Task {
-                    await UserNotificationManager.shared.register(application: UIApplication.shared)
-                }
+    private func presentPermissions() {
+        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: self.onboardingVC, animated: true) {
+                self.finishFlow(with: ())
             }
         }
-
-        let cancel = UIAlertAction(title: "Maybe Later", style: .cancel) { action in}
-
-        alert.addAction(cancel)
-        alert.addAction(allow)
-
-        self.router.topmostViewController.present(alert, animated: true, completion: nil)
+        self.router.present(coordinator, source: self.onboardingVC)
     }
-#endif
 }
 

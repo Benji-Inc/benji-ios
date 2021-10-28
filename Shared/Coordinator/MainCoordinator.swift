@@ -56,14 +56,13 @@ class MainCoordinator: Coordinator<Void> {
                                                     deepLink: self.deepLink)
             self.router.setRootModule(coordinator, animated: true)
             self.addChildAndStart(coordinator, finishedHandler: { (_) in
-                self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+
 #if APPCLIP
 #elseif !NOTIFICATION
                     self.runArchiveFlow()
                     //self.runHomeFlow()
 #endif
                     self.subscribeToUserUpdates()
-                }
             })
         }
     }

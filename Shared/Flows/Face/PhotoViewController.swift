@@ -20,7 +20,6 @@ enum PhotoState {
     case scanEyesClosed
     case captureEyesOpen
     case captureEyesClosed
-    case permissions
     case error(String)
     case finish
 }
@@ -36,10 +35,29 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         return vc
     }()
 
-    private let animationView = AnimationView.with(animation: .faceScan)
-    //private let errorLabel = Label(font: .smallBold, textColor: .textColor)
-    //private let gradientView = GradientView(with: [Color.darkGray.color.cgColor, Color.clear.color.cgColor], startPoint: .bottomCenter, endPoint: .topCenter)
+    private lazy var smilingDisclosureVC: FaceDisclosureViewController = {
+        let vc = FaceDisclosureViewController(with: .smiling)
+        vc.dismissHandlers.append { [unowned self] in
+            // do something
+        }
+        vc.button.didSelect { [unowned self] in
+            // do something
+        }
+        return vc
+    }()
 
+    private lazy var focusDisclosureVC: FaceDisclosureViewController = {
+        let vc = FaceDisclosureViewController(with: .eyesClosed)
+        vc.dismissHandlers.append { [unowned self] in
+            // do something
+        }
+        vc.button.didSelect { [unowned self] in
+            // do something
+        }
+        return vc
+    }()
+
+    private let animationView = AnimationView.with(animation: .faceScan)
     private var previousScanState: PhotoState = .scanEyesOpen
 
     @Published private(set) var currentState: PhotoState = .initial
@@ -67,8 +85,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             case .captureEyesOpen:
                 break
             case .captureEyesClosed:
-                break
-            case .permissions:
                 break
             case .error:
                 break
@@ -144,8 +160,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.handleScanState()
         case .captureEyesOpen, .captureEyesClosed:
             self.handleCaptureState()
-        case .permissions:
-            self.handlePermissionsState()
         case .error:
             self.handleErrorState()
         case .finish:
@@ -229,14 +243,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private func handleCaptureState() {
         self.cameraVC.capturePhoto()
-    }
-
-    private func handleEyesClosedCaptureState() {
-        self.cameraVC.capturePhoto()
-    }
-
-    private func handlePermissionsState() {
-
     }
 
     private func handleErrorState() {

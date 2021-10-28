@@ -14,7 +14,6 @@ import Intents
 
 protocol OnboardingViewControllerDelegate: AnyObject {
     func onboardingView(_ controller: OnboardingViewController, didVerify user: User)
-    func onboardingViewControllerNeedsAuthorization(_ controller: OnboardingViewController)
 }
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent>, TransitionableViewController {

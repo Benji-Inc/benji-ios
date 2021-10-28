@@ -104,12 +104,10 @@ enum OnboardingContent: Switchable {
                 return "Good one!"
             case .captureEyesClosed:
                 return "Perfect!"
-            case .permissions:
-                return "Now turn these on."
             case .error(let message):
                 return message
             case .finish:
-                return ""
+                return "Now turn these on."
             }
         }
     }
