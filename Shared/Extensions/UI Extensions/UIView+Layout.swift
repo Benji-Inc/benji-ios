@@ -187,11 +187,8 @@ extension UIView {
         get {
             return self.frame.origin
         }
-
         set {
-            var frame = self.frame
-            frame.origin = newValue
-            self.frame = frame
+            self.frame.origin = newValue
         }
     }
 

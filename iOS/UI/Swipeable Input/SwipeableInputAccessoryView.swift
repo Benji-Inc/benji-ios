@@ -348,8 +348,8 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         // Initialize the preview view for the user to drag up the screen.
         self.previewView = PreviewMessageView()
         self.previewView?.frame = self.inputContainerView.frame
-//        self.previewView?.set(backgroundColor: self.currentContext.color)
         self.previewView?.bubbleColor = self.currentContext.color.color
+        self.previewView?.borderColor = Color.white.color
         self.previewView?.messageKind = self.currentMessageKind
         self.addSubview(self.previewView!)
 
