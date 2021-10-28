@@ -57,10 +57,11 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     
     nonisolated func onboardingView(_ controller: OnboardingViewController, didVerify user: User) {
         Task {
-            await self.finishFlow(with: ())
+            await self.presentPermissions()
         }
     }
 
+    @MainActor
     private func presentPermissions() {
         let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { [unowned self] result in

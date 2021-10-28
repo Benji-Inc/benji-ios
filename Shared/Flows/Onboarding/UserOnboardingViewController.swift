@@ -31,7 +31,7 @@ class UserOnboardingViewController: ViewController {
         }
 
         self.view.addSubview(self.bubbleView)
-        self.bubbleView.set(backgroundColor: .gray)
+        self.bubbleView.set(backgroundColor: .lightGray)
 
         self.bubbleView.addSubview(self.textView)
 

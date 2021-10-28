@@ -147,24 +147,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             case .success:
                 Task {
                     try await ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
+                    guard let user = User.current(), user.status == .active else { return }
+                    self.delegate.onboardingView(self, didVerify: user)
                 }
-
-                //self.current = .focus(self.focusVC)
             case .failure(_):
                 break
             }
         }
-
-//        self.focusVC.onDidComplete = { [unowned self] result in
-//            switch result {
-//            case .success(let status):
-//                if status == .authorized, let user = User.current() {
-//                    self.delegate.onboardingView(self, didVerify: user)
-//                }
-//            case .failure(_):
-//                break
-//            }
-//        }
 
         self.waitlistVC.$didShowUpgrade.mainSink { [weak self] (didShow) in
             guard let `self` = self, didShow else { return }

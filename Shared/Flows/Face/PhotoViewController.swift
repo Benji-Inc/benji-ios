@@ -42,7 +42,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         }
         vc.button.didSelect { [unowned self] in
             vc.dismiss(animated: true, completion: nil)
-            self.currentState = .scanEyesClosed
         }
         return vc
     }()
@@ -54,7 +53,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         }
         vc.button.didSelect { [unowned self] in
             vc.dismiss(animated: true, completion: nil)
-            self.currentState = .finish
         }
         return vc
     }()
@@ -213,7 +211,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 self.cameraVC.previewLayer.opacity = 1.0
             } completion: { _ in
                 Task {
-                    await Task.sleep(seconds: 1.5)
+                    await Task.sleep(seconds: 2.0)
                     self.currentState = .scanEyesOpen
                 }
             }
@@ -226,10 +224,13 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
             self.cameraVC.previewLayer.opacity = 0.5
         } completion: { completed in
-            UIView.animate(withDuration: 0.2, delay: 1.5, options: []) {
+            UIView.animate(withDuration: 0.2, delay: 0.0, options: []) {
                 self.cameraVC.previewLayer.opacity = 1.0
             } completion: { _ in
-                self.currentState = .scanEyesClosed
+                Task {
+                    await Task.sleep(seconds: 2.0)
+                    self.currentState = .scanEyesClosed
+                }
             }
         }
     }
@@ -279,19 +280,23 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         do {
             try await currentUser.saveToServer()
-
-            switch self.currentState {
-            case .captureEyesOpen:
-                self.present(self.smilingDisclosureVC, animated: true, completion: nil)
-                //self.currentState = .scanEyesClosed
-            case .captureEyesClosed:
-                self.present(self.focusDisclosureVC, animated: true, completion: nil)
-                //self.currentState = .finish
-            default:
-                break
+            Task.onMainActor {
+                self.presentDisclosure()
             }
         } catch {
             self.currentState = .error("There was an error uploading your photo.")
+        }
+    }
+
+    @MainActor
+    private func presentDisclosure() {
+        switch self.currentState {
+        case .captureEyesOpen:
+            self.present(self.smilingDisclosureVC, animated: true, completion: nil)
+        case .captureEyesClosed:
+            self.present(self.focusDisclosureVC, animated: true, completion: nil)
+        default:
+            break
         }
     }
 }
