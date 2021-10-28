@@ -50,7 +50,7 @@ class UserOnboardingViewController: ViewController {
         self.nameLabel.centerOnX()
         self.nameLabel.pinToSafeArea(.top, padding: 0)
 
-        self.avatarView.setSize(for: 80)
+        self.avatarView.setSize(for: 60)
         self.avatarView.centerOnX()
         self.avatarView.match(.top, to: .bottom, of: self.nameLabel, offset: Theme.contentOffset.half)
 

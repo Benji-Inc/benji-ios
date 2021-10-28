@@ -16,6 +16,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
 
     @Published var faceDetected = false
     @Published var eyesAreClosed = false
+    @Published var isSmiling = false
 
     override func captureOutput(_ output: AVCaptureOutput,
                                 didOutput sampleBuffer: CMSampleBuffer,
@@ -47,7 +48,6 @@ class FaceDetectionViewController: ImageCaptureViewController {
     override func photoOutput(_ output: AVCapturePhotoOutput,
                      didFinishProcessingPhoto photo: AVCapturePhoto,
                      error: Error?) {
-        //super.photoOutput(output, didFinishProcessingPhoto: photo, error: error)
 
         guard let connection = output.connection(with: .video) else { return }
         connection.automaticallyAdjustsVideoMirroring = true
@@ -65,8 +65,10 @@ class FaceDetectionViewController: ImageCaptureViewController {
 
         if let face = faces?.first as? CIFaceFeature {
             self.eyesAreClosed = face.leftEyeClosed && face.rightEyeClosed
+            self.isSmiling = face.hasSmile
         } else {
             self.eyesAreClosed = false
+            self.isSmiling = false 
         }
 
         self.didCapturePhoto?(image)

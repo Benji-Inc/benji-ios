@@ -72,7 +72,8 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
                 self.currentCenterVC = content.viewController
 
                 if let contentVC = self.currentCenterVC {
-                    self.addChild(viewController: contentVC, toView: self.view)
+                    self.addChild(contentVC)
+                    self.view.insertSubview(contentVC.view, belowSubview: self.nameLabel)
                 }
 
                 self.willUpdateContent()

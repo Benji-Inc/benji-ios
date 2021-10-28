@@ -139,6 +139,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
         }
 
+        self.photoVC.$currentState.mainSink { [unowned self] _ in
+            self.updateUI()
+        }.store(in: &self.cancellables)
+
         self.photoVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
@@ -242,7 +246,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getMessage() -> Localized {
-        super.willUpdateContent()
         guard let content = self.current else { return "" }
         return content.getDescription(with: self.reservationOwner)
     }

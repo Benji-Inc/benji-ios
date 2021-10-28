@@ -21,7 +21,7 @@ enum PhotoState {
     case captureEyesOpen
     case captureEyesClosed
     case permissions
-    case error
+    case error(String)
     case finish
 }
 
@@ -37,10 +37,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }()
 
     private let animationView = AnimationView.with(animation: .faceScan)
-    private let button = Button()
-    private let instructionLabel = Label(font: .smallBold, textColor: .textColor)
-    private let errorLabel = Label(font: .smallBold, textColor: .textColor)
-    private let gradientView = GradientView(with: [Color.darkGray.color.cgColor, Color.clear.color.cgColor], startPoint: .bottomCenter, endPoint: .topCenter)
+    //private let errorLabel = Label(font: .smallBold, textColor: .textColor)
+    //private let gradientView = GradientView(with: [Color.darkGray.color.cgColor, Color.clear.color.cgColor], startPoint: .bottomCenter, endPoint: .topCenter)
+
+    private var previousScanState: PhotoState = .scanEyesOpen
 
     @Published private(set) var currentState: PhotoState = .initial
 
@@ -53,49 +53,50 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animationView.alpha = 0
         self.addChild(viewController: self.cameraVC)
 
-        self.view.addSubview(self.errorLabel)
-        self.errorLabel.alpha = 0
-        self.errorLabel.textAlignment = .center
+        self.view.didSelect { [unowned self] in
 
-        self.view.addSubview(self.gradientView)
-
-        self.view.addSubview(self.instructionLabel)
-        self.instructionLabel.alpha = 0
-        self.instructionLabel.textAlignment = .center
-
-        self.view.addSubview(self.button)
-        self.button.didSelect { [unowned self] in
             switch self.currentState {
             case .initial:
                 self.currentState = .scanEyesOpen
-            default:
+            case .scanEyesOpen:
+                guard self.cameraVC.faceDetected else { return }
+                self.currentState = .captureEyesOpen
+            case .scanEyesClosed:
+                guard self.cameraVC.faceDetected else { return }
+                self.currentState = .captureEyesClosed
+            case .captureEyesOpen:
+                break
+            case .captureEyesClosed:
+                break
+            case .permissions:
+                break
+            case .error:
+                break
+            case .finish:
                 break
             }
         }
 
-        self.view.didSelect { [unowned self] in
-            guard self.cameraVC.faceDetected else { return }
-
-            if self.currentState == .scanEyesOpen {
-                self.currentState = .captureEyesOpen
-            } else if self.currentState == .scanEyesClosed {
-                self.currentState = .captureEyesClosed
-            }
-        }
-
         self.cameraVC.didCapturePhoto = { [unowned self] image in
-            if self.currentState == .captureEyesClosed {
+            switch self.currentState {
+            case .captureEyesClosed:
                 if self.cameraVC.eyesAreClosed {
                     Task {
                         await self.updateUser(with: image)
                     }
                 } else {
-                    self.handleEyesClosed()
+                    self.handleEyesNotClosed()
                 }
-            } else {
-                Task {
-                    await self.updateUser(with: image)
+            case .captureEyesOpen:
+                if self.cameraVC.isSmiling {
+                    Task {
+                        await self.updateUser(with: image)
+                    }
+                } else {
+                    self.handleNotSmiling()
                 }
+            default:
+                break
             }
         }
 
@@ -108,8 +109,12 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.cameraVC.$faceDetected
             .removeDuplicates()
             .mainSink(receiveValue: { [unowned self] (faceDetected) in
-                guard self.currentState == .scanEyesOpen || self.currentState == .scanEyesClosed else { return }
-                self.handleFace(isDetected: faceDetected)
+                switch self.currentState {
+                case .scanEyesOpen, .scanEyesClosed, .error(_):
+                    self.handleFace(isDetected: faceDetected)
+                default:
+                    break
+                }
             }).store(in: &self.cancellables)
     }
 
@@ -126,21 +131,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animationView.centerOnXAndY()
 
         self.cameraVC.view.expandToSuperviewSize()
-
-        self.button.setSize(with: self.view.width)
-        self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
-        self.button.centerOnX()
-
-        self.gradientView.height = self.view.height - self.button.top
-        self.gradientView.expandToSuperviewWidth()
-        self.gradientView.pin(.bottom)
-
-        self.errorLabel.setSize(withWidth: self.view.width - Theme.contentOffset.doubled)
-        self.errorLabel.centerOnXAndY()
-
-        self.instructionLabel.setSize(withWidth: self.view.width - Theme.contentOffset.doubled)
-        self.instructionLabel.centerOnX()
-        self.instructionLabel.centerY = self.gradientView.centerY
     }
 
     private func handle(state: PhotoState) {
@@ -150,6 +140,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 self.handleInitialState()
             }
         case .scanEyesOpen, .scanEyesClosed:
+            self.previousScanState = state
             self.handleScanState()
         case .captureEyesOpen, .captureEyesClosed:
             self.handleCaptureState()
@@ -168,12 +159,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private func handleInitialState() {
 
-        self.button.set(style: .normal(color: .lightGray, text: "Begin"))
-
         if self.animationView.alpha == 0 {
             UIView.animate(withDuration: Theme.animationDuration, animations: {
                 self.animationView.alpha = 1
-                self.button.alpha = 1
             }) { (completed) in
                 self.animationView.play()
             }
@@ -185,30 +173,41 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func handleFace(isDetected: Bool) {
-        self.errorLabel.setText("No face detected")
-        self.view.layoutNow()
+
+        if isDetected {
+            self.currentState = self.previousScanState
+        } else {
+            self.currentState = .error("Please show your face.")
+        }
 
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
-            self.errorLabel.alpha = isDetected ? 0.0 : 1.0
-            self.instructionLabel.alpha = isDetected ? 1.0 : 0.0
-            self.cameraVC.previewLayer.opacity = isDetected ? 1.0 : 0.5
+            self.cameraVC.previewLayer.opacity = isDetected ? 1.0 : 0.25
         } completion: { completed in
 
         }
     }
 
-    private func handleEyesClosed() {
-        self.errorLabel.setText("Please close your eyes")
-        self.view.layoutNow()
+    private func handleNotSmiling() {
+        self.currentState = .error("Please smile! 😀")
 
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
-            self.errorLabel.alpha = 1.0
-            self.instructionLabel.alpha = 0.0
             self.cameraVC.previewLayer.opacity = 0.5
         } completion: { completed in
             UIView.animate(withDuration: 0.2, delay: 1.5, options: []) {
-                self.errorLabel.alpha = 0.0
-                self.instructionLabel.alpha = 1.0
+                self.cameraVC.previewLayer.opacity = 1.0
+            } completion: { _ in
+                self.currentState = .scanEyesOpen
+            }
+        }
+    }
+
+    private func handleEyesNotClosed() {
+        self.currentState = .error("Please close your eyes")
+
+        UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
+            self.cameraVC.previewLayer.opacity = 0.5
+        } completion: { completed in
+            UIView.animate(withDuration: 0.2, delay: 1.5, options: []) {
                 self.cameraVC.previewLayer.opacity = 1.0
             } completion: { _ in
                 self.currentState = .scanEyesClosed
@@ -221,16 +220,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.cameraVC.begin()
         }
 
-        if self.currentState == .scanEyesOpen {
-            self.instructionLabel.setText("Tap to take photo")
-        } else if self.currentState == .scanEyesClosed {
-            self.instructionLabel.setText("Close your eyes and tap to take photo")
-        }
-
         UIView.animate(withDuration: 0.2, animations: {
-            self.button.alpha = 0
             self.animationView.alpha = 0
-            self.instructionLabel.alpha = 1
         }) { (completed) in
 
         }
@@ -238,21 +229,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     private func handleCaptureState() {
         self.cameraVC.capturePhoto()
-
-        UIView.animate(withDuration: 0.2) {
-            self.instructionLabel.alpha = 0.0
-        }
     }
 
     private func handleEyesClosedCaptureState() {
         self.cameraVC.capturePhoto()
-
-        self.button.set(style: .normal(color: .lightGray, text: "Continue"))
-
-        UIView.animate(withDuration: 0.2) {
-            self.button.alpha = 1.0
-            self.instructionLabel.alpha = 0.0
-        }
     }
 
     private func handlePermissionsState() {
@@ -265,7 +245,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
     @MainActor
     private func handleFinishState() async {
-        await self.button.handleEvent(status: .loading)
         self.cancellables.forEach { (cancellable) in
             cancellable.cancel()
         }
@@ -276,39 +255,44 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private func updateUser(with image: UIImage) async {
         guard let currentUser = User.current(), let data = image.previewData else { return }
 
-        if self.currentState == .captureEyesOpen {
+        switch self.currentState {
+        case .captureEyesOpen:
             let file = PFFileObject(name:"small_image.jpeg", data: data)
             currentUser.smallImage = file
-        } else if self.currentState == .captureEyesClosed {
+        case .captureEyesClosed:
             let file = PFFileObject(name:"focus_image.jpeg", data: data)
             currentUser.focusImage = file
+        default:
+            break
         }
-
-        await self.button.handleEvent(status: .loading)
 
         do {
             try await currentUser.saveToServer()
             self.scheduleToast(with: image)
-            await self.button.handleEvent(status: .complete)
 
-            if self.currentState == .captureEyesOpen {
+            switch self.currentState {
+            case .captureEyesOpen:
                 self.currentState = .scanEyesClosed
-            } else if self.currentState == .captureEyesClosed {
+            case .captureEyesClosed:
                 self.currentState = .finish
+            default:
+                break
             }
         } catch {
-            await self.button.handleEvent(status: .error("Error"))
-            self.currentState = .error
+            self.currentState = .error("There was an error uploading your photo.")
         }
     }
 
     private func scheduleToast(with image: UIImage) {
         let description: Localized
 
-        if self.currentState == .captureEyesOpen {
+        switch self.currentState {
+        case .captureEyesOpen:
             description = "You have successfully updated your profile image."
-        } else {
+        case .captureEyesClosed:
             description = "You have successfully updated your focus image."
+        default:
+            description = ""
         }
 
         let toast = ToastType.basic(identifier: UUID().uuidString,
