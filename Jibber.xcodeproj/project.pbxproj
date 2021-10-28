@@ -528,9 +528,6 @@
 		D679DE0C26821EE70054DCAF /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */; };
 		D679DE0D26821EE80054DCAF /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */; };
 		D679DE0E26821EE80054DCAF /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */; };
-		D679DE1626822FB70054DCAF /* FocusStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679DE1526822FB70054DCAF /* FocusStatusViewController.swift */; };
-		D679DE1726822FB70054DCAF /* FocusStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679DE1526822FB70054DCAF /* FocusStatusViewController.swift */; };
-		D679DE1826822FB70054DCAF /* FocusStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D679DE1526822FB70054DCAF /* FocusStatusViewController.swift */; };
 		D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67A82DA230CCE3D0076152B /* SplashViewController.swift */; };
 		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
@@ -1095,7 +1092,6 @@
 		D67934DA23DC011D00536B44 /* CharacterCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterCountView.swift; sourceTree = "<group>"; };
 		D67934DE23DDFC4200536B44 /* PFInstallation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFInstallation+Extensions.swift"; sourceTree = "<group>"; };
 		D67934E423DE66FE00536B44 /* PushPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPayload.swift; sourceTree = "<group>"; };
-		D679DE1526822FB70054DCAF /* FocusStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusStatusViewController.swift; sourceTree = "<group>"; };
 		D67A82DA230CCE3D0076152B /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
@@ -1969,7 +1965,6 @@
 			isa = PBXGroup;
 			children = (
 				D67896B122FF67650059BA75 /* CodeViewController.swift */,
-				D679DE1526822FB70054DCAF /* FocusStatusViewController.swift */,
 				D67896BC23025FEC0059BA75 /* NameViewController.swift */,
 				D64DD8AF23CE3E7F0039DC5A /* OnboardingContent.swift */,
 				D67896B322FF75640059BA75 /* OnboardingCoordinator.swift */,
@@ -2791,7 +2786,6 @@
 				D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */,
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,
 				8015CA7726F3D907000F3C60 /* MessageCell.swift in Sources */,
-				D679DE1626822FB70054DCAF /* FocusStatusViewController.swift in Sources */,
 				D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */,
 				D678EC2626F534430071DB0D /* CircleGroup.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
@@ -3122,7 +3116,6 @@
 				D63DB21F25E998FC00F6B323 /* CGRect+Extensions.swift in Sources */,
 				D6B95AF5272324BD00FBE66A /* UserStore.swift in Sources */,
 				D63DB22025E998FC00F6B323 /* Character+Extensions.swift in Sources */,
-				D679DE1826822FB70054DCAF /* FocusStatusViewController.swift in Sources */,
 				D63DB26925E9997800F6B323 /* UserNotificationManager.swift in Sources */,
 				D63D71B725F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
 				D63DB29A25E999B200F6B323 /* TextView.swift in Sources */,
@@ -3300,7 +3293,6 @@
 				D65519622589127A00B901E4 /* PushPayload.swift in Sources */,
 				D6551A4125895E9500B901E4 /* TextInputViewController.swift in Sources */,
 				D655195D2589126800B901E4 /* User.swift in Sources */,
-				D679DE1726822FB70054DCAF /* FocusStatusViewController.swift in Sources */,
 				D667C08E25E559D500BED8B7 /* KeyboardManager.swift in Sources */,
 				D68C08212729D3DE0033C8AE /* Lorem.swift in Sources */,
 				D6551A3B25895E7E00B901E4 /* NavigationBarViewController.swift in Sources */,

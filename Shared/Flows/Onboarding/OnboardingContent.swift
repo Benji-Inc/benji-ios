@@ -18,7 +18,6 @@ enum OnboardingContent: Switchable {
     case name(NameViewController)
     case waitlist(WaitlistViewController)
     case photo(PhotoViewController)
-    case focus(FocusStatusViewController)
 
     var viewController: UIViewController & Sizeable {
         switch self {
@@ -33,8 +32,6 @@ enum OnboardingContent: Switchable {
         case .waitlist(let vc):
             return vc
         case .photo(let vc):
-            return vc
-        case .focus(let vc):
             return vc
         }
     }
@@ -94,17 +91,24 @@ enum OnboardingContent: Switchable {
             #endif
 
         case .photo(let vc):
-            if vc.currentState == .initial {
+            switch vc.currentState {
+            case .initial:
                 return LocalizedString(id: "",
                                        arguments: [],
                                        default: "To ensure everyone is who they say they are we require a photo. No 🤖's!")
-            } else {
-                return LocalizedString.empty
+            case .scanEyesOpen:
+                return ""
+            case .scanEyesClosed:
+                return ""
+            case .captureEyesOpen:
+                return ""
+            case .captureEyesClosed:
+                return ""
+            case .error:
+                return ""
+            case .finish:
+                return ""
             }
-        case .focus(_):
-            return LocalizedString(id: "",
-                                   arguments: [],
-                                   default: "Jibber doesn't make the trivial urgent, by letting others know you're focused.")
         }
     }
 }

@@ -33,7 +33,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var nameVC = NameViewController()
     lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
-    lazy var focusVC = FocusStatusViewController()
 
     let loadingBlur = BlurView()
     let blurEffect = UIBlurEffect(style: .systemMaterial)
@@ -146,22 +145,22 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                     try await ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
                 }
 
-                self.current = .focus(self.focusVC)
+                //self.current = .focus(self.focusVC)
             case .failure(_):
                 break
             }
         }
 
-        self.focusVC.onDidComplete = { [unowned self] result in
-            switch result {
-            case .success(let status):
-                if status == .authorized, let user = User.current() {
-                    self.delegate.onboardingView(self, didVerify: user)
-                }
-            case .failure(_):
-                break
-            }
-        }
+//        self.focusVC.onDidComplete = { [unowned self] result in
+//            switch result {
+//            case .success(let status):
+//                if status == .authorized, let user = User.current() {
+//                    self.delegate.onboardingView(self, didVerify: user)
+//                }
+//            case .failure(_):
+//                break
+//            }
+//        }
 
         self.waitlistVC.$didShowUpgrade.mainSink { [weak self] (didShow) in
             guard let `self` = self, didShow else { return }
@@ -223,7 +222,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             #else
             if current.fullName.isEmpty {
                 return .name(self.nameVC)
-            } else if current.smallImage.isNil {
+            } else if current.smallImage.isNil || current.focusImage.isNil {
                 return .photo(self.photoVC)
             } else {
                 return .name(self.nameVC)
