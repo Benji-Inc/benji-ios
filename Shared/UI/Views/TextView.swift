@@ -47,7 +47,6 @@ class TextView: UITextView {
     }
 
     func initializeViews() {
-
         let styleAttributes = StringStyle(font: .smallBold, color: .white).attributes
         self.typingAttributes = styleAttributes
         self.contentMode = .redraw
