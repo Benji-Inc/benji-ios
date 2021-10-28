@@ -20,6 +20,7 @@ enum PhotoState {
     case scanEyesClosed
     case captureEyesOpen
     case captureEyesClosed
+    case permissions
     case error
     case finish
 }
@@ -153,6 +154,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.handleScanState()
         case .captureEyesOpen, .captureEyesClosed:
             self.handleCaptureState()
+        case .permissions:
+            self.handlePermissionsState()
         case .error:
             self.handleErrorState()
         case .finish:
@@ -251,6 +254,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.button.alpha = 1.0
             self.instructionLabel.alpha = 0.0
         }
+    }
+
+    private func handlePermissionsState() {
+
     }
 
     private func handleErrorState() {

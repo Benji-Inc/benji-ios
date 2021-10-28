@@ -95,15 +95,17 @@ enum OnboardingContent: Switchable {
             case .initial:
                 return LocalizedString(id: "",
                                        arguments: [],
-                                       default: "To ensure everyone is who they say they are we require a photo. No 🤖's!")
+                                       default: "Tap the screen so I can see you smile.")
             case .scanEyesOpen:
-                return ""
+                return "Now smile and tap the screen."
             case .scanEyesClosed:
-                return ""
+                return "Close your eyes and tap again."
             case .captureEyesOpen:
-                return ""
+                return "Good one!"
             case .captureEyesClosed:
-                return ""
+                return "Perfect!"
+            case .permissions:
+                return "Now turn these on."
             case .error:
                 return ""
             case .finish:
