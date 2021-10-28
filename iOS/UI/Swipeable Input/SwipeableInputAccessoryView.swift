@@ -349,7 +349,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.previewView = PreviewMessageView()
         self.previewView?.frame = self.inputContainerView.frame
         self.previewView?.bubbleColor = self.currentContext.color.color
-        self.previewView?.borderColor = Color.white.color
         self.previewView?.messageKind = self.currentMessageKind
         self.addSubview(self.previewView!)
 
@@ -402,7 +401,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
                 guard let initialOrigin = self.initialPreviewOrigin else { return }
                 self.previewView?.origin = initialOrigin
                 self.previewView?.bubbleColor = .clear
-                self.previewView?.borderColor = .clear
             } completion: { completed in
                 self.textView.alpha = 1
                 self.attachmentView.alpha = 1
