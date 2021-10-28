@@ -30,6 +30,11 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
 
 class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGestureRecognizerDelegate {
 
+    // TODO: Restore
+    func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
+
+    }
+
     enum SendPosition {
         case left
         case middle
@@ -41,15 +46,11 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
     var alertAnimator: UIViewPropertyAnimator?
     var selectionFeedback = UIImpactFeedbackGenerator(style: .rigid)
-    var borderColor: CGColor? {
-        didSet {
-            self.inputContainerView.layer.borderColor = self.borderColor ?? Color.darkGray.color.cgColor
-        }
-    }
 
     let activityBar = InputActivityBar()
-    let inputContainerView = View()
-    let attachmentView = AttachmentView()
+    let inputContainerView = SpeechBubbleView(orientation: .down,
+                                              bubbleColor: nil,
+                                              borderColor: Color.white.color)
     /// A blue view placed behind the text input field.
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
     /// Text view for users to input their message.
@@ -58,42 +59,18 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     let overlayButton = UIButton()
     var cancellables = Set<AnyCancellable>()
 
-    var currentContext: MessageContext = .passive {
-        didSet {
-            self.borderColor = self.currentContext.color.color.cgColor
-        }
-    }
+    var currentContext: MessageContext = .passive
     
     var editableMessage: Messageable?
     var currentMessageKind: MessageKind = .text(String())
     private var sendable: SendableObject?
 
-    private(set) var attachmentHeightAnchor: NSLayoutConstraint?
-
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return CGSize(width: size.width, height: SwipeableInputAccessoryView.preferredHeight)
-    }
-
     override var intrinsicContentSize: CGSize {
-        var newSize = self.bounds.size
+        var contentHeight: CGFloat = self.textView.bounds.height + self.inputContainerView.tailHeight
 
-        if self.textView.bounds.size.height > 0.0 {
-            newSize.height = self.textView.bounds.size.height + 20.0 + InputActivityBar.height
-        }
+        contentHeight += 43
 
-        if let constraint = self.attachmentHeightAnchor, constraint.constant > 0 {
-            newSize.height += self.attachmentView.height + 10
-        }
-
-        if newSize.height < ConversationInputAccessoryView.preferredHeight || newSize.height > 120.0 {
-            newSize.height = ConversationInputAccessoryView.preferredHeight
-        }
-
-        if newSize.height > ConversationInputAccessoryView.maxHeight {
-            newSize.height = ConversationInputAccessoryView.maxHeight
-        }
-
-        return newSize
+        return CGSize(width: 0, height: contentHeight)
     }
 
     unowned let delegate: SwipeableInputAccessoryViewDelegate
@@ -110,7 +87,8 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.set(backgroundColor: .clear)
+        self.backgroundColor = .red
+        self.autoresizingMask = .flexibleHeight
 
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .autoReverse
@@ -118,23 +96,18 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.addSubview(self.activityBar)
 
         self.addSubview(self.inputContainerView)
-        self.inputContainerView.set(backgroundColor: .clear)
 
-        self.inputContainerView.addSubview(self.blurView)
+        self.inputContainerView.contentView.addSubview(self.blurView)
 
-        self.inputContainerView.addSubview(self.animationView)
+        self.inputContainerView.contentView.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
 
-        self.inputContainerView.addSubview(self.textView)
-        self.inputContainerView.addSubview(self.attachmentView)
-        self.inputContainerView.addSubview(self.overlayButton)
+        self.textView.backgroundColor = .purple
 
-        self.inputContainerView.layer.masksToBounds = true
-        self.inputContainerView.layer.borderWidth = Theme.borderWidth
-        self.inputContainerView.layer.cornerRadius = Theme.cornerRadius
+        self.inputContainerView.contentView.addSubview(self.textView)
+        self.inputContainerView.contentView.addSubview(self.overlayButton)
 
-        self.setupConstraints()
         self.setupGestures()
         self.setupHandlers()
     }
@@ -142,47 +115,32 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        let horizontalOffset: CGFloat = Theme.contentOffset
+
+//        self.activityBar.pin(.left, padding: horizontalOffset)
+//        self.activityBar.pin(.top)
+//        self.activityBar.expand(.right, padding: horizontalOffset)
+//        self.activityBar.height = InputActivityBar.height
+
+        self.inputContainerView.pin(.left, padding: horizontalOffset)
+        self.inputContainerView.pin(.top)
+        self.inputContainerView.expand(.right, padding: horizontalOffset)
+        self.inputContainerView.expand(.bottom, padding: self.safeAreaInsets.bottom + 10)
+
+//        self.textView.expandToSuperviewSize()
         self.blurView.expandToSuperviewSize()
+
         self.overlayButton.expandToSuperviewSize()
 
         self.animationView.size = CGSize(width: 18, height: 18)
-        self.animationView.match(.right, to: .right, of: self.inputContainerView, offset: Theme.contentOffset)
+        self.animationView.match(.right,
+                                 to: .right,
+                                 of: self.inputContainerView,
+                                 offset: Theme.contentOffset)
         self.animationView.centerOnY()
     }
 
     // MARK: PRIVATE
-
-    private func setupConstraints() {
-        self.translatesAutoresizingMaskIntoConstraints = false
-
-        let guide = self.layoutMarginsGuide
-        let horizontalOffset: CGFloat = Theme.contentOffset
-
-        self.activityBar.translatesAutoresizingMaskIntoConstraints = false
-        self.activityBar.topAnchor.constraint(equalTo: guide.topAnchor).isActive = true
-        self.activityBar.heightAnchor.constraint(equalToConstant: InputActivityBar.height).isActive = true
-        self.activityBar.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -horizontalOffset).isActive = true
-        self.activityBar.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: horizontalOffset).isActive = true
-
-        self.inputContainerView.translatesAutoresizingMaskIntoConstraints = false
-        self.inputContainerView.topAnchor.constraint(equalTo: self.activityBar.bottomAnchor).isActive = true
-        self.inputContainerView.bottomAnchor.constraint(equalTo: guide.bottomAnchor, constant: -10).isActive = true
-
-        self.inputContainerView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -horizontalOffset).isActive = true
-        self.inputContainerView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: horizontalOffset).isActive = true
-
-        self.attachmentView.leadingAnchor.constraint(equalTo: self.inputContainerView.leadingAnchor).isActive = true
-        self.attachmentView.trailingAnchor.constraint(equalTo: self.inputContainerView.trailingAnchor).isActive = true
-        self.attachmentView.topAnchor.constraint(equalTo: self.inputContainerView.topAnchor).isActive = true
-        self.attachmentHeightAnchor = NSLayoutConstraint(item: self.attachmentView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
-        self.attachmentHeightAnchor?.isActive = true
-
-        self.textView.leadingAnchor.constraint(equalTo: self.inputContainerView.leadingAnchor).isActive = true
-        self.textView.trailingAnchor.constraint(equalTo: self.inputContainerView.trailingAnchor).isActive = true
-        self.textView.topAnchor.constraint(equalTo: self.attachmentView.bottomAnchor).isActive = true
-        self.textView.bottomAnchor.constraint(equalTo: self.inputContainerView.bottomAnchor).isActive = true
-        self.textView.setContentHuggingPriority(.defaultHigh, for: .vertical)
-    }
 
     private func setupHandlers() {
         KeyboardManager.shared.$currentEvent
@@ -220,10 +178,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.textView.confirmationView.button.didSelect { [unowned self] in
             self.didPressAlertCancel()
         }
-
-        self.attachmentView.$messageKind.mainSink { (kind) in
-            self.attachentViewDidUpdate(kind: kind)
-        }.store(in: &self.cancellables)
     }
 
     // MARK: OVERRIDES
@@ -234,11 +188,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         }
         panRecognizer.delegate = self
         self.overlayButton.addGestureRecognizer(panRecognizer)
-    }
-
-    func attachentViewDidUpdate(kind: MessageKind?) {
-        self.attachmentHeightAnchor?.constant = kind.isNil ? 0 : 100
-        self.layoutNow()
     }
 
     func didPressAlertCancel() {}
@@ -260,6 +209,8 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         default:
             break
         }
+
+        self.invalidateIntrinsicContentSize()
     }
 
     func getDataTypes(from text: String) -> [NSTextCheckingResult]? {
@@ -289,13 +240,8 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     func resetInputViews() {
         self.textView.reset()
         self.textView.alpha = 1
-        self.attachmentView.alpha = 1
-        self.attachmentView.configure(with: nil)
-        self.attachmentView.messageKind = nil
         self.textView.countView.isHidden = true
     }
-
-    func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {}
 
     // MARK: - Pan Gesture Handling
 
@@ -342,13 +288,12 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
                                     previousMessage: self.editableMessage)
         self.sendable = object
 
-        self.attachmentView.alpha = 0
         self.textView.alpha = 0
 
         // Initialize the preview view for the user to drag up the screen.
-        self.previewView = PreviewMessageView()
+        self.previewView = PreviewMessageView(orientation: .down,
+                                              bubbleColor: self.currentContext.color.color)
         self.previewView?.frame = self.inputContainerView.frame
-        self.previewView?.bubbleColor = self.currentContext.color.color
         self.previewView?.messageKind = self.currentMessageKind
         self.addSubview(self.previewView!)
 
@@ -403,7 +348,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
                 self.previewView?.bubbleColor = .clear
             } completion: { completed in
                 self.textView.alpha = 1
-                self.attachmentView.alpha = 1
                 self.previewView?.removeFromSuperview()
             }
         }
@@ -412,7 +356,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
     private func handlePanFailed() {
         self.textView.alpha = 1
-        self.attachmentView.alpha = 1
         self.previewView?.removeFromSuperview()
         self.delegate.swipeableInputAccessoryDidFinishSwipe(self)
     }

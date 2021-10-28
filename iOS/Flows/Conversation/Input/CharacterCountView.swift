@@ -27,7 +27,7 @@ class CharacterCountView: View {
         self.layer.cornerRadius = 4
     }
 
-    func udpate(with count: Int, max: Int) {
+    func update(with count: Int, max: Int) {
         if count >= max {
             self.isHidden = false
             self.label.setText(self.getText(from: count, max: max))

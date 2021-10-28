@@ -20,13 +20,8 @@ class PreviewMessageView: SpeechBubbleView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.layer.cornerRadius = Theme.cornerRadius
-        self.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMinYCorner]
-
-        self.addSubview(self.textView)
-        self.addSubview(self.imageView)
-
-        self.imageView.clipsToBounds = true
+        self.contentView.addSubview(self.textView)
+        self.contentView.addSubview(self.imageView)
 
         self.$messageKind.mainSink { (kind) in
             guard let messageKind = kind else { return }
@@ -65,9 +60,8 @@ class PreviewMessageView: SpeechBubbleView {
         self.imageView.height = self.imageView.displayable.isNil ? 0 : 100
         self.imageView.centerOnX()
         
-        self.textView.width = self.width
-        self.textView.height = self.height - self.imageView.height
-        self.textView.pin(.left)
+        self.textView.expandToSuperviewWidth()
+        self.textView.height = self.contentView.height - self.imageView.height
         self.textView.match(.top, to: .bottom, of: self.imageView)
     }
 }

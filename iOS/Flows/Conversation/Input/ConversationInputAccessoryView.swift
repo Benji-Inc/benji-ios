@@ -17,13 +17,6 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
 
     let alertProgressView = AlertProgressView()
 
-    override var borderColor: CGColor? {
-        didSet {
-            self.inputContainerView.layer.borderColor
-            = self.borderColor ?? self.currentContext.color.color.cgColor
-        }
-    }
-
     override func initializeSubviews() {
         super.initializeSubviews()
 
@@ -53,13 +46,6 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
     }
 
     // MARK: OVERRIDES
-
-    override func attachentViewDidUpdate(kind: MessageKind?) {
-        super.attachentViewDidUpdate(kind: kind)
-
-        self.currentMessageKind = kind ?? .text(String())
-        self.textView.setPlaceholder(for: self.currentMessageKind)
-    }
 
     override func updateInputType() {
         super.updateInputType()
@@ -95,13 +81,6 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
 //            // progress is greater that 0 and input type is attachments
 //            self.attachmentView.messageKind = nil
 //        }
-    }
-
-    override func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
-        super.attachmentView(controller, didSelect: attachment)
-
-        self.attachmentView.configure(with: attachment)
-        self.updateInputType() // Needs to be called after configure
     }
 
     override func didPressAlertCancel() {

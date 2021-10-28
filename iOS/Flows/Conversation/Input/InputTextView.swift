@@ -44,7 +44,6 @@ class InputTextView: ExpandingTextView {
     }
 
     func updateInputView(type: InputViewType, becomeFirstResponder: Bool = true) {
-
         defer {
             if becomeFirstResponder, !self.isFirstResponder {
                 self.becomeFirstResponder()
@@ -73,7 +72,7 @@ class InputTextView: ExpandingTextView {
         super.textDidChange()
 
         self.inputText = self.text
-        self.countView.udpate(with: self.text.count, max: self.maxLength)
+        self.countView.update(with: self.text.count, max: self.maxLength)
     }
 
     override func layoutSubviews() {

@@ -26,8 +26,6 @@ class ExpandingTextView: TextView {
         self.textContainerInset.right = 10
         self.textContainerInset.top = 14
         self.textContainerInset.bottom = 12
-
-        self.set(backgroundColor: .clear)
     }
 
     func setPlaceholder(for avatars: [Avatar]) {
