@@ -9,6 +9,9 @@
 import Foundation
 import UIKit
 
+/// A view that has a rounded rectangular "speech bubble" background.
+/// The bubble has two parts: The bubble itself, and a triangular "tail" positioned on one of four sides.
+/// Subviews should be added to the contentView property.
 class SpeechBubbleView: View {
 
     enum TailOrientation {
@@ -35,6 +38,8 @@ class SpeechBubbleView: View {
             self.bubbleLayer.fillColor = newValue?.cgColor
         }
     }
+
+    /// The color of the border around the speech bubble.
     var borderColor: UIColor? {
         get {
             guard let cgColor = self.bubbleLayer.strokeColor else { return nil }
@@ -45,80 +50,108 @@ class SpeechBubbleView: View {
         }
     }
 
+    /// The distance from the base of the tail to the point.
+    var tailHeight: CGFloat = 10 {
+        didSet { self.setNeedsLayout() }
+    }
+    /// The length of the base of the tail. In other words, side of the tail flush with bubble.
+    var tailBaseLength: CGFloat = 8.6 {
+        didSet { self.setNeedsLayout() }
+    }
+    /// Describes how much bubble layer needs to be pushed in to make room for the tail.
+    private var bubbleInsets: UIEdgeInsets {
+        return UIEdgeInsets(top: self.orientation == .up ? self.tailHeight : 0,
+                            left: self.orientation == .left ? self.tailHeight : 0,
+                            bottom: self.orientation == .down ? self.height - self.tailHeight : self.height,
+                            right: self.orientation == .right ? self.width - self.tailHeight : self.width)
+    }
+
+    /// A view to contain subviews you want positioned inside the bubble. This view matches the frame of the bubble, excluding the tail.
+    let contentView = View()
+    /// The layer for drawing the speech bubble background.
     private let bubbleLayer = CAShapeLayer()
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.layer.addSublayer(self.bubbleLayer)
+        self.bubbleLayer.fillColor = UIColor.gray.cgColor
         self.bubbleLayer.lineWidth = 2
+
+        self.addSubview(self.contentView)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        logDebug("hello")
-        let path = CGMutablePath()
+        self.updateBubblePath()
+
+        let bubbleInsets = self.bubbleInsets
+        // Match the content view to the area of the bubble layer.
+        self.contentView.left = bubbleInsets.left
+        self.contentView.top = bubbleInsets.top
+        self.contentView.expand(.right, to: bubbleInsets.right)
+        self.contentView.expand(.bottom, to: bubbleInsets.bottom)
+    }
+
+    /// Draws a path for the bubble and applies it to the bubble layer.
+    private func updateBubblePath() {
         let cornerRadius: CGFloat = Theme.cornerRadius
+        let insets = self.bubbleInsets
+        let tailBaseLength = self.tailBaseLength
 
-        let triangleHeight: CGFloat = 10
-        let triangleSide: CGFloat = 8.6
-
-        let topSide: CGFloat = self.orientation == .up ? triangleHeight : 0
-        let bottomSide: CGFloat = self.orientation == .down ? self.height - triangleHeight : self.height
-        let leftSide: CGFloat = self.orientation == .left ? triangleHeight : 0
-        let rightSide: CGFloat = self.orientation == .right ? self.width - triangleHeight : self.width
+        let path = CGMutablePath()
 
         // Top left corner
-        path.move(to: CGPoint(x: leftSide, y: topSide + cornerRadius))
-        path.addArc(tangent1End: CGPoint(x: leftSide, y: topSide),
-                    tangent2End: CGPoint(x: leftSide + cornerRadius, y: topSide),
+        path.move(to: CGPoint(x: insets.left, y: insets.top + cornerRadius))
+        path.addArc(tangent1End: CGPoint(x: insets.left, y: insets.top),
+                    tangent2End: CGPoint(x: insets.left + cornerRadius, y: insets.top),
                     radius: cornerRadius)
 
-        // Up facing triangle
+        // Up facing tail
         if self.orientation == .up {
-            path.addLine(to: CGPoint(x: self.halfWidth - triangleSide.half, y: topSide))
+            path.addLine(to: CGPoint(x: self.halfWidth - tailBaseLength.half, y: insets.top))
             path.addLine(to: CGPoint(x: self.halfWidth, y: 0))
-            path.addLine(to: CGPoint(x: self.halfWidth + triangleSide.half, y: topSide))
+            path.addLine(to: CGPoint(x: self.halfWidth + tailBaseLength.half, y: insets.top))
         }
 
         // Top right corner
-        path.addLine(to: CGPoint(x: rightSide - cornerRadius, y: topSide))
-        path.addArc(tangent1End: CGPoint(x: rightSide, y: topSide),
-                    tangent2End: CGPoint(x: rightSide, y: topSide + cornerRadius),
+        path.addLine(to: CGPoint(x: insets.right - cornerRadius, y: insets.top))
+        path.addArc(tangent1End: CGPoint(x: insets.right, y: insets.top),
+                    tangent2End: CGPoint(x: insets.right, y: insets.top + cornerRadius),
                     radius: cornerRadius)
 
-        // Right facing triangle
+        // Right facing tail
         if self.orientation == .right {
-            path.addLine(to: CGPoint(x: rightSide, y: self.halfHeight - triangleSide.half))
+            path.addLine(to: CGPoint(x: insets.right, y: self.halfHeight - tailBaseLength.half))
             path.addLine(to: CGPoint(x: self.width, y: self.halfHeight))
-            path.addLine(to: CGPoint(x: rightSide, y: self.halfHeight + triangleSide.half))
+            path.addLine(to: CGPoint(x: insets.right, y: self.halfHeight + tailBaseLength.half))
         }
 
         // Bottom right corner
-        path.addLine(to: CGPoint(x: rightSide, y: bottomSide - cornerRadius))
-        path.addArc(tangent1End: CGPoint(x: rightSide, y: bottomSide),
-                    tangent2End: CGPoint(x: rightSide - cornerRadius, y: bottomSide),
+        path.addLine(to: CGPoint(x: insets.right, y: insets.bottom - cornerRadius))
+        path.addArc(tangent1End: CGPoint(x: insets.right, y: insets.bottom),
+                    tangent2End: CGPoint(x: insets.right - cornerRadius, y: insets.bottom),
                     radius: cornerRadius)
 
-        // Down facing triangle
+        // Down facing tail
         if self.orientation == .down {
-            path.addLine(to: CGPoint(x: self.halfWidth + triangleSide.half, y: bottomSide))
+            path.addLine(to: CGPoint(x: self.halfWidth + tailBaseLength.half, y: insets.bottom))
             path.addLine(to: CGPoint(x: self.halfWidth, y: self.height))
-            path.addLine(to: CGPoint(x: self.halfWidth - triangleSide.half, y: bottomSide))
+            path.addLine(to: CGPoint(x: self.halfWidth - tailBaseLength.half, y: insets.bottom))
         }
 
         // Bottom left corner
-        path.addLine(to: CGPoint(x: leftSide + cornerRadius, y: bottomSide))
-        path.addArc(tangent1End: CGPoint(x: leftSide, y: bottomSide),
-                    tangent2End: CGPoint(x: leftSide, y: bottomSide - cornerRadius),
+        path.addLine(to: CGPoint(x: insets.left + cornerRadius, y: insets.bottom))
+        path.addArc(tangent1End: CGPoint(x: insets.left, y: insets.bottom),
+                    tangent2End: CGPoint(x: insets.left, y: insets.bottom - cornerRadius),
                     radius: cornerRadius)
 
-        // Left facing triangle
+        // Left facing tail
         if self.orientation == .left {
-            path.addLine(to: CGPoint(x: leftSide, y: self.halfHeight + triangleSide.half))
+            path.addLine(to: CGPoint(x: insets.left, y: self.halfHeight + tailBaseLength.half))
             path.addLine(to: CGPoint(x: 0, y: self.halfHeight))
-            path.addLine(to: CGPoint(x: leftSide, y: self.halfHeight - triangleSide.half))
+            path.addLine(to: CGPoint(x: insets.left, y: self.halfHeight - tailBaseLength.half))
         }
 
         path.closeSubpath()
