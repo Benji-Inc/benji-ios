@@ -123,8 +123,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         super.viewDidLayoutSubviews()
 
         self.animationView.size = CGSize(width: 140, height: 140)
-        self.animationView.centerY = self.view.halfHeight * 0.8
-        self.animationView.centerOnX()
+        self.animationView.centerOnXAndY()
 
         self.cameraVC.view.expandToSuperviewSize()
 

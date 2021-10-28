@@ -48,7 +48,7 @@ class UserOnboardingViewController: ViewController {
 
         self.nameLabel.setSize(withWidth: self.view.width)
         self.nameLabel.centerOnX()
-        self.nameLabel.pinToSafeArea(.top, padding: Theme.contentOffset)
+        self.nameLabel.pinToSafeArea(.top, padding: 0)
 
         self.avatarView.setSize(for: 80)
         self.avatarView.centerOnX()
@@ -92,11 +92,11 @@ class UserMessageView: TextView {
     func set(text: Localized) {
         let textColor: Color = .white
         let attributedString = AttributedString(text,
-                                                fontType: .regularBold,
+                                                fontType: .small,
                                                 color: textColor)
 
         self.set(attributed: attributedString,
-                 alignment: .left,
+                 alignment: .center,
                  lineCount: 0,
                  lineBreakMode: .byWordWrapping,
                  stringCasing: .unchanged,
@@ -105,6 +105,7 @@ class UserMessageView: TextView {
 
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 2
+        style.alignment = .center
 
         self.addTextAttributes([NSAttributedString.Key.paragraphStyle: style])
     }
