@@ -38,10 +38,11 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private lazy var smilingDisclosureVC: FaceDisclosureViewController = {
         let vc = FaceDisclosureViewController(with: .smiling)
         vc.dismissHandlers.append { [unowned self] in
-            // do something
+            self.currentState = .scanEyesClosed
         }
         vc.button.didSelect { [unowned self] in
-            // do something
+            vc.dismiss(animated: true, completion: nil)
+            self.currentState = .scanEyesClosed
         }
         return vc
     }()
@@ -49,10 +50,11 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private lazy var focusDisclosureVC: FaceDisclosureViewController = {
         let vc = FaceDisclosureViewController(with: .eyesClosed)
         vc.dismissHandlers.append { [unowned self] in
-            // do something
+            self.currentState = .finish
         }
         vc.button.didSelect { [unowned self] in
-            // do something
+            vc.dismiss(animated: true, completion: nil)
+            self.currentState = .finish
         }
         return vc
     }()
@@ -207,10 +209,13 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
             self.cameraVC.previewLayer.opacity = 0.5
         } completion: { completed in
-            UIView.animate(withDuration: 0.2, delay: 1.5, options: []) {
+            UIView.animate(withDuration: 0.2, delay: 0.0, options: []) {
                 self.cameraVC.previewLayer.opacity = 1.0
             } completion: { _ in
-                self.currentState = .scanEyesOpen
+                Task {
+                    await Task.sleep(seconds: 1.5)
+                    self.currentState = .scanEyesOpen
+                }
             }
         }
     }
@@ -274,41 +279,19 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         do {
             try await currentUser.saveToServer()
-            self.scheduleToast(with: image)
 
             switch self.currentState {
             case .captureEyesOpen:
-                self.currentState = .scanEyesClosed
+                self.present(self.smilingDisclosureVC, animated: true, completion: nil)
+                //self.currentState = .scanEyesClosed
             case .captureEyesClosed:
-                self.currentState = .finish
+                self.present(self.focusDisclosureVC, animated: true, completion: nil)
+                //self.currentState = .finish
             default:
                 break
             }
         } catch {
             self.currentState = .error("There was an error uploading your photo.")
-        }
-    }
-
-    private func scheduleToast(with image: UIImage) {
-        let description: Localized
-
-        switch self.currentState {
-        case .captureEyesOpen:
-            description = "You have successfully updated your profile image."
-        case .captureEyesClosed:
-            description = "You have successfully updated your focus image."
-        default:
-            description = ""
-        }
-
-        let toast = ToastType.basic(identifier: UUID().uuidString,
-                                    displayable: image,
-                                    title: "Success",
-                                    description: description,
-                                    deepLink: nil)
-
-        Task {
-            await ToastScheduler.shared.schedule(toastType: toast)
         }
     }
 }
