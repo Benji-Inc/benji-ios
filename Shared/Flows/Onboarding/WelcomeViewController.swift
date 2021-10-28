@@ -67,11 +67,11 @@ class WelcomeViewController: TextInputViewController<Void> {
         super.viewDidLayoutSubviews()
 
         self.reservationButton.setSize(with: self.view.width)
-        self.reservationButton.pinToSafeArea(.bottom, padding: Theme.contentOffset.doubled)
+        self.reservationButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
         self.reservationButton.centerOnX()
 
         self.signupButton.setSize(with: self.view.width)
-        self.signupButton.match(.bottom, to: .top, of: self.reservationButton, offset: -10)
+        self.signupButton.match(.bottom, to: .top, of: self.reservationButton, offset: -Theme.contentOffset.half)
         self.signupButton.centerOnX()
     }
 

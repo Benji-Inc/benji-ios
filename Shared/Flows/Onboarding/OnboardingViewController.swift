@@ -36,6 +36,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     let loadingBlur = BlurView()
     let blurEffect = UIBlurEffect(style: .systemMaterial)
+    
     let loadingAnimationView = AnimationView()
     
     private let confettiView = ConfettiView()
@@ -74,7 +75,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingAnimationView.loopMode = .loop
         self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
 
-        self.scrollView.insertSubview(self.confettiView, aboveSubview: self.blurView)
+        self.view.insertSubview(self.confettiView, aboveSubview: self.blurView)
 
         self.welcomeVC.$state.mainSink { (state) in
             switch state {
@@ -201,6 +202,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
             self.reservationOwner = user
             self.avatarView.set(avatar: user)
+            self.nameLabel.setText(user.givenName.capitalized)
             self.avatarView.isHidden = false
             self.updateUI()
             self.view.layoutNow()
