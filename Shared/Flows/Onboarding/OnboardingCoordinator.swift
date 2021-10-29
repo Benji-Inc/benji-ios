@@ -10,6 +10,7 @@ import Foundation
 import PhoneNumberKit
 import Parse
 import Combine
+import Intents
 
 class OnboardingCoordinator: PresentableCoordinator<Void> {
 
@@ -57,7 +58,20 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     
     nonisolated func onboardingView(_ controller: OnboardingViewController, didVerify user: User) {
         Task {
-            await self.presentPermissions()
+            await self.checkForPermissions()
+        }
+    }
+
+    @MainActor
+    private func checkForPermissions() async {
+        if INFocusStatusCenter.default.authorizationStatus != .authorized {
+            self.presentPermissions()
+        } else if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
+            self.presentPermissions()
+        } else {
+            self.router.dismiss(source: self.onboardingVC, animated: true) {
+                self.finishFlow(with: ())
+            }
         }
     }
 

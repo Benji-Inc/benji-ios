@@ -27,9 +27,7 @@ class WelcomeViewController: TextInputViewController<Void> {
     @Published var state: State = .welcome
 
     init() {
-        super.init(textField: TextField(),
-                   title: LocalizedString(id: "", default: "Enter RSVP #"),
-                   placeholder: LocalizedString(id: "", default: ""))
+        super.init(textField: TextField(), placeholder: LocalizedString(id: "", default: ""))
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -109,15 +107,8 @@ class WelcomeViewController: TextInputViewController<Void> {
         }
     }
 
-    override func textFieldDidChange() {
-        super.textFieldDidChange()
-
-        if let text = self.textField.text, !text.isEmpty {
-            self.textEntry.button.isEnabled = true
-
-        } else {
-            self.textEntry.button.isEnabled = false
-        }
+    override func validate(text: String) -> Bool {
+        return text.isEmpty
     }
 
     override func didTapButton() {
@@ -138,7 +129,7 @@ class WelcomeViewController: TextInputViewController<Void> {
             return
         }
 
-        await self.textEntry.button.handleEvent(status: .loading)
+        await self.button.handleEvent(status: .loading)
 
         do {
             let reservation = try await Reservation.getObject(with: code)
@@ -148,9 +139,9 @@ class WelcomeViewController: TextInputViewController<Void> {
             } else {
                 self.state = .foundReservation(reservation)
             }
-            await self.textEntry.button.handleEvent(status: .complete)
+            await self.button.handleEvent(status: .complete)
         } catch {
-            await self.textEntry.button.handleEvent(status: .error(error.localizedDescription))
+            await self.button.handleEvent(status: .error(error.localizedDescription))
             self.state = .reservationError
         }
     }
