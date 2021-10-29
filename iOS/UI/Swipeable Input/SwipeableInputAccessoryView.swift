@@ -53,8 +53,6 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     /// A blur view placed behind the text input field.
     @IBOutlet var blurView: UIVisualEffectView!
 
-    let animationView = AnimationView.with(animation: .loading)
-
     var cancellables = Set<AnyCancellable>()
 
     var currentContext: MessageContext = .passive
@@ -83,23 +81,9 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
         self.blurView.roundCorners()
 
-        self.insertSubview(self.animationView, belowSubview: self.inputContainerView)
-        self.animationView.contentMode = .scaleAspectFit
-        self.animationView.loopMode = .loop
 
         self.setupGestures()
         self.setupHandlers()
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.animationView.size = CGSize(width: 18, height: 18)
-        self.animationView.match(.right,
-                                 to: .right,
-                                 of: self.inputContainerView,
-                                 offset: Theme.contentOffset)
-        self.animationView.centerOnY()
     }
 
     // MARK: PRIVATE
