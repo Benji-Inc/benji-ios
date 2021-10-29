@@ -9,6 +9,23 @@
 import Foundation
 import TMROLocalization
 
+class TextFieldToolBar: UIToolbar {
+
+    init(button: UIBarButtonItem) {
+        super.init(frame: .init(origin: .zero,
+                                size: CGSize(width: UIScreen.main.bounds.width,
+                                             height: Theme.buttonHeight + Theme.contentOffset)))
+        self.setItems([button], animated: false)
+        self.isTranslucent = true
+        self.setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
+        self.set(backgroundColor: .clear)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class TextInputViewController<ResultType>: ViewController, Sizeable, Completable, UITextFieldDelegate {
 
     var onDidComplete: ((Result<ResultType, Error>) -> Void)?
@@ -19,13 +36,26 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
 
     private(set) var textEntry: TextEntryField
 
-    init(textField: UITextField,
-         title: Localized,
-         placeholder: Localized?) {
+    lazy var button: Button = {
+        let button = Button()
+        button.set(style: .normal(color: .lightGray, text: "Next"))
+        button.height = Theme.buttonHeight
+        button.didSelect { [unowned self] in
+            self.didTapButton()
+        }
+        return button
+    }()
 
-        self.textEntry = TextEntryField(with: textField,
-                                        title: title,
-                                        placeholder: placeholder)
+    lazy var barButton: UIBarButtonItem = {
+        let barButton = UIBarButtonItem.init(customView: self.button)
+        return barButton
+    }()
+
+    lazy var toolbar = TextFieldToolBar(button: self.barButton)
+
+    init(textField: UITextField, placeholder: Localized?) {
+
+        self.textEntry = TextEntryField(with: textField, placeholder: placeholder)
         super.init()
     }
 
@@ -38,12 +68,6 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
 
         self.view.addSubview(self.textEntry)
 
-        self.textEntry.button.set(style: .normal(color: .lightGray, text: "Next"))
-        self.textEntry.button.didSelect { [unowned self] in
-            self.didTapButton()
-        }
-        self.textEntry.button.isEnabled = false
-
         self.textEntry.textField.addTarget(self,
                                            action: #selector(textFieldDidChange),
                                            for: UIControl.Event.editingChanged)
@@ -51,23 +75,30 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
 
         KeyboardManager.shared.addKeyboardObservers(with: nil)
         KeyboardManager.shared.$willKeyboardShow.mainSink { [unowned self] willShow in
-            if willShow {
-                UIView.animate(withDuration: 0.2) {
-                    self.textEntry.button.alpha = 1.0
-                    self.view.setNeedsLayout()
-                }
-            } else {
-                UIView.animate(withDuration: 0.2) {
-                    self.textEntry.button.alpha = 0.0
-                    self.view.setNeedsLayout()
-                }
+            UIView.animate(withDuration: 0.01) {
+                self.view.setNeedsLayout()
             }
         }.store(in: &self.cancellables)
     }
 
     func didTapButton() {}
 
-    @objc func textFieldDidChange() {}
+    @objc func textFieldDidChange() {
+        guard let text = self.textField.text else {
+            self.textField.inputAccessoryView = nil
+            self.textField.reloadInputViews()
+            return
+        }
+
+        let isValid = self.validate(text: text)
+
+        self.textEntry.textField.inputAccessoryView = isValid ? self.toolbar : nil
+        self.textEntry.textField.reloadInputViews()
+    }
+
+    func validate(text: String) -> Bool {
+        return false
+    }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -77,12 +108,14 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
         self.textEntry.size = CGSize(width: width, height: height)
         self.textEntry.centerOnX()
 
-        let defaultOffset = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height
+        let defaultOffset = self.view.height - KeyboardManager.shared.cachedKeyboardEndFrame.height - Theme.contentOffset
         self.textEntry.bottom = defaultOffset
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        self.becomeFirstResponder()
 
         if self.shouldBecomeFirstResponder() {
             self.textEntry.textField.becomeFirstResponder()

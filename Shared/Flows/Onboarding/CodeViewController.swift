@@ -19,21 +19,15 @@ class CodeViewController: TextInputViewController<Void> {
     var reservationId: String?
     
     init() {
-        super.init(textField: TextField(),
-                   title: LocalizedString(id: "", default: "CODE"),
-                   placeholder: LocalizedString(id: "", default: "0000"))
+        super.init(textField: TextField(), placeholder: LocalizedString(id: "", default: "0000"))
     }
 
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func textFieldDidChange() {
-        if let code = self.textField.text {
-            self.textEntry.button.isEnabled = code.extraWhitespaceRemoved().count == 4
-        } else {
-            self.textEntry.button.isEnabled = false
-        }
+    override func validate(text: String) -> Bool {
+        return text.extraWhitespaceRemoved().count == 4
     }
 
     override func didTapButton() {
@@ -48,7 +42,7 @@ class CodeViewController: TextInputViewController<Void> {
         guard !self.verifying, let phoneNumber = self.phoneNumber else { return }
         
         self.verifying = true
-        await self.textEntry.button.handleEvent(status: .loading)
+        await self.button.handleEvent(status: .loading)
 
         do {
             let installation = try await PFInstallation.getCurrent()
@@ -60,10 +54,10 @@ class CodeViewController: TextInputViewController<Void> {
 
             self.textField.resignFirstResponder()
             try await User.become(withSessionToken: token)
-            await self.textEntry.button.handleEvent(status: .complete)
+            await self.button.handleEvent(status: .complete)
             self.complete(with: .success(()))
         } catch {
-            await self.textEntry.button.handleEvent(status: .error(error.localizedDescription))
+            await self.button.handleEvent(status: .error(error.localizedDescription))
             self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
         }
 

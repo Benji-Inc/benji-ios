@@ -13,9 +13,7 @@ import TMROLocalization
 class NameViewController: TextInputViewController<Void> {
 
     init() {
-        super.init(textField: TextField(),
-                   title: LocalizedString(id: "", default: "FULL NAME"),
-                   placeholder: LocalizedString(id: "", default: "First Last"))
+        super.init(textField: TextField(), placeholder: LocalizedString(id: "", default: "First Last"))
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -30,14 +28,8 @@ class NameViewController: TextInputViewController<Void> {
         self.textField.keyboardType = .namePhonePad
     }
 
-    override func textFieldDidChange() {
-        super.textFieldDidChange()
-
-        if let text = self.textField.text {
-            self.textEntry.button.isEnabled = text.isValidPersonName
-        } else {
-            self.textEntry.button.isEnabled = false 
-        }
+    override func validate(text: String) -> Bool {
+        return text.isValidPersonName
     }
 
     override func didTapButton() {
@@ -50,16 +42,16 @@ class NameViewController: TextInputViewController<Void> {
         guard text.isValidPersonName else { return }
 
         Task {
-            await self.textEntry.button.handleEvent(status: .loading)
+            await self.button.handleEvent(status: .loading)
 
             do {
                 User.current()?.formatName(from: text)
 
                 try await User.current()?.saveLocalThenServer()
-                await self.textEntry.button.handleEvent(status: .complete)
+                await self.button.handleEvent(status: .complete)
                 self.complete(with: .success(()))
             } catch {
-                await self.textEntry.button.handleEvent(status: .error("Failed to update user name."))
+                await self.button.handleEvent(status: .error("Failed to update user name."))
                 self.complete(with: .failure(error))
             }
         }

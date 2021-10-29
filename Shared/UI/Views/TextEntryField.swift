@@ -12,17 +12,11 @@ import TMROLocalization
 class TextEntryField: View, Sizeable {
 
     private(set) var textField: UITextField
-    private let titleLabel = Label(font: .smallBold)
-    private let title: Localized
     private let placeholder: Localized?
-    let button = Button()
 
-    init(with textField: UITextField,
-         title: Localized,
-         placeholder: Localized?) {
+    init(with textField: UITextField, placeholder: Localized?) {
 
         self.textField = textField
-        self.title = title
         self.placeholder = placeholder
 
         super.init()
@@ -35,19 +29,22 @@ class TextEntryField: View, Sizeable {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.addSubview(self.titleLabel)
-        self.titleLabel.setText(self.title)
+        self.set(backgroundColor: .white)
+
         self.addSubview(self.textField)
-        self.addSubview(self.button)
 
         self.textField.returnKeyType = .done
         self.textField.adjustsFontSizeToFitWidth = true
         self.textField.keyboardAppearance = .dark
+        self.textField.textAlignment = .center
 
         if let placeholder = self.placeholder {
-            let attributed = AttributedString(placeholder, fontType: .medium, color: .lightGray)
+            let attributed = AttributedString(placeholder,
+                                              fontType: .medium,
+                                              color: .lightGray)
             self.textField.setPlaceholder(attributed: attributed)
-            self.textField.setDefaultAttributes(style: StringStyle(font: .medium, color: .textColor))
+            self.textField.setDefaultAttributes(style: StringStyle(font: .medium, color: .darkGray),
+                                                alignment: .center)
         }
 
         if let tf = self.textField as? TextField {
@@ -59,19 +56,10 @@ class TextEntryField: View, Sizeable {
 
     func getHeight(for width: CGFloat) -> CGFloat {
 
-        self.titleLabel.setSize(withWidth: width)
-        self.titleLabel.pin(.top)
-        self.titleLabel.pin(.left)
+        self.textField.size = CGSize(width: width - Theme.contentOffset, height: 40)
+        self.textField.pin(.left, padding: Theme.contentOffset.half)
+        self.textField.pin(.top, padding: Theme.contentOffset.half)
 
-        self.textField.size = CGSize(width: width, height: 40)
-        self.textField.pin(.left)
-        self.textField.match(.top, to: .bottom, of: self.titleLabel, offset: 10)
-
-        self.button.height = Theme.buttonHeight
-        self.button.width = width 
-        self.button.match(.top, to: .bottom, of: self.textField, offset: 10)
-        self.button.pin(.left)
-
-        return self.button.bottom
+        return self.textField.bottom + Theme.contentOffset.half
     }
 }

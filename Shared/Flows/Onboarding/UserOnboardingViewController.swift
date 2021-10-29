@@ -31,7 +31,7 @@ class UserOnboardingViewController: ViewController {
         }
 
         self.view.addSubview(self.bubbleView)
-        self.bubbleView.set(backgroundColor: .lightGray)
+        self.bubbleView.set(backgroundColor: .gray)
 
         self.bubbleView.addSubview(self.textView)
 
@@ -90,7 +90,7 @@ class UserMessageView: TextView {
     }
 
     func set(text: Localized) {
-        let textColor: Color = .white
+        let textColor: Color = .textColor
         let attributedString = AttributedString(text,
                                                 fontType: .small,
                                                 color: textColor)
