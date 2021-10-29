@@ -181,6 +181,24 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingAnimationView.centerOnXAndY()
     }
 
+    override func shouldShowLargeAvatar() -> Bool {
+        guard let current = self.current else { return false }
+        switch current {
+        case .welcome(_):
+            return true
+        case .phone(_):
+            return true
+        case .code(_):
+            return true
+        case .name(_):
+            return false
+        case .waitlist(_):
+            return true
+        case .photo(_):
+            return false
+        }
+    }
+
     private func showLoading() {
         self.loadingBlur.removeFromSuperview()
         self.view.addSubview(self.loadingBlur)
