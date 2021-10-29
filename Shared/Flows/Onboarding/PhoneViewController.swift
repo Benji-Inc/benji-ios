@@ -25,10 +25,11 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         phoneField.withFlag = true
         phoneField.withDefaultPickerUI = true
         phoneField.withExamplePlaceholder = true
+        phoneField.textColor = Color.darkGray.color
 
-        super.init(textField: phoneField,
-                   title: LocalizedString(id: "", default: "MOBILE NUMBER"),
-                   placeholder: phoneField.placeholder)
+        super.init(textField: phoneField, placeholder: phoneField.placeholder)
+
+        phoneField.textAlignment = .center
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -40,13 +41,15 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     }
 
     override func textFieldDidChange() {
-        if self.isPhoneNumberValid() {
-            // End editing because we have a valid phone number and we're ready to request a code with it
-            self.textEntry.button.isEnabled = true
-        } else if let text = self.textField.text, text.isEmpty {
+        super.textFieldDidChange()
+
+         if let text = self.textField.text, text.isEmpty {
             self.isSendingCode = false
-            self.textEntry.button.isEnabled = false
         }
+    }
+
+    override func validate(text: String) -> Bool {
+        return self.isPhoneNumberValid()
     }
 
     override func didTapButton() {
@@ -69,7 +72,7 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
     }
 
     private func sendCode(to phone: PhoneNumber, region: String) async {
-        await self.textEntry.button.handleEvent(status: .loading)
+        await self.button.handleEvent(status: .loading)
         self.isSendingCode = true
 
         do {
@@ -79,10 +82,10 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
                                        region: region,
                                        installationId: installation.installationId)
                 .makeRequest()
-            await self.textEntry.button.handleEvent(status: .complete)
+            await self.button.handleEvent(status: .complete)
             self.complete(with: .success(phone))
         } catch {
-            await self.textEntry.button.handleEvent(status: .error(""))
+            await self.button.handleEvent(status: .error(""))
             self.complete(with: .failure(error))
         }
     }

@@ -15,58 +15,57 @@ class UserOnboardingViewController: ViewController {
     private(set) var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private(set) var avatarView = AvatarView()
 
-    private(set) var bubbleView = View()
-    private(set) var textBubbleView = UserMessageView()
+    private(set) var nameLabel = Label(font: .mediumThin)
+    private(set) var bubbleView = SpeechBubbleView(orientation: .up,
+                                                   bubbleColor: Color.gray.color,
+                                                   borderColor: Color.gray.color)
+    private(set) var textView = OnboardingMessageTextView()
 
-    let scrollView = UIScrollView()
-
-    override func loadView() {
-        self.view = self.scrollView
-    }
 
     override func initializeViews() {
         super.initializeViews()
 
         self.view.addSubview(self.blurView)
 
+        self.view.addSubview(self.nameLabel)
         self.view.addSubview(self.avatarView)
         self.avatarView.didSelect { [unowned self] in
             self.didSelectBackButton()
         }
 
         self.view.addSubview(self.bubbleView)
-
-        self.bubbleView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner, .layerMaxXMinYCorner]
-        self.bubbleView.set(backgroundColor: .gray)
-
-        self.bubbleView.addSubview(self.textBubbleView)
+        self.view.addSubview(self.textView)
 
         self.updateUI()
     }
 
     func updateUI(animateTyping: Bool = true) {
-        self.textBubbleView.set(text: self.getMessage())
+        self.textView.set(text: self.getMessage())
         self.view.layoutNow()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.avatarView.setSize(for: 80)
-        self.avatarView.pin(.left, padding: Theme.contentOffset)
-        self.avatarView.pin(.top, padding: Theme.contentOffset)
+        self.nameLabel.setSize(withWidth: self.view.width)
+        self.nameLabel.centerOnX()
+        self.nameLabel.pinToSafeArea(.top, padding: 0)
 
-        let maxWidth = self.view.width - (Theme.contentOffset.doubled + Theme.contentOffset + 28)
+        self.avatarView.setSize(for: 60)
+        self.avatarView.centerOnX()
+        self.avatarView.match(.top, to: .bottom, of: self.nameLabel, offset: Theme.contentOffset.half)
 
-        self.textBubbleView.setSize(withWidth: maxWidth)
+        let maxWidth = self.view.width - (Theme.contentOffset.doubled.doubled)
 
-        self.bubbleView.height = self.textBubbleView.height + 20
-        self.bubbleView.width = self.textBubbleView.width + 28
-        self.bubbleView.match(.top, to: .bottom, of: self.avatarView, offset: 6)
-        self.bubbleView.match(.left, to: .left, of: self.avatarView)
-        self.bubbleView.roundCorners()
+        self.textView.setSize(withWidth: maxWidth)
 
-        self.textBubbleView.centerOnXAndY()
+        self.bubbleView.height = self.textView.height + 20 + self.bubbleView.tailLength
+        self.bubbleView.width = self.textView.width + 28
+        self.bubbleView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset.half)
+        self.bubbleView.centerOnX()
+
+        self.textView.centerOnX()
+        self.textView.match(.top, to: .top, of: self.bubbleView, offset: self.bubbleView.tailLength + 10)
 
         self.blurView.expandToSuperviewSize()
     }
@@ -80,7 +79,7 @@ class UserOnboardingViewController: ViewController {
     func didSelectBackButton() { }
 }
 
-class UserMessageView: TextView {
+class OnboardingMessageTextView: TextView {
 
     override func initializeViews() {
         super.initializeViews()
@@ -88,16 +87,17 @@ class UserMessageView: TextView {
         self.isEditable = false
         self.isScrollEnabled = false
         self.isSelectable = false
+        self.textAlignment = .center
     }
 
     func set(text: Localized) {
-        let textColor: Color = .white
+        let textColor: Color = .textColor
         let attributedString = AttributedString(text,
-                                                fontType: .regularBold,
+                                                fontType: .small,
                                                 color: textColor)
 
         self.set(attributed: attributedString,
-                 alignment: .left,
+                 alignment: .center,
                  lineCount: 0,
                  lineBreakMode: .byWordWrapping,
                  stringCasing: .unchanged,
@@ -106,6 +106,7 @@ class UserMessageView: TextView {
 
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 2
+        style.alignment = .center
 
         self.addTextAttributes([NSAttributedString.Key.paragraphStyle: style])
     }

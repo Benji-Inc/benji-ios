@@ -31,8 +31,6 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         ToastScheduler.shared.delegate = self
 
         self.archiveVC.addButton.didSelect { [unowned self] in
-
-            //            self.presentPhoto()
             Task {
                 await self.createConversation()
             }.add(to: self.archiveVC.taskPool)

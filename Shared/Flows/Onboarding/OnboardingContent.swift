@@ -18,7 +18,6 @@ enum OnboardingContent: Switchable {
     case name(NameViewController)
     case waitlist(WaitlistViewController)
     case photo(PhotoViewController)
-    case focus(FocusStatusViewController)
 
     var viewController: UIViewController & Sizeable {
         switch self {
@@ -33,8 +32,6 @@ enum OnboardingContent: Switchable {
         case .waitlist(let vc):
             return vc
         case .photo(let vc):
-            return vc
-        case .focus(let vc):
             return vc
         }
     }
@@ -52,30 +49,17 @@ enum OnboardingContent: Switchable {
                                        default: "Jibber is an exclusive community of people building a better place to be social online. To best serve this community, we currently require an RSVP for access OR you can tap JOIN to be added to the waitlist.")
             }
         case .phone(_):
-            if let user = user {
-                return LocalizedString(id: "",
-                                       arguments: [user.fullName],
-                                       default: "Please verify your mobile number, to accept @(fullname)'s reservation.")
-            } else {
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Please verify your account using the mobile number for this device.")
-            }
+            return LocalizedString(id: "",
+                                   arguments: [],
+                                   default: "Confirm your mobile so we can chat")
         case .code(_):
-            if let user = user {
-                return LocalizedString(id: "",
-                                       arguments: [user.givenName],
-                                       default: "Enter the 4 digit code from the text message, to accept your reservation from @(name).")
-            } else {
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Enter the 4 digit code from the text message.")
-            }
-
+            return LocalizedString(id: "",
+                                   arguments: [],
+                                   default: "Enter the code Jibber texted you")
         case .name(_):
             return LocalizedString(id: "",
                                    arguments: [],
-                                   default: "Please use your legal first and last name.")
+                                   default: "Confirm your name to use Jibber!")
         case .waitlist(_):
             #if APPCLIP
             if User.current()?.status == .inactive || User.current()?.status == .active {
@@ -94,17 +78,24 @@ enum OnboardingContent: Switchable {
             #endif
 
         case .photo(let vc):
-            if vc.currentState == .initial {
+            switch vc.currentState {
+            case .initial:
                 return LocalizedString(id: "",
                                        arguments: [],
-                                       default: "To ensure everyone is who they say they are we require a photo. No 🤖's!")
-            } else {
-                return LocalizedString.empty
+                                       default: "Tap the screen so I can see you 😀")
+            case .scanEyesOpen:
+                return "Now smile and tap the screen."
+            case .scanEyesClosed:
+                return "Close your eyes and tap again."
+            case .captureEyesOpen:
+                return "Good one!"
+            case .captureEyesClosed:
+                return "Perfect!"
+            case .error(let message):
+                return message
+            case .finish:
+                return "Now turn these on."
             }
-        case .focus(_):
-            return LocalizedString(id: "",
-                                   arguments: [],
-                                   default: "Jibber doesn't make the trivial urgent, by letting others know you're focused.")
         }
     }
 }

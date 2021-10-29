@@ -14,7 +14,6 @@ import Intents
 
 protocol OnboardingViewControllerDelegate: AnyObject {
     func onboardingView(_ controller: OnboardingViewController, didVerify user: User)
-    func onboardingViewControllerNeedsAuthorization(_ controller: OnboardingViewController)
 }
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent>, TransitionableViewController {
@@ -33,10 +32,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var nameVC = NameViewController()
     lazy var waitlistVC = WaitlistViewController()
     lazy var photoVC = PhotoViewController()
-    lazy var focusVC = FocusStatusViewController()
 
     let loadingBlur = BlurView()
     let blurEffect = UIBlurEffect(style: .systemMaterial)
+    
     let loadingAnimationView = AnimationView()
     
     private let confettiView = ConfettiView()
@@ -75,7 +74,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingAnimationView.loopMode = .loop
         self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
 
-        self.scrollView.insertSubview(self.confettiView, aboveSubview: self.blurView)
+        self.view.insertSubview(self.confettiView, aboveSubview: self.blurView)
 
         self.welcomeVC.$state.mainSink { (state) in
             switch state {
@@ -88,7 +87,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             case .foundReservation(let reservation):
                 self.reservationId = reservation.objectId
                 if let identity = reservation.createdBy?.objectId {
-                    self.updateReservationCreator(with: identity)
+                    Task {
+                        try await self.updateReservationCreator(with: identity)
+                    }
                 }
                 self.current = .phone(self.phoneVC)
             case .reservationError:
@@ -139,23 +140,16 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
         }
 
+        self.photoVC.$currentState.mainSink { [unowned self] _ in
+            self.updateUI()
+        }.store(in: &self.cancellables)
+
         self.photoVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success:
                 Task {
                     try await ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
-                }
-
-                self.current = .focus(self.focusVC)
-            case .failure(_):
-                break
-            }
-        }
-
-        self.focusVC.onDidComplete = { [unowned self] result in
-            switch result {
-            case .success(let status):
-                if status == .authorized, let user = User.current() {
+                    guard let user = User.current(), user.status == .active else { return }
                     self.delegate.onboardingView(self, didVerify: user)
                 }
             case .failure(_):
@@ -171,7 +165,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         }.store(in: &self.cancellables)
 
         if let userId = self.reservationOwnerId {
-            self.updateReservationCreator(with: userId)
+            Task {
+                try await self.updateReservationCreator(with: userId)
+            }
         }
     }
 
@@ -185,7 +181,32 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingAnimationView.centerOnXAndY()
     }
 
+    private func showLoading() {
+        self.loadingBlur.removeFromSuperview()
+        self.view.addSubview(self.loadingBlur)
+        self.view.layoutNow()
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.loadingBlur.effect = self.blurEffect
+        } completion: { completed in
+            self.loadingAnimationView.play()
+        }
+    }
+
+    @MainActor
+    private func hideLoading() async {
+        return await withCheckedContinuation { continuation in
+            self.loadingAnimationView.stop()
+            UIView.animate(withDuration: Theme.animationDuration) {
+                self.loadingBlur.effect = nil
+            } completion: { completed in
+                self.loadingBlur.removeFromSuperview()
+                continuation.resume(returning: ())
+            }
+        }
+    }
+
     private func showLoading(user: User) {
+        self.loadingBlur.removeFromSuperview()
         self.view.addSubview(self.loadingBlur)
         self.view.layoutNow()
         UIView.animate(withDuration: Theme.animationDuration) {
@@ -196,16 +217,15 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         }
     }
 
-    func updateReservationCreator(with userId: String) {
-        Task {
-            guard let user = try? await User.localThenNetworkQuery(for: userId) else { return }
-
-            self.reservationOwner = user
-            self.avatarView.set(avatar: user)
-            self.avatarView.isHidden = false
-            self.updateUI()
-            self.view.layoutNow()
-        }
+    @MainActor
+    func updateReservationCreator(with userId: String) async throws {
+        let user = try await User.localThenNetworkQuery(for: userId)
+        self.reservationOwner = user
+        self.avatarView.set(avatar: user)
+        self.nameLabel.setText(user.givenName.capitalized)
+        self.avatarView.isHidden = false
+        self.updateUI()
+        self.view.layoutNow()
     }
 
     override func getInitialContent() -> OnboardingContent {
@@ -223,7 +243,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             #else
             if current.fullName.isEmpty {
                 return .name(self.nameVC)
-            } else if current.smallImage.isNil {
+            } else if current.smallImage.isNil || current.focusImage.isNil {
                 return .photo(self.photoVC)
             } else {
                 return .name(self.nameVC)
@@ -241,7 +261,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getMessage() -> Localized {
-        super.willUpdateContent()
         guard let content = self.current else { return "" }
         return content.getDescription(with: self.reservationOwner)
     }
@@ -275,11 +294,16 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 self.phoneVC.didTapButton()
             }
         case .reservation(let reservationId):
-            vc.state = .reservationInput
-            vc.textField.text = reservationId
+            self.showLoading()
+            Task {
+                let reservation = try await Reservation.getObject(with: reservationId)
+                self.reservationId = reservationId
+                if let userId = reservation.createdBy?.objectId {
+                    try await self.updateReservationCreator(with: userId)
+                    await self.hideLoading()
+                    self.current = .phone(self.phoneVC)
+                }
 
-            delay(0.25) {
-                vc.didTapButton()
             }
         case .pass(passId: let passId):
             break
