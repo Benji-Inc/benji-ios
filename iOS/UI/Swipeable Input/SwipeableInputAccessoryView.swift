@@ -41,7 +41,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         case right
     }
 
-    static let preferredHeight: CGFloat = 54.0 + InputActivityBar.height
     static let maxHeight: CGFloat = 500.0
 
     var alertAnimator: UIViewPropertyAnimator?
@@ -66,11 +65,20 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     private var sendable: SendableObject?
 
     override var intrinsicContentSize: CGSize {
-        var contentHeight: CGFloat = self.textView.bounds.height + self.inputContainerView.tailHeight
+        // Calculate intrinsicContentSize that will fit all the text
+        var contentHeight = self.textView.sizeThatFits(CGSize(width: self.width - Theme.contentOffset.doubled,
+                                                              height: .greatestFiniteMagnitude)).height
+        if contentHeight == 0 {
+            contentHeight = 33
+        }
 
-        contentHeight += 43
+        contentHeight += InputActivityBar.height
+        + self.inputContainerView.tailLength
+        + self.safeAreaInsets.bottom
 
-        return CGSize(width: 0, height: contentHeight)
+        logDebug("intrinsic content height is \(contentHeight)")
+
+        return CGSize(width: UIView.noIntrinsicMetric, height: contentHeight)
     }
 
     unowned let delegate: SwipeableInputAccessoryViewDelegate
@@ -90,22 +98,18 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.backgroundColor = .red
         self.autoresizingMask = .flexibleHeight
 
-        self.animationView.contentMode = .scaleAspectFit
-        self.animationView.loopMode = .autoReverse
-
         self.addSubview(self.activityBar)
-
         self.addSubview(self.inputContainerView)
 
         self.inputContainerView.contentView.addSubview(self.blurView)
+
+        self.textView.backgroundColor = .purple
+        self.inputContainerView.contentView.addSubview(self.textView)
 
         self.inputContainerView.contentView.addSubview(self.animationView)
         self.animationView.contentMode = .scaleAspectFit
         self.animationView.loopMode = .loop
 
-        self.textView.backgroundColor = .purple
-
-        self.inputContainerView.contentView.addSubview(self.textView)
         self.inputContainerView.contentView.addSubview(self.overlayButton)
 
         self.setupGestures()
@@ -115,19 +119,25 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        logDebug("current height is \(self.frame.height)")
+
         let horizontalOffset: CGFloat = Theme.contentOffset
 
-//        self.activityBar.pin(.left, padding: horizontalOffset)
-//        self.activityBar.pin(.top)
-//        self.activityBar.expand(.right, padding: horizontalOffset)
-//        self.activityBar.height = InputActivityBar.height
+        self.activityBar.pin(.left, padding: horizontalOffset)
+        self.activityBar.pin(.top)
+        self.activityBar.expand(.right, padding: horizontalOffset)
+        self.activityBar.height = InputActivityBar.height
 
         self.inputContainerView.pin(.left, padding: horizontalOffset)
-        self.inputContainerView.pin(.top)
+        self.inputContainerView.match(.top, to: .bottom, of: self.activityBar)
         self.inputContainerView.expand(.right, padding: horizontalOffset)
-        self.inputContainerView.expand(.bottom, padding: self.safeAreaInsets.bottom + 10)
+        self.inputContainerView.expand(.bottom, padding: self.safeAreaInsets.bottom)
 
-//        self.textView.expandToSuperviewSize()
+        // TODO: Find a more elegant solution than manually calling layout now.
+        self.inputContainerView.layoutNow()
+
+        self.textView.expandToSuperviewSize()
+
         self.blurView.expandToSuperviewSize()
 
         self.overlayButton.expandToSuperviewSize()

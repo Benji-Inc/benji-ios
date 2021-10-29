@@ -51,7 +51,7 @@ class SpeechBubbleView: View {
     }
 
     /// The distance from the base of the tail to the point.
-    var tailHeight: CGFloat = 10 {
+    var tailLength: CGFloat = 10 {
         didSet { self.setNeedsLayout() }
     }
     /// The length of the base of the tail. In other words, side of the tail flush with bubble.
@@ -60,10 +60,10 @@ class SpeechBubbleView: View {
     }
     /// Describes how much the bubble layer needs to be pushed in to make room for the tail.
     var bubbleFrame: CGRect {
-        let topSide = self.orientation == .up ? self.tailHeight : 0
-        let leftSide = self.orientation == .left ? self.tailHeight : 0
-        let bottomSide = self.orientation == .down ? self.height - self.tailHeight : self.height
-        let rightSide = self.orientation == .right ? self.width - self.tailHeight : self.width
+        let topSide = self.orientation == .up ? self.tailLength : 0
+        let leftSide = self.orientation == .left ? self.tailLength : 0
+        let bottomSide = self.orientation == .down ? self.height - self.tailLength : self.height
+        let rightSide = self.orientation == .right ? self.width - self.tailLength : self.width
 
         return CGRect(x: leftSide,
                       y: topSide,
