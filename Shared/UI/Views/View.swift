@@ -30,9 +30,14 @@ class View: UIView {
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.initializeSubviews()
     }
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+
+        self.initializeSubviews()
+    }
+    
     func initializeSubviews() { }
 
     override func didMoveToWindow() {
