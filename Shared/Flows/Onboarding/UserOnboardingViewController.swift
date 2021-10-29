@@ -16,8 +16,11 @@ class UserOnboardingViewController: ViewController {
     private(set) var avatarView = AvatarView()
 
     private(set) var nameLabel = Label(font: .mediumThin)
-    private(set) var bubbleView = View()
-    private(set) var textView = UserMessageView()
+    private(set) var bubbleView = SpeechBubbleView(orientation: .up,
+                                                   bubbleColor: Color.gray.color,
+                                                   borderColor: Color.gray.color)
+    private(set) var textView = OnboardingMessageTextView()
+
 
     override func initializeViews() {
         super.initializeViews()
@@ -31,9 +34,7 @@ class UserOnboardingViewController: ViewController {
         }
 
         self.view.addSubview(self.bubbleView)
-        self.bubbleView.set(backgroundColor: .gray)
-
-        self.bubbleView.addSubview(self.textView)
+        self.view.addSubview(self.textView)
 
         self.updateUI()
     }
@@ -58,13 +59,13 @@ class UserOnboardingViewController: ViewController {
 
         self.textView.setSize(withWidth: maxWidth)
 
-        self.bubbleView.height = self.textView.height + 20
+        self.bubbleView.height = self.textView.height + 20 + self.bubbleView.tailLength
         self.bubbleView.width = self.textView.width + 28
         self.bubbleView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset.half)
         self.bubbleView.centerOnX()
-        self.bubbleView.roundCorners()
 
-        self.textView.centerOnXAndY()
+        self.textView.centerOnX()
+        self.textView.match(.top, to: .top, of: self.bubbleView, offset: self.bubbleView.tailLength + 10)
 
         self.blurView.expandToSuperviewSize()
     }
@@ -78,7 +79,7 @@ class UserOnboardingViewController: ViewController {
     func didSelectBackButton() { }
 }
 
-class UserMessageView: TextView {
+class OnboardingMessageTextView: TextView {
 
     override func initializeViews() {
         super.initializeViews()

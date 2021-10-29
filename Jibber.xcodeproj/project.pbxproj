@@ -1449,13 +1449,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		D61EC0D321D30BBF00204BEE /* App */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = App;
-			sourceTree = "<group>";
-		};
 		D61EC0D621D30C0500204BEE /* API */ = {
 			isa = PBXGroup;
 			children = (
@@ -1543,7 +1536,6 @@
 			children = (
 				80616E3326EAD1A900C077BA /* _Stream Temp */,
 				D61EC0D621D30C0500204BEE /* API */,
-				D61EC0D321D30BBF00204BEE /* App */,
 				D6E65F17237791450061AA67 /* Collection View Management  */,
 				D61EC0D721D30C1400204BEE /* Extensions */,
 				D6D145F121D548F600CD8CE4 /* Flows */,

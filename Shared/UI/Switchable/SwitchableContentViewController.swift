@@ -22,17 +22,17 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
     override func initializeViews() {
         super.initializeViews()
 
-        // Must be called here 
+        // Must be called here
         self.current = self.getInitialContent()
 
         // Need to call prepare before switchContent so content doesnt flicker on first load
         self.prepareForPresentation()
 
         self.$current.mainSink { [weak self] (value) in
-                guard let `self` = self else { return }
-                guard let content = value else { return }
-                self.switchTo(content)
-            }.store(in: &self.cancellables)
+            guard let `self` = self else { return }
+            guard let content = value else { return }
+            self.switchTo(content)
+        }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
@@ -59,8 +59,8 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
         self.prepareAnimator = UIViewPropertyAnimator.init(duration: Theme.animationDuration,
                                                            curve: .easeOut,
                                                            animations: {
-                                                            self.prepareForPresentation()
-                                                           })
+            self.prepareForPresentation()
+        })
 
         self.prepareAnimator?.addCompletion({ (position) in
             if position == .end {
@@ -89,7 +89,7 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
 
     private func prepareForPresentation() {
         self.bubbleView.alpha = 0
-
+        self.textView.alpha = 0
         self.currentCenterVC?.view.alpha = 0
     }
 
@@ -99,10 +99,10 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
                                                            curve: .easeOut,
                                                            animations: {
 
-                                                            self.bubbleView.alpha = 1
-
-                                                            self.currentCenterVC?.view.alpha = 1
-                                                           })
+            self.bubbleView.alpha = 1
+            self.textView.alpha = 1
+            self.currentCenterVC?.view.alpha = 1
+        })
         
         self.presentAnimator?.startAnimation()
     }

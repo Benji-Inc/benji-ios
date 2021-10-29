@@ -50,11 +50,11 @@ import Foundation
      }
 
      /// The distance from the base of the tail to the point.
-     var tailLength: CGFloat = 10 {
+     var tailLength: CGFloat = 7 {
          didSet { self.setNeedsLayout() }
      }
      /// The length of the base of the tail. In other words, side of the tail flush with bubble.
-     var tailBaseLength: CGFloat = 8.6 {
+     var tailBaseLength: CGFloat = 14 {
          didSet { self.setNeedsLayout() }
      }
      /// Describes how much the bubble layer needs to be pushed in to make room for the tail.
