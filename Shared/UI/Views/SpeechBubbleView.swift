@@ -11,7 +11,6 @@ import UIKit
 
 /// A view that has a rounded rectangular "speech bubble" background.
 /// The bubble has two parts: The bubble itself, and a triangular "tail" positioned on one of four sides.
-/// Subviews should be added to the contentView property.
 class SpeechBubbleView: View {
 
     enum TailOrientation {
@@ -58,7 +57,7 @@ class SpeechBubbleView: View {
     var tailBaseLength: CGFloat = 8.6 {
         didSet { self.setNeedsLayout() }
     }
-    /// Describes how much the bubble layer needs to be pushed in to make room for the tail.
+    /// Describes the frame of the bubble within this view's coordinate space, excluding the tail.
     var bubbleFrame: CGRect {
         let topSide = self.orientation == .up ? self.tailLength : 0
         let leftSide = self.orientation == .left ? self.tailLength : 0

@@ -28,12 +28,7 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView)
 }
 
-class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGestureRecognizerDelegate {
-
-    // TODO: Restore
-    func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
-
-    }
+class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
     /// The location on the screen that a send action was triggered.
     enum SendPosition {
