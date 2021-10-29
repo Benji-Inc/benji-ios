@@ -21,13 +21,12 @@ class ExpandingTextView: TextView {
         self.keyboardType = .twitter
         self.tintColor = Color.white.color
         self.textAlignment = .center
+        self.set(backgroundColor: .clear)
 
         self.textContainerInset.left = 10
         self.textContainerInset.right = 10
         self.textContainerInset.top = 14
         self.textContainerInset.bottom = 12
-
-        self.set(backgroundColor: .clear)
     }
 
     func setPlaceholder(for avatars: [Avatar]) {

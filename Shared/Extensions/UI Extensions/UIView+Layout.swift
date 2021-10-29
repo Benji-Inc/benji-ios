@@ -24,9 +24,7 @@ extension UIView {
         }
 
         set {
-            var frame = self.frame
-            frame.origin.y = newValue
-            self.frame = frame
+            self.frame.origin.y = newValue
         }
     }
 
@@ -36,9 +34,7 @@ extension UIView {
         }
 
         set {
-            var frame = self.frame
-            frame.origin.x = newValue
-            self.frame = frame
+            self.frame.origin.x = newValue
         }
     }
 
@@ -48,9 +44,7 @@ extension UIView {
         }
 
         set {
-            var frame = self.frame
-            frame.origin.y = newValue
-            self.frame = frame
+            self.frame.origin.y = newValue
         }
     }
 
@@ -60,9 +54,7 @@ extension UIView {
         }
 
         set {
-            var frame = self.frame
-            frame.origin.x = newValue
-            self.frame = frame
+            self.frame.origin.x = newValue
         }
     }
 
@@ -72,9 +64,7 @@ extension UIView {
         }
 
         set {
-            var frame = self.frame
-            frame.origin.x = newValue - frame.size.width
-            self.frame = frame
+            self.frame.origin.x = newValue - frame.size.width
         }
     }
 
@@ -84,9 +74,7 @@ extension UIView {
         }
 
         set {
-            var frame = self.frame
-            frame.origin.y = newValue - frame.size.height
-            self.frame = frame
+            self.frame.origin.y = newValue - frame.size.height
         }
     }
 
@@ -187,11 +175,8 @@ extension UIView {
         get {
             return self.frame.origin
         }
-
         set {
-            var frame = self.frame
-            frame.origin = newValue
-            self.frame = frame
+            self.frame.origin = newValue
         }
     }
 

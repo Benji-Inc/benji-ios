@@ -17,27 +17,21 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
 
     let alertProgressView = AlertProgressView()
 
-    override var borderColor: CGColor? {
-        didSet {
-            self.inputContainerView.layer.borderColor
-            = self.borderColor ?? self.currentContext.color.color.cgColor
-        }
-    }
-
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.currentContext = .passive
 
         self.inputContainerView.insertSubview(self.alertProgressView, belowSubview: self.textView)
-        self.alertProgressView.set(backgroundColor: .white)
+        self.alertProgressView.set(backgroundColor: .lightGray)
         self.alertProgressView.size = .zero
+        self.alertProgressView.roundCorners()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.alertProgressView.height = self.inputContainerView.height
+        self.alertProgressView.height = self.inputContainerView.bubbleFrame.height
     }
 
     // MARK: SETUP
@@ -53,13 +47,6 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
     }
 
     // MARK: OVERRIDES
-
-    override func attachentViewDidUpdate(kind: MessageKind?) {
-        super.attachentViewDidUpdate(kind: kind)
-
-        self.currentMessageKind = kind ?? .text(String())
-        self.textView.setPlaceholder(for: self.currentMessageKind)
-    }
 
     override func updateInputType() {
         super.updateInputType()
@@ -95,13 +82,6 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
 //            // progress is greater that 0 and input type is attachments
 //            self.attachmentView.messageKind = nil
 //        }
-    }
-
-    override func attachmentView(_ controller: AttachmentViewController, didSelect attachment: Attachment) {
-        super.attachmentView(controller, didSelect: attachment)
-
-        self.attachmentView.configure(with: attachment)
-        self.updateInputType() // Needs to be called after configure
     }
 
     override func didPressAlertCancel() {
@@ -165,3 +145,81 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
 }
 
 class AlertProgressView: View {}
+
+extension ConversationInputAccessoryView {
+
+    func handle(longPress: UILongPressGestureRecognizer) {
+        switch longPress.state {
+        case .possible:
+            break
+        case .began:
+            if case MessageKind.text(let text) = self.currentMessageKind, text.isEmpty {
+                UIMenuController.shared.showMenu(from: self, rect: self.textView.bounds)
+            } else {
+                self.startAlertAnimation()
+            }
+        case .changed:
+            break
+        case .ended, .cancelled, .failed:
+            if case MessageKind.text(let text) = self.currentMessageKind, text.isEmpty {
+                break
+            } else {
+                self.endAlertAnimation()
+            }
+        @unknown default:
+            break
+        }
+    }
+
+    private func startAlertAnimation() {
+        self.currentContext = .timeSensitive
+        self.alertAnimator?.stopAnimation(true)
+        self.alertAnimator?.pausesOnCompletion = true
+        self.selectionFeedback.impactOccurred()
+
+        self.alertAnimator = UIViewPropertyAnimator(duration: 1.0,
+                                                    curve: .linear,
+                                                    animations: { [unowned self] in
+            self.alertProgressView.size = CGSize(width: self.textView.width,
+                                                 height: self.textView.height)
+        })
+
+        self.alertAnimator?.startAnimation()
+
+        UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseIn, .repeat, .autoreverse], animations: {
+            self.alertProgressView.alpha = 0
+            self.selectionFeedback.impactOccurred()
+        }, completion: nil)
+    }
+
+    private func endAlertAnimation() {
+        if let fractionComplete = self.alertAnimator?.fractionComplete,
+            fractionComplete == CGFloat(0.0) {
+
+            self.alertAnimator?.stopAnimation(true)
+            self.showAlertConfirmation()
+        } else {
+            self.alertAnimator?.stopAnimation(true)
+            self.currentContext = .passive
+            self.alertAnimator = UIViewPropertyAnimator(duration: 0.5,
+                                                        curve: .linear,
+                                                        animations: { [unowned self] in
+                                                            self.alertProgressView.size = CGSize(width: 0, height: self.height)
+                                                            self.layer.borderColor = self.currentContext.color.color.cgColor
+            })
+            self.alertAnimator?.startAnimation()
+        }
+    }
+
+    private func showAlertConfirmation() {
+        #warning("Replace")
+//        guard let c = self.activeConversation, case Conversation.conversation = c.conversationType else { return }
+//
+//        self.textView.updateInputView(type: .confirmation)
+//
+//        let members = conversation.getNonMeMembers()
+//        self.textView.confirmationView.setAlertMessage(for: members)
+//
+//        self.alertProgressView.size = CGSize(width: self.width, height: self.height)
+    }
+}
