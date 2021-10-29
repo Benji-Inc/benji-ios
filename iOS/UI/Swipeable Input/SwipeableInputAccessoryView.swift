@@ -83,14 +83,10 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.backgroundColor = .red
-
         self.addSubview(self.activityBar)
         self.addSubview(self.inputContainerView)
 
         self.inputContainerView.contentView.addSubview(self.blurView)
-
-        self.textView.backgroundColor = .purple
         self.inputContainerView.contentView.addSubview(self.textView)
 
         self.inputContainerView.contentView.addSubview(self.animationView)
@@ -104,9 +100,14 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     }
 
     private var heightConstraint: NSLayoutConstraint?
+    private var safeAreaHeight: CGFloat = 0
 
     override func didMoveToWindow() {
         super.didMoveToWindow()
+
+        guard let window = self.window else { return }
+
+        self.safeAreaHeight = window.safeAreaInsets.bottom
 
         // Get a reference to the height constraint so we can expand this view for text input
         self.heightConstraint = self.constraints.first(where: { constraint in
@@ -125,14 +126,13 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
         let contentHeight = textViewHeight + InputActivityBar.height + self.inputContainerView.tailLength
         + SwipeableInputAccessoryView.bottomPadding
+        + self.safeAreaHeight
 
         return contentHeight
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
-        logDebug("current height is \(self.frame.height)")
 
         let horizontalOffset: CGFloat = Theme.contentOffset
 
@@ -144,10 +144,10 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         self.inputContainerView.pin(.left, padding: horizontalOffset)
         self.inputContainerView.match(.top, to: .bottom, of: self.activityBar)
         self.inputContainerView.expand(.right, padding: horizontalOffset)
-        self.inputContainerView.expand(.bottom, padding: SwipeableInputAccessoryView.bottomPadding)
 
-        // TODO: Find a more elegant solution than manually calling layout now.
-        self.inputContainerView.layoutNow()
+        let textViewSize = self.textView.sizeThatFits(CGSize(width: self.inputContainerView.width,
+                                                             height: .greatestFiniteMagnitude))
+        self.inputContainerView.height = textViewSize.height + self.inputContainerView.tailLength
 
         self.textView.expandToSuperviewSize()
 
@@ -170,10 +170,16 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
         KeyboardManager.shared.$currentEvent
             .mainSink { event in
                 switch event {
-                case .didHide(_):
+                case .willShow:
+                    self.safeAreaHeight = 0
+                    self.heightConstraint?.constant = self.getContentHeight()
+                case .willHide:
+                    if let window = self.window {
+                        self.safeAreaHeight = window.safeAreaInsets.bottom
+                        self.heightConstraint?.constant = self.getContentHeight()
+                    }
+                case .didHide:
                     self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
-                case .didShow(_):
-                    break
                 default:
                     break
                 }
