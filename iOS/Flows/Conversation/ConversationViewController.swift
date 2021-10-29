@@ -161,7 +161,7 @@ class ConversationViewController: FullScreenViewController,
         snapshot.appendSections([section])
         snapshot.appendItems(messages.asConversationCollectionItems)
 
-        if !controller.hasLoadedAllPreviousMessages {
+        if !controller.hasLoadedAllPreviousMessages && messages.count > 0 {
             snapshot.appendItems([.loadMore], toSection: section)
         }
 
