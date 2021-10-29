@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ConversationInputAccessoryView" customModule="Jibber" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="337" height="114"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CP8-gi-eym" userLabel="Safe Area Container">
+                    <rect key="frame" x="0.0" y="0.0" width="337" height="114"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6QT-73-Nac" customClass="InputActivityBar" customModule="Jibber" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="0.0" width="337" height="28"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="28" id="Qcc-5W-wS4"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VuQ-5S-h7F" customClass="SpeechBubbleView" customModule="Jibber" customModuleProvider="target">
+                            <rect key="frame" x="24" y="28" width="289" height="76"/>
+                            <subviews>
+                                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wd0-5K-wDX">
+                                    <rect key="frame" x="0.0" y="0.0" width="289" height="66"/>
+                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="1DJ-sg-uyi">
+                                        <rect key="frame" x="0.0" y="0.0" width="289" height="66"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    </view>
+                                    <blurEffect style="systemChromeMaterial"/>
+                                </visualEffectView>
+                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="This is some example message text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ads-9e-WJh" customClass="InputTextView" customModule="Jibber" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="289" height="66"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="textColor" systemColor="labelColor"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                </textView>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-ok-H5y">
+                                    <rect key="frame" x="0.0" y="0.0" width="289" height="76"/>
+                                    <state key="normal" title="Button"/>
+                                    <buttonConfiguration key="configuration" style="plain" title=""/>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="wd0-5K-wDX" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="2oF-yM-F3N"/>
+                                <constraint firstItem="b2H-ok-H5y" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="5OR-Ww-fH5"/>
+                                <constraint firstItem="wd0-5K-wDX" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="8Mu-Vz-G74"/>
+                                <constraint firstItem="Ads-9e-WJh" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="BWi-Ll-4ZT"/>
+                                <constraint firstAttribute="bottom" secondItem="wd0-5K-wDX" secondAttribute="bottom" constant="10" id="Fbj-GI-fJD"/>
+                                <constraint firstAttribute="trailing" secondItem="Ads-9e-WJh" secondAttribute="trailing" id="Oxb-vi-UJc"/>
+                                <constraint firstAttribute="trailing" secondItem="wd0-5K-wDX" secondAttribute="trailing" id="h6K-3X-T6J"/>
+                                <constraint firstItem="b2H-ok-H5y" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="jJa-qV-wJv"/>
+                                <constraint firstAttribute="bottom" secondItem="b2H-ok-H5y" secondAttribute="bottom" id="o6A-2N-qrt"/>
+                                <constraint firstAttribute="bottom" secondItem="Ads-9e-WJh" secondAttribute="bottom" constant="10" id="oSU-Bq-7GX"/>
+                                <constraint firstAttribute="trailing" secondItem="b2H-ok-H5y" secondAttribute="trailing" id="tFu-L7-c6N"/>
+                                <constraint firstItem="Ads-9e-WJh" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="xnh-w1-neF"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="6QT-73-Nac" firstAttribute="top" secondItem="CP8-gi-eym" secondAttribute="top" id="0H2-Xo-SXZ"/>
+                        <constraint firstItem="6QT-73-Nac" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" id="7OI-uH-Srh"/>
+                        <constraint firstAttribute="trailing" secondItem="6QT-73-Nac" secondAttribute="trailing" id="SmQ-yw-qqC"/>
+                        <constraint firstAttribute="trailing" secondItem="VuQ-5S-h7F" secondAttribute="trailing" constant="24" id="Tgi-A5-L3c"/>
+                        <constraint firstItem="VuQ-5S-h7F" firstAttribute="top" secondItem="6QT-73-Nac" secondAttribute="bottom" id="ZSd-AH-VpD"/>
+                        <constraint firstItem="VuQ-5S-h7F" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="24" id="Zve-FB-6La"/>
+                        <constraint firstAttribute="bottom" secondItem="VuQ-5S-h7F" secondAttribute="bottom" constant="10" id="z6m-Oo-aFo"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="CP8-gi-eym" secondAttribute="trailing" id="6pl-GL-tVf"/>
+                <constraint firstItem="CP8-gi-eym" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="CeC-mp-FyI"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="CP8-gi-eym" secondAttribute="bottom" id="EMx-qd-IUJ"/>
+                <constraint firstItem="CP8-gi-eym" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="PLr-1w-YEK"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="activityBar" destination="6QT-73-Nac" id="pPJ-K6-Xnn"/>
+                <outlet property="blurView" destination="wd0-5K-wDX" id="oKJ-Jh-pci"/>
+                <outlet property="inputContainerView" destination="VuQ-5S-h7F" id="o5I-Cx-4HN"/>
+                <outlet property="overlayButton" destination="b2H-ok-H5y" id="78P-cH-BSH"/>
+                <outlet property="textView" destination="Ads-9e-WJh" id="T8m-mt-M46"/>
+            </connections>
+            <point key="canvasLocation" x="81.884057971014499" y="-64.285714285714278"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
+</document>

@@ -38,7 +38,11 @@ class ConversationViewController: FullScreenViewController,
     var didTapConversationTitle: CompletionOptional = nil
 
     // Custom Input Accessory View
-    lazy var messageInputAccessoryView = ConversationInputAccessoryView(with: self)
+    lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
+        let view: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
+        view.delegate = self
+        return view
+    }()
     override var inputAccessoryView: UIView? {
         return self.presentedViewController.isNil ? self.messageInputAccessoryView : nil 
     }

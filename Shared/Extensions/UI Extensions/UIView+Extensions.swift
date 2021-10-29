@@ -11,6 +11,12 @@ import UIKit
 
 extension UIView: Selectable {
 
+    class func fromNib<T: UIView>() -> T {
+        return Bundle(for: T.self).loadNibNamed(String(describing: T.self),
+                                                owner: nil,
+                                                options: nil)!.first as! T
+    }
+
     var isVisible: Bool {
         get {
             return !self.isHidden

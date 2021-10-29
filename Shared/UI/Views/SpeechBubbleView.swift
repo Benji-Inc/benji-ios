@@ -71,8 +71,6 @@ class SpeechBubbleView: View {
                       height: bottomSide - topSide)
     }
 
-    /// A view to contain subviews you want positioned inside the bubble. This view matches the frame of the bubble, excluding the tail.
-    let contentView = View()
     /// The layer for drawing the speech bubble background.
     private let bubbleLayer = CAShapeLayer()
 
@@ -86,26 +84,25 @@ class SpeechBubbleView: View {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        self.orientation = .down
+
+        super.init(coder: aDecoder)
+
+        self.bubbleColor = .clear
+        self.borderColor = .white
     }
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.layer.addSublayer(self.bubbleLayer)
-        self.bubbleLayer.fillColor = UIColor.gray.cgColor
         self.bubbleLayer.lineWidth = 2
-
-        self.addSubview(self.contentView)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.updateBubblePath()
-
-        // Match the content view to the area of the bubble.
-        self.contentView.frame = self.bubbleFrame
     }
 
     /// Draws a path for the bubble and applies it to the bubble layer.
