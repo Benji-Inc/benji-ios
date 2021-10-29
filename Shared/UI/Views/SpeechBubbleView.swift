@@ -101,11 +101,46 @@ import Foundation
      override func layoutSubviews() {
          super.layoutSubviews()
 
+         // Get content size
+         // Get insets/tail lenght
+         // Draw bubble path with content size and insets
+         // Set x,y of content view
+         // Set size of self
+        // self.setSize()
+
          self.updateBubblePath()
 
          // Match the content view to the area of the bubble.
          self.contentView.frame = self.bubbleFrame
      }
+
+     #warning("Leaving this as a placeholder")
+
+//     private func setSize() {
+//         var newFrame: CGRect = .zero
+//
+//         self.subviews.forEach { view in
+//             if view is TextView {
+//                 newFrame = newFrame.union(view.frame)
+//             }
+//         }
+//
+//         switch self.orientation {
+//         case .up:
+//             <#code#>
+//         case .down:
+//             <#code#>
+//         case .left:
+//             <#code#>
+//         case .right:
+//             <#code#>
+//         }
+//
+//         newFrame.size.height += 10 + self.tailLength
+//         newFrame.size.width += 10
+//
+//         self.size = newFrame.size
+//     }
 
      /// Draws a path for the bubble and applies it to the bubble layer.
      private func updateBubblePath() {

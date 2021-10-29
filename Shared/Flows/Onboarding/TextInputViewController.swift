@@ -86,14 +86,16 @@ class TextInputViewController<ResultType>: ViewController, Sizeable, Completable
     @objc func textFieldDidChange() {
         guard let text = self.textField.text else {
             self.textField.inputAccessoryView = nil
+            self.textField.autocorrectionType = .default
             self.textField.reloadInputViews()
             return
         }
 
         let isValid = self.validate(text: text)
 
-        self.textEntry.textField.inputAccessoryView = isValid ? self.toolbar : nil
-        self.textEntry.textField.reloadInputViews()
+        self.textField.inputAccessoryView = isValid ? self.toolbar : nil
+        self.textField.autocorrectionType = isValid ? .no : .default
+        self.textField.reloadInputViews()
     }
 
     func validate(text: String) -> Bool {
