@@ -18,22 +18,20 @@ enum InputViewType {
 class InputTextView: ExpandingTextView {
 
     lazy var countView = CharacterCountView()
-    lazy var attachmentInputVC = AttachmentViewController(with: self.attachmentDelegate)
     lazy var demoVC = KeyboardDemoViewController()
     lazy var confirmationView = AlertConfirmationView()
 
     private(set) var currentInputView: InputViewType?
     @Published var inputText: String = ""
 
-    unowned let attachmentDelegate: AttachmentViewControllerDelegate
+    weak var attachmentDelegate: AttachmentViewControllerDelegate?
 
-    init(with delegate: AttachmentViewControllerDelegate) {
-        self.attachmentDelegate = delegate
+    init() {
         super.init(frame: .zero, textContainer: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
     }
 
     override func initializeViews() {
@@ -54,7 +52,7 @@ class InputTextView: ExpandingTextView {
 
         switch type {
         case .attachments:
-            self.inputView = self.attachmentInputVC.view
+            break
         case .confirmation:
             self.inputView = self.confirmationView
         case .keyboard:

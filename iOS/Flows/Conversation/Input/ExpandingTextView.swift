@@ -15,6 +15,7 @@ class ExpandingTextView: TextView {
     override func initializeViews() {
         super.initializeViews()
 
+        self.translatesAutoresizingMaskIntoConstraints = false
         self.textContainer.heightTracksTextView = true
         self.isScrollEnabled = false
         self.keyboardType = .twitter

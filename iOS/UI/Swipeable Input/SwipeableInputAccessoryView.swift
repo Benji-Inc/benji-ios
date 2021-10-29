@@ -49,14 +49,16 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     var alertAnimator: UIViewPropertyAnimator?
     var selectionFeedback = UIImpactFeedbackGenerator(style: .rigid)
 
-    let activityBar = InputActivityBar()
+    @IBOutlet var activityBar: InputActivityBar!
+    /// Text view for users to input their message.
+    @IBOutlet var textView: InputTextView!
+
     let inputContainerView = SpeechBubbleView(orientation: .down,
                                               bubbleColor: nil,
                                               borderColor: Color.white.color)
     /// A blue view placed behind the text input field.
     let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
-    /// Text view for users to input their message.
-    lazy var textView = InputTextView(with: self)
+
     let animationView = AnimationView.with(animation: .loading)
     let overlayButton = UIButton()
     var cancellables = Set<AnyCancellable>()
@@ -95,25 +97,22 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
         self.inputContainerView.contentView.addSubview(self.overlayButton)
 
+        self.backgroundColor = .red
+
+//        self.inputContainerView.contentView.addSubview(self.blurView)
+//
+//        self.textView.backgroundColor = .purple
+//        self.inputContainerView.contentView.addSubview(self.textView)
+//
+//        self.inputContainerView.contentView.addSubview(self.animationView)
+//        self.animationView.contentMode = .scaleAspectFit
+//        self.animationView.loopMode = .loop
+//
+//        self.inputContainerView.contentView.addSubview(self.overlayButton)
+
+
         self.setupGestures()
         self.setupHandlers()
-    }
-
-    private var heightConstraint: NSLayoutConstraint?
-    private var safeAreaHeight: CGFloat = 0
-
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
-
-        guard let window = self.window else { return }
-
-        self.safeAreaHeight = window.safeAreaInsets.bottom
-
-        // Get a reference to the height constraint so we can expand this view for text input
-        self.heightConstraint = self.constraints.first(where: { constraint in
-            return constraint.firstAttribute == .height
-        })
-        self.heightConstraint?.constant = self.getContentHeight()
     }
 
     private func getContentHeight() -> CGFloat {
@@ -126,7 +125,6 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
 
         let contentHeight = textViewHeight + InputActivityBar.height + self.inputContainerView.tailLength
         + SwipeableInputAccessoryView.bottomPadding
-        + self.safeAreaHeight
 
         return contentHeight
     }
@@ -134,34 +132,34 @@ class SwipeableInputAccessoryView: View, AttachmentViewControllerDelegate, UIGes
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let horizontalOffset: CGFloat = Theme.contentOffset
-
-        self.activityBar.pin(.left, padding: horizontalOffset)
-        self.activityBar.pin(.top)
-        self.activityBar.expand(.right, padding: horizontalOffset)
-        self.activityBar.height = InputActivityBar.height
-
-        self.inputContainerView.pin(.left, padding: horizontalOffset)
-        self.inputContainerView.match(.top, to: .bottom, of: self.activityBar)
-        self.inputContainerView.expand(.right, padding: horizontalOffset)
-
-        let textViewSize = self.textView.sizeThatFits(CGSize(width: self.inputContainerView.width,
-                                                             height: .greatestFiniteMagnitude))
-        self.inputContainerView.height = textViewSize.height + self.inputContainerView.tailLength
-
-        self.textView.expandToSuperviewSize()
-
-        self.blurView.expandToSuperviewSize()
-        self.blurView.roundCorners()
-
-        self.overlayButton.expandToSuperviewSize()
-
-        self.animationView.size = CGSize(width: 18, height: 18)
-        self.animationView.match(.right,
-                                 to: .right,
-                                 of: self.inputContainerView,
-                                 offset: Theme.contentOffset)
-        self.animationView.centerOnY()
+//        let horizontalOffset: CGFloat = Theme.contentOffset
+//
+//        self.activityBar.pin(.left, padding: horizontalOffset)
+//        self.activityBar.pin(.top)
+//        self.activityBar.expand(.right, padding: horizontalOffset)
+//        self.activityBar.height = InputActivityBar.height
+//
+//        self.inputContainerView.pin(.left, padding: horizontalOffset)
+//        self.inputContainerView.match(.top, to: .bottom, of: self.activityBar)
+//        self.inputContainerView.expand(.right, padding: horizontalOffset)
+//        self.inputContainerView.expand(.bottom, padding: SwipeableInputAccessoryView.bottomPadding)
+//
+//        // TODO: Find a more elegant solution than manually calling layout now.
+//        self.inputContainerView.layoutNow()
+//
+//        self.textView.expandToSuperviewSize()
+//
+//        self.blurView.expandToSuperviewSize()
+//        self.blurView.roundCorners()
+//
+//        self.overlayButton.expandToSuperviewSize()
+//
+//        self.animationView.size = CGSize(width: 18, height: 18)
+//        self.animationView.match(.right,
+//                                 to: .right,
+//                                 of: self.inputContainerView,
+//                                 offset: Theme.contentOffset)
+//        self.animationView.centerOnY()
     }
 
     // MARK: PRIVATE
