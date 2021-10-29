@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -27,14 +27,6 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VuQ-5S-h7F" customClass="SpeechBubbleView" customModule="Jibber" customModuleProvider="target">
                             <rect key="frame" x="24" y="28" width="289" height="76"/>
                             <subviews>
-                                <visualEffectView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wd0-5K-wDX">
-                                    <rect key="frame" x="0.0" y="0.0" width="289" height="66"/>
-                                    <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="1DJ-sg-uyi">
-                                        <rect key="frame" x="0.0" y="0.0" width="289" height="66"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                    </view>
-                                    <blurEffect style="systemChromeMaterial"/>
-                                </visualEffectView>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="This is some example message text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ads-9e-WJh" customClass="InputTextView" customModule="Jibber" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="289" height="66"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -50,13 +42,9 @@
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstItem="wd0-5K-wDX" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="2oF-yM-F3N"/>
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="5OR-Ww-fH5"/>
-                                <constraint firstItem="wd0-5K-wDX" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="8Mu-Vz-G74"/>
                                 <constraint firstItem="Ads-9e-WJh" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="top" id="BWi-Ll-4ZT"/>
-                                <constraint firstAttribute="bottom" secondItem="wd0-5K-wDX" secondAttribute="bottom" constant="10" id="Fbj-GI-fJD"/>
                                 <constraint firstAttribute="trailing" secondItem="Ads-9e-WJh" secondAttribute="trailing" id="Oxb-vi-UJc"/>
-                                <constraint firstAttribute="trailing" secondItem="wd0-5K-wDX" secondAttribute="trailing" id="h6K-3X-T6J"/>
                                 <constraint firstItem="b2H-ok-H5y" firstAttribute="leading" secondItem="VuQ-5S-h7F" secondAttribute="leading" id="jJa-qV-wJv"/>
                                 <constraint firstAttribute="bottom" secondItem="b2H-ok-H5y" secondAttribute="bottom" id="o6A-2N-qrt"/>
                                 <constraint firstAttribute="bottom" secondItem="Ads-9e-WJh" secondAttribute="bottom" constant="10" id="oSU-Bq-7GX"/>
@@ -88,7 +76,6 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="activityBar" destination="6QT-73-Nac" id="pPJ-K6-Xnn"/>
-                <outlet property="blurView" destination="wd0-5K-wDX" id="oKJ-Jh-pci"/>
                 <outlet property="inputContainerView" destination="VuQ-5S-h7F" id="o5I-Cx-4HN"/>
                 <outlet property="overlayButton" destination="b2H-ok-H5y" id="78P-cH-BSH"/>
                 <outlet property="textView" destination="Ads-9e-WJh" id="T8m-mt-M46"/>

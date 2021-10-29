@@ -187,6 +187,7 @@ class MessageSubcell: UICollectionViewCell {
         self.backgroundColorView.addSubview(self.textView)
         self.textView.isScrollEnabled = false
         self.textView.isEditable = false
+        self.textView.textAlignment = .center
 
         self.backgroundColorView.addSubview(self.replyCountLabel)
     }
@@ -198,8 +199,7 @@ class MessageSubcell: UICollectionViewCell {
         self.backgroundColorView.expandToSuperviewHeight()
         self.backgroundColorView.centerOnXAndY()
 
-        self.textView.expandToSuperviewWidth()
-        self.textView.sizeToFit()
+        self.textView.setSize(withWidth: self.contentView.width - Theme.contentOffset.doubled)
         self.textView.centerOnXAndY()
 
         self.replyCountLabel.sizeToFit()

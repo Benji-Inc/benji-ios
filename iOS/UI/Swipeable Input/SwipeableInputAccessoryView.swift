@@ -50,8 +50,6 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     @IBOutlet var textView: InputTextView!
     /// A button to handle taps and pan gestures.
     @IBOutlet var overlayButton: UIButton!
-    /// A blur view placed behind the text input field.
-    @IBOutlet var blurView: UIVisualEffectView!
 
     var cancellables = Set<AnyCancellable>()
 
@@ -77,10 +75,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         // Use flexible height autoresizing mask to account for changes in text input.
         self.autoresizingMask = .flexibleHeight
 
-        self.inputContainerView.borderColor = .lightGray
-
-        self.blurView.roundCorners()
-
+        self.inputContainerView.borderColor = Color.lightGray.color
+        self.inputContainerView.borderColor = Color.lightGray.color.withAlphaComponent(0.5)
 
         self.setupGestures()
         self.setupHandlers()

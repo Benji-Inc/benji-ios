@@ -87,14 +87,14 @@ class SpeechBubbleView: View {
 
         super.init(coder: aDecoder)
 
-        self.bubbleColor = .clear
-        self.borderColor = .white
+        self.bubbleColor = Color.white.color
+        self.borderColor = Color.white.color
     }
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.layer.addSublayer(self.bubbleLayer)
+        self.layer.insertSublayer(self.bubbleLayer, at: 0)
         self.bubbleLayer.lineWidth = 2
     }
 
@@ -165,7 +165,6 @@ class SpeechBubbleView: View {
         }
 
         path.closeSubpath()
-
         self.bubbleLayer.path = path
     }
 }

@@ -19,7 +19,8 @@ class ExpandingTextView: TextView {
         self.textContainer.heightTracksTextView = true
         self.isScrollEnabled = false
         self.keyboardType = .twitter
-        self.tintColor = Color.white.color
+        self.tintColor = Color.darkGray.color
+        self.textColor = Color.darkGray.color
         self.textAlignment = .center
         self.set(backgroundColor: .clear)
 
@@ -43,17 +44,17 @@ class ExpandingTextView: TextView {
         }
 
         self.initialPlaceholder = placeholderText
-        self.set(placeholder: placeholderText, color: .lightGray)
+        self.set(placeholder: placeholderText, color: .darkGray)
     }
 
     func setPlaceholder(for kind: MessageKind) {
         switch kind {
         case .text(_):
             if let placeholder = self.initialPlaceholder {
-                self.set(placeholder: placeholder, color: .lightGray)
+                self.set(placeholder: placeholder, color: .darkGray)
             }
         case .photo(_, _), .video(_, _):
-            self.set(placeholder: "Add comment", color: .lightGray)
+            self.set(placeholder: "Add comment", color: .darkGray)
         default:
             break
         }
