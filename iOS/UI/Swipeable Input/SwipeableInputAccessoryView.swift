@@ -76,8 +76,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        // Use flexible height autoresizing mask
-        self.translatesAutoresizingMaskIntoConstraints = false
+        // Use flexible height autoresizing mask to account for changes in text input.
         self.autoresizingMask = .flexibleHeight
 
         self.inputContainerView.borderColor = .lightGray
