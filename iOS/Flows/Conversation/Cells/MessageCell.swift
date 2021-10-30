@@ -159,7 +159,7 @@ class MessageSubcell: UICollectionViewCell {
     /// A rounded and colored background view for the message. Changes color based on the sender.
     let backgroundColorView = UIView()
     /// Text view for displaying the text of the message.
-    let textView = TextView()
+    let textView = MessageTextView()
     /// A label to show the total number of replies for the root message.
     let replyCountLabel = Label(font: .smallBold, textColor: .lightGray)
 
@@ -199,7 +199,8 @@ class MessageSubcell: UICollectionViewCell {
         self.backgroundColorView.expandToSuperviewHeight()
         self.backgroundColorView.centerOnXAndY()
 
-        self.textView.setSize(withWidth: self.contentView.width - Theme.contentOffset.doubled)
+        self.textView.expandToSuperviewWidth()
+        self.textView.sizeToFit()
         self.textView.centerOnXAndY()
 
         self.replyCountLabel.sizeToFit()
