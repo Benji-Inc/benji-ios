@@ -177,7 +177,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
     func resetInputViews() {
         self.textView.reset()
-        self.textView.alpha = 1
+        self.inputContainerView.alpha = 1
         self.textView.countView.isHidden = true
     }
 
@@ -226,7 +226,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
                                     previousMessage: self.editableMessage)
         self.sendable = object
 
-        self.textView.alpha = 0
+        self.inputContainerView.alpha = 0
 
         // Initialize the preview view for the user to drag up the screen.
         self.previewView = PreviewMessageView(orientation: .down,
@@ -283,9 +283,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
             UIView.animate(withDuration: Theme.animationDuration) {
                 guard let initialOrigin = self.initialPreviewOrigin else { return }
                 self.previewView?.origin = initialOrigin
-                self.previewView?.bubbleColor = .clear
             } completion: { completed in
-                self.textView.alpha = 1
+                self.inputContainerView.alpha = 1
                 self.previewView?.removeFromSuperview()
             }
         }
@@ -293,7 +292,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     }
 
     private func handlePanFailed() {
-        self.textView.alpha = 1
+        self.inputContainerView.alpha = 1
         self.previewView?.removeFromSuperview()
         self.delegate?.swipeableInputAccessoryDidFinishSwipe(self)
     }
