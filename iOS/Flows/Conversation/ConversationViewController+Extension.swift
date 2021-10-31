@@ -84,7 +84,7 @@ extension ConversationViewController {
                     let messageController = ChatClient.shared.messageController(cid: self.conversation.cid,
                                                                                 messageId: messageID)
                     if let message = messageController.message {
-                        self.dateLabel.set(date: message.createdAt)
+                       // self.dateLabel.set(date: message.createdAt)
                         self.view.layoutNow()
                     }
                 case .loadMore:

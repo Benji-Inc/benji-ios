@@ -46,7 +46,7 @@ class MessageCell: UICollectionViewCell {
         self.collectionView.set(backgroundColor: .clear)
         self.contentView.addSubview(self.collectionView)
         self.collectionView.clipsToBounds = false
-        self.collectionView.contentInset = UIEdgeInsets()
+        self.collectionView.contentInset = UIEdgeInsets(top: Theme.contentOffset, left: 0, bottom: 0, right: 0)
 
         self.clipsToBounds = false 
     }

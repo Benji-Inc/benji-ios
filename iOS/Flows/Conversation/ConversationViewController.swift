@@ -27,7 +27,6 @@ class ConversationViewController: FullScreenViewController,
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     let conversationHeader = ConversationHeaderView()
-    let dateLabel = ConversationDateLabel()
 
     var conversation: Conversation! { return self.conversationController?.channel }
     private(set) var conversationController: ChatChannelController?
@@ -76,8 +75,6 @@ class ConversationViewController: FullScreenViewController,
 
         self.contentContainer.addSubview(self.conversationHeader)
         self.conversationHeader.configure(with: self.conversation)
-
-        self.contentContainer.addSubview(self.dateLabel)
     }
     
     override func viewDidLayoutSubviews() {
@@ -85,21 +82,20 @@ class ConversationViewController: FullScreenViewController,
         
         self.blurView.expandToSuperviewSize()
 
-        self.dateLabel.setSize(withWidth: self.view.width)
-        self.dateLabel.centerOnX()
+        switch self.state {
+        case .read:
+            self.conversationHeader.height = 120
+        case .write:
+            self.conversationHeader.height = 60
+        }
+
+        self.conversationHeader.pinToSafeArea(.top, padding: Theme.contentOffset)
+        self.conversationHeader.expandToSuperviewWidth()
 
         self.collectionView.expandToSuperviewWidth()
-        let padding: CGFloat
-        if self.state == .read {
-            padding = self.dateLabel.height + (self.view.height * 0.15)
-        } else {
-            padding = self.dateLabel.height + 20
-        }
-        self.collectionView.match(.top, to: .bottom, of: self.conversationHeader, offset: padding)
-        self.collectionView.height = self.view.height - padding - self.conversationHeader.bottom
 
-        // Base the Y position of the date label on the top of the collection view.
-        self.dateLabel.match(.bottom, to: .top, of: self.collectionView, offset: -20)
+        self.collectionView.match(.top, to: .bottom, of: self.conversationHeader)
+        self.collectionView.height = self.view.height - self.conversationHeader.bottom
     }
 
     override func viewWillAppear(_ animated: Bool) {

@@ -15,7 +15,7 @@ import UIKit
 class ConversationHeaderView: View {
 
     let stackedAvatarView = StackedAvatarView()
-    let label = Label(font: .largeThin, textColor: .textColor)
+    let label = Label(font: .regularBold, textColor: .textColor)
     let button = Button()
 
     private var cancellables = Set<AnyCancellable>()
@@ -36,7 +36,7 @@ class ConversationHeaderView: View {
 
         self.addSubview(self.stackedAvatarView)
 
-        self.stackedAvatarView.itemHeight = 30
+        self.stackedAvatarView.itemHeight = 60
 
         self.addSubview(self.label)
         self.label.textAlignment = .left
@@ -80,28 +80,24 @@ class ConversationHeaderView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        guard let superview = self.superview else { return }
-
-        self.pin(.top, padding: Theme.contentOffset.half)
-        self.pin(.left, padding: Theme.contentOffset.half)
+        let maxWidth = self.width - Theme.contentOffset.doubled
+        self.label.setSize(withWidth: maxWidth)
+        self.label.pin(.top)
+        self.label.centerOnX()
 
         self.stackedAvatarView.setSize()
+        self.stackedAvatarView.centerOnX()
 
-        self.height = self.stackedAvatarView.itemHeight
-        self.width = superview.width - Theme.contentOffset
+        switch self.state {
+        case .read:
+            self.stackedAvatarView.match(.top, to: .bottom, of: self.label, offset: Theme.contentOffset.half)
+        case .write:
+            self.stackedAvatarView.pin(.top)
+        }
 
-        self.stackedAvatarView.pin(.left)
-        self.stackedAvatarView.centerOnY()
-
-        let maxWidth = self.width - Theme.contentOffset - self.stackedAvatarView.width
-        self.label.setSize(withWidth: maxWidth)
-
-        self.label.centerY = self.stackedAvatarView.centerY 
-        self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset.half)
-
-        self.button.squaredSize = self.height
-        self.button.pin(.right)
-        self.button.centerOnY()
+        self.button.squaredSize = 40
+        self.button.pin(.right, padding: Theme.contentOffset)
+        self.button.centerY = self.label.centerY
     }
 
     func update(for state: ConversationUIState) {
@@ -111,10 +107,8 @@ class ConversationHeaderView: View {
             switch state {
             case .read:
                 self.label.alpha = 1.0
-                self.button.alpha = 1.0
             case .write:
                 self.label.alpha = 0.0
-                self.button.alpha = 0.0
             }
 
             self.layoutNow()
