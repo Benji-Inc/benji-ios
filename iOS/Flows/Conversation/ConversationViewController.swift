@@ -35,6 +35,7 @@ class ConversationViewController: FullScreenViewController,
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
     var didTapMoreButton: CompletionOptional = nil
     var didTapConversationTitle: CompletionOptional = nil
+    @Published var didCenterOnCell: MessageCell? = nil
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
@@ -139,6 +140,12 @@ class ConversationViewController: FullScreenViewController,
         }
     }
 
+    func updateCenterMostCell() {
+        if let cell = self.collectionView.getCentermostVisibleCell() as? MessageCell {
+            self.didCenterOnCell = cell
+        }
+    }
+
     // MARK: - Message Loading and Updates
 
     @MainActor
@@ -170,6 +177,8 @@ class ConversationViewController: FullScreenViewController,
         await self.dataSource.apply(snapshot,
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
+
+        self.updateCenterMostCell()
     }
 
     private func getFirstUnreadIndexPath() -> IndexPath? {
@@ -246,9 +255,17 @@ class ConversationViewController: FullScreenViewController,
         }
         
         targetContentOffset.pointee = CGPoint(x: newXOffset, y: targetOffset.y)
+        
+        self.updateCenterMostCell()
+    }
+
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        self.updateCenterMostCell()
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        self.updateCenterMostCell()
+
         guard self.conversation.isUnread else { return }
         // Once the user sees the latest message, set the conversation as read.
         guard scrollView.contentOffset.x < 0 else { return }
