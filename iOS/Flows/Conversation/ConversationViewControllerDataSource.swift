@@ -58,9 +58,15 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         switch item {
         case .message(let messageID):
             if section.isThread {
-                return collectionView.dequeueConfiguredReusableCell(using: self.threadMessageCellRegistration,
-                                                                    for: indexPath,
-                                                                    item: (section.cid, messageID, self))
+                let threadCell
+                = collectionView.dequeueConfiguredReusableCell(using: self.threadMessageCellRegistration,
+                                                               for: indexPath,
+                                                               item: (section.cid, messageID, self))
+
+                threadCell.handleDeleteMessage = { [unowned self] (message) in
+                    self.handleDeleteMessage?(message)
+                }
+                return threadCell
             } else {
                 let messageCell
                 = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
