@@ -42,7 +42,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     
     unowned let delegate: OnboardingViewControllerDelegate
 
-    var deeplink: DeepLinkable?
     var reservationId: String? {
         didSet {
             self.codeVC.reservationId = self.reservationId
@@ -55,19 +54,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         }
     }
 
-    var reservationOwner: User? 
-    var reservationOwnerId: String?
+    var invitor: User? 
 
-    init(with reservationId: String?,
-         reservationCreatorId: String?,
-         passId: String?,
-         deeplink: DeepLinkable?,
-         delegate: OnboardingViewControllerDelegate) {
+    init(with delegate: OnboardingViewControllerDelegate) {
 
-        self.deeplink = deeplink
-        self.reservationId = reservationId
-        self.reservationOwnerId = reservationCreatorId
-        self.passId = passId
         self.delegate = delegate
         super.init()
     }
@@ -97,7 +87,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 self.reservationId = reservation.objectId
                 if let identity = reservation.createdBy?.objectId {
                     Task {
-                        try await self.updateReservationCreator(with: identity)
+                        try await self.updateInvitor(with: identity)
                     }
                 }
                 self.current = .phone(self.phoneVC)
@@ -173,11 +163,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
         }.store(in: &self.cancellables)
 
-        if let userId = self.reservationOwnerId {
-            Task {
-                try await self.updateReservationCreator(with: userId)
-            }
-        }
+//        if let userId = self.reservationOwnerId {
+//            Task {
+//                try await self.updateReservationCreator(with: userId)
+//            }
+//        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -245,9 +235,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     @MainActor
-    func updateReservationCreator(with userId: String) async throws {
+    func updateInvitor(with userId: String) async throws {
         let user = try await User.localThenNetworkQuery(for: userId)
-        self.reservationOwner = user
+        self.invitor = user
         self.avatarView.set(avatar: user)
         self.nameLabel.setText(user.givenName.capitalized)
         self.avatarView.isHidden = false
@@ -284,12 +274,12 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func willUpdateContent() {
         super.willUpdateContent()
 
-        self.avatarView.isHidden = self.reservationOwner.isNil
+        self.avatarView.isHidden = self.invitor.isNil
     }
 
     override func getMessage() -> Localized {
         guard let content = self.current else { return "" }
-        return content.getDescription(with: self.reservationOwner)
+        return content.getDescription(with: self.invitor)
     }
 
     override func didSelectBackButton() {
@@ -326,14 +316,22 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 let reservation = try await Reservation.getObject(with: reservationId)
                 self.reservationId = reservationId
                 if let userId = reservation.createdBy?.objectId {
-                    try await self.updateReservationCreator(with: userId)
+                    try await self.updateInvitor(with: userId)
                     await self.hideLoading()
                     self.current = .phone(self.phoneVC)
                 }
 
             }
         case .pass(passId: let passId):
-            break
+            Task {
+                let pass = try await Pass.getObject(with: passId)
+                self.passId = passId
+                if let userId = pass.owner?.objectId {
+                    try await self.updateInvitor(with: userId)
+                    await self.hideLoading()
+                    self.current = .phone(self.phoneVC)
+                }
+            }
         }
     }
 
