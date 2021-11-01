@@ -18,6 +18,8 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private let parentMessageView = ThreadMessageCell()
+    /// A view positioned behind the parent message to separate it from the rest of the messages.
+    private let parentMessageBlurView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
 
     /// A controller for message that all the replies in the thread are responding.
     let messageController: ChatMessageController
@@ -70,6 +72,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
         super.initializeViews()
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
+        self.view.addSubview(self.parentMessageBlurView)
         self.view.addSubview(self.parentMessageView)
 
         self.parentMessageView.set(message: self.parentMessage, replies: [], totalReplyCount: 0)
@@ -85,8 +88,16 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
         self.blurView.expandToSuperviewSize()
 
+        let headerHeight: CGFloat = 120
+
+        self.parentMessageBlurView.width = self.view.width - Theme.contentOffset
+        self.parentMessageBlurView.height = headerHeight
+        self.parentMessageBlurView.centerOnX()
+        self.parentMessageBlurView.roundCorners()
+
         self.parentMessageView.width = self.view.width * 0.8
-        self.parentMessageView.height = 120
+        self.parentMessageView.height = headerHeight - Theme.contentOffset.doubled
+        self.parentMessageView.pin(.top, padding: Theme.contentOffset)
         self.parentMessageView.centerOnX()
 
         self.collectionView.contentInset.top = 120
@@ -137,7 +148,11 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
     }
 
     override func getAnimationCycle() -> AnimationCycle? {
-        return nil
+        var cycle = super.getAnimationCycle()
+        cycle?.shouldConcatenate = false
+        cycle?.scrollToIndexPath = IndexPath(item: 0, section: 0)
+        cycle?.scrollPosition = .bottom
+        return cycle
     }
 }
 
