@@ -347,8 +347,10 @@ extension CollectionViewDataSource {
 
         await self.applySnapshotUsingReloadData(snapshot)
 
-        // If specified, scroll to the last item in the collection view.
-        if let scrollToIndexPath = animationCycle.scrollToIndexPath {
+        // If specified, scroll to a particular item in the collection view.
+        if let scrollToIndexPath = animationCycle.scrollToIndexPath,
+           self.itemIdentifier(for: scrollToIndexPath).exists {
+
             collectionView.scrollToItem(at: scrollToIndexPath,
                                         at: [animationCycle.scrollPosition],
                                         animated: false)
