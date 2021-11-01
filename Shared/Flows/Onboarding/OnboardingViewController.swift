@@ -54,7 +54,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         }
     }
 
-    var invitor: User? 
+    var invitor: User?
+    private var fullName: String = ""
 
     init(with delegate: OnboardingViewControllerDelegate) {
 
@@ -132,8 +133,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.nameVC.onDidComplete = { [unowned self] result in
             switch result {
-            case .success:
-                self.handleNameSuccess()
+            case .success(let name):
+                self.handleNameSuccess(for: name)
             case .failure(_):
                 break
             }
@@ -147,7 +148,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             switch result {
             case .success:
                 Task {
-                    try await ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
+                    try await ActivateUser(fullName: self.fullName).makeRequest(andUpdate: [], viewsToIgnore: [self.view])
                     guard let user = User.current(), user.status == .active else { return }
                     self.delegate.onboardingView(self, didVerify: user)
                 }
@@ -162,12 +163,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 self.confettiView.startConfetti(with: 10)
             }
         }.store(in: &self.cancellables)
-
-//        if let userId = self.reservationOwnerId {
-//            Task {
-//                try await self.updateReservationCreator(with: userId)
-//            }
-//        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -335,11 +330,16 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         }
     }
 
-    private func handleNameSuccess() {
+    private func handleNameSuccess(for name: String) {
+        self.fullName = name
         // User has been allowed to continue
         if User.current()?.status == .inactive {
             #if APPCLIP
-            self.current = .waitlist(self.waitlistVC)
+            Task {
+                User.current()?.formatName(from: name)
+                try await User.current()?.saveLocalThenServer()
+                self.current = .waitlist(self.waitlistVC)
+            }
             #else
             if let current = User.current(), current.isOnboarded {
                 self.delegate.onboardingView(self, didVerify: User.current()!)

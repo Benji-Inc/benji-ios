@@ -10,7 +10,7 @@ import Foundation
 import Parse
 import TMROLocalization
 
-class NameViewController: TextInputViewController<Void> {
+class NameViewController: TextInputViewController<String> {
 
     init() {
         super.init(textField: TextField(), placeholder: LocalizedString(id: "", default: "First Last"))
@@ -40,20 +40,6 @@ class NameViewController: TextInputViewController<Void> {
         guard let text = self.textField.text, !text.isEmpty else { return }
 
         guard text.isValidPersonName else { return }
-
-        Task {
-            await self.button.handleEvent(status: .loading)
-
-            do {
-                User.current()?.formatName(from: text)
-
-                try await User.current()?.saveLocalThenServer()
-                await self.button.handleEvent(status: .complete)
-                self.complete(with: .success(()))
-            } catch {
-                await self.button.handleEvent(status: .error("Failed to update user name."))
-                self.complete(with: .failure(error))
-            }
-        }
+        self.complete(with: .success(text))
     }
 }

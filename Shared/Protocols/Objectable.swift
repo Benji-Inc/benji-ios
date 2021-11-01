@@ -43,6 +43,21 @@ protocol Objectable: AnyObject {
 extension Objectable where Self: PFObject {
 
     @discardableResult
+    func saveLocally() async throws -> Self {
+        let object: Self = try await withCheckedThrowingContinuation { continuation in
+            self.pinInBackground { success, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: self)
+                }
+            }
+        }
+
+        return object
+    }
+
+    @discardableResult
     func saveLocalThenServer() async throws -> Self {
         let object: Self = try await withCheckedThrowingContinuation { continuation in
             self.saveEventually { (success, error) in
