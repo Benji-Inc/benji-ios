@@ -135,6 +135,10 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
         
         return data
     }
+
+    override func getAnimationCycle() -> AnimationCycle? {
+        return nil
+    }
 }
 
 // MARK: - Updates and Subscription
