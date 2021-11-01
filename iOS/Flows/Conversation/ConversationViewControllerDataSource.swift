@@ -38,11 +38,10 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case thread
     }
 
-    var handleDeleteMessage: ((Message) -> Void)?
+    var handleSelectedMessage: ((Messageable) -> Void)?
+    var handleDeleteMessage: ((Messageable) -> Void)?
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
-    
-    private let contextMenuDelegate: ContextMenuInteractionDelegate
 
     // Cell registration
     private let messageCellRegistration = ConversationCollectionViewDataSource.createMessageCellRegistration()
@@ -51,14 +50,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     private let loadMoreMessagesCellRegistration
     = ConversationCollectionViewDataSource.createLoadMoreCellRegistration()
 
-    required init(collectionView: UICollectionView) {
-        self.contextMenuDelegate = ContextMenuInteractionDelegate(collectionView: collectionView)
-
-        super.init(collectionView: collectionView)
-
-        self.contextMenuDelegate.dataSource = self
-    }
-
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
                               section: SectionType,
@@ -66,24 +57,32 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
         switch item {
         case .message(let messageID):
-            let cell: UICollectionViewCell
             if section.isThread {
-                cell = collectionView.dequeueConfiguredReusableCell(using: self.threadMessageCellRegistration,
+                return collectionView.dequeueConfiguredReusableCell(using: self.threadMessageCellRegistration,
                                                                     for: indexPath,
                                                                     item: (section.cid, messageID, self))
             } else {
-                cell = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
-                                                                    for: indexPath,
-                                                                    item: (section.cid, messageID, self))
+                let messageCell
+                = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
+                                                               for: indexPath,
+                                                               item: (section.cid, messageID, self))
+                messageCell.handleTappedMessage = { [unowned self] (message) in
+                    self.handleSelectedMessage?(message)
+                }
+                messageCell.handleDeleteMessage = { [unowned self] (message) in
+                    self.handleDeleteMessage?(message)
+                }
+                return messageCell
             }
-
-            let interaction = UIContextMenuInteraction(delegate: self.contextMenuDelegate)
-            cell.contentView.addInteraction(interaction)
-            return cell
         case .loadMore:
-            return collectionView.dequeueConfiguredReusableCell(using: self.loadMoreMessagesCellRegistration,
-                                                                for: indexPath,
-                                                                item: String())
+            let loadMoreCell
+            = collectionView.dequeueConfiguredReusableCell(using: self.loadMoreMessagesCellRegistration,
+                                                           for: indexPath,
+                                                           item: String())
+            loadMoreCell.handleLoadMoreMessages = { [unowned self] in
+                self.handleLoadMoreMessages?()
+            }
+            return loadMoreCell
         }
     }
 
@@ -158,71 +157,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 }
             }
         }
-    }
-}
-
-private class ContextMenuInteractionDelegate: NSObject, UIContextMenuInteractionDelegate {
-
-    weak var dataSource: ConversationCollectionViewDataSource?
-    let collectionView: UICollectionView
-
-    init(collectionView: UICollectionView) {
-        self.collectionView = collectionView
-    }
-
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
-                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-
-        let locationInCollectionView = interaction.location(in: self.collectionView)
-        guard let indexPath = self.collectionView.indexPathForItem(at: locationInCollectionView) else {
-            return nil
-        }
-
-        // Get the conversation and message IDs.
-        guard let sectionItem = self.dataSource?.sectionIdentifier(for: indexPath.section),
-              let messageItem = self.dataSource?.itemIdentifier(for: indexPath) else { return nil }
-
-        switch messageItem {
-        case .message(let messageID):
-            let messageController = ChatClient.shared.messageController(cid: sectionItem.cid,
-                                                                        messageId: messageID)
-
-            return UIContextMenuConfiguration(identifier: nil,
-                                              previewProvider: nil) { elements in
-                return self.makeContextMenu(for: messageController, at: indexPath)
-            }
-        case .loadMore:
-            return nil
-        }
-    }
-
-    private func makeContextMenu(for messageController: ChatMessageController,
-                                 at indexPath: IndexPath) -> UIMenu {
-
-        guard let message = messageController.message else { return UIMenu() }
-
-        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
-
-        let confirmDelete = UIAction(title: "Confirm",
-                                     image: UIImage(systemName: "trash"),
-                                     attributes: .destructive) { action in
-
-            self.dataSource?.handleDeleteMessage?(message)
-        }
-
-        let deleteMenu = UIMenu(title: "Delete",
-                                image: UIImage(systemName: "trash"),
-                                options: .destructive,
-                                children: [confirmDelete, neverMind])
-
-
-        if message.isFromCurrentUser {
-            let children = [deleteMenu]
-            return UIMenu(title: "", children: children)
-        }
-
-        // Create and return a UIMenu with the share action
-        return UIMenu()
     }
 }
 
