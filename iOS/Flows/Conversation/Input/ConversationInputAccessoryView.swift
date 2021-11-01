@@ -39,50 +39,15 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
     override func setupGestures() {
         super.setupGestures()
 
-        let longPressRecognizer = UILongPressGestureRecognizer { [unowned self] (recognizer) in
-            self.handle(longPress: recognizer)
-        }
-        longPressRecognizer.delegate = self
-        self.overlayButton.addGestureRecognizer(longPressRecognizer)
+        // Disabling the time sensitive interaction for now
+//        let longPressRecognizer = UILongPressGestureRecognizer { [unowned self] (recognizer) in
+//            self.handle(longPress: recognizer)
+//        }
+//        longPressRecognizer.delegate = self
+//        self.overlayButton.addGestureRecognizer(longPressRecognizer)
     }
 
     // MARK: OVERRIDES
-
-    override func updateInputType() {
-        super.updateInputType()
-//
-//        // If keyboard, then show attachments
-//        // If attachments & currentKind != .text, Then still show x
-//        // If progess is greater than 0 and pressed, reset attachment view.
-//        let currentType = self.textView.currentInputView
-//        let currentProgress = self.plusAnimationView.currentProgress
-//
-//        if currentType == .keyboard {
-//            if self.attachmentView.attachment.isNil {
-//                let newType: InputViewType = .attachments
-//                self.textView.updateInputView(type: newType)
-//            } else {
-//                self.attachmentView.configure(with: nil)
-//            }
-//
-//            let toProgress: CGFloat = currentProgress == 0 ? 1.0 : 0.0
-//            self.plusAnimationView.play(fromProgress: currentProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
-//
-//        } else if currentProgress > 0 {
-//
-//            let newType: InputViewType = .keyboard
-//
-//            if self.attachmentView.attachment.isNil {
-//                let toProgress: CGFloat = currentProgress == 0 ? 1.0 : 0.0
-//                self.plusAnimationView.play(fromProgress: currentProgress, toProgress: toProgress, loopMode: .playOnce, completion: nil)
-//            }
-//            self.textView.updateInputView(type: newType)
-//
-//        } else {
-//            // progress is greater that 0 and input type is attachments
-//            self.attachmentView.messageKind = nil
-//        }
-    }
 
     override func didPressAlertCancel() {
         super.didPressAlertCancel()
@@ -212,7 +177,6 @@ extension ConversationInputAccessoryView {
     }
 
     private func showAlertConfirmation() {
-        #warning("Replace")
 //        guard let c = self.activeConversation, case Conversation.conversation = c.conversationType else { return }
 //
 //        self.textView.updateInputView(type: .confirmation)
