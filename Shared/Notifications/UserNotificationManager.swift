@@ -11,6 +11,7 @@ import UserNotifications
 import TMROLocalization
 import Parse
 import Combine
+import StreamChat
 
 protocol UserNotificationManagerDelegate: AnyObject {
     func userNotificationManager(willHandle: DeepLinkable)
@@ -137,6 +138,23 @@ class UserNotificationManager: NSObject {
     }
 
     func registerPush(from deviceToken: Data) async {
+
+        // Leaving this here if we need to test notifications from stream
+
+//        #if IOS
+//        return await withCheckedContinuation({ continuation in
+//            ChatClient.shared.currentUserController().reloadUserIfNeeded { _ in
+//                ChatClient.shared.currentUserController().addDevice(token: deviceToken) { error in
+//                    if let e = error {
+//                        continuation.resume(returning: ())
+//                    } else {
+//                        continuation.resume(returning: ())
+//                    }
+//                }
+//            }
+//        })
+//        #endif 
+
         do {
             let installation = try await PFInstallation.getCurrent()
             installation.badge = 0

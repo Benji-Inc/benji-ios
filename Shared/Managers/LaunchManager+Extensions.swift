@@ -20,6 +20,9 @@ extension LaunchManager {
 
         do {
             try await ChatClient.initialize(for: user)
+            if let user = User.current(), user.isAuthenticated {
+                await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+            }
 
             self.finishedInitialFetch = true
             return .success(object: deepLink)
