@@ -14,6 +14,7 @@ protocol DeepLinkable {
     var conversationId: String? { get set }
     var reservationId: String? { get set }
     var reservationCreatorId: String? { get set }
+    var passId: String? { get set }
 }
 
 extension DeepLinkable {
@@ -54,6 +55,15 @@ extension DeepLinkable {
         }
         set {
             self.customMetadata.setValue(newValue, forKey: ReservationKey.createdBy.rawValue)
+        }
+    }
+
+    var passId: String? {
+        get {
+            return self.customMetadata.value(forKey: "passId") as? String
+        }
+        set {
+            self.customMetadata.setValue(newValue, forKey: "passId")
         }
     }
 }

@@ -42,23 +42,23 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     
     unowned let delegate: OnboardingViewControllerDelegate
 
-    var deeplink: DeepLinkable?
     var reservationId: String? {
         didSet {
             self.codeVC.reservationId = self.reservationId
         }
     }
-    var reservationOwner: User? 
-    var reservationOwnerId: String?
 
-    init(with reservationId: String?,
-         reservationCreatorId: String?,
-         deeplink: DeepLinkable?,
-         delegate: OnboardingViewControllerDelegate) {
+    var passId: String? {
+        didSet {
+            self.codeVC.passId = self.passId
+        }
+    }
 
-        self.deeplink = deeplink
-        self.reservationId = reservationId
-        self.reservationOwnerId = reservationCreatorId
+    var invitor: User?
+    private var fullName: String = ""
+
+    init(with delegate: OnboardingViewControllerDelegate) {
+
         self.delegate = delegate
         super.init()
     }
@@ -88,7 +88,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 self.reservationId = reservation.objectId
                 if let identity = reservation.createdBy?.objectId {
                     Task {
-                        try await self.updateReservationCreator(with: identity)
+                        try await self.updateInvitor(with: identity)
                     }
                 }
                 self.current = .phone(self.phoneVC)
@@ -133,8 +133,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.nameVC.onDidComplete = { [unowned self] result in
             switch result {
-            case .success:
-                self.handleNameSuccess()
+            case .success(let name):
+                self.handleNameSuccess(for: name)
             case .failure(_):
                 break
             }
@@ -148,7 +148,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             switch result {
             case .success:
                 Task {
-                    try await ActivateUser().makeRequest(andUpdate: [], viewsToIgnore: [self.view])
+                    try await ActivateUser(fullName: self.fullName).makeRequest(andUpdate: [], viewsToIgnore: [self.view])
                     guard let user = User.current(), user.status == .active else { return }
                     self.delegate.onboardingView(self, didVerify: user)
                 }
@@ -163,12 +163,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 self.confettiView.startConfetti(with: 10)
             }
         }.store(in: &self.cancellables)
-
-        if let userId = self.reservationOwnerId {
-            Task {
-                try await self.updateReservationCreator(with: userId)
-            }
-        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -236,9 +230,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     @MainActor
-    func updateReservationCreator(with userId: String) async throws {
+    func updateInvitor(with userId: String) async throws {
         let user = try await User.localThenNetworkQuery(for: userId)
-        self.reservationOwner = user
+        self.invitor = user
         self.avatarView.set(avatar: user)
         self.nameLabel.setText(user.givenName.capitalized)
         self.avatarView.isHidden = false
@@ -275,12 +269,12 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     override func willUpdateContent() {
         super.willUpdateContent()
 
-        self.avatarView.isHidden = self.reservationOwner.isNil
+        self.avatarView.isHidden = self.invitor.isNil
     }
 
     override func getMessage() -> Localized {
         guard let content = self.current else { return "" }
-        return content.getDescription(with: self.reservationOwner)
+        return content.getDescription(with: self.invitor)
     }
 
     override func didSelectBackButton() {
@@ -317,22 +311,35 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                 let reservation = try await Reservation.getObject(with: reservationId)
                 self.reservationId = reservationId
                 if let userId = reservation.createdBy?.objectId {
-                    try await self.updateReservationCreator(with: userId)
+                    try await self.updateInvitor(with: userId)
                     await self.hideLoading()
                     self.current = .phone(self.phoneVC)
                 }
 
             }
         case .pass(passId: let passId):
-            break
+            Task {
+                let pass = try await Pass.getObject(with: passId)
+                self.passId = passId
+                if let userId = pass.owner?.objectId {
+                    try await self.updateInvitor(with: userId)
+                    await self.hideLoading()
+                    self.current = .phone(self.phoneVC)
+                }
+            }
         }
     }
 
-    private func handleNameSuccess() {
+    private func handleNameSuccess(for name: String) {
+        self.fullName = name
         // User has been allowed to continue
         if User.current()?.status == .inactive {
             #if APPCLIP
-            self.current = .waitlist(self.waitlistVC)
+            Task {
+                User.current()?.formatName(from: name)
+                try await User.current()?.saveLocalThenServer()
+                self.current = .waitlist(self.waitlistVC)
+            }
             #else
             if let current = User.current(), current.isOnboarded {
                 self.delegate.onboardingView(self, didVerify: User.current()!)

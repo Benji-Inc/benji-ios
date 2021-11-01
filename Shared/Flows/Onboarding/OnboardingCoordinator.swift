@@ -14,33 +14,20 @@ import Intents
 
 class OnboardingCoordinator: PresentableCoordinator<Void> {
 
-    lazy var onboardingVC = OnboardingViewController(with: self.reservationId,
-                                                     reservationCreatorId: self.reservationCreatorId,
-                                                     deeplink: self.deepLink,
-                                                     delegate: self)
-    let reservationId: String?
-    let reservationCreatorId: String?
-
-    init(reservationId: String?,
-         reservationCreatorId: String?,
-         router: Router,
-         deepLink: DeepLinkable?) {
-
-        self.reservationId = reservationId
-        self.reservationCreatorId = reservationCreatorId ?? "IQgIBSPHpE"
-
-        super.init(router: router, deepLink: deepLink)
-    }
+    lazy var onboardingVC = OnboardingViewController(with: self)
 
     override func toPresentable() -> DismissableVC {
         return self.onboardingVC
     }
 
+    override func start() {
+        self.handle(deeplink: self.deepLink)
+    }
+
     func handle(deeplink: DeepLinkable?) {
         guard let link = deeplink else { return }
-        self.onboardingVC.deeplink = link
         self.onboardingVC.reservationId = link.reservationId
-        self.onboardingVC.reservationOwnerId = link.reservationCreatorId
+        self.onboardingVC.passId = link.passId
         self.onboardingVC.updateUI()
     }
 }

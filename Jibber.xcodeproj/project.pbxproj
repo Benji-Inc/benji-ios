@@ -700,7 +700,6 @@
 		D6C389312724B8F9004D29D5 /* MessageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F33C6A24AFCF24009603FF /* MessageKind.swift */; };
 		D6C389332724C091004D29D5 /* ArchiveCoordinator+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C389322724C091004D29D5 /* ArchiveCoordinator+Extensions.swift */; };
 		D6C3893627287307004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893527287307004D29D5 /* StreamChat */; };
-		D6C3893827287307004D29D5 /* StreamChatUI in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893727287307004D29D5 /* StreamChatUI */; };
 		D6C3893A27287491004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893927287491004D29D5 /* StreamChat */; };
 		D6C3893C2728749C004D29D5 /* StreamChat in Frameworks */ = {isa = PBXBuildFile; productRef = D6C3893B2728749C004D29D5 /* StreamChat */; };
 		D6C9EF3F25BF6CB100A14DE5 /* MessageBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF3E25BF6CB100A14DE5 /* MessageBubbleView.swift */; };
@@ -1246,7 +1245,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6C3893827287307004D29D5 /* StreamChatUI in Frameworks */,
 				D6AE0F5D267CF80C00C6B048 /* Lottie in Frameworks */,
 				D6D804B526693AE700741594 /* SDWebImageLinkPlugin in Frameworks */,
 				D6C3893627287307004D29D5 /* StreamChat in Frameworks */,
@@ -2353,7 +2351,6 @@
 				D6AE0F5C267CF80C00C6B048 /* Lottie */,
 				D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */,
 				D6C3893527287307004D29D5 /* StreamChat */,
-				D6C3893727287307004D29D5 /* StreamChatUI */,
 			);
 			productName = Benji;
 			productReference = D61EC0BC21D3071400204BEE /* Jibber.app */;
@@ -4219,11 +4216,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */;
 			productName = StreamChat;
-		};
-		D6C3893727287307004D29D5 /* StreamChatUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D6C3893427287307004D29D5 /* XCRemoteSwiftPackageReference "stream-chat-swift" */;
-			productName = StreamChatUI;
 		};
 		D6C3893927287491004D29D5 /* StreamChat */ = {
 			isa = XCSwiftPackageProductDependency;
