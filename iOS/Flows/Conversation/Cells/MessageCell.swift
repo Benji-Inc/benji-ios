@@ -8,6 +8,9 @@
 
 import Foundation
 import StreamChat
+import UIKit
+
+
 
 /// A cell to display a message along with a limited number of replies to that message.
 /// The root message and replies are stacked along the z-axis, with the most recent reply at the front (visually obscuring the others).
@@ -23,6 +26,9 @@ class MessageCell: UICollectionViewCell {
     private let cellRegistration = UICollectionView.CellRegistration<MessageSubcell, Messageable>
     { (cell, indexPath, item) in
         cell.setText(with: item)
+    }
+
+    let headerRegistration = UICollectionView.SupplementaryRegistration<TimeSentView>(elementKind: UICollectionView.elementKindSectionHeader) { supplementaryView, elementKind, indexPath in
     }
 
     private var state: ConversationUIState = .read
@@ -46,7 +52,7 @@ class MessageCell: UICollectionViewCell {
         self.collectionView.set(backgroundColor: .clear)
         self.contentView.addSubview(self.collectionView)
         self.collectionView.clipsToBounds = false
-        self.collectionView.contentInset = UIEdgeInsets()
+        self.collectionView.contentInset = UIEdgeInsets(top: Theme.contentOffset, left: 0, bottom: 0, right: 0)
 
         self.clipsToBounds = false 
     }
@@ -77,12 +83,16 @@ class MessageCell: UICollectionViewCell {
 
         self.collectionView.reloadData()
     }
+
+    func handle(isCentered: Bool) {
+       // self.backgroundColor = isCentered ? .red : .clear
+    }
 }
 
 extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     /// The space between the top of a cell and tops of adjacent cells.
-    var spaceBetweenCellTops: CGFloat { return 20 }
+    var spaceBetweenCellTops: CGFloat { return 15 }
     /// The height of each message subcell
     var cellHeight: CGFloat {
         guard let msg = self.message as? ChatMessage, msg.type != .reply else {
@@ -137,6 +147,27 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
     }
 
     func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration, for: indexPath)
+            if let message = self.message {
+                header.configure(with: message)
+            }
+            return header
+        case UICollectionView.elementKindSectionFooter:
+            return UICollectionReusableView()
+        default:
+            return UICollectionReusableView()
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.width, height: 30)
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
@@ -159,7 +190,7 @@ class MessageSubcell: UICollectionViewCell {
     /// A rounded and colored background view for the message. Changes color based on the sender.
     let backgroundColorView = UIView()
     /// Text view for displaying the text of the message.
-    let textView = TextView()
+    let textView = MessageTextView()
     /// A label to show the total number of replies for the root message.
     let replyCountLabel = Label(font: .smallBold, textColor: .lightGray)
 
@@ -199,7 +230,8 @@ class MessageSubcell: UICollectionViewCell {
         self.backgroundColorView.expandToSuperviewHeight()
         self.backgroundColorView.centerOnXAndY()
 
-        self.textView.setSize(withWidth: self.contentView.width - Theme.contentOffset.doubled)
+        self.textView.expandToSuperviewWidth()
+        self.textView.sizeToFit()
         self.textView.centerOnXAndY()
 
         self.replyCountLabel.sizeToFit()

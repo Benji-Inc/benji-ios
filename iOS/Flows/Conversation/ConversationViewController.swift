@@ -27,7 +27,6 @@ class ConversationViewController: FullScreenViewController,
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     let conversationHeader = ConversationHeaderView()
-    let dateLabel = ConversationDateLabel()
 
     var conversation: Conversation! { return self.conversationController?.channel }
     private(set) var conversationController: ChatChannelController?
@@ -36,6 +35,7 @@ class ConversationViewController: FullScreenViewController,
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
     var didTapMoreButton: CompletionOptional = nil
     var didTapConversationTitle: CompletionOptional = nil
+    @Published var didCenterOnCell: MessageCell? = nil
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
@@ -77,7 +77,7 @@ class ConversationViewController: FullScreenViewController,
         self.contentContainer.addSubview(self.conversationHeader)
         self.conversationHeader.configure(with: self.conversation)
 
-        self.contentContainer.addSubview(self.dateLabel)
+        self.subscribeToKeyboardUpdates()
     }
     
     override func viewDidLayoutSubviews() {
@@ -85,21 +85,20 @@ class ConversationViewController: FullScreenViewController,
         
         self.blurView.expandToSuperviewSize()
 
-        self.dateLabel.setSize(withWidth: self.view.width)
-        self.dateLabel.centerOnX()
+        switch self.state {
+        case .read:
+            self.conversationHeader.height = 120
+        case .write:
+            self.conversationHeader.height = 60
+        }
+
+        self.conversationHeader.pinToSafeArea(.top, padding: Theme.contentOffset)
+        self.conversationHeader.expandToSuperviewWidth()
 
         self.collectionView.expandToSuperviewWidth()
-        let padding: CGFloat
-        if self.state == .read {
-            padding = self.dateLabel.height + (self.view.height * 0.15)
-        } else {
-            padding = self.dateLabel.height + 20
-        }
-        self.collectionView.match(.top, to: .bottom, of: self.conversationHeader, offset: padding)
-        self.collectionView.height = self.view.height - padding - self.conversationHeader.bottom
 
-        // Base the Y position of the date label on the top of the collection view.
-        self.dateLabel.match(.bottom, to: .top, of: self.collectionView, offset: -20)
+        self.collectionView.match(.top, to: .bottom, of: self.conversationHeader)
+        self.collectionView.height = self.view.height - self.conversationHeader.bottom
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -112,6 +111,12 @@ class ConversationViewController: FullScreenViewController,
         super.viewWillDisappear(animated)
 
         self.resignFirstResponder()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        KeyboardManager.shared.reset()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -140,6 +145,12 @@ class ConversationViewController: FullScreenViewController,
 
         UIView.animate(withDuration: 0.25) {
             self.view.layoutNow()
+        }
+    }
+
+    func updateCenterMostCell() {
+        if let cell = self.collectionView.getCentermostVisibleCell() as? MessageCell {
+            self.didCenterOnCell = cell
         }
     }
 
@@ -174,6 +185,8 @@ class ConversationViewController: FullScreenViewController,
         await self.dataSource.apply(snapshot,
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
+
+        self.updateCenterMostCell()
     }
 
     private func getFirstUnreadIndexPath() -> IndexPath? {
@@ -250,9 +263,17 @@ class ConversationViewController: FullScreenViewController,
         }
         
         targetContentOffset.pointee = CGPoint(x: newXOffset, y: targetOffset.y)
+        
+        self.updateCenterMostCell()
+    }
+
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        self.updateCenterMostCell()
     }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        self.updateCenterMostCell()
+
         guard self.conversation.isUnread else { return }
         // Once the user sees the latest message, set the conversation as read.
         guard scrollView.contentOffset.x < 0 else { return }

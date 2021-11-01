@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConversationDateLabel: Label {
+class MessageDateLabel: Label {
 
     private(set) var currentDate: Date?
 
@@ -30,7 +30,7 @@ class ConversationDateLabel: Label {
         self.set(attributed: attributed,
                  alignment: .center,
                  lineCount: 1,
-                 stringCasing: .uppercase)
+                 stringCasing: .unchanged)
 
         self.currentDate = date
     }

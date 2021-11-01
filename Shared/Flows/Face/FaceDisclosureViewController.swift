@@ -27,23 +27,23 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         var description: HightlightedPhrase {
             switch self {
             case .smiling:
-                return HightlightedPhrase(text: "When people see your smiling face in Jibber it tells them you are available to chat and you’ll get a new message notification.", highlightedWords: ["available"])
+                return HightlightedPhrase(text: "Your smile tells everyone you are available and will recieve thier notifications.", highlightedWords: ["available", "new"])
             case .eyesClosed:
-                return HightlightedPhrase(text: "When people see your eyes closed in Jibber it tells them you are busy and all new messages are delivered silently.", highlightedWords: ["busy", "silently"])
+                return HightlightedPhrase(text: "When people see your eyes closed it tells them you are focused and all notifications are delivered silently.", highlightedWords: ["focused", "silently"])
             }
         }
 
-        var image: UIImage {
+        var displayable: ImageDisplayable? {
             switch self {
             case .smiling:
-                return UIImage(systemName: "face.smiling.fill")!
+                return User.current()?.smallImage
             case .eyesClosed:
-                return UIImage(systemName: "eyebrow")!
+                return User.current()?.focusImage
             }
         }
     }
 
-    private let imageView = DisplayableImageView()
+    private let imageView = AvatarView()
     let button = Button()
 
     private let captureType: CaptureType
@@ -61,7 +61,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         super.initializeViews()
 
         self.view.addSubview(self.imageView)
-        self.imageView.displayable = self.captureType.image
+        self.imageView.displayable = self.captureType.displayable
         self.imageView.tintColor = .white
 
         self.titleLabel.setText(self.captureType.title)
@@ -74,7 +74,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.imageView.squaredSize = self.view.width * 0.25
+        self.imageView.setSize(for: self.view.width * 0.25)
         self.imageView.match(.top, to: .bottom, of: self.titleLabel, offset: Theme.contentOffset)
         self.imageView.centerOnX()
 

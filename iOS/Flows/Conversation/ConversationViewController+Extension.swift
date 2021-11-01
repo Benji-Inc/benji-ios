@@ -32,13 +32,16 @@ extension ConversationViewController {
         }
     }
 
-    func subscribeToUpdates() {
+    func subscribeToKeyboardUpdates() {
         KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
 
         KeyboardManager.shared.$willKeyboardShow
             .mainSink { [unowned self] willShow in
                 self.state = willShow ? .write : .read
         }.store(in: &self.cancellables)
+    }
+
+    func subscribeToUpdates() {
 
         self.$state
             .removeDuplicates()
@@ -76,19 +79,10 @@ extension ConversationViewController {
         }.store(in: &self.cancellables)
 
         self.collectionView.publisher(for: \.contentOffset).mainSink { [unowned self] _ in
-            if let ip = self.collectionView.getCentermostVisibleIndex(),
-                let itemIdendifiter = self.dataSource.itemIdentifier(for: ip) {
 
-                switch itemIdendifiter {
-                case .message(let messageID):
-                    let messageController = ChatClient.shared.messageController(cid: self.conversation.cid,
-                                                                                messageId: messageID)
-                    if let message = messageController.message {
-                        self.dateLabel.set(date: message.createdAt)
-                        self.view.layoutNow()
-                    }
-                case .loadMore:
-                    break
+            self.collectionView.visibleCells.forEach { cell in
+                if let messageCell = cell as? MessageCell {
+                    messageCell.handle(isCentered: false)
                 }
             }
         }.store(in: &self.cancellables)
@@ -96,6 +90,12 @@ extension ConversationViewController {
         self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] _ in
             guard let enabled = self.conversationController?.areTypingEventsEnabled, enabled else { return }
             self.conversationController?.sendKeystrokeEvent(completion: nil)
+        }.store(in: &self.cancellables)
+
+        self.$didCenterOnCell
+            .mainSink { cell in
+            guard let messageCell = cell else { return }
+            messageCell.handle(isCentered: true)
         }.store(in: &self.cancellables)
     }
 }
