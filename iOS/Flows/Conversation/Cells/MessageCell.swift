@@ -16,6 +16,11 @@ import UIKit
 /// The root message and replies are stacked along the z-axis, with the most recent reply at the front (visually obscuring the others).
 class MessageCell: UICollectionViewCell {
 
+    // Interaction handling
+    var handleTappedMessage: ((Messageable) -> Void)?
+    var handleDeleteMessage: ((Messageable) -> Void)?
+    private lazy var contextMenuInteraction = UIContextMenuInteraction(delegate: self)
+
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -28,7 +33,8 @@ class MessageCell: UICollectionViewCell {
         cell.setText(with: item)
     }
 
-    let headerRegistration = UICollectionView.SupplementaryRegistration<TimeSentView>(elementKind: UICollectionView.elementKindSectionHeader) { supplementaryView, elementKind, indexPath in
+    private let headerRegistration
+    = UICollectionView.SupplementaryRegistration<TimeSentView>(elementKind: UICollectionView.elementKindSectionHeader) { supplementaryView, elementKind, indexPath in
     }
 
     private var state: ConversationUIState = .read
@@ -45,16 +51,19 @@ class MessageCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        // Don't allow the user to interact with the collectionview so that the cell can be tapped on.
-        self.collectionView.isUserInteractionEnabled = false
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
         self.collectionView.set(backgroundColor: .clear)
         self.contentView.addSubview(self.collectionView)
-        self.collectionView.clipsToBounds = false
-        self.collectionView.contentInset = UIEdgeInsets(top: Theme.contentOffset, left: 0, bottom: 0, right: 0)
+        self.collectionView.contentInset = UIEdgeInsets(top: Theme.contentOffset,
+                                                        left: 0,
+                                                        bottom: 0,
+                                                        right: 0)
 
-        self.clipsToBounds = false 
+        self.collectionView.onTap { [unowned self] tapRecognizer in
+            guard let message = self.message else { return }
+            self.handleTappedMessage?(message)
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -84,9 +93,7 @@ class MessageCell: UICollectionViewCell {
         self.collectionView.reloadData()
     }
 
-    func handle(isCentered: Bool) {
-       // self.backgroundColor = isCentered ? .red : .clear
-    }
+    func handle(isCentered: Bool) { }
 }
 
 extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -143,6 +150,14 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
             cell.setReplyCount(nil)
         }
 
+        // The menu interaction should only be on the front most cell,
+        // and only if the user created the original message.
+        if stackIndex == 0 {
+            cell.backgroundColorView.addInteraction(self.contextMenuInteraction)
+        } else {
+            cell.backgroundColorView.interactions.removeAll()
+        }
+
         return cell
     }
 
@@ -151,7 +166,8 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
                         at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration, for: indexPath)
+            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration,
+                                                                               for: indexPath)
             if let message = self.message {
                 header.configure(with: message)
             }
@@ -184,102 +200,45 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
     }
 }
 
-/// A cell for displaying individual the root message and replies within the MessageCell.
-class MessageSubcell: UICollectionViewCell {
+// MARK: - UIContextMenuInteractionDelegate
 
-    /// A rounded and colored background view for the message. Changes color based on the sender.
-    let backgroundColorView = UIView()
-    /// Text view for displaying the text of the message.
-    let textView = MessageTextView()
-    /// A label to show the total number of replies for the root message.
-    let replyCountLabel = Label(font: .smallBold, textColor: .lightGray)
+extension MessageCell: UIContextMenuInteractionDelegate {
 
-    /// Where this cell appears on the z-axis stack of messages. 0 means the item closest to the user.
-    private var stackIndex = 0
-    /// How much to scale the size of the background view.
-    private var scaleFactor: CGFloat {
-        return 1 - CGFloat(self.stackIndex) * 0.05
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+
+        return UIContextMenuConfiguration(identifier: nil,
+                                          previewProvider: nil) { elements in
+            return self.makeContextMenu()
+        }
     }
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        self.intitializeViews()
-    }
+    private func makeContextMenu() -> UIMenu {
+        guard let message = self.message else { return UIMenu() }
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.intitializeViews()
-    }
+        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
 
-    private func intitializeViews() {
-        self.contentView.addSubview(self.backgroundColorView)
-        self.backgroundColorView.roundCorners()
+        let confirmDelete = UIAction(title: "Confirm",
+                                     image: UIImage(systemName: "trash"),
+                                     attributes: .destructive) { [unowned self] action in
+            self.handleDeleteMessage?(message)
+        }
 
-        self.backgroundColorView.addSubview(self.textView)
-        self.textView.isScrollEnabled = false
-        self.textView.isEditable = false
-        self.textView.textAlignment = .center
+        let deleteMenu = UIMenu(title: "Delete Thread",
+                                image: UIImage(systemName: "trash"),
+                                options: .destructive,
+                                children: [confirmDelete, neverMind])
 
-        self.backgroundColorView.addSubview(self.replyCountLabel)
-    }
+        let openThread = UIAction(title: "Open Thread") { [unowned self] action in
+            self.handleTappedMessage?(message)
+        }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.backgroundColorView.width = self.width * self.scaleFactor
-        self.backgroundColorView.expandToSuperviewHeight()
-        self.backgroundColorView.centerOnXAndY()
-
-        self.textView.expandToSuperviewWidth()
-        self.textView.sizeToFit()
-        self.textView.centerOnXAndY()
-
-        self.replyCountLabel.sizeToFit()
-        self.replyCountLabel.pin(.right,padding: 8)
-        self.replyCountLabel.pin(.top, padding: 8)
-    }
-
-    func setText(with message: Messageable) {
-        self.textView.text = message.kind.text
-        self.setNeedsLayout()
-    }
-
-    /// Adjusts the background color of the cell to be appropriate for its position in the stack. Cells that are further back in the stack are darkened.
-    func configureBackground(withStackIndex stackIndex: Int, message: Messageable) {
-        // How much to scale the brightness of the background view.
-        let colorFactor = 1 - CGFloat(stackIndex) * 0.05
-
-        var backgroundColor: UIColor
+        var menuElements: [UIMenuElement] = []
         if message.isFromCurrentUser {
-            backgroundColor = Color.gray.color
-        } else {
-            backgroundColor = Color.lightGray.color
+            menuElements.append(deleteMenu)
         }
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
+        menuElements.append(openThread)
 
-        if backgroundColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
-            backgroundColor = UIColor(red: red * colorFactor,
-                                      green: green * colorFactor,
-                                      blue: blue * colorFactor,
-                                      alpha: alpha)
-        }
-
-        self.backgroundColorView.backgroundColor = backgroundColor
-
-        self.stackIndex = stackIndex
-        self.setNeedsLayout()
-    }
-
-    func setReplyCount(_ count: Int?) {
-        guard let count = count else {
-            self.replyCountLabel.text = nil
-            return
-        }
-
-        self.replyCountLabel.setText("\(count)")
-        self.setNeedsLayout()
+        return UIMenu(children: menuElements)
     }
 }

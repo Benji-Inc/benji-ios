@@ -124,7 +124,7 @@ class ConversationViewController: FullScreenViewController,
         
         once(caller: self, token: "initializeCollectionView") {
             Task {
-                self.setupCompletionHandlers()
+                self.setupInputHandlers()
                 // Initialize the datasource before listening for updates to ensure that the sections
                 // are set up.
                 await self.initializeDataSource()
@@ -201,22 +201,11 @@ class ConversationViewController: FullScreenViewController,
         return IndexPath(item: index, section: 0)
     }
     
-    // MARK: - UICollectionViewDelegate
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let messageItem = self.dataSource.itemIdentifier(for: indexPath) else { return }
-        
-        switch messageItem {
-        case .message(let messageID):
-            self.onSelectedThread?(self.conversation.cid, messageID)
-        case .loadMore:
-            self.loadMoreMessageIfNeeded()
-        }
-    }
+    // MARK: - UICollection Input Handlers
 
     /// If true, the conversation controller is currently loading messages.
     @Atomic private var isLoadingMessages = false
-    private func loadMoreMessageIfNeeded() {
+    func loadMoreMessageIfNeeded() {
         guard let conversationController = self.conversationController else { return }
 
         // If all the messages are loaded, there's no need to fetch more.
