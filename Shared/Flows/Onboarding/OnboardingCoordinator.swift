@@ -16,16 +16,20 @@ class OnboardingCoordinator: PresentableCoordinator<Void> {
 
     lazy var onboardingVC = OnboardingViewController(with: self.reservationId,
                                                      reservationCreatorId: self.reservationCreatorId,
+                                                     passId: self.passId,
                                                      deeplink: self.deepLink,
                                                      delegate: self)
     let reservationId: String?
     let reservationCreatorId: String?
+    let passId: String?
 
     init(reservationId: String?,
          reservationCreatorId: String?,
+         passId: String?,
          router: Router,
          deepLink: DeepLinkable?) {
 
+        self.passId = passId
         self.reservationId = reservationId
         self.reservationCreatorId = reservationCreatorId ?? "IQgIBSPHpE"
 

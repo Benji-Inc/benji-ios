@@ -52,6 +52,7 @@ class MainCoordinator: Coordinator<Void> {
         } else {
             let coordinator = OnboardingCoordinator(reservationId: self.deepLink?.reservationId,
                                                     reservationCreatorId: self.deepLink?.reservationCreatorId,
+                                                    passId: self.deepLink?.passId,
                                                     router: self.router,
                                                     deepLink: self.deepLink)
             self.router.setRootModule(coordinator, animated: true)

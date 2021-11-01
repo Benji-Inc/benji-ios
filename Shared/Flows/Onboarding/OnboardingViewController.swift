@@ -48,17 +48,26 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             self.codeVC.reservationId = self.reservationId
         }
     }
+
+    var passId: String? {
+        didSet {
+            self.codeVC.passId = self.passId
+        }
+    }
+
     var reservationOwner: User? 
     var reservationOwnerId: String?
 
     init(with reservationId: String?,
          reservationCreatorId: String?,
+         passId: String?,
          deeplink: DeepLinkable?,
          delegate: OnboardingViewControllerDelegate) {
 
         self.deeplink = deeplink
         self.reservationId = reservationId
         self.reservationOwnerId = reservationCreatorId
+        self.passId = passId
         self.delegate = delegate
         super.init()
     }

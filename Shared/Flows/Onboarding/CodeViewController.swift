@@ -17,6 +17,7 @@ class CodeViewController: TextInputViewController<Void> {
 
     var phoneNumber: PhoneNumber?
     var reservationId: String?
+    var passId: String? 
     
     init() {
         super.init(textField: TextField(), placeholder: LocalizedString(id: "", default: "0000"))
@@ -49,7 +50,8 @@ class CodeViewController: TextInputViewController<Void> {
             let token = try await VerifyCode(code: code,
                                              phoneNumber: phoneNumber,
                                              installationId: installation.installationId,
-                                             reservationId: String(optional: self.reservationId))
+                                             reservationId: String(optional: self.reservationId),
+                                             passId: String(optional: self.passId))
                 .makeRequest()
 
             self.textField.resignFirstResponder()

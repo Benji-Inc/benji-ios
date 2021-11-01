@@ -43,12 +43,14 @@ struct VerifyCode: CloudFunction {
     let phoneNumber: PhoneNumber
     let installationId: String
     let reservationId: String
+    let passId: String
 
     func makeRequest(andUpdate statusables: [Statusable] = [],
                           viewsToIgnore: [UIView] = []) async throws -> String {
         
         let params: [String: Any] = ["authCode": self.code,
                                      "installationId": self.installationId,
+                                     "passId": self.passId,
                                      "reservationId": self.reservationId,
                                      "phoneNumber": PhoneKit.shared.format(self.phoneNumber, toType: .e164)]
         
