@@ -88,13 +88,16 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
         self.blurView.expandToSuperviewSize()
 
-        self.parentMessageBlurView.expandToSuperviewWidth()
-        self.parentMessageBlurView.height = 120
+        let headerHeight: CGFloat = 120
+
+        self.parentMessageBlurView.width = self.view.width - Theme.contentOffset
+        self.parentMessageBlurView.height = headerHeight
+        self.parentMessageBlurView.centerOnX()
         self.parentMessageBlurView.roundCorners()
 
         self.parentMessageView.width = self.view.width * 0.8
-        self.parentMessageView.height = 100
-        self.parentMessageView.pin(.top, padding: 10)
+        self.parentMessageView.height = headerHeight - Theme.contentOffset.doubled
+        self.parentMessageView.pin(.top, padding: Theme.contentOffset)
         self.parentMessageView.centerOnX()
 
         self.collectionView.contentInset.top = 120
