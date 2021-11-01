@@ -151,8 +151,13 @@ extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowL
                         at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            let header = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration, for: indexPath)
-            if let message = self.message {
+            let header
+            = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration,
+                                                                    for: indexPath)
+            
+            if let latestMessage = self.replies.last {
+                header.configure(with: latestMessage)
+            } else if let message = self.message {
                 header.configure(with: message)
             }
             return header
