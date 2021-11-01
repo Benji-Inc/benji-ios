@@ -11,8 +11,7 @@ import StreamChat
 
 extension ConversationViewController {
 
-    func setupCompletionHandlers() {
-
+    func setupInputHandlers() {
         self.conversationHeader.didTapAddPeople = { [unowned self] in
             self.didTapMoreButton?()
         }
@@ -27,6 +26,12 @@ extension ConversationViewController {
             }
         }
 
+        self.dataSource.handleSelectedMessage = { [unowned self] (message) in
+            self.onSelectedThread?(self.conversation.cid, message.id)
+        }
+        self.dataSource.handleLoadMoreMessages = { [unowned self] in
+            self.loadMoreMessageIfNeeded()
+        }
         self.dataSource.handleDeleteMessage = { [unowned self] message in
             self.conversationController?.deleteMessage(message.id)
         }

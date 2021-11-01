@@ -10,6 +10,8 @@ import Foundation
 
 class LoadMoreMessagesCell: UICollectionViewCell {
 
+    var handleLoadMoreMessages: CompletionOptional = nil
+
     private(set) var label = Label(font: FontType.mediumBold, textColor: .white)
 
     override init(frame: CGRect) {
@@ -27,6 +29,10 @@ class LoadMoreMessagesCell: UICollectionViewCell {
 
         self.label.textAlignment = .center
         self.label.setText("LOAD MORE")
+
+        self.onTap { [unowned self] tapRecognizer in
+            self.handleLoadMoreMessages?()
+        }
     }
 
     override func layoutSubviews() {
