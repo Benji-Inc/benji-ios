@@ -63,7 +63,7 @@
          <EnvironmentVariable
             key = "_XCAppClipURL"
             value = "https://jibber.wtf/pass?passId=AVaUnie3oO"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>
