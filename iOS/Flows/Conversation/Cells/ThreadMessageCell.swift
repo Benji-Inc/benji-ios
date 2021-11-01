@@ -12,6 +12,10 @@ import StreamChat
 /// A cell to display a message within a thread along with the sender of the message..
 class ThreadMessageCell: UICollectionViewCell {
 
+    // Interaction handling
+    var handleDeleteMessage: ((Messageable) -> Void)?
+    private lazy var contextMenuInteraction = UIContextMenuInteraction(delegate: self)
+
     private let messageView = MessageSubcell(frame: .zero)
     private let authorView = AvatarView()
     private let topVerticalLine = View()
@@ -97,11 +101,17 @@ class ThreadMessageCell: UICollectionViewCell {
     ///     - replies: The currently loaded replies to the message. These should be ordered by newest to oldest.
     ///     - totalReplyCount: The total number of replies that this message has. It may be more than the passed in replies.
     func set(message: Messageable, replies: [Messageable], totalReplyCount: Int) {
+        self.message = message
+
         self.authorView.set(avatar: message.avatar)
         self.messageView.setText(with: message)
         self.messageView.configureBackground(withStackIndex: 0, message: message)
 
         self.setNeedsLayout()
+
+        if message.isFromCurrentUser {
+            self.messageView.backgroundColorView.addInteraction(self.contextMenuInteraction)
+        }
     }
 
     func setAuthor(with avatar: Avatar, showTopLine: Bool, showBottomLine: Bool) {
@@ -114,5 +124,43 @@ class ThreadMessageCell: UICollectionViewCell {
         self.dotView.isVisible = showTopLine && !showBottomLine
 
         self.setNeedsLayout()
+    }
+}
+
+// MARK: - UIContextMenuInteractionDelegate
+
+extension ThreadMessageCell: UIContextMenuInteractionDelegate {
+
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
+                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+
+        return UIContextMenuConfiguration(identifier: nil,
+                                          previewProvider: nil) { elements in
+            return self.makeContextMenu()
+        }
+    }
+
+    private func makeContextMenu() -> UIMenu {
+        guard let message = self.message else { return UIMenu() }
+
+        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
+
+        let confirmDelete = UIAction(title: "Confirm",
+                                     image: UIImage(systemName: "trash"),
+                                     attributes: .destructive) { [unowned self] action in
+            self.handleDeleteMessage?(message)
+        }
+
+        let deleteMenu = UIMenu(title: "Delete",
+                                image: UIImage(systemName: "trash"),
+                                options: .destructive,
+                                children: [confirmDelete, neverMind])
+
+        var menuElements: [UIMenuElement] = []
+        if message.isFromCurrentUser {
+            menuElements.append(deleteMenu)
+        }
+
+        return UIMenu(children: menuElements)
     }
 }
