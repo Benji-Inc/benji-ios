@@ -350,7 +350,7 @@ extension CollectionViewDataSource {
         // If specified, scroll to the last item in the collection view.
         if let scrollToIndexPath = animationCycle.scrollToIndexPath {
             collectionView.scrollToItem(at: scrollToIndexPath,
-                                        at: [.centeredHorizontally],
+                                        at: [animationCycle.scrollPosition],
                                         animated: false)
 
             // Minor hack. Wait a tick so that the collection view has time to update its visible cells.
