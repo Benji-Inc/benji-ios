@@ -94,6 +94,13 @@ class MessageCell: UICollectionViewCell {
     }
 
     func handle(isCentered: Bool) { }
+
+    /// Gets the message subcell that is the front, if any.
+    func getFrontmostMessageCell() -> MessageSubcell? {
+        let cellCount = self.collectionView.numberOfItems(inSection: 0)
+        let topCell = self.collectionView.cellForItem(at: IndexPath(item: cellCount - 1, section: 0))
+        return topCell as? MessageSubcell
+    }
 }
 
 extension MessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {

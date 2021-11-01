@@ -37,10 +37,6 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         case right
     }
 
-    /// The maximum height we should allow this view to expand to.
-    static let maxHeight: CGFloat = 500.0
-    static let bottomPadding: CGFloat = 8
-
     var alertAnimator: UIViewPropertyAnimator?
     var selectionFeedback = UIImpactFeedbackGenerator(style: .rigid)
 
@@ -75,7 +71,6 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         // Use flexible height autoresizing mask to account for changes in text input.
         self.autoresizingMask = .flexibleHeight
 
-        self.inputContainerView.borderColor = Color.lightGray.color
         self.inputContainerView.borderColor = Color.lightGray.color.withAlphaComponent(0.5)
 
         self.setupGestures()
@@ -86,7 +81,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
     private func setupHandlers() {
         KeyboardManager.shared.$currentEvent
-            .mainSink { event in
+            .mainSink { [weak self] event in
+                guard let `self` = self else { return }
                 switch event {
                 case .didHide:
                     self.textView.updateInputView(type: .keyboard, becomeFirstResponder: false)
@@ -100,7 +96,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
             self.textView.updateInputView(type: .keyboard)
         }
 
-        self.textView.$inputText.mainSink { text in
+        self.textView.$inputText.mainSink { [unowned self] text in
             self.handleTextChange(text)
         }.store(in: &self.cancellables)
 
@@ -189,7 +185,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     /// How far the preview view can be dragged left or right.
     private let maxXOffset: CGFloat = 40
     /// How far the preview view can be dragged vertically
-    private let maxYOffset: CGFloat = SwipeableInputAccessoryView.maxHeight.half
+    private let maxYOffset: CGFloat = 250
 
     func handle(pan: UIPanGestureRecognizer) {
         guard self.shouldHandlePan() else { return }
@@ -303,7 +299,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         let progress = clamp(-panOffset.y/self.maxYOffset, 0, 1)
 
         // Make sure the user has dragged up far enough, otherwise this isn't a valid send position.
-        guard progress > 0.5 else { return nil }
+        guard progress > 0.25 else { return nil }
 
         switch panOffset.x {
         case -CGFloat.greatestFiniteMagnitude ... -self.maxXOffset.half:
