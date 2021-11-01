@@ -34,13 +34,20 @@ class KeyboardManager {
         case didHide(NotificationCenter.Publisher.Output)
         case willChangeFrame(NotificationCenter.Publisher.Output)
         case didChangeFrame(NotificationCenter.Publisher.Output)
-        case none // No event has happe
+        case none // No event has happened
     }
 
     deinit {
         self.cancellables.forEach { cancellable in
             cancellable.cancel()
         }
+    }
+
+    func reset() {
+        self.cachedKeyboardEndFrame = .zero
+        self.inputAccessoryView = nil
+        self.willKeyboardShow = false
+        self.isKeyboardShowing = false
     }
 
     func addKeyboardObservers(with inputAccessoryView: UIView? = nil) {

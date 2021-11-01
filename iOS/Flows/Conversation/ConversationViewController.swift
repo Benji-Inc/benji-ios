@@ -76,6 +76,8 @@ class ConversationViewController: FullScreenViewController,
 
         self.contentContainer.addSubview(self.conversationHeader)
         self.conversationHeader.configure(with: self.conversation)
+
+        self.subscribeToKeyboardUpdates()
     }
     
     override func viewDidLayoutSubviews() {
@@ -109,6 +111,12 @@ class ConversationViewController: FullScreenViewController,
         super.viewWillDisappear(animated)
 
         self.resignFirstResponder()
+    }
+
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+
+        KeyboardManager.shared.reset()
     }
     
     override func viewDidAppear(_ animated: Bool) {
