@@ -12,6 +12,8 @@ import Parse
 enum PassKey: String {
     case owner
     case attributes
+    case connections
+    case link
 }
 
 final class Pass: PFObject, PFSubclassing {
@@ -26,6 +28,14 @@ final class Pass: PFObject, PFSubclassing {
 
     var attributes: [String: Any]? {
         return self.getObject(for: .attributes)
+    }
+
+    var connections: PFRelation<Connection>? {
+        return self.getRelationalObject(for: .connections)
+    }
+
+    var link: String? {
+        return self.getObject(for: .link)
     }
 }
 
