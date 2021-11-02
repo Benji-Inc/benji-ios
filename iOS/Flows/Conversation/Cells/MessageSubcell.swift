@@ -15,8 +15,6 @@ class MessageSubcell: UICollectionViewCell {
     let backgroundColorView = UIView()
     /// Text view for displaying the text of the message.
     let textView = MessageTextView()
-    /// A label to show the total number of replies for the root message.
-    let replyCountLabel = Label(font: .smallBold, textColor: .lightGray)
 
     /// Where this cell appears on the z-axis stack of messages. 0 means the item closest to the user.
     private var stackIndex = 0
@@ -43,8 +41,6 @@ class MessageSubcell: UICollectionViewCell {
         self.textView.isScrollEnabled = false
         self.textView.isEditable = false
         self.textView.textAlignment = .center
-
-        self.backgroundColorView.addSubview(self.replyCountLabel)
     }
 
     override func layoutSubviews() {
@@ -57,10 +53,6 @@ class MessageSubcell: UICollectionViewCell {
         self.textView.expandToSuperviewWidth()
         self.textView.sizeToFit()
         self.textView.centerOnXAndY()
-
-        self.replyCountLabel.sizeToFit()
-        self.replyCountLabel.pin(.right,padding: 8)
-        self.replyCountLabel.pin(.top, padding: 8)
     }
 
     func setText(with message: Messageable) {
@@ -99,16 +91,6 @@ class MessageSubcell: UICollectionViewCell {
         self.backgroundColorView.backgroundColor = backgroundColor
 
         self.stackIndex = stackIndex
-        self.setNeedsLayout()
-    }
-
-    func setReplyCount(_ count: Int?) {
-        guard let count = count else {
-            self.replyCountLabel.text = nil
-            return
-        }
-
-        self.replyCountLabel.setText("\(count)")
         self.setNeedsLayout()
     }
 }

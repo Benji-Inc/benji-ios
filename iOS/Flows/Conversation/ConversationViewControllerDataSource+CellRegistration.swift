@@ -12,7 +12,7 @@ import StreamChat
 extension ConversationCollectionViewDataSource {
 
     typealias MessageCellRegistration
-    = UICollectionView.CellRegistration<MessageCell,
+    = UICollectionView.CellRegistration<MessageThreadCell,
                                         (channelID: ChannelId,
                                          messageID: MessageId,
                                          dataSource: ConversationCollectionViewDataSource)>
