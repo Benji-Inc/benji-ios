@@ -11,7 +11,9 @@ import UserNotifications
 import TMROLocalization
 import Parse
 import Combine
+#if IOS
 import StreamChat
+#endif
 
 protocol UserNotificationManagerDelegate: AnyObject {
     func userNotificationManager(willHandle: DeepLinkable)

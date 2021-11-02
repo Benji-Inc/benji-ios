@@ -8,7 +8,6 @@
 
 import Foundation
 import UserNotifications
-import StreamChat
 
 enum NotificationContentKey: String {
     case target = "target"
