@@ -19,7 +19,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
     private let parentMessageView = ThreadMessageCell()
     /// A view positioned behind the parent message to separate it from the rest of the messages.
-    private let parentMessageBlurView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+    private let parentMessageBlurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
 
     /// A controller for message that all the replies in the thread are responding.
     let messageController: ChatMessageController
@@ -90,17 +90,18 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
         let headerHeight: CGFloat = 120
 
-        self.parentMessageBlurView.width = self.view.width - Theme.contentOffset
+        self.parentMessageBlurView.pin(.top, padding: Theme.contentOffset)
+        self.parentMessageBlurView.width = self.view.width - Theme.contentOffset.doubled
         self.parentMessageBlurView.height = headerHeight
         self.parentMessageBlurView.centerOnX()
         self.parentMessageBlurView.roundCorners()
 
         self.parentMessageView.width = self.view.width * 0.8
         self.parentMessageView.height = headerHeight - Theme.contentOffset.doubled
-        self.parentMessageView.pin(.top, padding: Theme.contentOffset)
+        self.parentMessageView.match(.top, to: .top, of: self.parentMessageBlurView, offset: Theme.contentOffset)
         self.parentMessageView.centerOnX()
 
-        self.collectionView.contentInset.top = 120
+        self.collectionView.contentInset.top = headerHeight + Theme.contentOffset
     }
 
     override func viewWillAppear(_ animated: Bool) {
