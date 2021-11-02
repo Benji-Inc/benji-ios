@@ -39,8 +39,6 @@
 		8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		80958C202721ED55007196BD /* BottomToTopColumnCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80958C1F2721ED55007196BD /* BottomToTopColumnCollectionViewLayout.swift */; };
 		8098CC61270F8A2300636484 /* ConversationCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8098CC60270F8A2300636484 /* ConversationCollectionView.swift */; };
-		80B17CD02729C90A000860F2 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B17CCF2729C90A000860F2 /* SpeechBubbleView.swift */; };
-		80B17CD12729C90A000860F2 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B17CCF2729C90A000860F2 /* SpeechBubbleView.swift */; };
 		80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */; };
 		80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */; };
 		80D044B526FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */; };
@@ -79,6 +77,11 @@
 		D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DB24FAD7B400B63412 /* AttachmentCell.swift */; };
 		D61592DE24FAD7C600B63412 /* AttachmentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DD24FAD7C600B63412 /* AttachmentHeaderView.swift */; };
 		D61592E024FC195D00B63412 /* InputTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DF24FC195D00B63412 /* InputTextView.swift */; };
+		D6166C882731EEC50013E803 /* PFFileObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6966516263D96D70009114B /* PFFileObject+Extensions.swift */; };
+		D6166C892731F79A0013E803 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
+		D6166C8B2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6166C8A2731F80B0013E803 /* UIImage+MediaItem.swift */; };
+		D6166C8C2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6166C8A2731F80B0013E803 /* UIImage+MediaItem.swift */; };
+		D6166C8D2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6166C8A2731F80B0013E803 /* UIImage+MediaItem.swift */; };
 		D61ACF86262898520052CE29 /* CollectionViewInputHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61ACF85262898520052CE29 /* CollectionViewInputHandler.swift */; };
 		D61D38E7248C494A00BE457B /* ConversationThreadViewController+Messaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61D38E6248C494A00BE457B /* ConversationThreadViewController+Messaging.swift */; };
 		D61EC0C021D3071400204BEE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0BF21D3071400204BEE /* AppDelegate.swift */; };
@@ -889,7 +892,6 @@
 		8096144C2714CDB600BC948E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		8096144E2714CDB800BC948E /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Base; path = Base.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		8098CC60270F8A2300636484 /* ConversationCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCollectionView.swift; sourceTree = "<group>"; };
-		80B17CCF2729C90A000860F2 /* SpeechBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleView.swift; sourceTree = "<group>"; };
 		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
 		80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationControllerType.swift; sourceTree = "<group>"; };
 		80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewControllerDataSource+CellRegistration.swift"; sourceTree = "<group>"; };
@@ -937,6 +939,7 @@
 		D61592DB24FAD7B400B63412 /* AttachmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
 		D61592DD24FAD7C600B63412 /* AttachmentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentHeaderView.swift; sourceTree = "<group>"; };
 		D61592DF24FC195D00B63412 /* InputTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextView.swift; sourceTree = "<group>"; };
+		D6166C8A2731F80B0013E803 /* UIImage+MediaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+MediaItem.swift"; sourceTree = "<group>"; };
 		D61ACF85262898520052CE29 /* CollectionViewInputHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewInputHandler.swift; sourceTree = "<group>"; };
 		D61D38E6248C494A00BE457B /* ConversationThreadViewController+Messaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationThreadViewController+Messaging.swift"; sourceTree = "<group>"; };
 		D61EC0BC21D3071400204BEE /* Jibber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Jibber.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1845,7 +1848,6 @@
 				D6F37D6325B5D9D50034C9C5 /* VibrancyView.swift */,
 				D69B75FA264842D00007020D /* VideoView.swift */,
 				D61EC0E521D30EB300204BEE /* View.swift */,
-				80B17CCF2729C90A000860F2 /* SpeechBubbleView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2286,6 +2288,7 @@
 				D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */,
 				D6D1503621D7E74500CD8CE4 /* UIViewController+Extensions.swift */,
 				D642739822CA79B60088256B /* UIWindow+Extensions.swift */,
+				D6166C8A2731F80B0013E803 /* UIImage+MediaItem.swift */,
 			);
 			path = "UI Extensions";
 			sourceTree = "<group>";
@@ -2834,7 +2837,6 @@
 				D642735522C87CCA0088256B /* ImageViewButton.swift in Sources */,
 				D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */,
 				D67934DB23DC011D00536B44 /* CharacterCountView.swift in Sources */,
-				80B17CD02729C90A000860F2 /* SpeechBubbleView.swift in Sources */,
 				D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */,
 				D6F37D6425B5D9D50034C9C5 /* VibrancyView.swift in Sources */,
 				D67896BD23025FEC0059BA75 /* NameViewController.swift in Sources */,
@@ -3095,6 +3097,7 @@
 				D6D1500721D5E73D00CD8CE4 /* ConversationThreadViewController.swift in Sources */,
 				D6B95AF3272324BD00FBE66A /* UserStore.swift in Sources */,
 				D64C323E270391AE004BC1BD /* Contact.swift in Sources */,
+				D6166C8B2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,
 				D6F7DEF626FBD85C00F72A5C /* UserOnboardingViewController.swift in Sources */,
 				80616E3526EAD2F300C077BA /* DataController+Async.swift in Sources */,
 			);
@@ -3221,6 +3224,7 @@
 				D63DB29825E999B200F6B323 /* DisplayableImageView.swift in Sources */,
 				D63DB21925E998F000F6B323 /* MainCoordinator.swift in Sources */,
 				D63DB29025E999B200F6B323 /* View.swift in Sources */,
+				D6166C8D2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,
 				D63DB22A25E9991300F6B323 /* NSAttributedString+Extensions.swift in Sources */,
 				D63DB21C25E998F000F6B323 /* MainCoordinator+Extensions.swift in Sources */,
 				D63DB22525E9990500F6B323 /* Error+Extensions.swift in Sources */,
@@ -3355,7 +3359,6 @@
 				D655193D2589122700B901E4 /* UIWindow+Extensions.swift in Sources */,
 				802C448B26CC76CC00A333A4 /* Logger.swift in Sources */,
 				D67758A125B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,
-				80B17CD12729C90A000860F2 /* SpeechBubbleView.swift in Sources */,
 				D6551A5F25895F1300B901E4 /* TextField.swift in Sources */,
 				801EC74F26D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */,
 				D69B75FC264842D00007020D /* VideoView.swift in Sources */,
@@ -3436,6 +3439,7 @@
 				D6551A7025895FFB00B901E4 /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D65519072589110A00B901E4 /* DeeplinkObject.swift in Sources */,
 				D65519CA258923E800B901E4 /* OnboardingCoordinator.swift in Sources */,
+				D6166C8C2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,
 				D65519C725891B1D00B901E4 /* ViewController.swift in Sources */,
 				D6617CF626743DFE00439C06 /* Notice.swift in Sources */,
 				D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
@@ -3474,6 +3478,7 @@
 				D6AE0FF7267D2CE400C6B048 /* Error+Extensions.swift in Sources */,
 				D6AE0FE8267D2C1800C6B048 /* User.swift in Sources */,
 				D68759622728A54300AF7C07 /* ImageDisplayable.swift in Sources */,
+				D6166C882731EEC50013E803 /* PFFileObject+Extensions.swift in Sources */,
 				D679DE0C26821EE70054DCAF /* NSObject+Extensions.swift in Sources */,
 				D687596C2728A64500AF7C07 /* String+Extensions.swift in Sources */,
 				D6AE0FFD267D2D9A00C6B048 /* User+Objectable.swift in Sources */,
@@ -3483,6 +3488,7 @@
 				D687595E2728A4BA00AF7C07 /* User+INPerson.swift in Sources */,
 				D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */,
 				D687595A27289E7F00AF7C07 /* Publisher+Extensions.swift in Sources */,
+				D6166C892731F79A0013E803 /* UIImage+Extensions.swift in Sources */,
 				D6AE0FFC267D2D9500C6B048 /* Objectable.swift in Sources */,
 				D68759612728A54000AF7C07 /* Avatar.swift in Sources */,
 			);

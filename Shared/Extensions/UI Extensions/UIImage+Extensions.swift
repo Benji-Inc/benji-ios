@@ -75,25 +75,3 @@ extension UIImage: Avatar {
         return nil
     }
 }
-
-#if !APPCLIP && !NOTIFICATION
-// Code you don't want to use in your App Clip.
-extension UIImage: MediaItem {
-
-    var url: URL? {
-        return nil
-    }
-
-    var fileName: String {
-        return ""
-    }
-
-    var type: MediaType {
-        .photo
-    }
-
-    var data: Data? {
-        return self.jpegData(compressionQuality: 30.0)
-    }
-}
-#endif

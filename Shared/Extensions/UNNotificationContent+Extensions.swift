@@ -10,6 +10,7 @@ import Foundation
 import UserNotifications
 
 enum NotificationContentKey: String {
+    case author = "author"
     case target = "target"
     case group = "group"
     case deeplink = "deeplink"
@@ -27,16 +28,18 @@ enum NotificationContentKey: String {
 
 extension UNNotificationContent {
 
+    var author: String? {
+        guard let value: String = self.value(for: .author) else { return nil }
+        return value
+    }
+
     var messageId: String? {
         guard let value: String = self.value(for: .messageId) else { return nil }
         return value
     }
 
     var conversationId: String? {
-        if let stream = self.userInfo["stream"] as? [String: Any],
-           let cid = stream["cid"] as? String {
-            return cid
-        } else if let value: String = self.value(for: .conversationId) {
+        if let value: String = self.value(for: .conversationId) {
             return value
         } else {
             return nil
@@ -49,11 +52,7 @@ extension UNNotificationContent {
     }
 
     var deepLinkTarget: DeepLinkTarget? {
-        if let stream = self.userInfo["stream"] as? [String: Any],
-           let _ = stream["cid"] as? String {
-            return DeepLinkTarget.conversation
-
-        } else if let value: String = self.value(for: .target) {
+        if let value: String = self.value(for: .target) {
             return DeepLinkTarget(rawValue: value)
         } else {
             return nil
