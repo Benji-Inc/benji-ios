@@ -25,7 +25,7 @@ extension ChatClient {
         // Create a shared chat client object if needed
         if self.shared.isNil {
             var config = ChatClientConfig(apiKey: .init("hvmd2mhxcres"))
-            config.applicationGroupIdentifier = Config.shared.environment.groudID
+            config.applicationGroupIdentifier = Config.shared.environment.groupId
             config.isLocalStorageEnabled = true 
             self.shared = ChatClient(config: config, tokenProvider: { completion in
                 let token = Token.development(userId: user.userObjectID!)
