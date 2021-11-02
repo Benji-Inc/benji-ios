@@ -84,7 +84,6 @@ extension ConversationViewController {
         }.store(in: &self.cancellables)
 
         self.collectionView.publisher(for: \.contentOffset).mainSink { [unowned self] _ in
-
             self.collectionView.visibleCells.forEach { cell in
                 if let messageCell = cell as? MessageCell {
                     messageCell.handle(isCentered: false)

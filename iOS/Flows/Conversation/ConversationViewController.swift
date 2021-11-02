@@ -23,6 +23,7 @@ class ConversationViewController: FullScreenViewController,
     
     lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationCollectionView()
+    /// Denotes where a message should be dragged and dropped to send.
     private let sendMessageOverlay = ConversationSendOverlayView()
     
     private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
@@ -330,9 +331,21 @@ class ConversationViewController: FullScreenViewController,
             self.sendMessageOverlay.alpha = 1
         }
 
-        self.sendMessageOverlay.size = CGSize(width: self.collectionView.width * 0.8,
-                                              height: self.collectionView.height * 0.27)
-        self.sendMessageOverlay.match(.top, to: .top, of: self.collectionView)
+        // Show the send message overlay so the user can see where to drag the message
+        if let centerCell = self.collectionView.getCentermostVisibleCell() as? MessageCell,
+           let messageSubcell = centerCell.getFrontmostMessageCell() {
+
+            // If possible put the message overlay around front most message
+            var overlayFrame = messageSubcell.convert(messageSubcell.bounds, to: self.contentContainer)
+            overlayFrame.top += Theme.contentOffset
+            self.sendMessageOverlay.frame = overlayFrame
+        } else {
+            // As a fallback, use the collection to determine the position of the overlay.
+            self.sendMessageOverlay.size = CGSize(width: self.collectionView.width * 0.8,
+                                                  height: self.collectionView.height * 0.27)
+            self.sendMessageOverlay.match(.top, to: .top, of: self.collectionView)
+        }
+
         self.sendMessageOverlay.centerOnX()
     }
 
