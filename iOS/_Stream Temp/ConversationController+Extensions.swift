@@ -38,17 +38,32 @@ extension ChatChannelController {
         }
     }
 
-    func donateIntent(for sendable: Sendable) {
+    func donateIntent(for sendable: Sendable) async {
         guard case MessageKind.text(let text) = sendable.kind else { return }
         let memberIDs = self.conversation.lastActiveMembers.compactMap { member in
             return member.id
         }
 
-        let recipients = UserStore.shared.users.filter { user in
+        let members = UserStore.shared.users.filter { user in
             return memberIDs.contains(user.objectId ?? String())
-        }.compactMap { user in
-            return user.inPerson
         }
+
+        var recipients: [INPerson] = []
+        await withTaskGroup(of: INPerson?.self) { group in
+            for member in members {
+                group.addTask {
+                    return await member.getINPerson()
+                }
+            }
+
+            for await inPerson in group {
+                if let person = inPerson {
+                    recipients.append(person)
+                }
+            }
+        }
+
+        let sender = await self.conversation.createdBy?.parseUser?.getINPerson()
 
         let intent = INSendMessageIntent(recipients: recipients,
                                          outgoingMessageType: .outgoingMessageText,
@@ -56,12 +71,12 @@ extension ChatChannelController {
                                          speakableGroupName: self.conversation.speakableGroupName,
                                          conversationIdentifier: self.conversation.cid.id,
                                          serviceName: nil,
-                                         sender: self.conversation.createdBy?.parseUser?.inPerson,
+                                         sender: sender,
                                          attachments: nil)
 
         let interaction = INInteraction(intent: intent, response: nil)
         interaction.direction = .outgoing
-        interaction.donate(completion: nil)
+        try? await interaction.donate()
     }
 
     @discardableResult
@@ -123,7 +138,9 @@ extension ChatChannelController {
 
                 switch result {
                 case .success(let messageID):
-                    self.donateIntent(for: sendable)
+                    Task {
+                        await self.donateIntent(for: sendable)
+                    }
                     continuation.resume(returning: messageID)
                 case .failure(let error):
                     continuation.resume(throwing: error)
@@ -181,7 +198,9 @@ extension ChatChannelController {
                 if let e = error {
                     continuation.resume(throwing: e)
                 } else {
-                    self.donateIntent(for: sendable)
+                    Task {
+                        await self.donateIntent(for: sendable)
+                    }
                     continuation.resume(returning: ())
                 }
             }
@@ -259,7 +278,9 @@ extension ChatChannelController {
                                              extraData: extraData) { result in
                 switch result {
                 case .success(let messageId):
-                    self.donateIntent(for: sendable)
+                    Task {
+                        await self.donateIntent(for: sendable)
+                    }
                     continuation.resume(returning: messageId)
                 case .failure(let error):
                     continuation.resume(throwing: error)

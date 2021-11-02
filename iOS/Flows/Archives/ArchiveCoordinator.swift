@@ -53,8 +53,8 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
             if let identifier = deeplink.customMetadata["conversationId"] as? String {
                 guard let conversationId = try? ChannelId.init(cid: identifier) else { return }
                 let conversation = ChatClient.shared.channelController(for: conversationId).conversation
-
-                self.startConversationFlow(for: conversation, startingMessageId: nil)
+                let messageId = deeplink.customMetadata["messageId"] as? String 
+                self.startConversationFlow(for: conversation, startingMessageId: messageId)
             } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
 
                 guard let connection = ConnectionStore.shared.connections.first(where: { connection in
@@ -66,12 +66,6 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
                 let conversation = ChatClient.shared.channelController(for: conversationId).conversation
 
                 self.startConversationFlow(for: conversation, startingMessageId: nil)
-            } else if let stream = deeplink.customMetadata["stream"] as? [String: Any],
-                      let cid = stream["cid"] as? String,
-                      let conversationId = try? ChannelId.init(cid: cid) {
-                let conversation = ChatClient.shared.channelController(for: conversationId).conversation
-                let messageId = stream["id"] as? String
-                self.startConversationFlow(for: conversation, startingMessageId: messageId)
             }
 
         default:

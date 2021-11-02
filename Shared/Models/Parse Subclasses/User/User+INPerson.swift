@@ -8,23 +8,34 @@
 
 import Foundation
 import Intents
+import UIKit
 
 extension User {
 
-    var inPerson: INPerson? {
+    func getINPerson() async -> INPerson? {
+
+        var inImage: INImage? = nil
+        if let data = try? await self.smallImage?.retrieveDataInBackground() {
+            if let image = UIImage(data: data),
+               let cgImage = image.cgImage {
+
+                let orientedImage = UIImage.init(cgImage: cgImage,
+                                                 scale: image.scale,
+                                                 orientation: .down)
+
+                if let previewData = orientedImage.previewData {
+                    inImage = INImage(imageData: previewData)
+                }
+            }
+        }
         return INPerson(personHandle: self.inHandle,
                         nameComponents: self.nameComponents,
                         displayName: self.fullName,
-                        image: self.inImage,
+                        image: inImage,
                         contactIdentifier: nil,
                         customIdentifier: self.objectId,
-                        aliases: nil,
-                        suggestionType: self.inSuggestionType)
-    }
-
-    private var inImage: INImage? {
-        guard let urlString = self.smallImage?.url, let url = URL(string: urlString) else { return nil }
-        return INImage(url: url)
+                        isMe: User.current()?.objectId == self.objectId,
+                        suggestionType: .instantMessageAddress)
     }
 
     private var inHandle: INPersonHandle {
