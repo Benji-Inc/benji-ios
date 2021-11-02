@@ -15,7 +15,8 @@ import StreamChat
 
 class ConversationCoordinator: PresentableCoordinator<Void> {
 
-    lazy var conversationVC = ConversationViewController(conversation: ConversationsManager.shared.activeConversations.last, startingMessageId: nil)
+    lazy var conversationVC = ConversationViewController(conversation: ConversationsManager.shared.activeConversations.last,
+                                                         startingMessageId: self.startingMessageId)
 
     let startingMessageId: MessageId?
 

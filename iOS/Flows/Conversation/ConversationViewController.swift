@@ -52,12 +52,18 @@ class ConversationViewController: FullScreenViewController,
     }
 
     @Published var state: ConversationUIState = .read
+    private let startingMessageId: MessageId?
     
     init(conversation: Conversation?, startingMessageId messageId: MessageId?) {
 
+        self.startingMessageId = messageId
+
         if let conversation = conversation {
-            self.conversationController
-            = ChatClient.shared.channelController(for: conversation.cid, messageOrdering: .topToBottom)
+            // Add query that loads all messages including the one with the messageId passed in
+            var query: ChannelListQuery? = nil
+            self.conversationController = ChatClient.shared.channelController(for: conversation.cid,
+                                                                                 channelListQuery: query,
+                                                                                 messageOrdering: .topToBottom)
         }
         
         super.init()
@@ -161,8 +167,11 @@ class ConversationViewController: FullScreenViewController,
     func initializeDataSource() async {
         guard let controller = self.conversationController else { return }
 
+        if let messageId = self.startingMessageId {
+            try? await controller.loadPreviousMessages(before: messageId)
+        }
         // Make sure messages are loaded before initializing the data.
-        if let mostRecentMessage = controller.messages.first {
+        else if let mostRecentMessage = controller.messages.first {
             try? await controller.loadPreviousMessages(before: mostRecentMessage.id)
         }
 
@@ -177,7 +186,7 @@ class ConversationViewController: FullScreenViewController,
             snapshot.appendItems([.loadMore], toSection: section)
         }
 
-        let initialIndexPath = self.getFirstUnreadIndexPath()
+        let initialIndexPath = self.getIntialIndexPath()
         let animationCycle = AnimationCycle(inFromPosition: .right,
                                             outToPosition: .left,
                                             shouldConcatenate: true,
@@ -188,6 +197,19 @@ class ConversationViewController: FullScreenViewController,
                                     animationCycle: animationCycle)
 
         self.updateCenterMostCell()
+    }
+
+    private func getIntialIndexPath() -> IndexPath? {
+        if let messages = self.conversationController?.conversation.latestMessages,
+           let messageId = self.startingMessageId,
+            let message = messages.first(where: { message in
+               return message.id == messageId
+           }),
+            let index = messages.firstIndex(of: message) {
+            return IndexPath(item: index, section: 0)
+        } else {
+            return self.getFirstUnreadIndexPath()
+        }
     }
 
     private func getFirstUnreadIndexPath() -> IndexPath? {
