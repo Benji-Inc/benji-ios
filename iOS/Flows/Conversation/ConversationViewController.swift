@@ -36,7 +36,7 @@ class ConversationViewController: FullScreenViewController,
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
     var didTapMoreButton: CompletionOptional = nil
     var didTapConversationTitle: CompletionOptional = nil
-    @Published var didCenterOnCell: MessageThreadCell? = nil
+    @Published var didCenterOnCell: ConversationMessageCell? = nil
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
@@ -157,7 +157,7 @@ class ConversationViewController: FullScreenViewController,
     }
 
     func updateCenterMostCell() {
-        if let cell = self.collectionView.getCentermostVisibleCell() as? MessageThreadCell {
+        if let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessageCell {
             self.didCenterOnCell = cell
         }
     }
@@ -332,7 +332,7 @@ class ConversationViewController: FullScreenViewController,
         }
 
         // Show the send message overlay so the user can see where to drag the message
-        if let centerCell = self.collectionView.getCentermostVisibleCell() as? MessageThreadCell,
+        if let centerCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessageCell,
            let messageSubcell = centerCell.getFrontmostMessageCell() {
 
             // If possible put the message overlay around front most message

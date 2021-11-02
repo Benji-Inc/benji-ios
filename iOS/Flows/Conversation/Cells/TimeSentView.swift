@@ -27,12 +27,6 @@ class TimeSentView: UICollectionReusableView {
         self.addSubview(self.daysAgoLabel)
     }
 
-    func configure(with message: Messageable) {
-        self.timeOfDayLabel.set(date: message.createdAt)
-        self.daysAgoLabel.set(date: message.createdAt)
-        self.layoutNow()
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -43,5 +37,18 @@ class TimeSentView: UICollectionReusableView {
         self.timeOfDayLabel.setSize(withWidth: self.width)
         self.timeOfDayLabel.pin(.right, padding: Theme.contentOffset)
         self.timeOfDayLabel.pin(.bottom, padding: Theme.contentOffset.half.half)
+    }
+
+    func configure(with message: Messageable?) {
+        if let message = message {
+            self.timeOfDayLabel.set(date: message.createdAt)
+            self.daysAgoLabel.set(date: message.createdAt)
+
+        } else {
+            self.timeOfDayLabel.text = nil
+            self.daysAgoLabel.text = nil
+        }
+
+        self.setNeedsLayout()
     }
 }

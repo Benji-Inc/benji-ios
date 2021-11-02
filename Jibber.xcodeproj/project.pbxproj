@@ -12,7 +12,7 @@
 		7F227B8576E160C9469E08D1 /* Pods_Intents_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C50C41C9E4C24DF432E0D86 /* Pods_Intents_Extension.framework */; };
 		8007CB642703CE0600FEA511 /* AttachmentCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8007CB632703CE0600FEA511 /* AttachmentCollectionViewDataSource.swift */; };
 		800FAAC126F0585A00D3C3A0 /* Conversation+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 800FAAC026F0585A00D3C3A0 /* Conversation+Extensions.swift */; };
-		8015CA7726F3D907000F3C60 /* MessageThreadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8015CA7626F3D907000F3C60 /* MessageThreadCell.swift */; };
+		8015CA7726F3D907000F3C60 /* ConversationMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8015CA7626F3D907000F3C60 /* ConversationMessageCell.swift */; };
 		801EC74E26D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */; };
 		801EC74F26D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */; };
 		801EC75026D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */; };
@@ -870,7 +870,7 @@
 		6FBC4612F5436670D960DB97 /* Pods_Notification_Service.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Notification_Service.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8007CB632703CE0600FEA511 /* AttachmentCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		800FAAC026F0585A00D3C3A0 /* Conversation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Conversation+Extensions.swift"; sourceTree = "<group>"; };
-		8015CA7626F3D907000F3C60 /* MessageThreadCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageThreadCell.swift; sourceTree = "<group>"; };
+		8015CA7626F3D907000F3C60 /* ConversationMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessageCell.swift; sourceTree = "<group>"; };
 		801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extensions.swift"; sourceTree = "<group>"; };
 		8020DD92272C81FB00D5BA04 /* ConversationInputAccessoryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConversationInputAccessoryView.xib; sourceTree = "<group>"; };
 		8024B95026F278C8008ABF7F /* ConversationViewControllerDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewControllerDataSource.swift; sourceTree = "<group>"; };
@@ -1623,7 +1623,7 @@
 			isa = PBXGroup;
 			children = (
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
-				8015CA7626F3D907000F3C60 /* MessageThreadCell.swift */,
+				8015CA7626F3D907000F3C60 /* ConversationMessageCell.swift */,
 				806DA16927307FA400843C4E /* MessageSubcell.swift */,
 				808313B42723694B00BAEBE0 /* ThreadMessageCell.swift */,
 				D68072EA2730462F004657E7 /* TimeSentView.swift */,
@@ -2801,7 +2801,7 @@
 				D6FEF02D257EB71700F9789B /* Button+Extensions.swift in Sources */,
 				D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */,
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,
-				8015CA7726F3D907000F3C60 /* MessageThreadCell.swift in Sources */,
+				8015CA7726F3D907000F3C60 /* ConversationMessageCell.swift in Sources */,
 				D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */,
 				D678EC2626F534430071DB0D /* CircleGroup.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,

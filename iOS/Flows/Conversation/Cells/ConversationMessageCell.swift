@@ -10,9 +10,9 @@ import Foundation
 import StreamChat
 import UIKit
 
-/// A cell to display a high-level view of a message thread. Displays a limited number of recent replies to a root message.
+/// A cell to display a high-level view of a conversation's message. Displays a limited number of recent replies to the message.
 /// The user's replies and other replies are put in two stacks (along the z-axis), with the most recent reply at the front (visually obscuring the others).
-class MessageThreadCell: UICollectionViewCell {
+class ConversationMessageCell: UICollectionViewCell {
 
     // Interaction handling
     var handleTappedMessage: ((Messageable) -> Void)?
@@ -62,8 +62,6 @@ class MessageThreadCell: UICollectionViewCell {
                                                         left: 0,
                                                         bottom: 0,
                                                         right: 0)
-        self.collectionView.register(UICollectionViewCell.self,
-                                     forCellWithReuseIdentifier: UICollectionViewCell.description())
 
         self.collectionView.onTap { [unowned self] tapRecognizer in
             guard let message = self.message else { return }
@@ -126,16 +124,10 @@ class MessageThreadCell: UICollectionViewCell {
     }
 }
 
-extension MessageThreadCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
     /// The space between the top of a cell and tops of adjacent cells.
     var spaceBetweenCellTops: CGFloat { return 15 }
-    /// The height of each message subcell
-    var cellHeight: CGFloat {
-        // Cell height should allow for one base message, plus the max number of replies to fit vertically.
-        let height: CGFloat = 50
-        return clamp(height, min: 1)
-    }
 
     // MARK: - UICollectionViewDataSource
     
@@ -150,13 +142,13 @@ extension MessageThreadCell: UICollectionViewDataSource, UICollectionViewDelegat
         // The first section contains replies from other users
         if section == 0 {
             itemCount = self.otherReplies.count
-        } else {
+        } else if section == 1 {
             // The second section contains replies from the current user
             itemCount = self.userReplies.count
         }
 
         // There's always at least one item in each section.
-        return clamp(itemCount, min: 1)
+        return itemCount
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -173,11 +165,7 @@ extension MessageThreadCell: UICollectionViewDataSource, UICollectionViewDelegat
             message = nil
         }
 
-        guard let message = message else {
-            return collectionView
-                .dequeueReusableCell(withReuseIdentifier: UICollectionViewCell.description(),
-                                     for: indexPath)
-        }
+        guard let message = message else { return UICollectionViewCell() }
 
         let cell = collectionView.dequeueConfiguredReusableCell(using: self.cellRegistration,
                                                                 for: indexPath,
@@ -208,17 +196,17 @@ extension MessageThreadCell: UICollectionViewDataSource, UICollectionViewDelegat
             let header
             = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration,
                                                                     for: indexPath)
-            if let latestMessage = self.otherReplies.last {
-                header.configure(with: latestMessage)
-            }
+            let latestMessage = self.otherReplies.last
+            header.configure(with: latestMessage)
+
             return header
         case UICollectionView.elementKindSectionFooter:
             let footer
             = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerRegistration,
                                                                     for: indexPath)
-            if let latestMessage = self.userReplies.last {
-                footer.configure(with: latestMessage)
-            }
+            let latestMessage = self.userReplies.last
+            footer.configure(with: latestMessage)
+
             return footer
         default:
             return UICollectionReusableView()
@@ -232,7 +220,25 @@ extension MessageThreadCell: UICollectionViewDataSource, UICollectionViewDelegat
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         let width = collectionView.width
-        return CGSize(width: width, height: self.cellHeight)
+        var height: CGFloat = 50
+
+        // The heights of all cells in a section are the same as the front most cell in that section.
+        switch indexPath.section {
+        case 0:
+            guard let latestMessage = self.otherReplies.last else { break }
+            let textView = MessageTextView()
+            textView.text = latestMessage.kind.text
+            height = textView.getSize(withWidth: width).height + Theme.contentOffset.doubled
+        case 1:
+            guard let latestMessage = self.userReplies.last else { break }
+            let textView = MessageTextView()
+            textView.text = latestMessage.kind.text
+            height = textView.getSize(withWidth: width).height + Theme.contentOffset.doubled
+        default:
+            break
+        }
+
+        return CGSize(width: width, height: height)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -241,7 +247,7 @@ extension MessageThreadCell: UICollectionViewDataSource, UICollectionViewDelegat
 
         // Put a little space between the user's replies and other replies.
         if section == 1 {
-            return UIEdgeInsets(top: self.spaceBetweenCellTops, left: 0, bottom: 0, right: 0)
+            return UIEdgeInsets(top: Theme.contentOffset, left: 0, bottom: 0, right: 0)
         }
 
         return .zero
@@ -251,16 +257,19 @@ extension MessageThreadCell: UICollectionViewDataSource, UICollectionViewDelegat
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumLineSpacingForSectionAt section: Int) -> CGFloat {
 
+        let cellSize = self.collectionView(collectionView,
+                                           layout: collectionViewLayout,
+                                           sizeForItemAt: IndexPath(item: 0, section: section))
         // Return a negative spacing so that the cells overlap.
-        return -self.cellHeight + self.spaceBetweenCellTops
+        return -cellSize.height + self.spaceBetweenCellTops
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
         // Only show a header for the first section
-        if section == 0 {
-            return CGSize(width: collectionView.width, height: 30)
+        if section == 0 && !self.otherReplies.isEmpty {
+            return CGSize(width: collectionView.width, height: Theme.contentOffset)
         }
 
         return .zero
@@ -270,8 +279,8 @@ extension MessageThreadCell: UICollectionViewDataSource, UICollectionViewDelegat
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
         // Only show a header for the second section
-        if section == 1 {
-            return CGSize(width: collectionView.width, height: 30)
+        if section == 1 && !self.userReplies.isEmpty {
+            return CGSize(width: collectionView.width, height: Theme.contentOffset)
         }
 
         return .zero
@@ -280,7 +289,7 @@ extension MessageThreadCell: UICollectionViewDataSource, UICollectionViewDelegat
 
 // MARK: - UIContextMenuInteractionDelegate
 
-extension MessageThreadCell: UIContextMenuInteractionDelegate {
+extension ConversationMessageCell: UIContextMenuInteractionDelegate {
 
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
