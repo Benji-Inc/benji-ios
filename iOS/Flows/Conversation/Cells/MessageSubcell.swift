@@ -11,8 +11,10 @@ import Foundation
 /// A cell for displaying individual messages  and replies within a MessageCell or ThreadedMessageCell.
 class MessageSubcell: UICollectionViewCell {
 
+    static let bubbleTailLength: CGFloat = 7
+
     /// A rounded and colored background view for the message. Changes color based on the sender.
-    let backgroundColorView = UIView()
+    let backgroundColorView = SpeechBubbleView(orientation: .down)
     /// Text view for displaying the text of the message.
     let textView = MessageTextView()
 
@@ -38,8 +40,6 @@ class MessageSubcell: UICollectionViewCell {
         self.backgroundColorView.roundCorners()
 
         self.backgroundColorView.addSubview(self.textView)
-        self.textView.isScrollEnabled = false
-        self.textView.isEditable = false
         self.textView.textAlignment = .center
     }
 
@@ -50,9 +50,9 @@ class MessageSubcell: UICollectionViewCell {
         self.backgroundColorView.expandToSuperviewHeight()
         self.backgroundColorView.centerOnXAndY()
 
-        self.textView.expandToSuperviewWidth()
+        self.textView.width = self.backgroundColorView.width
         self.textView.sizeToFit()
-        self.textView.centerOnXAndY()
+        self.textView.center = self.backgroundColorView.bubbleFrame.center
     }
 
     func setText(with message: Messageable) {
@@ -66,7 +66,10 @@ class MessageSubcell: UICollectionViewCell {
     }
 
     /// Adjusts the background color of the cell to be appropriate for its position in the stack. Cells that are further back in the stack are darkened.
-    func configureBackground(withStackIndex stackIndex: Int, message: Messageable) {
+    func configureBackground(withStackIndex stackIndex: Int,
+                             message: Messageable,
+                             showBubbleTail: Bool) {
+
         // How much to scale the brightness of the background view.
         let colorFactor = 1 - CGFloat(stackIndex) * 0.05
 
@@ -88,9 +91,24 @@ class MessageSubcell: UICollectionViewCell {
                                       alpha: alpha)
         }
 
-        self.backgroundColorView.backgroundColor = backgroundColor
+        self.backgroundColorView.bubbleColor = backgroundColor
+        self.backgroundColorView.tailLength = showBubbleTail ? MessageSubcell.bubbleTailLength : 0
+
+        self.backgroundColorView.orientation = message.isFromCurrentUser ? .down : .up
 
         self.stackIndex = stackIndex
         self.setNeedsLayout()
+    }
+}
+
+extension MessageSubcell {
+
+    /// Returns the height that a message subcell should be given a width and message to display.
+    static func getHeight(withWidth width: CGFloat, message: Messageable) -> CGFloat {
+        let textView = MessageTextView()
+        textView.text = message.kind.text
+        var textViewSize = textView.getSize(withWidth: width)
+        textViewSize.height += Theme.contentOffset.doubled
+        return textViewSize.height + self.bubbleTailLength
     }
 }
