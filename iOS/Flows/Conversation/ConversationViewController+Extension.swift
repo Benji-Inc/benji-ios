@@ -47,7 +47,6 @@ extension ConversationViewController {
     }
 
     func subscribeToUpdates() {
-
         self.$state
             .removeDuplicates()
             .mainSink { [unowned self] state in

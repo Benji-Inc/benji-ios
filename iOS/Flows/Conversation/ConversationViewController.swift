@@ -61,7 +61,7 @@ class ConversationViewController: FullScreenViewController,
 
         if let conversation = conversation {
             // Add query that loads all messages including the one with the messageId passed in
-            var query: ChannelListQuery? = nil
+            let query: ChannelListQuery? = nil
             self.conversationController = ChatClient.shared.channelController(for: conversation.cid,
                                                                                  channelListQuery: query,
                                                                                  messageOrdering: .topToBottom)
@@ -332,17 +332,8 @@ class ConversationViewController: FullScreenViewController,
         }
 
         // Show the send message overlay so the user can see where to drag the message
-        if let centerCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessageCell {
-            // If possible put the message overlay around front most message
-            let overlayFrame = centerCell.convert(centerCell.getMessageOverlayFrame(),
-                                                  to: self.contentContainer)
-            self.sendMessageOverlay.frame = overlayFrame
-        } else {
-            // As a fallback, use the collection to determine the position of the overlay.
-            self.sendMessageOverlay.size = CGSize(width: self.collectionView.width * 0.8,
-                                                  height: self.collectionView.height * 0.27)
-            self.sendMessageOverlay.match(.top, to: .top, of: self.collectionView)
-        }
+        let overlayFrame = self.collectionView.getMessageOverlayFrame(convertedTo: self.contentContainer)
+        self.sendMessageOverlay.frame = overlayFrame
 
         self.sendMessageOverlay.centerOnX()
     }

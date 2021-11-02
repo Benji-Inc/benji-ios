@@ -117,15 +117,16 @@ class ConversationMessageCell: UICollectionViewCell {
 
     func handle(isCentered: Bool) { }
 
-    /// Gets the message subcell that is the front, if any.
-    func getMessageOverlayFrame() -> CGRect {
+    /// Returns the frame that a message send overlay should appear based on this cells contents.
+    /// The frame is in the coordinate space of the passed in view.
+    func getMessageOverlayFrame(convertedTo targetView: UIView) -> CGRect {
         let userMessageCount = self.collectionView.numberOfItems(inSection: 1)
         if let frontUserCell = self.collectionView.cellForItem(at: IndexPath(item: userMessageCount - 1,
                                                                            section: 1)) {
 
             var overlayRect = frontUserCell.convert(frontUserCell.bounds, to: self)
             overlayRect.top += ConversationMessageCell.spaceBetweenCellTops
-            return overlayRect
+            return self.convert(overlayRect, to: targetView)
         }
 
         let otherMessageCount = self.collectionView.numberOfItems(inSection: 0)
@@ -134,10 +135,11 @@ class ConversationMessageCell: UICollectionViewCell {
 
             var overlayRect = frontOtherCell.convert(frontOtherCell.bounds, to: self)
             overlayRect.top += frontOtherCell.height + ConversationMessageCell.spaceBetweenCellTops
-            return overlayRect
+            return self.convert(overlayRect, to: targetView)
         }
 
-        return CGRect(x: 0, y: 0, width: self.width, height: 50)
+        return self.convert(CGRect(x: 0, y: 100, width: self.width, height: 50),
+                            to: targetView)
     }
 }
 
