@@ -41,7 +41,7 @@ class LaunchManager {
         // Initialize Parse if necessary
         if Parse.currentConfiguration.isNil  {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) in
-                configuration.applicationGroupIdentifier = Config.shared.environment.groudID
+                configuration.applicationGroupIdentifier = Config.shared.environment.groupId
                 configuration.server = Config.shared.environment.url
                 configuration.applicationId = Config.shared.environment.appID
                 configuration.isLocalDatastoreEnabled = true

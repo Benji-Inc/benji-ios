@@ -36,7 +36,7 @@ enum Environment: String {
         }
     }
 
-    var groudID: String {
+    var groupId: String {
         return "group.com.Jibber"
     }
 }
