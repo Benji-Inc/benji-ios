@@ -93,6 +93,7 @@ class NotificationService: UNNotificationServiceExtension {
         do {
             try await interaction.donate()
             let messageContent = try request.content.updating(from: incomingMessageIntent)
+            print("NOTIFICATIONS")
             contentHandler(messageContent)
         } catch {
             print(error)

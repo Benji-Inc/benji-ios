@@ -18,7 +18,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="337" height="114"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6QT-73-Nac" customClass="InputActivityBar" customModule="Jibber" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="0.0" width="337" height="28"/>
+                            <rect key="frame" x="24" y="0.0" width="289" height="28"/>
                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="28" id="Qcc-5W-wS4"/>
@@ -56,11 +56,11 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="6QT-73-Nac" firstAttribute="top" secondItem="CP8-gi-eym" secondAttribute="top" id="0H2-Xo-SXZ"/>
-                        <constraint firstItem="6QT-73-Nac" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" id="7OI-uH-Srh"/>
-                        <constraint firstAttribute="trailing" secondItem="6QT-73-Nac" secondAttribute="trailing" id="SmQ-yw-qqC"/>
                         <constraint firstAttribute="trailing" secondItem="VuQ-5S-h7F" secondAttribute="trailing" constant="24" id="Tgi-A5-L3c"/>
                         <constraint firstItem="VuQ-5S-h7F" firstAttribute="top" secondItem="6QT-73-Nac" secondAttribute="bottom" id="ZSd-AH-VpD"/>
                         <constraint firstItem="VuQ-5S-h7F" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="24" id="Zve-FB-6La"/>
+                        <constraint firstItem="VuQ-5S-h7F" firstAttribute="trailing" secondItem="6QT-73-Nac" secondAttribute="trailing" id="lDj-vr-jFz"/>
+                        <constraint firstItem="VuQ-5S-h7F" firstAttribute="leading" secondItem="6QT-73-Nac" secondAttribute="leading" id="qmj-x7-7Tm"/>
                         <constraint firstAttribute="bottom" secondItem="VuQ-5S-h7F" secondAttribute="bottom" constant="10" id="z6m-Oo-aFo"/>
                     </constraints>
                 </view>
