@@ -118,10 +118,26 @@ class ConversationMessageCell: UICollectionViewCell {
     func handle(isCentered: Bool) { }
 
     /// Gets the message subcell that is the front, if any.
-    func getFrontmostMessageCell() -> MessageSubcell? {
-        let cellCount = self.collectionView.numberOfItems(inSection: 1)
-        let topCell = self.collectionView.cellForItem(at: IndexPath(item: cellCount - 1, section: 1))
-        return topCell as? MessageSubcell
+    func getMessageOverlayFrame() -> CGRect {
+        let userMessageCount = self.collectionView.numberOfItems(inSection: 1)
+        if let frontUserCell = self.collectionView.cellForItem(at: IndexPath(item: userMessageCount - 1,
+                                                                           section: 1)) {
+
+            var overlayRect = frontUserCell.convert(frontUserCell.bounds, to: self)
+            overlayRect.top += ConversationMessageCell.spaceBetweenCellTops
+            return overlayRect
+        }
+
+        let otherMessageCount = self.collectionView.numberOfItems(inSection: 0)
+        if let frontOtherCell = self.collectionView.cellForItem(at: IndexPath(item: otherMessageCount - 1,
+                                                                            section: 0)) {
+
+            var overlayRect = frontOtherCell.convert(frontOtherCell.bounds, to: self)
+            overlayRect.top += frontOtherCell.height + ConversationMessageCell.spaceBetweenCellTops
+            return overlayRect
+        }
+
+        return CGRect(x: 0, y: 0, width: self.width, height: 50)
     }
 }
 
@@ -274,7 +290,7 @@ extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewD
                                            layout: collectionViewLayout,
                                            sizeForItemAt: IndexPath(item: 0, section: section))
         // Return a negative spacing so that the cells overlap.
-        return -cellSize.height + self.spaceBetweenCellTops
+        return -cellSize.height + ConversationMessageCell.spaceBetweenCellTops
     }
 
     func collectionView(_ collectionView: UICollectionView,

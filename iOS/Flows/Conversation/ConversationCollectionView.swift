@@ -29,4 +29,16 @@ class ConversationCollectionView: CollectionView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    func getMessageOverlayFrame() -> CGRect {
+        guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessageCell else {
+            var overlayFrame = self.bounds
+            overlayFrame.size.height = 50
+            return overlayFrame
+        }
+
+        let overlayRect = centerCell.getMessageOverlayFrame()
+
+        return centerCell.convert(overlayRect, to: self)
+    }
 }
