@@ -35,6 +35,9 @@ class MessageThreadCell: UICollectionViewCell {
     private let headerRegistration
     = UICollectionView.SupplementaryRegistration<TimeSentView>(elementKind: UICollectionView.elementKindSectionHeader) { supplementaryView, elementKind, indexPath in
     }
+    private let footerRegistration
+    = UICollectionView.SupplementaryRegistration<TimeSentView>(elementKind: UICollectionView.elementKindSectionFooter) { supplementaryView, elementKind, indexPath in
+    }
 
     private var state: ConversationUIState = .read
 
@@ -92,10 +95,6 @@ class MessageThreadCell: UICollectionViewCell {
              totalReplyCount: Int) {
 
         self.message = message
-
-        if message.kind.text == "This is the start of a thread" {
-            
-        }
 
         var userReplies = replies.filter { message in
             return message.isFromCurrentUser
@@ -209,15 +208,18 @@ extension MessageThreadCell: UICollectionViewDataSource, UICollectionViewDelegat
             let header
             = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration,
                                                                     for: indexPath)
-            #warning("Restore")
-//            if let latestMessage = self.replies.last {
-//                header.configure(with: latestMessage)
-//            } else if let message = self.message {
-//                header.configure(with: message)
-//            }
+            if let latestMessage = self.otherReplies.last {
+                header.configure(with: latestMessage)
+            }
             return header
         case UICollectionView.elementKindSectionFooter:
-            return UICollectionReusableView()
+            let footer
+            = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerRegistration,
+                                                                    for: indexPath)
+            if let latestMessage = self.userReplies.last {
+                footer.configure(with: latestMessage)
+            }
+            return footer
         default:
             return UICollectionReusableView()
         }
@@ -258,6 +260,17 @@ extension MessageThreadCell: UICollectionViewDataSource, UICollectionViewDelegat
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
         // Only show a header for the first section
         if section == 0 {
+            return CGSize(width: collectionView.width, height: 30)
+        }
+
+        return .zero
+    }
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForFooterInSection section: Int) -> CGSize {
+        // Only show a header for the second section
+        if section == 1 {
             return CGSize(width: collectionView.width, height: 30)
         }
 
