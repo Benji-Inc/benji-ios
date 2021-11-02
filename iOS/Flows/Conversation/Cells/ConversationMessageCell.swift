@@ -17,7 +17,6 @@ class ConversationMessageCell: UICollectionViewCell {
     // Interaction handling
     var handleTappedMessage: ((Messageable) -> Void)?
     var handleDeleteMessage: ((Messageable) -> Void)?
-    private lazy var contextMenuInteraction = UIContextMenuInteraction(delegate: self)
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -27,11 +26,11 @@ class ConversationMessageCell: UICollectionViewCell {
         return cv
     }()
 
+    // Cell/Header/Footer registration
     private let cellRegistration = UICollectionView.CellRegistration<MessageSubcell, Messageable>
     { (cell, indexPath, item) in
         cell.setText(with: item)
     }
-
     private let headerRegistration
     = UICollectionView.SupplementaryRegistration<TimeSentView>(elementKind: UICollectionView.elementKindSectionHeader) { supplementaryView, elementKind, indexPath in
     }
@@ -43,10 +42,10 @@ class ConversationMessageCell: UICollectionViewCell {
 
     /// The parent message of this thread.
     private var message: Messageable?
-    /// A subset of user replies to the root message that we want to display. The count is never more more than the maxShownReplies.
-    private var userReplies: [Messageable] = []
-    /// A subset of other people's replies to the root message that we want to display. The count is never more more than the maxShownReplies.
-    private var otherReplies: [Messageable] = []
+    /// The current user's replies to the root message that we want to display. May include the root message.
+    private var currentUserMessages: [Messageable] = []
+    /// Other people's replies to the root message that we want to display. May include the root message.
+    private var otherMessages: [Messageable] = []
 
     /// The maximum number of replies we'll show per stack of messages.
     private let maxShownRepliesPerStack = 3
@@ -94,12 +93,14 @@ class ConversationMessageCell: UICollectionViewCell {
 
         self.message = message
 
+        // Separate the user messages from other message.
         var userReplies = replies.filter { message in
             return message.isFromCurrentUser
         }
         var otherReplies = replies.filter { message in
             return !message.isFromCurrentUser
         }
+        // Put the parent message in the appropriate stack based on who sent it.
         if message.isFromCurrentUser {
             userReplies.append(message)
         } else {
@@ -108,8 +109,8 @@ class ConversationMessageCell: UICollectionViewCell {
 
         // Only shows a limited number of messages in each stack.
         // The newest messages are stacked on top, so reverse the order.
-        self.userReplies = userReplies.prefix(self.maxShownRepliesPerStack).reversed()
-        self.otherReplies = otherReplies.prefix(self.maxShownRepliesPerStack).reversed()
+        self.currentUserMessages = userReplies.prefix(self.maxShownRepliesPerStack).reversed()
+        self.otherMessages = otherReplies.prefix(self.maxShownRepliesPerStack).reversed()
 
         self.collectionView.reloadData()
     }
@@ -118,36 +119,36 @@ class ConversationMessageCell: UICollectionViewCell {
 
     /// Gets the message subcell that is the front, if any.
     func getFrontmostMessageCell() -> MessageSubcell? {
-        let cellCount = self.collectionView.numberOfItems(inSection: 0)
-        let topCell = self.collectionView.cellForItem(at: IndexPath(item: cellCount - 1, section: 0))
+        let cellCount = self.collectionView.numberOfItems(inSection: 1)
+        let topCell = self.collectionView.cellForItem(at: IndexPath(item: cellCount - 1, section: 1))
         return topCell as? MessageSubcell
     }
 }
 
 extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-    /// The space between the top of a cell and tops of adjacent cells.
-    var spaceBetweenCellTops: CGFloat { return 15 }
+    /// The space between the top of a cell and tops of adjacent cells in a stack.
+    static var spaceBetweenCellTops: CGFloat { return 15 }
 
     // MARK: - UICollectionViewDataSource
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // There are always two sections: One for the other people's replies and another for the user's replies.
+        // There are always two sections:
+        // One for the other people's replies and another for the current user's replies.
         return 2
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         var itemCount = 0
 
-        // The first section contains replies from other users
+        // The first section contains replies from other users.
         if section == 0 {
-            itemCount = self.otherReplies.count
+            itemCount = self.otherMessages.count
         } else if section == 1 {
-            // The second section contains replies from the current user
-            itemCount = self.userReplies.count
+            // The second section contains replies from the current user.
+            itemCount = self.currentUserMessages.count
         }
 
-        // There's always at least one item in each section.
         return itemCount
     }
 
@@ -156,9 +157,9 @@ extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewD
 
         var message: Messageable? = nil
         if indexPath.section == 0 {
-            message = self.otherReplies[safe: indexPath.item]
+            message = self.otherMessages[safe: indexPath.item]
         } else if indexPath.section == 1 {
-            message = self.userReplies[safe: indexPath.item]
+            message = self.currentUserMessages[safe: indexPath.item]
         }
 
         guard let message = message else { return UICollectionViewCell() }
@@ -174,10 +175,10 @@ extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewD
 
         let showBubbleTail: Bool
         if message.isFromCurrentUser {
-            // Only show a speechbubble tail for the front-most user reply.
+            // Only show a speech bubble tail for the front-most user reply.
             showBubbleTail = stackIndex == 0
         } else {
-            // Only show a speechbubble tail for the back-most reply from other users.
+            // Only show a speech bubble tail for the back-most reply from other users.
             showBubbleTail = indexPath.item == 0
         }
 
@@ -187,10 +188,10 @@ extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewD
 
         // The menu interaction should only be on the front most cell,
         // and only if the user created the original message.
+        cell.backgroundColorView.interactions.removeAll()
         if stackIndex == 0 {
-            cell.backgroundColorView.addInteraction(self.contextMenuInteraction)
-        } else {
-            cell.backgroundColorView.interactions.removeAll()
+            let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
+            cell.backgroundColorView.addInteraction(contextMenuInteraction)
         }
 
         return cell
@@ -204,17 +205,15 @@ extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewD
             let header
             = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration,
                                                                     for: indexPath)
-            let latestMessage = self.otherReplies.last
+            let latestMessage = self.otherMessages.last
             header.configure(with: latestMessage)
-
             return header
         case UICollectionView.elementKindSectionFooter:
             let footer
             = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerRegistration,
                                                                     for: indexPath)
-            let latestMessage = self.userReplies.last
+            let latestMessage = self.currentUserMessages.last
             footer.configure(with: latestMessage)
-
             return footer
         default:
             return UICollectionReusableView()
@@ -233,10 +232,10 @@ extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewD
         // The heights of all cells in a section are the same as the front most cell in that section.
         switch indexPath.section {
         case 0:
-            guard let latestMessage = self.otherReplies.last else { break }
+            guard let latestMessage = self.otherMessages.last else { break }
             height = MessageSubcell.getHeight(withWidth: width, message: latestMessage)
         case 1:
-            guard let latestMessage = self.userReplies.last else { break }
+            guard let latestMessage = self.currentUserMessages.last else { break }
             height = MessageSubcell.getHeight(withWidth: width, message: latestMessage)
         default:
             break
@@ -254,11 +253,11 @@ extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewD
                         insetForSectionAt section: Int) -> UIEdgeInsets {
 
         var insets: UIEdgeInsets = .zero
-        // Put a little space between the reply sections.
+        // Put a little space between the different reply sections.
         if section == 1 {
             insets.top = Theme.contentOffset
 
-            // Ensure that your replies align with other user replies in adjacent cells.
+            // Ensure that current user replies align with other user replies in adjacent cells.
             if collectionView.numberOfItems(inSection: 0) == 0 {
                 insets.top += MessageSubcell.bubbleTailLength
             }
@@ -282,7 +281,7 @@ extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewD
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
         // Only show a header for the first section
-        if section == 0 && !self.otherReplies.isEmpty {
+        if section == 0 && !self.otherMessages.isEmpty {
             return CGSize(width: collectionView.width, height: Theme.contentOffset)
         }
 
@@ -293,7 +292,7 @@ extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewD
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
         // Only show a header for the second section
-        if section == 1 && !self.userReplies.isEmpty {
+        if section == 1 && !self.currentUserMessages.isEmpty {
             return CGSize(width: collectionView.width, height: Theme.contentOffset)
         }
 
