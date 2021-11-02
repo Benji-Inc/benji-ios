@@ -105,7 +105,7 @@ class ThreadMessageCell: UICollectionViewCell {
 
         self.authorView.set(avatar: message.avatar)
         self.messageView.setText(with: message)
-        self.messageView.configureBackground(withStackIndex: 0, message: message)
+        self.messageView.configureBackground(withStackIndex: 0, message: message, showBubbleTail: false)
 
         self.setNeedsLayout()
 

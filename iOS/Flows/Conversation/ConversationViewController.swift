@@ -36,7 +36,7 @@ class ConversationViewController: FullScreenViewController,
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
     var didTapMoreButton: CompletionOptional = nil
     var didTapConversationTitle: CompletionOptional = nil
-    @Published var didCenterOnCell: MessageCell? = nil
+    @Published var didCenterOnCell: ConversationMessageCell? = nil
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
@@ -157,7 +157,7 @@ class ConversationViewController: FullScreenViewController,
     }
 
     func updateCenterMostCell() {
-        if let cell = self.collectionView.getCentermostVisibleCell() as? MessageCell {
+        if let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessageCell {
             self.didCenterOnCell = cell
         }
     }
@@ -332,12 +332,10 @@ class ConversationViewController: FullScreenViewController,
         }
 
         // Show the send message overlay so the user can see where to drag the message
-        if let centerCell = self.collectionView.getCentermostVisibleCell() as? MessageCell,
-           let messageSubcell = centerCell.getFrontmostMessageCell() {
-
+        if let centerCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessageCell {
             // If possible put the message overlay around front most message
-            var overlayFrame = messageSubcell.convert(messageSubcell.bounds, to: self.contentContainer)
-            overlayFrame.top += Theme.contentOffset
+            let overlayFrame = centerCell.convert(centerCell.getMessageOverlayFrame(),
+                                                  to: self.contentContainer)
             self.sendMessageOverlay.frame = overlayFrame
         } else {
             // As a fallback, use the collection to determine the position of the overlay.

@@ -160,7 +160,8 @@ class TextView: UITextView {
                                             longestEffectiveRange: nil,
                                             in: NSRange(location: 0, length: attText.length))
 
-        let maxSize = CGSize(width: width, height: height)
+        let maxSize = CGSize(width: width - self.textContainerInset.left - self.textContainerInset.right,
+                             height: height - self.textContainerInset.top - self.textContainerInset.bottom)
 
         let size: CGSize = t.boundingRect(with: maxSize,
                                           options: .usesLineFragmentOrigin,
