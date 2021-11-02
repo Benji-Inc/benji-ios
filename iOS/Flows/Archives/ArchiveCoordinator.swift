@@ -28,6 +28,7 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
             self.handle(deeplink: deeplink)
         }
 
+        UserNotificationManager.shared.delegate = self
         ToastScheduler.shared.delegate = self
 
         self.archiveVC.addButton.didSelect { [unowned self] in
@@ -53,7 +54,7 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
                 guard let conversationId = try? ChannelId.init(cid: identifier) else { return }
                 let conversation = ChatClient.shared.channelController(for: conversationId).conversation
 
-                self.startConversationFlow(for: conversation)
+                self.startConversationFlow(for: conversation, startingMessageId: nil)
             } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
 
                 guard let connection = ConnectionStore.shared.connections.first(where: { connection in
@@ -64,8 +65,15 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
                        }
                 let conversation = ChatClient.shared.channelController(for: conversationId).conversation
 
-                self.startConversationFlow(for: conversation)
+                self.startConversationFlow(for: conversation, startingMessageId: nil)
+            } else if let stream = deeplink.customMetadata["stream"] as? [String: Any],
+                      let cid = stream["cid"] as? String,
+                      let conversationId = try? ChannelId.init(cid: cid) {
+                let conversation = ChatClient.shared.channelController(for: conversationId).conversation
+                let messageId = stream["id"] as? String
+                self.startConversationFlow(for: conversation, startingMessageId: messageId)
             }
+
         default:
             break
         }
@@ -87,7 +95,7 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
                                                                      extraData: [:])
 
             try await controller.synchronize()
-            self.startConversationFlow(for: controller.conversation)
+            self.startConversationFlow(for: controller.conversation, startingMessageId: nil)
         } catch {
             print(error)
         }
@@ -105,17 +113,18 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
                 self.handle(notice: notice)
             case .conversation(let conversationID):
                 let conversation = ChatClient.shared.channelController(for: conversationID).conversation
-                self.startConversationFlow(for: conversation)
+                self.startConversationFlow(for: conversation, startingMessageId: nil)
             }
         }
     }
 
-    func startConversationFlow(for conversation: Conversation?) {
+    func startConversationFlow(for conversation: Conversation?, startingMessageId: MessageId?) {
         self.removeChild()
 
         let coordinator = ConversationCoordinator(router: self.router,
                                                   deepLink: self.deepLink,
-                                                  conversation: conversation)
+                                                  conversation: conversation,
+                                                  startingMessageId: startingMessageId)
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
             self.router.dismiss(source: self.archiveVC, animated: true)
             _ = ConversationsManager.shared.activeConversations.popLast()
@@ -132,7 +141,7 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
         case .alert:
             if let conversationID = notice.attributes?["conversationId"] as? ChannelId {
                 let conversation = ChatClient.shared.channelController(for: conversationID).conversation
-                self.startConversationFlow(for: conversation)
+                self.startConversationFlow(for: conversation, startingMessageId: nil)
             }
         case .connectionRequest:
             break

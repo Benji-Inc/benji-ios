@@ -23,7 +23,6 @@ class MainCoordinator: Coordinator<Void> {
             self.showLogOutAlert()
         }
 
-        UserNotificationManager.shared.delegate = self
         LaunchManager.shared.delegate = self
 
         Task {

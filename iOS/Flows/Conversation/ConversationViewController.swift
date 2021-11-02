@@ -53,7 +53,8 @@ class ConversationViewController: FullScreenViewController,
 
     @Published var state: ConversationUIState = .read
     
-    init(conversation: Conversation?) {
+    init(conversation: Conversation?, startingMessageId messageId: MessageId?) {
+
         if let conversation = conversation {
             self.conversationController
             = ChatClient.shared.channelController(for: conversation.cid, messageOrdering: .topToBottom)

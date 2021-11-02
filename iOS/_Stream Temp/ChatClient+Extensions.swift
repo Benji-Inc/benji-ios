@@ -33,7 +33,13 @@ extension ChatClient {
 
         let token = Token.development(userId: user.userObjectID!)
         let userId = User.current()?.userObjectID ?? String() as UserId
-        let userInfo = UserInfo(id: userId, name: nil, imageURL: nil, extraData: [:])
+        var userInfo = UserInfo(id: userId, name: nil, imageURL: nil, extraData: [:])
+        #if IOS
+        userInfo = UserInfo(id: userId,
+                            name: User.current()?.fullName,
+                            imageURL: User.current()?.smallImage?.url,
+                            extraData: [:])
+        #endif
 
         /// connect to chat
         return try await withCheckedThrowingContinuation { continuation in

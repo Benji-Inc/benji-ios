@@ -8,6 +8,7 @@
 
 import Foundation
 import UserNotifications
+import StreamChat
 
 enum NotificationContentKey: String {
     case target = "target"
@@ -33,8 +34,14 @@ extension UNNotificationContent {
     }
 
     var conversationId: String? {
-        guard let value: String = self.value(for: .conversationId) else { return nil }
-        return value
+        if let stream = self.userInfo["stream"] as? [String: Any],
+           let cid = stream["cid"] as? String {
+            return cid
+        } else if let value: String = self.value(for: .conversationId) {
+            return value
+        } else {
+            return nil
+        }
     }
 
     var connectionId: String? {
@@ -43,8 +50,15 @@ extension UNNotificationContent {
     }
 
     var deepLinkTarget: DeepLinkTarget? {
-        guard let value: String = self.value(for: .target) else { return nil }
-        return DeepLinkTarget(rawValue: value)
+        if let stream = self.userInfo["stream"] as? [String: Any],
+           let _ = stream["cid"] as? String {
+            return DeepLinkTarget.conversation
+
+        } else if let value: String = self.value(for: .target) {
+            return DeepLinkTarget(rawValue: value)
+        } else {
+            return nil
+        }
     }
 
     var deeplinkURL: URL? {

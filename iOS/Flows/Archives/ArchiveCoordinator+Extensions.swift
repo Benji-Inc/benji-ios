@@ -8,6 +8,16 @@
 
 import Foundation
 
+extension ArchiveCoordinator: UserNotificationManagerDelegate {
+
+    nonisolated func userNotificationManager(willHandle deeplink: DeepLinkable) {
+        Task.onMainActor {
+            self.deepLink = deeplink
+            self.handle(deeplink: deeplink)
+        }
+    }
+}
+
 #warning("Remove after beta features are complete.")
 extension ArchiveCoordinator: ToastSchedulerDelegate {
     

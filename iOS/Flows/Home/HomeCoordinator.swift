@@ -92,12 +92,13 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         self.router.present(coordinator, source: self.homeVC, animated: true)
     }
 
-    func startConversationFlow(for conversation: Conversation?) {
+    func startConversationFlow(for conversation: Conversation?, startingMessageId: MessageId?) {
         self.removeChild()
 
         let coordinator = ConversationCoordinator(router: self.router,
                                                   deepLink: self.deepLink,
-                                                  conversation: conversation)
+                                                  conversation: conversation,
+                                                  startingMessageId: startingMessageId)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 _ = ConversationsManager.shared.activeConversations.popLast()
@@ -123,7 +124,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
                                                                      extraData: [:])
 
             try await controller.synchronize()
-            self.startConversationFlow(for: controller.conversation)
+            self.startConversationFlow(for: controller.conversation, startingMessageId: nil)
         } catch {
             print(error)
         }

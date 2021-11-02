@@ -9,16 +9,6 @@
 import Foundation
 import ParseLiveQuery
 
-extension MainCoordinator: UserNotificationManagerDelegate {
-    
-    nonisolated func userNotificationManager(willHandle deeplink: DeepLinkable) {
-        Task.onMainActor {
-            self.deepLink = deeplink
-            self.handle(deeplink: deeplink)
-        }
-    }
-}
-
 extension MainCoordinator: LaunchManagerDelegate {
 
     nonisolated func launchManager(_ manager: LaunchManager, didReceive activity: LaunchActivity) {
