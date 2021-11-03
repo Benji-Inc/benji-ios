@@ -95,7 +95,7 @@ class ConversationViewController: FullScreenViewController,
 
         switch self.state {
         case .read:
-            self.conversationHeader.height = 120
+            self.conversationHeader.height = 96
         case .write:
             self.conversationHeader.height = 60
         }
@@ -104,9 +104,8 @@ class ConversationViewController: FullScreenViewController,
         self.conversationHeader.expandToSuperviewWidth()
 
         self.collectionView.expandToSuperviewWidth()
-
-        self.collectionView.match(.top, to: .bottom, of: self.conversationHeader)
-        self.collectionView.height = self.view.height - self.conversationHeader.bottom
+        self.collectionView.match(.top, to: .bottom, of: self.conversationHeader, offset: -40)
+        self.collectionView.height = self.contentContainer.height - 96
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -151,7 +150,7 @@ class ConversationViewController: FullScreenViewController,
 
         self.conversationHeader.update(for: state)
 
-        UIView.animate(withDuration: 0.25) {
+        UIView.animate(withDuration: Theme.animationDuration) {
             self.view.layoutNow()
         }
     }

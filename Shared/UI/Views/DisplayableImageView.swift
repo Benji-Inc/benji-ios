@@ -108,9 +108,8 @@ class DisplayableImageView: View {
     }
 
     func updateImageView(with displayable: ImageDisplayable) {
-        self.state = .loading
-
         if let photo = displayable.image {
+            self.state = .loading
             self.showResult(for: photo)
         } else if let url = displayable.url {
             Task {
@@ -126,29 +125,27 @@ class DisplayableImageView: View {
     }
 
     private func downloadAndSetImage(for user: User) {
-        if user.focusStatus == .focused, let file = user.focusImage {
-            Task {
+
+        Task {
+            if user.focusStatus == .focused, let file = user.focusImage {
+                await self.downloadAndSet(file: file)
+            } else if let file = user.smallImage {
                 await self.downloadAndSet(file: file)
             }
-        } else if let file = user.smallImage {
-            Task {
-                await self.downloadAndSet(file: file)
-            }
-        }
+        }.add(to: self.taskPool)
     }
 
     private func findUser(with objectID: String) {
-        guard let query = User.query() else { return }
+        guard let user = UserStore.shared.users.first(where: { user in
+            return user.objectId == objectID
+        }) else { return }
 
-        query.getObjectInBackground(withId: objectID) { [unowned self] object, error in
-            if let user = object as? User {
-                self.downloadAndSetImage(for: user)
-            }
-        }
+        self.downloadAndSetImage(for: user)
     }
 
     @MainActor
     private func downloadAndSetImage(url: URL) async {
+        self.state = .loading
         let downloadedImage: UIImage?
         = try? await self.imageView.setImageWithURL(url, progressHandler: { received, expected, url in
             if self.animationView.microAnimation == .pie {
@@ -169,7 +166,11 @@ class DisplayableImageView: View {
 
     @MainActor
     private func downloadAndSet(file: PFFileObject) async {
+
         do {
+            if !file.isDataAvailable {
+                self.state = .loading
+            }
             let data = try await file.retrieveDataInBackground { progress in
                 if self.animationView.microAnimation == .pie {
                     let time = AnimationProgressTime(progress)

@@ -71,10 +71,6 @@ extension ConversationViewController {
             }
         }.store(in: &self.cancellables)
 
-        self.conversationController?.memberEventPublisher.mainSink { [unowned self] _ in
-            self.conversationHeader.configure(with: self.conversation)
-        }.store(in: &self.cancellables)
-
         self.conversationController?.typingUsersPublisher.mainSink { [unowned self] users in
             let nonMeUsers = users.filter { user in
                 return user.userObjectID != User.current()?.objectId

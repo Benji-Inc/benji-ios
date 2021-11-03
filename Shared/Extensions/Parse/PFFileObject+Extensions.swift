@@ -22,6 +22,7 @@ extension PFFileObject: ImageDisplayable {
 
     func retrieveDataInBackground(progressHandler: ((Int) -> Void)? = nil) async throws -> Data {
         return try await withCheckedThrowingContinuation { continuation in
+
             self.getDataInBackground { data, error in
                 if let e = error {
                     continuation.resume(throwing: e)
