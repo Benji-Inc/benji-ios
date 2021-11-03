@@ -79,11 +79,11 @@ class ConversationViewController: FullScreenViewController,
         
         self.view.insertSubview(self.blurView, belowSubview: self.contentContainer)
 
-        self.contentContainer.addSubview(self.conversationHeader)
-        self.conversationHeader.configure(with: self.conversation)
-
         self.contentContainer.addSubview(self.collectionView)
         self.collectionView.delegate = self
+
+        self.contentContainer.addSubview(self.conversationHeader)
+        self.conversationHeader.configure(with: self.conversation)
 
         self.subscribeToKeyboardUpdates()
     }
