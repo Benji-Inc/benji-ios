@@ -27,18 +27,6 @@ class ConversationMessageCell: UICollectionViewCell {
     }()
     private lazy var dataSource = ConversationMessageCellDataSource(collectionView: self.collectionView)
 
-    // Cell/Header/Footer registration
-    private let cellRegistration = UICollectionView.CellRegistration<MessageSubcell, Messageable>
-    { (cell, indexPath, item) in
-        cell.setText(with: item)
-    }
-    private let headerRegistration
-    = UICollectionView.SupplementaryRegistration<TimeSentView>(elementKind: UICollectionView.elementKindSectionHeader) { supplementaryView, elementKind, indexPath in
-    }
-    private let footerRegistration
-    = UICollectionView.SupplementaryRegistration<TimeSentView>(elementKind: UICollectionView.elementKindSectionFooter) { supplementaryView, elementKind, indexPath in
-    }
-
     private var state: ConversationUIState = .read
 
     /// The parent message of this thread.
@@ -161,31 +149,6 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
     /// The space between the top of a cell and tops of adjacent cells in a stack.
     static var spaceBetweenCellTops: CGFloat { return 15 }
 
-    // MARK: - UICollectionViewDataSource
-
-    func collectionView(_ collectionView: UICollectionView,
-                        viewForSupplementaryElementOfKind kind: String,
-                        at indexPath: IndexPath) -> UICollectionReusableView {
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            let header
-            = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration,
-                                                                    for: indexPath)
-//            let latestMessage = self.otherMessages.last
-//            header.configure(with: latestMessage)
-            return header
-        case UICollectionView.elementKindSectionFooter:
-            let footer
-            = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerRegistration,
-                                                                    for: indexPath)
-//            let latestMessage = self.currentUserMessages.last
-//            footer.configure(with: latestMessage)
-            return footer
-        default:
-            return UICollectionReusableView()
-        }
-    }
-
     // MARK: - UICollectionViewDelegateFlowLayout
 
     func collectionView(_ collectionView: UICollectionView,
@@ -247,10 +210,10 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
-//        // Only show a header for the first section
-//        if section == 0 && !self.otherMessages.isEmpty {
-//            return CGSize(width: collectionView.width, height: Theme.contentOffset)
-//        }
+        // Only show a header for the first section
+        if section == 0 && self.dataSource.snapshot().numberOfItems(inSection: .otherMessages) != 0 {
+            return CGSize(width: collectionView.width, height: Theme.contentOffset)
+        }
 
         return .zero
     }
@@ -258,10 +221,10 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
-//        // Only show a header for the second section
-//        if section == 1 && !self.currentUserMessages.isEmpty {
-//            return CGSize(width: collectionView.width, height: Theme.contentOffset)
-//        }
+        // Only show a footer for the second section
+        if section == 1 && self.dataSource.snapshot().numberOfItems(inSection: .currentUserMessages) != 0 {
+            return CGSize(width: collectionView.width, height: Theme.contentOffset)
+        }
 
         return .zero
     }
