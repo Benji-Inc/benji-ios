@@ -2,7 +2,6 @@
 platform :ios, '14.0'
 
 def shared_pods
-  pod 'Parse'
   pod 'GestureRecognizerClosures'
   pod 'ParseLiveQuery'
 

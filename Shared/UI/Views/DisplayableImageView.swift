@@ -169,6 +169,7 @@ class DisplayableImageView: View {
 
     @MainActor
     private func downloadAndSet(file: PFFileObject) async {
+
         do {
             let data = try await file.retrieveDataInBackground { progress in
                 if self.animationView.microAnimation == .pie {
