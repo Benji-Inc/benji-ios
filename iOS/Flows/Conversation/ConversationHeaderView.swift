@@ -45,17 +45,21 @@ class ConversationHeaderView: View {
         self.addSubview(self.button)
         self.button.set(style: .noborder(image: UIImage(systemName: "ellipsis.circle")!, color: .textColor))
 
-        let add = UIAction.init(title: "Add people", image: UIImage(systemName: "person.badge.plus")) { _ in
+        let add = UIAction.init(title: "Add people",
+                                image: UIImage(systemName: "person.badge.plus")) { [unowned self] _ in
             self.didTapAddPeople?()
         }
 
-        let menu = UIMenu(title: "Menu", image: UIImage(systemName: "ellipsis.circle"), identifier: nil, options: [], children: [add])
+        let menu = UIMenu(title: "Menu",
+                          image: UIImage(systemName: "ellipsis.circle"),
+                          identifier: nil,
+                          options: [],
+                          children: [add])
         self.button.showsMenuAsPrimaryAction = true
         self.button.menu = menu
     }
 
     func configure(with conversation: Conversation) {
-
         defer {
             self.currentConversation = conversation
         }

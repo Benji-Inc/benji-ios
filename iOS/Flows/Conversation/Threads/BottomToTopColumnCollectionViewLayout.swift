@@ -8,15 +8,21 @@
 
 import Foundation
 
+protocol BottomToTopColumnCollectionViewLayoutDelegate: AnyObject {
+
+}
+
 /// A collection view layout that lays out its content in a single column with the first item at the bottom and the last at the top.
 class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
 
-    /// The size of the cells.
+    /// The default size of the cells. This is ignored if a delegate is assigned.
     var itemSize = CGSize(width: 20, height: 20)
-    /// The size of the header
+    /// The size of the header.
     var headerSize = CGSize(width: 20, height: 20)
     /// The vertical spacing between cells.
     var itemSpacing: CGFloat = 0
+
+
 
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     private var headerLayoutAttributes: [Int : UICollectionViewLayoutAttributes] = [:]

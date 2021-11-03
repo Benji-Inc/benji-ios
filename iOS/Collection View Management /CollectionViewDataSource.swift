@@ -62,7 +62,7 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
 
 // MARK: - NSDiffableDataSource Functions
 
-// These functions just forward to the corresponding functions in the underlying NSDiffableDataSource
+// These functions forward to the corresponding functions in the underlying NSDiffableDataSource
 extension CollectionViewDataSource {
 
     // MARK: - Standard DataSource Functions
@@ -97,6 +97,12 @@ extension CollectionViewDataSource {
 
     func indexPath(for itemIdentifier: ItemType) -> IndexPath? {
         return self.diffableDataSource.indexPath(for: itemIdentifier)
+    }
+
+    // MARK: - Getter Convenience
+
+    func itemIdentifiers(in section: SectionType) -> [ItemType] {
+        return self.snapshot().itemIdentifiers(inSection: section)
     }
 }
 

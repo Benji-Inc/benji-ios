@@ -18,12 +18,12 @@ enum MessageStatus: String {
 
 protocol Messageable {
 
+    var id: String { get }
     var createdAt: Date { get }
     var isFromCurrentUser: Bool { get }
     var authorID: String { get }
     var attributes: [String: Any]? { get }
     var avatar: Avatar { get }
-    var id: String { get }
     var status: MessageStatus { get }
     var context: MessageContext { get }
     var canBeConsumed: Bool { get }

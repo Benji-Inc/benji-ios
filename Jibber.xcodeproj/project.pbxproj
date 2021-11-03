@@ -23,6 +23,7 @@
 		802C448A26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		802C448B26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		802C448C26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
+		80471C432732FE450022172C /* ConversationMessageCellDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80471C422732FE450022172C /* ConversationMessageCellDatasource.swift */; };
 		80616E2E26EA9E1900C077BA /* ChatClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */; };
 		80616E3526EAD2F300C077BA /* DataController+Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E3426EAD2F300C077BA /* DataController+Async.swift */; };
 		806DA16A27307FA400843C4E /* MessageSubcell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 806DA16927307FA400843C4E /* MessageSubcell.swift */; };
@@ -880,6 +881,7 @@
 		8024B95126F278C8008ABF7F /* ConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		80251FF726F3D362006D7873 /* ChatMessageController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatMessageController+Extensions.swift"; sourceTree = "<group>"; };
 		802C448926CC76CC00A333A4 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		80471C422732FE450022172C /* ConversationMessageCellDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessageCellDatasource.swift; sourceTree = "<group>"; };
 		80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatClient+Extensions.swift"; sourceTree = "<group>"; };
 		80616E3426EAD2F300C077BA /* DataController+Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DataController+Async.swift"; sourceTree = "<group>"; };
 		806DA16927307FA400843C4E /* MessageSubcell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSubcell.swift; sourceTree = "<group>"; };
@@ -1625,8 +1627,9 @@
 		D635F0A927136C2600A02D17 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				8015CA7626F3D907000F3C60 /* ConversationMessageCell.swift */,
+				80471C422732FE450022172C /* ConversationMessageCellDatasource.swift */,
+				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				806DA16927307FA400843C4E /* MessageSubcell.swift */,
 				808313B42723694B00BAEBE0 /* ThreadMessageCell.swift */,
 				D68072EA2730462F004657E7 /* TimeSentView.swift */,
@@ -3077,6 +3080,7 @@
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,
 				D605C30826F683E400C86DAD /* ConversationPreviewViewController.swift in Sources */,
 				D61EC0E221D30E6000204BEE /* Label.swift in Sources */,
+				80471C432732FE450022172C /* ConversationMessageCellDatasource.swift in Sources */,
 				D61EC0E021D30E3F00204BEE /* FullScreenViewController.swift in Sources */,
 				D6D1502D21D6A08300CD8CE4 /* ConversationThreadCollectionView.swift in Sources */,
 				D646DB3C22CFCCD80055CC7C /* ClientError.swift in Sources */,
