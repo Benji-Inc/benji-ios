@@ -53,6 +53,7 @@ class ConversationMessageCell: UICollectionViewCell {
 
         // Init the sections
         self.dataSource.appendSections(ConversationMessageSection.allCases)
+        self.dataSource.contextMenuDelegate = self
     }
 
     required init?(coder: NSCoder) {

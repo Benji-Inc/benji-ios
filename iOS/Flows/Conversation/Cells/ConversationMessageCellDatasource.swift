@@ -25,6 +25,9 @@ class ConversationMessageCellDataSource: CollectionViewDataSource<ConversationMe
         let messageID: MessageId
     }
 
+    /// The parent message of this thread.
+    var contextMenuDelegate: UIContextMenuInteractionDelegate?
+
     // Cell registration
     private let messageSubcellRegistration
     = ConversationMessageCellDataSource.createMessageSubcellRegistration()
@@ -133,11 +136,11 @@ extension ConversationMessageCellDataSource {
             // The menu interaction should only be on the front most cell,
             // and only if the user created the original message.
             cell.backgroundColorView.interactions.removeAll()
-            #warning("")
-//            if stackIndex == 0 {
-//                let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
-//                cell.backgroundColorView.addInteraction(contextMenuInteraction)
-//            }
+
+            if stackIndex == 0, let contextMenuDelegate = dataSource.contextMenuDelegate {
+                let contextMenuInteraction = UIContextMenuInteraction(delegate: contextMenuDelegate)
+                cell.backgroundColorView.addInteraction(contextMenuInteraction)
+            }
         }
     }
 }

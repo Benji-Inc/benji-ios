@@ -84,8 +84,6 @@ class MessageSubcell: UICollectionViewCell {
                                       alpha: alpha)
         }
 
-        #warning("")
-        self.backgroundColorView.borderColor = .white
         self.backgroundColorView.bubbleColor = backgroundColor
         self.backgroundColorView.tailLength = showBubbleTail ? MessageSubcell.bubbleTailLength : 0
 
