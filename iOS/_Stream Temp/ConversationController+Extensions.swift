@@ -50,25 +50,9 @@ extension ChatChannelController {
             return user.iNPerson
         }
 
-//        var recipients: [INPerson] = []
-//        await withTaskGroup(of: INPerson?.self) { group in
-//            for member in members {
-//                group.addTask {
-//                    return await member.getINPerson()
-//                }
-//            }
-//
-//            for await inPerson in group {
-//                if let person = inPerson {
-//                    recipients.append(person)
-//                }
-//            }
-//        }
         let sender = recipients.first { inperson in
             return inperson.isMe
         }
-
-   //     let sender = await self.conversation.createdBy?.parseUser?.getINPerson()
 
         let intent = INSendMessageIntent(recipients: recipients,
                                          outgoingMessageType: .outgoingMessageText,

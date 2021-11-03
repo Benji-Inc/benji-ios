@@ -41,7 +41,7 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
 
         Task {
             do {
-                try await currentUser.saveToServer()
+                try await currentUser.saveLocalThenServer()
 
                 let response = INShareFocusStatusIntentResponse(code: .success, userActivity: nil)
                 completion(response)

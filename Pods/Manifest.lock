@@ -16,7 +16,6 @@ PODS:
 
 DEPENDENCIES:
   - GestureRecognizerClosures
-  - Parse
   - ParseLiveQuery
   - TMROCoordinator
   - TMROLocalization
@@ -42,6 +41,6 @@ SPEC CHECKSUMS:
   TMROCoordinator: 8e675e45c895feafdd548e1dd2de35430d3ea146
   TMROLocalization: f48046617e8453fabf353088634b91130d726d64
 
-PODFILE CHECKSUM: a12fd7dcff2e245b2104b071d1f0d065a8a80eb0
+PODFILE CHECKSUM: fbfe54567af246d3063acd7bd6babd595772323a
 
 COCOAPODS: 1.10.1
