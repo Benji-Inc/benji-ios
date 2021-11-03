@@ -25,7 +25,7 @@ class ConversationMessageCellDataSource: CollectionViewDataSource<ConversationMe
         let messageID: MessageId
     }
 
-    /// The parent message of this thread.
+    /// A delegate to handle context menu interactions on the subcells.
     var contextMenuDelegate: UIContextMenuInteractionDelegate?
 
     // Cell registration
