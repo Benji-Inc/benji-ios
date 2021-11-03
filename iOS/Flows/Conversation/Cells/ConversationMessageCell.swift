@@ -212,7 +212,6 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
             height = 50
         }
 
-        width = 100
         return CGSize(width: width, height: height)
     }
 
