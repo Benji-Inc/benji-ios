@@ -125,11 +125,12 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                            with: indexPath)
 
-        // Recursive call. Get the
+        // Recursive call. Get the frame of the item right above this one to determine our frame.
         if let itemAboveFrame = self.frameForItemOrHeader(aboveHeaderInSection: indexPath.section) {
             attributes.frame.origin = CGPoint(x: 0, y: itemAboveFrame.bottom + self.itemSpacing)
         } else {
-            attributes.frame = .zero
+            // If there is no item above us, then we've hit the top.
+            attributes.frame.origin = .zero
         }
 
         attributes.frame.size = self.headerSize
