@@ -38,20 +38,40 @@ class UserStore {
 
     private func initialize() {
         ConnectionStore.shared.$isReady.mainSink { isReady in
-            onceEver(token: "userStoreSubscribe") {
-                self.subscribeToUpdates()
+            if isReady {
+                onceEver(token: "userStoreSubscribe") {
+                    Task {
+                        await self.subscribeToUpdates()
+                    }
+                }
             }
         }.store(in: &self.cancellables)
     }
 
-    private func subscribeToUpdates() {
+    private func subscribeToUpdates() async {
 
-        self.users = ConnectionStore.shared.connections.compactMap { connection in
+
+        var unfetchedUsers = ConnectionStore.shared.connections.compactMap { connection in
             return connection.nonMeUser
         }
 
         if let current = User.current() {
-            self.users.append(current)
+            unfetchedUsers.append(current)
+        }
+
+        await withTaskGroup(of: User?.self) { group in
+            for user in unfetchedUsers {
+                group.addTask {
+                    return try? await user.fetchInBackground() as? User
+                }
+
+                for await user in group {
+                    if let u = user {
+                        self.users.append(u)
+                        self.userUpdated = u
+                    }
+                }
+            }
         }
 
         self.queries.forEach { query in
