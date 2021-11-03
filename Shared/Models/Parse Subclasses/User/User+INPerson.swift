@@ -12,7 +12,7 @@ import UIKit
 
 extension User {
 
-    func getINPerson() async -> INPerson? {
+    var iNPerson: INPerson? {
         return INPerson(personHandle: self.inHandle,
                         nameComponents: self.nameComponents,
                         displayName: self.fullName,

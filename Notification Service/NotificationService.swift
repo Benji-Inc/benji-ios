@@ -76,7 +76,7 @@ class NotificationService: UNNotificationServiceExtension {
               let authorId = request.content.author,
               let cid = try? ChannelId.init(cid: conversationId),
               let message = self.getMessage(with: cid, messageId: messageId),
-              let author = try? await User.getObject(with: authorId).getINPerson() else { return }
+              let author = try? await User.getObject(with: authorId).iNPerson else { return }
 
         let incomingMessageIntent = INSendMessageIntent(recipients: [],
                                                         outgoingMessageType: .outgoingMessageText,
