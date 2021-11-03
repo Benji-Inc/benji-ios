@@ -27,7 +27,6 @@ class NoticeSupplier {
 
     func loadNotices() async {
 //        do {
-            #warning("Figure out why async let isn't working here")
             self.notices = await self.getLocalNotices().sorted()
 //            let serverNotices = try await Notice.fetchAll()
 //

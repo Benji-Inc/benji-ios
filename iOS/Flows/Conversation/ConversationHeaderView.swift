@@ -55,7 +55,6 @@ class ConversationHeaderView: View {
     }
 
     func configure(with conversation: Conversation) {
-
         defer {
             self.currentConversation = conversation
         }
