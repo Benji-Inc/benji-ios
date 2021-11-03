@@ -17,7 +17,7 @@ protocol BottomToTopColumnCollectionViewLayoutDelegate: AnyObject {
 class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
 
     /// The default size of the cells. This is ignored if a delegate is assigned.
-    var itemSize = CGSize(width: 20, height: 20)
+    var defaultItemSize = CGSize(width: 20, height: 20)
     /// The size of the header.
     var headerSize = CGSize(width: 20, height: 20)
     /// The vertical spacing between cells.
@@ -62,6 +62,9 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         guard let collectionView = collectionView else { return }
 
         let sectionCount = collectionView.numberOfSections
+        // To better take advantage of caching and improve performance, calculate item frames in reverse.
+        // Items with lower indexes are positioned at the bottom of the collection so they rely on
+        // the frames of items with higher indexes.
         for section in (0..<sectionCount).reversed() {
             // Calculate and cache all of the header layout attributes
             self.headerLayoutAttributes[section]
@@ -122,6 +125,7 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                            with: indexPath)
 
+        // Recursive call. Get the
         if let itemAboveFrame = self.frameForItemOrHeader(aboveHeaderInSection: indexPath.section) {
             attributes.frame.origin = CGPoint(x: 0, y: itemAboveFrame.bottom + self.itemSpacing)
         } else {
@@ -133,6 +137,7 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         return attributes
     }
 
+    /// Gets the frame of the header or item above the item found at index path. If there is no item above, then nil is returned.
     private func frameForItemOrHeader(aboveItemAt indexPath: IndexPath) -> CGRect? {
         guard let collectionView = self.collectionView else { return nil }
 
@@ -140,8 +145,8 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         let isTopItemInSection
         = indexPath.item == collectionView.numberOfItems(inSection: indexPath.section) - 1
 
-
         if isTopItemInSection {
+            // If the item is at the top of its section, try to get this section's header frame.
             if let headerAboveAttributes
             = self.layoutAttributesForSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
                                                         at: IndexPath(item: 0, section: indexPath.section)) {
@@ -149,6 +154,7 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
                 return headerAboveAttributes.frame
             }
 
+            // If there was no header in this section, look at the bottom item in the section above us.
             if !isTopSection,
                 let itemAboveAttributes
                 = self.layoutAttributesForItem(at: IndexPath(item: 0, section: indexPath.section + 1)) {
@@ -156,10 +162,11 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
                 return itemAboveAttributes.frame
             }
 
+            // There's no item or header above us.
             return nil
         }
 
-
+        // Get the item above us in the current section.
         if let itemAboveAttributes = self.layoutAttributesForItem(at: IndexPath(item: indexPath.item + 1,
                                                                                 section: indexPath.section)) {
             return itemAboveAttributes.frame
@@ -168,6 +175,7 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         return nil
     }
 
+    /// Gets the frame of the header or item above the header found in the given section. If there is no item above, then nil is returned.
     private func frameForItemOrHeader(aboveHeaderInSection section: Int) -> CGRect? {
         guard let collectionView = self.collectionView else { return nil }
 
@@ -177,7 +185,6 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         if isTopSection {
             return nil
         }
-
 
         // Try to get the bottom most item in the section directly above us.
         if let itemAboveAttributes = self.layoutAttributesForItem(at: IndexPath(item: 0,
@@ -209,9 +216,9 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         return self.layoutAttributesForItem(at: IndexPath(item: 0, section: 0))
     }
 
-
+    /// Asks the delegate for the size of the item at the index path. If no delegate is assigned the default item size is used.
     private func sizeForItem(at indexPath: IndexPath) -> CGSize {
-        var size = self.itemSize
+        var size = self.defaultItemSize
         // If a delegate was assigned, override the items ize with whatever the delegate returns.
         if let delegate = self.delegate {
             size = delegate.bottomToTopColumnLayout(self, itemSizeForItemAtIndexPath: indexPath)
