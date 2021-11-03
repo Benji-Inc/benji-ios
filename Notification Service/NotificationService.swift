@@ -60,7 +60,6 @@ class NotificationService: UNNotificationServiceExtension {
 
     private func initializeChat() async {
         guard let user = User.current(), !ChatClient.isConnected else { return }
-        //ChatClient.isClientInActiveMode
         do {
             try await ChatClient.initialize(for: user)
         } catch {

@@ -8,10 +8,11 @@
 
 import Foundation
 import StreamChat
+import Intents
 
 class ArchiveCoordinator: PresentableCoordinator<Void> {
 
-    private lazy var archiveVC: ArchiveViewController = {
+    lazy var archiveVC: ArchiveViewController = {
         let vc = ArchiveViewController()
         vc.delegate = self
         return vc
@@ -23,6 +24,10 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
 
     override func start() {
         super.start()
+
+        Task {
+            await self.checkForPermissions()
+        }.add(to: self.archiveVC.taskPool)
 
         if let deeplink = self.deepLink {
             self.handle(deeplink: deeplink)
@@ -37,12 +42,7 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
             }.add(to: self.archiveVC.taskPool)
         }
     }
-
-    func presentPhoto() {
-        let vc = ProfilePhotoViewController()
-        self.router.topmostViewController.present(vc, animated: true, completion: nil)
-    }
-
+    
     func handle(deeplink: DeepLinkable) {
         self.deepLink = deeplink
 
@@ -159,22 +159,5 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
             coordinator.toPresentable().dismiss(animated: true)
         }
         self.router.present(coordinator, source: self.archiveVC)
-    }
-}
-
-private class ProfilePhotoViewController: PhotoViewController {
-
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
-
-    override func initializeViews() {
-        super.initializeViews()
-
-        self.view.insertSubview(self.blurView, at: 0)
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-        self.blurView.expandToSuperviewSize()
     }
 }
