@@ -46,23 +46,11 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         // The higher the cell's index, the closer it is to the front of the message stack.
         let stackIndex = totalItemsInSection - indexPath.item - 1
 
-        // How much to scale the brightness of the background view.
-        // Objects closer to the front should be brighter.
+        // Objects closer to the front of the stack should be brighter.
         let backgroundBrightness = 1 - CGFloat(stackIndex) * 0.05
-
         var backgroundColor: UIColor = indexPath.section == 0 ? .lightGray : .gray
+        backgroundColor = backgroundColor.color(withBrightness: backgroundBrightness)
 
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-
-        if backgroundColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
-            backgroundColor = UIColor(red: red * backgroundBrightness,
-                                      green: green * backgroundBrightness,
-                                      blue: blue * backgroundBrightness,
-                                      alpha: alpha)
-        }
         attributes.backgroundColor = backgroundColor
 
         // Only show text for the front most item in each section.

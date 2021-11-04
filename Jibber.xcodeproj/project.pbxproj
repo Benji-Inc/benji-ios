@@ -35,6 +35,9 @@
 		807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
 		807A7BCA26C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
 		807A7BCB26C5C8100023A71E /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
+		807E98E9273497610076889C /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807E98E8273497610076889C /* UIColor+Extensions.swift */; };
+		807E98EA273497610076889C /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807E98E8273497610076889C /* UIColor+Extensions.swift */; };
+		807E98EB273497610076889C /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807E98E8273497610076889C /* UIColor+Extensions.swift */; };
 		808313B52723694B00BAEBE0 /* ThreadMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808313B42723694B00BAEBE0 /* ThreadMessageCell.swift */; };
 		8094D5DB26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8094D5DC26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
@@ -900,6 +903,7 @@
 		8070E74F271747DE004873D9 /* ConversationSendOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationSendOverlayView.swift; sourceTree = "<group>"; };
 		807A7BC426C5B5A20023A71E /* Task+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Extensions.swift"; sourceTree = "<group>"; };
 		807A7BC826C5C8100023A71E /* Task+TaskPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+TaskPool.swift"; sourceTree = "<group>"; };
+		807E98E8273497610076889C /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		808313B42723694B00BAEBE0 /* ThreadMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadMessageCell.swift; sourceTree = "<group>"; };
 		8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFUser+Extensions.swift"; sourceTree = "<group>"; };
 		80958C1F2721ED55007196BD /* BottomToTopColumnCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomToTopColumnCollectionViewLayout.swift; sourceTree = "<group>"; };
@@ -2300,9 +2304,11 @@
 			isa = PBXGroup;
 			children = (
 				801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */,
+				807E98E8273497610076889C /* UIColor+Extensions.swift */,
 				D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */,
 				D64C6AA3232EA13300DB7257 /* UIEdgeInsets+Extensions.swift */,
 				D60C81472209314200A127A3 /* UIImage+Extensions.swift */,
+				D6166C8A2731F80B0013E803 /* UIImage+MediaItem.swift */,
 				D61EC0ED21D313BA00204BEE /* UIScreen+Extensions.swift */,
 				D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */,
 				D6617CE926741C4500439C06 /* UITextField+Extensions.swift */,
@@ -2312,7 +2318,6 @@
 				D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */,
 				D6D1503621D7E74500CD8CE4 /* UIViewController+Extensions.swift */,
 				D642739822CA79B60088256B /* UIWindow+Extensions.swift */,
-				D6166C8A2731F80B0013E803 /* UIImage+MediaItem.swift */,
 			);
 			path = "UI Extensions";
 			sourceTree = "<group>";
@@ -2984,6 +2989,7 @@
 				D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */,
 				80251FF826F3D362006D7873 /* ChatMessageController+Extensions.swift in Sources */,
+				807E98E9273497610076889C /* UIColor+Extensions.swift in Sources */,
 				D6C389332724C091004D29D5 /* ArchiveCoordinator+Extensions.swift in Sources */,
 				D61EC0C221D3071400204BEE /* ViewController.swift in Sources */,
 				D64A1EF5258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
@@ -3219,6 +3225,7 @@
 				D63DB28025E9999C00F6B323 /* TransitionRouter+Move.swift in Sources */,
 				D63DB24425E9993F00F6B323 /* WelcomeViewController.swift in Sources */,
 				D63DB25D25E9995E00F6B323 /* User.swift in Sources */,
+				807E98EB273497610076889C /* UIColor+Extensions.swift in Sources */,
 				D63DB21425E998D700F6B323 /* Connection+Cloud.swift in Sources */,
 				D63DB22B25E9991300F6B323 /* NSMutableAttributedString+Extensions.swift in Sources */,
 				D63DB26A25E9997800F6B323 /* UserNotificationFactory.swift in Sources */,
@@ -3487,6 +3494,7 @@
 				D63DB20C25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */,
 				D66379FE25A39C6000A4A3B7 /* UserNotificationFactory.swift in Sources */,
 				D65518F82589109100B901E4 /* AppDelegate.swift in Sources */,
+				807E98EA273497610076889C /* UIColor+Extensions.swift in Sources */,
 				D6617CF126743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D6551A4A25895EB200B901E4 /* Switchable.swift in Sources */,
 				D65519412589122C00B901E4 /* UNNotification+Extensions.swift in Sources */,
