@@ -33,11 +33,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case loadMore
     }
 
-    enum MessageStyle {
-        case conversation
-        case thread
-    }
-
     var handleSelectedMessage: ((Messageable) -> Void)?
     var handleDeleteMessage: ((Messageable) -> Void)?
     var handleLoadMoreMessages: CompletionOptional = nil

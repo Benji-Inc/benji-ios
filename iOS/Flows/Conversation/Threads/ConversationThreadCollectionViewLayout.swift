@@ -24,7 +24,7 @@ class ConversationThreadCollectionViewLayout: BottomToTopColumnCollectionViewLay
                                                    bottom: collectionView.contentInset.bottom,
                                                    right: collectionView.width * 0.1)
 
-        self.itemSize = CGSize(width: collectionView.width * 0.8, height: 120)
+        self.defaultItemSize = CGSize(width: collectionView.width * 0.8, height: 120)
         self.headerSize = .zero
         self.itemSpacing = collectionView.width * 0.05
 

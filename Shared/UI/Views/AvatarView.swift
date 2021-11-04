@@ -30,6 +30,7 @@ class AvatarView: DisplayableImageView {
     private var radius: CGFloat?
 
     // MARK: - Overridden Properties
+    
     override var frame: CGRect {
         didSet {
             self.setCorner(radius: self.radius)
