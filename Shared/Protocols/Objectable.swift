@@ -180,6 +180,28 @@ extension Objectable where Self: PFObject {
         return object
     }
 
+    static func fetchAndUpdateLocalContainer(where identifiers: [String],
+                                             container: ContainerName) async throws -> [Self] {
+        let array: [Self] = try await withCheckedThrowingContinuation({ continuation in
+            let query = self.query()
+            query?.whereKey(ObjectKey.objectId.rawValue, containedIn: identifiers)
+            query?.findObjectsInBackground(block: { objects, error in
+                PFObject.pinAll(inBackground: objects, withName: container.name) { (success, error) in
+                    if let e = error {
+                        SessionManager.shared.handleParse(error: e)
+                        continuation.resume(throwing: e)
+                    } else if let objectsForType = objects as? [Self] {
+                        continuation.resume(returning: objectsForType)
+                    } else {
+                        continuation.resume(throwing: ClientError.generic)
+                    }
+                }
+            })
+        })
+
+        return array
+    }
+
     static func localThenNetworkArrayQuery(where identifiers: [String],
                                            isEqual: Bool,
                                            container: ContainerName) async throws -> [Self] {
