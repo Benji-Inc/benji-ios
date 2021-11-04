@@ -123,6 +123,7 @@ class ConversationViewController: FullScreenViewController,
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
+        ConversationsManager.shared.activeConversations.remove(object: self.conversation)
         KeyboardManager.shared.reset()
     }
     
