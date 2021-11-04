@@ -77,12 +77,40 @@ class NotificationService: UNNotificationServiceExtension {
               let message = self.getMessage(with: cid, messageId: messageId),
               let author = try? await User.getObject(with: authorId).iNPerson else { return }
 
-        let incomingMessageIntent = INSendMessageIntent(recipients: [],
+        let conversation = await self.getConversation(with: conversationId)
+        let memberIds = conversation?.lastActiveMembers.compactMap({ member in
+            return member.id
+        }) ?? []
+
+        var recipients: [INPerson] = []
+        if let persons = try? await User.localThenNetworkArrayQuery(where: memberIds,
+                                                                       isEqual: true,
+                                                                                     container: .users).compactMap({ user in
+            return user.iNPerson
+        }) {
+            recipients = persons
+        }
+        
+        await withTaskGroup(of: User?.self) { group in
+            for memberId in memberIds {
+                group.addTask {
+                    return try? await User.getObject(with: memberId)
+                }
+
+                for await user in group {
+                    if let u = user, let inPerson = u.iNPerson {
+                        recipients.append(inPerson)
+                    }
+                }
+            }
+        }
+
+        let incomingMessageIntent = INSendMessageIntent(recipients: recipients,
                                                         outgoingMessageType: .outgoingMessageText,
                                                         content: message.text,
-                                                        speakableGroupName: nil,
+                                                        speakableGroupName: conversation?.speakableGroupName,
                                                         conversationIdentifier: conversationId,
-                                                        serviceName: nil,
+                                                        serviceName: "Jibber",
                                                         sender: author,
                                                         attachments: nil)
 
@@ -92,31 +120,29 @@ class NotificationService: UNNotificationServiceExtension {
         do {
             try await interaction.donate()
             let messageContent = try request.content.updating(from: incomingMessageIntent)
-            print("NOTIFICATIONS")
             contentHandler(messageContent)
         } catch {
             print(error)
         }
     }
 
-    #warning("Get the conversation to add recipients")
-//    private func getConversation(with identifier: String) async -> ChatChannel? {
-//        do {
-//            let cid = try ChannelId.init(cid: identifier)
-//            let controller = ChatClient.shared.channelController(for: cid)
-//            return try await withCheckedThrowingContinuation({ continuation in
-//                controller.synchronize { error in
-//                    if let e = error {
-//                        continuation.resume(throwing: e)
-//                    } else {
-//                        continuation.resume(returning: controller.channel)
-//                    }
-//                }
-//            })
-//        } catch {
-//            return nil
-//        }
-//    }
+    private func getConversation(with identifier: String) async -> ChatChannel? {
+        do {
+            let cid = try ChannelId.init(cid: identifier)
+            let controller = ChatClient.shared.channelController(for: cid)
+            return try await withCheckedThrowingContinuation({ continuation in
+                controller.synchronize { error in
+                    if let e = error {
+                        continuation.resume(throwing: e)
+                    } else {
+                        continuation.resume(returning: controller.channel)
+                    }
+                }
+            })
+        } catch {
+            return nil
+        }
+    }
 
     private func getMessage(with channelId: ChannelId, messageId: MessageId) -> ChatMessage? {
         return ChatClient.shared.messageController(cid: channelId, messageId: messageId).message

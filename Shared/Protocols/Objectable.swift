@@ -13,6 +13,7 @@ import Combine
 enum ContainerName {
     case conversation(identifier: String)
     case favorites
+    case users
 
     var name: String {
         switch self {
@@ -20,6 +21,8 @@ enum ContainerName {
             return "conversation\(identifier)"
         case .favorites:
             return "favorites"
+        case .users:
+            return "users"
         }
     }
 }
