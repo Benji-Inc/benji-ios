@@ -57,39 +57,28 @@ class MessageSubcell: UICollectionViewCell {
 
         self.setNeedsLayout()
     }
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
 
-    /// Adjusts the background color of the cell to be appropriate for its position in the stack. Cells that are further back in the stack are darkened.
-    func configureBackground(withStackIndex stackIndex: Int,
-                             message: Messageable,
-                             showBubbleTail: Bool) {
+        guard let messageLayoutAttributes
+                = layoutAttributes as? ConversationMessageCellLayoutAttributes else {
 
-        // How much to scale the brightness of the background view.
-        let colorFactor = 1 - CGFloat(stackIndex) * 0.05
-
-        var backgroundColor: UIColor
-        if message.isFromCurrentUser {
-            backgroundColor = Color.gray.color
-        } else {
-            backgroundColor = Color.lightGray.color
-        }
-        var red: CGFloat = 0
-        var green: CGFloat = 0
-        var blue: CGFloat = 0
-        var alpha: CGFloat = 0
-
-        if backgroundColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
-            backgroundColor = UIColor(red: red * colorFactor,
-                                      green: green * colorFactor,
-                                      blue: blue * colorFactor,
-                                      alpha: alpha)
+            return
         }
 
-        self.backgroundColorView.bubbleColor = backgroundColor
+        self.configureBackground(color: messageLayoutAttributes.backgroundColor,
+                                 showBubbleTail: messageLayoutAttributes.shouldShowTail,
+                                 tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
+    }
+
+    /// Sets the background color and shows/hides the bubble tail.
+    func configureBackground(color: UIColor,
+                             showBubbleTail: Bool,
+                             tailOrientation: SpeechBubbleView.TailOrientation) {
+
+        self.backgroundColorView.bubbleColor = color
         self.backgroundColorView.tailLength = showBubbleTail ? MessageSubcell.bubbleTailLength : 0
-
-        self.backgroundColorView.orientation = message.isFromCurrentUser ? .down : .up
-
-        self.setNeedsLayout()
+        self.backgroundColorView.orientation = tailOrientation
     }
 }
 
