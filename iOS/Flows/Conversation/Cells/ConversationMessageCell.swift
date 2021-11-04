@@ -18,9 +18,9 @@ class ConversationMessageCell: UICollectionViewCell {
     var handleTappedMessage: ((Messageable) -> Void)?
     var handleDeleteMessage: ((Messageable) -> Void)?
 
-    private let collectionView: UICollectionView = {
-        let layout = ConversationMessageCellLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    private let collectionLayout = ConversationMessageCellLayout()
+    private lazy var collectionView: UICollectionView = {
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
         return cv
     }()
@@ -77,6 +77,9 @@ class ConversationMessageCell: UICollectionViewCell {
              totalReplyCount: Int) {
 
         self.message = message
+        let cid = try! ConversationID(cid: message.conversationId)
+        self.collectionLayout.messageController = ChatClient.shared.messageController(cid: cid,
+                                                                                      messageId: message.id)
 
         // Separate the user messages from other message.
         var userReplies = replies.filter { message in

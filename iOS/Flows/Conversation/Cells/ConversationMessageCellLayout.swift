@@ -24,6 +24,8 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         self.scrollDirection = .vertical
     }
 
+    var messageController: MessageController?
+
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         guard let attributesInRect = super.layoutAttributesForElements(in: rect) else { return nil }
 
@@ -56,6 +58,9 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         // The higher the cell's index, the closer it is to the front of the message stack.
         let stackIndex = totalItemsInSection - indexPath.item - 1
 
+        // Only show text for the front most item in each section.
+        attributes.shouldShowText = stackIndex == 0
+
         // Objects closer to the front of the stack should be brighter.
         let backgroundBrightness = 1 - CGFloat(stackIndex) * 0.05
         var backgroundColor: UIColor = indexPath.section == 0 ? .lightGray : .gray
@@ -63,19 +68,31 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
 
         attributes.backgroundColor = backgroundColor
 
-        // Only show text for the front most item in each section.
-        attributes.shouldShowText = stackIndex == 0
+        var isMostRecentMessageFromUser = false
+        if let message = self.messageController?.message?.latestReplies.first {
+            isMostRecentMessageFromUser = message.isFromCurrentUser
+        }
 
         if indexPath.section == 0 {
             // The first section should have a bubble tail on its first item
             attributes.shouldShowTail = stackIndex == totalItemsInSection - 1
             attributes.bubbleTailOrientation = .up
+
+            // If the most recent message is from the other user, then highlight it with a white background.
+            if !isMostRecentMessageFromUser && stackIndex == 0 {
+                attributes.backgroundColor = .white
+            }
         }
 
         if indexPath.section == 1 {
             // The second section should have a tail on its last item
             attributes.shouldShowTail = stackIndex == 0
             attributes.bubbleTailOrientation = .down
+
+            // If the most recent message is from the current user, then highlight it with a white background.
+            if isMostRecentMessageFromUser && stackIndex == 0 {
+                attributes.backgroundColor = .white
+            }
         }
     }
 

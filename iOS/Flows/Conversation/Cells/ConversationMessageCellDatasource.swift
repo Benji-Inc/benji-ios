@@ -116,22 +116,15 @@ extension ConversationMessageCellDataSource {
             guard let message = messageController.message else { return }
 
             let dataSource = item.dataSource
-            // The higher the cells index, the closer it is to the front of the message stack.
-            let stackIndex = dataSource.getStackIndex(forIndexPath: indexPath)
-
-            let backgroundColor: UIColor
-            if message.isFromCurrentUser {
-                backgroundColor = .gray
-            } else {
-                backgroundColor = .darkGray
-            }
 
             cell.setText(with: message)
+
+            // The higher the cell's stack index, the closer it is to the front of the message stack.
+            let stackIndex = dataSource.getStackIndex(forIndexPath: indexPath)
 
             // The menu interaction should only be on the front most cell,
             // and only if the user created the original message.
             cell.backgroundColorView.interactions.removeAll()
-
             if stackIndex == 0, let contextMenuDelegate = dataSource.contextMenuDelegate {
                 let contextMenuInteraction = UIContextMenuInteraction(delegate: contextMenuDelegate)
                 cell.backgroundColorView.addInteraction(contextMenuInteraction)
