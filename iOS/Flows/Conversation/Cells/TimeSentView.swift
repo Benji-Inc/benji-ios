@@ -32,11 +32,11 @@ class TimeSentView: UICollectionReusableView {
 
         self.daysAgoLabel.setSize(withWidth: self.width)
         self.daysAgoLabel.pin(.left, padding: Theme.contentOffset)
-        self.daysAgoLabel.pin(.bottom, padding: Theme.contentOffset.half.half)
+        self.daysAgoLabel.centerOnY()
 
         self.timeOfDayLabel.setSize(withWidth: self.width)
         self.timeOfDayLabel.pin(.right, padding: Theme.contentOffset)
-        self.timeOfDayLabel.pin(.bottom, padding: Theme.contentOffset.half.half)
+        self.timeOfDayLabel.centerOnY()
     }
 
     func configure(with message: Messageable?) {

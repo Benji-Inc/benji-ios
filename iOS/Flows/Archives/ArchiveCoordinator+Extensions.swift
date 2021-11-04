@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Intents
 
 extension ArchiveCoordinator: UserNotificationManagerDelegate {
 
@@ -26,5 +27,26 @@ extension ArchiveCoordinator: ToastSchedulerDelegate {
             guard let link = deeplink else { return }
             self.handle(deeplink: link)
         }
+    }
+}
+
+extension ArchiveCoordinator {
+
+    @MainActor
+    func checkForPermissions() async {
+        if INFocusStatusCenter.default.authorizationStatus != .authorized {
+            self.presentPermissions()
+        } else if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
+            self.presentPermissions()
+        }
+    }
+
+    @MainActor
+    private func presentPermissions() {
+        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true)
+        }
+        self.router.present(coordinator, source: self.archiveVC)
     }
 }

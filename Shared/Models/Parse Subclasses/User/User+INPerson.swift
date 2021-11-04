@@ -24,8 +24,13 @@ extension User {
     }
 
     private var inImage: INImage? {
-        guard let urlString = self.smallImage?.url, let url = URL(string: urlString) else { return nil }
-        return INImage(url: url)
+        do {
+            if let data = try? self.smallImage?.getData() {
+                return INImage(imageData: data)
+            } else {
+                return nil
+            }
+        }
     }
 
     private var inHandle: INPersonHandle {
@@ -41,6 +46,29 @@ extension User {
 
     private var inSuggestionType: INPersonSuggestionType {
         return INPersonSuggestionType.instantMessageAddress
+    }
+}
+
+extension UIImage {
+    func rotate(radians: CGFloat) -> UIImage {
+        let rotatedSize = CGRect(origin: .zero, size: size)
+            .applying(CGAffineTransform(rotationAngle: CGFloat(radians)))
+            .integral.size
+        UIGraphicsBeginImageContext(rotatedSize)
+        if let context = UIGraphicsGetCurrentContext() {
+            let origin = CGPoint(x: rotatedSize.width / 2.0,
+                                 y: rotatedSize.height / 2.0)
+            context.translateBy(x: origin.x, y: origin.y)
+            context.rotate(by: radians)
+            draw(in: CGRect(x: -origin.y, y: -origin.x,
+                            width: size.width, height: size.height))
+            let rotatedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+
+            return rotatedImage ?? self
+        }
+
+        return self
     }
 }
 
