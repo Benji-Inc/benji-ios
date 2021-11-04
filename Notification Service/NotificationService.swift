@@ -6,16 +6,6 @@
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
-//{
-//    "aps" : {
-//        "alert" : {
-//            "title" : "Time-Sensitive",
-//            "body" : "I'm a time sensitive notification"
-//        }
-//        "interruption-level" : "time-sensitive"
-//    }
-//}
-
 import UserNotifications
 import Intents
 import StreamChat
@@ -31,7 +21,7 @@ class NotificationService: UNNotificationServiceExtension {
 
         Task {
             await self.initializeParse()
-            await self.initializeChat()
+            //try await self.initializeChat()
             await self.updateContent(with: request, contentHandler: contentHandler)
         }
     }
@@ -58,59 +48,44 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 
-    private func initializeChat() async {
+    private func initializeChat() async throws {
         guard let user = User.current(), !ChatClient.isConnected else { return }
-        do {
-            try await ChatClient.initialize(for: user)
-        } catch {
-            print(error)
-        }
+        try await ChatClient.initialize(for: user)
     }
 
     private func updateContent(with request: UNNotificationRequest,
                                contentHandler: @escaping (UNNotificationContent) -> Void) async {
 
         guard let conversationId = request.content.conversationId,
-              let messageId = request.content.messageId,
+              //let messageId = request.content.messageId,
               let authorId = request.content.author,
-              let cid = try? ChannelId.init(cid: conversationId),
-              let message = self.getMessage(with: cid, messageId: messageId),
+              //let cid = try? ChannelId.init(cid: conversationId),
+              //let message = self.getMessage(with: cid, messageId: messageId),
               let author = try? await User.getObject(with: authorId).iNPerson else { return }
 
-        let conversation = await self.getConversation(with: conversationId)
-        let memberIds = conversation?.lastActiveMembers.compactMap({ member in
-            return member.id
-        }) ?? []
-
         var recipients: [INPerson] = []
-        if let persons = try? await User.localThenNetworkArrayQuery(where: memberIds,
-                                                                       isEqual: true,
-                                                                                     container: .users).compactMap({ user in
-            return user.iNPerson
-        }) {
-            recipients = persons
-        }
-        
-        await withTaskGroup(of: User?.self) { group in
-            for memberId in memberIds {
-                group.addTask {
-                    return try? await User.getObject(with: memberId)
-                }
-
-                for await user in group {
-                    if let u = user, let inPerson = u.iNPerson {
-                        recipients.append(inPerson)
-                    }
-                }
-            }
-        }
+        var conversation: ChatChannel? = nil
+//        if let convo = await self.getConversation(with: conversationId) {
+//            let memberIds = convo.lastActiveMembers.compactMap({ member in
+//                return member.id
+//            })
+//
+//            if let persons = try? await User.localThenNetworkArrayQuery(where: memberIds,
+//                                                                           isEqual: true,
+//                                                                                         container: .users).compactMap({ user in
+//                return user.iNPerson
+//            }) {
+//                recipients = persons
+//            }
+//            conversation = convo
+//        }
 
         let incomingMessageIntent = INSendMessageIntent(recipients: recipients,
                                                         outgoingMessageType: .outgoingMessageText,
-                                                        content: message.text,
+                                                        content: request.content.body,
                                                         speakableGroupName: conversation?.speakableGroupName,
                                                         conversationIdentifier: conversationId,
-                                                        serviceName: "Jibber",
+                                                        serviceName: nil,
                                                         sender: author,
                                                         attachments: nil)
 

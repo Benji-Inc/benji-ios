@@ -36,7 +36,7 @@ extension ChatClient {
         let token = Token.development(userId: user.userObjectID!)
         let userId = User.current()?.userObjectID ?? String() as UserId
         var userInfo = UserInfo(id: userId, name: nil, imageURL: nil, extraData: [:])
-        #if IOS
+        #if IOS || NOTIFICATION_SERVICE
         userInfo = UserInfo(id: userId,
                             name: User.current()?.fullName,
                             imageURL: User.current()?.smallImage?.url,

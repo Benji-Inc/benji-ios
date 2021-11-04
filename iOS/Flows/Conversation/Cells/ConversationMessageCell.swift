@@ -300,7 +300,7 @@ extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewD
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
         // Only show a header for the first section
         if section == 0 && !self.otherMessages.isEmpty {
-            return CGSize(width: collectionView.width, height: Theme.contentOffset)
+            return CGSize(width: collectionView.width, height: 18)
         }
 
         return .zero
@@ -311,7 +311,7 @@ extension ConversationMessageCell: UICollectionViewDataSource, UICollectionViewD
                         referenceSizeForFooterInSection section: Int) -> CGSize {
         // Only show a header for the second section
         if section == 1 && !self.currentUserMessages.isEmpty {
-            return CGSize(width: collectionView.width, height: Theme.contentOffset)
+            return CGSize(width: collectionView.width, height: 18)
         }
 
         return .zero
