@@ -35,6 +35,7 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
 
         UserNotificationManager.shared.delegate = self
         ToastScheduler.shared.delegate = self
+        _ = ConversationsManager.shared
 
         self.archiveVC.addButton.didSelect { [unowned self] in
             Task {
@@ -121,12 +122,10 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
                                                   startingMessageId: startingMessageId)
         self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
             self.router.dismiss(source: self.archiveVC, animated: true)
-            _ = ConversationsManager.shared.activeConversations.popLast()
         })
         self.router.present(coordinator,
                             source: self.router.topmostViewController,
                             cancelHandler: {
-            _ = ConversationsManager.shared.activeConversations.popLast()
         })
     }
 
