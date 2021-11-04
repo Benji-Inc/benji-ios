@@ -10,7 +10,7 @@ import Foundation
 import StreamChat
 import TMROLocalization
 
-extension ChatChannel {
+extension Conversation {
 
     enum Role: String {
         case owner

@@ -13,7 +13,7 @@ import StreamChat
 typealias Conversation = ChatChannel
 typealias ConversationID = ChannelId
 
-extension ChatChannel {
+extension Conversation {
     
     var speakableGroupName: INSpeakableString? {
         guard let name = self.name else { return nil }
