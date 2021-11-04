@@ -11,6 +11,10 @@ import Foundation
 protocol BottomToTopColumnCollectionViewLayoutDelegate: AnyObject {
     func bottomToTopColumnLayout(_ layout: BottomToTopColumnCollectionViewLayout,
                                  itemSizeForItemAtIndexPath indexPath: IndexPath) -> CGSize
+    func bottomToTopColumnLayout(_ layout: BottomToTopColumnCollectionViewLayout,
+                                 headerSizeForSection section: Int) -> CGSize
+    func bottomToTopColumnLayout(_ layout: BottomToTopColumnCollectionViewLayout,
+                                 footerSizeForSection section: Int) -> CGSize
 }
 
 /// A collection view layout that lays out its content in a single column with the first item at the bottom and the last at the top.
@@ -18,15 +22,28 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
 
     /// The default size of the cells. This is ignored if a delegate is assigned.
     var defaultItemSize = CGSize(width: 20, height: 20)
-    /// The size of the header.
-    var headerSize = CGSize(width: 20, height: 20)
-    /// The vertical spacing between cells.
-    var itemSpacing: CGFloat = 0
+    /// The default vertical spacing between items.
+    var defaultItemSpacing: CGFloat = 0
+    /// The default size of the header. This is ignored if a delegate is assigned.
+    var defaultHeaderSize = CGSize(width: 20, height: 20)
+    /// The default size of the footer. This is ignored if a delegate is assigned.
+    var defaultFooterSize = CGSize(width: 20, height: 20)
 
     weak var delegate: BottomToTopColumnCollectionViewLayoutDelegate?
 
+    /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     private var headerLayoutAttributes: [Int : UICollectionViewLayoutAttributes] = [:]
+    private var footerLayoutAttributes: [Int : UICollectionViewLayoutAttributes] = [:]
+
+    private var sectionCount: Int {
+        return self.collectionView?.numberOfSections ?? 0
+    }
+    private func numberOfItems(inSection section: Int) -> Int {
+        return self.collectionView?.numberOfItems(inSection: section) ?? 0
+    }
+
+    // MARK: - UICollectionViewLayout Overrides
 
     override var collectionViewContentSize: CGSize {
         get {
@@ -48,6 +65,7 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         guard let collectionView = self.collectionView else { return false }
 
+        // Invalidate the bounds if the height of the collection view changes.
         return newBounds.height != collectionView.height
     }
 
@@ -56,6 +74,8 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
 
         // Clear the layout attributes cache.
         self.cellLayoutAttributes = [:]
+        self.headerLayoutAttributes = [:]
+        self.footerLayoutAttributes = [:]
     }
 
     override func prepare() {
@@ -78,6 +98,11 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
                 // Calculate and cache the layout attributes for the items in each section.
                 self.cellLayoutAttributes[indexPath] = self.layoutAttributesForItem(at: indexPath)
             }
+
+            // Calculate and cache the footer layout attributes
+            self.footerLayoutAttributes[section]
+            = self.layoutAttributesForSupplementaryView(ofKind: UICollectionView.elementKindSectionFooter,
+                                                        at: IndexPath(item: 0, section: section))
         }
     }
 
@@ -89,8 +114,11 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         let headerAttributes = self.headerLayoutAttributes.values.filter { attributes in
             return rect.intersects(attributes.frame)
         }
+        let footerAttibutes = self.footerLayoutAttributes.values.filter { attributes in
+            return rect.intersects(attributes.frame)
+        }
 
-        return itemAttributes + headerAttributes
+        return itemAttributes + headerAttributes + footerAttibutes
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
@@ -99,13 +127,35 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
             return attributes
         }
 
-        let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
-        if let itemAboveFrame = self.frameForItemOrHeader(aboveItemAt: indexPath) {
-            attributes.frame.origin = CGPoint(x: 0, y: itemAboveFrame.bottom + self.itemSpacing)
-        } else {
-            attributes.frame.origin = .zero
+        let sectionCount = self.sectionCount
+
+        var yValue: CGFloat = 0
+        for section in (indexPath.section..<sectionCount).reversed() {
+            let headerSize = self.sizeForHeader(inSection: section)
+
+            if headerSize.height > 0 {
+                yValue += headerSize.height + self.defaultItemSpacing
+            }
+
+            let itemCount = self.numberOfItems(inSection: section)
+            // No need to calculate the frames of items below this item.
+            for item in (indexPath.item..<itemCount).reversed() {
+                let indexPath = IndexPath(item: item, section: section)
+                let itemSize = self.sizeForItem(at: indexPath)
+
+                if itemSize.height > 0 {
+                    yValue += itemSize.height + self.defaultItemSpacing
+                }
+            }
+
+            let footerSize = self.sizeForFooter(inSection: section)
+            if footerSize.height > 0 {
+                yValue += headerSize.height + self.defaultItemSpacing
+            }
         }
 
+        let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+        attributes.frame.origin = CGPoint(x: 0, y: yValue)
         attributes.frame.size = self.sizeForItem(at: indexPath)
 
         return attributes
@@ -114,93 +164,110 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
     override func layoutAttributesForSupplementaryView(ofKind elementKind: String,
                                                        at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 
-        guard self.headerSize != .zero else { return nil }
+        switch elementKind {
+        case UICollectionView.elementKindSectionHeader:
+            return self.layoutAttributesForHeader(inSection: indexPath.section)
+        case UICollectionView.elementKindSectionFooter:
+            return self.layoutAttributesForFooter(inSection: indexPath.section)
+        default:
+            return nil
+        }
+    }
 
-        // Returned the cached attributes if we've already calculated these attributes
-        if let attributes = self.headerLayoutAttributes[indexPath.section] {
+    private func layoutAttributesForHeader(inSection section: Int) -> UICollectionViewLayoutAttributes? {
+        // If the attributes are cached already, just return those.
+        if let attributes = self.headerLayoutAttributes[section]  {
             return attributes
+        }
+
+        let headerSize = self.sizeForHeader(inSection: section)
+        if headerSize == .zero {
+            return nil
+        }
+
+        let sectionCount = self.sectionCount
+
+        var yValue: CGFloat = 0
+        // Headers are the top of their sections so there's no need to calculate its own section.
+        for currentSection in (section + 1..<sectionCount).reversed() {
+            let headerSize = self.sizeForHeader(inSection: currentSection)
+            if headerSize.height > 0 {
+                yValue += headerSize.height + self.defaultItemSpacing
+            }
+
+            let itemCount = self.numberOfItems(inSection: currentSection)
+            for item in (0..<itemCount).reversed() {
+                let indexPath = IndexPath(item: item, section: currentSection)
+                let itemSize = self.sizeForItem(at: indexPath)
+
+                if itemSize.height > 0 {
+                    yValue += itemSize.height + self.defaultItemSpacing
+                }
+            }
+
+            let footerSize = self.sizeForFooter(inSection: currentSection)
+            if footerSize.height > 0 {
+                yValue += headerSize.height + self.defaultItemSpacing
+            }
         }
 
         let attributes
         = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                           with: indexPath)
+                                           with: IndexPath(item: 0, section: section))
+        attributes.frame.origin = CGPoint(x: 0, y: yValue)
+        attributes.frame.size = headerSize
 
-        // Recursive call. Get the frame of the item right above this one to determine our frame.
-        if let itemAboveFrame = self.frameForItemOrHeader(aboveHeaderInSection: indexPath.section) {
-            attributes.frame.origin = CGPoint(x: 0, y: itemAboveFrame.bottom + self.itemSpacing)
-        } else {
-            // If there is no item above us, then we've hit the top.
-            attributes.frame.origin = .zero
-        }
-
-        attributes.frame.size = self.headerSize
 
         return attributes
     }
 
-    /// Gets the frame of the header or item above the item found at index path. If there is no item above, then nil is returned.
-    private func frameForItemOrHeader(aboveItemAt indexPath: IndexPath) -> CGRect? {
-        guard let collectionView = self.collectionView else { return nil }
+    private func layoutAttributesForFooter(inSection section: Int) -> UICollectionViewLayoutAttributes? {
+        // If the attributes are cached already, just return those.
+        if let attributes = self.footerLayoutAttributes[section]  {
+            return attributes
+        }
 
-        let isTopSection = indexPath.section == collectionView.numberOfSections - 1
-        let isTopItemInSection
-        = indexPath.item == collectionView.numberOfItems(inSection: indexPath.section) - 1
-
-        if isTopItemInSection {
-            // If the item is at the top of its section, try to get this section's header frame.
-            if let headerAboveAttributes
-            = self.layoutAttributesForSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
-                                                        at: IndexPath(item: 0, section: indexPath.section)) {
-
-                return headerAboveAttributes.frame
-            }
-
-            // If there was no header in this section, look at the bottom item in the section above us.
-            if !isTopSection,
-                let itemAboveAttributes
-                = self.layoutAttributesForItem(at: IndexPath(item: 0, section: indexPath.section + 1)) {
-
-                return itemAboveAttributes.frame
-            }
-
-            // There's no item or header above us.
+        let footerSize = self.sizeForFooter(inSection: section)
+        if footerSize == .zero {
             return nil
         }
 
-        // Get the item above us in the current section.
-        if let itemAboveAttributes = self.layoutAttributesForItem(at: IndexPath(item: indexPath.item + 1,
-                                                                                section: indexPath.section)) {
-            return itemAboveAttributes.frame
+        let sectionCount = self.sectionCount
+
+        var yValue: CGFloat = 0
+
+        for currentSection in (section..<sectionCount).reversed() {
+            let headerSize = self.sizeForHeader(inSection: currentSection)
+            if headerSize.height > 0 {
+                yValue += headerSize.height + self.defaultItemSpacing
+            }
+
+            let itemCount = self.numberOfItems(inSection: currentSection)
+            for item in (0..<itemCount).reversed() {
+                let indexPath = IndexPath(item: item, section: currentSection)
+                let itemSize = self.sizeForItem(at: indexPath)
+
+                if itemSize.height > 0 {
+                    yValue += itemSize.height + self.defaultItemSpacing
+                }
+            }
+
+            if currentSection == section {
+                let footerSize = self.sizeForFooter(inSection: currentSection)
+                if footerSize.height > 0 {
+                    yValue += headerSize.height + self.defaultItemSpacing
+                }
+            }
         }
 
-        return nil
-    }
+        let attributes
+        = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                           with: IndexPath(item: 0, section: section))
 
-    /// Gets the frame of the header or item above the header found in the given section. If there is no item above, then nil is returned.
-    private func frameForItemOrHeader(aboveHeaderInSection section: Int) -> CGRect? {
-        guard let collectionView = self.collectionView else { return nil }
+        attributes.frame.origin = CGPoint(x: 0, y: yValue)
+        attributes.frame.size = footerSize
 
-        let isTopSection = section == collectionView.numberOfSections - 1
-
-        // If this is the top section, there's nothing above this header.
-        if isTopSection {
-            return nil
-        }
-
-        // Try to get the bottom most item in the section directly above us.
-        if let itemAboveAttributes = self.layoutAttributesForItem(at: IndexPath(item: 0,
-                                                                                section: section + 1)) {
-            return itemAboveAttributes.frame
-        }
-
-        // If there was no item above, see if there's a header in the section above us.
-        if let headerAboveAttributes
-            = self.layoutAttributesForSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader,
-                                                        at: IndexPath(item: 0, section: section + 1)) {
-                return headerAboveAttributes.frame
-        }
-
-        return nil
+        return attributes
     }
 
     // MARK: - Helper Functions
@@ -219,11 +286,22 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
 
     /// Asks the delegate for the size of the item at the index path. If no delegate is assigned the default item size is used.
     private func sizeForItem(at indexPath: IndexPath) -> CGSize {
-        var size = self.defaultItemSize
-        // If a delegate was assigned, override the items ize with whatever the delegate returns.
-        if let delegate = self.delegate {
-            size = delegate.bottomToTopColumnLayout(self, itemSizeForItemAtIndexPath: indexPath)
-        }
-        return size
+        // If a delegate was assigned, override the items size with whatever the delegate returns.
+        return self.delegate?.bottomToTopColumnLayout(self,
+                                                      itemSizeForItemAtIndexPath: indexPath) ?? self.defaultItemSize
+    }
+
+    /// Asks the delegate for the size of header in the given section. If no delegate is assigned the default header size is used.
+    private func sizeForHeader(inSection section: Int) -> CGSize {
+        // If a delegate was assigned, override the header size with whatever the delegate returns.
+        return self.delegate?.bottomToTopColumnLayout(self,
+                                                      headerSizeForSection: section) ?? self.defaultHeaderSize
+    }
+
+    /// Asks the delegate for the size of the item at the index path. If no delegate is assigned the default item size is used.
+    private func sizeForFooter(inSection section: Int) -> CGSize {
+        // If a delegate was assigned, override the footer size with whatever the delegate returns.
+        return self.delegate?.bottomToTopColumnLayout(self,
+                                                      footerSizeForSection: section) ?? self.defaultFooterSize
     }
 }
