@@ -14,6 +14,16 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         return ConversationMessageCellLayoutAttributes.self
     }
 
+    override init() {
+        super.init()
+        self.scrollDirection = .vertical
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.scrollDirection = .vertical
+    }
+
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         guard let attributesInRect = super.layoutAttributesForElements(in: rect) else { return nil }
 
