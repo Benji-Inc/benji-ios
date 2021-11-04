@@ -294,7 +294,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     func handle(launchActivity: LaunchActivity) {
-        guard let content = self.current, case OnboardingContent.welcome(let vc) = content else { return }
+        guard let content = self.current, case OnboardingContent.welcome(_) = content else { return }
 
         switch launchActivity {
         case .onboarding(let phoneNumber):

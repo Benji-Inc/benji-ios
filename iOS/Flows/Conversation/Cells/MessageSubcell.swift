@@ -18,13 +18,6 @@ class MessageSubcell: UICollectionViewCell {
     /// Text view for displaying the text of the message.
     let textView = MessageTextView()
 
-    /// Where this cell appears on the z-axis stack of messages. 0 means the item closest to the user.
-    private var stackIndex = 0
-    /// How much to scale the size of the background view.
-    private var scaleFactor: CGFloat {
-        return 1 - CGFloat(self.stackIndex) * 0.05
-    }
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.intitializeViews()
@@ -46,7 +39,7 @@ class MessageSubcell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.backgroundColorView.width = self.width * self.scaleFactor
+        self.backgroundColorView.width = self.width
         self.backgroundColorView.expandToSuperviewHeight()
         self.backgroundColorView.centerOnXAndY()
 
@@ -96,7 +89,6 @@ class MessageSubcell: UICollectionViewCell {
 
         self.backgroundColorView.orientation = message.isFromCurrentUser ? .down : .up
 
-        self.stackIndex = stackIndex
         self.setNeedsLayout()
     }
 }
