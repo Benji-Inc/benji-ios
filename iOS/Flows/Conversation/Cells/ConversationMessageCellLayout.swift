@@ -47,6 +47,7 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         let stackIndex = totalItemsInSection - indexPath.item - 1
 
         // How much to scale the brightness of the background view.
+        // Objects closer to the front should be brighter.
         let backgroundBrightness = 1 - CGFloat(stackIndex) * 0.05
 
         var backgroundColor: UIColor = indexPath.section == 0 ? .lightGray : .gray
@@ -64,20 +65,23 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         }
         attributes.backgroundColor = backgroundColor
 
-        // The first section should have a bubble tail on its first item
+        // Only show text for the front most item in each section.
+        attributes.shouldShowText = stackIndex == 0
+
         if indexPath.section == 0 {
+            // The first section should have a bubble tail on its first item
             attributes.shouldShowTail = stackIndex == totalItemsInSection - 1
             attributes.bubbleTailOrientation = .up
         }
 
-        // The second section should have a tail on its last item
         if indexPath.section == 1 {
+            // The second section should have a tail on its last item
             attributes.shouldShowTail = stackIndex == 0
             attributes.bubbleTailOrientation = .down
         }
     }
 
-    // MARK: - Animations
+    // MARK: - Custom Animations
 
     private var insertingIndexPaths: [IndexPath] = []
     private var deletingIndexPaths: [IndexPath] = []
@@ -113,7 +117,7 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         let attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
 
         if self.deletingIndexPaths.contains(itemIndexPath) {
-            attributes?.transform = CGAffineTransform(scaleX: 0, y: 0)
+            attributes?.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
         }
 
         return attributes
