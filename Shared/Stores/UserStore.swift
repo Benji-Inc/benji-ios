@@ -58,9 +58,8 @@ class UserStore {
             unfetchedUserIds.append(current)
         }
 
-        if let users = try? await User.localThenNetworkArrayQuery(where: unfetchedUserIds,
-                                                                       isEqual: true,
-                                                                       container: .users) {
+        if let users = try? await User.fetchAndUpdateLocalContainer(where: unfetchedUserIds,
+                                                                         container: .users) {
             self.users = users
         }
 

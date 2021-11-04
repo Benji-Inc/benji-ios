@@ -58,7 +58,7 @@ class MessageSubcell: UICollectionViewCell {
 
         self.setNeedsLayout()
     }
-    
+
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
 

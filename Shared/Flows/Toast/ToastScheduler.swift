@@ -101,6 +101,7 @@ class ToastScheduler {
 
             let deeplink = DeepLinkObject(target: .conversation)
             deeplink.customMetadata["conversationId"] = message.conversationId
+            deeplink.customMetadata["messageId"] = message.id
             self.delegate?.didInteractWith(type: .newMessage(message), deeplink: deeplink)
         })
 

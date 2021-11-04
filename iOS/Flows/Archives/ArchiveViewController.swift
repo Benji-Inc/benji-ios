@@ -62,8 +62,6 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
 
         self.view.addSubview(self.addButton)
         self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightGray))
-
-        _ = ConversationsManager.shared
     }
 
     override func viewWasPresented() {

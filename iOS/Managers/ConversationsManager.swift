@@ -29,9 +29,14 @@ class ConversationsManager: EventsControllerDelegate {
 
         switch event {
         case let event as MessageNewEvent:
-            guard let last = self.activeConversations.last, event.channel != last else { return }
-            Task {
-                await ToastScheduler.shared.schedule(toastType: .newMessage(event.message))
+            if self.activeConversations.isEmpty {
+                Task {
+                    await ToastScheduler.shared.schedule(toastType: .newMessage(event.message))
+                }
+            } else if let last = self.activeConversations.last, event.channel != last {
+                Task {
+                    await ToastScheduler.shared.schedule(toastType: .newMessage(event.message))
+                }
             }
         case let event as ReactionNewEvent:
             guard let last = self.activeConversations.last, event.cid != last.cid else { return }
