@@ -19,7 +19,7 @@ class ConversationMessageCell: UICollectionViewCell {
     var handleDeleteMessage: ((Messageable) -> Void)?
 
     private let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
+        let layout = ConversationMessageCellLayout()
         layout.scrollDirection = .vertical
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.keyboardDismissMode = .interactive

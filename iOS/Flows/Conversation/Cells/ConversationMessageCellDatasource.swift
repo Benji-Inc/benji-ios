@@ -119,19 +119,14 @@ extension ConversationMessageCellDataSource {
             // The higher the cells index, the closer it is to the front of the message stack.
             let stackIndex = dataSource.getStackIndex(forIndexPath: indexPath)
 
-            let showBubbleTail: Bool
+            let backgroundColor: UIColor
             if message.isFromCurrentUser {
-                // Only show a speech bubble tail for the front-most user reply.
-                showBubbleTail = stackIndex == 0
+                backgroundColor = .gray
             } else {
-                // Only show a speech bubble tail for the back-most reply from other users.
-                showBubbleTail = indexPath.item == 0
+                backgroundColor = .darkGray
             }
 
             cell.setText(with: message)
-            cell.configureBackground(withStackIndex: stackIndex,
-                                     message: message,
-                                     showBubbleTail: showBubbleTail)
 
             // The menu interaction should only be on the front most cell,
             // and only if the user created the original message.
