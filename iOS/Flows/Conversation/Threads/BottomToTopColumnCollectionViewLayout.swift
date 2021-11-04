@@ -66,7 +66,7 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         guard let collectionView = self.collectionView else { return false }
 
         // Invalidate the bounds if the height of the collection view changes.
-        return newBounds.height != collectionView.height
+        return newBounds.size != collectionView.size
     }
 
     override func invalidateLayout() {
@@ -130,33 +130,49 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         let sectionCount = self.sectionCount
 
         var yValue: CGFloat = 0
-        for section in (indexPath.section..<sectionCount).reversed() {
-            let headerSize = self.sizeForHeader(inSection: section)
 
-            if headerSize.height > 0 {
-                yValue += headerSize.height + self.defaultItemSpacing
+    sectionLoop: for section in (indexPath.section..<sectionCount).reversed() {
+        let headerSize = self.sizeForHeader(inSection: section)
+
+        if headerSize.height > 0 {
+            yValue += headerSize.height + self.defaultItemSpacing
+        }
+
+        let itemCount = self.numberOfItems(inSection: section)
+        var startItem = 0
+        if indexPath.section == section {
+            startItem = indexPath.item
+        }
+        // No need to calculate the frames of items below this item.
+        for item in (startItem..<itemCount).reversed() {
+            let currentIndexPath = IndexPath(item: item, section: section)
+
+            if currentIndexPath == indexPath {
+                break sectionLoop
             }
 
-            let itemCount = self.numberOfItems(inSection: section)
-            // No need to calculate the frames of items below this item.
-            for item in (indexPath.item..<itemCount).reversed() {
-                let indexPath = IndexPath(item: item, section: section)
-                let itemSize = self.sizeForItem(at: indexPath)
+            let itemSize = self.sizeForItem(at: currentIndexPath)
 
-                if itemSize.height > 0 {
-                    yValue += itemSize.height + self.defaultItemSpacing
-                }
-            }
-
-            let footerSize = self.sizeForFooter(inSection: section)
-            if footerSize.height > 0 {
-                yValue += headerSize.height + self.defaultItemSpacing
+            yValue += itemSize.height
+            if itemSize.height > 0 && item != 0{
+                yValue += self.defaultItemSpacing
             }
         }
+
+        let footerSize = self.sizeForFooter(inSection: section)
+        if footerSize.height > 0 {
+            yValue += headerSize.height
+        }
+
+        yValue += 10
+    }
 
         let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
         attributes.frame.origin = CGPoint(x: 0, y: yValue)
         attributes.frame.size = self.sizeForItem(at: indexPath)
+
+        let itemCount = self.numberOfItems(inSection: indexPath.section)
+        attributes.zIndex = itemCount - indexPath.item
 
         return attributes
     }
@@ -180,6 +196,7 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
             return attributes
         }
 
+        // If the header is zero sized we shouldn't attempt to make a header.
         let headerSize = self.sizeForHeader(inSection: section)
         if headerSize == .zero {
             return nil
@@ -217,7 +234,6 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         attributes.frame.origin = CGPoint(x: 0, y: yValue)
         attributes.frame.size = headerSize
 
-
         return attributes
     }
 
@@ -228,6 +244,7 @@ class BottomToTopColumnCollectionViewLayout: UICollectionViewLayout {
         }
 
         let footerSize = self.sizeForFooter(inSection: section)
+        // If the footer is zero sized we shouldn't attempt to make a footer.
         if footerSize == .zero {
             return nil
         }
