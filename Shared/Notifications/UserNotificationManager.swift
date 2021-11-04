@@ -155,6 +155,10 @@ class UserNotificationManager: NSObject {
         }
 
         #if IOS
+        if !ChatClient.isConnected, let user = User.current() {
+            try? await ChatClient.initialize(for: user)
+        }
+
         return await withCheckedContinuation({ continuation in
             ChatClient.shared.currentUserController().reloadUserIfNeeded { _ in
                 ChatClient.shared.currentUserController().addDevice(token: deviceToken) { error in

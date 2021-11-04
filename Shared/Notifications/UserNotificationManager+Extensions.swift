@@ -11,17 +11,11 @@ import UserNotifications
 
 extension UserNotificationManager: UNUserNotificationCenterDelegate {
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        // Add intent updating 
-        completionHandler([.banner, .sound, .badge])
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
+        return [.banner, .sound, .badge]
     }
 
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Void) {
-
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         if let action = UserNotificationAction.init(rawValue: response.actionIdentifier) {
             self.handle(action: action, for: response)
         } else if let target = response.notification.deepLinkTarget {
@@ -29,8 +23,6 @@ extension UserNotificationManager: UNUserNotificationCenterDelegate {
             deepLink.customMetadata = response.notification.customMetadata
             self.delegate?.userNotificationManager(willHandle: deepLink)
         }
-
-        completionHandler()
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {}

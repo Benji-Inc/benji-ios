@@ -42,6 +42,9 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         Task {
             do {
                 try await currentUser.saveLocalThenServer()
+                if !isFocused {
+                    try? await UNUserNotificationCenter.current().add(self.createIsAvailableRequest(for: currentUser))
+                }
 
                 let response = INShareFocusStatusIntentResponse(code: .success, userActivity: nil)
                 completion(response)
@@ -50,6 +53,15 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
                 completion(response)
             }
         }
+    }
 
+    private func createIsAvailableRequest(for user: User) -> UNNotificationRequest {
+        let content = UNMutableNotificationContent()
+        content.title = "Available"
+        content.body = "You are now available to chat."
+        let request = UNNotificationRequest(identifier: UUID().uuidString,
+                                            content: content,
+                                            trigger: nil)
+        return request
     }
 }

@@ -50,28 +50,22 @@ class UserStore {
 
     private func subscribeToUpdates() async {
 
-
-        var unfetchedUsers = ConnectionStore.shared.connections.compactMap { connection in
-            return connection.nonMeUser
+        var unfetchedUserIds = ConnectionStore.shared.connections.compactMap { connection in
+            return connection.nonMeUser?.objectId
         }
 
-        if let current = User.current() {
-            unfetchedUsers.append(current)
+        if let current = User.current()?.objectId {
+            unfetchedUserIds.append(current)
         }
 
-        await withTaskGroup(of: User?.self) { group in
-            for user in unfetchedUsers {
-                group.addTask {
-                    return try? await user.fetchInBackground() as? User
-                }
+        if let users = try? await User.localThenNetworkArrayQuery(where: unfetchedUserIds,
+                                                                       isEqual: true,
+                                                                       container: .users) {
+            self.users = users
+        }
 
-                for await user in group {
-                    if let u = user {
-                        self.users.append(u)
-                        self.userUpdated = u
-                    }
-                }
-            }
+        self.users.forEach { user in
+            self.userUpdated = user 
         }
 
         self.queries.forEach { query in
