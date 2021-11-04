@@ -43,7 +43,7 @@ extension ConversationViewController {
         KeyboardManager.shared.$willKeyboardShow
             .mainSink { [unowned self] willShow in
                 self.state = willShow ? .write : .read
-        }.store(in: &self.cancellables)
+            }.store(in: &self.cancellables)
     }
 
     func subscribeToUpdates() {
@@ -79,6 +79,7 @@ extension ConversationViewController {
         }.store(in: &self.cancellables)
 
         self.collectionView.publisher(for: \.contentOffset).mainSink { [unowned self] _ in
+            guard self.collectionView.isTracking else { return }
             self.collectionView.visibleCells.forEach { cell in
                 if let messageCell = cell as? ConversationMessageCell {
                     messageCell.handle(isCentered: false)
@@ -93,8 +94,13 @@ extension ConversationViewController {
 
         self.$didCenterOnCell
             .mainSink { cell in
-            guard let messageCell = cell else { return }
-            messageCell.handle(isCentered: true)
-        }.store(in: &self.cancellables)
+                guard let messageCell = cell else { return }
+                messageCell.handle(isCentered: true)
+                self.collectionView.visibleCells.forEach { cell in
+                    if let offsetCell = cell as? ConversationMessageCell, offsetCell != messageCell {
+                        offsetCell.handle(isCentered: false)
+                    }
+                }
+            }.store(in: &self.cancellables)
     }
 }
