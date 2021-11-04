@@ -11,7 +11,7 @@ import Foundation
 extension UIColor {
 
     /// Returns a modified copy of this color with the specified brightness.
-    /// A brightness of  1 leaves the color unchanged. 0.5 is a half as bright as the original color. 0 is black.
+    /// A brightness of 1 leaves the color unchanged. 0.5 is a half as bright as the original color. 0 is black.
     func color(withBrightness brightness: CGFloat) -> UIColor {
         var red: CGFloat = 0
         var green: CGFloat = 0

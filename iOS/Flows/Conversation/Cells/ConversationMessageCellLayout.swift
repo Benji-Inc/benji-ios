@@ -95,6 +95,8 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
     -> UICollectionViewLayoutAttributes? {
 
         let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+        // Because the user is dropping the message directly on the stack,
+        // the message should appear immediately, not fade in.
         attributes?.alpha = 1
         return attributes
     }
@@ -105,6 +107,8 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         let attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
 
         if self.deletingIndexPaths.contains(itemIndexPath) {
+            // Shrink down the message we're deleting. This is also prevents the deleted cell from
+            // covering other views that are moving to take its place.
             attributes?.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
         }
 
