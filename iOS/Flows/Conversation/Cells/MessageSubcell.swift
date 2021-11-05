@@ -34,6 +34,7 @@ class MessageSubcell: UICollectionViewCell {
 
         self.backgroundColorView.addSubview(self.textView)
         self.textView.textAlignment = .center
+        self.textView.textColor = Color.textColor.color
     }
 
     override func layoutSubviews() {
@@ -57,6 +58,7 @@ class MessageSubcell: UICollectionViewCell {
 
         self.setNeedsLayout()
     }
+
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
 

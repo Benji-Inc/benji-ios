@@ -26,7 +26,7 @@ class ConversationViewController: FullScreenViewController,
     /// Denotes where a message should be dragged and dropped to send.
     private let sendMessageOverlay = ConversationSendOverlayView()
     
-    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
     let conversationHeader = ConversationHeaderView()
 
     var conversation: Conversation! { return self.conversationController?.channel }

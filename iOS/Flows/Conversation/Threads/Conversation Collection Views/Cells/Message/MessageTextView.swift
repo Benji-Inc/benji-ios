@@ -25,13 +25,13 @@ class MessageTextView: TextView {
     }
 
     func set(text: Localized, messageContext: MessageContext) {
-        let textColor: Color = messageContext == .status ? .darkGray : .white
+        let textColor: Color = messageContext == .status ? .darkGray : .textColor
         let attributedString = AttributedString(text,
                                                 fontType: .smallBold,
                                                 color: textColor)
 
         self.set(attributed: attributedString,
-                 alignment: .left,
+                 alignment: .center,
                  lineCount: 0,
                  lineBreakMode: .byWordWrapping,
                  stringCasing: .unchanged,
