@@ -52,22 +52,21 @@ enum OnboardingContent: Switchable {
             return LocalizedString(id: "",
                                    arguments: [],
                                    default: "Confirm your name to use Jibber!")
-        case .waitlist(_):
-            #if APPCLIP
-            if User.current()?.status == .inactive || User.current()?.status == .active {
+        case .waitlist(let vc):
+            switch vc.state {
+            case .initial:
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "Loading...")
+            case .onWaitlist(_):
+                return LocalizedString(id: "",
+                                       arguments: [],
+                                       default: "You are on the list. Sit tight and we will let you know when a slot opens up.")
+            case .upgrade:
                 return LocalizedString(id: "",
                                        arguments: [],
                                        default: "You no longer have to wait! Tap the banner below to download the full app.")
-            } else {
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "You are on the list. Sit tight and we will let you know when your slot opens up.")
             }
-            #else
-            return LocalizedString(id: "",
-                                   arguments: [],
-                                   default: "You are on the list. Sit tight and we will let you know when your slot opens up.")
-            #endif
 
         case .photo(let vc):
             switch vc.currentState {

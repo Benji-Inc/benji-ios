@@ -15,16 +15,18 @@ import Combine
 
 class WaitlistViewController: ViewController, Sizeable {
 
-    let positionLabel = Label(font: .small)
-    let remainingLabel = Label(font: .display)
+    enum State {
+        case initial
+        case onWaitlist(QuePositions)
+        case upgrade
+    }
 
-    @Published var didShowUpgrade: Bool = false
+    private let positionLabel = Label(font: .small)
+    private let remainingLabel = Label(font: .display)
 
-#if APPCLIP
-    private let userQuery = User.query()
-#endif
+    private let queQuery = QuePositions.query()
 
-    private let queQuery = QuePostions.query()
+    @Published var state: State = .initial
 
     lazy var skOverlay: SKOverlay = {
         let config = SKOverlay.AppClipConfiguration(position: .bottom)
@@ -38,69 +40,87 @@ class WaitlistViewController: ViewController, Sizeable {
 
         self.view.addSubview(self.positionLabel)
         self.view.addSubview(self.remainingLabel)
-    }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+        self.$state.mainSink { [unowned self] state in
+            self.update(for: state)
+        }.store(in: &self.cancellables)
 
-        #if APPCLIP
-        if let query = self.userQuery, let objectId = User.current()?.objectId {
+        Task {
+            let user = try? await User.getObject(with: User.current()?.objectId ?? "")
 
-            query.whereKey("objectId", equalTo: objectId)
-
-            let subscription = Client.shared.subscribe(query)
-
-            subscription.handleEvent { query, event in
-                switch event {
-                case .entered(let u), .left(let u), .created(let u), .updated(let u), .deleted(let u):
-                    guard let user = u as? User else { return }
-                    if user.status == .inactive || user.status == .active {
-                        self.loadUpgrade()
+            if let status = user?.status {
+                switch status {
+                case .active, .inactive:
+                    self.state = .upgrade
+                case .waitlist:
+                    if let que = try? await QuePositions.getFirstObject() {
+                        self.state = .onWaitlist(que)
                     }
+                    self.subscribeToUpdates()
+                case .needsVerification:
+                    break
                 }
             }
-        }
+        }.add(to: self.taskPool)
+    }
 
-        #endif
+    private func subscribeToUpdates() {
+        UserStore.shared.$userUpdated
+            .filter({ user in
+                return user?.isCurrentUser ?? false
+            }).mainSink { [unowned self] user in
+                guard let u = user else { return }
+                if u.status == .inactive || u.status == .active {
+                    self.state = .upgrade
+                }
+        }.store(in: &self.cancellables)
 
         if let query = self.queQuery {
             let subscription = Client.shared.subscribe(query)
 
             subscription.handleEvent { query, event in
                 switch event {
-                case .entered(let u):
-                    guard let que = u as? QuePostions else { return }
-                    self.loadWaitlist(for: que)
-                case .updated(let u):
-                    guard let que = u as? QuePostions else { return }
-                    self.loadWaitlist(for: que)
-                default: 
+                case .entered(let u), .updated(let u):
+                    guard let que = u as? QuePositions else { return }
+                    self.state = .onWaitlist(que)
+                default:
                     break
                 }
             }
         }
     }
 
-    private func loadWaitlist(for que: QuePostions) {
+    private func update(for state: State) {
+        switch state {
+        case .initial:
+            break
+        case .onWaitlist(let que):
+            self.loadWaitlist(for: que)
+        case .upgrade:
+            self.loadUpgrade()
+        }
+    }
+
+    private func loadWaitlist(for que: QuePositions) {
         guard let current = User.current(), current.status != .active else { return }
 
         if let position = current.quePosition {
-            let positionString = LocalizedString(id: "", arguments: [String(position)], default: "Your positon is: @(position)")
+
+            let positionString = LocalizedString(id: "", arguments: [String(position)], default: "Currently on #@(position)")
             self.positionLabel.setText(positionString)
 
             let remaining = (position + que.claimed) - que.max
 
-            self.remainingLabel.setText(String(remaining))
+            self.remainingLabel.setText("#\(String(remaining))")
             self.view.layoutNow()
         }
     }
 
     private func loadUpgrade() {
-        self.remainingLabel.setText("You're in!")
-        #if !NOTIFICATION
+        self.remainingLabel.setText("")
+#if !NOTIFICATION
         self.displayAppUpdateOverlay()
-        #endif
-        self.didShowUpgrade = true
+#endif
     }
 
     override func viewDidLayoutSubviews() {
@@ -108,7 +128,7 @@ class WaitlistViewController: ViewController, Sizeable {
 
         self.remainingLabel.setSize(withWidth: self.view.width * 0.8)
         self.remainingLabel.centerOnX()
-        self.remainingLabel.bottom = self.view.halfHeight * 0.8
+        self.remainingLabel.centerY = self.view.halfHeight
 
         self.positionLabel.setSize(withWidth: self.view.width)
         self.positionLabel.match(.top, to: .bottom, of: self.remainingLabel, offset: 20)
@@ -118,13 +138,13 @@ class WaitlistViewController: ViewController, Sizeable {
 
 extension WaitlistViewController: SKOverlayDelegate {
 
-    #if !NOTIFICATION
+#if !NOTIFICATION
     func displayAppUpdateOverlay() {
         guard let window = UIWindow.topWindow(), let scene = window.windowScene else { return }
 
         self.skOverlay.present(in: scene)
     }
-    #endif
+#endif
 
     func storeOverlayWillStartPresentation(_ overlay: SKOverlay, transitionContext: SKOverlay.TransitionContext) {
     }

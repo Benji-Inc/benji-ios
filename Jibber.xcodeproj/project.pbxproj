@@ -130,6 +130,7 @@
 		D62C9CC2266C3CAB00BB9632 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */; };
 		D62C9CC3266C3CAC00BB9632 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */; };
 		D62C9CC6266C417100BB9632 /* DemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CC5266C417100BB9632 /* DemoView.swift */; };
+		D62D16302735DB0D00C542CE /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1F06258C16470097817C /* WaitlistViewController.swift */; };
 		D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6347395241EBF6F0071E9DA /* UIView+Layout.swift */; };
 		D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */; };
 		D635F0A627135BAB00A02D17 /* ConversationThreadCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635F0A527135BAB00A02D17 /* ConversationThreadCollectionViewLayout.swift */; };
@@ -210,7 +211,6 @@
 		D63DB23F25E9993800F6B323 /* AvatarContextDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D650C1D925B5EE3D0037C59A /* AvatarContextDelegate.swift */; };
 		D63DB24025E9993800F6B323 /* AvatarProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F37D5F25B5D8610034C9C5 /* AvatarProfileViewController.swift */; };
 		D63DB24125E9993F00F6B323 /* PhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896A822FF51170059BA75 /* PhoneViewController.swift */; };
-		D63DB24225E9993F00F6B323 /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1F06258C16470097817C /* WaitlistViewController.swift */; };
 		D63DB24325E9993F00F6B323 /* NameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896BC23025FEC0059BA75 /* NameViewController.swift */; };
 		D63DB24425E9993F00F6B323 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D640325F25AE5CD400139396 /* WelcomeViewController.swift */; };
 		D63DB24525E9993F00F6B323 /* CodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896B122FF67650059BA75 /* CodeViewController.swift */; };
@@ -3197,7 +3197,6 @@
 				D63DB29B25E999B200F6B323 /* TextEntryField.swift in Sources */,
 				D63DB28625E999A100F6B323 /* FaceDetectionViewController.swift in Sources */,
 				D6D3927F265AAB2700E49F1E /* AnimationView+Extensions.swift in Sources */,
-				D63DB24225E9993F00F6B323 /* WaitlistViewController.swift in Sources */,
 				D63DB27F25E9999C00F6B323 /* TransitionRouter+Fill.swift in Sources */,
 				D68C0834272B6D9C0033C8AE /* TextInputViewController.swift in Sources */,
 				D63DB22C25E9991800F6B323 /* PFInstallation+Extensions.swift in Sources */,
@@ -3317,6 +3316,7 @@
 				D63DB22725E9990900F6B323 /* MathFunctions.swift in Sources */,
 				D6BF81512721EEE1006D7760 /* ToastView.swift in Sources */,
 				D63DB28F25E999AB00F6B323 /* FullScreenViewController.swift in Sources */,
+				D62D16302735DB0D00C542CE /* WaitlistViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -35,9 +35,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     let loadingBlur = BlurView()
     let loadingAnimationView = AnimationView()
-    
-    private let confettiView = ConfettiView()
-    
+
     unowned let delegate: OnboardingViewControllerDelegate
 
     var reservationId: String? {
@@ -71,8 +69,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingAnimationView.load(animation: .loading)
         self.loadingAnimationView.loopMode = .loop
         self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
-
-        self.view.insertSubview(self.confettiView, aboveSubview: self.blurView)
 
         self.welcomeVC.$state.mainSink { (state) in
             switch state {
@@ -155,18 +151,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
         }
 
-        self.waitlistVC.$didShowUpgrade.mainSink { [weak self] (didShow) in
-            guard let `self` = self, didShow else { return }
-            delay(1.0) { [unowned self] in
-                self.confettiView.startConfetti(with: 10)
-            }
+        self.waitlistVC.$state.mainSink { [unowned self] _ in
+            self.updateUI()
         }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.confettiView.expandToSuperviewSize()
         self.loadingBlur.expandToSuperviewSize()
 
         self.loadingAnimationView.size = CGSize(width: 18, height: 18)
@@ -239,7 +231,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getInitialContent() -> OnboardingContent {
-        guard let current = User.current(), let status = current.status else { return .welcome(self.welcomeVC)}
+        guard let current = User.current(), let status = current.status else { return .welcome(self.welcomeVC) }
+
         switch status {
         case .active, .waitlist:
             #if APPCLIP

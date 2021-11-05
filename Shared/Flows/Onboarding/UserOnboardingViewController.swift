@@ -21,10 +21,10 @@ class UserOnboardingViewController: ViewController {
                                                    borderColor: Color.white.color)
     private(set) var textView = OnboardingMessageTextView()
 
-
     override func initializeViews() {
         super.initializeViews()
 
+        self.avatarView.isHidden = true 
         self.view.set(backgroundColor: .background)
 
         self.view.addSubview(self.blurView)

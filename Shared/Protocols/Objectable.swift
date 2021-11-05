@@ -92,13 +92,17 @@ extension Objectable where Self: PFObject {
         return object
     }
 
-    static func getFirstObject(where key: String, contains string: String) async throws -> Self {
+    static func getFirstObject(where key: String? = nil,
+                               contains string: String? = nil) async throws -> Self {
+
         let object: Self = try await withCheckedThrowingContinuation { continuation in
             guard let query = self.query() else {
                 continuation.resume(throwing: ClientError.apiError(detail: "Query was nil"))
                 return
             }
-            query.whereKey(key, contains: string)
+            if let k = key, let s = string {
+                query.whereKey(k, contains: s)
+            }
             query.getFirstObjectInBackground(block: { object, error in
                 if let obj = object as? Self {
                     continuation.resume(returning: obj)
@@ -113,7 +117,7 @@ extension Objectable where Self: PFObject {
         return object
     }
 
-    static func getObject(with objectId: String) async throws -> Self {
+    static func getObject(with objectId: String?) async throws -> Self {
         let object = try await self.getFirstObject(where: "objectId", contains: objectId)
         return object
     }

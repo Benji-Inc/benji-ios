@@ -10,13 +10,13 @@ import Foundation
 import Parse
 import ParseLiveQuery
 
-enum QuePostionsKey: String {
+enum QuePositionsKey: String {
     case max = "maxQuePostions"
     case unclaimed = "unclaimedPostion"
     case claimed = "claimedPosition"
 }
 
-final class QuePostions: PFObject, PFSubclassing {
+final class QuePositions: PFObject, PFSubclassing {
 
     static func parseClassName() -> String {
         return String(describing: self)
@@ -35,18 +35,18 @@ final class QuePostions: PFObject, PFSubclassing {
     }
 }
 
-extension QuePostions: Objectable {
-    typealias KeyType = QuePostionsKey
+extension QuePositions: Objectable {
+    typealias KeyType = QuePositionsKey
 
-    func getObject<Type>(for key: QuePostionsKey) -> Type? {
+    func getObject<Type>(for key: QuePositionsKey) -> Type? {
         self.object(forKey: key.rawValue) as? Type
     }
 
-    func setObject<Type>(for key: QuePostionsKey, with newValue: Type) {
+    func setObject<Type>(for key: QuePositionsKey, with newValue: Type) {
         self.setObject(newValue, forKey: key.rawValue)
     }
 
-    func getRelationalObject<PFRelation>(for key: QuePostionsKey) -> PFRelation? {
+    func getRelationalObject<PFRelation>(for key: QuePositionsKey) -> PFRelation? {
         return self.relation(forKey: key.rawValue) as? PFRelation
     }
 }
