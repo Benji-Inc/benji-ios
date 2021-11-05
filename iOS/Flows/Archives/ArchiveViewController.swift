@@ -15,11 +15,19 @@ protocol ArchiveViewControllerDelegate: AnyObject {
     func archiveView(_ controller: ArchiveViewController, didSelect item: ArchiveCollectionViewDataSource.ItemType)
 }
 
-class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionViewDataSource.SectionType, ArchiveCollectionViewDataSource.ItemType, ArchiveCollectionViewDataSource> {
+class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionViewDataSource.SectionType, ArchiveCollectionViewDataSource.ItemType, ArchiveCollectionViewDataSource>, TransitionableViewController {
 
     weak var delegate: ArchiveViewControllerDelegate?
 
     let blurView = BlurView()
+
+    var receivingPresentationType: TransitionType {
+        return .fade
+    }
+
+    var transitionColor: Color {
+        return .clear
+    }
 
     // MARK: - UI
 

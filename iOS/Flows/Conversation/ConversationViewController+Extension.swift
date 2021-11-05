@@ -12,13 +12,6 @@ import StreamChat
 extension ConversationViewController {
 
     func setupInputHandlers() {
-        self.conversationHeader.didTapAddPeople = { [unowned self] in
-            self.didTapMoreButton?()
-        }
-
-        self.conversationHeader.didSelect { [unowned self] in
-            self.didTapConversationTitle?()
-        }
 
         self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
             if self.messageInputAccessoryView.textView.isFirstResponder {

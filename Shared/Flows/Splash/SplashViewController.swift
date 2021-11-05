@@ -18,12 +18,12 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     }
 
     var transitionColor: Color {
-        return .background
+        return .clear
     }
 
     let animationView = AnimationView.with(animation: .loading)
     let label = Label(font: .small)
-    let versionLabel = Label(frame: .zero, font: .small, textColor: .darkGray)
+    let versionLabel = Label(frame: .zero, font: .small, textColor: .textColor)
 
     private let messages = ["Booting up", "Getting coffee", "Connecting", "Saving a tree", "Finding purpose", "Doing math"]
 
@@ -31,15 +31,13 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         didSet {
             guard let text = self.text else { return }
             self.label.setText(text)
-            self.label.setTextColor(.darkGray)
+            self.label.setTextColor(.textColor)
             self.view.layoutNow()
         }
     }
     
     override func initializeViews() {
         super.initializeViews()
-
-        self.view.set(backgroundColor: .background)
 
         self.contentContainer.addSubview(self.label)
         self.contentContainer.addSubview(self.animationView)

@@ -43,11 +43,11 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
-        self.conversationVC.didTapMoreButton = { [unowned self] in
+        self.conversationVC.conversationHeader.didTapAddPeople = { [unowned self] in
             self.presentPeoplePicker()
         }
 
-        self.conversationVC.didTapConversationTitle = { [unowned self] in
+        self.conversationVC.conversationHeader.didTapUpdateTopic = { [unowned self] in
             guard let conversationController = self.conversationVC.conversationController,
             conversationController.conversation.membership?.memberRole.rawValue == "owner" else { return }
             self.presentConversationTitleAlert(for: conversationController)
@@ -116,7 +116,7 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
                 !text.isEmpty {
 
                 controller.updateChannel(name: text, imageURL: nil, team: nil) { [unowned self] error in
-                    self.conversationVC.conversationHeader.layoutNow()
+                    self.conversationVC.view.layoutNow()
                     alertController.dismiss(animated: true, completion: {
                         self.conversationVC.becomeFirstResponder()
                     })

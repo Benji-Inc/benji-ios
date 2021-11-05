@@ -82,7 +82,7 @@ class AvatarView: DisplayableImageView {
         self.setCorner(radius: 5)
         self.layer.borderColor = self.borderColor.color.cgColor
         self.layer.borderWidth = 2
-        self.backgroundColor = self.borderColor.color.withAlphaComponent(0.4)
+        self.set(backgroundColor: .white)
     }
 
     // MARK: - Open setters

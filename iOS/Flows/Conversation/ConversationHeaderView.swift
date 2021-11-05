@@ -15,7 +15,7 @@ import UIKit
 class ConversationHeaderView: View {
 
     let stackedAvatarView = StackedAvatarView()
-    let label = Label(font: .regularBold, textColor: .textColor)
+    let label = Label(font: .mediumThin, textColor: .white)
     let button = Button()
 
     private var cancellables = Set<AnyCancellable>()
@@ -24,6 +24,7 @@ class ConversationHeaderView: View {
     private var state: ConversationUIState = .read
 
     var didTapAddPeople: CompletionOptional = nil
+    var didTapUpdateTopic: CompletionOptional = nil
 
     deinit {
         self.cancellables.forEach { cancellable in
@@ -43,18 +44,22 @@ class ConversationHeaderView: View {
         self.label.lineBreakMode = .byTruncatingTail
 
         self.addSubview(self.button)
-        self.button.set(style: .noborder(image: UIImage(systemName: "ellipsis.circle")!, color: .textColor))
 
         let add = UIAction.init(title: "Add people",
                                 image: UIImage(systemName: "person.badge.plus")) { [unowned self] _ in
             self.didTapAddPeople?()
         }
 
+        let topic = UIAction.init(title: "Update topic",
+                                 image: UIImage(systemName: "pencil")) { [unowned self] _ in
+             self.didTapUpdateTopic?()
+         }
+
         let menu = UIMenu(title: "Menu",
                           image: UIImage(systemName: "ellipsis.circle"),
                           identifier: nil,
                           options: [],
-                          children: [add])
+                          children: [topic, add])
         self.button.showsMenuAsPrimaryAction = true
         self.button.menu = menu
     }
@@ -99,9 +104,7 @@ class ConversationHeaderView: View {
             self.stackedAvatarView.pin(.top)
         }
 
-        self.button.squaredSize = 40
-        self.button.pin(.right, padding: Theme.contentOffset)
-        self.button.centerY = self.label.centerY
+        self.button.frame = self.label.frame
     }
 
     func update(for state: ConversationUIState) {

@@ -26,7 +26,6 @@ class ConversationViewController: FullScreenViewController,
     /// Denotes where a message should be dragged and dropped to send.
     private let sendMessageOverlay = ConversationSendOverlayView()
     
-    private let blurView = BlurView()
     let conversationHeader = ConversationHeaderView()
 
     var conversation: Conversation! { return self.conversationController?.channel }
@@ -34,8 +33,7 @@ class ConversationViewController: FullScreenViewController,
 
     // Input handlers
     var onSelectedThread: ((ChannelId, MessageId) -> Void)?
-    var didTapMoreButton: CompletionOptional = nil
-    var didTapConversationTitle: CompletionOptional = nil
+    
     @Published var didCenterOnCell: ConversationMessageCell? = nil
 
     // Custom Input Accessory View
@@ -76,8 +74,6 @@ class ConversationViewController: FullScreenViewController,
     
     override func initializeViews() {
         super.initializeViews()
-        
-        self.view.insertSubview(self.blurView, belowSubview: self.contentContainer)
 
         self.contentContainer.addSubview(self.collectionView)
         self.collectionView.delegate = self
@@ -91,8 +87,6 @@ class ConversationViewController: FullScreenViewController,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.blurView.expandToSuperviewSize()
-
         switch self.state {
         case .read:
             self.conversationHeader.height = 96
