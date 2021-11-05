@@ -19,8 +19,7 @@ class ConversationMessageCell: UICollectionViewCell {
     var handleDeleteMessage: ((Messageable) -> Void)?
 
     private let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
+        let layout = ConversationMessageCellLayout()
         let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
         cv.keyboardDismissMode = .interactive
         return cv
@@ -51,8 +50,6 @@ class ConversationMessageCell: UICollectionViewCell {
             self.handleTappedMessage?(message)
         }
 
-        // Init the sections
-        self.dataSource.appendSections(ConversationMessageSection.allCases)
         self.dataSource.contextMenuDelegate = self
     }
 
@@ -108,10 +105,11 @@ class ConversationMessageCell: UICollectionViewCell {
 
         var snapshot = self.dataSource.snapshot()
 
-        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .otherMessages))
-        snapshot.appendItems(otherMessages, toSection: .otherMessages)
+        // Clear out the sections to make way for a fresh set of message.
+        snapshot.deleteSections(ConversationMessageSection.allCases)
+        snapshot.appendSections(ConversationMessageSection.allCases)
 
-        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: .currentUserMessages))
+        snapshot.appendItems(otherMessages, toSection: .otherMessages)
         snapshot.appendItems(currentUserMessages, toSection: .currentUserMessages)
 
         self.dataSource.apply(snapshot)
@@ -128,6 +126,15 @@ class ConversationMessageCell: UICollectionViewCell {
                 footer.alpha = isCentered ? 1.0 : 0.0
             }
         }
+    }
+  
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        // Remove all the items so the next message has a blank slate to work with.
+        var snapshot = self.dataSource.snapshot()
+        snapshot.deleteAllItems()
+        self.dataSource.apply(snapshot, animatingDifferences: false)
     }
 
     /// Returns the frame that a message send overlay should appear based on this cells contents.

@@ -105,7 +105,16 @@ class ThreadMessageCell: UICollectionViewCell {
 
         self.authorView.set(avatar: message.avatar)
         self.messageView.setText(with: message)
-        self.messageView.configureBackground(withStackIndex: 0, message: message, showBubbleTail: false)
+
+        let backgroundColor: UIColor
+        if message.isFromCurrentUser {
+            backgroundColor = .gray
+        } else {
+            backgroundColor = .darkGray
+        }
+        self.messageView.configureBackground(color: backgroundColor,
+                                             showBubbleTail: false,
+                                             tailOrientation: .down)
 
         self.setNeedsLayout()
 
