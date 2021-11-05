@@ -61,7 +61,7 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
         self.segmentedControl.selectedSegmentIndex = 0
 
         self.view.addSubview(self.addButton)
-        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightGray))
+        self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .white))
     }
 
     override func viewWasPresented() {
