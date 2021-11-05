@@ -36,18 +36,10 @@ enum OnboardingContent: Switchable {
         }
     }
 
-    func getDescription(with user: User?) -> Localized {
+    func getDescription(with user: User?) -> Localized? {
         switch self {
-        case .welcome(let vc):
-
-            switch vc.state {
-            case .reservationInput:
-                return "Enter the RSVP code, to get immediate access and connect with the person who invited you."
-            default:
-                return LocalizedString(id: "",
-                                       arguments: [],
-                                       default: "Jibber is an exclusive community of people building a better place to be social online. To best serve this community, we currently require an RSVP for access OR you can tap JOIN to be added to the waitlist.")
-            }
+        case .welcome(_):
+            return nil
         case .phone(_):
             return LocalizedString(id: "",
                                    arguments: [],

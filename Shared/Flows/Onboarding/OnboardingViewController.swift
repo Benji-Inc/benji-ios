@@ -78,7 +78,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             switch state {
             case .welcome:
                 self.updateUI()
-            case .signup:
+            case .login:
                 self.current = .phone(self.phoneVC)
             case .reservationInput:
                 self.updateUI()
@@ -270,8 +270,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.avatarView.isHidden = self.invitor.isNil
     }
 
-    override func getMessage() -> Localized {
-        guard let content = self.current else { return "" }
+    override func getMessage() -> Localized? {
+        guard let content = self.current else { return nil }
         return content.getDescription(with: self.invitor)
     }
 

@@ -14,20 +14,21 @@ class WelcomeViewController: TextInputViewController<Void> {
 
     enum State {
         case welcome
-        case signup
+        case login
         case reservationInput
         case foundReservation(Reservation)
         case reservationError
     }
 
-    private let signupButton = Button()
+    private let label = Label(font: .display, textColor: .textColor)
+    private let loginButton = Button()
     private let reservationButton = Button()
     private var reservationId: String?
 
     @Published var state: State = .welcome
 
     init() {
-        super.init(textField: TextField(), placeholder: LocalizedString(id: "", default: ""))
+        super.init(textField: TextField(), placeholder: LocalizedString(id: "RSVP CODE", default: ""))
     }
 
     required public init?(coder aDecoder: NSCoder) {
@@ -41,17 +42,20 @@ class WelcomeViewController: TextInputViewController<Void> {
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.addSubview(self.label)
+        self.label.setText("Jibber")
+
         self.textEntry.alpha = 0
 
-        self.view.addSubview(self.signupButton)
-        self.signupButton.set(style: .normal(color: .gray, text: "Login / Join"))
+        self.view.addSubview(self.loginButton)
+        self.loginButton.set(style: .normal(color: .clear, text: "Login"))
 
-        self.signupButton.didSelect { [unowned self] in
-            self.state = .signup
+        self.loginButton.didSelect { [unowned self] in
+            self.state = .login
         }
 
         self.view.addSubview(self.reservationButton)
-        self.reservationButton.set(style: .normal(color: .darkGray, text: "Claim RSVP"))
+        self.reservationButton.set(style: .normal(color: .white, text: "RSVP"))
         self.reservationButton.didSelect { [unowned self] in
             self.state = .reservationInput
         }
@@ -64,13 +68,18 @@ class WelcomeViewController: TextInputViewController<Void> {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        self.label.setSize(withWidth: self.view.width)
+        self.label.centerOnX()
+        self.label.centerY = self.view.halfHeight * 0.6
+
         self.reservationButton.setSize(with: self.view.width)
         self.reservationButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
         self.reservationButton.centerOnX()
 
-        self.signupButton.setSize(with: self.view.width)
-        self.signupButton.match(.bottom, to: .top, of: self.reservationButton, offset: -Theme.contentOffset.half)
-        self.signupButton.centerOnX()
+        self.loginButton.setSize(with: self.view.width)
+        self.loginButton.width = 80
+        self.loginButton.pin(.right, padding: Theme.contentOffset.half)
+        self.loginButton.pinToSafeArea(.top, padding: 0)
     }
 
     private func animate(for state: State) {
@@ -79,17 +88,17 @@ class WelcomeViewController: TextInputViewController<Void> {
             case .welcome:
                 self.textEntry.alpha = 0 
                 self.reservationButton.alpha = 1
-                self.signupButton.alpha = 1
-            case .signup:
+                self.loginButton.alpha = 1
+            case .login:
                 break
             case .reservationInput:
                 self.reservationButton.alpha = 0
-                self.signupButton.alpha = 0
+                self.loginButton.alpha = 0
             case .foundReservation(_):
                 break
             case .reservationError:
                 self.reservationButton.alpha = 1
-                self.signupButton.alpha = 1
+                self.loginButton.alpha = 1
             }
         } completion: { (completed) in
             switch state {
@@ -112,22 +121,29 @@ class WelcomeViewController: TextInputViewController<Void> {
     }
 
     override func didTapButton() {
-        Task {
-            await self.claimRSVP()
-        }
-    }
-
-    override func textFieldDidEndEditing(_ textField: UITextField) {
-        Task {
-            await self.claimRSVP()
-        }
-    }
-
-    private func claimRSVP() async {
         guard let code = self.textField.text, !code.isEmpty else {
             self.state = .welcome
             return
         }
+        
+        Task {
+            await self.claimRSVP(code: code)
+        }.add(to: self.taskPool)
+    }
+
+    override func textFieldDidEndEditing(_ textField: UITextField) {
+
+        guard let code = self.textField.text, !code.isEmpty else {
+            self.state = .welcome
+            return
+        }
+
+        Task {
+            await self.claimRSVP(code: code)
+        }.add(to: self.taskPool)
+    }
+
+    private func claimRSVP(code: String) async {
 
         await self.button.handleEvent(status: .loading)
 

@@ -115,7 +115,9 @@ class DisplayableImageView: View {
                 await self.downloadAndSetImage(url: url)
             }.add(to: self.taskPool)
         } else if let objectID = displayable.userObjectID {
-            self.findUser(with: objectID)
+            Task {
+                await self.findUser(with: objectID)
+            }.add(to: self.taskPool)
         } else if let file = displayable as? PFFileObject {
             Task {
                 await self.downloadAndSet(file: file)
@@ -134,12 +136,21 @@ class DisplayableImageView: View {
         }.add(to: self.taskPool)
     }
 
-    private func findUser(with objectID: String) {
-        guard let user = UserStore.shared.users.first(where: { user in
-            return user.objectId == objectID
-        }) else { return }
+    private func findUser(with objectID: String) async {
 
-        self.downloadAndSetImage(for: user)
+        var foundUser: User? = nil
+
+        if let user = UserStore.shared.users.first(where: { user in
+            return user.objectId == objectID
+        }) {
+            foundUser = user
+        } else if let user = try? await User.getObject(with: objectID) {
+            foundUser = user
+        }
+
+        if let user = foundUser {
+            self.downloadAndSetImage(for: user)
+        }
     }
 
     @MainActor
