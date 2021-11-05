@@ -12,13 +12,13 @@ import UIKit
 
 /// A cell to display a high-level view of a conversation's message. Displays a limited number of recent replies to the message.
 /// The user's replies and other replies are put in two stacks (along the z-axis), with the most recent reply at the front (visually obscuring the others).
-class ConversationMessageCell: UICollectionViewCell {
+class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayoutDelegate {
 
     // Interaction handling
     var handleTappedMessage: ((Messageable) -> Void)?
     var handleDeleteMessage: ((Messageable) -> Void)?
 
-    private let collectionLayout = ConversationMessageCellLayout()
+    private lazy var collectionLayout = ConversationMessageCellLayout(messageDelegate: self)
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
@@ -29,7 +29,7 @@ class ConversationMessageCell: UICollectionViewCell {
     private var state: ConversationUIState = .read
 
     /// The parent message of this thread.
-    private var message: Messageable?
+    var message: Messageable?
 
     /// The maximum number of replies we'll show per stack of messages.
     private let maxShownRepliesPerStack = 3
@@ -77,9 +77,6 @@ class ConversationMessageCell: UICollectionViewCell {
              totalReplyCount: Int) {
 
         self.message = message
-        let cid = try! ConversationID(cid: message.conversationId)
-        self.collectionLayout.messageController = ChatClient.shared.messageController(cid: cid,
-                                                                                      messageId: message.id)
 
         // Separate the user messages from other message.
         var userReplies = replies.filter { message in

@@ -8,23 +8,27 @@
 
 import Foundation
 
+protocol ConversationMessageCellLayoutDelegate: AnyObject {
+    var message: Messageable? { get }
+}
+
 class ConversationMessageCellLayout: UICollectionViewFlowLayout {
+
+    unowned let messageDelegate: ConversationMessageCellLayoutDelegate
 
     override class var layoutAttributesClass: AnyClass {
         return ConversationMessageCellLayoutAttributes.self
     }
 
-    override init() {
+    init(messageDelegate: ConversationMessageCellLayoutDelegate) {
+        self.messageDelegate = messageDelegate
         super.init()
         self.scrollDirection = .vertical
     }
 
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.scrollDirection = .vertical
+        fatalError("init(coder:) has not been implemented")
     }
-
-    var messageController: MessageController?
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         guard let attributesInRect = super.layoutAttributesForElements(in: rect) else { return nil }
@@ -69,8 +73,8 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         attributes.backgroundColor = backgroundColor
 
         var isMostRecentMessageFromUser = false
-        if let message = self.messageController?.message?.latestReplies.first {
-            isMostRecentMessageFromUser = message.isFromCurrentUser
+        if let mostRecentMessage = messageDelegate.message?.recentReplies.first {
+            isMostRecentMessageFromUser = mostRecentMessage.isFromCurrentUser
         }
 
         if indexPath.section == 0 {

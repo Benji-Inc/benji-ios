@@ -52,7 +52,11 @@ extension ChatMessage: Messageable {
     var isDeleted: Bool {
         return self.type == .deleted
     }
-    
+
+    var recentReplies: [Messageable] {
+        return self.latestReplies
+    }
+
     func updateConsumers(with consumer: Avatar) async throws -> Messageable {
         return self
     }

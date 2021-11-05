@@ -19,6 +19,7 @@ enum MessageStatus: String {
 protocol Messageable {
 
     var id: String { get }
+    var conversationId: String { get }
     var createdAt: Date { get }
     var isFromCurrentUser: Bool { get }
     var authorID: String { get }
@@ -32,7 +33,7 @@ protocol Messageable {
     var color: Color { get }
     var kind: MessageKind { get }
     var isDeleted: Bool { get }
-    var conversationId: String { get }
+    var recentReplies: [Messageable] { get }
 
     @discardableResult
     func updateConsumers(with consumer: Avatar) async throws -> Messageable
