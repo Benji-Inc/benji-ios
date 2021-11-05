@@ -115,6 +115,19 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
         self.dataSource.apply(snapshot)
     }
 
+    func handle(isCentered: Bool) {
+        
+        UIView.animate(withDuration: 0.2) {
+            if let header = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) {
+                header.alpha = isCentered ? 1.0 : 0.0
+            }
+
+            if let footer = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: 1)) {
+                footer.alpha = isCentered ? 1.0 : 0.0
+            }
+        }
+    }
+  
     override func prepareForReuse() {
         super.prepareForReuse()
 
@@ -123,8 +136,6 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
         snapshot.deleteAllItems()
         self.dataSource.apply(snapshot, animatingDifferences: false)
     }
-
-    func handle(isCentered: Bool) { }
 
     /// Returns the frame that a message send overlay should appear based on this cells contents.
     /// The frame is in the coordinate space of the passed in view.
