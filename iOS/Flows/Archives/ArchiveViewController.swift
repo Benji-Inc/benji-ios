@@ -19,7 +19,7 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
 
     weak var delegate: ArchiveViewControllerDelegate?
 
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    let blurView = BlurView()
 
     // MARK: - UI
 

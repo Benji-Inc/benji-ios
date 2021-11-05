@@ -18,8 +18,7 @@ class DisplayableImageView: View {
     private(set) var imageView = UIImageView()
     var cancellables = Set<AnyCancellable>()
 
-    lazy var blurEffect = UIBlurEffect(style: .systemMaterialDark)
-    lazy var blurView = BlurView(effect: self.blurEffect)
+    let blurView = BlurView()
 
     enum State {
         case initial
@@ -66,7 +65,7 @@ class DisplayableImageView: View {
             case .initial:
                 self.animationView.reset()
                 self.animationView.stop()
-                self.blurView.effect = self.blurEffect
+                self.blurView.showBlur(true)
             case .loading:
                 if self.animationView.isAnimationPlaying {
                     self.animationView.stop()
@@ -82,7 +81,7 @@ class DisplayableImageView: View {
                 self.animationView.loopMode = .loop
                 self.animationView.play()
                 UIView.animate(withDuration: 0.2) {
-                    self.blurView.effect = self.blurEffect
+                    self.blurView.showBlur(true)
                 }
             case .success:
                 if self.animationView.isAnimationPlaying {
@@ -91,7 +90,7 @@ class DisplayableImageView: View {
                 self.animationView.reset()
 
                 UIView.animate(withDuration: 0.2) {
-                    self.blurView.effect = nil
+                    self.blurView.showBlur(false)
                 }
             }
         }.store(in: &self.cancellables)
@@ -203,7 +202,7 @@ class DisplayableImageView: View {
 
         self.displayable = nil
         self.animationView.stop()
-        self.blurView.effect = self.blurEffect
+        self.blurView.showBlur(true)
     }
 
     func showResult(for image: UIImage?) {

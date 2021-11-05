@@ -12,7 +12,7 @@ import Lottie
 
 class UserOnboardingViewController: ViewController {
 
-    private(set) var blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    private(set) var blurView = BlurView()
     private(set) var avatarView = AvatarView()
 
     private(set) var nameLabel = Label(font: .mediumThin)

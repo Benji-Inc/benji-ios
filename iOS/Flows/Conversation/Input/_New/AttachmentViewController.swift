@@ -18,7 +18,7 @@ class AttachmentViewController: ViewController {
     private lazy var dataSource = AttachmentCollectionViewDataSource(collectionView: self.collectionView)
     private var collectionView = AttachmentCollectionView()
 
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemChromeMaterialDark))
+    let blurView = BlurView()
 
     unowned let delegate: AttachmentViewControllerDelegate
 

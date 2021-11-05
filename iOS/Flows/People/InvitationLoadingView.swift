@@ -12,7 +12,7 @@ import TMROLocalization
 
 class InvitationLoadingView: View {
 
-    let blurView = UIVisualEffectView(effect: nil)
+    let blurView = BlurView()
     let avatarView = AvatarView()
     let label = Label(font: .small)
     let progressView = UIProgressView()

@@ -10,34 +10,53 @@ import Foundation
 
 class VibrancyView: View {
 
-    lazy var blurEffect = UIBlurEffect(style: .systemMaterialDark)
-    lazy var blurView = BlurView(effect: self.blurEffect)
-    lazy var vibrancyEffect = UIVibrancyEffect(blurEffect: self.blurEffect)
-    lazy var vibrancyEffectView = VisualEffectView(effect: self.vibrancyEffect)
+    let blurView = BlurView()
+    let effectView = VisualEffectView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.addSubview(self.blurView)
-        self.blurView.contentView.addSubview(self.vibrancyEffectView)
+        self.blurView.contentView.addSubview(self.effectView)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.blurView.expandToSuperviewSize()
-        self.vibrancyEffectView.expandToSuperviewSize()
+        self.effectView.expandToSuperviewSize()
     }
 
     func show(blur: Bool) {
-        self.blurView.effect = blur ? self.blurEffect : nil
+        self.blurView.effect = blur ? Theme.blurEffect : nil
     }
 }
 
 class BlurView: UIVisualEffectView {
 
+    private let blurEffect: UIBlurEffect
+
+    init() {
+        self.blurEffect = Theme.blurEffect
+        super.init(effect: Theme.blurEffect)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func showBlur(_ show: Bool) {
+        self.effect = show ? self.blurEffect : nil 
+    }
 }
 
 class VisualEffectView: UIVisualEffectView {
 
+    init() {
+        super.init(effect: Theme.blurEffect)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

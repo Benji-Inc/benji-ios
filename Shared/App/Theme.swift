@@ -17,6 +17,7 @@ struct Theme {
     static let contentOffset: CGFloat = 24
     static let buttonHeight: CGFloat = 50
     static let iPadPortraitWidthRatio: CGFloat = 0.65
+    static let blurEffect = UIBlurEffect(style: .systemThinMaterialLight)
 
     private init() {}
 }

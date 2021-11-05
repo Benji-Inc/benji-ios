@@ -11,7 +11,7 @@ import UIKit
 
 class CircleGroupViewController: DiffableCollectionViewController<CircleGroupCollectionViewDataSource.SectionType, CircleGroupCollectionViewDataSource.ItemType, CircleGroupCollectionViewDataSource> {
 
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    let blurView = BlurView()
 
     var button = Button()
     var didSelectReservations: CompletionOptional = nil

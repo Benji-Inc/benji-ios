@@ -20,10 +20,7 @@ enum ToastState {
 
 class ToastView: View {
 
-    private lazy var blurEffect = UIBlurEffect(style: .systemThinMaterialDark)
-    private lazy var blurView = UIVisualEffectView(effect: self.blurEffect)
-    private lazy var vibrancyEffect = UIVibrancyEffect(blurEffect: self.blurEffect)
-    private lazy var vibrancyEffectView = UIVisualEffectView(effect: vibrancyEffect)
+    private let vibrancyView = VibrancyView()
     private let titleLabel = Label(font: .regularBold)
     private let descriptionLabel = Label(font: .smallBold)
     private let imageView = AvatarView()
@@ -89,11 +86,9 @@ class ToastView: View {
         guard let superview = UIWindow.topWindow() else { return }
         superview.addSubview(self)
 
-        self.addSubview(self.blurView)
         self.addSubview(self.imageView)
         self.addSubview(self.descriptionLabel)
-        self.vibrancyEffectView.contentView.addSubview(self.titleLabel)
-        self.blurView.contentView.addSubview(self.vibrancyEffectView)
+        self.vibrancyView.effectView.contentView.addSubview(self.titleLabel)
 
         self.isUserInteractionEnabled = true
         self.layer.masksToBounds = true
@@ -299,9 +294,8 @@ class ToastView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.blurView.expandToSuperviewSize()
-        self.vibrancyEffectView.expandToSuperviewSize()
-        self.blurView.roundCorners()
+        self.vibrancyView.expandToSuperviewSize()
+        self.vibrancyView.roundCorners()
 
         self.imageView.size = CGSize(width: 60 * 0.74, height: 60)
         self.imageView.left = Theme.contentOffset.half

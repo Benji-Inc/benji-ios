@@ -34,8 +34,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     lazy var photoVC = PhotoViewController()
 
     let loadingBlur = BlurView()
-    let blurEffect = UIBlurEffect(style: .systemMaterial)
-    
     let loadingAnimationView = AnimationView()
     
     private let confettiView = ConfettiView()
@@ -198,7 +196,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.view.addSubview(self.loadingBlur)
         self.view.layoutNow()
         UIView.animate(withDuration: Theme.animationDuration) {
-            self.loadingBlur.effect = self.blurEffect
+            self.loadingBlur.showBlur(true)
         } completion: { completed in
             self.loadingAnimationView.play()
         }
@@ -222,7 +220,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.view.addSubview(self.loadingBlur)
         self.view.layoutNow()
         UIView.animate(withDuration: Theme.animationDuration) {
-            self.loadingBlur.effect = self.blurEffect
+            self.loadingBlur.showBlur(true)
         } completion: { completed in
             self.loadingAnimationView.play()
             self.delegate.onboardingView(self, didVerify: user)

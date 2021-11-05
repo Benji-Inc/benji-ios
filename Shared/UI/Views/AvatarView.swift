@@ -13,7 +13,7 @@ class AvatarView: DisplayableImageView {
 
     // MARK: - Properties
 
-    var borderColor: Color = .darkGray {
+    var borderColor: Color = .clear {
         didSet {
             self.setBorder(color: self.borderColor)
         }
