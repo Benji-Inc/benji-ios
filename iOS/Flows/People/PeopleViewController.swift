@@ -23,7 +23,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     private let includeConnections: Bool
     private(set) var reservations: [Reservation] = []
 
-    let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    let blurView = BlurView()
 
     let button = Button()
     private let loadingView = InvitationLoadingView()

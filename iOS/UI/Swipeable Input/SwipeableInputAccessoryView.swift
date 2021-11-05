@@ -71,8 +71,6 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         // Use flexible height autoresizing mask to account for changes in text input.
         self.autoresizingMask = .flexibleHeight
 
-        self.inputContainerView.borderColor = Color.lightGray.color.withAlphaComponent(0.5)
-
         self.setupGestures()
         self.setupHandlers()
     }

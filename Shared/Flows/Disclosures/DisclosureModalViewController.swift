@@ -17,7 +17,7 @@ struct HightlightedPhrase {
 
 class DisclosureModalViewController: ViewController {
 
-    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
+    private let blurView = BlurView()
     let titleLabel = Label(font: .display)
     let descriptionLabel = Label(font: .regular)
     let contentView = View()

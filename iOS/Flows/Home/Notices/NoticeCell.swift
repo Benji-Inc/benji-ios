@@ -25,8 +25,6 @@ class NoticeCell: CollectionViewManagerCell, ManageableCell, UIGestureRecognizer
         self.contentView.addGestureRecognizer(self.stationaryPressRecognizer)
         self.stationaryPressRecognizer.delegate = self
 
-        self.contentView.layer.borderWidth = 2
-        self.contentView.layer.borderColor = Color.darkGray.color.cgColor
         self.contentView.layer.cornerRadius = Theme.cornerRadius
     }
 
