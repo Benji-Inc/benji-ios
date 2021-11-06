@@ -38,9 +38,21 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         _ = ConversationsManager.shared
 
         self.archiveVC.addButton.didSelect { [unowned self] in
-            Task {
-                await self.createConversation()
-            }.add(to: self.archiveVC.taskPool)
+            self.showToast()
+//            Task {
+//                await self.createConversation()
+//            }.add(to: self.archiveVC.taskPool)
+        }
+    }
+
+    func showToast() {
+        let toastType = ToastType.basic(identifier: UUID().uuidString,
+                                        displayable: User.current()!,
+                                        title: Lorem.name(),
+                                        description: Lorem.paragraph(),
+                                        deepLink: nil)
+        Task {
+            await ToastScheduler.shared.schedule(toastType: toastType)
         }
     }
     

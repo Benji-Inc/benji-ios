@@ -10,17 +10,12 @@ import Foundation
 import TMROLocalization
 import GestureRecognizerClosures
 
-class ToastBannerView: View, ToastViewable {
+class ToastBannerView: ToastView {
 
     private let vibrancyView = VibrancyView()
     private let titleLabel = Label(font: .regularBold)
     private let descriptionLabel = Label(font: .smallBold)
     private let imageView = AvatarView()
-
-    var didDismiss: () -> Void = {}
-    var didTap: () -> Void = {}
-
-    var toast: Toast?
 
     let revealAnimator = UIViewPropertyAnimator(duration: 0.35,
                                                 dampingRatio: 0.6,
@@ -38,14 +33,6 @@ class ToastBannerView: View, ToastViewable {
                                                  dampingRatio: 0.6,
                                                  animations: nil)
 
-    private var panStart: CGPoint?
-    private var startY: CGFloat?
-
-    var maxHeight: CGFloat?
-    var screenOffset: CGFloat = 50
-    var presentationDuration: TimeInterval = 10.0
-    //Used to present the toast from the top OR bottom of the screen
-    private var position: Toast.Position = .top
 
     private var toastState = ToastState.hidden {
         didSet {
@@ -78,6 +65,7 @@ class ToastBannerView: View, ToastViewable {
         guard let superview = UIWindow.topWindow() else { return }
         superview.addSubview(self)
 
+        self.addSubview(self.vibrancyView)
         self.addSubview(self.imageView)
         self.addSubview(self.descriptionLabel)
         self.vibrancyView.effectView.contentView.addSubview(self.titleLabel)
@@ -87,15 +75,13 @@ class ToastBannerView: View, ToastViewable {
         self.layer.cornerRadius = 10
 
         self.imageView.imageView.tintColor = Color.white.color
-        self.imageView.imageView.contentMode = .scaleAspectFit
 
         self.descriptionLabel.alpha = 0
         self.titleLabel.alpha = 0
 
-        self.showShadow(withOffset: 5)
         self.updateFor(state: self.toastState)
 
-        if self.position == .top {
+        if self.toast?.position == .top {
             self.screenOffset = superview.safeAreaInsets.top
         } else {
             self.screenOffset = superview.safeAreaInsets.bottom
@@ -103,21 +89,17 @@ class ToastBannerView: View, ToastViewable {
         #endif
     }
 
-    func configure(toast: Toast) {
-        self.toast = toast
-        self.title = toast.title
-        self.position = toast.position
+    override func configure(toast: Toast) {
+        super.configure(toast: toast)
+
         self.descriptionText = localized(toast.description)
-
-        self.didSelect { [unowned self] in
-            toast.didTap()
-            self.dismiss()
-        }
-
+        self.title = toast.title
         self.imageView.displayable = toast.displayable
     }
 
-    func reveal() {
+    override func reveal() {
+        super.reveal()
+
         self.layoutNow()
         self.revealAnimator.stopAnimation(true)
         self.revealAnimator.addAnimations { [unowned self] in
@@ -182,7 +164,8 @@ class ToastBannerView: View, ToastViewable {
         self.addGestureRecognizer(panRecognizer)
     }
 
-    func dismiss() {
+    override func dismiss() {
+        super.dismiss()
 
         self.revealAnimator.stopAnimation(true)
         self.expandAnimator.stopAnimation(true)
@@ -206,7 +189,7 @@ class ToastBannerView: View, ToastViewable {
         guard let superView = UIWindow.topWindow() else { return }
         switch state {
         case .hidden:
-            if self.position == .top {
+            if self.toast?.position == .top {
                 self.bottom = superView.top - self.screenOffset - superView.safeAreaInsets.top
             } else {
                 self.top = superView.bottom + self.screenOffset + superView.safeAreaInsets.bottom
@@ -215,7 +198,7 @@ class ToastBannerView: View, ToastViewable {
             self.maxHeight = 84
             self.centerOnX()
         case .present:
-            if self.position == .top {
+            if self.toast?.position == .top {
                 self.top = superView.top + self.screenOffset
             } else {
                 self.bottom = superView.bottom - self.screenOffset
@@ -237,7 +220,7 @@ class ToastBannerView: View, ToastViewable {
             self.descriptionLabel.alpha = 1
             self.titleLabel.alpha = 1
         case .dismiss, .gone:
-            if self.position == .top {
+            if self.toast?.position == .top {
                 self.bottom = superView.top + 10
             } else {
                 self.top = superView.bottom - 10

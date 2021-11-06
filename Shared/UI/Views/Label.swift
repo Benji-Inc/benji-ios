@@ -56,7 +56,7 @@ class Label: UILabel {
     /// The string attributes to apply to any text given this label's assigned font and font color.
     private var attributes: [NSAttributedString.Key : Any] {
         let font = self.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
-        let textColor = self.textColor ?? UIColor.black
+        let textColor = self.textColor ?? Color.textColor.color
         return [NSAttributedString.Key.font: font,
                 NSAttributedString.Key.kern: self.kerning,
                 NSAttributedString.Key.foregroundColor: textColor]
@@ -66,7 +66,7 @@ class Label: UILabel {
 
     init(frame: CGRect = .zero,
          font: FontType,
-         textColor: Color = .white) {
+         textColor: Color = .textColor) {
         
         self.kerning = font.kern
         self.stringCasing = .unchanged
