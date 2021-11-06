@@ -57,6 +57,8 @@ class ToastScheduler {
                           description: error.localizedDescription,
                           displayable: image,
                           deeplink: nil,
+                          type: .error,
+                          position: .bottom,
                           didTap: { [unowned self] in
             self.delegate?.didInteractWith(type: .error(error), deeplink: nil)
         })
@@ -76,6 +78,8 @@ class ToastScheduler {
                           description: description,
                           displayable: displayable,
                           deeplink: deepLink,
+                          type: .banner,
+                          position: .top,
                           didTap: { [unowned self] in
             self.delegate?.didInteractWith(type: .basic(identifier: identifier, displayable: displayable, title: title, description: description, deepLink: deepLink), deeplink: deepLink)
         })
@@ -97,6 +101,8 @@ class ToastScheduler {
                           description: text,
                           displayable: author,
                           deeplink: DeepLinkObject(target: .conversation),
+                          type: .banner,
+                          position: .top,
                           didTap: { [unowned self] in
 
             let deeplink = DeepLinkObject(target: .conversation)

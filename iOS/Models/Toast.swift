@@ -10,12 +10,25 @@ import Foundation
 import TMROLocalization
 
 struct Toast: Equatable {
+
+    enum DisplayType {
+        case banner
+        case error
+    }
+
+    enum Position {
+        case top
+        case bottom
+    }
+
     var id: String
     var priority: Int = 0
     var title: Localized
     var description: Localized
     var displayable: ImageDisplayable
     var deeplink: DeepLinkable?
+    var type: DisplayType
+    var position: Position
     var didTap: () -> Void
 
     static func == (lhs: Toast, rhs: Toast) -> Bool {

@@ -10,15 +10,20 @@ import Foundation
 import TMROLocalization
 import GestureRecognizerClosures
 
-enum ToastPosition {
-    case top, bottom
-}
-
 enum ToastState {
     case hidden, present, left, expanded, alphaIn, dismiss, gone
 }
 
-class ToastView: View {
+protocol ToastViewable {
+    var toast: Toast? { get set }
+    var didDismiss: () -> Void { get set }
+    var didTap: () -> Void { get set }
+    func reveal()
+    func dismiss()
+    func configure(toast: Toast)
+}
+
+class ToastView: View, ToastViewable {
 
     private let vibrancyView = VibrancyView()
     private let titleLabel = Label(font: .regularBold)
@@ -53,7 +58,7 @@ class ToastView: View {
     var screenOffset: CGFloat = 50
     var presentationDuration: TimeInterval = 10.0
     //Used to present the toast from the top OR bottom of the screen
-    private let position: ToastPosition = .top
+    private var position: Toast.Position = .top
 
     private var toastState = ToastState.hidden {
         didSet {
@@ -114,6 +119,7 @@ class ToastView: View {
     func configure(toast: Toast) {
         self.toast = toast
         self.title = toast.title
+        self.position = toast.position
         self.descriptionText = localized(toast.description)
 
         self.didSelect { [unowned self] in
