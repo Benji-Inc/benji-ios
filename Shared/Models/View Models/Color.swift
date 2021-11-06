@@ -18,6 +18,7 @@ enum Color: String, CaseIterable {
     case textColor
     case white
     case clear
+    case red
 
     var color: UIColor {
         switch self {
@@ -35,6 +36,8 @@ enum Color: String, CaseIterable {
             return UIColor(named: "WHITE")!
         case .clear:
             return UIColor(named: "CLEAR")!
+        case .red:
+            return UIColor(named: "RED")!
         }
     }
 }

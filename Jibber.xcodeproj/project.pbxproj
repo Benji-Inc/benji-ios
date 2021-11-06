@@ -131,6 +131,9 @@
 		D62C9CC3266C3CAC00BB9632 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */; };
 		D62C9CC6266C417100BB9632 /* DemoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62C9CC5266C417100BB9632 /* DemoView.swift */; };
 		D62D16302735DB0D00C542CE /* WaitlistViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64A1F06258C16470097817C /* WaitlistViewController.swift */; };
+		D62D16322736F60400C542CE /* ToastErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62D16312736F60400C542CE /* ToastErrorView.swift */; };
+		D62D16332736F60400C542CE /* ToastErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62D16312736F60400C542CE /* ToastErrorView.swift */; };
+		D62D16342736F60400C542CE /* ToastErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62D16312736F60400C542CE /* ToastErrorView.swift */; };
 		D6347396241EBF6F0071E9DA /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6347395241EBF6F0071E9DA /* UIView+Layout.swift */; };
 		D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */; };
 		D635F0A627135BAB00A02D17 /* ConversationThreadCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635F0A527135BAB00A02D17 /* ConversationThreadCollectionViewLayout.swift */; };
@@ -986,6 +989,7 @@
 		D62C9CBE266BE50700BB9632 /* KeyboardDemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardDemoViewController.swift; sourceTree = "<group>"; };
 		D62C9CC0266C3CA800BB9632 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		D62C9CC5266C417100BB9632 /* DemoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoView.swift; sourceTree = "<group>"; };
+		D62D16312736F60400C542CE /* ToastErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastErrorView.swift; sourceTree = "<group>"; };
 		D6347395241EBF6F0071E9DA /* UIView+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Layout.swift"; sourceTree = "<group>"; };
 		D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extensions.swift"; sourceTree = "<group>"; };
 		D635F0A527135BAB00A02D17 /* ConversationThreadCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationThreadCollectionViewLayout.swift; sourceTree = "<group>"; };
@@ -1978,6 +1982,7 @@
 				D671E1F226402B1F00BF2B8D /* ToastQue.swift */,
 				D671E1F426402B9800BF2B8D /* ToastScheduler.swift */,
 				D671E1F026402A2000BF2B8D /* ToastView.swift */,
+				D62D16312736F60400C542CE /* ToastErrorView.swift */,
 			);
 			path = Toast;
 			sourceTree = "<group>";
@@ -2912,6 +2917,7 @@
 				D6C2E0DA27304BE300FCA0D7 /* MessageTimeLabel.swift in Sources */,
 				D6B3329325DD74EB00211044 /* Conversation+Cloud.swift in Sources */,
 				D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */,
+				D62D16322736F60400C542CE /* ToastErrorView.swift in Sources */,
 				D66F0FD222BF065F00BA277D /* DeeplinkTarget.swift in Sources */,
 				D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */,
 				D671E1F526402B9800BF2B8D /* ToastScheduler.swift in Sources */,
@@ -3224,6 +3230,7 @@
 				D63DB26A25E9997800F6B323 /* UserNotificationFactory.swift in Sources */,
 				D63DB24725E9993F00F6B323 /* OnboardingCoordinator.swift in Sources */,
 				D6C3892F2724B8E5004D29D5 /* MessageContext.swift in Sources */,
+				D62D16342736F60400C542CE /* ToastErrorView.swift in Sources */,
 				D63DB28225E9999C00F6B323 /* TransitionRouter.swift in Sources */,
 				D63DB22625E9990900F6B323 /* CGPoint+Extensions.swift in Sources */,
 				D6B95AF1272324AE00FBE66A /* ConnectionStore.swift in Sources */,
@@ -3361,6 +3368,7 @@
 				D68C08212729D3DE0033C8AE /* Lorem.swift in Sources */,
 				D6551A3B25895E7E00B901E4 /* NavigationBarViewController.swift in Sources */,
 				D655197E2589129B00B901E4 /* Objectable.swift in Sources */,
+				D62D16332736F60400C542CE /* ToastErrorView.swift in Sources */,
 				D655195C2589126800B901E4 /* Reservation.swift in Sources */,
 				D6551A3425895E5500B901E4 /* CodeViewController.swift in Sources */,
 				D6551A4725895EA900B901E4 /* Onboarding+Cloud.swift in Sources */,
