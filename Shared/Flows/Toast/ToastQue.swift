@@ -59,9 +59,9 @@ fileprivate class Toaster {
 
         switch toast.type {
         case .banner:
-            toastView = ToastView()
+            toastView = ToastBannerView()
         case .error:
-            toastView = ToastView()
+            toastView = ToastErrorView()
         }
         
         toastView.configure(toast: toast)
