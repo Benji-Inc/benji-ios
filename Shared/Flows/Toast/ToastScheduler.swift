@@ -32,24 +32,31 @@ class ToastScheduler {
     weak var delegate: ToastSchedulerDelegate?
 
     @MainActor
-    func schedule(toastType: ToastType) async {
-        
+    func schedule(toastType: ToastType, position: Toast.Position = .top) async {
+
+        var toast: Toast? = nil
+
         switch toastType {
         case .error(let error):
-            self.createErrorToast(for: error)
+            toast = self.createErrorToast(for: error, position: position)
         case .basic(let identifier, let displayable, let title, let description, let deepLink):
-            self.createBasicToast(for: identifier,
-                                     displayable: displayable,
-                                     title: title,
-                                     description: description,
-                                     deepLink: deepLink)
+            toast = self.createBasicToast(for: identifier,
+                                             position: position,
+                                             displayable: displayable,
+                                             title: title,
+                                             description: description,
+                                             deepLink: deepLink)
         case .newMessage(let message):
-            self.createMessageToast(for: message)
+            toast = self.createMessageToast(for: message, position: position)
+        }
+
+        if let t = toast {
+            ToastQueue.shared.add(toast: t)
         }
     }
 
-    private func createErrorToast(for error: ClientError) {
-        guard let image = UIImage(systemName: "exclamationmark.triangle") else { return }
+    private func createErrorToast(for error: ClientError, position: Toast.Position) -> Toast? {
+        guard let image = UIImage(systemName: "exclamationmark.triangle") else { return nil }
 
         let toast = Toast(id: error.localizedDescription + "error",
                           priority: 1,
@@ -58,19 +65,20 @@ class ToastScheduler {
                           displayable: image,
                           deeplink: nil,
                           type: .error,
-                          position: .bottom,
+                          position: position,
                           didTap: { [unowned self] in
             self.delegate?.didInteractWith(type: .error(error), deeplink: nil)
         })
 
-        ToastQueue.shared.add(toast: toast)
+        return toast
     }
 
     private func createBasicToast(for identifier: String,
+                                  position: Toast.Position,
                                   displayable: ImageDisplayable,
                                   title: Localized,
                                   description: Localized,
-                                  deepLink: DeepLinkable?) {
+                                  deepLink: DeepLinkable?) -> Toast? {
 
         let toast = Toast(id: identifier,
                           priority: 1,
@@ -79,21 +87,21 @@ class ToastScheduler {
                           displayable: displayable,
                           deeplink: deepLink,
                           type: .banner,
-                          position: .top,
+                          position: position,
                           didTap: { [unowned self] in
             self.delegate?.didInteractWith(type: .basic(identifier: identifier, displayable: displayable, title: title, description: description, deepLink: deepLink), deeplink: deepLink)
         })
 
-        ToastQueue.shared.add(toast: toast)
+        return toast
     }
 
-    private func createMessageToast(for message: Messageable) {
+    private func createMessageToast(for message: Messageable, position: Toast.Position) -> Toast? {
 
         guard case MessageKind.text(let text) = message.kind,
-                !text.isEmpty,
-        let author = UserStore.shared.users.first(where: { user in
-            return user.userObjectID == message.authorID
-        }) else { return }
+              !text.isEmpty,
+              let author = UserStore.shared.users.first(where: { user in
+                  return user.userObjectID == message.authorID
+              }) else { return nil }
 
         let toast = Toast(id: message.id,
                           priority: 1,
@@ -102,7 +110,7 @@ class ToastScheduler {
                           displayable: author,
                           deeplink: DeepLinkObject(target: .conversation),
                           type: .banner,
-                          position: .top,
+                          position: position,
                           didTap: { [unowned self] in
 
             let deeplink = DeepLinkObject(target: .conversation)
@@ -111,6 +119,6 @@ class ToastScheduler {
             self.delegate?.didInteractWith(type: .newMessage(message), deeplink: deeplink)
         })
 
-        ToastQueue.shared.add(toast: toast)
+        return toast
     }
 }

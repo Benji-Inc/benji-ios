@@ -8,13 +8,9 @@
 
 import Foundation
 
-class ToastErrorView: View, ToastViewable {
+class ToastErrorView: ToastView {
 
     private let label = Label(font: .smallBold, textColor: .red)
-
-    var toast: Toast?
-    var didDismiss: () -> Void = {}
-    var didTap: () -> Void = {}
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -22,15 +18,11 @@ class ToastErrorView: View, ToastViewable {
         self.addSubview(self.label)
     }
 
-    func configure(toast: Toast) {
-        self.toast = toast
-    }
-
-    func reveal() {
+    override func reveal() {
 
     }
 
-    func dismiss() {
+    override func dismiss() {
 
     }
 

@@ -59,12 +59,10 @@ fileprivate class Toaster {
 
         switch toast.type {
         case .banner:
-            toastView = ToastBannerView()
+            toastView = ToastBannerView(with: toast)
         case .error:
-            toastView = ToastErrorView()
+            toastView = ToastErrorView(with: toast)
         }
-        
-        toastView.configure(toast: toast)
 
         if let current = self.items.first {
             current.dismiss()
@@ -73,7 +71,9 @@ fileprivate class Toaster {
 
         if self.items.count == 1 {
             self.isPresenting = true
-            toastView.reveal()
+            toastView.didPrepareForPresentation = {
+                toastView.reveal()
+            }
         }
 
         toastView.didDismiss = { [unowned self] in
@@ -94,7 +94,7 @@ fileprivate class Toaster {
 
         var indexToRemove: Int?
         for (index, item) in self.items.enumerated() {
-            if item.toast?.id == toastView.toast?.id {
+            if item.toast.id == toastView.toast.id {
                 indexToRemove = index
             }
         }

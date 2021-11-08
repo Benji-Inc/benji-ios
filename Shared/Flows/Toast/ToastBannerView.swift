@@ -1,5 +1,5 @@
 //
-//  ToastView.swift
+//  ToastBannerView.swift
 //  Jibber
 //
 //  Created by Benji Dodgson on 5/3/21.
@@ -32,15 +32,6 @@ class ToastBannerView: ToastView {
     let dismissAnimator = UIViewPropertyAnimator(duration: 0.35,
                                                  dampingRatio: 0.6,
                                                  animations: nil)
-
-
-    private var toastState = ToastState.hidden {
-        didSet {
-            if self.toastState != oldValue {
-                self.updateFor(state: self.toastState)
-            }
-        }
-    }
 
     private var title: Localized? {
         didSet {
@@ -79,22 +70,18 @@ class ToastBannerView: ToastView {
         self.descriptionLabel.alpha = 0
         self.titleLabel.alpha = 0
 
-        self.updateFor(state: self.toastState)
-
-        if self.toast?.position == .top {
+        if self.toast.position == .top {
             self.screenOffset = superview.safeAreaInsets.top
         } else {
             self.screenOffset = superview.safeAreaInsets.bottom
         }
+
+        self.descriptionText = localized(self.toast.description)
+        self.title = self.toast.title
+        self.imageView.displayable = self.toast.displayable
         #endif
-    }
 
-    override func configure(toast: Toast) {
-        super.configure(toast: toast)
-
-        self.descriptionText = localized(toast.description)
-        self.title = toast.title
-        self.imageView.displayable = toast.displayable
+        self.layoutNow()
     }
 
     override func reveal() {
@@ -103,7 +90,7 @@ class ToastBannerView: ToastView {
         self.layoutNow()
         self.revealAnimator.stopAnimation(true)
         self.revealAnimator.addAnimations { [unowned self] in
-            self.toastState = .present
+            self.state = .present
         }
 
         self.revealAnimator.addCompletion({ [unowned self] (position) in
@@ -119,7 +106,7 @@ class ToastBannerView: ToastView {
 
         self.leftAnimator.stopAnimation(true)
         self.leftAnimator.addAnimations { [unowned self] in
-            self.toastState = .left
+            self.state = .left
         }
 
         self.leftAnimator.addCompletion({ [unowned self] (position) in
@@ -135,19 +122,19 @@ class ToastBannerView: ToastView {
 
         self.expandAnimator.stopAnimation(true)
         self.expandAnimator.addAnimations { [unowned self] in
-            self.toastState = .expanded
+            self.state = .expanded
             self.layoutNow()
         }
 
         self.expandAnimator.addAnimations({ [unowned self] in
-            self.toastState = .alphaIn
+            self.state = .alphaIn
         }, delayFactor: 0.5)
 
         self.expandAnimator.addCompletion({ [unowned self] (position) in
             if position == .end {
                 self.addPan()
                 delay(self.presentationDuration) {
-                    if self.toastState != .gone {
+                    if self.state != .gone {
                         self.dismiss()
                     }
                 }
@@ -172,24 +159,26 @@ class ToastBannerView: ToastView {
         self.leftAnimator.stopAnimation(true)
 
         self.dismissAnimator.addAnimations{ [unowned self] in
-            self.toastState = .dismiss
+            self.state = .dismiss
         }
 
         self.dismissAnimator.addCompletion({ [unowned self] (position) in
             if position == .end {
-                self.toastState = .gone
+                self.state = .gone
                 self.didDismiss()
             }
         })
         self.dismissAnimator.startAnimation()
     }
 
-    private func updateFor(state: ToastState) {
+    override func update(for state: ToastState) {
+        super.update(for: state)
+
         #if !NOTIFICATION
         guard let superView = UIWindow.topWindow() else { return }
         switch state {
         case .hidden:
-            if self.toast?.position == .top {
+            if self.toast.position == .top {
                 self.bottom = superView.top - self.screenOffset - superView.safeAreaInsets.top
             } else {
                 self.top = superView.bottom + self.screenOffset + superView.safeAreaInsets.bottom
@@ -197,8 +186,10 @@ class ToastBannerView: ToastView {
             self.width =  (60 * 0.74) + (Theme.contentOffset)
             self.maxHeight = 84
             self.centerOnX()
+            self.layoutNow()
+            self.didPrepareForPresentation()
         case .present:
-            if self.toast?.position == .top {
+            if self.toast.position == .top {
                 self.top = superView.top + self.screenOffset
             } else {
                 self.bottom = superView.bottom - self.screenOffset
@@ -220,7 +211,7 @@ class ToastBannerView: ToastView {
             self.descriptionLabel.alpha = 1
             self.titleLabel.alpha = 1
         case .dismiss, .gone:
-            if self.toast?.position == .top {
+            if self.toast.position == .top {
                 self.bottom = superView.top + 10
             } else {
                 self.top = superView.bottom - 10
