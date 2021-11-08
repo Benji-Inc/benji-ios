@@ -116,21 +116,8 @@ class ToastBannerView: ToastView {
     override func dismiss() {
         super.dismiss()
 
-        self.revealAnimator.stopAnimation(true)
         self.expandAnimator.stopAnimation(true)
         self.leftAnimator.stopAnimation(true)
-
-        self.dismissAnimator.addAnimations{ [unowned self] in
-            self.state = .dismiss
-        }
-
-        self.dismissAnimator.addCompletion({ [unowned self] (position) in
-            if position == .end {
-                self.state = .gone
-                self.didDismiss()
-            }
-        })
-        self.dismissAnimator.startAnimation()
     }
 
     override func update(for state: ToastState) {
@@ -143,12 +130,6 @@ class ToastBannerView: ToastView {
             self.width =  (60 * 0.74) + (Theme.contentOffset)
             self.maxHeight = 84
             self.centerOnX()
-        case .present:
-            if self.toast.position == .top {
-                self.top = superView.top + self.screenOffset
-            } else {
-                self.bottom = superView.bottom - self.screenOffset
-            }
         case .left:
             if UIScreen.main.isSmallerThan(screenSize: .tablet) {
                 self.left = superView.width * 0.025
@@ -165,12 +146,8 @@ class ToastBannerView: ToastView {
         case .alphaIn:
             self.descriptionLabel.alpha = 1
             self.titleLabel.alpha = 1
-        case .dismiss, .gone:
-            if self.toast.position == .top {
-                self.bottom = superView.top + 10
-            } else {
-                self.top = superView.bottom - 10
-            }
+        case .present, .dismiss, .gone:
+            break 
         }
         #endif
     }

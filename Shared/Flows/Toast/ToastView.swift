@@ -104,7 +104,21 @@ class ToastView: View, ToastViewable {
     }
 
     func dismiss() {
+        self.revealAnimator.stopAnimation(true)
+        //self.expandAnimator.stopAnimation(true)
+       // self.leftAnimator.stopAnimation(true)
 
+        self.dismissAnimator.addAnimations{ [unowned self] in
+            self.state = .dismiss
+        }
+
+        self.dismissAnimator.addCompletion({ [unowned self] (position) in
+            if position == .end {
+                self.state = .gone
+                self.didDismiss()
+            }
+        })
+        self.dismissAnimator.startAnimation()
     }
 
     func update(for state: ToastState) {
@@ -119,17 +133,23 @@ class ToastView: View, ToastViewable {
                 self.top = superView.bottom + self.screenOffset + superView.safeAreaInsets.bottom
             }
         case .present:
-            break 
+            if self.toast.position == .top {
+                self.top = superView.top + self.screenOffset
+            } else {
+                self.bottom = superView.bottom - self.screenOffset
+            }
         case .left:
             break
         case .expanded:
             break
         case .alphaIn:
             break
-        case .dismiss:
-            break
-        case .gone:
-            break
+        case .dismiss, .gone:
+            if self.toast.position == .top {
+                self.bottom = superView.top + 10
+            } else {
+                self.top = superView.bottom - 10
+            }
         }
         #endif
 
