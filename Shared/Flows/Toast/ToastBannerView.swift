@@ -49,10 +49,6 @@ class ToastBannerView: ToastView {
         self.addSubview(self.descriptionLabel)
         self.vibrancyView.effectView.contentView.addSubview(self.titleLabel)
 
-        self.isUserInteractionEnabled = true
-        self.layer.masksToBounds = true
-        self.layer.cornerRadius = 10
-
         self.imageView.imageView.tintColor = Color.white.color
 
         self.descriptionLabel.alpha = 0

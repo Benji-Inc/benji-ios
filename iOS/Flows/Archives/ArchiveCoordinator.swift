@@ -46,13 +46,10 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
     }
 
     func showToast() {
-        let toastType = ToastType.basic(identifier: UUID().uuidString,
-                                        displayable: User.current()!,
-                                        title: Lorem.name(),
-                                        description: Lorem.paragraph(),
-                                        deepLink: nil)
+        let error = ClientError.apiError(detail: "This is an error message.")
+        let toastType = ToastType.error(error)
         Task {
-            await ToastScheduler.shared.schedule(toastType: toastType)
+            await ToastScheduler.shared.schedule(toastType: toastType, position: .bottom)
         }
     }
     

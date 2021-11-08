@@ -67,9 +67,9 @@ class ToastScheduler {
                                   duration: TimeInterval) -> Toast? {
         guard let image = UIImage(systemName: "exclamationmark.triangle") else { return nil }
 
-        let toast = Toast(id: error.localizedDescription + "error",
+        let toast = Toast(id: UUID().uuidString,
                           priority: 1,
-                          title: "Oops!",
+                          title: "",
                           description: error.localizedDescription,
                           displayable: image,
                           deeplink: nil,

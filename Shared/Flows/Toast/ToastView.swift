@@ -66,6 +66,10 @@ class ToastView: View, ToastViewable {
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        self.isUserInteractionEnabled = true
+        self.layer.masksToBounds = true
+        self.layer.cornerRadius = Theme.cornerRadius
+
         self.didSelect { [unowned self] in
             self.toast.didTap()
             self.dismiss()
@@ -100,13 +104,19 @@ class ToastView: View, ToastViewable {
     }
 
     func didReveal() {
+        Task {
+            await Task.sleep(seconds: self.toast.duration)
+            if self.state != .gone {
+                self.dismiss()
+            } else {
+                await self.taskPool.cancelAndRemoveAll()
+            }
 
+        }.add(to: self.taskPool)
     }
 
     func dismiss() {
         self.revealAnimator.stopAnimation(true)
-        //self.expandAnimator.stopAnimation(true)
-       // self.leftAnimator.stopAnimation(true)
 
         self.dismissAnimator.addAnimations{ [unowned self] in
             self.state = .dismiss
