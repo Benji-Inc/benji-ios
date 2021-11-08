@@ -100,7 +100,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
         self.overlayButton.didSelect { [unowned self] in
             if !self.textView.isFirstResponder {
-                if UserDefaultsManager.getValue(for: .hasShownKeyboardInstructions) {
+                if UserDefaultsManager.getBool(for: .hasShownKeyboardInstructions) {
                     self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
                 } else {
                     self.textView.updateInputView(type: .demo, becomeFirstResponder: true)

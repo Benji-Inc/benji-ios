@@ -68,7 +68,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         self.updateDescription(with: self.captureType.description)
 
         self.contentView.addSubview(self.button)
-        self.button.set(style: .normal(color: .lightGray, text: "Got it"))
+        self.button.set(style: .normal(color: .white, text: "Got it"))
     }
 
     override func viewDidLayoutSubviews() {

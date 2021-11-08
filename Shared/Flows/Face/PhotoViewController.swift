@@ -19,8 +19,10 @@ enum PhotoState {
     case scanEyesOpen
     case scanEyesClosed
     case captureEyesOpen
+    case didCaptureEyesOpen
     case captureEyesClosed
-    case error(String)
+    case didCaptureEyesClosed
+    case error
     case finish
 }
 
@@ -28,6 +30,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     typealias ResultType = Void
 
     var onDidComplete: ((Result<Void, Error>) -> Void)?
+
+    private let errorView = ErrorView()
+    private var errorOffset: CGFloat = -100
 
     private lazy var cameraVC: FaceDetectionViewController = {
         let vc: FaceDetectionViewController = UIStoryboard(name: "FaceDetection", bundle: nil).instantiateViewController(withIdentifier: "FaceDetection") as! FaceDetectionViewController
@@ -71,6 +76,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animationView.alpha = 0
         self.addChild(viewController: self.cameraVC)
 
+        self.view.addSubview(self.errorView)
+
         self.view.didSelect { [unowned self] in
 
             switch self.currentState {
@@ -82,14 +89,14 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             case .scanEyesClosed:
                 guard self.cameraVC.faceDetected else { return }
                 self.currentState = .captureEyesClosed
-            case .captureEyesOpen:
+            case .captureEyesOpen, .didCaptureEyesOpen:
                 break
-            case .captureEyesClosed:
-                break
-            case .error:
+            case .captureEyesClosed, .didCaptureEyesClosed:
                 break
             case .finish:
                 break
+            case .error:
+                break 
             }
         }
 
@@ -97,6 +104,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             switch self.currentState {
             case .captureEyesClosed:
                 if self.cameraVC.eyesAreClosed {
+                    self.currentState = .didCaptureEyesClosed
+                    self.animateError(with: nil, show: false)
                     Task {
                         await self.updateUser(with: image)
                     }
@@ -105,6 +114,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 }
             case .captureEyesOpen:
                 if self.cameraVC.isSmiling {
+                    self.currentState = .didCaptureEyesOpen
+                    self.animateError(with: nil, show: false)
                     Task {
                         await self.updateUser(with: image)
                     }
@@ -126,7 +137,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             .removeDuplicates()
             .mainSink(receiveValue: { [unowned self] (faceDetected) in
                 switch self.currentState {
-                case .scanEyesOpen, .scanEyesClosed, .error(_):
+                case .scanEyesOpen, .scanEyesClosed, .error:
                     self.handleFace(isDetected: faceDetected)
                 default:
                     break
@@ -147,6 +158,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animationView.centerOnXAndY()
 
         self.cameraVC.view.expandToSuperviewSize()
+
+        self.errorView.bottom = self.view.height - self.errorOffset
     }
 
     private func handle(state: PhotoState) {
@@ -160,8 +173,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.handleScanState()
         case .captureEyesOpen, .captureEyesClosed:
             self.handleCaptureState()
-        case .error:
-            self.handleErrorState()
+        case .error, .didCaptureEyesOpen, .didCaptureEyesClosed:
+            break
         case .finish:
             Task {
                 await self.handleFinishState()
@@ -190,9 +203,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         if isDetected {
             self.currentState = self.previousScanState
-        } else {
-            self.currentState = .error("Please show your face.")
         }
+
+        self.animateError(with: "Jibber can't detect your face.", show: !isDetected)
 
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
             self.cameraVC.previewLayer.opacity = isDetected ? 1.0 : 0.25
@@ -202,7 +215,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func handleNotSmiling() {
-        self.currentState = .error("Please smile! 😀")
+        self.animateError(with: "Jibber doesn't see you smiling.", show: true)
 
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
             self.cameraVC.previewLayer.opacity = 0.5
@@ -213,13 +226,14 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 Task {
                     await Task.sleep(seconds: 2.0)
                     self.currentState = .scanEyesOpen
+                    self.animateError(with: nil, show: false)
                 }
             }
         }
     }
 
     private func handleEyesNotClosed() {
-        self.currentState = .error("Please close your eyes")
+        self.animateError(with: "Please close your eyes", show: true)
 
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
             self.cameraVC.previewLayer.opacity = 0.5
@@ -230,6 +244,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 Task {
                     await Task.sleep(seconds: 2.0)
                     self.currentState = .scanEyesClosed
+                    self.animateError(with: nil, show: false)
                 }
             }
         }
@@ -251,8 +266,16 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.cameraVC.capturePhoto()
     }
 
-    private func handleErrorState() {
-        self.complete(with: .failure(ClientError.message(detail: "There was a problem. Please try again.")))
+    private func animateError(with message: String?, show: Bool) {
+        if let msg = message {
+            self.errorView.label.setText(msg)
+            self.errorView.label.layoutNow()
+        }
+
+        self.errorOffset = show ? 100 : -100
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.view.layoutNow()
+        }
     }
 
     @MainActor
@@ -268,10 +291,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         guard let currentUser = User.current(), let data = image.previewData else { return }
 
         switch self.currentState {
-        case .captureEyesOpen:
+        case .didCaptureEyesOpen:
             let file = PFFileObject(name:"small_image.jpeg", data: data)
             currentUser.smallImage = file
-        case .captureEyesClosed:
+        case .didCaptureEyesClosed:
             let file = PFFileObject(name:"focus_image.jpeg", data: data)
             currentUser.focusImage = file
         default:
@@ -284,19 +307,51 @@ class PhotoViewController: ViewController, Sizeable, Completable {
                 self.presentDisclosure()
             }
         } catch {
-            self.currentState = .error("There was an error uploading your photo.")
+            self.animateError(with: "There was an error uploading your photo.", show: true)
         }
     }
 
     @MainActor
     private func presentDisclosure() {
         switch self.currentState {
-        case .captureEyesOpen:
+        case .didCaptureEyesOpen:
             self.present(self.smilingDisclosureVC, animated: true, completion: nil)
-        case .captureEyesClosed:
+        case .didCaptureEyesClosed:
             self.present(self.focusDisclosureVC, animated: true, completion: nil)
         default:
             break
         }
+    }
+}
+
+private class ErrorView: View {
+
+    let label = Label(font: .smallBold, textColor: .red)
+    private let blurView = BlurView()
+
+    override func initializeSubviews() {
+        super.initializeSubviews()
+
+        self.addSubview(self.blurView)
+        self.addSubview(self.label)
+        self.backgroundColor = Color.red.color.withAlphaComponent(0.8)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        #if !NOTIFICATION
+        guard let superview = UIWindow.topWindow() else { return }
+        self.label.setSize(withWidth: superview.width - Theme.contentOffset.doubled)
+
+        self.size = CGSize(width: self.label.width + Theme.contentOffset, height: self.label.height + Theme.contentOffset)
+
+        self.label.centerOnXAndY()
+        self.centerOnX()
+
+        self.blurView.expandToSuperviewSize()
+
+        self.roundCorners()
+        #endif
     }
 }

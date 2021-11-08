@@ -78,12 +78,14 @@ enum OnboardingContent: Switchable {
                 return "Now smile and tap the screen."
             case .scanEyesClosed:
                 return "Close your eyes and tap again."
-            case .captureEyesOpen:
+            case .didCaptureEyesOpen:
                 return "Good one!"
-            case .captureEyesClosed:
+            case .didCaptureEyesClosed:
                 return "Perfect!"
-            case .error(let message):
-                return message
+            case .captureEyesOpen, .captureEyesClosed:
+                return "Try again"
+            case .error:
+                return ""
             case .finish:
                 return "Now turn these on."
             }

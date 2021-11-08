@@ -51,7 +51,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     var invitor: User?
-    private var fullName: String = ""
 
     init(with delegate: OnboardingViewControllerDelegate) {
 
@@ -134,7 +133,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
         }
 
-        self.photoVC.$currentState.mainSink { [unowned self] _ in
+        self.photoVC.$currentState
+            .filter({ state in
+                return state != .error 
+            })
+            .mainSink { [unowned self] _ in
             self.updateUI()
         }.store(in: &self.cancellables)
 
@@ -142,7 +145,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             switch result {
             case .success:
                 Task {
-                    try await ActivateUser(fullName: self.fullName).makeRequest(andUpdate: [], viewsToIgnore: [self.view])
+                    guard let fullName = UserDefaultsManager.getString(for: .fullName) else { return }
+                    try await ActivateUser(fullName: fullName).makeRequest(andUpdate: [], viewsToIgnore: [self.view])
                     guard let user = User.current(), user.status == .active else { return }
                     self.delegate.onboardingView(self, didVerify: user)
                 }
@@ -322,7 +326,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     private func handleNameSuccess(for name: String) {
-        self.fullName = name
+        UserDefaultsManager.update(key: .fullName, with: name)
         // User has been allowed to continue
         if User.current()?.status == .inactive {
             #if APPCLIP

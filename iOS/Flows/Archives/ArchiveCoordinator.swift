@@ -38,18 +38,9 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         _ = ConversationsManager.shared
 
         self.archiveVC.addButton.didSelect { [unowned self] in
-            self.showToast()
-//            Task {
-//                await self.createConversation()
-//            }.add(to: self.archiveVC.taskPool)
-        }
-    }
-
-    func showToast() {
-        let error = ClientError.apiError(detail: "This is an error message.")
-        let toastType = ToastType.error(error)
-        Task {
-            await ToastScheduler.shared.schedule(toastType: toastType, position: .bottom)
+            Task {
+                await self.createConversation()
+            }.add(to: self.archiveVC.taskPool)
         }
     }
     

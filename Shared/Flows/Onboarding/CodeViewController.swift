@@ -13,11 +13,11 @@ import TMROLocalization
 import Combine
 
 @MainActor
-class CodeViewController: TextInputViewController<Void> {
+class CodeViewController: TextInputViewController<String?> {
 
     var phoneNumber: PhoneNumber?
     var reservationId: String?
-    var passId: String? 
+    var passId: String?
     
     init() {
         super.init(textField: TextField(), placeholder: LocalizedString(id: "", default: "0000"))
@@ -47,17 +47,19 @@ class CodeViewController: TextInputViewController<Void> {
 
         do {
             let installation = try await PFInstallation.getCurrent()
-            let token = try await VerifyCode(code: code,
-                                             phoneNumber: phoneNumber,
-                                             installationId: installation.installationId,
-                                             reservationId: String(optional: self.reservationId),
-                                             passId: String(optional: self.passId))
+            let dict = try await VerifyCode(code: code,
+                                            phoneNumber: phoneNumber,
+                                            installationId: installation.installationId,
+                                            reservationId: String(optional: self.reservationId),
+                                            passId: String(optional: self.passId))
                 .makeRequest()
 
             self.textField.resignFirstResponder()
-            try await User.become(withSessionToken: token)
+            if let token = dict["sessionToken"] {
+                try await User.become(withSessionToken: token)
+            }
             await self.button.handleEvent(status: .complete)
-            self.complete(with: .success(()))
+            self.complete(with: .success((dict["channelId"])))
         } catch {
             await self.button.handleEvent(status: .error(error.localizedDescription))
             self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))
