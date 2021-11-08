@@ -48,7 +48,8 @@ class ConversationMessageCellDataSource: CollectionViewDataSource<ConversationMe
                                                                for: indexPath,
                                                                item: (item.channelID,
                                                                       item.messageID,
-                                                                      self))
+                                                                      collectionView,
+                                                                      self.contextMenuDelegate))
 
 
                 return messageCell
@@ -85,17 +86,6 @@ class ConversationMessageCellDataSource: CollectionViewDataSource<ConversationMe
             return UICollectionReusableView()
         }
     }
-
-    // MARK: - Helper Functions
-    
-    func getStackIndex(forIndexPath indexPath: IndexPath) -> Int {
-        guard let sectionID = self.sectionIdentifier(for: indexPath.section) else { return 0 }
-
-        let totalCellsInSection = self.itemIdentifiers(in: sectionID).count
-
-        // The higher the cell's index, the closer it is to the front of the message stack.
-        return totalCellsInSection - indexPath.item - 1
-    }
 }
 
 // MARK: - Cell registration
@@ -104,9 +94,10 @@ extension ConversationMessageCellDataSource {
 
     typealias MessageSubcellRegistration
     = UICollectionView.CellRegistration<MessageSubcell,
-                                            (channelID: ChannelId,
-                                             messageID: MessageId,
-                                             dataSource: ConversationMessageCellDataSource)>
+                                        (channelID: ChannelId,
+                                         messageID: MessageId,
+                                         collectionView: UICollectionView,
+                                         contextMenuDelegate: UIContextMenuInteractionDelegate?)>
 
     static func createMessageSubcellRegistration() -> MessageSubcellRegistration {
 
@@ -115,19 +106,19 @@ extension ConversationMessageCellDataSource {
                                                                         messageId: item.messageID)
             guard let message = messageController.message else { return }
 
-            let dataSource = item.dataSource
-
             cell.setText(with: message)
 
-            // The higher the cell's stack index, the closer it is to the front of the message stack.
-            let stackIndex = dataSource.getStackIndex(forIndexPath: indexPath)
+            var zIndex = 0
+            if let layout = item.collectionView.collectionViewLayout as? ConversationMessageCellLayout {
+                zIndex = layout.getZIndex(forIndexPath: indexPath)
+            }
 
-            // The menu interaction should only be on the front most cell,
-            // and only if the user created the original message.
+            // The menu interaction should only be on the front most cell.
             cell.backgroundColorView.interactions.removeAll()
-            if stackIndex == 0, let contextMenuDelegate = dataSource.contextMenuDelegate {
-                let contextMenuInteraction = UIContextMenuInteraction(delegate: contextMenuDelegate)
-                cell.backgroundColorView.addInteraction(contextMenuInteraction)
+            if zIndex == 0 {
+                cell.setContextMenuInteraction(with: item.contextMenuDelegate)
+            } else {
+                cell.setContextMenuInteraction(with: nil)
             }
         }
     }

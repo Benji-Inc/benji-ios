@@ -185,9 +185,12 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
 
             height = MessageSubcell.getHeight(withWidth: width, message: latestMessage)
 
-            // Shrink down cells as they get closer to the bottom of the stack.
-            let stackIndex = self.dataSource.getStackIndex(forIndexPath: indexPath)
-            width -= CGFloat(stackIndex) * 15
+            // Shrink down cells as they get closer to the back of the stack.
+            var stackIndex = 0
+            if let messageLayout = collectionViewLayout as? ConversationMessageCellLayout {
+                stackIndex = messageLayout.getZIndex(forIndexPath: indexPath)
+            }
+            width += CGFloat(stackIndex) * 15
         }
 
         if self.message?.isDeleted == true {
@@ -229,7 +232,8 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
-        // Only show a header for the first section
+
+        // Only show a header for the first section, and only if there's at least one item in that section.
         if section == 0 && self.dataSource.snapshot().numberOfItems(inSection: .otherMessages) != 0 {
             return CGSize(width: collectionView.width, height: Theme.contentOffset)
         }
@@ -240,7 +244,7 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
-        // Only show a footer for the second section
+        // Only show a footer for the second section, and only if there's at least one item in that section.
         if section == 1 && self.dataSource.snapshot().numberOfItems(inSection: .currentUserMessages) != 0 {
             return CGSize(width: collectionView.width, height: Theme.contentOffset)
         }

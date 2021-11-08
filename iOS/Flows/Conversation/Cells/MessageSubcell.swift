@@ -20,15 +20,15 @@ class MessageSubcell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.intitializeViews()
+        self.initializeViews()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.intitializeViews()
+        self.initializeViews()
     }
 
-    private func intitializeViews() {
+    private func initializeViews() {
         self.contentView.addSubview(self.backgroundColorView)
         self.backgroundColorView.roundCorners()
 
@@ -57,6 +57,17 @@ class MessageSubcell: UICollectionViewCell {
         }
 
         self.setNeedsLayout()
+    }
+
+    /// Adds a context menu interaction to this cell, using the provided delegate object.
+    /// If no delegate is provided, no interaction will be added. Previously added interactions are always removed.
+    func setContextMenuInteraction(with contextMenuDelegate: UIContextMenuInteractionDelegate?) {
+        self.backgroundColorView.interactions.removeAll()
+
+        if let contextMenuDelegate = contextMenuDelegate {
+            let contextMenuInteraction = UIContextMenuInteraction(delegate: contextMenuDelegate)
+            self.backgroundColorView.addInteraction(contextMenuInteraction)
+        }
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
