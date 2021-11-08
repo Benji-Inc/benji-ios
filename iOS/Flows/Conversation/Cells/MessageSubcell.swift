@@ -35,6 +35,7 @@ class MessageSubcell: UICollectionViewCell {
         self.backgroundColorView.addSubview(self.textView)
         self.textView.textAlignment = .center
         self.textView.textColor = Color.textColor.color
+        self.textView.textContainer.lineBreakMode = .byTruncatingTail
     }
 
     override func layoutSubviews() {
@@ -44,9 +45,11 @@ class MessageSubcell: UICollectionViewCell {
         self.backgroundColorView.expandToSuperviewHeight()
         self.backgroundColorView.centerOnXAndY()
 
-        self.textView.width = self.backgroundColorView.width
-        self.textView.sizeToFit()
-        self.textView.center = self.backgroundColorView.bubbleFrame.center
+        self.textView.width = self.backgroundColorView.bubbleFrame.width
+        self.textView.centerOnX()
+        self.textView.top = self.backgroundColorView.bubbleFrame.top + Theme.contentOffset.half
+        self.textView.expand(.bottom,
+                             to: self.backgroundColorView.bubbleFrame.bottom - Theme.contentOffset.half)
     }
 
     func setText(with message: Messageable) {
@@ -98,12 +101,17 @@ class MessageSubcell: UICollectionViewCell {
 
 extension MessageSubcell {
 
+    static var minimumHeight: CGFloat { return 50 }
+    static var maximumHeight: CGFloat { return 100 }
+
     /// Returns the height that a message subcell should be given a width and message to display.
     static func getHeight(withWidth width: CGFloat, message: Messageable) -> CGFloat {
         let textView = MessageTextView()
         textView.text = message.kind.text
         var textViewSize = textView.getSize(withWidth: width)
-        textViewSize.height += Theme.contentOffset.doubled
-        return textViewSize.height + self.bubbleTailLength
+        textViewSize.height += Theme.contentOffset
+        return clamp(textViewSize.height + self.bubbleTailLength,
+                     MessageSubcell.minimumHeight,
+                     MessageSubcell.maximumHeight)
     }
 }

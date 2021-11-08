@@ -53,6 +53,10 @@ extension ChatMessage: Messageable {
         return self.type == .deleted
     }
 
+    var totalReplyCount: Int {
+        return self.replyCount
+    }
+    
     var recentReplies: [Messageable] {
         return self.latestReplies
     }

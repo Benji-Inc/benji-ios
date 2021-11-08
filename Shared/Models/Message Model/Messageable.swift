@@ -33,6 +33,7 @@ protocol Messageable {
     var color: Color { get }
     var kind: MessageKind { get }
     var isDeleted: Bool { get }
+    var totalReplyCount: Int { get }
     var recentReplies: [Messageable] { get }
 
     @discardableResult
@@ -83,5 +84,15 @@ extension Messageable {
                 return .clear
             }
         }
+    }
+
+    /// Returns the most recent reply to this message that is loaded or, if there are no replies, the message itself is returned.
+    /// NOTE: If this message has not loaded its replies yet, the most recent reply will not be available and nil will be returned.
+    var mostRecentMessage: Messageable? {
+        if self.totalReplyCount == 0 {
+            return self
+        }
+
+        return self.recentReplies.first
     }
 }
