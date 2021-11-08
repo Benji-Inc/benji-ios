@@ -12,6 +12,8 @@ protocol ConversationMessageCellLayoutDelegate: AnyObject {
     var message: Messageable? { get }
 }
 
+/// A custom collectionview layout for conversation message cells. This class assumes the collection view contains
+/// MessageSubcell cells laid out in a stack along the z-axis.
 class ConversationMessageCellLayout: UICollectionViewFlowLayout {
 
     unowned let messageDelegate: ConversationMessageCellLayoutDelegate
@@ -57,10 +59,8 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         guard let collectionView = self.collectionView else { return }
 
         let indexPath = attributes.indexPath
-        let totalItemsInSection = collectionView.numberOfItems(inSection: indexPath.section)
 
-        // The higher the cell's index, the closer it is to the front of the message stack.
-        let stackIndex = totalItemsInSection - indexPath.item - 1
+        let stackIndex = self.getZIndex(forIndexPath: indexPath)
 
         // Only show text for the front most item in each section.
         attributes.shouldShowText = stackIndex == 0
@@ -70,6 +70,7 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         var backgroundColor: UIColor = indexPath.section == 0 ? .lightGray : .gray
         backgroundColor = backgroundColor.color(withBrightness: backgroundBrightness)
 
+        // Set the cell background color. The color may be overwritten if this is the most recent message.
         attributes.backgroundColor = backgroundColor
 
         var isMostRecentMessageFromUser = false
@@ -77,9 +78,10 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
             isMostRecentMessageFromUser = mostRecentMessage.isFromCurrentUser
         }
 
+        // Each section should have a tail only on its frontmost item.
+        attributes.shouldShowTail = stackIndex == 0
+
         if indexPath.section == 0 {
-            // The first section should have a bubble tail on its first item
-            attributes.shouldShowTail = stackIndex == totalItemsInSection - 1
             attributes.bubbleTailOrientation = .up
 
             // If the most recent message is from the other user, then highlight it with a white background.
@@ -89,14 +91,33 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         }
 
         if indexPath.section == 1 {
-            // The second section should have a tail on its last item
-            attributes.shouldShowTail = stackIndex == 0
             attributes.bubbleTailOrientation = .down
 
             // If the most recent message is from the current user, then highlight it with a white background.
             if isMostRecentMessageFromUser && stackIndex == 0 {
                 attributes.backgroundColor = .white
             }
+        }
+    }
+
+    // MARK: - Helper Functions
+
+    /// Returns the z index of the cell at the specified index path.
+    /// The frontmost item in a section will always have a z-index of 0. Items further back will have negative indices.
+    func getZIndex(forIndexPath indexPath: IndexPath) -> Int {
+        guard let collectionView = self.collectionView else { return 0 }
+
+        let totalItemsInSection = collectionView.numberOfItems(inSection: indexPath.section)
+
+        if indexPath.section == 0 {
+            // In the first section, the frontmost item is the first one.
+            return -indexPath.item
+        } else if indexPath.section == 1 {
+            // In the second section, the frontmost item is the last one.
+            return -(totalItemsInSection - indexPath.item - 1)
+        } else {
+            // If we add more than two sections, the frontmost item is undetermined.
+            return 0
         }
     }
 
