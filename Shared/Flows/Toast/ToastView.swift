@@ -35,7 +35,6 @@ class ToastView: View, ToastViewable {
 
     var maxHeight: CGFloat?
     var screenOffset: CGFloat = 50
-    var presentationDuration: TimeInterval = 10.0
 
     var cancellables = Set<AnyCancellable>()
 
@@ -59,17 +58,10 @@ class ToastView: View, ToastViewable {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-//        self.$state.mainSink { [unowned self] state in
-//            Task {
-//                await self.update(for: state)
-//            }
-//        }.store(in: &self.cancellables)
-
         self.didSelect { [unowned self] in
             self.toast.didTap()
             self.dismiss()
         }
-
 
         Task {
             await Task.snooze(seconds: 0.1)

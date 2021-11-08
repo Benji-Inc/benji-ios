@@ -133,7 +133,7 @@ class ToastBannerView: ToastView {
         self.expandAnimator.addCompletion({ [unowned self] (position) in
             if position == .end {
                 self.addPan()
-                delay(self.presentationDuration) {
+                delay(self.toast.duration) {
                     if self.state != .gone {
                         self.dismiss()
                     }

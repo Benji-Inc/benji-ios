@@ -32,22 +32,29 @@ class ToastScheduler {
     weak var delegate: ToastSchedulerDelegate?
 
     @MainActor
-    func schedule(toastType: ToastType, position: Toast.Position = .top) async {
+    func schedule(toastType: ToastType,
+                  position: Toast.Position = .top,
+                  duration: TimeInterval = 10) async {
 
         var toast: Toast? = nil
 
         switch toastType {
         case .error(let error):
-            toast = self.createErrorToast(for: error, position: position)
+            toast = self.createErrorToast(for: error,
+                                             position: position,
+                                             duration: duration)
         case .basic(let identifier, let displayable, let title, let description, let deepLink):
             toast = self.createBasicToast(for: identifier,
                                              position: position,
+                                             duration: duration,
                                              displayable: displayable,
                                              title: title,
                                              description: description,
                                              deepLink: deepLink)
         case .newMessage(let message):
-            toast = self.createMessageToast(for: message, position: position)
+            toast = self.createMessageToast(for: message,
+                                               position: position,
+                                               duration: duration)
         }
 
         if let t = toast {
@@ -55,7 +62,9 @@ class ToastScheduler {
         }
     }
 
-    private func createErrorToast(for error: ClientError, position: Toast.Position) -> Toast? {
+    private func createErrorToast(for error: ClientError,
+                                  position: Toast.Position,
+                                  duration: TimeInterval) -> Toast? {
         guard let image = UIImage(systemName: "exclamationmark.triangle") else { return nil }
 
         let toast = Toast(id: error.localizedDescription + "error",
@@ -66,6 +75,7 @@ class ToastScheduler {
                           deeplink: nil,
                           type: .error,
                           position: position,
+                          duration: duration,
                           didTap: { [unowned self] in
             self.delegate?.didInteractWith(type: .error(error), deeplink: nil)
         })
@@ -75,6 +85,7 @@ class ToastScheduler {
 
     private func createBasicToast(for identifier: String,
                                   position: Toast.Position,
+                                  duration: TimeInterval,
                                   displayable: ImageDisplayable,
                                   title: Localized,
                                   description: Localized,
@@ -88,6 +99,7 @@ class ToastScheduler {
                           deeplink: deepLink,
                           type: .banner,
                           position: position,
+                          duration: duration,
                           didTap: { [unowned self] in
             self.delegate?.didInteractWith(type: .basic(identifier: identifier, displayable: displayable, title: title, description: description, deepLink: deepLink), deeplink: deepLink)
         })
@@ -95,7 +107,9 @@ class ToastScheduler {
         return toast
     }
 
-    private func createMessageToast(for message: Messageable, position: Toast.Position) -> Toast? {
+    private func createMessageToast(for message: Messageable,
+                                    position: Toast.Position,
+                                    duration: TimeInterval) -> Toast? {
 
         guard case MessageKind.text(let text) = message.kind,
               !text.isEmpty,
@@ -111,6 +125,7 @@ class ToastScheduler {
                           deeplink: DeepLinkObject(target: .conversation),
                           type: .banner,
                           position: position,
+                          duration: duration,
                           didTap: { [unowned self] in
 
             let deeplink = DeepLinkObject(target: .conversation)

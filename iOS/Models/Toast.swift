@@ -29,6 +29,7 @@ struct Toast: Equatable {
     var deeplink: DeepLinkable?
     var type: DisplayType
     var position: Position
+    var duration: TimeInterval
     var didTap: () -> Void
 
     static func == (lhs: Toast, rhs: Toast) -> Bool {
