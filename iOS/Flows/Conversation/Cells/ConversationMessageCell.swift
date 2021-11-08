@@ -93,12 +93,14 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
         }
 
         // Only shows a limited number of messages in each stack.
-        // The newest messages are stacked on top, so reverse the order.
+        // The for the user's messages, the newest message is at the bottom, so reverse the order.
         let currentUserMessages = userReplies.prefix(self.maxShownRepliesPerStack).reversed().map { message in
             return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
-        let otherMessages = otherReplies.prefix(self.maxShownRepliesPerStack).reversed().map { message in
+
+        // Other messages have the newest message on top, so there's no need to reverse the messages.
+        let otherMessages = otherReplies.prefix(self.maxShownRepliesPerStack).map { message in
             return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
