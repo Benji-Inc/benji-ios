@@ -16,6 +16,7 @@ class ToastErrorView: ToastView {
         super.initializeSubviews()
 
         self.addSubview(self.label)
+        self.set(backgroundColor: .red)
     }
 
     override func reveal() {
@@ -26,8 +27,12 @@ class ToastErrorView: ToastView {
 
     }
 
+    
+
     override func layoutSubviews() {
         super.layoutSubviews()
+
+
 
         
     }

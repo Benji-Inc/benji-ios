@@ -46,6 +46,14 @@ class ToastView: View, ToastViewable {
         }
     }
 
+    let revealAnimator = UIViewPropertyAnimator(duration: 0.35,
+                                                dampingRatio: 0.6,
+                                                animations: nil)
+
+    let dismissAnimator = UIViewPropertyAnimator(duration: 0.35,
+                                                 dampingRatio: 0.6,
+                                                 animations: nil)
+
     required init(with toast: Toast) {
         self.toast = toast
         super.init()
@@ -67,6 +75,17 @@ class ToastView: View, ToastViewable {
             await Task.snooze(seconds: 0.1)
             self.update(for: self.state)
         }
+
+        #if !NOTIFICATION
+        guard let superview = UIWindow.topWindow() else { return }
+        superview.addSubview(self)
+        
+        if self.toast.position == .top {
+            self.screenOffset = superview.safeAreaInsets.top
+        } else {
+            self.screenOffset = superview.safeAreaInsets.bottom
+        }
+        #endif
     }
 
     func reveal() {

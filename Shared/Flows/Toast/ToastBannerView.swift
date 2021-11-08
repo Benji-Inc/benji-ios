@@ -17,10 +17,6 @@ class ToastBannerView: ToastView {
     private let descriptionLabel = Label(font: .smallBold)
     private let imageView = AvatarView()
 
-    let revealAnimator = UIViewPropertyAnimator(duration: 0.35,
-                                                dampingRatio: 0.6,
-                                                animations: nil)
-
     let leftAnimator = UIViewPropertyAnimator(duration: 0.35,
                                               dampingRatio: 0.9,
                                               animations: nil)
@@ -28,10 +24,6 @@ class ToastBannerView: ToastView {
     let expandAnimator = UIViewPropertyAnimator(duration: 0.35,
                                                 dampingRatio: 0.9,
                                                 animations: nil)
-
-    let dismissAnimator = UIViewPropertyAnimator(duration: 0.35,
-                                                 dampingRatio: 0.6,
-                                                 animations: nil)
 
     private var title: Localized? {
         didSet {
@@ -52,10 +44,6 @@ class ToastBannerView: ToastView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        #if !NOTIFICATION
-        guard let superview = UIWindow.topWindow() else { return }
-        superview.addSubview(self)
-
         self.addSubview(self.vibrancyView)
         self.addSubview(self.imageView)
         self.addSubview(self.descriptionLabel)
@@ -70,18 +58,9 @@ class ToastBannerView: ToastView {
         self.descriptionLabel.alpha = 0
         self.titleLabel.alpha = 0
 
-        if self.toast.position == .top {
-            self.screenOffset = superview.safeAreaInsets.top
-        } else {
-            self.screenOffset = superview.safeAreaInsets.bottom
-        }
-
         self.descriptionText = localized(self.toast.description)
         self.title = self.toast.title
         self.imageView.displayable = self.toast.displayable
-        #endif
-
-        self.layoutNow()
     }
 
     override func reveal() {
