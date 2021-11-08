@@ -56,17 +56,17 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
     }
 
     private func update(attributes: ConversationMessageCellLayoutAttributes) {
-        guard let collectionView = self.collectionView else { return }
-
         let indexPath = attributes.indexPath
 
-        let stackIndex = self.getZIndex(forIndexPath: indexPath)
+        let zIndex = self.getZIndex(forIndexPath: indexPath)
+
+        attributes.zIndex = zIndex
 
         // Only show text for the front most item in each section.
-        attributes.shouldShowText = stackIndex == 0
+        attributes.shouldShowText = zIndex == 0
 
         // Objects closer to the front of the stack should be brighter.
-        let backgroundBrightness = 1 - CGFloat(stackIndex) * 0.05
+        let backgroundBrightness = 1 + CGFloat(zIndex) * 0.05
         var backgroundColor: UIColor = indexPath.section == 0 ? .lightGray : .gray
         backgroundColor = backgroundColor.color(withBrightness: backgroundBrightness)
 
@@ -79,13 +79,13 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         }
 
         // Each section should have a tail only on its frontmost item.
-        attributes.shouldShowTail = stackIndex == 0
+        attributes.shouldShowTail = zIndex == 0
 
         if indexPath.section == 0 {
             attributes.bubbleTailOrientation = .up
 
             // If the most recent message is from the other user, then highlight it with a white background.
-            if !isMostRecentMessageFromUser && stackIndex == 0 {
+            if !isMostRecentMessageFromUser && zIndex == 0 {
                 attributes.backgroundColor = .white
             }
         }
@@ -94,7 +94,7 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
             attributes.bubbleTailOrientation = .down
 
             // If the most recent message is from the current user, then highlight it with a white background.
-            if isMostRecentMessageFromUser && stackIndex == 0 {
+            if isMostRecentMessageFromUser && zIndex == 0 {
                 attributes.backgroundColor = .white
             }
         }
@@ -121,7 +121,7 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         }
     }
 
-    // MARK: - Custom Animations
+    // MARK: - Custom Diff Animations
 
     private var insertingIndexPaths: [IndexPath] = []
     private var deletingIndexPaths: [IndexPath] = []
