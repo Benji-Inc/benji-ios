@@ -31,8 +31,8 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
     /// The parent message of this thread.
     var message: Messageable?
 
-    /// The maximum number of replies we'll show per stack of messages.
-    private let maxShownRepliesPerSection = 3
+    /// The maximum number of messages we'll show per stack of messages.
+    private let maxMessagesPerSection = 3
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -94,13 +94,13 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
 
         // Only shows a limited number of messages in each stack.
         // The for the user's messages, the newest message is at the bottom, so reverse the order.
-        let currentUserMessages = userReplies.prefix(self.maxShownRepliesPerSection).reversed().map { message in
+        let currentUserMessages = userReplies.prefix(self.maxMessagesPerSection).reversed().map { message in
             return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
 
         // Other messages have the newest message on top, so there's no need to reverse the messages.
-        let otherMessages = otherReplies.prefix(self.maxShownRepliesPerSection).map { message in
+        let otherMessages = otherReplies.prefix(self.maxMessagesPerSection).map { message in
             return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
@@ -206,6 +206,8 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
 
+        guard let messageLayout = collectionViewLayout as? ConversationMessageCellLayout else { return .zero }
+
         var insets: UIEdgeInsets = .zero
 
         // Sections should always be tall enough to accommodate the max number of cells, regardless of
@@ -213,18 +215,19 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
         // insets to make up for it.
         let numberOfItems = collectionView.numberOfItems(inSection: section)
 
-        let extraSpacersNeeded = self.maxShownRepliesPerSection - numberOfItems
+        let numberOfExtraCells = clamp(numberOfItems - 1, min: 0)
+        let extraSpacersNeeded = (self.maxMessagesPerSection - 1) - numberOfExtraCells
 
         if section == 0 {
-            insets.top = MessageSubcell.maximumHeight - MessageSubcell.minimumHeight
+            let topInset: CGFloat = 0
 
-            if let frontMostIndex = (collectionViewLayout as! ConversationMessageCellLayout).getFrontmostItemIndexPath(inSection: section) {
-
-                let itemHeight = self.collectionView(collectionView,
-                                                     layout: collectionViewLayout,
-                                                     sizeForItemAt: frontMostIndex).height
-                insets.top = clamp(insets.top - (itemHeight - MessageSubcell.minimumHeight),
-                                                 min: 0)
+            if let frontMostIndex = messageLayout.getFrontmostItemIndexPath(inSection: section) {
+                let frontmostItemHeight = self.collectionView(collectionView,
+                                                              layout: collectionViewLayout,
+                                                              sizeForItemAt: frontMostIndex).height
+                insets.top = MessageSubcell.maximumHeight - frontmostItemHeight
+            } else {
+                insets.top = MessageSubcell.maximumHeight
             }
 
             // Ensure that the bottom of the latest non-user reply in this cell aligns
@@ -233,6 +236,7 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
         } else if section == 1 {
             // Put some space betweent the user's messages and non-user messages
             insets.top = Theme.contentOffset
+
             // Ensure that the top of the latest user reply in this cell aligns
             // with the tops of the latest user replies in adjacent cells.
             insets.top += CGFloat(extraSpacersNeeded) * ConversationMessageCell.spaceBetweenCellTops
@@ -256,23 +260,20 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
 
-        // Only show a header for the first section, and only if there's at least one item in that section.
-        if section == 0 && self.dataSource.snapshot().numberOfItems(inSection: .otherMessages) != 0 {
-            return CGSize(width: collectionView.width, height: Theme.contentOffset)
-        }
+        // Only show a header for the first section.
+        guard section == 0 else { return .zero }
 
-        return .zero
+        return CGSize(width: collectionView.width, height: Theme.contentOffset)
     }
 
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForFooterInSection section: Int) -> CGSize {
-        // Only show a footer for the second section, and only if there's at least one item in that section.
-        if section == 1 && self.dataSource.snapshot().numberOfItems(inSection: .currentUserMessages) != 0 {
-            return CGSize(width: collectionView.width, height: Theme.contentOffset)
-        }
 
-        return .zero
+        // Only show a footer for the second section
+        guard section == 1 else { return .zero }
+
+        return CGSize(width: collectionView.width, height: Theme.contentOffset)
     }
 }
 
