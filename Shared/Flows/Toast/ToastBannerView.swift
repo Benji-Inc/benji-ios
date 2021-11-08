@@ -157,16 +157,9 @@ class ToastBannerView: ToastView {
         guard let superView = UIWindow.topWindow() else { return }
         switch state {
         case .hidden:
-            if self.toast.position == .top {
-                self.bottom = superView.top - self.screenOffset - superView.safeAreaInsets.top
-            } else {
-                self.top = superView.bottom + self.screenOffset + superView.safeAreaInsets.bottom
-            }
             self.width =  (60 * 0.74) + (Theme.contentOffset)
             self.maxHeight = 84
             self.centerOnX()
-            self.layoutNow()
-            self.didPrepareForPresentation()
         case .present:
             if self.toast.position == .top {
                 self.top = superView.top + self.screenOffset
@@ -197,7 +190,7 @@ class ToastBannerView: ToastView {
             }
         }
         #endif
-        self.layoutNow()
+        //self.layoutNow()
     }
 
     private func handle(panRecognizer: UIPanGestureRecognizer) {

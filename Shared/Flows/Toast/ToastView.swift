@@ -74,17 +74,12 @@ class ToastView: View, ToastViewable {
         Task {
             await Task.snooze(seconds: 0.1)
             self.update(for: self.state)
+            self.didPrepareForPresentation()
         }
 
         #if !NOTIFICATION
         guard let superview = UIWindow.topWindow() else { return }
         superview.addSubview(self)
-        
-        if self.toast.position == .top {
-            self.screenOffset = superview.safeAreaInsets.top
-        } else {
-            self.screenOffset = superview.safeAreaInsets.bottom
-        }
         #endif
     }
 
@@ -97,6 +92,31 @@ class ToastView: View, ToastViewable {
     }
 
     func update(for state: ToastState) {
-        
+        #if !NOTIFICATION
+        guard let superView = UIWindow.topWindow() else { return }
+
+        switch state {
+        case .hidden:
+            if self.toast.position == .top {
+                self.bottom = superView.top - self.screenOffset - superView.safeAreaInsets.top
+            } else {
+                self.top = superView.bottom + self.screenOffset + superView.safeAreaInsets.bottom
+            }
+        case .present:
+            break 
+        case .left:
+            break
+        case .expanded:
+            break
+        case .alphaIn:
+            break
+        case .dismiss:
+            break
+        case .gone:
+            break
+        }
+        #endif
+
+        self.layoutNow()
     }
 }
