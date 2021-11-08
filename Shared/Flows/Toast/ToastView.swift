@@ -81,9 +81,25 @@ class ToastView: View, ToastViewable {
         guard let superview = UIWindow.topWindow() else { return }
         superview.addSubview(self)
         #endif
+
+        self.addPan()
     }
 
     func reveal() {
+        self.revealAnimator.stopAnimation(true)
+        self.revealAnimator.addAnimations { [unowned self] in
+            self.state = .present
+        }
+
+        self.revealAnimator.addCompletion({ [unowned self] (position) in
+            if position == .end {
+                self.didReveal()
+            }
+        })
+        self.revealAnimator.startAnimation(afterDelay: 0.5)
+    }
+
+    func didReveal() {
 
     }
 
@@ -118,5 +134,49 @@ class ToastView: View, ToastViewable {
         #endif
 
         self.layoutNow()
+    }
+
+    private func addPan() {
+        let panRecognizer = UIPanGestureRecognizer { [unowned self] panRecognizer in
+            self.handle(panRecognizer: panRecognizer)
+        }
+        self.addGestureRecognizer(panRecognizer)
+    }
+
+    private func handle(panRecognizer: UIPanGestureRecognizer) {
+        #if !NOTIFICATION
+        guard let superview = UIWindow.topWindow() else { return }
+
+        switch panRecognizer.state {
+        case .began:
+            self.initializePanIfNeeded(panRecognizer: panRecognizer)
+        case .changed:
+            self.initializePanIfNeeded(panRecognizer: panRecognizer)
+
+            if let panStart = self.panStart, let startY = self.startY {
+                let delta = panStart.y + panRecognizer.translation(in: superview).y
+                self.centerY = (startY...CGFloat.greatestFiniteMagnitude).clamp(delta + startY)
+            }
+        case .ended, .cancelled, .failed:
+            // Ensure we don't respond the end of an untracked pan gesture
+            let offset = superview.height - self.screenOffset * 0.5
+            if self.top <= offset {
+                self.dismiss()
+            }
+        case .possible:
+            break
+        @unknown default:
+            break
+        }
+        #endif
+    }
+
+    private func initializePanIfNeeded(panRecognizer: UIPanGestureRecognizer) {
+        #if !NOTIFICATION
+        if self.panStart == nil, let superview = UIWindow.topWindow() {
+            self.startY = self.centerY
+            self.panStart = panRecognizer.translation(in: superview)
+        }
+        #endif
     }
 }
