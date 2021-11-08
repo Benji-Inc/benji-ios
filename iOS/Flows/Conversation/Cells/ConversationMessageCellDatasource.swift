@@ -69,6 +69,8 @@ class ConversationMessageCellDataSource: CollectionViewDataSource<ConversationMe
                 let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                             messageId: item.messageID)
                 header.configure(with: messageController.message)
+            } else {
+                header.configure(with: nil)
             }
 
             return header
@@ -80,6 +82,8 @@ class ConversationMessageCellDataSource: CollectionViewDataSource<ConversationMe
                 let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                             messageId: item.messageID)
                 footer.configure(with: messageController.message)
+            } else {
+                footer.configure(with: nil)
             }
             return footer
         default:

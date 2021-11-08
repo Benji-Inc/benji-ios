@@ -25,8 +25,6 @@ class TimeSentView: UICollectionReusableView {
     private func initializeSubviews() {
         self.addSubview(self.timeOfDayLabel)
         self.addSubview(self.daysAgoLabel)
-
-        self.backgroundColor = .red
     }
 
     override func layoutSubviews() {
@@ -45,7 +43,6 @@ class TimeSentView: UICollectionReusableView {
         if let message = message {
             self.timeOfDayLabel.set(date: message.createdAt)
             self.daysAgoLabel.set(date: message.createdAt)
-
         } else {
             self.timeOfDayLabel.text = nil
             self.daysAgoLabel.text = nil
