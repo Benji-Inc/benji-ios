@@ -74,7 +74,7 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         attributes.backgroundColor = backgroundColor
 
         var isMostRecentMessageFromUser = false
-        if let mostRecentMessage = messageDelegate.message?.recentReplies.first {
+        if let mostRecentMessage = self.messageDelegate.message?.mostRecentMessage {
             isMostRecentMessageFromUser = mostRecentMessage.isFromCurrentUser
         }
 
@@ -119,6 +119,22 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
             // If we add more than two sections, the frontmost item is undetermined.
             return 0
         }
+    }
+
+    /// Returns the index path of the item with the highest z-index value in the specified section.
+    func getFrontmostItemIndexPath(inSection section: Int) -> IndexPath? {
+        guard let collectionView = self.collectionView else { return nil }
+
+        let totalItemsInSection = collectionView.numberOfItems(inSection: section)
+
+        for i in 0..<totalItemsInSection {
+            let indexPath = IndexPath(item: i, section: section)
+            if self.getZIndex(forIndexPath: indexPath) == 0 {
+                return indexPath
+            }
+        }
+
+        return nil
     }
 
     // MARK: - Custom Diff Animations
