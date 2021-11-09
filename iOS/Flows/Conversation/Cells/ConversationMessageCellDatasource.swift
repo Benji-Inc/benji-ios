@@ -31,12 +31,6 @@ class ConversationMessageCellDataSource: CollectionViewDataSource<ConversationMe
     // Cell registration
     private let messageSubcellRegistration
     = ConversationMessageCellDataSource.createMessageSubcellRegistration()
-    private let headerRegistration
-    = UICollectionView.SupplementaryRegistration<TimeSentView>(elementKind: UICollectionView.elementKindSectionHeader)
-    { supplementaryView, elementKind, indexPath in }
-    private let footerRegistration
-    = UICollectionView.SupplementaryRegistration<TimeSentView>(elementKind: UICollectionView.elementKindSectionFooter)
-    { supplementaryView, elementKind, indexPath in }
 
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
@@ -53,42 +47,6 @@ class ConversationMessageCellDataSource: CollectionViewDataSource<ConversationMe
 
 
                 return messageCell
-    }
-
-    override func dequeueSupplementaryView(with collectionView: UICollectionView,
-                                           kind: String,
-                                           section: ConversationMessageSection,
-                                           indexPath: IndexPath) -> UICollectionReusableView? {
-
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            let header
-            = collectionView.dequeueConfiguredReusableSupplementary(using: self.headerRegistration,
-                                                                    for: indexPath)
-            if let item = self.itemIdentifiers(in: .otherMessages).last {
-                let messageController = ChatClient.shared.messageController(cid: item.channelID,
-                                                                            messageId: item.messageID)
-                header.configure(with: messageController.message)
-            } else {
-                header.configure(with: nil)
-            }
-
-            return header
-        case UICollectionView.elementKindSectionFooter:
-            let footer
-            = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerRegistration,
-                                                                    for: indexPath)
-            if let item = self.itemIdentifiers(in: .currentUserMessages).last {
-                let messageController = ChatClient.shared.messageController(cid: item.channelID,
-                                                                            messageId: item.messageID)
-                footer.configure(with: messageController.message)
-            } else {
-                footer.configure(with: nil)
-            }
-            return footer
-        default:
-            return UICollectionReusableView()
-        }
     }
 }
 

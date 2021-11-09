@@ -7,13 +7,14 @@
 //
 
 import Foundation
+import StreamChat
 
 protocol ConversationMessageCellLayoutDelegate: AnyObject {
     var message: Messageable? { get }
 }
 
 /// A custom collectionview layout for conversation message cells. This class assumes the collection view contains
-/// MessageSubcell cells laid out in a stack along the z-axis.
+/// MessageSubcell cells laid out in two separate stacks along the z-axis.
 class ConversationMessageCellLayout: UICollectionViewFlowLayout {
 
     unowned let messageDelegate: ConversationMessageCellLayoutDelegate
@@ -24,8 +25,11 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
 
     init(messageDelegate: ConversationMessageCellLayoutDelegate) {
         self.messageDelegate = messageDelegate
+
         super.init()
+
         self.scrollDirection = .vertical
+        self.register(TimeSentView.self, forDecorationViewOfKind: TimeSentView.objectIdentifier)
     }
 
     required init?(coder: NSCoder) {
@@ -33,13 +37,24 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        guard let attributesInRect = super.layoutAttributesForElements(in: rect) else { return nil }
+        guard var attributesInRect = super.layoutAttributesForElements(in: rect) else { return nil }
 
         for attributes in attributesInRect {
             guard let messageAttributes = attributes as? ConversationMessageCellLayoutAttributes else {
                 continue
             }
             self.update(attributes: messageAttributes)
+        }
+
+        let sectionCount = self.collectionView?.numberOfSections ?? 0
+        for sectionIndex in 0..<sectionCount {
+            let decorationAttributes
+            = self.layoutAttributesForDecorationView(ofKind: TimeSentView.objectIdentifier,
+                                                     at: IndexPath(item: 0,
+                                                                   section: sectionIndex))
+            if let decorationAttributes = decorationAttributes {
+                attributesInRect.append(decorationAttributes)
+            }
         }
 
         return attributesInRect
@@ -54,6 +69,44 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
 
         return attributes
     }
+
+    override func layoutAttributesForDecorationView(ofKind elementKind: String,
+                                                    at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+
+        guard let frontmostItemIndex = self.getFrontmostItemIndexPath(inSection: indexPath.section),
+              let frontmostAttributes = self.layoutAttributesForItem(at: frontmostItemIndex) else {
+            return nil
+        }
+
+        let attributes
+        = ConversationMessageCellLayoutAttributes(forDecorationViewOfKind: TimeSentView.objectIdentifier,
+                                                  with: indexPath)
+
+        if indexPath.section == 0 {
+            // Position the decoration above the frontmost item in the first section
+            attributes.frame = CGRect(x: frontmostAttributes.frame.left,
+                                      y: frontmostAttributes.frame.top - Theme.contentOffset,
+                                      width: frontmostAttributes.frame.width,
+                                      height: Theme.contentOffset)
+        } else {
+            // Position the decoration below the frontmost item in the second section
+            attributes.frame = CGRect(x: frontmostAttributes.frame.left,
+                                      y: frontmostAttributes.frame.bottom,
+                                      width: frontmostAttributes.frame.width,
+                                      height: Theme.contentOffset)
+        }
+
+        guard let recentMessage = self.messageDelegate.message else { return nil }
+        let messageController
+        = ChatClient.shared.messageController(cid: try! ChannelId(cid: recentMessage.conversationId),
+                                              messageId: recentMessage.id)
+        let mostRecentMessage = messageController.getMostRecent(fromCurrentUser: indexPath.section == 1)
+        attributes.timeSent = mostRecentMessage?.createdAt
+
+        return attributes
+    }
+
+    // MARK: - Attribute Modifications
 
     private func update(attributes: ConversationMessageCellLayoutAttributes) {
         let indexPath = attributes.indexPath
