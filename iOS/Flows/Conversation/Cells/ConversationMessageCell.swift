@@ -175,29 +175,27 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
+        guard let messageLayout = collectionViewLayout as? ConversationMessageCellLayout else { return .zero }
+
         var width = collectionView.width
         var height: CGFloat = MessageSubcell.minimumHeight
 
         // The heights of all cells in a section are the same as the front most cell in that section.
-        if let messageLayout = collectionViewLayout as? ConversationMessageCellLayout,
-           let latestItemIndex = messageLayout.getFrontmostItemIndexPath(inSection: indexPath.section),
-           let latestItem = self.dataSource.itemIdentifier(for: latestItemIndex) {
+        if let frontmostItemIndex = messageLayout.getFrontmostItemIndexPath(inSection: indexPath.section),
+           let frontmostItem = self.dataSource.itemIdentifier(for: frontmostItemIndex) {
 
+            // The height of the frontmost item depends on the content of the message it displays.
             if let latestMessage
-                = ChatClient.shared.messageController(cid: latestItem.channelID,
-                                                      messageId: latestItem.messageID).message {
+                = ChatClient.shared.messageController(cid: frontmostItem.channelID,
+                                                      messageId: frontmostItem.messageID).message {
 
                 height = MessageSubcell.getHeight(withWidth: width, message: latestMessage)
             }
-
-            // Shrink down cells as they get closer to the back of the stack.
-            let zIndex = messageLayout.getZIndex(forIndexPath: indexPath)
-            width += CGFloat(zIndex) * 15
         }
 
-        if self.message?.isDeleted == true {
-            height = MessageSubcell.minimumHeight
-        }
+        // Shrink down cells widths the farther back they are in the stack.
+        let zIndex = messageLayout.getZIndex(forIndexPath: indexPath)
+        width += CGFloat(zIndex) * 15
 
         return CGSize(width: width, height: height)
     }
@@ -208,15 +206,17 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
 
         guard let messageLayout = collectionViewLayout as? ConversationMessageCellLayout else { return .zero }
 
+        // Sections are a fixed height. They are exactly tall enough to accommodate the maximum cell count
+        // per section with the frontmost cell at the maximum height.
+        // If the existing cells aren't enough that match that height, we add section
+        // insets to make up the difference.
 
-
-        // Sections should always be tall enough to accommodate the max number of cells, regardless of
-        // how many cells they actually have. If there aren't enough cells to fill that space, add section
-        // insets to make up for it.
         let numberOfItems = collectionView.numberOfItems(inSection: section)
-
-        let numberOfExtraCells = clamp(numberOfItems - 1, min: 0)
-        let extraSpacersNeeded = (self.maxMessagesPerSection - 1) - numberOfExtraCells
+        // The number of cells behind the frontmost cells.
+        let numberOfCoveredCells = clamp(numberOfItems - 1, min: 0)
+        // The amount of extra space units we need to add to the insets to ensure a fixed section height.
+        let extraSpacersNeeded
+        = (self.maxMessagesPerSection - 1) - numberOfCoveredCells
 
         var insets: UIEdgeInsets = .zero
         if section == 0 {
@@ -233,7 +233,7 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
             // with the bottom of the latest non-user reply in adjacent cells.
             insets.bottom += CGFloat(extraSpacersNeeded) * ConversationMessageCell.spaceBetweenCellTops
         } else if section == 1 {
-            // Put some space between the user's messages and non-user messages
+            // Put some space between the two sections of messages.
             insets.top = Theme.contentOffset
 
             // Ensure that the top of the latest user reply in this cell aligns
