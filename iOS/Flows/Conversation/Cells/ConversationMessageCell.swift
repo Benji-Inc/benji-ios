@@ -117,14 +117,10 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
     }
 
     func handle(isCentered: Bool) {
+        guard self.collectionLayout.showTimeSent != isCentered else { return }
+        
         UIView.animate(withDuration: 0.2) {
-            if let header = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) {
-                header.alpha = isCentered ? 1.0 : 0.0
-            }
-
-            if let footer = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: 1)) {
-                footer.alpha = isCentered ? 1.0 : 0.0
-            }
+            self.collectionLayout.showTimeSent = isCentered
         }
     }
   

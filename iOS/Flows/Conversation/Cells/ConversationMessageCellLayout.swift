@@ -17,6 +17,10 @@ protocol ConversationMessageCellLayoutDelegate: AnyObject {
 /// MessageSubcell cells laid out in two separate stacks along the z-axis.
 class ConversationMessageCellLayout: UICollectionViewFlowLayout {
 
+    /// If true, the time sent decoration views should be displayed.
+    var showTimeSent: Bool = false {
+        didSet { self.invalidateLayout() }
+    }
     unowned let messageDelegate: ConversationMessageCellLayoutDelegate
 
     override class var layoutAttributesClass: AnyClass {
@@ -102,6 +106,8 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
                                               messageId: recentMessage.id)
         let mostRecentMessage = messageController.getMostRecent(fromCurrentUser: indexPath.section == 1)
         attributes.timeSent = mostRecentMessage?.createdAt
+
+        attributes.alpha = self.showTimeSent ? 1 : 0
 
         return attributes
     }
