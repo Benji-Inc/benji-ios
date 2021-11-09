@@ -78,7 +78,7 @@ class WaitlistViewController: ViewController, Sizeable {
         if let query = self.queQuery {
             let subscription = Client.shared.subscribe(query)
 
-            subscription.handleEvent { query, event in
+            subscription.handleEvent { [unowned self] query, event in
                 switch event {
                 case .entered(let u), .updated(let u):
                     guard let que = u as? QuePositions else { return }
