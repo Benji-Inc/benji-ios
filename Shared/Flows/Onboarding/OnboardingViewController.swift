@@ -74,6 +74,9 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             case .welcome:
                 self.updateUI()
             case .login:
+                Task {
+                    try await self.updateInvitor(with: "IQgIBSPHpE")
+                }
                 self.current = .phone(self.phoneVC)
             case .reservationInput:
                 self.updateUI()
