@@ -8,6 +8,28 @@
 
 import Foundation
 
+/// Layout attributes that can be used to configure a TimeSentView.
+class TimeSentViewLayoutAttributes: UICollectionViewLayoutAttributes {
+
+    /// The date we want displayed on the TimeSentView
+    var timeSent: Date?
+
+    override func copy(with zone: NSZone? = nil) -> Any {
+        let copy = super.copy(with: zone) as! TimeSentViewLayoutAttributes
+        copy.timeSent = self.timeSent
+        return copy
+    }
+
+    override func isEqual(_ object: Any?) -> Bool {
+        if let layoutAttributes = object as? TimeSentViewLayoutAttributes {
+            return super.isEqual(object)
+            && layoutAttributes.timeSent == self.timeSent
+        }
+
+        return false
+    }
+}
+
 class TimeSentView: UICollectionReusableView {
 
     let timeOfDayLabel = MessageTimeLabel()
@@ -42,9 +64,9 @@ class TimeSentView: UICollectionReusableView {
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
 
-        if let messageAttributes = layoutAttributes as? ConversationMessageCellLayoutAttributes {
-            self.timeOfDayLabel.set(date: messageAttributes.timeSent)
-            self.daysAgoLabel.set(date: messageAttributes.timeSent)
+        if let timeSentAttributes = layoutAttributes as? TimeSentViewLayoutAttributes {
+            self.timeOfDayLabel.set(date: timeSentAttributes.timeSent)
+            self.daysAgoLabel.set(date: timeSentAttributes.timeSent)
         }
 
         self.setNeedsLayout()
