@@ -57,6 +57,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
     weak var delegate: SwipeableInputAccessoryViewDelegate?
 
+    var targetRect: CGRect = .zero
+
     // MARK: View Setup and Layout
 
     // Override intrinsic content size so that height is adjusted for safe areas and text input.
@@ -182,8 +184,6 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     private var currentSendPosition: SendPosition?
     /// How far the preview view can be dragged left or right.
     private let maxXOffset: CGFloat = 40
-    /// How far the preview view can be dragged vertically
-    private let maxYOffset: CGFloat = 250
 
     func handle(pan: UIPanGestureRecognizer) {
         guard self.shouldHandlePan() else { return }
@@ -237,9 +237,10 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
     private func handlePanChanged(withOffset panOffset: CGPoint) {
         guard let initialPosition = self.initialPreviewOrigin else { return }
+        let maxY = self.inputContainerView.top - self.targetRect.top + 20
 
         let offsetX = clamp(panOffset.x, -self.maxXOffset, self.maxXOffset)
-        let offsetY = clamp(panOffset.y, -self.maxYOffset, 0)
+        let offsetY = clamp(panOffset.y, -maxY, 0)
         self.previewView?.origin = initialPosition + CGPoint(x: offsetX, y: offsetY)
 
         guard let sendable = self.sendable else { return }
@@ -247,7 +248,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         let newSendPosition = self.getSendPosition(forPanOffset: panOffset)
 
         // Detect if the send position has changed. If so, let the delegate know so it can prepare
-        // for a send or cancel the current send.
+        // for a send, or cancel the current send.
         if newSendPosition != self.currentSendPosition {
             self.currentSendPosition = newSendPosition
 
@@ -294,10 +295,10 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     /// Gets the send position for the given panOffset. If the pan offset doesn't correspond to a valid send position, nil is returned.
     private func getSendPosition(forPanOffset panOffset: CGPoint) -> SendPosition? {
         // The percentage of the max y offset that the preview view has been dragged up.
-        let progress = clamp(-panOffset.y/self.maxYOffset, 0, 1)
+        let progress = clamp(panOffset.y/self.targetRect.top, 0, 1)
 
         // Make sure the user has dragged up far enough, otherwise this isn't a valid send position.
-        guard progress > 0.25 else { return nil }
+        guard progress > 0.8 else { return nil }
 
         switch panOffset.x {
         case -CGFloat.greatestFiniteMagnitude ... -self.maxXOffset.half:

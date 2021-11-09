@@ -329,6 +329,8 @@ class ConversationViewController: FullScreenViewController,
         let overlayFrame = self.collectionView.getMessageOverlayFrame(convertedTo: self.contentContainer)
         self.sendMessageOverlay.frame = overlayFrame
 
+        view.targetRect = view.convert(self.sendMessageOverlay.bounds, from: self.sendMessageOverlay)
+
         self.sendMessageOverlay.centerOnX()
     }
 

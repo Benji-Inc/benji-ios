@@ -119,6 +119,7 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
 
     func handle(isCentered: Bool) {
         UIView.animate(withDuration: 0.2) {
+            self.collectionLayout.layoutAttributesForDecorationView(ofKind: <#T##String#>, at: <#T##IndexPath#>)
             if let header = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) {
                 header.alpha = isCentered ? 1.0 : 0.0
             }
@@ -138,24 +139,14 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
         self.dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    /// Returns the frame that a message send overlay should appear based on this cells contents.
+    /// Returns the frame that a message drop zone should have, based on this cell's contents.
     /// The frame is in the coordinate space of the passed in view.
     func getMessageOverlayFrame(convertedTo targetView: UIView) -> CGRect {
-        let userMessageCount = self.collectionView.numberOfItems(inSection: 1)
-        if let frontUserCell = self.collectionView.cellForItem(at: IndexPath(item: userMessageCount - 1,
-                                                                           section: 1)) {
+        if let frontCellIndex = self.collectionLayout
+            .getFrontmostItemIndexPath(inSection: ConversationMessageSection.currentUserMessages.rawValue),
+           let frontUserCell = self.collectionView.cellForItem(at: frontCellIndex) {
 
-            var overlayRect = frontUserCell.convert(frontUserCell.bounds, to: self)
-            overlayRect.top += ConversationMessageCell.spaceBetweenCellTops
-            return self.convert(overlayRect, to: targetView)
-        }
-
-        let otherMessageCount = self.collectionView.numberOfItems(inSection: 0)
-        if let frontOtherCell = self.collectionView.cellForItem(at: IndexPath(item: otherMessageCount - 1,
-                                                                            section: 0)) {
-
-            var overlayRect = frontOtherCell.convert(frontOtherCell.bounds, to: self)
-            overlayRect.top += frontOtherCell.height + ConversationMessageCell.spaceBetweenCellTops
+            let overlayRect = frontUserCell.convert(frontUserCell.bounds, to: self)
             return self.convert(overlayRect, to: targetView)
         }
 
