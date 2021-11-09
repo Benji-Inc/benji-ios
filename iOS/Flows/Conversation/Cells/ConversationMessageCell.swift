@@ -104,7 +104,6 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
             return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
-
         var snapshot = self.dataSource.snapshot()
 
         // Clear out the sections to make way for a fresh set of message.
@@ -118,15 +117,10 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
     }
 
     func handle(isCentered: Bool) {
+        guard self.collectionLayout.showTimeSent != isCentered else { return }
+        
         UIView.animate(withDuration: 0.2) {
-            self.collectionLayout.layoutAttributesForDecorationView(ofKind: <#T##String#>, at: <#T##IndexPath#>)
-            if let header = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(item: 0, section: 0)) {
-                header.alpha = isCentered ? 1.0 : 0.0
-            }
-
-            if let footer = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionFooter, at: IndexPath(item: 0, section: 1)) {
-                footer.alpha = isCentered ? 1.0 : 0.0
-            }
+            self.collectionLayout.showTimeSent = isCentered
         }
     }
   
@@ -248,26 +242,6 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
                                            sizeForItemAt: IndexPath(item: 0, section: section))
         // Return a negative spacing so that the cells overlap.
         return -cellSize.height + ConversationMessageCell.spaceBetweenCellTops
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForHeaderInSection section: Int) -> CGSize {
-
-        // Only show a header for the first section.
-        guard section == 0 else { return .zero }
-
-        return CGSize(width: collectionView.width, height: Theme.contentOffset)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForFooterInSection section: Int) -> CGSize {
-
-        // Only show a footer for the second section
-        guard section == 1 else { return .zero }
-
-        return CGSize(width: collectionView.width, height: Theme.contentOffset)
     }
 }
 

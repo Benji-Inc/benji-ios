@@ -11,7 +11,7 @@ import StreamChat
 
 typealias MessageController = ChatMessageController
 
-extension ChatMessageController {
+extension MessageController {
 
     func editMessage(with sendable: Sendable) async throws {
         switch sendable.kind {
@@ -165,6 +165,25 @@ extension ChatMessageController {
                 } else {
                     continuation.resume(returning: ())
                 }
+            }
+        }
+    }
+
+    /// Returns the most recently sent message from either the current user or from another user.
+    /// This checks both replies and the original message.
+    func getMostRecent(fromCurrentUser: Bool) -> Message? {
+        var allMessages: [Message] = []
+        allMessages.append(contentsOf: Array(self.replies))
+        if let message = self.message {
+            allMessages.append(message)
+        }
+
+        // Find the most recent message that was sent by the user.
+        return allMessages.first { message in
+            if fromCurrentUser {
+                return message.isFromCurrentUser
+            } else {
+                return !message.isFromCurrentUser
             }
         }
     }
