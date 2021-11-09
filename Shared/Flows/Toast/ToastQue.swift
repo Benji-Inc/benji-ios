@@ -38,7 +38,7 @@ class ToastQueue {
         self.toaster.add(toast: toast)
         self.allViewed.append(toast.id)
 
-        self.toaster.didDismiss = { _ in
+        self.toaster.didDismiss = { [unowned self] _ in
             if let nextToast = self.scheduled.last  {
                 self.present(toast: nextToast)
                 self.scheduled.remove(object: nextToast)
@@ -49,14 +49,20 @@ class ToastQueue {
 
 fileprivate class Toaster {
 
-    var items: [ToastView] = []
+    var items: [ToastViewable] = []
     var didDismiss: (String) -> Void = {_ in }
     var isPresenting: Bool = false
 
     func add(toast: Toast) {
 
-        let toastView = ToastView()
-        toastView.configure(toast: toast)
+        var toastView: ToastViewable
+
+        switch toast.type {
+        case .banner:
+            toastView = ToastBannerView(with: toast)
+        case .error:
+            toastView = ToastErrorView(with: toast)
+        }
 
         if let current = self.items.first {
             current.dismiss()
@@ -65,7 +71,9 @@ fileprivate class Toaster {
 
         if self.items.count == 1 {
             self.isPresenting = true
-            toastView.reveal()
+            toastView.didPrepareForPresentation = {
+                toastView.reveal()
+            }
         }
 
         toastView.didDismiss = { [unowned self] in
@@ -78,9 +86,22 @@ fileprivate class Toaster {
         }
     }
 
-    func didDismiss(toastView: ToastView) {
-        toastView.removeFromSuperview()
-        self.items.remove(object: toastView)
+    func didDismiss(toastView: ToastViewable) {
+
+        if let view = toastView as? UIView {
+            view.removeFromSuperview()
+        }
+
+        var indexToRemove: Int?
+        for (index, item) in self.items.enumerated() {
+            if item.toast.id == toastView.toast.id {
+                indexToRemove = index
+            }
+        }
+        if let i = indexToRemove {
+            self.items.remove(at: i)
+        }
+
         self.isPresenting = false
 
         if !self.items.isEmpty, let nextView = self.items[safe: 0] {

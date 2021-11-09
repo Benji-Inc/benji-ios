@@ -86,7 +86,10 @@ class Button: UIButton, Statusable {
 
             normalString.addAttribute(.foregroundColor, value: Color.white.color)
             highlightedString.addAttribute(.foregroundColor, value: Color.white.color)
-            self.setBackground(color: color.color.withAlphaComponent(alpha), forUIControlState: .normal)
+            if color != .clear {
+                self.setBackground(color: color.color.withAlphaComponent(alpha), forUIControlState: .normal)
+            }
+
             self.setBackground(color: Color.clear.color, forUIControlState: .highlighted)
 
             // Emojis wont show correctly with attributes
@@ -98,8 +101,10 @@ class Button: UIButton, Statusable {
                 self.setAttributedTitle(highlightedString, for: .highlighted)
             }
 
-            self.layer.borderColor = color.color.cgColor
-            self.layer.borderWidth = 2
+            if color != .clear {
+                self.layer.borderColor = color.color.cgColor
+                self.layer.borderWidth = 2
+            }
 
         case .icon(let image, let color):
             self.defaultColor = color

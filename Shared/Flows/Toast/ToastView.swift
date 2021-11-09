@@ -2,184 +2,168 @@
 //  ToastView.swift
 //  Jibber
 //
-//  Created by Benji Dodgson on 5/3/21.
+//  Created by Benji Dodgson on 11/6/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
-import TMROLocalization
-import GestureRecognizerClosures
-
-enum ToastPosition {
-    case top, bottom
-}
+import Combine
 
 enum ToastState {
     case hidden, present, left, expanded, alphaIn, dismiss, gone
 }
 
-class ToastView: View {
+protocol ToastViewable {
+    var toast: Toast { get set }
+    var didPrepareForPresentation: () -> Void { get set }
+    var didDismiss: () -> Void { get set }
+    var didTap: () -> Void { get set }
+    func reveal()
+    func dismiss()
+    init(with toast: Toast)
+}
 
-    private let vibrancyView = VibrancyView()
-    private let titleLabel = Label(font: .regularBold)
-    private let descriptionLabel = Label(font: .smallBold)
-    private let imageView = AvatarView()
+class ToastView: View, ToastViewable {
 
+    var toast: Toast
+    var didPrepareForPresentation: () -> Void = {}
     var didDismiss: () -> Void = {}
     var didTap: () -> Void = {}
 
-    var toast: Toast?
+    var panStart: CGPoint?
+    var startY: CGFloat?
+
+    var maxHeight: CGFloat?
+    var screenOffset: CGFloat = 50
+
+    var cancellables = Set<AnyCancellable>()
+
+    var state: ToastState = .hidden {
+        didSet {
+            if self.state != oldValue {
+                self.update(for: self.state)
+            }
+        }
+    }
 
     let revealAnimator = UIViewPropertyAnimator(duration: 0.35,
                                                 dampingRatio: 0.6,
-                                                animations: nil)
-
-    let leftAnimator = UIViewPropertyAnimator(duration: 0.35,
-                                              dampingRatio: 0.9,
-                                              animations: nil)
-
-    let expandAnimator = UIViewPropertyAnimator(duration: 0.35,
-                                                dampingRatio: 0.9,
                                                 animations: nil)
 
     let dismissAnimator = UIViewPropertyAnimator(duration: 0.35,
                                                  dampingRatio: 0.6,
                                                  animations: nil)
 
-    private var panStart: CGPoint?
-    private var startY: CGFloat?
-
-    var maxHeight: CGFloat?
-    var screenOffset: CGFloat = 50
-    var presentationDuration: TimeInterval = 10.0
-    //Used to present the toast from the top OR bottom of the screen
-    private let position: ToastPosition = .top
-
-    private var toastState = ToastState.hidden {
-        didSet {
-            if self.toastState != oldValue {
-                self.updateFor(state: self.toastState)
-            }
-        }
+    required init(with toast: Toast) {
+        self.toast = toast
+        super.init()
     }
 
-    private var title: Localized? {
-        didSet {
-            guard let text = self.title else { return }
-            self.titleLabel.setText(text)
-            self.layoutNow()
-        }
-    }
-
-    private var descriptionText: Localized? {
-        didSet {
-            guard let text = self.descriptionText else { return }
-            self.descriptionLabel.setText(text)
-            self.layoutNow()
-        }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        #if !NOTIFICATION
-        guard let superview = UIWindow.topWindow() else { return }
-        superview.addSubview(self)
-
-        self.addSubview(self.imageView)
-        self.addSubview(self.descriptionLabel)
-        self.vibrancyView.effectView.contentView.addSubview(self.titleLabel)
-
         self.isUserInteractionEnabled = true
         self.layer.masksToBounds = true
-        self.layer.cornerRadius = 10
-
-        self.imageView.imageView.tintColor = Color.white.color
-        self.imageView.imageView.contentMode = .scaleAspectFit
-
-        self.descriptionLabel.alpha = 0
-        self.titleLabel.alpha = 0
-
-        self.showShadow(withOffset: 5)
-        self.updateFor(state: self.toastState)
-
-        if self.position == .top {
-            self.screenOffset = superview.safeAreaInsets.top
-        } else {
-            self.screenOffset = superview.safeAreaInsets.bottom
-        }
-        #endif
-    }
-
-    func configure(toast: Toast) {
-        self.toast = toast
-        self.title = toast.title
-        self.descriptionText = localized(toast.description)
+        self.layer.cornerRadius = Theme.cornerRadius
 
         self.didSelect { [unowned self] in
-            toast.didTap()
+            self.toast.didTap()
             self.dismiss()
         }
 
-        self.imageView.displayable = toast.displayable
+        Task {
+            await Task.snooze(seconds: 0.1)
+            self.update(for: self.state)
+            self.didPrepareForPresentation()
+        }
+
+        #if !NOTIFICATION
+        guard let superview = UIWindow.topWindow() else { return }
+        superview.addSubview(self)
+        #endif
+
+        self.addPan()
     }
 
     func reveal() {
-        self.layoutNow()
         self.revealAnimator.stopAnimation(true)
         self.revealAnimator.addAnimations { [unowned self] in
-            self.toastState = .present
+            self.state = .present
         }
 
         self.revealAnimator.addCompletion({ [unowned self] (position) in
             if position == .end {
-                self.moveLeft()
+                self.didReveal()
             }
         })
         self.revealAnimator.startAnimation(afterDelay: 0.5)
     }
 
-    private func moveLeft() {
-        self.layoutNow()
-
-        self.leftAnimator.stopAnimation(true)
-        self.leftAnimator.addAnimations { [unowned self] in
-            self.toastState = .left
-        }
-
-        self.leftAnimator.addCompletion({ [unowned self] (position) in
-            if position == .end {
-                self.expand()
+    func didReveal() {
+        Task {
+            await Task.sleep(seconds: self.toast.duration)
+            if self.state != .gone {
+                self.dismiss()
+            } else {
+                await self.taskPool.cancelAndRemoveAll()
             }
-        })
-        self.leftAnimator.startAnimation()
+
+        }.add(to: self.taskPool)
     }
 
-    private func expand() {
-        self.layoutNow()
+    func dismiss() {
+        self.revealAnimator.stopAnimation(true)
 
-        self.expandAnimator.stopAnimation(true)
-        self.expandAnimator.addAnimations { [unowned self] in
-            self.toastState = .expanded
-            self.layoutNow()
+        self.dismissAnimator.addAnimations{ [unowned self] in
+            self.state = .dismiss
         }
 
-        self.expandAnimator.addAnimations({ [unowned self] in
-            self.toastState = .alphaIn
-        }, delayFactor: 0.5)
-
-        self.expandAnimator.addCompletion({ [unowned self] (position) in
+        self.dismissAnimator.addCompletion({ [unowned self] (position) in
             if position == .end {
-                self.addPan()
-                delay(self.presentationDuration) {
-                    if self.toastState != .gone {
-                        self.dismiss()
-                    }
-                }
+                self.state = .gone
+                self.didDismiss()
             }
         })
+        self.dismissAnimator.startAnimation()
+    }
 
-        self.expandAnimator.startAnimation(afterDelay: 0.2)
+    func update(for state: ToastState) {
+        #if !NOTIFICATION
+        guard let superView = UIWindow.topWindow() else { return }
+
+        switch state {
+        case .hidden:
+            if self.toast.position == .top {
+                self.bottom = superView.top - self.screenOffset - superView.safeAreaInsets.top
+            } else {
+                self.top = superView.bottom + self.screenOffset + superView.safeAreaInsets.bottom
+            }
+        case .present:
+            if self.toast.position == .top {
+                self.top = superView.top + self.screenOffset
+            } else {
+                self.bottom = superView.bottom - self.screenOffset
+            }
+        case .left:
+            break
+        case .expanded:
+            break
+        case .alphaIn:
+            break
+        case .dismiss, .gone:
+            if self.toast.position == .top {
+                self.bottom = superView.top + 10
+            } else {
+                self.top = superView.bottom - 10
+            }
+        }
+        #endif
+
+        self.layoutNow()
     }
 
     private func addPan() {
@@ -187,71 +171,6 @@ class ToastView: View {
             self.handle(panRecognizer: panRecognizer)
         }
         self.addGestureRecognizer(panRecognizer)
-    }
-
-    func dismiss() {
-
-        self.revealAnimator.stopAnimation(true)
-        self.expandAnimator.stopAnimation(true)
-        self.leftAnimator.stopAnimation(true)
-
-        self.dismissAnimator.addAnimations{ [unowned self] in
-            self.toastState = .dismiss
-        }
-
-        self.dismissAnimator.addCompletion({ [unowned self] (position) in
-            if position == .end {
-                self.toastState = .gone
-                self.didDismiss()
-            }
-        })
-        self.dismissAnimator.startAnimation()
-    }
-
-    private func updateFor(state: ToastState) {
-        #if !NOTIFICATION
-        guard let superView = UIWindow.topWindow() else { return }
-        switch state {
-        case .hidden:
-            if self.position == .top {
-                self.bottom = superView.top - self.screenOffset - superView.safeAreaInsets.top
-            } else {
-                self.top = superView.bottom + self.screenOffset + superView.safeAreaInsets.bottom
-            }
-            self.width =  (60 * 0.74) + (Theme.contentOffset)
-            self.maxHeight = 84
-            self.centerOnX()
-        case .present:
-            if self.position == .top {
-                self.top = superView.top + self.screenOffset
-            } else {
-                self.bottom = superView.bottom - self.screenOffset
-            }
-        case .left:
-            if UIScreen.main.isSmallerThan(screenSize: .tablet) {
-                self.left = superView.width * 0.025
-            } else {
-                self.left = superView.width * 0.175
-            }
-        case .expanded:
-            self.maxHeight = nil
-            if UIScreen.main.isSmallerThan(screenSize: .tablet) {
-                self.width = superView.width * 0.95
-            } else {
-                self.width = superView.width * Theme.iPadPortraitWidthRatio
-            }
-        case .alphaIn:
-            self.descriptionLabel.alpha = 1
-            self.titleLabel.alpha = 1
-        case .dismiss, .gone:
-            if self.position == .top {
-                self.bottom = superView.top + 10
-            } else {
-                self.top = superView.bottom - 10
-            }
-        }
-        #endif
-        self.layoutNow()
     }
 
     private func handle(panRecognizer: UIPanGestureRecognizer) {
@@ -289,52 +208,5 @@ class ToastView: View {
             self.panStart = panRecognizer.translation(in: superview)
         }
         #endif
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        self.vibrancyView.expandToSuperviewSize()
-        self.vibrancyView.roundCorners()
-
-        self.imageView.size = CGSize(width: 60 * 0.74, height: 60)
-        self.imageView.left = Theme.contentOffset.half
-        self.imageView.top = Theme.contentOffset.half
-
-        if self.imageView.displayable is UIImage {
-            self.imageView.layer.borderColor = Color.clear.color.cgColor
-            self.imageView.layer.borderWidth = 0
-            self.imageView.set(backgroundColor: .clear)
-        }
-        
-        self.imageView.layer.masksToBounds = true
-        self.imageView.layer.cornerRadius = 5
-        self.imageView.clipsToBounds = true
-
-        let maxTitleWidth: CGFloat
-        if UIScreen.main.isSmallerThan(screenSize: .tablet) {
-            maxTitleWidth = self.width - (self.imageView.right + Theme.contentOffset)
-        } else {
-            maxTitleWidth = (self.width * Theme.iPadPortraitWidthRatio) - (self.imageView.right + 22)
-        }
-
-        self.titleLabel.setSize(withWidth: maxTitleWidth)
-        self.titleLabel.match(.left, to: .right, of: self.imageView, offset: Theme.contentOffset.half)
-        self.titleLabel.match(.top, to: .top, of: self.imageView)
-
-        self.descriptionLabel.setSize(withWidth: maxTitleWidth)
-        self.descriptionLabel.match(.left, to: .right, of: self.imageView, offset: Theme.contentOffset.half)
-        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 4)
-        if self.descriptionLabel.height > 84 {
-            self.descriptionLabel.height = 84
-        }
-
-        if let height = self.maxHeight {
-            self.height = height
-        } else if self.descriptionLabel.bottom + Theme.contentOffset.half < 84 {
-            self.height = 84
-        } else {
-            self.height = self.descriptionLabel.bottom + Theme.contentOffset.half
-        }
     }
 }

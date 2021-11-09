@@ -18,7 +18,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
     }
 
     var transitionColor: Color {
-        return .clear
+        return .background
     }
 
     let animationView = AnimationView.with(animation: .loading)

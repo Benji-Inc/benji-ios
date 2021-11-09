@@ -40,7 +40,7 @@ class HomeViewController: DiffableCollectionViewController<HomeCollectionViewDat
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.set(backgroundColor: .background)
+        self.view.set(backgroundColor: .white)
 
         self.view.addSubview(self.addButton)
         self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .lightGray))

@@ -72,7 +72,5 @@ class FaceDetectionViewController: ImageCaptureViewController {
         }
 
         self.didCapturePhoto?(image)
-
-        print("EYES ARE CLOSED: \(self.eyesAreClosed)")
     }
 }

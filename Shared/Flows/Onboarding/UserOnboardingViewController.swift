@@ -15,15 +15,17 @@ class UserOnboardingViewController: ViewController {
     private(set) var blurView = BlurView()
     private(set) var avatarView = AvatarView()
 
-    private(set) var nameLabel = Label(font: .mediumThin)
+    private(set) var nameLabel = Label(font: .mediumThin, textColor: .textColor)
     private(set) var bubbleView = SpeechBubbleView(orientation: .up,
-                                                   bubbleColor: Color.gray.color,
-                                                   borderColor: Color.gray.color)
+                                                   bubbleColor: Color.white.color,
+                                                   borderColor: Color.white.color)
     private(set) var textView = OnboardingMessageTextView()
-
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.avatarView.isHidden = true 
+        self.view.set(backgroundColor: .background)
 
         self.view.addSubview(self.blurView)
 
@@ -40,8 +42,15 @@ class UserOnboardingViewController: ViewController {
     }
 
     func updateUI(animateTyping: Bool = true) {
-        self.textView.set(text: self.getMessage())
-        self.view.layoutNow()
+        if let text = self.getMessage() {
+            self.textView.isHidden = false
+            self.bubbleView.isHidden = false
+            self.textView.set(text: text)
+            self.view.layoutNow()
+        } else {
+            self.textView.isHidden = true
+            self.bubbleView.isHidden = true
+        }
     }
 
     func shouldShowLargeAvatar() -> Bool {
@@ -77,8 +86,8 @@ class UserOnboardingViewController: ViewController {
 
     // MARK: PUBLIC
 
-    func getMessage() -> Localized {
-        return LocalizedString.empty
+    func getMessage() -> Localized? {
+        return nil
     }
 
     func didSelectBackButton() { }
@@ -98,7 +107,7 @@ class OnboardingMessageTextView: TextView {
     func set(text: Localized) {
         let textColor: Color = .textColor
         let attributedString = AttributedString(text,
-                                                fontType: .small,
+                                                fontType: .smallBold,
                                                 color: textColor)
 
         self.set(attributed: attributedString,

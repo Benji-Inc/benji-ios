@@ -37,7 +37,7 @@ struct SendCode: CloudFunction {
 }
 
 struct VerifyCode: CloudFunction {
-    typealias ReturnType = String
+    typealias ReturnType = [String: String]
     
     let code: String
     let phoneNumber: PhoneNumber
@@ -46,7 +46,7 @@ struct VerifyCode: CloudFunction {
     let passId: String
 
     func makeRequest(andUpdate statusables: [Statusable] = [],
-                          viewsToIgnore: [UIView] = []) async throws -> String {
+                     viewsToIgnore: [UIView] = []) async throws -> [String: String] {
         
         let params: [String: Any] = ["authCode": self.code,
                                      "installationId": self.installationId,
@@ -59,8 +59,10 @@ struct VerifyCode: CloudFunction {
                                                      callName: "validateCode",
                                                      viewsToIgnore: viewsToIgnore)
         
-        if let token = result as? String, !token.isEmpty {
-            return token
+        if let dict = result as? [String: String],
+           let token = dict["sessionToken"],
+            !token.isEmpty {
+            return dict
         } else {
             throw(ClientError.apiError(detail: "Verify code error"))
         }

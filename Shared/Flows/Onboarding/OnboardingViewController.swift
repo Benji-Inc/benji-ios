@@ -35,9 +35,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     let loadingBlur = BlurView()
     let loadingAnimationView = AnimationView()
-    
-    private let confettiView = ConfettiView()
-    
+
     unowned let delegate: OnboardingViewControllerDelegate
 
     var reservationId: String? {
@@ -53,7 +51,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     var invitor: User?
-    private var fullName: String = ""
 
     init(with delegate: OnboardingViewControllerDelegate) {
 
@@ -72,13 +69,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingAnimationView.loopMode = .loop
         self.loadingBlur.contentView.addSubview(self.loadingAnimationView)
 
-        self.view.insertSubview(self.confettiView, aboveSubview: self.blurView)
-
         self.welcomeVC.$state.mainSink { (state) in
             switch state {
             case .welcome:
                 self.updateUI()
-            case .signup:
+            case .login:
+                Task {
+                    try await self.updateInvitor(with: "IQgIBSPHpE")
+                }
                 self.current = .phone(self.phoneVC)
             case .reservationInput:
                 self.updateUI()
@@ -138,7 +136,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
         }
 
-        self.photoVC.$currentState.mainSink { [unowned self] _ in
+        self.photoVC.$currentState
+            .filter({ state in
+                return state != .error 
+            })
+            .mainSink { [unowned self] _ in
             self.updateUI()
         }.store(in: &self.cancellables)
 
@@ -146,7 +148,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             switch result {
             case .success:
                 Task {
-                    try await ActivateUser(fullName: self.fullName).makeRequest(andUpdate: [], viewsToIgnore: [self.view])
+                    guard let fullName = UserDefaultsManager.getString(for: .fullName) else { return }
+                    try await ActivateUser(fullName: fullName).makeRequest(andUpdate: [], viewsToIgnore: [self.view])
                     guard let user = User.current(), user.status == .active else { return }
                     self.delegate.onboardingView(self, didVerify: user)
                 }
@@ -155,18 +158,14 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
         }
 
-        self.waitlistVC.$didShowUpgrade.mainSink { [weak self] (didShow) in
-            guard let `self` = self, didShow else { return }
-            delay(1.0) { [unowned self] in
-                self.confettiView.startConfetti(with: 10)
-            }
+        self.waitlistVC.$state.mainSink { [unowned self] _ in
+            self.updateUI()
         }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.confettiView.expandToSuperviewSize()
         self.loadingBlur.expandToSuperviewSize()
 
         self.loadingAnimationView.size = CGSize(width: 18, height: 18)
@@ -239,7 +238,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     override func getInitialContent() -> OnboardingContent {
-        guard let current = User.current(), let status = current.status else { return .welcome(self.welcomeVC)}
+        guard let current = User.current(), let status = current.status else { return .welcome(self.welcomeVC) }
+
         switch status {
         case .active, .waitlist:
             #if APPCLIP
@@ -270,8 +270,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.avatarView.isHidden = self.invitor.isNil
     }
 
-    override func getMessage() -> Localized {
-        guard let content = self.current else { return "" }
+    override func getMessage() -> Localized? {
+        guard let content = self.current else { return nil }
         return content.getDescription(with: self.invitor)
     }
 
@@ -329,7 +329,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     private func handleNameSuccess(for name: String) {
-        self.fullName = name
+        UserDefaultsManager.update(key: .fullName, with: name)
         // User has been allowed to continue
         if User.current()?.status == .inactive {
             #if APPCLIP
