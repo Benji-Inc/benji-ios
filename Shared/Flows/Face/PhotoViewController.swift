@@ -288,38 +288,44 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func updateUser(with image: UIImage) async {
-        guard let currentUser = User.current(), let data = image.previewData else { return }
-
-        switch self.currentState {
-        case .didCaptureEyesOpen:
-            let file = PFFileObject(name:"small_image.jpeg", data: data)
-            currentUser.smallImage = file
-        case .didCaptureEyesClosed:
-            let file = PFFileObject(name:"focus_image.jpeg", data: data)
-            currentUser.focusImage = file
-        default:
-            break
-        }
+        guard let data = image.previewData else { return }
 
         do {
-            try await currentUser.saveToServer()
-            Task.onMainActor {
-                self.presentDisclosure()
-            }
+            try await self.presentDisclosure(with: data)
         } catch {
             self.animateError(with: "There was an error uploading your photo.", show: true)
         }
     }
 
     @MainActor
-    private func presentDisclosure() {
-        switch self.currentState {
-        case .didCaptureEyesOpen:
-            self.present(self.smilingDisclosureVC, animated: true, completion: nil)
-        case .didCaptureEyesClosed:
-            self.present(self.focusDisclosureVC, animated: true, completion: nil)
-        default:
-            break
+    private func presentDisclosure(with data: Data) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            switch self.currentState {
+            case .didCaptureEyesOpen:
+                self.present(self.smilingDisclosureVC, animated: true, completion: { [unowned self] in
+                    Task {
+                        do {
+                            try await self.smilingDisclosureVC.updateUser(with: data)
+                            continuation.resume(returning: ())
+                        } catch {
+                            continuation.resume(throwing: error)
+                        }
+                    }
+                })
+            case .didCaptureEyesClosed:
+                self.present(self.focusDisclosureVC, animated: true, completion: { [unowned self] in
+                    Task {
+                        do {
+                            try await self.focusDisclosureVC.updateUser(with: data)
+                            continuation.resume(returning: ())
+                        } catch {
+                            continuation.resume(throwing: error)
+                        }
+                    }
+                })
+            default:
+                continuation.resume(returning: ())
+            }
         }
     }
 }

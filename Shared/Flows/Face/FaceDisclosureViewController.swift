@@ -8,6 +8,7 @@
 
 import Foundation
 import TMROLocalization
+import Parse
 
 class FaceDisclosureViewController: DisclosureModalViewController {
 
@@ -61,12 +62,12 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         super.initializeViews()
 
         self.view.addSubview(self.imageView)
-        self.imageView.displayable = self.captureType.displayable
+        self.imageView.state = .loading
         self.imageView.tintColor = .white
 
-        self.titleLabel.setText(self.captureType.title)
-        self.updateDescription(with: self.captureType.description)
+        self.titleLabel.setText("Uploading")
 
+        self.button.isHidden = true
         self.contentView.addSubview(self.button)
         self.button.set(style: .normal(color: .white, text: "Got it"))
     }
@@ -83,5 +84,37 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         self.button.expandToSuperviewWidth()
         self.button.height = Theme.buttonHeight
         self.button.pin(.bottom, padding: Theme.contentOffset)
+    }
+
+    func updateUser(with data: Data) async throws {
+        guard let currentUser = User.current() else { return }
+
+        switch self.captureType {
+        case .smiling:
+            let file = PFFileObject(name:"small_image.jpeg", data: data)
+            currentUser.smallImage = file
+        case .eyesClosed:
+            let file = PFFileObject(name:"focus_image.jpeg", data: data)
+            currentUser.focusImage = file
+        }
+
+        do {
+            try await currentUser.saveToServer()
+            Task.onMainActor {
+                self.updateUI(data: data)
+            }
+        } catch {
+            self.imageView.state = .error
+            self.titleLabel.setText("Error")
+            throw error
+        }
+    }
+
+    private func updateUI(data: Data) {
+        self.titleLabel.setText(self.captureType.title)
+        self.updateDescription(with: self.captureType.description)
+        self.imageView.displayable = UIImage(data: data)
+        self.button.isHidden = false
+        self.view.layoutNow()
     }
 }
