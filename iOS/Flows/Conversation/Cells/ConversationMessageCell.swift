@@ -185,11 +185,11 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
            let frontmostItem = self.dataSource.itemIdentifier(for: frontmostItemIndex) {
 
             // The height of the frontmost item depends on the content of the message it displays.
-            if let latestMessage
+            if let frontmostMessage
                 = ChatClient.shared.messageController(cid: frontmostItem.channelID,
                                                       messageId: frontmostItem.messageID).message {
 
-                height = MessageSubcell.getHeight(withWidth: width, message: latestMessage)
+                height = MessageSubcell.getHeight(withWidth: width, message: frontmostMessage)
             }
         }
 
