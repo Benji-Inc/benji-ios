@@ -106,6 +106,13 @@ extension MessageSubcell {
 
     /// Returns the height that a message subcell should be given a width and message to display.
     static func getHeight(withWidth width: CGFloat, message: Messageable) -> CGFloat {
+
+        // If the message is deleted, we're not going to display its content.
+        // Return the minimum height so we have enough to show the deleted status.
+        if message.isDeleted {
+            return MessageSubcell.minimumHeight
+        }
+
         let textView = MessageTextView()
         textView.text = message.kind.text
         var textViewSize = textView.getSize(withWidth: width)
