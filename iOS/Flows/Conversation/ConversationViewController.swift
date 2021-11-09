@@ -98,7 +98,10 @@ class ConversationViewController: FullScreenViewController,
         self.conversationHeader.expandToSuperviewWidth()
 
         self.collectionView.expandToSuperviewWidth()
-        self.collectionView.match(.top, to: .bottom, of: self.conversationHeader, offset: -40)
+        self.collectionView.match(.top,
+                                  to: .bottom,
+                                  of: self.conversationHeader,
+                                  offset: -10)
         self.collectionView.height = self.contentContainer.height - 96
     }
 

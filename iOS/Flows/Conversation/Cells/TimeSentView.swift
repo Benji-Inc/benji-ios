@@ -39,13 +39,12 @@ class TimeSentView: UICollectionReusableView {
         self.timeOfDayLabel.centerOnY()
     }
 
-    func configure(with message: Messageable?) {
-        if let message = message {
-            self.timeOfDayLabel.set(date: message.createdAt)
-            self.daysAgoLabel.set(date: message.createdAt)
-        } else {
-            self.timeOfDayLabel.text = nil
-            self.daysAgoLabel.text = nil
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
+
+        if let messageAttributes = layoutAttributes as? ConversationMessageCellLayoutAttributes {
+            self.timeOfDayLabel.set(date: messageAttributes.timeSent)
+            self.daysAgoLabel.set(date: messageAttributes.timeSent)
         }
 
         self.setNeedsLayout()

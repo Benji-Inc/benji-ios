@@ -10,8 +10,6 @@ import Foundation
 
 class MessageDateLabel: Label {
 
-    private(set) var currentDate: Date?
-
     init() {
         super.init(font: .small)
 
@@ -22,7 +20,11 @@ class MessageDateLabel: Label {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func set(date: Date) {
+    func set(date: Date?) {
+        guard let date = date else {
+            self.setText(" ")
+            return
+        }
 
         let attributed = AttributedString(self.getString(for: date),
                                           fontType: .small,
@@ -31,12 +33,9 @@ class MessageDateLabel: Label {
                  alignment: .center,
                  lineCount: 1,
                  stringCasing: .unchanged)
-
-        self.currentDate = date
     }
 
     private func getString(for date: Date) -> String {
-
         let now = Date()
 
         if date.isSameDay(as: now) {
