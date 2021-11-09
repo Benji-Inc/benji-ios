@@ -218,6 +218,10 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
         let extraSpacersNeeded
         = (self.maxMessagesPerSection - 1) - numberOfCoveredCells
 
+        // The following code ensures that:
+        // 1. Sections are fixed height.
+        // 2. Frontmost non-user messages have their bottoms aligned across ConversationMessageCells.
+        // 3. Frontmost user messages have their tops aligned across ConversationMessageCells.
         var insets: UIEdgeInsets = .zero
         if section == 0 {
             if let frontMostIndex = messageLayout.getFrontmostItemIndexPath(inSection: section) {
