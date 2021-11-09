@@ -168,10 +168,10 @@ class ConversationViewController: FullScreenViewController,
                 messageIdToLoad = parentId
             }
 
-            try? await controller.loadPreviousMessages(before: messageIdToLoad)
+            try? await controller.loadPreviousMessages(including: messageIdToLoad)
 
             if msgController.message!.parentMessageId.exists {
-                try? await msgController.loadPreviousReplies(before: messageId)
+                try? await msgController.loadPreviousReplies(including: messageId)
             }
         }
         // Make sure messages are loaded before initializing the data.

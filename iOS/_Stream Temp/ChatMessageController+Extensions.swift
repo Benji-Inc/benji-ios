@@ -121,6 +121,16 @@ extension ChatMessageController {
         }
     }
 
+    func loadPreviousReplies(including messageId: MessageId, limit: Int = 25) async throws {
+        try await self.loadPreviousReplies(before: messageId, limit: limit)
+        let controller = ChatClient.shared.messageController(cid: self.cid, messageId: messageId)
+        if let replyBefore = self.replies.first(where: { message in
+            return message.createdAt < controller.message!.createdAt
+        }) {
+            try await self.loadNextReplies(after: replyBefore.id, limit: 1)
+        }
+    }
+
     /// Loads previous messages from backend.
     ///
     /// - Parameters:
