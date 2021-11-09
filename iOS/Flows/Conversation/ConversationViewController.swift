@@ -160,18 +160,20 @@ class ConversationViewController: FullScreenViewController,
     func initializeDataSource() async {
         guard let controller = self.conversationController else { return }
 
+        var messageController: MessageController?
+
         if let messageId = self.startingMessageId {
             var messageIdToLoad = messageId
-            let msgController = ChatClient.shared.messageController(cid: self.conversation.cid,
+            messageController = ChatClient.shared.messageController(cid: self.conversation.cid,
                                                                     messageId: messageId)
-            if let parentId = msgController.message?.parentMessageId {
+            if let parentId = messageController?.message?.parentMessageId {
                 messageIdToLoad = parentId
             }
 
             try? await controller.loadPreviousMessages(including: messageIdToLoad)
 
-            if msgController.message!.parentMessageId.exists {
-                try? await msgController.loadPreviousReplies(including: messageId)
+            if messageController!.message!.parentMessageId.exists {
+                try? await messageController?.loadPreviousReplies(including: messageId)
             }
         }
         // Make sure messages are loaded before initializing the data.
@@ -199,6 +201,13 @@ class ConversationViewController: FullScreenViewController,
         await self.dataSource.apply(snapshot,
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
+
+        //If startingMessage is a reply OR has replies, then open thread
+        if let msg = messageController?.message {
+            if msg.parentMessageId.exists || msg.replyCount > 0 {
+                self.onSelectedThread?(self.conversation.cid, msg.id)
+            }
+        }
 
         self.updateCenterMostCell()
     }
