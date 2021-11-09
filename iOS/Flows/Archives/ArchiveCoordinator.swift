@@ -34,6 +34,7 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         }
 
         UserNotificationManager.shared.delegate = self
+        
         ToastScheduler.shared.delegate = self
         _ = ConversationsManager.shared
 
