@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 struct ManageableCellRegistration<Cell: UICollectionViewCell & ManageableCell> {
     let provider = UICollectionView.CellRegistration<Cell, Cell.ItemType> { (cell, indexPath, model)  in
@@ -26,8 +27,13 @@ struct ManageableHeaderRegistration<Header: UICollectionReusableView> {
 }
 
 // A base class that other cells managed by a CollectionViewManager can inherit from.
-class CollectionViewManagerCell: UICollectionViewListCell {
+class CollectionViewManagerCell: UICollectionViewListCell, UIGestureRecognizerDelegate {
 
+    // Touch Handlers
+    private lazy var stationaryPressRecognizer
+         = StationaryPressGestureRecognizer(cancelsTouchesInView: false,
+                                            target: self,
+                                            action: #selector(self.handleStationaryPress))
     var onLongPress: (() -> Void)?
     var cancellables = Set<AnyCancellable>()
 
@@ -45,7 +51,10 @@ class CollectionViewManagerCell: UICollectionViewListCell {
         self.initializeSubviews()
     }
 
-    func initializeSubviews() {}
+    func initializeSubviews() {
+        self.contentView.addGestureRecognizer(self.stationaryPressRecognizer)
+        self.stationaryPressRecognizer.delegate = self
+    }
 
     private func initializeLongPressGesture() {
 
@@ -86,5 +95,38 @@ class CollectionViewManagerCell: UICollectionViewListCell {
 
         // Apply the background configuration to the cell.
         self.backgroundConfiguration = backgroundConfig
+    }
+
+    func canHandleStationaryPress() -> Bool {
+        return true
+    }
+
+    // MARK: Touch Handling
+
+    @objc private func handleStationaryPress(_ gestureRecognizer: StationaryPressGestureRecognizer) {
+
+        guard self.canHandleStationaryPress() else { return }
+        // Scale down the cell when pressed, and scale back up on release.
+        switch gestureRecognizer.state {
+        case .possible, .changed:
+            break
+        case .began:
+            self.scaleDown()
+        case .ended, .cancelled, .failed:
+            self.scaleUp()
+        @unknown default:
+            break
+        }
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+
+        if gestureRecognizer === self.stationaryPressRecognizer {
+            if otherGestureRecognizer.view?.isDescendant(of: self) == true {
+                return false
+            }
+        }
+        return true
     }
 }

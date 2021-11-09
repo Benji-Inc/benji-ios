@@ -62,6 +62,8 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
     override func initializeViews() {
         super.initializeViews()
 
+        self.dataSource.contextMenuDelegate = self 
+
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
 
         #warning("Add segmentcontrol back in when Beta is complete.")
@@ -130,24 +132,6 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
         guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
 
         self.delegate?.archiveView(self, didSelect: identifier)
-    }
-
-    override func collectionView(_ collectionView: UICollectionView,
-                        contextMenuConfigurationForItemAt indexPath: IndexPath,
-                        point: CGPoint) -> UIContextMenuConfiguration? {
-
-        guard let conversation = self.channelListController?.channels[indexPath.row],
-              let cell = collectionView.cellForItem(at: indexPath) as? ConversationCell else { return nil }
-
-        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
-            return ConversationPreviewViewController(with: conversation, size: cell.size)
-        }, actionProvider: { suggestedActions in
-            if conversation.isOwnedByMe {
-                return self.makeCurrentUserMenu(for: conversation, at: indexPath)
-            } else {
-                return self.makeNonCurrentUserMenu(for: conversation, at: indexPath)
-            }
-        })
     }
 
     func subscribeToUpdates() {

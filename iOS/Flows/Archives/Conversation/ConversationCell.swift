@@ -15,7 +15,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: ChannelId?
 
-    private let content = ConversationContentView()
+    let content = ConversationContentView()
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -33,6 +33,10 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         
         layoutAttributes.size = CGSize(width: layoutAttributes.size.width, height: 60)
         return layoutAttributes
+    }
+
+    override func canHandleStationaryPress() -> Bool {
+        return false
     }
 
     override func layoutSubviews() {

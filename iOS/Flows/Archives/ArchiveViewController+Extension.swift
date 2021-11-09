@@ -9,9 +9,25 @@
 import Foundation
 import StreamChat
 
-extension ArchiveViewController {
+extension ArchiveViewController: UIContextMenuInteractionDelegate {
 
-    func makeCurrentUserMenu(for conversation: Conversation, at indexPath: IndexPath) -> UIMenu {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+
+        guard let content = interaction.view as? ConversationContentView,
+                let conversation = content.currentItem  else { return nil }
+
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: {
+            return ConversationPreviewViewController(with: conversation, size: content.size)
+        }, actionProvider: { suggestedActions in
+            if conversation.isOwnedByMe {
+                return self.makeCurrentUserMenu(for: conversation)
+            } else {
+                return self.makeNonCurrentUserMenu(for: conversation)
+            }
+        })
+    }
+
+    func makeCurrentUserMenu(for conversation: Conversation) -> UIMenu {
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
 
         let confirm = UIAction(title: "Confirm",
@@ -29,15 +45,14 @@ extension ArchiveViewController {
                                 children: [confirm, neverMind])
 
         let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { [unowned self] _ in
-            guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
-            self.delegate?.archiveView(self, didSelect: identifier)
+            self.delegate?.archiveView(self, didSelect: .conversation(conversation.cid))
         }
 
         // Create and return a UIMenu with the share action
         return UIMenu(title: "Options", children: [open, deleteMenu])
     }
 
-    func makeNonCurrentUserMenu(for conversation: Conversation, at indexPath: IndexPath) -> UIMenu {
+    func makeNonCurrentUserMenu(for conversation: Conversation) -> UIMenu {
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { _ in }
 
@@ -55,8 +70,7 @@ extension ArchiveViewController {
                                 children: [confirm, neverMind])
 
         let open = UIAction(title: "Open", image: UIImage(systemName: "arrowshape.turn.up.right")) { [unowned self] _ in
-            guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
-            self.delegate?.archiveView(self, didSelect: item)
+            self.delegate?.archiveView(self, didSelect: .conversation(conversation.cid))
         }
 
         // Create and return a UIMenu with the share action
