@@ -169,7 +169,8 @@ extension MessageController {
         }
     }
 
-    /// Returns the most recently sent message from the current user. This checks both replies and the original message.
+    /// Returns the most recently sent message from either the current user or from another user.
+    /// This checks both replies and the original message.
     func getMostRecent(fromCurrentUser: Bool) -> Message? {
         var allMessages: [Message] = []
         allMessages.append(contentsOf: Array(self.replies))
