@@ -79,8 +79,8 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         }
 
         let attributes
-        = ConversationMessageCellLayoutAttributes(forDecorationViewOfKind: TimeSentView.objectIdentifier,
-                                                  with: indexPath)
+        = TimeSentViewLayoutAttributes(forDecorationViewOfKind: TimeSentView.objectIdentifier,
+                                       with: indexPath)
 
         if indexPath.section == 0 {
             // Position the decoration above the frontmost item in the first section

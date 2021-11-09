@@ -19,16 +19,12 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
     /// The direction the speech bubble tail should be pointed.
     var bubbleTailOrientation: SpeechBubbleView.TailOrientation = .down
 
-    // Decoration view properties
-    var timeSent: Date?
-
     override func copy(with zone: NSZone? = nil) -> Any {
         let copy = super.copy(with: zone) as! ConversationMessageCellLayoutAttributes
         copy.shouldShowText = self.shouldShowText
         copy.backgroundColor = self.backgroundColor
         copy.shouldShowTail = self.shouldShowTail
         copy.bubbleTailOrientation = self.bubbleTailOrientation
-        copy.timeSent = self.timeSent
         return copy
     }
 
@@ -39,7 +35,6 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
             && layoutAttributes.backgroundColor == self.backgroundColor
             && layoutAttributes.shouldShowTail == self.shouldShowTail
             && layoutAttributes.bubbleTailOrientation == self.bubbleTailOrientation
-            && layoutAttributes.timeSent == self.timeSent
         }
 
         return false
