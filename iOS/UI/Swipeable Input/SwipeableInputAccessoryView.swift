@@ -71,6 +71,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         // Use flexible height autoresizing mask to account for changes in text input.
         self.autoresizingMask = .flexibleHeight
 
+        self.inputContainerView.showShadow(withOffset: 8)
+
         self.setupGestures()
         self.setupHandlers()
     }
@@ -218,9 +220,11 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
         // Initialize the preview view for the user to drag up the screen.
         self.previewView = PreviewMessageView(orientation: .down,
-                                              bubbleColor: self.currentContext.color.color)
+                                              bubbleColor: self.currentContext.color.color,
+                                              borderColor: self.currentContext.color.color)
         self.previewView?.frame = self.inputContainerView.frame
         self.previewView?.messageKind = self.currentMessageKind
+        self.previewView?.showShadow(withOffset: 8)
         self.addSubview(self.previewView!)
 
         self.initialPreviewOrigin = self.previewView?.origin
