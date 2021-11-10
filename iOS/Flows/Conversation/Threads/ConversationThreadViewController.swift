@@ -21,7 +21,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
     /// A view positioned behind the parent message to separate it from the rest of the messages.
     private let parentMessageBlurView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
 
-    /// A controller for message that all the replies in the thread are responding.
+    /// A controller for the message that all the replies in this thread are responding to.
     let messageController: ChatMessageController
     var parentMessage: Message! {
         return self.messageController.message

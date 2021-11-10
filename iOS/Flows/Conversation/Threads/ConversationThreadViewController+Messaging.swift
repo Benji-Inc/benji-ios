@@ -25,7 +25,7 @@ extension ConversationThreadViewController: SwipeableInputAccessoryViewDelegate 
     }
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
-
+        
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -37,7 +37,8 @@ extension ConversationThreadViewController: SwipeableInputAccessoryViewDelegate 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  triggeredSendFor sendable: Sendable,
                                  withPreviewFrame frame: CGRect) -> Bool {
-        #warning("Check to see if we should actually send")
+
+        guard frame.top < 0 else { return false }
 
         Task {
             await self.send(object: sendable)
