@@ -80,7 +80,7 @@ class MessageSubcell: UICollectionViewCell {
             return
         }
 
-        self.textView.isVisible = true// messageLayoutAttributes.shouldShowText
+        self.textView.isVisible = messageLayoutAttributes.shouldShowText
         self.configureBackground(color: messageLayoutAttributes.backgroundColor,
                                  showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                  tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
