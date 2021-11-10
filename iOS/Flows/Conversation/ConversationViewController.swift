@@ -376,7 +376,17 @@ class ConversationViewController: FullScreenViewController,
                                  didUpdate sendable: Sendable,
                                  withPreviewFrame frame: CGRect) {
 
+        let newPosition = self.getSendPosition(forPreviewFrame: frame)
 
+        guard newPosition != self.lastPreparedPosition else { return }
+
+        if let newPosition = newPosition {
+            self.prepareForSend(with: newPosition)
+        } else {
+            self.unprepareForSend()
+        }
+
+        self.lastPreparedPosition = newPosition
     }
 
     private func prepareForSend(with position: SendPosition) {
@@ -407,8 +417,6 @@ class ConversationViewController: FullScreenViewController,
             self.sendMessageOverlay.setState(.newMessage)
             self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
         }
-
-        self.lastPreparedPosition = position
     }
 
     private func unprepareForSend() {
@@ -468,25 +476,16 @@ class ConversationViewController: FullScreenViewController,
         }
     }
 
-    //    /// Gets the send position for the given panOffset. If the pan offset doesn't correspond to a valid send position, nil is returned.
-    //    private func getSendPosition(forPanOffset panOffset: CGPoint) -> SendPosition? {
-    //        guard let initialPosition = self.initialPreviewOrigin else { return }
-    //
-    //        // The percentage of the max y offset that the preview view has been dragged up.
-    //        let progress = clamp(panOffset.y/self.dropZoneRect.top, 0, 1)
-    //
-    //        // Make sure the user has dragged up far enough, otherwise this isn't a valid send position.
-    //        guard
-    //
-    //        switch panOffset.x {
-    //        case -CGFloat.greatestFiniteMagnitude ... -self.maxXOffset.half:
-    //            return .left
-    //        case self.maxXOffset.half ... CGFloat.greatestFiniteMagnitude:
-    //            return .right
-    //        default:
-    //            return .middle
-    //        }
-    //    }
+    /// Gets the send position for the given panOffset. If the pan offset doesn't correspond to a valid send position, nil is returned.
+    private func getSendPosition(forPreviewFrame frame: CGRect) -> SendPosition? {
+        if frame.left < 20 {
+            return .left
+        } else if frame.right > self.view.width - 20 {
+            return .right
+        } else {
+            return .middle
+        }
+    }
 
     // MARK: - Send Message Functions
 
