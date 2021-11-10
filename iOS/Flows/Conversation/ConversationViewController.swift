@@ -310,10 +310,17 @@ class ConversationViewController: FullScreenViewController,
 
     // MARK: - SwipeableInputAccessoryViewDelegate
 
+    /// The location on the screen that a send action was triggered.
+    enum SendPosition {
+        case left
+        case middle
+        case right
+    }
+
     /// The collection view's content offset at the first call to prepare for a swipe. Used to reset the the content offset after a swipe is cancelled.
     private var initialContentOffset: CGPoint?
     /// The last swipe position type that was registersed, if any.
-    private var lastPreparedPosition: SwipeableInputAccessoryView.SendPosition?
+    private var lastPreparedPosition: SendPosition?
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
         self.initialContentOffset = self.collectionView.contentOffset
@@ -333,30 +340,40 @@ class ConversationViewController: FullScreenViewController,
         let overlayFrame = self.collectionView.getMessageOverlayFrame(convertedTo: self.contentContainer)
         self.sendMessageOverlay.frame = overlayFrame
 
-        view.dropZoneRect = view.convert(self.sendMessageOverlay.bounds, from: self.sendMessageOverlay)
+        view.dropZoneFrame = view.convert(self.sendMessageOverlay.bounds, from: self.sendMessageOverlay)
 
         self.sendMessageOverlay.centerOnX()
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didPrepare sendable: Sendable,
-                                 at position: SwipeableInputAccessoryView.SendPosition) {
+                                 didUpdate sendable: Sendable,
+                                 withPreviewFrame frame: CGRect) {
 
-        // Alpha out the collection view to let the user know they can send a message from this position.
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.collectionView.alpha = 0.5
-        }
 
+    }
+
+    private func prepareForSend(with position: SendPosition) {
         switch position {
         case .left, .middle:
             // Avoid animating content offset twice for redundant states
             guard !self.lastPreparedPosition.equalsOneOf(these: .left, .middle) else { break }
+
+            // Alpha out the collection view to let the user know they can send a message from this position.
+            UIView.animate(withDuration: Theme.animationDuration) {
+                self.collectionView.alpha = 0.5
+            }
 
             self.sendMessageOverlay.setState(.reply)
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
         case .right:
+
+            // Alpha out the collection view to let the user know they can send a message from this position.
+            UIView.animate(withDuration: Theme.animationDuration) {
+                self.collectionView.alpha = 0.5
+            }
+
             let newXOffset
             = -self.collectionView.width + self.collectionView.conversationLayout.minimumLineSpacing
 
@@ -367,13 +384,7 @@ class ConversationViewController: FullScreenViewController,
         self.lastPreparedPosition = position
     }
 
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didUpdate sendable: Sendable,
-                                 withProgress progress: CGFloat) {
-
-    }
-
-    func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
+    private func unprepareForSend() {
         self.sendMessageOverlay.setState(nil)
         UIView.animate(withDuration: Theme.animationDuration) {
             self.collectionView.alpha = 1
@@ -384,8 +395,13 @@ class ConversationViewController: FullScreenViewController,
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didConfirm sendable: Sendable,
-                                 at position: SwipeableInputAccessoryView.SendPosition) {
+                                 triggeredSendFor sendable: Sendable,
+                                 withPreviewFrame frame: CGRect) -> Bool {
+
+        let dropZoneFrame = view.dropZoneFrame
+        let doSend = dropZoneFrame.centerY.distance(to: frame.centerY) < 20
+
+        guard doSend else { return false }
 
         guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
               let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath),
@@ -395,10 +411,10 @@ class ConversationViewController: FullScreenViewController,
                   Task {
                       await self.send(sendable)
                   }
-                  return
+                  return true
               }
 
-        switch position {
+        switch self.lastPreparedPosition {
         case .left, .middle:
             Task {
                 await self.reply(to: messageID, sendable: sendable)
@@ -407,7 +423,11 @@ class ConversationViewController: FullScreenViewController,
             Task {
                 await self.send(sendable)
             }
+        case .none:
+            return false
         }
+
+        return true
     }
 
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
@@ -420,6 +440,26 @@ class ConversationViewController: FullScreenViewController,
             self.sendMessageOverlay.removeFromSuperview()
         }
     }
+
+    //    /// Gets the send position for the given panOffset. If the pan offset doesn't correspond to a valid send position, nil is returned.
+    //    private func getSendPosition(forPanOffset panOffset: CGPoint) -> SendPosition? {
+    //        guard let initialPosition = self.initialPreviewOrigin else { return }
+    //
+    //        // The percentage of the max y offset that the preview view has been dragged up.
+    //        let progress = clamp(panOffset.y/self.dropZoneRect.top, 0, 1)
+    //
+    //        // Make sure the user has dragged up far enough, otherwise this isn't a valid send position.
+    //        guard
+    //
+    //        switch panOffset.x {
+    //        case -CGFloat.greatestFiniteMagnitude ... -self.maxXOffset.half:
+    //            return .left
+    //        case self.maxXOffset.half ... CGFloat.greatestFiniteMagnitude:
+    //            return .right
+    //        default:
+    //            return .middle
+    //        }
+    //    }
 
     // MARK: - Send Message Functions
 

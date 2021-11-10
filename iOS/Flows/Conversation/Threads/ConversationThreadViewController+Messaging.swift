@@ -29,28 +29,21 @@ extension ConversationThreadViewController: SwipeableInputAccessoryViewDelegate 
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didPrepare sendable: Sendable,
-                                 at position: SwipeableInputAccessoryView.SendPosition) {
-
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didUpdate sendable: Sendable,
-                                 withProgress progress: CGFloat) {
-
-    }
-
-    func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
+                                 withPreviewFrame frame: CGRect) {
 
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didConfirm sendable: Sendable,
-                                 at position: SwipeableInputAccessoryView.SendPosition) {
+                                 triggeredSendFor sendable: Sendable,
+                                 withPreviewFrame frame: CGRect) -> Bool {
+        #warning("Check to see if we should actually send")
 
         Task {
             await self.send(object: sendable)
         }
+
+        return true
     }
 
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
