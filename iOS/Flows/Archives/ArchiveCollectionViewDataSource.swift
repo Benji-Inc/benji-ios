@@ -28,6 +28,7 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
     private let reservationConfig = ManageableCellRegistration<ReservationCell>().provider
     private let connectionConfig = ManageableCellRegistration<ConnectionRequestCell>().provider
     var didUpdateConnection: CompletionOptional = nil
+    weak var contextMenuDelegate: UIContextMenuInteractionDelegate?
 
     // MARK: - Cell Dequeueing
 
@@ -38,9 +39,17 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
 
         switch item {
         case .conversation(let conversation):
-            return collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
-                                                                for: indexPath,
-                                                                item: conversation)
+            let cell = collectionView.dequeueConfiguredReusableCell(using: self.conversationConfig,
+                                                                    for: indexPath,
+                                                                    item: conversation)
+            cell.content.interactions.removeAll()
+            cell.onDidTap = { [unowned self] in
+                self.didSelectItem?(item)
+            }
+            if let delegate = self.contextMenuDelegate {
+                cell.content.addInteraction(UIContextMenuInteraction(delegate: delegate))
+            }
+            return cell
         case .notice(let notice):
             switch notice.type {
             case .connectionRequest:

@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 struct ManageableCellRegistration<Cell: UICollectionViewCell & ManageableCell> {
     let provider = UICollectionView.CellRegistration<Cell, Cell.ItemType> { (cell, indexPath, model)  in
@@ -28,45 +29,25 @@ struct ManageableHeaderRegistration<Header: UICollectionReusableView> {
 // A base class that other cells managed by a CollectionViewManager can inherit from.
 class CollectionViewManagerCell: UICollectionViewListCell {
 
-    var onLongPress: (() -> Void)?
     var cancellables = Set<AnyCancellable>()
 
-    override init(frame: CGRect) {
+    var onDidTap: (() -> Void)?
 
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        self.initializeLongPressGesture()
         self.initializeSubviews()
     }
 
     required init?(coder aDecoder: NSCoder) {
-
         super.init(coder: aDecoder)
-        self.initializeLongPressGesture()
         self.initializeSubviews()
     }
 
-    func initializeSubviews() {}
+    func initializeSubviews() {
 
-    private func initializeLongPressGesture() {
-
-        let longPress = UILongPressGestureRecognizer { [unowned self] (longPress) in
-            switch longPress.state {
-            case .possible, .changed:
-                break
-            case .began:
-                self.onLongPress?()
-                // If the user starts a long press, we don't want this cell to be selected.
-                // Cancelling touches in this view means only a long press event will occur.
-                longPress.cancelsTouchesInView = true
-            case .ended, .cancelled, .failed:
-                longPress.cancelsTouchesInView = false
-            @unknown default:
-                break
-            }
+        self.contentView.didSelect { [unowned self] in
+            self.onDidTap?()
         }
-        // Don't cancel other touches so we don't interfere with the default cell selection behavior
-        longPress.cancelsTouchesInView = false
-        self.contentView.addGestureRecognizer(longPress)
     }
 
     func update(isSelected: Bool) {}

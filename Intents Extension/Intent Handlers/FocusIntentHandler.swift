@@ -59,7 +59,7 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         let content = UNMutableNotificationContent()
         content.title = "Available"
         content.body = "You are now available to chat."
-        let request = UNNotificationRequest(identifier: UUID().uuidString,
+        let request = UNNotificationRequest(identifier: "focusTimeAvailable",
                                             content: content,
                                             trigger: nil)
         return request

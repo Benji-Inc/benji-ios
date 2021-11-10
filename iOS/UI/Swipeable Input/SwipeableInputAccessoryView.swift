@@ -89,23 +89,13 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
                 }
             }.store(in: &self.cancellables)
 
-        self.textView.demoVC.exitButton.didSelect { [unowned self] in
-            UserDefaultsManager.update(key: .hasShownKeyboardInstructions, with: true)
-            self.textView.updateInputView(type: .keyboard)
-        }
-
         self.textView.$inputText.mainSink { [unowned self] text in
             self.handleTextChange(text)
         }.store(in: &self.cancellables)
 
         self.overlayButton.didSelect { [unowned self] in
             if !self.textView.isFirstResponder {
-                if UserDefaultsManager.getBool(for: .hasShownKeyboardInstructions) {
-                    self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
-                } else {
-                    self.textView.updateInputView(type: .demo, becomeFirstResponder: true)
-
-                }
+                self.textView.updateInputView(type: .keyboard, becomeFirstResponder: true)
             }
         }
 

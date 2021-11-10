@@ -18,7 +18,7 @@ class ConversationContentView: View {
     let messageLabel = Label(font: .smallBold, textColor: .textColor)
 
     private var cancellables = Set<AnyCancellable>()
-    private var currentItem: Conversation?
+    private(set) var currentItem: Conversation?
 
     deinit {
         self.cancellables.forEach { cancellable in

@@ -12,13 +12,11 @@ enum InputViewType {
     case attachments
     case confirmation
     case keyboard
-    case demo
 }
 
 class InputTextView: ExpandingTextView {
 
     lazy var countView = CharacterCountView()
-    lazy var demoVC = KeyboardDemoViewController()
     lazy var confirmationView = AlertConfirmationView()
 
     private(set) var currentInputView: InputViewType?
@@ -57,9 +55,6 @@ class InputTextView: ExpandingTextView {
             self.inputView = self.confirmationView
         case .keyboard:
             self.inputView = nil
-        case .demo:
-            self.inputView = self.demoVC.view
-            self.demoVC.load(demos: [.send, .sendAlert, .cursor])
         }
 
         self.currentInputView = type
