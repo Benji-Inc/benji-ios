@@ -15,7 +15,7 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: ChannelId?
 
-    private let content = ConversationContentView()
+    let content = ConversationContentView()
 
     override func initializeSubviews() {
         super.initializeSubviews()

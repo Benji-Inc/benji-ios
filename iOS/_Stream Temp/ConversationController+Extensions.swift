@@ -22,6 +22,16 @@ extension ChatChannelController {
         return self.conversation.getOldestUnreadMessage(withUserID: userID)
     }
 
+    func loadPreviousMessages(including messageId: MessageId, limit: Int = 25) async throws {
+        try await self.loadPreviousMessages(before: messageId, limit: limit)
+        let controller = ChatClient.shared.messageController(cid: self.cid, messageId: messageId)
+        if let messageBefore = self.messages.first(where: { message in
+            return message.createdAt < controller.message!.createdAt
+        }) {
+            try await self.loadNextMessages(after: messageBefore.id, limit: 1)
+        }
+    }
+
     /// Loads previous messages from backend.
     /// - Parameters:
     ///   - messageId: ID of the last fetched message. You will get messages `older` than the provided ID.
@@ -29,6 +39,18 @@ extension ChatChannelController {
     func loadPreviousMessages(before messageId: MessageId? = nil, limit: Int = 25) async throws {
         return try await withCheckedThrowingContinuation { continuation in
             self.loadPreviousMessages(before: messageId, limit: limit) { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+    }
+
+    func loadNextMessages(after messageId: MessageId? = nil, limit: Int = 25) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.loadNextMessages(after: messageId, limit: limit) { error in
                 if let error = error {
                     continuation.resume(throwing: error)
                 } else {

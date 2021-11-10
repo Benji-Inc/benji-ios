@@ -58,10 +58,8 @@ class ConversationViewController: FullScreenViewController,
         self.startingMessageId = messageId
 
         if let conversation = conversation {
-            // Add query that loads all messages including the one with the messageId passed in
-            let query: ChannelListQuery? = nil
             self.conversationController = ChatClient.shared.channelController(for: conversation.cid,
-                                                                                 channelListQuery: query,
+                                                                                 channelListQuery: nil,
                                                                                  messageOrdering: .topToBottom)
         }
         
@@ -165,8 +163,21 @@ class ConversationViewController: FullScreenViewController,
     func initializeDataSource() async {
         guard let controller = self.conversationController else { return }
 
+        var messageController: MessageController?
+
         if let messageId = self.startingMessageId {
-            try? await controller.loadPreviousMessages(before: messageId)
+            var messageIdToLoad = messageId
+            messageController = ChatClient.shared.messageController(cid: self.conversation.cid,
+                                                                    messageId: messageId)
+            if let parentId = messageController?.message?.parentMessageId {
+                messageIdToLoad = parentId
+            }
+
+            try? await controller.loadPreviousMessages(including: messageIdToLoad)
+
+            if messageController!.message!.parentMessageId.exists {
+                try? await messageController?.loadPreviousReplies(including: messageId)
+            }
         }
         // Make sure messages are loaded before initializing the data.
         else if let mostRecentMessage = controller.messages.first {
@@ -194,20 +205,36 @@ class ConversationViewController: FullScreenViewController,
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
 
+        //If startingMessage is a reply OR has replies, then open thread
+        if let msg = messageController?.message {
+            if msg.parentMessageId.exists || msg.replyCount > 0 {
+                self.onSelectedThread?(self.conversation.cid, msg.id)
+            }
+        }
+
         self.updateCenterMostCell()
     }
 
     private func getIntialIndexPath() -> IndexPath? {
-        if let messages = self.conversationController?.conversation.latestMessages,
-           let messageId = self.startingMessageId,
-            let message = messages.first(where: { message in
-               return message.id == messageId
-           }),
-            let index = messages.firstIndex(of: message) {
-            return IndexPath(item: index, section: 0)
+        if let messageId = self.startingMessageId {
+            return self.getMessageIndexPath(with: messageId)
         } else {
             return self.getFirstUnreadIndexPath()
         }
+    }
+
+    func getMessageIndexPath(with msgId: MessageId) -> IndexPath? {
+        let controller = ChatClient.shared.messageController(cid: self.conversation.cid, messageId: msgId)
+        let messages = Array(self.conversationController!.messages)
+        let index = messages.firstIndex { msg in
+            return msg.id == controller.messageId || msg.id == controller.message?.parentMessageId
+        }
+
+        if let i = index {
+            return IndexPath(item: i, section: 0)
+        }
+
+        return nil
     }
 
     private func getFirstUnreadIndexPath() -> IndexPath? {

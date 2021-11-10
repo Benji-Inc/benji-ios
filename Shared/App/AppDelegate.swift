@@ -21,6 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let rootNavController = RootNavigationController()
         self.initializeKeyWindow(with: rootNavController)
         self.initializeMainCoordinator(with: rootNavController, withOptions: launchOptions)
+        _ = UserNotificationManager.shared
 #endif
 
         return true

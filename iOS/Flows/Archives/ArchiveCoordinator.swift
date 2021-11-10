@@ -34,6 +34,7 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         }
 
         UserNotificationManager.shared.delegate = self
+        
         ToastScheduler.shared.delegate = self
         _ = ConversationsManager.shared
 
@@ -125,7 +126,8 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
         })
         self.router.present(coordinator,
                             source: self.router.topmostViewController,
-                            cancelHandler: {
+                            cancelHandler: { [unowned self] in
+            print("Did Cancel")
         })
     }
 

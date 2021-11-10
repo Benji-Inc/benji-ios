@@ -24,6 +24,9 @@ class MainCoordinator: Coordinator<Void> {
         }
 
         LaunchManager.shared.delegate = self
+        #if !APPCLIP && !NOTIFICATION
+        UserNotificationManager.shared.delegate = self
+        #endif
 
         Task {
             await self.runLaunchFlow()
@@ -47,7 +50,7 @@ class MainCoordinator: Coordinator<Void> {
 
     func runOnboardingFlow() {
         if let onboardingCoordinator = self.childCoordinator as? OnboardingCoordinator {
-            onboardingCoordinator.handle(deeplink: deepLink)
+            onboardingCoordinator.handle(deeplink: self.deepLink)
         } else {
             let coordinator = OnboardingCoordinator(router: self.router,
                                                     deepLink: self.deepLink)
@@ -122,3 +125,16 @@ class MainCoordinator: Coordinator<Void> {
         self.runOnboardingFlow()
     }
 }
+
+#if !APPCLIP && !NOTIFICATION
+extension MainCoordinator: UserNotificationManagerDelegate {
+
+    nonisolated func userNotificationManager(willHandle deeplink: DeepLinkable) {
+        Task.onMainActor {
+            self.deepLink = deeplink
+            self.handle(deeplink: deeplink)
+        }
+    }
+}
+#endif
+
