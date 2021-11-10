@@ -10,8 +10,6 @@ import Foundation
 
 class MessageTimeLabel: Label {
 
-    private(set) var currentDate: Date?
-
     init() {
         super.init(font: .small)
 
@@ -22,7 +20,11 @@ class MessageTimeLabel: Label {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func set(date: Date) {
+    func set(date: Date?) {
+        guard let date = date else {
+            self.setText(" ")
+            return
+        }
 
         let attributed = AttributedString(Date.hourMinuteTimeOfDay.string(from: date),
                                           fontType: .small,
@@ -31,7 +33,5 @@ class MessageTimeLabel: Label {
                  alignment: .center,
                  lineCount: 1,
                  stringCasing: .unchanged)
-
-        self.currentDate = date
     }
 }

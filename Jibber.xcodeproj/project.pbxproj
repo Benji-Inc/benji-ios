@@ -19,7 +19,7 @@
 		8020DD93272C81FB00D5BA04 /* ConversationInputAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8020DD92272C81FB00D5BA04 /* ConversationInputAccessoryView.xib */; };
 		8024B95326F278C8008ABF7F /* ConversationViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8024B95026F278C8008ABF7F /* ConversationViewControllerDataSource.swift */; };
 		8024B95426F278C8008ABF7F /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8024B95126F278C8008ABF7F /* ConversationViewController.swift */; };
-		80251FF826F3D362006D7873 /* ChatMessageController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80251FF726F3D362006D7873 /* ChatMessageController+Extensions.swift */; };
+		80251FF826F3D362006D7873 /* MessageController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80251FF726F3D362006D7873 /* MessageController+Extensions.swift */; };
 		802C448A26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		802C448B26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
 		802C448C26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
@@ -885,7 +885,7 @@
 		8020DD92272C81FB00D5BA04 /* ConversationInputAccessoryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConversationInputAccessoryView.xib; sourceTree = "<group>"; };
 		8024B95026F278C8008ABF7F /* ConversationViewControllerDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewControllerDataSource.swift; sourceTree = "<group>"; };
 		8024B95126F278C8008ABF7F /* ConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
-		80251FF726F3D362006D7873 /* ChatMessageController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatMessageController+Extensions.swift"; sourceTree = "<group>"; };
+		80251FF726F3D362006D7873 /* MessageController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageController+Extensions.swift"; sourceTree = "<group>"; };
 		802C448926CC76CC00A333A4 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		80471C422732FE450022172C /* ConversationMessageCellDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessageCellDatasource.swift; sourceTree = "<group>"; };
 		8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationMessageCellLayoutAttributes.swift; sourceTree = "<group>"; };
@@ -1338,15 +1338,15 @@
 		80616E3326EAD1A900C077BA /* _Stream Temp */ = {
 			isa = PBXGroup;
 			children = (
+				80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */,
+				80FA868B26F111830053101B /* ChatMessage+Extensions.swift */,
+				80FA869126F117C20053101B /* ChatUser+Avatar.swift */,
 				800FAAC026F0585A00D3C3A0 /* Conversation+Extensions.swift */,
 				D687595B2728A0C400AF7C07 /* Conversation+Intents.swift */,
 				80F88BAD26F11F02006C7677 /* ConversationController+Extensions.swift */,
-				80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */,
-				80FA868B26F111830053101B /* ChatMessage+Extensions.swift */,
-				80251FF726F3D362006D7873 /* ChatMessageController+Extensions.swift */,
-				80FA869126F117C20053101B /* ChatUser+Avatar.swift */,
 				80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */,
 				80616E3426EAD2F300C077BA /* DataController+Async.swift */,
+				80251FF726F3D362006D7873 /* MessageController+Extensions.swift */,
 			);
 			path = "_Stream Temp";
 			sourceTree = "<group>";
@@ -2956,7 +2956,7 @@
 				D6B3329525DDB9E300211044 /* PeopleHeaderView.swift in Sources */,
 				D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */,
 				D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */,
-				80251FF826F3D362006D7873 /* ChatMessageController+Extensions.swift in Sources */,
+				80251FF826F3D362006D7873 /* MessageController+Extensions.swift in Sources */,
 				807E98E9273497610076889C /* UIColor+Extensions.swift in Sources */,
 				D6C389332724C091004D29D5 /* ArchiveCoordinator+Extensions.swift in Sources */,
 				D61EC0C221D3071400204BEE /* ViewController.swift in Sources */,
