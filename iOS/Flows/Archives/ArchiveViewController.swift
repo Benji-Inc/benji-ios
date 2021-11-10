@@ -132,14 +132,6 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
         return data
     }
 
-//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        super.collectionView(collectionView, didSelectItemAt: indexPath)
-//
-//        guard let identifier = self.dataSource.itemIdentifier(for: indexPath) else { return }
-//
-//        self.delegate?.archiveView(self, didSelect: identifier)
-//    }
-
     func subscribeToUpdates() {
         self.channelListController?.channelsChangesPublisher.mainSink(receiveValue: { changes in
 

@@ -13,13 +13,6 @@ class CollectionView: UICollectionView {
 
     let animationView = AnimationView.with(animation: .loading)
 
-    override var delegate: UICollectionViewDelegate? {
-        didSet {
-            if self.delegate.isNil {
-                print("Delagate is nil")
-            }
-        }
-    }
     init(layout: UICollectionViewLayout) {
         super.init(frame: .zero, collectionViewLayout: layout)
         self.set(backgroundColor: .clear)
