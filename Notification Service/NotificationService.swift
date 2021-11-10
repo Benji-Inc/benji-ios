@@ -15,19 +15,30 @@ import Combine
 class NotificationService: UNNotificationServiceExtension {
 
     private var cancellables = Set<AnyCancellable>()
+    var contentHandler: ((UNNotificationContent) -> Void)?
+    var request: UNNotificationRequest?
 
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
 
+        self.contentHandler = contentHandler
+        self.request = request
+
         Task {
             await self.initializeParse()
-            //try await self.initializeChat()
-            await self.updateContent(with: request, contentHandler: contentHandler)
+            if let client = self.getChatClient() {
+                await self.updateContent(with: request,
+                                         client: client,
+                                         contentHandler: contentHandler)
+            }
         }
     }
 
     override func serviceExtensionTimeWillExpire() {
-        print("WILL EXPIRE")
+        if let contentHandler = contentHandler,
+            let bestAttemptContent = request?.content.mutableCopy() as? UNMutableNotificationContent {
+            contentHandler(bestAttemptContent)
+        }
     }
 
     private func initializeParse() async {
@@ -48,42 +59,59 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 
-    private func initializeChat() async throws {
-        guard let user = User.current(), !ChatClient.isConnected else { return }
-        try await ChatClient.initialize(for: user)
+    private func getChatClient() -> ChatClient? {
+        guard let user = User.current() else { return nil }
+
+        var config = ChatClientConfig(apiKey: .init("hvmd2mhxcres"))
+        config.isLocalStorageEnabled = true
+        config.applicationGroupIdentifier = Config.shared.environment.groupId
+
+        let client = ChatClient(config: config)
+        let token = Token.development(userId: user.objectId!)
+        client.setToken(token: token)
+
+        return client
     }
 
     private func updateContent(with request: UNNotificationRequest,
+                               client: ChatClient,
                                contentHandler: @escaping (UNNotificationContent) -> Void) async {
 
-        guard let conversationId = request.content.conversationId,
-              //let messageId = request.content.messageId,
-              let authorId = request.content.author,
-              //let cid = try? ChannelId.init(cid: conversationId),
-              //let message = self.getMessage(with: cid, messageId: messageId),
-              let author = try? await User.getObject(with: authorId).iNPerson else { return }
+        guard let content = request.content.mutableCopy() as? UNMutableNotificationContent else {
+            contentHandler(request.content)
+                return
+        }
 
-        var recipients: [INPerson] = []
-        var conversation: ChatChannel? = nil
-//        if let convo = await self.getConversation(with: conversationId) {
-//            let memberIds = convo.lastActiveMembers.compactMap({ member in
-//                return member.id
-//            })
-//
-//            if let persons = try? await User.localThenNetworkArrayQuery(where: memberIds,
-//                                                                           isEqual: true,
-//                                                                                         container: .users).compactMap({ user in
-//                return user.iNPerson
-//            }) {
-//                recipients = persons
-//            }
-//            conversation = convo
-//        }
+        guard let conversationId = request.content.conversationId,
+              let messageId = request.content.messageId,
+              let authorId = request.content.author,
+              let cid = try? ChannelId.init(cid: conversationId) else { return }
+
+        async let conversation = try? self.getConversation(with: client, cid: cid)
+        async let message = try? self.getMessage(with: client, cid: cid, messageId: messageId)
+        async let author = try? User.getObject(with: authorId).iNPerson
+
+        guard let conversation = await conversation,
+              let message = await message,
+                let author = await author else {
+            return
+        }
+
+        let memberIds = conversation.lastActiveMembers.compactMap { member in
+            return member.id
+        }
+
+        guard let recipients: [INPerson] = try? await User.fetchAndUpdateLocalContainer(where: memberIds, container: .users).compactMap({ user in
+            return user.iNPerson
+        }) else { return }
+
+        //switch message.
+
 
         let incomingMessageIntent = INSendMessageIntent(recipients: recipients,
                                                         outgoingMessageType: .outgoingMessageText,
                                                         content: request.content.body,
-                                                        speakableGroupName: conversation?.speakableGroupName,
+                                                        speakableGroupName: conversation.speakableGroupName,
                                                         conversationIdentifier: conversationId,
                                                         serviceName: nil,
                                                         sender: author,
@@ -101,25 +129,32 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 
-    private func getConversation(with identifier: String) async -> ChatChannel? {
-        do {
-            let cid = try ChannelId.init(cid: identifier)
-            let controller = ChatClient.shared.channelController(for: cid)
-            return try await withCheckedThrowingContinuation({ continuation in
-                controller.synchronize { error in
-                    if let e = error {
-                        continuation.resume(throwing: e)
-                    } else {
-                        continuation.resume(returning: controller.channel)
-                    }
+    private func getConversation(with client: ChatClient, cid: ChannelId) async throws -> ChatChannel? {
+        return try await withCheckedThrowingContinuation({ continuation in
+            let controller = client.channelController(for: cid)
+            controller.synchronize { error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: controller.channel)
                 }
-            })
-        } catch {
-            return nil
-        }
+            }
+        })
     }
 
-    private func getMessage(with channelId: ChannelId, messageId: MessageId) -> ChatMessage? {
-        return ChatClient.shared.messageController(cid: channelId, messageId: messageId).message
+    private func getMessage(with client: ChatClient,
+                            cid: ChannelId,
+                            messageId: MessageId) async throws -> ChatMessage? {
+
+        return try await withCheckedThrowingContinuation({ continuation in
+            let controller = client.messageController(cid: cid, messageId: messageId)
+            controller.synchronize { error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: controller.message)
+                }
+            }
+        })
     }
 }

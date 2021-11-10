@@ -44,10 +44,6 @@ final class Connection: PFObject, PFSubclassing {
         return self.getObject(for: .from)
     }
 
-    var conversationId: String? {
-        return self.getObject(for: .conversationSid)
-    }
-
     var initialConversations: [String] {
         get { return self.getObject(for: .initialConversations) ?? [] }
         set { self.setObject(for: .initialConversations, with: newValue) }
