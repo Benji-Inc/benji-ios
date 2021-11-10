@@ -16,6 +16,7 @@ import StreamChat
 class ConversationInputAccessoryView: SwipeableInputAccessoryView {
 
     let alertProgressView = AlertProgressView()
+    var alertAnimator: UIViewPropertyAnimator?
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -140,7 +141,7 @@ extension ConversationInputAccessoryView {
         self.currentContext = .timeSensitive
         self.alertAnimator?.stopAnimation(true)
         self.alertAnimator?.pausesOnCompletion = true
-        self.selectionFeedback.impactOccurred()
+        self.impactFeedback.impactOccurred()
 
         self.alertAnimator = UIViewPropertyAnimator(duration: 1.0,
                                                     curve: .linear,
@@ -153,7 +154,7 @@ extension ConversationInputAccessoryView {
 
         UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseIn, .repeat, .autoreverse], animations: {
             self.alertProgressView.alpha = 0
-            self.selectionFeedback.impactOccurred()
+            self.impactFeedback.impactOccurred()
         }, completion: nil)
     }
 

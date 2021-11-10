@@ -41,9 +41,7 @@ class MessageSubcell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.backgroundColorView.width = self.width
-        self.backgroundColorView.expandToSuperviewHeight()
-        self.backgroundColorView.centerOnXAndY()
+        self.backgroundColorView.expandToSuperviewSize()
 
         self.textView.width = self.backgroundColorView.bubbleFrame.width
         self.textView.centerOnX()
@@ -82,7 +80,7 @@ class MessageSubcell: UICollectionViewCell {
             return
         }
 
-        self.textView.isVisible = messageLayoutAttributes.shouldShowText
+        self.textView.isVisible = true// messageLayoutAttributes.shouldShowText
         self.configureBackground(color: messageLayoutAttributes.backgroundColor,
                                  showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                  tailOrientation: messageLayoutAttributes.bubbleTailOrientation)

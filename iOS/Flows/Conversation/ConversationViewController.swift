@@ -20,11 +20,11 @@ class ConversationViewController: FullScreenViewController,
                                   UICollectionViewDelegate,
                                   UICollectionViewDelegateFlowLayout,
                                   SwipeableInputAccessoryViewDelegate {
-    
+
     lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationCollectionView()
     /// Denotes where a message should be dragged and dropped to send.
-    private let sendMessageOverlay = ConversationSendOverlayView()
+    private let sendMessageOverlay = MessageDropZoneView()
     
     let conversationHeader = ConversationHeaderView()
 
@@ -101,7 +101,7 @@ class ConversationViewController: FullScreenViewController,
         self.collectionView.match(.top,
                                   to: .bottom,
                                   of: self.conversationHeader,
-                                  offset: -10)
+                                  offset: -14)
         self.collectionView.height = self.contentContainer.height - 96
     }
 
@@ -154,9 +154,10 @@ class ConversationViewController: FullScreenViewController,
     }
 
     func updateCenterMostCell() {
-        if let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessageCell {
-            self.didCenterOnCell = cell
+        guard let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessageCell else {
+            return
         }
+        self.didCenterOnCell = cell
     }
 
     // MARK: - Message Loading and Updates
@@ -332,7 +333,7 @@ class ConversationViewController: FullScreenViewController,
         let overlayFrame = self.collectionView.getMessageOverlayFrame(convertedTo: self.contentContainer)
         self.sendMessageOverlay.frame = overlayFrame
 
-        view.targetRect = view.convert(self.sendMessageOverlay.bounds, from: self.sendMessageOverlay)
+        view.dropZoneRect = view.convert(self.sendMessageOverlay.bounds, from: self.sendMessageOverlay)
 
         self.sendMessageOverlay.centerOnX()
     }
@@ -364,6 +365,12 @@ class ConversationViewController: FullScreenViewController,
         }
 
         self.lastPreparedPosition = position
+    }
+
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 didUpdate sendable: Sendable,
+                                 withProgress progress: CGFloat) {
+
     }
 
     func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
@@ -415,6 +422,7 @@ class ConversationViewController: FullScreenViewController,
     }
 
     // MARK: - Send Message Functions
+
     private func send(_ sendable: Sendable) async {
         do {
             try await self.conversationController?.createNewMessage(with: sendable)

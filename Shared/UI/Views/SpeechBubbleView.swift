@@ -101,7 +101,28 @@ class SpeechBubbleView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        // The bubble layer has problems animating size changes when this view's bounds are animating.
+        // To get around this issue, create a duplicate animation when this view's size is changing.
+        // https://stackoverflow.com/questions/24670269
+        CATransaction.begin()
+
+        let sizeAnimation = self.layer.animation(forKey: "bounds.size")
+        if let sizeAnimation = sizeAnimation {
+            // animating, apply same duration and timing function.
+            CATransaction.setAnimationDuration(sizeAnimation.duration)
+            CATransaction.setAnimationTimingFunction(sizeAnimation.timingFunction)
+            let pathAnimation = CABasicAnimation(keyPath: "path")
+            self.bubbleLayer.add(pathAnimation, forKey: "path")
+
+        } else {
+            // We're not animating, so we should disable implicit animations.
+            CATransaction.disableActions()
+        }
+
         self.updateBubblePath()
+        self.bubbleLayer.frame = self.bounds
+
+        CATransaction.commit()
     }
 
     /// Draws a path for the bubble and applies it to the bubble layer.

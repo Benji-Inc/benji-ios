@@ -34,6 +34,12 @@ extension ConversationThreadViewController: SwipeableInputAccessoryViewDelegate 
 
     }
 
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 didUpdate sendable: Sendable,
+                                 withProgress progress: CGFloat) {
+
+    }
+
     func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView) {
 
     }
