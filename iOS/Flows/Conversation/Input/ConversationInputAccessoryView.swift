@@ -101,7 +101,6 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
     func resetAlertProgress() {
         self.currentContext = .passive
         self.alertProgressView.width = 0
-        self.alertProgressView.set(backgroundColor: .white)
         self.alertProgressView.alpha = 1
         self.alertProgressView.layer.removeAllAnimations()
         self.textView.updateInputView(type: .keyboard)
