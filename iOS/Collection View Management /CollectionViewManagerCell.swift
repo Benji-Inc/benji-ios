@@ -27,55 +27,27 @@ struct ManageableHeaderRegistration<Header: UICollectionReusableView> {
 }
 
 // A base class that other cells managed by a CollectionViewManager can inherit from.
-class CollectionViewManagerCell: UICollectionViewListCell, UIGestureRecognizerDelegate {
+class CollectionViewManagerCell: UICollectionViewListCell {
 
-    // Touch Handlers
-    private lazy var stationaryPressRecognizer
-         = StationaryPressGestureRecognizer(cancelsTouchesInView: false,
-                                            target: self,
-                                            action: #selector(self.handleStationaryPress))
-    var onLongPress: (() -> Void)?
     var cancellables = Set<AnyCancellable>()
 
-    override init(frame: CGRect) {
+    var onDidTap: (() -> Void)?
 
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        self.initializeLongPressGesture()
         self.initializeSubviews()
     }
 
     required init?(coder aDecoder: NSCoder) {
-
         super.init(coder: aDecoder)
-        self.initializeLongPressGesture()
         self.initializeSubviews()
     }
 
     func initializeSubviews() {
-        self.contentView.addGestureRecognizer(self.stationaryPressRecognizer)
-        self.stationaryPressRecognizer.delegate = self
-    }
 
-    private func initializeLongPressGesture() {
-
-        let longPress = UILongPressGestureRecognizer { [unowned self] (longPress) in
-            switch longPress.state {
-            case .possible, .changed:
-                break
-            case .began:
-                self.onLongPress?()
-                // If the user starts a long press, we don't want this cell to be selected.
-                // Cancelling touches in this view means only a long press event will occur.
-                longPress.cancelsTouchesInView = true
-            case .ended, .cancelled, .failed:
-                longPress.cancelsTouchesInView = false
-            @unknown default:
-                break
-            }
+        self.contentView.didSelect { [unowned self] in
+            self.onDidTap?()
         }
-        // Don't cancel other touches so we don't interfere with the default cell selection behavior
-        longPress.cancelsTouchesInView = false
-        self.contentView.addGestureRecognizer(longPress)
     }
 
     func update(isSelected: Bool) {}
@@ -95,38 +67,5 @@ class CollectionViewManagerCell: UICollectionViewListCell, UIGestureRecognizerDe
 
         // Apply the background configuration to the cell.
         self.backgroundConfiguration = backgroundConfig
-    }
-
-    func canHandleStationaryPress() -> Bool {
-        return true
-    }
-
-    // MARK: Touch Handling
-
-    @objc private func handleStationaryPress(_ gestureRecognizer: StationaryPressGestureRecognizer) {
-
-        guard self.canHandleStationaryPress() else { return }
-        // Scale down the cell when pressed, and scale back up on release.
-        switch gestureRecognizer.state {
-        case .possible, .changed:
-            break
-        case .began:
-            self.scaleDown()
-        case .ended, .cancelled, .failed:
-            self.scaleUp()
-        @unknown default:
-            break
-        }
-    }
-
-    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
-                           shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-
-        if gestureRecognizer === self.stationaryPressRecognizer {
-            if otherGestureRecognizer.view?.isDescendant(of: self) == true {
-                return false
-            }
-        }
-        return true
     }
 }

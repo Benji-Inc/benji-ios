@@ -20,6 +20,8 @@ class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
 
     private var diffableDataSource: DiffableDataSourceType!
 
+    var didSelectItem: ((ItemType) -> Void)? 
+
     required init(collectionView: UICollectionView) {
         self.diffableDataSource = DiffableDataSourceType(collectionView: collectionView,
                                                          cellProvider: { collectionView, indexPath, itemIdentifier in

@@ -38,6 +38,14 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
 
         self.view.addSubview(self.collectionView)
         self.collectionView.delegate = self
+
+        self.dataSource.didSelectItem = { [unowned self] item in
+            if self.selectedItems.contains(item) {
+                self.selectedItems = self.selectedItems
+            } else {
+                self.selectedItems.append(item)
+            }
+        }
     }
 
     override func viewDidLoad() {
@@ -124,7 +132,7 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
             cell.update(isSelected: true )
         }
 
-        self.selectedItems = self.__selectedItems
+        //self.selectedItems = self.__selectedItems
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -132,7 +140,7 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
             cell.update(isSelected: false)
         }
 
-        self.selectedItems = self.__selectedItems
+        //self.selectedItems = self.__selectedItems
     }
 
     func collectionView(_ collectionView: UICollectionView,

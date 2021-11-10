@@ -35,10 +35,6 @@ class ConversationCell: CollectionViewManagerCell, ManageableCell {
         return layoutAttributes
     }
 
-    override func canHandleStationaryPress() -> Bool {
-        return false
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
 
