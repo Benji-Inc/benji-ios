@@ -41,6 +41,6 @@ class ConversationCollectionView: CollectionView {
             return self.convert(overlayFrame, to: view)
         }
 
-        return centerCell.getMessageOverlayFrame(convertedTo: view)
+        return centerCell.getMessageDropZoneFrame(convertedTo: view)
     }
 }

@@ -14,31 +14,32 @@ import Combine
 protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     /// The accessory has begun a swipe interaction.
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView)
-    /// The accessory is ready to confirm a sendable, but has not yet done so.
+    /// The accessory view updated the position of the sendable's preview view's position.
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didPrepare sendable: Sendable,
-                                 at position: SwipeableInputAccessoryView.SendPosition)
-    /// The accessory has moved from being prepared to confirm a sendable, to not being prepared.
-    func swipeableInputAccessoryDidUnprepareSendable(_ view: SwipeableInputAccessoryView)
-    /// The accesory  has is intending to send a sendable. The swipe is at the specified position.
+                                 didUpdate sendable: Sendable,
+                                 withPreviewFrame frame: CGRect)
+    /// The accessory view wants to send the sendable with the preview with the specified frame.
+    /// The delegate should return true if the sendable was sent.
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didConfirm sendable: Sendable,
-                                 at position: SwipeableInputAccessoryView.SendPosition)
-    /// The accessory finished a swipe interaction. This occurs regardless of whether a message was sent.
+                                 triggeredSendFor sendable: Sendable,
+                                 withPreviewFrame frame: CGRect) -> Bool
+    /// The accessory view finished its swipe interaction.
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView)
 }
 
 class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
-    /// The location on the screen that a send action was triggered.
-    enum SendPosition {
-        case left
-        case middle
-        case right
-    }
+    weak var delegate: SwipeableInputAccessoryViewDelegate?
 
-    var alertAnimator: UIViewPropertyAnimator?
-    var selectionFeedback = UIImpactFeedbackGenerator(style: .rigid)
+    // MARK: - Drag and Drop Properties
+
+    /// The rough area that we need to drag and drop messages to send them.
+    var dropZoneFrame: CGRect = .zero
+
+    /// An object to give the user touch feedback when performing certain actions.
+    var impactFeedback = UIImpactFeedbackGenerator(style: .rigid)
+
+    // MARK:  - Views
 
     @IBOutlet var activityBar: InputActivityBar!
     @IBOutlet var inputContainerView: SpeechBubbleView!
@@ -47,15 +48,14 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     /// A button to handle taps and pan gestures.
     @IBOutlet var overlayButton: UIButton!
 
-    var cancellables = Set<AnyCancellable>()
+    // MARK: - Message State
 
     var currentContext: MessageContext = .passive
-    
     var editableMessage: Messageable?
     var currentMessageKind: MessageKind = .text(String())
     private var sendable: SendableObject?
 
-    weak var delegate: SwipeableInputAccessoryViewDelegate?
+    var cancellables = Set<AnyCancellable>()
 
     // MARK: View Setup and Layout
 
@@ -70,6 +70,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
         // Use flexible height autoresizing mask to account for changes in text input.
         self.autoresizingMask = .flexibleHeight
+
+        self.inputContainerView.showShadow(withOffset: 8)
 
         self.setupGestures()
         self.setupHandlers()
@@ -168,12 +170,14 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     // MARK: - Pan Gesture Handling
 
     private var previewView: PreviewMessageView?
+    /// The origin of the preview view when the pan started.
     private var initialPreviewOrigin: CGPoint?
-    private var currentSendPosition: SendPosition?
     /// How far the preview view can be dragged left or right.
     private let maxXOffset: CGFloat = 40
-    /// How far the preview view can be dragged vertically
-    private let maxYOffset: CGFloat = 250
+    /// How far the preview view can be dragged up.
+    private var maxYOffset: CGFloat {
+        return -(self.inputContainerView.top - self.dropZoneFrame.top + 20)
+    }
 
     func handle(pan: UIPanGestureRecognizer) {
         guard self.shouldHandlePan() else { return }
@@ -196,7 +200,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         }
     }
 
-    func shouldHandlePan() -> Bool {
+    private func shouldHandlePan() -> Bool {
+        // Only handle pans if the user has input a sendable message.
         let object = SendableObject(kind: self.currentMessageKind,
                                     context: self.currentContext,
                                     previousMessage: self.editableMessage)
@@ -210,55 +215,72 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
                                     previousMessage: self.editableMessage)
         self.sendable = object
 
+        // Hide the input area. The preview view will take its place during the pan.
         self.inputContainerView.alpha = 0
 
         // Initialize the preview view for the user to drag up the screen.
         self.previewView = PreviewMessageView(orientation: .down,
-                                              bubbleColor: self.currentContext.color.color)
+                                              bubbleColor: self.currentContext.color.color,
+                                              borderColor: self.currentContext.color.color)
         self.previewView?.frame = self.inputContainerView.frame
         self.previewView?.messageKind = self.currentMessageKind
+        self.previewView?.showShadow(withOffset: 8)
         self.addSubview(self.previewView!)
 
         self.initialPreviewOrigin = self.previewView?.origin
-        self.currentSendPosition = nil
 
         self.delegate?.swipeableInputAccessoryDidBeginSwipe(self)
     }
 
     private func handlePanChanged(withOffset panOffset: CGPoint) {
-        guard let initialPosition = self.initialPreviewOrigin else { return }
+        self.updatePreviewViewPosition(withOffset: panOffset)
 
-        let offsetX = clamp(panOffset.x, -self.maxXOffset, self.maxXOffset)
-        let offsetY = clamp(panOffset.y, -self.maxYOffset, 0)
-        self.previewView?.origin = initialPosition + CGPoint(x: offsetX, y: offsetY)
+        guard let sendable = self.sendable, let previewView = self.previewView else { return }
 
-        guard let sendable = self.sendable else { return }
-
-        let newSendPosition = self.getSendPosition(forPanOffset: panOffset)
-
-        // Detect if the send position has changed. If so, let the delegate know so it can prepare
-        // for a send or cancel the current send.
-        if newSendPosition != self.currentSendPosition {
-            self.currentSendPosition = newSendPosition
-
-            if let newSendPosition = newSendPosition {
-                self.delegate?.swipeableInputAccessory(self,
-                                                      didPrepare: sendable,
-                                                      at: newSendPosition)
-            } else {
-                self.delegate?.swipeableInputAccessoryDidUnprepareSendable(self)
-            }
-        }
+        self.delegate?.swipeableInputAccessory(self,
+                                               didUpdate: sendable,
+                                               withPreviewFrame: previewView.frame)
     }
 
     private func handlePanEnded(withOffset panOffset: CGPoint) {
-        // Only attempt to send a message if we have a valid swipe position.
-        if let swipePosition = self.getSendPosition(forPanOffset: panOffset),
-           let sendable = self.sendable {
+        self.updatePreviewViewPosition(withOffset: panOffset)
 
-            self.selectionFeedback.impactOccurred()
-            self.delegate?.swipeableInputAccessory(self, didConfirm: sendable, at: swipePosition)
+        var sendableWillBeSent = false
 
+        if let sendable = self.sendable,
+           let previewView = self.previewView,
+           let delegate = self.delegate {
+
+            sendableWillBeSent = delegate.swipeableInputAccessory(self,
+                                                                  triggeredSendFor: sendable,
+                                                                  withPreviewFrame: previewView.frame)
+        }
+
+        self.resetPreviewAndInputViews(didSend: sendableWillBeSent)
+
+        self.delegate?.swipeableInputAccessoryDidFinishSwipe(self)
+    }
+
+    private func handlePanFailed() {
+        self.inputContainerView.alpha = 1
+        self.previewView?.removeFromSuperview()
+        self.delegate?.swipeableInputAccessoryDidFinishSwipe(self)
+    }
+
+    /// Updates the position of the preview view based on the provided pan gesture offset. This function ensures that preview view's origin
+    /// is kept within bounds defined by max X and Y offset.
+    private func updatePreviewViewPosition(withOffset panOffset: CGPoint) {
+        guard let initialPosition = self.initialPreviewOrigin,
+              let previewView = self.previewView else { return }
+
+        let offsetX = clamp(panOffset.x, -self.maxXOffset, self.maxXOffset)
+        let offsetY = clamp(panOffset.y, self.maxYOffset, 0)
+        previewView.origin = initialPosition + CGPoint(x: offsetX, y: offsetY)
+    }
+
+    private func resetPreviewAndInputViews(didSend: Bool) {
+        if didSend {
+            self.impactFeedback.impactOccurred()
             self.previewView?.removeFromSuperview()
             self.resetInputViews()
         } else {
@@ -271,31 +293,6 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
                 self.inputContainerView.alpha = 1
                 self.previewView?.removeFromSuperview()
             }
-        }
-        self.delegate?.swipeableInputAccessoryDidFinishSwipe(self)
-    }
-
-    private func handlePanFailed() {
-        self.inputContainerView.alpha = 1
-        self.previewView?.removeFromSuperview()
-        self.delegate?.swipeableInputAccessoryDidFinishSwipe(self)
-    }
-
-    /// Gets the send position for the given panOffset. If the pan offset doesn't correspond to a valid send position, nil is returned.
-    private func getSendPosition(forPanOffset panOffset: CGPoint) -> SendPosition? {
-        // The percentage of the max y offset that the preview view has been dragged up.
-        let progress = clamp(-panOffset.y/self.maxYOffset, 0, 1)
-
-        // Make sure the user has dragged up far enough, otherwise this isn't a valid send position.
-        guard progress > 0.25 else { return nil }
-
-        switch panOffset.x {
-        case -CGFloat.greatestFiniteMagnitude ... -self.maxXOffset.half:
-            return .left
-        case self.maxXOffset.half ... CGFloat.greatestFiniteMagnitude:
-            return .right
-        default:
-            return .middle
         }
     }
 

@@ -41,9 +41,7 @@ class MessageSubcell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.backgroundColorView.width = self.width
-        self.backgroundColorView.expandToSuperviewHeight()
-        self.backgroundColorView.centerOnXAndY()
+        self.backgroundColorView.expandToSuperviewSize()
 
         self.textView.width = self.backgroundColorView.bubbleFrame.width
         self.textView.centerOnX()
