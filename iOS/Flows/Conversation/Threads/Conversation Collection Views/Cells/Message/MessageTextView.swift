@@ -24,9 +24,9 @@ class MessageTextView: TextView {
         self.textContainerInset.right = Theme.contentOffset
     }
 
-    func set(text: Localized, messageContext: MessageContext) {
-        let textColor: Color = messageContext == .status ? .darkGray : .textColor
-        let attributedString = AttributedString(text,
+    func setText(with message: Messageable) {
+        let textColor: Color = message.context.color
+        let attributedString = AttributedString(message.kind.text,
                                                 fontType: .smallBold,
                                                 color: textColor)
 

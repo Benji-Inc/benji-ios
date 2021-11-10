@@ -18,11 +18,11 @@ enum MessageContext: String, CaseIterable {
     var color: Color {
         switch self {
         case .timeSensitive:
-            return .lightGray
+            return .red
         case .passive:
-            return .white
+            return .textColor
         case .status:
-            return .gray
+            return .textColor
         }
     }
 }

@@ -39,12 +39,11 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
     override func setupGestures() {
         super.setupGestures()
 
-        // Disabling the time sensitive interaction for now
-//        let longPressRecognizer = UILongPressGestureRecognizer { [unowned self] (recognizer) in
-//            self.handle(longPress: recognizer)
-//        }
-//        longPressRecognizer.delegate = self
-//        self.overlayButton.addGestureRecognizer(longPressRecognizer)
+        let longPressRecognizer = UILongPressGestureRecognizer { [unowned self] (recognizer) in
+            self.handle(longPress: recognizer)
+        }
+        longPressRecognizer.delegate = self
+        self.overlayButton.addGestureRecognizer(longPressRecognizer)
     }
 
     // MARK: OVERRIDES
@@ -177,13 +176,15 @@ extension ConversationInputAccessoryView {
     }
 
     private func showAlertConfirmation() {
-//        guard let c = self.activeConversation, case Conversation.conversation = c.conversationType else { return }
-//
-//        self.textView.updateInputView(type: .confirmation)
-//
-//        let members = conversation.getNonMeMembers()
-//        self.textView.confirmationView.setAlertMessage(for: members)
-//
-//        self.alertProgressView.size = CGSize(width: self.width, height: self.height)
+        guard let conversation = self.conversation else { return }
+
+        self.textView.updateInputView(type: .confirmation)
+
+        let members = conversation.lastActiveMembers.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        }
+        self.textView.confirmationView.setAlertMessage(for: members)
+
+        self.alertProgressView.size = CGSize(width: self.width, height: self.height)
     }
 }

@@ -40,8 +40,10 @@ class ConversationViewController: FullScreenViewController,
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
         let view: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
         view.delegate = self
+        view.conversation = self.conversation
         return view
     }()
+    
     override var inputAccessoryView: UIView? {
         return self.presentedViewController.isNil ? self.messageInputAccessoryView : nil 
     }

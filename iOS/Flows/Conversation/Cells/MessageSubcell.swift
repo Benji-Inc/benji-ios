@@ -56,7 +56,7 @@ class MessageSubcell: UICollectionViewCell {
         if message.isDeleted {
             self.textView.text = "DELETED"
         } else {
-            self.textView.text = message.kind.text
+            self.textView.setText(with: message)
         }
 
         self.setNeedsLayout()

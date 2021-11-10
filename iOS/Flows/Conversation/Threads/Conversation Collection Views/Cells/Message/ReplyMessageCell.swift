@@ -46,9 +46,7 @@ class ReplyMessageCell: BaseMessageCell {
     override func configure(with message: Messageable) {
         super.configure(with: message)
 
-        if case MessageKind.text(let text) = message.kind {
-            self.textView.set(text: text, messageContext: message.context)
-        }
+        self.textView.setText(with: message)
 
         self.layoutNow()
     }

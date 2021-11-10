@@ -139,13 +139,15 @@ extension ChatChannelController {
                           extraData: [String: RawJSON] = [:]) async throws -> MessageId {
 
         return try await withCheckedThrowingContinuation { continuation in
+            var data = extraData
+            data["context"] = .string(sendable.context.rawValue)
             self.createNewMessage(text: text,
                                   pinning: pinning,
                                   isSilent: isSilent,
                                   attachments: attachments,
                                   mentionedUserIds: mentionedUserIds,
                                   quotedMessageId: quotedMessageId,
-                                  extraData: extraData) { result in
+                                  extraData: data) { result in
 
                 switch result {
                 case .success(let messageID):
@@ -279,6 +281,8 @@ extension ChatChannelController {
         let messageController = self.client.messageController(cid: channelID, messageId: messageID)
 
         return try await withCheckedThrowingContinuation({ continuation in
+            var data = extraData
+            data["context"] = .string(sendable.context.rawValue)
             messageController.createNewReply(text: text,
                                              pinning: pinning,
                                              attachments: attachments,
