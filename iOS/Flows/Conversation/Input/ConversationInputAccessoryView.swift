@@ -23,7 +23,7 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
         self.currentContext = .passive
 
         self.inputContainerView.insertSubview(self.alertProgressView, belowSubview: self.textView)
-        self.alertProgressView.set(backgroundColor: .lightGray)
+        self.alertProgressView.set(backgroundColor: .red)
         self.alertProgressView.size = .zero
         self.alertProgressView.roundCorners()
     }
@@ -144,8 +144,7 @@ extension ConversationInputAccessoryView {
         self.alertAnimator = UIViewPropertyAnimator(duration: 1.0,
                                                     curve: .linear,
                                                     animations: { [unowned self] in
-            self.alertProgressView.size = CGSize(width: self.textView.width,
-                                                 height: self.textView.height)
+            self.alertProgressView.size = self.inputContainerView.bubbleFrame.size
         })
 
         self.alertAnimator?.startAnimation()
@@ -168,7 +167,7 @@ extension ConversationInputAccessoryView {
             self.alertAnimator = UIViewPropertyAnimator(duration: 0.5,
                                                         curve: .linear,
                                                         animations: { [unowned self] in
-                                                            self.alertProgressView.size = CGSize(width: 0, height: self.height)
+                self.alertProgressView.size = CGSize(width: 0, height: self.inputContainerView.bubbleFrame.height)
                                                             self.layer.borderColor = self.currentContext.color.color.cgColor
             })
             self.alertAnimator?.startAnimation()
@@ -185,6 +184,6 @@ extension ConversationInputAccessoryView {
         }
         self.textView.confirmationView.setAlertMessage(for: members)
 
-        self.alertProgressView.size = CGSize(width: self.width, height: self.height)
+        self.alertProgressView.size = self.inputContainerView.bubbleFrame.size 
     }
 }

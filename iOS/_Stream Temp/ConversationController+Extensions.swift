@@ -290,7 +290,7 @@ extension ChatChannelController {
                                              showReplyInChannel: showReplyInChannel,
                                              isSilent: isSilent,
                                              quotedMessageId: quotedMessageId,
-                                             extraData: extraData) { result in
+                                             extraData: data) { result in
                 switch result {
                 case .success(let messageId):
                     Task {
