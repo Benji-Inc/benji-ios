@@ -267,6 +267,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         self.delegate?.swipeableInputAccessoryDidFinishSwipe(self)
     }
 
+    /// Updates the position of the preview view based on the provided pan gesture offset. This function ensures that preview view's origin
+    /// is kept within bounds defined by max X and Y offset.
     private func updatePreviewViewPosition(withOffset panOffset: CGPoint) {
         guard let initialPosition = self.initialPreviewOrigin,
               let previewView = self.previewView else { return }
