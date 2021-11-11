@@ -113,6 +113,8 @@ class OnboardingMessageTextView: TextView {
         style.lineSpacing = 2
         style.alignment = .center
 
+        self.linkTextAttributes = [.foregroundColor: Color.lightGray.color, .underlineStyle: 0]
+
         self.addTextAttributes([NSAttributedString.Key.paragraphStyle: style])
     }
 }
