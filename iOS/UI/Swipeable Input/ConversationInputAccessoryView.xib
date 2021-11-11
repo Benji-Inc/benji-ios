@@ -11,11 +11,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ConversationInputAccessoryView" customModule="Jibber" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="337" height="114"/>
+            <rect key="frame" x="0.0" y="0.0" width="337" height="134"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CP8-gi-eym" userLabel="Safe Area Container">
-                    <rect key="frame" x="0.0" y="0.0" width="337" height="114"/>
+                    <rect key="frame" x="0.0" y="0.0" width="337" height="134"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6QT-73-Nac" customClass="InputActivityBar" customModule="Jibber" customModuleProvider="target">
                             <rect key="frame" x="24" y="0.0" width="289" height="28"/>
@@ -25,17 +25,17 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VuQ-5S-h7F" customClass="SpeechBubbleView" customModule="Jibber" customModuleProvider="target">
-                            <rect key="frame" x="24" y="28" width="289" height="43"/>
+                            <rect key="frame" x="24" y="28" width="289" height="58"/>
                             <subviews>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" text="This is some example message text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ads-9e-WJh" customClass="InputTextView" customModule="Jibber" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="289" height="33"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="289" height="48"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <color key="textColor" systemColor="labelColor"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 </textView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-ok-H5y">
-                                    <rect key="frame" x="0.0" y="0.0" width="289" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="289" height="58"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title=""/>
                                 </button>
@@ -53,25 +53,25 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vaX-xP-i7k">
-                            <rect key="frame" x="24" y="79" width="289" height="27"/>
-                            <color key="backgroundColor" systemColor="systemPinkColor"/>
+                            <rect key="frame" x="0.0" y="94" width="337" height="40"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="27" id="W3f-8z-1Rm"/>
+                                <constraint firstAttribute="height" constant="40" id="W3f-8z-1Rm"/>
                             </constraints>
                         </view>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="6QT-73-Nac" firstAttribute="top" secondItem="CP8-gi-eym" secondAttribute="top" id="0H2-Xo-SXZ"/>
-                        <constraint firstItem="vaX-xP-i7k" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="24" id="7ML-EV-mbN"/>
+                        <constraint firstItem="vaX-xP-i7k" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" id="7ML-EV-mbN"/>
                         <constraint firstAttribute="trailing" secondItem="VuQ-5S-h7F" secondAttribute="trailing" constant="24" id="Tgi-A5-L3c"/>
-                        <constraint firstAttribute="bottom" secondItem="vaX-xP-i7k" secondAttribute="bottom" constant="8" id="W0X-I8-0SE"/>
+                        <constraint firstAttribute="bottom" secondItem="vaX-xP-i7k" secondAttribute="bottom" id="W0X-I8-0SE"/>
                         <constraint firstItem="VuQ-5S-h7F" firstAttribute="top" secondItem="6QT-73-Nac" secondAttribute="bottom" id="ZSd-AH-VpD"/>
                         <constraint firstItem="VuQ-5S-h7F" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="24" id="Zve-FB-6La"/>
                         <constraint firstItem="vaX-xP-i7k" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="bottom" constant="8" id="khc-UU-tVU"/>
                         <constraint firstItem="VuQ-5S-h7F" firstAttribute="trailing" secondItem="6QT-73-Nac" secondAttribute="trailing" id="lDj-vr-jFz"/>
                         <constraint firstItem="VuQ-5S-h7F" firstAttribute="leading" secondItem="6QT-73-Nac" secondAttribute="leading" id="qmj-x7-7Tm"/>
-                        <constraint firstAttribute="trailing" secondItem="vaX-xP-i7k" secondAttribute="trailing" constant="24" id="y13-oz-083"/>
+                        <constraint firstAttribute="trailing" secondItem="vaX-xP-i7k" secondAttribute="trailing" id="y13-oz-083"/>
                     </constraints>
                 </view>
             </subviews>
@@ -88,18 +88,16 @@
                 <outlet property="activityBar" destination="6QT-73-Nac" id="pPJ-K6-Xnn"/>
                 <outlet property="inputContainerView" destination="VuQ-5S-h7F" id="o5I-Cx-4HN"/>
                 <outlet property="inputTypeContainer" destination="vaX-xP-i7k" id="iQV-ts-qMa"/>
+                <outlet property="inputTypeHeightConstraint" destination="W3f-8z-1Rm" id="ISn-9g-1kH"/>
                 <outlet property="overlayButton" destination="b2H-ok-H5y" id="78P-cH-BSH"/>
                 <outlet property="textView" destination="Ads-9e-WJh" id="T8m-mt-M46"/>
             </connections>
-            <point key="canvasLocation" x="81.884057971014499" y="-64.285714285714278"/>
+            <point key="canvasLocation" x="81.884057971014499" y="-57.589285714285708"/>
         </view>
     </objects>
     <resources>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -50,6 +50,11 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     @IBOutlet var overlayButton: UIButton!
 
     @IBOutlet var inputTypeContainer: UIView!
+    @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
+
+    lazy var inputTypeVC = InputTypeViewController()
+
+    static var inputTypeMaxHeight: CGFloat = 40
 
     // MARK: - Message State
 
@@ -78,13 +83,34 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
         self.inputContainerView.showShadow(withOffset: 8)
 
+        self.inputTypeContainer.addSubview(self.inputTypeVC.view)
+
+        self.inputTypeVC.view.translatesAutoresizingMaskIntoConstraints = false
+        let topConstraint = self.inputTypeVC.view.topAnchor.constraint(equalTo: self.inputTypeContainer.topAnchor)
+        let bottomConstraint = self.inputTypeVC.view.bottomAnchor.constraint(equalTo: self.inputTypeContainer.bottomAnchor)
+        let leadingConstraint = self.inputTypeVC.view.leadingAnchor.constraint(equalTo: self.inputTypeContainer.leadingAnchor)
+        let trailingConstraint = self.inputTypeVC.view.trailingAnchor.constraint(equalTo: self.inputTypeContainer.trailingAnchor)
+        self.inputTypeContainer.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
+
         self.setupGestures()
         self.setupHandlers()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.inputTypeVC.collectionView.expandToSuperviewSize()
     }
 
     // MARK: PRIVATE
 
     private func setupHandlers() {
+
+        KeyboardManager.shared.$willKeyboardShow.mainSink { willShow in
+            self.inputTypeHeightConstraint.constant = willShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 0
+            self.inputTypeVC.view.alpha = willShow ? 1 : 0
+        }.store(in: &self.cancellables)
+
         KeyboardManager.shared.$currentEvent
             .mainSink { [weak self] event in
                 guard let `self` = self else { return }

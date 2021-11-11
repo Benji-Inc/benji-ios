@@ -24,7 +24,7 @@ class InputTypeCollectionViewLayout: UICollectionViewCompositionalLayout {
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: .fractionalWidth(1))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: .fractionalHeight(1))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
 
                 // Section

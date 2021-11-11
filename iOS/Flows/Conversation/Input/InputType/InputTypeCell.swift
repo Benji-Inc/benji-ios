@@ -20,6 +20,8 @@ class InputTypeCell: CollectionViewManagerCell, ManageableCell {
 
         self.contentView.addSubview(self.imageView)
         self.imageView.alpha = 0.5
+        self.imageView.tintColor = Color.gray.color
+        self.imageView.contentMode = .scaleAspectFit
     }
 
     func configure(with item: InputType) {
@@ -36,7 +38,7 @@ class InputTypeCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.imageView.squaredSize = self.contentView.height
+        self.imageView.squaredSize = self.contentView.height * 0.8
         self.imageView.centerOnXAndY()
     }
 }
