@@ -56,9 +56,14 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES"
-      launchAutomaticallySubstyle = "2">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      launchAutomaticallySubstyle = "2"
+      notificationPayloadFile = "PushNotificationPayload.apns">
+      <RemoteRunnable
+         runnableDebuggingMode = "0"
+         BundleIdentifier = "com.Jibber-Inc.Jibber"
+         RemotePath = "/var/containers/Bundle/Application/2BF78D8D-1A7C-4C65-AD86-B3A006FD5B78/Jibber.app">
+      </RemoteRunnable>
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "D61EC0BB21D3071400204BEE"
@@ -66,7 +71,7 @@
             BlueprintName = "Jibber"
             ReferencedContainer = "container:Jibber.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

@@ -53,9 +53,9 @@ class MessageSubcell: UICollectionViewCell {
         if message.isDeleted {
             self.textView.text = "DELETED"
         } else {
-            self.textView.set(text: message.kind.text, messageContext: message.context)
+            self.textView.setText(with: message)
         }
-
+    
         self.setNeedsLayout()
     }
 
@@ -113,7 +113,7 @@ extension MessageSubcell {
         }
 
         let textView = MessageTextView()
-        textView.text = message.kind.text
+        textView.setText(with: message)
         var textViewSize = textView.getSize(withMaxWidth: width)
         textViewSize.height += Theme.contentOffset
         return clamp(textViewSize.height + self.bubbleTailLength,
