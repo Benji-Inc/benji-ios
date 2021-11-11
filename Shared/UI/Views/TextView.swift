@@ -21,9 +21,7 @@ class TextView: UITextView {
     var cancellables = Set<AnyCancellable>()
 
     override var text: String! {
-        get {
-            return super.text
-        }
+        get { return super.text }
         set {
             guard let string = newValue, !string.isEmpty else {
                 // No need to apply attributes to a nil string.
@@ -34,6 +32,26 @@ class TextView: UITextView {
             self.setTextWithAttributes(string)
         }
     }
+
+    // Back the normal font variable with a private variable to ensure that the
+    // font type doesn't get set wrong when dealing with emojis.
+    override var font: UIFont? {
+        get { return self._font }
+        set {
+            self._font = newValue ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
+        }
+    }
+    private var _font: UIFont
+
+    // Back the normal text color variable with a private variable to ensure that the
+    // color doesn't get set wrong when dealing with emojis.
+    override var textColor: UIColor? {
+        get { return self._textColor }
+        set {
+            self._textColor = newValue ?? UIColor.black
+        }
+    }
+    private var _textColor: UIColor
 
     /// Kerning to be applied to all text in this text view. If an attributed string is set manually, there is no guarantee that this variable
     /// will be accurate, but setting it will update kerning on all text in the label.
@@ -55,8 +73,8 @@ class TextView: UITextView {
 
     /// The string attributes to apply to any text given this label's assigned font and font color.
     private var attributes: [NSAttributedString.Key: Any] {
-        let font = self.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
-        let textColor = self.textColor ?? UIColor.black
+        let font = self._font
+        let textColor = self._textColor
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = self.textAlignment
         paragraphStyle.lineSpacing = self.lineSpacing
@@ -74,29 +92,21 @@ class TextView: UITextView {
     }
 
     init(frame: CGRect = .zero, font: FontType, textColor: Color, textContainer: NSTextContainer?) {
+        self._font = font.font
+        self._textColor = textColor.color
         self.kerning = font.kern
 
         super.init(frame: frame, textContainer: textContainer)
-
-        // Ensure that there's always some text in this text view so font color and text color properties
-        // don't become nil
-        self.text = " "
-        self.font = font.font
-        self.textColor = textColor.color
 
         self.initializeViews()
     }
 
     required init?(coder aDecoder: NSCoder) {
+        self._font = FontType.smallBold.font
+        self._textColor = UIColor.black
         self.kerning = FontType.smallBold.kern
 
         super.init(coder: aDecoder)
-
-        // Ensure that there's always some text in this text view so font color and text color properties
-        // don't become nil
-        self.text = " "
-        self.font = FontType.smallBold.font
-        self.textColor = Color.textColor.color
 
         self.initializeViews()
     }
