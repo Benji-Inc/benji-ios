@@ -13,7 +13,10 @@ class MessageTimeLabel: Label {
     init() {
         super.init(font: .small)
 
-        self.setText(" ")
+        self.textAlignment = .center
+        self.numberOfLines = 1
+        self.setFont(.small)
+        self.setTextColor(.gray)
     }
 
     required init?(coder: NSCoder) {
@@ -22,16 +25,10 @@ class MessageTimeLabel: Label {
 
     func set(date: Date?) {
         guard let date = date else {
-            self.setText(" ")
+            self.text = nil
             return
         }
 
-        let attributed = AttributedString(Date.hourMinuteTimeOfDay.string(from: date),
-                                          fontType: .small,
-                                          color: .lightGray)
-        self.set(attributed: attributed,
-                 alignment: .center,
-                 lineCount: 1,
-                 stringCasing: .unchanged)
+        self.text = Date.hourMinuteTimeOfDay.string(from: date)
     }
 }

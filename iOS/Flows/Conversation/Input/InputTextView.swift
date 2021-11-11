@@ -25,11 +25,17 @@ class InputTextView: ExpandingTextView {
     weak var attachmentDelegate: AttachmentViewControllerDelegate?
 
     init() {
-        super.init(frame: .zero, textContainer: nil)
+        super.init(frame: .zero,
+                   font: .smallBold,
+                   textColor: .textColor,
+                   textContainer: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+
+        self.font = FontType.smallBold.font
+        self.textColor = Color.textColor.color
     }
 
     override func initializeViews() {

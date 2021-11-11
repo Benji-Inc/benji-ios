@@ -89,13 +89,13 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         if indexPath.section == 0 {
             // Position the decoration above the frontmost item in the first section
             attributes.frame = CGRect(x: frontmostAttributes.frame.left,
-                                      y: frontmostAttributes.frame.top - Theme.contentOffset,
+                                      y: frontmostAttributes.frame.top - Theme.contentOffset + 7,
                                       width: frontmostAttributes.frame.width,
                                       height: Theme.contentOffset)
         } else {
             // Position the decoration below the frontmost item in the second section
             attributes.frame = CGRect(x: frontmostAttributes.frame.left,
-                                      y: frontmostAttributes.frame.bottom,
+                                      y: frontmostAttributes.frame.bottom - 7,
                                       width: frontmostAttributes.frame.width,
                                       height: Theme.contentOffset)
         }

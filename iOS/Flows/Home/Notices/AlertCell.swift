@@ -59,7 +59,7 @@ class AlertCell: NoticeCell {
         self.avatarView.pin(.top, padding: Theme.contentOffset.half)
 
         let maxWidth = self.contentView.width - self.avatarView.right - Theme.contentOffset.doubled
-        self.textView.setSize(withWidth: maxWidth, height: self.contentView.height - Theme.contentOffset.doubled)
+        self.textView.setSize(withMaxWidth: maxWidth, maxHeight: self.contentView.height - Theme.contentOffset.doubled)
 
         self.bubbleView.height = self.textView.height + Theme.contentOffset
         self.bubbleView.width = self.textView.width + Theme.contentOffset

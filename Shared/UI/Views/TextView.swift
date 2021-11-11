@@ -21,9 +21,44 @@ class TextView: UITextView {
     var cancellables = Set<AnyCancellable>()
 
     override var text: String! {
-        didSet {
-            self.setNeedsDisplay()
+        get { return super.text }
+        set {
+            // Always have some text in this textview so that we don't lose the text attributes.
+            let string = newValue ?? ""
+            self.setTextWithAttributes(string)
         }
+    }
+
+    /// Kerning to be applied to all text in this text view. If an attributed string is set manually, there is no guarantee that this variable
+    /// will be accurate, but setting it will update kerning on all text in the label.
+    var kerning: CGFloat {
+        didSet {
+            guard let text = self.text else { return }
+            self.setTextWithAttributes(text)
+        }
+    }
+
+    /// Line spacing for consecutive lines of text. If an attributed string is set manually, there is no guarantee that this variable
+    /// will be accurate, but setting it will update line spacing on all text in the label.
+    var lineSpacing: CGFloat = 0 {
+        didSet {
+            guard let text = self.text else { return }
+            self.setTextWithAttributes(text)
+        }
+    }
+
+    /// The string attributes to apply to any text given this label's assigned font and font color.
+    private var attributes: [NSAttributedString.Key: Any] {
+        let font = self.font ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
+        let textColor = self.textColor ?? UIColor.black
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = self.textAlignment
+        paragraphStyle.lineSpacing = self.lineSpacing
+
+        return [.font: font,
+                .kern: self.kerning,
+                .foregroundColor: textColor,
+                .paragraphStyle: paragraphStyle]
     }
 
     private var attributedPlaceholder: NSAttributedString? {
@@ -32,27 +67,52 @@ class TextView: UITextView {
         }
     }
 
-    override init(frame: CGRect, textContainer: NSTextContainer?) {
-        super.init(frame: frame, textContainer: textContainer)
-        self.initializeViews()
-    }
+    init(frame: CGRect = .zero,
+         font: FontType,
+         textColor: Color,
+         textContainer: NSTextContainer?) {
 
-    convenience init() {
-        self.init(frame: .zero, textContainer: nil)
+        self.kerning = font.kern
+
+        super.init(frame: frame, textContainer: textContainer)
+
+        self.font = font.font
+        self.textColor = textColor.color
+
+        self.initializeViews()
     }
 
     required init?(coder aDecoder: NSCoder) {
-        super.init(frame: .zero, textContainer: nil)
+        self.kerning = FontType.smallBold.kern
+
+        super.init(coder: aDecoder)
+
+        self.font = FontType.smallBold.font
+        self.textColor = UIColor.black
+
         self.initializeViews()
+
+    }
+
+    convenience init() {
+        self.init(frame: .zero, font: .smallBold, textColor: .textColor, textContainer: nil)
     }
 
     func initializeViews() {
-        let styleAttributes = StringStyle(font: .smallBold, color: .white).attributes
-        self.typingAttributes = styleAttributes
+        // Give the text view an initial value so to get our attributes bootstrapped.
+        self.text = ""
+
         self.contentMode = .redraw
 
         self.keyboardAppearance = .dark
-        
+
+        self.textContainer.lineBreakMode = .byWordWrapping
+        self.textContainer.lineFragmentPadding = 0
+
+        self.textAlignment = .center
+        self.isUserInteractionEnabled = true
+        self.dataDetectorTypes = .all
+
         self.set(backgroundColor: .clear)
 
         NotificationCenter.default.publisher(for: UITextView.textDidChangeNotification)
@@ -66,41 +126,52 @@ class TextView: UITextView {
             }.store(in: &self.cancellables)
     }
 
+    // MARK: Setters
+    
+    func setText(_ localizedText: Localized?) {
+        guard let localizedText = localizedText else {
+            self.text = nil
+            return
+        }
+        self.text = localized(localizedText)
+    }
+
+    func setFont(_ fontType: FontType) {
+        self.font = fontType.font
+        self.kerning = fontType.kern
+    }
+
+    func setTextColor(_ textColor: Color) {
+        self.textColor = textColor.color
+    }
+
     func set(placeholder: Localized, color: Color = .textColor) {
         let styleAttributes = StringStyle(font: .smallBold, color: color).attributes
         let string = NSAttributedString(string: localized(placeholder), attributes: styleAttributes)
         self.attributedPlaceholder = string
     }
 
-    func set(attributed: AttributedString,
-             alignment: NSTextAlignment = .left,
-             lineCount: Int = 0,
-             lineBreakMode: NSLineBreakMode = .byWordWrapping,
-             stringCasing: StringCasing = .unchanged,
-             isEditable: Bool = false,
-             linkColor: Color = .white) {
-
-        let string = stringCasing.format(string: attributed.string.string)
-        let attributedString = NSMutableAttributedString(string: string)
-        attributedString.addAttributes(attributed.attributes, range: NSRange(location: 0,
-                                                                             length: attributedString.length))
-
-        attributedString.linkItems()
-        self.linkTextAttributes = [.foregroundColor: linkColor.color, .underlineStyle: 0]
-
-        self.isEditable = isEditable
+    private func setTextWithAttributes(_ newText: String) {
+        let attributedString = NSMutableAttributedString(string: newText)
+        attributedString.addAttributes(self.attributes,
+                                       range: NSRange(location: 0, length: attributedString.length))
         self.attributedText = attributedString
-        self.textContainer.maximumNumberOfLines = lineCount
-        self.textContainer.lineBreakMode = lineBreakMode
-        self.textAlignment = alignment
-        self.isUserInteractionEnabled = true
-        self.dataDetectorTypes = .all
-        self.textContainerInset = .zero
-        self.textContainer.lineFragmentPadding = 0
+
+        self.typingAttributes = self.attributes
+    }
+
+    /// Adds the provided attributes to all the text in the view while preserving the existing attributes.
+    func addTextAttributes(_ attributes: [NSAttributedString.Key : Any]) {
+        guard let current = self.attributedText else { return }
+
+        let newString = NSMutableAttributedString(current)
+        let range = NSMakeRange(0, newString.string.count)
+        newString.addAttributes(attributes, range: range)
+        self.attributedText = newString
     }
 
     func reset() {
-        self.text = String()
+        self.text = ""
         self.textDidChange()
     }
 
@@ -149,35 +220,32 @@ class TextView: UITextView {
         }
     }
 
-    func setSize(withWidth width: CGFloat, height: CGFloat = CGFloat.infinity) {
-        self.size = self.getSize(withWidth: width, height: height)
+    func setSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = CGFloat.infinity) {
+        self.size = self.getSize(withMaxWidth: maxWidth, maxHeight: maxHeight)
     }
 
-    func getSize(withWidth width: CGFloat, height: CGFloat = CGFloat.infinity) -> CGSize {
-        guard let t = self.text, !t.isEmpty, let attText = self.attributedText else { return CGSize.zero }
+    func getSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = CGFloat.infinity) -> CGSize {
+        guard let text = self.text, !text.isEmpty, let attText = self.attributedText else {
+            return CGSize.zero
+        }
 
-        let attributes = attText.attributes(at: 0,
-                                            longestEffectiveRange: nil,
-                                            in: NSRange(location: 0, length: attText.length))
+        let horizontalPadding = self.contentInset.horizontal + self.textContainerInset.horizontal
+        let verticalPadding = self.contentInset.vertical + self.textContainerInset.vertical
 
-        let maxSize = CGSize(width: width - self.textContainerInset.left - self.textContainerInset.right,
-                             height: height - self.textContainerInset.top - self.textContainerInset.bottom)
+        // Get the max size available for the text, taking the textview's insets into account.
+        let maxTextSize = CGSize(width: maxWidth - horizontalPadding, height: maxHeight - verticalPadding)
 
-        let size: CGSize = t.boundingRect(with: maxSize,
-                                          options: .usesLineFragmentOrigin,
-                                          attributes: attributes,
-                                          context: nil).size
+        var size: CGSize = attText.boundingRect(with: maxTextSize,
+                                                options: .usesLineFragmentOrigin,
+                                                context: nil).size
+
+        // Add back the spacing for the text container insets, but ensure we don't exceed the maximum.
+        size.width += horizontalPadding
+        size.width = clamp(size.width, max: maxWidth)
+
+        size.height += verticalPadding
+        size.height = clamp(size.height, max: maxHeight)
 
         return size
-    }
-
-    /// Adds the provided attributes to all the text in the view.
-    func addTextAttributes(_ attributes: [NSAttributedString.Key : Any]) {
-        guard let current = self.attributedText else { return }
-
-        let newString = NSMutableAttributedString(current)
-        let range = NSMakeRange(0, newString.string.count)
-        newString.addAttributes(attributes, range: range)
-        self.attributedText = newString
     }
 }

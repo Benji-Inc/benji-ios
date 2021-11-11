@@ -157,7 +157,7 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
 extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
 
     /// The space between the top of a cell and tops of adjacent cells in a stack.
-    static var spaceBetweenCellTops: CGFloat { return 15 }
+    static var spaceBetweenCellTops: CGFloat { return 8 }
 
     // MARK: - UICollectionViewDelegateFlowLayout
 
@@ -228,7 +228,7 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
             insets.bottom += CGFloat(extraSpacersNeeded) * ConversationMessageCell.spaceBetweenCellTops
         } else if section == 1 {
             // Put some space between the two sections of messages.
-            insets.top = Theme.contentOffset
+            insets.top = Theme.contentOffset.half
 
             // Ensure that the top of the latest user reply in this cell aligns
             // with the tops of the latest user replies in adjacent cells.

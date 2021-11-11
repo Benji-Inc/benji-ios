@@ -72,10 +72,9 @@ class ConnectionRequestView: View {
             let userWithData = try await user.retrieveDataIfNeeded()
             if let status = item.status, status == .invited {
                 let text = LocalizedString(id: "", arguments: [userWithData.fullName], default: "[@(name)](\(user.objectId!)) has invited you to connect.")
-                let attributedString = AttributedString(text,
-                                                        fontType: .regular,
-                                                        color: .white)
-                self.textView.set(attributed: attributedString, linkColor: .lightGray)
+
+                self.textView.linkTextAttributes = [.foregroundColor: Color.lightGray.color, .underlineStyle: 0]
+                self.textView.text = localized(text)
                 self.avatarView.set(avatar: userWithData)
                 self.layoutNow()
             } else {
@@ -97,7 +96,7 @@ class ConnectionRequestView: View {
         self.avatarView.setSize(for: self.containerView.height - Theme.contentOffset)
 
         let maxLabelWidth = self.containerView.width - self.avatarView.right - Theme.contentOffset
-        self.textView.setSize(withWidth: maxLabelWidth)
+        self.textView.setSize(withMaxWidth: maxLabelWidth)
         self.textView.match(.top, to: .top, of: self.avatarView)
         self.textView.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset.half)
 

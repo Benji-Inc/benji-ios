@@ -17,8 +17,8 @@ class UserOnboardingViewController: ViewController {
 
     private(set) var nameLabel = Label(font: .mediumThin, textColor: .textColor)
     private(set) var bubbleView = SpeechBubbleView(orientation: .up,
-                                                   bubbleColor: Color.white.color,
-                                                   borderColor: Color.white.color)
+                                                   bubbleColor: Color.white,
+                                                   borderColor: Color.white)
     private(set) var textView = OnboardingMessageTextView()
 
     override func initializeViews() {
@@ -45,7 +45,7 @@ class UserOnboardingViewController: ViewController {
         if let text = self.getMessage() {
             self.textView.isHidden = false
             self.bubbleView.isHidden = false
-            self.textView.set(text: text)
+            self.textView.setText(text)
             self.view.layoutNow()
         } else {
             self.textView.isHidden = true
@@ -71,9 +71,9 @@ class UserOnboardingViewController: ViewController {
 
         let maxWidth = self.view.width - (Theme.contentOffset.doubled.doubled)
 
-        self.textView.setSize(withWidth: maxWidth)
+        self.textView.setSize(withMaxWidth: maxWidth)
 
-        self.bubbleView.height = self.textView.height + 20 + self.bubbleView.tailLength
+        self.bubbleView.height = self.textView.height + Theme.contentOffset + self.bubbleView.tailLength
         self.bubbleView.width = self.textView.width + 28
         self.bubbleView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset.half)
         self.bubbleView.centerOnX()
@@ -102,26 +102,9 @@ class OnboardingMessageTextView: TextView {
         self.isScrollEnabled = false
         self.isSelectable = false
         self.textAlignment = .center
-    }
-
-    func set(text: Localized) {
-        let textColor: Color = .textColor
-        let attributedString = AttributedString(text,
-                                                fontType: .smallBold,
-                                                color: textColor)
-
-        self.set(attributed: attributedString,
-                 alignment: .center,
-                 lineCount: 0,
-                 lineBreakMode: .byWordWrapping,
-                 stringCasing: .unchanged,
-                 isEditable: false,
-                 linkColor: .white)
-
-        let style = NSMutableParagraphStyle()
-        style.lineSpacing = 2
-        style.alignment = .center
-
-        self.addTextAttributes([NSAttributedString.Key.paragraphStyle: style])
+        self.textContainer.lineBreakMode = .byWordWrapping
+        self.isEditable = false
+        self.linkTextAttributes = [.foregroundColor: Color.lightGray.color, .underlineStyle: 0]
+        self.lineSpacing = 2
     }
 }

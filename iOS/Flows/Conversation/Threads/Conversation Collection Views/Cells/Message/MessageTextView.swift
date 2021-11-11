@@ -13,30 +13,21 @@ class MessageTextView: TextView {
 
     override func initializeViews() {
         super.initializeViews()
-
+        
         self.isEditable = false
         self.isScrollEnabled = false
         self.isSelectable = true
 
-        self.textContainerInset.top = 0
-        self.textContainerInset.bottom = 0
         self.textContainerInset.left = Theme.contentOffset
         self.textContainerInset.right = Theme.contentOffset
+        self.textContainerInset.top = 0
+        self.textContainerInset.bottom = 0
     }
 
     func setText(with message: Messageable) {
-        let textColor: Color = message.context.color
-        let attributedString = AttributedString(message.kind.text,
-                                                fontType: .smallBold,
-                                                color: textColor)
-
-        self.set(attributed: attributedString,
-                 alignment: .center,
-                 lineCount: 0,
-                 lineBreakMode: .byTruncatingTail,
-                 stringCasing: .unchanged,
-                 isEditable: false,
-                 linkColor: .white)
+        self.setText(message.kind.text)
+        let textColor: Color = message.context == .status ? .darkGray : .textColor
+        self.setTextColor(textColor)
     }
 
     // Allows us to interact with links if they exist or pass the touch to the next receiver if they do not
