@@ -13,14 +13,30 @@ class InputTypeCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: InputType?
 
+    private let imageView = UIImageView()
+
     override func initializeSubviews() {
         super.initializeSubviews()
-    }
 
+        self.contentView.addSubview(self.imageView)
+        self.imageView.alpha = 0.5
+    }
 
     func configure(with item: InputType) {
         self.currentItem = item
+        self.imageView.image = item.image
+    }
 
-        
+    override func update(isSelected: Bool) {
+        super.update(isSelected: isSelected)
+
+        self.imageView.alpha = isSelected ? 1.0 : 0.5
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.imageView.squaredSize = self.contentView.height
+        self.imageView.centerOnXAndY()
     }
 }

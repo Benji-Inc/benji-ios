@@ -10,7 +10,7 @@ import Foundation
 
 class InputTypeDataSource: CollectionViewDataSource<InputTypeDataSource.SectionType, InputType> {
 
-    enum SectionType: Hashable {
+    enum SectionType: Int, CaseIterable {
         case types
     }
 
