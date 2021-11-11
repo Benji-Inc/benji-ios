@@ -229,20 +229,15 @@ class TextView: UITextView {
             return CGSize.zero
         }
 
-        let attributes = attText.attributes(at: 0,
-                                            longestEffectiveRange: nil,
-                                            in: NSRange(location: 0, length: attText.length))
-
         let horizontalPadding = self.contentInset.horizontal + self.textContainerInset.horizontal
         let verticalPadding = self.contentInset.vertical + self.textContainerInset.vertical
 
         // Get the max size available for the text, taking the textview's insets into account.
         let maxTextSize = CGSize(width: maxWidth - horizontalPadding, height: maxHeight - verticalPadding)
 
-        var size: CGSize = text.boundingRect(with: maxTextSize,
-                                             options: .usesLineFragmentOrigin,
-                                             attributes: attributes,
-                                             context: nil).size
+        var size: CGSize = attText.boundingRect(with: maxTextSize,
+                                                options: .usesLineFragmentOrigin,
+                                                context: nil).size
 
         // Add back the spacing for the text container insets, but ensure we don't exceed the maximum.
         size.width += horizontalPadding
