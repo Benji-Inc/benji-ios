@@ -118,16 +118,6 @@ class Label: UILabel {
         attributedString.addAttributes(self.attributes, range: NSRange(location: 0,
                                                                        length: attributedString.length))
 
-        let fontSize: CGFloat = self.font?.pointSize ?? UIFont.systemFontSize
-        // NOTE: Some emojis don't display properly with certain attributes applied to them
-        // So remove attributes from emoji characters.
-        for emojiRange in newText.getEmojiRanges() {
-            attributedString.removeAttributes(atRange: emojiRange)
-            if let emojiFont = UIFont(name: "AppleColorEmoji", size: fontSize) {
-                attributedString.addAttributes([NSAttributedString.Key.font: emojiFont], range: emojiRange)
-            }
-        }
-
         super.attributedText = attributedString
     }
 }
