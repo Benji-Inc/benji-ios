@@ -24,8 +24,8 @@ class TextView: UITextView {
         get { return super.text }
         set {
             guard let string = newValue, !string.isEmpty else {
-                // No need to apply attributes to a nil string.
-                super.text = " "
+                // No need to apply attributes to an empty string.
+                super.text = newValue
                 return
             }
 
@@ -109,10 +109,11 @@ class TextView: UITextView {
         self.keyboardAppearance = .dark
 
         self.textContainer.lineBreakMode = .byWordWrapping
+        self.textContainer.lineFragmentPadding = 0
+
         self.textAlignment = .center
         self.isUserInteractionEnabled = true
         self.dataDetectorTypes = .all
-        self.textContainer.lineFragmentPadding = 0
 
         self.set(backgroundColor: .clear)
 
@@ -131,7 +132,7 @@ class TextView: UITextView {
     
     func setText(_ localizedText: Localized?) {
         guard let localizedText = localizedText else {
-            self.text = ""
+            self.text = nil
             return
         }
         self.text = localized(localizedText)
@@ -219,11 +220,11 @@ class TextView: UITextView {
         }
     }
 
-    func setSize(withWidth width: CGFloat, height: CGFloat = CGFloat.infinity) {
-        self.size = self.getSize(withWidth: width, height: height)
+    func setSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = CGFloat.infinity) {
+        self.size = self.getSize(withMaxWidth: maxWidth, maxHeight: maxHeight)
     }
 
-    func getSize(withWidth width: CGFloat, height: CGFloat = CGFloat.infinity) -> CGSize {
+    func getSize(withMaxWidth maxWidth: CGFloat, maxHeight: CGFloat = CGFloat.infinity) -> CGSize {
         guard let text = self.text, !text.isEmpty, let attText = self.attributedText else {
             return CGSize.zero
         }
@@ -232,13 +233,23 @@ class TextView: UITextView {
                                             longestEffectiveRange: nil,
                                             in: NSRange(location: 0, length: attText.length))
 
-        let maxSize = CGSize(width: width - self.textContainerInset.left - self.textContainerInset.right,
-                             height: height - self.textContainerInset.top - self.textContainerInset.bottom)
+        let horizontalPadding = self.contentInset.horizontal + self.textContainerInset.horizontal
+        let verticalPadding = self.contentInset.vertical + self.textContainerInset.vertical
 
-        let size: CGSize = text.boundingRect(with: maxSize,
+        // Get the max size available for the text, taking the textview's insets into account.
+        let maxTextSize = CGSize(width: maxWidth - horizontalPadding, height: maxHeight - verticalPadding)
+
+        var size: CGSize = text.boundingRect(with: maxTextSize,
                                              options: .usesLineFragmentOrigin,
                                              attributes: attributes,
                                              context: nil).size
+
+        // Add back the spacing for the text container insets, but ensure we don't exceed the maximum.
+        size.width += horizontalPadding
+        size.width = clamp(size.width, max: maxWidth)
+
+        size.height += verticalPadding
+        size.height = clamp(size.height, max: maxHeight)
 
         return size
     }

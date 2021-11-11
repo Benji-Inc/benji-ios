@@ -96,7 +96,7 @@ class ConnectionRequestView: View {
         self.avatarView.setSize(for: self.containerView.height - Theme.contentOffset)
 
         let maxLabelWidth = self.containerView.width - self.avatarView.right - Theme.contentOffset
-        self.textView.setSize(withWidth: maxLabelWidth)
+        self.textView.setSize(withMaxWidth: maxLabelWidth)
         self.textView.match(.top, to: .top, of: self.avatarView)
         self.textView.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset.half)
 

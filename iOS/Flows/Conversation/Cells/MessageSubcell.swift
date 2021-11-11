@@ -79,7 +79,7 @@ class MessageSubcell: UICollectionViewCell {
             return
         }
 
-        self.textView.alpha = messageLayoutAttributes.shouldShowText ? 1 : 0.5
+        self.textView.isVisible = messageLayoutAttributes.shouldShowText
         self.configureBackground(color: messageLayoutAttributes.backgroundColor,
                                  showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                  tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
@@ -95,6 +95,8 @@ class MessageSubcell: UICollectionViewCell {
         self.backgroundColorView.orientation = tailOrientation
     }
 }
+
+// MARK: - Sizing
 
 extension MessageSubcell {
 
@@ -112,7 +114,7 @@ extension MessageSubcell {
 
         let textView = MessageTextView()
         textView.text = message.kind.text
-        var textViewSize = textView.getSize(withWidth: width)
+        var textViewSize = textView.getSize(withMaxWidth: width)
         textViewSize.height += Theme.contentOffset
         return clamp(textViewSize.height + self.bubbleTailLength,
                      MessageSubcell.minimumHeight,

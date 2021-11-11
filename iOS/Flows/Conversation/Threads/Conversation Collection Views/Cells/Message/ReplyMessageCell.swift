@@ -74,7 +74,7 @@ class ReplyMessageCell: BaseMessageCell {
 
         self.bubbleView.expandToSuperviewSize()
         self.bubbleView.roundCorners()
-        self.textView.setSize(withWidth: self.contentView.width)
+        self.textView.setSize(withMaxWidth: self.contentView.width)
         self.textView.centerOnXAndY()
     }
 
