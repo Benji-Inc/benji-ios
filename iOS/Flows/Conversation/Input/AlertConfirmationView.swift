@@ -11,11 +11,13 @@ import TMROLocalization
 
 class AlertConfirmationView: View {
 
-    private let label = Label(font: .smallBold)
+    private let label = Label(font: .regular)
     let button = Button()
 
     override func initializeSubviews() {
         super.initializeSubviews()
+
+        self.set(backgroundColor: .white)
 
         self.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
@@ -27,15 +29,15 @@ class AlertConfirmationView: View {
     }
 
     func setAlertMessage(for avatars: [Avatar]) {
-        var arguments = String()
+        var arguments: String = String()
         for (index, avatar) in avatars.enumerated() {
             if avatar.userObjectID != User.current()?.objectId {
                 if avatars.count == 1 {
-                    arguments.append(avatar.givenName + " ")
+                    arguments += avatar.givenName + " "
                 } else if index + 1 == avatars.count, arguments.count > 1 {
-                    arguments.append(" and" + avatar.givenName + " ")
+                    arguments += " and" + avatar.givenName + " "
                 } else {
-                    arguments.append(avatar.givenName + ", ")
+                    arguments += avatar.givenName + ", "
                 }
             }
         }
@@ -43,9 +45,10 @@ class AlertConfirmationView: View {
         if arguments.isEmpty {
             arguments.append("others ")
         }
-        let text = LocalizedString(id: "", arguments: [arguments], default: "Swipe up to alert @(handle) of this message and be notified when it is read.")
+        let text = LocalizedString(id: "", arguments: [arguments], default: "Swipe up to notify @(arguments)of this message.")
 
         self.label.setText(text)
+        self.label.add(attributes: [.font: FontType.regularBold.font], to: arguments)
         self.layoutNow()
     }
 
@@ -57,7 +60,7 @@ class AlertConfirmationView: View {
         self.label.centerY = self.halfWidth * 0.6
 
         self.button.setSize(with: self.width)
-        self.button.pin(.bottom, padding: 20)
+        self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
         self.button.centerOnX()
     }
 }

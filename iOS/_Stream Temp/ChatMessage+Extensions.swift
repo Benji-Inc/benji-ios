@@ -38,6 +38,11 @@ extension ChatMessage: Messageable {
     }
 
     var context: MessageContext {
+        if let value = self.extraData["context"],
+           case RawJSON.string(let string) = value,
+            let context = MessageContext.init(rawValue: string) {
+            return context
+        }
         return .passive
     }
 

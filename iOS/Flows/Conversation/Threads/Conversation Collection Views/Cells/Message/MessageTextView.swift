@@ -24,24 +24,19 @@ class MessageTextView: TextView {
         self.textContainerInset.right = Theme.contentOffset
     }
 
-    func set(text: Localized, messageContext: MessageContext) {
-        let textColor: Color = messageContext == .status ? .darkGray : .textColor
-        let attributedString = AttributedString(text,
+    func setText(with message: Messageable) {
+        let textColor: Color = message.context.color
+        let attributedString = AttributedString(message.kind.text,
                                                 fontType: .smallBold,
                                                 color: textColor)
 
         self.set(attributed: attributedString,
                  alignment: .center,
                  lineCount: 0,
-                 lineBreakMode: .byWordWrapping,
+                 lineBreakMode: .byTruncatingTail,
                  stringCasing: .unchanged,
                  isEditable: false,
                  linkColor: .white)
-
-        let style = NSMutableParagraphStyle()
-        style.lineSpacing = 2
-
-        self.addTextAttributes([NSAttributedString.Key.paragraphStyle: style])
     }
 
     // Allows us to interact with links if they exist or pass the touch to the next receiver if they do not

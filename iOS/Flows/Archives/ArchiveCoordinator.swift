@@ -61,7 +61,7 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
 
                 guard let connection = ConnectionStore.shared.connections.first(where: { connection in
                     return connection.objectId == connectionId
-                }), let identifier = connection.conversationId,
+                }), let identifier = connection.initialConversations.first,
                        let conversationId = try? ChannelId.init(cid: identifier)  else {
                            return
                        }

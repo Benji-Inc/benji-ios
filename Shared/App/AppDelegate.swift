@@ -48,23 +48,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("DID FAIL TO REGISTER FOR PUSH \(error)")
     }
-
-    func application(_ application: UIApplication,
-                     didReceiveRemoteNotification userInfo: [AnyHashable : Any],
-                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-
-        print("DID RECEIVE REMOTE NOTIFICATION")
-        guard application.applicationState == .active || application.applicationState == .inactive else {
-            completionHandler(.noData)
-            return
-        }
-
-        if UserNotificationManager.shared.handle(userInfo: userInfo) {
-            completionHandler(.newData)
-        } else {
-            completionHandler(.noData)
-        }
-    }
 #endif
 
     private func prepareCurrentUser() {
