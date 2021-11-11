@@ -10,6 +10,7 @@ import Foundation
 import Lottie
 import TMROLocalization
 import Combine
+import UIKit
 
 protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     /// The accessory has begun a swipe interaction.
@@ -47,6 +48,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     @IBOutlet var textView: InputTextView!
     /// A button to handle taps and pan gestures.
     @IBOutlet var overlayButton: UIButton!
+
+    @IBOutlet var inputTypeContainer: UIView?
 
     // MARK: - Message State
 
