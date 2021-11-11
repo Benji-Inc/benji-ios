@@ -9,7 +9,7 @@
 import Foundation
 
 /// A view used by the conversation VC to designate where to drag and drop new messages.
-class ConversationSendOverlayView: View {
+class MessageDropZoneView: View {
 
     enum State {
         case reply
@@ -23,7 +23,7 @@ class ConversationSendOverlayView: View {
         super.initializeSubviews()
 
         self.addSubview(self.sendTypeLabel)
-        self.sendTypeLabel.text = "new message"
+        self.sendTypeLabel.text = "Drop"
     }
 
     override func layoutSubviews() {

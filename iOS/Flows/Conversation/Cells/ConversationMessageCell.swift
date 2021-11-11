@@ -133,28 +133,23 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
         self.dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    /// Returns the frame that a message send overlay should appear based on this cells contents.
+    /// Returns the frame that a message drop zone should have, based on this cell's contents.
     /// The frame is in the coordinate space of the passed in view.
-    func getMessageOverlayFrame(convertedTo targetView: UIView) -> CGRect {
-        let userMessageCount = self.collectionView.numberOfItems(inSection: 1)
-        if let frontUserCell = self.collectionView.cellForItem(at: IndexPath(item: userMessageCount - 1,
-                                                                           section: 1)) {
+    func getMessageDropZoneFrame(convertedTo targetView: UIView) -> CGRect {
+        if let frontCellIndex = self.collectionLayout
+            .getFrontmostItemIndexPath(inSection: ConversationMessageSection.currentUserMessages.rawValue),
+           let frontUserCell = self.collectionView.cellForItem(at: frontCellIndex) {
 
-            var overlayRect = frontUserCell.convert(frontUserCell.bounds, to: self)
-            overlayRect.top += ConversationMessageCell.spaceBetweenCellTops
+            let overlayRect = frontUserCell.convert(frontUserCell.bounds, to: self)
             return self.convert(overlayRect, to: targetView)
         }
 
-        let otherMessageCount = self.collectionView.numberOfItems(inSection: 0)
-        if let frontOtherCell = self.collectionView.cellForItem(at: IndexPath(item: otherMessageCount - 1,
-                                                                            section: 0)) {
-
-            var overlayRect = frontOtherCell.convert(frontOtherCell.bounds, to: self)
-            overlayRect.top += frontOtherCell.height + ConversationMessageCell.spaceBetweenCellTops
-            return self.convert(overlayRect, to: targetView)
-        }
-
-        return self.convert(CGRect(x: 0, y: 100, width: self.width, height: 50),
+        return self.convert(CGRect(x: 0,
+                                   y: MessageSubcell.maximumHeight
+                                   + ConversationMessageCell.spaceBetweenCellTops * CGFloat(self.maxMessagesPerSection) * 2
+                                   + Theme.contentOffset,
+                                   width: self.width,
+                                   height: MessageSubcell.minimumHeight),
                             to: targetView)
     }
 }
