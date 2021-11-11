@@ -123,18 +123,6 @@ class UserNotificationManager: NSObject {
     }
 #endif
 
-    @discardableResult
-    func handle(userInfo: [AnyHashable: Any]) -> Bool {
-        guard let data = userInfo["data"] as? [String: Any],
-              let note = UserNotificationFactory.createNote(from: data) else { return false }
-
-        Task {
-            await self.schedule(note: note)
-        }
-
-        return true
-    }
-
     func schedule(note: UNNotificationRequest) async {
         try? await self.center.add(note)
     }

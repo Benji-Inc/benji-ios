@@ -77,6 +77,9 @@
 		D611D97426FD184700E51ABC /* LaunchManager+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97326FD184700E51ABC /* LaunchManager+Extensions.swift */; };
 		D611D97826FD19E100E51ABC /* MainCoordinator+Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D611D97726FD19E100E51ABC /* MainCoordinator+Launch.swift */; };
 		D6123E522710BFB000F90D30 /* InputActivityBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6123E512710BFB000F90D30 /* InputActivityBar.swift */; };
+		D61316B0273C859700DC782B /* MessageContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642735022C857760088256B /* MessageContext.swift */; };
+		D61316B1273C85A200DC782B /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0F621D316F100204BEE /* Color.swift */; };
+		D61316B2273C85D000DC782B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
 		D614F831270F9FCE0000D15F /* ReservationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614F830270F9FCE0000D15F /* ReservationCell.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
@@ -2615,6 +2618,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D61316B2273C85D000DC782B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3483,6 +3487,7 @@
 				D68759672728A59600AF7C07 /* User+Extensions.swift in Sources */,
 				D687594B2728845800AF7C07 /* DeeplinkTarget.swift in Sources */,
 				D687595427289CAE00AF7C07 /* Optional+Extensions.swift in Sources */,
+				D61316B0273C859700DC782B /* MessageContext.swift in Sources */,
 				D6AE0FF1267D2CC900C6B048 /* ClientError.swift in Sources */,
 				D6AE0FEB267D2CA900C6B048 /* ConnectionPreference.swift in Sources */,
 				D66ED456267D35E100332BA3 /* Config.swift in Sources */,
@@ -3500,6 +3505,7 @@
 				D66ED459267D4B1200332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0F70267CF9CA00C6B048 /* NotificationService.swift in Sources */,
 				D687596E2728AFB900AF7C07 /* ChatClient+Extensions.swift in Sources */,
+				D61316B1273C85A200DC782B /* Color.swift in Sources */,
 				D687595E2728A4BA00AF7C07 /* User+INPerson.swift in Sources */,
 				D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */,
 				D687595A27289E7F00AF7C07 /* Publisher+Extensions.swift in Sources */,

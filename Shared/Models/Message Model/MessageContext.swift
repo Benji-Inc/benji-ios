@@ -11,8 +11,8 @@ import TMROLocalization
 
 enum MessageContext: String, CaseIterable {
 
-    case timeSensitive
-    case passive
+    case timeSensitive = "time-sensitive"
+    case passive = "active"
     case status
 
     var color: Color {
@@ -23,6 +23,17 @@ enum MessageContext: String, CaseIterable {
             return .textColor
         case .status:
             return .textColor
+        }
+    }
+
+    var interruptionLevel: UNNotificationInterruptionLevel {
+        switch self {
+        case .timeSensitive:
+            return .timeSensitive
+        case .passive:
+            return .passive
+        case .status:
+            return .passive
         }
     }
 }

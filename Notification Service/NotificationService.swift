@@ -18,6 +18,14 @@ class NotificationService: UNNotificationServiceExtension {
     var contentHandler: ((UNNotificationContent) -> Void)?
     var request: UNNotificationRequest?
 
+    private var recipients: [INPerson] = []
+    private var conversation: ChatChannel?
+    private var message: ChatMessage?
+    private var author: INPerson?
+    private var conversationId: String?
+
+    private var chatHandler: ChatRemoteNotificationHandler?
+
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
 
@@ -35,9 +43,12 @@ class NotificationService: UNNotificationServiceExtension {
     }
 
     override func serviceExtensionTimeWillExpire() {
-        if let contentHandler = contentHandler,
-            let bestAttemptContent = request?.content.mutableCopy() as? UNMutableNotificationContent {
-            contentHandler(bestAttemptContent)
+        if let contentHandler = self.contentHandler,
+           let content = self.request?.content {
+            Task {
+                logDebug("will expire")
+                await self.finalizeContent(content: content, contentHandler: contentHandler)
+            }
         }
     }
 
@@ -77,44 +88,85 @@ class NotificationService: UNNotificationServiceExtension {
                                client: ChatClient,
                                contentHandler: @escaping (UNNotificationContent) -> Void) async {
 
-        guard let content = request.content.mutableCopy() as? UNMutableNotificationContent else {
-            contentHandler(request.content)
-                return
-        }
-
-        guard let conversationId = request.content.conversationId,
-              let messageId = request.content.messageId,
-              let authorId = request.content.author,
-              let cid = try? ChannelId.init(cid: conversationId) else { return }
-
-        async let conversation = try? self.getConversation(with: client, cid: cid)
-        async let message = try? self.getMessage(with: client, cid: cid, messageId: messageId)
-        async let author = try? User.getObject(with: authorId).iNPerson
-
-        guard let conversation = await conversation,
-              let message = await message,
-                let author = await author else {
+        /// Ensure we have the data we need
+        guard let authorId = request.content.author,
+              let author = try? await User.getObject(with: authorId).iNPerson,
+              let content = request.content.mutableCopy() as? UNMutableNotificationContent else {
+                  await self.finalizeContent(content: request.content, contentHandler: contentHandler)
             return
         }
 
-        let memberIds = conversation.lastActiveMembers.compactMap { member in
+        self.author = author
+
+        self.chatHandler = ChatRemoteNotificationHandler(client: client, content: content)
+
+        #warning("This doesnt work due to a bug. Always returns false.")
+        let notification = self.chatHandler?.handleNotification { pushContentType in
+            Task {
+                switch pushContentType {
+                case .message(let msg):
+                    logDebug("Did Recieve message")
+                    if let conversation = msg.channel {
+                        self.conversation = conversation
+                        self.message = msg.message
+
+                        await self.applyMessageData(content: content, contentHandler: contentHandler)
+                    }
+                case .reaction(let reaction):
+                    if let conversation = reaction.channel {
+
+                        self.conversation = conversation
+                        self.message = reaction.message
+
+                        await self.applyMessageData(content: content, contentHandler: contentHandler)
+                    }
+                case .unknown(_):
+                    break
+                }
+            }
+        } ?? false
+
+        if !notification {
+            logDebug("chat handler failed to update notification content")
+           await self.finalizeContent(content: content, contentHandler: contentHandler)
+        }
+    }
+
+    private func applyMessageData(content: UNMutableNotificationContent,
+                                  contentHandler: @escaping (UNNotificationContent) -> Void) async {
+
+        let memberIds = self.conversation?.lastActiveMembers.compactMap { member in
             return member.id
+        } ?? []
+
+        /// Map members to recipients
+        if let recipients = try? await User.fetchAndUpdateLocalContainer(where: memberIds, container: .users).compactMap({ user in
+            return user.iNPerson
+        }) {
+            self.recipients = recipients
         }
 
-        guard let recipients: [INPerson] = try? await User.fetchAndUpdateLocalContainer(where: memberIds, container: .users).compactMap({ user in
-            return user.iNPerson
-        }) else { return }
+        /// Update the interruption level
+        if let value = self.message?.extraData["context"],
+           case RawJSON.string(let string) = value,
+           let context = MessageContext.init(rawValue: string) {
+            logDebug(context.rawValue)
+            content.interruptionLevel = context.interruptionLevel
+        }
 
-        //switch message.
+        await self.finalizeContent(content: content, contentHandler: contentHandler)
+    }
 
-
+    private func finalizeContent(content: UNNotificationContent,
+                                 contentHandler: @escaping (UNNotificationContent) -> Void) async {
+        /// Create the intent
         let incomingMessageIntent = INSendMessageIntent(recipients: recipients,
                                                         outgoingMessageType: .outgoingMessageText,
-                                                        content: request.content.body,
-                                                        speakableGroupName: conversation.speakableGroupName,
-                                                        conversationIdentifier: conversationId,
+                                                        content: content.body,
+                                                        speakableGroupName: self.conversation?.speakableGroupName,
+                                                        conversationIdentifier: self.conversationId,
                                                         serviceName: nil,
-                                                        sender: author,
+                                                        sender: self.author,
                                                         attachments: nil)
 
         let interaction = INInteraction(intent: incomingMessageIntent, response: nil)
@@ -122,39 +174,11 @@ class NotificationService: UNNotificationServiceExtension {
 
         do {
             try await interaction.donate()
-            let messageContent = try request.content.updating(from: incomingMessageIntent)
-            contentHandler(messageContent)
+            // Update the content with the intent
+            let messageContent = try content.updating(from: incomingMessageIntent)
+            self.contentHandler?(messageContent)
         } catch {
             print(error)
         }
-    }
-
-    private func getConversation(with client: ChatClient, cid: ChannelId) async throws -> ChatChannel? {
-        return try await withCheckedThrowingContinuation({ continuation in
-            let controller = client.channelController(for: cid)
-            controller.synchronize { error in
-                if let e = error {
-                    continuation.resume(throwing: e)
-                } else {
-                    continuation.resume(returning: controller.channel)
-                }
-            }
-        })
-    }
-
-    private func getMessage(with client: ChatClient,
-                            cid: ChannelId,
-                            messageId: MessageId) async throws -> ChatMessage? {
-
-        return try await withCheckedThrowingContinuation({ continuation in
-            let controller = client.messageController(cid: cid, messageId: messageId)
-            controller.synchronize { error in
-                if let e = error {
-                    continuation.resume(throwing: e)
-                } else {
-                    continuation.resume(returning: controller.message)
-                }
-            }
-        })
     }
 }
