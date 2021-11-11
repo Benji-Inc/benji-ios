@@ -46,6 +46,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
         let view: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
         view.delegate = self
+        view.conversation = self.messageController.conversation
         return view
     }()
 

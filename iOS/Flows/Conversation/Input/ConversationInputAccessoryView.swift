@@ -24,7 +24,7 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
         self.currentContext = .passive
 
         self.inputContainerView.insertSubview(self.alertProgressView, belowSubview: self.textView)
-        self.alertProgressView.set(backgroundColor: .lightGray)
+        self.alertProgressView.set(backgroundColor: .red)
         self.alertProgressView.size = .zero
         self.alertProgressView.roundCorners()
     }
@@ -40,12 +40,11 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
     override func setupGestures() {
         super.setupGestures()
 
-        // Disabling the time sensitive interaction for now
-//        let longPressRecognizer = UILongPressGestureRecognizer { [unowned self] (recognizer) in
-//            self.handle(longPress: recognizer)
-//        }
-//        longPressRecognizer.delegate = self
-//        self.overlayButton.addGestureRecognizer(longPressRecognizer)
+        let longPressRecognizer = UILongPressGestureRecognizer { [unowned self] (recognizer) in
+            self.handle(longPress: recognizer)
+        }
+        longPressRecognizer.delegate = self
+        self.overlayButton.addGestureRecognizer(longPressRecognizer)
     }
 
     // MARK: OVERRIDES
@@ -103,7 +102,6 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
     func resetAlertProgress() {
         self.currentContext = .passive
         self.alertProgressView.width = 0
-        self.alertProgressView.set(backgroundColor: .white)
         self.alertProgressView.alpha = 1
         self.alertProgressView.layer.removeAllAnimations()
         self.textView.updateInputView(type: .keyboard)
@@ -146,8 +144,7 @@ extension ConversationInputAccessoryView {
         self.alertAnimator = UIViewPropertyAnimator(duration: 1.0,
                                                     curve: .linear,
                                                     animations: { [unowned self] in
-            self.alertProgressView.size = CGSize(width: self.textView.width,
-                                                 height: self.textView.height)
+            self.alertProgressView.size = self.inputContainerView.bubbleFrame.size
         })
 
         self.alertAnimator?.startAnimation()
@@ -170,7 +167,7 @@ extension ConversationInputAccessoryView {
             self.alertAnimator = UIViewPropertyAnimator(duration: 0.5,
                                                         curve: .linear,
                                                         animations: { [unowned self] in
-                                                            self.alertProgressView.size = CGSize(width: 0, height: self.height)
+                self.alertProgressView.size = CGSize(width: 0, height: self.inputContainerView.bubbleFrame.height)
                                                             self.layer.borderColor = self.currentContext.color.color.cgColor
             })
             self.alertAnimator?.startAnimation()
@@ -178,13 +175,15 @@ extension ConversationInputAccessoryView {
     }
 
     private func showAlertConfirmation() {
-//        guard let c = self.activeConversation, case Conversation.conversation = c.conversationType else { return }
-//
-//        self.textView.updateInputView(type: .confirmation)
-//
-//        let members = conversation.getNonMeMembers()
-//        self.textView.confirmationView.setAlertMessage(for: members)
-//
-//        self.alertProgressView.size = CGSize(width: self.width, height: self.height)
+        guard let conversation = self.conversation else { return }
+
+        self.textView.updateInputView(type: .confirmation)
+
+        let members = conversation.lastActiveMembers.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        }
+        self.textView.confirmationView.setAlertMessage(for: members)
+
+        self.alertProgressView.size = self.inputContainerView.bubbleFrame.size 
     }
 }

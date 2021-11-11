@@ -24,10 +24,9 @@ class MessageTextView: TextView {
         self.textContainerInset.bottom = 0
     }
 
-    func set(text: Localized, messageContext: MessageContext) {
-        self.setText(text)
-
-        let textColor: Color = messageContext == .status ? .darkGray : .textColor
+    func setText(with message: Messageable) {
+        self.setText(message.kind.text)
+        let textColor: Color = message.context == .status ? .darkGray : .textColor
         self.setTextColor(textColor)
     }
 

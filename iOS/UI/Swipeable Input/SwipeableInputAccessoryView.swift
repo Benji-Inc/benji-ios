@@ -53,6 +53,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     // MARK: - Message State
 
     var currentContext: MessageContext = .passive
+    var conversation: Conversation? 
+
     var editableMessage: Messageable?
     var currentMessageKind: MessageKind = .text(String())
     private var sendable: SendableObject?

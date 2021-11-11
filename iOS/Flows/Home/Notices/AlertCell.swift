@@ -35,7 +35,8 @@ class AlertCell: NoticeCell {
         guard let body = item.body,
               let author = item.attributes?["author"] as? String else { return }
 
-        self.textView.set(text: body, messageContext: MessageContext.timeSensitive)
+        self.textView.text = body
+        self.textView.textColor = MessageContext.timeSensitive.color.color
 
         Task {
             do {
