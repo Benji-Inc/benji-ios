@@ -60,8 +60,8 @@ class PreviewMessageView: SpeechBubbleView {
         self.imageView.height = self.imageView.displayable.isNil ? 0 : 100
         self.imageView.centerOnX()
         
-        self.textView.expandToSuperviewWidth()
-        self.textView.height = self.bubbleFrame.height - self.imageView.height
+        self.textView.setSize(withMaxWidth: self.width)
+        self.textView.centerOnX()
         self.textView.match(.top, to: .bottom, of: self.imageView)
     }
 }

@@ -23,12 +23,8 @@ class TextView: UITextView {
     override var text: String! {
         get { return super.text }
         set {
-            guard let string = newValue, !string.isEmpty else {
-                // No need to apply attributes to an empty string.
-                super.text = newValue
-                return
-            }
-
+            // Always have some text in this textview so that we don't lose the text attributes.
+            let string = newValue ?? ""
             self.setTextWithAttributes(string)
         }
     }
@@ -96,7 +92,6 @@ class TextView: UITextView {
 
         self.initializeViews()
 
-        self.text = nil
     }
 
     convenience init() {
@@ -104,6 +99,9 @@ class TextView: UITextView {
     }
 
     func initializeViews() {
+        // Give the text view an initial value so to get our attributes bootstrapped.
+        self.text = ""
+
         self.contentMode = .redraw
 
         self.keyboardAppearance = .dark
@@ -158,6 +156,8 @@ class TextView: UITextView {
         attributedString.addAttributes(self.attributes,
                                        range: NSRange(location: 0, length: attributedString.length))
         self.attributedText = attributedString
+
+        self.typingAttributes = self.attributes
     }
 
     /// Adds the provided attributes to all the text in the view while preserving the existing attributes.

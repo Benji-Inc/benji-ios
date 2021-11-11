@@ -22,8 +22,8 @@ class ExpandingTextView: TextView {
         self.tintColor = Color.darkGray.color
         self.textColor = Color.darkGray.color
 
-        self.textContainerInset.left = 10
-        self.textContainerInset.right = 10
+        self.textContainerInset.left = Theme.contentOffset
+        self.textContainerInset.right = Theme.contentOffset
         self.textContainerInset.top = 14
         self.textContainerInset.bottom = 12
     }

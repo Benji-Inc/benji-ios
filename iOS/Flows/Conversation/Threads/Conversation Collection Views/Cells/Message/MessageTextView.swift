@@ -18,10 +18,10 @@ class MessageTextView: TextView {
         self.isScrollEnabled = false
         self.isSelectable = true
 
-        self.textContainerInset.top = 0
-        self.textContainerInset.bottom = 0
         self.textContainerInset.left = Theme.contentOffset
         self.textContainerInset.right = Theme.contentOffset
+        self.textContainerInset.top = 0
+        self.textContainerInset.bottom = 0
     }
 
     func set(text: Localized, messageContext: MessageContext) {
