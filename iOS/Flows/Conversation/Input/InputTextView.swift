@@ -26,15 +26,16 @@ class InputTextView: ExpandingTextView {
 
     init() {
         super.init(frame: .zero,
-                   font: .small,
+                   font: .smallBold,
                    textColor: .textColor,
                    textContainer: nil)
-
-        self.textAlignment = .center
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+
+        self.font = FontType.smallBold.font
+        self.textColor = Color.textColor.color
     }
 
     override func initializeViews() {

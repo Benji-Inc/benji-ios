@@ -13,9 +13,6 @@ class MessageTextView: TextView {
 
     override func initializeViews() {
         super.initializeViews()
-
-        self.lineSpacing = 0
-        self.setFont(.smallBold)
         
         self.isEditable = false
         self.isScrollEnabled = false
@@ -25,8 +22,6 @@ class MessageTextView: TextView {
         self.textContainerInset.bottom = 0
         self.textContainerInset.left = Theme.contentOffset
         self.textContainerInset.right = Theme.contentOffset
-
-        self.backgroundColor = .cyan
     }
 
     func set(text: Localized, messageContext: MessageContext) {

@@ -25,7 +25,7 @@ class TextView: UITextView {
         set {
             guard let string = newValue, !string.isEmpty else {
                 // No need to apply attributes to a nil string.
-                super.text = " "
+                super.text = ""
                 return
             }
 
@@ -38,7 +38,11 @@ class TextView: UITextView {
     override var font: UIFont? {
         get { return self._font }
         set {
+            super.font = newValue
             self._font = newValue ?? UIFont.systemFont(ofSize: UIFont.systemFontSize)
+
+            guard let text = self.text else { return }
+            self.setTextWithAttributes(text)
         }
     }
     private var _font: UIFont
@@ -48,7 +52,11 @@ class TextView: UITextView {
     override var textColor: UIColor? {
         get { return self._textColor }
         set {
+            super.textColor = newValue
             self._textColor = newValue ?? UIColor.black
+
+            guard let text = self.text else { return }
+            self.setTextWithAttributes(text)
         }
     }
     private var _textColor: UIColor
@@ -73,15 +81,13 @@ class TextView: UITextView {
 
     /// The string attributes to apply to any text given this label's assigned font and font color.
     private var attributes: [NSAttributedString.Key: Any] {
-        let font = self._font
-        let textColor = self._textColor
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = self.textAlignment
         paragraphStyle.lineSpacing = self.lineSpacing
 
-        return [.font: font,
+        return [.font: self._font,
                 .kern: self.kerning,
-                .foregroundColor: textColor,
+                .foregroundColor: self._textColor,
                 .paragraphStyle: paragraphStyle]
     }
 
@@ -91,7 +97,11 @@ class TextView: UITextView {
         }
     }
 
-    init(frame: CGRect = .zero, font: FontType, textColor: Color, textContainer: NSTextContainer?) {
+    init(frame: CGRect = .zero,
+         font: FontType,
+         textColor: Color,
+         textContainer: NSTextContainer?) {
+
         self._font = font.font
         self._textColor = textColor.color
         self.kerning = font.kern
@@ -109,6 +119,8 @@ class TextView: UITextView {
         super.init(coder: aDecoder)
 
         self.initializeViews()
+
+        self.text = nil
     }
 
     convenience init() {
@@ -116,9 +128,6 @@ class TextView: UITextView {
     }
 
     func initializeViews() {
-        let styleAttributes = StringStyle(font: .smallBold, color: .white).attributes
-        self.typingAttributes = styleAttributes
-
         self.contentMode = .redraw
 
         self.keyboardAppearance = .dark
@@ -146,7 +155,7 @@ class TextView: UITextView {
     
     func setText(_ localizedText: Localized?) {
         guard let localizedText = localizedText else {
-            self.text = " "
+            self.text = ""
             return
         }
         self.text = localized(localizedText)
@@ -195,7 +204,7 @@ class TextView: UITextView {
     }
 
     func reset() {
-        self.text = " "
+        self.text = ""
         self.textDidChange()
     }
 

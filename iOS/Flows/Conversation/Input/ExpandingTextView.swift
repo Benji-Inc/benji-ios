@@ -21,8 +21,6 @@ class ExpandingTextView: TextView {
         self.keyboardType = .twitter
         self.tintColor = Color.darkGray.color
         self.textColor = Color.darkGray.color
-        self.textAlignment = .center
-        self.set(backgroundColor: .clear)
 
         self.textContainerInset.left = 10
         self.textContainerInset.right = 10
