@@ -102,21 +102,12 @@ class OnboardingMessageTextView: TextView {
         self.isScrollEnabled = false
         self.isSelectable = false
         self.textAlignment = .center
+        self.textContainer.lineBreakMode = .byWordWrapping
+        self.isEditable = false
     }
 
     func set(text: Localized) {
-        let textColor: Color = .textColor
-        let attributedString = AttributedString(text,
-                                                fontType: .smallBold,
-                                                color: textColor)
-
-        self.set(attributed: attributedString,
-                 alignment: .center,
-                 lineCount: 0,
-                 lineBreakMode: .byWordWrapping,
-                 stringCasing: .unchanged,
-                 isEditable: false,
-                 linkColor: .white)
+        self.text = localized(text)
 
         let style = NSMutableParagraphStyle()
         style.lineSpacing = 2

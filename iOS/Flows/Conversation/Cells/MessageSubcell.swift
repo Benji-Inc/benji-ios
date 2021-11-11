@@ -33,8 +33,7 @@ class MessageSubcell: UICollectionViewCell {
         self.backgroundColorView.roundCorners()
 
         self.backgroundColorView.addSubview(self.textView)
-        self.textView.textAlignment = .center
-        self.textView.textColor = Color.textColor.color
+
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
     }
 
@@ -54,7 +53,7 @@ class MessageSubcell: UICollectionViewCell {
         if message.isDeleted {
             self.textView.text = "DELETED"
         } else {
-            self.textView.text = message.kind.text
+            self.textView.set(text: message.kind.text, messageContext: message.context)
         }
 
         self.setNeedsLayout()
@@ -80,7 +79,7 @@ class MessageSubcell: UICollectionViewCell {
             return
         }
 
-        self.textView.isVisible = messageLayoutAttributes.shouldShowText
+        self.textView.alpha = messageLayoutAttributes.shouldShowText ? 1 : 0.5
         self.configureBackground(color: messageLayoutAttributes.backgroundColor,
                                  showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                  tailOrientation: messageLayoutAttributes.bubbleTailOrientation)

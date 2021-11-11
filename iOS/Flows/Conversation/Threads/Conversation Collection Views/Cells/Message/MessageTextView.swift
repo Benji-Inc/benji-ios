@@ -14,6 +14,9 @@ class MessageTextView: TextView {
     override func initializeViews() {
         super.initializeViews()
 
+        self.lineSpacing = 0
+        self.setFont(.smallBold)
+        
         self.isEditable = false
         self.isScrollEnabled = false
         self.isSelectable = true
@@ -22,26 +25,15 @@ class MessageTextView: TextView {
         self.textContainerInset.bottom = 0
         self.textContainerInset.left = Theme.contentOffset
         self.textContainerInset.right = Theme.contentOffset
+
+        self.backgroundColor = .cyan
     }
 
     func set(text: Localized, messageContext: MessageContext) {
+        self.setText(text)
+
         let textColor: Color = messageContext == .status ? .darkGray : .textColor
-        let attributedString = AttributedString(text,
-                                                fontType: .smallBold,
-                                                color: textColor)
-
-        self.set(attributed: attributedString,
-                 alignment: .center,
-                 lineCount: 0,
-                 lineBreakMode: .byWordWrapping,
-                 stringCasing: .unchanged,
-                 isEditable: false,
-                 linkColor: .white)
-
-        let style = NSMutableParagraphStyle()
-        style.lineSpacing = 2
-
-        self.addTextAttributes([NSAttributedString.Key.paragraphStyle: style])
+        self.setTextColor(textColor)
     }
 
     // Allows us to interact with links if they exist or pass the touch to the next receiver if they do not

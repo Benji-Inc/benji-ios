@@ -101,7 +101,10 @@ class Label: UILabel {
     }
 
     func add(attributes: [NSAttributedString.Key : Any], to text: String) {
-        guard let existingText = self.attributedText, let range = existingText.string.range(of: text) else { return }
+        guard let existingText = self.attributedText, let range = existingText.string.range(of: text) else {
+            return
+        }
+        
         let attributedString = NSMutableAttributedString(existingText)
         attributedString.addAttributes(attributes, range: range.nsRange(text))
         super.attributedText = attributedString

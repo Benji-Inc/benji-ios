@@ -72,10 +72,9 @@ class ConnectionRequestView: View {
             let userWithData = try await user.retrieveDataIfNeeded()
             if let status = item.status, status == .invited {
                 let text = LocalizedString(id: "", arguments: [userWithData.fullName], default: "[@(name)](\(user.objectId!)) has invited you to connect.")
-                let attributedString = AttributedString(text,
-                                                        fontType: .regular,
-                                                        color: .white)
-                self.textView.set(attributed: attributedString, linkColor: .lightGray)
+
+                self.textView.linkTextAttributes = [.foregroundColor: Color.lightGray.color, .underlineStyle: 0]
+                self.textView.text = localized(text)
                 self.avatarView.set(avatar: userWithData)
                 self.layoutNow()
             } else {

@@ -25,7 +25,12 @@ class InputTextView: ExpandingTextView {
     weak var attachmentDelegate: AttachmentViewControllerDelegate?
 
     init() {
-        super.init(frame: .zero, textContainer: nil)
+        super.init(frame: .zero,
+                   font: .small,
+                   textColor: .textColor,
+                   textContainer: nil)
+
+        self.textAlignment = .center
     }
 
     required init?(coder aDecoder: NSCoder) {
