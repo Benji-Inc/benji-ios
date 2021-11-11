@@ -49,7 +49,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     /// A button to handle taps and pan gestures.
     @IBOutlet var overlayButton: UIButton!
 
-    @IBOutlet var inputTypeContainer: UIView?
+    @IBOutlet var inputTypeContainer: UIView!
 
     // MARK: - Message State
 
