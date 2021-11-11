@@ -101,6 +101,23 @@ class ConversationViewController: FullScreenViewController,
                                   of: self.conversationHeader,
                                   offset: -16)
         self.collectionView.height = self.contentContainer.height - 96
+
+        // If we're in the write mode, adjust the position of the collectionview to
+        // accomodate the text input, if necessary.
+        if self.state == .write {
+            self.collectionView.top += self.getCollectionViewYOffset()
+        }
+    }
+
+    /// Returns how much the collection view y position should  be adjusted to ensure that the text message input
+    /// and message drop zone don't overlap.
+    private func getCollectionViewYOffset() -> CGFloat {
+        let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
+        let textView: InputTextView = self.messageInputAccessoryView.textView
+        let textViewFrame = textView.convert(textView.bounds, to: self.contentContainer)
+
+        let overlapAmount = dropZoneFrame.bottom + Theme.contentOffset - textViewFrame.top
+        return -clamp(overlapAmount, min: 0)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -156,6 +173,10 @@ class ConversationViewController: FullScreenViewController,
             return
         }
         self.didCenterOnCell = cell
+
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.view.layoutNow()
+        }
     }
 
     // MARK: - Message Loading and Updates
@@ -365,7 +386,7 @@ class ConversationViewController: FullScreenViewController,
         }
 
         // Show the send message overlay so the user can see where to drag the message
-        let overlayFrame = self.collectionView.getMessageOverlayFrame(convertedTo: self.contentContainer)
+        let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
         self.sendMessageOverlay.frame = overlayFrame
 
         view.dropZoneFrame = view.convert(self.sendMessageOverlay.bounds, from: self.sendMessageOverlay)
@@ -411,7 +432,13 @@ class ConversationViewController: FullScreenViewController,
         let dropZoneFrame = view.dropZoneFrame
         let shouldSend = dropZoneFrame.bottom > frame.centerY
 
-        guard shouldSend else { return false }
+        guard shouldSend else {
+            // Reset the collectionview content offset back to where we started.
+            if let initialContentOffset = self.initialContentOffset {
+                self.collectionView.setContentOffset(initialContentOffset, animated: true)
+            }
+            return false
+        }
 
         switch self.currentSendMode {
         case .reply:
@@ -462,6 +489,14 @@ class ConversationViewController: FullScreenViewController,
             } else {
                 return .newMessage
             }
+        }
+    }
+
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 updatedFrameOf textView: InputTextView) {
+        
+        UIView.animate(withDuration: Theme.animationDuration) {
+            self.view.layoutNow()
         }
     }
 

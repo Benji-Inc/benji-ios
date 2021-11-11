@@ -25,6 +25,8 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
                                  withPreviewFrame frame: CGRect) -> Bool
     /// The accessory view finished its swipe interaction.
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView)
+    /// The accessory view's text view has updated its frame.
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, updatedFrameOf textView: InputTextView)
 }
 
 class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
@@ -104,6 +106,12 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         self.textView.confirmationView.button.didSelect { [unowned self] in
             self.didPressAlertCancel()
         }
+
+        // Listen for changes to the textview bounds and update the delegate as needed.
+        self.textView.publisher(for: \.bounds, options: [.new])
+            .mainSink { [unowned self] bounds in
+                self.delegate?.swipeableInputAccessory(self, updatedFrameOf: self.textView)
+            }.store(in: &self.cancellables)
     }
 
     // MARK: OVERRIDES
@@ -176,7 +184,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     private let maxXOffset: CGFloat = 40
     /// How far the preview view can be dragged up.
     private var maxYOffset: CGFloat {
-        return -(self.inputContainerView.top - self.dropZoneFrame.top + 20)
+        let additionalSpace = self.textView.height.half
+        return -(self.inputContainerView.top - self.dropZoneFrame.top + additionalSpace)
     }
 
     func handle(pan: UIPanGestureRecognizer) {

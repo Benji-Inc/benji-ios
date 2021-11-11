@@ -30,9 +30,9 @@ class ConversationCollectionView: CollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    /// Returns the frame that a message send overlay should appear based on this collectionview's contents.
+    /// Returns the frame that a message drop zone should appear based on this collectionview's contents.
     /// The frame is in the coordinate space of the passed in view.
-    func getMessageOverlayFrame(convertedTo view: UIView) -> CGRect {
+    func getMessageDropZoneFrame(convertedTo view: UIView) -> CGRect {
         guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessageCell else {
             let overlayFrame = CGRect(x: Theme.contentOffset,
                                       y: 100,
