@@ -33,6 +33,7 @@ extension ChatClient {
 
     /// Retrieves the token
     private static func getChatToken() async throws -> Token {
+        #warning("Uncomment once GetChatToken is updated for Stream")
         return Token.development(userId: User.current()!.objectId!)
 //        let string = try await GetChatToken().makeRequest()
 //        return try Token(rawValue: string)
