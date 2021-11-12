@@ -19,19 +19,18 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     /// The parent message is root message that has replies in a thread. It is nil for a conversation.
     struct SectionType: Hashable {
         let sectionID: String
+        let conversationsController: ConversationListController?
         let parentMessageID: MessageId?
 
-        var isConversation: Bool {
-            do {
-                _ = try ChannelId(cid: self.sectionID)
-                return !self.isThread
-            } catch {
-                return false
-            }
-        }
+        var isConversationList: Bool { return self.conversationsController.exists }
         var isThread: Bool { return self.parentMessageID.exists }
-        init(sectionID: String, parentMessageID: MessageId? = nil) {
+
+        init(sectionID: String,
+             conversationsController: ConversationListController? = nil,
+             parentMessageID: MessageId? = nil) {
+
             self.sectionID = sectionID
+            self.conversationsController = conversationsController
             self.parentMessageID = parentMessageID
         }
     }
@@ -186,5 +185,21 @@ extension ChatMessage {
     /// Convenience function to convert Stream chat messages into the ItemType of a ConversationCollectionViewDataSource.
     var asConversationCollectionItem: ConversationItem {
         return ConversationItem.messages(self.id)
+    }
+}
+
+extension Array where Element == Conversation {
+    
+    var asConversationCollectionItems: [ConversationItem] {
+        return self.map { conversation in
+            return conversation.asConversationCollectionItem
+        }
+    }
+}
+
+extension Conversation {
+
+    var asConversationCollectionItem: ConversationItem {
+        return ConversationItem.messages(self.cid.description)
     }
 }
