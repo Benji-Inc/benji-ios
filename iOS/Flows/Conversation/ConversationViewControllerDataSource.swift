@@ -47,6 +47,8 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
     // Cell registration
     private let messageCellRegistration = ConversationCollectionViewDataSource.createMessageCellRegistration()
+    private let conversationCellRegistration
+    = ConversationCollectionViewDataSource.createConversationCellRegistration()
     private let threadMessageCellRegistration
     = ConversationCollectionViewDataSource.createThreadMessageCellRegistration()
     private let loadMoreMessagesCellRegistration
@@ -58,24 +60,33 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                               item: ItemType) -> UICollectionViewCell? {
 
         switch item {
-        case .messages(let messageID):
+        case .messages(let itemID):
             if section.isThread {
                 let cid = try! ConversationID(cid: section.sectionID)
                 let threadCell
                 = collectionView.dequeueConfiguredReusableCell(using: self.threadMessageCellRegistration,
                                                                for: indexPath,
-                                                               item: (cid, messageID, self))
+                                                               item: (cid, itemID, self))
 
                 threadCell.handleDeleteMessage = { [unowned self] (message) in
                     self.handleDeleteMessage?(message)
                 }
                 return threadCell
+            } else if section.isConversationList {
+                let controller = section.conversationsController
+                let cid = try! ConversationID(cid: itemID)
+
+                let messageCell
+                = collectionView.dequeueConfiguredReusableCell(using: self.conversationCellRegistration,
+                                                               for: indexPath,
+                                                               item: (cid, self))
+                return messageCell
             } else {
                 let cid = try! ConversationID(cid: section.sectionID)
                 let messageCell
                 = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                for: indexPath,
-                                                               item: (cid, messageID, self))
+                                                               item: (cid, itemID, self))
                 messageCell.handleTappedMessage = { [unowned self] (message) in
                     self.handleSelectedMessage?(message)
                 }

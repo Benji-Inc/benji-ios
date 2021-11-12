@@ -16,6 +16,10 @@ extension ConversationCollectionViewDataSource {
                                         (channelID: ChannelId,
                                          messageID: MessageId,
                                          dataSource: ConversationCollectionViewDataSource)>
+    typealias ConversationCellRegistration
+    = UICollectionView.CellRegistration<ConversationMessageCell,
+                                        (channelID: ChannelId,
+                                         dataSource: ConversationCollectionViewDataSource)>
     typealias ThreadMessageCellRegistration
     = UICollectionView.CellRegistration<ThreadMessageCell,
                                         (channelID: ChannelId,
@@ -41,6 +45,18 @@ extension ConversationCollectionViewDataSource {
                     await dataSource.reconfigureItems([.messages(item.messageID)])
                 }
             }
+        }
+    }
+
+    static func createConversationCellRegistration() -> ConversationCellRegistration {
+        return ConversationCellRegistration { cell, indexPath, item in
+            let conversationController = ChatClient.shared.channelController(for: item.channelID)
+
+            let messages = Array(conversationController.messages)
+            cell.set(message: nil,
+                     replies: messages,
+                     totalReplyCount: 0)
+            // TODO: Load more messages
         }
     }
 
