@@ -13,7 +13,10 @@ class MessageDateLabel: Label {
     init() {
         super.init(font: .small)
 
-        self.setText(" ")
+        self.textAlignment = .center
+        self.numberOfLines = 1
+        self.setFont(.small)
+        self.setTextColor(.gray)
     }
 
     required init?(coder: NSCoder) {
@@ -22,17 +25,11 @@ class MessageDateLabel: Label {
 
     func set(date: Date?) {
         guard let date = date else {
-            self.setText(" ")
+            self.text = nil
             return
         }
 
-        let attributed = AttributedString(self.getString(for: date),
-                                          fontType: .small,
-                                          color: .lightGray)
-        self.set(attributed: attributed,
-                 alignment: .center,
-                 lineCount: 1,
-                 stringCasing: .unchanged)
+        self.text = self.getString(for: date)
     }
 
     private func getString(for date: Date) -> String {

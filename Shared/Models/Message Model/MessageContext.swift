@@ -20,9 +20,9 @@ enum MessageContext: String, CaseIterable {
         case .timeSensitive:
             return .red
         case .passive:
-            return .textColor
+            return .white
         case .status:
-            return .textColor
+            return .white
         }
     }
 

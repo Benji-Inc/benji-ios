@@ -33,6 +33,8 @@ class MessageSubcell: UICollectionViewCell {
         self.backgroundColorView.roundCorners()
 
         self.backgroundColorView.addSubview(self.textView)
+
+        self.textView.textContainer.lineBreakMode = .byTruncatingTail
     }
 
     override func layoutSubviews() {
@@ -94,6 +96,8 @@ class MessageSubcell: UICollectionViewCell {
     }
 }
 
+// MARK: - Sizing
+
 extension MessageSubcell {
 
     static var minimumHeight: CGFloat { return 50 }
@@ -110,7 +114,7 @@ extension MessageSubcell {
 
         let textView = MessageTextView()
         textView.setText(with: message)
-        var textViewSize = textView.getSize(withWidth: width)
+        var textViewSize = textView.getSize(withMaxWidth: width)
         textViewSize.height += Theme.contentOffset
         return clamp(textViewSize.height + self.bubbleTailLength,
                      MessageSubcell.minimumHeight,

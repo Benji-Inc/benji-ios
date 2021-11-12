@@ -25,17 +25,6 @@ class Label: UILabel {
         }
     }
 
-    override var attributedText: NSAttributedString? {
-        get { return super.attributedText }
-        set {
-            guard let attributedString = newValue else {
-                super.attributedText = nil
-                return
-            }
-            self.setAttributedTextWithAttributes(attributedString)
-        }
-    }
-
     /// Kerning to be applied to all text in this label. If an attributed string is set manually, there is no guarantee that this variable
     /// will be accurate, but setting it will update kerning on all text in the label.
     var kerning: CGFloat {
@@ -70,7 +59,9 @@ class Label: UILabel {
         
         self.kerning = font.kern
         self.stringCasing = .unchanged
+
         super.init(frame: frame)
+
         self.font = font.font
         self.textColor = textColor.color
         self.initializeLabel()
@@ -79,7 +70,9 @@ class Label: UILabel {
     required init?(coder: NSCoder) {
         self.kerning = 0
         self.stringCasing = .unchanged
+
         super.init(coder: coder)
+
         self.initializeLabel()
     }
 
@@ -108,14 +101,16 @@ class Label: UILabel {
     }
 
     func add(attributes: [NSAttributedString.Key : Any], to text: String) {
-        guard let existingText = self.attributedText, let range = existingText.string.range(of: text) else { return }
+        guard let existingText = self.attributedText, let range = existingText.string.range(of: text) else {
+            return
+        }
+        
         let attributedString = NSMutableAttributedString(existingText)
         attributedString.addAttributes(attributes, range: range.nsRange(text))
         super.attributedText = attributedString
     }
 
     private func setTextWithAttributes(_ newText: String) {
-
         let string = self.stringCasing.format(string: newText)
 
         // Create an attributed string and add attributes to the entire range.
@@ -123,47 +118,7 @@ class Label: UILabel {
         attributedString.addAttributes(self.attributes, range: NSRange(location: 0,
                                                                        length: attributedString.length))
 
-        let fontSize: CGFloat = self.font?.pointSize ?? UIFont.systemFontSize
-        // NOTE: Some emojis don't display properly with certain attributes applied to them
-        // So remove attributes from emoji characters.
-        for emojiRange in newText.getEmojiRanges() {
-            attributedString.removeAttributes(atRange: emojiRange)
-            if let emojiFont = UIFont(name: "AppleColorEmoji", size: fontSize) {
-                attributedString.addAttributes([NSAttributedString.Key.font: emojiFont], range: emojiRange)
-            }
-        }
-
         super.attributedText = attributedString
-    }
-
-    /// Applies the font, color and kerning to the provided string while preserving any other attributes, then sets it as the attributed text.
-    private func setAttributedTextWithAttributes(_ newText: NSAttributedString) {
-        let attributedString = NSMutableAttributedString(string: newText.string)
-        attributedString.addAttributes(newText.existingAttributes ?? [:])
-        attributedString.addAttributes(self.attributes, range: NSRange(location: 0,
-                                                                       length: attributedString.length))
-        super.attributedText = attributedString
-    }
-
-    func set(attributed: AttributedString,
-             alignment: NSTextAlignment = .left,
-             lineCount: Int = 0,
-             lineBreakMode: NSLineBreakMode = .byWordWrapping,
-             stringCasing: StringCasing = .unchanged) {
-
-        let string = stringCasing.format(string: attributed.string.string)
-        let newString = NSMutableAttributedString(string: string)
-        newString.addAttributes(attributed.attributes,
-                                range: NSRange(location: 0, length: newString.length))
-        // NOTE: Some emojis don't display properly with certain attributes applied to them
-        for emojiRange in string.getEmojiRanges() {
-            newString.removeAttributes(atRange: emojiRange)
-        }
-
-        self.attributedText = newString
-        self.numberOfLines = lineCount
-        self.lineBreakMode = lineBreakMode
-        self.textAlignment = alignment
     }
 }
 

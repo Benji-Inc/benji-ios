@@ -82,6 +82,10 @@ class SpeechBubbleView: View {
         self.borderColor = borderColor
     }
 
+    convenience init(orientation: TailOrientation, bubbleColor: Color, borderColor: Color) {
+        self.init(orientation: orientation, bubbleColor: bubbleColor.color, borderColor: borderColor.color)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         self.orientation = .down
 
