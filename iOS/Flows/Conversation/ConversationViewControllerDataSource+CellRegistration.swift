@@ -38,7 +38,7 @@ extension ConversationCollectionViewDataSource {
                 let dataSource = item.dataSource
                 Task {
                     try? await messageController.loadPreviousReplies()
-                    await dataSource.reconfigureItems([.message(item.messageID)])
+                    await dataSource.reconfigureItems([.messages(item.messageID)])
                 }
             }
         }
@@ -62,7 +62,7 @@ extension ConversationCollectionViewDataSource {
             // Connect messages from the same author with a vertical line.
             if let nextItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item + 1,
                                                                        section: indexPath.section)) {
-                if case .message(let messageID) = nextItem {
+                if case .messages(let messageID) = nextItem {
                     let nextMessageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                                     messageId: messageID)
                     if nextMessageController.message?.author == messageAuthor {
@@ -73,7 +73,7 @@ extension ConversationCollectionViewDataSource {
 
             if let previousItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item - 1,
                                                                            section: indexPath.section)) {
-                if case .message(let messageID) = previousItem {
+                if case .messages(let messageID) = previousItem {
                     let previousMessageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                                         messageId: messageID)
                     if previousMessageController.message?.author == messageAuthor {

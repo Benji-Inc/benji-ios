@@ -18,18 +18,18 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     /// Model for the main section of the conversation or thread.
     /// The parent message is root message that has replies in a thread. It is nil for a conversation.
     struct SectionType: Hashable {
-        let cid: ConversationID
+        let sectionID: String
         let parentMessageID: MessageId?
 
         var isThread: Bool { return self.parentMessageID.exists }
-        init(cid: ConversationID, parentMessageID: MessageId? = nil) {
-            self.cid = cid
+        init(sectionID: String, parentMessageID: MessageId? = nil) {
+            self.sectionID = sectionID
             self.parentMessageID = parentMessageID
         }
     }
 
     enum ItemType: Hashable {
-        case message(MessageId)
+        case messages(MessageId)
         case loadMore
     }
 
@@ -51,22 +51,24 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                               item: ItemType) -> UICollectionViewCell? {
 
         switch item {
-        case .message(let messageID):
+        case .messages(let messageID):
             if section.isThread {
+                let cid = try! ConversationID(cid: section.sectionID)
                 let threadCell
                 = collectionView.dequeueConfiguredReusableCell(using: self.threadMessageCellRegistration,
                                                                for: indexPath,
-                                                               item: (section.cid, messageID, self))
+                                                               item: (cid, messageID, self))
 
                 threadCell.handleDeleteMessage = { [unowned self] (message) in
                     self.handleDeleteMessage?(message)
                 }
                 return threadCell
             } else {
+                let cid = try! ConversationID(cid: section.sectionID)
                 let messageCell
                 = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                for: indexPath,
-                                                               item: (section.cid, messageID, self))
+                                                               item: (cid, messageID, self))
                 messageCell.handleTappedMessage = { [unowned self] (message) in
                     self.handleSelectedMessage?(message)
                 }
@@ -96,7 +98,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
 
         var snapshot = self.snapshot()
 
-        let sectionID = ConversationSection(cid: conversation.cid,
+        let sectionID = ConversationSection(sectionID: conversation.cid.description,
                                             parentMessageID: conversationController.rootMessage?.id)
 
         // If there's more than one change, reload all of the data.
@@ -117,7 +119,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         for change in changes {
             switch change {
             case .insert(let message, let index):
-                snapshot.insertItems([.message(message.id)],
+                snapshot.insertItems([.messages(message.id)],
                                      in: sectionID,
                                      atIndex: index.item)
                 if message.isFromCurrentUser {
@@ -175,6 +177,6 @@ extension ChatMessage {
 
     /// Convenience function to convert Stream chat messages into the ItemType of a ConversationCollectionViewDataSource.
     var asConversationCollectionItem: ConversationItem {
-        return ConversationItem.message(self.id)
+        return ConversationItem.messages(self.id)
     }
 }

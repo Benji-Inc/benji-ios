@@ -214,7 +214,7 @@ class ConversationViewController: FullScreenViewController,
         let messages = controller.messages
         var snapshot = self.dataSource.snapshot()
 
-        let section = ConversationSection(cid: controller.cid)
+        let section = ConversationSection(sectionID: controller.cid!.description)
         snapshot.appendSections([section])
         snapshot.appendItems(messages.asConversationCollectionItems)
 
@@ -449,7 +449,7 @@ class ConversationViewController: FullScreenViewController,
         case .reply:
             guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
                   let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath),
-                  case let .message(messageID) = currentItem else {
+                  case let .messages(messageID) = currentItem else {
 
                       // If there is no current message to reply to, assume we're sending a new message
                       self.send(sendable)
