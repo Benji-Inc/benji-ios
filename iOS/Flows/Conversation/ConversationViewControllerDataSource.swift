@@ -21,6 +21,14 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         let sectionID: String
         let parentMessageID: MessageId?
 
+        var isConversation: Bool {
+            do {
+                _ = try ChannelId(cid: self.sectionID)
+                return !self.isThread
+            } catch {
+                return false
+            }
+        }
         var isThread: Bool { return self.parentMessageID.exists }
         init(sectionID: String, parentMessageID: MessageId? = nil) {
             self.sectionID = sectionID
@@ -29,7 +37,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     }
 
     enum ItemType: Hashable {
-        case messages(MessageId)
+        case messages(String)
         case loadMore
     }
 
