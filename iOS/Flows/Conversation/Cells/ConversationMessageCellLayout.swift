@@ -33,7 +33,7 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         super.init()
 
         self.scrollDirection = .vertical
-        self.register(TimeSentView.self, forDecorationViewOfKind: TimeSentView.objectIdentifier)
+        self.register(MessageStatusView.self, forDecorationViewOfKind: MessageStatusView.objectIdentifier)
     }
 
     required init?(coder: NSCoder) {
@@ -53,7 +53,7 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         let sectionCount = self.collectionView?.numberOfSections ?? 0
         for sectionIndex in 0..<sectionCount {
             let decorationAttributes
-            = self.layoutAttributesForDecorationView(ofKind: TimeSentView.objectIdentifier,
+            = self.layoutAttributesForDecorationView(ofKind: MessageStatusView.objectIdentifier,
                                                      at: IndexPath(item: 0,
                                                                    section: sectionIndex))
             if let decorationAttributes = decorationAttributes {
@@ -83,7 +83,7 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         }
 
         let attributes
-        = TimeSentViewLayoutAttributes(forDecorationViewOfKind: TimeSentView.objectIdentifier,
+        = MessageStatusViewLayoutAttributes(forDecorationViewOfKind: MessageStatusView.objectIdentifier,
                                        with: indexPath)
 
         if indexPath.section == 0 {

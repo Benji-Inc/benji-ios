@@ -556,7 +556,7 @@
 		D68072E7272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D68072E8272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D68072E9272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
-		D68072EB2730462F004657E7 /* TimeSentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072EA2730462F004657E7 /* TimeSentView.swift */; };
+		D68072EB2730462F004657E7 /* MessageStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072EA2730462F004657E7 /* MessageStatusView.swift */; };
 		D684840A22CD48D000362AC3 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840922CD48D000362AC3 /* GradientView.swift */; };
 		D684840C22CD48FA00362AC3 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684840B22CD48FA00362AC3 /* PassThroughView.swift */; };
 		D684D6EB22D0E4F000874B08 /* StackedAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */; };
@@ -1123,7 +1123,7 @@
 		D67934E423DE66FE00536B44 /* PushPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPayload.swift; sourceTree = "<group>"; };
 		D67A82DA230CCE3D0076152B /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleView.swift; sourceTree = "<group>"; };
-		D68072EA2730462F004657E7 /* TimeSentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeSentView.swift; sourceTree = "<group>"; };
+		D68072EA2730462F004657E7 /* MessageStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStatusView.swift; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		D684840B22CD48FA00362AC3 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassThroughView.swift; sourceTree = "<group>"; };
 		D684D6EA22D0E4F000874B08 /* StackedAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackedAvatarView.swift; sourceTree = "<group>"; };
@@ -1648,7 +1648,7 @@
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
 				806DA16927307FA400843C4E /* MessageSubcell.swift */,
 				808313B42723694B00BAEBE0 /* ThreadMessageCell.swift */,
-				D68072EA2730462F004657E7 /* TimeSentView.swift */,
+				D68072EA2730462F004657E7 /* MessageStatusView.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2852,7 +2852,7 @@
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
 				D678EC1E26F50BBC0071DB0D /* UserCell.swift in Sources */,
 				D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
-				D68072EB2730462F004657E7 /* TimeSentView.swift in Sources */,
+				D68072EB2730462F004657E7 /* MessageStatusView.swift in Sources */,
 				D6B26903264C7D2000EFDA17 /* AnimatingTapView.swift in Sources */,
 				800FAAC126F0585A00D3C3A0 /* Conversation+Extensions.swift in Sources */,
 				D6FEF031257EB91B00F9789B /* UIControl+Extensions.swift in Sources */,
