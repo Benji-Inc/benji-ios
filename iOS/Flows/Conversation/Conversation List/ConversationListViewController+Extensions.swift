@@ -18,12 +18,13 @@ extension ConversationListViewController {
             }
         }
 
-//        self.dataSource.handleSelectedMessage = { [unowned self] (message) in
-//            self.onSelectedConversation?(self.conversation.cid, message.id)
-//        }
-//        self.dataSource.handleLoadMoreMessages = { [unowned self] in
-//            self.loadMoreConversationsIfNeeded()
-//        }
+        self.dataSource.handleSelectedMessage = { [unowned self] (message) in
+            guard let cid = try? ConversationID(cid: message.conversationId) else { return }
+            self.onSelectedConversation?(cid)
+        }
+        self.dataSource.handleLoadMoreMessages = { [unowned self] in
+            self.loadMoreConversationsIfNeeded()
+        }
     }
 
     func subscribeToKeyboardUpdates() {

@@ -32,8 +32,6 @@ class ConversationListViewController: FullScreenViewController,
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
         let inputView: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
         inputView.delegate = self
-        // TODO:
-//        view.conversation = self.conversation
         return inputView
     }()
 
@@ -69,8 +67,6 @@ class ConversationListViewController: FullScreenViewController,
         self.collectionView.delegate = self
 
         self.contentContainer.addSubview(self.conversationHeader)
-        // TODO:
-//        self.conversationHeader.configure(with: self.conversation)
 
         self.subscribeToKeyboardUpdates()
     }
@@ -162,7 +158,14 @@ class ConversationListViewController: FullScreenViewController,
         self.didCenterOnCell = cell
 
         // If there's a centered cell, update the layout
-        if self.collectionView.centerIndexPath().exists {
+        if let indexPath = self.collectionView.centerIndexPath() {
+
+            if let conversation = self.conversationListController.conversations[safe: indexPath.item] {
+                self.messageInputAccessoryView.conversation = conversation
+                self.conversationHeader.configure(with: conversation)
+            }
+
+
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.view.layoutNow()
             }
@@ -423,14 +426,6 @@ class ConversationListViewController: FullScreenViewController,
 //            } catch {
 //                logDebug(error)
 //            }
-//        }
-    }
-
-    private func update(_ sendable: Sendable) async {
-//        do {
-//            try await self.conversationController?.editMessage(with: sendable)
-//        } catch {
-//            logDebug(error)
 //        }
     }
 }

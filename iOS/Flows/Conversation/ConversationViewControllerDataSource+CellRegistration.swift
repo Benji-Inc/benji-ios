@@ -53,7 +53,7 @@ extension ConversationCollectionViewDataSource {
             let conversationController = ChatClient.shared.channelController(for: item.channelID)
 
             let messages = Array(conversationController.messages)
-            cell.set(message: nil,
+            cell.set(message: conversationController.conversation,
                      replies: messages,
                      totalReplyCount: 0)
             // TODO: Load more messages

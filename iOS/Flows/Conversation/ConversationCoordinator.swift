@@ -17,8 +17,18 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
 
     lazy var conversationVC = ConversationViewController(conversation: ConversationsManager.shared.activeConversations.last,
                                                          startingMessageId: self.startingMessageId)
+    lazy var conversationListVC = ConversationListViewController(userIDs: [User.current()!.userObjectID!])
 
     let startingMessageId: MessageId?
+
+    override func toPresentable() -> DismissableVC {
+        return self.conversationListVC
+        
+        self.conversationVC.onSelectedThread = { [unowned self] (channelID, messageID) in
+            self.presentThread(for: channelID, messageID: messageID)
+        }
+        return self.conversationVC
+    }
 
     init(router: Router,
          deepLink: DeepLinkable?,
@@ -31,13 +41,6 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
             ConversationsManager.shared.activeConversations.append(convo)
         }
         super.init(router: router, deepLink: deepLink)
-    }
-
-    override func toPresentable() -> DismissableVC {
-        self.conversationVC.onSelectedThread = { [unowned self] (channelID, messageID) in
-            self.presentThread(for: channelID, messageID: messageID)
-        }
-        return self.conversationVC
     }
 
     override func start() {
