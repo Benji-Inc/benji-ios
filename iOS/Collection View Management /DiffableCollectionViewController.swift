@@ -47,6 +47,23 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
                 self.selectedItems.append(item)
             }
         }
+
+//        self.$selectedItems.mainSink { items in
+//            var ips: [IndexPath] = []
+//            items.forEach { item in
+//                if let ip = self.dataSource.indexPath(for: item) {
+//                    ips.append(ip)
+//                }
+//            }
+//
+//            self.collectionView.indexPathsForVisibleItems.forEach { ip in
+//                if ips.contains(ip), let cell = self.collectionView.cellForItem(at: ip) as? CollectionViewManagerCell {
+//                    cell.update(isSelected: true)
+//                } else if let cell = self.collectionView.cellForItem(at: ip) as? CollectionViewManagerCell {
+//                    cell.update(isSelected: false)
+//                }
+//            }
+//        }.store(in: &self.cancellables)
     }
 
     override func viewDidLoad() {
