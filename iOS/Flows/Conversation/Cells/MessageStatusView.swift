@@ -7,23 +7,35 @@
 //
 
 import Foundation
+import StreamChat
+
+struct ChatMessageStatus: Equatable {
+
+    let read: ChatChannelRead
+    let message: Message
+
+    static func == (lhs: ChatMessageStatus, rhs: ChatMessageStatus) -> Bool {
+        return lhs.message == rhs.message &&
+        lhs.read.lastReadAt == rhs.read.lastReadAt &&
+        lhs.read.user == rhs.read.user
+    }
+}
 
 /// Layout attributes that can be used to configure a TimeSentView.
 class MessageStatusViewLayoutAttributes: UICollectionViewLayoutAttributes {
 
-    /// The date we want displayed on the TimeSentView
-    var timeSent: Date?
+    var status: ChatMessageStatus?
 
     override func copy(with zone: NSZone? = nil) -> Any {
         let copy = super.copy(with: zone) as! MessageStatusViewLayoutAttributes
-        copy.timeSent = self.timeSent
+        copy.status = self.status
         return copy
     }
 
     override func isEqual(_ object: Any?) -> Bool {
         if let layoutAttributes = object as? MessageStatusViewLayoutAttributes {
             return super.isEqual(object)
-            && layoutAttributes.timeSent == self.timeSent
+            && layoutAttributes.status == self.status
         }
 
         return false
@@ -32,8 +44,8 @@ class MessageStatusViewLayoutAttributes: UICollectionViewLayoutAttributes {
 
 class MessageStatusView: UICollectionReusableView {
 
-    let timeOfDayLabel = MessageTimeLabel()
-    let daysAgoLabel = MessageDateLabel()
+    let dateLabel = MessageDateLabel()
+    let statusLabel = Label(font: .small)
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -45,28 +57,28 @@ class MessageStatusView: UICollectionReusableView {
     }
 
     private func initializeSubviews() {
-        self.addSubview(self.timeOfDayLabel)
-        self.addSubview(self.daysAgoLabel)
+        self.addSubview(self.dateLabel)
+        self.addSubview(self.statusLabel)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.daysAgoLabel.setSize(withWidth: self.width)
-        self.daysAgoLabel.pin(.left, padding: Theme.contentOffset.half)
-        self.daysAgoLabel.centerOnY()
+        self.dateLabel.setSize(withWidth: self.width)
+        self.dateLabel.pin(.left, padding: Theme.contentOffset.half)
+        self.dateLabel.centerOnY()
 
-        self.timeOfDayLabel.setSize(withWidth: self.width)
-        self.timeOfDayLabel.pin(.right, padding: Theme.contentOffset.half)
-        self.timeOfDayLabel.centerOnY()
+        self.statusLabel.setSize(withWidth: self.width)
+        self.statusLabel.pin(.right, padding: Theme.contentOffset.half)
+        self.statusLabel.centerOnY()
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
         super.apply(layoutAttributes)
 
-        if let timeSentAttributes = layoutAttributes as? MessageStatusViewLayoutAttributes {
-            self.timeOfDayLabel.set(date: timeSentAttributes.timeSent)
-            self.daysAgoLabel.set(date: timeSentAttributes.timeSent)
+        if let attributes = layoutAttributes as? MessageStatusViewLayoutAttributes {
+            self.dateLabel.set(date: attributes.status?.message.createdAt)
+            //self.daysAgoLabel.set(date: timeSentAttributes.timeSent)
         }
 
         self.setNeedsLayout()

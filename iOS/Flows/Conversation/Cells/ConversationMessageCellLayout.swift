@@ -18,7 +18,7 @@ protocol ConversationMessageCellLayoutDelegate: AnyObject {
 class ConversationMessageCellLayout: UICollectionViewFlowLayout {
 
     /// If true, the time sent decoration views should be displayed.
-    var showTimeSent: Bool = false {
+    var showMessageStatus: Bool = false {
         didSet { self.invalidateLayout() }
     }
     unowned let messageDelegate: ConversationMessageCellLayoutDelegate
@@ -105,9 +105,14 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         = ChatClient.shared.messageController(cid: try! ChannelId(cid: recentMessage.conversationId),
                                               messageId: recentMessage.id)
         let mostRecentMessage = messageController.getMostRecent(fromCurrentUser: indexPath.section == 1)
-        attributes.timeSent = mostRecentMessage?.createdAt
 
-        attributes.alpha = self.showTimeSent ? 1 : 0
+        if let read = messageController.conversation.reads.first(where: { read in
+            return read.user == mostRecentMessage?.author
+        }), let message = mostRecentMessage {
+            attributes.status = ChatMessageStatus(read: read, message: message)
+        }
+
+        attributes.alpha = self.showMessageStatus ? 1 : 0
 
         return attributes
     }
