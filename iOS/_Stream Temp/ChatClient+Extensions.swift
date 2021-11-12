@@ -22,26 +22,43 @@ extension ChatClient {
 
     /// Initializes the shared chat client singleton.
     static func initialize(for user: User) async throws {
-        // Create a shared chat client object if needed
         if self.shared.isNil {
-            var config = ChatClientConfig(apiKey: .init("hvmd2mhxcres"))
-            config.applicationGroupIdentifier = Config.shared.environment.groupId
-            config.isLocalStorageEnabled = true 
-            self.shared = ChatClient(config: config, tokenProvider: { completion in
-                let token = Token.development(userId: user.userObjectID!)
-                completion(.success(token))
-            })
+            return try await self.initializeChatClient(with: user)
+        } else if let token = try? await self.getChatToken() {
+            return try await self.shared.connectUser(with: token)
+        } else {
+            logDebug("Failed to initialize chat")
         }
+    }
 
-        let token = Token.development(userId: user.userObjectID!)
+    /// Retrieves the token
+    private static func getChatToken() async throws -> Token {
+        return Token.development(userId: User.current()!.objectId!)
+//        let string = try await GetChatToken().makeRequest()
+//        return try Token(rawValue: string)
+    }
+
+    /// Initializes the ChatClient with a configuration, retrieves and sets token, and connects the user
+    private static func initializeChatClient(with user: User) async throws {
+
+        var config = ChatClientConfig(apiKey: .init(Config.shared.environment.chatAPIKey))
+        config.applicationGroupIdentifier = Config.shared.environment.groupId
+        config.isLocalStorageEnabled = true
+
+        self.shared = ChatClient.init(config: config, tokenProvider: nil)
+        let token = try await self.getChatToken()
+        self.shared.setToken(token: token)
+        try await self.shared.connectUser(with: token)
+    }
+
+    private func connectUser(with token: Token) async throws {
+
         let userId = User.current()?.userObjectID ?? String() as UserId
         var userInfo = UserInfo(id: userId, name: nil, imageURL: nil, extraData: [:])
-        #if IOS || NOTIFICATION_SERVICE
         userInfo = UserInfo(id: userId,
                             name: User.current()?.fullName,
                             imageURL: User.current()?.smallImage?.url,
                             extraData: [:])
-        #endif
 
         /// connect to chat
         return try await withCheckedThrowingContinuation { continuation in

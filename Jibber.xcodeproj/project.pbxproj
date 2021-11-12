@@ -577,7 +577,6 @@
 		D687596A2728A60700AF7C07 /* String+PhoneNumbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68759682728A60700AF7C07 /* String+PhoneNumbers.swift */; };
 		D687596B2728A60700AF7C07 /* String+PhoneNumbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68759682728A60700AF7C07 /* String+PhoneNumbers.swift */; };
 		D687596C2728A64500AF7C07 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0E921D3111600204BEE /* String+Extensions.swift */; };
-		D687596E2728AFB900AF7C07 /* ChatClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80616E2D26EA9E1900C077BA /* ChatClient+Extensions.swift */; };
 		D687F3C626FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C526FE4DD5000E4734 /* PeopleCollectionViewDataSource.swift */; };
 		D687F3C826FE4E4B000E4734 /* ContactCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C726FE4E4B000E4734 /* ContactCell.swift */; };
 		D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D687F3C926FE4FB3000E4734 /* PeopleCollectionViewLayout.swift */; };
@@ -3532,7 +3531,6 @@
 				D6AE0FFD267D2D9A00C6B048 /* User+Objectable.swift in Sources */,
 				D66ED459267D4B1200332BA3 /* DispatchQue+Extensions.swift in Sources */,
 				D6AE0F70267CF9CA00C6B048 /* NotificationService.swift in Sources */,
-				D687596E2728AFB900AF7C07 /* ChatClient+Extensions.swift in Sources */,
 				D61316B1273C85A200DC782B /* Color.swift in Sources */,
 				D687595E2728A4BA00AF7C07 /* User+INPerson.swift in Sources */,
 				D687594A2728844500AF7C07 /* UNNotificationContent+Extensions.swift in Sources */,
