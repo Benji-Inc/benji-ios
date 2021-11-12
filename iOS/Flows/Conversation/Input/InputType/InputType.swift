@@ -24,7 +24,7 @@ enum InputType {
         case .video:
             return UIImage(systemName: "video")
         case .keyboard:
-            return UIImage(systemName: "textformat.abc")
+            return UIImage(systemName: "abc")
         case .calendar:
             return UIImage(systemName: "calendar")
         case .jibs:

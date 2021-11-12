@@ -18,11 +18,10 @@ class InputTypeViewController: DiffableCollectionViewController<InputTypeDataSou
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func initializeViews() {
-        super.initializeViews()
+    override func loadData() async {
+        await super.loadData()
 
-//        if let ip = self.dataSource.indexPath(for: <#T##InputType#>)
-//        self.dataSource.select
+        self.selectedItems = [.keyboard]
     }
 
     override func retrieveDataForSnapshot() async -> [InputTypeDataSource.SectionType : [InputType]] {

@@ -19,20 +19,23 @@ class InputTypeCell: CollectionViewManagerCell, ManageableCell {
         super.initializeSubviews()
 
         self.contentView.addSubview(self.imageView)
-        self.imageView.alpha = 0.5
-        self.imageView.tintColor = Color.gray.color
+        self.imageView.tintColor = Color.lightGray.color
         self.imageView.contentMode = .scaleAspectFit
     }
 
     func configure(with item: InputType) {
         self.currentItem = item
         self.imageView.image = item.image
+
+        if item == .keyboard {
+            self.update(isSelected: true)
+        }
     }
 
     override func update(isSelected: Bool) {
         super.update(isSelected: isSelected)
 
-        self.imageView.alpha = isSelected ? 1.0 : 0.5
+        self.imageView.tintColor = isSelected ? Color.darkGray.color : Color.lightGray.color
     }
 
     override func layoutSubviews() {

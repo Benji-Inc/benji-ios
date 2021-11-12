@@ -83,7 +83,9 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
         self.inputContainerView.showShadow(withOffset: 8)
 
-        self.inputTypeContainer.addSubview(self.inputTypeVC.view)
+        if let controller = UIWindow.topMostController() {
+            controller.addChild(viewController: self.inputTypeVC, toView: self.inputTypeContainer)
+        }
 
         self.inputTypeVC.view.translatesAutoresizingMaskIntoConstraints = false
         let topConstraint = self.inputTypeVC.view.topAnchor.constraint(equalTo: self.inputTypeContainer.topAnchor)
