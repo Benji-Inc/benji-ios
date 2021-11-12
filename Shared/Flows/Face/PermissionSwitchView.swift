@@ -117,7 +117,7 @@ class PermissionSwitchView: View {
             self.isUserInteractionEnabled = false
         }
 
-        UIView.animate(withDuration: Theme.animationDuration) {
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
             switch state {
             case .enabled:
                 self.alpha = 1.0

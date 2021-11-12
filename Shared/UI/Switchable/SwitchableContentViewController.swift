@@ -56,7 +56,7 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
             return
         }
 
-        self.prepareAnimator = UIViewPropertyAnimator.init(duration: Theme.animationDuration,
+        self.prepareAnimator = UIViewPropertyAnimator.init(duration: Theme.animationDurationStandard,
                                                            curve: .easeOut,
                                                            animations: {
             self.prepareForPresentation()
@@ -95,7 +95,7 @@ class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingVi
 
     private func animatePresentation() {
 
-        self.presentAnimator = UIViewPropertyAnimator.init(duration: Theme.animationDuration,
+        self.presentAnimator = UIViewPropertyAnimator.init(duration: Theme.animationDurationStandard,
                                                            curve: .easeOut,
                                                            animations: {
 

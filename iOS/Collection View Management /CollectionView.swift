@@ -119,7 +119,8 @@ class CollectionView: UICollectionView {
         return viewType
     }
 
-    func centerMostIndexPath() -> IndexPath? {
+    /// Returns the index path of the item whose cell contains the center point of the collection view.
+    func centerIndexPath() -> IndexPath? {
         let point = CGPoint(x: self.halfWidth + self.contentOffset.x,
                             y: self.halfHeight + self.contentOffset.y)
         guard let indexPath = self.indexPathForItem(at: point) else { return nil }

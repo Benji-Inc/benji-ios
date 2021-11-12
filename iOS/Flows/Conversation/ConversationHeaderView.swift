@@ -110,7 +110,7 @@ class ConversationHeaderView: View {
     func update(for state: ConversationUIState) {
         self.state = state
 
-        UIView.animate(withDuration: Theme.animationDuration) {
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
             switch state {
             case .read:
                 self.label.alpha = 1.0

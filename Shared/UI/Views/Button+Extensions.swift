@@ -89,7 +89,7 @@ extension Button {
             self.isUserInteractionEnabled = true
             self.isEnabled = true
 
-            UIView.animate(withDuration: Theme.animationDuration, animations: {
+            UIView.animate(withDuration: Theme.animationDurationStandard, animations: {
                 for view in self.subviews {
                     if let label = view as? UILabel {
                         label.alpha = 0.0

@@ -144,7 +144,7 @@ class ConnectionRequestView: View {
         self.successLabel.setText(text)
         self.layoutNow()
 
-        UIView.animate(withDuration: Theme.animationDuration) {
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.containerView.alpha = 0
             self.successLabel.alpha = 1
         } completion: { completed in

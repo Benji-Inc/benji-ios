@@ -11,7 +11,9 @@ import UIKit
 
 struct Theme {
 
-    static let animationDuration: TimeInterval = 0.35
+    static let animationDurationFast: TimeInterval = 0.2
+    static let animationDurationStandard: TimeInterval = 0.35
+    static let animationDurationSlow: TimeInterval = 0.5
     static let cornerRadius: CGFloat = 10
     static let borderWidth: CGFloat = 2
     static let contentOffset: CGFloat = 24

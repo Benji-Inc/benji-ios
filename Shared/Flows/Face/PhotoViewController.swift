@@ -187,13 +187,13 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private func handleInitialState() {
 
         if self.animationView.alpha == 0 {
-            UIView.animate(withDuration: Theme.animationDuration, animations: {
+            UIView.animate(withDuration: Theme.animationDurationStandard, animations: {
                 self.animationView.alpha = 1
             }) { (completed) in
                 self.animationView.play()
             }
         } else {
-            delay(Theme.animationDuration) {
+            delay(Theme.animationDurationStandard) {
                 self.animationView.play()
             }
         }
@@ -273,7 +273,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         }
 
         self.errorOffset = show ? 100 : -100
-        UIView.animate(withDuration: Theme.animationDuration) {
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.view.layoutNow()
         }
     }

@@ -33,7 +33,7 @@ extension UILabel {
 
     func fade(toText text: String, layoutReady: CompletionOptional) {
         // Move our fade out code from earlier
-        UIView.animate(withDuration: Theme.animationDuration, delay: 0.0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: Theme.animationDurationStandard, delay: 0.0, options: .curveEaseOut, animations: {
             self.alpha = 0.0
         }, completion: { finished in
 
@@ -45,7 +45,7 @@ extension UILabel {
                 layoutReady?()
 
                 // Fade in
-                UIView.animate(withDuration: Theme.animationDuration, delay: 0.0, options: .curveEaseIn, animations: {
+                UIView.animate(withDuration: Theme.animationDurationStandard, delay: 0.0, options: .curveEaseIn, animations: {
                     self.alpha = 1.0
                 }, completion: nil)
             }

@@ -165,7 +165,7 @@ class ConversationViewController: FullScreenViewController,
 
         self.conversationHeader.update(for: state)
 
-        UIView.animate(withDuration: Theme.animationDuration) {
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.view.layoutNow()
         }
     }
@@ -176,8 +176,11 @@ class ConversationViewController: FullScreenViewController,
         }
         self.didCenterOnCell = cell
 
-        UIView.animate(withDuration: Theme.animationDuration) {
-            self.view.layoutNow()
+        // If there's a centered cell, update the layout
+        if self.collectionView.centerIndexPath().exists {
+            UIView.animate(withDuration: Theme.animationDurationFast) {
+                self.view.layoutNow()
+            }
         }
     }
 
@@ -383,7 +386,7 @@ class ConversationViewController: FullScreenViewController,
         self.contentContainer.addSubview(self.sendMessageOverlay)
         self.sendMessageOverlay.alpha = 0
         self.sendMessageOverlay.setState(nil)
-        UIView.animate(withDuration: Theme.animationDuration) {
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.sendMessageOverlay.alpha = 1
         }
 
@@ -466,7 +469,7 @@ class ConversationViewController: FullScreenViewController,
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
         self.collectionView.isUserInteractionEnabled = true
 
-        UIView.animate(withDuration: Theme.animationDuration) {
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.sendMessageOverlay.alpha = 0
         } completion: { didFinish in
             self.sendMessageOverlay.removeFromSuperview()
@@ -497,7 +500,7 @@ class ConversationViewController: FullScreenViewController,
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  updatedFrameOf textView: InputTextView) {
         
-        UIView.animate(withDuration: Theme.animationDuration) {
+        UIView.animate(withDuration: Theme.animationDurationFast) {
             self.view.layoutNow()
         }
     }
