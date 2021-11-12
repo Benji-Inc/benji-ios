@@ -31,8 +31,6 @@ class CollectionViewManagerCell: UICollectionViewListCell {
 
     var cancellables = Set<AnyCancellable>()
 
-    var onDidTap: (() -> Void)?
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.initializeSubviews()
@@ -45,9 +43,6 @@ class CollectionViewManagerCell: UICollectionViewListCell {
 
     func initializeSubviews() {
 
-        self.contentView.didSelect { [unowned self] in
-            self.onDidTap?()
-        }
     }
 
     func update(isSelected: Bool) {}

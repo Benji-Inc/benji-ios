@@ -38,32 +38,6 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
 
         self.view.addSubview(self.collectionView)
         self.collectionView.delegate = self
-
-        self.dataSource.didSelectItem = { [unowned self] item in
-            #warning("Make this not suck")
-            if self.selectedItems.contains(item) {
-                self.selectedItems = self.selectedItems
-            } else {
-                self.selectedItems.append(item)
-            }
-        }
-
-//        self.$selectedItems.mainSink { items in
-//            var ips: [IndexPath] = []
-//            items.forEach { item in
-//                if let ip = self.dataSource.indexPath(for: item) {
-//                    ips.append(ip)
-//                }
-//            }
-//
-//            self.collectionView.indexPathsForVisibleItems.forEach { ip in
-//                if ips.contains(ip), let cell = self.collectionView.cellForItem(at: ip) as? CollectionViewManagerCell {
-//                    cell.update(isSelected: true)
-//                } else if let cell = self.collectionView.cellForItem(at: ip) as? CollectionViewManagerCell {
-//                    cell.update(isSelected: false)
-//                }
-//            }
-//        }.store(in: &self.cancellables)
     }
 
     override func viewDidLoad() {
@@ -149,12 +123,16 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
         if let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewManagerCell {
             cell.update(isSelected: true )
         }
+
+        self.selectedItems = __selectedItems
     }
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewManagerCell {
             cell.update(isSelected: false)
         }
+        
+        self.selectedItems = __selectedItems
     }
 
     func collectionView(_ collectionView: UICollectionView,
