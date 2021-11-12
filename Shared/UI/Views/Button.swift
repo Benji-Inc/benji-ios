@@ -22,11 +22,11 @@ enum ButtonStyle {
 
 class Button: UIButton, Statusable {
 
-    let alphaOutAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
+    let alphaOutAnimator = UIViewPropertyAnimator(duration: Theme.animationDurationStandard,
                                                   curve: .linear,
                                                   animations: nil)
 
-    let alphaInAnimator = UIViewPropertyAnimator(duration: Theme.animationDuration,
+    let alphaInAnimator = UIViewPropertyAnimator(duration: Theme.animationDurationStandard,
                                                  curve: .linear,
                                                  animations: nil)
 

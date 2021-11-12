@@ -91,7 +91,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
         self.button.set(style: .normal(color: .darkGray, text: self.getButtonTitle()))
 
-        UIView.animate(withDuration: Theme.animationDuration) {
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
 
             if self.selectedItems.count == 0 {
                 self.button.top = self.view.height

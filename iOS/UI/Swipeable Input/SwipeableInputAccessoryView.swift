@@ -297,7 +297,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         } else {
             // If the user didn't swipe far enough to send a message, animate the preview view back
             // to where it started, then reveal the text view to allow for input again.
-            UIView.animate(withDuration: Theme.animationDuration) {
+            UIView.animate(withDuration: Theme.animationDurationStandard) {
                 guard let initialOrigin = self.initialPreviewOrigin else { return }
                 self.previewView?.origin = initialOrigin
             } completion: { completed in

@@ -56,7 +56,7 @@ extension UICollectionView {
             return
         }
 
-        let duration: TimeInterval = Theme.animationDuration
+        let duration: TimeInterval = Theme.animationDurationStandard
         var longestDelay: TimeInterval = 0
 
         for (index, cell) in visibleCells.enumerated() {
@@ -88,7 +88,7 @@ extension UICollectionView {
             return
         }
 
-        let duration: TimeInterval = Theme.animationDuration
+        let duration: TimeInterval = Theme.animationDurationStandard
         var longestDelay: TimeInterval = 0
 
         for (index, cell) in visibleCells.enumerated() {

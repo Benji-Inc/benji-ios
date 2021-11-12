@@ -83,7 +83,7 @@ class WelcomeViewController: TextInputViewController<Void> {
     }
 
     private func animate(for state: State) {
-        UIView.animate(withDuration: Theme.animationDuration) {
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
             switch state {
             case .welcome:
                 self.textEntry.alpha = 0 
@@ -103,7 +103,7 @@ class WelcomeViewController: TextInputViewController<Void> {
         } completion: { (completed) in
             switch state {
             case .reservationInput:
-                UIView.animate(withDuration: Theme.animationDuration) {
+                UIView.animate(withDuration: Theme.animationDurationStandard) {
                     self.textEntry.alpha = 1
                 } completion: { (completed) in
                     self.textField.becomeFirstResponder()

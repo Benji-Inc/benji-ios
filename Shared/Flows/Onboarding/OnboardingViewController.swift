@@ -194,7 +194,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingBlur.removeFromSuperview()
         self.view.addSubview(self.loadingBlur)
         self.view.layoutNow()
-        UIView.animate(withDuration: Theme.animationDuration) {
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.loadingBlur.showBlur(true)
         } completion: { completed in
             self.loadingAnimationView.play()
@@ -205,7 +205,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     private func hideLoading() async {
         return await withCheckedContinuation { continuation in
             self.loadingAnimationView.stop()
-            UIView.animate(withDuration: Theme.animationDuration) {
+            UIView.animate(withDuration: Theme.animationDurationStandard) {
                 self.loadingBlur.effect = nil
             } completion: { completed in
                 self.loadingBlur.removeFromSuperview()
@@ -218,7 +218,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.loadingBlur.removeFromSuperview()
         self.view.addSubview(self.loadingBlur)
         self.view.layoutNow()
-        UIView.animate(withDuration: Theme.animationDuration) {
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.loadingBlur.showBlur(true)
         } completion: { completed in
             self.loadingAnimationView.play()
