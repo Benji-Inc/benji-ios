@@ -32,7 +32,7 @@ class MessageDateLabel: Label {
         self.text = self.getString(for: date)
     }
 
-    private func getString(for date: Date) -> String {
+    func getString(for date: Date) -> String {
         let now = Date()
 
         if date.isSameDay(as: now) {

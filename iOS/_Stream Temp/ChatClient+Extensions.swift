@@ -48,8 +48,8 @@ extension ChatClient {
 
         self.shared = ChatClient.init(config: config, tokenProvider: nil)
         let token = try await self.getChatToken()
-        self.shared.setToken(token: token)
-        try await self.shared.connectUser(with: token)
+        ChatClient.shared.setToken(token: token)
+        try await ChatClient.shared.connectUser(with: token)
     }
 
     private func connectUser(with token: Token) async throws {

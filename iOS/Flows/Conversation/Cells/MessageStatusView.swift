@@ -14,6 +14,18 @@ struct ChatMessageStatus: Equatable {
     let read: ChatChannelRead
     let message: Message
 
+    var isRead: Bool {
+        return self.read.lastReadAt >= self.message.createdAt && self.isDelivered
+    }
+
+    var isDelivered: Bool {
+        return self.state.isNil
+    }
+
+    var state: LocalMessageState? {
+        return self.message.localState
+    }
+
     static func == (lhs: ChatMessageStatus, rhs: ChatMessageStatus) -> Bool {
         return lhs.message == rhs.message &&
         lhs.read.lastReadAt == rhs.read.lastReadAt &&
@@ -45,7 +57,7 @@ class MessageStatusViewLayoutAttributes: UICollectionViewLayoutAttributes {
 class MessageStatusView: UICollectionReusableView {
 
     let dateLabel = MessageDateLabel()
-    let statusLabel = Label(font: .small)
+    let statusLabel = MessageStatusLabel()
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -78,7 +90,7 @@ class MessageStatusView: UICollectionReusableView {
 
         if let attributes = layoutAttributes as? MessageStatusViewLayoutAttributes {
             self.dateLabel.set(date: attributes.status?.message.createdAt)
-            //self.daysAgoLabel.set(date: timeSentAttributes.timeSent)
+            self.statusLabel.set(status: attributes.status)
         }
 
         self.setNeedsLayout()
