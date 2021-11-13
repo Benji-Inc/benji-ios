@@ -55,9 +55,16 @@ class MainCoordinator: Coordinator<Void> {
             let coordinator = OnboardingCoordinator(router: self.router,
                                                     deepLink: self.deepLink)
             self.router.setRootModule(coordinator, animated: true)
-            self.addChildAndStart(coordinator, finishedHandler: { (_) in
+            self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (conversationId) in
 
+                /// Set the conversationId on the deeplink so it gets passed up and displayed
+                if let id = conversationId {
+                    self.deepLink?.conversationId = id
+                    self.deepLink?.deepLinkTarget = .conversation
+                }
 #if APPCLIP
+                
+                //Add the conversationId to shared storage so it can open once they download the full app.
 #elseif !NOTIFICATION
                     self.runArchiveFlow()
                     //self.runHomeFlow()
