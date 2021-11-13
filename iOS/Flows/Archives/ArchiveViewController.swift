@@ -134,7 +134,6 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
 
     func subscribeToUpdates() {
         self.channelListController?.channelsChangesPublisher.mainSink(receiveValue: { changes in
-
             changes.forEach { change in
                 switch change {
                 case .insert(let conversation, let ip):

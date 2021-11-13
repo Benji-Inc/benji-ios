@@ -45,7 +45,10 @@ class ConversationListViewController: FullScreenViewController,
 
     @Published var state: ConversationUIState = .read
 
+    private let userIDs: [UserId]
+
     init(userIDs: [UserId]) {
+        self.userIDs = userIDs
         let query = ChannelListQuery(filter: .containMembers(userIds: userIDs),
                                      sort: [Sorting(key: .lastMessageAt, isAscending: false)],
                                      pageSize: 10,
@@ -410,13 +413,27 @@ class ConversationListViewController: FullScreenViewController,
     // MARK: - Send Message Functions
 
     private func createNewConversation(_ sendable: Sendable) {
-//        Task {
-//            do {
-//                try await self.conversationController?.createNewMessage(with: sendable)
-//            } catch {
-//                logDebug(error)
-//            }
-//        }
+        Task {
+            let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
+            let userIDs = Set(self.userIDs)
+
+            do {
+                let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
+                                                                         name: nil,
+                                                                         imageURL: nil,
+                                                                         team: nil,
+                                                                         members: userIDs,
+                                                                         isCurrentUserMember: true,
+                                                                         messageOrdering: .bottomToTop,
+                                                                         invites: [],
+                                                                         extraData: [:])
+
+                try await controller.synchronize()
+                try await controller.createNewMessage(with: sendable)
+            } catch {
+                logDebug(error)
+            }
+        }
     }
 
     private func reply(to cid: ConversationID, sendable: Sendable) {
