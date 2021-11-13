@@ -43,23 +43,15 @@ extension ConversationListViewController {
                 self.updateUI(for: state)
             }.store(in: &self.cancellables)
 
-//        self.conversationController?.messagesChangesPublisher.mainSink { [unowned self] changes in
-//            Task {
-//                guard let conversationController = self.conversationController else { return }
-//                await self.dataSource.update(with: changes,
-//                                             conversationController: conversationController,
-//                                             collectionView: self.collectionView)
-//            }
-//        }.store(in: &self.cancellables)
-//
-//        self.conversationController?.channelChangePublisher.mainSink { [unowned self] change in
-//            switch change {
-//            case .update(let conversation):
-//                self.conversationHeader.configure(with: conversation)
-//            case .create, .remove:
-//                break
-//            }
-//        }.store(in: &self.cancellables)
+        self.conversationListController
+            .channelsChangesPublisher
+            .mainSink { [unowned self] changes in
+                Task {
+                    await self.dataSource.update(with: changes,
+                                                 conversationController: self.conversationListController,
+                                                 collectionView: self.collectionView)
+                }
+        }.store(in: &self.cancellables)
 //
 //        self.conversationController?.typingUsersPublisher.mainSink { [unowned self] users in
 //            let nonMeUsers = users.filter { user in

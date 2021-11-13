@@ -184,6 +184,78 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             }
         }
     }
+
+    /// Updates the datasource with the passed in array of conversation changes.
+    func update(with changes: [ListChange<Conversation>],
+                conversationController: ConversationListController,
+                collectionView: UICollectionView) async {
+
+
+        var snapshot = self.snapshot()
+
+        let sectionID = ConversationSection(sectionID: "channelList",
+                                            conversationsController: conversationController)
+
+        // If there's more than one change, reload all of the data.
+        guard changes.count == 1 else {
+            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
+            snapshot.appendItems(conversationController.conversations.asConversationCollectionItems,
+                                 toSection: sectionID)
+            if !conversationController.hasLoadedAllPreviousChannels {
+                snapshot.appendItems([.loadMore], toSection: sectionID)
+            }
+            await self.apply(snapshot)
+            return
+        }
+
+        // If this gets set to true, we should scroll to the most recent message after applying the snapshot
+        var scrollToLatestMessage = false
+
+        for change in changes {
+            switch change {
+            case .insert(let conversation, let index):
+                snapshot.insertItems([.messages(conversation.id)],
+                                     in: sectionID,
+                                     atIndex: index.item)
+                if conversation.isFromCurrentUser {
+                    scrollToLatestMessage = true
+                }
+            case .move:
+                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
+                snapshot.appendItems(conversationController.conversations.asConversationCollectionItems,
+                                     toSection: sectionID)
+            case .update(let message, _):
+                snapshot.reconfigureItems([message.asConversationCollectionItem])
+            case .remove(let message, _):
+                snapshot.deleteItems([message.asConversationCollectionItem])
+            }
+        }
+
+        // Only show the load more cell if there are previous messages to load.
+        snapshot.deleteItems([.loadMore])
+        if !conversationController.hasLoadedAllPreviousChannels {
+            snapshot.appendItems([.loadMore], toSection: sectionID)
+        }
+
+        await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
+            self.apply(snapshot)
+
+            // Scroll to the latest message if needed and reconfigure cells as needed.
+            if scrollToLatestMessage, let sectionIndex = snapshot.indexOfSection(sectionID) {
+                let latestMessageIndex = IndexPath(item: 0, section: sectionIndex)
+                if sectionID.isThread {
+                    // Inserting a message can cause the visual state of the previous message to change.
+                    self.reconfigureItem(atIndex: 1, in: sectionID)
+                    collectionView.scrollToItem(at: latestMessageIndex, at: .bottom, animated: true)
+                } else {
+                    // Conversations have the latest message at the first index.
+                    collectionView.scrollToItem(at: latestMessageIndex,
+                                                at: .centeredHorizontally,
+                                                animated: true)
+                }
+            }
+        }
+    }
 }
 
 extension LazyCachedMapCollection where Element == Message {

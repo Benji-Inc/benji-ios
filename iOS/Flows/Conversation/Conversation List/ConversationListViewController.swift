@@ -266,10 +266,10 @@ class ConversationListViewController: FullScreenViewController,
 
     /// The type of message send method that the conversation VC is prepped for.
     private enum SendMode {
-        /// The message will be sent as a reply to the currently centered message.
-        case reply
-        /// The message will be sent as a new message.
-        case newMessage
+        /// The message will be sent to currently centered message.
+        case message
+        /// The message will the first in a new conversation.
+        case newConversation
     }
 
     /// The collection view's content offset at the first call to prepare for a swipe. Used to reset the the content offset after a swipe is cancelled.
@@ -316,12 +316,12 @@ class ConversationListViewController: FullScreenViewController,
 
     private func prepareForSend(with position: SendMode) {
         switch position {
-        case .reply:
+        case .message:
             self.sendMessageOverlay.setState(.reply)
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
-        case .newMessage:
+        case .newConversation:
             let newXOffset
             = -self.collectionView.width + self.collectionView.conversationLayout.minimumLineSpacing
 
@@ -347,19 +347,20 @@ class ConversationListViewController: FullScreenViewController,
         }
 
         switch self.currentSendMode {
-        case .reply:
+        case .message:
             guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
                   let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath),
-                  case let .messages(messageID) = currentItem else {
+                  case let .messages(conversationID) = currentItem,
+                  let cid = try? ConversationID(cid: conversationID) else {
 
                       // If there is no current message to reply to, assume we're sending a new message
-                      self.send(sendable)
+                      self.createNewConversation(sendable)
                       return true
                   }
 
-            self.reply(to: messageID, sendable: sendable)
-        case .newMessage:
-            self.send(sendable)
+            self.reply(to: cid, sendable: sendable)
+        case .newConversation:
+            self.createNewConversation(sendable)
         case .none:
             return false
         }
@@ -380,20 +381,20 @@ class ConversationListViewController: FullScreenViewController,
     /// Gets the send position for the given preview view frame.
     private func getSendMode(forPreviewFrame frame: CGRect) -> SendMode {
         switch self.currentSendMode {
-        case .reply, .none:
+        case .message, .none:
             // If we're in the reply mode, switch to newMessage when the user
             // has dragged far enough to the right.
             if frame.right > self.view.width - 10 {
-                return .newMessage
+                return .newConversation
             } else {
-                return .reply
+                return .message
             }
-        case .newMessage:
+        case .newConversation:
             // If we're in newMessage mode, switch to reply mode if the user drags far enough to the left.
             if frame.left < 10 {
-                return .reply
+                return .message
             } else {
-                return .newMessage
+                return .newConversation
             }
         }
     }
@@ -408,8 +409,7 @@ class ConversationListViewController: FullScreenViewController,
 
     // MARK: - Send Message Functions
 
-    // TODO:
-    private func send(_ sendable: Sendable) {
+    private func createNewConversation(_ sendable: Sendable) {
 //        Task {
 //            do {
 //                try await self.conversationController?.createNewMessage(with: sendable)
@@ -419,14 +419,14 @@ class ConversationListViewController: FullScreenViewController,
 //        }
     }
 
-    private func reply(to messageID: MessageId, sendable: Sendable) {
-//        Task {
-//            do {
-//                try await self.conversationController?.createNewReply(for: messageID, with: sendable)
-//            } catch {
-//                logDebug(error)
-//            }
-//        }
+    private func reply(to cid: ConversationID, sendable: Sendable) {
+        let conversationController = ChatClient.shared.channelController(for: cid)
+        Task {
+            do {
+                try await conversationController.createNewMessage(with: sendable)
+            } catch {
+                logDebug(error)
+            }
+        }
     }
 }
-
