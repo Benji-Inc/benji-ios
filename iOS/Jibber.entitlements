@@ -6,12 +6,12 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>appclips:jibber.wtf</string>
-		<string>applinks:jibber.wtf</string>
-		<string>webcredentials:jibber.wtf</string>
-		<string>appclips:jibber.wtf/reservation</string>
-		<string>appclips:jibber.wtf/onboarding</string>
-		<string>appclips:jibber.wtf/pass</string>
+		<string>appclips:joinjibber.com</string>
+		<string>applinks:joinjibber.com</string>
+		<string>webcredentials:joinjibber.com</string>
+		<string>appclips:joinjibber.com/reservation</string>
+		<string>appclips:joinjibber.com/onboarding</string>
+		<string>appclips:joinjibber.com/pass</string>
 	</array>
 	<key>com.apple.developer.healthkit</key>
 	<true/>

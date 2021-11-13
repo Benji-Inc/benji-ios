@@ -20,12 +20,7 @@ class InputTypeDataSource: CollectionViewDataSource<InputTypeDataSource.SectionT
                               indexPath: IndexPath,
                               section: SectionType,
                               item: InputType) -> UICollectionViewCell? {
-        let cell = collectionView.dequeueConfiguredReusableCell(using: self.inputConfig, for: indexPath, item: item)
-
-        cell.onDidTap = {
-            self.didSelectItem?(item)
-        }
-
-        return cell
+        
+        return collectionView.dequeueConfiguredReusableCell(using: self.inputConfig, for: indexPath, item: item)
     }
 }

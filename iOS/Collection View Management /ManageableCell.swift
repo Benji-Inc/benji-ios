@@ -12,9 +12,6 @@ protocol ManageableCell: AnyObject {
     /// The type that will be used to configure this object.
     associatedtype ItemType: Hashable
 
-    /// Triggered when a long press gesture occurs on this item.
-    var onDidTap: (() -> Void)? { get set }
-
     /// Conforming types should take in the item type and set up the cell's visual state.
     func configure(with item: ItemType)
 

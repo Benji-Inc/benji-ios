@@ -43,9 +43,10 @@ class ArchiveCollectionViewDataSource: CollectionViewDataSource<ArchiveCollectio
                                                                     for: indexPath,
                                                                     item: conversation)
             cell.content.interactions.removeAll()
-            cell.onDidTap = { [unowned self] in
+            cell.content.didSelect { [unowned self] in
                 self.didSelectItem?(item)
             }
+
             if let delegate = self.contextMenuDelegate {
                 cell.content.addInteraction(UIContextMenuInteraction(delegate: delegate))
             }
