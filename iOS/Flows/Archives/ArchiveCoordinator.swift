@@ -127,7 +127,6 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
         self.router.present(coordinator,
                             source: self.archiveVC,
                             cancelHandler: {
-            print("Did Cancel")
         })
     }
 

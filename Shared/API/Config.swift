@@ -39,6 +39,14 @@ enum Environment: String {
     var groupId: String {
         return "group.com.Jibber"
     }
+
+    var chatAPIKey: String {
+        return "hvmd2mhxcres"
+//        switch self {
+//        case .staging: return "hvmd2mhxcres"
+//        case .production: return "ybdsdqhd2nhg"
+//        }
+    }
 }
 
 enum BuildType: String, CaseIterable {

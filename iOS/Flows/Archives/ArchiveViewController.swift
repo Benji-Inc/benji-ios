@@ -73,11 +73,9 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
         self.view.addSubview(self.addButton)
         self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .white))
 
-        self.$selectedItems.mainSink { [unowned self] items in
-            if let first = items.first {
-                self.delegate?.archiveView(self, didSelect: first)
-            }
-        }.store(in: &self.cancellables)
+        self.dataSource.didSelectItem = { [unowned self] item in
+            self.delegate?.archiveView(self, didSelect: item)
+        }
     }
 
     override func viewWasPresented() {

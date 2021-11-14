@@ -54,7 +54,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     @IBOutlet var inputTypeContainer: UIView!
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
 
-    lazy var inputTypeVC = InputTypeViewController()
+   // lazy var inputTypeVC = InputTypeViewController()
 
     static var inputTypeMaxHeight: CGFloat = 40
 
@@ -85,15 +85,17 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
         self.inputContainerView.showShadow(withOffset: 8)
 
-        #warning("Find a way to add the view controller to the correct parent.")
-        self.inputTypeContainer.addSubview(self.inputTypeVC.view)
-
-        self.inputTypeVC.view.translatesAutoresizingMaskIntoConstraints = false
-        let topConstraint = self.inputTypeVC.view.topAnchor.constraint(equalTo: self.inputTypeContainer.topAnchor)
-        let bottomConstraint = self.inputTypeVC.view.bottomAnchor.constraint(equalTo: self.inputTypeContainer.bottomAnchor)
-        let leadingConstraint = self.inputTypeVC.view.leadingAnchor.constraint(equalTo: self.inputTypeContainer.leadingAnchor)
-        let trailingConstraint = self.inputTypeVC.view.trailingAnchor.constraint(equalTo: self.inputTypeContainer.trailingAnchor)
-        self.inputTypeContainer.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
+        #warning("need to convert this to a UIInputViewController in order to add child controllers")
+//        if let controller = UIWindow.topMostController() {
+//            controller.addChild(viewController: self.inputTypeVC, toView: self.inputTypeContainer)
+//        }
+//
+//        self.inputTypeVC.view.translatesAutoresizingMaskIntoConstraints = false
+//        let topConstraint = self.inputTypeVC.view.topAnchor.constraint(equalTo: self.inputTypeContainer.topAnchor)
+//        let bottomConstraint = self.inputTypeVC.view.bottomAnchor.constraint(equalTo: self.inputTypeContainer.bottomAnchor)
+//        let leadingConstraint = self.inputTypeVC.view.leadingAnchor.constraint(equalTo: self.inputTypeContainer.leadingAnchor)
+//        let trailingConstraint = self.inputTypeVC.view.trailingAnchor.constraint(equalTo: self.inputTypeContainer.trailingAnchor)
+//        self.inputTypeContainer.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
 
         self.setupGestures()
         self.setupHandlers()
@@ -102,17 +104,17 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.inputTypeVC.collectionView.expandToSuperviewSize()
+       // self.inputTypeVC.collectionView.expandToSuperviewSize()
     }
 
     // MARK: PRIVATE
 
     private func setupHandlers() {
 
-        KeyboardManager.shared.$willKeyboardShow.mainSink { willShow in
-            self.inputTypeHeightConstraint.constant = willShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 0
-            self.inputTypeVC.view.alpha = willShow ? 1 : 0
-        }.store(in: &self.cancellables)
+//        KeyboardManager.shared.$willKeyboardShow.mainSink { willShow in
+//            self.inputTypeHeightConstraint.constant = willShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 0
+//            self.inputTypeVC.view.alpha = willShow ? 1 : 0
+//        }.store(in: &self.cancellables)
 
         KeyboardManager.shared.$currentEvent
             .mainSink { [weak self] event in
