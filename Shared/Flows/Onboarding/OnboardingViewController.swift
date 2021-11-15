@@ -14,8 +14,7 @@ import Intents
 
 protocol OnboardingViewControllerDelegate: AnyObject {
     func onboardingView(_ controller: OnboardingViewController,
-                        didVerify user: User,
-                        conversationId: String?)
+                        didVerify user: User)
 }
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent>, TransitionableViewController {
@@ -53,7 +52,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     var invitor: User?
-    var conversationId: String?
 
     init(with delegate: OnboardingViewControllerDelegate) {
 
@@ -109,18 +107,22 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.codeVC.onDidComplete = { [unowned self] result in
             switch result {
             case .success(let conversationId):
+                Task {
+                    try await self.saveInitialConversation(with: conversationId)
+                }
+
                 guard let current = User.current() else { return }
                 if current.isOnboarded, current.status == .active {
                     #if APPCLIP
                     self.current = .waitlist(self.waitlistVC)
                     #else
-                    self.showLoading(user: current, conversationId: conversationId)
+                    self.showLoading(user: current)
                     #endif
                 } else if current.status == .inactive, current.isOnboarded {
                     #if APPCLIP
                     self.current = .waitlist(self.waitlistVC)
                     #else
-                    self.showLoading(user: current, conversationId: conversationId)
+                    self.showLoading(user: current)
                     #endif
                 } else {
                     self.current = .name(self.nameVC)
@@ -154,7 +156,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                     guard let fullName = UserDefaultsManager.getString(for: .fullName) else { return }
                     try await ActivateUser(fullName: fullName).makeRequest(andUpdate: [], viewsToIgnore: [self.view])
                     guard let user = User.current(), user.status == .active else { return }
-                    self.delegate.onboardingView(self, didVerify: user, conversationId: self.conversationId)
+                    self.delegate.onboardingView(self, didVerify: user)
                 }
             case .failure(_):
                 break
@@ -164,6 +166,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.waitlistVC.$state.mainSink { [unowned self] _ in
             self.updateUI()
         }.store(in: &self.cancellables)
+    }
+
+    private func saveInitialConversation(with conversationId: String?) async throws {
+        guard let id = conversationId else { return }
+        let object = InitialConveration()
+        object.conversationId = id
+        try await object.saveLocally()
     }
 
     override func viewDidLayoutSubviews() {
@@ -217,8 +226,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         }
     }
 
-    private func showLoading(user: User, conversationId: String?) {
-        self.conversationId = conversationId
+    private func showLoading(user: User) {
         self.loadingBlur.removeFromSuperview()
         self.view.addSubview(self.loadingBlur)
         self.view.layoutNow()
@@ -226,7 +234,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             self.loadingBlur.showBlur(true)
         } completion: { completed in
             self.loadingAnimationView.play()
-            self.delegate.onboardingView(self, didVerify: user, conversationId: conversationId)
+            self.delegate.onboardingView(self, didVerify: user)
         }
     }
 
@@ -344,7 +352,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             }
             #else
             if let current = User.current(), current.isOnboarded {
-                self.delegate.onboardingView(self, didVerify: User.current()!, conversationId: nil)
+                self.delegate.onboardingView(self, didVerify: User.current()!)
             } else {
                 self.current = .photo(self.photoVC)
             }

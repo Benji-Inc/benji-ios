@@ -24,8 +24,15 @@ extension LaunchManager {
                 await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
             }
 
+            var link = deepLink
+            /// Used to load the initial conversation when a user has downloaded the full app from an app clip
+            if let initial = try? await InitialConveration.retrieve() {
+                link?.conversationId = initial.conversationId
+                link?.deepLinkTarget = .conversation
+            }
+
             self.finishedInitialFetch = true
-            return .success(object: deepLink)
+            return .success(object: link)
         } catch {
             return .failed(error: ClientError.apiError(detail: error.localizedDescription))
         }

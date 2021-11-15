@@ -12,10 +12,9 @@ import Parse
 import Combine
 import Intents
 
-class OnboardingCoordinator: PresentableCoordinator<String?> {
+class OnboardingCoordinator: PresentableCoordinator<Void> {
 
     lazy var onboardingVC = OnboardingViewController(with: self)
-    private var conversationId: String?
 
     override func toPresentable() -> DismissableVC {
         return self.onboardingVC
@@ -45,8 +44,7 @@ extension OnboardingCoordinator: LaunchActivityHandler {
 extension OnboardingCoordinator: OnboardingViewControllerDelegate {
     
     nonisolated func onboardingView(_ controller: OnboardingViewController,
-                                    didVerify user: User,
-                                    conversationId: String?) {
+                                    didVerify user: User) {
         Task {
             await self.checkForPermissions()
         }
@@ -60,7 +58,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
             self.presentPermissions()
         } else {
             self.router.dismiss(source: self.onboardingVC, animated: true) {
-                self.finishFlow(with: (self.conversationId))
+                self.finishFlow(with: ())
             }
         }
     }
@@ -70,7 +68,7 @@ extension OnboardingCoordinator: OnboardingViewControllerDelegate {
         let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { [unowned self] result in
             self.router.dismiss(source: self.onboardingVC, animated: true) {
-                self.finishFlow(with: (self.conversationId))
+                self.finishFlow(with: ())
             }
         }
         self.router.present(coordinator, source: self.onboardingVC)

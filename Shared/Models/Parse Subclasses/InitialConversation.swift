@@ -21,7 +21,8 @@ final class InitialConveration: PFObject, PFSubclassing {
     }
 
     var conversationId: String? {
-        return self.getObject(for: .conversationId)
+        get { return self.getObject(for: .conversationId) }
+        set { return self.setObject(for: .conversationId, with: newValue)}
     }
 
     func saveLocally() async throws {
