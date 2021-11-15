@@ -117,17 +117,24 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
     func startConversationFlow(for conversation: Conversation?, startingMessageId: MessageId?) {
         self.removeChild()
 
-        let coordinator = ConversationCoordinator(router: self.router,
-                                                  deepLink: self.deepLink,
-                                                  conversation: conversation,
-                                                  startingMessageId: startingMessageId)
-        self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
-            self.router.dismiss(source: self.archiveVC, animated: true)
-        })
-        self.router.present(coordinator,
-                            source: self.archiveVC,
-                            cancelHandler: {
-        })
+        guard let conversation = conversation else { return }
+
+        let membersController = ChatClient.shared.memberListController(query: .init(cid: conversation.cid))
+        membersController.synchronize { error in
+            let members = Array(membersController.members)
+
+            let coordinator = ConversationCoordinator(router: self.router,
+                                                      deepLink: self.deepLink,
+                                                      conversationMembers: members,
+                                                      startingConversationID: conversation.cid)
+            self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+                self.router.dismiss(source: self.archiveVC, animated: true)
+            })
+            self.router.present(coordinator,
+                                source: self.archiveVC,
+                                cancelHandler: {
+            })
+        }
     }
 
     private func handle(notice: SystemNotice) {

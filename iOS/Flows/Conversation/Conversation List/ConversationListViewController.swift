@@ -22,6 +22,11 @@ class ConversationListViewController: FullScreenViewController,
     let conversationHeader = ConversationHeaderView()
 
     private(set) var conversationListController: ConversationListController
+    /// Returns the current conversation that is centered and being interacted with.
+    var currentConversation: Conversation? {
+        guard let indexPath = self.collectionView.centerIndexPath() else { return nil}
+        return self.conversationListController.conversations[safe: indexPath.item]
+    }
 
     // Input handlers
     var onSelectedConversation: ((ChannelId) -> Void)?
@@ -45,18 +50,23 @@ class ConversationListViewController: FullScreenViewController,
 
     @Published var state: ConversationUIState = .read
 
-    private let userIDs: [UserId]
+    /// A list of conversation members used to filter conversations. We'll only show conversations with this exact set of members.
+    private let members: [ConversationMember]
 
-    init(userIDs: [UserId]) {
-        self.userIDs = userIDs
-        let query = ChannelListQuery(filter: .containMembers(userIds: userIDs),
-                                     sort: [Sorting(key: .lastMessageAt, isAscending: false)],
+    init(members: [ConversationMember]) {
+        self.members = members
+        let query = ChannelListQuery(filter: .containMembers(userIds: members.userIDs),
+                                     sort: [Sorting(key: .createdAt, isAscending: false)],
                                      pageSize: 10,
                                      messagesLimit: 10)
         self.conversationListController
         = ChatClient.shared.channelListController(query: query)
 
         super.init()
+
+        self.conversationListController.synchronize { error in
+            logDebug(self.conversationListController.conversations.description)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -161,13 +171,9 @@ class ConversationListViewController: FullScreenViewController,
         self.didCenterOnCell = cell
 
         // If there's a centered cell, update the layout
-        if let indexPath = self.collectionView.centerIndexPath() {
-
-            if let conversation = self.conversationListController.conversations[safe: indexPath.item] {
-                self.messageInputAccessoryView.conversation = conversation
-                self.conversationHeader.configure(with: conversation)
-            }
-
+        if let currentConversation = self.currentConversation {
+            self.messageInputAccessoryView.conversation = currentConversation
+            self.conversationHeader.configure(with: currentConversation)
 
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.view.layoutNow()
@@ -415,7 +421,7 @@ class ConversationListViewController: FullScreenViewController,
     private func createNewConversation(_ sendable: Sendable) {
         Task {
             let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
-            let userIDs = Set(self.userIDs)
+            let userIDs = Set(self.members.userIDs)
 
             do {
                 let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
