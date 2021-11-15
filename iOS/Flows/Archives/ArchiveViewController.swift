@@ -70,7 +70,10 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
        // self.view.addSubview(self.segmentedControl)
         self.segmentedControl.selectedSegmentIndex = 0
 
-        self.view.addSubview(self.addButton)
+        if !isRelease {
+            self.view.addSubview(self.addButton)
+        }
+        
         self.addButton.set(style: .icon(image: UIImage(systemName: "plus")!, color: .white))
 
         self.dataSource.didSelectItem = { [unowned self] item in
@@ -121,12 +124,14 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
             return .conversation(conversation.cid)
         }
 
-        await NoticeSupplier.shared.loadNotices()
+        if !isRelease {
+            await NoticeSupplier.shared.loadNotices()
 
-        data[.notices] = NoticeSupplier.shared.notices.map { notice in
-            return .notice(notice)
+            data[.notices] = NoticeSupplier.shared.notices.map { notice in
+                return .notice(notice)
+            }
         }
-
+        
         return data
     }
 
