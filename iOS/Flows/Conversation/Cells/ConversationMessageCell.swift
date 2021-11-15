@@ -72,7 +72,7 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
     ///     - message: The root message to display, which may have replies.
     ///     - replies: The currently loaded replies to the message. These should be ordered by newest to oldest.
     ///     - totalReplyCount: The total number of replies that this message has. It may be more than the passed in replies.
-    func set(message: Messageable,
+    func set(message: Messageable?,
              replies: [Messageable],
              totalReplyCount: Int) {
 
@@ -86,10 +86,12 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
             return !message.isFromCurrentUser
         }
         // Put the parent message in the appropriate stack based on who sent it.
-        if message.isFromCurrentUser {
-            userReplies.append(message)
-        } else {
-            otherReplies.append(message)
+        if let message = message {
+            if message.isFromCurrentUser {
+                userReplies.append(message)
+            } else {
+                otherReplies.append(message)
+            }
         }
 
         // Only shows a limited number of messages in each stack.

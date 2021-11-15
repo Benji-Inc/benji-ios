@@ -16,6 +16,10 @@ extension ConversationCollectionViewDataSource {
                                         (channelID: ChannelId,
                                          messageID: MessageId,
                                          dataSource: ConversationCollectionViewDataSource)>
+    typealias ConversationCellRegistration
+    = UICollectionView.CellRegistration<ConversationMessageCell,
+                                        (channelID: ChannelId,
+                                         dataSource: ConversationCollectionViewDataSource)>
     typealias ThreadMessageCellRegistration
     = UICollectionView.CellRegistration<ThreadMessageCell,
                                         (channelID: ChannelId,
@@ -38,9 +42,21 @@ extension ConversationCollectionViewDataSource {
                 let dataSource = item.dataSource
                 Task {
                     try? await messageController.loadPreviousReplies()
-                    await dataSource.reconfigureItems([.message(item.messageID)])
+                    await dataSource.reconfigureItems([.messages(item.messageID)])
                 }
             }
+        }
+    }
+
+    static func createConversationCellRegistration() -> ConversationCellRegistration {
+        return ConversationCellRegistration { cell, indexPath, item in
+            let conversationController = ChatClient.shared.channelController(for: item.channelID)
+
+            let messages = Array(conversationController.messages)
+            cell.set(message: conversationController.conversation,
+                     replies: messages,
+                     totalReplyCount: 0)
+            // TODO: Load more messages
         }
     }
 
@@ -62,7 +78,7 @@ extension ConversationCollectionViewDataSource {
             // Connect messages from the same author with a vertical line.
             if let nextItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item + 1,
                                                                        section: indexPath.section)) {
-                if case .message(let messageID) = nextItem {
+                if case .messages(let messageID) = nextItem {
                     let nextMessageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                                     messageId: messageID)
                     if nextMessageController.message?.author == messageAuthor {
@@ -73,7 +89,7 @@ extension ConversationCollectionViewDataSource {
 
             if let previousItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item - 1,
                                                                            section: indexPath.section)) {
-                if case .message(let messageID) = previousItem {
+                if case .messages(let messageID) = previousItem {
                     let previousMessageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                                         messageId: messageID)
                     if previousMessageController.message?.author == messageAuthor {

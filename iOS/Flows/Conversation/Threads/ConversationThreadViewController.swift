@@ -121,7 +121,8 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 
     override func getAllSections() -> [ConversationSection] {
         if let channelId = self.parentMessage.cid {
-            return [ConversationSection(cid: channelId, parentMessageID: self.parentMessage.id)]
+            return [ConversationSection(sectionID: channelId.description,
+                                        parentMessageID: self.parentMessage.id)]
         }
 
         return []
@@ -135,7 +136,8 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
             let messages = Array(self.messageController.replies.asConversationCollectionItems)
 
             if let channelId = self.parentMessage.cid {
-                let section = ConversationSection(cid: channelId, parentMessageID: self.parentMessage.id)
+                let section = ConversationSection(sectionID: channelId.description,
+                                                  parentMessageID: self.parentMessage.id)
                 data[section] = []
                 data[section]?.append(contentsOf: messages)
                 if !self.messageController.hasLoadedAllPreviousReplies {

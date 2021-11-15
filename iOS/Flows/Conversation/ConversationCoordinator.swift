@@ -20,6 +20,13 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
 
     let startingMessageId: MessageId?
 
+    override func toPresentable() -> DismissableVC {
+        self.conversationVC.onSelectedThread = { [unowned self] (channelID, messageID) in
+            self.presentThread(for: channelID, messageID: messageID)
+        }
+        return self.conversationVC
+    }
+
     init(router: Router,
          deepLink: DeepLinkable?,
          conversation: Conversation?,
@@ -31,13 +38,6 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
             ConversationsManager.shared.activeConversations.append(convo)
         }
         super.init(router: router, deepLink: deepLink)
-    }
-
-    override func toPresentable() -> DismissableVC {
-        self.conversationVC.onSelectedThread = { [unowned self] (channelID, messageID) in
-            self.presentThread(for: channelID, messageID: messageID)
-        }
-        return self.conversationVC
     }
 
     override func start() {

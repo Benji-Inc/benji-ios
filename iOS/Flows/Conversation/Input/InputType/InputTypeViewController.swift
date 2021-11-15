@@ -8,7 +8,9 @@
 
 import Foundation
 
-class InputTypeViewController: DiffableCollectionViewController<InputTypeDataSource.SectionType, InputType, InputTypeDataSource> {
+class InputTypeViewController: DiffableCollectionViewController<InputTypeDataSource.SectionType,
+                               InputType,
+                               InputTypeDataSource> {
 
     init() {
         super.init(with: CollectionView(layout: InputTypeCollectionViewLayout()))

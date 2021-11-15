@@ -1,51 +1,42 @@
 //
-//  ConversationViewController.swift
-//  ConversationViewController
+//  ConversationListViewController.swift
+//  Jibber
 //
-//  Created by Martin Young on 9/15/21.
+//  Created by Martin Young on 11/12/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
 import StreamChat
-import UIKit
-import SwiftUI
 
-enum ConversationUIState {
-    case read // Keyboard is NOT shown
-    case write // Keyboard IS shown
-}
-
-class ConversationViewController: FullScreenViewController,
-                                  UICollectionViewDelegate,
-                                  UICollectionViewDelegateFlowLayout,
-                                  SwipeableInputAccessoryViewDelegate {
+class ConversationListViewController: FullScreenViewController,
+                                      UICollectionViewDelegate,
+                                      UICollectionViewDelegateFlowLayout,
+                                      SwipeableInputAccessoryViewDelegate {
 
     lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationCollectionView()
     /// Denotes where a message should be dragged and dropped to send.
     private let sendMessageOverlay = MessageDropZoneView()
-    
+
     let conversationHeader = ConversationHeaderView()
 
-    var conversation: Conversation! { return self.conversationController?.channel }
-    private(set) var conversationController: ChatChannelController?
+    private(set) var conversationListController: ConversationListController
 
     // Input handlers
-    var onSelectedThread: ((ChannelId, MessageId) -> Void)?
-    
+    var onSelectedConversation: ((ChannelId) -> Void)?
+
     @Published var didCenterOnCell: ConversationMessageCell? = nil
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
-        let view: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
-        view.delegate = self
-        view.conversation = self.conversation
-        return view
+        let inputView: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
+        inputView.delegate = self
+        return inputView
     }()
-    
+
     override var inputAccessoryView: UIView? {
-        return self.presentedViewController.isNil ? self.messageInputAccessoryView : nil 
+        return self.presentedViewController.isNil ? self.messageInputAccessoryView : nil
     }
 
     override var canBecomeFirstResponder: Bool {
@@ -53,25 +44,25 @@ class ConversationViewController: FullScreenViewController,
     }
 
     @Published var state: ConversationUIState = .read
-    private let startingMessageId: MessageId?
-    
-    init(conversation: Conversation?, startingMessageId messageId: MessageId?) {
 
-        self.startingMessageId = messageId
+    private let userIDs: [UserId]
 
-        if let conversation = conversation {
-            self.conversationController = ChatClient.shared.channelController(for: conversation.cid,
-                                                                                 channelListQuery: nil,
-                                                                                 messageOrdering: .topToBottom)
-        }
-        
+    init(userIDs: [UserId]) {
+        self.userIDs = userIDs
+        let query = ChannelListQuery(filter: .containMembers(userIds: userIDs),
+                                     sort: [Sorting(key: .lastMessageAt, isAscending: false)],
+                                     pageSize: 10,
+                                     messagesLimit: 10)
+        self.conversationListController
+        = ChatClient.shared.channelListController(query: query)
+
         super.init()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func initializeViews() {
         super.initializeViews()
 
@@ -79,14 +70,13 @@ class ConversationViewController: FullScreenViewController,
         self.collectionView.delegate = self
 
         self.contentContainer.addSubview(self.conversationHeader)
-        self.conversationHeader.configure(with: self.conversation)
 
         self.subscribeToKeyboardUpdates()
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+
         switch self.state {
         case .read:
             self.conversationHeader.height = 96
@@ -137,13 +127,12 @@ class ConversationViewController: FullScreenViewController,
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
-        ConversationsManager.shared.activeConversations.remove(object: self.conversation)
         KeyboardManager.shared.reset()
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
         once(caller: self, token: "initializeCollectionView") {
             Task {
                 self.setupInputHandlers()
@@ -151,11 +140,6 @@ class ConversationViewController: FullScreenViewController,
                 // are set up.
                 await self.initializeDataSource()
                 self.subscribeToUpdates()
-
-                // Mark the conversation as read if we're looking at the latest message.
-                if self.collectionView.contentOffset.x < 0 {
-                    await self.markConversationReadIfNeeded()
-                }
             }
         }
     }
@@ -165,7 +149,7 @@ class ConversationViewController: FullScreenViewController,
 
         self.conversationHeader.update(for: state)
 
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
+        UIView.animate(withDuration: Theme.animationDurationFast) {
             self.view.layoutNow()
         }
     }
@@ -177,7 +161,14 @@ class ConversationViewController: FullScreenViewController,
         self.didCenterOnCell = cell
 
         // If there's a centered cell, update the layout
-        if self.collectionView.centerIndexPath().exists {
+        if let indexPath = self.collectionView.centerIndexPath() {
+
+            if let conversation = self.conversationListController.conversations[safe: indexPath.item] {
+                self.messageInputAccessoryView.conversation = conversation
+                self.conversationHeader.configure(with: conversation)
+            }
+
+
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.view.layoutNow()
             }
@@ -188,136 +179,71 @@ class ConversationViewController: FullScreenViewController,
 
     @MainActor
     func initializeDataSource() async {
-        guard let controller = self.conversationController else { return }
+        let conversations = self.conversationListController.conversations
 
-        var messageController: MessageController?
-
-        if let messageId = self.startingMessageId {
-            var messageIdToLoad = messageId
-            messageController = ChatClient.shared.messageController(cid: self.conversation.cid,
-                                                                    messageId: messageId)
-            if let parentId = messageController?.message?.parentMessageId {
-                messageIdToLoad = parentId
-            }
-
-            try? await controller.loadPreviousMessages(including: messageIdToLoad)
-
-            if messageController!.message!.parentMessageId.exists {
-                try? await messageController?.loadPreviousReplies(including: messageId)
-            }
-        }
-        // Make sure messages are loaded before initializing the data.
-        else if let mostRecentMessage = controller.messages.first {
-            try? await controller.loadPreviousMessages(before: mostRecentMessage.id)
-        }
-
-        let messages = controller.messages
         var snapshot = self.dataSource.snapshot()
 
-        let section = ConversationSection(sectionID: controller.cid!.description)
+        let section = ConversationSection(sectionID: "channelList",
+                                          conversationsController: self.conversationListController)
         snapshot.appendSections([section])
-        snapshot.appendItems(messages.asConversationCollectionItems)
+        snapshot.appendItems(conversations.asConversationCollectionItems)
 
-        if !controller.hasLoadedAllPreviousMessages && messages.count > 0 {
+        if !self.conversationListController.hasLoadedAllPreviousChannels && conversations.count > 0 {
             snapshot.appendItems([.loadMore], toSection: section)
         }
 
-        let initialIndexPath = self.getIntialIndexPath()
         let animationCycle = AnimationCycle(inFromPosition: .right,
                                             outToPosition: .left,
                                             shouldConcatenate: true,
-                                            scrollToIndexPath: initialIndexPath)
+                                            scrollToIndexPath: nil)
 
         await self.dataSource.apply(snapshot,
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
 
-        //If startingMessage is a reply OR has replies, then open thread
-        if let msg = messageController?.message {
-            if msg.parentMessageId.exists || msg.replyCount > 0 {
-                self.onSelectedThread?(self.conversation.cid, msg.id)
-            }
-        }
-
         self.updateCenterMostCell()
     }
 
-    private func getIntialIndexPath() -> IndexPath? {
-        if let messageId = self.startingMessageId {
-            return self.getMessageIndexPath(with: messageId)
-        } else {
-            return self.getFirstUnreadIndexPath()
-        }
-    }
 
-    func getMessageIndexPath(with msgId: MessageId) -> IndexPath? {
-        let controller = ChatClient.shared.messageController(cid: self.conversation.cid, messageId: msgId)
-        let messages = Array(self.conversationController!.messages)
-        let index = messages.firstIndex { msg in
-            return msg.id == controller.messageId || msg.id == controller.message?.parentMessageId
-        }
-
-        if let i = index {
-            return IndexPath(item: i, section: 0)
-        }
-
-        return nil
-    }
-
-    private func getFirstUnreadIndexPath() -> IndexPath? {
-        guard let conversation = self.conversationController?.conversation else { return nil }
-
-        guard let userID = ChatClient.shared.currentUserId,
-              let message = conversation.getOldestUnreadMessage(withUserID: userID) else {
-            return nil
-        }
-
-        guard let index = conversation.latestMessages.firstIndex(of: message) else { return nil }
-        return IndexPath(item: index, section: 0)
-    }
-    
     // MARK: - UICollection Input Handlers
 
-    /// If true, the conversation controller is currently loading messages.
-    @Atomic private var isLoadingMessages = false
-    func loadMoreMessageIfNeeded() {
-        guard let conversationController = self.conversationController else { return }
-
-        // If all the messages are loaded, there's no need to fetch more.
-        guard !conversationController.hasLoadedAllPreviousMessages else { return }
+    /// If true, the conversation controller is currently loading more conversations.
+    @Atomic private var isLoadingConversations = false
+    func loadMoreConversationsIfNeeded() {
+        // If all the conversations are loaded, there's no need to fetch more.
+        guard !self.conversationListController.hasLoadedAllPreviousChannels else { return }
 
         Task {
-            guard !isLoadingMessages else { return }
+            guard !isLoadingConversations else { return }
 
-            self.isLoadingMessages = true
+            self.isLoadingConversations = true
             do {
-                let oldestMessageID = conversationController.messages.last?.id
-                try await conversationController.loadPreviousMessages(before: oldestMessageID)
+                try await self.conversationListController.loadNextConversations(limit: 10)
             } catch {
                 logDebug(error)
             }
-            self.isLoadingMessages = false
+            self.isLoadingConversations = false
         }
     }
 
     // MARK: - UIScrollViewDelegate
-    
+
     func scrollViewWillEndDragging(_ scrollView: UIScrollView,
                                    withVelocity velocity: CGPoint,
                                    targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        
+
         // Always scroll so that a cell is centered when we stop scrolling.
         var newXOffset = CGFloat.greatestFiniteMagnitude
         let targetOffset = targetContentOffset.pointee
-        
+
         let targetRect = CGRect(x: targetOffset.x,
                                 y: targetOffset.y,
                                 width: scrollView.width,
                                 height: scrollView.height)
-        
+
         let layout = self.collectionView.conversationLayout
         guard let layoutAttributes = layout.layoutAttributesForElements(in: targetRect) else { return }
-        
+
         // Find the item whose center is closest to the proposed offset and set that as the new scroll target
         for elementAttributes in layoutAttributes {
             let possibleNewOffset = elementAttributes.frame.centerX - collectionView.halfWidth
@@ -325,9 +251,9 @@ class ConversationViewController: FullScreenViewController,
                 newXOffset = possibleNewOffset
             }
         }
-        
+
         targetContentOffset.pointee = CGPoint(x: newXOffset, y: targetOffset.y)
-        
+
         self.updateCenterMostCell()
     }
 
@@ -337,38 +263,16 @@ class ConversationViewController: FullScreenViewController,
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         self.updateCenterMostCell()
-
-        guard self.conversation.isUnread else { return }
-        // Once the user sees the latest message, set the conversation as read.
-        guard scrollView.contentOffset.x < 0 else { return }
-
-        Task {
-            await self.markConversationReadIfNeeded()
-        }
-    }
-
-    @Atomic private var isSettingChannelRead = false
-    private func markConversationReadIfNeeded() async {
-        guard self.conversation.isUnread,
-              let conversationController = self.conversationController else { return }
-
-        self.isSettingChannelRead = true
-        do {
-            try await conversationController.markRead()
-        } catch {
-            logDebug(error)
-        }
-        self.isSettingChannelRead = false
     }
 
     // MARK: - SwipeableInputAccessoryViewDelegate
 
     /// The type of message send method that the conversation VC is prepped for.
     private enum SendMode {
-        /// The message will be sent as a reply to the currently centered message.
-        case reply
-        /// The message will be sent as a new message.
-        case newMessage
+        /// The message will be sent to currently centered message.
+        case message
+        /// The message will the first in a new conversation.
+        case newConversation
     }
 
     /// The collection view's content offset at the first call to prepare for a swipe. Used to reset the the content offset after a swipe is cancelled.
@@ -415,12 +319,12 @@ class ConversationViewController: FullScreenViewController,
 
     private func prepareForSend(with position: SendMode) {
         switch position {
-        case .reply:
+        case .message:
             self.sendMessageOverlay.setState(.reply)
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
-        case .newMessage:
+        case .newConversation:
             let newXOffset
             = -self.collectionView.width + self.collectionView.conversationLayout.minimumLineSpacing
 
@@ -446,19 +350,20 @@ class ConversationViewController: FullScreenViewController,
         }
 
         switch self.currentSendMode {
-        case .reply:
+        case .message:
             guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
                   let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath),
-                  case let .messages(messageID) = currentItem else {
+                  case let .messages(conversationID) = currentItem,
+                  let cid = try? ConversationID(cid: conversationID) else {
 
                       // If there is no current message to reply to, assume we're sending a new message
-                      self.send(sendable)
+                      self.createNewConversation(sendable)
                       return true
                   }
 
-            self.reply(to: messageID, sendable: sendable)
-        case .newMessage:
-            self.send(sendable)
+            self.reply(to: cid, sendable: sendable)
+        case .newConversation:
+            self.createNewConversation(sendable)
         case .none:
             return false
         }
@@ -479,27 +384,27 @@ class ConversationViewController: FullScreenViewController,
     /// Gets the send position for the given preview view frame.
     private func getSendMode(forPreviewFrame frame: CGRect) -> SendMode {
         switch self.currentSendMode {
-        case .reply, .none:
+        case .message, .none:
             // If we're in the reply mode, switch to newMessage when the user
             // has dragged far enough to the right.
             if frame.right > self.view.width - 10 {
-                return .newMessage
+                return .newConversation
             } else {
-                return .reply
+                return .message
             }
-        case .newMessage:
+        case .newConversation:
             // If we're in newMessage mode, switch to reply mode if the user drags far enough to the left.
             if frame.left < 10 {
-                return .reply
+                return .message
             } else {
-                return .newMessage
+                return .newConversation
             }
         }
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  updatedFrameOf textView: InputTextView) {
-        
+
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.view.layoutNow()
         }
@@ -507,31 +412,38 @@ class ConversationViewController: FullScreenViewController,
 
     // MARK: - Send Message Functions
 
-    private func send(_ sendable: Sendable) {
+    private func createNewConversation(_ sendable: Sendable) {
         Task {
+            let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
+            let userIDs = Set(self.userIDs)
+
             do {
-                try await self.conversationController?.createNewMessage(with: sendable)
+                let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
+                                                                         name: nil,
+                                                                         imageURL: nil,
+                                                                         team: nil,
+                                                                         members: userIDs,
+                                                                         isCurrentUserMember: true,
+                                                                         messageOrdering: .bottomToTop,
+                                                                         invites: [],
+                                                                         extraData: [:])
+
+                try await controller.synchronize()
+                try await controller.createNewMessage(with: sendable)
             } catch {
                 logDebug(error)
             }
         }
     }
-    
-    private func reply(to messageID: MessageId, sendable: Sendable) {
+
+    private func reply(to cid: ConversationID, sendable: Sendable) {
+        let conversationController = ChatClient.shared.channelController(for: cid)
         Task {
             do {
-                try await self.conversationController?.createNewReply(for: messageID, with: sendable)
+                try await conversationController.createNewMessage(with: sendable)
             } catch {
                 logDebug(error)
             }
-        }
-    }
-    
-    private func update(_ sendable: Sendable) async {
-        do {
-            try await self.conversationController?.editMessage(with: sendable)
-        } catch {
-            logDebug(error)
         }
     }
 }

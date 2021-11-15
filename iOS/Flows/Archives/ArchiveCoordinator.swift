@@ -125,9 +125,8 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
             self.router.dismiss(source: self.archiveVC, animated: true)
         })
         self.router.present(coordinator,
-                            source: self.router.topmostViewController,
-                            cancelHandler: { [unowned self] in
-
+                            source: self.archiveVC,
+                            cancelHandler: {
         })
     }
 

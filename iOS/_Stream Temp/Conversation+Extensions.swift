@@ -99,3 +99,57 @@ extension Conversation {
         })
     }
 }
+
+extension Conversation: Messageable {
+    var id: String {
+        return self.conversationId
+    }
+
+    var conversationId: String {
+        return cid.description
+    }
+
+    var isFromCurrentUser: Bool {
+        return self.isOwnedByMe
+    }
+
+    var authorID: String {
+        return self.createdBy!.id
+    }
+
+    var attributes: [String : Any]? {
+        return nil
+    }
+
+    var avatar: Avatar {
+        return createdBy!
+    }
+
+    var status: MessageStatus {
+        .unknown
+    }
+
+    var context: MessageContext {
+        .status
+    }
+
+    var hasBeenConsumedBy: [String] {
+        return []
+    }
+
+    var kind: MessageKind {
+        return .text("")
+    }
+
+    var totalReplyCount: Int {
+        return 0
+    }
+
+    var recentReplies: [Messageable] {
+        return self.latestMessages
+    }
+
+    func updateConsumers(with consumer: Avatar) async throws -> Messageable {
+        return self
+    }
+}
