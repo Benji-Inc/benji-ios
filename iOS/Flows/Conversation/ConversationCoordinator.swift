@@ -17,13 +17,10 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
 
     lazy var conversationVC = ConversationViewController(conversation: ConversationsManager.shared.activeConversations.last,
                                                          startingMessageId: self.startingMessageId)
-    lazy var conversationListVC = ConversationListViewController(userIDs: [User.current()!.userObjectID!])
 
     let startingMessageId: MessageId?
 
     override func toPresentable() -> DismissableVC {
-        return self.conversationListVC
-        
         self.conversationVC.onSelectedThread = { [unowned self] (channelID, messageID) in
             self.presentThread(for: channelID, messageID: messageID)
         }
