@@ -13,7 +13,8 @@ import Lottie
 import Intents
 
 protocol OnboardingViewControllerDelegate: AnyObject {
-    func onboardingView(_ controller: OnboardingViewController, didVerify user: User)
+    func onboardingView(_ controller: OnboardingViewController,
+                        didVerify user: User)
 }
 
 class OnboardingViewController: SwitchableContentViewController<OnboardingContent>, TransitionableViewController {
@@ -105,7 +106,11 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
         self.codeVC.onDidComplete = { [unowned self] result in
             switch result {
-            case .success:
+            case .success(let conversationId):
+                Task {
+                    try await self.saveInitialConversation(with: conversationId)
+                }
+
                 guard let current = User.current() else { return }
                 if current.isOnboarded, current.status == .active {
                     #if APPCLIP
@@ -148,8 +153,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             switch result {
             case .success:
                 Task {
+                    self.showLoading()
                     guard let fullName = UserDefaultsManager.getString(for: .fullName) else { return }
                     try await ActivateUser(fullName: fullName).makeRequest(andUpdate: [], viewsToIgnore: [self.view])
+                    await self.hideLoading()
                     guard let user = User.current(), user.status == .active else { return }
                     self.delegate.onboardingView(self, didVerify: user)
                 }
@@ -161,6 +168,13 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.waitlistVC.$state.mainSink { [unowned self] _ in
             self.updateUI()
         }.store(in: &self.cancellables)
+    }
+
+    private func saveInitialConversation(with conversationId: String?) async throws {
+        guard let id = conversationId else { return }
+        let object = InitialConveration()
+        object.conversationId = id
+        try await object.saveLocally()
     }
 
     override func viewDidLayoutSubviews() {

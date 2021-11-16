@@ -558,6 +558,10 @@
 		D679DE0D26821EE80054DCAF /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */; };
 		D679DE0E26821EE80054DCAF /* NSObject+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502A21D69C3300CD8CE4 /* NSObject+Extensions.swift */; };
 		D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67A82DA230CCE3D0076152B /* SplashViewController.swift */; };
+		D67CAFDA27402993004FED29 /* InitialConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67CAFD927402993004FED29 /* InitialConversation.swift */; };
+		D67CAFDB27402993004FED29 /* InitialConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67CAFD927402993004FED29 /* InitialConversation.swift */; };
+		D67CAFDC27402993004FED29 /* InitialConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67CAFD927402993004FED29 /* InitialConversation.swift */; };
+		D67CAFDD274331D9004FED29 /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
 		D68072E7272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D68072E8272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D68072E9272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
@@ -1132,6 +1136,7 @@
 		D67934DE23DDFC4200536B44 /* PFInstallation+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFInstallation+Extensions.swift"; sourceTree = "<group>"; };
 		D67934E423DE66FE00536B44 /* PushPayload.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushPayload.swift; sourceTree = "<group>"; };
 		D67A82DA230CCE3D0076152B /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		D67CAFD927402993004FED29 /* InitialConversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InitialConversation.swift; sourceTree = "<group>"; };
 		D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechBubbleView.swift; sourceTree = "<group>"; };
 		D68072EA2730462F004657E7 /* MessageStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStatusView.swift; sourceTree = "<group>"; };
 		D684840922CD48D000362AC3 /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
@@ -1720,6 +1725,7 @@
 			children = (
 				D6405B6A236E0E7900FAA06B /* Connection.swift */,
 				D63D71C025F0419D004C26F7 /* ConnectionPreference.swift */,
+				D67CAFD927402993004FED29 /* InitialConversation.swift */,
 				D6A6691C271A44FB0001D218 /* Pass.swift */,
 				D6DF870525A5214D0089B0CF /* QuePositions.swift */,
 				D6D8BB6C24677B5D00937581 /* Reservation.swift */,
@@ -3079,6 +3085,7 @@
 				D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */,
 				80FA868C26F111830053101B /* ChatMessage+Extensions.swift in Sources */,
 				D67758A025B0A17D007E0184 /* CGRect+Extensions.swift in Sources */,
+				D67CAFDA27402993004FED29 /* InitialConversation.swift in Sources */,
 				D6B95AF727236E1000FBE66A /* ConversationsManager.swift in Sources */,
 				D678EC1A26F50B120071DB0D /* CircleCollectionViewLayout.swift in Sources */,
 				D671E1EF264029BC00BF2B8D /* Toast.swift in Sources */,
@@ -3333,6 +3340,7 @@
 				8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */,
 				D69972FB25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
 				D68072E9272C60CC004657E7 /* SpeechBubbleView.swift in Sources */,
+				D67CAFDC27402993004FED29 /* InitialConversation.swift in Sources */,
 				D63DB22125E9990100F6B323 /* Array+Extensions.swift in Sources */,
 				D6617CF226743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D68C081D2729CF430033C8AE /* DisclosureModalViewController.swift in Sources */,
@@ -3494,6 +3502,7 @@
 				D65519442589123200B901E4 /* Completeable.swift in Sources */,
 				D646955927370A7B00BF47CE /* ToastView.swift in Sources */,
 				D65519152589120C00B901E4 /* Error+Extensions.swift in Sources */,
+				D67CAFDB27402993004FED29 /* InitialConversation.swift in Sources */,
 				D67758AF25B0AFB2007E0184 /* TransitionRouter+Home.swift in Sources */,
 				D6D804B12667E06700741594 /* StationaryPressRecognizer.swift in Sources */,
 				D65519352589122700B901E4 /* UIControl+Extensions.swift in Sources */,
@@ -3552,6 +3561,7 @@
 				D6166C8E2732FFBC0013E803 /* Logger.swift in Sources */,
 				D6AE0FF7267D2CE400C6B048 /* Error+Extensions.swift in Sources */,
 				D6AE0FE8267D2C1800C6B048 /* User.swift in Sources */,
+				D67CAFDD274331D9004FED29 /* Task+TaskPool.swift in Sources */,
 				D68759622728A54300AF7C07 /* ImageDisplayable.swift in Sources */,
 				D6166C882731EEC50013E803 /* PFFileObject+Extensions.swift in Sources */,
 				D679DE0C26821EE70054DCAF /* NSObject+Extensions.swift in Sources */,

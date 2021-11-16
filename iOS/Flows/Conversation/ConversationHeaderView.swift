@@ -43,7 +43,9 @@ class ConversationHeaderView: View {
         self.label.textAlignment = .left
         self.label.lineBreakMode = .byTruncatingTail
 
-        self.addSubview(self.button)
+        if !isRelease {
+            self.addSubview(self.button)
+        }
 
         let add = UIAction.init(title: "Add people",
                                 image: UIImage(systemName: "person.badge.plus")) { [unowned self] _ in
@@ -53,13 +55,14 @@ class ConversationHeaderView: View {
         let topic = UIAction.init(title: "Update topic",
                                  image: UIImage(systemName: "pencil")) { [unowned self] _ in
              self.didTapUpdateTopic?()
-         }
+        }
 
         let menu = UIMenu(title: "Menu",
                           image: UIImage(systemName: "ellipsis.circle"),
                           identifier: nil,
                           options: [],
                           children: [topic, add])
+
         self.button.showsMenuAsPrimaryAction = true
         self.button.menu = menu
     }

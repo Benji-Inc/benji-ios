@@ -55,9 +55,9 @@ class CodeViewController: TextInputViewController<String?> {
                 .makeRequest()
 
             self.textField.resignFirstResponder()
-            if let token = dict["sessionToken"] {
-                try await User.become(withSessionToken: token)
-            }
+            guard let token = dict["sessionToken"] else { return }
+            
+            try await User.become(withSessionToken: token)
             await self.button.handleEvent(status: .complete)
             self.complete(with: .success((dict["channelId"])))
         } catch {
