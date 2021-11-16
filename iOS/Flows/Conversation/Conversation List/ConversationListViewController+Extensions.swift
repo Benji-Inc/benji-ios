@@ -28,7 +28,11 @@ extension ConversationListViewController {
                 do {
                     let cid = try ConversationID(cid: conversation.conversationId)
                     let conversationController = ChatClient.shared.channelController(for: cid)
-                    try await conversationController.deleteChannel()
+                    if conversationController.conversation.isFromCurrentUser {
+                        try await conversationController.deleteChannel()
+                    } else {
+                        try await conversationController.hideChannel()
+                    }
                 } catch {
                     logDebug(error)
                 }

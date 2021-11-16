@@ -277,7 +277,8 @@ extension ConversationMessageCell: UIContextMenuInteractionDelegate {
         }
 
 
-        let deleteMenu = UIMenu(title: "Delete Conversation",
+        let deleteText = message.isFromCurrentUser ? "Delete Conversation" : "Hide Conversation"
+        let deleteMenu = UIMenu(title: deleteText,
                                 image: UIImage(systemName: "trash"),
                                 options: .destructive,
                                 children: [confirmDelete, neverMind])
@@ -287,9 +288,7 @@ extension ConversationMessageCell: UIContextMenuInteractionDelegate {
         }
 
         var menuElements: [UIMenuElement] = []
-        if message.isFromCurrentUser {
-            menuElements.append(deleteMenu)
-        }
+        menuElements.append(deleteMenu)
         menuElements.append(openThread)
 
         return UIMenu(children: menuElements)

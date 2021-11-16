@@ -56,7 +56,6 @@ class ConversationViewController: FullScreenViewController,
     private let startingMessageId: MessageId?
     
     init(conversation: Conversation?, startingMessageId messageId: MessageId?) {
-
         self.startingMessageId = messageId
 
         if let conversation = conversation {

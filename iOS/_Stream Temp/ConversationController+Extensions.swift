@@ -371,6 +371,35 @@ extension ChatChannelController {
         }
     }
 
+    /// Hide the channel this controller manages from queryChannels for the user until a message is added.
+    ///
+    /// - Parameters:
+    ///   - clearHistory: Flag to remove channel history (**false** by default)
+    func hideChannel(clearHistory: Bool = false) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.hideChannel(clearHistory: clearHistory) { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+    }
+
+    /// Removes hidden status for the channel this controller manages.
+    func showChannel() async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.showChannel { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+    }
+
     /// Marks the channel as read.
     func markRead() async throws {
         return try await withCheckedThrowingContinuation { continuation in
