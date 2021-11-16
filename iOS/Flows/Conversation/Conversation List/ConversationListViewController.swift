@@ -189,7 +189,7 @@ class ConversationListViewController: FullScreenViewController,
     @MainActor
     func initializeDataSource() async {
         try? await self.conversationListController.synchronize()
-        try? await self.conversationListController.loadNextConversations(limit: 3)
+        try? await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
 
         let conversations = self.conversationListController.conversations
 
