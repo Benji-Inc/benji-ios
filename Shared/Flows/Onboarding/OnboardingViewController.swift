@@ -153,8 +153,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
             switch result {
             case .success:
                 Task {
+                    self.showLoading()
                     guard let fullName = UserDefaultsManager.getString(for: .fullName) else { return }
                     try await ActivateUser(fullName: fullName).makeRequest(andUpdate: [], viewsToIgnore: [self.view])
+                    await self.hideLoading()
                     guard let user = User.current(), user.status == .active else { return }
                     self.delegate.onboardingView(self, didVerify: user)
                 }
@@ -166,6 +168,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.waitlistVC.$state.mainSink { [unowned self] _ in
             self.updateUI()
         }.store(in: &self.cancellables)
+
+        delay(0.5) { [unowned self] in
+            self.handle(launchActivity: .pass(passId: "AVaUnie3oO"))
+        }
     }
 
     private func saveInitialConversation(with conversationId: String?) async throws {
