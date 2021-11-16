@@ -101,6 +101,7 @@ extension Conversation {
 }
 
 extension Conversation: Messageable {
+    
     var id: String {
         return self.conversationId
     }
@@ -142,7 +143,7 @@ extension Conversation: Messageable {
     }
 
     var totalReplyCount: Int {
-        return 0
+        return self.latestMessages.count
     }
 
     var recentReplies: [Messageable] {

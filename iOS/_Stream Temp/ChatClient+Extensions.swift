@@ -41,10 +41,8 @@ extension ChatClient {
 
     /// Initializes the ChatClient with a configuration, retrieves and sets token, and connects the user
     private static func initializeChatClient(with user: User) async throws {
-
         var config = ChatClientConfig(apiKey: .init(Config.shared.environment.chatAPIKey))
         config.applicationGroupIdentifier = Config.shared.environment.groupId
-        config.isLocalStorageEnabled = true
 
         self.shared = ChatClient.init(config: config, tokenProvider: nil)
         let token = try await self.getChatToken()

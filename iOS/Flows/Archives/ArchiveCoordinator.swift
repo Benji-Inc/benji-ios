@@ -75,9 +75,11 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-    #warning("Remove after Beta")
+
     func createConversation() async {
-        let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
+        #warning("Remove after Beta")
+        let username = User.current()?.initials ?? ""
+        let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
 
         do {
             let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
@@ -115,19 +117,27 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
     }
 
     func startConversationFlow(for conversation: Conversation?, startingMessageId: MessageId?) {
-        self.removeChild()
+        Task {
+            self.removeChild()
+            guard let conversation = conversation else { return }
 
-        let coordinator = ConversationCoordinator(router: self.router,
-                                                  deepLink: self.deepLink,
-                                                  conversation: conversation,
-                                                  startingMessageId: startingMessageId)
-        self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
-            self.router.dismiss(source: self.archiveVC, animated: true)
-        })
-        self.router.present(coordinator,
-                            source: self.archiveVC,
-                            cancelHandler: {
-        })
+            let membersController = ChatClient.shared.memberListController(query: .init(cid: conversation.cid))
+            try? await membersController.synchronize()
+
+            let members = Array(membersController.members)
+
+            let coordinator = ConversationListCoordinator(router: self.router,
+                                                          deepLink: self.deepLink,
+                                                          conversationMembers: members,
+                                                          startingConversationID: conversation.cid)
+            self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+                self.router.dismiss(source: self.archiveVC, animated: true)
+            })
+            self.router.present(coordinator,
+                                source: self.archiveVC,
+                                cancelHandler: {
+            })
+        }
     }
 
     private func handle(notice: SystemNotice) {

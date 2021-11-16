@@ -13,44 +13,50 @@ import PhotosUI
 import Combine
 import StreamChat
 
-class ConversationCoordinator: PresentableCoordinator<Void> {
+class ConversationListCoordinator: PresentableCoordinator<Void> {
 
-    lazy var conversationVC = ConversationViewController(conversation: ConversationsManager.shared.activeConversations.last,
-                                                         startingMessageId: self.startingMessageId)
+    lazy var conversationListVC = ConversationListViewController(members: self.conversationMembers)
 
-    let startingMessageId: MessageId?
+    private let conversationMembers: [ConversationMember]
+    private let startingConversationID: ConversationID?
 
     override func toPresentable() -> DismissableVC {
-        self.conversationVC.onSelectedThread = { [unowned self] (channelID, messageID) in
-            self.presentThread(for: channelID, messageID: messageID)
-        }
-        return self.conversationVC
+        return self.conversationListVC
     }
 
     init(router: Router,
          deepLink: DeepLinkable?,
-         conversation: Conversation?,
-         startingMessageId: MessageId?) {
+         conversationMembers: [ConversationMember],
+         startingConversationID: ConversationID?) {
 
-        self.startingMessageId = startingMessageId
-        
-        if let convo = conversation {
-            ConversationsManager.shared.activeConversations.append(convo)
-        }
+        self.conversationMembers = conversationMembers
+        self.startingConversationID = startingConversationID
+
         super.init(router: router, deepLink: deepLink)
     }
 
     override func start() {
         super.start()
 
-        self.conversationVC.conversationHeader.didTapAddPeople = { [unowned self] in
+        self.conversationListVC.onSelectedConversation = { [unowned self] (channelID) in
+            #warning("Present the individual conversation experience")
+            logDebug("Selection conversation "+channelID.description)
+        }
+
+        self.conversationListVC.conversationHeader.didTapAddPeople = { [unowned self] in
             self.presentPeoplePicker()
         }
 
-        self.conversationVC.conversationHeader.didTapUpdateTopic = { [unowned self] in
-            guard let conversationController = self.conversationVC.conversationController,
-            conversationController.conversation.membership?.memberRole.rawValue == "owner" else { return }
-            self.presentConversationTitleAlert(for: conversationController)
+        self.conversationListVC.conversationHeader.didTapUpdateTopic = { [unowned self] in
+            guard let conversation = self.conversationListVC.currentConversation else {
+                logDebug("Unable to change topic because no conversation is selected.")
+                return
+            }
+            guard conversation.membership?.memberRole.rawValue == "owner" else {
+                logDebug("Unable to change topic because conversation is not owned by user.")
+                return
+            }
+            self.presentConversationTitleAlert(for: conversation)
         }
     }
 
@@ -59,14 +65,17 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
         let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
 
         self.addChildAndStart(coordinator) { [unowned self] connections in
-            coordinator.toPresentable().dismiss(animated: true)
-            guard let conversationController = self.conversationVC.conversationController else { return }
-            self.add(connections: connections, to: conversationController)
+            self.router.dismiss(source: self.conversationListVC)
+
+            guard let conversation = self.conversationListVC.currentConversation else { return }
+            self.add(connections: connections, to: conversation)
         }
-        self.router.present(coordinator, source: self.conversationVC)
+        self.router.present(coordinator, source: self.conversationListVC)
     }
 
-    func add(connections: [Connection], to controller: ChatChannelController) {
+    func add(connections: [Connection], to conversation: Conversation) {
+        let controller = ChatClient.shared.channelController(for: conversation.cid)
+
         let acceptedConnections = connections.filter { connection in
             return connection.status == .accepted
         }
@@ -105,20 +114,22 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-    func presentConversationTitleAlert(for controller: ChatChannelController) {
+    func presentConversationTitleAlert(for conversation: Conversation) {
+        let controller = ChatClient.shared.channelController(for: conversation.cid)
+
         let alertController = UIAlertController(title: "Update Name", message: "", preferredStyle: .alert)
         alertController.addTextField { (textField : UITextField!) -> Void in
             textField.placeholder = "New Name"
         }
         let saveAction = UIAlertAction(title: "Save", style: .default, handler: { [unowned self] alert -> Void in
             if let textField = alertController.textFields?.first,
-                let text = textField.text,
-                !text.isEmpty {
+               let text = textField.text,
+               !text.isEmpty {
 
                 controller.updateChannel(name: text, imageURL: nil, team: nil) { [unowned self] error in
-                    self.conversationVC.view.layoutNow()
+                    self.conversationListVC.view.layoutNow()
                     alertController.dismiss(animated: true, completion: {
-                        self.conversationVC.becomeFirstResponder()
+                        self.conversationListVC.becomeFirstResponder()
                     })
                 }
             }
@@ -126,20 +137,12 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
             (action : UIAlertAction!) -> Void in
-            self.conversationVC.becomeFirstResponder()
+            self.conversationListVC.becomeFirstResponder()
         })
 
         alertController.addAction(saveAction)
         alertController.addAction(cancelAction)
 
-        self.conversationVC.present(alertController, animated: true, completion: nil)
-    }
-
-    func presentThread(for channelID: ChannelId, messageID: MessageId) {
-        let threadVC = ConversationThreadViewController(channelID: channelID, messageID: messageID)
-        threadVC.dismissHandlers.append { [unowned self] in
-            self.conversationVC.becomeFirstResponder()
-        }
-        self.router.present(threadVC, source: self.conversationVC)
+        self.conversationListVC.present(alertController, animated: true, completion: nil)
     }
 }

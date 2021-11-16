@@ -32,16 +32,16 @@ enum ArchiveScope: Int, CaseIterable {
         switch self {
         case .recents:
             return ChannelListQuery(filter: .containMembers(userIds: [userId]),
-                                         sort: [.init(key: .lastMessageAt, isAscending: false)],
-                                         pageSize: 20)
+                                    sort: [.init(key: .lastMessageAt, isAscending: false)],
+                                    pageSize: 20)
         case .dms:
             return ChannelListQuery(filter: .and([.containMembers(userIds: [userId]), .lessOrEqual(.memberCount, than: 2)]),
-                                         sort: [.init(key: .lastMessageAt, isAscending: false)],
-                                         pageSize: 20)
+                                    sort: [.init(key: .lastMessageAt, isAscending: false)],
+                                    pageSize: 20)
         case .groups:
             return ChannelListQuery(filter: .and([.containMembers(userIds: [userId]), .greaterOrEqual(.memberCount, than: 3)]),
-                                         sort: [.init(key: .lastMessageAt, isAscending: false)],
-                                         pageSize: 20)
+                                    sort: [.init(key: .lastMessageAt, isAscending: false)],
+                                    pageSize: 20)
         }
     }
 }

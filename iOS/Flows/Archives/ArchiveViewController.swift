@@ -82,8 +82,8 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
     }
 
     override func viewWasPresented() {
-
-        guard let query = ArchiveScope(rawValue: self.segmentedControl.selectedSegmentIndex)?.query else { return }
+        guard let query
+                = ArchiveScope(rawValue: self.segmentedControl.selectedSegmentIndex)?.query else { return }
 
         Task {
             self.channelListController = try? await ChatClient.shared.queryChannels(query: query)

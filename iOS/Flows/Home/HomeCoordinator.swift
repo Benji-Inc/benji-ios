@@ -95,10 +95,15 @@ class HomeCoordinator: PresentableCoordinator<Void> {
     func startConversationFlow(for conversation: Conversation?, startingMessageId: MessageId?) {
         self.removeChild()
 
-        let coordinator = ConversationCoordinator(router: self.router,
+        guard let conversation = conversation else { return }
+
+        let membersController = ChatClient.shared.memberListController(query: .init(cid: conversation.cid))
+        let members = Array(membersController.members)
+
+        let coordinator = ConversationListCoordinator(router: self.router,
                                                   deepLink: self.deepLink,
-                                                  conversation: conversation,
-                                                  startingMessageId: startingMessageId)
+                                                  conversationMembers: members,
+                                                  startingConversationID: conversation.cid)
         self.addChildAndStart(coordinator, finishedHandler: { (_) in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 _ = ConversationsManager.shared.activeConversations.popLast()
