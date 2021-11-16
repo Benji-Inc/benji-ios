@@ -10,13 +10,14 @@ import Foundation
 import StreamChat
 import UIKit
 
-/// A cell to display a high-level view of a conversation's message. Displays a limited number of recent replies to the message.
-/// The user's replies and other replies are put in two stacks (along the z-axis), with the most recent reply at the front (visually obscuring the others).
-class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayoutDelegate {
+/// A cell to display a high-level view of a conversation's message. Displays a limited number of recent messages in a conversation.
+/// The user's messages and other messages are put in two stacks (along the z-axis),
+/// with the most recent message at the front (visually obscuring the others).
+class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLayoutDelegate {
 
     // Interaction handling
-    var handleTappedMessage: ((Messageable) -> Void)?
-    var handleDeleteMessage: ((Messageable) -> Void)?
+    var handleTappedConversation: ((Messageable) -> Void)?
+    var handleDeleteConversation: ((Messageable) -> Void)?
 
     private lazy var collectionLayout = ConversationMessageCellLayout(messageDelegate: self)
     private lazy var collectionView: UICollectionView = {
@@ -29,7 +30,7 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
     private var state: ConversationUIState = .read
 
     /// The parent message of this thread.
-    var message: Messageable?
+    var conversation: Messageable?
 
     /// The maximum number of messages we'll show per stack of messages.
     private let maxMessagesPerSection = 3
@@ -46,8 +47,8 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
                                                         right: 0)
 
         self.collectionView.onTap { [unowned self] tapRecognizer in
-            guard let message = self.message else { return }
-            self.handleTappedMessage?(message)
+            guard let conversation = self.conversation else { return }
+            self.handleTappedConversation?(conversation)
         }
 
         self.dataSource.contextMenuDelegate = self
@@ -76,7 +77,7 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
              replies: [Messageable],
              totalReplyCount: Int) {
 
-        self.message = message
+        self.conversation = message
 
         // Separate the user messages from other message.
         var userReplies = replies.filter { message in
@@ -108,7 +109,7 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
         }
         var snapshot = self.dataSource.snapshot()
 
-        // Clear out the sections to make way for a fresh set of message.
+        // Clear out the sections to make way for a fresh set of messages.
         snapshot.deleteSections(ConversationMessageSection.allCases)
         snapshot.appendSections(ConversationMessageSection.allCases)
 
@@ -148,7 +149,7 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
 
         return self.convert(CGRect(x: 0,
                                    y: MessageSubcell.maximumHeight
-                                   + ConversationMessageCell.spaceBetweenCellTops * CGFloat(self.maxMessagesPerSection) * 2
+                                   + ConversationMessagesCell.spaceBetweenCellTops * CGFloat(self.maxMessagesPerSection) * 2
                                    + Theme.contentOffset,
                                    width: self.width,
                                    height: MessageSubcell.minimumHeight),
@@ -156,7 +157,7 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
     }
 }
 
-extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
+extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
 
     /// The space between the top of a cell and tops of adjacent cells in a stack.
     static var spaceBetweenCellTops: CGFloat { return 8 }
@@ -227,14 +228,14 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
 
             // Ensure that the bottom of the latest non-user reply in this cell aligns
             // with the bottom of the latest non-user reply in adjacent cells.
-            insets.bottom += CGFloat(extraSpacersNeeded) * ConversationMessageCell.spaceBetweenCellTops
+            insets.bottom += CGFloat(extraSpacersNeeded) * ConversationMessagesCell.spaceBetweenCellTops
         } else if section == 1 {
             // Put some space between the two sections of messages.
             insets.top = Theme.contentOffset.half
 
             // Ensure that the top of the latest user reply in this cell aligns
             // with the tops of the latest user replies in adjacent cells.
-            insets.top += CGFloat(extraSpacersNeeded) * ConversationMessageCell.spaceBetweenCellTops
+            insets.top += CGFloat(extraSpacersNeeded) * ConversationMessagesCell.spaceBetweenCellTops
         }
 
         return insets
@@ -248,13 +249,13 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
                                            layout: collectionViewLayout,
                                            sizeForItemAt: IndexPath(item: 0, section: section))
         // Return a negative spacing so that the cells overlap.
-        return -cellSize.height + ConversationMessageCell.spaceBetweenCellTops
+        return -cellSize.height + ConversationMessagesCell.spaceBetweenCellTops
     }
 }
 
 // MARK: - UIContextMenuInteractionDelegate
 
-extension ConversationMessageCell: UIContextMenuInteractionDelegate {
+extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
 
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
@@ -266,14 +267,14 @@ extension ConversationMessageCell: UIContextMenuInteractionDelegate {
     }
 
     private func makeContextMenu() -> UIMenu {
-        guard let message = self.message else { return UIMenu() }
+        guard let message = self.conversation else { return UIMenu() }
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
 
         let confirmDelete = UIAction(title: "Confirm",
                                      image: UIImage(systemName: "trash"),
                                      attributes: .destructive) { [unowned self] action in
-            self.handleDeleteMessage?(message)
+            self.handleDeleteConversation?(message)
         }
 
         let deleteMenu = UIMenu(title: "Delete Thread",
@@ -282,7 +283,7 @@ extension ConversationMessageCell: UIContextMenuInteractionDelegate {
                                 children: [confirmDelete, neverMind])
 
         let openThread = UIAction(title: "Open Thread") { [unowned self] action in
-            self.handleTappedMessage?(message)
+            self.handleTappedConversation?(message)
         }
 
         var menuElements: [UIMenuElement] = []

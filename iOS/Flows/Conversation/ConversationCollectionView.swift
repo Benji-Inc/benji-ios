@@ -33,7 +33,7 @@ class ConversationCollectionView: CollectionView {
     /// Returns the frame that a message drop zone should appear based on this collectionview's contents.
     /// The frame is in the coordinate space of the passed in view.
     func getMessageDropZoneFrame(convertedTo view: UIView) -> CGRect {
-        guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessageCell else {
+        guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
             let overlayFrame = CGRect(x: Theme.contentOffset,
                                       y: 100,
                                       width: self.width - Theme.contentOffset.doubled,

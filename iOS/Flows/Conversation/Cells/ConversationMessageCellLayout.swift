@@ -10,7 +10,7 @@ import Foundation
 import StreamChat
 
 protocol ConversationMessageCellLayoutDelegate: AnyObject {
-    var message: Messageable? { get }
+    var conversation: Messageable? { get }
 }
 
 /// A custom collectionview layout for conversation message cells. This class assumes the collection view contains
@@ -79,12 +79,12 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
 
         guard let frontmostItemIndex = self.getFrontmostItemIndexPath(inSection: indexPath.section),
               let frontmostAttributes = self.layoutAttributesForItem(at: frontmostItemIndex) else {
-            return nil
-        }
+                  return nil
+              }
 
         let attributes
         = MessageStatusViewLayoutAttributes(forDecorationViewOfKind: MessageStatusView.objectIdentifier,
-                                       with: indexPath)
+                                            with: indexPath)
 
         if indexPath.section == 0 {
             // Position the decoration above the frontmost item in the first section
@@ -100,7 +100,7 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
                                       height: Theme.contentOffset)
         }
 
-        guard let recentMessage = self.messageDelegate.message else { return nil }
+        guard let recentMessage = self.messageDelegate.conversation else { return nil }
         let messageController
         = ChatClient.shared.messageController(cid: try! ChannelId(cid: recentMessage.conversationId),
                                               messageId: recentMessage.id)
@@ -138,7 +138,7 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         attributes.backgroundColor = backgroundColor
 
         var isMostRecentMessageFromUser = false
-        if let mostRecentMessage = self.messageDelegate.message?.mostRecentMessage {
+        if let mostRecentMessage = self.messageDelegate.conversation?.mostRecentMessage {
             isMostRecentMessageFromUser = mostRecentMessage.isFromCurrentUser
         }
 
