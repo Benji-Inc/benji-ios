@@ -41,4 +41,12 @@ extension NSDiffableDataSourceSnapshot {
             self.reconfigureItems([itemAtIndex])
         }
     }
+
+    func indexPathOfItem(_ identifier: ItemIdentifierType) -> IndexPath? {
+        guard let indexOfItem = self.indexOfItem(identifier),
+              let containingSection = self.sectionIdentifier(containingItem: identifier),
+              let indexOfSection = self.indexOfSection(containingSection) else { return nil }
+
+        return IndexPath(item: indexOfItem, section: indexOfSection)
+    }
 }

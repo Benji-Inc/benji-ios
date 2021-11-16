@@ -15,7 +15,9 @@ import StreamChat
 
 class ConversationListCoordinator: PresentableCoordinator<Void> {
 
-    lazy var conversationListVC = ConversationListViewController(members: self.conversationMembers)
+    lazy var conversationListVC
+    = ConversationListViewController(members: self.conversationMembers,
+                                     startingConversationID: self.startingConversationID)
 
     private let conversationMembers: [ConversationMember]
     private let startingConversationID: ConversationID?

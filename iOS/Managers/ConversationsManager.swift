@@ -26,7 +26,6 @@ class ConversationsManager: EventsControllerDelegate {
     }
 
     func eventsController(_ controller: EventsController, didReceiveEvent event: Event) {
-
         switch event {
         case let event as MessageNewEvent:
             if self.activeConversations.isEmpty {

@@ -52,11 +52,14 @@ class ConversationListViewController: FullScreenViewController,
 
     /// A list of conversation members used to filter conversations. We'll only show conversations with this exact set of members.
     private let members: [ConversationMember]
+    /// The id of the conversation we should land on when this VC appears.
+    private let startingConversationID: ConversationID?
 
-    init(members: [ConversationMember]) {
+    init(members: [ConversationMember], startingConversationID: ConversationID?) {
         self.members = members
+        self.startingConversationID = startingConversationID
 
-        let query = ChannelListQuery(filter: .containMembers(userIds: members.userIDs),
+        let query = ChannelListQuery(filter: .containOnlyMembers(members),
                                      sort: [Sorting(key: .createdAt, isAscending: false)],
                                      pageSize: 10,
                                      messagesLimit: 10)
@@ -200,10 +203,15 @@ class ConversationListViewController: FullScreenViewController,
             snapshot.appendItems([.loadMore], toSection: section)
         }
 
+        var startingIndexPath: IndexPath? = nil
+        if let startingConversationID = self.startingConversationID {
+            startingIndexPath = snapshot.indexPathOfItem(.messages(startingConversationID.description))
+        }
+
         let animationCycle = AnimationCycle(inFromPosition: .right,
                                             outToPosition: .left,
                                             shouldConcatenate: true,
-                                            scrollToIndexPath: nil)
+                                            scrollToIndexPath: startingIndexPath)
 
         await self.dataSource.apply(snapshot,
                                     collectionView: self.collectionView,
