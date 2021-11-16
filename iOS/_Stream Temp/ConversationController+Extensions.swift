@@ -355,6 +355,22 @@ extension ChatChannelController {
         }
     }
 
+    /// Remove users to the channel as members.
+    ///
+    /// - Parameters:
+    ///   - users: Users Id to remove from conversation.
+    func removeMembers(userIds: Set<UserId>) async throws {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.removeMembers(userIds: userIds) { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        }
+    }
+
     /// Marks the channel as read.
     func markRead() async throws {
         return try await withCheckedThrowingContinuation { continuation in

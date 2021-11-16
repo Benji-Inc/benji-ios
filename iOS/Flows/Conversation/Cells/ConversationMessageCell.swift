@@ -276,12 +276,13 @@ extension ConversationMessageCell: UIContextMenuInteractionDelegate {
             self.handleDeleteMessage?(message)
         }
 
-        let deleteMenu = UIMenu(title: "Delete Thread",
+
+        let deleteMenu = UIMenu(title: "Delete Conversation",
                                 image: UIImage(systemName: "trash"),
                                 options: .destructive,
                                 children: [confirmDelete, neverMind])
 
-        let openThread = UIAction(title: "Open Thread") { [unowned self] action in
+        let openThread = UIAction(title: "Expand") { [unowned self] action in
             self.handleTappedMessage?(message)
         }
 

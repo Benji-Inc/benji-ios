@@ -18,10 +18,23 @@ extension ConversationListViewController {
             }
         }
 
-        self.dataSource.handleSelectedMessage = { [unowned self] (message) in
-            guard let cid = try? ConversationID(cid: message.conversationId) else { return }
+        self.dataSource.handleSelectedMessage = { [unowned self] (conversation) in
+            guard let cid = try? ConversationID(cid: conversation.conversationId) else { return }
             self.onSelectedConversation?(cid)
         }
+
+        self.dataSource.handleDeleteMessage = { (conversation) in
+            Task {
+                do {
+                    let cid = try ConversationID(cid: conversation.conversationId)
+                    let conversationController = ChatClient.shared.channelController(for: cid)
+                    try await conversationController.deleteChannel()
+                } catch {
+                    logDebug(error)
+                }
+            }
+        }
+
         self.dataSource.handleLoadMoreMessages = { [unowned self] in
             self.loadMoreConversationsIfNeeded()
         }
