@@ -190,11 +190,7 @@ class ConversationListViewController: FullScreenViewController,
                     let nonMeUsers = typingUsers.filter { user in
                         return user.userObjectID != User.current()?.objectId
                     }
-                    if nonMeUsers.count > 0 {
-                        self.view.backgroundColor = .red
-                    } else {
-                        self.view.backgroundColor = .clear
-                    }
+                    // TODO: Update the typing indicator.
             })
 
             UIView.animate(withDuration: Theme.animationDurationFast) {
