@@ -15,20 +15,20 @@ protocol ConversationMessageCellLayoutDelegate: AnyObject {
 
 /// A custom collectionview layout for conversation message cells. This class assumes the collection view contains
 /// MessageSubcell cells laid out in two separate stacks along the z-axis.
-class ConversationMessageCellLayout: UICollectionViewFlowLayout {
+class ConversationMessagesCellLayout: UICollectionViewFlowLayout {
 
     /// If true, the time sent decoration views should be displayed.
     var showMessageStatus: Bool = false {
         didSet { self.invalidateLayout() }
     }
-    unowned let messageDelegate: ConversationMessageCellLayoutDelegate
+    unowned let conversationDelegate: ConversationMessageCellLayoutDelegate
 
     override class var layoutAttributesClass: AnyClass {
         return ConversationMessageCellLayoutAttributes.self
     }
 
-    init(messageDelegate: ConversationMessageCellLayoutDelegate) {
-        self.messageDelegate = messageDelegate
+    init(conversationDelegate: ConversationMessageCellLayoutDelegate) {
+        self.conversationDelegate = conversationDelegate
 
         super.init()
 
@@ -100,13 +100,15 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
                                       height: Theme.contentOffset)
         }
 
-        guard let recentMessage = self.messageDelegate.conversation else { return nil }
-        let messageController
-        = ChatClient.shared.messageController(cid: try! ChannelId(cid: recentMessage.conversationId),
-                                              messageId: recentMessage.id)
-        let mostRecentMessage = messageController.getMostRecent(fromCurrentUser: indexPath.section == 1)
+        guard let conversation = self.conversationDelegate.conversation else { return nil }
 
-        if let read = messageController.conversation.reads.first(where: { read in
+        let cid = try! ChannelId(cid: conversation.conversationId)
+        let conversationController = ChatClient.shared.channelController(for: cid)
+        let mostRecentMessage
+        = conversationController.getMostRecentMessage(fromCurrentUser: indexPath.section == 1)
+
+
+        if let read = conversationController.conversation.reads.first(where: { read in
             return read.user == mostRecentMessage?.author
         }), let message = mostRecentMessage {
             attributes.status = ChatMessageStatus(read: read, message: message)
@@ -138,7 +140,7 @@ class ConversationMessageCellLayout: UICollectionViewFlowLayout {
         attributes.backgroundColor = backgroundColor
 
         var isMostRecentMessageFromUser = false
-        if let mostRecentMessage = self.messageDelegate.conversation?.mostRecentMessage {
+        if let mostRecentMessage = self.conversationDelegate.conversation?.mostRecentMessage {
             isMostRecentMessageFromUser = mostRecentMessage.isFromCurrentUser
         }
 

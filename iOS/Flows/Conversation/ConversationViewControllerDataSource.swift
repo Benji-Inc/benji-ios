@@ -79,10 +79,10 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 = collectionView.dequeueConfiguredReusableCell(using: self.conversationCellRegistration,
                                                                for: indexPath,
                                                                item: (cid, self))
-                messageCell.handleTappedMessage = { [unowned self] (message) in
+                messageCell.handleTappedConversation = { [unowned self] (message) in
                     self.handleSelectedMessage?(message)
                 }
-                messageCell.handleDeleteMessage = { [unowned self] (message) in
+                messageCell.handleDeleteConversation = { [unowned self] (message) in
                     self.handleDeleteMessage?(message)
                 }
                 return messageCell
@@ -92,10 +92,10 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                for: indexPath,
                                                                item: (cid, itemID, self))
-                messageCell.handleTappedMessage = { [unowned self] (message) in
+                messageCell.handleTappedConversation = { [unowned self] (message) in
                     self.handleSelectedMessage?(message)
                 }
-                messageCell.handleDeleteMessage = { [unowned self] (message) in
+                messageCell.handleDeleteConversation = { [unowned self] (message) in
                     self.handleDeleteMessage?(message)
                 }
                 return messageCell

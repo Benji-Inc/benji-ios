@@ -19,7 +19,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     var handleTappedConversation: ((Messageable) -> Void)?
     var handleDeleteConversation: ((Messageable) -> Void)?
 
-    private lazy var collectionLayout = ConversationMessageCellLayout(messageDelegate: self)
+    private lazy var collectionLayout = ConversationMessagesCellLayout(conversationDelegate: self)
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
@@ -29,7 +29,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
 
     private var state: ConversationUIState = .read
 
-    /// The parent message of this thread.
+    /// The conversation containing all the messages..
     var conversation: Messageable?
 
     /// The maximum number of messages we'll show per stack of messages.
@@ -168,7 +168,7 @@ extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        guard let messageLayout = collectionViewLayout as? ConversationMessageCellLayout else { return .zero }
+        guard let messageLayout = collectionViewLayout as? ConversationMessagesCellLayout else { return .zero }
 
         var width = collectionView.width
         var height: CGFloat = MessageSubcell.minimumHeight
@@ -197,7 +197,7 @@ extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
 
-        guard let messageLayout = collectionViewLayout as? ConversationMessageCellLayout else { return .zero }
+        guard let messageLayout = collectionViewLayout as? ConversationMessagesCellLayout else { return .zero }
 
         // Sections are a fixed height. They are exactly tall enough to accommodate the maximum cell count
         // per section with the frontmost cell at the maximum height.
