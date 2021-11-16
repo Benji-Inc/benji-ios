@@ -63,13 +63,6 @@ extension ConversationViewController {
             }
         }.store(in: &self.cancellables)
 
-        self.conversationController?.typingUsersPublisher.mainSink { [unowned self] users in
-            let nonMeUsers = users.filter { user in
-                return user.userObjectID != User.current()?.objectId
-            }
-            self.messageInputAccessoryView.updateTypingActivity(with: nonMeUsers)
-        }.store(in: &self.cancellables)
-
         self.collectionView.publisher(for: \.contentOffset).mainSink { [unowned self] _ in
             guard self.collectionView.isTracking else { return }
             self.collectionView.visibleCells.forEach { cell in

@@ -52,13 +52,6 @@ extension ConversationListViewController {
                                                  collectionView: self.collectionView)
                 }
         }.store(in: &self.cancellables)
-//
-//        self.conversationController?.typingUsersPublisher.mainSink { [unowned self] users in
-//            let nonMeUsers = users.filter { user in
-//                return user.userObjectID != User.current()?.objectId
-//            }
-//            self.messageInputAccessoryView.updateTypingActivity(with: nonMeUsers)
-//        }.store(in: &self.cancellables)
 
         self.collectionView.publisher(for: \.contentOffset).mainSink { [unowned self] _ in
             guard self.collectionView.isTracking else { return }
@@ -69,10 +62,18 @@ extension ConversationListViewController {
             }
         }.store(in: &self.cancellables)
 
-//        self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] _ in
-//            guard let enabled = self.conversationController?.areTypingEventsEnabled, enabled else { return }
-//            self.conversationController?.sendKeystrokeEvent(completion: nil)
-//        }.store(in: &self.cancellables)
+        self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] text in
+            guard let currentConversation = self.currentConversation else { return }
+
+            let conversationController = ChatClient.shared.channelController(for: currentConversation.cid)
+            guard conversationController.areTypingEventsEnabled else { return }
+
+            if !text.isEmpty {
+                conversationController.sendKeystrokeEvent()
+            } else {
+                conversationController.sendStopTypingEvent()
+            }
+        }.store(in: &self.cancellables)
 
         self.$didCenterOnCell
             .mainSink { cell in

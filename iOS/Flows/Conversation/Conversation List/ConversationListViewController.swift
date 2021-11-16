@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Combine
 
 class ConversationListViewController: FullScreenViewController,
                                       UICollectionViewDelegate,
@@ -164,6 +165,8 @@ class ConversationListViewController: FullScreenViewController,
         }
     }
 
+    private var typingSubscriber: AnyCancellable?
+
     func updateCenterMostCell() {
         guard let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessageCell else {
             return
@@ -172,11 +175,27 @@ class ConversationListViewController: FullScreenViewController,
 
         // If there's a centered cell, update the layout
         if let currentConversation = self.currentConversation {
+
             ConversationsManager.shared.activeConversations.removeAll()
             ConversationsManager.shared.activeConversations.append(currentConversation)
 
             self.messageInputAccessoryView.conversation = currentConversation
             self.conversationHeader.configure(with: currentConversation)
+
+            let conversationController = ChatClient.shared.channelController(for: currentConversation.cid)
+            self.typingSubscriber = conversationController
+                .typingUsersPublisher
+                .mainSink(receiveValue: { [unowned self] typingUsers in
+                    let nonMeUsers = typingUsers.filter { user in
+                        return user.userObjectID != User.current()?.objectId
+                    }
+                    logDebug(typingUsers.description)
+                    if nonMeUsers.count > 0 {
+                        self.view.backgroundColor = .red
+                    } else {
+                        self.view.backgroundColor = .clear
+                    }
+            })
 
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.view.layoutNow()
@@ -235,7 +254,7 @@ class ConversationListViewController: FullScreenViewController,
 
             self.isLoadingConversations = true
             do {
-                try await self.conversationListController.loadNextConversations(limit: 10)
+                try await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
             } catch {
                 logDebug(error)
             }
