@@ -61,7 +61,7 @@ class ConversationListViewController: FullScreenViewController,
 
         let query = ChannelListQuery(filter: .containOnlyMembers(members),
                                      sort: [Sorting(key: .createdAt, isAscending: false)],
-                                     pageSize: 10,
+                                     pageSize: .channelsPageSize,
                                      messagesLimit: 10)
         self.conversationListController
         = ChatClient.shared.channelListController(query: query)
