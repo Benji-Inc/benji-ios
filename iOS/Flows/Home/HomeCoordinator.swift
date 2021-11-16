@@ -100,7 +100,7 @@ class HomeCoordinator: PresentableCoordinator<Void> {
         let membersController = ChatClient.shared.memberListController(query: .init(cid: conversation.cid))
         let members = Array(membersController.members)
 
-        let coordinator = ConversationCoordinator(router: self.router,
+        let coordinator = ConversationListCoordinator(router: self.router,
                                                   deepLink: self.deepLink,
                                                   conversationMembers: members,
                                                   startingConversationID: conversation.cid)

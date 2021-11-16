@@ -13,7 +13,7 @@ import PhotosUI
 import Combine
 import StreamChat
 
-class ConversationCoordinator: PresentableCoordinator<Void> {
+class ConversationListCoordinator: PresentableCoordinator<Void> {
 
     lazy var conversationListVC = ConversationListViewController(members: self.conversationMembers)
 
@@ -123,8 +123,8 @@ class ConversationCoordinator: PresentableCoordinator<Void> {
         }
         let saveAction = UIAlertAction(title: "Save", style: .default, handler: { [unowned self] alert -> Void in
             if let textField = alertController.textFields?.first,
-                let text = textField.text,
-                !text.isEmpty {
+               let text = textField.text,
+               !text.isEmpty {
 
                 controller.updateChannel(name: text, imageURL: nil, team: nil) { [unowned self] error in
                     self.conversationListVC.view.layoutNow()

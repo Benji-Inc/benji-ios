@@ -123,7 +123,7 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
         membersController.synchronize { error in
             let members = Array(membersController.members)
 
-            let coordinator = ConversationCoordinator(router: self.router,
+            let coordinator = ConversationListCoordinator(router: self.router,
                                                       deepLink: self.deepLink,
                                                       conversationMembers: members,
                                                       startingConversationID: conversation.cid)
