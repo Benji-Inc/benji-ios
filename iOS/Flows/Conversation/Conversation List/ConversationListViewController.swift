@@ -55,6 +55,7 @@ class ConversationListViewController: FullScreenViewController,
 
     init(members: [ConversationMember]) {
         self.members = members
+
         let query = ChannelListQuery(filter: .containMembers(userIds: members.userIDs),
                                      sort: [Sorting(key: .createdAt, isAscending: false)],
                                      pageSize: 10,
@@ -63,10 +64,6 @@ class ConversationListViewController: FullScreenViewController,
         = ChatClient.shared.channelListController(query: query)
 
         super.init()
-
-        self.conversationListController.synchronize { error in
-            logDebug(self.conversationListController.conversations.description)
-        }
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -172,6 +169,9 @@ class ConversationListViewController: FullScreenViewController,
 
         // If there's a centered cell, update the layout
         if let currentConversation = self.currentConversation {
+            ConversationsManager.shared.activeConversations.removeAll()
+            ConversationsManager.shared.activeConversations.append(currentConversation)
+
             self.messageInputAccessoryView.conversation = currentConversation
             self.conversationHeader.configure(with: currentConversation)
 
@@ -185,6 +185,8 @@ class ConversationListViewController: FullScreenViewController,
 
     @MainActor
     func initializeDataSource() async {
+        try? await self.conversationListController.synchronize()
+
         let conversations = self.conversationListController.conversations
 
         var snapshot = self.dataSource.snapshot()
