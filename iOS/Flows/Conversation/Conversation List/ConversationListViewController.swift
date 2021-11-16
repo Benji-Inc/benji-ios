@@ -422,7 +422,8 @@ class ConversationListViewController: FullScreenViewController,
 
     private func createNewConversation(_ sendable: Sendable) {
         Task {
-            let channelId = ChannelId(type: .messaging, id: UUID().uuidString)
+            let username = User.current()?.initials ?? ""
+            let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
             let userIDs = Set(self.members.userIDs)
 
             do {
