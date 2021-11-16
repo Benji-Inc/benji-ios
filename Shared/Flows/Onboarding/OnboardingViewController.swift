@@ -168,10 +168,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         self.waitlistVC.$state.mainSink { [unowned self] _ in
             self.updateUI()
         }.store(in: &self.cancellables)
-
-        delay(0.5) { [unowned self] in
-            self.handle(launchActivity: .pass(passId: "AVaUnie3oO"))
-        }
     }
 
     private func saveInitialConversation(with conversationId: String?) async throws {
