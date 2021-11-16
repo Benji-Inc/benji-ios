@@ -559,6 +559,7 @@
 		D67CAFDA27402993004FED29 /* InitialConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67CAFD927402993004FED29 /* InitialConversation.swift */; };
 		D67CAFDB27402993004FED29 /* InitialConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67CAFD927402993004FED29 /* InitialConversation.swift */; };
 		D67CAFDC27402993004FED29 /* InitialConversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67CAFD927402993004FED29 /* InitialConversation.swift */; };
+		D67CAFDD274331D9004FED29 /* Task+TaskPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807A7BC826C5C8100023A71E /* Task+TaskPool.swift */; };
 		D68072E7272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D68072E8272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
 		D68072E9272C60CC004657E7 /* SpeechBubbleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68072E6272C60CC004657E7 /* SpeechBubbleView.swift */; };
@@ -3552,6 +3553,7 @@
 				D6166C8E2732FFBC0013E803 /* Logger.swift in Sources */,
 				D6AE0FF7267D2CE400C6B048 /* Error+Extensions.swift in Sources */,
 				D6AE0FE8267D2C1800C6B048 /* User.swift in Sources */,
+				D67CAFDD274331D9004FED29 /* Task+TaskPool.swift in Sources */,
 				D68759622728A54300AF7C07 /* ImageDisplayable.swift in Sources */,
 				D6166C882731EEC50013E803 /* PFFileObject+Extensions.swift in Sources */,
 				D679DE0C26821EE70054DCAF /* NSObject+Extensions.swift in Sources */,
