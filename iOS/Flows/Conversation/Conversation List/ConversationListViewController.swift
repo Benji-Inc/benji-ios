@@ -59,7 +59,7 @@ class ConversationListViewController: FullScreenViewController,
         self.members = members
         self.startingConversationID = startingConversationID
 
-        let query = ChannelListQuery(filter: .containsOnlyMembers(members),
+        let query = ChannelListQuery(filter: .containOnlyMembers(members),
                                      sort: [Sorting(key: .createdAt, isAscending: false)],
                                      pageSize: 10,
                                      messagesLimit: 10)

@@ -12,7 +12,7 @@ import StreamChat
 extension Filter where Scope: AnyChannelListFilterScope {
 
     /// Filter to match conversations that contain all and only the passed in members.
-    static func containsOnlyMembers(_ members: [ConversationMember]) -> Filter<Scope> {
+    static func containOnlyMembers(_ members: [ConversationMember]) -> Filter<Scope> {
         var memberFilters: [Filter<Scope>] = []
         for userID in members.userIDs {
             memberFilters.append(.containMembers(userIds: [userID]))
