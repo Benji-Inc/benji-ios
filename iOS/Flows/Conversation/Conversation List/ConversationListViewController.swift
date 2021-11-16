@@ -204,10 +204,8 @@ class ConversationListViewController: FullScreenViewController,
         }
 
         var startingIndexPath: IndexPath? = nil
-        if let index = conversations.firstIndex(where: { conversation in
-            conversation.cid == self.startingConversationID
-        }) {
-            startingIndexPath = IndexPath(item: index, section: 0)
+        if let startingConversationID = self.startingConversationID {
+            startingIndexPath = snapshot.indexPathOfItem(.messages(startingConversationID.description))
         }
 
         let animationCycle = AnimationCycle(inFromPosition: .right,
