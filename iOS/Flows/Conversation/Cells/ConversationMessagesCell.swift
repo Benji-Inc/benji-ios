@@ -16,8 +16,8 @@ import UIKit
 class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLayoutDelegate {
 
     // Interaction handling
-    var handleTappedConversation: ((Messageable) -> Void)?
-    var handleDeleteConversation: ((Messageable) -> Void)?
+    var handleTappedConversation: ((MessageSequence) -> Void)?
+    var handleDeleteConversation: ((MessageSequence) -> Void)?
 
     private lazy var collectionLayout = ConversationMessagesCellLayout(conversationDelegate: self)
     private lazy var collectionView: UICollectionView = {
@@ -30,7 +30,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     private var state: ConversationUIState = .read
 
     /// The conversation containing all the messages..
-    var conversation: Messageable?
+    var conversation: MessageSequence?
 
     /// The maximum number of messages we'll show per stack of messages.
     private let maxMessagesPerSection = 3
@@ -73,37 +73,28 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     ///     - message: The root message to display, which may have replies.
     ///     - replies: The currently loaded replies to the message. These should be ordered by newest to oldest.
     ///     - totalReplyCount: The total number of replies that this message has. It may be more than the passed in replies.
-    func set(message: Messageable?,
-             replies: [Messageable],
-             totalReplyCount: Int) {
 
-        self.conversation = message
+    func set(sequence: MessageSequence) {
+
+        self.conversation = sequence
 
         // Separate the user messages from other message.
-        var userReplies = replies.filter { message in
+        var userMessages = sequence.messages.filter { message in
             return message.isFromCurrentUser
         }
-        var otherReplies = replies.filter { message in
+        var otherMessages = sequence.messages.filter { message in
             return !message.isFromCurrentUser
-        }
-        // Put the parent message in the appropriate stack based on who sent it.
-        if let message = message {
-            if message.isFromCurrentUser {
-                userReplies.append(message)
-            } else {
-                otherReplies.append(message)
-            }
         }
 
         // Only shows a limited number of messages in each stack.
         // The for the user's messages, the newest message is at the bottom, so reverse the order.
-        let currentUserMessages = userReplies.prefix(self.maxMessagesPerSection).reversed().map { message in
+        let currentUserMessages = userMessages.prefix(self.maxMessagesPerSection).reversed().map { message in
             return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
 
         // Other messages have the newest message on top, so there's no need to reverse the messages.
-        let otherMessages = otherReplies.prefix(self.maxMessagesPerSection).map { message in
+        let messages = otherMessages.prefix(self.maxMessagesPerSection).map { message in
             return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
@@ -113,7 +104,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         snapshot.deleteSections(ConversationMessageSection.allCases)
         snapshot.appendSections(ConversationMessageSection.allCases)
 
-        snapshot.appendItems(otherMessages, toSection: .otherMessages)
+        snapshot.appendItems(messages, toSection: .otherMessages)
         snapshot.appendItems(currentUserMessages, toSection: .currentUserMessages)
 
         self.dataSource.apply(snapshot)
@@ -271,14 +262,14 @@ extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
     }
 
     private func makeContextMenu() -> UIMenu {
-        guard let message = self.conversation else { return UIMenu() }
+        guard let conversation = self.conversation else { return UIMenu() }
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
 
         let confirmDelete = UIAction(title: "Confirm",
                                      image: UIImage(systemName: "trash"),
                                      attributes: .destructive) { [unowned self] action in
-            self.handleDeleteConversation?(message)
+            self.handleDeleteConversation?(conversation)
         }
 
         let deleteMenu = UIMenu(title: "Delete Thread",
@@ -287,11 +278,11 @@ extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
                                 children: [confirmDelete, neverMind])
 
         let openThread = UIAction(title: "Open Thread") { [unowned self] action in
-            self.handleTappedConversation?(message)
+            self.handleTappedConversation?(conversation)
         }
 
         var menuElements: [UIMenuElement] = []
-        if message.isFromCurrentUser {
+        if conversation.isCreatedByCurrentUser {
             menuElements.append(deleteMenu)
         }
         menuElements.append(openThread)

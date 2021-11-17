@@ -13,7 +13,7 @@ protocol MessageSequence {
     var id: String { get }
     var conversationId: String { get }
     var createdAt: Date { get }
-    var updateAt: Date { get }
+    var updatedAt: Date { get }
     var isCreatedByCurrentUser: Bool { get }
     var authorID: String { get }
     var attributes: [String: Any]? { get }
@@ -25,7 +25,7 @@ func ==(lhs: MessageSequence, rhs: MessageSequence) -> Bool {
     return lhs.id == rhs.id
         && lhs.conversationId == rhs.conversationId
         && lhs.createdAt == rhs.createdAt
-        && lhs.updateAt == rhs.updateAt
+        && lhs.updatedAt == rhs.updatedAt
         && lhs.authorID == rhs.authorID
 }
 
