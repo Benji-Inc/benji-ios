@@ -70,8 +70,6 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
     override func initializeViews() {
         super.initializeViews()
 
-        self.modalPresentationStyle
-
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
 

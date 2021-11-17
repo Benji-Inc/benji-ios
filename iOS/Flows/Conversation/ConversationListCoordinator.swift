@@ -74,7 +74,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
                                             deepLink: self.deepLink)
 
         self.addChildAndStart(coordinator) { _ in
-
+            self.router.popToModule(module: self)
         }
 
         self.router.push(coordinator)
