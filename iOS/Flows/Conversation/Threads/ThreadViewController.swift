@@ -185,8 +185,8 @@ extension ThreadViewController {
             }
         }.store(in: &self.cancellables)
 
-        self.dataSource.handleDeleteMessage = { [unowned self] message in
-            self.conversationController?.deleteMessage(message.id)
+        self.dataSource.handleDeleteMessage = { [unowned self] item in
+            self.conversationController?.deleteMessage(item.messageID)
         }
     }
 }

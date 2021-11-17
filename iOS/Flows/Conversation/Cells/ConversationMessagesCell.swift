@@ -16,6 +16,7 @@ import UIKit
 class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLayoutDelegate {
 
     // Interaction handling
+    var handleTappedMessage: ((ConversationMessageItem) -> Void)?
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
@@ -46,10 +47,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
                                                         bottom: 0,
                                                         right: 0)
 
-        self.collectionView.onTap { [unowned self] tapRecognizer in
-            guard let conversation = self.conversation else { return }
-            self.handleTappedConversation?(conversation)
-        }
+//        self.collectionView.onTap { [unowned self] tapRecognizer in
+//            guard let conversation = self.conversation else { return }
+//            self.handleTappedConversation?(conversation)
+//        }
 
         self.dataSource.contextMenuDelegate = self
     }
@@ -79,10 +80,11 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         self.conversation = sequence
 
         // Separate the user messages from other message.
-        var userMessages = sequence.messages.filter { message in
+        let userMessages = sequence.messages.filter { message in
             return message.isFromCurrentUser
         }
-        var otherMessages = sequence.messages.filter { message in
+
+        let otherMessages = sequence.messages.filter { message in
             return !message.isFromCurrentUser
         }
 
@@ -156,7 +158,8 @@ extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
     // MARK: - UICollectionViewDelegateFlowLayout
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        logDebug("\(indexPath)")
+        guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
+        self.handleTappedMessage?(item)
     }
 
     func collectionView(_ collectionView: UICollectionView,

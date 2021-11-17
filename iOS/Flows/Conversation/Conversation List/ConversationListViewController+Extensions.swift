@@ -18,9 +18,8 @@ extension ConversationListViewController {
             }
         }
 
-        self.dataSource.handleSelectedMessage = { [unowned self] (message) in
-            guard let cid = try? ConversationID(cid: message.conversationId) else { return }
-            self.onSelectedConversation?(cid)
+        self.dataSource.handleSelectedMessage = { [unowned self] (item) in
+            self.onSelectedMessage?(item.channelID, item.messageID)
         }
         self.dataSource.handleLoadMoreMessages = { [unowned self] in
             self.loadMoreConversationsIfNeeded()
