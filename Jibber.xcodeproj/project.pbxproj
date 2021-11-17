@@ -90,6 +90,7 @@
 		D615534827448C4200B08459 /* InputPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615534727448C4200B08459 /* InputPlaceholderView.swift */; };
 		D615534A2745737300B08459 /* ThreadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553492745737300B08459 /* ThreadCoordinator.swift */; };
 		D615534C27458CEA00B08459 /* MessageSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615534B27458CEA00B08459 /* MessageSequence.swift */; };
+		D615534E2745C1C900B08459 /* MessageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615534D2745C1C900B08459 /* MessageContentView.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
 		D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DB24FAD7B400B63412 /* AttachmentCell.swift */; };
@@ -973,6 +974,7 @@
 		D615534727448C4200B08459 /* InputPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputPlaceholderView.swift; sourceTree = "<group>"; };
 		D61553492745737300B08459 /* ThreadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadCoordinator.swift; sourceTree = "<group>"; };
 		D615534B27458CEA00B08459 /* MessageSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSequence.swift; sourceTree = "<group>"; };
+		D615534D2745C1C900B08459 /* MessageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentView.swift; sourceTree = "<group>"; };
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
 		D61592DB24FAD7B400B63412 /* AttachmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
@@ -1675,14 +1677,15 @@
 		D635F0A927136C2600A02D17 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				8015CA7626F3D907000F3C60 /* ConversationMessagesCell.swift */,
 				80471C422732FE450022172C /* ConversationMessageCellDatasource.swift */,
-				809EBAF3273474B900DE3161 /* ConversationMessagesCellLayout.swift */,
 				8052D85927347C6600C228F5 /* ConversationMessageCellLayoutAttributes.swift */,
+				8015CA7626F3D907000F3C60 /* ConversationMessagesCell.swift */,
+				809EBAF3273474B900DE3161 /* ConversationMessagesCellLayout.swift */,
 				80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */,
+				D615534D2745C1C900B08459 /* MessageContentView.swift */,
+				D68072EA2730462F004657E7 /* MessageStatusView.swift */,
 				806DA16927307FA400843C4E /* MessageSubcell.swift */,
 				808313B42723694B00BAEBE0 /* ThreadMessageCell.swift */,
-				D68072EA2730462F004657E7 /* MessageStatusView.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2979,6 +2982,7 @@
 				D6D145FF21D5510400CD8CE4 /* StringStyle.swift in Sources */,
 				D691794222F6418700340AA3 /* Router.swift in Sources */,
 				D60F95F02665A5E400CF8766 /* ConnectionRequestCell.swift in Sources */,
+				D615534E2745C1C900B08459 /* MessageContentView.swift in Sources */,
 				D6A6691B271A11BD0001D218 /* ConversationViewController+Extension.swift in Sources */,
 				D6AC1D69273DAD9600774622 /* InputTypeCell.swift in Sources */,
 				D63D5C97265811B000543200 /* URL+Extensions.swift in Sources */,
