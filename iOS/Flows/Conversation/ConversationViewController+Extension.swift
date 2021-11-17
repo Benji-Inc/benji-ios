@@ -18,7 +18,7 @@ extension ConversationViewController {
             }
         }
 
-        self.dataSource.handleSelectedMessage = { [unowned self] (item) in
+        self.dataSource.handleSelectedMessage = { [unowned self] (item, view) in
             self.onSelectedThread?(item.channelID, item.messageID)
         }
         self.dataSource.handleLoadMoreMessages = { [unowned self] in

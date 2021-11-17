@@ -119,7 +119,7 @@ class ThreadMessageCell: UICollectionViewCell {
         self.setNeedsLayout()
 
         if message.isFromCurrentUser {
-            self.messageView.backgroundColorView.addInteraction(self.contextMenuInteraction)
+            self.messageView.content.backgroundColorView.addInteraction(self.contextMenuInteraction)
         }
     }
 

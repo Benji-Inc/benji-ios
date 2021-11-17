@@ -76,7 +76,9 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
         self.addChildAndStart(coordinator) { _ in
 
         }
-        self.router.present(coordinator, source: self.conversationListVC)
+
+        self.router.push(coordinator)
+        //self.router.present(coordinator, source: self.conversationListVC)
     }
 
     func presentPeoplePicker() {

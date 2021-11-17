@@ -160,6 +160,16 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
     }
 }
 
+extension ThreadViewController: TransitionableViewController {
+    var receivingPresentationType: TransitionType {
+        return .move(self.parentMessageView)
+    }
+
+    var transitionColor: Color {
+        return .red
+    }
+}
+
 // MARK: - Updates and Subscription
 extension ThreadViewController {
 
