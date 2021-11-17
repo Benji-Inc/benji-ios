@@ -40,8 +40,8 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
-        self.conversationListVC.onSelectedMessage = { [unowned self] (messageID) in
-
+        self.conversationListVC.onSelectedMessage = { [unowned self] (channelId, messageId) in
+            self.presentThread(for: channelId, messageId: messageId)
         }
 
         self.conversationListVC.onSelectedConversation = { [unowned self] (channelID) in
@@ -66,8 +66,17 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-    func presentThread(for messageId: MessageId) {
+    func presentThread(for channelId: ChannelId, messageId: MessageId) {
+        self.removeChild()
+        let coordinator = ThreadCoordinator(with: channelId,
+                                            messageId: messageId,
+                                            router: self.router,
+                                            deepLink: self.deepLink)
 
+        self.addChildAndStart(coordinator) { _ in
+
+        }
+        self.router.present(coordinator, source: self.conversationListVC)
     }
 
     func presentPeoplePicker() {

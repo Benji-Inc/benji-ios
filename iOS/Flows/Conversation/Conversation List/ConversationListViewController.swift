@@ -31,7 +31,7 @@ class ConversationListViewController: FullScreenViewController,
 
     // Input handlers
     var onSelectedConversation: ((ChannelId) -> Void)?
-    var onSelectedMessage: ((MessageId) -> Void)? 
+    var onSelectedMessage: ((ChannelId, MessageId) -> Void)? 
 
     @Published var didCenterOnCell: ConversationMessagesCell? = nil
 

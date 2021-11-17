@@ -18,7 +18,7 @@ class ThreadCoordinator: PresentableCoordinator<Void> {
     init(with channelId: ChannelId,
          messageId: MessageId,
          router: Router,
-         deepLink: DeepLinkable) {
+         deepLink: DeepLinkable?) {
 
         self.channelId = channelId
         self.messageId = messageId
