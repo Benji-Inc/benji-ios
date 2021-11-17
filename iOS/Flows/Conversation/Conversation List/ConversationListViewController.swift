@@ -490,10 +490,6 @@ extension ConversationListViewController: TransitionableViewController {
         return .fade
     }
 
-    var transitionColor: Color {
-        return .red
-    }
-
     var sendingPresentationType: TransitionType {
         if let view = self.selectedMessageView {
             return .move(view)

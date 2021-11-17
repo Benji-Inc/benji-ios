@@ -70,10 +70,15 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
     override func initializeViews() {
         super.initializeViews()
 
+        self.modalPresentationStyle
+
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
 
         self.parentMessageView.setText(with: self.parentMessage)
+        self.parentMessageView.configureBackground(color: .white,
+                                                   showBubbleTail: false,
+                                                   tailOrientation: .left)
 
         self.subscribeToUpdates()
     }
@@ -151,10 +156,6 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 extension ThreadViewController: TransitionableViewController {
     var receivingPresentationType: TransitionType {
         return .move(self.parentMessageView)
-    }
-
-    var transitionColor: Color {
-        return .red
     }
 }
 

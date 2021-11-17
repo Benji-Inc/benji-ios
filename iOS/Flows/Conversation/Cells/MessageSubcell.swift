@@ -59,18 +59,8 @@ class MessageSubcell: UICollectionViewCell {
         }
 
         self.content.textView.isVisible = messageLayoutAttributes.shouldShowText
-        self.configureBackground(color: messageLayoutAttributes.backgroundColor,
-                                 showBubbleTail: messageLayoutAttributes.shouldShowTail,
-                                 tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
-    }
-
-    /// Sets the background color and shows/hides the bubble tail.
-    func configureBackground(color: UIColor,
-                             showBubbleTail: Bool,
-                             tailOrientation: SpeechBubbleView.TailOrientation) {
-
-        self.content.backgroundColorView.bubbleColor = color
-        self.content.backgroundColorView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
-        self.content.backgroundColorView.orientation = tailOrientation
+        self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
+                                         showBubbleTail: messageLayoutAttributes.shouldShowTail,
+                                         tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
     }
 }

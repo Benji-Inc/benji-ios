@@ -23,6 +23,10 @@ protocol Transitionable {
 
 extension Transitionable {
 
+    var transitionColor: Color {
+        return .clear
+    }
+
     var receivingDismissalType: TransitionType {
         return .fade
     }

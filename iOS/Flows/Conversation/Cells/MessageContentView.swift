@@ -37,6 +37,16 @@ class MessageContentView: View {
         self.setNeedsLayout()
     }
 
+    /// Sets the background color and shows/hides the bubble tail.
+    func configureBackground(color: UIColor,
+                             showBubbleTail: Bool,
+                             tailOrientation: SpeechBubbleView.TailOrientation) {
+
+        self.backgroundColorView.bubbleColor = color
+        self.backgroundColorView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
+        self.backgroundColorView.orientation = tailOrientation
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
 

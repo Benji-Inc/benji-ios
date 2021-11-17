@@ -107,8 +107,4 @@ extension HomeViewController: TransitionableViewController {
     var receivingPresentationType: TransitionType {
         return .home
     }
-
-    var transitionColor: Color {
-        return .background
-    }
 }

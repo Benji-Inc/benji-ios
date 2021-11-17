@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension TransitionRouter {
 
@@ -18,6 +19,8 @@ extension TransitionRouter {
         guard let snapshot = fromView.snapshotView(afterScreenUpdates: false) else {
             return
         }
+
+        let foo = transitionContext.viewController(forKey: .from)
 
         let containerView = transitionContext.containerView
         containerView.set(backgroundColor: self.fromVC.transitionColor)
@@ -83,6 +86,8 @@ extension TransitionRouter {
             // Unhide all of the views we tampered with so that they're visible after the transition
             self.fromVC.view.alpha = 1
             fromView.isHidden = false
+            containerView.addSubview(foo?.view ?? UIView())
+            foo?.view.expandToSuperviewSize()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
     }

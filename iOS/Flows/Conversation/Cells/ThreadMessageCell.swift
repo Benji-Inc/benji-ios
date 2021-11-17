@@ -112,9 +112,9 @@ class ThreadMessageCell: UICollectionViewCell {
         } else {
             backgroundColor = .darkGray
         }
-        self.messageView.configureBackground(color: backgroundColor,
-                                             showBubbleTail: false,
-                                             tailOrientation: .down)
+        self.messageView.content.configureBackground(color: backgroundColor,
+                                                     showBubbleTail: false,
+                                                     tailOrientation: .down)
 
         self.setNeedsLayout()
 
