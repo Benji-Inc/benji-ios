@@ -40,6 +40,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
+        self.conversationListVC.onSelectedMessage = { [unowned self] (messageID) in
+
+        }
+
         self.conversationListVC.onSelectedConversation = { [unowned self] (channelID) in
             #warning("Present the individual conversation experience")
             logDebug("Selection conversation "+channelID.description)
@@ -60,6 +64,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
             }
             self.presentConversationTitleAlert(for: conversation)
         }
+    }
+
+    func presentThread(for messageId: MessageId) {
+
     }
 
     func presentPeoplePicker() {

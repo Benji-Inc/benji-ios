@@ -10,7 +10,7 @@ import Foundation
 import Photos
 import StreamChat
 
-extension ConversationThreadViewController: SwipeableInputAccessoryViewDelegate {
+extension ThreadViewController: SwipeableInputAccessoryViewDelegate {
 
     func handle(attachment: Attachment, body: String) {
         Task {

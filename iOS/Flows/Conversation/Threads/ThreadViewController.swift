@@ -11,7 +11,7 @@ import Parse
 import Combine
 import StreamChat
 
-class ConversationThreadViewController: DiffableCollectionViewController<ConversationSection,
+class ThreadViewController: DiffableCollectionViewController<ConversationSection,
                                         ConversationItem,
                                         ConversationCollectionViewDataSource>,
                                         CollectionViewInputHandler {
@@ -62,7 +62,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
         self.messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
         self.conversationController = ChatClient.shared.channelController(for: channelID,
                                                                              messageOrdering: .topToBottom)
-        super.init(with: ConversationThreadCollectionView())
+        super.init(with: ThreadCollectionView())
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -161,7 +161,7 @@ class ConversationThreadViewController: DiffableCollectionViewController<Convers
 }
 
 // MARK: - Updates and Subscription
-extension ConversationThreadViewController {
+extension ThreadViewController {
 
     func subscribeToUpdates() {
         self.addKeyboardObservers()
