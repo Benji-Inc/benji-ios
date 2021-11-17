@@ -36,11 +36,13 @@ class InputTypeManager: NSObject, UICollectionViewDelegate {
     func initialize() {
         self.collectionView.allowsMultipleSelection = false
         self.collectionView.delegate = self
+        self.collectionView.isScrollEnabled = false 
 
         Task {
             await self.loadData()
             guard let ip = self.dataSource.indexPath(for: .keyboard) else { return }
             self.collectionView.selectItem(at: ip, animated: false, scrollPosition: .centeredHorizontally)
+            self.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
         }
     }
 

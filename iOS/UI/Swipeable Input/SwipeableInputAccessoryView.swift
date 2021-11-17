@@ -107,6 +107,10 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
             .removeDuplicates()
             .mainSink { items in
                 guard let first = items.first else { return }
+                if let ip = self.inputManager.dataSource.indexPath(for: first) {
+                    self.inputManager.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
+                }
+
                 self.updateInputType(with: first)
             }.store(in: &self.cancellables)
 
