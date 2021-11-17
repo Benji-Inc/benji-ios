@@ -54,7 +54,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     @IBOutlet var inputTypeContainer: UIView!
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
 
-   // lazy var inputTypeVC = InputTypeViewController()
+    lazy var inputManager = InputTypeManager.init(with: CollectionView(layout: InputTypeCollectionViewLayout()))
 
     static var inputTypeMaxHeight: CGFloat = 40
 
@@ -85,36 +85,41 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
         self.inputContainerView.showShadow(withOffset: 8)
 
-        #warning("need to convert this to a UIInputViewController in order to add child controllers")
-//        if let controller = UIWindow.topMostController() {
-//            controller.addChild(viewController: self.inputTypeVC, toView: self.inputTypeContainer)
-//        }
-//
-//        self.inputTypeVC.view.translatesAutoresizingMaskIntoConstraints = false
-//        let topConstraint = self.inputTypeVC.view.topAnchor.constraint(equalTo: self.inputTypeContainer.topAnchor)
-//        let bottomConstraint = self.inputTypeVC.view.bottomAnchor.constraint(equalTo: self.inputTypeContainer.bottomAnchor)
-//        let leadingConstraint = self.inputTypeVC.view.leadingAnchor.constraint(equalTo: self.inputTypeContainer.leadingAnchor)
-//        let trailingConstraint = self.inputTypeVC.view.trailingAnchor.constraint(equalTo: self.inputTypeContainer.trailingAnchor)
-//        self.inputTypeContainer.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
+        self.inputTypeContainer.addSubview(self.inputManager.collectionView)
+
+        self.inputManager.collectionView.translatesAutoresizingMaskIntoConstraints = false
+        let topConstraint = self.inputManager.collectionView.topAnchor.constraint(equalTo: self.inputTypeContainer.topAnchor)
+        let bottomConstraint = self.inputManager.collectionView.bottomAnchor.constraint(equalTo: self.inputTypeContainer.bottomAnchor)
+        let leadingConstraint = self.inputManager.collectionView.leadingAnchor.constraint(equalTo: self.inputTypeContainer.leadingAnchor)
+        let trailingConstraint = self.inputManager.collectionView.trailingAnchor.constraint(equalTo: self.inputTypeContainer.trailingAnchor)
+        self.inputTypeContainer.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
 
         self.setupGestures()
         self.setupHandlers()
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-       // self.inputTypeVC.collectionView.expandToSuperviewSize()
     }
 
     // MARK: PRIVATE
 
     private func setupHandlers() {
 
-//        KeyboardManager.shared.$willKeyboardShow.mainSink { willShow in
-//            self.inputTypeHeightConstraint.constant = willShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 0
-//            self.inputTypeVC.view.alpha = willShow ? 1 : 0
-//        }.store(in: &self.cancellables)
+        self.inputManager
+            .$selectedItems
+            .removeDuplicates()
+            .mainSink { items in
+                guard let first = items.first else { return }
+                if let ip = self.inputManager.dataSource.indexPath(for: first) {
+                    self.inputManager.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
+                }
+
+                self.updateInputType(with: first)
+            }.store(in: &self.cancellables)
+
+        KeyboardManager.shared.$willKeyboardShow.mainSink { willShow in
+            UIView.animate(withDuration: 0.2) {
+                self.inputTypeHeightConstraint.constant = willShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 1
+                self.inputManager.collectionView.alpha = willShow ? 1 : 0
+            }
+        }.store(in: &self.cancellables)
 
         KeyboardManager.shared.$currentEvent
             .mainSink { [weak self] event in
@@ -199,7 +204,9 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         return results
     }
 
-    func updateInputType() {}
+    func updateInputType(with type: InputType) {
+        self.textView.updateInputView(type: type)
+    }
 
     func animateInputViews(with text: String) {}
 
