@@ -12,6 +12,7 @@ class InputTextView: ExpandingTextView {
 
     lazy var countView = CharacterCountView()
     lazy var confirmationView = AlertConfirmationView()
+    lazy var placeholderView = InputPlaceholderView()
 
     private(set) var currentInputType: InputType?
     @Published var inputText: String = ""
@@ -53,14 +54,9 @@ class InputTextView: ExpandingTextView {
             self.inputView = self.confirmationView
         case .keyboard:
             self.inputView = nil
-        case .photo:
-            break
-        case .video:
-            break
-        case .calendar:
-            break
-        case .jibs:
-            break 
+        case .photo, .video, .calendar, .jibs:
+            self.placeholderView.configure(with: type)
+            self.inputView = self.placeholderView
         }
 
         self.currentInputType = type

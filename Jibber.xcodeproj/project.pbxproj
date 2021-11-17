@@ -85,6 +85,7 @@
 		D61316B2273C85D000DC782B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
 		D614F831270F9FCE0000D15F /* ReservationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D614F830270F9FCE0000D15F /* ReservationCell.swift */; };
 		D6155346274484B800B08459 /* InputTypeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6155345274484B800B08459 /* InputTypeManager.swift */; };
+		D615534827448C4200B08459 /* InputPlaceholderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615534727448C4200B08459 /* InputPlaceholderView.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
 		D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DB24FAD7B400B63412 /* AttachmentCell.swift */; };
@@ -962,6 +963,7 @@
 		D6123E512710BFB000F90D30 /* InputActivityBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputActivityBar.swift; sourceTree = "<group>"; };
 		D614F830270F9FCE0000D15F /* ReservationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationCell.swift; sourceTree = "<group>"; };
 		D6155345274484B800B08459 /* InputTypeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTypeManager.swift; sourceTree = "<group>"; };
+		D615534727448C4200B08459 /* InputPlaceholderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputPlaceholderView.swift; sourceTree = "<group>"; };
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
 		D61592DB24FAD7B400B63412 /* AttachmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
@@ -2173,6 +2175,7 @@
 				D6AC1D66273DAD7800774622 /* InputTypeCollectionViewLayout.swift */,
 				D6AC1D64273DAD5A00774622 /* InputTypeDataSource.swift */,
 				D6155345274484B800B08459 /* InputTypeManager.swift */,
+				D615534727448C4200B08459 /* InputPlaceholderView.swift */,
 			);
 			path = InputType;
 			sourceTree = "<group>";
@@ -3137,6 +3140,7 @@
 				808313B52723694B00BAEBE0 /* ThreadMessageCell.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
+				D615534827448C4200B08459 /* InputPlaceholderView.swift in Sources */,
 				D678EC2D26F5384D0071DB0D /* CircleGroupCollectionViewLayout.swift in Sources */,
 				D677589B25B0A06A007E0184 /* TransitionRouter+Move.swift in Sources */,
 				D66379D225A3704300A4A3B7 /* UserNotificationManager.swift in Sources */,

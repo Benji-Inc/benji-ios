@@ -102,6 +102,14 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
 
     private func setupHandlers() {
 
+        self.inputManager
+            .$selectedItems
+            .removeDuplicates()
+            .mainSink { items in
+                guard let first = items.first else { return }
+                self.updateInputType(with: first)
+            }.store(in: &self.cancellables)
+
         KeyboardManager.shared.$willKeyboardShow.mainSink { willShow in
             self.inputTypeHeightConstraint.constant = willShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 0
             self.inputManager.collectionView.alpha = willShow ? 1 : 0
@@ -190,7 +198,9 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
         return results
     }
 
-    func updateInputType() {}
+    func updateInputType(with type: InputType) {
+        self.textView.updateInputView(type: type)
+    }
 
     func animateInputViews(with text: String) {}
 
