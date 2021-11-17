@@ -71,7 +71,7 @@ extension ConversationMessageCellDataSource {
             cell.setText(with: message)
 
             var zIndex = 0
-            if let layout = item.collectionView.collectionViewLayout as? ConversationMessageCellLayout {
+            if let layout = item.collectionView.collectionViewLayout as? ConversationMessagesCellLayout {
                 zIndex = layout.getZIndex(forIndexPath: indexPath)
             }
 

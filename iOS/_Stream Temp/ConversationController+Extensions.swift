@@ -69,6 +69,20 @@ extension ChatChannelController {
         }
     }
 
+    /// Returns the most recently sent message from either the current user or from another user.
+    func getMostRecentMessage(fromCurrentUser: Bool) -> Message? {
+        let allMessages: [Message] = Array(self.messages)
+
+        // Find the most recent message that was sent by the user.
+        return allMessages.first { message in
+            if fromCurrentUser {
+                return message.isFromCurrentUser
+            } else {
+                return !message.isFromCurrentUser
+            }
+        }
+    }
+
     func donateIntent(for sendable: Sendable) async {
         guard case MessageKind.text(let text) = sendable.kind else { return }
         let memberIDs = self.conversation.lastActiveMembers.compactMap { member in

@@ -62,22 +62,6 @@ class ConversationInputAccessoryView: SwipeableInputAccessoryView {
 
     // MARK: PUBLIC
 
-    func updateTypingActivity(with users: Set<ChatUser>) {
-        var text: String = ""
-        var names: [String] = []
-        for (index, user) in users.enumerated() {
-            if users.count == 1 || index == users.count - 1 {
-                text.append("\(user.givenName) is typing...")
-            } else {
-                text.append("\(user.givenName), ")
-            }
-
-            names.append(user.givenName)
-        }
-
-        self.activityBar.update(text: text, with: names)
-    }
-
     func edit(message: Messageable) {
         switch message.kind {
         case .text(let body):

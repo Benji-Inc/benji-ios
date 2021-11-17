@@ -63,17 +63,10 @@ extension ConversationViewController {
             }
         }.store(in: &self.cancellables)
 
-        self.conversationController?.typingUsersPublisher.mainSink { [unowned self] users in
-            let nonMeUsers = users.filter { user in
-                return user.userObjectID != User.current()?.objectId
-            }
-            self.messageInputAccessoryView.updateTypingActivity(with: nonMeUsers)
-        }.store(in: &self.cancellables)
-
         self.collectionView.publisher(for: \.contentOffset).mainSink { [unowned self] _ in
             guard self.collectionView.isTracking else { return }
             self.collectionView.visibleCells.forEach { cell in
-                if let messageCell = cell as? ConversationMessageCell {
+                if let messageCell = cell as? ConversationMessagesCell {
                     messageCell.handle(isCentered: false)
                 }
             }
@@ -89,7 +82,7 @@ extension ConversationViewController {
                 guard let messageCell = cell else { return }
                 messageCell.handle(isCentered: true)
                 self.collectionView.visibleCells.forEach { cell in
-                    if let offsetCell = cell as? ConversationMessageCell, offsetCell != messageCell {
+                    if let offsetCell = cell as? ConversationMessagesCell, offsetCell != messageCell {
                         offsetCell.handle(isCentered: false)
                     }
                 }
