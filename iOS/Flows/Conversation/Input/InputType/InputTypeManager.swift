@@ -41,8 +41,12 @@ class InputTypeManager: NSObject, UICollectionViewDelegate {
         Task {
             await self.loadData()
             guard let ip = self.dataSource.indexPath(for: .keyboard) else { return }
-            self.collectionView.selectItem(at: ip, animated: false, scrollPosition: .centeredHorizontally)
-            self.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
+
+            // A little hack to get the keyboard centered and selected. 
+            self.collectionView.selectItem(at: ip, animated: true, scrollPosition: .centeredHorizontally)
+            if let cell = collectionView.cellForItem(at: ip) as? CollectionViewManagerCell {
+                cell.update(isSelected: true)
+            }
         }
     }
 
