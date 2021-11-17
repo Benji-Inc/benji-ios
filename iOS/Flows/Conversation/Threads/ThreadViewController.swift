@@ -17,9 +17,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
                                         CollectionViewInputHandler {
 
     private let blurView = BlurView()
-    private let parentMessageView = ThreadMessageCell()
-    /// A view positioned behind the parent message to separate it from the rest of the messages.
-    private let parentMessageBlurView = UIVisualEffectView(effect: UIBlurEffect(style: .extraLight))
+    private let parentMessageView = MessageContentView()
 
     /// A controller for the message that all the replies in this thread are responding to.
     let messageController: ChatMessageController
@@ -73,13 +71,9 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         super.initializeViews()
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
-        self.view.addSubview(self.parentMessageBlurView)
         self.view.addSubview(self.parentMessageView)
 
-        self.parentMessageView.set(message: self.parentMessage, replies: [], totalReplyCount: 0)
-        self.parentMessageView.setAuthor(with: self.parentMessage.avatar,
-                                         showTopLine: false,
-                                         showBottomLine: false)
+        self.parentMessageView.setText(with: self.parentMessage)
 
         self.subscribeToUpdates()
     }
@@ -91,15 +85,9 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         let headerHeight: CGFloat = 120
 
-        self.parentMessageBlurView.pin(.top, padding: Theme.contentOffset)
-        self.parentMessageBlurView.width = self.view.width - Theme.contentOffset.doubled
-        self.parentMessageBlurView.height = headerHeight
-        self.parentMessageBlurView.centerOnX()
-        self.parentMessageBlurView.roundCorners()
-
         self.parentMessageView.width = self.view.width * 0.8
         self.parentMessageView.height = headerHeight - Theme.contentOffset.doubled
-        self.parentMessageView.match(.top, to: .top, of: self.parentMessageBlurView, offset: Theme.contentOffset)
+        self.parentMessageView.pinToSafeArea(.top, padding: Theme.contentOffset)
         self.parentMessageView.centerOnX()
 
         self.collectionView.contentInset.top = headerHeight + Theme.contentOffset

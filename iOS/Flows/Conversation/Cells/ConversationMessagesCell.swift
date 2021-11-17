@@ -141,11 +141,11 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         }
 
         return self.convert(CGRect(x: 0,
-                                   y: MessageSubcell.maximumHeight
+                                   y: MessageContentView.maximumHeight
                                    + ConversationMessagesCell.spaceBetweenCellTops * CGFloat(self.maxMessagesPerSection) * 2
                                    + Theme.contentOffset,
                                    width: self.width,
-                                   height: MessageSubcell.minimumHeight),
+                                   height: MessageContentView.minimumHeight),
                             to: targetView)
     }
 }
@@ -169,7 +169,7 @@ extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
         guard let messageLayout = collectionViewLayout as? ConversationMessagesCellLayout else { return .zero }
 
         var width = collectionView.width
-        var height: CGFloat = MessageSubcell.minimumHeight
+        var height: CGFloat = MessageContentView.minimumHeight
 
         // The heights of all cells in a section are the same as the front most cell in that section.
         if let frontmostItemIndex = messageLayout.getFrontmostItemIndexPath(inSection: indexPath.section),
@@ -180,7 +180,7 @@ extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
                 = ChatClient.shared.messageController(cid: frontmostItem.channelID,
                                                       messageId: frontmostItem.messageID).message {
 
-                height = MessageSubcell.getHeight(withWidth: width, message: frontmostMessage)
+                height = MessageContentView.getHeight(withWidth: width, message: frontmostMessage)
             }
         }
 
@@ -219,9 +219,9 @@ extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
                 let frontmostItemHeight = self.collectionView(collectionView,
                                                               layout: collectionViewLayout,
                                                               sizeForItemAt: frontMostIndex).height
-                insets.top = MessageSubcell.maximumHeight - frontmostItemHeight
+                insets.top = MessageContentView.maximumHeight - frontmostItemHeight
             } else {
-                insets.top = MessageSubcell.maximumHeight
+                insets.top = MessageContentView.maximumHeight
             }
 
             // Ensure that the bottom of the latest non-user reply in this cell aligns

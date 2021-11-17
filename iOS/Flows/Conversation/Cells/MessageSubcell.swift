@@ -48,6 +48,29 @@ class MessageContentView: View {
         self.textView.expand(.bottom,
                              to: self.backgroundColorView.bubbleFrame.bottom - Theme.contentOffset.half)
     }
+
+    /// Sizing
+
+    static var minimumHeight: CGFloat { return 50 }
+    static var maximumHeight: CGFloat { return 100 }
+
+    /// Returns the height that a message subcell should be given a width and message to display.
+    static func getHeight(withWidth width: CGFloat, message: Messageable) -> CGFloat {
+
+        // If the message is deleted, we're not going to display its content.
+        // Return the minimum height so we have enough to show the deleted status.
+        if message.isDeleted {
+            return MessageContentView.minimumHeight
+        }
+
+        let textView = MessageTextView()
+        textView.setText(with: message)
+        var textViewSize = textView.getSize(withMaxWidth: width)
+        textViewSize.height += Theme.contentOffset
+        return clamp(textViewSize.height + MessageContentView.bubbleTailLength,
+                     MessageContentView.minimumHeight,
+                     MessageContentView.maximumHeight)
+    }
 }
 
 /// A cell for displaying individual messages  and replies within a MessageCell or ThreadedMessageCell.
@@ -114,31 +137,5 @@ class MessageSubcell: UICollectionViewCell {
         self.content.backgroundColorView.bubbleColor = color
         self.content.backgroundColorView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
         self.content.backgroundColorView.orientation = tailOrientation
-    }
-}
-
-// MARK: - Sizing
-
-extension MessageSubcell {
-
-    static var minimumHeight: CGFloat { return 50 }
-    static var maximumHeight: CGFloat { return 100 }
-
-    /// Returns the height that a message subcell should be given a width and message to display.
-    static func getHeight(withWidth width: CGFloat, message: Messageable) -> CGFloat {
-
-        // If the message is deleted, we're not going to display its content.
-        // Return the minimum height so we have enough to show the deleted status.
-        if message.isDeleted {
-            return MessageSubcell.minimumHeight
-        }
-
-        let textView = MessageTextView()
-        textView.setText(with: message)
-        var textViewSize = textView.getSize(withMaxWidth: width)
-        textViewSize.height += Theme.contentOffset
-        return clamp(textViewSize.height + MessageContentView.bubbleTailLength,
-                     MessageSubcell.minimumHeight,
-                     MessageSubcell.maximumHeight)
     }
 }
