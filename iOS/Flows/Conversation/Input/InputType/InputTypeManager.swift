@@ -34,12 +34,13 @@ class InputTypeManager: NSObject, UICollectionViewDelegate {
     }
 
     func initialize() {
-        self.collectionView.allowsMultipleSelection = true
+        self.collectionView.allowsMultipleSelection = false
         self.collectionView.delegate = self
 
         Task {
             await self.loadData()
-            self.selectedItems = [.keyboard]
+            guard let ip = self.dataSource.indexPath(for: .keyboard) else { return }
+            self.collectionView.selectItem(at: ip, animated: false, scrollPosition: .centeredHorizontally)
         }
     }
 
@@ -100,10 +101,11 @@ class InputTypeManager: NSObject, UICollectionViewDelegate {
     }
 
     func getAnimationCycle() -> AnimationCycle? {
+        guard let ip = self.dataSource.indexPath(for: .keyboard) else { return nil }
         return AnimationCycle(inFromPosition: .inward,
                               outToPosition: .inward,
                               shouldConcatenate: true,
-                              scrollToIndexPath: nil)
+                              scrollToIndexPath: ip)
     }
 
     //MARK: CollectionViewDelegate
