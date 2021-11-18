@@ -10,6 +10,11 @@ import Foundation
 import StreamChat
 import Combine
 
+enum ConversationUIState {
+    case read // Keyboard is NOT shown
+    case write // Keyboard IS shown
+}
+
 class ConversationListViewController: FullScreenViewController,
                                       UICollectionViewDelegate,
                                       UICollectionViewDelegateFlowLayout,

@@ -18,7 +18,6 @@
 		801EC75026D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */; };
 		8020DD93272C81FB00D5BA04 /* ConversationInputAccessoryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8020DD92272C81FB00D5BA04 /* ConversationInputAccessoryView.xib */; };
 		8024B95326F278C8008ABF7F /* ConversationViewControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8024B95026F278C8008ABF7F /* ConversationViewControllerDataSource.swift */; };
-		8024B95426F278C8008ABF7F /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8024B95126F278C8008ABF7F /* ConversationViewController.swift */; };
 		80251FF826F3D362006D7873 /* MessageController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80251FF726F3D362006D7873 /* MessageController+Extensions.swift */; };
 		8028C9E9273ECB1200520465 /* ConversationListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8028C9E8273ECB1200520465 /* ConversationListViewController.swift */; };
 		802C448A26CC76CC00A333A4 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802C448926CC76CC00A333A4 /* Logger.swift */; };
@@ -635,7 +634,6 @@
 		D6A49A78260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */; };
 		D6A4A1F625E9550A007F3E15 /* UserNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */; };
 		D6A4A1F725E9550A007F3E15 /* UserNotificationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */; };
-		D6A6691B271A11BD0001D218 /* ConversationViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A6691A271A11BD0001D218 /* ConversationViewController+Extension.swift */; };
 		D6A6691D271A44FB0001D218 /* Pass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A6691C271A44FB0001D218 /* Pass.swift */; };
 		D6A6691E271A44FB0001D218 /* Pass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A6691C271A44FB0001D218 /* Pass.swift */; };
 		D6A6691F271A44FB0001D218 /* Pass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A6691C271A44FB0001D218 /* Pass.swift */; };
@@ -904,7 +902,6 @@
 		801EC74D26D5AE1F00B52F31 /* UICollectionView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extensions.swift"; sourceTree = "<group>"; };
 		8020DD92272C81FB00D5BA04 /* ConversationInputAccessoryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ConversationInputAccessoryView.xib; sourceTree = "<group>"; };
 		8024B95026F278C8008ABF7F /* ConversationViewControllerDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewControllerDataSource.swift; sourceTree = "<group>"; };
-		8024B95126F278C8008ABF7F /* ConversationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConversationViewController.swift; sourceTree = "<group>"; };
 		80251FF726F3D362006D7873 /* MessageController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageController+Extensions.swift"; sourceTree = "<group>"; };
 		8028C9E8273ECB1200520465 /* ConversationListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationListViewController.swift; sourceTree = "<group>"; };
 		802C448926CC76CC00A333A4 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
@@ -1178,7 +1175,6 @@
 		D6A3E24827025AC900CEBAC0 /* ConversationHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationHeaderView.swift; sourceTree = "<group>"; };
 		D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewAnimatingState+Extensions.swift"; sourceTree = "<group>"; };
 		D6A4A1F525E9550A007F3E15 /* UserNotificationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserNotificationCategory.swift; sourceTree = "<group>"; };
-		D6A6691A271A11BD0001D218 /* ConversationViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewController+Extension.swift"; sourceTree = "<group>"; };
 		D6A6691C271A44FB0001D218 /* Pass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pass.swift; sourceTree = "<group>"; };
 		D6AC1D60273DA44A00774622 /* InputType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputType.swift; sourceTree = "<group>"; };
 		D6AC1D64273DAD5A00774622 /* InputTypeDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTypeDataSource.swift; sourceTree = "<group>"; };
@@ -1771,8 +1767,6 @@
 				80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */,
 				D6A3E24827025AC900CEBAC0 /* ConversationHeaderView.swift */,
 				D67896CB2304524C0059BA75 /* ConversationListCoordinator.swift */,
-				8024B95126F278C8008ABF7F /* ConversationViewController.swift */,
-				D6A6691A271A11BD0001D218 /* ConversationViewController+Extension.swift */,
 				8024B95026F278C8008ABF7F /* ConversationViewControllerDataSource.swift */,
 				80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */,
 				D6B2603622E6AA3800143CF0 /* Input */,
@@ -2983,7 +2977,6 @@
 				D691794222F6418700340AA3 /* Router.swift in Sources */,
 				D60F95F02665A5E400CF8766 /* ConnectionRequestCell.swift in Sources */,
 				D615534E2745C1C900B08459 /* MessageContentView.swift in Sources */,
-				D6A6691B271A11BD0001D218 /* ConversationViewController+Extension.swift in Sources */,
 				D6AC1D69273DAD9600774622 /* InputTypeCell.swift in Sources */,
 				D63D5C97265811B000543200 /* URL+Extensions.swift in Sources */,
 				802C448A26CC76CC00A333A4 /* Logger.swift in Sources */,
@@ -3040,7 +3033,6 @@
 				D67934E523DE66FE00536B44 /* PushPayload.swift in Sources */,
 				D635F0A627135BAB00A02D17 /* ThreadCollectionViewLayout.swift in Sources */,
 				D66F0FD422BF074C00BA277D /* DeeplinkObject.swift in Sources */,
-				8024B95426F278C8008ABF7F /* ConversationViewController.swift in Sources */,
 				D6D39288265F15B800E49F1E /* NoticeCell.swift in Sources */,
 				806DA16A27307FA400843C4E /* MessageSubcell.swift in Sources */,
 				D6D1461121D583D200CD8CE4 /* RootNavigationController.swift in Sources */,
