@@ -199,7 +199,7 @@ class ConversationListViewController: FullScreenViewController,
                         return user.userObjectID != User.current()?.objectId
                     }
                     // TODO: Update the typing indicator.
-            })
+                })
 
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.view.layoutNow()
@@ -263,7 +263,7 @@ class ConversationListViewController: FullScreenViewController,
                 logDebug(error)
             }
             self.isLoadingConversations = false
-        }
+        }.add(to: self.taskPool)
     }
 
     // MARK: - UIScrollViewDelegate
@@ -474,7 +474,7 @@ class ConversationListViewController: FullScreenViewController,
             } catch {
                 logDebug(error)
             }
-        }
+        }.add(to: self.taskPool)
     }
 
     private func reply(to cid: ConversationID, sendable: Sendable) {
@@ -485,7 +485,7 @@ class ConversationListViewController: FullScreenViewController,
             } catch {
                 logDebug(error)
             }
-        }
+        }.add(to: self.taskPool)
     }
 }
 

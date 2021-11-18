@@ -1,5 +1,5 @@
 //
-//  ConversationViewController.swift
+//  ThreadViewController.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 12/27/18.
@@ -70,6 +70,8 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
     override func initializeViews() {
         super.initializeViews()
 
+        self.modalPresentationStyle = .overCurrentContext
+
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
 
@@ -88,8 +90,9 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         let headerHeight: CGFloat = 120
 
-        self.parentMessageView.width = self.view.width * 0.8
-        self.parentMessageView.height = headerHeight - Theme.contentOffset.doubled
+        let msgWidth = self.view.width - Theme.contentOffset.doubled
+        self.parentMessageView.width = msgWidth
+        self.parentMessageView.height = MessageContentView.getHeight(withWidth: self.view.width, message: self.parentMessage)
         self.parentMessageView.pinToSafeArea(.top, padding: Theme.contentOffset)
         self.parentMessageView.centerOnX()
 

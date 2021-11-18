@@ -15,17 +15,12 @@ protocol Transitionable {
     var sendingDismissalType: TransitionType { get }
     var receivingPresentationType: TransitionType { get }
     var receivingDismissalType: TransitionType { get }
-    var transitionColor: Color { get }
     var transitionDuration: TimeInterval { get }
 
     func getTransitionType(for operation: UINavigationController.Operation, isFromVC: Bool) -> TransitionType
 }
 
 extension Transitionable {
-
-    var transitionColor: Color {
-        return .clear
-    }
 
     var receivingDismissalType: TransitionType {
         return .fade
@@ -62,7 +57,6 @@ enum TransitionType: Equatable {
     case move(UIView)
     case fade
     case fill(UIView)
-    case home
 
     var duration: TimeInterval {
         switch self {
@@ -71,8 +65,6 @@ enum TransitionType: Equatable {
         case .fade:
             return 0.75
         case .fill(_):
-            return 0.5
-        case .home:
             return 0.5
         }
     }

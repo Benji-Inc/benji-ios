@@ -104,11 +104,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
                                             deepLink: self.deepLink)
 
         self.addChildAndStart(coordinator) { _ in
-            self.router.popToModule(module: self)
+            self.router.dismiss(source: coordinator.toPresentable())
         }
 
-        self.router.push(coordinator)
-        //self.router.present(coordinator, source: self.conversationListVC)
+        self.router.present(coordinator, source: self.conversationListVC)
     }
 
     func presentPeoplePicker() {
