@@ -10,15 +10,17 @@ import Foundation
 import StreamChat
 import UIKit
 
-/// A cell to display a high-level view of a conversation's message. Displays a limited number of recent replies to the message.
-/// The user's replies and other replies are put in two stacks (along the z-axis), with the most recent reply at the front (visually obscuring the others).
-class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayoutDelegate {
+/// A cell to display a high-level view of a conversation's message. Displays a limited number of recent messages in a conversation.
+/// The user's messages and other messages are put in two stacks (along the z-axis),
+/// with the most recent message at the front (visually obscuring the others).
+class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLayoutDelegate {
 
     // Interaction handling
-    var handleTappedMessage: ((Messageable) -> Void)?
-    var handleDeleteMessage: ((Messageable) -> Void)?
+    var handleTappedMessage: ((ConversationMessageItem) -> Void)?
+    var handleTappedConversation: ((MessageSequence) -> Void)?
+    var handleDeleteConversation: ((MessageSequence) -> Void)?
 
-    private lazy var collectionLayout = ConversationMessageCellLayout(messageDelegate: self)
+    private lazy var collectionLayout = ConversationMessagesCellLayout(conversationDelegate: self)
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
@@ -28,8 +30,8 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
 
     private var state: ConversationUIState = .read
 
-    /// The parent message of this thread.
-    var message: Messageable?
+    /// The conversation containing all the messages..
+    var conversation: MessageSequence?
 
     /// The maximum number of messages we'll show per stack of messages.
     private let maxMessagesPerSection = 3
@@ -44,11 +46,11 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
                                                         left: 0,
                                                         bottom: 0,
                                                         right: 0)
-
-        self.collectionView.onTap { [unowned self] tapRecognizer in
-            guard let message = self.message else { return }
-            self.handleTappedMessage?(message)
-        }
+        #warning("This prevents single selection of a cell")
+//        self.collectionView.onTap { [unowned self] tapRecognizer in
+//            guard let conversation = self.conversation else { return }
+//            self.handleTappedConversation?(conversation)
+//        }
 
         self.dataSource.contextMenuDelegate = self
     }
@@ -72,47 +74,39 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
     ///     - message: The root message to display, which may have replies.
     ///     - replies: The currently loaded replies to the message. These should be ordered by newest to oldest.
     ///     - totalReplyCount: The total number of replies that this message has. It may be more than the passed in replies.
-    func set(message: Messageable?,
-             replies: [Messageable],
-             totalReplyCount: Int) {
 
-        self.message = message
+    func set(sequence: MessageSequence) {
+
+        self.conversation = sequence
 
         // Separate the user messages from other message.
-        var userReplies = replies.filter { message in
+        let userMessages = sequence.messages.filter { message in
             return message.isFromCurrentUser
         }
-        var otherReplies = replies.filter { message in
+
+        let otherMessages = sequence.messages.filter { message in
             return !message.isFromCurrentUser
-        }
-        // Put the parent message in the appropriate stack based on who sent it.
-        if let message = message {
-            if message.isFromCurrentUser {
-                userReplies.append(message)
-            } else {
-                otherReplies.append(message)
-            }
         }
 
         // Only shows a limited number of messages in each stack.
         // The for the user's messages, the newest message is at the bottom, so reverse the order.
-        let currentUserMessages = userReplies.prefix(self.maxMessagesPerSection).reversed().map { message in
+        let currentUserMessages = userMessages.prefix(self.maxMessagesPerSection).reversed().map { message in
             return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
 
         // Other messages have the newest message on top, so there's no need to reverse the messages.
-        let otherMessages = otherReplies.prefix(self.maxMessagesPerSection).map { message in
+        let messages = otherMessages.prefix(self.maxMessagesPerSection).map { message in
             return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
         var snapshot = self.dataSource.snapshot()
 
-        // Clear out the sections to make way for a fresh set of message.
+        // Clear out the sections to make way for a fresh set of messages.
         snapshot.deleteSections(ConversationMessageSection.allCases)
         snapshot.appendSections(ConversationMessageSection.allCases)
 
-        snapshot.appendItems(otherMessages, toSection: .otherMessages)
+        snapshot.appendItems(messages, toSection: .otherMessages)
         snapshot.appendItems(currentUserMessages, toSection: .currentUserMessages)
 
         self.dataSource.apply(snapshot)
@@ -147,30 +141,35 @@ class ConversationMessageCell: UICollectionViewCell, ConversationMessageCellLayo
         }
 
         return self.convert(CGRect(x: 0,
-                                   y: MessageSubcell.maximumHeight
-                                   + ConversationMessageCell.spaceBetweenCellTops * CGFloat(self.maxMessagesPerSection) * 2
+                                   y: MessageContentView.maximumHeight
+                                   + ConversationMessagesCell.spaceBetweenCellTops * CGFloat(self.maxMessagesPerSection) * 2
                                    + Theme.contentOffset,
                                    width: self.width,
-                                   height: MessageSubcell.minimumHeight),
+                                   height: MessageContentView.minimumHeight),
                             to: targetView)
     }
 }
 
-extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
+extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
 
     /// The space between the top of a cell and tops of adjacent cells in a stack.
     static var spaceBetweenCellTops: CGFloat { return 8 }
 
     // MARK: - UICollectionViewDelegateFlowLayout
 
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
+        self.handleTappedMessage?(item)
+    }
+
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        guard let messageLayout = collectionViewLayout as? ConversationMessageCellLayout else { return .zero }
+        guard let messageLayout = collectionViewLayout as? ConversationMessagesCellLayout else { return .zero }
 
         var width = collectionView.width
-        var height: CGFloat = MessageSubcell.minimumHeight
+        var height: CGFloat = MessageContentView.minimumHeight
 
         // The heights of all cells in a section are the same as the front most cell in that section.
         if let frontmostItemIndex = messageLayout.getFrontmostItemIndexPath(inSection: indexPath.section),
@@ -181,7 +180,7 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
                 = ChatClient.shared.messageController(cid: frontmostItem.channelID,
                                                       messageId: frontmostItem.messageID).message {
 
-                height = MessageSubcell.getHeight(withWidth: width, message: frontmostMessage)
+                height = MessageContentView.getHeight(withWidth: width, message: frontmostMessage)
             }
         }
 
@@ -196,7 +195,7 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
 
-        guard let messageLayout = collectionViewLayout as? ConversationMessageCellLayout else { return .zero }
+        guard let messageLayout = collectionViewLayout as? ConversationMessagesCellLayout else { return .zero }
 
         // Sections are a fixed height. They are exactly tall enough to accommodate the maximum cell count
         // per section with the frontmost cell at the maximum height.
@@ -220,21 +219,21 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
                 let frontmostItemHeight = self.collectionView(collectionView,
                                                               layout: collectionViewLayout,
                                                               sizeForItemAt: frontMostIndex).height
-                insets.top = MessageSubcell.maximumHeight - frontmostItemHeight
+                insets.top = MessageContentView.maximumHeight - frontmostItemHeight
             } else {
-                insets.top = MessageSubcell.maximumHeight
+                insets.top = MessageContentView.maximumHeight
             }
 
             // Ensure that the bottom of the latest non-user reply in this cell aligns
             // with the bottom of the latest non-user reply in adjacent cells.
-            insets.bottom += CGFloat(extraSpacersNeeded) * ConversationMessageCell.spaceBetweenCellTops
+            insets.bottom += CGFloat(extraSpacersNeeded) * ConversationMessagesCell.spaceBetweenCellTops
         } else if section == 1 {
             // Put some space between the two sections of messages.
             insets.top = Theme.contentOffset.half
 
             // Ensure that the top of the latest user reply in this cell aligns
             // with the tops of the latest user replies in adjacent cells.
-            insets.top += CGFloat(extraSpacersNeeded) * ConversationMessageCell.spaceBetweenCellTops
+            insets.top += CGFloat(extraSpacersNeeded) * ConversationMessagesCell.spaceBetweenCellTops
         }
 
         return insets
@@ -248,13 +247,13 @@ extension ConversationMessageCell: UICollectionViewDelegateFlowLayout {
                                            layout: collectionViewLayout,
                                            sizeForItemAt: IndexPath(item: 0, section: section))
         // Return a negative spacing so that the cells overlap.
-        return -cellSize.height + ConversationMessageCell.spaceBetweenCellTops
+        return -cellSize.height + ConversationMessagesCell.spaceBetweenCellTops
     }
 }
 
 // MARK: - UIContextMenuInteractionDelegate
 
-extension ConversationMessageCell: UIContextMenuInteractionDelegate {
+extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
 
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
@@ -266,30 +265,32 @@ extension ConversationMessageCell: UIContextMenuInteractionDelegate {
     }
 
     private func makeContextMenu() -> UIMenu {
-        guard let message = self.message else { return UIMenu() }
+        guard let conversation = self.conversation else { return UIMenu() }
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
 
         let confirmDelete = UIAction(title: "Confirm",
                                      image: UIImage(systemName: "trash"),
                                      attributes: .destructive) { [unowned self] action in
-            self.handleDeleteMessage?(message)
+            self.handleDeleteConversation?(conversation)
         }
 
 
-        let deleteText = message.isFromCurrentUser ? "Delete Conversation" : "Hide Conversation"
+        let deleteText = conversation.isCreatedByCurrentUser ? "Delete Conversation" : "Hide Conversation"
         let deleteMenu = UIMenu(title: deleteText,
                                 image: UIImage(systemName: "trash"),
                                 options: .destructive,
                                 children: [confirmDelete, neverMind])
 
-        let openThread = UIAction(title: "Expand") { [unowned self] action in
-            self.handleTappedMessage?(message)
+        let openConvesation = UIAction(title: "Open Conversation") { [unowned self] action in
+            self.handleTappedConversation?(conversation)
         }
 
         var menuElements: [UIMenuElement] = []
-        menuElements.append(deleteMenu)
-        menuElements.append(openThread)
+        if conversation.isCreatedByCurrentUser {
+            menuElements.append(deleteMenu)
+        }
+        menuElements.append(openConvesation)
 
         return UIMenu(children: menuElements)
     }

@@ -23,10 +23,6 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
         return .fade
     }
 
-    var transitionColor: Color {
-        return .background
-    }
-
     lazy var welcomeVC = WelcomeViewController()
     lazy var phoneVC = PhoneViewController()
     lazy var codeVC = CodeViewController()

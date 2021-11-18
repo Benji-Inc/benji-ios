@@ -25,10 +25,6 @@ class ArchiveViewController: DiffableCollectionViewController<ArchiveCollectionV
         return .fade
     }
 
-    var transitionColor: Color {
-        return .clear
-    }
-
     // MARK: - UI
 
     #warning("Remove after Beta")

@@ -40,8 +40,12 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case loadMore
     }
 
-    var handleSelectedMessage: ((Messageable) -> Void)?
-    var handleDeleteMessage: ((Messageable) -> Void)?
+    var handleSelectedConversation: ((MessageSequence) -> Void)?
+    var handleDeletedConversation: ((MessageSequence) -> Void)?
+
+    var handleSelectedMessage: ((ConversationMessageItem, UIView) -> Void)?
+    var handleDeleteMessage: ((ConversationMessageItem) -> Void)?
+    
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
 
@@ -69,9 +73,10 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                                                                item: (cid, itemID, self))
 
                 threadCell.handleDeleteMessage = { [unowned self] (message) in
-                    self.handleDeleteMessage?(message)
+//                    self.handleDeleteMessage?(item)
                 }
                 return threadCell
+
             } else if section.isConversationList {
                 let cid = try! ConversationID(cid: itemID)
 
@@ -79,11 +84,14 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 = collectionView.dequeueConfiguredReusableCell(using: self.conversationCellRegistration,
                                                                for: indexPath,
                                                                item: (cid, self))
-                messageCell.handleTappedMessage = { [unowned self] (message) in
-                    self.handleSelectedMessage?(message)
+                messageCell.handleTappedMessage = { [unowned self] item in
+                    self.handleSelectedMessage?(item, messageCell)
                 }
-                messageCell.handleDeleteMessage = { [unowned self] (message) in
-                    self.handleDeleteMessage?(message)
+                messageCell.handleTappedConversation = { [unowned self] (conversation) in
+                    self.handleSelectedConversation?(conversation)
+                }
+                messageCell.handleDeleteConversation = { [unowned self] (conversation) in
+                    self.handleDeletedConversation?(conversation)
                 }
                 return messageCell
             } else {
@@ -92,11 +100,14 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                for: indexPath,
                                                                item: (cid, itemID, self))
-                messageCell.handleTappedMessage = { [unowned self] (message) in
-                    self.handleSelectedMessage?(message)
+                messageCell.handleTappedMessage = { [unowned self] item in
+                    self.handleSelectedMessage?(item, messageCell)
                 }
-                messageCell.handleDeleteMessage = { [unowned self] (message) in
-                    self.handleDeleteMessage?(message)
+                messageCell.handleTappedConversation = { [unowned self] (conversation) in
+                    self.handleSelectedConversation?(conversation)
+                }
+                messageCell.handleDeleteConversation = { [unowned self] (conversation) in
+                    self.handleDeletedConversation?(conversation)
                 }
                 return messageCell
             }

@@ -71,12 +71,12 @@ extension ConversationMessageCellDataSource {
             cell.setText(with: message)
 
             var zIndex = 0
-            if let layout = item.collectionView.collectionViewLayout as? ConversationMessageCellLayout {
+            if let layout = item.collectionView.collectionViewLayout as? ConversationMessagesCellLayout {
                 zIndex = layout.getZIndex(forIndexPath: indexPath)
             }
 
             // The menu interaction should only be on the front most cell.
-            cell.backgroundColorView.interactions.removeAll()
+            cell.content.backgroundColorView.interactions.removeAll()
             if zIndex == 0 {
                 cell.setContextMenuInteraction(with: item.contextMenuDelegate)
             } else {

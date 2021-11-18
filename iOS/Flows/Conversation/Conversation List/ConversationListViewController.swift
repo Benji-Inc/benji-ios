@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Combine
 
 class ConversationListViewController: FullScreenViewController,
                                       UICollectionViewDelegate,
@@ -28,10 +29,13 @@ class ConversationListViewController: FullScreenViewController,
         return self.conversationListController.conversations[safe: indexPath.item]
     }
 
+    var selectedMessageView: UIView?
+
     // Input handlers
     var onSelectedConversation: ((ChannelId) -> Void)?
+    var onSelectedMessage: ((ChannelId, MessageId) -> Void)?
 
-    @Published var didCenterOnCell: ConversationMessageCell? = nil
+    @Published var didCenterOnCell: ConversationMessagesCell? = nil
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
@@ -61,7 +65,7 @@ class ConversationListViewController: FullScreenViewController,
 
         let query = ChannelListQuery(filter: .containOnlyMembers(members),
                                      sort: [Sorting(key: .createdAt, isAscending: false)],
-                                     pageSize: 10,
+                                     pageSize: .channelsPageSize,
                                      messagesLimit: 10)
         self.conversationListController
         = ChatClient.shared.channelListController(query: query)
@@ -164,19 +168,33 @@ class ConversationListViewController: FullScreenViewController,
         }
     }
 
+    private var typingSubscriber: AnyCancellable?
+    var conversationController: ConversationController?
+
     func updateCenterMostCell() {
-        guard let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessageCell else {
+        guard let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
             return
         }
         self.didCenterOnCell = cell
 
         // If there's a centered cell, update the layout
         if let currentConversation = self.currentConversation {
+            self.conversationController = ChatClient.shared.channelController(for: currentConversation.cid)
+
             ConversationsManager.shared.activeConversations.removeAll()
             ConversationsManager.shared.activeConversations.append(currentConversation)
 
             self.messageInputAccessoryView.conversation = currentConversation
             self.conversationHeader.configure(with: currentConversation)
+
+            self.typingSubscriber = self.conversationController?
+                .typingUsersPublisher
+                .mainSink(receiveValue: { [unowned self] typingUsers in
+                    let nonMeUsers = typingUsers.filter { user in
+                        return user.userObjectID != User.current()?.objectId
+                    }
+                    // TODO: Update the typing indicator.
+            })
 
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.view.layoutNow()
@@ -189,6 +207,7 @@ class ConversationListViewController: FullScreenViewController,
     @MainActor
     func initializeDataSource() async {
         try? await self.conversationListController.synchronize()
+        try? await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
 
         let conversations = self.conversationListController.conversations
 
@@ -234,7 +253,7 @@ class ConversationListViewController: FullScreenViewController,
 
             self.isLoadingConversations = true
             do {
-                try await self.conversationListController.loadNextConversations(limit: 10)
+                try await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
             } catch {
                 logDebug(error)
             }
@@ -462,5 +481,19 @@ class ConversationListViewController: FullScreenViewController,
                 logDebug(error)
             }
         }
+    }
+}
+
+extension ConversationListViewController: TransitionableViewController {
+
+    var receivingPresentationType: TransitionType {
+        return .fade
+    }
+
+    var sendingPresentationType: TransitionType {
+        if let view = self.selectedMessageView {
+            return .move(view)
+        }
+        return .fade
     }
 }

@@ -12,12 +12,12 @@ import StreamChat
 extension ConversationCollectionViewDataSource {
 
     typealias MessageCellRegistration
-    = UICollectionView.CellRegistration<ConversationMessageCell,
+    = UICollectionView.CellRegistration<ConversationMessagesCell,
                                         (channelID: ChannelId,
                                          messageID: MessageId,
                                          dataSource: ConversationCollectionViewDataSource)>
     typealias ConversationCellRegistration
-    = UICollectionView.CellRegistration<ConversationMessageCell,
+    = UICollectionView.CellRegistration<ConversationMessagesCell,
                                         (channelID: ChannelId,
                                          dataSource: ConversationCollectionViewDataSource)>
     typealias ThreadMessageCellRegistration
@@ -34,8 +34,7 @@ extension ConversationCollectionViewDataSource {
                                                                         messageId: item.messageID)
             guard let message = messageController.message else { return }
 
-            let replies = Array(messageController.replies)
-            cell.set(message: message, replies: replies, totalReplyCount: message.replyCount)
+            cell.set(sequence: messageController.conversation)
 
             // Load in the message's replies if needed, then reconfigure the cell so they show up.
             if message.replyCount > 0 && message.latestReplies.isEmpty {
@@ -53,9 +52,7 @@ extension ConversationCollectionViewDataSource {
             let conversationController = ChatClient.shared.channelController(for: item.channelID)
 
             let messages = Array(conversationController.messages)
-            cell.set(message: conversationController.conversation,
-                     replies: messages,
-                     totalReplyCount: 0)
+            cell.set(sequence: conversationController.conversation)
             // TODO: Load more messages
         }
     }
