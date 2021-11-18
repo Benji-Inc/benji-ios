@@ -73,7 +73,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                                                                item: (cid, itemID, self))
 
                 threadCell.handleDeleteMessage = { [unowned self] (message) in
-//                    self.handleDeleteMessage?(item)
+                    //self.handleDeleteMessage?(message)
                 }
                 return threadCell
 
@@ -164,7 +164,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
                                      toSection: sectionID)
             case .update(let message, _):
-                #warning("This can crash the app")
                 snapshot.reconfigureItems([message.asConversationCollectionItem])
             case .remove(let message, _):
                 snapshot.deleteItems([message.asConversationCollectionItem])

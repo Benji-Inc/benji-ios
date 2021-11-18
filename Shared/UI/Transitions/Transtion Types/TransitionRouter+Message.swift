@@ -15,6 +15,20 @@ extension TransitionRouter {
                           toView: MessageContentView,
                           transitionContext: UIViewControllerContextTransitioning) {
 
+        if self.toVC is ThreadViewController {
+            self.presentThread(fromView: fromView, toView: toView, transitionContext: transitionContext)
+        } else {
+            self.dismissThread(fromView: fromView, toView: toView, transitionContext: transitionContext)
+        }
+    }
+
+    private func presentThread(fromView: MessageContentView,
+                               toView: MessageContentView,
+                               transitionContext: UIViewControllerContextTransitioning) {
+
+        guard let threadVC = self.toVC as? ThreadViewController,
+            let listVC = self.fromVC as? ConversationListViewController else { return }
+
         // Make sure we have all the components we need to complete this transition
         guard let snapshot = fromView.snapshotView(afterScreenUpdates: false) else {
             return
@@ -23,9 +37,6 @@ extension TransitionRouter {
         let containerView = transitionContext.containerView
         containerView.set(backgroundColor: .clear)
         fromView.isHidden = true
-
-        // Clear the background color of the toVC so that it doesn't have a visible seam
-        // at the top as it slides up
 
         let toVCFinalFrame = transitionContext.finalFrame(for: self.toVC)
         self.toVC.view.frame = toVCFinalFrame
@@ -43,8 +54,8 @@ extension TransitionRouter {
         snapshot.frame = fromView.convert(fromView.bounds, to: containerView)
 
         toView.alpha = 0
-        fromView.alpha = 0
-        self.toVC.navigationController?.navigationBar.alpha = 0
+        //fromView.alpha = 0
+        //self.toVC.navigationController?.navigationBar.alpha = 0
 
         let moveDuration = self.transitionDuration(using: transitionContext) * 0.65
 
@@ -69,14 +80,14 @@ extension TransitionRouter {
                                     // Slide toVC into place and fade in tab container, have center content
                                     // and nav bar hidden
                                     UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.2) {
-                                        self.toVC.navigationController?.navigationBar.alpha = 0
+                                       // self.toVC.navigationController?.navigationBar.alpha = 0
                                     }
 
                                     // Fade in view of toVC
                                     UIView.addKeyframe(withRelativeStartTime: 0.65, relativeDuration: 0.35) {
                                         toView.alpha = 1
                                         self.toVC.view.alpha = 1
-                                        self.toVC.navigationController?.navigationBar.alpha = 1
+                                        //self.toVC.navigationController?.navigationBar.alpha = 1
                                     }
         }) { (completed) in
             snapshot.removeFromSuperview()
@@ -85,5 +96,14 @@ extension TransitionRouter {
             fromView.isHidden = false
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
+    }
+
+    private func dismissThread(fromView: MessageContentView,
+                               toView: MessageContentView,
+                               transitionContext: UIViewControllerContextTransitioning) {
+
+        guard let threadVC = self.fromVC as? ThreadViewController,
+            let listVC = self.toVC as? ConversationListController else { return }
+
     }
 }
