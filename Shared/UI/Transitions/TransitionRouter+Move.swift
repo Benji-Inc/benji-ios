@@ -21,7 +21,7 @@ extension TransitionRouter {
         }
 
         let containerView = transitionContext.containerView
-        containerView.set(backgroundColor: self.fromVC.transitionColor)
+        containerView.set(backgroundColor: .clear)
         fromView.isHidden = true
 
         // Clear the background color of the toVC so that it doesn't have a visible seam
@@ -77,7 +77,6 @@ extension TransitionRouter {
                                         toView.alpha = 1
                                         self.toVC.view.alpha = 1
                                         self.toVC.navigationController?.navigationBar.alpha = 1
-                                        containerView.set(backgroundColor: self.toVC.transitionColor)
                                     }
         }) { (completed) in
             snapshot.removeFromSuperview()
