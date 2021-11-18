@@ -23,56 +23,52 @@ extension MainCoordinator {
             } else if let user = User.current(), !user.isOnboarded {
                 self.runOnboardingFlow()
             } else {
-                self.runConversationListFlow()
+                Task {
+                    await self.runConversationListFlow()
+                }.add(to: self.taskPool)
             }
         case .failed(_):
             break
         }
     }
 
-    func runConversationListFlow() {
+    @MainActor
+    func runConversationListFlow() async {
         if ChatClient.isConnected {
             if let coordinator = self.childCoordinator as? ConversationListCoordinator {
                 if let deepLink = self.deepLink {
                     coordinator.handle(deeplink: deepLink)
                 }
-                Task {
-                    await self.checkForPermissions()
-                }
+
+                await self.checkForPermissions()
             } else {
-                Task {
-                    self.removeChild()
-                    let query = ChannelListQuery(filter: .containMembers(userIds: [User.current()!.objectId!]),
-                                                 sort: [.init(key: .lastMessageAt, isAscending: false)],
-                                            pageSize: 20)
-                    let channelListController = try? await ChatClient.shared.queryChannels(query: query)
-                    guard let conversation = channelListController?.channels.first else { return }
+                self.removeChild()
+                let query = ChannelListQuery(filter: .containMembers(userIds: [User.current()!.objectId!]),
+                                             sort: [.init(key: .lastMessageAt, isAscending: false)],
+                                             pageSize: 20)
+                let channelListController = try? await ChatClient.shared.queryChannels(query: query)
+                guard let conversation = channelListController?.channels.first else { return }
 
-                    let membersController = ChatClient.shared.memberListController(query: .init(cid: conversation.cid))
-                    try? await membersController.synchronize()
+                let membersController = ChatClient.shared.memberListController(query: .init(cid: conversation.cid))
+                try? await membersController.synchronize()
 
-                    let members = Array(membersController.members)
+                let members = Array(membersController.members)
 
-                    let coordinator = ConversationListCoordinator(router: self.router,
-                                                                  deepLink: self.deepLink,
-                                                                  conversationMembers: members,
-                                                                  startingConversationID: conversation.cid)
-                    self.addChildAndStart(coordinator, finishedHandler: { (_) in
+                let coordinator = ConversationListCoordinator(router: self.router,
+                                                              deepLink: self.deepLink,
+                                                              conversationMembers: members,
+                                                              startingConversationID: conversation.cid)
+                self.addChildAndStart(coordinator, finishedHandler: { (_) in
 
-                    })
-                    self.router.push(coordinator, cancelHandler: {
-                    }, animated: true)
+                })
+                self.router.push(coordinator, cancelHandler: {
+                }, animated: true)
 
-                    Task {
-                        await self.checkForPermissions()
-                    }
-                }
+                await self.checkForPermissions()
             }
         } else {
-            Task {
-                try await ChatClient.initialize(for: User.current()!)
-                self.runConversationListFlow()
-            }
+            try? await ChatClient.initialize(for: User.current()!)
+            await self.runConversationListFlow()
         }
     }
 
