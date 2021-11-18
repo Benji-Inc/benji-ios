@@ -91,6 +91,12 @@
 		D615534A2745737300B08459 /* ThreadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553492745737300B08459 /* ThreadCoordinator.swift */; };
 		D615534C27458CEA00B08459 /* MessageSequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615534B27458CEA00B08459 /* MessageSequence.swift */; };
 		D615534E2745C1C900B08459 /* MessageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615534D2745C1C900B08459 /* MessageContentView.swift */; };
+		D61553522746D4BB00B08459 /* ModalTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553512746D4BB00B08459 /* ModalTransitionController.swift */; };
+		D61553532746D4BB00B08459 /* ModalTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553512746D4BB00B08459 /* ModalTransitionController.swift */; };
+		D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553562746D5D200B08459 /* PanDismissInteractionController.swift */; };
+		D61553582746D5D200B08459 /* PanDismissInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553562746D5D200B08459 /* PanDismissInteractionController.swift */; };
+		D615535C2746D64200B08459 /* DismissTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615535B2746D64200B08459 /* DismissTransitionController.swift */; };
+		D615535D2746D64200B08459 /* DismissTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615535B2746D64200B08459 /* DismissTransitionController.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
 		D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DB24FAD7B400B63412 /* AttachmentCell.swift */; };
@@ -975,6 +981,9 @@
 		D61553492745737300B08459 /* ThreadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadCoordinator.swift; sourceTree = "<group>"; };
 		D615534B27458CEA00B08459 /* MessageSequence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageSequence.swift; sourceTree = "<group>"; };
 		D615534D2745C1C900B08459 /* MessageContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContentView.swift; sourceTree = "<group>"; };
+		D61553512746D4BB00B08459 /* ModalTransitionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalTransitionController.swift; sourceTree = "<group>"; };
+		D61553562746D5D200B08459 /* PanDismissInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanDismissInteractionController.swift; sourceTree = "<group>"; };
+		D615535B2746D64200B08459 /* DismissTransitionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissTransitionController.swift; sourceTree = "<group>"; };
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
 		D61592DB24FAD7B400B63412 /* AttachmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
@@ -2019,6 +2028,9 @@
 		D677588125B09F18007E0184 /* Transitions */ = {
 			isa = PBXGroup;
 			children = (
+				D615535B2746D64200B08459 /* DismissTransitionController.swift */,
+				D61553512746D4BB00B08459 /* ModalTransitionController.swift */,
+				D61553562746D5D200B08459 /* PanDismissInteractionController.swift */,
 				D677588225B09F4D007E0184 /* Transitionable.swift */,
 				D677588B25B09F9C007E0184 /* TransitionRouter.swift */,
 				D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */,
@@ -2880,6 +2892,7 @@
 				D650C21025B7D6F20037C59A /* Attachment.swift in Sources */,
 				8015CA7726F3D907000F3C60 /* ConversationMessagesCell.swift in Sources */,
 				D67896AF22FF62630059BA75 /* PhoneKit.swift in Sources */,
+				D615535C2746D64200B08459 /* DismissTransitionController.swift in Sources */,
 				D678EC2626F534430071DB0D /* CircleGroup.swift in Sources */,
 				D64C32442703AC5A004BC1BD /* InvitationLoadingView.swift in Sources */,
 				D63D71B525F00ED8004C26F7 /* ImageCaptureViewController.swift in Sources */,
@@ -3013,6 +3026,7 @@
 				D6B95AEF272324AE00FBE66A /* ConnectionStore.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,
 				D605C30926F683E400C86DAD /* ConversationContentView.swift in Sources */,
+				D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */,
 				D6AD7999266E870200ED7A93 /* MIMEType.swift in Sources */,
 				D6155346274484B800B08459 /* InputTypeManager.swift in Sources */,
 				D687F3CA26FE4FB3000E4734 /* PeopleCollectionViewLayout.swift in Sources */,
@@ -3079,6 +3093,7 @@
 				D68C08242729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
 				D678EC2B26F538350071DB0D /* CircleGroupViewController.swift in Sources */,
+				D61553522746D4BB00B08459 /* ModalTransitionController.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
 				D6F33C7E24B15063009603FF /* LocationMessageCell.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
@@ -3445,6 +3460,7 @@
 				D655191B2589121100B901E4 /* CGPoint+Extensions.swift in Sources */,
 				D6637A2925A3A82F00A4A3B7 /* TextView.swift in Sources */,
 				D64A1EF6258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
+				D615535D2746D64200B08459 /* DismissTransitionController.swift in Sources */,
 				D655191C2589121100B901E4 /* MathFunctions.swift in Sources */,
 				D65519122589120600B901E4 /* ClosedRange+Extensions.swift in Sources */,
 				D64A1F08258C16470097817C /* WaitlistViewController.swift in Sources */,
@@ -3463,6 +3479,7 @@
 				D68C08292729D9980033C8AE /* PermissionsViewController.swift in Sources */,
 				D6C3892E2724B8E4004D29D5 /* MessageContext.swift in Sources */,
 				D65519062589110A00B901E4 /* Coordinator.swift in Sources */,
+				D61553532746D4BB00B08459 /* ModalTransitionController.swift in Sources */,
 				80F1C4D7270E505E00616F01 /* Equatable+Extensions.swift in Sources */,
 				D65519BE25891A0500B901E4 /* RootNavigationController.swift in Sources */,
 				D6C3892C2724B8D0004D29D5 /* Messageable.swift in Sources */,
@@ -3539,6 +3556,7 @@
 				D6166C8C2731F80B0013E803 /* UIImage+MediaItem.swift in Sources */,
 				D65519C725891B1D00B901E4 /* ViewController.swift in Sources */,
 				D6617CF626743DFE00439C06 /* Notice.swift in Sources */,
+				D61553582746D5D200B08459 /* PanDismissInteractionController.swift in Sources */,
 				D6B53B01258FE73D00593670 /* Publisher+Extensions.swift in Sources */,
 				D65519252589121C00B901E4 /* PFInstallation+Extensions.swift in Sources */,
 				D69972FA25EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
