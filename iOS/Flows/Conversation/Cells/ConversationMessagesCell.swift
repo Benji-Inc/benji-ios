@@ -275,12 +275,14 @@ extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
             self.handleDeleteConversation?(conversation)
         }
 
-        let deleteMenu = UIMenu(title: "Delete Thread",
+
+        let deleteText = conversation.isCreatedByCurrentUser ? "Delete Conversation" : "Hide Conversation"
+        let deleteMenu = UIMenu(title: deleteText,
                                 image: UIImage(systemName: "trash"),
                                 options: .destructive,
                                 children: [confirmDelete, neverMind])
 
-        let openThread = UIAction(title: "Open Thread") { [unowned self] action in
+        let openConvesation = UIAction(title: "Open Conversation") { [unowned self] action in
             self.handleTappedConversation?(conversation)
         }
 
@@ -288,7 +290,7 @@ extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
         if conversation.isCreatedByCurrentUser {
             menuElements.append(deleteMenu)
         }
-        menuElements.append(openThread)
+        menuElements.append(openConvesation)
 
         return UIMenu(children: menuElements)
     }

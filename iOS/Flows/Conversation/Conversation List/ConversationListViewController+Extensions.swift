@@ -22,6 +22,23 @@ extension ConversationListViewController {
             self.selectedMessageView = view 
             self.onSelectedMessage?(item.channelID, item.messageID)
         }
+
+        self.dataSource.handleDeleteMessage = { (conversation) in
+            Task {
+                do {
+                    let cid = try ConversationID(cid: conversation.channelID.description)
+                    let conversationController = ChatClient.shared.channelController(for: cid)
+                    if conversationController.conversation.isFromCurrentUser {
+                        try await conversationController.deleteChannel()
+                    } else {
+                        try await conversationController.hideChannel()
+                    }
+                } catch {
+                    logDebug(error)
+                }
+            }
+        }
+
         self.dataSource.handleLoadMoreMessages = { [unowned self] in
             self.loadMoreConversationsIfNeeded()
         }
