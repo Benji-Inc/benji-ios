@@ -1,5 +1,5 @@
 //
-//  ConversationViewController.swift
+//  ThreadViewController.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 12/27/18.
@@ -69,6 +69,8 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
     override func initializeViews() {
         super.initializeViews()
+
+        self.modalPresentationStyle = .overCurrentContext
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)

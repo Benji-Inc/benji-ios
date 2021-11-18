@@ -1,5 +1,5 @@
 //
-//  ConversationViewController+Messaging.swift
+//  ThreadViewController+Messaging.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 6/6/20.

@@ -107,8 +107,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
             self.router.popToModule(module: self)
         }
 
-        self.router.push(coordinator)
-        //self.router.present(coordinator, source: self.conversationListVC)
+        self.router.present(coordinator, source: self.conversationListVC)
     }
 
     func presentPeoplePicker() {
