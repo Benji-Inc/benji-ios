@@ -90,8 +90,9 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         let headerHeight: CGFloat = 120
 
-        self.parentMessageView.width = self.view.width * 0.8
-        self.parentMessageView.height = headerHeight - Theme.contentOffset.doubled
+        let msgWidth = self.view.width - Theme.contentOffset.doubled
+        self.parentMessageView.width = msgWidth
+        self.parentMessageView.height = MessageContentView.getHeight(withWidth: self.view.width, message: self.parentMessage)
         self.parentMessageView.pinToSafeArea(.top, padding: Theme.contentOffset)
         self.parentMessageView.centerOnX()
 
