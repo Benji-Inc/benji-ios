@@ -48,6 +48,7 @@ extension ChatClient {
         let token = try await self.getChatToken()
         ChatClient.shared.setToken(token: token)
         try await ChatClient.shared.connectUser(with: token)
+        _ = ConversationsManager.shared
     }
 
     private func connectUser(with token: Token) async throws {

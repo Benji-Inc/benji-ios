@@ -66,6 +66,36 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
         }
     }
 
+    func handle(deeplink: DeepLinkable) {
+        self.deepLink = deeplink
+
+        guard let target = deeplink.deepLinkTarget else { return }
+
+        switch target {
+        case .conversation:
+            if let identifier = deeplink.customMetadata["conversationId"] as? String {
+                guard let conversationId = try? ChannelId.init(cid: identifier) else { return }
+                let conversation = ChatClient.shared.channelController(for: conversationId).conversation
+                let messageId = deeplink.customMetadata["messageId"] as? String
+                //self.startConversationFlow(for: conversation, startingMessageId: messageId)
+            } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
+
+                guard let connection = ConnectionStore.shared.connections.first(where: { connection in
+                    return connection.objectId == connectionId
+                }), let identifier = connection.initialConversations.first,
+                       let conversationId = try? ChannelId.init(cid: identifier)  else {
+                           return
+                       }
+                let conversation = ChatClient.shared.channelController(for: conversationId).conversation
+
+               // self.startConversationFlow(for: conversation, startingMessageId: nil)
+            }
+
+        default:
+            break
+        }
+    }
+
     func presentThread(for channelId: ChannelId, messageId: MessageId) {
         self.removeChild()
         let coordinator = ThreadCoordinator(with: channelId,

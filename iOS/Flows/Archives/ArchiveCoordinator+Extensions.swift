@@ -19,17 +19,6 @@ extension ArchiveCoordinator: UserNotificationManagerDelegate {
     }
 }
 
-#warning("Remove after beta features are complete.")
-extension ArchiveCoordinator: ToastSchedulerDelegate {
-    
-    nonisolated func didInteractWith(type: ToastType, deeplink: DeepLinkable?) {
-        Task.onMainActor {
-            guard let link = deeplink else { return }
-            self.handle(deeplink: link)
-        }
-    }
-}
-
 extension ArchiveCoordinator {
 
     @MainActor

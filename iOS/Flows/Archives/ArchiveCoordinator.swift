@@ -33,11 +33,6 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
             self.handle(deeplink: deeplink)
         }
 
-        UserNotificationManager.shared.delegate = self
-        
-        ToastScheduler.shared.delegate = self
-        _ = ConversationsManager.shared
-
         self.archiveVC.addButton.didSelect { [unowned self] in
             Task {
                 await self.createConversation()
@@ -75,9 +70,7 @@ class ArchiveCoordinator: PresentableCoordinator<Void> {
         }
     }
 
-
     func createConversation() async {
-        #warning("Remove after Beta")
         let username = User.current()?.initials ?? ""
         let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
 

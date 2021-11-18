@@ -24,8 +24,10 @@ class MainCoordinator: Coordinator<Void> {
         }
 
         LaunchManager.shared.delegate = self
-        #if !APPCLIP && !NOTIFICATION
+        
+        #if IOS
         UserNotificationManager.shared.delegate = self
+        ToastScheduler.shared.delegate = self
         #endif
 
         Task {
@@ -38,13 +40,12 @@ class MainCoordinator: Coordinator<Void> {
 
         let launchStatus = await LaunchManager.shared.launchApp(with: self.launchOptions)
 
-#if !APPCLIP && !NOTIFICATION
-        // Code you don't want to use in your App Clip.
+        #if IOS
         self.handle(result: launchStatus)
-#elseif !NOTIFICATION
+        #elseif APPCLIP
         // Code your App Clip may access.
         self.handleAppClip(result: launchStatus)
-#endif
+        #endif
         self.subscribeToUserUpdates()
     }
 
@@ -56,43 +57,32 @@ class MainCoordinator: Coordinator<Void> {
                                                     deepLink: self.deepLink)
             self.router.setRootModule(coordinator, animated: true)
             self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
+                self.subscribeToUserUpdates()
 
-#if APPCLIP
-                //Add the conversationId to shared storage so it can open once they download the full app.
-#elseif !NOTIFICATION
-                    self.runArchiveFlow()
-                    //self.runHomeFlow()
-#endif
-                    self.subscribeToUserUpdates()
+                #if IOS
+                self.runConversationListFlow()
+                #endif
             })
         }
     }
+
 
     func handle(deeplink: DeepLinkable) {
         guard let string = deeplink.customMetadata["target"] as? String,
               let target = DeepLinkTarget(rawValue: string)  else { return }
         switch target {
         case .home, .conversation, .archive:
-            if let user = User.current(), user.isAuthenticated {
-#if !APPCLIP && !NOTIFICATION
-                // Code you don't want to use in your App Clip.
-                self.runArchiveFlow()
-                //self.runHomeFlow()
-#else
-                // Code your App Clip may access.
-#endif
-            }
+            guard let user = User.current(), user.isAuthenticated else { return }
+            #if IOS
+            self.runConversationListFlow()
+            #endif
         case .login:
             break
         case .reservation:
             if let user = User.current(), user.isAuthenticated {
-#if !APPCLIP && !NOTIFICATION
-                // Code you don't want to use in your App Clip.
-                self.runArchiveFlow()
-                //self.runHomeFlow()
-#else
-                // Code your App Clip may access.
-#endif
+            #if IOS
+                self.runConversationListFlow()
+            #endif
             } else {
                 self.runOnboardingFlow()
             }
@@ -117,9 +107,9 @@ class MainCoordinator: Coordinator<Void> {
     }
 
     private func logOut() {
-#if !APPCLIP && !NOTIFICATION
+        #if IOS
         self.logOutChat()
-#endif
+        #endif
         User.logOut()
         self.deepLink = nil
         self.removeChild()
@@ -127,7 +117,7 @@ class MainCoordinator: Coordinator<Void> {
     }
 }
 
-#if !APPCLIP && !NOTIFICATION
+#if IOS
 extension MainCoordinator: UserNotificationManagerDelegate {
 
     nonisolated func userNotificationManager(willHandle deeplink: DeepLinkable) {
