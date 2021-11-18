@@ -16,7 +16,7 @@ import UIKit
 class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLayoutDelegate {
 
     // Interaction handling
-    var handleTappedMessage: ((ConversationMessageItem) -> Void)?
+    var handleTappedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
@@ -158,8 +158,8 @@ extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
     // MARK: - UICollectionViewDelegateFlowLayout
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
-        self.handleTappedMessage?(item)
+        guard let item = self.dataSource.itemIdentifier(for: indexPath), let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
+        self.handleTappedMessage?(item, cell.content)
     }
 
     func collectionView(_ collectionView: UICollectionView,

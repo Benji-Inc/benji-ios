@@ -34,7 +34,7 @@ class ConversationListViewController: FullScreenViewController,
         return self.conversationListController.conversations[safe: indexPath.item]
     }
 
-    var selectedMessageView: UIView?
+    var selectedMessageView: MessageContentView?
 
     // Input handlers
     var onSelectedConversation: ((ChannelId) -> Void)?
@@ -497,7 +497,7 @@ extension ConversationListViewController: TransitionableViewController {
 
     var sendingPresentationType: TransitionType {
         if let view = self.selectedMessageView {
-            return .move(view)
+            return .message(view)
         }
         return .fade
     }

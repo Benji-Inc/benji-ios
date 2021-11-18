@@ -155,8 +155,13 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 }
 
 extension ThreadViewController: TransitionableViewController {
+    
     var receivingPresentationType: TransitionType {
-        return .move(self.parentMessageView)
+        return .message(self.parentMessageView)
+    }
+
+    var sendingDismissalType: TransitionType {
+        return .message(self.parentMessageView)
     }
 }
 

@@ -57,6 +57,9 @@ enum TransitionType: Equatable {
     case move(UIView)
     case fade
     case fill(UIView)
+    #if IOS
+    case message(MessageContentView)
+    #endif
 
     var duration: TimeInterval {
         switch self {
@@ -66,6 +69,10 @@ enum TransitionType: Equatable {
             return 0.75
         case .fill(_):
             return 0.5
+            #if IOS
+        case .message(_):
+            return 1.0
+            #endif
         }
     }
 }

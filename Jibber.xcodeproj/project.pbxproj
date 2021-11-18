@@ -92,6 +92,7 @@
 		D61553582746D5D200B08459 /* PanDismissInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553562746D5D200B08459 /* PanDismissInteractionController.swift */; };
 		D615535C2746D64200B08459 /* DismissTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615535B2746D64200B08459 /* DismissTransitionController.swift */; };
 		D615535D2746D64200B08459 /* DismissTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615535B2746D64200B08459 /* DismissTransitionController.swift */; };
+		D61553622746E62D00B08459 /* TransitionRouter+Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553612746E62D00B08459 /* TransitionRouter+Message.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
 		D61592DC24FAD7B400B63412 /* AttachmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592DB24FAD7B400B63412 /* AttachmentCell.swift */; };
@@ -947,6 +948,7 @@
 		D61553512746D4BB00B08459 /* ModalTransitionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalTransitionController.swift; sourceTree = "<group>"; };
 		D61553562746D5D200B08459 /* PanDismissInteractionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PanDismissInteractionController.swift; sourceTree = "<group>"; };
 		D615535B2746D64200B08459 /* DismissTransitionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissTransitionController.swift; sourceTree = "<group>"; };
+		D61553612746E62D00B08459 /* TransitionRouter+Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TransitionRouter+Message.swift"; sourceTree = "<group>"; };
 		D61592D524FACD9200B63412 /* AttachmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentViewController.swift; sourceTree = "<group>"; };
 		D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCollectionView.swift; sourceTree = "<group>"; };
 		D61592DB24FAD7B400B63412 /* AttachmentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentCell.swift; sourceTree = "<group>"; };
@@ -1414,6 +1416,17 @@
 				D605C30526F683E400C86DAD /* ConversationContentView.swift */,
 			);
 			path = Conversation;
+			sourceTree = "<group>";
+		};
+		D61553602746E60400B08459 /* Transtion Types */ = {
+			isa = PBXGroup;
+			children = (
+				D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */,
+				D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */,
+				D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */,
+				D61553612746E62D00B08459 /* TransitionRouter+Message.swift */,
+			);
+			path = "Transtion Types";
 			sourceTree = "<group>";
 		};
 		D61592D424FACD7700B63412 /* Attachment */ = {
@@ -1958,9 +1971,7 @@
 				D61553562746D5D200B08459 /* PanDismissInteractionController.swift */,
 				D677588225B09F4D007E0184 /* Transitionable.swift */,
 				D677588B25B09F9C007E0184 /* TransitionRouter.swift */,
-				D677589025B09FC8007E0184 /* TransitionRouter+Fade.swift */,
-				D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */,
-				D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */,
+				D61553602746E60400B08459 /* Transtion Types */,
 			);
 			path = Transitions;
 			sourceTree = "<group>";
@@ -2783,6 +2794,7 @@
 				D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */,
 				D6F312A0266ADDA600E25FEE /* LinkView.swift in Sources */,
 				80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */,
+				D61553622746E62D00B08459 /* TransitionRouter+Message.swift in Sources */,
 				D650C1DA25B5EE3D0037C59A /* AvatarContextDelegate.swift in Sources */,
 				D65519F32589591D00B901E4 /* Typealias.swift in Sources */,
 				D6F37D6025B5D8610034C9C5 /* AvatarProfileViewController.swift in Sources */,

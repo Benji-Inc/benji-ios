@@ -38,6 +38,10 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
         let toTransition = self.toVC.getTransitionType(for: self.operation, isFromVC: false)
 
         switch (fromTransition, toTransition) {
+            #if IOS
+        case (let .message(fromView), let .message(toView)):
+            self.messageTranstion(fromView: fromView, toView: toView, transitionContext: transitionContext)
+            #endif 
         case (let .move(fromView), let .move(toView)):
             self.moveTranstion(fromView: fromView, toView: toView, transitionContext: transitionContext)
         case (let .fill(expandingView), .fade):
