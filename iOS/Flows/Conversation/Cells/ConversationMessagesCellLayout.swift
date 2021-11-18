@@ -10,7 +10,7 @@ import Foundation
 import StreamChat
 
 protocol ConversationMessageCellLayoutDelegate: AnyObject {
-    var conversation: Messageable? { get }
+    var conversation: MessageSequence? { get }
 }
 
 /// A custom collectionview layout for conversation message cells. This class assumes the collection view contains
@@ -140,7 +140,7 @@ class ConversationMessagesCellLayout: UICollectionViewFlowLayout {
         attributes.backgroundColor = backgroundColor
 
         var isMostRecentMessageFromUser = false
-        if let mostRecentMessage = self.conversationDelegate.conversation?.mostRecentMessage {
+        if let mostRecentMessage = self.conversationDelegate.conversation?.messages.first {
             isMostRecentMessageFromUser = mostRecentMessage.isFromCurrentUser
         }
 

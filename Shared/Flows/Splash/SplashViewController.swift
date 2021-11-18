@@ -17,10 +17,6 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         return .fade
     }
 
-    var transitionColor: Color {
-        return .background
-    }
-
     let animationView = AnimationView.with(animation: .loading)
     let label = Label(font: .small)
     let versionLabel = Label(frame: .zero, font: .small, textColor: .textColor)

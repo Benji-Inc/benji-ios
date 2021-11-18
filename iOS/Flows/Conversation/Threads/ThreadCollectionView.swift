@@ -8,10 +8,10 @@
 
 import Foundation
 
-class ConversationThreadCollectionView: CollectionView {
+class ThreadCollectionView: CollectionView {
 
     init() {
-        super.init(layout: ConversationThreadCollectionViewLayout())
+        super.init(layout: ThreadCollectionViewLayout())
         
         self.registerReusableViews()
         self.keyboardDismissMode = .interactive
@@ -49,7 +49,7 @@ class ConversationThreadCollectionView: CollectionView {
     override func scrollToEnd(animated: Bool = true, completion: CompletionOptional = nil) {
         var rect: CGRect = .zero
         
-        if let flowLayout = self.collectionViewLayout as? ConversationThreadCollectionViewLayout {
+        if let flowLayout = self.collectionViewLayout as? ThreadCollectionViewLayout {
 
             let contentHeight = flowLayout.collectionViewContentSize.height
             rect = CGRect(x: 0.0,

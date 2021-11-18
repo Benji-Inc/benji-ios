@@ -40,6 +40,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
     override func start() {
         super.start()
 
+        self.conversationListVC.onSelectedMessage = { [unowned self] (channelId, messageId) in
+            self.presentThread(for: channelId, messageId: messageId)
+        }
+
         self.conversationListVC.onSelectedConversation = { [unowned self] (channelID) in
             #warning("Present the individual conversation experience")
             logDebug("Selection conversation "+channelID.description)
@@ -60,6 +64,21 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
             }
             self.presentConversationTitleAlert(for: conversation)
         }
+    }
+
+    func presentThread(for channelId: ChannelId, messageId: MessageId) {
+        self.removeChild()
+        let coordinator = ThreadCoordinator(with: channelId,
+                                            messageId: messageId,
+                                            router: self.router,
+                                            deepLink: self.deepLink)
+
+        self.addChildAndStart(coordinator) { _ in
+            self.router.popToModule(module: self)
+        }
+
+        self.router.push(coordinator)
+        //self.router.present(coordinator, source: self.conversationListVC)
     }
 
     func presentPeoplePicker() {

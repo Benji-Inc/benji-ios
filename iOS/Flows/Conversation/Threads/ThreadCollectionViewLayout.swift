@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConversationThreadCollectionViewLayout: BottomToTopColumnCollectionViewLayout {
+class ThreadCollectionViewLayout: BottomToTopColumnCollectionViewLayout {
 
     override class var layoutAttributesClass: AnyClass {
         return ConversationCollectionViewLayoutAttributes.self

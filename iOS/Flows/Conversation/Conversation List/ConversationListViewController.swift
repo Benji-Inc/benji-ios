@@ -29,8 +29,11 @@ class ConversationListViewController: FullScreenViewController,
         return self.conversationListController.conversations[safe: indexPath.item]
     }
 
+    var selectedMessageView: UIView?
+
     // Input handlers
     var onSelectedConversation: ((ChannelId) -> Void)?
+    var onSelectedMessage: ((ChannelId, MessageId) -> Void)?
 
     @Published var didCenterOnCell: ConversationMessagesCell? = nil
 
@@ -478,5 +481,19 @@ class ConversationListViewController: FullScreenViewController,
                 logDebug(error)
             }
         }
+    }
+}
+
+extension ConversationListViewController: TransitionableViewController {
+
+    var receivingPresentationType: TransitionType {
+        return .fade
+    }
+
+    var sendingPresentationType: TransitionType {
+        if let view = self.selectedMessageView {
+            return .move(view)
+        }
+        return .fade
     }
 }

@@ -133,10 +133,13 @@ extension ArchiveCoordinator: ArchiveViewControllerDelegate {
             self.addChildAndStart(coordinator, finishedHandler: { [unowned self] (_) in
                 self.router.dismiss(source: self.archiveVC, animated: true)
             })
-            self.router.present(coordinator,
-                                source: self.archiveVC,
-                                cancelHandler: {
-            })
+            self.router.push(coordinator, cancelHandler: {
+
+            }, animated: true)
+//            self.router.present(coordinator,
+//                                source: self.archiveVC,
+//                                cancelHandler: {
+//            })
         }
     }
 
