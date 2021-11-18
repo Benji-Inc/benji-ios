@@ -2907,6 +2907,7 @@
 				D67934E523DE66FE00536B44 /* PushPayload.swift in Sources */,
 				D635F0A627135BAB00A02D17 /* ThreadCollectionViewLayout.swift in Sources */,
 				D66F0FD422BF074C00BA277D /* DeeplinkObject.swift in Sources */,
+				D6D39288265F15B800E49F1E /* NoticeCell.swift in Sources */,
 				806DA16A27307FA400843C4E /* MessageSubcell.swift in Sources */,
 				D6D1461121D583D200CD8CE4 /* RootNavigationController.swift in Sources */,
 				D61EC0EC21D312B600204BEE /* UIView+Extensions.swift in Sources */,
