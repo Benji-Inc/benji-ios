@@ -16,7 +16,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
                                         ConversationCollectionViewDataSource>,
                                         CollectionViewInputHandler {
 
-    private let blurView = BlurView()
+    let blurView = BlurView()
     private let parentMessageView = MessageContentView()
 
     /// A controller for the message that all the replies in this thread are responding to.

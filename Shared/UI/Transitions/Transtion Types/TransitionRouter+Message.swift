@@ -27,7 +27,7 @@ extension TransitionRouter {
                                transitionContext: UIViewControllerContextTransitioning) {
 
         guard let threadVC = self.toVC as? ThreadViewController,
-            let listVC = self.fromVC as? ConversationListViewController else { return }
+              let listVC = self.fromVC as? ConversationListViewController else { return }
 
         // Make sure we have all the components we need to complete this transition
         guard let snapshot = fromView.snapshotView(afterScreenUpdates: false) else {
@@ -38,17 +38,18 @@ extension TransitionRouter {
         containerView.set(backgroundColor: .clear)
         fromView.isHidden = true
 
-        let toVCFinalFrame = transitionContext.finalFrame(for: self.toVC)
-        self.toVC.view.frame = toVCFinalFrame
+        let toVCFinalFrame = transitionContext.finalFrame(for: threadVC)
+        threadVC.view.frame = toVCFinalFrame
 
-        containerView.addSubview(self.toVC.view)
-        self.toVC.view.layoutIfNeeded()
+        containerView.addSubview(threadVC.view)
+        threadVC.view.layoutIfNeeded()
 
         containerView.addSubview(snapshot)
         let finalFrame = toView.convert(toView.bounds, to: containerView)
 
-        self.toVC.view.frame = toVCFinalFrame
-        self.toVC.view.alpha = 0
+        //self.toVC.view.frame = toVCFinalFrame
+        threadVC.view.alpha = 0
+        threadVC.blurView.showBlur(false)
 
         // Put snapshot in the exact same spot as the original so that the transition looks seamless
         snapshot.frame = fromView.convert(fromView.bounds, to: containerView)
@@ -64,7 +65,7 @@ extension TransitionRouter {
                        delay: 0.0,
                        options: .curveEaseInOut,
                        animations: {
-                        snapshot.frame = finalFrame
+            snapshot.frame = finalFrame
         }) { (_) in}
 
         UIView.animateKeyframes(withDuration: self.transitionDuration(using: transitionContext),
@@ -72,27 +73,19 @@ extension TransitionRouter {
                                 options: .calculationModeLinear,
                                 animations: {
 
-                                    // Fade out the fromVC
-                                    UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.25) {
-                                        self.fromVC.view.alpha = 0
-                                    }
+            // Apply blurr
+            UIView.addKeyframe(withRelativeStartTime: 0, relativeDuration: 0.65) {
+                // listVC.view.alpha = 0
+                threadVC.blurView.showBlur(true)
+                self.toVC.view.alpha = 1
+            }
 
-                                    // Slide toVC into place and fade in tab container, have center content
-                                    // and nav bar hidden
-                                    UIView.addKeyframe(withRelativeStartTime: 0.25, relativeDuration: 0.2) {
-                                       // self.toVC.navigationController?.navigationBar.alpha = 0
-                                    }
-
-                                    // Fade in view of toVC
-                                    UIView.addKeyframe(withRelativeStartTime: 0.65, relativeDuration: 0.35) {
-                                        toView.alpha = 1
-                                        self.toVC.view.alpha = 1
-                                        //self.toVC.navigationController?.navigationBar.alpha = 1
-                                    }
+            // Fade in view of toVC
+            UIView.addKeyframe(withRelativeStartTime: 0.65, relativeDuration: 0.35) {
+                toView.alpha = 1
+            }
         }) { (completed) in
             snapshot.removeFromSuperview()
-            // Unhide all of the views we tampered with so that they're visible after the transition
-            self.fromVC.view.alpha = 1
             fromView.isHidden = false
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
@@ -103,7 +96,7 @@ extension TransitionRouter {
                                transitionContext: UIViewControllerContextTransitioning) {
 
         guard let threadVC = self.fromVC as? ThreadViewController,
-            let listVC = self.toVC as? ConversationListController else { return }
+              let listVC = self.toVC as? ConversationListController else { return }
 
     }
 }
