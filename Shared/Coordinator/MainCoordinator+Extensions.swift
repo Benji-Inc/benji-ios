@@ -29,7 +29,7 @@ extension MainCoordinator: LaunchManagerDelegate {
             }.store(in: &self.cancellables)
     }
 
-#if APPCLIP
+    #if APPCLIP
     func handleAppClip(result: LaunchStatus) {
         switch result {
         case .success(let object):
@@ -39,5 +39,15 @@ extension MainCoordinator: LaunchManagerDelegate {
             break
         }
     }
-#endif
+    #endif
+}
+
+extension MainCoordinator: ToastSchedulerDelegate {
+
+    nonisolated func didInteractWith(type: ToastType, deeplink: DeepLinkable?) {
+        Task.onMainActor {
+            guard let link = deeplink else { return }
+            self.handle(deeplink: link)
+        }
+    }
 }

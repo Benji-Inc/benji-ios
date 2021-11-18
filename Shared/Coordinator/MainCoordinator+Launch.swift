@@ -8,9 +8,11 @@
 
 import Foundation
 import StreamChat
+import Intents
 
+#if IOS
 extension MainCoordinator {
-#if !APPCLIP && !NOTIFICATION
+
     func handle(result: LaunchStatus) {
         switch result {
         case .success(let object):
@@ -20,61 +22,78 @@ extension MainCoordinator {
                 self.runOnboardingFlow()
             } else if let user = User.current(), !user.isOnboarded {
                 self.runOnboardingFlow()
-            } else if ChatClient.isConnected {
-                if let deepLink = object {
-                    self.handle(deeplink: deepLink)
-                } else {
-                    self.runArchiveFlow()
-                    //self.runHomeFlow()
-                }
+            } else {
+                Task {
+                    await self.runConversationListFlow()
+                }.add(to: self.taskPool)
             }
         case .failed(_):
             break
         }
     }
 
-    #warning("Replace with HomeCoordinator after beta features are complete.")
-    func runArchiveFlow() {
+    @MainActor
+    func runConversationListFlow() async {
         if ChatClient.isConnected {
-            if let coordinator = self.childCoordinator as? ArchiveCoordinator {
+            if let coordinator = self.childCoordinator as? ConversationListCoordinator {
                 if let deepLink = self.deepLink {
                     coordinator.handle(deeplink: deepLink)
                 }
+
+                await self.checkForPermissions()
             } else {
                 self.removeChild()
-                let coordinator = ArchiveCoordinator(router: self.router, deepLink: self.deepLink)
-                self.router.setRootModule(coordinator, animated: true)
-                self.addChildAndStart(coordinator, finishedHandler: { _ in
-                    // If the home coordinator ever finishes, put handling logic here.
+                let query = ChannelListQuery(filter: .containMembers(userIds: [User.current()!.objectId!]),
+                                             sort: [.init(key: .lastMessageAt, isAscending: false)],
+                                             pageSize: 20)
+                let channelListController = try? await ChatClient.shared.queryChannels(query: query)
+                guard let conversation = channelListController?.channels.first else { return }
+
+                let membersController = ChatClient.shared.memberListController(query: .init(cid: conversation.cid))
+                try? await membersController.synchronize()
+
+                let members = Array(membersController.members)
+
+                let coordinator = ConversationListCoordinator(router: self.router,
+                                                              deepLink: self.deepLink,
+                                                              conversationMembers: members,
+                                                              startingConversationID: conversation.cid)
+                self.addChildAndStart(coordinator, finishedHandler: { (_) in
+
                 })
+                self.router.push(coordinator, cancelHandler: {
+                }, animated: true)
+
+                await self.checkForPermissions()
             }
         } else {
-            Task {
-                try await ChatClient.initialize(for: User.current()!)
-                self.runArchiveFlow()
-            }
+            try? await ChatClient.initialize(for: User.current()!)
+            await self.runConversationListFlow()
         }
     }
 
-//    func runHomeFlow() {
-//        if let homeCoordinator = self.childCoordinator as? HomeCoordinator {
-//            if let deepLink = self.deepLink {
-//                homeCoordinator.handle(deeplink: deepLink)
-//            }
-//        } else {
-//            self.removeChild()
-//            let homeCoordinator = HomeCoordinator(router: self.router, deepLink: self.deepLink)
-//            self.router.setRootModule(homeCoordinator, animated: true)
-//            self.addChildAndStart(homeCoordinator, finishedHandler: { _ in
-//                // If the home coordinator ever finishes, put handling logic here.
-//            })
-//        }
-//    }
+    @MainActor
+    func checkForPermissions() async {
+        if INFocusStatusCenter.default.authorizationStatus != .authorized {
+            self.presentPermissions()
+        } else if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
+            self.presentPermissions()
+        }
+    }
+
+    @MainActor
+    private func presentPermissions() {
+        let coordinator = PermissionsCoordinator(router: self.router, deepLink: self.deepLink)
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true)
+        }
+        self.router.present(coordinator, source: self.router.topmostViewController)
+    }
 
     func logOutChat() {
         ChatClient.shared.disconnect()
     }
-#endif
 }
+#endif
 
 
