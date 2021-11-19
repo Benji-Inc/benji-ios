@@ -11,7 +11,7 @@ import Foundation
 class ThreadCollectionViewLayout: BottomToTopColumnCollectionViewLayout {
 
     override class var layoutAttributesClass: AnyClass {
-        return ConversationCollectionViewLayoutAttributes.self
+        return ConversationMessageCellLayoutAttributes.self
     }
     
     private var insertingIndexPaths: [IndexPath] = []
