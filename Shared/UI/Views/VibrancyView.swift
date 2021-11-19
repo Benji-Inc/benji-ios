@@ -34,7 +34,7 @@ class VibrancyView: View {
 
 class BlurView: UIVisualEffectView {
 
-    private let blurEffect: UIBlurEffect
+    let blurEffect: UIBlurEffect
 
     init() {
         self.blurEffect = Theme.blurEffect

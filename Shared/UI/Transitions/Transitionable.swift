@@ -64,14 +64,14 @@ enum TransitionType: Equatable {
     var duration: TimeInterval {
         switch self {
         case .move(_):
-            return 0.75
+            return Theme.animationDurationSlow
         case .fade:
-            return 0.75
+            return Theme.animationDurationSlow
         case .fill(_):
-            return 0.5
+            return Theme.animationDurationSlow
             #if IOS
         case .message(_):
-            return 1.0
+            return Theme.animationDurationSlow
             #endif
         }
     }

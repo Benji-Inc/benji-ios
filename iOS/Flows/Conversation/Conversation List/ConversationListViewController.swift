@@ -68,7 +68,7 @@ class ConversationListViewController: FullScreenViewController,
         self.members = members
         self.startingConversationID = startingConversationID
 
-        let filter: Filter<ChannelListFilterScope> = members.isEmpty ? .equal(.type, to: .messaging) : .containOnlyMembers(members)
+        let filter: Filter<ChannelListFilterScope> = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
 
         let query = ChannelListQuery(filter: filter,
                                      sort: [Sorting(key: .createdAt, isAscending: false)],
@@ -494,6 +494,13 @@ class ConversationListViewController: FullScreenViewController,
 extension ConversationListViewController: TransitionableViewController {
 
     var receivingPresentationType: TransitionType {
+        return .fade
+    }
+
+    var receivingDismissalType: TransitionType {
+        if let view = self.selectedMessageView {
+            return .message(view)
+        }
         return .fade
     }
 

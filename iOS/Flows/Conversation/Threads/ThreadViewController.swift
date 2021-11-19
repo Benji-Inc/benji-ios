@@ -75,11 +75,6 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
 
-        self.parentMessageView.setText(with: self.parentMessage)
-        self.parentMessageView.configureBackground(color: .white,
-                                                   showBubbleTail: false,
-                                                   tailOrientation: .left)
-
         self.subscribeToUpdates()
     }
 
@@ -90,9 +85,6 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         let headerHeight: CGFloat = 120
 
-        let msgWidth = self.view.width - Theme.contentOffset.doubled
-        self.parentMessageView.width = msgWidth
-        self.parentMessageView.height = MessageContentView.getHeight(withWidth: self.view.width, message: self.parentMessage)
         self.parentMessageView.pinToSafeArea(.top, padding: Theme.contentOffset)
         self.parentMessageView.centerOnX()
 

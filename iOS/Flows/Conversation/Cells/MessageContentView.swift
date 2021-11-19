@@ -15,6 +15,7 @@ class MessageContentView: View {
     let backgroundColorView = SpeechBubbleView(orientation: .down)
     /// Text view for displaying the text of the message.
     let textView = MessageTextView()
+    private (set) var message: Messageable?
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -28,6 +29,7 @@ class MessageContentView: View {
     }
 
     func setText(with message: Messageable) {
+        self.message = message
         if message.isDeleted {
             self.textView.text = "DELETED"
         } else {
