@@ -35,7 +35,7 @@ class InputTypeCell: CollectionViewManagerCell, ManageableCell {
     override func update(isSelected: Bool) {
         super.update(isSelected: isSelected)
 
-        self.imageView.tintColor = isSelected ? Color.darkGray.color : Color.lightGray.color
+        self.imageView.tintColor = isSelected ? Color.white.color : Color.lightGray.color
     }
 
     override func layoutSubviews() {

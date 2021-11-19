@@ -74,7 +74,9 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
+    }
 
+    override func handleFinishingLoadingData() {
         self.subscribeToUpdates()
     }
 
@@ -179,7 +181,7 @@ extension ThreadViewController {
                 await self.dataSource.update(with: changes,
                                              conversationController: self.messageController,
                                              collectionView: self.collectionView)
-            }
+            }.add(to: self.taskPool)
         }.store(in: &self.cancellables)
 
         self.dataSource.handleDeleteMessage = { [unowned self] item in
