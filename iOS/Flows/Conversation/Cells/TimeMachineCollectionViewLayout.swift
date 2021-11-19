@@ -18,7 +18,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     weak var dataSource: ConversationMessageCellDataSource?
 
-    /// The default size of the cells.
+    /// The size of the cells.
     var itemSize = CGSize(width: 200, height: 100)
 
     /// A cache of item layout attributes so they don't have to be recalculated.
@@ -26,6 +26,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
     /// A dictionary of z ranges for all the items. A z range represents the range that each item will be the frontmost of its section
     /// and its scale will be unaltered.
     private var zRangesDict: [IndexPath : Range<CGFloat>] = [:]
+    /// The current position along the Z axis. This is based off of the collectionview's Y content offset.
     private var zPosition: CGFloat {
         return self.collectionView?.contentOffset.y ?? 0
     }
@@ -231,6 +232,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
                                       withScrollingVelocity velocity: CGPoint) -> CGPoint {
 
+        // When finished scrolling, always settle on a cell in a centered position.
         var newOffset = proposedContentOffset
         newOffset.y = round(newOffset.y, toNearest: self.itemSize.height)
         newOffset.y = max(newOffset.y, 0)
@@ -239,15 +241,15 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 }
 
 
-func easeInExpo(_ x: CGFloat) -> CGFloat {
+private func easeInExpo(_ x: CGFloat) -> CGFloat {
     return x == 0 ? 0 : pow(2, 10 * x - 10)
 }
 
-func easeInCubic(_ x: CGFloat) -> CGFloat {
+private func easeInCubic(_ x: CGFloat) -> CGFloat {
     return x * x * x
 }
 
-func round(_ value: CGFloat, toNearest: CGFloat) -> CGFloat {
+private func round(_ value: CGFloat, toNearest: CGFloat) -> CGFloat {
     return round(value / toNearest) * toNearest
 }
 

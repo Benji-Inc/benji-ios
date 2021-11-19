@@ -20,7 +20,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
-    private lazy var collectionLayout = ConversationMessagesCellLayout(conversationDelegate: self)
+    private lazy var collectionLayout = TimelineCollectionViewLayout()
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
@@ -39,6 +39,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        self.collectionLayout.dataSource = self.dataSource
         self.collectionView.delegate = self
         self.collectionView.set(backgroundColor: .clear)
         self.contentView.addSubview(self.collectionView)
@@ -74,9 +75,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     ///     - message: The root message to display, which may have replies.
     ///     - replies: The currently loaded replies to the message. These should be ordered by newest to oldest.
     ///     - totalReplyCount: The total number of replies that this message has. It may be more than the passed in replies.
-
     func set(sequence: MessageSequence) {
-
         self.conversation = sequence
 
         // Separate the user messages from other message.
@@ -113,11 +112,12 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     }
 
     func handle(isCentered: Bool) {
-        guard self.collectionLayout.showMessageStatus != isCentered else { return }
-        
-        UIView.animate(withDuration: 0.2) {
-            self.collectionLayout.showMessageStatus = isCentered
-        }
+        // TODO: Restore this
+//        guard self.collectionLayout.showMessageStatus != isCentered else { return }
+//
+//        UIView.animate(withDuration: 0.2) {
+//            self.collectionLayout.showMessageStatus = isCentered
+//        }
     }
   
     override func prepareForReuse() {
@@ -132,13 +132,15 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     /// Returns the frame that a message drop zone should have, based on this cell's contents.
     /// The frame is in the coordinate space of the passed in view.
     func getMessageDropZoneFrame(convertedTo targetView: UIView) -> CGRect {
-        if let frontCellIndex = self.collectionLayout
-            .getFrontmostItemIndexPath(inSection: ConversationMessageSection.currentUserMessages.rawValue),
-           let frontUserCell = self.collectionView.cellForItem(at: frontCellIndex) {
-
-            let overlayRect = frontUserCell.convert(frontUserCell.bounds, to: self)
-            return self.convert(overlayRect, to: targetView)
-        }
+        // TODO: Restore this
+        return .zero
+//        if let frontCellIndex = self.collectionLayout
+//            .getFrontmostItemIndexPath(inSection: ConversationMessageSection.currentUserMessages.rawValue),
+//           let frontUserCell = self.collectionView.cellForItem(at: frontCellIndex) {
+//
+//            let overlayRect = frontUserCell.convert(frontUserCell.bounds, to: self)
+//            return self.convert(overlayRect, to: targetView)
+//        }
 
         return self.convert(CGRect(x: 0,
                                    y: MessageContentView.maximumHeight
