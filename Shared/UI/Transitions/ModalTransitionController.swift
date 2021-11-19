@@ -21,11 +21,7 @@ class ModalTransitionController: NSObject, UIViewControllerTransitioningDelegate
 
         if let from = source as? TransitionableViewController,
             let toVC = presented as? TransitionableViewController {
-
-            // If there is a parent it will crash on dismiss.
-            //if from.parent.isNil {
-                toVC.fromTransitionController = from
-            //}
+            toVC.fromTransitionController = from
             return TransitionRouter(fromVC: from, toVC: toVC, operation: .push)
         } else {
             return nil
