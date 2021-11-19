@@ -8,9 +8,11 @@
 
 import Foundation
 
+#if IOS
 protocol DismissInteractableController where Self: ViewController {
     var dismissInteractionController: PanDismissInteractionController { get }
 }
+#endif 
 
 /// This class is used to handle custom present transitions for CardTransitionableControllers that are presented modally
 class ModalTransitionController: NSObject, UIViewControllerTransitioningDelegate {
@@ -31,19 +33,19 @@ class ModalTransitionController: NSObject, UIViewControllerTransitioningDelegate
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 
         // Reverse the vc's to go back
-        if let fromVC = dismissed as? DismissInteractableController,
-            let toVC = fromVC.presentingTransitionController {
+        #if IOS
+        if let fromVC = dismissed as? DismissInteractableController {
 
             var interactionController: PanDismissInteractionController?
             if fromVC.dismissInteractionController.interactionInProgress {
                 interactionController = fromVC.dismissInteractionController
             }
 
-            return DismissTransitionController(toVC: toVC,
-                                               fromVC: fromVC,
-                                               interactionController: interactionController)
+            return DismissTransitionController(interactionController: interactionController)
+        }
+        #endif
 
-        } else if let from = dismissed as? TransitionableViewController, let to = from.fromTransitionController {
+        if let from = dismissed as? TransitionableViewController, let to = from.fromTransitionController {
             return TransitionRouter(fromVC: from, toVC: to, operation: .pop)
         } else {
             return nil
@@ -53,9 +55,12 @@ class ModalTransitionController: NSObject, UIViewControllerTransitioningDelegate
     func interactionControllerForDismissal(using animator: UIViewControllerAnimatedTransitioning)
         -> UIViewControllerInteractiveTransitioning? {
 
+        #if IOS
         guard let transitionController = animator as? DismissTransitionController else { return nil }
-
         return transitionController.interactionController
+        #else
+        return nil
+        #endif
     }
 }
 

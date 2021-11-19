@@ -91,7 +91,6 @@
 		D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553562746D5D200B08459 /* PanDismissInteractionController.swift */; };
 		D61553582746D5D200B08459 /* PanDismissInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553562746D5D200B08459 /* PanDismissInteractionController.swift */; };
 		D615535C2746D64200B08459 /* DismissTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615535B2746D64200B08459 /* DismissTransitionController.swift */; };
-		D615535D2746D64200B08459 /* DismissTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615535B2746D64200B08459 /* DismissTransitionController.swift */; };
 		D61553622746E62D00B08459 /* TransitionRouter+Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553612746E62D00B08459 /* TransitionRouter+Message.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
@@ -3225,7 +3224,6 @@
 				D655191B2589121100B901E4 /* CGPoint+Extensions.swift in Sources */,
 				D6637A2925A3A82F00A4A3B7 /* TextView.swift in Sources */,
 				D64A1EF6258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
-				D615535D2746D64200B08459 /* DismissTransitionController.swift in Sources */,
 				D655191C2589121100B901E4 /* MathFunctions.swift in Sources */,
 				D65519122589120600B901E4 /* ClosedRange+Extensions.swift in Sources */,
 				D64A1F08258C16470097817C /* WaitlistViewController.swift in Sources */,
