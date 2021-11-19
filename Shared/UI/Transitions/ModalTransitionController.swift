@@ -21,11 +21,7 @@ class ModalTransitionController: NSObject, UIViewControllerTransitioningDelegate
 
         if let from = source as? TransitionableViewController,
             let toVC = presented as? TransitionableViewController {
-
-            // If there is a parent it will crash on dismiss.
-            if from.parent.isNil {
-                toVC.fromTransitionController = from
-            }
+            toVC.fromTransitionController = from
             return TransitionRouter(fromVC: from, toVC: toVC, operation: .push)
         } else {
             return nil
@@ -90,15 +86,12 @@ private var transitionControllerHandle: UInt = 0
 private extension TransitionableViewController {
 
     /// The transitionable view controller that presented this view controller.
-    var fromTransitionController: TransitionableViewController? {
+    var fromTransitionController: TransitionableViewController?  {
         get {
-            return getAssociatedObject(&transitionControllerHandle)
+            return self.getAssociatedObject(&transitionControllerHandle)
         }
-
         set {
-            self.setAssociatedObject(key: &transitionControllerHandle,
-                                     value: newValue,
-                                     policy: .OBJC_ASSOCIATION_ASSIGN)  // Weak ref prevents memory leaks
+            self.setAssociatedObject(key: &transitionControllerHandle, value: newValue)
         }
     }
 }

@@ -43,7 +43,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     var handleSelectedConversation: ((MessageSequence) -> Void)?
     var handleDeletedConversation: ((MessageSequence) -> Void)?
 
-    var handleSelectedMessage: ((ConversationMessageItem, UIView) -> Void)?
+    var handleSelectedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
     var handleDeleteMessage: ((ConversationMessageItem) -> Void)?
     
     var handleLoadMoreMessages: CompletionOptional = nil
@@ -73,7 +73,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                                                                item: (cid, itemID, self))
 
                 threadCell.handleDeleteMessage = { [unowned self] (message) in
-//                    self.handleDeleteMessage?(item)
+                    //self.handleDeleteMessage?(message)
                 }
                 return threadCell
 
@@ -84,8 +84,8 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 = collectionView.dequeueConfiguredReusableCell(using: self.conversationCellRegistration,
                                                                for: indexPath,
                                                                item: (cid, self))
-                messageCell.handleTappedMessage = { [unowned self] item in
-                    self.handleSelectedMessage?(item, messageCell)
+                messageCell.handleTappedMessage = { [unowned self] item, content in
+                    self.handleSelectedMessage?(item, content)
                 }
                 messageCell.handleTappedConversation = { [unowned self] (conversation) in
                     self.handleSelectedConversation?(conversation)
@@ -100,8 +100,8 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                for: indexPath,
                                                                item: (cid, itemID, self))
-                messageCell.handleTappedMessage = { [unowned self] item in
-                    self.handleSelectedMessage?(item, messageCell)
+                messageCell.handleTappedMessage = { [unowned self] item, content in
+                    self.handleSelectedMessage?(item, content)
                 }
                 messageCell.handleTappedConversation = { [unowned self] (conversation) in
                     self.handleSelectedConversation?(conversation)
@@ -164,7 +164,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
                                      toSection: sectionID)
             case .update(let message, _):
-                #warning("This can crash the app")
                 snapshot.reconfigureItems([message.asConversationCollectionItem])
             case .remove(let message, _):
                 snapshot.deleteItems([message.asConversationCollectionItem])

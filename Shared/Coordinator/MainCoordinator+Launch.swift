@@ -43,21 +43,11 @@ extension MainCoordinator {
                 await self.checkForPermissions()
             } else {
                 self.removeChild()
-                let query = ChannelListQuery(filter: .containMembers(userIds: [User.current()!.objectId!]),
-                                             sort: [.init(key: .lastMessageAt, isAscending: false)],
-                                             pageSize: 20)
-                let channelListController = try? await ChatClient.shared.queryChannels(query: query)
-                guard let conversation = channelListController?.channels.first else { return }
-
-                let membersController = ChatClient.shared.memberListController(query: .init(cid: conversation.cid))
-                try? await membersController.synchronize()
-
-                let members = Array(membersController.members)
 
                 let coordinator = ConversationListCoordinator(router: self.router,
                                                               deepLink: self.deepLink,
-                                                              conversationMembers: members,
-                                                              startingConversationID: conversation.cid)
+                                                              conversationMembers: [],
+                                                              startingConversationID: nil)
                 self.addChildAndStart(coordinator, finishedHandler: { (_) in
 
                 })

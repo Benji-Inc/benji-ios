@@ -34,7 +34,7 @@ class ConversationListViewController: FullScreenViewController,
         return self.conversationListController.conversations[safe: indexPath.item]
     }
 
-    var selectedMessageView: UIView?
+    var selectedMessageView: MessageContentView?
 
     // Input handlers
     var onSelectedConversation: ((ChannelId) -> Void)?
@@ -68,7 +68,9 @@ class ConversationListViewController: FullScreenViewController,
         self.members = members
         self.startingConversationID = startingConversationID
 
-        let query = ChannelListQuery(filter: .containOnlyMembers(members),
+        let filter: Filter<ChannelListFilterScope> = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
+
+        let query = ChannelListQuery(filter: filter,
                                      sort: [Sorting(key: .createdAt, isAscending: false)],
                                      pageSize: .channelsPageSize,
                                      messagesLimit: 10)
@@ -495,9 +497,16 @@ extension ConversationListViewController: TransitionableViewController {
         return .fade
     }
 
+    var receivingDismissalType: TransitionType {
+        if let view = self.selectedMessageView {
+            return .message(view)
+        }
+        return .fade
+    }
+
     var sendingPresentationType: TransitionType {
         if let view = self.selectedMessageView {
-            return .move(view)
+            return .message(view)
         }
         return .fade
     }
