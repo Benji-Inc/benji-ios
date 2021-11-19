@@ -49,7 +49,6 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
             var height = itemCount * self.itemSize.height
             height += collectionView.bounds.height
             height -= collectionView.contentInset.top + collectionView.contentInset.bottom
-            height -= self.itemSize.height
 
             return CGSize(width: collectionView.bounds.width, height: height)
         }
@@ -148,7 +147,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         let frontmostZOffset = self.getFrontmostItemZOffset(in: indexPath.section)
         let zDifference = -(frontmostZOffset+offsetFromFrontmost)
 
-        let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
+        let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
         // Make sure items in the front are drawn over items in the back.
         attributes.zIndex = indexPath.item
         attributes.frame.size = self.itemSize
@@ -176,6 +175,11 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         attributes.center = centerPoint
         attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
         attributes.alpha = alpha
+
+        attributes.shouldShowText = true
+        attributes.backgroundColor = .white
+        attributes.shouldShowTail = true
+        attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
 
         return attributes
     }

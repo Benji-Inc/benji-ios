@@ -34,7 +34,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     var conversation: MessageSequence?
 
     /// The maximum number of messages we'll show per stack of messages.
-    private let maxMessagesPerSection = 3
+    private let maxMessagesPerSection = 25
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -95,7 +95,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         }
 
         // Other messages have the newest message on top, so there's no need to reverse the messages.
-        let messages = otherMessages.prefix(self.maxMessagesPerSection).map { message in
+        let messages = otherMessages.prefix(self.maxMessagesPerSection).reversed().map { message in
             return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
