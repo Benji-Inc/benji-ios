@@ -117,4 +117,8 @@ extension ChatClient {
             }
         })
     }
+
+    func message(cid: ConversationID, id: MessageId) -> Message {
+        return self.messageController(cid: cid, messageId: id).message!
+    }
 }

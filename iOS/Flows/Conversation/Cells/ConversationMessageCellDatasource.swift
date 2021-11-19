@@ -13,7 +13,7 @@ typealias ConversationMessageSection = ConversationMessageCellDataSource.Section
 typealias ConversationMessageItem = ConversationMessageCellDataSource.ItemType
 
 class ConversationMessageCellDataSource: CollectionViewDataSource<ConversationMessageSection,
-                                            ConversationMessageItem> {
+                                         ConversationMessageItem> {
 
     enum SectionType: Int, Hashable, CaseIterable {
         case otherMessages = 0
