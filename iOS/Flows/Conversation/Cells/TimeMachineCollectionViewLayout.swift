@@ -9,10 +9,12 @@ import Foundation
 import UIKit
 import StreamChat
 
+/// A custom layout for conversation messages. Up to two message cells section are each displayed as a stack along the z axis.
+/// The stacks appear similar to Apple's Time Machine interface, with older messages going out into the distance.
+/// As the collection view scrolls up and down, the messages move away or toward the user.
 class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     private typealias SectionIndex = Int
-    private typealias ItemIndex = Int
 
     weak var dataSource: ConversationMessageCellDataSource?
 
@@ -21,6 +23,8 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
+    /// A dictionary of z ranges for all the items. A z range represents the range that each item will be the frontmost of its section
+    /// and its scale will be unaltered.
     private var zRangesDict: [IndexPath : Range<CGFloat>] = [:]
     private var zPosition: CGFloat {
         return self.collectionView?.contentOffset.y ?? 0
