@@ -81,7 +81,6 @@ extension TransitionRouter {
         }) { _ in
             toView.alpha = 1
             snapshot.removeFromSuperview()
-            fromView.isHidden = false
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
     }
@@ -115,8 +114,6 @@ extension TransitionRouter {
         // Put snapshot in the exact same spot as the original so that the transition looks seamless
         snapshot.frame = fromView.convert(fromView.bounds, to: containerView)
 
-        toView.alpha = 0
-
         UIView.animate(withDuration: self.transitionDuration(using: transitionContext),
                        delay: 0,
                        usingSpringWithDamping: 0.65,
@@ -127,9 +124,8 @@ extension TransitionRouter {
             self.fromVC.view.alpha = 0
             snapshot.frame = finalFrame
         }) { _ in
-            toView.alpha = 1
+            toView.isHidden = false
             snapshot.removeFromSuperview()
-            fromView.isHidden = true
             delay(0.1) {
                 listVC.becomeFirstResponder()
             }
