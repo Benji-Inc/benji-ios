@@ -51,6 +51,8 @@ class ThreadMessageCell: UICollectionViewCell {
             self.content.height = MessageContentView.getHeight(withWidth: width, message: message)
         }
 
+        self.content.centerOnY()
+
         self.authorView.centerY = self.content.centerY
     }
 

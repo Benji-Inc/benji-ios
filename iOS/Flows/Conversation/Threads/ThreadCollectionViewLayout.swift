@@ -24,7 +24,7 @@ class ThreadCollectionViewLayout: BottomToTopColumnCollectionViewLayout {
                                                    bottom: collectionView.contentInset.bottom,
                                                    right: collectionView.width * 0.1)
 
-        self.defaultItemSize = CGSize(width: collectionView.width * 0.8, height: 120)
+        self.defaultItemSize = CGSize(width: collectionView.width * 0.8, height: MessageContentView.maximumHeight)
         self.defaultHeaderSize = .zero
         self.defaultFooterSize = .zero
         self.defaultItemSpacing = collectionView.width * 0.05
