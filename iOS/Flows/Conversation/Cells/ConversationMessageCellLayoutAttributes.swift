@@ -13,7 +13,7 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
     /// If true, then text should be shown in the speech bubble.
     var shouldShowText: Bool = true
     /// The color of the background of the cell.
-    var backgroundColor: Color = .gray
+    var backgroundColor: Color = .lightGray
     /// If true, the speechbubble tail should be shown.
     var shouldShowTail: Bool = false
     /// The direction the speech bubble tail should be pointed.

@@ -76,7 +76,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.view.addSubview(self.parentMessageView)
     }
 
-    override func handleFinishingLoadingData() {
+    override func handleDataBeingLoaded() {
         self.subscribeToUpdates()
     }
 
