@@ -20,14 +20,4 @@ class ThreadCollectionView: CollectionView {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    private func registerReusableViews() {
-        self.register(ReplyMessageCell.self)
-        self.register(AudioMessageCell.self)
-        self.register(LocationMessageCell.self)
-        self.register(ContactMessageCell.self)
-        self.register(EmojiMessageCell.self)
-        self.register(VideoMessageCell.self)
-        self.register(LinkCell.self)
-    }
 }
