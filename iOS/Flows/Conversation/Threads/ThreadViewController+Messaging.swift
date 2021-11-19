@@ -21,7 +21,7 @@ extension ThreadViewController: SwipeableInputAccessoryViewDelegate {
             } catch {
                 logDebug(error)
             }
-        }
+        }.add(to: self.taskPool)
     }
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
@@ -42,7 +42,7 @@ extension ThreadViewController: SwipeableInputAccessoryViewDelegate {
 
         Task {
             await self.send(object: sendable)
-        }
+        }.add(to: self.taskPool)
 
         return true
     }

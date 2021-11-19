@@ -45,8 +45,11 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
 
         Task {
             await self.loadData()
+            self.handleDataBeingLoaded()
         }.add(to: self.taskPool)
     }
+
+    func handleDataBeingLoaded() {}
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()

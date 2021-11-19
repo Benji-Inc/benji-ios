@@ -133,11 +133,11 @@ class ConversationMessagesCellLayout: UICollectionViewFlowLayout {
 
         // Objects closer to the front of the stack should be brighter.
         let backgroundBrightness = 1 + CGFloat(zIndex) * 0.05
-        var backgroundColor: UIColor = indexPath.section == 0 ? .lightGray : .gray
-        backgroundColor = backgroundColor.color(withBrightness: backgroundBrightness)
+        let backgroundColor: Color = indexPath.section == 0 ? .white : .lightGray
 
         // Set the cell background color. The color may be overwritten if this is the most recent message.
         attributes.backgroundColor = backgroundColor
+        attributes.alpha = backgroundBrightness
 
         var isMostRecentMessageFromUser = false
         if let mostRecentMessage = self.conversationDelegate.conversation?.messages.first {

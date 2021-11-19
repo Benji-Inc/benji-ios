@@ -62,42 +62,7 @@ extension ConversationCollectionViewDataSource {
             let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                         messageId: item.messageID)
             guard let message = messageController.message else { return }
-
-            cell.set(message: message, replies: [], totalReplyCount: 0)
-
-            let messageAuthor = message.author
-
-            let dataSource = item.dataSource
-
-            var showTopLine = false
-            var showBottomLine = false
-
-            // Connect messages from the same author with a vertical line.
-            if let nextItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item + 1,
-                                                                       section: indexPath.section)) {
-                if case .messages(let messageID) = nextItem {
-                    let nextMessageController = ChatClient.shared.messageController(cid: item.channelID,
-                                                                                    messageId: messageID)
-                    if nextMessageController.message?.author == messageAuthor {
-                        showTopLine = true
-                    }
-                }
-            }
-
-            if let previousItem = dataSource.itemIdentifier(for: IndexPath(item: indexPath.item - 1,
-                                                                           section: indexPath.section)) {
-                if case .messages(let messageID) = previousItem {
-                    let previousMessageController = ChatClient.shared.messageController(cid: item.channelID,
-                                                                                        messageId: messageID)
-                    if previousMessageController.message?.author == messageAuthor {
-                        showBottomLine = true
-                    }
-                }
-            }
-
-            cell.setAuthor(with: messageAuthor,
-                           showTopLine: showTopLine,
-                           showBottomLine: showBottomLine)
+            cell.set(message: message)
         }
     }
 

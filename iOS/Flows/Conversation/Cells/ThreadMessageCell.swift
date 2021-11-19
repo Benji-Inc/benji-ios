@@ -16,11 +16,8 @@ class ThreadMessageCell: UICollectionViewCell {
     var handleDeleteMessage: ((Messageable) -> Void)?
     private lazy var contextMenuInteraction = UIContextMenuInteraction(delegate: self)
 
-    private let messageView = MessageSubcell(frame: .zero)
+    private let content = MessageContentView()
     private let authorView = AvatarView()
-    private let topVerticalLine = View()
-    private let bottomVerticalLine = View()
-    private let dotView = View()
 
     private var state: ConversationUIState = .read
 
@@ -30,20 +27,7 @@ class ThreadMessageCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.contentView.addSubview(self.messageView)
-
-        self.topVerticalLine.set(backgroundColor: .lightGray)
-        self.contentView.addSubview(self.topVerticalLine)
-        self.bottomVerticalLine.set(backgroundColor: .lightGray)
-        self.contentView.addSubview(self.bottomVerticalLine)
-
-        self.contentView.addSubview(self.dotView)
-        self.dotView.set(backgroundColor: .lightGray)
-
-        self.contentView.addSubview(self.authorView)
-
-        self.dotView.set(backgroundColor: .white)
-
+        self.contentView.addSubview(self.content)
         self.contentView.addSubview(self.authorView)
 
         // Don't clip to bounds so that the vertical lines can meet between cells.
@@ -57,82 +41,53 @@ class ThreadMessageCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        let shouldShowAvatar = self.authorView.displayable.exists
+        self.authorView.setSize(for: MessageContentView.minimumHeight - Theme.contentOffset.half)
+        self.authorView.pin(.left)
 
-        if shouldShowAvatar {
-            self.messageView.left = 40
-        } else {
-            self.messageView.left = 0
+        let width = self.contentView.width - (self.authorView.width + Theme.contentOffset.half)
+        self.content.match(.left, to: .right, of: self.authorView, offset: Theme.contentOffset.half)
+        self.content.width = width
+        if let message = self.message {
+            self.content.height = MessageContentView.getHeight(withWidth: width, message: message)
         }
-        self.messageView.expand(.right)
-        self.messageView.expandToSuperviewHeight()
 
-        if shouldShowAvatar {
-            self.authorView.setSize(for: 40)
-            self.authorView.pin(.left)
-            self.authorView.centerY = self.messageView.halfHeight
+        self.content.centerOnY()
 
-            let lineOffset: CGFloat = 10
-
-            self.topVerticalLine.height = self.contentView.halfHeight + lineOffset
-            self.topVerticalLine.width = 2
-            self.topVerticalLine.top = -lineOffset
-            self.topVerticalLine.centerX = self.authorView.centerX
-
-            self.bottomVerticalLine.height = self.contentView.halfHeight + lineOffset
-            self.bottomVerticalLine.width = 2
-            self.bottomVerticalLine.centerX = self.authorView.centerX
-            self.bottomVerticalLine.pin(.bottom, padding: -lineOffset)
-
-            self.dotView.size = CGSize(width: 6, height: 6)
-            self.dotView.layer.cornerRadius = 3
-            self.dotView.center = self.authorView.center
-        } else {
-            self.authorView.frame = .zero
-            self.topVerticalLine.frame = .zero
-            self.bottomVerticalLine.frame = .zero
-        }
+        self.authorView.centerY = self.content.centerY
     }
 
     /// Configures the cell to display the given messages.
     ///
     /// - Parameters:
-    ///     - message: The root message to display, which may have replies.
-    ///     - replies: The currently loaded replies to the message. These should be ordered by newest to oldest.
-    ///     - totalReplyCount: The total number of replies that this message has. It may be more than the passed in replies.
-    func set(message: Messageable, replies: [Messageable], totalReplyCount: Int) {
+    ///     - message: The root message to display.
+    func set(message: Messageable) {
         self.message = message
 
         self.authorView.set(avatar: message.avatar)
-        self.messageView.setText(with: message)
+        self.content.setText(with: message)
 
-        let backgroundColor: UIColor
-        if message.isFromCurrentUser {
-            backgroundColor = .gray
-        } else {
-            backgroundColor = .darkGray
-        }
-        self.messageView.content.configureBackground(color: backgroundColor,
-                                                     showBubbleTail: false,
-                                                     tailOrientation: .down)
-
+        self.content.configureBackground(color: message.context.color,
+                                             showBubbleTail: true,
+                                             tailOrientation: .left)
         self.setNeedsLayout()
 
-        if message.isFromCurrentUser {
-            self.messageView.content.backgroundColorView.addInteraction(self.contextMenuInteraction)
-        }
+        self.content.backgroundColorView.addInteraction(self.contextMenuInteraction)
     }
 
-    func setAuthor(with avatar: Avatar, showTopLine: Bool, showBottomLine: Bool) {
-        self.authorView.set(avatar: avatar)
-        self.authorView.isVisible = !showTopLine
+    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
+        super.apply(layoutAttributes)
 
-        self.topVerticalLine.isVisible = showTopLine
-        self.bottomVerticalLine.isVisible = showBottomLine
+        guard let messageLayoutAttributes
+                = layoutAttributes as? ConversationMessageCellLayoutAttributes else {
 
-        self.dotView.isVisible = showTopLine && !showBottomLine
+            return
+        }
 
-        self.setNeedsLayout()
+        self.content.alpha = messageLayoutAttributes.alpha
+        self.content.textView.isVisible = messageLayoutAttributes.shouldShowText
+        self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
+                                         showBubbleTail: messageLayoutAttributes.shouldShowTail,
+                                         tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
     }
 }
 
