@@ -41,10 +41,11 @@ class MessageContentView: View {
 
     /// Sets the background color and shows/hides the bubble tail.
     func configureBackground(color: Color,
+                             brightness: CGFloat,
                              showBubbleTail: Bool,
                              tailOrientation: SpeechBubbleView.TailOrientation) {
 
-        self.backgroundColorView.bubbleColor = color.color
+        self.backgroundColorView.bubbleColor = color.color.color(withBrightness: brightness)
         self.backgroundColorView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
         self.backgroundColorView.orientation = tailOrientation
     }

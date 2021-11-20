@@ -44,10 +44,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         self.collectionView.delegate = self
         self.collectionView.set(backgroundColor: .clear)
         self.contentView.addSubview(self.collectionView)
-        self.collectionView.contentInset = UIEdgeInsets(top: Theme.contentOffset,
-                                                        left: 0,
-                                                        bottom: 0,
-                                                        right: 0)
+        self.collectionView.contentInset = .zero
         #warning("This prevents single selection of a cell")
 //        self.collectionView.onTap { [unowned self] tapRecognizer in
 //            guard let conversation = self.conversation else { return }

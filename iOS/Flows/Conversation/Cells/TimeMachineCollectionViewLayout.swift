@@ -149,6 +149,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         // Make sure items in the front are drawn over items in the back.
         attributes.zIndex = indexPath.item
         attributes.frame.size = self.itemSize
+        attributes.frame.size.width = self.collectionView!.width
 
         var scale: CGFloat = 1
         var yOffset: CGFloat = 0
@@ -174,8 +175,14 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
         attributes.alpha = alpha
 
+        // Objects closer to the front of the stack should be brighter.
+        let backgroundBrightness = clamp(1 - CGFloat(frontmostIndexPath.item - indexPath.item) * 0.05,
+                                         max: 1)
+        let backgroundColor: Color = indexPath.section == 0 ? .white : .lightGray
+
         attributes.shouldShowText = true
-        attributes.backgroundColor = .white
+        attributes.backgroundColor = backgroundColor
+        attributes.brightness = backgroundBrightness
         attributes.shouldShowTail = true
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
 
