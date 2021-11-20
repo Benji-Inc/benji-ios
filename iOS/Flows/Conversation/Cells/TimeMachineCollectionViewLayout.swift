@@ -46,10 +46,8 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
             guard let collectionView = collectionView, collectionView.frame != .zero else { return .zero }
 
             let itemCount = CGFloat(self.numberOfItems(inSection: 0) + self.numberOfItems(inSection: 1))
-            var height = itemCount * self.itemSize.height
+            var height = (itemCount - 1) * self.itemSize.height
             height += collectionView.bounds.height
-            height -= collectionView.contentInset.top + collectionView.contentInset.bottom
-
             return CGSize(width: collectionView.bounds.width, height: height)
         }
     }

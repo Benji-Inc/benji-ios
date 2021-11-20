@@ -39,6 +39,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        self.collectionView.decelerationRate = .fast
         self.collectionLayout.dataSource = self.dataSource
         self.collectionView.delegate = self
         self.collectionView.set(backgroundColor: .clear)
