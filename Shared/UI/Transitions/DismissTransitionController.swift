@@ -56,11 +56,7 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
 
         containerView.addSubview(threadVC.view)
 
-        // Setup temp transition view for animation
-        let initialFrame = containerView.convert(fromView.bounds,
-                                                      from: fromView)
-        let finalFrame = containerView.convert(toView.bounds,
-                                               from: toView)
+        let finalFrame = toView.convert(toView.bounds, to: containerView)
 
         let snapshot = MessageContentView()
 
@@ -72,17 +68,26 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
         }
 
         containerView.addSubview(snapshot)
-        snapshot.frame = initialFrame
+        snapshot.frame = fromView.frame
 
-        fromView.isHidden = true 
+        fromView.isHidden = true
+        threadVC.resignFirstResponder()
 
         let animator = UIViewPropertyAnimator(duration: self.transitionDuration(using: transitionContext),
-                                              curve: .easeOut)
+                                              curve: .linear)
 
-        animator.addAnimations { 
-            threadVC.blurView.showBlur(false)
-            threadVC.view.alpha = 0
-            snapshot.frame = finalFrame
+        animator.addAnimations {
+
+            UIView.animateKeyframes(withDuration: 0.0, delay: 0.0, animations: {
+                snapshot.center = finalFrame.center
+
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
+                    threadVC.collectionView.alpha = 0
+                }
+                UIView.addKeyframe(withRelativeStartTime: 0.3, relativeDuration: 0.7) {
+                    threadVC.blurView.showBlur(false)
+                }
+              })
         }
 
         animator.addCompletion { (position) in
@@ -92,7 +97,7 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
                 delay(0.1) {
                     listVC.becomeFirstResponder()
                 }
-            } else {
+            } else if position == .start {
                 toView.isHidden = true
                 fromView.isHidden = false
                 delay(0.1) {
