@@ -67,7 +67,7 @@ class MessageStatusLabel: MessageDateLabel {
             await self.awaitAnimation(with: .fast, animations: {
                 self.alpha = 1
             })
-        }
+        }.add(to: self.taskPool)
     }
 
     private func getReplies(for message: Message) -> Localized {
