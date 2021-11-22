@@ -159,23 +159,9 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     /// Returns the frame that a message drop zone should have, based on this cell's contents.
     /// The frame is in the coordinate space of the passed in view.
     func getMessageDropZoneFrame(convertedTo targetView: UIView) -> CGRect {
-        // TODO: Restore this
-        return .zero
-//        if let frontCellIndex = self.collectionLayout
-//            .getFrontmostItemIndexPath(inSection: ConversationMessageSection.currentUserMessages.rawValue),
-//           let frontUserCell = self.collectionView.cellForItem(at: frontCellIndex) {
-//
-//            let overlayRect = frontUserCell.convert(frontUserCell.bounds, to: self)
-//            return self.convert(overlayRect, to: targetView)
-//        }
+        let dropZoneFrame = self.collectionLayout.getDropZoneFrame()
 
-        return self.convert(CGRect(x: 0,
-                                   y: MessageContentView.maximumHeight
-                                   + ConversationMessagesCell.spaceBetweenCellTops * CGFloat(self.maxMessagesPerSection) * 2
-                                   + Theme.contentOffset,
-                                   width: self.width,
-                                   height: MessageContentView.minimumHeight),
-                            to: targetView)
+        return self.collectionView.convert(dropZoneFrame, to: targetView)
     }
 }
 

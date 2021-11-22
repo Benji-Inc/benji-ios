@@ -51,6 +51,16 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return CGPoint(x: 0, y: upperBound)
     }
 
+    func getDropZoneFrame() -> CGRect {
+        let center = self.getCenterPoint(for: 1, withNormalizedYOffset: 0)
+        var frame = CGRect(x: 0,
+                           y: 0,
+                           width: self.collectionView!.width,
+                           height: self.itemHeight)
+        frame.centerY = center.y
+        return frame
+    }
+
     // MARK: - UICollectionViewLayout Overrides
 
     override var collectionViewContentSize: CGSize {
