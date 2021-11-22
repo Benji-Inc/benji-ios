@@ -55,11 +55,8 @@ class MessageContentView: View {
 
         self.backgroundColorView.expandToSuperviewSize()
 
-        self.textView.width = self.backgroundColorView.bubbleFrame.width
-        self.textView.centerOnX()
-        self.textView.top = self.backgroundColorView.bubbleFrame.top + Theme.contentOffset.half
-        self.textView.expand(.bottom,
-                             to: self.backgroundColorView.bubbleFrame.bottom - Theme.contentOffset.half)
+        self.textView.setSize(withMaxWidth: self.backgroundColorView.bubbleFrame.width)
+        self.textView.center = self.backgroundColorView.bubbleFrame.center
     }
 
     /// Sizing

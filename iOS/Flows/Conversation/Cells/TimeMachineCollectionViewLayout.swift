@@ -7,8 +7,10 @@
 
 import Foundation
 import UIKit
+import StreamChat
 
 protocol TimelineCollectionViewLayoutDataSource: AnyObject {
+    func getConversation(at indexPath: IndexPath) -> Conversation?
     func getMessage(at indexPath: IndexPath) -> Messageable?
 }
 
@@ -21,11 +23,17 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     weak var dataSource: TimelineCollectionViewLayoutDataSource?
 
-    /// The size of the cells.
-    var itemSize = CGSize(width: 200, height: 100)
+    /// The height of the cells.
+    var itemHeight: CGFloat = 100
+    /// If true, the time sent decoration views should be displayed.
+    var showMessageStatus: Bool = false {
+        didSet { self.invalidateLayout() }
+    }
 
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
+    /// A cache of layout attributes for decoration views.
+    private var decorationLayoutAttributes: [SectionIndex : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
     /// and its scale will be unaltered.
     private var zRangesDict: [IndexPath : Range<CGFloat>] = [:]
@@ -42,14 +50,24 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return self.collectionView?.numberOfItems(inSection: section) ?? 0
     }
 
+    override init() {
+        super.init()
+        self.register(MessageStatusView.self, forDecorationViewOfKind: MessageStatusView.objectIdentifier)
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.register(MessageStatusView.self, forDecorationViewOfKind: MessageStatusView.objectIdentifier)
+    }
+
     // MARK: - UICollectionViewLayout Overrides
 
     override var collectionViewContentSize: CGSize {
         get {
-            guard let collectionView = collectionView, collectionView.frame != .zero else { return .zero }
+            guard let collectionView = collectionView else { return .zero }
 
             let itemCount = CGFloat(self.numberOfItems(inSection: 0) + self.numberOfItems(inSection: 1))
-            var height = (itemCount - 1) * self.itemSize.height
+            var height = (itemCount - 1) * self.itemHeight
             height += collectionView.bounds.height
             return CGSize(width: collectionView.bounds.width, height: height)
         }
@@ -66,6 +84,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         // Clear the layout attributes caches.
         self.cellLayoutAttributes.removeAll()
         self.zRangesDict.removeAll()
+        self.decorationLayoutAttributes.removeAll()
     }
 
     override func prepare() {
@@ -74,6 +93,12 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         // Calculate and cache the layout attributes for the items in each section.
         self.forEachIndexPath { indexPath in
             self.cellLayoutAttributes[indexPath] = self.layoutAttributesForItem(at: indexPath)
+        }
+
+        for section in 0..<self.sectionCount {
+            self.decorationLayoutAttributes[section]
+            = self.layoutAttributesForDecorationView(ofKind: MessageStatusView.objectIdentifier,
+                                                     at: IndexPath(item: 0, section: section))
         }
     }
 
@@ -101,7 +126,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
             if let previousRangeInSection = self.zRangesDict[IndexPath(item: currentItemIndex - 1,
                                                                       section: currentSection)] {
 
-                startZ = previousRangeInSection.upperBound + self.itemSize.height
+                startZ = previousRangeInSection.upperBound + self.itemHeight
             }
 
             var endZ = startZ
@@ -111,10 +136,10 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
                     let nextIndexPath = sortedItemIndexPaths[nextIndex]
 
                     if currentSection == nextIndexPath.section {
-                        endZ = CGFloat(nextIndex) * self.itemSize.height - self.itemSize.height
+                        endZ = CGFloat(nextIndex) * self.itemHeight - self.itemHeight
                         break
                     } else if nextIndex == sortedItemIndexPaths.count - 1 {
-                        endZ = CGFloat(nextIndex) * self.itemSize.height
+                        endZ = CGFloat(nextIndex) * self.itemHeight
                         break
                     }
                 }
@@ -126,14 +151,18 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         // Return all items whose frames intersect with the given rect and aren't invisible.
-        let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
+        var itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
             return attributes.alpha > 0 && rect.intersects(attributes.frame)
         }
+
+        itemAttributes.append(contentsOf: self.decorationLayoutAttributes.values)
 
         return itemAttributes
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        guard let collectionView = self.collectionView else { return nil }
+
         // If the attributes are cached already, just return those.
         if let attributes = self.cellLayoutAttributes[indexPath]  {
             return attributes
@@ -142,7 +171,10 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         // All items in a section are positioned relative to its frontmost item.
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
 
-        let offsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)*self.itemSize.height
+        guard abs(frontmostIndexPath.item - indexPath.item) < 4 else { return nil }
+
+
+        let offsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)*self.itemHeight
 
         let frontmostVectorToCurrentZ = self.getFrontmostItemZOffset(in: indexPath.section)
         let vectorToCurrentZ = frontmostVectorToCurrentZ+offsetFromFrontmost
@@ -150,8 +182,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
         // Make sure items in the front are drawn over items in the back.
         attributes.zIndex = indexPath.item
-        attributes.frame.size = self.itemSize
-        attributes.frame.size.width = self.collectionView!.width
+        attributes.frame.size = CGSize(width: collectionView.width, height: self.itemHeight)
 
         var scale: CGFloat = 1
         var yOffset: CGFloat = 0
@@ -160,16 +191,16 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         if vectorToCurrentZ > 0 {
             // If the item's z range is behind the current zPosition, then start scaling it down
             // to simulate moving away from the user.
-            let normalized = vectorToCurrentZ/(self.itemSize.height*4)
+            let normalized = vectorToCurrentZ/(self.itemHeight*3)
             scale = clamp(1-normalized, min: 0)
-            yOffset = (normalized) * self.itemSize.height
+            yOffset = (normalized) * self.itemHeight
             alpha = scale == 0 ? 0 : 1
         } else if vectorToCurrentZ < 0 {
             // If the item's z range is in front of the current zPosition, then scale it up
             // to simulate it moving closer to the user.
-            let normalized = (-vectorToCurrentZ)/self.itemSize.height
+            let normalized = (-vectorToCurrentZ)/self.itemHeight
             scale = clamp(normalized, max: 1) + 1
-            yOffset = normalized * -self.itemSize.height * 2
+            yOffset = normalized * -self.itemHeight * 2
             alpha = 1 - normalized
         } else {
             // If current z position is within the item's z range, don't adjust its scale or position.
@@ -186,7 +217,11 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         // Objects closer to the front of the stack should be brighter.
         let backgroundBrightness = clamp(1 - CGFloat(frontmostIndexPath.item - indexPath.item) * 0.1,
                                          max: 1)
-        let backgroundColor: Color = indexPath.section == 0 ? .white : .lightGray
+        var backgroundColor: Color = .lightGray
+
+        if indexPath == self.getMostRecentVisibleIndexPath() {
+            backgroundColor = .white
+        }
 
         attributes.shouldShowText = true
         attributes.backgroundColor = backgroundColor
@@ -196,6 +231,52 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
         return attributes
     }
+
+    override func layoutAttributesForDecorationView(ofKind elementKind: String,
+                                                    at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+
+        guard let frontmostItemIndex = self.getFrontmostIndexPath(in: indexPath.section),
+              let frontmostAttributes = self.layoutAttributesForItem(at: frontmostItemIndex) else {
+                  return nil
+              }
+
+        guard let conversation = self.dataSource?.getConversation(at: indexPath),
+              let messageable = self.dataSource?.getMessage(at: indexPath) else {
+                  return nil
+              }
+
+        let message = ChatClient.shared.message(cid: conversation.cid, id: messageable.id)
+
+        let attributes
+        = MessageStatusViewLayoutAttributes(forDecorationViewOfKind: MessageStatusView.objectIdentifier,
+                                            with: indexPath)
+
+        if indexPath.section == 0 {
+            // Position the decoration above the frontmost item in the first section
+            attributes.frame = CGRect(x: frontmostAttributes.frame.left,
+                                      y: frontmostAttributes.frame.top - Theme.contentOffset + 7,
+                                      width: frontmostAttributes.frame.width,
+                                      height: Theme.contentOffset)
+        } else {
+            // Position the decoration below the frontmost item in the second section
+            attributes.frame = CGRect(x: frontmostAttributes.frame.left,
+                                      y: frontmostAttributes.frame.bottom - 7,
+                                      width: frontmostAttributes.frame.width,
+                                      height: Theme.contentOffset)
+        }
+
+        if let read = conversation.reads.first(where: { read in
+            return read.user.id == message.authorID
+        }) {
+            attributes.status = ChatMessageStatus(read: read, message: message)
+        }
+
+        attributes.alpha = self.showMessageStatus ? 1 : 0
+
+        return attributes
+    }
+
+    // MARK: - Attribute Helpers
 
     /// Gets the index path of the frontmost item in the given section.
     private func getFrontmostIndexPath(in section: SectionIndex) -> IndexPath? {
@@ -218,6 +299,22 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return indexPathCandidate
     }
 
+    private func getMostRecentVisibleIndexPath() -> IndexPath? {
+        let sectionCount = self.sectionCount
+
+        var frontmostIndexes: [IndexPath] = []
+        for i in 0..<sectionCount {
+            guard let frontmostIndex = self.getFrontmostIndexPath(in: i) else { continue }
+            frontmostIndexes.append(frontmostIndex)
+        }
+
+        return frontmostIndexes.max { indexPath1, indexPath2 in
+            guard let lowerBound1 = self.zRangesDict[indexPath1]?.lowerBound else { return true}
+            guard let lowerBound2 = self.zRangesDict[indexPath2]?.lowerBound else { return false }
+            return lowerBound1 < lowerBound2
+        }
+    }
+
     /// Gets the z vector from current frontmost item's z range to the current z position.
     private func getFrontmostItemZOffset(in section: SectionIndex) -> CGFloat {
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: section) else { return 0 }
@@ -235,17 +332,73 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
                                  y: collectionView.contentOffset.y,
                                  width: collectionView.bounds.size.width,
                                  height: collectionView.bounds.size.height)
-        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.midY)
+        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top + Theme.contentOffset)
 
         if section == 0 {
-            centerPoint.y -= self.itemSize.height * 0.75
+            centerPoint.y += self.itemHeight.half
             centerPoint.y += yOffset*0.75
         } else {
-            centerPoint.y += self.itemSize.height * 0.75
+            centerPoint.y += self.itemHeight.doubled
             centerPoint.y -= yOffset*0.75
         }
 
         return centerPoint
+    }
+
+    func getMostRecentItemContentOffset() -> CGPoint? {
+        guard let mostRecentIndex = self.zRangesDict.max(by: { kvp1, kvp2 in
+            return kvp1.value.lowerBound < kvp2.value.lowerBound
+        })?.key else { return nil }
+
+        guard let upperBound = self.zRangesDict[mostRecentIndex]?.upperBound else { return nil }
+        return CGPoint(x: 0, y: upperBound)
+    }
+
+    func getDropZoneFrame() -> CGRect {
+        let center = self.getCenterPoint(for: 1, withNormalizedYOffset: 0)
+        var frame = CGRect(x: 0,
+                           y: 0,
+                           width: self.collectionView!.width,
+                           height: self.itemHeight)
+        frame.centerY = center.y
+        return frame
+    }
+
+    // MARK: - Content Offset Handling
+
+    private var shouldScrollToEnd = false
+
+    override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
+        super.prepare(forCollectionViewUpdates: updateItems)
+
+        guard let collectionView = self.collectionView,
+        let mostRecentOffset = self.getMostRecentItemContentOffset() else { return }
+
+        for update in updateItems {
+            if let indexPath = update.indexPathAfterUpdate, update.updateAction == .insert {
+                // Always scroll to the end for new user messages, or if we're currently scrolled to the
+                // most recent message.
+                if indexPath.section == 1
+                    || (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight {
+                    self.shouldScrollToEnd = true
+                }
+            }
+        }
+    }
+
+    override func finalizeCollectionViewUpdates() {
+        super.finalizeCollectionViewUpdates()
+
+        self.shouldScrollToEnd = false
+    }
+
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+        guard self.shouldScrollToEnd,
+              let offset = self.getMostRecentItemContentOffset() else {
+                  return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
+              }
+
+        return offset
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
@@ -253,7 +406,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
         // When finished scrolling, always settle on a cell in a centered position.
         var newOffset = proposedContentOffset
-        newOffset.y = round(newOffset.y, toNearest: self.itemSize.height)
+        newOffset.y = round(newOffset.y, toNearest: self.itemHeight)
         newOffset.y = max(newOffset.y, 0)
         return newOffset
     }

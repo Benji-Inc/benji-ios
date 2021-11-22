@@ -39,10 +39,14 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.collectionView.decelerationRate = .fast
         self.collectionLayout.dataSource = self.dataSource
+
+        self.collectionView.decelerationRate = .fast
         self.collectionView.delegate = self
         self.collectionView.set(backgroundColor: .clear)
+
+        // Allow message subcells to scale in size without getting clipped.
+        self.collectionView.clipsToBounds = false
         self.contentView.addSubview(self.collectionView)
         
         #warning("This prevents single selection of a cell")
@@ -58,21 +62,27 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         fatalError("init(coder:) has not been implemented")
     }
 
+    /// If true we need scroll to the most recent item.
+    private var needsOffsetReload = true
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        // Let the collection view know we're about to invalidate the layout so there aren't item size
-        // conflicts.
-        self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.expandToSuperviewSize()
+        self.collectionLayout.invalidateLayout()
+        self.collectionLayout.prepare()
+
+        if self.needsOffsetReload,
+            let contentOffset = self.collectionLayout.getMostRecentItemContentOffset() {
+
+            self.collectionView.contentOffset = contentOffset
+            self.collectionLayout.invalidateLayout()
+
+            self.needsOffsetReload = false
+        }
     }
 
     /// Configures the cell to display the given messages.
-    ///
-    /// - Parameters:
-    ///     - message: The root message to display, which may have replies.
-    ///     - replies: The currently loaded replies to the message. These should be ordered by newest to oldest.
-    ///     - totalReplyCount: The total number of replies that this message has. It may be more than the passed in replies.
     func set(sequence: MessageSequence) {
         self.conversation = sequence
 
@@ -99,6 +109,11 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         }
         var snapshot = self.dataSource.snapshot()
 
+        var animateDifference = true
+        if snapshot.numberOfItems == 0 {
+            animateDifference = false
+        }
+
         // Clear out the sections to make way for a fresh set of messages.
         snapshot.deleteSections(ConversationMessageSection.allCases)
         snapshot.appendSections(ConversationMessageSection.allCases)
@@ -106,20 +121,29 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         snapshot.appendItems(messages, toSection: .otherMessages)
         snapshot.appendItems(currentUserMessages, toSection: .currentUserMessages)
 
-        self.dataSource.apply(snapshot)
+        if animateDifference {
+            self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
+        } else {
+            self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
+        }
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
     }
 
     func handle(isCentered: Bool) {
-        // TODO: Restore this
-//        guard self.collectionLayout.showMessageStatus != isCentered else { return }
-//
-//        UIView.animate(withDuration: 0.2) {
-//            self.collectionLayout.showMessageStatus = isCentered
-//        }
+        guard self.collectionLayout.showMessageStatus != isCentered else { return }
+
+        UIView.animate(withDuration: 0.2) {
+            self.collectionLayout.showMessageStatus = isCentered
+        }
     }
   
     override func prepareForReuse() {
         super.prepareForReuse()
+
+        self.needsOffsetReload = true
 
         // Remove all the items so the next message has a blank slate to work with.
         var snapshot = self.dataSource.snapshot()
@@ -130,124 +154,19 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     /// Returns the frame that a message drop zone should have, based on this cell's contents.
     /// The frame is in the coordinate space of the passed in view.
     func getMessageDropZoneFrame(convertedTo targetView: UIView) -> CGRect {
-        // TODO: Restore this
-        return .zero
-//        if let frontCellIndex = self.collectionLayout
-//            .getFrontmostItemIndexPath(inSection: ConversationMessageSection.currentUserMessages.rawValue),
-//           let frontUserCell = self.collectionView.cellForItem(at: frontCellIndex) {
-//
-//            let overlayRect = frontUserCell.convert(frontUserCell.bounds, to: self)
-//            return self.convert(overlayRect, to: targetView)
-//        }
+        let dropZoneFrame = self.collectionLayout.getDropZoneFrame()
 
-        return self.convert(CGRect(x: 0,
-                                   y: MessageContentView.maximumHeight
-                                   + ConversationMessagesCell.spaceBetweenCellTops * CGFloat(self.maxMessagesPerSection) * 2
-                                   + Theme.contentOffset,
-                                   width: self.width,
-                                   height: MessageContentView.minimumHeight),
-                            to: targetView)
+        return self.collectionView.convert(dropZoneFrame, to: targetView)
     }
 }
 
-extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
+extension ConversationMessagesCell: UICollectionViewDelegate {
 
-    /// The space between the top of a cell and tops of adjacent cells in a stack.
-    static var spaceBetweenCellTops: CGFloat { return 8 }
-
-    // MARK: - UICollectionViewDelegateFlowLayout
+    // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = self.dataSource.itemIdentifier(for: indexPath), let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
         self.handleTappedMessage?(item, cell.content)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        guard let messageLayout = collectionViewLayout as? ConversationMessagesCellLayout else { return .zero }
-
-        var width = collectionView.width
-        var height: CGFloat = MessageContentView.minimumHeight
-
-        // The heights of all cells in a section are the same as the front most cell in that section.
-        if let frontmostItemIndex = messageLayout.getFrontmostItemIndexPath(inSection: indexPath.section),
-           let frontmostItem = self.dataSource.itemIdentifier(for: frontmostItemIndex) {
-
-            // The height of the frontmost item depends on the content of the message it displays.
-            if let frontmostMessage
-                = ChatClient.shared.messageController(cid: frontmostItem.channelID,
-                                                      messageId: frontmostItem.messageID).message {
-
-                height = MessageContentView.getHeight(withWidth: width, message: frontmostMessage)
-            }
-        }
-
-        // Shrink down cells widths the farther back they are in the stack.
-        let zIndex = messageLayout.getZIndex(forIndexPath: indexPath)
-        width += CGFloat(zIndex) * 15
-
-        return CGSize(width: width, height: height)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-
-        guard let messageLayout = collectionViewLayout as? ConversationMessagesCellLayout else { return .zero }
-
-        // Sections are a fixed height. They are exactly tall enough to accommodate the maximum cell count
-        // per section with the frontmost cell at the maximum height.
-        // If the existing cells aren't enough that match that height, we add section
-        // insets to make up the difference.
-
-        let numberOfItems = collectionView.numberOfItems(inSection: section)
-        // The number of cells behind the frontmost cells.
-        let numberOfCoveredCells = clamp(numberOfItems - 1, min: 0)
-        // The amount of extra space units we need to add to the insets to ensure a fixed section height.
-        let extraSpacersNeeded
-        = (self.maxMessagesPerSection - 1) - numberOfCoveredCells
-
-        // The following code ensures that:
-        // 1. Sections are fixed height.
-        // 2. Frontmost non-user messages have their bottoms aligned across ConversationMessageCells.
-        // 3. Frontmost user messages have their tops aligned across ConversationMessageCells.
-        var insets: UIEdgeInsets = .zero
-        if section == 0 {
-            if let frontMostIndex = messageLayout.getFrontmostItemIndexPath(inSection: section) {
-                let frontmostItemHeight = self.collectionView(collectionView,
-                                                              layout: collectionViewLayout,
-                                                              sizeForItemAt: frontMostIndex).height
-                insets.top = MessageContentView.maximumHeight - frontmostItemHeight
-            } else {
-                insets.top = MessageContentView.maximumHeight
-            }
-
-            // Ensure that the bottom of the latest non-user reply in this cell aligns
-            // with the bottom of the latest non-user reply in adjacent cells.
-            insets.bottom += CGFloat(extraSpacersNeeded) * ConversationMessagesCell.spaceBetweenCellTops
-        } else if section == 1 {
-            // Put some space between the two sections of messages.
-            insets.top = Theme.contentOffset.half
-
-            // Ensure that the top of the latest user reply in this cell aligns
-            // with the tops of the latest user replies in adjacent cells.
-            insets.top += CGFloat(extraSpacersNeeded) * ConversationMessagesCell.spaceBetweenCellTops
-        }
-
-        return insets
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-
-        let cellSize = self.collectionView(collectionView,
-                                           layout: collectionViewLayout,
-                                           sizeForItemAt: IndexPath(item: 0, section: section))
-        // Return a negative spacing so that the cells overlap.
-        return -cellSize.height + ConversationMessagesCell.spaceBetweenCellTops
     }
 }
 
