@@ -19,14 +19,14 @@ class MessageContentView: View {
     private (set) var message: Messageable?
 
     private let authorView = AvatarView()
-    private let reactionsView = View()
+    private let reactionsView = ReactionsView()
 
     enum State {
         case expanded
         case collapsed
     }
 
-    var state: State = .collapsed
+    var state: State = .expanded
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -40,15 +40,19 @@ class MessageContentView: View {
 
         self.backgroundColorView.addSubview(self.authorView)
         self.backgroundColorView.addSubview(self.reactionsView)
-        self.reactionsView.set(backgroundColor: .red)
     }
 
-    func setText(with message: Messageable) {
+    func configure(with message: Messageable) {
         self.message = message
         if message.isDeleted {
             self.textView.text = "DELETED"
         } else {
             self.textView.setText(with: message)
+        }
+
+        self.authorView.set(avatar: message.avatar)
+        if let msg = message as? Message {
+            self.reactionsView.configure(with: msg.latestReactions)
         }
 
         self.setNeedsLayout()
@@ -71,12 +75,14 @@ class MessageContentView: View {
 
         let authorHeight: CGFloat = self.state == .collapsed ? .zero : MessageContentView.minimumHeight - Theme.contentOffset
         self.authorView.setSize(for: authorHeight)
-        self.authorView.pin(.top, padding: Theme.contentOffset.half)
-        self.authorView.pin(.left, padding: Theme.contentOffset.half)
+        let padding = Theme.contentOffset.half - self.backgroundColorView.tailLength.half
+        let topPadding = self.backgroundColorView.orientation == .down ? padding : padding + self.backgroundColorView.tailLength
+        self.authorView.pin(.top, padding: topPadding)
+        self.authorView.pin(.left, padding: padding)
 
-        self.reactionsView.size = self.authorView.size
-        self.reactionsView.pin(.top, padding: Theme.contentOffset.half)
-        self.reactionsView.pin(.right, padding: Theme.contentOffset.half)
+        self.reactionsView.squaredSize = self.authorView.width
+        self.reactionsView.pin(.top, padding: topPadding)
+        self.reactionsView.pin(.right, padding: padding)
 
         let textWidth = self.backgroundColorView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
         self.textView.width = textWidth

@@ -31,24 +31,6 @@ class ThreadMessageCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-//        self.authorView.setSize(for: MessageContentView.minimumHeight - Theme.contentOffset.half)
-//        self.authorView.pin(.left)
-//
-//        let width = self.contentView.width - (self.authorView.width + Theme.contentOffset.half)
-//        self.content.match(.left, to: .right, of: self.authorView, offset: Theme.contentOffset.half)
-//        self.content.width = width
-//        if let message = self.message {
-//            self.content.height = MessageContentView.getHeight(withWidth: width, message: message)
-//        }
-//
-//        self.content.centerOnY()
-//
-//        self.authorView.centerY = self.content.centerY
-    }
-
     /// Configures the cell to display the given messages.
     ///
     /// - Parameters:
@@ -56,8 +38,7 @@ class ThreadMessageCell: UICollectionViewCell {
     func set(message: Messageable) {
         self.message = message
 
-        //self.authorView.set(avatar: message.avatar)
-        self.content.setText(with: message)
+        self.content.configure(with: message)
 
         self.content.configureBackground(color: message.context.color,
                                              showBubbleTail: false,

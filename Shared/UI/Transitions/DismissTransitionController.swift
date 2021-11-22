@@ -61,7 +61,7 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
         let snapshot = MessageContentView()
 
         if let message = fromView.message {
-            snapshot.setText(with: message)
+            snapshot.configure(with: message)
             snapshot.backgroundColorView.bubbleColor = fromView.backgroundColorView.bubbleColor
             snapshot.backgroundColorView.tailLength = fromView.backgroundColorView.tailLength
             snapshot.backgroundColorView.orientation = fromView.backgroundColorView.orientation

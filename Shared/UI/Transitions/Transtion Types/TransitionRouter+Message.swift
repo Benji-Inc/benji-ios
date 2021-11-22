@@ -32,13 +32,13 @@ extension TransitionRouter {
         let snapshot = MessageContentView()
 
         if let message = fromView.message {
-            snapshot.setText(with: message)
+            snapshot.configure(with: message)
 
             snapshot.backgroundColorView.bubbleColor = fromView.backgroundColorView.bubbleColor
             snapshot.backgroundColorView.tailLength = fromView.backgroundColorView.tailLength
             snapshot.backgroundColorView.orientation = fromView.backgroundColorView.orientation
 
-            toView.setText(with: message)
+            toView.configure(with: message)
             toView.backgroundColorView.bubbleColor = fromView.backgroundColorView.bubbleColor
             toView.backgroundColorView.tailLength = fromView.backgroundColorView.tailLength
             toView.backgroundColorView.orientation = fromView.backgroundColorView.orientation
@@ -96,7 +96,7 @@ extension TransitionRouter {
         let snapshot = MessageContentView()
 
         if let message = fromView.message {
-            snapshot.setText(with: message)
+            snapshot.configure(with: message)
             snapshot.backgroundColorView.bubbleColor = fromView.backgroundColorView.bubbleColor
             snapshot.backgroundColorView.tailLength = fromView.backgroundColorView.tailLength
             snapshot.backgroundColorView.orientation = fromView.backgroundColorView.orientation

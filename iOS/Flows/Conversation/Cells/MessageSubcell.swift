@@ -34,7 +34,7 @@ class MessageSubcell: UICollectionViewCell {
     }
 
     func setText(with message: Messageable) {
-        self.content.setText(with: message)
+        self.content.configure(with: message)
         self.setNeedsLayout()
     }
 
