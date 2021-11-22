@@ -59,13 +59,14 @@ class MessageStatusLabel: MessageDateLabel {
 
     @MainActor
     private func setReplies(for message: Message) {
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.alpha = 0
-        } completion: { completed in
+        Task {
+            await self.awaitAnimation(with: .fast, animations: {
+                self.alpha = 0
+            })
             self.setText(self.getReplies(for: message))
-            UIView.animate(withDuration: Theme.animationDurationFast) {
+            await self.awaitAnimation(with: .fast, animations: {
                 self.alpha = 1
-            }
+            })
         }
     }
 
