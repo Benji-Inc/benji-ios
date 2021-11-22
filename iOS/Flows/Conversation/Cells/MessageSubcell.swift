@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// A cell for displaying individual messages  and replies within a MessageCell or ThreadedMessageCell.
+/// A cell for displaying individual messages, autor and reactions.
 class MessageSubcell: UICollectionViewCell {
 
     let content = MessageContentView()
@@ -33,7 +33,7 @@ class MessageSubcell: UICollectionViewCell {
         self.content.expandToSuperviewSize()
     }
 
-    func setText(with message: Messageable) {
+    func configure(with message: Messageable) {
         self.content.configure(with: message)
         self.setNeedsLayout()
     }
