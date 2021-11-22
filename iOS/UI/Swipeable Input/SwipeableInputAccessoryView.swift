@@ -114,7 +114,14 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
                 self.updateInputType(with: first)
             }.store(in: &self.cancellables)
 
-        KeyboardManager.shared.$willKeyboardShow.mainSink { willShow in
+        KeyboardManager.shared.$willKeyboardShow
+            .filter({ willShow in
+                if let view = KeyboardManager.shared.inputAccessoryView as? SwipeableInputAccessoryView {
+                    return view.textView.restorationIdentifier == self.textView.restorationIdentifier
+                }
+                return KeyboardManager.shared.inputAccessoryView === self
+            })
+            .mainSink { willShow in
             UIView.animate(withDuration: 0.2) {
                 self.inputTypeHeightConstraint.constant = willShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 1
                 self.inputManager.collectionView.alpha = willShow ? 1 : 0

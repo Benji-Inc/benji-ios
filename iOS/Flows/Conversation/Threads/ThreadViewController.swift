@@ -45,6 +45,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         let view: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
         view.delegate = self
         view.conversation = self.messageController.conversation
+        view.textView.restorationIdentifier = "thread"
         return view
     }()
 

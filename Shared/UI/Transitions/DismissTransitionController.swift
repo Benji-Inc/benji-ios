@@ -71,7 +71,6 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
         snapshot.frame = fromView.frame
 
         fromView.isHidden = true
-        threadVC.resignFirstResponder()
 
         let animator = UIViewPropertyAnimator(duration: self.transitionDuration(using: transitionContext),
                                               curve: .linear)
@@ -100,9 +99,6 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
             } else if position == .start {
                 toView.isHidden = true
                 fromView.isHidden = false
-                delay(0.1) {
-                    threadVC.becomeFirstResponder()
-                }
             }
 
             snapshot.removeFromSuperview()

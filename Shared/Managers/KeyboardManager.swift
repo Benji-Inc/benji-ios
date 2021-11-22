@@ -24,7 +24,7 @@ class KeyboardManager {
     // Does not include the inputAccessoryViews size
     @Published var willKeyboardShow: Bool = false
 
-    private weak var inputAccessoryView: UIView?
+    private(set) weak var inputAccessoryView: UIView?
 
     /// Keyboard events that can happen. Translates directly to `UIKeyboard` notifications from UIKit.
     enum KeyboardEvent {
