@@ -85,3 +85,16 @@ extension ConversationMessageCellDataSource {
         }
     }
 }
+
+// MARK: - TimelineCollectionViewLayoutDataSource
+
+extension ConversationMessageCellDataSource: TimelineCollectionViewLayoutDataSource {
+
+    func getMessage(at indexPath: IndexPath) -> Messageable? {
+        guard let item = self.itemIdentifier(for: indexPath) else { return nil }
+        let messageController = ChatClient.shared.messageController(cid: item.channelID,
+                                                                    messageId: item.messageID)
+
+        return messageController.message
+    }
+}

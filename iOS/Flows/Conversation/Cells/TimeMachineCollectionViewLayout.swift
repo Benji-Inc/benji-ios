@@ -7,10 +7,9 @@
 
 import Foundation
 import UIKit
-import StreamChat
 
-protocol TimelineCollectionViewLayoutDelegate: AnyObject {
-
+protocol TimelineCollectionViewLayoutDataSource: AnyObject {
+    func getMessage(at indexPath: IndexPath) -> Messageable?
 }
 
 /// A custom layout for conversation messages. Up to two message cell sections are each displayed as a stack along the z axis.
@@ -20,7 +19,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     private typealias SectionIndex = Int
 
-    weak var dataSource: ConversationMessageCellDataSource?
+    weak var dataSource: TimelineCollectionViewLayoutDataSource?
 
     /// The size of the cells.
     var itemSize = CGSize(width: 200, height: 100)
@@ -83,22 +82,19 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         guard let dataSource = self.dataSource else { return }
 
         // Get all of the items and sort them by value. This combines all the sections into a flat list.
-        var sortedItems: [(item: ConversationMessageItem, indexPath: IndexPath)] = []
+        var sortedItemIndexPaths: [IndexPath] = []
         self.forEachIndexPath { indexPath in
-            guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
-            sortedItems.append((item, indexPath))
+            sortedItemIndexPaths.append(indexPath)
         }
-        sortedItems.sort { itemData1, itemData2 in
-            let message1 = ChatClient.shared.message(cid: itemData1.item.channelID,
-                                                     id: itemData1.item.messageID)
-            let message2 = ChatClient.shared.message(cid: itemData2.item.channelID,
-                                                     id: itemData2.item.messageID)
+        sortedItemIndexPaths.sort { indexPath1, indexPath2 in
+            let message1 = dataSource.getMessage(at: indexPath1)!
+            let message2 = dataSource.getMessage(at: indexPath2)!
             return message1.createdAt < message2.createdAt
         }
 
-        for (sortedItemsIndex, currentItem) in sortedItems.enumerated() {
-            let currentSection = currentItem.indexPath.section
-            let currentItemIndex = currentItem.indexPath.item
+        for (sortedItemsIndex, indexPath) in sortedItemIndexPaths.enumerated() {
+            let currentSection = indexPath.section
+            let currentItemIndex = indexPath.item
 
             var startZ: CGFloat = 0
             // Each item's z range starts after the end of the previous item's range within its section.
@@ -110,21 +106,21 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
             var endZ = startZ
             // Each item's z range ends before the beginning of the next item's range from within its section.
-            if sortedItemsIndex + 1 < sortedItems.count {
-                for nextIndex in (sortedItemsIndex+1)..<sortedItems.count {
-                    let nextItem = sortedItems[nextIndex]
+            if sortedItemsIndex + 1 < sortedItemIndexPaths.count {
+                for nextIndex in (sortedItemsIndex+1)..<sortedItemIndexPaths.count {
+                    let nextIndexPath = sortedItemIndexPaths[nextIndex]
 
-                    if currentSection == nextItem.indexPath.section {
+                    if currentSection == nextIndexPath.section {
                         endZ = CGFloat(nextIndex) * self.itemSize.height - self.itemSize.height
                         break
-                    } else if nextIndex == sortedItems.count - 1 {
+                    } else if nextIndex == sortedItemIndexPaths.count - 1 {
                         endZ = CGFloat(nextIndex) * self.itemSize.height
                         break
                     }
                 }
             }
 
-            self.zRangesDict[currentItem.indexPath] = startZ..<endZ
+            self.zRangesDict[indexPath] = startZ..<endZ
         }
     }
 
@@ -167,7 +163,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
             let normalized = vectorToCurrentZ/(self.itemSize.height*4)
             scale = clamp(1-normalized, min: 0)
             yOffset = (normalized) * self.itemSize.height
-            alpha = 1-easeInExpo(normalized)
+            alpha = scale == 0 ? 0 : 1
         } else if vectorToCurrentZ < 0 {
             // If the item's z range is in front of the current zPosition, then scale it up
             // to simulate it moving closer to the user.
@@ -201,6 +197,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return attributes
     }
 
+    /// Gets the index path of the frontmost item in the given section.
     private func getFrontmostIndexPath(in section: SectionIndex) -> IndexPath? {
         var indexPathCandidate: IndexPath?
 
@@ -221,7 +218,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return indexPathCandidate
     }
 
-    /// Gets the z offset of the current frontmost item in the section to the current z position.
+    /// Gets the z vector from current frontmost item's z range to the current z position.
     private func getFrontmostItemZOffset(in section: SectionIndex) -> CGFloat {
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: section) else { return 0 }
 
