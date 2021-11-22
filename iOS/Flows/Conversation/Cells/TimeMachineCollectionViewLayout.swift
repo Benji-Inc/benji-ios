@@ -21,8 +21,8 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     weak var dataSource: TimelineCollectionViewLayoutDataSource?
 
-    /// The size of the cells.
-    var itemSize = CGSize(width: 200, height: 100)
+    /// The height of the cells.
+    var itemHeight: CGFloat = 100
 
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
@@ -49,7 +49,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
             guard let collectionView = collectionView, collectionView.frame != .zero else { return .zero }
 
             let itemCount = CGFloat(self.numberOfItems(inSection: 0) + self.numberOfItems(inSection: 1))
-            var height = (itemCount - 1) * self.itemSize.height
+            var height = (itemCount - 1) * self.itemHeight
             height += collectionView.bounds.height
             return CGSize(width: collectionView.bounds.width, height: height)
         }
@@ -101,7 +101,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
             if let previousRangeInSection = self.zRangesDict[IndexPath(item: currentItemIndex - 1,
                                                                       section: currentSection)] {
 
-                startZ = previousRangeInSection.upperBound + self.itemSize.height
+                startZ = previousRangeInSection.upperBound + self.itemHeight
             }
 
             var endZ = startZ
@@ -111,10 +111,10 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
                     let nextIndexPath = sortedItemIndexPaths[nextIndex]
 
                     if currentSection == nextIndexPath.section {
-                        endZ = CGFloat(nextIndex) * self.itemSize.height - self.itemSize.height
+                        endZ = CGFloat(nextIndex) * self.itemHeight - self.itemHeight
                         break
                     } else if nextIndex == sortedItemIndexPaths.count - 1 {
-                        endZ = CGFloat(nextIndex) * self.itemSize.height
+                        endZ = CGFloat(nextIndex) * self.itemHeight
                         break
                     }
                 }
@@ -134,6 +134,8 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+        guard let collectionView = self.collectionView else { return nil }
+
         // If the attributes are cached already, just return those.
         if let attributes = self.cellLayoutAttributes[indexPath]  {
             return attributes
@@ -142,7 +144,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         // All items in a section are positioned relative to its frontmost item.
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
 
-        let offsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)*self.itemSize.height
+        let offsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)*self.itemHeight
 
         let frontmostVectorToCurrentZ = self.getFrontmostItemZOffset(in: indexPath.section)
         let vectorToCurrentZ = frontmostVectorToCurrentZ+offsetFromFrontmost
@@ -150,8 +152,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
         // Make sure items in the front are drawn over items in the back.
         attributes.zIndex = indexPath.item
-        attributes.frame.size = self.itemSize
-        attributes.frame.size.width = self.collectionView!.width
+        attributes.frame.size = CGSize(width: collectionView.width, height: self.itemHeight)
 
         var scale: CGFloat = 1
         var yOffset: CGFloat = 0
@@ -160,16 +161,16 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         if vectorToCurrentZ > 0 {
             // If the item's z range is behind the current zPosition, then start scaling it down
             // to simulate moving away from the user.
-            let normalized = vectorToCurrentZ/(self.itemSize.height*4)
+            let normalized = vectorToCurrentZ/(self.itemHeight*4)
             scale = clamp(1-normalized, min: 0)
-            yOffset = (normalized) * self.itemSize.height
+            yOffset = (normalized) * self.itemHeight
             alpha = scale == 0 ? 0 : 1
         } else if vectorToCurrentZ < 0 {
             // If the item's z range is in front of the current zPosition, then scale it up
             // to simulate it moving closer to the user.
-            let normalized = (-vectorToCurrentZ)/self.itemSize.height
+            let normalized = (-vectorToCurrentZ)/self.itemHeight
             scale = clamp(normalized, max: 1) + 1
-            yOffset = normalized * -self.itemSize.height * 2
+            yOffset = normalized * -self.itemHeight * 2
             alpha = 1 - normalized
         } else {
             // If current z position is within the item's z range, don't adjust its scale or position.
@@ -238,10 +239,10 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.midY)
 
         if section == 0 {
-            centerPoint.y -= self.itemSize.height * 0.75
+            centerPoint.y -= self.itemHeight * 0.75
             centerPoint.y += yOffset*0.75
         } else {
-            centerPoint.y += self.itemSize.height * 0.75
+            centerPoint.y += self.itemHeight * 0.75
             centerPoint.y -= yOffset*0.75
         }
 
@@ -253,7 +254,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
         // When finished scrolling, always settle on a cell in a centered position.
         var newOffset = proposedContentOffset
-        newOffset.y = round(newOffset.y, toNearest: self.itemSize.height)
+        newOffset.y = round(newOffset.y, toNearest: self.itemHeight)
         newOffset.y = max(newOffset.y, 0)
         return newOffset
     }
