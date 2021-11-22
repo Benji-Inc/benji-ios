@@ -176,7 +176,7 @@ extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
                                                       messageId: frontmostItem.messageID).message {
 
                 height = MessageContentView.getHeight(withWidth: width,
-                                                      state: .expanded,
+                                                      state: .collapsed,
                                                       message: frontmostMessage)
             }
         }

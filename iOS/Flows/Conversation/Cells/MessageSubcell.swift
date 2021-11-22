@@ -8,7 +8,7 @@
 
 import Foundation
 
-/// A cell for displaying individual messages, autor and reactions.
+/// A cell for displaying individual messages, author and reactions.
 class MessageSubcell: UICollectionViewCell {
 
     let content = MessageContentView()

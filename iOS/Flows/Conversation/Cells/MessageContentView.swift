@@ -26,7 +26,7 @@ class MessageContentView: View {
         case collapsed
     }
 
-    var state: State = .expanded
+    var state: State = .collapsed
 
     override func initializeSubviews() {
         super.initializeSubviews()
