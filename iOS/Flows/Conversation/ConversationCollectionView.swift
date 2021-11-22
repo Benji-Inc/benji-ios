@@ -20,6 +20,7 @@ class ConversationCollectionView: CollectionView {
 
         super.init(layout: self.conversationLayout)
 
+        self.clipsToBounds = false
         self.keyboardDismissMode = .interactive
         self.decelerationRate = .fast
         self.showsHorizontalScrollIndicator = false
