@@ -209,7 +209,11 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         // Objects closer to the front of the stack should be brighter.
         let backgroundBrightness = clamp(1 - CGFloat(frontmostIndexPath.item - indexPath.item) * 0.1,
                                          max: 1)
-        let backgroundColor: Color = indexPath.section == 0 ? .white : .lightGray
+        var backgroundColor: Color = .lightGray
+
+        if indexPath == self.getMostRecentVisibleIndexPath() {
+            backgroundColor = .white
+        }
 
         attributes.shouldShowText = true
         attributes.backgroundColor = backgroundColor
@@ -241,6 +245,22 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         }
 
         return indexPathCandidate
+    }
+
+    private func getMostRecentVisibleIndexPath() -> IndexPath? {
+        let sectionCount = self.sectionCount
+
+        var frontmostIndexes: [IndexPath] = []
+        for i in 0..<sectionCount {
+            guard let frontmostIndex = self.getFrontmostIndexPath(in: i) else { continue }
+            frontmostIndexes.append(frontmostIndex)
+        }
+
+        return frontmostIndexes.max { indexPath1, indexPath2 in
+            let lowerBound1 = self.zRangesDict[indexPath1]!.lowerBound
+            let lowerBound2 = self.zRangesDict[indexPath2]!.lowerBound
+            return lowerBound1 < lowerBound2
+        }
     }
 
     /// Gets the z vector from current frontmost item's z range to the current z position.
