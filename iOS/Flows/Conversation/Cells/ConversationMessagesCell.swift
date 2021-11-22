@@ -20,9 +20,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
-    private lazy var collectionLayout = TimelineCollectionViewLayout()
-    private lazy var collectionView: UICollectionView = {
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
+    lazy var collectionLayout = TimelineCollectionViewLayout()
+    lazy var collectionView: UICollectionView = {
+        let cv = UICollectionView(frame: CGRect(x: 0, y: 0, width: 100, height: 100),
+                                  collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
         return cv
     }()
@@ -39,10 +40,15 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.collectionView.decelerationRate = .fast
         self.collectionLayout.dataSource = self.dataSource
+
+        self.collectionView.decelerationRate = .fast
         self.collectionView.delegate = self
         self.collectionView.set(backgroundColor: .clear)
+        self.collectionView.contentInset = UIEdgeInsets(top: Theme.contentOffset,
+                                                        left: 0,
+                                                        bottom: 0,
+                                                        right: 0)
         self.contentView.addSubview(self.collectionView)
         
         #warning("This prevents single selection of a cell")
@@ -61,10 +67,14 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        // Let the collection view know we're about to invalidate the layout so there aren't item size
-        // conflicts.
-        self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.expandToSuperviewSize()
+        self.collectionLayout.invalidateLayout()
+        self.collectionLayout.prepare()
+
+        if let contentOffset = self.collectionLayout.getMostRecentItemContentOffset() {
+            self.collectionView.contentOffset = contentOffset
+            self.collectionLayout.invalidateLayout()
+        }
     }
 
     /// Configures the cell to display the given messages.
@@ -99,6 +109,11 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         }
         var snapshot = self.dataSource.snapshot()
 
+        var animateDifference = true
+        if snapshot.numberOfItems == 0 {
+            animateDifference = false
+        }
+
         // Clear out the sections to make way for a fresh set of messages.
         snapshot.deleteSections(ConversationMessageSection.allCases)
         snapshot.appendSections(ConversationMessageSection.allCases)
@@ -106,7 +121,21 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         snapshot.appendItems(messages, toSection: .otherMessages)
         snapshot.appendItems(currentUserMessages, toSection: .currentUserMessages)
 
-        self.dataSource.apply(snapshot)
+        if animateDifference {
+            self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
+        } else {
+            self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
+            if let contentOffset = self.collectionLayout.getMostRecentItemContentOffset() {
+                self.collectionView.contentOffset = contentOffset
+            }
+        }
+
+        logDebug(self.collectionView.contentSize.height.description)
+        
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
     }
 
     func handle(isCentered: Bool) {

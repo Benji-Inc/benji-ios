@@ -42,11 +42,20 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return self.collectionView?.numberOfItems(inSection: section) ?? 0
     }
 
+    func getMostRecentItemContentOffset() -> CGPoint? {
+        guard let mostRecentIndex = self.zRangesDict.max(by: { kvp1, kvp2 in
+            return kvp1.value.lowerBound < kvp2.value.lowerBound
+        })?.key else { return nil }
+
+        guard let upperBound = self.zRangesDict[mostRecentIndex]?.upperBound else { return nil }
+        return CGPoint(x: 0, y: upperBound)
+    }
+
     // MARK: - UICollectionViewLayout Overrides
 
     override var collectionViewContentSize: CGSize {
         get {
-            guard let collectionView = collectionView, collectionView.frame != .zero else { return .zero }
+            guard let collectionView = collectionView else { return .zero }
 
             let itemCount = CGFloat(self.numberOfItems(inSection: 0) + self.numberOfItems(inSection: 1))
             var height = (itemCount - 1) * self.itemHeight
@@ -161,7 +170,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         if vectorToCurrentZ > 0 {
             // If the item's z range is behind the current zPosition, then start scaling it down
             // to simulate moving away from the user.
-            let normalized = vectorToCurrentZ/(self.itemHeight*4)
+            let normalized = vectorToCurrentZ/(self.itemHeight*3)
             scale = clamp(1-normalized, min: 0)
             yOffset = (normalized) * self.itemHeight
             alpha = scale == 0 ? 0 : 1
@@ -236,17 +245,21 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
                                  y: collectionView.contentOffset.y,
                                  width: collectionView.bounds.size.width,
                                  height: collectionView.bounds.size.height)
-        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.midY)
+        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top)
 
         if section == 0 {
-            centerPoint.y -= self.itemHeight * 0.75
+            centerPoint.y += self.itemHeight.half
             centerPoint.y += yOffset*0.75
         } else {
-            centerPoint.y += self.itemHeight * 0.75
+            centerPoint.y += self.itemHeight.doubled
             centerPoint.y -= yOffset*0.75
         }
 
         return centerPoint
+    }
+
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+        return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
