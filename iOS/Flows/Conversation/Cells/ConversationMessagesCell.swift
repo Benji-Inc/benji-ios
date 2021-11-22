@@ -44,7 +44,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         self.collectionView.decelerationRate = .fast
         self.collectionView.delegate = self
         self.collectionView.set(backgroundColor: .clear)
-        
+
+        // Allow message subcells to scale in size without getting clipped.
         self.collectionView.clipsToBounds = false
         self.contentView.addSubview(self.collectionView)
         
@@ -61,6 +62,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         fatalError("init(coder:) has not been implemented")
     }
 
+    /// If true we need scroll to the most recent item.
     private var needsOffsetReload = true
 
     override func layoutSubviews() {
@@ -72,6 +74,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
 
         if self.needsOffsetReload,
             let contentOffset = self.collectionLayout.getMostRecentItemContentOffset() {
+
             self.collectionView.contentOffset = contentOffset
             self.collectionLayout.invalidateLayout()
 
@@ -122,12 +125,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
             self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
         } else {
             self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
-            if let contentOffset = self.collectionLayout.getMostRecentItemContentOffset() {
-                self.collectionView.contentOffset = contentOffset
-            }
         }
-
-        logDebug(self.collectionView.contentSize.height.description)
     }
 
     override func didMoveToWindow() {
