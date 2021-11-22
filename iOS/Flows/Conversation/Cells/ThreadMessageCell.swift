@@ -67,8 +67,9 @@ class ThreadMessageCell: UICollectionViewCell {
         self.content.setText(with: message)
 
         self.content.configureBackground(color: message.context.color,
-                                             showBubbleTail: true,
-                                             tailOrientation: .left)
+                                         brightness: 1,
+                                         showBubbleTail: true,
+                                         tailOrientation: .left)
         self.setNeedsLayout()
 
         self.content.backgroundColorView.addInteraction(self.contextMenuInteraction)
@@ -86,6 +87,7 @@ class ThreadMessageCell: UICollectionViewCell {
         self.content.alpha = messageLayoutAttributes.alpha
         self.content.textView.isVisible = messageLayoutAttributes.shouldShowText
         self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
+                                         brightness: 1,
                                          showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                          tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
     }

@@ -12,7 +12,6 @@ import UIKit
 /// A base class for types that can act as a data source for a UICollectionview.
 /// Subclasses should override functions related to dequeuing cells and supplementary views.
 /// This class works the same as UICollectionViewDiffableDataSource but it allows you to subclass it more easily and hold additional state.
-@MainActor
 class CollectionViewDataSource<SectionType: Hashable, ItemType: Hashable> {
 
     typealias DiffableDataSourceType = UICollectionViewDiffableDataSource<SectionType, ItemType>
