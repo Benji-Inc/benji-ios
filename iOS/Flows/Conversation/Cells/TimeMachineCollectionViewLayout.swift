@@ -163,6 +163,9 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         // All items in a section are positioned relative to its frontmost item.
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
 
+        guard abs(frontmostIndexPath.item - indexPath.item) < 4 else { return nil }
+
+
         let offsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)*self.itemHeight
 
         let frontmostVectorToCurrentZ = self.getFrontmostItemZOffset(in: indexPath.section)
@@ -217,6 +220,8 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return attributes
     }
 
+    // MARK: - Attribute Helpers
+
     /// Gets the index path of the frontmost item in the given section.
     private func getFrontmostIndexPath(in section: SectionIndex) -> IndexPath? {
         var indexPathCandidate: IndexPath?
@@ -268,8 +273,41 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return centerPoint
     }
 
+    // MARK: - Content Offset Handling
+
+    private var shouldScrollToEnd = false
+
+    override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
+        super.prepare(forCollectionViewUpdates: updateItems)
+
+        guard let collectionView = self.collectionView,
+        let mostRecentOffset = self.getMostRecentItemContentOffset() else { return }
+
+        for update in updateItems {
+            if let indexPath = update.indexPathAfterUpdate, update.updateAction == .insert {
+                // Always scroll to the end for new user messages, or if we're currently scrolled to the
+                // most recent message.
+                if indexPath.section == 1
+                    || (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight {
+                    self.shouldScrollToEnd = true
+                }
+            }
+        }
+    }
+
+    override func finalizeCollectionViewUpdates() {
+        super.finalizeCollectionViewUpdates()
+
+        self.shouldScrollToEnd = false
+    }
+
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
+        guard self.shouldScrollToEnd,
+              let offset = self.getMostRecentItemContentOffset() else {
+                  return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
+              }
+
+        return offset
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,

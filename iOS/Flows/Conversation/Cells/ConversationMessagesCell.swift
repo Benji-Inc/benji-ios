@@ -64,6 +64,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         fatalError("init(coder:) has not been implemented")
     }
 
+    var needsOffsetReload = true
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -71,9 +73,12 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         self.collectionLayout.invalidateLayout()
         self.collectionLayout.prepare()
 
-        if let contentOffset = self.collectionLayout.getMostRecentItemContentOffset() {
+        if self.needsOffsetReload,
+            let contentOffset = self.collectionLayout.getMostRecentItemContentOffset() {
             self.collectionView.contentOffset = contentOffset
             self.collectionLayout.invalidateLayout()
+
+            self.needsOffsetReload = false
         }
     }
 
@@ -131,7 +136,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         }
 
         logDebug(self.collectionView.contentSize.height.description)
-        
     }
 
     override func didMoveToWindow() {
@@ -149,6 +153,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
   
     override func prepareForReuse() {
         super.prepareForReuse()
+
+        self.needsOffsetReload = true
 
         // Remove all the items so the next message has a blank slate to work with.
         var snapshot = self.dataSource.snapshot()
