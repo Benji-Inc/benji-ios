@@ -46,6 +46,7 @@ class ConversationListViewController: FullScreenViewController,
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
         let inputView: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
         inputView.delegate = self
+        inputView.textView.restorationIdentifier = "list"
         return inputView
     }()
 

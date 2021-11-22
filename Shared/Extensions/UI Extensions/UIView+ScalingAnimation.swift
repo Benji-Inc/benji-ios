@@ -34,4 +34,13 @@ extension UIView {
         }
         propertyAnimator.startAnimation()
     }
+
+    @MainActor
+    func awaitAnimation(with duration: Theme.AnimationDuration, animations: @escaping () -> Void) async {
+        return await withCheckedContinuation { continuation in
+            UIView.animate(withDuration: duration.rawValue, animations: animations) { _ in
+                continuation.resume(with: .success(()))
+            }
+        }
+    }
 }

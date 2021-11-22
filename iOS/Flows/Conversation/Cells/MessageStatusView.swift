@@ -8,6 +8,7 @@
 
 import Foundation
 import StreamChat
+import Combine
 
 struct ChatMessageStatus: Equatable {
 
@@ -59,6 +60,8 @@ class MessageStatusView: UICollectionReusableView {
     let dateLabel = MessageDateLabel()
     let statusLabel = MessageStatusLabel()
 
+    private var cancellables = Set<AnyCancellable>()
+
     override init(frame: CGRect) {
         super.init(frame: .zero)
         self.initializeSubviews()
@@ -68,9 +71,23 @@ class MessageStatusView: UICollectionReusableView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    deinit {
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+    }
+
     private func initializeSubviews() {
         self.addSubview(self.dateLabel)
         self.addSubview(self.statusLabel)
+
+        self.dateLabel.publisher(for: \.text).mainSink { [unowned self] _ in
+            self.layoutNow()
+        }.store(in: &self.cancellables)
+
+        self.statusLabel.publisher(for: \.text).mainSink { [unowned self] _ in
+            self.layoutNow()
+        }.store(in: &self.cancellables)
     }
 
     override func layoutSubviews() {
