@@ -265,9 +265,6 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
                                       height: Theme.contentOffset)
         }
 
-
-
-
         if let read = conversation.reads.first(where: { read in
             return read.user.id == message.authorID
         }) {
