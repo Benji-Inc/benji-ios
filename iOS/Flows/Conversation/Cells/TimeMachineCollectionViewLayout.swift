@@ -7,8 +7,10 @@
 
 import Foundation
 import UIKit
+import StreamChat
 
 protocol TimelineCollectionViewLayoutDataSource: AnyObject {
+    func getConversation(at indexPath: IndexPath) -> Conversation?
     func getMessage(at indexPath: IndexPath) -> Messageable?
 }
 
@@ -23,9 +25,15 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     /// The height of the cells.
     var itemHeight: CGFloat = 100
+    /// If true, the time sent decoration views should be displayed.
+    var showMessageStatus: Bool = false {
+        didSet { self.invalidateLayout() }
+    }
 
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
+    /// A cache of layout attributes for decoration views.
+    private var decorationLayoutAttributes: [SectionIndex : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
     /// and its scale will be unaltered.
     private var zRangesDict: [IndexPath : Range<CGFloat>] = [:]
@@ -61,6 +69,16 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return frame
     }
 
+    override init() {
+        super.init()
+        self.register(MessageStatusView.self, forDecorationViewOfKind: MessageStatusView.objectIdentifier)
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.register(MessageStatusView.self, forDecorationViewOfKind: MessageStatusView.objectIdentifier)
+    }
+
     // MARK: - UICollectionViewLayout Overrides
 
     override var collectionViewContentSize: CGSize {
@@ -85,6 +103,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         // Clear the layout attributes caches.
         self.cellLayoutAttributes.removeAll()
         self.zRangesDict.removeAll()
+        self.decorationLayoutAttributes.removeAll()
     }
 
     override func prepare() {
@@ -93,6 +112,12 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         // Calculate and cache the layout attributes for the items in each section.
         self.forEachIndexPath { indexPath in
             self.cellLayoutAttributes[indexPath] = self.layoutAttributesForItem(at: indexPath)
+        }
+
+        for section in 0..<self.sectionCount {
+            self.decorationLayoutAttributes[section]
+            = self.layoutAttributesForDecorationView(ofKind: MessageStatusView.objectIdentifier,
+                                                     at: IndexPath(item: 0, section: section))
         }
     }
 
@@ -145,9 +170,11 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         // Return all items whose frames intersect with the given rect and aren't invisible.
-        let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
+        var itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
             return attributes.alpha > 0 && rect.intersects(attributes.frame)
         }
+
+        itemAttributes.append(contentsOf: self.decorationLayoutAttributes.values)
 
         return itemAttributes
     }
@@ -224,6 +251,53 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return attributes
     }
 
+    override func layoutAttributesForDecorationView(ofKind elementKind: String,
+                                                    at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+
+        guard let frontmostItemIndex = self.getFrontmostIndexPath(in: indexPath.section),
+              let frontmostAttributes = self.layoutAttributesForItem(at: frontmostItemIndex) else {
+                  return nil
+              }
+
+        guard let conversation = self.dataSource?.getConversation(at: indexPath),
+              let messageable = self.dataSource?.getMessage(at: indexPath) else {
+                  return nil
+              }
+
+        let message = ChatClient.shared.message(cid: conversation.cid, id: messageable.id)
+
+        let attributes
+        = MessageStatusViewLayoutAttributes(forDecorationViewOfKind: MessageStatusView.objectIdentifier,
+                                            with: indexPath)
+
+        if indexPath.section == 0 {
+            // Position the decoration above the frontmost item in the first section
+            attributes.frame = CGRect(x: frontmostAttributes.frame.left,
+                                      y: frontmostAttributes.frame.top - Theme.contentOffset + 7,
+                                      width: frontmostAttributes.frame.width,
+                                      height: Theme.contentOffset)
+        } else {
+            // Position the decoration below the frontmost item in the second section
+            attributes.frame = CGRect(x: frontmostAttributes.frame.left,
+                                      y: frontmostAttributes.frame.bottom - 7,
+                                      width: frontmostAttributes.frame.width,
+                                      height: Theme.contentOffset)
+        }
+
+
+
+
+        if let read = conversation.reads.first(where: { read in
+            return read.user.id == message.authorID
+        }) {
+            attributes.status = ChatMessageStatus(read: read, message: message)
+        }
+
+        attributes.alpha = self.showMessageStatus ? 1 : 0
+
+        return attributes
+    }
+
     // MARK: - Attribute Helpers
 
     /// Gets the index path of the frontmost item in the given section.
@@ -280,7 +354,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
                                  y: collectionView.contentOffset.y,
                                  width: collectionView.bounds.size.width,
                                  height: collectionView.bounds.size.height)
-        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top)
+        var centerPoint = CGPoint(x: contentRect.midX, y: contentRect.top + Theme.contentOffset)
 
         if section == 0 {
             centerPoint.y += self.itemHeight.half

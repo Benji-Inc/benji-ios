@@ -44,10 +44,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         self.collectionView.decelerationRate = .fast
         self.collectionView.delegate = self
         self.collectionView.set(backgroundColor: .clear)
-        self.collectionView.contentInset = UIEdgeInsets(top: Theme.contentOffset,
-                                                        left: 0,
-                                                        bottom: 0,
-                                                        right: 0)
+        
         self.collectionView.clipsToBounds = false
         self.contentView.addSubview(self.collectionView)
         
@@ -64,12 +61,12 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         fatalError("init(coder:) has not been implemented")
     }
 
-    var needsOffsetReload = true
+    private var needsOffsetReload = true
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.collectionView.expandToSuperviewWidth()
+        self.collectionView.expandToSuperviewSize()
         self.collectionLayout.invalidateLayout()
         self.collectionLayout.prepare()
 
@@ -138,12 +135,11 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     }
 
     func handle(isCentered: Bool) {
-        // TODO: Restore this
-//        guard self.collectionLayout.showMessageStatus != isCentered else { return }
-//
-//        UIView.animate(withDuration: 0.2) {
-//            self.collectionLayout.showMessageStatus = isCentered
-//        }
+        guard self.collectionLayout.showMessageStatus != isCentered else { return }
+
+        UIView.animate(withDuration: 0.2) {
+            self.collectionLayout.showMessageStatus = isCentered
+        }
     }
   
     override func prepareForReuse() {

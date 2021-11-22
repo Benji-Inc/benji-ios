@@ -90,6 +90,12 @@ extension ConversationMessageCellDataSource {
 
 extension ConversationMessageCellDataSource: TimelineCollectionViewLayoutDataSource {
 
+    func getConversation(at indexPath: IndexPath) -> Conversation? {
+        guard let item = self.itemIdentifier(for: indexPath) else { return nil }
+
+        return ChatClient.shared.channelController(for: item.channelID).conversation
+    }
+
     func getMessage(at indexPath: IndexPath) -> Messageable? {
         guard let item = self.itemIdentifier(for: indexPath) else { return nil }
         let messageController = ChatClient.shared.messageController(cid: item.channelID,
