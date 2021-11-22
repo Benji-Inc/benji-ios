@@ -50,25 +50,6 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return self.collectionView?.numberOfItems(inSection: section) ?? 0
     }
 
-    func getMostRecentItemContentOffset() -> CGPoint? {
-        guard let mostRecentIndex = self.zRangesDict.max(by: { kvp1, kvp2 in
-            return kvp1.value.lowerBound < kvp2.value.lowerBound
-        })?.key else { return nil }
-
-        guard let upperBound = self.zRangesDict[mostRecentIndex]?.upperBound else { return nil }
-        return CGPoint(x: 0, y: upperBound)
-    }
-
-    func getDropZoneFrame() -> CGRect {
-        let center = self.getCenterPoint(for: 1, withNormalizedYOffset: 0)
-        var frame = CGRect(x: 0,
-                           y: 0,
-                           width: self.collectionView!.width,
-                           height: self.itemHeight)
-        frame.centerY = center.y
-        return frame
-    }
-
     override init() {
         super.init()
         self.register(MessageStatusView.self, forDecorationViewOfKind: MessageStatusView.objectIdentifier)
@@ -365,6 +346,25 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         }
 
         return centerPoint
+    }
+
+    func getMostRecentItemContentOffset() -> CGPoint? {
+        guard let mostRecentIndex = self.zRangesDict.max(by: { kvp1, kvp2 in
+            return kvp1.value.lowerBound < kvp2.value.lowerBound
+        })?.key else { return nil }
+
+        guard let upperBound = self.zRangesDict[mostRecentIndex]?.upperBound else { return nil }
+        return CGPoint(x: 0, y: upperBound)
+    }
+
+    func getDropZoneFrame() -> CGRect {
+        let center = self.getCenterPoint(for: 1, withNormalizedYOffset: 0)
+        var frame = CGRect(x: 0,
+                           y: 0,
+                           width: self.collectionView!.width,
+                           height: self.itemHeight)
+        frame.centerY = center.y
+        return frame
     }
 
     // MARK: - Content Offset Handling
