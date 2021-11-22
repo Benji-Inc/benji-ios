@@ -53,8 +53,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     private let messageCellRegistration = ConversationCollectionViewDataSource.createMessageCellRegistration()
     private let conversationCellRegistration
     = ConversationCollectionViewDataSource.createConversationCellRegistration()
-//    private let threadMessageCellRegistration
-//    = ConversationCollectionViewDataSource.createThreadMessageCellRegistration()
+
     private let loadMoreMessagesCellRegistration
     = ConversationCollectionViewDataSource.createLoadMoreCellRegistration()
 
