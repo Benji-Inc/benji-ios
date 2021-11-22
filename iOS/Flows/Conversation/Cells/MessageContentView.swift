@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Combine
 
 class MessageContentView: View {
 
@@ -21,12 +22,20 @@ class MessageContentView: View {
     private let authorView = AvatarView()
     private let reactionsView = ReactionsView()
 
+    private var cancellables = Set<AnyCancellable>()
+
     enum State {
         case expanded
         case collapsed
     }
 
-    var state: State = .collapsed
+    @Published var state: State = .collapsed
+
+    deinit {
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+    }
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -40,9 +49,14 @@ class MessageContentView: View {
 
         self.backgroundColorView.addSubview(self.authorView)
         self.backgroundColorView.addSubview(self.reactionsView)
+
+        self.$state.mainSink { [unowned self] state in
+            self.layoutNow()
+        }.store(in: &self.cancellables)
     }
 
     func configure(with message: Messageable) {
+
         self.message = message
         if message.isDeleted {
             self.textView.text = "DELETED"
