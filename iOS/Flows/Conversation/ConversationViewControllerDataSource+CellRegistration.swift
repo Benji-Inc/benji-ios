@@ -31,15 +31,6 @@ extension ConversationCollectionViewDataSource {
                                                                         messageId: item.messageID)
             guard let message = messageController.message else { return }
             cell.configure(with: message)
-
-//            // Load in the message's replies if needed, then reconfigure the cell so they show up.
-//            if message.replyCount > 0 && message.latestReplies.isEmpty {
-//                let dataSource = item.dataSource
-//                Task {
-//                    try? await messageController.loadPreviousReplies()
-//                    await dataSource.reconfigureItems([.messages(item.messageID)])
-//                }
-//            }
         }
     }
 

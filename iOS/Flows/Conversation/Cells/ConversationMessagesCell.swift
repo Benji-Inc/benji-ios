@@ -46,11 +46,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
                                                         left: 0,
                                                         bottom: 0,
                                                         right: 0)
-        #warning("This prevents single selection of a cell")
-//        self.collectionView.onTap { [unowned self] tapRecognizer in
-//            guard let conversation = self.conversation else { return }
-//            self.handleTappedConversation?(conversation)
-//        }
 
         self.dataSource.contextMenuDelegate = self
     }
