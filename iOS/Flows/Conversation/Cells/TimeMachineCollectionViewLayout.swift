@@ -257,8 +257,8 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         }
 
         return frontmostIndexes.max { indexPath1, indexPath2 in
-            let lowerBound1 = self.zRangesDict[indexPath1]!.lowerBound
-            let lowerBound2 = self.zRangesDict[indexPath2]!.lowerBound
+            guard let lowerBound1 = self.zRangesDict[indexPath1]?.lowerBound else { return true}
+            guard let lowerBound2 = self.zRangesDict[indexPath2]?.lowerBound else { return false }
             return lowerBound1 < lowerBound2
         }
     }

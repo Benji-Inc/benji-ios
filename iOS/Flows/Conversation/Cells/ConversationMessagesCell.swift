@@ -20,10 +20,9 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
-    lazy var collectionLayout = TimelineCollectionViewLayout()
-    lazy var collectionView: UICollectionView = {
-        let cv = UICollectionView(frame: CGRect(x: 0, y: 0, width: 100, height: 100),
-                                  collectionViewLayout: self.collectionLayout)
+    private lazy var collectionLayout = TimelineCollectionViewLayout()
+    private lazy var collectionView: UICollectionView = {
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
         return cv
     }()
@@ -70,7 +69,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.collectionView.expandToSuperviewSize()
+        self.collectionView.expandToSuperviewWidth()
         self.collectionLayout.invalidateLayout()
         self.collectionLayout.prepare()
 
@@ -84,11 +83,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     }
 
     /// Configures the cell to display the given messages.
-    ///
-    /// - Parameters:
-    ///     - message: The root message to display, which may have replies.
-    ///     - replies: The currently loaded replies to the message. These should be ordered by newest to oldest.
-    ///     - totalReplyCount: The total number of replies that this message has. It may be more than the passed in replies.
     func set(sequence: MessageSequence) {
         self.conversation = sequence
 
