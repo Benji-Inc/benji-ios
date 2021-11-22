@@ -9,8 +9,12 @@ import Foundation
 import UIKit
 import StreamChat
 
-/// A custom layout for conversation messages. Up to two message cells section are each displayed as a stack along the z axis.
-/// The stacks appear similar to Apple's Time Machine interface, with older messages going out into the distance.
+protocol TimelineCollectionViewLayoutDelegate: AnyObject {
+
+}
+
+/// A custom layout for conversation messages. Up to two message cell sections are each displayed as a stack along the z axis.
+/// The stacks appear similar to Apple's Time Machine interface, with the newest message in front and older messages going out into the distance.
 /// As the collection view scrolls up and down, the messages move away or toward the user.
 class TimelineCollectionViewLayout: UICollectionViewLayout {
 
@@ -23,7 +27,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
-    /// A dictionary of z ranges for all the items. A z range represents the range that each item will be the frontmost of its section
+    /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
     /// and its scale will be unaltered.
     private var zRangesDict: [IndexPath : Range<CGFloat>] = [:]
     /// The current position along the Z axis. This is based off of the collectionview's Y content offset.
@@ -53,6 +57,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        // The positions of the items need to be recalculated for every change to the bounds.
         return true
     }
 
@@ -65,7 +70,6 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func prepare() {
-        // Get all the items and sort them by value.
         self.prepareZRanges()
 
         // Calculate and cache the layout attributes for the items in each section.
@@ -74,6 +78,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         }
     }
 
+    /// Updates the z ranges dictionary for all items.
     private func prepareZRanges() {
         guard let dataSource = self.dataSource else { return }
 
@@ -142,8 +147,9 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
 
         let offsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)*self.itemSize.height
-        let frontmostZOffset = self.getFrontmostItemZOffset(in: indexPath.section)
-        let zDifference = -(frontmostZOffset+offsetFromFrontmost)
+
+        let frontmostVectorToCurrentZ = self.getFrontmostItemZOffset(in: indexPath.section)
+        let vectorToCurrentZ = frontmostVectorToCurrentZ+offsetFromFrontmost
 
         let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
         // Make sure items in the front are drawn over items in the back.
@@ -155,16 +161,22 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         var yOffset: CGFloat = 0
         var alpha: CGFloat = 1
 
-        if zDifference > 0 {
-            scale = min(zDifference/(self.itemSize.height), 1) + 1
-            yOffset = (scale-1) * -self.itemSize.height * 2
-            alpha = 2 - scale
-        } else if zDifference < 0 {
-            let normalized = -zDifference/(self.itemSize.height*5)
-            scale = 1-normalized
+        if vectorToCurrentZ > 0 {
+            // If the item's z range is behind the current zPosition, then start scaling it down
+            // to simulate moving away from the user.
+            let normalized = vectorToCurrentZ/(self.itemSize.height*4)
+            scale = clamp(1-normalized, min: 0)
             yOffset = (normalized) * self.itemSize.height
             alpha = 1-easeInExpo(normalized)
+        } else if vectorToCurrentZ < 0 {
+            // If the item's z range is in front of the current zPosition, then scale it up
+            // to simulate it moving closer to the user.
+            let normalized = (-vectorToCurrentZ)/self.itemSize.height
+            scale = clamp(normalized, max: 1) + 1
+            yOffset = normalized * -self.itemSize.height * 2
+            alpha = 1 - normalized
         } else {
+            // If current z position is within the item's z range, don't adjust its scale or position.
             scale = 1
             yOffset = 0
             alpha = 1
@@ -176,7 +188,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         attributes.alpha = alpha
 
         // Objects closer to the front of the stack should be brighter.
-        let backgroundBrightness = clamp(1 - CGFloat(frontmostIndexPath.item - indexPath.item) * 0.05,
+        let backgroundBrightness = clamp(1 - CGFloat(frontmostIndexPath.item - indexPath.item) * 0.1,
                                          max: 1)
         let backgroundColor: Color = indexPath.section == 0 ? .white : .lightGray
 
@@ -209,6 +221,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return indexPathCandidate
     }
 
+    /// Gets the z offset of the current frontmost item in the section to the current z position.
     private func getFrontmostItemZOffset(in section: SectionIndex) -> CGFloat {
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: section) else { return 0 }
 
@@ -280,6 +293,8 @@ extension TimelineCollectionViewLayout {
 
 extension Range where Bound: Numeric {
 
+    /// Gets the one dimensional vector from range to the specified value.
+    /// If the value is contained within the range, then zero is returned.
     func vector(to value: Bound) -> Bound {
         if value < self.lowerBound {
             return value - self.lowerBound
