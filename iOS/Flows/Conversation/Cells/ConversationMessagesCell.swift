@@ -180,7 +180,9 @@ extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
                 = ChatClient.shared.messageController(cid: frontmostItem.channelID,
                                                       messageId: frontmostItem.messageID).message {
 
-                height = MessageContentView.getHeight(withWidth: width, message: frontmostMessage)
+                height = MessageContentView.getHeight(withWidth: width,
+                                                      state: .collapsed,
+                                                      message: frontmostMessage)
             }
         }
 

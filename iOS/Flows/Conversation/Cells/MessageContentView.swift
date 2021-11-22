@@ -69,8 +69,8 @@ class MessageContentView: View {
 
         self.backgroundColorView.expandToSuperviewSize()
 
-        let authorSize: CGFloat = self.state == .collapsed ? .zero : MessageContentView.minimumHeight - Theme.contentOffset
-        self.authorView.setSize(for: authorSize)
+        let authorHeight: CGFloat = self.state == .collapsed ? .zero : MessageContentView.minimumHeight - Theme.contentOffset
+        self.authorView.setSize(for: authorHeight)
         self.authorView.pin(.top, padding: Theme.contentOffset.half)
         self.authorView.pin(.left, padding: Theme.contentOffset.half)
 
@@ -78,7 +78,7 @@ class MessageContentView: View {
         self.reactionsView.pin(.top, padding: Theme.contentOffset.half)
         self.reactionsView.pin(.right, padding: Theme.contentOffset.half)
 
-        let textWidth = self.backgroundColorView.bubbleFrame.width - ((authorSize * 2) + Theme.contentOffset)
+        let textWidth = self.backgroundColorView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
         self.textView.width = textWidth
         self.textView.centerOnX()
         self.textView.top = self.backgroundColorView.bubbleFrame.top + Theme.contentOffset.half
@@ -92,7 +92,9 @@ class MessageContentView: View {
     static var maximumHeight: CGFloat { return 100 }
 
     /// Returns the height that a message subcell should be given a width and message to display.
-    static func getHeight(withWidth width: CGFloat, message: Messageable) -> CGFloat {
+    static func getHeight(withWidth width: CGFloat,
+                          state: MessageContentView.State, 
+                          message: Messageable) -> CGFloat {
 
         // If the message is deleted, we're not going to display its content.
         // Return the minimum height so we have enough to show the deleted status.
@@ -102,7 +104,15 @@ class MessageContentView: View {
 
         let textView = MessageTextView()
         textView.setText(with: message)
-        var textViewSize = textView.getSize(withMaxWidth: width)
+        let maxWidth: CGFloat
+        if state == .collapsed {
+            maxWidth = width
+        } else {
+            let authorHeight: CGFloat = MessageContentView.minimumHeight - Theme.contentOffset
+            let size = AvatarView().getSize(for: authorHeight)
+            maxWidth = width - ((size.width * 2) + Theme.contentOffset)
+        }
+        var textViewSize = textView.getSize(withMaxWidth: maxWidth)
         textViewSize.height += Theme.contentOffset
         return clamp(textViewSize.height + MessageContentView.bubbleTailLength,
                      MessageContentView.minimumHeight,
