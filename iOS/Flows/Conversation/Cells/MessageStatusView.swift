@@ -81,11 +81,11 @@ class MessageStatusView: UICollectionReusableView {
         self.addSubview(self.dateLabel)
         self.addSubview(self.statusLabel)
 
-        self.dateLabel.publisher(for: \.text).mainSink { _ in
+        self.dateLabel.publisher(for: \.text).mainSink { [unowned self] _ in
             self.layoutNow()
         }.store(in: &self.cancellables)
 
-        self.statusLabel.publisher(for: \.text).mainSink { _ in
+        self.statusLabel.publisher(for: \.text).mainSink { [unowned self] _ in
             self.layoutNow()
         }.store(in: &self.cancellables)
     }
