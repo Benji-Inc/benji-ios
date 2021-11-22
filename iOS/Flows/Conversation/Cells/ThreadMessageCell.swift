@@ -17,9 +17,6 @@ class ThreadMessageCell: UICollectionViewCell {
     private lazy var contextMenuInteraction = UIContextMenuInteraction(delegate: self)
 
     private let content = MessageContentView()
-    private let authorView = AvatarView()
-
-    private var state: ConversationUIState = .read
 
     /// The message to display.
     private var message: Messageable?
@@ -28,10 +25,6 @@ class ThreadMessageCell: UICollectionViewCell {
         super.init(frame: frame)
 
         self.contentView.addSubview(self.content)
-        self.contentView.addSubview(self.authorView)
-
-        // Don't clip to bounds so that the vertical lines can meet between cells.
-        self.clipsToBounds = false
     }
 
     required init?(coder: NSCoder) {
@@ -41,19 +34,19 @@ class ThreadMessageCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.authorView.setSize(for: MessageContentView.minimumHeight - Theme.contentOffset.half)
-        self.authorView.pin(.left)
-
-        let width = self.contentView.width - (self.authorView.width + Theme.contentOffset.half)
-        self.content.match(.left, to: .right, of: self.authorView, offset: Theme.contentOffset.half)
-        self.content.width = width
-        if let message = self.message {
-            self.content.height = MessageContentView.getHeight(withWidth: width, message: message)
-        }
-
-        self.content.centerOnY()
-
-        self.authorView.centerY = self.content.centerY
+//        self.authorView.setSize(for: MessageContentView.minimumHeight - Theme.contentOffset.half)
+//        self.authorView.pin(.left)
+//
+//        let width = self.contentView.width - (self.authorView.width + Theme.contentOffset.half)
+//        self.content.match(.left, to: .right, of: self.authorView, offset: Theme.contentOffset.half)
+//        self.content.width = width
+//        if let message = self.message {
+//            self.content.height = MessageContentView.getHeight(withWidth: width, message: message)
+//        }
+//
+//        self.content.centerOnY()
+//
+//        self.authorView.centerY = self.content.centerY
     }
 
     /// Configures the cell to display the given messages.
@@ -63,11 +56,11 @@ class ThreadMessageCell: UICollectionViewCell {
     func set(message: Messageable) {
         self.message = message
 
-        self.authorView.set(avatar: message.avatar)
+        //self.authorView.set(avatar: message.avatar)
         self.content.setText(with: message)
 
         self.content.configureBackground(color: message.context.color,
-                                             showBubbleTail: true,
+                                             showBubbleTail: false,
                                              tailOrientation: .left)
         self.setNeedsLayout()
 

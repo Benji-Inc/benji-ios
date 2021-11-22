@@ -9,6 +9,7 @@
 import Foundation
 
 class MessageContentView: View {
+
     static let bubbleTailLength: CGFloat = 7
 
     /// A rounded and colored background view for the message. Changes color based on the sender.
@@ -16,6 +17,16 @@ class MessageContentView: View {
     /// Text view for displaying the text of the message.
     let textView = MessageTextView()
     private (set) var message: Messageable?
+
+    private let authorView = AvatarView()
+    private let reactionsView = View()
+
+    enum State {
+        case expanded
+        case collapsed
+    }
+
+    var state: State = .collapsed
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -26,6 +37,10 @@ class MessageContentView: View {
         self.backgroundColorView.addSubview(self.textView)
 
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
+
+        self.backgroundColorView.addSubview(self.authorView)
+        self.backgroundColorView.addSubview(self.reactionsView)
+        self.reactionsView.set(backgroundColor: .red)
     }
 
     func setText(with message: Messageable) {
@@ -54,7 +69,17 @@ class MessageContentView: View {
 
         self.backgroundColorView.expandToSuperviewSize()
 
-        self.textView.width = self.backgroundColorView.bubbleFrame.width
+        let authorSize: CGFloat = self.state == .collapsed ? .zero : MessageContentView.minimumHeight - Theme.contentOffset
+        self.authorView.setSize(for: authorSize)
+        self.authorView.pin(.top, padding: Theme.contentOffset.half)
+        self.authorView.pin(.left, padding: Theme.contentOffset.half)
+
+        self.reactionsView.size = self.authorView.size
+        self.reactionsView.pin(.top, padding: Theme.contentOffset.half)
+        self.reactionsView.pin(.right, padding: Theme.contentOffset.half)
+
+        let textWidth = self.backgroundColorView.bubbleFrame.width - ((authorSize * 2) + Theme.contentOffset)
+        self.textView.width = textWidth
         self.textView.centerOnX()
         self.textView.top = self.backgroundColorView.bubbleFrame.top + Theme.contentOffset.half
         self.textView.expand(.bottom,
