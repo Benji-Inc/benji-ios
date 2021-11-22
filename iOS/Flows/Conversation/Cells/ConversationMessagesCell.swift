@@ -166,104 +166,13 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     }
 }
 
-extension ConversationMessagesCell: UICollectionViewDelegateFlowLayout {
+extension ConversationMessagesCell: UICollectionViewDelegate {
 
-    /// The space between the top of a cell and tops of adjacent cells in a stack.
-    static var spaceBetweenCellTops: CGFloat { return 8 }
-
-    // MARK: - UICollectionViewDelegateFlowLayout
+    // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = self.dataSource.itemIdentifier(for: indexPath), let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
         self.handleTappedMessage?(item, cell.content)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        guard let messageLayout = collectionViewLayout as? ConversationMessagesCellLayout else { return .zero }
-
-        var width = collectionView.width
-        var height: CGFloat = MessageContentView.minimumHeight
-
-        // The heights of all cells in a section are the same as the front most cell in that section.
-        if let frontmostItemIndex = messageLayout.getFrontmostItemIndexPath(inSection: indexPath.section),
-           let frontmostItem = self.dataSource.itemIdentifier(for: frontmostItemIndex) {
-
-            // The height of the frontmost item depends on the content of the message it displays.
-            if let frontmostMessage
-                = ChatClient.shared.messageController(cid: frontmostItem.channelID,
-                                                      messageId: frontmostItem.messageID).message {
-
-                height = MessageContentView.getHeight(withWidth: width, message: frontmostMessage)
-            }
-        }
-
-        // Shrink down cells widths the farther back they are in the stack.
-        let zIndex = messageLayout.getZIndex(forIndexPath: indexPath)
-        width += CGFloat(zIndex) * 15
-
-        return CGSize(width: width, height: height)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-
-        guard let messageLayout = collectionViewLayout as? ConversationMessagesCellLayout else { return .zero }
-
-        // Sections are a fixed height. They are exactly tall enough to accommodate the maximum cell count
-        // per section with the frontmost cell at the maximum height.
-        // If the existing cells aren't enough that match that height, we add section
-        // insets to make up the difference.
-
-        let numberOfItems = collectionView.numberOfItems(inSection: section)
-        // The number of cells behind the frontmost cells.
-        let numberOfCoveredCells = clamp(numberOfItems - 1, min: 0)
-        // The amount of extra space units we need to add to the insets to ensure a fixed section height.
-        let extraSpacersNeeded
-        = (self.maxMessagesPerSection - 1) - numberOfCoveredCells
-
-        // The following code ensures that:
-        // 1. Sections are fixed height.
-        // 2. Frontmost non-user messages have their bottoms aligned across ConversationMessageCells.
-        // 3. Frontmost user messages have their tops aligned across ConversationMessageCells.
-        var insets: UIEdgeInsets = .zero
-        if section == 0 {
-            if let frontMostIndex = messageLayout.getFrontmostItemIndexPath(inSection: section) {
-                let frontmostItemHeight = self.collectionView(collectionView,
-                                                              layout: collectionViewLayout,
-                                                              sizeForItemAt: frontMostIndex).height
-                insets.top = MessageContentView.maximumHeight - frontmostItemHeight
-            } else {
-                insets.top = MessageContentView.maximumHeight
-            }
-
-            // Ensure that the bottom of the latest non-user reply in this cell aligns
-            // with the bottom of the latest non-user reply in adjacent cells.
-            insets.bottom += CGFloat(extraSpacersNeeded) * ConversationMessagesCell.spaceBetweenCellTops
-        } else if section == 1 {
-            // Put some space between the two sections of messages.
-            insets.top = Theme.contentOffset.half
-
-            // Ensure that the top of the latest user reply in this cell aligns
-            // with the tops of the latest user replies in adjacent cells.
-            insets.top += CGFloat(extraSpacersNeeded) * ConversationMessagesCell.spaceBetweenCellTops
-        }
-
-        return insets
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-
-        let cellSize = self.collectionView(collectionView,
-                                           layout: collectionViewLayout,
-                                           sizeForItemAt: IndexPath(item: 0, section: section))
-        // Return a negative spacing so that the cells overlap.
-        return -cellSize.height + ConversationMessagesCell.spaceBetweenCellTops
     }
 }
 
