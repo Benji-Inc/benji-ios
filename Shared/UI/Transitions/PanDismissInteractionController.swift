@@ -44,7 +44,6 @@ class PanDismissInteractionController: UIPercentDrivenInteractiveTransition {
         case .changed:
             if self.interactionInProgress {
                 let progress = self.isReadyForDismissal(pan) ? self.progress(currentPoint: currentPoint) : 0.0
-                logDebug("progress \(progress)")
                 if progress > 0.01 {
                     self.viewController.resignFirstResponder()
                 }
