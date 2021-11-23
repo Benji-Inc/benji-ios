@@ -8,32 +8,9 @@
 
 import Foundation
 
-class ThreadCollectionViewLayout: BottomToTopColumnCollectionViewLayout {
-
-    override class var layoutAttributesClass: AnyClass {
-        return ConversationMessageCellLayoutAttributes.self
-    }
+class ThreadCollectionViewLayout: TimelineCollectionViewLayout {
     
     private var insertingIndexPaths: [IndexPath] = []
-
-    override func prepare() {
-        guard let collectionView = self.collectionView else { return }
-
-        collectionView.contentInset = UIEdgeInsets(top: collectionView.contentInset.top,
-                                                   left: collectionView.width * 0.1,
-                                                   bottom: collectionView.contentInset.bottom,
-                                                   right: collectionView.width * 0.1)
-
-        self.defaultItemSize = CGSize(width: collectionView.width * 0.8, height: MessageContentView.maximumHeight)
-        self.defaultHeaderSize = .zero
-        self.defaultFooterSize = .zero
-        self.defaultItemSpacing = collectionView.width * 0.05
-
-        // Call prepare after setting the item size and spacing so the super call can use those values.
-        super.prepare()
-    }
-
-    
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)

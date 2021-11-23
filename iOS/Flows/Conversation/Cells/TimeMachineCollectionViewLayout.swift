@@ -106,7 +106,10 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     /// Updates the z ranges dictionary for all items.
     private func prepareZRanges() {
-        guard let dataSource = self.dataSource else { return }
+        guard let dataSource = self.dataSource else {
+            logDebug("Warning: Data source not initialized in \(self)")
+            return
+        }
 
         // Get all of the items and sort them by value. This combines all the sections into a flat list.
         var sortedItemIndexPaths: [IndexPath] = []

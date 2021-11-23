@@ -10,8 +10,10 @@ import Foundation
 
 class ThreadCollectionView: CollectionView {
 
+    let threadLayout = ThreadCollectionViewLayout()
+
     init() {
-        super.init(layout: ThreadCollectionViewLayout())
+        super.init(layout: self.threadLayout)
         
         self.keyboardDismissMode = .interactive
         self.automaticallyAdjustsScrollIndicatorInsets = true 
