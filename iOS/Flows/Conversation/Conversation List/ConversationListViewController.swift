@@ -87,10 +87,10 @@ class ConversationListViewController: FullScreenViewController,
     override func initializeViews() {
         super.initializeViews()
 
+        self.contentContainer.addSubview(self.conversationHeader)
+
         self.contentContainer.addSubview(self.collectionView)
         self.collectionView.delegate = self
-
-        self.contentContainer.addSubview(self.conversationHeader)
 
         self.subscribeToKeyboardUpdates()
     }

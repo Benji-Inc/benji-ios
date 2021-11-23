@@ -24,7 +24,7 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
     weak var dataSource: TimelineCollectionViewLayoutDataSource?
 
     /// The height of the cells.
-    var itemHeight: CGFloat = 100
+    var itemHeight: CGFloat = 88
     /// If true, the time sent decoration views should be displayed.
     var showMessageStatus: Bool = false {
         didSet { self.invalidateLayout() }
@@ -171,8 +171,8 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         // All items in a section are positioned relative to its frontmost item.
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
 
+        // Don't calculate attributes for cells that won't be visible anyway.
         guard abs(frontmostIndexPath.item - indexPath.item) < 4 else { return nil }
-
 
         let offsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)*self.itemHeight
 
@@ -215,8 +215,8 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         attributes.alpha = alpha
 
         // Objects closer to the front of the stack should be brighter.
-        let backgroundBrightness = clamp(1 - CGFloat(frontmostIndexPath.item - indexPath.item) * 0.1,
-                                         max: 1)
+        let backgroundBrightness: CGFloat = clamp(1 - CGFloat(frontmostIndexPath.item - indexPath.item) * 0.1,
+                                                  max: 1)
         var backgroundColor: Color = .lightGray
 
         if indexPath == self.getMostRecentVisibleIndexPath() {
@@ -299,6 +299,16 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         return indexPathCandidate
     }
 
+    /// Gets the z vector from current frontmost item's z range to the current z position.
+    private func getFrontmostItemZOffset(in section: SectionIndex) -> CGFloat {
+        guard let frontmostIndexPath = self.getFrontmostIndexPath(in: section) else { return 0 }
+
+        guard let frontmostRange = self.zRangesDict[frontmostIndexPath] else { return 0 }
+
+        return frontmostRange.vector(to: self.zPosition)
+    }
+
+
     private func getMostRecentVisibleIndexPath() -> IndexPath? {
         let sectionCount = self.sectionCount
 
@@ -315,13 +325,13 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         }
     }
 
-    /// Gets the z vector from current frontmost item's z range to the current z position.
-    private func getFrontmostItemZOffset(in section: SectionIndex) -> CGFloat {
-        guard let frontmostIndexPath = self.getFrontmostIndexPath(in: section) else { return 0 }
+    func getMostRecentItemContentOffset() -> CGPoint? {
+        guard let mostRecentIndex = self.zRangesDict.max(by: { kvp1, kvp2 in
+            return kvp1.value.lowerBound < kvp2.value.lowerBound
+        })?.key else { return nil }
 
-        guard let frontmostRange = self.zRangesDict[frontmostIndexPath] else { return 0 }
-
-        return frontmostRange.vector(to: self.zPosition)
+        guard let upperBound = self.zRangesDict[mostRecentIndex]?.upperBound else { return nil }
+        return CGPoint(x: 0, y: upperBound)
     }
 
     private func getCenterPoint(for section: SectionIndex,
@@ -343,15 +353,6 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         }
 
         return centerPoint
-    }
-
-    func getMostRecentItemContentOffset() -> CGPoint? {
-        guard let mostRecentIndex = self.zRangesDict.max(by: { kvp1, kvp2 in
-            return kvp1.value.lowerBound < kvp2.value.lowerBound
-        })?.key else { return nil }
-
-        guard let upperBound = self.zRangesDict[mostRecentIndex]?.upperBound else { return nil }
-        return CGPoint(x: 0, y: upperBound)
     }
 
     func getDropZoneFrame() -> CGRect {

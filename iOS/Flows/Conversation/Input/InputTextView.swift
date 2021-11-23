@@ -21,7 +21,7 @@ class InputTextView: ExpandingTextView {
 
     init() {
         super.init(frame: .zero,
-                   font: .smallBold,
+                   font: .regularBold,
                    textColor: .textColor,
                    textContainer: nil)
     }
@@ -29,7 +29,7 @@ class InputTextView: ExpandingTextView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
 
-        self.font = FontType.smallBold.font
+        self.font = FontType.regularBold.font
         self.textColor = Color.textColor.color
     }
 

@@ -14,7 +14,7 @@ class RootNavigationController: NavigationController, UINavigationControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.set(backgroundColor: .background)
+        self.view.set(backgroundColor: .darkGray)
         self.delegate = self
         self.setNavigationBarHidden(true, animated: false)
 

@@ -49,9 +49,9 @@ enum FontType {
         case .medium, .mediumBold, .mediumThin:
             return 24
         case .regular, .regularBold:
-            return 20
-        case .small, .smallBold:
             return 14
+        case .small, .smallBold:
+            return 10
         }
     }
 

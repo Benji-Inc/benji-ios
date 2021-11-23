@@ -14,7 +14,7 @@ class MessageContentView: View {
     /// A rounded and colored background view for the message. Changes color based on the sender.
     let backgroundColorView = SpeechBubbleView(orientation: .down)
     /// Text view for displaying the text of the message.
-    let textView = MessageTextView()
+    let textView = MessageTextView(font: .regularBold, textColor: .textColor)
     private (set) var message: Messageable?
 
     override func initializeSubviews() {
@@ -66,7 +66,6 @@ class MessageContentView: View {
 
     /// Returns the height that a message subcell should be given a width and message to display.
     static func getHeight(withWidth width: CGFloat, message: Messageable) -> CGFloat {
-
         // If the message is deleted, we're not going to display its content.
         // Return the minimum height so we have enough to show the deleted status.
         if message.isDeleted {

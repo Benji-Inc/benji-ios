@@ -70,7 +70,7 @@ class TextView: UITextView {
     init(frame: CGRect = .zero,
          font: FontType,
          textColor: Color,
-         textContainer: NSTextContainer?) {
+         textContainer: NSTextContainer? = nil) {
 
         self.kerning = font.kern
 
@@ -83,11 +83,11 @@ class TextView: UITextView {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        self.kerning = FontType.smallBold.kern
+        self.kerning = FontType.regularBold.kern
 
         super.init(coder: aDecoder)
 
-        self.font = FontType.smallBold.font
+        self.font = FontType.regularBold.font
         self.textColor = UIColor.black
 
         self.initializeViews()
@@ -146,7 +146,7 @@ class TextView: UITextView {
     }
 
     func set(placeholder: Localized, color: Color = .textColor) {
-        let styleAttributes = StringStyle(font: .smallBold, color: color).attributes
+        let styleAttributes = StringStyle(font: .regularBold, color: color).attributes
         let string = NSAttributedString(string: localized(placeholder), attributes: styleAttributes)
         self.attributedPlaceholder = string
     }

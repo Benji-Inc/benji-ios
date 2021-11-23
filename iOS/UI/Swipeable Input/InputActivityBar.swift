@@ -32,7 +32,7 @@ class InputActivityBar: View {
     func update(text: Localized, with hightlightedWords: [String] = []) {
         self.label.setText(text)
         hightlightedWords.forEach { highlight in
-            self.label.add(attributes: [.font: FontType.smallBold.font], to: highlight)
+            self.label.add(attributes: [.font: FontType.regularBold.font], to: highlight)
         }
         self.layoutNow()
     }
