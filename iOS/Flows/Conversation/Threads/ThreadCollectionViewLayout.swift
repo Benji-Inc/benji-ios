@@ -33,6 +33,8 @@ class ThreadCollectionViewLayout: BottomToTopColumnCollectionViewLayout {
         super.prepare()
     }
 
+    
+
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
 

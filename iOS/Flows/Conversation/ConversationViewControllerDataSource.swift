@@ -53,8 +53,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     private let messageCellRegistration = ConversationCollectionViewDataSource.createMessageCellRegistration()
     private let conversationCellRegistration
     = ConversationCollectionViewDataSource.createConversationCellRegistration()
-    private let threadMessageCellRegistration
-    = ConversationCollectionViewDataSource.createThreadMessageCellRegistration()
+
     private let loadMoreMessagesCellRegistration
     = ConversationCollectionViewDataSource.createLoadMoreCellRegistration()
 
@@ -66,15 +65,12 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         switch item {
         case .messages(let itemID):
             if section.isThread {
+
                 let cid = try! ConversationID(cid: section.sectionID)
                 let threadCell
-                = collectionView.dequeueConfiguredReusableCell(using: self.threadMessageCellRegistration,
+                = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                for: indexPath,
                                                                item: (cid, itemID, self))
-
-                threadCell.handleDeleteMessage = { [unowned self] (message) in
-                    //self.handleDeleteMessage?(message)
-                }
                 return threadCell
 
             } else if section.isConversationList {
@@ -95,21 +91,7 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 }
                 return messageCell
             } else {
-                let cid = try! ConversationID(cid: section.sectionID)
-                let messageCell
-                = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
-                                                               for: indexPath,
-                                                               item: (cid, itemID, self))
-                messageCell.handleTappedMessage = { [unowned self] item, content in
-                    self.handleSelectedMessage?(item, content)
-                }
-                messageCell.handleTappedConversation = { [unowned self] (conversation) in
-                    self.handleSelectedConversation?(conversation)
-                }
-                messageCell.handleDeleteConversation = { [unowned self] (conversation) in
-                    self.handleDeletedConversation?(conversation)
-                }
-                return messageCell
+                return nil
             }
         case .loadMore:
             let loadMoreCell
