@@ -98,12 +98,12 @@ class MessageContentView: View {
         self.reactionsView.pin(.top, padding: topPadding)
         self.reactionsView.pin(.right, padding: padding)
 
-        let maxWidth = self.backgroundColorView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
-        let maxHeight = MessageContentView.maximumHeight - MessageContentView.bubbleTailLength - Theme.contentOffset
+        let maxWidth
+        = self.backgroundColorView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
+        let maxHeight
+        = MessageContentView.maximumHeight - MessageContentView.bubbleTailLength - Theme.contentOffset
         self.textView.setSize(withMaxWidth: maxWidth, maxHeight: maxHeight)
         self.textView.center = self.backgroundColorView.bubbleFrame.center
-
-        logDebug("\(self.textView.size)")
     }
 
     /// Sizing

@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import StreamChat
 
-protocol TimelineCollectionViewLayoutDataSource: AnyObject {
+protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
     func getConversation(at indexPath: IndexPath) -> Conversation?
     func getMessage(at indexPath: IndexPath) -> Messageable?
 }
@@ -17,11 +17,11 @@ protocol TimelineCollectionViewLayoutDataSource: AnyObject {
 /// A custom layout for conversation messages. Up to two message cell sections are each displayed as a stack along the z axis.
 /// The stacks appear similar to Apple's Time Machine interface, with the newest message in front and older messages going out into the distance.
 /// As the collection view scrolls up and down, the messages move away or toward the user.
-class TimelineCollectionViewLayout: UICollectionViewLayout {
+class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     private typealias SectionIndex = Int
 
-    weak var dataSource: TimelineCollectionViewLayoutDataSource?
+    weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
 
     /// The height of the cells.
     var itemHeight: CGFloat = 88
@@ -106,7 +106,10 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     /// Updates the z ranges dictionary for all items.
     private func prepareZRanges() {
-        guard let dataSource = self.dataSource else { return }
+        guard let dataSource = self.dataSource else {
+            logDebug("Warning: Data source not initialized in \(self)")
+            return
+        }
 
         // Get all of the items and sort them by value. This combines all the sections into a flat list.
         var sortedItemIndexPaths: [IndexPath] = []
@@ -172,9 +175,6 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
         // All items in a section are positioned relative to its frontmost item.
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
-
-        // Don't calculate attributes for cells that won't be visible anyway.
-        guard abs(frontmostIndexPath.item - indexPath.item) < 4 else { return nil }
 
         let offsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)*self.itemHeight
 
@@ -397,10 +397,9 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        guard self.shouldScrollToEnd,
-              let offset = self.getMostRecentItemContentOffset() else {
-                  return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
-              }
+        guard self.shouldScrollToEnd, let offset = self.getMostRecentItemContentOffset() else {
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
+        }
 
         return offset
     }
@@ -429,7 +428,7 @@ private func round(_ value: CGFloat, toNearest: CGFloat) -> CGFloat {
     return round(value / toNearest) * toNearest
 }
 
-extension TimelineCollectionViewLayout {
+extension TimeMachineCollectionViewLayout {
 
     /// Runs the passed in closure on every valid index path in the collection view.
     func forEachIndexPath(_ apply: (IndexPath) -> Void) {

@@ -365,6 +365,8 @@ extension CollectionViewDataSource {
             // Minor hack. Wait a tick so that the collection view has time to update its visible cells.
             // This ensures that the animate in animations work properly.
             await Task.sleep(seconds: 0.01)
+        } else if let scrollToOffset = animationCycle.scrollToOffset {
+            collectionView.contentOffset = scrollToOffset
         }
         
         await collectionView.animateIn(position: animationCycle.inFromPosition,

@@ -8,9 +8,12 @@
 
 import Foundation
 
-class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable, DataSource: CollectionViewDataSource<SectionType, ItemType>>: ViewController, UICollectionViewDelegate {
+class DiffableCollectionViewController<SectionType: Hashable,
+                                       ItemType: Hashable,
+                                       DataSource: CollectionViewDataSource<SectionType, ItemType>>:
+                                        ViewController, UICollectionViewDelegate {
     
-    lazy var dataSource = DataSource.init(collectionView: self.collectionView)
+    lazy var dataSource = DataSource(collectionView: self.collectionView)
 
     @Published var selectedItems: [ItemType] = []
 
@@ -82,8 +85,9 @@ class DiffableCollectionViewController<SectionType: Hashable, ItemType: Hashable
         self.collectionView.animationView.stop()
     }
 
-    func getInitialSnapshot(with dictionary: [SectionType: [ItemType]]) -> NSDiffableDataSourceSnapshot<SectionType, ItemType> {
-
+    func getInitialSnapshot(with dictionary: [SectionType: [ItemType]])
+    -> NSDiffableDataSourceSnapshot<SectionType, ItemType> {
+        
         var snapshot = self.dataSource.snapshot()
         snapshot.deleteAllItems()
 

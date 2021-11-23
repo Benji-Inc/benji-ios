@@ -14,4 +14,5 @@ struct AnimationCycle {
     var shouldConcatenate: Bool
     var scrollToIndexPath: IndexPath?
     var scrollPosition: UICollectionView.ScrollPosition = .centeredHorizontally
+    var scrollToOffset: CGPoint? = nil
 }

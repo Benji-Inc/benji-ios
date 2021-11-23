@@ -88,7 +88,7 @@ extension ConversationMessageCellDataSource {
 
 // MARK: - TimelineCollectionViewLayoutDataSource
 
-extension ConversationMessageCellDataSource: TimelineCollectionViewLayoutDataSource {
+extension ConversationMessageCellDataSource: TimeMachineCollectionViewLayoutDataSource {
 
     func getConversation(at indexPath: IndexPath) -> Conversation? {
         guard let item = self.itemIdentifier(for: indexPath) else { return nil }
