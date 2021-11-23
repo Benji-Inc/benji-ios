@@ -52,11 +52,13 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
 
     override init() {
         super.init()
+        self.collectionView?.showsVerticalScrollIndicator = false
         self.register(MessageStatusView.self, forDecorationViewOfKind: MessageStatusView.objectIdentifier)
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        self.collectionView?.showsVerticalScrollIndicator = false
         self.register(MessageStatusView.self, forDecorationViewOfKind: MessageStatusView.objectIdentifier)
     }
 

@@ -44,7 +44,6 @@ class MessageContentView: View {
         self.backgroundColorView.roundCorners()
 
         self.backgroundColorView.addSubview(self.textView)
-
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
 
         self.backgroundColorView.addSubview(self.authorView)
@@ -100,8 +99,11 @@ class MessageContentView: View {
         self.reactionsView.pin(.right, padding: padding)
 
         let maxWidth = self.backgroundColorView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
-        self.textView.setSize(withMaxWidth: maxWidth)
+        let maxHeight = MessageContentView.maximumHeight - MessageContentView.bubbleTailLength - Theme.contentOffset
+        self.textView.setSize(withMaxWidth: maxWidth, maxHeight: maxHeight)
         self.textView.center = self.backgroundColorView.bubbleFrame.center
+
+        logDebug("\(self.textView.size)")
     }
 
     /// Sizing
@@ -130,12 +132,13 @@ class MessageContentView: View {
             let size = AvatarView().getSize(for: authorHeight)
             maxWidth = width - ((size.width * 2) + Theme.contentOffset)
         }
-        var textViewSize = textView.getSize(withMaxWidth: maxWidth)
+
+        let maxHeight = MessageContentView.maximumHeight - MessageContentView.bubbleTailLength
+        var textViewSize = textView.getSize(withMaxWidth: maxWidth, maxHeight: maxHeight)
         textViewSize.height += Theme.contentOffset
 
-        let max = state == .collapsed ? MessageContentView.maximumHeight : CGFloat.greatestFiniteMagnitude
         return clamp(textViewSize.height + MessageContentView.bubbleTailLength,
                      MessageContentView.minimumHeight,
-                     max)
+                     MessageContentView.maximumHeight)
     }
 }

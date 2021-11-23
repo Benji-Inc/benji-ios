@@ -24,6 +24,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
+        cv.showsVerticalScrollIndicator = false 
         return cv
     }()
     private lazy var dataSource = ConversationMessageCellDataSource(collectionView: self.collectionView)
