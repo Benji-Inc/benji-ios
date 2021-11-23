@@ -52,8 +52,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                           options: [],
                           children: [topic, add])
 
-        self.button.showsMenuAsPrimaryAction = true
-        self.button.menu = menu
+        if self.activeConversation?.membership?.memberRole.rawValue == "owner" {
+            self.button.showsMenuAsPrimaryAction = true
+            self.button.menu = menu
+        }
 
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
