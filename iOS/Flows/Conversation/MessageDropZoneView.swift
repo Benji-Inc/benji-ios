@@ -17,40 +17,44 @@ class MessageDropZoneView: View {
     }
 
     private let borderLayer = CAShapeLayer()
-    private let sendTypeLabel = Label(font: .small)
+    private let sendTypeLabel = Label(font: .regular)
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
+        self.borderLayer.strokeColor = Color.lightGray.color.cgColor
+        self.borderLayer.lineDashPattern = [5, 10]
+        self.borderLayer.fillColor = Color.white.color.cgColor
+        self.borderLayer.lineWidth = 2
+
+        self.layer.addSublayer(self.borderLayer)
+
         self.addSubview(self.sendTypeLabel)
-        self.sendTypeLabel.text = "Drop"
+        self.sendTypeLabel.setTextColor(.lightGray)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.sendTypeLabel.sizeToFit()
-        self.sendTypeLabel.pin(.top, padding: self.sendTypeLabel.height)
-        self.sendTypeLabel.centerOnX()
+        self.sendTypeLabel.setSize(withWidth: self.width)
+        self.sendTypeLabel.centerOnXAndY()
 
-        self.borderLayer.strokeColor = UIColor(white: 1, alpha: 0.5).cgColor
-        self.borderLayer.lineDashPattern = [10, 10]
-        self.borderLayer.fillColor = nil
-        self.borderLayer.lineWidth = 4
         self.borderLayer.frame = self.bounds
-        self.borderLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 20).cgPath
-
-        self.layer.addSublayer(self.borderLayer)
+        self.borderLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: Theme.cornerRadius).cgPath
     }
 
     func setState(_ state: State?) {
         switch state {
         case .reply:
-            self.sendTypeLabel.isHidden = true
+            self.sendTypeLabel.setText("Drop new reply here")
+            self.sendTypeLabel.isHidden = false
         case .newMessage:
+            self.sendTypeLabel.setText("Drop new message here")
             self.sendTypeLabel.isHidden = false
         case .none:
             self.sendTypeLabel.isHidden = true
         }
+
+        self.layoutNow()
     }
 }

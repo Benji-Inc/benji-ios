@@ -315,27 +315,38 @@ class ConversationListViewController: FullScreenViewController,
     /// The last swipe position type that was registersed, if any.
     private var currentSendMode: SendMode?
 
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
+        if isEnabled {
+            guard self.sendMessageOverlay.superview.isNil else { return }
+            // Animate in the send overlay
+            self.contentContainer.addSubview(self.sendMessageOverlay)
+            self.sendMessageOverlay.alpha = 0
+            self.sendMessageOverlay.setState(.newMessage)
+            UIView.animate(withDuration: Theme.animationDurationStandard) {
+                self.sendMessageOverlay.alpha = 1
+            }
+
+            // Show the send message overlay so the user can see where to drag the message
+            let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
+            self.sendMessageOverlay.frame = overlayFrame
+
+            view.dropZoneFrame = view.convert(self.sendMessageOverlay.bounds, from: self.sendMessageOverlay)
+
+            self.sendMessageOverlay.centerOnX()
+        } else {
+            UIView.animate(withDuration: Theme.animationDurationStandard) {
+                self.sendMessageOverlay.alpha = 0
+            } completion: { didFinish in
+                self.sendMessageOverlay.removeFromSuperview()
+            }
+        }
+    }
+
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
         self.initialContentOffset = self.collectionView.contentOffset
         self.currentSendMode = nil
 
         self.collectionView.isUserInteractionEnabled = false
-
-        // Animate in the send overlay
-        self.contentContainer.addSubview(self.sendMessageOverlay)
-        self.sendMessageOverlay.alpha = 0
-        self.sendMessageOverlay.setState(nil)
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageOverlay.alpha = 1
-        }
-
-        // Show the send message overlay so the user can see where to drag the message
-        let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
-        self.sendMessageOverlay.frame = overlayFrame
-
-        view.dropZoneFrame = view.convert(self.sendMessageOverlay.bounds, from: self.sendMessageOverlay)
-
-        self.sendMessageOverlay.centerOnX()
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
