@@ -11,7 +11,7 @@ import Foundation
 /// A collection view for displaying conversation messages.
 /// Messages are ordered right to left. So the first message in the data source is on the far right.
 /// It automatically creates its own custom layout object.
-class ConversationCollectionView: CollectionView {
+class ConversationListCollectionView: CollectionView {
 
     let conversationLayout: ConversationCollectionViewLayout
 
