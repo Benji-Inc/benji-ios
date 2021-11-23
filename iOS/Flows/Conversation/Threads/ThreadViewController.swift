@@ -200,10 +200,6 @@ extension ThreadViewController {
                                              collectionView: self.collectionView)
             }.add(to: self.taskPool)
         }.store(in: &self.cancellables)
-
-        self.dataSource.handleDeleteMessage = { [unowned self] item in
-            self.conversationController?.deleteMessage(item.messageID)
-        }
     }
 }
 
