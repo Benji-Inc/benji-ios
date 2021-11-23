@@ -102,8 +102,6 @@ class MessageContentView: View {
         let maxHeight = MessageContentView.maximumHeight - MessageContentView.bubbleTailLength - Theme.contentOffset
         self.textView.setSize(withMaxWidth: maxWidth, maxHeight: maxHeight)
         self.textView.center = self.backgroundColorView.bubbleFrame.center
-
-        logDebug("\(self.textView.size)")
     }
 
     /// Sizing

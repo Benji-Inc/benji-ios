@@ -77,7 +77,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
 
-        self.dismissInteractionController.initialize(interactionView: self.collectionView)
+        self.dismissInteractionController.initialize(collectionView: self.collectionView)
     }
     override func handleDataBeingLoaded() {
         self.subscribeToUpdates()

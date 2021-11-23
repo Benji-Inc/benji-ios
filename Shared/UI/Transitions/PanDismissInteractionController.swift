@@ -27,27 +27,25 @@ class PanDismissInteractionController: UIPercentDrivenInteractiveTransition {
         super.init()
     }
 
-    func initialize(interactionView: UIView) {
-        let panGesture = UIPanGestureRecognizer { [unowned self] (pan) in
-            self.handle(pan: pan)
-        }
-        panGesture.cancelsTouchesInView = true
-        panGesture.delegate = self
-        interactionView.addGestureRecognizer(panGesture)
+    func initialize(collectionView: UICollectionView) {
+        collectionView.panGestureRecognizer.addTarget(self, action: #selector(self.handle(pan:)))
     }
 
-    func handle(pan: UIPanGestureRecognizer) {
+    @objc func handle(pan: UIPanGestureRecognizer) {
 
         let currentPoint = pan.location(in: nil)
 
         switch pan.state {
         case .began:
-            self.panStartPoint = currentPoint
-
+            if let cv = pan.view as? UICollectionView, cv.contentOffset.y < 0 {
+                self.panStartPoint = currentPoint
+            }
         case .changed:
             if self.interactionInProgress {
-                let progress = self.progress(currentPoint: currentPoint)
-                self.update(progress)
+                if let cv = pan.view as? UICollectionView {
+                    let progress = self.progress(currentPoint: currentPoint, collectionView: cv)
+                    self.update(progress)
+                }
             } else if currentPoint.y - self.panStartPoint.y > self.dismissThreshold {
                 // Only start dismissing the view controller if the pan drags far enough
                 self.interactionInProgress = true
@@ -60,7 +58,11 @@ class PanDismissInteractionController: UIPercentDrivenInteractiveTransition {
             self.interactionInProgress = false
 
             if self.percentComplete > 0.3 || pan.velocity(in: nil).y > 400  {
-                self.finish()
+                if let cv = pan.view as? UICollectionView, cv.contentOffset.y < 0 {
+                    self.finish()
+                } else {
+                    self.cancel()
+                }
             } else {
                 self.cancel()
             }
@@ -72,7 +74,10 @@ class PanDismissInteractionController: UIPercentDrivenInteractiveTransition {
         }
     }
 
-    private func progress(currentPoint: CGPoint) -> CGFloat {
+    private func progress(currentPoint: CGPoint, collectionView: UICollectionView) -> CGFloat {
+        logDebug("yOFFset: \(collectionView.contentOffset.y)")
+        guard collectionView.contentOffset.y < 0 else { return 0.0 }
+
         let progress = (currentPoint.y - self.dismissStartPoint.y) / self.dismissDistance
         return clamp(progress, 0.0, 1.0)
     }
