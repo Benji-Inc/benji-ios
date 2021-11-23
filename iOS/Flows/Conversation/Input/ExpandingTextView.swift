@@ -42,8 +42,12 @@ class ExpandingTextView: TextView {
         self.textContainerInset.bottom = 12
     }
 
-    func setPlaceholder(for avatars: [Avatar]) {
-        var placeholderText = "Message "
+    func setPlaceholder(for avatars: [Avatar], isReply: Bool) {
+        var placeholderText = isReply ? "Reply to" : "Message "
+
+        if avatars.isEmpty {
+            placeholderText = isReply ? "Reply" : "Message"
+        }
 
         for (index, avatar) in avatars.enumerated() {
             if index < avatars.count - 1 {
@@ -56,7 +60,7 @@ class ExpandingTextView: TextView {
         }
 
         self.initialPlaceholder = placeholderText
-        self.set(placeholder: placeholderText, color: .darkGray)
+        self.set(placeholder: placeholderText, color: .lightGray)
     }
 
     func setPlaceholder(for kind: MessageKind) {
