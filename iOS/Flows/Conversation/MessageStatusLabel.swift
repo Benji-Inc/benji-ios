@@ -20,7 +20,15 @@ class MessageStatusLabel: MessageDateLabel {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    var taskPool = TaskPool()
+
+    deinit {
+        Task {
+            await self.taskPool.cancelAndRemoveAll()
+        }
+    }
+
     func set(status: ChatMessageStatus?) {
         guard let status = status else {
             self.text = nil
@@ -28,6 +36,11 @@ class MessageStatusLabel: MessageDateLabel {
         }
 
         self.setText(self.getText(for: status))
+
+        Task {
+            await Task.snooze(seconds: 2.0)
+            self.setReplies(for: status.message)
+        }.add(to: self.taskPool)
     }
 
     private func getText(for status: ChatMessageStatus) -> Localized {
@@ -52,5 +65,28 @@ class MessageStatusLabel: MessageDateLabel {
         }
 
         return LocalizedString.empty
+    }
+
+    @MainActor
+    private func setReplies(for message: Message) {
+        Task {
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.alpha = 0
+            })
+            self.setText(self.getReplies(for: message))
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.alpha = 1
+            })
+        }.add(to: self.taskPool)
+    }
+
+    private func getReplies(for message: Message) -> Localized {
+        if message.replyCount == 0 {
+            return "No replies"
+        } else if message.replyCount == 1 {
+            return "1 reply"
+        } else {
+            return "\(message.replyCount) replies"
+        }
     }
 }

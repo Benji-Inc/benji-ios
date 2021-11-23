@@ -48,12 +48,11 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         // Allow message subcells to scale in size without getting clipped.
         self.collectionView.clipsToBounds = false
         self.contentView.addSubview(self.collectionView)
-        
-        #warning("This prevents single selection of a cell")
-//        self.collectionView.onTap { [unowned self] tapRecognizer in
-//            guard let conversation = self.conversation else { return }
-//            self.handleTappedConversation?(conversation)
-//        }
+
+        self.collectionView.contentInset = UIEdgeInsets(top: Theme.contentOffset,
+                                                        left: 0,
+                                                        bottom: 0,
+                                                        right: 0)
 
         self.dataSource.contextMenuDelegate = self
     }

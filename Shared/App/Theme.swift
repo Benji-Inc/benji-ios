@@ -11,6 +11,12 @@ import UIKit
 
 struct Theme {
 
+    enum AnimationDuration: Double {
+        case fast = 0.2
+        case standard = 0.35
+        case slow = 0.5
+    }
+
     static let animationDurationFast: TimeInterval = 0.2
     static let animationDurationStandard: TimeInterval = 0.35
     static let animationDurationSlow: TimeInterval = 0.5

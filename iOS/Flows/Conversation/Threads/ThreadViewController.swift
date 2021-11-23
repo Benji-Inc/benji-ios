@@ -14,10 +14,10 @@ import StreamChat
 class ThreadViewController: DiffableCollectionViewController<ConversationSection,
                                         ConversationItem,
                                         ConversationCollectionViewDataSource>,
-                                        CollectionViewInputHandler {
+                                        CollectionViewInputHandler, DismissInteractableController {
 
     let blurView = BlurView()
-    private let parentMessageView = MessageContentView()
+    let parentMessageView = MessageContentView()
 
     /// A controller for the message that all the replies in this thread are responding to.
     let messageController: ChatMessageController
@@ -45,6 +45,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         let view: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
         view.delegate = self
         view.conversation = self.messageController.conversation
+        view.textView.restorationIdentifier = "thread"
         return view
     }()
 
@@ -55,6 +56,8 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
     override var canBecomeFirstResponder: Bool {
         return true
     }
+
+    lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
     init(channelID: ChannelId, messageID: MessageId) {
         self.messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
@@ -74,8 +77,9 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
-    }
 
+        self.dismissInteractionController.initialize(interactionView: self.collectionView)
+    }
     override func handleDataBeingLoaded() {
         self.subscribeToUpdates()
     }

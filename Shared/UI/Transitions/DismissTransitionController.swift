@@ -11,19 +11,12 @@ import Foundation
 /// This class is used to handle custom dismiss transitions for CardTransitionableControllers that are presented modally
 class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioning {
 
-    let toVC: ViewController
-    let fromVC: ViewController
-
     let interactionController: PanDismissInteractionController?
 
     var animator: UIViewPropertyAnimator!
 
-    init(toVC: ViewController,
-         fromVC: ViewController,
-         interactionController: PanDismissInteractionController?) {
+    init(interactionController: PanDismissInteractionController?) {
 
-        self.toVC = toVC
-        self.fromVC = fromVC
         self.interactionController = interactionController
 
         super.init()
@@ -45,96 +38,73 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
 
     private func createAnimator(using transitionContext: UIViewControllerContextTransitioning) {
 
-        guard self.animator == nil else {
+        guard self.animator.isNil else {
             return
         }
 
-//        let dismissingVC = transitionContext.viewController(forKey: .from)!
-//        let presentingVC = transitionContext.viewController(forKey: .to)!
-//
-//        let containerView = transitionContext.containerView
-//
-//        containerView.addSubview(presentingVC.view)
-//
-//        // Add the blur view above the VC we're going to so it gradually becomes sharper
-//        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-//        blurView.frame = containerView.bounds
-//        containerView.addSubview(blurView)
-//
-//        containerView.addSubview(dismissingVC.view)
-//
-//        // Setup temp transition view for animation
-//        let initialFrame = containerView.convert(self.fromVC.transitionableView.bounds,
-//                                                      from: self.fromVC.transitionableView)
-//        let finalFrame = containerView.convert(self.toVC.transitionableView.bounds,
-//                                               from: self.toVC.transitionableView)
-//
-//        let toTransitionableSnapshot = self.toVC.transitionableView.snapshotView(afterScreenUpdates: true)!
-//        containerView.addSubview(toTransitionableSnapshot)
-//        toTransitionableSnapshot.frame = initialFrame
-//
-//        // Transition view intitialization
-//        let transitionView = CardTransitionalView(with: currentModel)
-//        containerView.addSubview(transitionView)
-//
-//        transitionView.frame = initialFrame
-//        transitionView.layoutNow()
+        guard let rootVC = transitionContext.viewController(forKey: .to) as? RootNavigationController,
+              let listVC = rootVC.viewControllers.first(where: { controller in
+                  return controller is ConversationListViewController
+              }) as? ConversationListViewController,
+              let threadVC = transitionContext.viewController(forKey: .from) as? ThreadViewController
+               else { return }
 
-        let animator = UIViewPropertyAnimator(duration: self.transitionDuration(using: transitionContext),
-                                              curve: .easeOut)
+        let fromView = threadVC.parentMessageView
+        let toView = listVC.selectedMessageView!
 
-        animator.addAnimations { [unowned self] in
-            UIView.animateKeyframes(withDuration: 0,
-                                    delay: 0,
-                                    animations: {
+        let containerView = transitionContext.containerView
 
-                                        // Hiding the transitionable views of the to and from VC
-                                        UIView.addKeyframe(withRelativeStartTime: 0,
-                                                           relativeDuration: 0,
-                                                           animations: {
-//                                                            self.fromVC.transitionableView.alpha = 0
-//                                                            self.toVC.transitionableView.alpha = 0
-                                        })
+        containerView.addSubview(threadVC.view)
 
-                                        UIView.addKeyframe(withRelativeStartTime: 0,
-                                                           relativeDuration: 0.01,
-                                                           animations: {
-                                                            //transitionView.layer.cornerRadius = 0
-                                        })
+        let finalFrame = toView.convert(toView.bounds, to: containerView)
 
-                                        UIView.addKeyframe(withRelativeStartTime: 0,
-                                                           relativeDuration: 0.3,
-                                                           animations: {
-                                                            //dismissingVC.view.alpha = 0
-                                        })
+        let snapshot = MessageContentView()
 
-                                        UIView.addKeyframe(withRelativeStartTime: 0,
-                                                           relativeDuration: 0.7,
-                                                           animations: {
-//                                                            blurView.effect = nil
-//                                                            transitionView.handleTransition(for: destinationModel)
-//                                                            transitionView.frame = finalFrame
-//                                                            transitionView.layer.cornerRadius = TomorrowTheme.roundedRadius
-//                                                            transitionView.layoutNow()
-//                                                            toTransitionableSnapshot.frame = finalFrame
-                                        })
-
-                                        UIView.addKeyframe(withRelativeStartTime: 0.7,
-                                                           relativeDuration: 0.3,
-                                                           animations: {
-                                                            //self.toVC.transitionableView.alpha = 1
-                                                           // transitionView.handlePresentation(for: destinationModel)
-                                                           // transitionView.alpha = 0
-                                        })
-            })
+        if let message = fromView.message {
+            snapshot.configure(with: message)
+            snapshot.state = fromView.state
+            snapshot.backgroundColorView.bubbleColor = fromView.backgroundColorView.bubbleColor
+            snapshot.backgroundColorView.tailLength = fromView.backgroundColorView.tailLength
+            snapshot.backgroundColorView.orientation = fromView.backgroundColorView.orientation
         }
 
-        animator.addCompletion { [unowned self] (position) in
-            //blurView.removeFromSuperview()
-            //transitionView.removeFromSuperview()
+        containerView.addSubview(snapshot)
+        snapshot.frame = fromView.frame
 
-            //toTransitionableSnapshot.removeFromSuperview()
-            //self.toVC.transitionableView.alpha = 1
+        fromView.isHidden = true
+
+        let animator = UIViewPropertyAnimator(duration: self.transitionDuration(using: transitionContext),
+                                              curve: .linear)
+
+        animator.addAnimations {
+
+            UIView.animateKeyframes(withDuration: 0.0, delay: 0.0, animations: {
+                snapshot.center = finalFrame.center
+
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
+                    threadVC.collectionView.alpha = 0
+                    snapshot.authorView.alpha = 0
+                    snapshot.reactionsView.alpha = 0 
+                }
+                UIView.addKeyframe(withRelativeStartTime: 0.3, relativeDuration: 0.7) {
+                    threadVC.blurView.showBlur(false)
+                }
+              })
+        }
+
+        animator.addCompletion { (position) in
+            if position == .end {
+                toView.isHidden = false
+                fromView.isHidden = true
+                delay(0.1) {
+                    listVC.becomeFirstResponder()
+                }
+            } else if position == .start {
+                toView.isHidden = true
+                fromView.isHidden = false
+            }
+
+            snapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
 

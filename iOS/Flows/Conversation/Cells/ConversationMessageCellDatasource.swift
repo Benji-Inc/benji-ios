@@ -68,7 +68,7 @@ extension ConversationMessageCellDataSource {
                                                                         messageId: item.messageID)
             guard let message = messageController.message else { return }
 
-            cell.setText(with: message)
+            cell.configure(with: message)
 
             var zIndex = 0
             if let layout = item.collectionView.collectionViewLayout as? ConversationMessagesCellLayout {

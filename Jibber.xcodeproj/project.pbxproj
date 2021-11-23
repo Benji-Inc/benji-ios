@@ -41,7 +41,6 @@
 		807E98E9273497610076889C /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807E98E8273497610076889C /* UIColor+Extensions.swift */; };
 		807E98EA273497610076889C /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807E98E8273497610076889C /* UIColor+Extensions.swift */; };
 		807E98EB273497610076889C /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 807E98E8273497610076889C /* UIColor+Extensions.swift */; };
-		808313B52723694B00BAEBE0 /* ThreadMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 808313B42723694B00BAEBE0 /* ThreadMessageCell.swift */; };
 		8094D5DB26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8094D5DC26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
 		8094D5DD26CA1ED200FE9B5D /* PFUser+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */; };
@@ -92,7 +91,6 @@
 		D61553572746D5D200B08459 /* PanDismissInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553562746D5D200B08459 /* PanDismissInteractionController.swift */; };
 		D61553582746D5D200B08459 /* PanDismissInteractionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553562746D5D200B08459 /* PanDismissInteractionController.swift */; };
 		D615535C2746D64200B08459 /* DismissTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615535B2746D64200B08459 /* DismissTransitionController.swift */; };
-		D615535D2746D64200B08459 /* DismissTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615535B2746D64200B08459 /* DismissTransitionController.swift */; };
 		D61553622746E62D00B08459 /* TransitionRouter+Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61553612746E62D00B08459 /* TransitionRouter+Message.swift */; };
 		D61592D624FACD9200B63412 /* AttachmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D524FACD9200B63412 /* AttachmentViewController.swift */; };
 		D61592DA24FAD7A300B63412 /* AttachmentCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61592D924FAD7A300B63412 /* AttachmentCollectionView.swift */; };
@@ -216,7 +214,7 @@
 		D63DB23325E9992600F6B323 /* UIControl+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6FEF030257EB91B00F9789B /* UIControl+Extensions.swift */; };
 		D63DB23425E9992600F6B323 /* UIEdgeInsets+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6AA3232EA13300DB7257 /* UIEdgeInsets+Extensions.swift */; };
 		D63DB23525E9992600F6B323 /* UIView+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6347395241EBF6F0071E9DA /* UIView+Layout.swift */; };
-		D63DB23725E9992600F6B323 /* UIView+ScalingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */; };
+		D63DB23725E9992600F6B323 /* UIView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */; };
 		D63DB23825E9992600F6B323 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60C81472209314200A127A3 /* UIImage+Extensions.swift */; };
 		D63DB23925E9992600F6B323 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503621D7E74500CD8CE4 /* UIViewController+Extensions.swift */; };
 		D63DB23A25E9992600F6B323 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */; };
@@ -390,7 +388,7 @@
 		D65519372589122700B901E4 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503621D7E74500CD8CE4 /* UIViewController+Extensions.swift */; };
 		D65519392589122700B901E4 /* UIEdgeInsets+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D64C6AA3232EA13300DB7257 /* UIEdgeInsets+Extensions.swift */; };
 		D655193B2589122700B901E4 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D61EC0EB21D312B600204BEE /* UIView+Extensions.swift */; };
-		D655193C2589122700B901E4 /* UIView+ScalingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */; };
+		D655193C2589122700B901E4 /* UIView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */; };
 		D655193D2589122700B901E4 /* UIWindow+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D642739822CA79B60088256B /* UIWindow+Extensions.swift */; };
 		D65519402589122C00B901E4 /* UNNotificationContent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB73E244D3B4300607677 /* UNNotificationContent+Extensions.swift */; };
 		D65519412589122C00B901E4 /* UNNotification+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D62BB740244D3BA100607677 /* UNNotification+Extensions.swift */; };
@@ -455,6 +453,7 @@
 		D6551A5F25895F1300B901E4 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503D21DAF98500CD8CE4 /* TextField.swift */; };
 		D6551A7025895FFB00B901E4 /* FaceDetectionViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */; };
 		D660544726320C06002F74F8 /* scroll_down.json in Resources */ = {isa = PBXBuildFile; fileRef = D660544626320C06002F74F8 /* scroll_down.json */; };
+		D66121EC274C1D5C00DD9B95 /* ReactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66121EB274C1D5C00DD9B95 /* ReactionsView.swift */; };
 		D6617CEA26741C4500439C06 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CE926741C4500439C06 /* UITextField+Extensions.swift */; };
 		D6617CEB26741C4500439C06 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CE926741C4500439C06 /* UITextField+Extensions.swift */; };
 		D6617CEC26741C4500439C06 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CE926741C4500439C06 /* UITextField+Extensions.swift */; };
@@ -741,7 +740,7 @@
 		D6D39282265AAFB900E49F1E /* lock.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39280265AAFB900E49F1E /* lock.json */; };
 		D6D39283265AAFB900E49F1E /* lock.json in Resources */ = {isa = PBXBuildFile; fileRef = D6D39280265AAFB900E49F1E /* lock.json */; };
 		D6D39290266287A700E49F1E /* NoticeSupplier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D3928F266287A700E49F1E /* NoticeSupplier.swift */; };
-		D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */; };
+		D6D6D57423A6E51000D2B5BF /* UIView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */; };
 		D6D804B02667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
 		D6D804B12667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
 		D6D804B22667E06700741594 /* StationaryPressRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */; };
@@ -884,7 +883,6 @@
 		807A7BC426C5B5A20023A71E /* Task+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+Extensions.swift"; sourceTree = "<group>"; };
 		807A7BC826C5C8100023A71E /* Task+TaskPool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Task+TaskPool.swift"; sourceTree = "<group>"; };
 		807E98E8273497610076889C /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
-		808313B42723694B00BAEBE0 /* ThreadMessageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadMessageCell.swift; sourceTree = "<group>"; };
 		8094D5DA26CA1ED200FE9B5D /* PFUser+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PFUser+Extensions.swift"; sourceTree = "<group>"; };
 		80958C1F2721ED55007196BD /* BottomToTopColumnCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomToTopColumnCollectionViewLayout.swift; sourceTree = "<group>"; };
 		8096144C2714CDB600BC948E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = en; path = en.lproj/AppIntentVocabulary.plist; sourceTree = "<group>"; };
@@ -1039,6 +1037,7 @@
 		D65519F22589591D00B901E4 /* Typealias.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typealias.swift; sourceTree = "<group>"; };
 		D658C7DC24425E410027D12E /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		D660544626320C06002F74F8 /* scroll_down.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = scroll_down.json; sourceTree = "<group>"; };
+		D66121EB274C1D5C00DD9B95 /* ReactionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsView.swift; sourceTree = "<group>"; };
 		D6617CE926741C4500439C06 /* UITextField+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Extensions.swift"; sourceTree = "<group>"; };
 		D6617CEF26743DCF00439C06 /* SystemNotice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemNotice.swift; sourceTree = "<group>"; };
 		D6617CF426743DFE00439C06 /* Notice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notice.swift; sourceTree = "<group>"; };
@@ -1186,7 +1185,7 @@
 		D6D3927C265AAB2700E49F1E /* AnimationView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnimationView+Extensions.swift"; sourceTree = "<group>"; };
 		D6D39280265AAFB900E49F1E /* lock.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = lock.json; sourceTree = "<group>"; };
 		D6D3928F266287A700E49F1E /* NoticeSupplier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeSupplier.swift; sourceTree = "<group>"; };
-		D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ScalingAnimation.swift"; sourceTree = "<group>"; };
+		D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animations.swift"; sourceTree = "<group>"; };
 		D6D804AF2667E06700741594 /* StationaryPressRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationaryPressRecognizer.swift; sourceTree = "<group>"; };
 		D6D804BA266A8B7D00741594 /* NSTextCheckingResult+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSTextCheckingResult+Extension.swift"; sourceTree = "<group>"; };
 		D6D8A48B235D154500F0CC4B /* NavigationBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarViewController.swift; sourceTree = "<group>"; };
@@ -1613,8 +1612,8 @@
 				D615534D2745C1C900B08459 /* MessageContentView.swift */,
 				D68072EA2730462F004657E7 /* MessageStatusView.swift */,
 				806DA16927307FA400843C4E /* MessageSubcell.swift */,
-				808313B42723694B00BAEBE0 /* ThreadMessageCell.swift */,
 				806C99562748632900011728 /* TimeMachineCollectionViewLayout.swift */,
+				D66121EB274C1D5C00DD9B95 /* ReactionsView.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -2186,7 +2185,7 @@
 				D6617CE926741C4500439C06 /* UITextField+Extensions.swift */,
 				D61EC0EB21D312B600204BEE /* UIView+Extensions.swift */,
 				D6347395241EBF6F0071E9DA /* UIView+Layout.swift */,
-				D6D6D57323A6E51000D2B5BF /* UIView+ScalingAnimation.swift */,
+				D6D6D57323A6E51000D2B5BF /* UIView+Animations.swift */,
 				D6A49A75260006CA007F2E4A /* UIViewAnimatingState+Extensions.swift */,
 				D6D1503621D7E74500CD8CE4 /* UIViewController+Extensions.swift */,
 				D642739822CA79B60088256B /* UIWindow+Extensions.swift */,
@@ -2723,6 +2722,7 @@
 				D642735322C85B740088256B /* SystemAvatar.swift in Sources */,
 				D69EB44A2457EB4500473530 /* Error+Extensions.swift in Sources */,
 				D6B230D325BC7FCE0082A41A /* SendableType.swift in Sources */,
+				D66121EC274C1D5C00DD9B95 /* ReactionsView.swift in Sources */,
 				D6F312A0266ADDA600E25FEE /* LinkView.swift in Sources */,
 				80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */,
 				D61553622746E62D00B08459 /* TransitionRouter+Message.swift in Sources */,
@@ -2742,7 +2742,7 @@
 				D6748CBE262DAF280095F4B1 /* ReservationsViewController.swift in Sources */,
 				D646955827370A7B00BF47CE /* ToastView.swift in Sources */,
 				D61EC0F521D3151400204BEE /* NSAttributedString+Extensions.swift in Sources */,
-				D6D6D57423A6E51000D2B5BF /* UIView+ScalingAnimation.swift in Sources */,
+				D6D6D57423A6E51000D2B5BF /* UIView+Animations.swift in Sources */,
 				D6D1460721D552B100CD8CE4 /* Character+Extensions.swift in Sources */,
 				D6D39279265AAAA700E49F1E /* MicroAnimation.swift in Sources */,
 				D6A6691D271A44FB0001D218 /* Pass.swift in Sources */,
@@ -2945,7 +2945,6 @@
 				D6AC1D61273DA44A00774622 /* InputType.swift in Sources */,
 				D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */,
 				8007CB642703CE0600FEA511 /* AttachmentCollectionViewDataSource.swift in Sources */,
-				808313B52723694B00BAEBE0 /* ThreadMessageCell.swift in Sources */,
 				D642736C22C98FA00088256B /* MathFunctions.swift in Sources */,
 				D6AC90CA2594F8F80032774D /* Delegated.swift in Sources */,
 				D615534827448C4200B08459 /* InputPlaceholderView.swift in Sources */,
@@ -3047,7 +3046,7 @@
 				D63DB23025E9991F00F6B323 /* String+Extensions.swift in Sources */,
 				D63DB24F25E9994B00F6B323 /* Delegated.swift in Sources */,
 				D69B75FD264842D00007020D /* VideoView.swift in Sources */,
-				D63DB23725E9992600F6B323 /* UIView+ScalingAnimation.swift in Sources */,
+				D63DB23725E9992600F6B323 /* UIView+Animations.swift in Sources */,
 				D6F7DEF826FBDD8600F72A5C /* UserOnboardingViewController.swift in Sources */,
 				801EC75026D5AE1F00B52F31 /* UICollectionView+Extensions.swift in Sources */,
 				D63DB26825E9997800F6B323 /* UserNotificationManager+Extensions.swift in Sources */,
@@ -3229,7 +3228,6 @@
 				D655191B2589121100B901E4 /* CGPoint+Extensions.swift in Sources */,
 				D6637A2925A3A82F00A4A3B7 /* TextView.swift in Sources */,
 				D64A1EF6258AFF330097817C /* MainCoordinator+Extensions.swift in Sources */,
-				D615535D2746D64200B08459 /* DismissTransitionController.swift in Sources */,
 				D655191C2589121100B901E4 /* MathFunctions.swift in Sources */,
 				D65519122589120600B901E4 /* ClosedRange+Extensions.swift in Sources */,
 				D64A1F08258C16470097817C /* WaitlistViewController.swift in Sources */,
@@ -3296,7 +3294,7 @@
 				D677589725B09FF7007E0184 /* TransitionRouter+Fill.swift in Sources */,
 				D65519FC258959CC00B901E4 /* CloudFunction.swift in Sources */,
 				D68C0831272A17E60033C8AE /* FaceDisclosureViewController.swift in Sources */,
-				D655193C2589122700B901E4 /* UIView+ScalingAnimation.swift in Sources */,
+				D655193C2589122700B901E4 /* UIView+Animations.swift in Sources */,
 				D6629C7625AD254C002C3B92 /* ConfettiView.swift in Sources */,
 				D65519112589120600B901E4 /* Array+Extensions.swift in Sources */,
 				D65519052589110A00B901E4 /* DeeplinkTarget.swift in Sources */,
