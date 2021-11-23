@@ -84,8 +84,9 @@ class DiffableCollectionViewController<SectionType: Hashable,
         self.collectionView.animationView.stop()
     }
 
-    func getInitialSnapshot(with dictionary: [SectionType: [ItemType]]) -> NSDiffableDataSourceSnapshot<SectionType, ItemType> {
-
+    func getInitialSnapshot(with dictionary: [SectionType: [ItemType]])
+    -> NSDiffableDataSourceSnapshot<SectionType, ItemType> {
+        
         var snapshot = self.dataSource.snapshot()
         snapshot.deleteAllItems()
 

@@ -176,9 +176,6 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
         // All items in a section are positioned relative to its frontmost item.
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
 
-        // Don't calculate attributes for cells that won't be visible anyway.
-        guard abs(frontmostIndexPath.item - indexPath.item) < 4 else { return nil }
-
         let offsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)*self.itemHeight
 
         let frontmostVectorToCurrentZ = self.getFrontmostItemZOffset(in: indexPath.section)
@@ -400,20 +397,10 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        if self is ThreadCollectionViewLayout {
-            logDebug("proposed offset is "+proposedContentOffset.debugDescription)
+        guard self.shouldScrollToEnd, let offset = self.getMostRecentItemContentOffset() else {
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
         }
-        guard self.shouldScrollToEnd,
-              let offset = self.getMostRecentItemContentOffset() else {
-                  if self is ThreadCollectionViewLayout {
-                      logDebug(super.targetContentOffset(forProposedContentOffset: proposedContentOffset).debugDescription)
-                  }
-                  return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
-              }
-        
-        if self is ThreadCollectionViewLayout {
-            logDebug(offset.debugDescription)
-        }
+
         return offset
     }
 

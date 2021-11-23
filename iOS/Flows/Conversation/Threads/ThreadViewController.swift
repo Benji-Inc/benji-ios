@@ -156,8 +156,13 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
     override func getAnimationCycle() -> AnimationCycle? {
         var cycle = super.getAnimationCycle()
         cycle?.shouldConcatenate = false
-        cycle?.scrollToIndexPath = IndexPath(item: 0, section: 0)
-        cycle?.scrollPosition = .bottom
+        // Scroll to the lastest reply.
+        if let threadLayout = self.collectionView.collectionViewLayout as? ThreadCollectionViewLayout {
+            let lastReplyIndex = clamp(self.messageController.replies.count - 1, min: 0)
+            let yOffset = CGFloat(lastReplyIndex) * threadLayout.itemHeight
+            cycle?.scrollToOffset = CGPoint(x: 0, y: yOffset)
+        }
+
         return cycle
     }
 }
