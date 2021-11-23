@@ -127,6 +127,7 @@ extension Conversation: MessageSequence {
     }
 
     var messages: [Messageable] {
-        return self.latestMessages
+        let messageArray = Array(ChatClient.shared.channelController(for: self.cid).messages)
+        return messageArray
     }
 }

@@ -16,7 +16,7 @@ class MessageContentView: View {
     /// A rounded and colored background view for the message. Changes color based on the sender.
     let backgroundColorView = SpeechBubbleView(orientation: .down)
     /// Text view for displaying the text of the message.
-    let textView = MessageTextView()
+    let textView = MessageTextView(font: .regularBold, textColor: .textColor)
     private (set) var message: Messageable?
 
     let authorView = AvatarView()
@@ -74,10 +74,11 @@ class MessageContentView: View {
 
     /// Sets the background color and shows/hides the bubble tail.
     func configureBackground(color: Color,
+                             brightness: CGFloat,
                              showBubbleTail: Bool,
                              tailOrientation: SpeechBubbleView.TailOrientation) {
 
-        self.backgroundColorView.bubbleColor = color.color
+        self.backgroundColorView.bubbleColor = color.color.color(withBrightness: brightness)
         self.backgroundColorView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
         self.backgroundColorView.orientation = tailOrientation
     }
@@ -98,12 +99,9 @@ class MessageContentView: View {
         self.reactionsView.pin(.top, padding: topPadding)
         self.reactionsView.pin(.right, padding: padding)
 
-        let textWidth = self.backgroundColorView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
-        self.textView.width = textWidth
-        self.textView.centerOnX()
-        self.textView.top = self.backgroundColorView.bubbleFrame.top + Theme.contentOffset.half
-        self.textView.expand(.bottom,
-                             to: self.backgroundColorView.bubbleFrame.bottom - Theme.contentOffset.half)
+        let maxWidth = self.backgroundColorView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
+        self.textView.setSize(withMaxWidth: maxWidth)
+        self.textView.center = self.backgroundColorView.bubbleFrame.center
     }
 
     /// Sizing

@@ -16,7 +16,7 @@ class MessageDateLabel: Label {
         self.textAlignment = .center
         self.numberOfLines = 1
         self.setFont(.small)
-        self.setTextColor(.gray)
+        self.setTextColor(.lightGray)
     }
 
     required init?(coder: NSCoder) {

@@ -11,6 +11,16 @@ import TMROLocalization
 
 class MessageStatusLabel: MessageDateLabel {
 
+    override init() {
+        super.init()
+
+        self.setFont(.smallBold)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     var taskPool = TaskPool()
 
     deinit {

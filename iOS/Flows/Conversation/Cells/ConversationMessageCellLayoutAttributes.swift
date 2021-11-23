@@ -14,6 +14,8 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
     var shouldShowText: Bool = true
     /// The color of the background of the cell.
     var backgroundColor: Color = .lightGray
+    /// How bright the background color is. 0 is black. 1 is full brightness of the given color
+    var brightness: CGFloat = 1
     /// If true, the speechbubble tail should be shown.
     var shouldShowTail: Bool = false
     /// The direction the speech bubble tail should be pointed.
@@ -23,6 +25,7 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
         let copy = super.copy(with: zone) as! ConversationMessageCellLayoutAttributes
         copy.shouldShowText = self.shouldShowText
         copy.backgroundColor = self.backgroundColor
+        copy.brightness = self.brightness
         copy.shouldShowTail = self.shouldShowTail
         copy.bubbleTailOrientation = self.bubbleTailOrientation
         return copy
@@ -33,6 +36,7 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
             return super.isEqual(object)
             && layoutAttributes.shouldShowText == self.shouldShowText
             && layoutAttributes.backgroundColor == self.backgroundColor
+            && layoutAttributes.brightness == self.brightness
             && layoutAttributes.shouldShowTail == self.shouldShowTail
             && layoutAttributes.bubbleTailOrientation == self.bubbleTailOrientation
         }

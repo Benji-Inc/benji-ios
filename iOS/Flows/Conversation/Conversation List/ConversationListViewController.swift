@@ -74,7 +74,7 @@ class ConversationListViewController: FullScreenViewController,
         let query = ChannelListQuery(filter: filter,
                                      sort: [Sorting(key: .createdAt, isAscending: false)],
                                      pageSize: .channelsPageSize,
-                                     messagesLimit: 10)
+                                     messagesLimit: .messagesPageSize)
         self.conversationListController
         = ChatClient.shared.channelListController(query: query)
 
@@ -88,10 +88,10 @@ class ConversationListViewController: FullScreenViewController,
     override func initializeViews() {
         super.initializeViews()
 
+        self.contentContainer.addSubview(self.conversationHeader)
+
         self.contentContainer.addSubview(self.collectionView)
         self.collectionView.delegate = self
-
-        self.contentContainer.addSubview(self.conversationHeader)
 
         self.subscribeToKeyboardUpdates()
     }
