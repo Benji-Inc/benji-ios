@@ -80,15 +80,6 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.dismissInteractionController.initialize(interactionView: self.collectionView)
     }
-
-//    override func viewWasPresented() {
-//        super.viewWasPresented()
-//
-//        Task {
-//            
-//        }.add(to: self.taskPool)
-//    }
-
     override func handleDataBeingLoaded() {
         self.subscribeToUpdates()
     }
