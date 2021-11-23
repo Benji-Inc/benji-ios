@@ -29,7 +29,7 @@ class ThreadCollectionView: CollectionView {
     /// Returns the frame that a message drop zone should have, based on this cell's contents.
     /// The frame is in the coordinate space of the passed in view.
     func getMessageDropZoneFrame(convertedTo targetView: UIView) -> CGRect {
-        let dropZoneFrame = self.threadLayout.getDropZoneFrame()
+        guard let dropZoneFrame = self.threadLayout?.getDropZoneFrame() else { return .zero }
 
         return self.convert(dropZoneFrame, to: targetView)
     }
