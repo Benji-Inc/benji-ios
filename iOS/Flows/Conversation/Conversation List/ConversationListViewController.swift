@@ -18,26 +18,20 @@ enum ConversationUIState {
 class ConversationListViewController: FullScreenViewController,
                                       UICollectionViewDelegate,
                                       UICollectionViewDelegateFlowLayout,
-                                      SwipeableInputAccessoryViewDelegate {
+                                      SwipeableInputAccessoryViewDelegate, ActiveConversationable {
 
     lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationCollectionView()
     /// Denotes where a message should be dragged and dropped to send.
     private let sendMessageOverlay = MessageDropZoneView()
 
-    let conversationHeader = ConversationHeaderView()
+    lazy var headerVC = ConversationHeaderViewController()
 
     private(set) var conversationListController: ConversationListController
-    /// Returns the current conversation that is centered and being interacted with.
-    var currentConversation: Conversation? {
-        guard let indexPath = self.collectionView.centerIndexPath() else { return nil}
-        return self.conversationListController.conversations[safe: indexPath.item]
-    }
 
     var selectedMessageView: MessageContentView?
 
     // Input handlers
-    var onSelectedConversation: ((ChannelId) -> Void)?
     var onSelectedMessage: ((ChannelId, MessageId) -> Void)?
 
     @Published var didCenterOnCell: ConversationMessagesCell? = nil
@@ -88,7 +82,7 @@ class ConversationListViewController: FullScreenViewController,
     override func initializeViews() {
         super.initializeViews()
 
-        self.contentContainer.addSubview(self.conversationHeader)
+        self.addChild(viewController: self.headerVC, toView: self.contentContainer)
 
         self.contentContainer.addSubview(self.collectionView)
         self.collectionView.delegate = self
@@ -101,18 +95,18 @@ class ConversationListViewController: FullScreenViewController,
 
         switch self.state {
         case .read:
-            self.conversationHeader.height = 96
+            self.headerVC.view.height = 96
         case .write:
-            self.conversationHeader.height = 60
+            self.headerVC.view.height = 60
         }
 
-        self.conversationHeader.pinToSafeArea(.top, padding: Theme.contentOffset)
-        self.conversationHeader.expandToSuperviewWidth()
+        self.headerVC.view.pinToSafeArea(.top, padding: Theme.contentOffset)
+        self.headerVC.view.expandToSuperviewWidth()
 
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.match(.top,
                                   to: .bottom,
-                                  of: self.conversationHeader,
+                                  of: self.headerVC.view,
                                   offset: -16)
         self.collectionView.height = self.contentContainer.height - 96
 
@@ -169,7 +163,7 @@ class ConversationListViewController: FullScreenViewController,
     func updateUI(for state: ConversationUIState) {
         guard self.presentedViewController.isNil else { return }
 
-        self.conversationHeader.update(for: state)
+        self.headerVC.update(for: state)
 
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.view.layoutNow()
@@ -185,15 +179,13 @@ class ConversationListViewController: FullScreenViewController,
         }
         self.didCenterOnCell = cell
 
+        guard let ip = self.collectionView.centerIndexPath(), let conversation = self.conversationListController.conversations[safe: ip.item] else { return }
+
+        ConversationsManager.shared.activeConversation = conversation
+
         // If there's a centered cell, update the layout
-        if let currentConversation = self.currentConversation {
+        if let currentConversation = self.activeConversation {
             self.conversationController = ChatClient.shared.channelController(for: currentConversation.cid)
-
-            ConversationsManager.shared.activeConversations.removeAll()
-            ConversationsManager.shared.activeConversations.append(currentConversation)
-
-            self.messageInputAccessoryView.conversation = currentConversation
-            self.conversationHeader.configure(with: currentConversation)
 
             self.typingSubscriber = self.conversationController?
                 .typingUsersPublisher

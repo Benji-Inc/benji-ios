@@ -30,7 +30,7 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, updatedFrameOf textView: InputTextView)
 }
 
-class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
+class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConversationable {
 
     weak var delegate: SwipeableInputAccessoryViewDelegate?
 
@@ -61,7 +61,6 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate {
     // MARK: - Message State
 
     var currentContext: MessageContext = .passive
-    var conversation: Conversation? 
 
     var editableMessage: Messageable?
     var currentMessageKind: MessageKind = .text(String())
