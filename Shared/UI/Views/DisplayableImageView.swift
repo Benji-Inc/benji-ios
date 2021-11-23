@@ -65,8 +65,11 @@ class DisplayableImageView: View {
             case .initial:
                 self.animationView.reset()
                 self.animationView.stop()
-                self.blurView.showBlur(true)
+                self.blurView.showBlur(false)
             case .loading:
+                UIView.animate(withDuration: 0.2) {
+                    self.blurView.showBlur(true)
+                }
                 if self.animationView.isAnimationPlaying {
                     self.animationView.stop()
                 }
@@ -108,7 +111,6 @@ class DisplayableImageView: View {
 
     func updateImageView(with displayable: ImageDisplayable) {
         if let photo = displayable.image {
-            self.state = .loading
             self.showResult(for: photo)
         } else if let url = displayable.url {
             Task {
