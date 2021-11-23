@@ -10,7 +10,7 @@ import Foundation
 import Photos
 import StreamChat
 
-extension ThreadViewController: SwipeableInputAccessoryViewDelegate {
+extension ThreadViewController {
 
     func handle(attachment: Attachment, body: String) {
         Task {
@@ -22,38 +22,6 @@ extension ThreadViewController: SwipeableInputAccessoryViewDelegate {
                 logDebug(error)
             }
         }.add(to: self.taskPool)
-    }
-
-    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
-        
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didUpdate sendable: Sendable,
-                                 withPreviewFrame frame: CGRect) {
-
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 triggeredSendFor sendable: Sendable,
-                                 withPreviewFrame frame: CGRect) -> Bool {
-
-        guard frame.top < 0 else { return false }
-
-        Task {
-            await self.send(object: sendable)
-        }.add(to: self.taskPool)
-
-        return true
-    }
-
-    func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
-
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 updatedFrameOf textView: InputTextView) {
-        
     }
 
     @MainActor

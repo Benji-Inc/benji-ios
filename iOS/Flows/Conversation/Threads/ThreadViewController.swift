@@ -14,10 +14,15 @@ import StreamChat
 class ThreadViewController: DiffableCollectionViewController<ConversationSection,
                             ConversationItem,
                             ConversationCollectionViewDataSource>,
-                            CollectionViewInputHandler, DismissInteractableController {
+                            CollectionViewInputHandler,
+                            DismissInteractableController,
+                            SwipeableInputAccessoryViewDelegate {
 
     let blurView = BlurView()
     let parentMessageView = MessageContentView()
+    /// A view that shows where a message should be dragged and dropped to send.
+    private let sendMessageOverlay = MessageDropZoneView()
+    private let threadCollectionView = ThreadCollectionView()
 
     /// A controller for the message that all the replies in this thread are responding to.
     let messageController: ChatMessageController
@@ -62,10 +67,9 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
         self.conversationController = ChatClient.shared.channelController(for: channelID,
                                                                              messageOrdering: .topToBottom)
-        let collectionView = ThreadCollectionView()
-        super.init(with: collectionView)
+        super.init(with: self.threadCollectionView)
 
-        collectionView.threadLayout?.dataSource = self
+        self.threadCollectionView.threadLayout?.dataSource = self
         self.messageController.listOrdering = .bottomToTop
     }
 
@@ -98,6 +102,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.parentMessageView.pinToSafeArea(.top, padding: Theme.contentOffset)
         self.parentMessageView.centerOnX()
 
+        self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.pinToSafeArea(.top, padding: 0)
         self.collectionView.width = self.view.width * 0.8
         self.collectionView.centerOnX()
@@ -164,6 +169,67 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         return cycle
     }
+
+    // MARK: - SwipeableInputAccessoryViewDelegate
+
+    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
+        self.collectionView.isUserInteractionEnabled = false
+
+        // Animate in the send overlay
+        self.view.insertSubview(self.sendMessageOverlay, aboveSubview: self.collectionView)
+        self.sendMessageOverlay.alpha = 0
+        self.sendMessageOverlay.setState(.reply)
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            self.sendMessageOverlay.alpha = 1
+        }
+
+        // Show the send message overlay so the user can see where to drag the message
+        let overlayFrame = self.threadCollectionView.getMessageDropZoneFrame(convertedTo: self.view)
+        self.sendMessageOverlay.frame = overlayFrame
+
+        view.dropZoneFrame = view.convert(self.sendMessageOverlay.bounds, from: self.sendMessageOverlay)
+    }
+
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 didUpdate sendable: Sendable,
+                                 withPreviewFrame frame: CGRect) {
+        // Do nothing.
+    }
+
+
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 triggeredSendFor sendable: Sendable,
+                                 withPreviewFrame frame: CGRect) -> Bool {
+
+        // Ensure that the preview has been dragged far up enough to send.
+        let dropZoneFrame = view.dropZoneFrame
+        let shouldSend = dropZoneFrame.bottom > frame.centerY
+
+        guard shouldSend else {
+            return false
+        }
+
+        Task {
+            await self.send(object: sendable)
+        }.add(to: self.taskPool)
+
+        return true
+    }
+
+    func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
+        self.collectionView.isUserInteractionEnabled = true
+
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            self.sendMessageOverlay.alpha = 0
+        } completion: { didFinish in
+            self.sendMessageOverlay.removeFromSuperview()
+        }
+    }
+
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 updatedFrameOf textView: InputTextView) {
+        // Do nothing.
+    }
 }
 
 extension ThreadViewController: TransitionableViewController {
@@ -200,10 +266,6 @@ extension ThreadViewController {
                                              collectionView: self.collectionView)
             }.add(to: self.taskPool)
         }.store(in: &self.cancellables)
-
-        self.dataSource.handleDeleteMessage = { [unowned self] item in
-            self.conversationController?.deleteMessage(item.messageID)
-        }
     }
 }
 

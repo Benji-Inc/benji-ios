@@ -44,7 +44,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     var handleDeletedConversation: ((MessageSequence) -> Void)?
 
     var handleSelectedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
-    var handleDeleteMessage: ((ConversationMessageItem) -> Void)?
     
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
@@ -65,7 +64,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         switch item {
         case .messages(let itemID):
             if section.isThread {
-
                 let cid = try! ConversationID(cid: section.sectionID)
                 let threadCell
                 = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,

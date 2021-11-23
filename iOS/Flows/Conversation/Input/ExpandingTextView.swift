@@ -12,6 +12,20 @@ class ExpandingTextView: TextView {
 
     private var initialPlaceholder: String?
 
+    init() {
+        super.init(frame: .zero,
+                   font: .regularBold,
+                   textColor: .textColor,
+                   textContainer: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+
+        self.font = FontType.regularBold.font
+        self.textColor = Color.textColor.color
+    }
+    
     override func initializeViews() {
         super.initializeViews()
 
