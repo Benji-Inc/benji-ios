@@ -13,7 +13,7 @@ import PhotosUI
 import Combine
 import StreamChat
 
-class ConversationListCoordinator: PresentableCoordinator<Void> {
+class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversationable {
 
     lazy var conversationListVC
     = ConversationListViewController(members: self.conversationMembers,
@@ -44,17 +44,12 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
             self.presentThread(for: channelId, messageId: messageId)
         }
 
-        self.conversationListVC.onSelectedConversation = { [unowned self] (channelID) in
-            #warning("Present the individual conversation experience")
-            logDebug("Selection conversation "+channelID.description)
-        }
-
-        self.conversationListVC.conversationHeader.didTapAddPeople = { [unowned self] in
+        self.conversationListVC.headerVC.didTapAddPeople = { [unowned self] in
             self.presentPeoplePicker()
         }
 
-        self.conversationListVC.conversationHeader.didTapUpdateTopic = { [unowned self] in
-            guard let conversation = self.conversationListVC.currentConversation else {
+        self.conversationListVC.headerVC.didTapUpdateTopic = { [unowned self] in
+            guard let conversation = self.activeConversation else {
                 logDebug("Unable to change topic because no conversation is selected.")
                 return
             }
@@ -117,7 +112,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void> {
         self.addChildAndStart(coordinator) { [unowned self] connections in
             self.router.dismiss(source: self.conversationListVC)
 
-            guard let conversation = self.conversationListVC.currentConversation else { return }
+            guard let conversation = self.activeConversation else { return }
             self.add(connections: connections, to: conversation)
         }
         self.router.present(coordinator, source: self.conversationListVC)

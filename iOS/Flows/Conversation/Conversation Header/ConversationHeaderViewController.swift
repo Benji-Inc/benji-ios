@@ -12,13 +12,12 @@ import Combine
 import Lottie
 import UIKit
 
-class ConversationHeaderViewController: ViewController {
+class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
     lazy var membersVC = MembersViewController()
     let label = Label(font: .mediumThin, textColor: .white)
     let button = Button()
 
-    private var currentConversation: Conversation?
     private var state: ConversationUIState = .read
 
     var didTapAddPeople: CompletionOptional = nil
@@ -28,7 +27,6 @@ class ConversationHeaderViewController: ViewController {
         super.initializeViews()
 
         self.addChild(viewController: self.membersVC)
-        //self.stackedAvatarView.itemHeight = 60
 
         self.view.addSubview(self.label)
         self.label.textAlignment = .left
@@ -56,28 +54,12 @@ class ConversationHeaderViewController: ViewController {
 
         self.button.showsMenuAsPrimaryAction = true
         self.button.menu = menu
-    }
 
-    func configure(with conversation: Conversation) {
-        defer {
-            self.currentConversation = conversation
-        }
-
-        if self.currentConversation?.title != conversation.title {
-            self.label.setText(conversation.title)
-        }
-
-        guard self.currentConversation?.lastActiveMembers != conversation.lastActiveMembers else { return }
-
-        let members = conversation.lastActiveMembers.filter { member in
-            return member.id != ChatClient.shared.currentUserId
-        }
-
-        if !members.isEmpty {
-            //self.stackedAvatarView.set(items: members)
-        } else {
-            //self.stackedAvatarView.set(items: [User.current()!])
-        }
+        ConversationsManager.shared.$activeConversation.mainSink { conversation in
+            guard let convo = conversation else { return }
+            self.label.setText(convo.title)
+            self.view.layoutNow()
+        }.store(in: &self.cancellables)
     }
 
     override func viewDidLayoutSubviews() {

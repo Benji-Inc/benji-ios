@@ -9,7 +9,7 @@
 import Foundation
 import StreamChat
 
-class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType, MembersCollectionViewDataSource.ItemType, MembersCollectionViewDataSource> {
+class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType, MembersCollectionViewDataSource.ItemType, MembersCollectionViewDataSource>, ActiveConversationable {
 
     init() {
         super.init(with: CollectionView(layout: MembersCollectionViewLayout()))
@@ -22,24 +22,11 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     override func initializeViews() {
         super.initializeViews()
 
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-    }
-
-    func configure(with conversation: Conversation) {
-
-        let members = conversation.lastActiveMembers.filter { member in
-            return member.id != ChatClient.shared.currentUserId
-        }
-
-        if !members.isEmpty {
-            //self.stackedAvatarView.set(items: members)
-        } else {
-            //self.stackedAvatarView.set(items: [User.current()!])
-        }
+        ConversationsManager.shared.$activeConversation.mainSink { conversation in
+            Task {
+                await self.loadData()
+            }.add(to: self.taskPool)
+        }.store(in: &self.cancellables)
     }
 
     // MARK: Data Loading
@@ -52,8 +39,19 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
         var data: [MembersCollectionViewDataSource.SectionType: [MembersCollectionViewDataSource.ItemType]] = [:]
 
+        guard let conversation = self.activeConversation else { return data }
 
-        data[.members] = []
+        let members = conversation.lastActiveMembers.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        }
+
+        if !members.isEmpty {
+            data[.members] = members.compactMap({ member in
+                return .member(AnyHashableDisplayable.init(member))
+            })
+        } else {
+            data[.members] = [.member(AnyHashableDisplayable.init(User.current()!))]
+        }
 
         return data
     }

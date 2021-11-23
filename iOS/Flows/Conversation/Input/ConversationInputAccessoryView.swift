@@ -159,7 +159,7 @@ extension ConversationInputAccessoryView {
     }
 
     private func showAlertConfirmation() {
-        guard let conversation = self.conversation else { return }
+        guard let conversation = self.activeConversation else { return }
 
         self.textView.updateInputView(type: .confirmation)
 

@@ -18,7 +18,7 @@ enum ConversationUIState {
 class ConversationListViewController: FullScreenViewController,
                                       UICollectionViewDelegate,
                                       UICollectionViewDelegateFlowLayout,
-                                      SwipeableInputAccessoryViewDelegate {
+                                      SwipeableInputAccessoryViewDelegate, ActiveConversationable {
 
     lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationCollectionView()
@@ -28,16 +28,10 @@ class ConversationListViewController: FullScreenViewController,
     lazy var headerVC = ConversationHeaderViewController()
 
     private(set) var conversationListController: ConversationListController
-    /// Returns the current conversation that is centered and being interacted with.
-    var currentConversation: Conversation? {
-        guard let indexPath = self.collectionView.centerIndexPath() else { return nil}
-        return self.conversationListController.conversations[safe: indexPath.item]
-    }
 
     var selectedMessageView: MessageContentView?
 
     // Input handlers
-    var onSelectedConversation: ((ChannelId) -> Void)?
     var onSelectedMessage: ((ChannelId, MessageId) -> Void)?
 
     @Published var didCenterOnCell: ConversationMessagesCell? = nil
@@ -185,15 +179,13 @@ class ConversationListViewController: FullScreenViewController,
         }
         self.didCenterOnCell = cell
 
+        guard let ip = self.collectionView.centerIndexPath(), let conversation = self.conversationListController.conversations[safe: ip.item] else { return }
+
+        ConversationsManager.shared.activeConversation = conversation
+
         // If there's a centered cell, update the layout
-        if let currentConversation = self.currentConversation {
+        if let currentConversation = self.activeConversation {
             self.conversationController = ChatClient.shared.channelController(for: currentConversation.cid)
-
-            ConversationsManager.shared.activeConversations.removeAll()
-            ConversationsManager.shared.activeConversations.append(currentConversation)
-
-            self.messageInputAccessoryView.conversation = currentConversation
-            self.headerVC.configure(with: currentConversation)
 
             self.typingSubscriber = self.conversationController?
                 .typingUsersPublisher
