@@ -62,6 +62,7 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
 
         if let message = fromView.message {
             snapshot.configure(with: message)
+            snapshot.state = fromView.state
             snapshot.backgroundColorView.bubbleColor = fromView.backgroundColorView.bubbleColor
             snapshot.backgroundColorView.tailLength = fromView.backgroundColorView.tailLength
             snapshot.backgroundColorView.orientation = fromView.backgroundColorView.orientation
@@ -82,6 +83,8 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
                     threadVC.collectionView.alpha = 0
+                    snapshot.authorView.alpha = 0
+                    snapshot.reactionsView.alpha = 0 
                 }
                 UIView.addKeyframe(withRelativeStartTime: 0.3, relativeDuration: 0.7) {
                     threadVC.blurView.showBlur(false)

@@ -17,6 +17,8 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
     private(set) var toVC: TransitionableViewController
     private let operation: UINavigationController.Operation
 
+    var taskPool = TaskPool()
+
     init(fromVC: TransitionableViewController,
          toVC: TransitionableViewController,
          operation: UINavigationController.Operation) {
@@ -48,6 +50,12 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
             self.fillTranstion(expandingView: expandingView, transitionContext: transitionContext)
         default:
             self.fadeTranstion(fromColor: .clear, toColor: .clear, transitionContext: transitionContext)
+        }
+    }
+
+    func animationEnded(_ transitionCompleted: Bool) {
+        Task {
+            await self.taskPool.cancelAndRemoveAll()
         }
     }
 }

@@ -19,8 +19,8 @@ class MessageContentView: View {
     let textView = MessageTextView()
     private (set) var message: Messageable?
 
-    private let authorView = AvatarView()
-    private let reactionsView = ReactionsView()
+    let authorView = AvatarView()
+    let reactionsView = ReactionsView()
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -134,8 +134,10 @@ class MessageContentView: View {
         }
         var textViewSize = textView.getSize(withMaxWidth: maxWidth)
         textViewSize.height += Theme.contentOffset
+
+        let max = state == .collapsed ? MessageContentView.maximumHeight : CGFloat.greatestFiniteMagnitude
         return clamp(textViewSize.height + MessageContentView.bubbleTailLength,
                      MessageContentView.minimumHeight,
-                     MessageContentView.maximumHeight)
+                     max)
     }
 }

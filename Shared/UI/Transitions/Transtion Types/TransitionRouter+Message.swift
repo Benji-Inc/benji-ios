@@ -34,12 +34,13 @@ extension TransitionRouter {
         if let message = fromView.message {
             snapshot.configure(with: message)
             snapshot.backgroundColorView.bubbleColor = fromView.backgroundColorView.bubbleColor
-            snapshot.backgroundColorView.tailLength = fromView.backgroundColorView.tailLength
+            snapshot.backgroundColorView.tailLength = 0
             snapshot.backgroundColorView.orientation = fromView.backgroundColorView.orientation
 
             toView.configure(with: message)
+            toView.state = .expanded
             toView.backgroundColorView.bubbleColor = fromView.backgroundColorView.bubbleColor
-            toView.backgroundColorView.tailLength = fromView.backgroundColorView.tailLength
+            toView.backgroundColorView.tailLength = 0
             toView.backgroundColorView.orientation = fromView.backgroundColorView.orientation
             toView.size = fromView.size
         }
@@ -67,21 +68,17 @@ extension TransitionRouter {
 
         toView.alpha = 0
 
-        UIView.animate(withDuration: self.transitionDuration(using: transitionContext),
-                       delay: 0,
-                       usingSpringWithDamping: 0.65,
-                       initialSpringVelocity: 1,
-                       options: .curveEaseInOut,
-                       animations: {
-            snapshot.frame = finalFrame
-            threadVC.blurView.showBlur(true)
-            self.toVC.view.alpha = 1
-
-        }) { _ in
+        Task {
+            await UIView.awaitSpringAnimation(with: .slow, animations: {
+                snapshot.frame = finalFrame
+                snapshot.state = .expanded
+                threadVC.blurView.showBlur(true)
+                self.toVC.view.alpha = 1
+            })
             toView.alpha = 1
             snapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-        }
+        }.add(to: self.taskPool)
     }
 
     private func dismissThread(fromView: MessageContentView,
@@ -113,22 +110,18 @@ extension TransitionRouter {
         // Put snapshot in the exact same spot as the original so that the transition looks seamless
         snapshot.frame = fromView.convert(fromView.bounds, to: containerView)
 
-        UIView.animate(withDuration: self.transitionDuration(using: transitionContext),
-                       delay: 0,
-                       usingSpringWithDamping: 0.65,
-                       initialSpringVelocity: 1,
-                       options: .curveEaseIn,
-                       animations: {
-            threadVC.blurView.showBlur(false)
-            self.fromVC.view.alpha = 0
-            snapshot.frame = finalFrame
-        }) { _ in
+        Task {
+            await UIView.awaitSpringAnimation(with: .slow, animations: {
+                threadVC.blurView.showBlur(false)
+                self.fromVC.view.alpha = 0
+                snapshot.frame = finalFrame
+            })
             toView.isHidden = false
             snapshot.removeFromSuperview()
             delay(0.1) {
                 listVC.becomeFirstResponder()
             }
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
-        }
+        }.add(to: self.taskPool)
     }
 }
