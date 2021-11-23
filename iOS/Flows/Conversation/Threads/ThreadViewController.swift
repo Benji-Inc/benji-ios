@@ -65,7 +65,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         let collectionView = ThreadCollectionView()
         super.init(with: collectionView)
 
-        collectionView.threadLayout.dataSource = self
+        collectionView.threadLayout?.dataSource = self
         self.messageController.listOrdering = .bottomToTop
     }
 
@@ -109,8 +109,8 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.becomeFirstResponder()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
 
         self.resignFirstResponder()
     }

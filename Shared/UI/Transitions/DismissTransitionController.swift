@@ -13,7 +13,7 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
 
     let interactionController: PanDismissInteractionController?
 
-    var animator: UIViewPropertyAnimator!
+    var animator: UIViewPropertyAnimator?
 
     init(interactionController: PanDismissInteractionController?) {
 
@@ -28,12 +28,16 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
 
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         self.createAnimator(using: transitionContext)
-        self.animator.startAnimation()
+        self.animator?.startAnimation()
     }
 
     func interruptibleAnimator(using transitionContext: UIViewControllerContextTransitioning) -> UIViewImplicitlyAnimating {
-        self.createAnimator(using: transitionContext)
-        return self.animator
+        if let animator = self.animator {
+            return animator 
+        } else {
+            self.createAnimator(using: transitionContext)
+            return self.animator!
+        }
     }
 
     private func createAnimator(using transitionContext: UIViewControllerContextTransitioning) {
@@ -58,33 +62,18 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
 
         let finalFrame = toView.convert(toView.bounds, to: containerView)
 
-        let snapshot = MessageContentView()
-
-        if let message = fromView.message {
-            snapshot.configure(with: message)
-            snapshot.state = fromView.state
-            snapshot.backgroundColorView.bubbleColor = fromView.backgroundColorView.bubbleColor
-            snapshot.backgroundColorView.tailLength = fromView.backgroundColorView.tailLength
-            snapshot.backgroundColorView.orientation = fromView.backgroundColorView.orientation
-        }
-
-        containerView.addSubview(snapshot)
-        snapshot.frame = fromView.frame
-
-        fromView.isHidden = true
-
         let animator = UIViewPropertyAnimator(duration: self.transitionDuration(using: transitionContext),
                                               curve: .linear)
 
         animator.addAnimations {
 
             UIView.animateKeyframes(withDuration: 0.0, delay: 0.0, animations: {
-                snapshot.center = finalFrame.center
+                fromView.center = finalFrame.center
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
                     threadVC.collectionView.alpha = 0
-                    snapshot.authorView.alpha = 0
-                    snapshot.reactionsView.alpha = 0 
+                    fromView.authorView.alpha = 0
+                    fromView.reactionsView.alpha = 0
                 }
                 UIView.addKeyframe(withRelativeStartTime: 0.3, relativeDuration: 0.7) {
                     threadVC.blurView.showBlur(false)
@@ -104,7 +93,6 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
                 fromView.isHidden = false
             }
 
-            snapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
 
