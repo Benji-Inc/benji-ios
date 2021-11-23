@@ -10,11 +10,14 @@ import Foundation
 
 class ThreadCollectionView: CollectionView {
 
-    let threadLayout = ThreadCollectionViewLayout()
+    var threadLayout: ThreadCollectionViewLayout? {
+        return self.collectionViewLayout as? ThreadCollectionViewLayout
+    }
 
     init() {
-        super.init(layout: self.threadLayout)
-        
+        super.init(layout: ThreadCollectionViewLayout())
+
+        self.showsVerticalScrollIndicator = false
         self.keyboardDismissMode = .interactive
         self.automaticallyAdjustsScrollIndicatorInsets = true 
     }

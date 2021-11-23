@@ -69,7 +69,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
                                                                              messageOrdering: .topToBottom)
         super.init(with: self.threadCollectionView)
 
-        self.threadCollectionView.threadLayout.dataSource = self
+        self.threadCollectionView.threadLayout?.dataSource = self
         self.messageController.listOrdering = .bottomToTop
     }
 
@@ -87,7 +87,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.collectionView.clipsToBounds = false
 
-        self.dismissInteractionController.initialize(interactionView: self.collectionView)
+        self.dismissInteractionController.initialize(collectionView: self.collectionView)
     }
 
     override func handleDataBeingLoaded() {
@@ -114,8 +114,8 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.becomeFirstResponder()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
 
         self.resignFirstResponder()
     }
