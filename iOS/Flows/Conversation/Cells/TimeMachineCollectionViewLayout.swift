@@ -400,11 +400,20 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+        if self is ThreadCollectionViewLayout {
+            logDebug("proposed offset is "+proposedContentOffset.debugDescription)
+        }
         guard self.shouldScrollToEnd,
               let offset = self.getMostRecentItemContentOffset() else {
+                  if self is ThreadCollectionViewLayout {
+                      logDebug(super.targetContentOffset(forProposedContentOffset: proposedContentOffset).debugDescription)
+                  }
                   return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
               }
-
+        
+        if self is ThreadCollectionViewLayout {
+            logDebug(offset.debugDescription)
+        }
         return offset
     }
 

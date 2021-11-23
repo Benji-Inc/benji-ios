@@ -67,6 +67,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         super.init(with: collectionView)
 
         collectionView.threadLayout.dataSource = self
+        self.messageController.listOrdering = .bottomToTop
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -98,8 +99,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.parentMessageView.pinToSafeArea(.top, padding: Theme.contentOffset)
         self.parentMessageView.centerOnX()
 
-        self.collectionView.match(.top, to: .bottom, of: self.parentMessageView)
-        self.collectionView.expand(.bottom)
+        self.collectionView.pinToSafeArea(.top, padding: 0)
         self.collectionView.width = self.view.width * 0.8
         self.collectionView.centerOnX()
     }
@@ -135,7 +135,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         do {
             try await self.messageController.loadPreviousReplies()
-            let messages = Array(self.messageController.replies.asConversationCollectionItems).reversed()
+            let messages = Array(self.messageController.replies.asConversationCollectionItems)
 
             if let channelId = self.parentMessage.cid {
                 let section = ConversationSection(sectionID: channelId.description,
@@ -178,8 +178,6 @@ extension ThreadViewController: TransitionableViewController {
 extension ThreadViewController {
 
     func subscribeToUpdates() {
-        self.addKeyboardObservers()
-
         self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
             if self.messageInputAccessoryView.textView.isFirstResponder {
                 self.messageInputAccessoryView.textView.resignFirstResponder()
@@ -214,6 +212,6 @@ extension ThreadViewController: TimelineCollectionViewLayoutDataSource {
     }
 
     func getMessage(at indexPath: IndexPath) -> Messageable? {
-        return self.messageController.replies.reversed()[indexPath.item]
+        return self.messageController.replies[indexPath.item]
     }
 }

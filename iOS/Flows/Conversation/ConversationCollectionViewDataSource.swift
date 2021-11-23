@@ -129,18 +129,12 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             return
         }
 
-        // If this gets set to true, we should scroll to the most recent message after applying the snapshot
-        var scrollToLatestMessage = false
-
         for change in changes {
             switch change {
             case .insert(let message, let index):
                 snapshot.insertItems([.messages(message.id)],
                                      in: sectionID,
                                      atIndex: index.item)
-                if message.isFromCurrentUser {
-                    scrollToLatestMessage = true
-                }
             case .move:
                 snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
                 snapshot.appendItems(conversationController.messages.asConversationCollectionItems,
@@ -158,23 +152,8 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             snapshot.appendItems([.loadMore], toSection: sectionID)
         }
 
-        await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
+        await Task.onMainActorAsync { [snapshot = snapshot] in
             self.apply(snapshot)
-
-            // Scroll to the latest message if needed and reconfigure cells as needed.
-            if scrollToLatestMessage, let sectionIndex = snapshot.indexOfSection(sectionID) {
-                let latestMessageIndex = IndexPath(item: 0, section: sectionIndex)
-                if sectionID.isThread {
-                    // Inserting a message can cause the visual state of the previous message to change.
-                    self.reconfigureItem(atIndex: 1, in: sectionID)
-                    collectionView.scrollToItem(at: latestMessageIndex, at: .bottom, animated: true)
-                } else {
-                    // Conversations have the latest message at the first index.
-                    collectionView.scrollToItem(at: latestMessageIndex,
-                                                at: .centeredHorizontally,
-                                                animated: true)
-                }
-            }
         }
     }
 
@@ -201,18 +180,12 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             return
         }
 
-        // If this gets set to true, we should scroll to the most recent message after applying the snapshot
-        var scrollToLatestMessage = false
-
         for change in changes {
             switch change {
             case .insert(let conversation, let index):
                 snapshot.insertItems([.messages(conversation.id)],
                                      in: sectionID,
                                      atIndex: index.item)
-                if conversation.isFromCurrentUser {
-                    scrollToLatestMessage = true
-                }
             case .move:
                 snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
                 snapshot.appendItems(conversationController.conversations.asConversationCollectionItems,
@@ -230,23 +203,8 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
             snapshot.appendItems([.loadMore], toSection: sectionID)
         }
 
-        await Task.onMainActorAsync { [snapshot = snapshot, scrollToLatestMessage = scrollToLatestMessage] in
+        await Task.onMainActorAsync { [snapshot = snapshot] in
             self.apply(snapshot)
-
-            // Scroll to the latest message if needed and reconfigure cells as needed.
-            if scrollToLatestMessage, let sectionIndex = snapshot.indexOfSection(sectionID) {
-                let latestMessageIndex = IndexPath(item: 0, section: sectionIndex)
-                if sectionID.isThread {
-                    // Inserting a message can cause the visual state of the previous message to change.
-                    self.reconfigureItem(atIndex: 1, in: sectionID)
-                    collectionView.scrollToItem(at: latestMessageIndex, at: .bottom, animated: true)
-                } else {
-                    // Conversations have the latest message at the first index.
-                    collectionView.scrollToItem(at: latestMessageIndex,
-                                                at: .centeredHorizontally,
-                                                animated: true)
-                }
-            }
         }
     }
 }
