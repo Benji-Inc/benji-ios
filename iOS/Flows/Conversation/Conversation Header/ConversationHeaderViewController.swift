@@ -12,13 +12,11 @@ import Combine
 import Lottie
 import UIKit
 
-class ConversationHeaderView: View {
+class ConversationHeaderViewController: ViewController {
 
-    let stackedAvatarView = StackedAvatarView()
+    lazy var membersVC = MembersViewController()
     let label = Label(font: .mediumThin, textColor: .white)
     let button = Button()
-
-    private var cancellables = Set<AnyCancellable>()
 
     private var currentConversation: Conversation?
     private var state: ConversationUIState = .read
@@ -26,25 +24,18 @@ class ConversationHeaderView: View {
     var didTapAddPeople: CompletionOptional = nil
     var didTapUpdateTopic: CompletionOptional = nil
 
-    deinit {
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
-        }
-    }
+    override func initializeViews() {
+        super.initializeViews()
 
-    override func initializeSubviews() {
-        super.initializeSubviews()
+        self.addChild(viewController: self.membersVC)
+        //self.stackedAvatarView.itemHeight = 60
 
-        self.addSubview(self.stackedAvatarView)
-
-        self.stackedAvatarView.itemHeight = 60
-
-        self.addSubview(self.label)
+        self.view.addSubview(self.label)
         self.label.textAlignment = .left
         self.label.lineBreakMode = .byTruncatingTail
 
         if !isRelease {
-            self.addSubview(self.button)
+            self.view.addSubview(self.button)
         }
 
         let add = UIAction.init(title: "Add people",
@@ -83,28 +74,28 @@ class ConversationHeaderView: View {
         }
 
         if !members.isEmpty {
-            self.stackedAvatarView.set(items: members)
+            //self.stackedAvatarView.set(items: members)
         } else {
-            self.stackedAvatarView.set(items: [User.current()!])
+            //self.stackedAvatarView.set(items: [User.current()!])
         }
     }
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
 
-        let maxWidth = self.width - Theme.contentOffset.doubled
+        let maxWidth = self.view.width - Theme.contentOffset.doubled
         self.label.setSize(withWidth: maxWidth)
         self.label.pin(.top)
         self.label.centerOnX()
 
-        self.stackedAvatarView.setSize()
-        self.stackedAvatarView.centerOnX()
+        self.membersVC.view.height = 60
+        self.membersVC.view.expandToSuperviewWidth()
 
         switch self.state {
         case .read:
-            self.stackedAvatarView.match(.top, to: .bottom, of: self.label, offset: Theme.contentOffset.half)
+            self.membersVC.view.match(.top, to: .bottom, of: self.label, offset: Theme.contentOffset.half)
         case .write:
-            self.stackedAvatarView.pin(.top)
+            self.membersVC.view.pin(.top)
         }
 
         self.button.frame = self.label.frame
@@ -121,7 +112,7 @@ class ConversationHeaderView: View {
                 self.label.alpha = 0.0
             }
 
-            self.layoutNow()
+            self.view.layoutNow()
         } completion: { completed in
 
         }

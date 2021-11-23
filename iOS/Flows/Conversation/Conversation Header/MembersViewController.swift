@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StreamChat
 
 class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType, MembersCollectionViewDataSource.ItemType, MembersCollectionViewDataSource> {
 
@@ -26,6 +27,19 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+    }
+
+    func configure(with conversation: Conversation) {
+
+        let members = conversation.lastActiveMembers.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        }
+
+        if !members.isEmpty {
+            //self.stackedAvatarView.set(items: members)
+        } else {
+            //self.stackedAvatarView.set(items: [User.current()!])
+        }
     }
 
     // MARK: Data Loading
