@@ -12,9 +12,9 @@ import Combine
 import StreamChat
 
 class ThreadViewController: DiffableCollectionViewController<ConversationSection,
-                                        ConversationItem,
-                                        ConversationCollectionViewDataSource>,
-                                        CollectionViewInputHandler, DismissInteractableController {
+                            ConversationItem,
+                            ConversationCollectionViewDataSource>,
+                            CollectionViewInputHandler, DismissInteractableController {
 
     let blurView = BlurView()
     let parentMessageView = MessageContentView()
@@ -25,7 +25,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         return self.messageController.message
     }
 
-    private(set) var conversationController: ChatChannelController?
+    private(set) var conversationController: ConversationController?
 
     var collectionViewBottomInset: CGFloat = 0 {
         didSet {
@@ -62,7 +62,11 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
         self.conversationController = ChatClient.shared.channelController(for: channelID,
                                                                              messageOrdering: .topToBottom)
-        super.init(with: ThreadCollectionView())
+        let collectionView = ThreadCollectionView()
+        super.init(with: collectionView)
+
+        collectionView.threadLayout.dataSource = self
+        self.messageController.listOrdering = .bottomToTop
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,8 +81,11 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
 
+        self.collectionView.clipsToBounds = false
+
         self.dismissInteractionController.initialize(collectionView: self.collectionView)
     }
+
     override func handleDataBeingLoaded() {
         self.subscribeToUpdates()
     }
@@ -88,12 +95,12 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.blurView.expandToSuperviewSize()
 
-        let headerHeight: CGFloat = 120
-
         self.parentMessageView.pinToSafeArea(.top, padding: Theme.contentOffset)
         self.parentMessageView.centerOnX()
 
-        self.collectionView.contentInset.top = headerHeight + Theme.contentOffset
+        self.collectionView.pinToSafeArea(.top, padding: 0)
+        self.collectionView.width = self.view.width * 0.8
+        self.collectionView.centerOnX()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -112,7 +119,10 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
     override func getAllSections() -> [ConversationSection] {
         if let channelId = self.parentMessage.cid {
-            return [ConversationSection(sectionID: channelId.description,
+            let placeholderSection = ConversationSection(sectionID: channelId.description,
+                                                        parentMessageID: "Placeholder")
+            return [placeholderSection,
+                    ConversationSection(sectionID: channelId.description,
                                         parentMessageID: self.parentMessage.id)]
         }
 
@@ -145,8 +155,13 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
     override func getAnimationCycle() -> AnimationCycle? {
         var cycle = super.getAnimationCycle()
         cycle?.shouldConcatenate = false
-        cycle?.scrollToIndexPath = IndexPath(item: 0, section: 0)
-        cycle?.scrollPosition = .bottom
+        // Scroll to the lastest reply.
+        if let threadLayout = self.collectionView.collectionViewLayout as? ThreadCollectionViewLayout {
+            let lastReplyIndex = clamp(self.messageController.replies.count - 1, min: 0)
+            let yOffset = CGFloat(lastReplyIndex) * threadLayout.itemHeight
+            cycle?.scrollToOffset = CGPoint(x: 0, y: yOffset)
+        }
+
         return cycle
     }
 }
@@ -163,11 +178,10 @@ extension ThreadViewController: TransitionableViewController {
 }
 
 // MARK: - Updates and Subscription
+
 extension ThreadViewController {
 
     func subscribeToUpdates() {
-        self.addKeyboardObservers()
-
         self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
             if self.messageInputAccessoryView.textView.isFirstResponder {
                 self.messageInputAccessoryView.textView.resignFirstResponder()
@@ -190,5 +204,18 @@ extension ThreadViewController {
         self.dataSource.handleDeleteMessage = { [unowned self] item in
             self.conversationController?.deleteMessage(item.messageID)
         }
+    }
+}
+
+// MARK: - TimelineCollectionViewLayoutDataSource
+
+extension ThreadViewController: TimeMachineCollectionViewLayoutDataSource {
+
+    func getConversation(at indexPath: IndexPath) -> Conversation? {
+        return self.conversationController?.conversation
+    }
+
+    func getMessage(at indexPath: IndexPath) -> Messageable? {
+        return self.messageController.replies[indexPath.item]
     }
 }
