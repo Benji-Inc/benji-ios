@@ -37,14 +37,16 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
     func handle(intent: INShareFocusStatusIntent, completion: @escaping (INShareFocusStatusIntentResponse) -> Void) {
         guard let isFocused = intent.focusStatus?.isFocused, let currentUser = User.current() else { return }
 
-        currentUser.focusStatus = isFocused ? .focused : .available
+        let newStatus: FocusStatus = isFocused ? .focused : .available
 
         Task {
             do {
-                try await currentUser.saveLocalThenServer()
-                if !isFocused {
+                if currentUser.focusStatus != newStatus, !isFocused {
                     try? await UNUserNotificationCenter.current().add(self.createIsAvailableRequest(for: currentUser))
                 }
+
+                currentUser.focusStatus = newStatus
+                try await currentUser.saveLocalThenServer()
 
                 let response = INShareFocusStatusIntentResponse(code: .success, userActivity: nil)
                 completion(response)
