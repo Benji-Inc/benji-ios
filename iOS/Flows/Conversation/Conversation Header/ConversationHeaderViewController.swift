@@ -52,16 +52,15 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                           options: [],
                           children: [topic, add])
 
-        if self.activeConversation?.membership?.memberRole.rawValue == "owner" {
-            self.button.showsMenuAsPrimaryAction = true
-            self.button.menu = menu
-        }
+        self.button.showsMenuAsPrimaryAction = true
+        self.button.menu = menu
 
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { conversation in
             guard let convo = conversation else { return }
             self.label.setText(convo.title)
+            self.button.isEnabled = convo.membership?.memberRole.rawValue == "owner" 
             self.view.layoutNow()
         }.store(in: &self.cancellables)
     }
