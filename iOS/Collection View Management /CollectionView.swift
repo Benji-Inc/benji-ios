@@ -24,7 +24,10 @@ class CollectionView: UICollectionView {
     }
 
     func initializeViews() {
-        self.addSubview(self.animationView)
+        let backView = View()
+        backView.set(backgroundColor: .clear)
+        self.backgroundView = backView
+        backView.addSubview(self.animationView)
     }
 
     override func layoutSubviews() {

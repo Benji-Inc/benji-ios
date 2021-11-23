@@ -12,7 +12,9 @@ import StreamChat
 class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType, MembersCollectionViewDataSource.ItemType, MembersCollectionViewDataSource>, ActiveConversationable {
 
     init() {
-        super.init(with: CollectionView(layout: MembersCollectionViewLayout()))
+        let cv = CollectionView(layout: MembersCollectionViewLayout())
+        cv.isScrollEnabled = false
+        super.init(with: cv)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -22,7 +24,9 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     override func initializeViews() {
         super.initializeViews()
 
-        ConversationsManager.shared.$activeConversation.mainSink { conversation in
+        ConversationsManager.shared.$activeConversation
+            .removeDuplicates()
+            .mainSink { conversation in
             Task {
                 await self.loadData()
             }.add(to: self.taskPool)
@@ -30,6 +34,13 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     }
 
     // MARK: Data Loading
+
+    override func getAnimationCycle() -> AnimationCycle? {
+        return AnimationCycle(inFromPosition: .inward,
+                              outToPosition: .inward,
+                              shouldConcatenate: true,
+                              scrollToIndexPath: IndexPath(row: 0, section: 0))
+    }
 
     override func getAllSections() -> [MembersCollectionViewDataSource.SectionType] {
         return MembersCollectionViewDataSource.SectionType.allCases

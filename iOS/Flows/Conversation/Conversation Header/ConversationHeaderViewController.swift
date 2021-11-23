@@ -55,7 +55,9 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.button.showsMenuAsPrimaryAction = true
         self.button.menu = menu
 
-        ConversationsManager.shared.$activeConversation.mainSink { conversation in
+        ConversationsManager.shared.$activeConversation
+            .removeDuplicates()
+            .mainSink { conversation in
             guard let convo = conversation else { return }
             self.label.setText(convo.title)
             self.view.layoutNow()
