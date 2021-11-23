@@ -14,12 +14,24 @@ protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
     func getMessage(at indexPath: IndexPath) -> Messageable?
 }
 
+class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
+    /// If true, the z ranges for all the items should be recalculated.
+    var shouldRecalculateZRanges = true
+}
+
 /// A custom layout for conversation messages. Up to two message cell sections are each displayed as a stack along the z axis.
 /// The stacks appear similar to Apple's Time Machine interface, with the newest message in front and older messages going out into the distance.
 /// As the collection view scrolls up and down, the messages move away or toward the user.
 class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     private typealias SectionIndex = Int
+
+    override class var layoutAttributesClass: AnyClass {
+        return ConversationMessageCellLayoutAttributes.self
+    }
+    override class var invalidationContextClass: AnyClass {
+        return TimeMachineCollectionViewLayoutInvalidationContext.self
+    }
 
     weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
 
@@ -80,13 +92,32 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return true
     }
 
-    override func invalidateLayout() {
-        super.invalidateLayout()
+    override func invalidationContext(forBoundsChange newBounds: CGRect)
+    -> UICollectionViewLayoutInvalidationContext {
+
+        let invalidationContext = super.invalidationContext(forBoundsChange: newBounds)
+
+        guard let customInvalidationContext = invalidationContext as? TimeMachineCollectionViewLayoutInvalidationContext else {
+            return invalidationContext
+        }
+
+        // Changing the bounds doesn't affect item z ranges.
+        customInvalidationContext.shouldRecalculateZRanges = false
+
+        return customInvalidationContext
+    }
+
+    override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
+        super.invalidateLayout(with: context)
+
+        guard let customContext = context as? TimeMachineCollectionViewLayoutInvalidationContext else { return }
 
         // Clear the layout attributes caches.
         self.cellLayoutAttributes.removeAll()
-        self.zRangesDict.removeAll()
         self.decorationLayoutAttributes.removeAll()
+        if customContext.shouldRecalculateZRanges {
+            self.zRangesDict.removeAll()
+        }
     }
 
     override func prepare() {
@@ -176,6 +207,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         // All items in a section are positioned relative to its frontmost item.
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
 
+        guard abs(frontmostIndexPath.item - indexPath.item) < 4 else { return nil }
+        
         let offsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)*self.itemHeight
 
         let frontmostVectorToCurrentZ = self.getFrontmostItemZOffset(in: indexPath.section)
