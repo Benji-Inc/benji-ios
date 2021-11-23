@@ -183,6 +183,11 @@ class ConversationListViewController: FullScreenViewController,
 
         ConversationsManager.shared.activeConversation = conversation
 
+        let members = conversation.lastActiveMembers.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        }
+        self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: false)
+
         // If there's a centered cell, update the layout
         if let currentConversation = self.activeConversation {
             self.conversationController = ChatClient.shared.channelController(for: currentConversation.cid)

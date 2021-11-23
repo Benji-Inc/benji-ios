@@ -278,6 +278,11 @@ extension ThreadViewController {
                                              collectionView: self.collectionView)
             }.add(to: self.taskPool)
         }.store(in: &self.cancellables)
+
+        let members = self.messageController.message?.threadParticipants.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        } ?? []
+        self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: true)
     }
 }
 

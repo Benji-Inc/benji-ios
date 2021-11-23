@@ -146,7 +146,10 @@ class TextView: UITextView {
     }
 
     func set(placeholder: Localized, color: Color = .textColor) {
-        let styleAttributes = StringStyle(font: .regularBold, color: color).attributes
+        var styleAttributes = StringStyle(font: .regularBold, color: color).attributes
+        let centeredParagraphStyle = NSMutableParagraphStyle()
+        centeredParagraphStyle.alignment = .center
+        styleAttributes[.paragraphStyle] = centeredParagraphStyle
         let string = NSAttributedString(string: localized(placeholder), attributes: styleAttributes)
         self.attributedPlaceholder = string
     }
