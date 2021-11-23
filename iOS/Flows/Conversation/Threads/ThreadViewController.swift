@@ -210,7 +210,7 @@ extension ThreadViewController {
 
 // MARK: - TimelineCollectionViewLayoutDataSource
 
-extension ThreadViewController: TimelineCollectionViewLayoutDataSource {
+extension ThreadViewController: TimeMachineCollectionViewLayoutDataSource {
 
     func getConversation(at indexPath: IndexPath) -> Conversation? {
         return self.conversationController?.conversation

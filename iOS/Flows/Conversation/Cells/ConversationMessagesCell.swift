@@ -20,7 +20,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
-    private lazy var collectionLayout = TimelineCollectionViewLayout()
+    private lazy var collectionLayout = TimeMachineCollectionViewLayout()
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
