@@ -29,18 +29,23 @@ class MessageStatusLabel: MessageDateLabel {
         }
     }
 
+    private var previousStatus: ChatMessageStatus?
+
     func set(status: ChatMessageStatus?) {
         guard let status = status else {
             self.text = nil
             return
         }
 
-        self.setText(self.getText(for: status))
+        guard self.previousStatus != status else { return }
 
-        Task {
-            await Task.snooze(seconds: 2.0)
+        self.previousStatus = status
+
+        if status.message.replyCount > 0 {
             self.setReplies(for: status.message)
-        }.add(to: self.taskPool)
+        } else {
+            self.setText(self.getText(for: status))
+        }
     }
 
     private func getText(for status: ChatMessageStatus) -> Localized {

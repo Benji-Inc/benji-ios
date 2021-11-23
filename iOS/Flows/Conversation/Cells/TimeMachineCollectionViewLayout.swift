@@ -235,17 +235,18 @@ class TimelineCollectionViewLayout: UICollectionViewLayout {
     override func layoutAttributesForDecorationView(ofKind elementKind: String,
                                                     at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 
-        guard let frontmostItemIndex = self.getFrontmostIndexPath(in: indexPath.section),
-              let frontmostAttributes = self.layoutAttributesForItem(at: frontmostItemIndex) else {
+        guard let frontmostItemIndexPath = self.getFrontmostIndexPath(in: indexPath.section),
+              let frontmostAttributes = self.layoutAttributesForItem(at: frontmostItemIndexPath) else {
                   return nil
               }
 
-        guard let conversation = self.dataSource?.getConversation(at: indexPath),
-              let messageable = self.dataSource?.getMessage(at: indexPath) else {
+        guard let conversation = self.dataSource?.getConversation(at: frontmostItemIndexPath),
+              let messageable = self.dataSource?.getMessage(at: frontmostItemIndexPath) else {
                   return nil
               }
 
         let message = ChatClient.shared.message(cid: conversation.cid, id: messageable.id)
+
 
         let attributes
         = MessageStatusViewLayoutAttributes(forDecorationViewOfKind: MessageStatusView.objectIdentifier,

@@ -112,4 +112,11 @@ class MessageStatusView: UICollectionReusableView {
 
         self.setNeedsLayout()
     }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        self.dateLabel.text = nil
+        self.statusLabel.text = nil
+    }
 }
