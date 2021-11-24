@@ -75,4 +75,16 @@ class ExpandingTextView: TextView {
             break
         }
     }
+
+    override func textViewDidBeginEditing() {
+        super.textViewDidBeginEditing()
+        self.set(placeholder: "", color: .lightGray)
+        self.setNeedsDisplay()
+    }
+
+    override func textDidEndEditing() {
+        super.textDidEndEditing()
+        self.set(placeholder: self.initialPlaceholder ?? "", color: .lightGray)
+        self.setNeedsDisplay()
+    }
 }
