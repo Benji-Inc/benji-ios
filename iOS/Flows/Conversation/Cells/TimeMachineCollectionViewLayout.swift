@@ -14,12 +14,21 @@ protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
     func getMessage(at indexPath: IndexPath) -> Messageable?
 }
 
+class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
+    /// If true, the z ranges for all the items should be recalculated.
+    var shouldRecalculateZRanges = true
+}
+
 /// A custom layout for conversation messages. Up to two message cell sections are each displayed as a stack along the z axis.
 /// The stacks appear similar to Apple's Time Machine interface, with the newest message in front and older messages going out into the distance.
 /// As the collection view scrolls up and down, the messages move away or toward the user.
 class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     private typealias SectionIndex = Int
+
+    override class var invalidationContextClass: AnyClass {
+        return TimeMachineCollectionViewLayoutInvalidationContext.self
+    }
 
     weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
 
@@ -82,17 +91,39 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return true
     }
 
-    override func invalidateLayout() {
-        super.invalidateLayout()
+    override func invalidationContext(forBoundsChange newBounds: CGRect)
+    -> UICollectionViewLayoutInvalidationContext {
+
+        let invalidationContext = super.invalidationContext(forBoundsChange: newBounds)
+
+        guard let customInvalidationContext = invalidationContext as? TimeMachineCollectionViewLayoutInvalidationContext else {
+            return invalidationContext
+        }
+
+        // Changing the bounds doesn't affect item z ranges.
+        customInvalidationContext.shouldRecalculateZRanges = false
+
+        return customInvalidationContext
+    }
+
+    override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
+        super.invalidateLayout(with: context)
+
+        guard let customContext = context as? TimeMachineCollectionViewLayoutInvalidationContext else { return }
 
         // Clear the layout attributes caches.
         self.cellLayoutAttributes.removeAll()
-        self.zRangesDict.removeAll()
         self.decorationLayoutAttributes.removeAll()
+        if customContext.shouldRecalculateZRanges {
+            self.zRangesDict.removeAll()
+        }
     }
 
     override func prepare() {
-        self.prepareZRanges()
+        // Don't recalculate z ranges if we already have them cached.
+        if self.zRangesDict.isEmpty {
+            self.prepareZRanges()
+        }
 
         // Calculate and cache the layout attributes for the items in each section.
         self.forEachIndexPath { indexPath in
@@ -128,7 +159,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             let currentSection = indexPath.section
             let currentItemIndex = indexPath.item
 
-            var startZ: CGFloat = 0
+            var startZ: CGFloat = CGFloat(sortedItemsIndex) * self.itemHeight
             // Each item's z range starts after the end of the previous item's range within its section.
             if let previousRangeInSection = self.zRangesDict[IndexPath(item: currentItemIndex - 1,
                                                                       section: currentSection)] {
@@ -150,6 +181,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                         break
                     }
                 }
+            } else {
+                endZ = CGFloat(sortedItemsIndex) * self.itemHeight
             }
 
             self.zRangesDict[indexPath] = startZ..<endZ
@@ -178,6 +211,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         // All items in a section are positioned relative to its frontmost item.
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
 
+        // OPTIMIZATION: Don't calculate attributes for items that won't be visible.
+        guard abs(frontmostIndexPath.item - indexPath.item) < 4 else { return nil }
+        
         let offsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)*self.itemHeight
 
         let frontmostVectorToCurrentZ = self.getFrontmostItemZOffset(in: indexPath.section)
@@ -238,6 +274,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     override func layoutAttributesForDecorationView(ofKind elementKind: String,
                                                     at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+
+        // If the attributes are cached already, just return those.
+        if let attributes = self.decorationLayoutAttributes[indexPath.section] {
+            return attributes
+        }
 
         guard let frontmostItemIndexPath = self.getFrontmostIndexPath(in: indexPath.section),
               let frontmostAttributes = self.layoutAttributesForItem(at: frontmostItemIndexPath) else {
@@ -320,11 +361,15 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         var frontmostIndexes: [IndexPath] = []
         for i in 0..<sectionCount {
             guard let frontmostIndex = self.getFrontmostIndexPath(in: i) else { continue }
-            frontmostIndexes.append(frontmostIndex)
+            guard let range = self.zRangesDict[frontmostIndex] else { continue }
+
+            if range.vector(to: self.zPosition) > -self.itemHeight {
+                frontmostIndexes.append(frontmostIndex)
+            }
         }
 
         return frontmostIndexes.max { indexPath1, indexPath2 in
-            guard let lowerBound1 = self.zRangesDict[indexPath1]?.lowerBound else { return true}
+            guard let lowerBound1 = self.zRangesDict[indexPath1]?.lowerBound else { return true }
             guard let lowerBound2 = self.zRangesDict[indexPath2]?.lowerBound else { return false }
             return lowerBound1 < lowerBound2
         }
@@ -445,8 +490,7 @@ extension TimeMachineCollectionViewLayout {
     }
 }
 
-
-extension Range where Bound: Numeric {
+private extension Range where Bound: Numeric {
 
     /// Gets the one dimensional vector from range to the specified value.
     /// If the value is contained within the range, then zero is returned.
