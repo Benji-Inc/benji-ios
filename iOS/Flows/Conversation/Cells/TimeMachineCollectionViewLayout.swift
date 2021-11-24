@@ -26,9 +26,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     private typealias SectionIndex = Int
 
-    override class var layoutAttributesClass: AnyClass {
-        return ConversationMessageCellLayoutAttributes.self
-    }
     override class var invalidationContextClass: AnyClass {
         return TimeMachineCollectionViewLayoutInvalidationContext.self
     }
