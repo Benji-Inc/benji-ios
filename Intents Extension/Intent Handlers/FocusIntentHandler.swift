@@ -42,7 +42,11 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
         Task {
             do {
                 if currentUser.focusStatus != newStatus, !isFocused {
-                    try? await UNUserNotificationCenter.current().add(self.createIsAvailableRequest(for: currentUser))
+                    if isFocused {
+                        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: ["focusTimeAvailable"])
+                    } else {
+                        try? await UNUserNotificationCenter.current().add(self.createIsAvailableRequest(for: currentUser))
+                    }
                 }
 
                 currentUser.focusStatus = newStatus
