@@ -45,7 +45,6 @@ extension ConversationListViewController {
     }
 
     func subscribeToKeyboardUpdates() {
-        KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
 
         KeyboardManager.shared.$willKeyboardShow
             .mainSink { [unowned self] willShow in

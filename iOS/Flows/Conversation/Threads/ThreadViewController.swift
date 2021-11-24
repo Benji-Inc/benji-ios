@@ -111,12 +111,14 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
         self.becomeFirstResponder()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
 
+        KeyboardManager.shared.reset()
         self.resignFirstResponder()
     }
 

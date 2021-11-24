@@ -123,6 +123,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
                 return KeyboardManager.shared.inputAccessoryView === self
             })
             .mainSink { willShow in
+
             UIView.animate(withDuration: 0.2) {
                 self.inputTypeHeightConstraint.constant = willShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 1
                 self.inputManager.collectionView.alpha = willShow ? 1 : 0
