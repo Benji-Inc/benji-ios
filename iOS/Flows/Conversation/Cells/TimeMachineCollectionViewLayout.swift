@@ -79,7 +79,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
             let itemCount = CGFloat(self.numberOfItems(inSection: 0) + self.numberOfItems(inSection: 1))
             var height = (itemCount - 1) * self.itemHeight
-            height += collectionView.bounds.height
+
+            /// Plus 1 ensures that we will still receive the pan gesture, regardless of content size
+            height += collectionView.bounds.height + 1
             return CGSize(width: collectionView.bounds.width, height: height)
         }
     }
@@ -405,11 +407,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     func getDropZoneFrame() -> CGRect {
         let center = self.getCenterPoint(for: 1, withNormalizedYOffset: 0)
-        var frame = CGRect(x: 0,
+        var frame = CGRect(x: Theme.contentOffset.half,
                            y: 0,
-                           width: self.collectionView!.width,
-                           height: self.itemHeight)
-        frame.centerY = center.y
+                           width: self.collectionView!.width - Theme.contentOffset,
+                           height: self.itemHeight - MessageContentView.bubbleTailLength - Theme.contentOffset)
+        frame.centerY = center.y - MessageContentView.bubbleTailLength.half
         return frame
     }
 

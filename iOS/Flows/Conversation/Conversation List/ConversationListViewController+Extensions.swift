@@ -67,7 +67,7 @@ extension ConversationListViewController {
                     await self.dataSource.update(with: changes,
                                                  conversationController: self.conversationListController,
                                                  collectionView: self.collectionView)
-                }
+                }.add(to: self.taskPool)
         }.store(in: &self.cancellables)
 
         self.collectionView.publisher(for: \.contentOffset).mainSink { [unowned self] _ in

@@ -13,6 +13,8 @@ import Combine
 import UIKit
 
 protocol SwipeableInputAccessoryViewDelegate: AnyObject {
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool)
+
     /// The accessory has begun a swipe interaction.
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView)
     /// The accessory view updated the position of the sendable's preview view's position.
@@ -188,6 +190,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
         default:
             break
         }
+
+        self.delegate?.swipeableInputAccessory(self, swipeIsEnabled: !text.isEmpty)
     }
 
     func getDataTypes(from text: String) -> [NSTextCheckingResult]? {

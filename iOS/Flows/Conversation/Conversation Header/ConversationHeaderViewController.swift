@@ -60,6 +60,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
             .mainSink { conversation in
             guard let convo = conversation else { return }
             self.label.setText(convo.title)
+            self.button.isEnabled = convo.membership?.memberRole.rawValue == "owner" 
             self.view.layoutNow()
         }.store(in: &self.cancellables)
     }

@@ -69,7 +69,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
                                                                              messageOrdering: .topToBottom)
         super.init(with: self.threadCollectionView)
 
-        self.threadCollectionView.threadLayout.dataSource = self
+        self.threadCollectionView.threadLayout?.dataSource = self
         self.messageController.listOrdering = .bottomToTop
     }
 
@@ -87,7 +87,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.collectionView.clipsToBounds = false
 
-        self.dismissInteractionController.initialize(interactionView: self.collectionView)
+        self.dismissInteractionController.initialize(collectionView: self.collectionView)
     }
 
     override func handleDataBeingLoaded() {
@@ -114,8 +114,8 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.becomeFirstResponder()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
 
         self.resignFirstResponder()
     }
@@ -172,22 +172,34 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
     // MARK: - SwipeableInputAccessoryViewDelegate
 
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
+        if isEnabled {
+            
+            guard self.sendMessageOverlay.superview.isNil else { return }
+            // Animate in the send overlay
+            self.view.insertSubview(self.sendMessageOverlay, aboveSubview: self.collectionView)
+            self.sendMessageOverlay.alpha = 0
+            self.sendMessageOverlay.setState(.reply)
+            UIView.animate(withDuration: Theme.animationDurationStandard) {
+                self.sendMessageOverlay.alpha = 1
+            }
+
+            // Show the send message overlay so the user can see where to drag the message
+            let overlayFrame = self.threadCollectionView.getMessageDropZoneFrame(convertedTo: self.view)
+            self.sendMessageOverlay.frame = overlayFrame
+
+            view.dropZoneFrame = view.convert(self.sendMessageOverlay.bounds, from: self.sendMessageOverlay)
+        } else {
+            UIView.animate(withDuration: Theme.animationDurationStandard) {
+                self.sendMessageOverlay.alpha = 0
+            } completion: { didFinish in
+                self.sendMessageOverlay.removeFromSuperview()
+            }
+        }
+    }
+
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
         self.collectionView.isUserInteractionEnabled = false
-
-        // Animate in the send overlay
-        self.view.insertSubview(self.sendMessageOverlay, aboveSubview: self.collectionView)
-        self.sendMessageOverlay.alpha = 0
-        self.sendMessageOverlay.setState(.reply)
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageOverlay.alpha = 1
-        }
-
-        // Show the send message overlay so the user can see where to drag the message
-        let overlayFrame = self.threadCollectionView.getMessageDropZoneFrame(convertedTo: self.view)
-        self.sendMessageOverlay.frame = overlayFrame
-
-        view.dropZoneFrame = view.convert(self.sendMessageOverlay.bounds, from: self.sendMessageOverlay)
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -266,6 +278,11 @@ extension ThreadViewController {
                                              collectionView: self.collectionView)
             }.add(to: self.taskPool)
         }.store(in: &self.cancellables)
+
+        let members = self.messageController.message?.threadParticipants.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        } ?? []
+        self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: true)
     }
 }
 
