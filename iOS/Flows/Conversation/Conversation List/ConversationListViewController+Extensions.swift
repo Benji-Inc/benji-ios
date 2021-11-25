@@ -45,9 +45,13 @@ extension ConversationListViewController {
     }
 
     func subscribeToKeyboardUpdates() {
-        KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
-
         KeyboardManager.shared.$willKeyboardShow
+            .filter({ willShow in
+                if let view = KeyboardManager.shared.inputAccessoryView as? SwipeableInputAccessoryView {
+                    return view.textView.restorationIdentifier == self.messageInputAccessoryView.textView.restorationIdentifier
+                }
+                return false 
+            })
             .mainSink { [unowned self] willShow in
                 self.state = willShow ? .write : .read
             }.store(in: &self.cancellables)
