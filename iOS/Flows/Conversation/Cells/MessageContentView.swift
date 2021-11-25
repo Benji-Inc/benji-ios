@@ -110,7 +110,7 @@ class MessageContentView: View {
 
         self.textView.size = self.textView.getSize(with: self.state, width: maxWidth)
 
-        self.textView.center = self.center
+        self.textView.center = self.backgroundColorView.center
 
         switch self.backgroundColorView.orientation {
         case .up:
@@ -118,12 +118,7 @@ class MessageContentView: View {
         case .down:
             self.textView.center.y -= self.backgroundColorView.tailLength.half
         default:
-            self.textView.centerOnY()
-        }
-        self.textView.centerOnX()
-
-        if self.textView.center.y > self.halfHeight {
-            logDebug("")
+            break
         }
     }
 }
