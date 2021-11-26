@@ -7,7 +7,9 @@
 //
 
 import Foundation
+#if IOS
 import StreamChat
+#endif
 
 class ReactionsView: View {
 
@@ -22,9 +24,11 @@ class ReactionsView: View {
         self.imageView.imageView.contentMode = .scaleAspectFit
     }
 
+    #if IOS
     func configure(with reactions: Set<ChatMessageReaction>) {
 
     }
+    #endif
 
     override func layoutSubviews() {
         super.layoutSubviews()
