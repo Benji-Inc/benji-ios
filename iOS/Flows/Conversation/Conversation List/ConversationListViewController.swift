@@ -322,7 +322,7 @@ class ConversationListViewController: FullScreenViewController,
             // Animate in the send overlay
             self.contentContainer.addSubview(self.sendMessageOverlay)
             self.sendMessageOverlay.alpha = 0
-            self.sendMessageOverlay.setState(.newMessage)
+            self.sendMessageOverlay.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
             UIView.animate(withDuration: Theme.animationDurationStandard) {
                 self.sendMessageOverlay.alpha = 1
             }
@@ -367,7 +367,7 @@ class ConversationListViewController: FullScreenViewController,
     private func prepareForSend(with position: SendMode) {
         switch position {
         case .message:
-            self.sendMessageOverlay.setState(.newMessage)
+            self.sendMessageOverlay.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
@@ -375,7 +375,7 @@ class ConversationListViewController: FullScreenViewController,
             let newXOffset
             = -self.collectionView.width + self.collectionView.conversationLayout.minimumLineSpacing
 
-            self.sendMessageOverlay.setState(.newConversation)
+            self.sendMessageOverlay.setState(.newConversation, messageColor: nil)
             self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
         }
     }
@@ -426,7 +426,7 @@ class ConversationListViewController: FullScreenViewController,
     private func getSendMode(forPreviewFrame frame: CGRect) -> SendMode {
         switch self.currentSendMode {
         case .message, .none:
-            // If we're in the reply mode, switch to newMessage when the user
+            // If we're in the message mode, switch to newConversation when the user
             // has dragged far enough to the right.
             if frame.right > self.view.width - 10 {
                 return .newConversation
@@ -434,7 +434,7 @@ class ConversationListViewController: FullScreenViewController,
                 return .message
             }
         case .newConversation:
-            // If we're in newMessage mode, switch to reply mode if the user drags far enough to the left.
+            // If we're in newConversation mode, switch to newMessage mode if the user drags far enough to the left.
             if frame.left < 10 {
                 return .message
             } else {

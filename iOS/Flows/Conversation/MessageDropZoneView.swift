@@ -18,20 +18,15 @@ class MessageDropZoneView: View {
     }
 
     private let borderLayer = CAShapeLayer()
-    private let sendTypeLabel = Label(font: .regular)
+    private let sendTypeLabel = Label(font: .regularBold)
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.borderLayer.strokeColor = Color.lightGray.color.cgColor
         self.borderLayer.lineDashPattern = [5, 10]
-        self.borderLayer.fillColor = Color.white.color.cgColor
         self.borderLayer.lineWidth = 2
-
         self.layer.addSublayer(self.borderLayer)
-
         self.addSubview(self.sendTypeLabel)
-        self.sendTypeLabel.setTextColor(.lightGray)
     }
 
     override func layoutSubviews() {
@@ -44,7 +39,7 @@ class MessageDropZoneView: View {
         self.borderLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: Theme.cornerRadius).cgPath
     }
 
-    func setState(_ state: State?) {
+    func setState(_ state: State?, messageColor: Color?) {
         switch state {
         case .reply:
             self.sendTypeLabel.setText("Drop new reply here")
@@ -59,6 +54,27 @@ class MessageDropZoneView: View {
             self.sendTypeLabel.isHidden = true
         }
 
+        self.setColors(for: messageColor)
+
         self.layoutNow()
+    }
+
+    private func setColors(for messageColor: Color?) {
+        guard let color = messageColor else {
+            self.borderLayer.strokeColor = Color.lightGray.color.cgColor
+            self.sendTypeLabel.setTextColor(.lightGray)
+            self.borderLayer.fillColor = Color.clear.color.cgColor
+            return
+        }
+        
+        if color == .lightGray {
+            self.borderLayer.strokeColor = Color.white.color.cgColor
+            self.sendTypeLabel.setTextColor(.white)
+            self.borderLayer.fillColor = Color.lightGray.color.cgColor
+        } else {
+            self.borderLayer.strokeColor = Color.lightGray.color.cgColor
+            self.sendTypeLabel.setTextColor(.lightGray)
+            self.borderLayer.fillColor = Color.white.color.cgColor
+        }
     }
 }

@@ -158,6 +158,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
 
         return self.collectionView.convert(dropZoneFrame, to: targetView)
     }
+
+    func getDropZoneColor() -> Color? {
+        return self.collectionLayout.getDropZoneColor()
+    }
 }
 
 extension ConversationMessagesCell: UICollectionViewDelegate {
