@@ -16,10 +16,7 @@ class UserOnboardingViewController: ViewController {
     private(set) var avatarView = AvatarView()
 
     private(set) var nameLabel = Label(font: .mediumThin, textColor: .textColor)
-    private(set) var bubbleView = SpeechBubbleView(orientation: .up,
-                                                   bubbleColor: Color.white,
-                                                   borderColor: Color.white)
-    private(set) var textView = OnboardingMessageTextView()
+    private(set) var messageContent = MessageContentView()
 
     override func initializeViews() {
         super.initializeViews()
@@ -35,21 +32,22 @@ class UserOnboardingViewController: ViewController {
             self.didSelectBackButton()
         }
 
-        self.view.addSubview(self.bubbleView)
-        self.view.addSubview(self.textView)
+        self.view.addSubview(self.messageContent)
+        self.messageContent.configureBackground(color: .white,
+                                                brightness: 1.0,
+                                                showBubbleTail: true,
+                                                tailOrientation: .up)
 
         self.updateUI()
     }
 
     func updateUI(animateTyping: Bool = true) {
         if let text = self.getMessage() {
-            self.textView.isHidden = false
-            self.bubbleView.isHidden = false
-            self.textView.setText(text)
+            self.messageContent.isHidden = false
+            self.messageContent.textView.setText(text)
             self.view.layoutNow()
         } else {
-            self.textView.isHidden = true
-            self.bubbleView.isHidden = true
+            self.messageContent.isHidden = true
         }
     }
 
@@ -71,15 +69,15 @@ class UserOnboardingViewController: ViewController {
 
         let maxWidth = self.view.width - (Theme.contentOffset.doubled.doubled)
 
-        self.textView.setSize(withMaxWidth: maxWidth)
-
-        self.bubbleView.height = self.textView.height + Theme.contentOffset + self.bubbleView.tailLength
-        self.bubbleView.width = self.textView.width + 28
-        self.bubbleView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset.half)
-        self.bubbleView.centerOnX()
-
-        self.textView.centerOnX()
-        self.textView.match(.top, to: .top, of: self.bubbleView, offset: self.bubbleView.tailLength + 10)
+//        self.textView.setSize(withMaxWidth: maxWidth)
+//
+//        self.bubbleView.height = self.textView.height + Theme.contentOffset + self.bubbleView.tailLength
+//        self.bubbleView.width = self.textView.width + 28
+//        self.bubbleView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset.half)
+//        self.bubbleView.centerOnX()
+//
+//        self.textView.centerOnX()
+//        self.textView.match(.top, to: .top, of: self.bubbleView, offset: self.bubbleView.tailLength + 10)
 
         self.blurView.expandToSuperviewSize()
     }

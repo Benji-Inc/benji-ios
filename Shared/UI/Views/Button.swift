@@ -77,11 +77,11 @@ class Button: UIButton, Statusable {
             localizedString = casingType.format(string: localizedString)
 
             let normalString = NSMutableAttributedString(string: localizedString)
-            normalString.addAttribute(.font, value: FontType.smallBold.font)
+            normalString.addAttribute(.font, value: FontType.regularBold.font)
             normalString.addAttribute(.kern, value: CGFloat(2))
 
             let highlightedString = NSMutableAttributedString(string: localizedString)
-            highlightedString.addAttribute(.font, value: FontType.smallBold.font)
+            highlightedString.addAttribute(.font, value: FontType.regularBold.font)
             highlightedString.addAttribute(.kern, value: CGFloat(2))
 
             normalString.addAttribute(.foregroundColor, value: Color.white.color)
