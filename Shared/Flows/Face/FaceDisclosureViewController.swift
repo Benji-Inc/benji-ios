@@ -28,7 +28,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         var description: HightlightedPhrase {
             switch self {
             case .smiling:
-                return HightlightedPhrase(text: "Your smile tells everyone you are available and will recieve thier notifications.", highlightedWords: ["available", "new"])
+                return HightlightedPhrase(text: "Your smile tells everyone you are available and will recieve thier notifications.", highlightedWords: ["available"])
             case .eyesClosed:
                 return HightlightedPhrase(text: "When people see your eyes closed it tells them you are focused and all notifications are delivered silently.", highlightedWords: ["focused", "silently"])
             }

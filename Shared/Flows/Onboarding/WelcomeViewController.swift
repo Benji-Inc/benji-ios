@@ -46,6 +46,8 @@ class WelcomeViewController: TextInputViewController<Void> {
         self.label.setText("Jibber")
 
         self.textEntry.alpha = 0
+        self.textField.autocapitalizationType = .none
+        self.textField.autocorrectionType = .no
 
         self.view.addSubview(self.loginButton)
         self.loginButton.set(style: .normal(color: .clear, text: "Login"))
@@ -63,6 +65,12 @@ class WelcomeViewController: TextInputViewController<Void> {
         self.$state.mainSink { [unowned self] (state) in
             self.animate(for: state)
         }.store(in: &self.cancellables)
+
+        self.view.onDoubleTap { [unowned self] _ in
+            if self.textField.isFirstResponder {
+                self.textField.resignFirstResponder()
+            }
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -117,7 +125,7 @@ class WelcomeViewController: TextInputViewController<Void> {
     }
 
     override func validate(text: String) -> Bool {
-        return text.isEmpty
+        return !text.isEmpty
     }
 
     override func didTapButton() {

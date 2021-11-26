@@ -71,9 +71,11 @@ class MessageContentView: View {
         }
 
         self.authorView.set(avatar: message.avatar)
+        #if IOS
         if let msg = message as? Message {
             self.reactionsView.configure(with: msg.latestReactions)
         }
+        #endif
 
         self.setNeedsLayout()
     }
@@ -121,6 +123,13 @@ class MessageContentView: View {
             break
         }
     }
+
+    func getSize(with width: CGFloat) -> CGSize {
+        let horizontalPadding = ((self.authorView.width * 2) + Theme.contentOffset)
+        var textSize = self.textView.getSize(with: self.state, width: width - horizontalPadding)
+        textSize.height += MessageContentView.verticalPadding
+        return textSize
+    }
 }
 
 extension MessageTextView {
@@ -137,7 +146,7 @@ extension MessageTextView {
             maxTextWidth = width - ((size.width * 2) + Theme.contentOffset)
             maxTextHeight = CGFloat.greatestFiniteMagnitude
         case .collapsed:
-            maxTextWidth = width
+            maxTextWidth = width 
             maxTextHeight = MessageContentView.maximumHeight - MessageContentView.bubbleTailLength - Theme.contentOffset
         }
 
