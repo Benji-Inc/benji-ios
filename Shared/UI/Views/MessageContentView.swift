@@ -125,7 +125,8 @@ class MessageContentView: View {
     }
 
     func getSize(with width: CGFloat) -> CGSize {
-        var textSize = self.textView.getSize(with: self.state, width: width)
+        let horizontalPadding = ((self.authorView.width * 2) + Theme.contentOffset)
+        var textSize = self.textView.getSize(with: self.state, width: width - horizontalPadding)
         textSize.height += MessageContentView.verticalPadding
         return textSize
     }
@@ -145,7 +146,7 @@ extension MessageTextView {
             maxTextWidth = width - ((size.width * 2) + Theme.contentOffset)
             maxTextHeight = CGFloat.greatestFiniteMagnitude
         case .collapsed:
-            maxTextWidth = width
+            maxTextWidth = width 
             maxTextHeight = MessageContentView.maximumHeight - MessageContentView.bubbleTailLength - Theme.contentOffset
         }
 
