@@ -71,9 +71,11 @@ class MessageContentView: View {
         }
 
         self.authorView.set(avatar: message.avatar)
+        #if IOS
         if let msg = message as? Message {
             self.reactionsView.configure(with: msg.latestReactions)
         }
+        #endif
 
         self.setNeedsLayout()
     }
@@ -120,6 +122,12 @@ class MessageContentView: View {
         default:
             break
         }
+    }
+
+    func getSize(with width: CGFloat) -> CGSize {
+        var textSize = self.textView.getSize(with: self.state, width: width)
+        textSize.height += MessageContentView.verticalPadding
+        return textSize
     }
 }
 

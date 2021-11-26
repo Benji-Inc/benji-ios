@@ -142,7 +142,13 @@ class PermissionsViewController: DisclosureModalViewController {
         }
 
         if await UserNotificationManager.shared.getNotificationSettings().authorizationStatus != .authorized {
-            self.notificationSwitchView.state = .disabled
+            if INFocusStatusCenter.default.authorizationStatus == .authorized {
+                self.notificationSwitchView.state = .enabled
+                self.state = .notificationAsk
+            } else {
+                self.notificationSwitchView.state = .disabled
+            }
+
         } else {
             self.notificationSwitchView.state = .enabled
             self.notificationSwitchView.switchView.setOn(true, animated: true)

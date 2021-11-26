@@ -69,15 +69,9 @@ class UserOnboardingViewController: ViewController {
 
         let maxWidth = self.view.width - (Theme.contentOffset.doubled.doubled)
 
-//        self.textView.setSize(withMaxWidth: maxWidth)
-//
-//        self.bubbleView.height = self.textView.height + Theme.contentOffset + self.bubbleView.tailLength
-//        self.bubbleView.width = self.textView.width + 28
-//        self.bubbleView.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset.half)
-//        self.bubbleView.centerOnX()
-//
-//        self.textView.centerOnX()
-//        self.textView.match(.top, to: .top, of: self.bubbleView, offset: self.bubbleView.tailLength + 10)
+        self.messageContent.size = self.messageContent.getSize(with: maxWidth)
+        self.messageContent.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset.half)
+        self.messageContent.centerOnX()
 
         self.blurView.expandToSuperviewSize()
     }
