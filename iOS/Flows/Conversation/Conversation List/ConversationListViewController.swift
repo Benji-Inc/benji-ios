@@ -23,7 +23,7 @@ class ConversationListViewController: FullScreenViewController,
     lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
     /// Denotes where a message should be dragged and dropped to send.
-    private let sendMessageOverlay = MessageDropZoneView()
+    let sendMessageOverlay = MessageDropZoneView()
 
     lazy var headerVC = ConversationHeaderViewController()
 

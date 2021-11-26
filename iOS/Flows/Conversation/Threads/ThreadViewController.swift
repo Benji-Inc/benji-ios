@@ -181,7 +181,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
             // Animate in the send overlay
             self.view.insertSubview(self.sendMessageOverlay, aboveSubview: self.collectionView)
             self.sendMessageOverlay.alpha = 0
-            self.sendMessageOverlay.setState(.reply, messageColor: nil)
+            self.sendMessageOverlay.setState(.reply, messageColor: .white)
             UIView.animate(withDuration: Theme.animationDurationStandard) {
                 self.sendMessageOverlay.alpha = 1
             }

@@ -59,7 +59,7 @@ class MessageDropZoneView: View {
         self.layoutNow()
     }
 
-    private func setColors(for messageColor: Color?) {
+    func setColors(for messageColor: Color?) {
         guard let color = messageColor else {
             self.borderLayer.strokeColor = Color.lightGray.color.cgColor
             self.sendTypeLabel.setTextColor(.lightGray)
