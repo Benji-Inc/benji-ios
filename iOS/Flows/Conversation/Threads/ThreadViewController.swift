@@ -232,12 +232,6 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
         self.collectionView.isUserInteractionEnabled = true
-
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageOverlay.alpha = 0
-        } completion: { didFinish in
-            self.sendMessageOverlay.removeFromSuperview()
-        }
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,

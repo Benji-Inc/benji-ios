@@ -367,7 +367,7 @@ class ConversationListViewController: FullScreenViewController,
     private func prepareForSend(with position: SendMode) {
         switch position {
         case .message:
-            self.sendMessageOverlay.setState(.reply)
+            self.sendMessageOverlay.setState(.newMessage)
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
@@ -375,7 +375,7 @@ class ConversationListViewController: FullScreenViewController,
             let newXOffset
             = -self.collectionView.width + self.collectionView.conversationLayout.minimumLineSpacing
 
-            self.sendMessageOverlay.setState(.newMessage)
+            self.sendMessageOverlay.setState(.newConversation)
             self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
         }
     }
@@ -420,12 +420,6 @@ class ConversationListViewController: FullScreenViewController,
 
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
         self.collectionView.isUserInteractionEnabled = true
-
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageOverlay.alpha = 0
-        } completion: { didFinish in
-            self.sendMessageOverlay.removeFromSuperview()
-        }
     }
 
     /// Gets the send position for the given preview view frame.

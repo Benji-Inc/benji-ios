@@ -14,6 +14,7 @@ class MessageDropZoneView: View {
     enum State {
         case reply
         case newMessage
+        case newConversation
     }
 
     private let borderLayer = CAShapeLayer()
@@ -50,6 +51,9 @@ class MessageDropZoneView: View {
             self.sendTypeLabel.isHidden = false
         case .newMessage:
             self.sendTypeLabel.setText("Drop new message here")
+            self.sendTypeLabel.isHidden = false
+        case .newConversation:
+            self.sendTypeLabel.setText("Start a new conversation here")
             self.sendTypeLabel.isHidden = false
         case .none:
             self.sendTypeLabel.isHidden = true
