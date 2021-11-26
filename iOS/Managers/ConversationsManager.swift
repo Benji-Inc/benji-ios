@@ -38,6 +38,7 @@ class ConversationsManager: EventsControllerDelegate {
     func eventsController(_ controller: EventsController, didReceiveEvent event: Event) {
         switch event {
         case let event as MessageNewEvent:
+
             if self.activeConversation.isNil {
                 Task {
                     await ToastScheduler.shared.schedule(toastType: .newMessage(event.message))
@@ -48,6 +49,7 @@ class ConversationsManager: EventsControllerDelegate {
                 }
             }
         case let event as ReactionNewEvent:
+
             guard let last = self.activeConversation, event.cid != last.cid else { return }
             Task {
                 await ToastScheduler.shared.schedule(toastType: .newMessage(event.message))

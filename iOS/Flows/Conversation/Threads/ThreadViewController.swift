@@ -181,7 +181,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
             // Animate in the send overlay
             self.view.insertSubview(self.sendMessageOverlay, aboveSubview: self.collectionView)
             self.sendMessageOverlay.alpha = 0
-            self.sendMessageOverlay.setState(.reply)
+            self.sendMessageOverlay.setState(.reply, messageColor: .white)
             UIView.animate(withDuration: Theme.animationDurationStandard) {
                 self.sendMessageOverlay.alpha = 1
             }
@@ -232,12 +232,6 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
     func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
         self.collectionView.isUserInteractionEnabled = true
-
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageOverlay.alpha = 0
-        } completion: { didFinish in
-            self.sendMessageOverlay.removeFromSuperview()
-        }
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,

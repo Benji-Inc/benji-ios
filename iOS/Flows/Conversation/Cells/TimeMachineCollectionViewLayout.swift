@@ -405,6 +405,16 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return centerPoint
     }
 
+    func getDropZoneColor() -> Color? {
+        guard let ip = self.getMostRecentVisibleIndexPath(),
+                let attributes = self.layoutAttributesForItem(at: ip) as? ConversationMessageCellLayoutAttributes else { return nil }
+        if ip.section == 1 {
+            return attributes.backgroundColor
+        } else {
+            return .lightGray
+        }
+    }
+
     func getDropZoneFrame() -> CGRect {
         let center = self.getCenterPoint(for: 1, withNormalizedYOffset: 0)
         var frame = CGRect(x: Theme.contentOffset.half,

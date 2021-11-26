@@ -44,4 +44,12 @@ class ConversationListCollectionView: CollectionView {
 
         return centerCell.getMessageDropZoneFrame(convertedTo: view)
     }
+
+    func getDropZoneColor() -> Color? {
+        guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
+            return nil
+        }
+
+        return centerCell.getDropZoneColor()
+    }
 }
