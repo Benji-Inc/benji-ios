@@ -40,13 +40,6 @@ class InputTypeManager: NSObject, UICollectionViewDelegate {
 
         Task {
             await self.loadData()
-            guard let ip = self.dataSource.indexPath(for: .keyboard) else { return }
-
-            // A little hack to get the keyboard centered and selected. 
-            self.collectionView.selectItem(at: ip, animated: true, scrollPosition: .centeredHorizontally)
-            if let cell = collectionView.cellForItem(at: ip) as? CollectionViewManagerCell {
-                cell.update(isSelected: true)
-            }
         }
     }
 
@@ -72,6 +65,14 @@ class InputTypeManager: NSObject, UICollectionViewDelegate {
         }
 
         self.collectionView.animationView.stop()
+
+        guard let ip = self.dataSource.indexPath(for: .keyboard) else { return }
+
+        // A little hack to get the keyboard centered and selected.
+        self.collectionView.selectItem(at: ip, animated: true, scrollPosition: .centeredHorizontally)
+        if let cell = collectionView.cellForItem(at: ip) as? CollectionViewManagerCell {
+            cell.update(isSelected: true)
+        }
     }
 
     func getInitialSnapshot(with dictionary: [InputTypeDataSource.SectionType: [InputType]]) -> NSDiffableDataSourceSnapshot<InputTypeDataSource.SectionType, InputType> {

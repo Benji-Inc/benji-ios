@@ -131,19 +131,15 @@ class ConversationListViewController: FullScreenViewController,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
         self.becomeFirstResponder()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 
-        self.resignFirstResponder()
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-
         KeyboardManager.shared.reset()
+        self.resignFirstResponder()
     }
 
     override func viewDidAppear(_ animated: Bool) {

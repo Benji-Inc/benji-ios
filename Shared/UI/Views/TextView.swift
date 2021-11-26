@@ -120,6 +120,11 @@ class TextView: UITextView {
                 self.textDidChange()
             }.store(in: &self.cancellables)
 
+        NotificationCenter.default.publisher(for: UITextView.textDidBeginEditingNotification)
+            .mainSink { (text) in
+                self.textViewDidBeginEditing()
+            }.store(in: &self.cancellables)
+
         NotificationCenter.default.publisher(for: UITextView.textDidEndEditingNotification)
             .mainSink { (text) in
                 self.textDidEndEditing()
@@ -196,6 +201,8 @@ class TextView: UITextView {
         }
         self.setNeedsDisplay()
     }
+
+    func textViewDidBeginEditing() {}
 
     func scrollToCorrectPosition() {
         if self.isFirstResponder {

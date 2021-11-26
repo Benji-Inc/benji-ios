@@ -8,8 +8,15 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class MessageContentView: View {
+
+    /// Sizing
+
+    static var minimumHeight: CGFloat { return 50 }
+    static var maximumHeight: CGFloat { return 100 }
+    static var verticalPadding: CGFloat { return MessageContentView.bubbleTailLength + Theme.contentOffset }
 
     static let bubbleTailLength: CGFloat = 7
 
@@ -100,45 +107,41 @@ class MessageContentView: View {
 
         let maxWidth
         = self.backgroundColorView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
-        let maxHeight
-        = MessageContentView.maximumHeight - MessageContentView.bubbleTailLength - Theme.contentOffset
-        self.textView.setSize(withMaxWidth: maxWidth, maxHeight: maxHeight)
-        self.textView.center = self.backgroundColorView.bubbleFrame.center
-    }
 
-    /// Sizing
+        self.textView.size = self.textView.getSize(with: self.state, width: maxWidth)
 
-    static var minimumHeight: CGFloat { return 50 }
-    static var maximumHeight: CGFloat { return 100 }
+        self.textView.center = self.backgroundColorView.center
 
-    /// Returns the height that a message subcell should be given a width and message to display.
-    static func getHeight(withWidth width: CGFloat,
-                          state: MessageContentView.State, 
-                          message: Messageable) -> CGFloat {
-
-        // If the message is deleted, we're not going to display its content.
-        // Return the minimum height so we have enough to show the deleted status.
-        if message.isDeleted {
-            return MessageContentView.minimumHeight
+        switch self.backgroundColorView.orientation {
+        case .up:
+            self.textView.center.y += self.backgroundColorView.tailLength.half
+        case .down:
+            self.textView.center.y -= self.backgroundColorView.tailLength.half
+        default:
+            break
         }
+    }
+}
 
-        let textView = MessageTextView()
-        textView.setText(with: message)
-        let maxWidth: CGFloat
-        if state == .collapsed {
-            maxWidth = width
-        } else {
+extension MessageTextView {
+
+    func getSize(with state: MessageContentView.State, width: CGFloat) -> CGSize {
+
+        let maxTextWidth: CGFloat
+        let maxTextHeight: CGFloat
+
+        switch state {
+        case .expanded:
             let authorHeight: CGFloat = MessageContentView.minimumHeight - Theme.contentOffset
             let size = AvatarView().getSize(for: authorHeight)
-            maxWidth = width - ((size.width * 2) + Theme.contentOffset)
+            maxTextWidth = width - ((size.width * 2) + Theme.contentOffset)
+            maxTextHeight = CGFloat.greatestFiniteMagnitude
+        case .collapsed:
+            maxTextWidth = width
+            maxTextHeight = MessageContentView.maximumHeight - MessageContentView.bubbleTailLength - Theme.contentOffset
         }
 
-        let maxHeight = MessageContentView.maximumHeight - MessageContentView.bubbleTailLength
-        var textViewSize = textView.getSize(withMaxWidth: maxWidth, maxHeight: maxHeight)
-        textViewSize.height += Theme.contentOffset
-
-        return clamp(textViewSize.height + MessageContentView.bubbleTailLength,
-                     MessageContentView.minimumHeight,
-                     MessageContentView.maximumHeight)
+        let size = self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)
+        return size
     }
 }
