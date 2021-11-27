@@ -24,11 +24,11 @@ class ReactionsView: View {
         self.imageView.imageView.contentMode = .scaleAspectFit
     }
 
-    #if IOS
+#if IOS
     func configure(with reactions: Set<ChatMessageReaction>) {
 
     }
-    #endif
+#endif
 
     override func layoutSubviews() {
         super.layoutSubviews()
