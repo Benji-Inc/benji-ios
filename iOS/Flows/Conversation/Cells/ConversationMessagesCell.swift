@@ -17,6 +17,9 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
 
     // Interaction handling
     var handleTappedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
+    var handleDeleteMessage: ((Messageable) -> Void)?
+    var handleEditMessage: ((Messageable) -> Void)?
+
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
@@ -181,39 +184,71 @@ extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
 
+        guard let content = interaction.view?.superview as? MessageContentView else { return nil }
+
         return UIContextMenuConfiguration(identifier: nil,
                                           previewProvider: nil) { elements in
-            return self.makeContextMenu()
+            return self.makeContextMenu(with: content)
         }
     }
 
-    private func makeContextMenu() -> UIMenu {
-        guard let conversation = self.conversation else { return UIMenu() }
+    private func makeContextMenu(with content: MessageContentView) -> UIMenu {
+        guard let message = content.message as? Message, let cid = message.cid else { return UIMenu() }
+        //react
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
 
         let confirmDelete = UIAction(title: "Confirm",
                                      image: UIImage(systemName: "trash"),
                                      attributes: .destructive) { [unowned self] action in
-            self.handleDeleteConversation?(conversation)
+            self.handleDeleteMessage?(message)
         }
 
-
-        let deleteText = conversation.isCreatedByCurrentUser ? "Delete Conversation" : "Hide Conversation"
-        let deleteMenu = UIMenu(title: deleteText,
+        let deleteMenu = UIMenu(title: "Delete Message",
                                 image: UIImage(systemName: "trash"),
                                 options: .destructive,
                                 children: [confirmDelete, neverMind])
 
-        let openConvesation = UIAction(title: "Open Conversation") { [unowned self] action in
-            self.handleTappedConversation?(conversation)
+        let viewReplies = UIAction(title: "View Replies") { [unowned self] action in
+            let item = ConversationMessageItem(channelID: message.cid!, messageID: message.id)
+            self.handleTappedMessage?(item, content)
+        }
+
+        let edit = UIAction(title: "Edit",
+                            image: UIImage(systemName: "pencil.circle")) { [unowned self] action in
+            self.handleEditMessage?(message)
         }
 
         var menuElements: [UIMenuElement] = []
-        if conversation.isCreatedByCurrentUser {
+
+        if message.isFromCurrentUser {
             menuElements.append(deleteMenu)
         }
-        menuElements.append(openConvesation)
+
+        if message.isFromCurrentUser {
+            menuElements.append(edit)
+        }
+
+        if message.parentMessageId.isNil {
+            menuElements.append(viewReplies)
+        }
+
+        let children: [UIAction] = ReactionType.allCases.compactMap { type in
+            return UIAction.init(title: type.rawValue,
+                                 subtitle: nil,
+                                 image: nil,
+                                 identifier: nil,
+                                 discoverabilityTitle: nil,
+                                 attributes: []) { [unowned self] _ in
+                logDebug("did tap reaction \(type.rawValue)")
+            }
+        }
+
+        let reactionsMenu = UIMenu(title: "Add Reaction",
+                                image: UIImage(systemName: "face.smile"),
+                                children: children)
+
+        menuElements.append(reactionsMenu)
 
         return UIMenu(children: menuElements)
     }

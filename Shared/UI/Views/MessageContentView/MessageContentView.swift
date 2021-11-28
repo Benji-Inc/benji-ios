@@ -56,10 +56,6 @@ class MessageContentView: View {
         self.backgroundColorView.addSubview(self.authorView)
         self.backgroundColorView.addSubview(self.reactionsView)
 
-        self.reactionsView.didSelect { [unowned self] in
-            self.presentReactions()
-        }
-
         self.$state.mainSink { [unowned self] state in
             self.layoutNow()
         }.store(in: &self.cancellables)
