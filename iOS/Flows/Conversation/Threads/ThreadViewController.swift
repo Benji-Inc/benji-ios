@@ -307,4 +307,8 @@ extension ThreadViewController: TimeMachineCollectionViewLayoutDataSource {
     func getMessage(at indexPath: IndexPath) -> Messageable? {
         return self.messageController.replies[indexPath.item]
     }
+
+    func frontMostItemWasUpdated(for indexPath: IndexPath) {
+        logDebug("\(indexPath.description)")
+    }
 }

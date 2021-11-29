@@ -9,12 +9,16 @@
 import Foundation
 import Combine
 import SwiftUI
+#if IOS
+import StreamChat
+#endif
 
 class MessageContentView: View {
 
     #if IOS
     var handleTappedMessage: ((ConversationMessageItem) -> Void)?
     var handleEditMessage: ((ConversationMessageItem) -> Void)?
+    var messageController: ChatMessageController?
     #endif
 
     /// Sizing
@@ -34,6 +38,7 @@ class MessageContentView: View {
     let reactionsView = ReactionsView()
 
     private var cancellables = Set<AnyCancellable>()
+    var publisherCancellables = Set<AnyCancellable>()
 
     enum State {
         case expanded
@@ -44,6 +49,10 @@ class MessageContentView: View {
 
     deinit {
         self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+
+        self.publisherCancellables.forEach { cancellable in
             cancellable.cancel()
         }
     }
@@ -65,8 +74,6 @@ class MessageContentView: View {
             self.reactionsView.isVisible = state == .expanded
             self.layoutNow()
         }.store(in: &self.cancellables)
-
-
     }
 
     #if IOS
@@ -86,10 +93,13 @@ class MessageContentView: View {
             self.textView.setText(with: message)
         }
 
+        self.configureConsumption(for: message)
+
         self.authorView.set(avatar: message.avatar)
         #if IOS
         if let msg = message as? Message {
             self.reactionsView.configure(with: msg.latestReactions)
+            self.subscribeToUpdates(for: msg)
         }
         #endif
 

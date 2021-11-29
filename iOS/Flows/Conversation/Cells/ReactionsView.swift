@@ -15,9 +15,6 @@ class ReactionsView: View {
 
     let label = Label(font: .small)
     let imageView = DisplayableImageView()
-    #if IOS
-    var didSelectReaction: ((ReactionType) -> Void)? = nil
-    #endif
     
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -43,7 +40,12 @@ class ReactionsView: View {
     #if IOS
     func configure(with reactions: Set<ChatMessageReaction>) {
 
-        let reaction = reactions.first { reaction in
+        let nonReadReactions = reactions.filter { reaction in
+            guard let type = ReactionType(rawValue: reaction.type.rawValue) else { return false }
+            return type != .read
+        }
+
+        let reaction = nonReadReactions.first { reaction in
             return reaction.author.id == User.current()!.objectId
         }
 

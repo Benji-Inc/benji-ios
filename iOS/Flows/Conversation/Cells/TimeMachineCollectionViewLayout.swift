@@ -12,6 +12,7 @@ import StreamChat
 protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
     func getConversation(at indexPath: IndexPath) -> Conversation?
     func getMessage(at indexPath: IndexPath) -> Messageable?
+    func frontMostItemWasUpdated(for indexPath: IndexPath)
 }
 
 class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
@@ -29,6 +30,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     override class var invalidationContextClass: AnyClass {
         return TimeMachineCollectionViewLayoutInvalidationContext.self
     }
+
+    private var lastFrontMostIndexPath: [SectionIndex: IndexPath] = [:]
 
     weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
 
@@ -253,6 +256,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         attributes.center = centerPoint
         attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
         attributes.alpha = alpha
+
+        if yOffset == 0, indexPath != self.lastFrontMostIndexPath[indexPath.section] {
+            self.dataSource?.frontMostItemWasUpdated(for: indexPath)
+            self.lastFrontMostIndexPath[indexPath.section] = indexPath
+        }
 
         // Objects closer to the front of the stack should be brighter.
         let backgroundBrightness: CGFloat = clamp(1 - CGFloat(frontmostIndexPath.item - indexPath.item) * 0.1,
