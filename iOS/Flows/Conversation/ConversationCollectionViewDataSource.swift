@@ -40,10 +40,11 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case loadMore
     }
 
-    var handleSelectedConversation: ((MessageSequence) -> Void)?
-    var handleDeletedConversation: ((MessageSequence) -> Void)?
-
     var handleSelectedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
+    var handleReactionSelected: ((ConversationMessageItem, ReactionType) -> Void)?
+    var handleDeleteMessage: ((ConversationMessageItem) -> Void)?
+    var handleEditMessage: ((ConversationMessageItem) -> Void)?
+
     
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
@@ -81,12 +82,16 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 messageCell.handleTappedMessage = { [unowned self] item, content in
                     self.handleSelectedMessage?(item, content)
                 }
-                messageCell.handleTappedConversation = { [unowned self] (conversation) in
-                    self.handleSelectedConversation?(conversation)
+                messageCell.handleReactionSelected = { [unowned self] item, type in
+                    self.handleReactionSelected?(item, type)
                 }
-                messageCell.handleDeleteConversation = { [unowned self] (conversation) in
-                    self.handleDeletedConversation?(conversation)
+                messageCell.handleEditMessage = { [unowned self] item in 
+                    self.handleEditMessage?(item)
                 }
+                messageCell.handleDeleteMessage = { [unowned self] item in
+                    self.handleDeleteMessage?(item)
+                }
+
                 return messageCell
             } else {
                 return nil

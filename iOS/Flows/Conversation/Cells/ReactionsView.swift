@@ -13,7 +13,7 @@ import StreamChat
 
 class ReactionsView: View {
 
-    let button = Button()
+    let label = Label(font: .small)
     let imageView = DisplayableImageView()
     #if IOS
     var didSelectReaction: ((ReactionType) -> Void)? = nil
@@ -26,49 +26,39 @@ class ReactionsView: View {
         self.imageView.displayable = UIImage(systemName: "face.smiling")
         self.imageView.imageView.tintColor = Color.gray.color
         self.imageView.imageView.contentMode = .scaleAspectFit
+        self.imageView.isVisible = false
 
-        self.addSubview(self.button)
-
-        self.button.showsMenuAsPrimaryAction = true
+        self.addSubview(self.label)
+        self.label.isVisible = false
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.button.expandToSuperviewSize()
         self.imageView.expandToSuperviewSize()
+        self.label.setSize(withWidth: self.width)
+        self.label.centerOnXAndY()
     }
 
-#if IOS
+    #if IOS
     func configure(with reactions: Set<ChatMessageReaction>) {
-        self.button.menu = self.createMenu()
-    }
 
-    private func createMenu() -> UIMenu {
-
-        var childern: [UIMenuElement] = []
-
-        ReactionType.allCases.forEach { type in
-
-            let action = UIAction(title: type.rawValue,
-                                  subtitle: "",
-                                  image: nil,
-                                  identifier: nil,
-                                  discoverabilityTitle: nil,
-                                  attributes: [],
-                                  state: .on) { [unowned self] _ in
-                self.didSelectReaction?(type)
-            }
-
-            childern.append(action)
+        let reaction = reactions.first { reaction in
+            return reaction.author.id == User.current()!.objectId
         }
 
-        let menu = UIMenu.init(title: "",
-                               image: nil,
-                               identifier: nil,
-                               options: [.singleSelection],
-                               children: childern)
-        return menu
+        guard let r = reaction, let type = ReactionType(rawValue: r.type.rawValue) else {
+            self.imageView.isVisible = true
+            return
+        }
+        var text = type.emoji
+        if reactions.count > 1 {
+            text += " +\(reactions.count - 1)"
+        }
+        self.label.setText(text)
+        self.label.isVisible = true 
+        self.imageView.isVisible = false
+        self.layoutNow()
     }
     #endif
 }

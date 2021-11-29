@@ -16,9 +16,10 @@ import UIKit
 class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLayoutDelegate {
 
     // Interaction handling
+    var handleReactionSelected: ((ConversationMessageItem, ReactionType) -> Void)?
     var handleTappedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
-    var handleDeleteMessage: ((Messageable) -> Void)?
-    var handleEditMessage: ((Messageable) -> Void)?
+    var handleDeleteMessage: ((ConversationMessageItem) -> Void)?
+    var handleEditMessage: ((ConversationMessageItem) -> Void)?
 
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
@@ -194,14 +195,14 @@ extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
 
     private func makeContextMenu(with content: MessageContentView) -> UIMenu {
         guard let message = content.message as? Message, let cid = message.cid else { return UIMenu() }
-        //react
 
         let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
 
         let confirmDelete = UIAction(title: "Confirm",
                                      image: UIImage(systemName: "trash"),
                                      attributes: .destructive) { [unowned self] action in
-            self.handleDeleteMessage?(message)
+            let item = ConversationMessageItem(channelID: cid, messageID: message.id)
+            self.handleDeleteMessage?(item)
         }
 
         let deleteMenu = UIMenu(title: "Delete Message",
@@ -210,13 +211,14 @@ extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
                                 children: [confirmDelete, neverMind])
 
         let viewReplies = UIAction(title: "View Replies") { [unowned self] action in
-            let item = ConversationMessageItem(channelID: message.cid!, messageID: message.id)
+            let item = ConversationMessageItem(channelID: cid, messageID: message.id)
             self.handleTappedMessage?(item, content)
         }
 
         let edit = UIAction(title: "Edit",
                             image: UIImage(systemName: "pencil.circle")) { [unowned self] action in
-            self.handleEditMessage?(message)
+            let item = ConversationMessageItem(channelID: cid, messageID: message.id)
+            self.handleEditMessage?(item)
         }
 
         var menuElements: [UIMenuElement] = []
@@ -234,13 +236,14 @@ extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
         }
 
         let children: [UIAction] = ReactionType.allCases.compactMap { type in
-            return UIAction.init(title: type.rawValue,
+            return UIAction.init(title: type.emoji,
                                  subtitle: nil,
                                  image: nil,
                                  identifier: nil,
                                  discoverabilityTitle: nil,
                                  attributes: []) { [unowned self] _ in
-                logDebug("did tap reaction \(type.rawValue)")
+                let item = ConversationMessageItem(channelID: cid, messageID: message.id)
+                self.handleReactionSelected?(item, type)
             }
         }
 
@@ -251,5 +254,12 @@ extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
         menuElements.append(reactionsMenu)
 
         return UIMenu(children: menuElements)
+    }
+
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        let params = UIPreviewParameters()
+        params.backgroundColor = Color.clear.color
+        let preview = UITargetedPreview(view: interaction.view!, parameters: params)
+        return preview
     }
 }

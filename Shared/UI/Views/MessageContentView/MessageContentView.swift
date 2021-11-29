@@ -57,6 +57,8 @@ class MessageContentView: View {
         self.backgroundColorView.addSubview(self.reactionsView)
 
         self.$state.mainSink { [unowned self] state in
+            self.authorView.isVisible = state == .expanded
+            self.reactionsView.isVisible = state == .expanded
             self.layoutNow()
         }.store(in: &self.cancellables)
     }
