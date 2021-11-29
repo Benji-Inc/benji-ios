@@ -16,7 +16,7 @@ class NavigationBarViewController: ViewController {
     private(set) var animationView = AnimationView.with(animation: .arrow)
     private(set) var backButton = Button()
     private(set) var titleLabel = Label(font: .display)
-    private(set) var descriptionLabel = Label(font: .mediumThin)
+    private(set) var descriptionLabel = Label(font: .medium)
 
     let scrollView = UIScrollView()
 

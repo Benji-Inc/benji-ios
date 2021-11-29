@@ -151,9 +151,6 @@
 		D635551B21E5B3D400530602 /* UIScrollView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */; };
 		D635F0A627135BAB00A02D17 /* ThreadCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D635F0A527135BAB00A02D17 /* ThreadCollectionViewLayout.swift */; };
 		D63752C6231258DA00214F63 /* PreviewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63752C5231258DA00214F63 /* PreviewMessageView.swift */; };
-		D637532A2316172700214F63 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753272316172700214F63 /* Roboto-Regular.ttf */; };
-		D637532B2316172700214F63 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753282316172700214F63 /* Roboto-Bold.ttf */; };
-		D637532C2316172700214F63 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753292316172700214F63 /* Roboto-Medium.ttf */; };
 		D63BEF6026FFA5BB004243AB /* ContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63BEF5F26FFA5BB004243AB /* ContactsViewController.swift */; };
 		D63BEF6226FFF5A5004243AB /* DiffableCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */; };
 		D63C67D923D3927500EA373A /* PhoneTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67D823D3927500EA373A /* PhoneTextField.swift */; };
@@ -278,9 +275,6 @@
 		D63DB27925E9998A00F6B323 /* face_scan.json in Resources */ = {isa = PBXBuildFile; fileRef = D640328A25AF3CA500139396 /* face_scan.json */; };
 		D63DB27A25E9998A00F6B323 /* plusToX.json in Resources */ = {isa = PBXBuildFile; fileRef = D650C1F025B741EB0037C59A /* plusToX.json */; };
 		D63DB27B25E9998D00F6B323 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D61EC0C621D3071500204BEE /* Assets.xcassets */; };
-		D63DB27C25E9999300F6B323 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753292316172700214F63 /* Roboto-Medium.ttf */; };
-		D63DB27D25E9999300F6B323 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753272316172700214F63 /* Roboto-Regular.ttf */; };
-		D63DB27E25E9999300F6B323 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753282316172700214F63 /* Roboto-Bold.ttf */; };
 		D63DB27F25E9999C00F6B323 /* TransitionRouter+Fill.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589525B09FF7007E0184 /* TransitionRouter+Fill.swift */; };
 		D63DB28025E9999C00F6B323 /* TransitionRouter+Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677589A25B0A06A007E0184 /* TransitionRouter+Move.swift */; };
 		D63DB28225E9999C00F6B323 /* TransitionRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D677588B25B09F9C007E0184 /* TransitionRouter.swift */; };
@@ -416,9 +410,6 @@
 		D655197A2589129B00B901E4 /* ResourceObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1502821D6085200CD8CE4 /* ResourceObject.swift */; };
 		D655197D2589129B00B901E4 /* Avatar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66F0FE522C0640E00BA277D /* Avatar.swift */; };
 		D655197E2589129B00B901E4 /* Objectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D609AE3B236F913F004FA89A /* Objectable.swift */; };
-		D6551988258912AE00B901E4 /* Roboto-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753272316172700214F63 /* Roboto-Regular.ttf */; };
-		D6551989258912AE00B901E4 /* Roboto-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753292316172700214F63 /* Roboto-Medium.ttf */; };
-		D655198A258912AE00B901E4 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D63753282316172700214F63 /* Roboto-Bold.ttf */; };
 		D65519A52589151000B901E4 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67A82DA230CCE3D0076152B /* SplashViewController.swift */; };
 		D65519BE25891A0500B901E4 /* RootNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461021D583D200CD8CE4 /* RootNavigationController.swift */; };
 		D65519C125891A4800B901E4 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1461221D583E500CD8CE4 /* NavigationController.swift */; };
@@ -771,6 +762,18 @@
 		D6E9743C2755568D00D95F08 /* MessageContentView+Read.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */; };
 		D6E9743D275562F000D95F08 /* MessageContentView+Read.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */; };
 		D6E9743E275562F100D95F08 /* MessageContentView+Read.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */; };
+		D6E97440275596BC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9743F275596BC00D95F08 /* SF-Pro-Text-Regular.otf */; };
+		D6E97441275596BC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9743F275596BC00D95F08 /* SF-Pro-Text-Regular.otf */; };
+		D6E97442275596BC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9743F275596BC00D95F08 /* SF-Pro-Text-Regular.otf */; };
+		D6E97443275596BC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9743F275596BC00D95F08 /* SF-Pro-Text-Regular.otf */; };
+		D6E974452755973700D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E974442755973700D95F08 /* SF-Pro-Text-Bold.otf */; };
+		D6E974462755973700D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E974442755973700D95F08 /* SF-Pro-Text-Bold.otf */; };
+		D6E974472755973700D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E974442755973700D95F08 /* SF-Pro-Text-Bold.otf */; };
+		D6E974482755973700D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E974442755973700D95F08 /* SF-Pro-Text-Bold.otf */; };
+		D6E9744927559D6600D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E974442755973700D95F08 /* SF-Pro-Text-Bold.otf */; };
+		D6E9744A27559D6800D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E974442755973700D95F08 /* SF-Pro-Text-Bold.otf */; };
+		D6E9744B27559D6B00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9743F275596BC00D95F08 /* SF-Pro-Text-Regular.otf */; };
+		D6E9744C27559D6B00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9743F275596BC00D95F08 /* SF-Pro-Text-Regular.otf */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
 		D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
@@ -991,9 +994,6 @@
 		D635551A21E5B3D400530602 /* UIScrollView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+Extensions.swift"; sourceTree = "<group>"; };
 		D635F0A527135BAB00A02D17 /* ThreadCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D63752C5231258DA00214F63 /* PreviewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewMessageView.swift; sourceTree = "<group>"; };
-		D63753272316172700214F63 /* Roboto-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Regular.ttf"; sourceTree = "<group>"; };
-		D63753282316172700214F63 /* Roboto-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Bold.ttf"; sourceTree = "<group>"; };
-		D63753292316172700214F63 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Roboto-Medium.ttf"; sourceTree = "<group>"; };
 		D63BEF5F26FFA5BB004243AB /* ContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsViewController.swift; sourceTree = "<group>"; };
 		D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableCollectionViewController.swift; sourceTree = "<group>"; };
 		D63C67D823D3927500EA373A /* PhoneTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneTextField.swift; sourceTree = "<group>"; };
@@ -1216,6 +1216,8 @@
 		D6E97437275486F700D95F08 /* MessageContentView+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageContentView+Menu.swift"; sourceTree = "<group>"; };
 		D6E97439275551A600D95F08 /* MessageContentView+Udpates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageContentView+Udpates.swift"; sourceTree = "<group>"; };
 		D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageContentView+Read.swift"; sourceTree = "<group>"; };
+		D6E9743F275596BC00D95F08 /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Text-Regular.otf"; path = "../../../../../../Library/Fonts/SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
+		D6E974442755973700D95F08 /* SF-Pro-Text-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SF-Pro-Text-Bold.otf"; path = "../../../../../../Library/Fonts/SF-Pro-Text-Bold.otf"; sourceTree = "<group>"; };
 		D6EAC95423D145350028DAA2 /* Sizeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sizeable.swift; sourceTree = "<group>"; };
 		D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionViewController.swift; sourceTree = "<group>"; };
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
@@ -1642,9 +1644,8 @@
 		D63752C723133AC700214F63 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				D63753282316172700214F63 /* Roboto-Bold.ttf */,
-				D63753292316172700214F63 /* Roboto-Medium.ttf */,
-				D63753272316172700214F63 /* Roboto-Regular.ttf */,
+				D6E974442755973700D95F08 /* SF-Pro-Text-Bold.otf */,
+				D6E9743F275596BC00D95F08 /* SF-Pro-Text-Regular.otf */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -2485,15 +2486,14 @@
 				D640329025AF3CA500139396 /* face_scan.json in Resources */,
 				D660544726320C06002F74F8 /* scroll_down.json in Resources */,
 				D640328E25AF3CA500139396 /* loading.json in Resources */,
-				D637532B2316172700214F63 /* Roboto-Bold.ttf in Resources */,
 				D640329625AF3CA500139396 /* checkbox.json in Resources */,
 				D63D71B925F025E8004C26F7 /* FaceDetection.storyboard in Resources */,
 				D6D39281265AAFB900E49F1E /* lock.json in Resources */,
-				D637532C2316172700214F63 /* Roboto-Medium.ttf in Resources */,
 				8020DD93272C81FB00D5BA04 /* ConversationInputAccessoryView.xib in Resources */,
 				D650C1F125B741EB0037C59A /* plusToX.json in Resources */,
-				D637532A2316172700214F63 /* Roboto-Regular.ttf in Resources */,
 				D61EC0CA21D3071500204BEE /* LaunchScreen.storyboard in Resources */,
+				D6E97440275596BC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
+				D6E974452755973700D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				D6D39271265AA9E000E49F1E /* pie_loader.json in Resources */,
 				D61EC0C721D3071500204BEE /* Assets.xcassets in Resources */,
 				D640329225AF3CA500139396 /* arrow.json in Resources */,
@@ -2506,17 +2506,16 @@
 			files = (
 				D63DB27525E9998A00F6B323 /* error.json in Resources */,
 				D63DB27825E9998A00F6B323 /* checkbox.json in Resources */,
-				D63DB27D25E9999300F6B323 /* Roboto-Regular.ttf in Resources */,
 				D63DB20125E968C300F6B323 /* MainInterface.storyboard in Resources */,
-				D63DB27E25E9999300F6B323 /* Roboto-Bold.ttf in Resources */,
 				D63D71BB25F025E8004C26F7 /* FaceDetection.storyboard in Resources */,
+				D6E97442275596BC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D63DB27725E9998A00F6B323 /* loading.json in Resources */,
 				D63DB27A25E9998A00F6B323 /* plusToX.json in Resources */,
+				D6E974472755973700D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				D63DB27625E9998A00F6B323 /* arrow.json in Resources */,
 				D63DB27B25E9998D00F6B323 /* Assets.xcassets in Resources */,
 				D6D39283265AAFB900E49F1E /* lock.json in Resources */,
 				D63DB27925E9998A00F6B323 /* face_scan.json in Resources */,
-				D63DB27C25E9999300F6B323 /* Roboto-Medium.ttf in Resources */,
 				D6D39273265AA9E000E49F1E /* pie_loader.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2526,14 +2525,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				D640329525AF3CA500139396 /* error.json in Resources */,
-				D6551989258912AE00B901E4 /* Roboto-Medium.ttf in Resources */,
 				D640329125AF3CA500139396 /* face_scan.json in Resources */,
 				D640328F25AF3CA500139396 /* loading.json in Resources */,
-				D6551988258912AE00B901E4 /* Roboto-Regular.ttf in Resources */,
 				D63D71BA25F025E8004C26F7 /* FaceDetection.storyboard in Resources */,
+				D6E97441275596BC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D640329725AF3CA500139396 /* checkbox.json in Resources */,
 				D650C1F225B741EB0037C59A /* plusToX.json in Resources */,
-				D655198A258912AE00B901E4 /* Roboto-Bold.ttf in Resources */,
+				D6E974462755973700D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				D65518F125890E3D00B901E4 /* Assets.xcassets in Resources */,
 				D6D39282265AAFB900E49F1E /* lock.json in Resources */,
 				D64A1F13258D598B0097817C /* LaunchScreen.storyboard in Resources */,
@@ -2546,6 +2544,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6E9744B27559D6B00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
+				D6E9744927559D6600D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				D61316B2273C85D000DC782B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2554,6 +2554,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6E9744C27559D6B00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
+				D6E9744A27559D6800D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2561,7 +2563,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6E97443275596BC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
 				D6AE0F8F267CFA6D00C6B048 /* MainInterface.storyboard in Resources */,
+				D6E974482755973700D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
