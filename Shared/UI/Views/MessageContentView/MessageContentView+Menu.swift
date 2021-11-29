@@ -56,9 +56,14 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
             self.handleEditMessage?(item)
         }
 
-        let read = UIAction(title: "Read",
+        let read = UIAction(title: "Set to read",
                             image: UIImage(systemName: "eyeglasses")) { [unowned self] action in
             self.setToRead()
+        }
+
+        let unread = UIAction(title: "Set to unread",
+                            image: UIImage(systemName: "eyeglasses")) { [unowned self] action in
+            self.setToUnread()
         }
 
         var menuElements: [UIMenuElement] = []
@@ -71,8 +76,10 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
             menuElements.append(edit)
         }
 
-        if message.parentMessageId.isNil {
-            menuElements.append(viewReplies)
+        if message.isConsumedByMe {
+            menuElements.append(unread)
+        } else if message.canBeConsumed {
+            menuElements.append(read)
         }
 
         let children: [UIAction] = ReactionType.allCases.filter({ type in
@@ -100,6 +107,10 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
                                 children: children)
 
         menuElements.append(reactionsMenu)
+
+        if message.parentMessageId.isNil {
+            menuElements.append(viewReplies)
+        }
 
         return UIMenu(children: menuElements)
     }
