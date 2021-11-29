@@ -47,13 +47,13 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
 
         let viewReplies = UIAction(title: "View Replies") { [unowned self] action in
             let item = ConversationMessageItem(channelID: cid, messageID: message.id)
-            //self.handleTappedMessage?(item, content)
+            self.handleTappedMessage?(item)
         }
 
         let edit = UIAction(title: "Edit",
                             image: UIImage(systemName: "pencil.circle")) { [unowned self] action in
             let item = ConversationMessageItem(channelID: cid, messageID: message.id)
-            //self.handleEditMessage?(item)
+            self.handleEditMessage?(item)
         }
 
         var menuElements: [UIMenuElement] = []

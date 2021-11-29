@@ -41,8 +41,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
     }
 
     var handleSelectedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
-    var handleReactionSelected: ((ConversationMessageItem, ReactionType) -> Void)?
-    var handleDeleteMessage: ((ConversationMessageItem) -> Void)?
     var handleEditMessage: ((ConversationMessageItem) -> Void)?
 
     
@@ -70,6 +68,10 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                for: indexPath,
                                                                item: (cid, itemID, self))
+                threadCell.content.setContextMenu()
+                threadCell.content.handleEditMessage = { [unowned self] item in
+                    self.handleEditMessage?(item)
+                }
                 return threadCell
 
             } else if section.isConversationList {
@@ -82,14 +84,8 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 messageCell.handleTappedMessage = { [unowned self] item, content in
                     self.handleSelectedMessage?(item, content)
                 }
-                messageCell.handleReactionSelected = { [unowned self] item, type in
-                    self.handleReactionSelected?(item, type)
-                }
                 messageCell.handleEditMessage = { [unowned self] item in 
                     self.handleEditMessage?(item)
-                }
-                messageCell.handleDeleteMessage = { [unowned self] item in
-                    self.handleDeleteMessage?(item)
                 }
 
                 return messageCell

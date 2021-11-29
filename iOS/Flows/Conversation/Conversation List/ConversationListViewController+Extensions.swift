@@ -27,28 +27,6 @@ extension ConversationListViewController {
             // TODO
         }
 
-        self.dataSource.handleDeleteMessage = { [unowned self] item in
-            Task {
-                let controller = ChatClient.shared.messageController(cid: item.channelID, messageId: item.messageID)
-                do {
-                    try await controller.deleteMessage()
-                } catch {
-                    logDebug(error)
-                }
-            }.add(to: self.taskPool)
-        }
-
-        self.dataSource.handleReactionSelected = { [unowned self] item, type in
-            Task {
-                let controller = ChatClient.shared.messageController(cid: item.channelID, messageId: item.messageID)
-                do {
-                    try await controller.addReaction(with: type)
-                } catch {
-                    logDebug(error)
-                }
-            }.add(to: self.taskPool)
-        }
-
         self.dataSource.handleLoadMoreMessages = { [unowned self] in
             self.loadMoreConversationsIfNeeded()
         }

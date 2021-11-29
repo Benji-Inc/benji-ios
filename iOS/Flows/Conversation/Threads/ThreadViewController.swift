@@ -84,6 +84,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
+        self.parentMessageView.setContextMenu()
 
         self.collectionView.clipsToBounds = false
 
@@ -260,6 +261,11 @@ extension ThreadViewController: TransitionableViewController {
 extension ThreadViewController {
 
     func subscribeToUpdates() {
+
+        self.dataSource.handleEditMessage = { [unowned self] item in
+            // TODO
+        }
+
         self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
             if self.messageInputAccessoryView.textView.isFirstResponder {
                 self.messageInputAccessoryView.textView.resignFirstResponder()

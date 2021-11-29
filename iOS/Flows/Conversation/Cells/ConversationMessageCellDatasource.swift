@@ -25,8 +25,8 @@ class ConversationMessageCellDataSource: CollectionViewDataSource<ConversationMe
         let messageID: MessageId
     }
 
-    /// A delegate to handle context menu interactions on the subcells.
-    var contextMenuDelegate: UIContextMenuInteractionDelegate?
+    var handleTappedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
+    var handleEditMessage: ((ConversationMessageItem) -> Void)?
 
     // Cell registration
     private let messageSubcellRegistration
@@ -37,16 +37,20 @@ class ConversationMessageCellDataSource: CollectionViewDataSource<ConversationMe
                               section: SectionType,
                               item: ItemType) -> UICollectionViewCell? {
 
-                let messageCell
-                = collectionView.dequeueConfiguredReusableCell(using: self.messageSubcellRegistration,
-                                                               for: indexPath,
-                                                               item: (item.channelID,
-                                                                      item.messageID,
-                                                                      collectionView,
-                                                                      self.contextMenuDelegate))
+        let messageCell
+        = collectionView.dequeueConfiguredReusableCell(using: self.messageSubcellRegistration,
+                                                       for: indexPath,
+                                                       item: (item.channelID,
+                                                              item.messageID,
+                                                              collectionView))
+        messageCell.content.handleEditMessage = { [unowned self] item in
+            self.handleEditMessage?(item)
+        }
 
-
-                return messageCell
+        messageCell.content.handleTappedMessage = { [unowned self] item in
+            self.handleTappedMessage?(item, messageCell.content)
+        }
+        return messageCell
     }
 }
 
@@ -58,8 +62,7 @@ extension ConversationMessageCellDataSource {
     = UICollectionView.CellRegistration<MessageSubcell,
                                         (channelID: ChannelId,
                                          messageID: MessageId,
-                                         collectionView: UICollectionView,
-                                         contextMenuDelegate: UIContextMenuInteractionDelegate?)>
+                                         collectionView: UICollectionView)>
 
     static func createMessageSubcellRegistration() -> MessageSubcellRegistration {
 
@@ -78,9 +81,9 @@ extension ConversationMessageCellDataSource {
             // The menu interaction should only be on the front most cell.
             cell.content.backgroundColorView.interactions.removeAll()
             if zIndex == 0 {
-                cell.setContextMenuInteraction(with: item.contextMenuDelegate)
+                cell.content.setContextMenu()
             } else {
-                cell.setContextMenuInteraction(with: nil)
+                cell.content.backgroundColorView.interactions.removeAll()
             }
         }
     }

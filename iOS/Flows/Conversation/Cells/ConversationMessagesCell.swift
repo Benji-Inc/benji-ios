@@ -16,9 +16,7 @@ import UIKit
 class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLayoutDelegate {
 
     // Interaction handling
-    var handleReactionSelected: ((ConversationMessageItem, ReactionType) -> Void)?
     var handleTappedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
-    var handleDeleteMessage: ((ConversationMessageItem) -> Void)?
     var handleEditMessage: ((ConversationMessageItem) -> Void)?
 
     var handleTappedConversation: ((MessageSequence) -> Void)?
@@ -59,7 +57,13 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
                                                         bottom: 0,
                                                         right: 0)
 
-        self.dataSource.contextMenuDelegate = self
+        self.dataSource.handleTappedMessage = { [unowned self] item, content in
+            self.handleTappedMessage?(item, content)
+        }
+
+        self.dataSource.handleEditMessage = { [unowned self] item in
+            self.handleEditMessage?(item)
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -175,91 +179,5 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = self.dataSource.itemIdentifier(for: indexPath), let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
         self.handleTappedMessage?(item, cell.content)
-    }
-}
-
-// MARK: - UIContextMenuInteractionDelegate
-
-extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
-
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
-                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-
-        guard let content = interaction.view?.superview as? MessageContentView else { return nil }
-
-        return UIContextMenuConfiguration(identifier: nil,
-                                          previewProvider: nil) { elements in
-            return self.makeContextMenu(with: content)
-        }
-    }
-
-    private func makeContextMenu(with content: MessageContentView) -> UIMenu {
-        guard let message = content.message as? Message, let cid = message.cid else { return UIMenu() }
-
-        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
-
-        let confirmDelete = UIAction(title: "Confirm",
-                                     image: UIImage(systemName: "trash"),
-                                     attributes: .destructive) { [unowned self] action in
-            let item = ConversationMessageItem(channelID: cid, messageID: message.id)
-            self.handleDeleteMessage?(item)
-        }
-
-        let deleteMenu = UIMenu(title: "Delete Message",
-                                image: UIImage(systemName: "trash"),
-                                options: .destructive,
-                                children: [confirmDelete, neverMind])
-
-        let viewReplies = UIAction(title: "View Replies") { [unowned self] action in
-            let item = ConversationMessageItem(channelID: cid, messageID: message.id)
-            self.handleTappedMessage?(item, content)
-        }
-
-        let edit = UIAction(title: "Edit",
-                            image: UIImage(systemName: "pencil.circle")) { [unowned self] action in
-            let item = ConversationMessageItem(channelID: cid, messageID: message.id)
-            self.handleEditMessage?(item)
-        }
-
-        var menuElements: [UIMenuElement] = []
-
-        if message.isFromCurrentUser {
-            menuElements.append(deleteMenu)
-        }
-
-        if message.isFromCurrentUser {
-            menuElements.append(edit)
-        }
-
-        if message.parentMessageId.isNil {
-            menuElements.append(viewReplies)
-        }
-
-        let children: [UIAction] = ReactionType.allCases.compactMap { type in
-            return UIAction.init(title: type.emoji,
-                                 subtitle: nil,
-                                 image: nil,
-                                 identifier: nil,
-                                 discoverabilityTitle: nil,
-                                 attributes: []) { [unowned self] _ in
-                let item = ConversationMessageItem(channelID: cid, messageID: message.id)
-                self.handleReactionSelected?(item, type)
-            }
-        }
-
-        let reactionsMenu = UIMenu(title: "Add Reaction",
-                                image: UIImage(systemName: "face.smile"),
-                                children: children)
-
-        menuElements.append(reactionsMenu)
-
-        return UIMenu(children: menuElements)
-    }
-
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
-        let params = UIPreviewParameters()
-        params.backgroundColor = Color.clear.color
-        let preview = UITargetedPreview(view: interaction.view!, parameters: params)
-        return preview
     }
 }
