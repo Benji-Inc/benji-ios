@@ -271,6 +271,10 @@ extension ThreadViewController {
             self.conversationController?.sendKeystrokeEvent(completion: nil)
         }.store(in: &self.cancellables)
 
+        self.messageController.messageChangePublisher.mainSink { [unowned self] changes in
+            // TODO
+        }.store(in: &self.cancellables)
+
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
             Task {
                 await self.dataSource.update(with: changes,
