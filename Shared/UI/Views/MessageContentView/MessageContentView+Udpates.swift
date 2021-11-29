@@ -29,14 +29,5 @@ extension MessageContentView {
                 break
             }
         }.store(in: &self.publisherCancellables)
-
-        self.messageController?.reactionsPublisher.mainSink { [unowned self] _ in
-            #if IOS
-            if let msg = self.message as? Message {
-                self.reactionsView.configure(with: msg.latestReactions)
-                self.configureConsumption(for: msg)
-            }
-            #endif
-        }.store(in: &self.publisherCancellables)
     }
 }

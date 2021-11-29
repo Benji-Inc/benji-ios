@@ -769,6 +769,8 @@
 		D6E97438275486F700D95F08 /* MessageContentView+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E97437275486F700D95F08 /* MessageContentView+Menu.swift */; };
 		D6E9743A275551A600D95F08 /* MessageContentView+Udpates.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E97439275551A600D95F08 /* MessageContentView+Udpates.swift */; };
 		D6E9743C2755568D00D95F08 /* MessageContentView+Read.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */; };
+		D6E9743D275562F000D95F08 /* MessageContentView+Read.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */; };
+		D6E9743E275562F100D95F08 /* MessageContentView+Read.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
 		D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
@@ -3199,6 +3201,7 @@
 				D63DB25C25E9995E00F6B323 /* Reservation.swift in Sources */,
 				D63DB28E25E999AB00F6B323 /* NavigationController.swift in Sources */,
 				D63D5C99265811B000543200 /* URL+Extensions.swift in Sources */,
+				D6E9743E275562F100D95F08 /* MessageContentView+Read.swift in Sources */,
 				D63DB28D25E999AB00F6B323 /* NavigationBarViewController.swift in Sources */,
 				D63DB29125E999B200F6B323 /* Button.swift in Sources */,
 				D6617CEC26741C4500439C06 /* UITextField+Extensions.swift in Sources */,
@@ -3250,6 +3253,7 @@
 				D65519622589127A00B901E4 /* PushPayload.swift in Sources */,
 				D6551A4125895E9500B901E4 /* TextInputViewController.swift in Sources */,
 				D655195D2589126800B901E4 /* User.swift in Sources */,
+				D6E9743D275562F000D95F08 /* MessageContentView+Read.swift in Sources */,
 				D667C08E25E559D500BED8B7 /* KeyboardManager.swift in Sources */,
 				D68C08212729D3DE0033C8AE /* Lorem.swift in Sources */,
 				D6551A3B25895E7E00B901E4 /* NavigationBarViewController.swift in Sources */,
