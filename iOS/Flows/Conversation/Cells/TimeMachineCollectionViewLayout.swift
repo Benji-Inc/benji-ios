@@ -49,9 +49,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         didSet { self.invalidateLayout() }
     }
     /// The amount of vertical space between the tops of adjacent items.
-    var itemSpacing: CGFloat = 10 {
-        didSet { self.invalidateLayout() }
-    }
+    var spacingKeyPoints: [CGFloat] = [0, 12, 20, 24]
     /// The maximum number of messages to show in each section's stack.
     var stackDepth: Int = 3 {
         didSet { self.invalidateLayout() }
@@ -240,11 +238,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let frontmostVectorToCurrentZ = self.getFrontmostItemZOffset(in: indexPath.section)
         let vectorToCurrentZ = frontmostVectorToCurrentZ+offsetFromFrontmost
 
-        let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
-        // Make sure items in the front are drawn over items in the back.
-        attributes.zIndex = indexPath.item
-        attributes.frame.size = CGSize(width: collectionView.width, height: self.itemHeight)
-
         var scale: CGFloat = 1
         var yOffset: CGFloat = 0
         var alpha: CGFloat = 1
@@ -254,7 +247,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             // Start scaling it down to simulate it moving away from the user.
             let normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
             scale = clamp(1-normalized, min: 0)
-            yOffset = (normalized) * self.itemHeight
+            yOffset = lerp(normalized, keyPoints: self.spacingKeyPoints)
             alpha = scale == 0 ? 0 : 1
         } else if vectorToCurrentZ < 0 {
             // The item's z range is in front of the current zPosition.
@@ -270,7 +263,14 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             alpha = 1
         }
 
-        let centerPoint = self.getCenterPoint(for: indexPath.section, withNormalizedYOffset: yOffset)
+        let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
+        // Make sure items in the front are drawn over items in the back.
+        attributes.zIndex = indexPath.item
+        attributes.bounds.size = CGSize(width: collectionView.width, height: self.itemHeight)
+
+        let centerPoint = self.getCenterPoint(for: indexPath.section,
+                                                 withYOffset: yOffset,
+                                                 scale: scale)
         attributes.center = centerPoint
         attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
         attributes.alpha = alpha
@@ -403,7 +403,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     private func getCenterPoint(for section: SectionIndex,
-                                withNormalizedYOffset yOffset: CGFloat) -> CGPoint {
+                                withYOffset yOffset: CGFloat,
+                                scale: CGFloat) -> CGPoint {
 
         guard let collectionView = self.collectionView else { return .zero }
         let contentRect = CGRect(x: collectionView.contentOffset.x,
@@ -414,10 +415,12 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         if section == 0 {
             centerPoint.y += self.itemHeight.half
-            centerPoint.y += yOffset*0.75
+            centerPoint.y += yOffset
+            centerPoint.y += self.itemHeight.half * (1-scale)
         } else {
             centerPoint.y += self.itemHeight.doubled
-            centerPoint.y -= yOffset*0.75
+            centerPoint.y -= yOffset
+            centerPoint.y -= self.itemHeight.half * (1-scale)
         }
 
         return centerPoint
@@ -434,7 +437,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     func getDropZoneFrame() -> CGRect {
-        let center = self.getCenterPoint(for: 1, withNormalizedYOffset: 0)
+        let center = self.getCenterPoint(for: 1, withYOffset: 0, scale: 1)
         var frame = CGRect(x: Theme.contentOffset.half,
                            y: 0,
                            width: self.collectionView!.width - Theme.contentOffset,

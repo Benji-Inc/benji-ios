@@ -40,17 +40,41 @@ func clamp(_ value: CGFloat, max: CGFloat) -> CGFloat {
 
 // MARK: Linear Interpolation
 
-// Linearly interpolate between two values given a normalized value between 0 and 1
-// Example: lerp(0.2, min 1, max 3) = 1.4
+/// Linearly interpolate between two values given a normalized value between 0 and 1
+/// Example: lerp(0.2, min 1, max 3) = 1.4
 func lerp(_ normalized: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
     return min + normalized * (max - min)
 }
 
-// Linearly interpolate between two values. The normalized value is clamped between 0 and 1 so
-// the result will never be outside the range of the min and max
+/// Linearly interpolate between two values. The normalized value is clamped between 0 and 1 so
+/// the result will never be outside the range of the min and max
 func lerpClamped(_ normalized: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
     return lerp((0...1).clamp(normalized), min: min, max: max)
 }
+
+/// Linearly interpolates along a path as defined by the key points.
+/// For example, for the key points: [0, 100, 50]:
+/// normalized 0 == 0
+/// normalized 0.25 == 50
+/// normalized 0.5 == 100
+/// normalized 1 == 50
+func lerp(_ normalized: CGFloat, keyPoints: [CGFloat]) -> CGFloat {
+    let pointCount = keyPoints.count
+
+    guard pointCount > 0 else { return 0 }
+
+    let segmentLength = 1/CGFloat(pointCount - 1)
+    let currentIndex = Int(normalized/segmentLength)
+
+    guard let segmentLowerBound = keyPoints[safe: currentIndex] else { return 0 }
+    guard let segmentUpperBound = keyPoints[safe: currentIndex + 1] else { return segmentLowerBound }
+
+    let normalizedInSegment
+    = normalized.truncatingRemainder(dividingBy: segmentLength)
+
+    return lerp(normalizedInSegment/segmentLength, min: segmentLowerBound, max: segmentUpperBound)
+}
+
 
 // MARK: Trig Functions
 
