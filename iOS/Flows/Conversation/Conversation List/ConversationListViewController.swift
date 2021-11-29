@@ -63,7 +63,8 @@ class ConversationListViewController: FullScreenViewController,
         self.members = members
         self.startingConversationID = startingConversationID
 
-        let filter: Filter<ChannelListFilterScope> = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
+        let filter: Filter<ChannelListFilterScope>
+        = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
 
         let query = ChannelListQuery(filter: filter,
                                      sort: [Sorting(key: .createdAt, isAscending: false)],
@@ -85,6 +86,7 @@ class ConversationListViewController: FullScreenViewController,
         self.addChild(viewController: self.headerVC, toView: self.contentContainer)
 
         self.contentContainer.addSubview(self.collectionView)
+        self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.delegate = self
 
         self.subscribeToKeyboardUpdates()

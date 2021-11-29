@@ -286,11 +286,11 @@ extension ThreadViewController {
 
 extension ThreadViewController: TimeMachineCollectionViewLayoutDataSource {
 
-    func getConversation(at indexPath: IndexPath) -> Conversation? {
+    func getConversation(forItemAt indexPath: IndexPath) -> Conversation? {
         return self.conversationController?.conversation
     }
 
-    func getMessage(at indexPath: IndexPath) -> Messageable? {
+    func getMessage(forItemAt indexPath: IndexPath) -> Messageable? {
         return self.messageController.replies[indexPath.item]
     }
 }

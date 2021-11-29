@@ -9,6 +9,15 @@
 import Foundation
 import UIKit
 
+// MARK: - Rounding
+
+/// Rounds the given value to the nearest multiple of toNearest.
+func round(_ value: CGFloat, toNearest: CGFloat) -> CGFloat {
+    return round(value / toNearest) * toNearest
+}
+
+// MARK: - Clamping
+
 func clamp(_ value: Int, min: Int) -> Int {
     return (min...Int.max).clamp(value)
 }

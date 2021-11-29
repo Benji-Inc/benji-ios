@@ -10,8 +10,8 @@ import UIKit
 import StreamChat
 
 protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
-    func getConversation(at indexPath: IndexPath) -> Conversation?
-    func getMessage(at indexPath: IndexPath) -> Messageable?
+    func getConversation(forItemAt indexPath: IndexPath) -> Conversation?
+    func getMessage(forItemAt indexPath: IndexPath) -> Messageable?
 }
 
 class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
@@ -21,7 +21,7 @@ class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayout
 
 /// A custom layout for conversation messages. Up to two message cell sections are each displayed as a stack along the z axis.
 /// The stacks appear similar to Apple's Time Machine interface, with the newest message in front and older messages going out into the distance.
-/// As the collection view scrolls up and down, the messages move away or toward the user.
+/// As the collection view scrolls up and down, the messages move away and toward the user respectively.
 class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     private typealias SectionIndex = Int
@@ -30,14 +30,38 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return TimeMachineCollectionViewLayoutInvalidationContext.self
     }
 
+    // MARK: - Data Source
+
     weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
 
+    var sectionCount: Int {
+        return self.collectionView?.numberOfSections ?? 0
+    }
+    func numberOfItems(inSection section: Int) -> Int {
+        guard section < self.sectionCount else { return 0 }
+        return self.collectionView?.numberOfItems(inSection: section) ?? 0
+    }
+
+    // MARK: - Layout Configuration
+
     /// The height of the cells.
-    var itemHeight: CGFloat = 88
-    /// If true, the time sent decoration views should be displayed.
+    var itemHeight: CGFloat = 88 {
+        didSet { self.invalidateLayout() }
+    }
+    /// The amount of vertical space between the tops of adjacent items.
+    var itemSpacing: CGFloat = 10 {
+        didSet { self.invalidateLayout() }
+    }
+    /// The maximum number of messages to show in each section's stack.
+    var stackDepth: Int = 3 {
+        didSet { self.invalidateLayout() }
+    }
+    /// If true, the message status decoration views should be displayed.
     var showMessageStatus: Bool = false {
         didSet { self.invalidateLayout() }
     }
+
+    // MARK: - Layout State
 
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
@@ -51,23 +75,17 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return self.collectionView?.contentOffset.y ?? 0
     }
 
-    private var sectionCount: Int {
-        return self.collectionView?.numberOfSections ?? 0
-    }
-    private func numberOfItems(inSection section: Int) -> Int {
-        guard section < self.sectionCount else { return 0 }
-        return self.collectionView?.numberOfItems(inSection: section) ?? 0
-    }
-
     override init() {
         super.init()
-        self.collectionView?.showsVerticalScrollIndicator = false
-        self.register(MessageStatusView.self, forDecorationViewOfKind: MessageStatusView.objectIdentifier)
+        self.initialize()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        self.collectionView?.showsVerticalScrollIndicator = false
+        self.initialize()
+    }
+
+    private func initialize() {
         self.register(MessageStatusView.self, forDecorationViewOfKind: MessageStatusView.objectIdentifier)
     }
 
@@ -80,7 +98,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             let itemCount = CGFloat(self.numberOfItems(inSection: 0) + self.numberOfItems(inSection: 1))
             var height = (itemCount - 1) * self.itemHeight
 
-            /// Plus 1 ensures that we will still receive the pan gesture, regardless of content size
+            // Plus 1 ensures that we will still receive the pan gesture, regardless of content size
             height += collectionView.bounds.height + 1
             return CGSize(width: collectionView.bounds.width, height: height)
         }
@@ -96,7 +114,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         let invalidationContext = super.invalidationContext(forBoundsChange: newBounds)
 
-        guard let customInvalidationContext = invalidationContext as? TimeMachineCollectionViewLayoutInvalidationContext else {
+        guard let customInvalidationContext
+                = invalidationContext as? TimeMachineCollectionViewLayoutInvalidationContext else {
             return invalidationContext
         }
 
@@ -114,6 +133,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         // Clear the layout attributes caches.
         self.cellLayoutAttributes.removeAll()
         self.decorationLayoutAttributes.removeAll()
+
         if customContext.shouldRecalculateZRanges {
             self.zRangesDict.removeAll()
         }
@@ -150,8 +170,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             sortedItemIndexPaths.append(indexPath)
         }
         sortedItemIndexPaths.sort { indexPath1, indexPath2 in
-            let message1 = dataSource.getMessage(at: indexPath1)!
-            let message2 = dataSource.getMessage(at: indexPath2)!
+            let message1 = dataSource.getMessage(forItemAt: indexPath1)!
+            let message2 = dataSource.getMessage(forItemAt: indexPath2)!
             return message1.createdAt < message2.createdAt
         }
 
@@ -159,7 +179,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             let currentSection = indexPath.section
             let currentItemIndex = indexPath.item
 
-            var startZ: CGFloat = CGFloat(sortedItemsIndex) * self.itemHeight
+            var startZ = CGFloat(sortedItemsIndex) * self.itemHeight
             // Each item's z range starts after the end of the previous item's range within its section.
             if let previousRangeInSection = self.zRangesDict[IndexPath(item: currentItemIndex - 1,
                                                                       section: currentSection)] {
@@ -169,7 +189,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
             var endZ = startZ
             // Each item's z range ends before the beginning of the next item's range from within its section.
-            if sortedItemsIndex + 1 < sortedItemIndexPaths.count {
+            if sortedItemsIndex+1 < sortedItemIndexPaths.count {
                 for nextIndex in (sortedItemsIndex+1)..<sortedItemIndexPaths.count {
                     let nextIndexPath = sortedItemIndexPaths[nextIndex]
 
@@ -181,8 +201,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                         break
                     }
                 }
-            } else {
-                endZ = CGFloat(sortedItemsIndex) * self.itemHeight
             }
 
             self.zRangesDict[indexPath] = startZ..<endZ
@@ -208,13 +226,16 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             return attributes
         }
 
-        // All items in a section are positioned relative to its frontmost item.
+        // All items are positioned relative to its frontmost item in their section.
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
 
-        // OPTIMIZATION: Don't calculate attributes for items that won't be visible.
-        guard abs(frontmostIndexPath.item - indexPath.item) < 4 else { return nil }
-        
-        let offsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)*self.itemHeight
+        // OPTIMIZATION: Don't calculate attributes for items that definitely won't be visible.
+        guard (-1..<self.stackDepth+1).contains(frontmostIndexPath.item - indexPath.item) else {
+            return nil
+        }
+
+        let indexOffsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)
+        let offsetFromFrontmost = indexOffsetFromFrontmost*self.itemHeight
 
         let frontmostVectorToCurrentZ = self.getFrontmostItemZOffset(in: indexPath.section)
         let vectorToCurrentZ = frontmostVectorToCurrentZ+offsetFromFrontmost
@@ -229,15 +250,15 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         var alpha: CGFloat = 1
 
         if vectorToCurrentZ > 0 {
-            // If the item's z range is behind the current zPosition, then start scaling it down
-            // to simulate moving away from the user.
-            let normalized = vectorToCurrentZ/(self.itemHeight*3)
+            // The item's z range is behind the current zPosition.
+            // Start scaling it down to simulate it moving away from the user.
+            let normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
             scale = clamp(1-normalized, min: 0)
             yOffset = (normalized) * self.itemHeight
             alpha = scale == 0 ? 0 : 1
         } else if vectorToCurrentZ < 0 {
-            // If the item's z range is in front of the current zPosition, then scale it up
-            // to simulate it moving closer to the user.
+            // The item's z range is in front of the current zPosition.
+            // Scale it up to simulate it moving closer to the user.
             let normalized = (-vectorToCurrentZ)/self.itemHeight
             scale = clamp(normalized, max: 1) + 1
             yOffset = normalized * -self.itemHeight * 2
@@ -255,17 +276,15 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         attributes.alpha = alpha
 
         // Objects closer to the front of the stack should be brighter.
-        let backgroundBrightness: CGFloat = clamp(1 - CGFloat(frontmostIndexPath.item - indexPath.item) * 0.1,
-                                                  max: 1)
+        let backgroundBrightness: CGFloat = clamp(1 - indexOffsetFromFrontmost * 0.1, max: 1)
         var backgroundColor: Color = .lightGray
 
         if indexPath == self.getMostRecentVisibleIndexPath() {
             backgroundColor = .white
         }
 
-        attributes.shouldShowText = true
-        attributes.backgroundColor = backgroundColor
         attributes.brightness = backgroundBrightness
+        attributes.backgroundColor = backgroundColor
         attributes.shouldShowTail = true
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
 
@@ -285,13 +304,12 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                   return nil
               }
 
-        guard let conversation = self.dataSource?.getConversation(at: frontmostItemIndexPath),
-              let messageable = self.dataSource?.getMessage(at: frontmostItemIndexPath) else {
+        guard let conversation = self.dataSource?.getConversation(forItemAt: frontmostItemIndexPath),
+              let messageable = self.dataSource?.getMessage(forItemAt: frontmostItemIndexPath) else {
                   return nil
               }
 
         let message = ChatClient.shared.message(cid: conversation.cid, id: messageable.id)
-
 
         let attributes
         = MessageStatusViewLayoutAttributes(forDecorationViewOfKind: MessageStatusView.objectIdentifier,
@@ -472,19 +490,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 }
 
-
-private func easeInExpo(_ x: CGFloat) -> CGFloat {
-    return x == 0 ? 0 : pow(2, 10 * x - 10)
-}
-
-private func easeInCubic(_ x: CGFloat) -> CGFloat {
-    return x * x * x
-}
-
-private func round(_ value: CGFloat, toNearest: CGFloat) -> CGFloat {
-    return round(value / toNearest) * toNearest
-}
-
 extension TimeMachineCollectionViewLayout {
 
     /// Runs the passed in closure on every valid index path in the collection view.
@@ -497,20 +502,5 @@ extension TimeMachineCollectionViewLayout {
                 apply(indexPath)
             }
         }
-    }
-}
-
-private extension Range where Bound: Numeric {
-
-    /// Gets the one dimensional vector from range to the specified value.
-    /// If the value is contained within the range, then zero is returned.
-    func vector(to value: Bound) -> Bound {
-        if value < self.lowerBound {
-            return value - self.lowerBound
-        } else if value > self.upperBound {
-            return value - self.upperBound
-        }
-
-        return Bound.zero
     }
 }
