@@ -56,6 +56,11 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
             self.handleEditMessage?(item)
         }
 
+        let read = UIAction(title: "Read",
+                            image: UIImage(systemName: "eyeglasses")) { [unowned self] action in
+            self.setToRead()
+        }
+
         var menuElements: [UIMenuElement] = []
 
         if message.isFromCurrentUser {

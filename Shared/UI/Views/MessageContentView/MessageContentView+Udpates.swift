@@ -34,6 +34,7 @@ extension MessageContentView {
             #if IOS
             if let msg = self.message as? Message {
                 self.reactionsView.configure(with: msg.latestReactions)
+                self.configureConsumption(for: msg)
             }
             #endif
         }.store(in: &self.publisherCancellables)

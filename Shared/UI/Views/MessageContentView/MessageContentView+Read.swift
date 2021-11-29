@@ -7,13 +7,26 @@
 //
 
 import Foundation
-#if IOS
-import StreamChat
 
 extension MessageContentView {
 
-    func configureReadStatus(for message: Message) {
-        
+    func configureConsumption(for message: Messageable) {
+        if message.isConsumedByMe {
+            self.textView.setFont(.regular)
+        }
+    }
+
+    func setToRead() {
+        guard let msg = self.message, msg.canBeConsumed else { return }
+        Task {
+            try await self.message?.setToConsumed()
+        }
+    }
+
+    func setToUnread() {
+        guard let msg = self.message, msg.isConsumedByMe else { return }
+        Task {
+            try await self.message?.setToUnconsumed()
+        }
     }
 }
-#endif

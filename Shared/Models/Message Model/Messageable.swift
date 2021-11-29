@@ -37,7 +37,8 @@ protocol Messageable {
     var totalReplyCount: Int { get }
     var recentReplies: [Messageable] { get }
 
-    func setToConsumed() async throws 
+    func setToConsumed() async throws
+    func setToUnconsumed() async throws
     func appendAttributes(with attributes: [String: Any]) async throws -> Messageable
 }
 

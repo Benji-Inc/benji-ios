@@ -98,7 +98,7 @@ class MessageContentView: View {
         if let msg = message as? Message {
             self.reactionsView.configure(with: msg.latestReactions)
             self.subscribeToUpdates(for: msg)
-            self.configureReadStatus(for: msg)
+            self.configureConsumption(for: msg)
         }
         #endif
 
