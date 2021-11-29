@@ -13,8 +13,12 @@ import StreamChat
 
 class ReactionsView: View {
 
+    let label = Label(font: .small)
     let imageView = DisplayableImageView()
-
+    #if IOS
+    var didSelectReaction: ((ReactionType) -> Void)? = nil
+    #endif
+    
     override func initializeSubviews() {
         super.initializeSubviews()
 
@@ -22,17 +26,42 @@ class ReactionsView: View {
         self.imageView.displayable = UIImage(systemName: "face.smiling")
         self.imageView.imageView.tintColor = Color.gray.color
         self.imageView.imageView.contentMode = .scaleAspectFit
-    }
+        self.imageView.isVisible = false
 
-    #if IOS
-    func configure(with reactions: Set<ChatMessageReaction>) {
-
+        self.addSubview(self.label)
+        self.label.isVisible = false
     }
-    #endif
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.imageView.expandToSuperviewSize()
+        self.label.setSize(withWidth: self.width)
+        self.label.centerOnXAndY()
     }
+
+    #if IOS
+    func configure(with reactions: Set<ChatMessageReaction>) {
+
+        let reaction = reactions.first { reaction in
+            return reaction.author.id == User.current()!.objectId
+        }
+
+        guard let r = reaction, let type = ReactionType(rawValue: r.type.rawValue) else {
+            self.imageView.isVisible = true
+            return
+        }
+        var text = type.emoji
+        if reactions.count > 1 {
+            text += " +\(reactions.count - 1)"
+        }
+        self.label.setText(text)
+        self.label.isVisible = true 
+        self.imageView.isVisible = false
+        self.layoutNow()
+    }
+    #endif
 }
+
+
+

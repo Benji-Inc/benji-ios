@@ -33,4 +33,12 @@ class ThreadCollectionView: CollectionView {
 
         return self.convert(dropZoneFrame, to: targetView)
     }
+
+    func getDropZoneColor() -> Color? {
+        if self.visibleCells.count > 0 {
+            return .white
+        }
+
+        return nil 
+    }
 }

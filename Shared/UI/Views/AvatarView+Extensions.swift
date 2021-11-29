@@ -23,7 +23,7 @@ extension AvatarView: AvatarContextDelegate {
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willEndFor configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
 
         animator?.addCompletion {
-            //self.show(PupperMapViewController(), sender: self)
+            
         }
     }
 }

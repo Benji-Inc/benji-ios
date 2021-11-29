@@ -12,8 +12,12 @@ import SwiftUI
 
 class MessageContentView: View {
 
-    /// Sizing
+    #if IOS
+    var handleTappedMessage: ((ConversationMessageItem) -> Void)?
+    var handleEditMessage: ((ConversationMessageItem) -> Void)?
+    #endif
 
+    /// Sizing
     static var minimumHeight: CGFloat { return 50 }
     static var maximumHeight: CGFloat { return 100 }
     static var verticalPadding: CGFloat { return MessageContentView.bubbleTailLength + Theme.contentOffset }
@@ -57,9 +61,21 @@ class MessageContentView: View {
         self.backgroundColorView.addSubview(self.reactionsView)
 
         self.$state.mainSink { [unowned self] state in
+            self.authorView.isVisible = state == .expanded
+            self.reactionsView.isVisible = state == .expanded
             self.layoutNow()
         }.store(in: &self.cancellables)
+
+
     }
+
+    #if IOS
+    func setContextMenu() {
+        self.backgroundColorView.interactions.removeAll()
+        let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
+        self.backgroundColorView.addInteraction(contextMenuInteraction)
+    }
+    #endif
 
     func configure(with message: Messageable) {
 

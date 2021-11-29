@@ -40,10 +40,9 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
         case loadMore
     }
 
-    var handleSelectedConversation: ((MessageSequence) -> Void)?
-    var handleDeletedConversation: ((MessageSequence) -> Void)?
-
     var handleSelectedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
+    var handleEditMessage: ((ConversationMessageItem) -> Void)?
+
     
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
@@ -69,6 +68,10 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                for: indexPath,
                                                                item: (cid, itemID, self))
+                threadCell.content.setContextMenu()
+                threadCell.content.handleEditMessage = { [unowned self] item in
+                    self.handleEditMessage?(item)
+                }
                 return threadCell
 
             } else if section.isConversationList {
@@ -81,12 +84,10 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 messageCell.handleTappedMessage = { [unowned self] item, content in
                     self.handleSelectedMessage?(item, content)
                 }
-                messageCell.handleTappedConversation = { [unowned self] (conversation) in
-                    self.handleSelectedConversation?(conversation)
+                messageCell.handleEditMessage = { [unowned self] item in 
+                    self.handleEditMessage?(item)
                 }
-                messageCell.handleDeleteConversation = { [unowned self] (conversation) in
-                    self.handleDeletedConversation?(conversation)
-                }
+
                 return messageCell
             } else {
                 return nil
