@@ -28,16 +28,16 @@ protocol Messageable {
     var status: MessageStatus { get }
     var context: MessageContext { get }
     var canBeConsumed: Bool { get }
+    var isConsumedByMe: Bool { get }
     var isConsumed: Bool { get }
-    var hasBeenConsumedBy: [String] { get }
+    var hasBeenConsumedBy: [Avatar] { get }
     var color: Color { get }
     var kind: MessageKind { get }
     var isDeleted: Bool { get }
     var totalReplyCount: Int { get }
     var recentReplies: [Messageable] { get }
 
-    @discardableResult
-    func updateConsumers(with consumer: Avatar) async throws -> Messageable
+    func setToConsumed() async throws 
     func appendAttributes(with attributes: [String: Any]) async throws -> Messageable
 }
 
@@ -60,26 +60,26 @@ extension Messageable {
         return self.hasBeenConsumedBy.count > 0 
     }
 
+    var isConsumedByMe: Bool {
+        return self.hasBeenConsumedBy.contains { avatar in
+            return avatar.userObjectID == User.current()?.objectId
+        }
+    }
+
     func appendAttributes(with attributes: [String: Any]) async throws -> Messageable {
         return self
     }
 
     var color: Color {
         if self.isFromCurrentUser {
-            if self.isConsumed {
-                return .gray
+            if self.context == .passive {
+                return .lightGray
             } else {
-                if self.context == .passive {
-                    return .lightGray
-                } else {
-                    return self.context.color
-                }
+                return self.context.color
             }
         } else {
             if self.context == .status {
                 return self.context.color
-            } else if self.isConsumed {
-                return .darkGray
             } else {
                 return .clear
             }

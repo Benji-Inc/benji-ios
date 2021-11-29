@@ -15,9 +15,6 @@ class ReactionsView: View {
 
     let label = Label(font: .small)
     let imageView = DisplayableImageView()
-    #if IOS
-    var didSelectReaction: ((ReactionType) -> Void)? = nil
-    #endif
     
     override func initializeSubviews() {
         super.initializeSubviews()
