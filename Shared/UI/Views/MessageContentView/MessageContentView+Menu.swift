@@ -70,7 +70,9 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
             menuElements.append(viewReplies)
         }
 
-        let children: [UIAction] = ReactionType.allCases.compactMap { type in
+        let children: [UIAction] = ReactionType.allCases.filter({ type in
+            return type != .read 
+        }).compactMap { type in
             return UIAction.init(title: type.emoji,
                                  subtitle: nil,
                                  image: nil,

@@ -10,9 +10,11 @@ import Foundation
 import StreamChat
 
 enum ReactionType: String, CaseIterable {
+
     case like
     case love
     case dislike
+    case read
 
     var reaction: MessageReactionType {
         return MessageReactionType.init(stringLiteral: self.rawValue)
@@ -26,6 +28,8 @@ enum ReactionType: String, CaseIterable {
             return "😍"
         case .dislike:
             return "👎"
+        case .read:
+            return ""
         }
     }
 }
