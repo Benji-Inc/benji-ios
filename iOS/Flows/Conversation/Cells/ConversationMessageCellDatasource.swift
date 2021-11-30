@@ -108,6 +108,6 @@ extension ConversationMessageCellDataSource: TimeMachineCollectionViewLayoutData
     }
 
     func frontMostItemWasUpdated(for indexPath: IndexPath) {
-        logDebug("\(indexPath.description)")
+        // TODO: 
     }
 }
