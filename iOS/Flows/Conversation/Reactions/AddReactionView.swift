@@ -24,9 +24,8 @@ class AddReactionView: UICollectionReusableView {
     func initializeViews() {
         self.addSubview(self.imageView)
         self.imageView.displayable = UIImage(systemName: "face.smiling")
-        self.imageView.imageView.tintColor = Color.gray.color
+        self.imageView.imageView.tintColor = Color.white.color
         self.imageView.imageView.contentMode = .scaleAspectFit
-        self.imageView.isVisible = false
     }
 
     override func layoutSubviews() {

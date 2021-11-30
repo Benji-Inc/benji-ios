@@ -9,6 +9,11 @@
 import Foundation
 import StreamChat
 
+struct ReactionSummary: Hashable {
+    let type: ReactionType
+    let count: Int 
+}
+
 enum ReactionType: String, CaseIterable {
 
     case like

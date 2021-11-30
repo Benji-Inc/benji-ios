@@ -20,16 +20,17 @@ class ReactionsCollectionViewLayout: UICollectionViewCompositionalLayout {
             switch sectionType {
             case .reactions:
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(36), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(26), heightDimension: .fractionalHeight(1))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
                 group.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Theme.ContentOffset.short.value, bottom: 0, trailing: Theme.ContentOffset.short.value)
 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Theme.ContentOffset.short.value, bottom: 0, trailing: Theme.ContentOffset.short.value)
 
                 let size = NSCollectionLayoutSize(widthDimension: .absolute(20),
                                                               heightDimension: .fractionalHeight(1.0))

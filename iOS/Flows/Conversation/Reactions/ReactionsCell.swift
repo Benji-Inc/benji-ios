@@ -10,12 +10,12 @@ import Foundation
 import StreamChat
 
 class ReactionsCell: CollectionViewManagerCell, ManageableCell {
-    typealias ItemType = Set<ChatMessageReaction>
+    typealias ItemType = ReactionSummary
 
-    var currentItem: Set<ChatMessageReaction>?
+    var currentItem: ReactionSummary?
 
     let container = View()
-    let emojiLabel = Label(font: .regular)
+    let emojiLabel = Label(font: .small, textColor: .white)
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -28,15 +28,16 @@ class ReactionsCell: CollectionViewManagerCell, ManageableCell {
         self.container.layer.borderWidth = 0.25
     }
 
-    func configure(with item: Set<ChatMessageReaction>) {
-        guard let first = item.first, let type = ReactionType(rawValue: first.type.rawValue) else { return }
-        let text = type.rawValue + "\(item.count)"
+    func configure(with item: ReactionSummary) {
+        let text = item.type.emoji + " \(item.count)"
         self.emojiLabel.setText(text)
         self.layoutNow()
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
+
+        self.container.expandToSuperviewSize()
 
         self.emojiLabel.setSize(withWidth: self.width)
         self.emojiLabel.centerOnXAndY()
