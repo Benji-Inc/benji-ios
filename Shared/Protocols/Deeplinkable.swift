@@ -42,10 +42,10 @@ extension DeepLinkable {
 
     var reservationId: String? {
         get {
-            return self.customMetadata.value(forKey: ReservationKey.reservationId.rawValue) as? String
+            return self.customMetadata.value(forKey: "reservationId") as? String
         }
         set {
-            self.customMetadata.setValue(newValue, forKey: ReservationKey.reservationId.rawValue)
+            self.customMetadata.setValue(newValue, forKey: "reservationId")
         }
     }
 

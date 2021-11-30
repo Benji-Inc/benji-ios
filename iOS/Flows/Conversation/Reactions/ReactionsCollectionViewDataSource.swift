@@ -7,3 +7,37 @@
 //
 
 import Foundation
+import StreamChat
+
+class ReactionsCollectionViewDataSource: CollectionViewDataSource<ReactionsCollectionViewDataSource.SectionType, Set<ChatMessageReaction>> {
+
+    enum SectionType: Int, CaseIterable {
+        case reactions
+    }
+
+    private let config = ManageableCellRegistration<ReactionsCell>().provider
+    private let headerConfig = ManageableHeaderRegistration<AddReactionView>().provider
+    private let footerConfig = ManageableFooterRegistration<ReactionsCountView>().provider
+
+    override func dequeueCell(with collectionView: UICollectionView,
+                              indexPath: IndexPath,
+                              section: SectionType,
+                              item: Set<ChatMessageReaction>) -> UICollectionViewCell? {
+
+        return collectionView.dequeueConfiguredReusableCell(using: self.config, for: indexPath, item: item)
+    }
+
+    override func dequeueSupplementaryView(with collectionView: UICollectionView, kind: String, section: SectionType, indexPath: IndexPath) -> UICollectionReusableView? {
+
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            return collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
+        case UICollectionView.elementKindSectionFooter:
+            return collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
+        default:
+            break
+        }
+
+        return nil
+    }
+}
