@@ -9,14 +9,13 @@
 import Foundation
 import UIKit
 
+private let boldFontName = "SFProText-Bold"
+private let regularFontName = "SFProText-Regular"
+
 enum FontType {
 
     case display
-    case displayUnderlined
-    case displayThin
-    case largeThin
     case medium
-    case mediumThin
     case mediumBold
     case regular
     case regularBold
@@ -25,31 +24,21 @@ enum FontType {
 
     var font: UIFont {
         switch self {
-        case .display, .displayUnderlined:
-            return UIFont.systemFont(ofSize: self.size, weight: .heavy)
-        case .displayThin, .mediumThin, .largeThin:
-            return UIFont.systemFont(ofSize: self.size, weight: .ultraLight)
-        case .medium, .regular, .small:
-            return UIFont.systemFont(ofSize: self.size, weight: .regular)
+        case .display, .medium, .regular, .small:
+            return UIFont(name: regularFontName, size: self.size)!
         case .mediumBold, .regularBold, .smallBold:
-            return UIFont.systemFont(ofSize: self.size, weight: .bold)
+            return UIFont(name: boldFontName, size: self.size)!
         }
     }
 
     var size: CGFloat {
         switch self {
-        case .displayThin:
-            return 60
         case .display:
             return 40
-        case .displayUnderlined:
-            return 32
-        case .largeThin:
-            return 30
-        case .medium, .mediumBold, .mediumThin:
+        case .medium, .mediumBold:
             return 24
         case .regular, .regularBold:
-            return 14
+            return 18
         case .small, .smallBold:
             return 10
         }
@@ -57,19 +46,12 @@ enum FontType {
 
     var kern: CGFloat {
         switch self {
-        case .displayThin:
-            return 0
         default:
             return 1
         }
     }
 
     var underlineStyle: NSUnderlineStyle {
-        switch self {
-        case .displayUnderlined:
-            return .single
-        default:
-            return []
-        }
+        return []
     }
 }

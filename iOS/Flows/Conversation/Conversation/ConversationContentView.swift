@@ -14,7 +14,7 @@ import StreamChat
 class ConversationContentView: View {
 
     let stackedAvatarView = StackedAvatarView()
-    let label = Label(font: .mediumThin, textColor: .textColor)
+    let label = Label(font: .medium, textColor: .textColor)
     let messageLabel = Label(font: .regularBold, textColor: .textColor)
 
     private var cancellables = Set<AnyCancellable>()
@@ -78,16 +78,16 @@ class ConversationContentView: View {
 
         self.stackedAvatarView.setSize()
         self.stackedAvatarView.centerOnY()
-        self.stackedAvatarView.pin(.left, padding: Theme.contentOffset.half)
+        self.stackedAvatarView.pin(.left, offset: .standard)
 
         let maxWidth = self.width - Theme.contentOffset - self.stackedAvatarView.width
         self.label.setSize(withWidth: maxWidth)
-        self.label.pin(.top, padding: Theme.contentOffset.half)
-        self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: Theme.contentOffset.half)
+        self.label.pin(.top, offset: .standard)
+        self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: .standard)
 
         let maxHeight = self.height - self.label.height - Theme.contentOffset
         self.messageLabel.setSize(withWidth: maxWidth, height: maxHeight)
-        self.messageLabel.match(.top, to: .bottom, of: self.label, offset: 4)
+        self.messageLabel.match(.top, to: .bottom, of: self.label, offset: .short)
         self.messageLabel.match(.left, to: .left, of: self.label)
     }
 }

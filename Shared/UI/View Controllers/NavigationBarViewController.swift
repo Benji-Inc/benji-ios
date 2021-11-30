@@ -16,7 +16,7 @@ class NavigationBarViewController: ViewController {
     private(set) var animationView = AnimationView.with(animation: .arrow)
     private(set) var backButton = Button()
     private(set) var titleLabel = Label(font: .display)
-    private(set) var descriptionLabel = Label(font: .mediumThin)
+    private(set) var descriptionLabel = Label(font: .medium)
 
     let scrollView = UIScrollView()
 
@@ -69,11 +69,11 @@ class NavigationBarViewController: ViewController {
         let maxWidth = self.view.width - Theme.contentOffset.doubled
         self.descriptionLabel.setSize(withWidth: maxWidth)
         self.titleLabel.setSize(withWidth: maxWidth)
-        self.descriptionLabel.pin(.left, padding: Theme.contentOffset)
-        self.titleLabel.pin(.left, padding: Theme.contentOffset)
+        self.descriptionLabel.pinToSafeAreaLeft()
+        self.titleLabel.pinToSafeAreaLeft()
 
         self.titleLabel.match(.top, to: .bottom, of: self.backButton)
-        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 10)
+        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .standard)
 
         self.blurView.expandToSuperviewSize()
     }

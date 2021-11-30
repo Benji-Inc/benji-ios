@@ -36,7 +36,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
 
     /// The height of the cells.
-    var itemHeight: CGFloat = 88
+    var itemHeight: CGFloat = 60 + MessageContentView.bubbleTailLength
     /// If true, the time sent decoration views should be displayed.
     var showMessageStatus: Bool = false {
         didSet { self.invalidateLayout() }

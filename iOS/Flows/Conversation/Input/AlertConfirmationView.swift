@@ -60,7 +60,7 @@ class AlertConfirmationView: View {
         self.label.centerY = self.halfWidth * 0.6
 
         self.button.setSize(with: self.width)
-        self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+        self.button.pinToSafeAreaBottom()
         self.button.centerOnX()
     }
 }

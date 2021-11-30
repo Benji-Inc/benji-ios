@@ -41,7 +41,7 @@ class PeopleHeaderView: UICollectionReusableView {
         super.layoutSubviews()
 
         self.titleLabel.setSize(withWidth: self.width)
-        self.titleLabel.pin(.top, padding: Theme.contentOffset)
+        self.titleLabel.pinToSafeAreaTop()
         self.titleLabel.centerOnX()
 
         self.descriptionLabel.setSize(withWidth: self.width)

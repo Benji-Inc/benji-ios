@@ -131,7 +131,7 @@ class WaitlistViewController: ViewController, Sizeable {
         self.remainingLabel.centerY = self.view.halfHeight
 
         self.positionLabel.setSize(withWidth: self.view.width)
-        self.positionLabel.match(.top, to: .bottom, of: self.remainingLabel, offset: 20)
+        self.positionLabel.match(.top, to: .bottom, of: self.remainingLabel, offset: .xtraLong)
         self.positionLabel.centerOnX()
     }
 }

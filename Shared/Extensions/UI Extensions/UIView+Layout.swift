@@ -220,36 +220,52 @@ extension UIView {
     
     /// Pins the specified side of the view to the same side of its superview with optional padding space.
     /// The view's size remains unchanged. If the view has no superview, this function does nothing.
-    func pin(_ side: ViewSide, padding: CGFloat = 0) {
+    func pin(_ side: ViewSide, offset: Theme.ContentOffset = .noOffset) {
         guard let superview = self.superview else { return }
 
         switch side {
         case .top:
-            self.top = padding
+            self.top = offset.value
         case .bottom:
-            self.bottom = superview.height - padding
+            self.bottom = superview.height - offset.value
         case .left:
-            self.left = padding
+            self.left = offset.value
         case .right:
-            self.right = superview.width - padding
+            self.right = superview.width - offset.value
         }
+    }
+
+    func pinToSafeAreaTop() {
+        self.pinToSafeArea(.top, offset: .xtraLong)
+    }
+
+    func pinToSafeAreaBottom() {
+        self.pinToSafeArea(.bottom, offset: .xtraLong)
+    }
+
+    func pinToSafeAreaRight() {
+        self.pinToSafeArea(.right, offset: .xtraLong)
+    }
+
+    func pinToSafeAreaLeft() {
+        self.pinToSafeArea(.left, offset: .xtraLong)
     }
 
     /// Pins the specified side of the view to the same side of its superview's safe area with optional padding space.
     /// The view's size remains unchanged. If the view has no superview, this function does nothing.
-    func pinToSafeArea(_ side: ViewSide, padding: CGFloat) {
+    func pinToSafeArea(_ side: ViewSide, offset: Theme.ContentOffset) {
         guard let superview = self.superview else { return }
         let superSafeAreaRect = superview.safeAreaRect
 
         switch side {
         case .top:
-            self.top = superSafeAreaRect.minY + padding
+            self.top = superSafeAreaRect.minY + offset.value
         case .bottom:
-            self.bottom = superSafeAreaRect.maxY - padding
+            self.bottom = superSafeAreaRect.maxY - offset.value
         case .left:
-            self.left = superSafeAreaRect.minX + padding
+            self.left = superSafeAreaRect.minX + offset.value
         case .right:
-            self.right = superSafeAreaRect.maxX - padding
+            self.right = superSafeAreaRect.maxX - offset.value
         }
     }
 
@@ -258,7 +274,7 @@ extension UIView {
     func match(_ side: ViewSide,
                to toSide: ViewSide,
                of view: UIView,
-               offset: CGFloat = 0) {
+               offset: Theme.ContentOffset = .noOffset) {
 
         let toSideValue: CGFloat
 
@@ -275,13 +291,13 @@ extension UIView {
 
         switch side {
         case .top:
-            self.top = toSideValue + offset
+            self.top = toSideValue + offset.value
         case .bottom:
-            self.bottom = toSideValue + offset
+            self.bottom = toSideValue + offset.value
         case .left:
-            self.left = toSideValue + offset
+            self.left = toSideValue + offset.value
         case .right:
-            self.right = toSideValue + offset
+            self.right = toSideValue + offset.value
         }
     }
 
@@ -327,10 +343,6 @@ extension UIView {
         case .right:
             self.width += value - self.right + offset
         }
-    }
-
-    var proportionalWidth: CGFloat {
-        return self.width * 0.8
     }
 }
 

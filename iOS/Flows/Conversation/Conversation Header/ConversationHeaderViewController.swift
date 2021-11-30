@@ -15,7 +15,7 @@ import UIKit
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
     lazy var membersVC = MembersViewController()
-    let label = Label(font: .mediumThin, textColor: .white)
+    let label = Label(font: .medium, textColor: .white)
     let button = Button()
 
     private var state: ConversationUIState = .read
@@ -73,12 +73,12 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.label.pin(.top)
         self.label.centerOnX()
 
-        self.membersVC.view.height = 60
+        self.membersVC.view.height = 43
         self.membersVC.view.expandToSuperviewWidth()
 
         switch self.state {
         case .read:
-            self.membersVC.view.match(.top, to: .bottom, of: self.label, offset: Theme.contentOffset.half)
+            self.membersVC.view.match(.top, to: .bottom, of: self.label, offset: .standard)
         case .write:
             self.membersVC.view.pin(.top)
         }

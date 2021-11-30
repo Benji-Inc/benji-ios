@@ -14,7 +14,7 @@ extension MessageContentView {
         if message.isConsumedByMe {
             self.textView.setFont(.regular)
         } else {
-            self.textView.setFont(.regularBold)
+            self.textView.setFont(.regular)
         }
     }
 

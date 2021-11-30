@@ -50,11 +50,11 @@ class SpeechBubbleView: View {
     }
 
     /// The distance from the base of the tail to the point.
-    var tailLength: CGFloat = 7 {
+    var tailLength: CGFloat = 12 {
         didSet { self.setNeedsLayout() }
     }
     /// The length of the base of the tail. In other words, side of the tail flush with bubble.
-    var tailBaseLength: CGFloat = 14 {
+    var tailBaseLength: CGFloat = 24 {
         didSet { self.setNeedsLayout() }
     }
     /// Describes the frame of the bubble within this view's coordinate space, excluding the tail.

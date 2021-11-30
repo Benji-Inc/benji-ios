@@ -22,11 +22,11 @@ class MessageContentView: View {
     #endif
 
     /// Sizing
-    static var minimumHeight: CGFloat { return 50 }
-    static var maximumHeight: CGFloat { return 100 }
-    static var verticalPadding: CGFloat { return MessageContentView.bubbleTailLength + Theme.contentOffset }
 
-    static let bubbleTailLength: CGFloat = 7
+    static var standardHeight: CGFloat { return 60 + MessageContentView.bubbleTailLength }
+    static var verticalPadding: CGFloat { return MessageContentView.bubbleTailLength + Theme.ContentOffset.xtraLong.value }
+
+    static let bubbleTailLength: CGFloat = 12
 
     /// A rounded and colored background view for the message. Changes color based on the sender.
     let backgroundColorView = SpeechBubbleView(orientation: .down)
@@ -122,16 +122,16 @@ class MessageContentView: View {
 
         self.backgroundColorView.expandToSuperviewSize()
 
-        let authorHeight: CGFloat = self.state == .collapsed ? .zero : MessageContentView.minimumHeight - Theme.contentOffset
+        let authorHeight: CGFloat = self.state == .collapsed ? .zero : MessageContentView.standardHeight - MessageContentView.verticalPadding
         self.authorView.setSize(for: authorHeight)
-        let padding = Theme.contentOffset.half - self.backgroundColorView.tailLength.half
+        let padding = Theme.ContentOffset.standard.value - self.backgroundColorView.tailLength.half
         let topPadding = self.backgroundColorView.orientation == .down ? padding : padding + self.backgroundColorView.tailLength
-        self.authorView.pin(.top, padding: topPadding)
-        self.authorView.pin(.left, padding: padding)
+        self.authorView.pin(.top, offset: .custom(topPadding))
+        self.authorView.pin(.left, offset: .custom(padding))
 
         self.reactionsView.squaredSize = self.authorView.width
-        self.reactionsView.pin(.top, padding: topPadding)
-        self.reactionsView.pin(.right, padding: padding)
+        self.reactionsView.pin(.top, offset: .custom(topPadding))
+        self.reactionsView.pin(.right, offset: .custom(padding))
 
         let maxWidth
         = self.backgroundColorView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
@@ -167,13 +167,13 @@ extension MessageTextView {
 
         switch state {
         case .expanded:
-            let authorHeight: CGFloat = MessageContentView.minimumHeight - Theme.contentOffset
+            let authorHeight: CGFloat = MessageContentView.standardHeight - MessageContentView.verticalPadding
             let size = AvatarView().getSize(for: authorHeight)
             maxTextWidth = width - ((size.width * 2) + Theme.contentOffset)
             maxTextHeight = CGFloat.greatestFiniteMagnitude
         case .collapsed:
             maxTextWidth = width 
-            maxTextHeight = MessageContentView.maximumHeight - MessageContentView.bubbleTailLength - Theme.contentOffset
+            maxTextHeight = MessageContentView.standardHeight - MessageContentView.verticalPadding
         }
 
         let size = self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)
