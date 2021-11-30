@@ -51,7 +51,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         didSet { self.invalidateLayout() }
     }
     /// Keypoints used to gradually shrink down items as they move away.
-    var scalingKeypoints: [CGFloat] = [1, 0.84, 0.65, 0.5]
+    var scalingKeyPoints: [CGFloat] = [1, 0.84, 0.65, 0.4]
     /// The amount of vertical space between the tops of adjacent items.
     var spacingKeyPoints: [CGFloat] = [0, 8, 16, 20]
     /// Key points used for the gradually alpha out items further back in the message stack.
@@ -267,7 +267,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             // The item's z range is behind the current zPosition.
             // Start scaling it down to simulate it moving away from the user.
             let normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
-            scale = lerp(normalized, keyPoints: self.scalingKeypoints)
+            scale = lerp(normalized, keyPoints: self.scalingKeyPoints)
             yOffset = lerp(normalized, keyPoints: self.spacingKeyPoints)
             alpha = lerp(normalized, keyPoints: self.alphaKeyPoints)
             backgroundBrightness = lerpClamped(normalized,
