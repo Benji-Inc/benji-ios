@@ -73,7 +73,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.label.pin(.top)
         self.label.centerOnX()
 
-        self.membersVC.view.height = 60
+        self.membersVC.view.height = 43
         self.membersVC.view.expandToSuperviewWidth()
 
         switch self.state {
