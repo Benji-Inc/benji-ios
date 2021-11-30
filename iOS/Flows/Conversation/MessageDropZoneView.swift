@@ -18,13 +18,13 @@ class MessageDropZoneView: View {
     }
 
     private let borderLayer = CAShapeLayer()
-    private let sendTypeLabel = Label(font: .regularBold)
+    private let sendTypeLabel = Label(font: .regular)
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.borderLayer.lineDashPattern = [5, 10]
-        self.borderLayer.lineWidth = 2
+        self.borderLayer.lineDashPattern = [3, 4]
+        self.borderLayer.lineWidth = 1
         self.layer.addSublayer(self.borderLayer)
         self.addSubview(self.sendTypeLabel)
     }
@@ -36,7 +36,7 @@ class MessageDropZoneView: View {
         self.sendTypeLabel.centerOnXAndY()
 
         self.borderLayer.frame = self.bounds
-        self.borderLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: Theme.cornerRadius).cgPath
+        self.borderLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 5).cgPath
     }
 
     func setState(_ state: State?, messageColor: Color?) {

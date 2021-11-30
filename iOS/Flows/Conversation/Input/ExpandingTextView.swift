@@ -14,7 +14,7 @@ class ExpandingTextView: TextView {
 
     init() {
         super.init(frame: .zero,
-                   font: .regularBold,
+                   font: .regular,
                    textColor: .textColor,
                    textContainer: nil)
     }
@@ -22,7 +22,7 @@ class ExpandingTextView: TextView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
 
-        self.font = FontType.regularBold.font
+        self.font = FontType.regular.font
         self.textColor = Color.textColor.color
     }
     
@@ -33,13 +33,13 @@ class ExpandingTextView: TextView {
         self.textContainer.heightTracksTextView = true
         self.isScrollEnabled = false
         self.keyboardType = .twitter
-        self.tintColor = Color.darkGray.color
-        self.textColor = Color.darkGray.color
+        self.tintColor = Color.textColor.color
+        self.textColor = Color.textColor.color
 
-        self.textContainerInset.left = Theme.contentOffset
-        self.textContainerInset.right = Theme.contentOffset
-        self.textContainerInset.top = 14
-        self.textContainerInset.bottom = 12
+        self.textContainerInset.left = Theme.ContentOffset.long.value
+        self.textContainerInset.right = Theme.ContentOffset.long.value
+        self.textContainerInset.top = Theme.ContentOffset.xtraLong.value 
+        self.textContainerInset.bottom = Theme.ContentOffset.long.value
     }
 
     func setPlaceholder(for avatars: [Avatar], isReply: Bool) {

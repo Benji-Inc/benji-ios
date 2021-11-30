@@ -54,7 +54,7 @@ class AvatarProfileViewController: ViewController {
         self.avatarView.pinToSafeAreaTop()
         self.avatarView.centerOnX()
 
-        let maxWidth = self.view.width - (Theme.contentOffset * 2)
+        let maxWidth = Theme.getPaddedWidth(with: self.view.width)
 
         self.nameLabel.setSize(withWidth: maxWidth)
         self.nameLabel.centerOnX()
