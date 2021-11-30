@@ -177,7 +177,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             let currentSection = indexPath.section
             let currentItemIndex = indexPath.item
 
-            var startZ = CGFloat(sortedItemsIndex) * self.itemHeight
+            var startZ: CGFloat = 0
             // Each item's z range starts after the end of the previous item's range within its section.
             if let previousRangeInSection = self.zRangesDict[IndexPath(item: currentItemIndex - 1,
                                                                       section: currentSection)] {
@@ -254,7 +254,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             // Scale it up to simulate it moving closer to the user.
             let normalized = (-vectorToCurrentZ)/self.itemHeight
             scale = clamp(normalized, max: 1) + 1
-            yOffset = normalized * -self.itemHeight * 2
+            yOffset = normalized * -self.itemHeight * 1
             alpha = 1 - normalized
         } else {
             // If current z position is within the item's z range, don't adjust its scale or position.
