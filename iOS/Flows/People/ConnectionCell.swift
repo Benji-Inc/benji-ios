@@ -52,7 +52,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
         self.avatarView.centerOnX()
 
         self.titleLabel.setSize(withWidth: self.contentView.width)
-        self.titleLabel.match(.top, to: .bottom, of: self.avatarView, offset: 4)
+        self.titleLabel.match(.top, to: .bottom, of: self.avatarView, offset: .short)
         self.titleLabel.centerOnX()
     }
 }

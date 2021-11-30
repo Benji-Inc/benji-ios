@@ -98,16 +98,16 @@ class ConnectionRequestView: View {
         let maxLabelWidth = self.containerView.width - self.avatarView.right - Theme.contentOffset
         self.textView.setSize(withMaxWidth: maxLabelWidth)
         self.textView.match(.top, to: .top, of: self.avatarView)
-        self.textView.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset.half)
+        self.textView.match(.left, to: .right, of: self.avatarView, offset: .standard)
 
         let buttonWidth = (self.containerView.width - self.avatarView.right - Theme.contentOffset - Theme.contentOffset.half) * 0.5
 
         self.acceptButton.size = CGSize(width: buttonWidth, height: 40)
-        self.acceptButton.match(.right, to: .right, of: self.containerView, offset: -Theme.contentOffset.half)
+        self.acceptButton.match(.right, to: .right, of: self.containerView, offset: .standard)
         self.acceptButton.pin(.bottom, padding: Theme.contentOffset.half)
 
         self.declineButton.size = CGSize(width: buttonWidth, height: 40)
-        self.declineButton.match(.right, to: .left, of: self.acceptButton, offset: -Theme.contentOffset.half)
+        self.declineButton.match(.right, to: .left, of: self.acceptButton, offset: .standard)
         self.declineButton.pin(.bottom, padding: Theme.contentOffset.half)
 
         self.successLabel.setSize(withWidth: self.containerView.width * 0.8)

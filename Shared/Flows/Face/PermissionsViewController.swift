@@ -87,11 +87,11 @@ class PermissionsViewController: DisclosureModalViewController {
 
         self.notificationSwitchView.expandToSuperviewWidth()
         self.notificationSwitchView.height = Theme.buttonHeight
-        self.notificationSwitchView.match(.bottom, to: .top, of: self.button, offset: -Theme.contentOffset.half)
+        self.notificationSwitchView.match(.bottom, to: .top, of: self.button, offset: .standard, isNegativeOffset: true)
 
         self.focusSwitchView.expandToSuperviewWidth()
         self.focusSwitchView.height = Theme.buttonHeight
-        self.focusSwitchView.match(.bottom, to: .top, of: self.notificationSwitchView, offset: -Theme.contentOffset.half)
+        self.focusSwitchView.match(.bottom, to: .top, of: self.notificationSwitchView, offset: .standard, isNegativeOffset: true)
     }
 
     private func updateUI(for state: State) {

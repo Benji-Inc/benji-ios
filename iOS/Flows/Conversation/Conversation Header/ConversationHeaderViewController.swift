@@ -78,7 +78,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
         switch self.state {
         case .read:
-            self.membersVC.view.match(.top, to: .bottom, of: self.label, offset: Theme.contentOffset.half)
+            self.membersVC.view.match(.top, to: .bottom, of: self.label, offset: .standard)
         case .write:
             self.membersVC.view.pin(.top)
         }

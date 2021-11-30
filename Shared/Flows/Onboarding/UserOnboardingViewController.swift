@@ -65,12 +65,12 @@ class UserOnboardingViewController: ViewController {
         let height: CGFloat = self.shouldShowLargeAvatar() ? self.view.width * 0.4 : 60
         self.avatarView.setSize(for: height)
         self.avatarView.centerOnX()
-        self.avatarView.match(.top, to: .bottom, of: self.nameLabel, offset: Theme.contentOffset.half)
+        self.avatarView.match(.top, to: .bottom, of: self.nameLabel, offset: .standard)
 
         let maxWidth = self.view.width - (Theme.contentOffset.doubled.doubled)
 
         self.messageContent.size = self.messageContent.getSize(with: maxWidth)
-        self.messageContent.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset.half)
+        self.messageContent.match(.top, to: .bottom, of: self.avatarView, offset: .standard)
         self.messageContent.centerOnX()
 
         self.blurView.expandToSuperviewSize()

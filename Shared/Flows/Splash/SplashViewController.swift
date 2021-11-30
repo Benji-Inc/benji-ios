@@ -56,7 +56,7 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
 
         let max = self.view.width - (Theme.contentOffset * 3) - self.animationView.width
         self.label.setSize(withWidth: max)
-        self.label.match(.right, to: .left, of: self.animationView, offset: Theme.contentOffset * -1)
+        self.label.match(.right, to: .left, of: self.animationView, offset: .xtraLong, isNegativeOffset: true)
         self.label.match(.bottom, to: .bottom, of: self.animationView)
 
         self.versionLabel.setSize(withWidth: self.view.width)

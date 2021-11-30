@@ -73,7 +73,7 @@ class NavigationBarViewController: ViewController {
         self.titleLabel.pin(.left, padding: Theme.contentOffset)
 
         self.titleLabel.match(.top, to: .bottom, of: self.backButton)
-        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 10)
+        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .standard)
 
         self.blurView.expandToSuperviewSize()
     }

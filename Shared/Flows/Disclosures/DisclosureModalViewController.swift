@@ -54,11 +54,11 @@ class DisclosureModalViewController: ViewController {
 
         self.descriptionLabel.setSize(withWidth: maxWidth)
         self.descriptionLabel.centerOnX()
-        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: Theme.contentOffset)
+        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .standard)
 
         let contentHeight = self.view.height - (self.descriptionLabel.bottom + Theme.contentOffset) - self.view.safeAreaInsets.bottom
         self.contentView.size = CGSize(width: maxWidth, height: contentHeight)
-        self.contentView.match(.top, to: .bottom, of: self.descriptionLabel, offset: Theme.contentOffset)
+        self.contentView.match(.top, to: .bottom, of: self.descriptionLabel, offset: .standard)
         self.contentView.centerOnX()
     }
 

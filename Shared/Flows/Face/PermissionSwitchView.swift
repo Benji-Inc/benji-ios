@@ -101,7 +101,7 @@ class PermissionSwitchView: View {
         self.imageView.centerOnY()
 
         self.label.setSize(withWidth: self.width)
-        self.label.match(.left, to: .right, of: self.imageView, offset: Theme.contentOffset.half)
+        self.label.match(.left, to: .right, of: self.imageView, offset: .short)
         self.label.centerOnY()
 
         self.switchView.centerOnY()

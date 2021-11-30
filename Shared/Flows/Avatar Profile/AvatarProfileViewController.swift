@@ -58,10 +58,10 @@ class AvatarProfileViewController: ViewController {
 
         self.nameLabel.setSize(withWidth: maxWidth)
         self.nameLabel.centerOnX()
-        self.nameLabel.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset)
+        self.nameLabel.match(.top, to: .bottom, of: self.avatarView, offset: .standard)
 
         self.handleLabel.setSize(withWidth: maxWidth)
         self.handleLabel.centerOnX()
-        self.handleLabel.match(.top, to: .bottom, of: self.nameLabel, offset: 4)
+        self.handleLabel.match(.top, to: .bottom, of: self.nameLabel, offset: .short)
     }
 }

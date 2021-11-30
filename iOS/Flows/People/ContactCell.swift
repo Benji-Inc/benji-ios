@@ -60,11 +60,11 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
 
         self.subTitleLabel.setSize(withWidth: self.contentView.width * 0.6)
         self.subTitleLabel.top = self.avatarView.centerY + 4
-        self.subTitleLabel.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset.half)
+        self.subTitleLabel.match(.left, to: .right, of: self.avatarView, offset: .standard)
 
         self.titleLabel.setSize(withWidth: self.contentView.width * 0.6)
         self.titleLabel.bottom = self.avatarView.centerY
-        self.titleLabel.match(.left, to: .right, of: self.avatarView, offset: Theme.contentOffset.half)
+        self.titleLabel.match(.left, to: .right, of: self.avatarView, offset: .standard)
 
         self.animationView.squaredSize = 20
         self.animationView.pin(.right, padding: Theme.contentOffset)

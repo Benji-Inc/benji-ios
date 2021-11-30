@@ -9,8 +9,8 @@
 import Foundation
 import UIKit
 
-private let boldFontName = "SF-Pro-Text-Bold.otf"
-private let regularFontName = "SF-Pro-Text-Regular.otf"
+private let boldFontName = "SFProText-Bold"
+private let regularFontName = "SFProText-Regular"
 
 enum FontType {
 

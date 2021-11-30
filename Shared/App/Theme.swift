@@ -17,6 +17,14 @@ struct Theme {
         case slow = 0.5
     }
 
+    enum ContentOffset: CGFloat {
+        case noOffset = 0 
+        case short = 4
+        case standard = 8
+        case long = 12
+        case xtraLong = 16
+    }
+
     static let animationDurationFast: TimeInterval = 0.2
     static let animationDurationStandard: TimeInterval = 0.35
     static let animationDurationSlow: TimeInterval = 0.5

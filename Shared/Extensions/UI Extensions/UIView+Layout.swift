@@ -258,8 +258,13 @@ extension UIView {
     func match(_ side: ViewSide,
                to toSide: ViewSide,
                of view: UIView,
-               offset: CGFloat = 0) {
+               offset: Theme.ContentOffset = .noOffset,
+               isNegativeOffset: Bool = false) {
 
+        var offset = offset.rawValue
+        if isNegativeOffset {
+            offset = offset * -1
+        }
         let toSideValue: CGFloat
 
         switch toSide {

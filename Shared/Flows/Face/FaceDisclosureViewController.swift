@@ -76,10 +76,10 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         super.viewDidLayoutSubviews()
 
         self.imageView.setSize(for: self.view.width * 0.25)
-        self.imageView.match(.top, to: .bottom, of: self.titleLabel, offset: Theme.contentOffset)
+        self.imageView.match(.top, to: .bottom, of: self.titleLabel, offset: .xtraLong)
         self.imageView.centerOnX()
 
-        self.descriptionLabel.match(.top, to: .bottom, of: self.imageView, offset: Theme.contentOffset)
+        self.descriptionLabel.match(.top, to: .bottom, of: self.imageView, offset: .xtraLong)
 
         self.button.expandToSuperviewWidth()
         self.button.height = Theme.buttonHeight

@@ -176,12 +176,12 @@ class ToastBannerView: ToastView {
         }
 
         self.titleLabel.setSize(withWidth: maxTitleWidth)
-        self.titleLabel.match(.left, to: .right, of: self.imageView, offset: Theme.contentOffset.half)
+        self.titleLabel.match(.left, to: .right, of: self.imageView, offset: .short)
         self.titleLabel.match(.top, to: .top, of: self.imageView)
 
         self.descriptionLabel.setSize(withWidth: maxTitleWidth)
-        self.descriptionLabel.match(.left, to: .right, of: self.imageView, offset: Theme.contentOffset.half)
-        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: 4)
+        self.descriptionLabel.match(.left, to: .right, of: self.imageView, offset: .standard)
+        self.descriptionLabel.match(.top, to: .bottom, of: self.titleLabel, offset: .short)
         if self.descriptionLabel.height > 84 {
             self.descriptionLabel.height = 84
         }
