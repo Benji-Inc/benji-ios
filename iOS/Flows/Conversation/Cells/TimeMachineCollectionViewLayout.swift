@@ -45,14 +45,24 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Layout Configuration
 
     /// The height of the cells.
-    var itemHeight: CGFloat = 88 {
+    var itemHeight: CGFloat = 64 {
         didSet { self.invalidateLayout() }
     }
+    /// Keypoints used to gradually shrink down items as they move away.
+    var scalingKeypoints: [CGFloat] = [1, 0.84, 0.65, 0.5]
     /// The amount of vertical space between the tops of adjacent items.
-    var spacingKeyPoints: [CGFloat] = [0, 12, 20, 24]
+    var spacingKeyPoints: [CGFloat] = [0, 8, 16, 20]
+    /// Key points used for the gradually alpha out items further back in the message stack.
+    var alphaKeyPoints: [CGFloat] = [1, 1, 1, 0]
     /// The maximum number of messages to show in each section's stack.
     var stackDepth: Int = 3 {
         didSet { self.invalidateLayout() }
+    }
+    /// How bright the background of the frontmost item is. 0 is black, 1 is full brightness.
+    var frontmostBrightness: CGFloat = 0.89
+    /// How bright the background of the backmost item is. This is based off of the frontmost item brightness.
+    var backmostBrightness: CGFloat {
+        return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.1
     }
     /// If true, the message status decoration views should be displayed.
     var showMessageStatus: Bool = false {
@@ -126,11 +136,13 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
         super.invalidateLayout(with: context)
 
-        guard let customContext = context as? TimeMachineCollectionViewLayoutInvalidationContext else { return }
-
         // Clear the layout attributes caches.
         self.cellLayoutAttributes.removeAll()
         self.decorationLayoutAttributes.removeAll()
+
+        guard let customContext = context as? TimeMachineCollectionViewLayoutInvalidationContext else {
+            return
+        }
 
         if customContext.shouldRecalculateZRanges {
             self.zRangesDict.removeAll()
@@ -143,11 +155,12 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             self.prepareZRanges()
         }
 
-        // Calculate and cache the layout attributes for the items in each section.
+        // Calculate and cache the layout attributes for all the items.
         self.forEachIndexPath { indexPath in
             self.cellLayoutAttributes[indexPath] = self.layoutAttributesForItem(at: indexPath)
         }
 
+        // Calculate and cache the layout attributes for all of the decoration views.
         for section in 0..<self.sectionCount {
             self.decorationLayoutAttributes[section]
             = self.layoutAttributesForDecorationView(ofKind: MessageStatusView.objectIdentifier,
@@ -173,29 +186,34 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             return message1.createdAt < message2.createdAt
         }
 
+        // Calculate the z range for each item.
         for (sortedItemsIndex, indexPath) in sortedItemIndexPaths.enumerated() {
-            let currentSection = indexPath.section
+            let currentSectionIndex = indexPath.section
             let currentItemIndex = indexPath.item
 
             var startZ: CGFloat = 0
             // Each item's z range starts after the end of the previous item's range within its section.
             if let previousRangeInSection = self.zRangesDict[IndexPath(item: currentItemIndex - 1,
-                                                                      section: currentSection)] {
+                                                                      section: currentSectionIndex)] {
 
                 startZ = previousRangeInSection.upperBound + self.itemHeight
             }
 
             var endZ = startZ
-            // Each item's z range ends before the beginning of the next item's range from within its section.
-            if sortedItemsIndex+1 < sortedItemIndexPaths.count {
-                for nextIndex in (sortedItemsIndex+1)..<sortedItemIndexPaths.count {
-                    let nextIndexPath = sortedItemIndexPaths[nextIndex]
 
-                    if currentSection == nextIndexPath.section {
-                        endZ = CGFloat(nextIndex) * self.itemHeight - self.itemHeight
+            if sortedItemsIndex < sortedItemIndexPaths.count {
+
+                for nextSortedItemsIndex in (sortedItemsIndex+1)..<sortedItemIndexPaths.count {
+                    let nextIndexPath = sortedItemIndexPaths[nextSortedItemsIndex]
+
+                    if currentSectionIndex == nextIndexPath.section {
+                        // Each item's z range ends before the beginning of the
+                        // next item's range from within its section.
+                        endZ = CGFloat(nextSortedItemsIndex) * self.itemHeight - self.itemHeight
                         break
-                    } else if nextIndex == sortedItemIndexPaths.count - 1 {
-                        endZ = CGFloat(nextIndex) * self.itemHeight
+                    } else if nextSortedItemsIndex == sortedItemIndexPaths.count - 1 {
+                        // If we've hit the last item we must be at the end of the range.
+                        endZ = CGFloat(nextSortedItemsIndex) * self.itemHeight
                         break
                     }
                 }
@@ -247,10 +265,12 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             // The item's z range is behind the current zPosition.
             // Start scaling it down to simulate it moving away from the user.
             let normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
-            scale = clamp(1-normalized, min: 0)
+            scale = lerp(normalized, keyPoints: self.scalingKeypoints)
             yOffset = lerp(normalized, keyPoints: self.spacingKeyPoints)
-            alpha = scale == 0 ? 0 : 1
-            backgroundBrightness = lerpClamped(normalized, start: 0.89, end: 0.59)
+            alpha = lerp(normalized, keyPoints: self.alphaKeyPoints)
+            backgroundBrightness = lerpClamped(normalized,
+                                               start: self.frontmostBrightness,
+                                               end: self.backmostBrightness)
         } else if vectorToCurrentZ < 0 {
             // The item's z range is in front of the current zPosition.
             // Scale it up to simulate it moving closer to the user.
@@ -258,16 +278,16 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             scale = clamp(normalized, max: 1) + 1
             yOffset = normalized * -self.itemHeight * 1
             alpha = 1 - normalized
-            backgroundBrightness = 0.9
+            backgroundBrightness = self.frontmostBrightness
         } else {
             // If current z position is within the item's z range, don't adjust its scale or position.
             scale = 1
             yOffset = 0
             alpha = 1
-            backgroundBrightness = 0.9
+            backgroundBrightness = self.frontmostBrightness
         }
 
-        // Objects closer to the front of the stack should be brighter.
+        // The most recent visible item should be white.
         if let naturalZOffset = self.zRangesDict[indexPath]?.lowerBound {
             let normalizedToFront = clamp(1 - naturalZOffset.distance(to: self.zPosition)/self.itemHeight.half,
                                           min: 0)
@@ -375,7 +395,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return frontmostRange.vector(to: self.zPosition)
     }
 
-
     private func getMostRecentVisibleIndexPath() -> IndexPath? {
         let sectionCount = self.sectionCount
 
@@ -421,7 +440,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             centerPoint.y += yOffset
             centerPoint.y += self.itemHeight.half * (1-scale)
         } else {
-            centerPoint.y += self.itemHeight.doubled
+            centerPoint.y += self.itemHeight.doubled + self.itemHeight.half
             centerPoint.y -= yOffset
             centerPoint.y -= self.itemHeight.half * (1-scale)
         }

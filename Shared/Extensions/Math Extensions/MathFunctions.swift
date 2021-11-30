@@ -75,6 +75,9 @@ func lerp(_ normalized: CGFloat, keyPoints: [CGFloat]) -> CGFloat {
     return lerp(normalizedInSegment/segmentLength, start: segmentLowerBound, end: segmentUpperBound)
 }
 
+func lerpClamped(_ normalized: CGFloat, keyPoints: [CGFloat]) -> CGFloat {
+    return lerp((0...1).clamp(normalized), keyPoints: keyPoints)
+}
 
 // MARK: Trig Functions
 
