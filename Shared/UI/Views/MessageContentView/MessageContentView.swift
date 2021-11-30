@@ -124,14 +124,14 @@ class MessageContentView: View {
 
         let authorHeight: CGFloat = self.state == .collapsed ? .zero : MessageContentView.minimumHeight - Theme.contentOffset
         self.authorView.setSize(for: authorHeight)
-        let padding = Theme.contentOffset.half - self.backgroundColorView.tailLength.half
+        let padding = Theme.ContentOffset.standard.value - self.backgroundColorView.tailLength.half
         let topPadding = self.backgroundColorView.orientation == .down ? padding : padding + self.backgroundColorView.tailLength
-        self.authorView.pin(.top, padding: topPadding)
-        self.authorView.pin(.left, padding: padding)
+        self.authorView.pin(.top, offset: .custom(topPadding))
+        self.authorView.pin(.left, offset: .custom(padding))
 
         self.reactionsView.squaredSize = self.authorView.width
-        self.reactionsView.pin(.top, padding: topPadding)
-        self.reactionsView.pin(.right, padding: padding)
+        self.reactionsView.pin(.top, offset: .custom(topPadding))
+        self.reactionsView.pin(.right, offset: .custom(padding))
 
         let maxWidth
         = self.backgroundColorView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)

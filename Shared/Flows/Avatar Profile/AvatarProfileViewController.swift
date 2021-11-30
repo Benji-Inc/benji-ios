@@ -51,7 +51,7 @@ class AvatarProfileViewController: ViewController {
         self.vibrancyView.expandToSuperviewSize()
 
         self.avatarView.setSize(for: 120)
-        self.avatarView.pin(.top, padding: Theme.contentOffset)
+        self.avatarView.pinToSafeAreaTop()
         self.avatarView.centerOnX()
 
         let maxWidth = self.view.width - (Theme.contentOffset * 2)

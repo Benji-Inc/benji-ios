@@ -104,11 +104,11 @@ class ConnectionRequestView: View {
 
         self.acceptButton.size = CGSize(width: buttonWidth, height: 40)
         self.acceptButton.match(.right, to: .right, of: self.containerView, offset: .standard)
-        self.acceptButton.pin(.bottom, padding: Theme.contentOffset.half)
+        self.acceptButton.pin(.bottom, offset: .standard)
 
         self.declineButton.size = CGSize(width: buttonWidth, height: 40)
         self.declineButton.match(.right, to: .left, of: self.acceptButton, offset: .standard)
-        self.declineButton.pin(.bottom, padding: Theme.contentOffset.half)
+        self.declineButton.pin(.bottom, offset: .standard)
 
         self.successLabel.setSize(withWidth: self.containerView.width * 0.8)
         self.successLabel.centerOnXAndY()

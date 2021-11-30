@@ -83,7 +83,7 @@ class FaceDisclosureViewController: DisclosureModalViewController {
 
         self.button.expandToSuperviewWidth()
         self.button.height = Theme.buttonHeight
-        self.button.pin(.bottom, padding: Theme.contentOffset)
+        self.button.pinToSafeAreaBottom()
     }
 
     func updateUser(with data: Data) async throws {

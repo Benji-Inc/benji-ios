@@ -67,10 +67,7 @@ class AttachmentViewController: ViewController {
         super.viewDidLayoutSubviews()
 
         self.blurView.expandToSuperviewSize()
-
-        self.collectionView.expandToSuperviewWidth()
-        self.collectionView.pin(.top, padding: 10)
-        self.collectionView.height = self.view.height - self.view.safeAreaInsets.bottom - 10
+        self.collectionView.expandToSuperviewSize()
     }
 
     override func viewWillAppear(_ animated: Bool) {

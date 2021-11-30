@@ -97,7 +97,7 @@ class PermissionSwitchView: View {
         self.roundCorners()
 
         self.imageView.squaredSize = self.height - Theme.contentOffset
-        self.imageView.pin(.left, padding: Theme.contentOffset.half)
+        self.imageView.pin(.left, offset: .standard)
         self.imageView.centerOnY()
 
         self.label.setSize(withWidth: self.width)
@@ -105,7 +105,7 @@ class PermissionSwitchView: View {
         self.label.centerOnY()
 
         self.switchView.centerOnY()
-        self.switchView.pin(.right, padding: Theme.contentOffset.half)
+        self.switchView.pin(.right, offset: .standard)
     }
 
     private func updateUI(for state: State) {

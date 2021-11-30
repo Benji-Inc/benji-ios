@@ -17,12 +17,34 @@ struct Theme {
         case slow = 0.5
     }
 
-    enum ContentOffset: CGFloat {
-        case noOffset = 0 
-        case short = 4
-        case standard = 8
-        case long = 12
-        case xtraLong = 16
+    indirect enum ContentOffset {
+
+        case noOffset
+        case short
+        case standard
+        case long
+        case xtraLong
+        case custom(CGFloat)
+        case negative(ContentOffset)
+
+        var value: CGFloat {
+            switch self {
+            case .noOffset:
+                return 0
+            case .short:
+                return 4
+            case .standard:
+                return 8
+            case .long:
+                return 12
+            case .xtraLong:
+                return 16
+            case .custom(let value):
+                return value
+            case .negative(let offset):
+                return offset.value * -1
+            }
+        }
     }
 
     static let animationDurationFast: TimeInterval = 0.2
@@ -34,6 +56,10 @@ struct Theme {
     static let buttonHeight: CGFloat = 50
     static let iPadPortraitWidthRatio: CGFloat = 0.65
     static let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
+
+    static func getPaddedWidth(with width: CGFloat) -> CGFloat {
+        return width - ContentOffset.xtraLong.value.doubled
+    }
 
     private init() {}
 }

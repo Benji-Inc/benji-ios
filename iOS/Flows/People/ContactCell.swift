@@ -55,7 +55,7 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
         self.content.roundCorners()
 
         self.avatarView.setSize(for: self.contentView.height - Theme.contentOffset)
-        self.avatarView.pin(.left, padding: Theme.contentOffset.half)
+        self.avatarView.pin(.left, offset: .standard)
         self.avatarView.centerOnY()
 
         self.subTitleLabel.setSize(withWidth: self.contentView.width * 0.6)
@@ -67,7 +67,7 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
         self.titleLabel.match(.left, to: .right, of: self.avatarView, offset: .standard)
 
         self.animationView.squaredSize = 20
-        self.animationView.pin(.right, padding: Theme.contentOffset)
+        self.animationView.pin(.right, offset: .xtraLong)
         self.animationView.centerOnY()
     }
 }

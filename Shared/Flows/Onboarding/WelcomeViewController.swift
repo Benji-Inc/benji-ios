@@ -86,8 +86,8 @@ class WelcomeViewController: TextInputViewController<Void> {
 
         self.loginButton.setSize(with: self.view.width)
         self.loginButton.width = 80
-        self.loginButton.pin(.right, padding: Theme.contentOffset.half)
-        self.loginButton.pinToSafeArea(.top, offset: .noOffset)
+        self.loginButton.pinToSafeAreaRight()
+        self.loginButton.pinToSafeAreaTop()
     }
 
     private func animate(for state: State) {

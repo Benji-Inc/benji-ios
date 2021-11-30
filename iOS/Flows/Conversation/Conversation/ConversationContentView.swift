@@ -78,11 +78,11 @@ class ConversationContentView: View {
 
         self.stackedAvatarView.setSize()
         self.stackedAvatarView.centerOnY()
-        self.stackedAvatarView.pin(.left, padding: Theme.contentOffset.half)
+        self.stackedAvatarView.pin(.left, offset: .standard)
 
         let maxWidth = self.width - Theme.contentOffset - self.stackedAvatarView.width
         self.label.setSize(withWidth: maxWidth)
-        self.label.pin(.top, padding: Theme.contentOffset.half)
+        self.label.pin(.top, offset: .standard)
         self.label.match(.left, to: .right, of: self.stackedAvatarView, offset: .standard)
 
         let maxHeight = self.height - self.label.height - Theme.contentOffset
