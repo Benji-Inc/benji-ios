@@ -344,9 +344,5 @@ extension UIView {
             self.width += value - self.right + offset
         }
     }
-
-    var proportionalWidth: CGFloat {
-        return self.width * 0.8
-    }
 }
 
