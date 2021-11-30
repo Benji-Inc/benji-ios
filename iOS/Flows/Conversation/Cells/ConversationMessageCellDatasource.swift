@@ -83,7 +83,7 @@ extension ConversationMessageCellDataSource {
             if zIndex == 0 {
                 cell.content.setContextMenu()
             } else {
-                cell.content.backgroundColorView.interactions.removeAll()
+                cell.content.bubbleView.interactions.removeAll()
             }
         }
     }
