@@ -33,7 +33,11 @@ class ReactionsCollectionViewDataSource: CollectionViewDataSource<ReactionsColle
         case UICollectionView.elementKindSectionHeader:
             return collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
         case UICollectionView.elementKindSectionFooter:
-            return collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
+            let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
+            if let item = self.itemIdentifier(for: indexPath) {
+                footer.configure(with: item)
+            }
+            return footer
         default:
             break
         }
