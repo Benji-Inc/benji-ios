@@ -100,7 +100,7 @@ class ConversationListViewController: FullScreenViewController,
             self.headerVC.view.height = 60
         }
 
-        self.headerVC.view.pinToSafeArea(.top, padding: Theme.contentOffset)
+        self.headerVC.view.pinToSafeAreaTop()
         self.headerVC.view.expandToSuperviewWidth()
 
         self.collectionView.expandToSuperviewWidth()

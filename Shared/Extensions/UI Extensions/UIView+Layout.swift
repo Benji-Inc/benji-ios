@@ -235,21 +235,36 @@ extension UIView {
         }
     }
 
+    func pinToSafeAreaTop() {
+        self.pinToSafeArea(.top, offset: .xtraLong)
+    }
+
+    func pinToSafeAreaBottom() {
+        self.pinToSafeArea(.bottom, offset: .xtraLong)
+    }
+
     /// Pins the specified side of the view to the same side of its superview's safe area with optional padding space.
     /// The view's size remains unchanged. If the view has no superview, this function does nothing.
-    func pinToSafeArea(_ side: ViewSide, padding: CGFloat) {
+    func pinToSafeArea(_ side: ViewSide,
+                       offset: Theme.ContentOffset,
+                       isNegativePadding: Bool = false) {
         guard let superview = self.superview else { return }
         let superSafeAreaRect = superview.safeAreaRect
 
+        var offset = offset.rawValue
+        if isNegativePadding {
+            offset = offset * -1
+        }
+
         switch side {
         case .top:
-            self.top = superSafeAreaRect.minY + padding
+            self.top = superSafeAreaRect.minY + offset
         case .bottom:
-            self.bottom = superSafeAreaRect.maxY - padding
+            self.bottom = superSafeAreaRect.maxY - offset
         case .left:
-            self.left = superSafeAreaRect.minX + padding
+            self.left = superSafeAreaRect.minX + offset
         case .right:
-            self.right = superSafeAreaRect.maxX - padding
+            self.right = superSafeAreaRect.maxX - offset
         }
     }
 

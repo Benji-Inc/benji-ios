@@ -50,7 +50,7 @@ class DisclosureModalViewController: ViewController {
 
         self.titleLabel.setSize(withWidth: maxWidth)
         self.titleLabel.centerOnX()
-        self.titleLabel.pinToSafeArea(.top, padding: Theme.contentOffset)
+        self.titleLabel.pinToSafeArea(.top, offset: .xtraLong)
 
         self.descriptionLabel.setSize(withWidth: maxWidth)
         self.descriptionLabel.centerOnX()

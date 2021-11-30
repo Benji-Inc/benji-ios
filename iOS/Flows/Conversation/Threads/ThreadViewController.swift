@@ -100,11 +100,11 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.blurView.expandToSuperviewSize()
 
-        self.parentMessageView.pinToSafeArea(.top, padding: Theme.contentOffset)
+        self.parentMessageView.pinToSafeAreaTop()
         self.parentMessageView.centerOnX()
 
         self.collectionView.collectionViewLayout.invalidateLayout()
-        self.collectionView.pinToSafeArea(.top, padding: 0)
+        self.collectionView.pinToSafeArea(.top, offset: .noOffset)
         self.collectionView.width = self.view.width * 0.8
         self.collectionView.centerOnX()
     }

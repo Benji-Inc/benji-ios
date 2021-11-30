@@ -29,7 +29,7 @@ class ReservationsViewController: NavigationBarViewController {
 
         self.contactsButton.setSize(with: self.view.width)
         self.contactsButton.centerOnX()
-        self.contactsButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+        self.contactsButton.pinToSafeAreaBottom()
     }
 
     override func getTitle() -> Localized {

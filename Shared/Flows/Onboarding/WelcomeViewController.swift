@@ -81,13 +81,13 @@ class WelcomeViewController: TextInputViewController<Void> {
         self.label.centerY = self.view.halfHeight * 0.6
 
         self.reservationButton.setSize(with: self.view.width)
-        self.reservationButton.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+        self.reservationButton.pinToSafeArea(.bottom, offset: .xtraLong)
         self.reservationButton.centerOnX()
 
         self.loginButton.setSize(with: self.view.width)
         self.loginButton.width = 80
         self.loginButton.pin(.right, padding: Theme.contentOffset.half)
-        self.loginButton.pinToSafeArea(.top, padding: 0)
+        self.loginButton.pinToSafeArea(.top, offset: .noOffset)
     }
 
     private func animate(for state: State) {
