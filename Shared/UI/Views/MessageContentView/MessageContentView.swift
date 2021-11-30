@@ -9,16 +9,24 @@
 import Foundation
 import Combine
 import SwiftUI
+#if IOS
+import StreamChat
+#endif
 
 class MessageContentView: View {
 
+    #if IOS
+    var handleTappedMessage: ((ConversationMessageItem) -> Void)?
+    var handleEditMessage: ((ConversationMessageItem) -> Void)?
+    var messageController: ChatMessageController?
+    #endif
+
     /// Sizing
 
-    static var minimumHeight: CGFloat { return 50 }
-    static var maximumHeight: CGFloat { return 100 }
-    static var verticalPadding: CGFloat { return MessageContentView.bubbleTailLength + Theme.contentOffset }
+    static var standardHeight: CGFloat { return 60 + MessageContentView.bubbleTailLength }
+    static var verticalPadding: CGFloat { return MessageContentView.bubbleTailLength + Theme.ContentOffset.xtraLong.value }
 
-    static let bubbleTailLength: CGFloat = 7
+    static let bubbleTailLength: CGFloat = 12
 
     /// A speech bubble background view for the message.
     let bubbleView = SpeechBubbleView(orientation: .down)
@@ -30,6 +38,7 @@ class MessageContentView: View {
     let reactionsView = ReactionsView()
 
     private var cancellables = Set<AnyCancellable>()
+    var publisherCancellables = Set<AnyCancellable>()
 
     enum State {
         case expanded
@@ -40,6 +49,10 @@ class MessageContentView: View {
 
     deinit {
         self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
+
+        self.publisherCancellables.forEach { cancellable in
             cancellable.cancel()
         }
     }
@@ -57,9 +70,19 @@ class MessageContentView: View {
         self.bubbleView.addSubview(self.reactionsView)
 
         self.$state.mainSink { [unowned self] state in
+            self.authorView.isVisible = state == .expanded
+            self.reactionsView.isVisible = state == .expanded
             self.layoutNow()
         }.store(in: &self.cancellables)
     }
+
+    #if IOS
+    func setContextMenu() {
+        self.bubbleView.interactions.removeAll()
+        let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
+        self.bubbleView.addInteraction(contextMenuInteraction)
+    }
+    #endif
 
     func configure(with message: Messageable) {
         self.message = message
@@ -69,10 +92,13 @@ class MessageContentView: View {
             self.textView.setText(with: message)
         }
 
+        self.configureConsumption(for: message)
+
         self.authorView.set(avatar: message.avatar)
         #if IOS
         if let msg = message as? Message {
             self.reactionsView.configure(with: msg.latestReactions)
+            self.subscribeToUpdates(for: msg)
         }
         #endif
 
@@ -95,16 +121,16 @@ class MessageContentView: View {
 
         self.bubbleView.expandToSuperviewSize()
 
-        let authorHeight: CGFloat = self.state == .collapsed ? .zero : MessageContentView.minimumHeight - Theme.contentOffset
+        let authorHeight: CGFloat = self.state == .collapsed ? .zero : MessageContentView.standardHeight - MessageContentView.verticalPadding
         self.authorView.setSize(for: authorHeight)
-        let padding = Theme.contentOffset.half - self.bubbleView.tailLength.half
+        let padding = Theme.ContentOffset.standard.value - self.bubbleView.tailLength.half
         let topPadding = self.bubbleView.orientation == .down ? padding : padding + self.bubbleView.tailLength
-        self.authorView.pin(.top, padding: topPadding)
-        self.authorView.pin(.left, padding: padding)
+        self.authorView.pin(.top, offset: .custom(topPadding))
+        self.authorView.pin(.left, offset: .custom(padding))
 
         self.reactionsView.squaredSize = self.authorView.width
-        self.reactionsView.pin(.top, padding: topPadding)
-        self.reactionsView.pin(.right, padding: padding)
+        self.reactionsView.pin(.top, offset: .custom(topPadding))
+        self.reactionsView.pin(.right, offset: .custom(padding))
 
         let maxWidth
         = self.bubbleView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
@@ -139,13 +165,13 @@ extension MessageTextView {
 
         switch state {
         case .expanded:
-            let authorHeight: CGFloat = MessageContentView.minimumHeight - Theme.contentOffset
+            let authorHeight: CGFloat = MessageContentView.standardHeight - MessageContentView.verticalPadding
             let size = AvatarView().getSize(for: authorHeight)
             maxTextWidth = width - ((size.width * 2) + Theme.contentOffset)
             maxTextHeight = CGFloat.greatestFiniteMagnitude
         case .collapsed:
             maxTextWidth = width 
-            maxTextHeight = MessageContentView.maximumHeight - MessageContentView.bubbleTailLength - Theme.contentOffset
+            maxTextHeight = MessageContentView.standardHeight - MessageContentView.verticalPadding
         }
 
         let size = self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)

@@ -17,6 +17,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
 
     // Interaction handling
     var handleTappedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
+    var handleEditMessage: ((ConversationMessageItem) -> Void)?
+
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
@@ -55,7 +57,13 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
                                                         bottom: 0,
                                                         right: 0)
 
-        self.dataSource.contextMenuDelegate = self
+        self.dataSource.handleTappedMessage = { [unowned self] item, content in
+            self.handleTappedMessage?(item, content)
+        }
+
+        self.dataSource.handleEditMessage = { [unowned self] item in
+            self.handleEditMessage?(item)
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -171,50 +179,5 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = self.dataSource.itemIdentifier(for: indexPath), let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
         self.handleTappedMessage?(item, cell.content)
-    }
-}
-
-// MARK: - UIContextMenuInteractionDelegate
-
-extension ConversationMessagesCell: UIContextMenuInteractionDelegate {
-
-    func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
-                                configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
-
-        return UIContextMenuConfiguration(identifier: nil,
-                                          previewProvider: nil) { elements in
-            return self.makeContextMenu()
-        }
-    }
-
-    private func makeContextMenu() -> UIMenu {
-        guard let conversation = self.conversation else { return UIMenu() }
-
-        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
-
-        let confirmDelete = UIAction(title: "Confirm",
-                                     image: UIImage(systemName: "trash"),
-                                     attributes: .destructive) { [unowned self] action in
-            self.handleDeleteConversation?(conversation)
-        }
-
-
-        let deleteText = conversation.isCreatedByCurrentUser ? "Delete Conversation" : "Hide Conversation"
-        let deleteMenu = UIMenu(title: deleteText,
-                                image: UIImage(systemName: "trash"),
-                                options: .destructive,
-                                children: [confirmDelete, neverMind])
-
-        let openConvesation = UIAction(title: "Open Conversation") { [unowned self] action in
-            self.handleTappedConversation?(conversation)
-        }
-
-        var menuElements: [UIMenuElement] = []
-        if conversation.isCreatedByCurrentUser {
-            menuElements.append(deleteMenu)
-        }
-        menuElements.append(openConvesation)
-
-        return UIMenu(children: menuElements)
     }
 }

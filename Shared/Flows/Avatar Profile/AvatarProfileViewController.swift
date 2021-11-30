@@ -51,17 +51,17 @@ class AvatarProfileViewController: ViewController {
         self.vibrancyView.expandToSuperviewSize()
 
         self.avatarView.setSize(for: 120)
-        self.avatarView.pin(.top, padding: Theme.contentOffset)
+        self.avatarView.pinToSafeAreaTop()
         self.avatarView.centerOnX()
 
-        let maxWidth = self.view.width - (Theme.contentOffset * 2)
+        let maxWidth = Theme.getPaddedWidth(with: self.view.width)
 
         self.nameLabel.setSize(withWidth: maxWidth)
         self.nameLabel.centerOnX()
-        self.nameLabel.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset)
+        self.nameLabel.match(.top, to: .bottom, of: self.avatarView, offset: .standard)
 
         self.handleLabel.setSize(withWidth: maxWidth)
         self.handleLabel.centerOnX()
-        self.handleLabel.match(.top, to: .bottom, of: self.nameLabel, offset: 4)
+        self.handleLabel.match(.top, to: .bottom, of: self.nameLabel, offset: .short)
     }
 }

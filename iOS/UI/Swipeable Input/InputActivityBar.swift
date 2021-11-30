@@ -26,7 +26,7 @@ class InputActivityBar: View {
 
         self.label.setSize(withWidth: self.width - Theme.contentOffset)
         self.label.centerOnY()
-        self.label.pin(.left, padding: 6)
+        self.label.pin(.left, offset: .short)
     }
 
     func update(text: Localized, with hightlightedWords: [String] = []) {

@@ -12,6 +12,7 @@ import StreamChat
 protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
     func getConversation(forItemAt indexPath: IndexPath) -> Conversation?
     func getMessage(forItemAt indexPath: IndexPath) -> Messageable?
+    func frontMostItemWasUpdated(for indexPath: IndexPath)
 }
 
 class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
@@ -31,6 +32,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     // MARK: - Data Source
+    private var lastFrontMostIndexPath: [SectionIndex: IndexPath] = [:]
 
     weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
 
@@ -45,7 +47,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Layout Configuration
 
     /// The height of the cells.
-    var itemHeight: CGFloat = 64 {
+    var itemHeight: CGFloat = 60 + MessageContentView.bubbleTailLength {
         didSet { self.invalidateLayout() }
     }
     /// Keypoints used to gradually shrink down items as they move away.
@@ -311,6 +313,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         attributes.shouldShowTail = true
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
 
+        if yOffset == 0, indexPath != self.lastFrontMostIndexPath[indexPath.section] {
+            self.dataSource?.frontMostItemWasUpdated(for: indexPath)
+            self.lastFrontMostIndexPath[indexPath.section] = indexPath
+        }
+
         return attributes
     }
 
@@ -465,8 +472,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let center = self.getCenterPoint(for: 1, withYOffset: 0, scale: 1)
         var frame = CGRect(x: Theme.contentOffset.half,
                            y: 0,
-                           width: self.collectionView!.width - Theme.contentOffset,
-                           height: self.itemHeight - MessageContentView.bubbleTailLength - Theme.contentOffset)
+                           width: self.collectionView!.width - (Theme.ContentOffset.short.value * 2),
+                           height: self.itemHeight - MessageContentView.bubbleTailLength - (Theme.ContentOffset.short.value * 2))
         frame.centerY = center.y - MessageContentView.bubbleTailLength.half
         return frame
     }

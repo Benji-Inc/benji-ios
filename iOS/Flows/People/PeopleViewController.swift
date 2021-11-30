@@ -96,7 +96,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             if self.selectedItems.count == 0 {
                 self.button.top = self.view.height
             } else {
-                self.button.pinToSafeArea(.bottom, padding: Theme.contentOffset)
+                self.button.pinToSafeAreaBottom()
             }
 
             self.view.layoutNow()

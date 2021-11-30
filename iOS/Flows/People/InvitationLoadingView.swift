@@ -125,10 +125,10 @@ class InvitationLoadingView: View {
 
         self.label.setSize(withWidth: self.width - Theme.contentOffset.doubled)
         self.label.centerOnX()
-        self.label.match(.top, to: .bottom, of: self.avatarView, offset: Theme.contentOffset)
+        self.label.match(.top, to: .bottom, of: self.avatarView, offset: .xtraLong)
 
         self.progressView.width = self.halfWidth
-        self.progressView.match(.top, to: .bottom, of: self.label, offset: Theme.contentOffset.half)
+        self.progressView.match(.top, to: .bottom, of: self.label, offset: .standard)
         self.progressView.centerOnX()
     }
 }

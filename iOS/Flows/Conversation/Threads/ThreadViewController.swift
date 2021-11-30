@@ -84,6 +84,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
+        self.parentMessageView.setContextMenu()
 
         self.collectionView.clipsToBounds = false
 
@@ -99,11 +100,11 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.blurView.expandToSuperviewSize()
 
-        self.parentMessageView.pinToSafeArea(.top, padding: Theme.contentOffset)
+        self.parentMessageView.pinToSafeAreaTop()
         self.parentMessageView.centerOnX()
 
         self.collectionView.collectionViewLayout.invalidateLayout()
-        self.collectionView.pinToSafeArea(.top, padding: 0)
+        self.collectionView.pinToSafeArea(.top, offset: .noOffset)
         self.collectionView.width = self.view.width * 0.8
         self.collectionView.centerOnX()
     }
@@ -181,7 +182,11 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
             // Animate in the send overlay
             self.view.insertSubview(self.sendMessageOverlay, aboveSubview: self.collectionView)
             self.sendMessageOverlay.alpha = 0
-            self.sendMessageOverlay.setState(.reply, messageColor: .white)
+
+            if let cv = self.collectionView as? ThreadCollectionView {
+                self.sendMessageOverlay.setState(.reply, messageColor: cv.getDropZoneColor())
+
+            }
             UIView.animate(withDuration: Theme.animationDurationStandard) {
                 self.sendMessageOverlay.alpha = 1
             }
@@ -256,6 +261,11 @@ extension ThreadViewController: TransitionableViewController {
 extension ThreadViewController {
 
     func subscribeToUpdates() {
+
+        self.dataSource.handleEditMessage = { [unowned self] item in
+            // TODO
+        }
+
         self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
             if self.messageInputAccessoryView.textView.isFirstResponder {
                 self.messageInputAccessoryView.textView.resignFirstResponder()
@@ -265,6 +275,10 @@ extension ThreadViewController {
         self.messageInputAccessoryView.textView.$inputText.mainSink { _ in
             guard let enabled = self.conversationController?.areTypingEventsEnabled, enabled else { return }
             self.conversationController?.sendKeystrokeEvent(completion: nil)
+        }.store(in: &self.cancellables)
+
+        self.messageController.messageChangePublisher.mainSink { [unowned self] changes in
+            // TODO
         }.store(in: &self.cancellables)
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
@@ -292,5 +306,9 @@ extension ThreadViewController: TimeMachineCollectionViewLayoutDataSource {
 
     func getMessage(forItemAt indexPath: IndexPath) -> Messageable? {
         return self.messageController.replies[indexPath.item]
+    }
+
+    func frontMostItemWasUpdated(for indexPath: IndexPath) {
+        logDebug("\(indexPath.description)")
     }
 }

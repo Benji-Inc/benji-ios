@@ -41,6 +41,7 @@ extension TransitionRouter {
             toView.bubbleView.bubbleColor = Color.white.color
             toView.bubbleView.tailLength = 0
             toView.bubbleView.orientation = fromView.bubbleView.orientation
+            toView.state = .expanded
             toView.size = fromView.size
             toView.layoutNow()
         }
@@ -71,7 +72,9 @@ extension TransitionRouter {
         Task {
             await UIView.awaitSpringAnimation(with: .slow, animations: {
                 snapshot.frame = finalFrame
+                snapshot.state = .expanded
                 snapshot.bubbleView.bubbleColor = Color.white.color
+
                 threadVC.blurView.showBlur(true)
                 self.toVC.view.alpha = 1
             })

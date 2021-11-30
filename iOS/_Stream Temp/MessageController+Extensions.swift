@@ -54,6 +54,33 @@ extension MessageController {
         }
     }
 
+    func addReaction(with type: ReactionType, extraData: [String: RawJSON] = [:]) async throws {
+        return try await withCheckedThrowingContinuation({ continuation in
+            self.addReaction(type.reaction,
+                             score: 0,
+                             enforceUnique: true,
+                             extraData: extraData) { error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        })
+    }
+
+    func removeReaction(with type: MessageReactionType) async throws {
+        return try await withCheckedThrowingContinuation({ continuation in
+            self.deleteReaction(type) { error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        })
+    }
+
     @discardableResult
     func createNewReply(with sendable: Sendable) async throws -> MessageId {
         switch sendable.kind {

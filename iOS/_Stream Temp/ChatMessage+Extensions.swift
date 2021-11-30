@@ -46,8 +46,15 @@ extension ChatMessage: Messageable {
         return .passive
     }
 
-    var hasBeenConsumedBy: [String] {
-        return []
+    var hasBeenConsumedBy: [Avatar] {
+        let reads = self.latestReactions.filter { reaction in
+            guard let type = ReactionType(rawValue: reaction.type.rawValue) else { return false }
+            return type == .read
+        }
+
+        return reads.compactMap { reaction in
+            return reaction.author
+        }
     }
 
     var kind: MessageKind {
@@ -66,7 +73,20 @@ extension ChatMessage: Messageable {
         return self.latestReplies
     }
 
-    func updateConsumers(with consumer: Avatar) async throws -> Messageable {
-        return self
+    func setToConsumed() async throws {
+        let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
+        try await controller.addReaction(with: .read)
+    }
+
+    func setToUnconsumed() async throws {
+        let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
+        if let readReaction = self.latestReactions.first(where: { reaction in
+            if let type = ReactionType(rawValue: reaction.type.rawValue), type == .read, reaction.author.userObjectID == User.current()?.objectId {
+                return true
+            }
+            return false
+        }) {
+            try await controller.removeReaction(with: readReaction.type)
+        }
     }
 }

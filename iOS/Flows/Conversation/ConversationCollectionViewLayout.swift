@@ -37,7 +37,7 @@ class ConversationCollectionViewLayout: UICollectionViewFlowLayout {
 
         let itemHeight: CGFloat = collectionView.height
 
-        self.itemSize = CGSize(width: collectionView.width * 0.8, height: itemHeight)
+        self.itemSize = CGSize(width: Theme.getPaddedWidth(with: collectionView.width), height: itemHeight)
 
         // NOTE: Subtracting 1 to ensure there's enough vertical space for the cells.
         let verticalSpacing = (collectionView.height - itemHeight - 1)
@@ -45,6 +45,6 @@ class ConversationCollectionViewLayout: UICollectionViewFlowLayout {
                                          left: 0,
                                          bottom: verticalSpacing,
                                          right: 0)
-        self.minimumLineSpacing = collectionView.width * 0.05
+        self.minimumLineSpacing = Theme.ContentOffset.standard.value
     }
 }

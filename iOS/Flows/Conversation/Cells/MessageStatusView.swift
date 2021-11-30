@@ -94,11 +94,11 @@ class MessageStatusView: UICollectionReusableView {
         super.layoutSubviews()
 
         self.dateLabel.setSize(withWidth: self.width)
-        self.dateLabel.pin(.left, padding: Theme.contentOffset.half)
+        self.dateLabel.pin(.left, offset: .standard)
         self.dateLabel.centerOnY()
 
         self.statusLabel.setSize(withWidth: self.width)
-        self.statusLabel.pin(.right, padding: Theme.contentOffset.half)
+        self.statusLabel.pin(.right, offset: .standard)
         self.statusLabel.centerOnY()
     }
 

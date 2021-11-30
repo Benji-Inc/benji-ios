@@ -51,16 +51,16 @@ class SplashViewController: FullScreenViewController, TransitionableViewControll
         super.viewDidLayoutSubviews()
 
         self.animationView.size = CGSize(width: 18, height: 18)
-        self.animationView.pin(.right, padding: Theme.contentOffset)
-        self.animationView.pinToSafeArea(.bottom, padding: 5)
+        self.animationView.pinToSafeAreaRight()
+        self.animationView.pinToSafeAreaBottom()
 
         let max = self.view.width - (Theme.contentOffset * 3) - self.animationView.width
         self.label.setSize(withWidth: max)
-        self.label.match(.right, to: .left, of: self.animationView, offset: Theme.contentOffset * -1)
+        self.label.match(.right, to: .left, of: self.animationView, offset: .negative(.xtraLong))
         self.label.match(.bottom, to: .bottom, of: self.animationView)
 
         self.versionLabel.setSize(withWidth: self.view.width)
-        self.versionLabel.pin(.left, padding: Theme.contentOffset)
+        self.versionLabel.pinToSafeAreaLeft()
         self.versionLabel.match(.bottom, to: .bottom, of: self.label)
     }
 

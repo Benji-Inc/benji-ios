@@ -102,14 +102,14 @@ class ConversationListViewController: FullScreenViewController,
             self.headerVC.view.height = 60
         }
 
-        self.headerVC.view.pinToSafeArea(.top, padding: Theme.contentOffset)
+        self.headerVC.view.pinToSafeAreaTop()
         self.headerVC.view.expandToSuperviewWidth()
 
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.match(.top,
                                   to: .bottom,
                                   of: self.headerVC.view,
-                                  offset: -16)
+                                  offset: .negative(.long))
         self.collectionView.height = self.contentContainer.height - 96
 
         // If we're in the write mode, adjust the position of the collectionview to

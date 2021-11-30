@@ -67,7 +67,7 @@ class AvatarView: DisplayableImageView {
     }
 
     func getSize(for height: CGFloat) -> CGSize {
-        return CGSize(width: height * 0.74, height: height)
+        return CGSize(width: height, height: height)
     }
 
     func setSize(for height: CGFloat) {
