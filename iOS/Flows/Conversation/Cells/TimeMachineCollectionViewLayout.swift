@@ -78,7 +78,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// A cache of layout attributes for decoration views.
     private var decorationLayoutAttributes: [SectionIndex : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
-    /// and its scale will be unaltered.
+    /// and its scale and position will be unaltered.
     private var zRangesDict: [IndexPath : Range<CGFloat>] = [:]
     /// The current position along the Z axis. This is based off of the collectionview's Y content offset.
     private var zPosition: CGFloat {
@@ -202,25 +202,21 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             }
 
             var endZ = startZ
+            for nextSortedItemsIndex in (sortedItemsIndex+1)..<sortedItemIndexPaths.count {
+                let nextIndexPath = sortedItemIndexPaths[nextSortedItemsIndex]
 
-            if sortedItemsIndex < sortedItemIndexPaths.count {
-
-                for nextSortedItemsIndex in (sortedItemsIndex+1)..<sortedItemIndexPaths.count {
-                    let nextIndexPath = sortedItemIndexPaths[nextSortedItemsIndex]
-
-                    if currentSectionIndex == nextIndexPath.section {
-                        // Each item's z range ends before the beginning of the
-                        // next item's range from within its section.
-                        endZ = CGFloat(nextSortedItemsIndex) * self.itemHeight - self.itemHeight
-                        break
-                    } else if nextSortedItemsIndex == sortedItemIndexPaths.count - 1 {
-                        // If we've hit the last item we must be at the end of the range.
-                        endZ = CGFloat(nextSortedItemsIndex) * self.itemHeight
-                        break
-                    }
+                // Each item's z range ends before the beginning of the
+                // next item's range from within its section.
+                if currentSectionIndex == nextIndexPath.section {
+                    endZ = CGFloat(nextSortedItemsIndex) * self.itemHeight - self.itemHeight
+                    break
+                } else if nextSortedItemsIndex == sortedItemIndexPaths.count - 1 {
+                    // If we've hit the last item we must be at the end of the range.
+                    endZ = CGFloat(nextSortedItemsIndex) * self.itemHeight
+                    break
                 }
             }
-
+            
             self.zRangesDict[indexPath] = startZ..<endZ
         }
     }
@@ -263,7 +259,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         var alpha: CGFloat
         var backgroundBrightness: CGFloat
 
-        if vectorToCurrentZ > 0 {
+        if 0 < vectorToCurrentZ {
             // The item's z range is behind the current zPosition.
             // Start scaling it down to simulate it moving away from the user.
             let normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
@@ -293,7 +289,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         if let naturalZOffset = self.zRangesDict[indexPath]?.lowerBound {
             let normalizedToFront = clamp(1 - naturalZOffset.distance(to: self.zPosition)/self.itemHeight.half,
                                           min: 0)
-            backgroundBrightness += lerp(normalizedToFront, start: 0, end: 0.1)
+            backgroundBrightness += lerp(normalizedToFront, start: 0, end: 1-self.frontmostBrightness)
         }
 
         let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
@@ -313,7 +309,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         attributes.shouldShowTail = true
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
 
-        if yOffset == 0, indexPath != self.lastFrontMostIndexPath[indexPath.section] {
+        if yOffset == vectorToCurrentZ, indexPath != self.lastFrontMostIndexPath[indexPath.section] {
             self.dataSource?.frontMostItemWasUpdated(for: indexPath)
             self.lastFrontMostIndexPath[indexPath.section] = indexPath
         }
