@@ -224,7 +224,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             return attributes
         }
 
-        // All items are positioned relative to its frontmost item in their section.
+        // All items are positioned relative to the frontmost item in their section.
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
 
         // OPTIMIZATION: Don't calculate attributes for items that definitely won't be visible.
@@ -238,9 +238,10 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let frontmostVectorToCurrentZ = self.getFrontmostItemZOffset(in: indexPath.section)
         let vectorToCurrentZ = frontmostVectorToCurrentZ+offsetFromFrontmost
 
-        var scale: CGFloat = 1
-        var yOffset: CGFloat = 0
-        var alpha: CGFloat = 1
+        var scale: CGFloat
+        var yOffset: CGFloat
+        var alpha: CGFloat
+        var backgroundBrightness: CGFloat
 
         if vectorToCurrentZ > 0 {
             // The item's z range is behind the current zPosition.
@@ -249,6 +250,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             scale = clamp(1-normalized, min: 0)
             yOffset = lerp(normalized, keyPoints: self.spacingKeyPoints)
             alpha = scale == 0 ? 0 : 1
+            backgroundBrightness = lerpClamped(normalized, start: 0.89, end: 0.59)
         } else if vectorToCurrentZ < 0 {
             // The item's z range is in front of the current zPosition.
             // Scale it up to simulate it moving closer to the user.
@@ -256,11 +258,20 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             scale = clamp(normalized, max: 1) + 1
             yOffset = normalized * -self.itemHeight * 1
             alpha = 1 - normalized
+            backgroundBrightness = 0.9
         } else {
             // If current z position is within the item's z range, don't adjust its scale or position.
             scale = 1
             yOffset = 0
             alpha = 1
+            backgroundBrightness = 0.9
+        }
+
+        // Objects closer to the front of the stack should be brighter.
+        if let naturalZOffset = self.zRangesDict[indexPath]?.lowerBound {
+            let normalizedToFront = clamp(1 - naturalZOffset.distance(to: self.zPosition)/self.itemHeight.half,
+                                          min: 0)
+            backgroundBrightness += lerp(normalizedToFront, start: 0, end: 0.1)
         }
 
         let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
@@ -275,16 +286,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
         attributes.alpha = alpha
 
-        // Objects closer to the front of the stack should be brighter.
-        let backgroundBrightness: CGFloat = clamp(1 - indexOffsetFromFrontmost * 0.1, max: 1)
-        var backgroundColor: Color = .lightGray
-
-        if indexPath == self.getMostRecentVisibleIndexPath() {
-            backgroundColor = .white
-        }
-
+        attributes.backgroundColor = .white
         attributes.brightness = backgroundBrightness
-        attributes.backgroundColor = backgroundColor
         attributes.shouldShowTail = true
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
 
@@ -428,7 +431,10 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     func getDropZoneColor() -> Color? {
         guard let ip = self.getMostRecentVisibleIndexPath(),
-                let attributes = self.layoutAttributesForItem(at: ip) as? ConversationMessageCellLayoutAttributes else { return nil }
+                let attributes = self.layoutAttributesForItem(at: ip) as? ConversationMessageCellLayoutAttributes else {
+                    return nil
+                }
+
         if ip.section == 1 {
             return attributes.backgroundColor
         } else {
@@ -448,6 +454,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     // MARK: - Content Offset Handling
 
+    /// If true, scroll to the most recent item after performing collection view updates.
     private var shouldScrollToEnd = false
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {

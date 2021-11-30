@@ -41,11 +41,11 @@ class MessageSubcell: UICollectionViewCell {
     /// Adds a context menu interaction to this cell, using the provided delegate object.
     /// If no delegate is provided, no interaction will be added. Previously added interactions are always removed.
     func setContextMenuInteraction(with contextMenuDelegate: UIContextMenuInteractionDelegate?) {
-        self.content.backgroundColorView.interactions.removeAll()
+        self.content.bubbleView.interactions.removeAll()
 
         if let contextMenuDelegate = contextMenuDelegate {
             let contextMenuInteraction = UIContextMenuInteraction(delegate: contextMenuDelegate)
-            self.content.backgroundColorView.addInteraction(contextMenuInteraction)
+            self.content.bubbleView.addInteraction(contextMenuInteraction)
         }
     }
 
@@ -58,7 +58,6 @@ class MessageSubcell: UICollectionViewCell {
             return
         }
 
-        self.content.alpha = messageLayoutAttributes.alpha
         self.content.textView.isVisible = messageLayoutAttributes.shouldShowText
         self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
                                          brightness: messageLayoutAttributes.brightness,

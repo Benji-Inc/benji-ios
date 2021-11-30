@@ -76,7 +76,7 @@ extension ConversationMessageCellDataSource {
             }
 
             // The menu interaction should only be on the front most cell.
-            cell.content.backgroundColorView.interactions.removeAll()
+            cell.content.bubbleView.interactions.removeAll()
             if zIndex == 0 {
                 cell.setContextMenuInteraction(with: item.contextMenuDelegate)
             } else {

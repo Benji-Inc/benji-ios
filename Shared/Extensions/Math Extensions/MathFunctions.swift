@@ -42,14 +42,14 @@ func clamp(_ value: CGFloat, max: CGFloat) -> CGFloat {
 
 /// Linearly interpolate between two values given a normalized value between 0 and 1
 /// Example: lerp(0.2, min 1, max 3) = 1.4
-func lerp(_ normalized: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
-    return min + normalized * (max - min)
+func lerp(_ normalized: CGFloat, start: CGFloat, end: CGFloat) -> CGFloat {
+    return start + normalized * (end - start)
 }
 
 /// Linearly interpolate between two values. The normalized value is clamped between 0 and 1 so
-/// the result will never be outside the range of the min and max
-func lerpClamped(_ normalized: CGFloat, min: CGFloat, max: CGFloat) -> CGFloat {
-    return lerp((0...1).clamp(normalized), min: min, max: max)
+/// the result will never be outside the range of the start and end
+func lerpClamped(_ normalized: CGFloat, start: CGFloat, end: CGFloat) -> CGFloat {
+    return lerp((0...1).clamp(normalized), start: start, end: end)
 }
 
 /// Linearly interpolates along a path as defined by the key points.
@@ -72,7 +72,7 @@ func lerp(_ normalized: CGFloat, keyPoints: [CGFloat]) -> CGFloat {
     let normalizedInSegment
     = normalized.truncatingRemainder(dividingBy: segmentLength)
 
-    return lerp(normalizedInSegment/segmentLength, min: segmentLowerBound, max: segmentUpperBound)
+    return lerp(normalizedInSegment/segmentLength, start: segmentLowerBound, end: segmentUpperBound)
 }
 
 

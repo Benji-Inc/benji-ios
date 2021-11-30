@@ -20,8 +20,8 @@ class MessageContentView: View {
 
     static let bubbleTailLength: CGFloat = 7
 
-    /// A rounded and colored background view for the message. Changes color based on the sender.
-    let backgroundColorView = SpeechBubbleView(orientation: .down)
+    /// A speech bubble background view for the message.
+    let bubbleView = SpeechBubbleView(orientation: .down)
     /// Text view for displaying the text of the message.
     let textView = MessageTextView(font: .regularBold, textColor: .textColor)
     private (set) var message: Messageable?
@@ -47,14 +47,14 @@ class MessageContentView: View {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.addSubview(self.backgroundColorView)
-        self.backgroundColorView.roundCorners()
+        self.addSubview(self.bubbleView)
+        self.bubbleView.roundCorners()
 
-        self.backgroundColorView.addSubview(self.textView)
+        self.bubbleView.addSubview(self.textView)
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
 
-        self.backgroundColorView.addSubview(self.authorView)
-        self.backgroundColorView.addSubview(self.reactionsView)
+        self.bubbleView.addSubview(self.authorView)
+        self.bubbleView.addSubview(self.reactionsView)
 
         self.$state.mainSink { [unowned self] state in
             self.layoutNow()
@@ -62,7 +62,6 @@ class MessageContentView: View {
     }
 
     func configure(with message: Messageable) {
-
         self.message = message
         if message.isDeleted {
             self.textView.text = "DELETED"
@@ -86,20 +85,20 @@ class MessageContentView: View {
                              showBubbleTail: Bool,
                              tailOrientation: SpeechBubbleView.TailOrientation) {
 
-        self.backgroundColorView.bubbleColor = color.color.color(withBrightness: brightness)
-        self.backgroundColorView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
-        self.backgroundColorView.orientation = tailOrientation
+        self.bubbleView.bubbleColor = color.color.color(withBrightness: brightness)
+        self.bubbleView.tailLength = showBubbleTail ? MessageContentView.bubbleTailLength : 0
+        self.bubbleView.orientation = tailOrientation
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.backgroundColorView.expandToSuperviewSize()
+        self.bubbleView.expandToSuperviewSize()
 
         let authorHeight: CGFloat = self.state == .collapsed ? .zero : MessageContentView.minimumHeight - Theme.contentOffset
         self.authorView.setSize(for: authorHeight)
-        let padding = Theme.contentOffset.half - self.backgroundColorView.tailLength.half
-        let topPadding = self.backgroundColorView.orientation == .down ? padding : padding + self.backgroundColorView.tailLength
+        let padding = Theme.contentOffset.half - self.bubbleView.tailLength.half
+        let topPadding = self.bubbleView.orientation == .down ? padding : padding + self.bubbleView.tailLength
         self.authorView.pin(.top, padding: topPadding)
         self.authorView.pin(.left, padding: padding)
 
@@ -108,17 +107,17 @@ class MessageContentView: View {
         self.reactionsView.pin(.right, padding: padding)
 
         let maxWidth
-        = self.backgroundColorView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
+        = self.bubbleView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
 
         self.textView.size = self.textView.getSize(with: self.state, width: maxWidth)
 
-        self.textView.center = self.backgroundColorView.center
+        self.textView.center = self.bubbleView.center
 
-        switch self.backgroundColorView.orientation {
+        switch self.bubbleView.orientation {
         case .up:
-            self.textView.center.y += self.backgroundColorView.tailLength.half
+            self.textView.center.y += self.bubbleView.tailLength.half
         case .down:
-            self.textView.center.y -= self.backgroundColorView.tailLength.half
+            self.textView.center.y -= self.bubbleView.tailLength.half
         default:
             break
         }
@@ -135,7 +134,6 @@ class MessageContentView: View {
 extension MessageTextView {
 
     func getSize(with state: MessageContentView.State, width: CGFloat) -> CGSize {
-
         let maxTextWidth: CGFloat
         let maxTextHeight: CGFloat
 
