@@ -58,7 +58,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
 
     lazy var inputManager = InputTypeManager.init(with: CollectionView(layout: InputTypeCollectionViewLayout()))
 
-    static var inputTypeMaxHeight: CGFloat = MessageContentView.standardHeight
+    static var inputTypeMaxHeight: CGFloat = 40
 
     // MARK: - Message State
 
