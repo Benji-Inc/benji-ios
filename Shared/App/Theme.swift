@@ -24,6 +24,7 @@ struct Theme {
         case standard
         case long
         case xtraLong
+        case screenPadding
         case custom(CGFloat)
         case negative(ContentOffset)
 
@@ -39,6 +40,8 @@ struct Theme {
                 return 12
             case .xtraLong:
                 return 16
+            case .screenPadding:
+                return 32
             case .custom(let value):
                 return value
             case .negative(let offset):
@@ -58,7 +61,7 @@ struct Theme {
     static let blurEffect = UIBlurEffect(style: .systemUltraThinMaterial)
 
     static func getPaddedWidth(with width: CGFloat) -> CGFloat {
-        return width - ContentOffset.xtraLong.value.doubled
+        return width - ContentOffset.screenPadding.value.doubled
     }
 
     private init() {}

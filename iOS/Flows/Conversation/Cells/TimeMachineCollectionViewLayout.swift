@@ -427,8 +427,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let center = self.getCenterPoint(for: 1, withNormalizedYOffset: 0)
         var frame = CGRect(x: Theme.contentOffset.half,
                            y: 0,
-                           width: self.collectionView!.width - Theme.contentOffset,
-                           height: self.itemHeight - MessageContentView.bubbleTailLength - Theme.contentOffset)
+                           width: self.collectionView!.width - (Theme.ContentOffset.short.value * 2),
+                           height: self.itemHeight - MessageContentView.bubbleTailLength - (Theme.ContentOffset.short.value * 2))
         frame.centerY = center.y - MessageContentView.bubbleTailLength.half
         return frame
     }
