@@ -761,6 +761,14 @@
 		D6E9743C2755568D00D95F08 /* MessageContentView+Read.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */; };
 		D6E9743D275562F000D95F08 /* MessageContentView+Read.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */; };
 		D6E9743E275562F100D95F08 /* MessageContentView+Read.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */; };
+		D6E9744F2756ADB100D95F08 /* ReactionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9744E2756ADB100D95F08 /* ReactionsManager.swift */; };
+		D6E974512756ADC900D95F08 /* ReactionsCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974502756ADC900D95F08 /* ReactionsCollectionViewDataSource.swift */; };
+		D6E974532756ADEA00D95F08 /* ReactionsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974522756ADEA00D95F08 /* ReactionsCollectionViewLayout.swift */; };
+		D6E974552756ADFF00D95F08 /* ReactionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974542756ADFF00D95F08 /* ReactionsCell.swift */; };
+		D6E974572756AE1500D95F08 /* AddReactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974562756AE1500D95F08 /* AddReactionView.swift */; };
+		D6E974592756AE3300D95F08 /* ReactionsCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974582756AE3300D95F08 /* ReactionsCountView.swift */; };
+		D6E9745B2756AED200D95F08 /* DiffableCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9745A2756AED200D95F08 /* DiffableCollectionViewManager.swift */; };
+		D6E9746B2756FC3600D95F08 /* ReactionsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9746A2756FC3600D95F08 /* ReactionsCollectionView.swift */; };
 		D6E9745E2756DAFA00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
 		D6E9745F2756DAFB00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
 		D6E974602756DAFB00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
@@ -1214,6 +1222,14 @@
 		D6E97437275486F700D95F08 /* MessageContentView+Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageContentView+Menu.swift"; sourceTree = "<group>"; };
 		D6E97439275551A600D95F08 /* MessageContentView+Udpates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageContentView+Udpates.swift"; sourceTree = "<group>"; };
 		D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MessageContentView+Read.swift"; sourceTree = "<group>"; };
+		D6E9744E2756ADB100D95F08 /* ReactionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsManager.swift; sourceTree = "<group>"; };
+		D6E974502756ADC900D95F08 /* ReactionsCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsCollectionViewDataSource.swift; sourceTree = "<group>"; };
+		D6E974522756ADEA00D95F08 /* ReactionsCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsCollectionViewLayout.swift; sourceTree = "<group>"; };
+		D6E974542756ADFF00D95F08 /* ReactionsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsCell.swift; sourceTree = "<group>"; };
+		D6E974562756AE1500D95F08 /* AddReactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReactionView.swift; sourceTree = "<group>"; };
+		D6E974582756AE3300D95F08 /* ReactionsCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsCountView.swift; sourceTree = "<group>"; };
+		D6E9745A2756AED200D95F08 /* DiffableCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableCollectionViewManager.swift; sourceTree = "<group>"; };
+		D6E9746A2756FC3600D95F08 /* ReactionsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsCollectionView.swift; sourceTree = "<group>"; };
 		D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Bold.otf"; sourceTree = "<group>"; };
 		D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
 		D6EAC95423D145350028DAA2 /* Sizeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sizeable.swift; sourceTree = "<group>"; };
@@ -1696,6 +1712,7 @@
 		D6432BF122D8282E0016001A /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
+				D6E9744D2756AD8B00D95F08 /* Reactions */,
 				D605C30126F683E400C86DAD /* Conversation */,
 				D635F0A927136C2600A02D17 /* Cells */,
 				8028C9EA273ECB1900520465 /* Conversation List */,
@@ -2220,12 +2237,13 @@
 		D6E65F17237791450061AA67 /* Collection View Management  */ = {
 			isa = PBXGroup;
 			children = (
-				80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */,
-				D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */,
-				80FD049E26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift */,
 				D6D1501921D5F5D100CD8CE4 /* CollectionView.swift */,
+				80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */,
 				D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */,
+				D63BEF6126FFF5A5004243AB /* DiffableCollectionViewController.swift */,
+				D6E9745A2756AED200D95F08 /* DiffableCollectionViewManager.swift */,
 				D6E65F18237791650061AA67 /* ManageableCell.swift */,
+				80FD049E26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift */,
 			);
 			path = "Collection View Management ";
 			sourceTree = "<group>";
@@ -2239,6 +2257,20 @@
 				D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */,
 			);
 			path = MessageContentView;
+			sourceTree = "<group>";
+		};
+		D6E9744D2756AD8B00D95F08 /* Reactions */ = {
+			isa = PBXGroup;
+			children = (
+				D6E974562756AE1500D95F08 /* AddReactionView.swift */,
+				D6E974542756ADFF00D95F08 /* ReactionsCell.swift */,
+				D6E9746A2756FC3600D95F08 /* ReactionsCollectionView.swift */,
+				D6E974502756ADC900D95F08 /* ReactionsCollectionViewDataSource.swift */,
+				D6E974522756ADEA00D95F08 /* ReactionsCollectionViewLayout.swift */,
+				D6E974582756AE3300D95F08 /* ReactionsCountView.swift */,
+				D6E9744E2756ADB100D95F08 /* ReactionsManager.swift */,
+			);
+			path = Reactions;
 			sourceTree = "<group>";
 		};
 		D6F37D5E25B5D8300034C9C5 /* Avatar Profile */ = {
@@ -2751,6 +2783,7 @@
 				D6B2601822E4208900143CF0 /* MessageDateLabel.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
 				D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
+				D6E9746B2756FC3600D95F08 /* ReactionsCollectionView.swift in Sources */,
 				D68072EB2730462F004657E7 /* MessageStatusView.swift in Sources */,
 				D6B26903264C7D2000EFDA17 /* AnimatingTapView.swift in Sources */,
 				800FAAC126F0585A00D3C3A0 /* Conversation+Extensions.swift in Sources */,
@@ -2767,13 +2800,16 @@
 				D61553622746E62D00B08459 /* TransitionRouter+Message.swift in Sources */,
 				D650C1DA25B5EE3D0037C59A /* AvatarContextDelegate.swift in Sources */,
 				D65519F32589591D00B901E4 /* Typealias.swift in Sources */,
+				D6E974532756ADEA00D95F08 /* ReactionsCollectionViewLayout.swift in Sources */,
 				D6F37D6025B5D8610034C9C5 /* AvatarProfileViewController.swift in Sources */,
 				D61592DE24FAD7C600B63412 /* AttachmentHeaderView.swift in Sources */,
+				D6E974552756ADFF00D95F08 /* ReactionsCell.swift in Sources */,
 				D642735522C87CCA0088256B /* ImageViewButton.swift in Sources */,
 				D66F0FE622C0640E00BA277D /* Avatar.swift in Sources */,
 				D67934DB23DC011D00536B44 /* CharacterCountView.swift in Sources */,
 				D6DF870625A5214D0089B0CF /* QuePositions.swift in Sources */,
 				D6F37D6425B5D9D50034C9C5 /* VibrancyView.swift in Sources */,
+				D6E9745B2756AED200D95F08 /* DiffableCollectionViewManager.swift in Sources */,
 				D67896BD23025FEC0059BA75 /* NameViewController.swift in Sources */,
 				D677588C25B09F9C007E0184 /* TransitionRouter.swift in Sources */,
 				D6F80BE125C9BE1400E9C75F /* ContactsManager.swift in Sources */,
@@ -2874,6 +2910,7 @@
 				D63DB20B25E96E1E00F6B323 /* UserNotificationAction.swift in Sources */,
 				D6617CEA26741C4500439C06 /* UITextField+Extensions.swift in Sources */,
 				8098CC61270F8A2300636484 /* ConversationListCollectionView.swift in Sources */,
+				D6E974512756ADC900D95F08 /* ReactionsCollectionViewDataSource.swift in Sources */,
 				D61EC0F921D317AB00204BEE /* Theme.swift in Sources */,
 				D6B3329525DDB9E300211044 /* PeopleHeaderView.swift in Sources */,
 				D63C67E023D416B800EA373A /* FaceDetectionViewController+Extensions.swift in Sources */,
@@ -2981,6 +3018,7 @@
 				D64DD8AC23CE2C180039DC5A /* OnboardingViewController.swift in Sources */,
 				80FA869226F117C20053101B /* ChatUser+Avatar.swift in Sources */,
 				D687F3C826FE4E4B000E4734 /* ContactCell.swift in Sources */,
+				D6E974572756AE1500D95F08 /* AddReactionView.swift in Sources */,
 				D66379CF25A3704300A4A3B7 /* UserNotificationManager+Extensions.swift in Sources */,
 				D66F0FDA22BF297F00BA277D /* MainCoordinator.swift in Sources */,
 				D67896A922FF51170059BA75 /* PhoneViewController.swift in Sources */,
@@ -3011,7 +3049,9 @@
 				D67758A725B0A604007E0184 /* UIViewController+Presentable.swift in Sources */,
 				D63D71C125F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
 				8024B95326F278C8008ABF7F /* ConversationCollectionViewDataSource.swift in Sources */,
+				D6E9744F2756ADB100D95F08 /* ReactionsManager.swift in Sources */,
 				D62BB73F244D3B4300607677 /* UNNotificationContent+Extensions.swift in Sources */,
+				D6E974592756AE3300D95F08 /* ReactionsCountView.swift in Sources */,
 				D6617CF026743DCF00439C06 /* SystemNotice.swift in Sources */,
 				D6D1500721D5E73D00CD8CE4 /* ThreadViewController.swift in Sources */,
 				D6B95AF3272324BD00FBE66A /* UserStore.swift in Sources */,
