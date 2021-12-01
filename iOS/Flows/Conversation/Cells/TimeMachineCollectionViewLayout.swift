@@ -73,17 +73,20 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     // MARK: - Layout State
 
+    /// The current position along the Z axis. This is based off of the collectionview's Y content offset.
+    /// The z position ranges from 0 to itemCount*itemHeight
+    private var zPosition: CGFloat {
+        return self.collectionView?.contentOffset.y ?? 0
+    }
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     /// A cache of layout attributes for decoration views.
     private var decorationLayoutAttributes: [SectionIndex : UICollectionViewLayoutAttributes] = [:]
+    /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
+    private var itemFocusPositions: [IndexPath : CGFloat] = [:]
     /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
     /// and its scale and position will be unaltered.
-    private var zRangesDict: [IndexPath : Range<CGFloat>] = [:]
-    /// The current position along the Z axis. This is based off of the collectionview's Y content offset.
-    private var zPosition: CGFloat {
-        return self.collectionView?.contentOffset.y ?? 0
-    }
+    private var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
 
     override init() {
         super.init()
@@ -147,14 +150,15 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         if customContext.shouldRecalculateZRanges {
-            self.zRangesDict.removeAll()
+            self.itemFocusPositions.removeAll()
+            self.itemZRanges.removeAll()
         }
     }
 
     override func prepare() {
         // Don't recalculate z ranges if we already have them cached.
-        if self.zRangesDict.isEmpty {
-            self.prepareZRanges()
+        if self.itemZRanges.isEmpty {
+            self.prepareZPositionsAndRanges()
         }
 
         // Calculate and cache the layout attributes for all the items.
@@ -171,7 +175,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     /// Updates the z ranges dictionary for all items.
-    private func prepareZRanges() {
+    private func prepareZPositionsAndRanges() {
         guard let dataSource = self.dataSource else {
             logDebug("Warning: Data source not initialized in \(self)")
             return
@@ -190,12 +194,15 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         // Calculate the z range for each item.
         for (sortedItemsIndex, indexPath) in sortedItemIndexPaths.enumerated() {
+            self.itemFocusPositions[indexPath] = CGFloat(sortedItemsIndex) * self.itemHeight
+
             let currentSectionIndex = indexPath.section
             let currentItemIndex = indexPath.item
 
-            var startZ: CGFloat = 0
+            var startZ: CGFloat = CGFloat(sortedItemsIndex) * self.itemHeight
+
             // Each item's z range starts after the end of the previous item's range within its section.
-            if let previousRangeInSection = self.zRangesDict[IndexPath(item: currentItemIndex - 1,
+            if let previousRangeInSection = self.itemZRanges[IndexPath(item: currentItemIndex - 1,
                                                                       section: currentSectionIndex)] {
 
                 startZ = previousRangeInSection.upperBound + self.itemHeight
@@ -217,7 +224,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                 }
             }
             
-            self.zRangesDict[indexPath] = startZ..<endZ
+            self.itemZRanges[indexPath] = startZ..<endZ
         }
     }
 
@@ -251,7 +258,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let indexOffsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)
         let offsetFromFrontmost = indexOffsetFromFrontmost*self.itemHeight
 
-        let frontmostVectorToCurrentZ = self.getFrontmostItemZOffset(in: indexPath.section)
+        let frontmostVectorToCurrentZ = self.getFrontmostItemZVector(in: indexPath.section)
         let vectorToCurrentZ = frontmostVectorToCurrentZ+offsetFromFrontmost
 
         var scale: CGFloat
@@ -286,10 +293,12 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         // The most recent visible item should be white.
-        if let naturalZOffset = self.zRangesDict[indexPath]?.lowerBound {
-            let normalizedToFront = clamp(1 - naturalZOffset.distance(to: self.zPosition)/self.itemHeight.half,
-                                          min: 0)
-            backgroundBrightness += lerp(normalizedToFront, start: 0, end: 1-self.frontmostBrightness)
+        if let itemFocusPosition = self.itemFocusPositions[indexPath] {
+            let normalizedFocusDistance = abs(itemFocusPosition - self.zPosition)/self.itemHeight.half
+
+            backgroundBrightness += lerpClamped(normalizedFocusDistance,
+                                                start: 1-self.frontmostBrightness,
+                                                end: 0)
         }
 
         let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
@@ -380,7 +389,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                 continue
             }
 
-            guard let range = self.zRangesDict[indexPath] else { continue }
+            guard let range = self.itemZRanges[indexPath] else { continue }
             if range.vector(to: self.zPosition) <= 0 {
                 indexPathCandidate = indexPath
             }
@@ -390,21 +399,21 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     /// Gets the z vector from current frontmost item's z range to the current z position.
-    private func getFrontmostItemZOffset(in section: SectionIndex) -> CGFloat {
+    private func getFrontmostItemZVector(in section: SectionIndex) -> CGFloat {
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: section) else { return 0 }
 
-        guard let frontmostRange = self.zRangesDict[frontmostIndexPath] else { return 0 }
+        guard let frontmostRange = self.itemZRanges[frontmostIndexPath] else { return 0 }
 
         return frontmostRange.vector(to: self.zPosition)
     }
 
-    private func getMostRecentVisibleIndexPath() -> IndexPath? {
+    private func getFocusedItemIndexPath() -> IndexPath? {
         let sectionCount = self.sectionCount
 
         var frontmostIndexes: [IndexPath] = []
         for i in 0..<sectionCount {
             guard let frontmostIndex = self.getFrontmostIndexPath(in: i) else { continue }
-            guard let range = self.zRangesDict[frontmostIndex] else { continue }
+            guard let range = self.itemZRanges[frontmostIndex] else { continue }
 
             if range.vector(to: self.zPosition) > -self.itemHeight {
                 frontmostIndexes.append(frontmostIndex)
@@ -412,18 +421,18 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         return frontmostIndexes.max { indexPath1, indexPath2 in
-            guard let lowerBound1 = self.zRangesDict[indexPath1]?.lowerBound else { return true }
-            guard let lowerBound2 = self.zRangesDict[indexPath2]?.lowerBound else { return false }
+            guard let lowerBound1 = self.itemZRanges[indexPath1]?.lowerBound else { return true }
+            guard let lowerBound2 = self.itemZRanges[indexPath2]?.lowerBound else { return false }
             return lowerBound1 < lowerBound2
         }
     }
 
     func getMostRecentItemContentOffset() -> CGPoint? {
-        guard let mostRecentIndex = self.zRangesDict.max(by: { kvp1, kvp2 in
+        guard let mostRecentIndex = self.itemZRanges.max(by: { kvp1, kvp2 in
             return kvp1.value.lowerBound < kvp2.value.lowerBound
         })?.key else { return nil }
 
-        guard let upperBound = self.zRangesDict[mostRecentIndex]?.upperBound else { return nil }
+        guard let upperBound = self.itemZRanges[mostRecentIndex]?.upperBound else { return nil }
         return CGPoint(x: 0, y: upperBound)
     }
 
@@ -452,7 +461,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     func getDropZoneColor() -> Color? {
-        guard let ip = self.getMostRecentVisibleIndexPath(),
+        guard let ip = self.getFocusedItemIndexPath(),
                 let attributes = self.layoutAttributesForItem(at: ip) as? ConversationMessageCellLayoutAttributes else {
                     return nil
                 }
