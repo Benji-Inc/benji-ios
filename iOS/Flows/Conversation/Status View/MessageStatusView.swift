@@ -28,10 +28,10 @@ class MessageStatusView: View {
 
         self.replyView.expandToSuperviewHeight()
         self.replyView.pin(.right)
-        self.replyView.width = 60
+        self.replyView.centerOnY()
 
         self.readView.expandToSuperviewHeight()
-        self.readView.width = 80
+        self.readView.centerOnY()
         let readOffset = Theme.ContentOffset.short.value + self.replyView.width
         self.readView.pin(.right, offset: .custom(readOffset))
     }
@@ -40,6 +40,7 @@ class MessageStatusView: View {
         guard let status = status else {
             self.readView.reset()
             self.replyView.reset()
+            self.layoutNow()
             return
         }
 
@@ -60,6 +61,9 @@ class MessageStatusView: View {
 
 private class MessageStatusContainer: View {
 
+    let maxWidth: CGFloat = 100
+    let minWidth: CGFloat = 20
+
     override func initializeSubviews() {
         super.initializeSubviews()
 
@@ -72,7 +76,7 @@ private class MessageStatusContainer: View {
 
 private class MessageReadView: MessageStatusContainer {
 
-    let imageView = DisplayableImageView()
+    let imageView = UIImageView()
     let label = Label(font: .small)
     let progressView = UIProgressView()
 
@@ -80,6 +84,7 @@ private class MessageReadView: MessageStatusContainer {
         super.initializeSubviews()
 
         self.addSubview(self.imageView)
+        self.imageView.contentMode = .scaleAspectFit
         self.addSubview(self.label)
         self.addSubview(self.progressView)
         self.progressView.isVisible = false
@@ -92,10 +97,14 @@ private class MessageReadView: MessageStatusContainer {
         self.imageView.pin(.right, offset: .short)
         self.imageView.centerOnY()
 
-        let maxWidth = self.width - Theme.ContentOffset.short.value.doubled - self.imageView.width
+        let maxWidth = self.maxWidth - Theme.ContentOffset.short.value.doubled - self.imageView.width
         self.label.setSize(withWidth: maxWidth)
-        self.label.match(.right, to: .left, of: self.imageView, offset: .negative(.short))
+        let offset = self.imageView.width + Theme.ContentOffset.short.value.doubled
+        self.label.pin(.right, offset: .custom(offset))
         self.label.centerOnY()
+
+        let width = (Theme.ContentOffset.short.value * 3) + self.imageView.width + self.label.width
+        self.width = clamp(width, self.minWidth, self.maxWidth)
 
         self.progressView.expandToSuperviewSize()
     }
@@ -117,10 +126,10 @@ private class MessageReadView: MessageStatusContainer {
             }
         } else if status.isRead {
             self.label.setText("Read")
-            self.imageView.displayable = UIImage(named: "checkmark-double")
+            self.imageView.image = UIImage(named: "checkmark-double")
         } else {
             self.label.setText("Delivered")
-            self.imageView.displayable = UIImage(named: "checkmark")
+            self.imageView.image = UIImage(named: "checkmark")
         }
 
         self.layoutNow()
@@ -128,7 +137,7 @@ private class MessageReadView: MessageStatusContainer {
 
     func reset() {
         self.label.text = nil
-        self.imageView.displayable = nil
+        self.imageView.image = nil
     }
 }
 
@@ -147,14 +156,26 @@ private class MessageReplyView: MessageStatusContainer {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.countLabel.setSize(withWidth: self.width)
-        self.countLabel.pin(.right, offset: .short)
+        self.countLabel.setSize(withWidth: self.maxWidth)
+        self.countLabel.pin(.right, offset: .standard)
         self.countLabel.centerOnY()
 
-        self.label.setSize(withWidth: self.width - Theme.ContentOffset.standard.value)
-        let offset = Theme.ContentOffset.standard.value + self.countLabel.width
-        self.label.pin(.right, offset: .custom(offset))
-        self.label.centerOnY()
+        if self.countLabel.text.isNil {
+            self.label.setSize(withWidth: self.maxWidth - (Theme.ContentOffset.short.value * 2))
+
+            let width = (Theme.ContentOffset.short.value * 2) + self.label.width
+            self.width = clamp(width, self.minWidth, self.maxWidth)
+
+            self.label.centerOnXAndY()
+        } else {
+            self.label.setSize(withWidth: self.maxWidth - (Theme.ContentOffset.short.value * 3))
+            let offset = (Theme.ContentOffset.short.value * 3) + self.countLabel.width
+            self.label.pin(.right, offset: .custom(offset))
+            self.label.centerOnY()
+
+            let width = (Theme.ContentOffset.short.value * 4) + self.countLabel.width + self.label.width
+            self.width = clamp(width, self.minWidth, self.maxWidth)
+        }
     }
 
     func setReplies(for message: Message) {
