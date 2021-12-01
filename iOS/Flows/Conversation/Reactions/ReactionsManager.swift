@@ -16,6 +16,7 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
 
     private var cancellables = Set<AnyCancellable>()
     private var messageController: ChatMessageController?
+    private var updatedAt: Date?
 
     override func initializeCollectionView() {
         super.initializeCollectionView()
@@ -26,14 +27,23 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
 
     func loadReactions(for message: Message) {
         self.messageController = ChatClient.shared.messageController(cid: message.cid!, messageId: message.id)
-        self.reloadReactions()
+        self.subscribeToUpdates(for: message)
+        Task {
+            await self.reloadReactions()
+        }.add(to: self.taskPool)
     }
 
-    private func reloadReactions() {
-        Task {
+    @MainActor
+    private func reloadReactions() async {
+        if self.updatedAt.isNil {
             await self.loadData()
             self.handleDataBeingLoaded()
-        }.add(to: self.taskPool)
+        } else if let newUpdate = self.messageController?.message?.updatedAt,
+            let oldUpdate = self.updatedAt,
+        newUpdate > oldUpdate {
+            await self.loadData()
+            self.handleDataBeingLoaded()
+        }
     }
 
     private func subscribeToUpdates(for message: Message) {
@@ -47,7 +57,10 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
             case .create(_):
                 break
             case .update(_):
-                self.reloadReactions()
+                Task {
+                    try? await self.messageController?.synchronize()
+                    await self.reloadReactions()
+                }.add(to: self.taskPool)
             case .remove(_):
                 break
             }
@@ -77,6 +90,7 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
             }
         }
 
+        self.updatedAt = message.updatedAt
         self.dataSource.remainingCount = remaining
         self.dataSource.message = message
 
