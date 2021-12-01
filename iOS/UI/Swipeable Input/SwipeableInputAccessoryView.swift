@@ -27,7 +27,8 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
                                  triggeredSendFor sendable: Sendable,
                                  withPreviewFrame frame: CGRect) -> Bool
     /// The accessory view finished its swipe interaction.
-    func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView)
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 didFinishSwipeSendingSendable didSend: Bool)
     /// The accessory view's text view has updated its frame.
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, updatedFrameOf textView: InputTextView)
 }
@@ -319,13 +320,13 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
 
         self.resetPreviewAndInputViews(didSend: sendableWillBeSent)
 
-        self.delegate?.swipeableInputAccessoryDidFinishSwipe(self)
+        self.delegate?.swipeableInputAccessory(self, didFinishSwipeSendingSendable: sendableWillBeSent)
     }
 
     private func handlePanFailed() {
         self.inputContainerView.alpha = 1
         self.previewView?.removeFromSuperview()
-        self.delegate?.swipeableInputAccessoryDidFinishSwipe(self)
+        self.delegate?.swipeableInputAccessory(self, didFinishSwipeSendingSendable: false)
     }
 
     /// Updates the position of the preview view based on the provided pan gesture offset. This function ensures that preview view's origin

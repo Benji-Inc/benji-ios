@@ -187,9 +187,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             sortedItemIndexPaths.append(indexPath)
         }
         sortedItemIndexPaths.sort { indexPath1, indexPath2 in
-            let message1 = dataSource.getMessage(forItemAt: indexPath1)!
-            let message2 = dataSource.getMessage(forItemAt: indexPath2)!
-            return message1.createdAt < message2.createdAt
+            let createdAt1 = dataSource.getMessage(forItemAt: indexPath1)?.createdAt ?? Date.distantFuture
+            let createdAt2 = dataSource.getMessage(forItemAt: indexPath2)?.createdAt ?? Date.distantFuture
+            return createdAt1 < createdAt2
         }
 
         // Calculate the z range for each item.
@@ -252,6 +252,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         // OPTIMIZATION: Don't calculate attributes for items that definitely won't be visible.
         guard (-1..<self.stackDepth+1).contains(frontmostIndexPath.item - indexPath.item) else {
+            return nil
+        }
+
+        // If there is no message to display for this index path, don't show a cell.
+        if self.dataSource?.getMessage(forItemAt: indexPath) == nil {
             return nil
         }
 
@@ -483,7 +488,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return frame
     }
 
-    // MARK: - Content Offset Handling
+    // MARK: - Content Offset Handling/Custom Animations
 
     /// If true, scroll to the most recent item after performing collection view updates.
     private var shouldScrollToEnd = false

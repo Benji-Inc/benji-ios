@@ -70,11 +70,11 @@ class MessageDropZoneView: View {
         if color == .lightGray {
             self.borderLayer.strokeColor = Color.white.color.cgColor
             self.sendTypeLabel.setTextColor(.white)
-            self.borderLayer.fillColor = Color.lightGray.color.cgColor
+            self.borderLayer.fillColor = Color.clear.color.cgColor
         } else {
             self.borderLayer.strokeColor = Color.lightGray.color.cgColor
             self.sendTypeLabel.setTextColor(.lightGray)
-            self.borderLayer.fillColor = Color.white.color.cgColor
+            self.borderLayer.fillColor = Color.clear.color.cgColor
         }
     }
 }

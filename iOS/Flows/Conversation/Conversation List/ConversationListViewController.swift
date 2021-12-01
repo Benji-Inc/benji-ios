@@ -350,6 +350,10 @@ class ConversationListViewController: FullScreenViewController,
         self.currentSendMode = nil
 
         self.collectionView.isUserInteractionEnabled = false
+
+        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
+            currentCell.prepareForNewMessage()
+        }
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -369,7 +373,8 @@ class ConversationListViewController: FullScreenViewController,
     private func prepareForSend(with position: SendMode) {
         switch position {
         case .message:
-            self.sendMessageOverlay.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
+            self.sendMessageOverlay.setState(.newMessage,
+                                             messageColor: self.collectionView.getDropZoneColor())
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
@@ -420,8 +425,14 @@ class ConversationListViewController: FullScreenViewController,
         return true
     }
 
-    func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 didFinishSwipeSendingSendable didSend: Bool) {
+        
         self.collectionView.isUserInteractionEnabled = true
+
+        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
+            currentCell.unprepareForNewMessage(reloadMessages: !didSend)
+        }
     }
 
     /// Gets the send position for the given preview view frame.
