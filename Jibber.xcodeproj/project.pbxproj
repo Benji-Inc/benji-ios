@@ -780,6 +780,7 @@
 		D6E974572756AE1500D95F08 /* AddReactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974562756AE1500D95F08 /* AddReactionView.swift */; };
 		D6E974592756AE3300D95F08 /* ReactionsCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974582756AE3300D95F08 /* ReactionsCountView.swift */; };
 		D6E9745B2756AED200D95F08 /* DiffableCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9745A2756AED200D95F08 /* DiffableCollectionViewManager.swift */; };
+		D6E9746B2756FC3600D95F08 /* ReactionsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9746A2756FC3600D95F08 /* ReactionsCollectionView.swift */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
 		D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
@@ -1230,6 +1231,7 @@
 		D6E974562756AE1500D95F08 /* AddReactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReactionView.swift; sourceTree = "<group>"; };
 		D6E974582756AE3300D95F08 /* ReactionsCountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsCountView.swift; sourceTree = "<group>"; };
 		D6E9745A2756AED200D95F08 /* DiffableCollectionViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiffableCollectionViewManager.swift; sourceTree = "<group>"; };
+		D6E9746A2756FC3600D95F08 /* ReactionsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsCollectionView.swift; sourceTree = "<group>"; };
 		D6EAC95423D145350028DAA2 /* Sizeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sizeable.swift; sourceTree = "<group>"; };
 		D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionViewController.swift; sourceTree = "<group>"; };
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
@@ -2268,12 +2270,13 @@
 		D6E9744D2756AD8B00D95F08 /* Reactions */ = {
 			isa = PBXGroup;
 			children = (
-				D6E9744E2756ADB100D95F08 /* ReactionsManager.swift */,
+				D6E974562756AE1500D95F08 /* AddReactionView.swift */,
+				D6E974542756ADFF00D95F08 /* ReactionsCell.swift */,
+				D6E9746A2756FC3600D95F08 /* ReactionsCollectionView.swift */,
 				D6E974502756ADC900D95F08 /* ReactionsCollectionViewDataSource.swift */,
 				D6E974522756ADEA00D95F08 /* ReactionsCollectionViewLayout.swift */,
-				D6E974542756ADFF00D95F08 /* ReactionsCell.swift */,
-				D6E974562756AE1500D95F08 /* AddReactionView.swift */,
 				D6E974582756AE3300D95F08 /* ReactionsCountView.swift */,
+				D6E9744E2756ADB100D95F08 /* ReactionsManager.swift */,
 			);
 			path = Reactions;
 			sourceTree = "<group>";
@@ -2788,6 +2791,7 @@
 				D6B2601822E4208900143CF0 /* MessageDateLabel.swift in Sources */,
 				D67A82DB230CCE3D0076152B /* SplashViewController.swift in Sources */,
 				D69972F925EA8C80000AEE6A /* ConnectionRequestView.swift in Sources */,
+				D6E9746B2756FC3600D95F08 /* ReactionsCollectionView.swift in Sources */,
 				D68072EB2730462F004657E7 /* MessageStatusView.swift in Sources */,
 				D6B26903264C7D2000EFDA17 /* AnimatingTapView.swift in Sources */,
 				800FAAC126F0585A00D3C3A0 /* Conversation+Extensions.swift in Sources */,

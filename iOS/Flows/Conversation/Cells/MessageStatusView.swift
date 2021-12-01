@@ -57,10 +57,13 @@ class MessageStatusViewLayoutAttributes: UICollectionViewLayoutAttributes {
 
 class MessageStatusView: UICollectionReusableView {
 
-    private lazy var collectionView = CollectionView(layout: ReactionsCollectionViewLayout())
+    
+    private lazy var collectionView = ReactionsCollectionView()
     private lazy var manager = ReactionsManager(with: self.collectionView)
 
     let statusLabel = MessageStatusLabel()
+
+    private var hasLoadedMessage: Message?
 
     private var cancellables = Set<AnyCancellable>()
 
@@ -93,7 +96,7 @@ class MessageStatusView: UICollectionReusableView {
 
         self.collectionView.expandToSuperviewHeight()
         self.collectionView.pin(.left, offset: .standard)
-        self.collectionView.width = 200
+        self.collectionView.width = 300
 
         self.statusLabel.setSize(withWidth: self.width)
         self.statusLabel.pin(.right, offset: .standard)
@@ -104,8 +107,9 @@ class MessageStatusView: UICollectionReusableView {
         super.apply(layoutAttributes)
 
         if let attributes = layoutAttributes as? MessageStatusViewLayoutAttributes {
-            if let msg = attributes.status?.message {
+            if let msg = attributes.status?.message, self.hasLoadedMessage.isNil {
                 self.manager.loadReactions(for: msg)
+                self.hasLoadedMessage = msg
             }
             self.statusLabel.set(status: attributes.status)
         }
@@ -116,6 +120,7 @@ class MessageStatusView: UICollectionReusableView {
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.hasLoadedMessage = nil
         self.statusLabel.text = nil
     }
 }
