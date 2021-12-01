@@ -78,21 +78,28 @@ class MessageDetailView: UICollectionReusableView {
         super.apply(layoutAttributes)
 
         if let attributes = layoutAttributes as? MessageDetailViewLayoutAttributes {
+            guard let msg = attributes.message else { return }
+
             if self.hasLoadedMessage.isNil {
-                if let msg = attributes.message, attributes.alpha == 0.0 {
+                if attributes.alpha == 1.0 {
                     self.manager.loadReactions(for: msg)
                     self.hasLoadedMessage = msg
                 }
-            } else if let msg = attributes.message,
-                        msg != self.hasLoadedMessage,
-                      attributes.alpha == 0.0 {
+            } else if msg != self.hasLoadedMessage, attributes.alpha == 1.0 {
                 self.manager.loadReactions(for: msg)
                 self.hasLoadedMessage = msg
             }
-            self.statusView.configure(for: attributes.message)
+
+            self.statusView.configure(for: msg)
+
+            if attributes.alpha == 1.0 {
+                self.statusView.handleConsumption()
+            } else {
+                self.statusView.resetConsumption()
+            }
         }
 
-        self.setNeedsLayout()
+        self.layoutNow()
     }
 
     override func prepareForReuse() {

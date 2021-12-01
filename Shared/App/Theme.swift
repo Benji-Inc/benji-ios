@@ -11,10 +11,24 @@ import UIKit
 
 struct Theme {
 
-    enum AnimationDuration: Double {
-        case fast = 0.2
-        case standard = 0.35
-        case slow = 0.5
+    enum AnimationDuration {
+        case fast
+        case standard
+        case slow
+        case custom(CGFloat)
+
+        var value: TimeInterval {
+            switch self {
+            case .fast:
+                return 0.2
+            case .standard:
+                return 0.35
+            case .slow:
+                return 0.5
+            case .custom(let time):
+                return time
+            }
+        }
     }
 
     indirect enum ContentOffset {

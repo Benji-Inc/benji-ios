@@ -78,6 +78,12 @@ extension String {
 
         return false
     }
+
+    var wordCount: Int {
+        let components = self.components(separatedBy: .whitespacesAndNewlines)
+        let words = components.filter { word in !word.isEmpty }
+        return words.count
+    }
 }
 
 extension StringProtocol {
