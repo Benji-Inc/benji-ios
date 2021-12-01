@@ -79,11 +79,11 @@ extension ConversationMessageCellDataSource {
             }
 
             // The menu interaction should only be on the front most cell.
-            cell.content.backgroundColorView.interactions.removeAll()
+            cell.content.bubbleView.interactions.removeAll()
             if zIndex == 0 {
                 cell.content.setContextMenu()
             } else {
-                cell.content.backgroundColorView.interactions.removeAll()
+                cell.content.bubbleView.interactions.removeAll()
             }
         }
     }
@@ -93,13 +93,13 @@ extension ConversationMessageCellDataSource {
 
 extension ConversationMessageCellDataSource: TimeMachineCollectionViewLayoutDataSource {
 
-    func getConversation(at indexPath: IndexPath) -> Conversation? {
+    func getConversation(forItemAt indexPath: IndexPath) -> Conversation? {
         guard let item = self.itemIdentifier(for: indexPath) else { return nil }
 
         return ChatClient.shared.channelController(for: item.channelID).conversation
     }
 
-    func getMessage(at indexPath: IndexPath) -> Messageable? {
+    func getMessage(forItemAt indexPath: IndexPath) -> Messageable? {
         guard let item = self.itemIdentifier(for: indexPath) else { return nil }
         let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                     messageId: item.messageID)
@@ -108,6 +108,6 @@ extension ConversationMessageCellDataSource: TimeMachineCollectionViewLayoutData
     }
 
     func frontMostItemWasUpdated(for indexPath: IndexPath) {
-        logDebug("\(indexPath.description)")
+        // TODO: 
     }
 }

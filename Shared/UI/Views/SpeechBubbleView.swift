@@ -34,7 +34,11 @@ class SpeechBubbleView: View {
             return UIColor(cgColor: cgColor)
         }
         set {
+            // CALayers are implicitly animated. Disable animations so the color changes immediately.
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
             self.bubbleLayer.fillColor = newValue?.cgColor
+            CATransaction.commit()
         }
     }
 
@@ -45,7 +49,11 @@ class SpeechBubbleView: View {
             return UIColor(cgColor: cgColor)
         }
         set {
+            // CALayers are implicitly animated. Disable animations so the color changes immediately.
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
             self.bubbleLayer.strokeColor = newValue?.cgColor
+            CATransaction.commit()
         }
     }
 
