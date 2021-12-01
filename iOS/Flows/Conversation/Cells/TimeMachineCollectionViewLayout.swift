@@ -109,7 +109,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             guard let collectionView = collectionView else { return .zero }
 
             let itemCount = CGFloat(self.numberOfItems(inSection: 0) + self.numberOfItems(inSection: 1))
-            var height = (itemCount - 1) * self.itemHeight
+            var height = clamp((itemCount - 1), min: 0) * self.itemHeight
 
             // Plus 1 ensures that we will still receive the pan gesture, regardless of content size
             height += collectionView.bounds.height + 1
