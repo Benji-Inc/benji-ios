@@ -15,8 +15,8 @@ enum ReservationKey: String {
     case user
     case createdBy
     case isClaimed
-    case reservationId
     case contactId
+    case conversationId
 }
 
 final class Reservation: PFObject, PFSubclassing {
@@ -37,13 +37,14 @@ final class Reservation: PFObject, PFSubclassing {
         return self.getObject(for: .createdBy)
     }
 
+    var conversationId: String? {
+        get { return self.getObject(for: .conversationId) }
+        set { self.setObject(for: .conversationId, with: newValue) }
+    }
+
     var contactId: String? {
-        get {
-            return self.getObject(for: .contactId)
-        }
-        set {
-            self.setObject(for: .contactId, with: newValue)
-        }
+        get { return self.getObject(for: .contactId) }
+        set { self.setObject(for: .contactId, with: newValue) }
     }
 
     static func getUnclaimedReservationCount(for user: User) async -> Int {
