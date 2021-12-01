@@ -36,7 +36,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     /// If true, push the user messages back to prepare for a new message.
     private var prepareForSend = false
 
-    /// The conversation containing all the messages..
+    /// The conversation containing all the messages.
     var conversation: MessageSequence?
 
     override init(frame: CGRect) {
@@ -70,7 +70,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         fatalError("init(coder:) has not been implemented")
     }
 
-    /// If true we need scroll to the most recent item.
+    /// If true we need scroll to the most recent item upon layout.
     private var needsOffsetReload = true
 
     override func layoutSubviews() {
@@ -90,7 +90,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         }
     }
 
-    /// Configures the cell to display the given messages.
+    /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
     func set(sequence: MessageSequence) {
         self.conversation = sequence
 
@@ -103,20 +103,21 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
             return !message.isFromCurrentUser
         }
 
+        let channelID = try! ChannelId(cid: sequence.conversationId)
         // The newest message is at the bottom, so reverse the order.
         var userMessageItems = userMessages.reversed().map { message in
-            return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
-                                           messageID: message.id)
+            return ConversationMessageItem(channelID: channelID, messageID: message.id)
         }
         if self.prepareForSend {
-            userMessageItems.append(ConversationMessageItem(channelID: try! ChannelId(cid: sequence.conversationId),
-                                                            messageID: "placeholder"))
+            userMessageItems.append(ConversationMessageItem(channelID: channelID,
+                                                            messageID: "placeholderMessage"))
         }
 
         let otherMessageItems = otherMessages.reversed().map { message in
             return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
+
         var snapshot = self.dataSource.snapshot()
 
         var animateDifference = true
@@ -131,11 +132,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         snapshot.appendItems(otherMessageItems, toSection: .otherMessages)
         snapshot.appendItems(userMessageItems, toSection: .currentUserMessages)
 
-        if animateDifference {
-            self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
-        } else {
-            self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
-        }
+        self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
     }
 
     func handle(isCentered: Bool) {

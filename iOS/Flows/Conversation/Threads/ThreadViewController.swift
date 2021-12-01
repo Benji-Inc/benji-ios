@@ -310,7 +310,7 @@ extension ThreadViewController: TimeMachineCollectionViewLayoutDataSource {
         return self.messageController.replies[indexPath.item]
     }
 
-    func frontMostItemWasUpdated(for indexPath: IndexPath) {
+    func frontmostItemWasUpdated(for indexPath: IndexPath) {
         logDebug("\(indexPath.description)")
     }
 }

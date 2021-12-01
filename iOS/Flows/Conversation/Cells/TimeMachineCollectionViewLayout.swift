@@ -12,7 +12,7 @@ import StreamChat
 protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
     func getConversation(forItemAt indexPath: IndexPath) -> Conversation?
     func getMessage(forItemAt indexPath: IndexPath) -> Messageable?
-    func frontMostItemWasUpdated(for indexPath: IndexPath)
+    func frontmostItemWasUpdated(for indexPath: IndexPath)
 }
 
 class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
@@ -251,12 +251,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
 
         // OPTIMIZATION: Don't calculate attributes for items that definitely won't be visible.
-        guard (-1..<self.stackDepth+1).contains(frontmostIndexPath.item - indexPath.item) else {
-            return nil
-        }
-
-        // If there is no message to display for this index path, don't show a cell.
-        if self.dataSource?.getMessage(forItemAt: indexPath) == nil {
+        guard (-1..<self.stackDepth+2).contains(frontmostIndexPath.item - indexPath.item) else {
             return nil
         }
 
@@ -306,6 +301,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                                                 end: 0)
         }
 
+        // If there is no message to display for this index path, don't show the cell.
+        if self.dataSource?.getMessage(forItemAt: indexPath) == nil {
+            alpha = 0
+        }
+
         let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
         // Make sure items in the front are drawn over items in the back.
         attributes.zIndex = indexPath.item
@@ -324,7 +324,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
 
         if yOffset == vectorToCurrentZ, indexPath != self.lastFrontMostIndexPath[indexPath.section] {
-            self.dataSource?.frontMostItemWasUpdated(for: indexPath)
+            self.dataSource?.frontmostItemWasUpdated(for: indexPath)
             self.lastFrontMostIndexPath[indexPath.section] = indexPath
         }
 

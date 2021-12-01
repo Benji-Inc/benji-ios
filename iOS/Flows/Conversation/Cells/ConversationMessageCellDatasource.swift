@@ -65,11 +65,12 @@ extension ConversationMessageCellDataSource {
                                          collectionView: UICollectionView)>
 
     static func createMessageSubcellRegistration() -> MessageSubcellRegistration {
-
         return MessageSubcellRegistration { cell, indexPath, item in
             let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                         messageId: item.messageID)
-            guard let message = messageController.message else { return }
+            guard let message = messageController.message else {
+                return
+            }
 
             cell.configure(with: message)
 
@@ -107,7 +108,7 @@ extension ConversationMessageCellDataSource: TimeMachineCollectionViewLayoutData
         return messageController.message
     }
 
-    func frontMostItemWasUpdated(for indexPath: IndexPath) {
+    func frontmostItemWasUpdated(for indexPath: IndexPath) {
         // TODO: 
     }
 }
