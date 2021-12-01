@@ -128,7 +128,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
     override func getAllSections() -> [ConversationSection] {
         if let channelId = self.parentMessage.cid {
             let placeholderSection = ConversationSection(sectionID: channelId.description,
-                                                        parentMessageID: "Placeholder")
+                                                        parentMessageID: "placeholderSection")
             return [placeholderSection,
                     ConversationSection(sectionID: channelId.description,
                                         parentMessageID: self.parentMessage.id)]
@@ -142,16 +142,17 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         do {
             try await self.messageController.loadPreviousReplies()
-            let messages = Array(self.messageController.replies.asConversationCollectionItems)
 
-            if let channelId = self.parentMessage.cid {
-                let section = ConversationSection(sectionID: channelId.description,
-                                                  parentMessageID: self.parentMessage.id)
-                data[section] = []
-                data[section]?.append(contentsOf: messages)
-                if !self.messageController.hasLoadedAllPreviousReplies {
-                    data[section]?.append(contentsOf: [.loadMore])
-                }
+            guard let channelId = self.parentMessage.cid else { return [:] }
+
+            let section = ConversationSection(sectionID: channelId.description,
+                                              parentMessageID: self.parentMessage.id)
+
+            let messages = Array(self.messageController.replies.asConversationCollectionItems)
+            data[section] = messages
+
+            if !self.messageController.hasLoadedAllPreviousReplies {
+                data[section]?.append(contentsOf: [.loadMore])
             }
         } catch {
             logDebug(error)
@@ -177,7 +178,6 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
         if isEnabled {
-            
             guard self.sendMessageOverlay.superview.isNil else { return }
             // Animate in the send overlay
             self.view.insertSubview(self.sendMessageOverlay, aboveSubview: self.collectionView)
