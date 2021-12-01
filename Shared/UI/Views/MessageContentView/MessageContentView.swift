@@ -35,7 +35,6 @@ class MessageContentView: View {
     private (set) var message: Messageable?
 
     let authorView = AvatarView()
-    let reactionsView = ReactionsView()
 
     private var cancellables = Set<AnyCancellable>()
     var publisherCancellables = Set<AnyCancellable>()
@@ -67,11 +66,9 @@ class MessageContentView: View {
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
 
         self.backgroundColorView.addSubview(self.authorView)
-        self.backgroundColorView.addSubview(self.reactionsView)
 
         self.$state.mainSink { [unowned self] state in
             self.authorView.isVisible = state == .expanded
-            self.reactionsView.isVisible = state == .expanded
             self.layoutNow()
         }.store(in: &self.cancellables)
     }
@@ -98,7 +95,6 @@ class MessageContentView: View {
         self.authorView.set(avatar: message.avatar)
         #if IOS
         if let msg = message as? Message {
-            self.reactionsView.configure(with: msg.latestReactions)
             self.subscribeToUpdates(for: msg)
         }
         #endif
@@ -128,10 +124,6 @@ class MessageContentView: View {
         let topPadding = self.backgroundColorView.orientation == .down ? padding : padding + self.backgroundColorView.tailLength
         self.authorView.pin(.top, offset: .custom(topPadding))
         self.authorView.pin(.left, offset: .custom(padding))
-
-        self.reactionsView.squaredSize = self.authorView.width
-        self.reactionsView.pin(.top, offset: .custom(topPadding))
-        self.reactionsView.pin(.right, offset: .custom(padding))
 
         let maxWidth
         = self.backgroundColorView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)

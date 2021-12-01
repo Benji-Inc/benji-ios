@@ -73,7 +73,6 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
                     threadVC.collectionView.alpha = 0
                     fromView.authorView.alpha = 0
-                    fromView.reactionsView.alpha = 0
                 }
                 UIView.addKeyframe(withRelativeStartTime: 0.3, relativeDuration: 0.7) {
                     threadVC.blurView.showBlur(false)

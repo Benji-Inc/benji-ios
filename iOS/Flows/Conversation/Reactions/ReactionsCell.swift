@@ -31,7 +31,6 @@ class ReactionsCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: ReactionSummary) {
         let text = item.type.emoji + " \(item.count)"
         self.emojiLabel.setText(text)
-        //self.emojiLabel.add(attributes: [NSAttributedString.Key.font: FontType.reaction.font], to: "\(item.count)")
         self.layoutNow()
     }
 

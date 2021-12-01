@@ -57,14 +57,9 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
     // MARK: Overrides
 
     override func retrieveDataForSnapshot() async -> [ReactionsCollectionViewDataSource.SectionType: [ReactionSummary]] {
-//        guard let allReactions = self.messageController?.message?.reactionCounts else { return [.reactions: []] }
+        guard let message = self.messageController?.message else { return [.reactions: []] }
 
-        var allReactions: [MessageReactionType: Int] = [:]
-
-        allReactions[MessageReactionType(rawValue: ReactionType.like.rawValue)] = 14
-        allReactions[MessageReactionType(rawValue: ReactionType.love.rawValue)] = 5
-        allReactions[MessageReactionType(rawValue: ReactionType.dislike.rawValue)] = 9
-
+        let allReactions = message.reactionCounts
         var summaries: [ReactionSummary] = []
         var remaining: Int = 0
 
@@ -83,6 +78,7 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
         }
 
         self.dataSource.remainingCount = remaining
+        self.dataSource.message = message
 
         return [.reactions: summaries]
     }
