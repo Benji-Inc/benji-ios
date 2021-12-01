@@ -57,18 +57,32 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
     // MARK: Overrides
 
     override func retrieveDataForSnapshot() async -> [ReactionsCollectionViewDataSource.SectionType: [ReactionSummary]] {
-        guard let allReactions = self.messageController?.message?.reactionCounts else { return [.reactions: []] }
+//        guard let allReactions = self.messageController?.message?.reactionCounts else { return [.reactions: []] }
+
+        var allReactions: [MessageReactionType: Int] = [:]
+
+        allReactions[MessageReactionType(rawValue: ReactionType.like.rawValue)] = 14
+        allReactions[MessageReactionType(rawValue: ReactionType.love.rawValue)] = 5
+        allReactions[MessageReactionType(rawValue: ReactionType.dislike.rawValue)] = 9
 
         var summaries: [ReactionSummary] = []
+        var remaining: Int = 0
 
         allReactions.keys.forEach { type in
-            if let t = ReactionType(rawValue: type.rawValue),
-                let count = allReactions[type],
-               summaries.count <= 3 {
-                let summary = ReactionSummary(type: t, count: count)
-                summaries.append(summary)
+            if let count = allReactions[type] {
+                if let t = ReactionType(rawValue: type.rawValue), t != .read {
+                    remaining += count
+                    if summaries.count <= 3 {
+                        let summary = ReactionSummary(type: t, count: count)
+                        summaries.append(summary)
+                        remaining -= count
+                    }
+
+                }
             }
         }
+
+        self.dataSource.remainingCount = remaining
 
         return [.reactions: summaries]
     }

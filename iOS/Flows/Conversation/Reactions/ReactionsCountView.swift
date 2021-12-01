@@ -26,27 +26,10 @@ class ReactionsCountView: UICollectionReusableView {
         self.addSubview(self.label)
     }
 
-    func configure(with reactions: Set<ChatMessageReaction>) {
+    func configure(with remaining: Int) {
+        guard remaining > 0 else { return }
 
-        let nonReadReactions = reactions.filter { reaction in
-            guard let type = ReactionType(rawValue: reaction.type.rawValue) else { return false }
-            return type != .read
-        }
-
-        let reaction = nonReadReactions.first { reaction in
-            return reaction.author.id == User.current()!.objectId
-        }
-
-        guard let r = reaction, let type = ReactionType(rawValue: r.type.rawValue) else {
-            return
-        }
-        
-        var text = type.emoji
-        if reactions.count > 1 {
-            text += " +\(reactions.count - 1)"
-        }
-        self.label.setText(text)
-        self.label.isVisible = true
+        self.label.setText("+\(remaining)")
         self.layoutNow()
     }
 

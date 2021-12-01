@@ -31,7 +31,7 @@ class AddReactionView: UICollectionReusableView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.imageView.squaredSize = 12
+        self.imageView.squaredSize = 16
         self.imageView.centerOnXAndY()
     }
 }

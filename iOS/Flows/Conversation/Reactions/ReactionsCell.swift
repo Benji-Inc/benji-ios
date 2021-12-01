@@ -15,7 +15,7 @@ class ReactionsCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: ReactionSummary?
 
     let container = View()
-    let emojiLabel = Label(font: .small, textColor: .white)
+    let emojiLabel = Label(font: .reaction, textColor: .white)
 
     override func initializeSubviews() {
         super.initializeSubviews()

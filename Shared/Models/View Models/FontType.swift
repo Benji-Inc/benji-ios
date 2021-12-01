@@ -21,6 +21,7 @@ enum FontType {
     case regularBold
     case small
     case smallBold
+    case reaction
 
     var font: UIFont {
         switch self {
@@ -28,6 +29,8 @@ enum FontType {
             return UIFont(name: regularFontName, size: self.size)!
         case .mediumBold, .regularBold, .smallBold:
             return UIFont(name: boldFontName, size: self.size)!
+        case .reaction:
+            return UIFont.systemFont(ofSize: self.size)
         }
     }
 
@@ -39,7 +42,7 @@ enum FontType {
             return 24
         case .regular, .regularBold:
             return 16
-        case .small, .smallBold:
+        case .small, .smallBold, .reaction:
             return 12
         }
     }

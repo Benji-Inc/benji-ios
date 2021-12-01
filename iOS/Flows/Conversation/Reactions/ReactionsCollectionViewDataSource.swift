@@ -19,6 +19,8 @@ class ReactionsCollectionViewDataSource: CollectionViewDataSource<ReactionsColle
     private let headerConfig = ManageableHeaderRegistration<AddReactionView>().provider
     private let footerConfig = ManageableFooterRegistration<ReactionsCountView>().provider
 
+    var remainingCount: Int = 0
+
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
                               section: SectionType,
@@ -34,9 +36,7 @@ class ReactionsCollectionViewDataSource: CollectionViewDataSource<ReactionsColle
             return collectionView.dequeueConfiguredReusableSupplementary(using: self.headerConfig, for: indexPath)
         case UICollectionView.elementKindSectionFooter:
             let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
-            if let item = self.itemIdentifier(for: indexPath) {
-                //footer.configure(with: item)
-            }
+            footer.configure(with: self.remainingCount)
             return footer
         default:
             break
