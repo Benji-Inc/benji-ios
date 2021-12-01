@@ -251,7 +251,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
 
         // OPTIMIZATION: Don't calculate attributes for items that definitely won't be visible.
-        guard (-1..<self.stackDepth+2).contains(frontmostIndexPath.item - indexPath.item) else {
+        guard (-1..<self.stackDepth+1).contains(frontmostIndexPath.item - indexPath.item) else {
             return nil
         }
 
