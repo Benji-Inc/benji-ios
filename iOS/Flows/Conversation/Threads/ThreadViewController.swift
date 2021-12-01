@@ -235,7 +235,9 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         return true
     }
 
-    func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 didFinishSwipeSendingSendable didSend: Bool) {
+
         self.collectionView.isUserInteractionEnabled = true
     }
 
