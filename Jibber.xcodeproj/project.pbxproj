@@ -781,7 +781,7 @@
 		D6E974682756DB0100D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
 		D6E974692756DB0200D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
 		D6E9746B2756FC3600D95F08 /* ReactionsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9746A2756FC3600D95F08 /* ReactionsCollectionView.swift */; };
-		D6E9746E2757356C00D95F08 /* MessageReadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9746D2757356C00D95F08 /* MessageReadView.swift */; };
+		D6E9746E2757356C00D95F08 /* MessageStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9746D2757356C00D95F08 /* MessageStatusView.swift */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
 		D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
@@ -1233,7 +1233,7 @@
 		D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Bold.otf"; sourceTree = "<group>"; };
 		D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SF-Pro-Text-Regular.otf"; sourceTree = "<group>"; };
 		D6E9746A2756FC3600D95F08 /* ReactionsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReactionsCollectionView.swift; sourceTree = "<group>"; };
-		D6E9746D2757356C00D95F08 /* MessageReadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageReadView.swift; sourceTree = "<group>"; };
+		D6E9746D2757356C00D95F08 /* MessageStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageStatusView.swift; sourceTree = "<group>"; };
 		D6EAC95423D145350028DAA2 /* Sizeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sizeable.swift; sourceTree = "<group>"; };
 		D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionViewController.swift; sourceTree = "<group>"; };
 		D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewManagerCell.swift; sourceTree = "<group>"; };
@@ -2277,7 +2277,7 @@
 		D6E9746C2757353800D95F08 /* Status View */ = {
 			isa = PBXGroup;
 			children = (
-				D6E9746D2757356C00D95F08 /* MessageReadView.swift */,
+				D6E9746D2757356C00D95F08 /* MessageStatusView.swift */,
 				D68072EA2730462F004657E7 /* MessageDetailView.swift */,
 				D6E9744D2756AD8B00D95F08 /* Reactions */,
 			);
@@ -3003,7 +3003,7 @@
 				807A7BC926C5C8100023A71E /* Task+TaskPool.swift in Sources */,
 				D6D804BB266A8B7D00741594 /* NSTextCheckingResult+Extension.swift in Sources */,
 				D61EC0EE21D313BA00204BEE /* UIScreen+Extensions.swift in Sources */,
-				D6E9746E2757356C00D95F08 /* MessageReadView.swift in Sources */,
+				D6E9746E2757356C00D95F08 /* MessageStatusView.swift in Sources */,
 				D678EC2426F530850071DB0D /* Circle.swift in Sources */,
 				D6405B6B236E0E7900FAA06B /* Connection.swift in Sources */,
 				D66A580B25DD6990001B3F64 /* ConnectionCell.swift in Sources */,

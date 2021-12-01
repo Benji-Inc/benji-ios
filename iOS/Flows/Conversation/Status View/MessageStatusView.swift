@@ -1,125 +1,182 @@
 //
-//  TimeSentHeaderView.swift
+//  MessageReadView.swift
 //  Jibber
 //
-//  Created by Benji Dodgson on 11/1/21.
+//  Created by Benji Dodgson on 11/30/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
-import StreamChat
-import Combine
+import TMROLocalization
 
-struct ChatMessageStatus: Equatable {
+class MessageStatusView: View {
 
-    let read: ChatChannelRead
-    let message: Message
+    private var previousStatus: ChatMessageStatus?
 
-    var isRead: Bool {
-        return self.read.lastReadAt >= self.message.createdAt && self.isDelivered
-    }
+    private let readView = MessageReadView()
+    private let replyView = MessageReplyView()
 
-    var isDelivered: Bool {
-        return self.state.isNil
-    }
+    override func initializeSubviews() {
+        super.initializeSubviews()
 
-    var state: LocalMessageState? {
-        return self.message.localState
-    }
-
-    static func == (lhs: ChatMessageStatus, rhs: ChatMessageStatus) -> Bool {
-        return lhs.message == rhs.message &&
-        lhs.read.lastReadAt == rhs.read.lastReadAt &&
-        lhs.read.user == rhs.read.user
-    }
-}
-
-/// Layout attributes that can be used to configure a TimeSentView.
-class MessageStatusViewLayoutAttributes: UICollectionViewLayoutAttributes {
-
-    var status: ChatMessageStatus?
-
-    override func copy(with zone: NSZone? = nil) -> Any {
-        let copy = super.copy(with: zone) as! MessageStatusViewLayoutAttributes
-        copy.status = self.status
-        return copy
-    }
-
-    override func isEqual(_ object: Any?) -> Bool {
-        if let layoutAttributes = object as? MessageStatusViewLayoutAttributes {
-            return super.isEqual(object)
-            && layoutAttributes.status == self.status
-        }
-
-        return false
-    }
-}
-
-class MessageStatusView: UICollectionReusableView {
-
-    private lazy var collectionView = ReactionsCollectionView()
-    private lazy var manager = ReactionsManager(with: self.collectionView)
-
-    let statusLabel = MessageStatusLabel()
-
-    private var hasLoadedMessage: Message?
-
-    private var cancellables = Set<AnyCancellable>()
-
-    override init(frame: CGRect) {
-        super.init(frame: .zero)
-        self.initializeSubviews()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
-        }
-    }
-
-    private func initializeSubviews() {
-        self.addSubview(self.collectionView)
-        self.addSubview(self.statusLabel)
-
-        self.statusLabel.publisher(for: \.text).mainSink { [unowned self] _ in
-            self.layoutNow()
-        }.store(in: &self.cancellables)
+        self.addSubview(self.readView)
+        self.addSubview(self.replyView)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.collectionView.expandToSuperviewHeight()
-        self.collectionView.pin(.left, offset: .standard)
-        self.collectionView.width = 300
+        self.replyView.expandToSuperviewHeight()
+        self.replyView.pin(.right)
+        self.replyView.width = 60
 
-        self.statusLabel.setSize(withWidth: self.width)
-        self.statusLabel.pin(.right, offset: .standard)
-        self.statusLabel.centerOnY()
+        self.readView.expandToSuperviewHeight()
+        self.readView.width = 80
+        let readOffset = Theme.ContentOffset.short.value + self.replyView.width
+        self.readView.pin(.right, offset: .custom(readOffset))
     }
 
-    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.apply(layoutAttributes)
-
-        if let attributes = layoutAttributes as? MessageStatusViewLayoutAttributes {
-            if let msg = attributes.status?.message, self.hasLoadedMessage.isNil {
-                self.manager.loadReactions(for: msg)
-                self.hasLoadedMessage = msg
-            }
-            self.statusLabel.set(status: attributes.status)
+    func set(status: ChatMessageStatus?) {
+        guard let status = status else {
+            self.readView.reset()
+            self.replyView.reset()
+            return
         }
 
-        self.setNeedsLayout()
+        guard self.previousStatus != status else { return }
+
+        self.previousStatus = status
+
+        self.replyView.setReplies(for: status.message)
+        self.readView.configure(for: status)
+        self.layoutNow()
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    func reset() {
+        self.readView.reset()
+        self.replyView.reset() 
+    }
+}
 
-        self.hasLoadedMessage = nil
-        self.statusLabel.text = nil
+private class MessageStatusContainer: View {
+
+    override func initializeSubviews() {
+        super.initializeSubviews()
+
+        self.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        self.layer.cornerRadius = Theme.innerCornerRadius
+        self.layer.borderColor = Color.border.color.cgColor
+        self.layer.borderWidth = 0.25
+    }
+}
+
+private class MessageReadView: MessageStatusContainer {
+
+    let imageView = DisplayableImageView()
+    let label = Label(font: .small)
+    let progressView = UIProgressView()
+
+    override func initializeSubviews() {
+        super.initializeSubviews()
+
+        self.addSubview(self.imageView)
+        self.addSubview(self.label)
+        self.addSubview(self.progressView)
+        self.progressView.isVisible = false
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.imageView.squaredSize = 18
+        self.imageView.pin(.right, offset: .short)
+        self.imageView.centerOnY()
+
+        let maxWidth = self.width - Theme.ContentOffset.short.value.doubled - self.imageView.width
+        self.label.setSize(withWidth: maxWidth)
+        self.label.match(.right, to: .left, of: self.imageView, offset: .negative(.short))
+        self.label.centerOnY()
+
+        self.progressView.expandToSuperviewSize()
+    }
+
+    func configure(for status: ChatMessageStatus) {
+
+        if let state = status.state {
+            switch state {
+            case .pendingSync, .syncing:
+                self.label.setText("Synching")
+            case .syncingFailed, .sendingFailed:
+                self.label.setText("Error")
+            case .pendingSend, .sending:
+                self.label.setText("Sending")
+            case .deleting:
+                break
+            case .deletingFailed:
+                break
+            }
+        } else if status.isRead {
+            self.label.setText("Read")
+            self.imageView.displayable = UIImage(named: "checkmark-double")
+        } else {
+            self.label.setText("Delivered")
+            self.imageView.displayable = UIImage(named: "checkmark")
+        }
+
+        self.layoutNow()
+    }
+
+    func reset() {
+        self.label.text = nil
+        self.imageView.displayable = nil
+    }
+}
+
+private class MessageReplyView: MessageStatusContainer {
+
+    let label = Label(font: .small, textColor: .textColor)
+    let countLabel = Label(font: .xtraSmall, textColor: .white)
+
+    override func initializeSubviews() {
+        super.initializeSubviews()
+
+        self.addSubview(self.label)
+        self.addSubview(self.countLabel)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.countLabel.setSize(withWidth: self.width)
+        self.countLabel.pin(.right, offset: .short)
+        self.countLabel.centerOnY()
+
+        self.label.setSize(withWidth: self.width - Theme.ContentOffset.standard.value)
+        let offset = Theme.ContentOffset.standard.value + self.countLabel.width
+        self.label.pin(.right, offset: .custom(offset))
+        self.label.centerOnY()
+    }
+
+    func setReplies(for message: Message) {
+        self.label.setText(self.getReplies(for: message))
+        if message.replyCount > 0 {
+            self.countLabel.setText("\(message.replyCount)")
+        } else {
+            self.countLabel.text = nil
+        }
+        self.layoutNow()
+    }
+
+    private func getReplies(for message: Message) -> Localized {
+        if message.replyCount == 0 {
+            return "No Replies"
+        } else {
+            return "Replies"
+        }
+    }
+
+    func reset() {
+        self.label.text = nil
+        self.countLabel.text = nil
     }
 }

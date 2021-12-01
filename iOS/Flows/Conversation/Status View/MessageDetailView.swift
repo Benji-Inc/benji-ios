@@ -60,7 +60,7 @@ class MessageDetailView: UICollectionReusableView {
     private lazy var collectionView = ReactionsCollectionView()
     private lazy var manager = ReactionsManager(with: self.collectionView)
 
-    let readView = MessageReadView()
+    let statusView = MessageStatusView()
 
     private var hasLoadedMessage: Message?
 
@@ -83,7 +83,7 @@ class MessageDetailView: UICollectionReusableView {
 
     private func initializeSubviews() {
         self.addSubview(self.collectionView)
-        self.addSubview(self.readView)
+        self.addSubview(self.statusView)
 
 //        self.statusLabel.publisher(for: \.text).mainSink { [unowned self] _ in
 //            self.layoutNow()
@@ -95,13 +95,11 @@ class MessageDetailView: UICollectionReusableView {
 
         self.collectionView.expandToSuperviewHeight()
         self.collectionView.pin(.left, offset: .standard)
-        self.collectionView.width = 300
+        self.collectionView.width = 200
 
-        self.readView.width = 120
-
-//        self.statusLabel.setSize(withWidth: self.width)
-//        self.statusLabel.pin(.right, offset: .standard)
-//        self.statusLabel.centerOnY()
+        self.statusView.width = 240
+        self.statusView.pin(.right, offset: .standard)
+        self.statusView.expandToSuperviewHeight()
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -112,7 +110,7 @@ class MessageDetailView: UICollectionReusableView {
                 self.manager.loadReactions(for: msg)
                 self.hasLoadedMessage = msg
             }
-           // self.statusLabel.set(status: attributes.status)
+            self.statusView.set(status: attributes.status)
         }
 
         self.setNeedsLayout()
@@ -122,6 +120,6 @@ class MessageDetailView: UICollectionReusableView {
         super.prepareForReuse()
 
         self.hasLoadedMessage = nil
-        //self.statusLabel.text = nil
+        self.statusView.reset()
     }
 }

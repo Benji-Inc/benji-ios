@@ -21,11 +21,12 @@ enum FontType {
     case regularBold
     case small
     case smallBold
+    case xtraSmall
     case reactionEmoji
 
     var font: UIFont {
         switch self {
-        case .display, .medium, .regular, .small:
+        case .display, .medium, .regular, .small, .xtraSmall:
             return UIFont(name: regularFontName, size: self.size)!
         case .mediumBold, .regularBold, .smallBold:
             return UIFont(name: boldFontName, size: self.size)!
@@ -46,11 +47,15 @@ enum FontType {
             return 12
         case .reactionEmoji:
             return 10
+        case .xtraSmall:
+            return 8
         }
     }
 
     var kern: CGFloat {
         switch self {
+        case .small, .xtraSmall:
+            return -0.5
         default:
             return 1
         }
