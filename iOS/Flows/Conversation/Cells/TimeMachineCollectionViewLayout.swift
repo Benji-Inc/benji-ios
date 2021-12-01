@@ -81,7 +81,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     /// A cache of layout attributes for decoration views.
-    private var decorationLayoutAttributes: [SectionIndex : UICollectionViewLayoutAttributes] = [:]
+    private var decorationLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
     private var itemFocusPositions: [IndexPath : CGFloat] = [:]
     /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
@@ -164,13 +164,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         // Calculate and cache the layout attributes for all the items.
         self.forEachIndexPath { indexPath in
             self.cellLayoutAttributes[indexPath] = self.layoutAttributesForItem(at: indexPath)
-        }
-
-        // Calculate and cache the layout attributes for all of the decoration views.
-        for section in 0..<self.sectionCount {
-            self.decorationLayoutAttributes[section]
+            self.decorationLayoutAttributes[indexPath]
             = self.layoutAttributesForDecorationView(ofKind: MessageDetailView.objectIdentifier,
-                                                     at: IndexPath(item: 0, section: section))
+                                                     at: indexPath)
         }
     }
 
@@ -330,17 +326,16 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                                                     at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
 
         // If the attributes are cached already, just return those.
-        if let attributes = self.decorationLayoutAttributes[indexPath.section] {
+        if let attributes = self.decorationLayoutAttributes[indexPath] {
             return attributes
         }
 
-        guard let frontmostItemIndexPath = self.getFrontmostIndexPath(in: indexPath.section),
-              let frontmostAttributes = self.layoutAttributesForItem(at: frontmostItemIndexPath) else {
+        guard let itemAttributes = self.layoutAttributesForItem(at: indexPath) as? ConversationMessageCellLayoutAttributes else {
                   return nil
               }
 
-        guard let conversation = self.dataSource?.getConversation(forItemAt: frontmostItemIndexPath),
-              let messageable = self.dataSource?.getMessage(forItemAt: frontmostItemIndexPath) else {
+        guard let conversation = self.dataSource?.getConversation(forItemAt: indexPath),
+              let messageable = self.dataSource?.getMessage(forItemAt: indexPath) else {
                   return nil
               }
 
@@ -352,17 +347,19 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         if indexPath.section == 0 {
             // Position the decoration above the frontmost item in the first section
-            attributes.frame = CGRect(x: frontmostAttributes.frame.left,
-                                      y: frontmostAttributes.frame.top - 20 + 8,
-                                      width: frontmostAttributes.frame.width,
+            attributes.frame = CGRect(x: itemAttributes.frame.left,
+                                      y: itemAttributes.frame.top - 20 + 8,
+                                      width: itemAttributes.frame.width,
                                       height: 20)
         } else {
             // Position the decoration below the frontmost item in the second section
-            attributes.frame = CGRect(x: frontmostAttributes.frame.left,
-                                      y: frontmostAttributes.frame.bottom - 8,
-                                      width: frontmostAttributes.frame.width,
+            attributes.frame = CGRect(x: itemAttributes.frame.left,
+                                      y: itemAttributes.frame.bottom - 8,
+                                      width: itemAttributes.frame.width,
                                       height: 20)
         }
+
+        // Chat
 
         if let read = conversation.reads.first(where: { read in
             return read.user.id == message.authorID
@@ -370,7 +367,10 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             attributes.status = ChatMessageStatus(read: read, message: message)
         }
 
-        attributes.alpha = self.showMessageStatus ? 1 : 0
+        let itemZRange = self.itemZRanges[indexPath]
+        let zVector = itemZRange?.vector(to: self.zPosition) ?? 0
+        let zAlpha: CGFloat = 1 - abs(zVector) / (self.itemHeight * 0.2)
+        attributes.alpha = self.showMessageStatus ? zAlpha : 0
 
         return attributes
     }

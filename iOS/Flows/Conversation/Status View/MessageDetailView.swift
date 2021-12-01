@@ -103,11 +103,13 @@ class MessageDetailView: UICollectionReusableView {
 
         if let attributes = layoutAttributes as? MessageDetailViewLayoutAttributes {
             if self.hasLoadedMessage.isNil {
-                if let msg = attributes.status?.message {
+                if let msg = attributes.status?.message, attributes.alpha == 0.0 {
                     self.manager.loadReactions(for: msg)
                     self.hasLoadedMessage = msg
                 }
-            } else if let msg = attributes.status?.message, msg != self.hasLoadedMessage {
+            } else if let msg = attributes.status?.message,
+                        msg != self.hasLoadedMessage,
+                      attributes.alpha == 0.0 {
                 self.manager.loadReactions(for: msg)
                 self.hasLoadedMessage = msg
             }
@@ -121,6 +123,5 @@ class MessageDetailView: UICollectionReusableView {
         super.prepareForReuse()
 
         self.hasLoadedMessage = nil
-        self.statusView.reset()
     }
 }
