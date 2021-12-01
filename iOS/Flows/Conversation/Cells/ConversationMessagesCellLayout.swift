@@ -107,13 +107,7 @@ class ConversationMessagesCellLayout: UICollectionViewFlowLayout {
         let mostRecentMessage
         = conversationController.getMostRecentMessage(fromCurrentUser: indexPath.section == 1)
 
-
-        if let read = conversationController.conversation.reads.first(where: { read in
-            return read.user == mostRecentMessage?.author
-        }), let message = mostRecentMessage {
-            attributes.status = ChatMessageStatus(read: read, message: message)
-        }
-
+        attributes.message = mostRecentMessage
         attributes.alpha = self.showMessageStatus ? 1 : 0
 
         return attributes

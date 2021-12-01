@@ -11,7 +11,7 @@ import TMROLocalization
 
 class MessageStatusView: View {
 
-    private var previousStatus: ChatMessageStatus?
+    private var previousMessage: Message?
 
     private let readView = MessageReadView()
     private let replyView = MessageReplyView()
@@ -36,20 +36,20 @@ class MessageStatusView: View {
         self.readView.pin(.right, offset: .custom(readOffset))
     }
 
-    func set(status: ChatMessageStatus?) {
-        guard let status = status else {
+    func configure(for message: Message?) {
+        guard let message = message else {
             self.readView.reset()
             self.replyView.reset()
             self.layoutNow()
             return
         }
 
-        guard self.previousStatus != status else { return }
+        guard self.previousMessage != message else { return }
 
-        self.previousStatus = status
+        self.previousMessage = message
 
-        self.replyView.setReplies(for: status.message)
-        self.readView.configure(for: status)
+        self.replyView.setReplies(for: message)
+        self.readView.configure(for: message)
         self.layoutNow()
     }
 
@@ -109,9 +109,9 @@ private class MessageReadView: MessageStatusContainer {
         self.progressView.expandToSuperviewSize()
     }
 
-    func configure(for status: ChatMessageStatus) {
+    func configure(for message: Message) {
 
-        if let state = status.state {
+        if let state = message.localState {
             switch state {
             case .pendingSync, .syncing:
                 self.label.setText("Synching")
@@ -124,9 +124,14 @@ private class MessageReadView: MessageStatusContainer {
             case .deletingFailed:
                 break
             }
-        } else if status.isRead {
-            self.label.setText("Read")
-            self.imageView.image = UIImage(named: "checkmark-double")
+        } else if message.isConsumed {
+            if message.isFromCurrentUser {
+                self.label.setText("Read")
+                self.imageView.image = UIImage(named: "checkmark-double")
+            } else if !message.isConsumedByMe {
+                self.label.setText("Read")
+                self.imageView.image = UIImage(named: "checkmark-double")
+            }
         } else {
             self.label.setText("Delivered")
             self.imageView.image = UIImage(named: "checkmark")
@@ -157,7 +162,7 @@ private class MessageReplyView: MessageStatusContainer {
         super.layoutSubviews()
 
         self.countLabel.setSize(withWidth: self.maxWidth)
-        self.countLabel.pin(.right, offset: .standard)
+        self.countLabel.pin(.right, offset: .short)
         self.countLabel.centerOnY()
 
         if self.countLabel.text.isNil {
@@ -169,11 +174,11 @@ private class MessageReplyView: MessageStatusContainer {
             self.label.centerOnXAndY()
         } else {
             self.label.setSize(withWidth: self.maxWidth - (Theme.ContentOffset.short.value * 3))
-            let offset = (Theme.ContentOffset.short.value * 3) + self.countLabel.width
+            let offset = (Theme.ContentOffset.short.value * 2) + self.countLabel.width
             self.label.pin(.right, offset: .custom(offset))
             self.label.centerOnY()
 
-            let width = (Theme.ContentOffset.short.value * 4) + self.countLabel.width + self.label.width
+            let width = (Theme.ContentOffset.short.value * 3) + self.countLabel.width + self.label.width
             self.width = clamp(width, self.minWidth, self.maxWidth)
         }
     }

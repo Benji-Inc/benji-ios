@@ -359,13 +359,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                                       height: 20)
         }
 
-        // Chat
-
-        if let read = conversation.reads.first(where: { read in
-            return read.user.id == message.authorID
-        }) {
-            attributes.status = ChatMessageStatus(read: read, message: message)
-        }
+        attributes.message = message
 
         let itemZRange = self.itemZRanges[indexPath]
         let zVector = itemZRange?.vector(to: self.zPosition) ?? 0

@@ -10,45 +10,21 @@ import Foundation
 import StreamChat
 import Combine
 
-struct ChatMessageStatus: Equatable {
-
-    let read: ChatChannelRead
-    let message: Message
-
-    var isRead: Bool {
-        return self.message.isFromCurrentUser ? self.message.isConsumed : self.message.isConsumedByMe
-    }
-
-    var isDelivered: Bool {
-        return self.state.isNil
-    }
-
-    var state: LocalMessageState? {
-        return self.message.localState
-    }
-
-    static func == (lhs: ChatMessageStatus, rhs: ChatMessageStatus) -> Bool {
-        return lhs.message == rhs.message &&
-        lhs.read.lastReadAt == rhs.read.lastReadAt &&
-        lhs.read.user == rhs.read.user
-    }
-}
-
 /// Layout attributes that can be used to configure a TimeSentView.
 class MessageDetailViewLayoutAttributes: UICollectionViewLayoutAttributes {
 
-    var status: ChatMessageStatus?
+    var message: Message?
 
     override func copy(with zone: NSZone? = nil) -> Any {
         let copy = super.copy(with: zone) as! MessageDetailViewLayoutAttributes
-        copy.status = self.status
+        copy.message = self.message
         return copy
     }
 
     override func isEqual(_ object: Any?) -> Bool {
         if let layoutAttributes = object as? MessageDetailViewLayoutAttributes {
             return super.isEqual(object)
-            && layoutAttributes.status == self.status
+            && layoutAttributes.message == self.message
         }
 
         return false
@@ -103,17 +79,17 @@ class MessageDetailView: UICollectionReusableView {
 
         if let attributes = layoutAttributes as? MessageDetailViewLayoutAttributes {
             if self.hasLoadedMessage.isNil {
-                if let msg = attributes.status?.message, attributes.alpha == 0.0 {
+                if let msg = attributes.message, attributes.alpha == 0.0 {
                     self.manager.loadReactions(for: msg)
                     self.hasLoadedMessage = msg
                 }
-            } else if let msg = attributes.status?.message,
+            } else if let msg = attributes.message,
                         msg != self.hasLoadedMessage,
                       attributes.alpha == 0.0 {
                 self.manager.loadReactions(for: msg)
                 self.hasLoadedMessage = msg
             }
-            self.statusView.set(status: attributes.status)
+            self.statusView.configure(for: attributes.message)
         }
 
         self.setNeedsLayout()
