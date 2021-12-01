@@ -33,14 +33,14 @@ extension TransitionRouter {
 
         if let message = fromView.message {
             snapshot.configure(with: message)
-            snapshot.backgroundColorView.bubbleColor = fromView.backgroundColorView.bubbleColor
-            snapshot.backgroundColorView.tailLength = 0
-            snapshot.backgroundColorView.orientation = fromView.backgroundColorView.orientation
+            snapshot.bubbleView.bubbleColor = fromView.bubbleView.bubbleColor
+            snapshot.bubbleView.tailLength = 0
+            snapshot.bubbleView.orientation = fromView.bubbleView.orientation
 
             toView.configure(with: message)
-            toView.backgroundColorView.bubbleColor = Color.white.color
-            toView.backgroundColorView.tailLength = 0
-            toView.backgroundColorView.orientation = fromView.backgroundColorView.orientation
+            toView.bubbleView.bubbleColor = Color.white.color
+            toView.bubbleView.tailLength = 0
+            toView.bubbleView.orientation = fromView.bubbleView.orientation
             toView.state = .expanded
             toView.size = fromView.size
             toView.layoutNow()
@@ -73,7 +73,8 @@ extension TransitionRouter {
             await UIView.awaitSpringAnimation(with: .slow, animations: {
                 snapshot.frame = finalFrame
                 snapshot.state = .expanded
-                snapshot.backgroundColorView.bubbleColor = Color.white.color
+                snapshot.bubbleView.bubbleColor = Color.white.color
+
                 threadVC.blurView.showBlur(true)
                 self.toVC.view.alpha = 1
             })
@@ -95,9 +96,9 @@ extension TransitionRouter {
 
         if let message = fromView.message {
             snapshot.configure(with: message)
-            snapshot.backgroundColorView.bubbleColor = fromView.backgroundColorView.bubbleColor
-            snapshot.backgroundColorView.tailLength = fromView.backgroundColorView.tailLength
-            snapshot.backgroundColorView.orientation = fromView.backgroundColorView.orientation
+            snapshot.bubbleView.bubbleColor = fromView.bubbleView.bubbleColor
+            snapshot.bubbleView.tailLength = fromView.bubbleView.tailLength
+            snapshot.bubbleView.orientation = fromView.bubbleView.orientation
         }
 
         snapshot.frame = fromView.frame
@@ -117,7 +118,7 @@ extension TransitionRouter {
                 threadVC.blurView.showBlur(false)
                 self.fromVC.view.alpha = 0
                 snapshot.frame = finalFrame
-                snapshot.backgroundColorView.bubbleColor = toView.backgroundColorView.bubbleColor
+                snapshot.bubbleView.bubbleColor = toView.bubbleView.bubbleColor
             })
             toView.isHidden = false
             snapshot.removeFromSuperview()

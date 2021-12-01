@@ -47,7 +47,6 @@ class MessageSubcell: UICollectionViewCell {
             return
         }
 
-        self.content.alpha = messageLayoutAttributes.alpha
         self.content.textView.isVisible = messageLayoutAttributes.shouldShowText
         self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
                                          brightness: messageLayoutAttributes.brightness,
