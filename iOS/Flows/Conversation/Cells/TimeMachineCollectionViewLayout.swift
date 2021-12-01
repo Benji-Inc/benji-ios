@@ -99,7 +99,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     private func initialize() {
-        self.register(MessageStatusView.self, forDecorationViewOfKind: MessageStatusView.objectIdentifier)
+        self.register(MessageDetailView.self, forDecorationViewOfKind: MessageDetailView.objectIdentifier)
     }
 
     // MARK: - UICollectionViewLayout Overrides
@@ -169,7 +169,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         // Calculate and cache the layout attributes for all of the decoration views.
         for section in 0..<self.sectionCount {
             self.decorationLayoutAttributes[section]
-            = self.layoutAttributesForDecorationView(ofKind: MessageStatusView.objectIdentifier,
+            = self.layoutAttributesForDecorationView(ofKind: MessageDetailView.objectIdentifier,
                                                      at: IndexPath(item: 0, section: section))
         }
     }
@@ -347,7 +347,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let message = ChatClient.shared.message(cid: conversation.cid, id: messageable.id)
 
         let attributes
-        = MessageStatusViewLayoutAttributes(forDecorationViewOfKind: MessageStatusView.objectIdentifier,
+        = MessageDetailViewLayoutAttributes(forDecorationViewOfKind: MessageDetailView.objectIdentifier,
                                             with: indexPath)
 
         if indexPath.section == 0 {

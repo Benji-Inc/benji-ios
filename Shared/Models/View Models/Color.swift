@@ -11,6 +11,7 @@ import UIKit
 
 enum Color: String, CaseIterable {
 
+    case border
     case background
     case darkGray
     case gray
@@ -22,6 +23,8 @@ enum Color: String, CaseIterable {
 
     var color: UIColor {
         switch self {
+        case .border:
+            return UIColor(named: "BORDER")!
         case .background:
             return UIColor(named: "BACKGROUND")!
         case .darkGray:

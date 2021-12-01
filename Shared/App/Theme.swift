@@ -54,6 +54,7 @@ struct Theme {
     static let animationDurationStandard: TimeInterval = 0.35
     static let animationDurationSlow: TimeInterval = 0.5
     static let cornerRadius: CGFloat = 10
+    static let innerCornerRadius: CGFloat = Theme.cornerRadius.half
     static let borderWidth: CGFloat = 2
     static let contentOffset: CGFloat = 24
     static let buttonHeight: CGFloat = 50
