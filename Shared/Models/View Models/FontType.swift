@@ -42,8 +42,10 @@ enum FontType {
             return 24
         case .regular, .regularBold:
             return 16
-        case .small, .smallBold, .reactionEmoji:
+        case .small, .smallBold:
             return 12
+        case .reactionEmoji:
+            return 10
         }
     }
 

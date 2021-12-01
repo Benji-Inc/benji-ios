@@ -57,7 +57,6 @@ class MessageStatusViewLayoutAttributes: UICollectionViewLayoutAttributes {
 
 class MessageStatusView: UICollectionReusableView {
 
-    
     private lazy var collectionView = ReactionsCollectionView()
     private lazy var manager = ReactionsManager(with: self.collectionView)
 

@@ -89,15 +89,15 @@ class ConversationMessagesCellLayout: UICollectionViewFlowLayout {
         if indexPath.section == 0 {
             // Position the decoration above the frontmost item in the first section
             attributes.frame = CGRect(x: frontmostAttributes.frame.left,
-                                      y: frontmostAttributes.frame.top - Theme.contentOffset + 7,
+                                      y: frontmostAttributes.frame.top - 20 + 8,
                                       width: frontmostAttributes.frame.width,
-                                      height: Theme.contentOffset)
+                                      height: 20)
         } else {
             // Position the decoration below the frontmost item in the second section
             attributes.frame = CGRect(x: frontmostAttributes.frame.left,
-                                      y: frontmostAttributes.frame.bottom - 7,
+                                      y: frontmostAttributes.frame.bottom - 8,
                                       width: frontmostAttributes.frame.width,
-                                      height: Theme.contentOffset)
+                                      height: 20)
         }
 
         guard let conversation = self.conversationDelegate.conversation else { return nil }

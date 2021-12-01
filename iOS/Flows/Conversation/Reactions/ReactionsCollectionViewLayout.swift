@@ -20,7 +20,7 @@ class ReactionsCollectionViewLayout: UICollectionViewCompositionalLayout {
             switch sectionType {
             case .reactions:
                 // Item
-                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(42), heightDimension: .fractionalHeight(1))
+                let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(28), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
                 // Group
