@@ -35,6 +35,7 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
 
     @MainActor
     private func reloadReactions() async {
+        /// Checks to make sure we have already tried to update
         if self.updatedAt.isNil {
             await self.loadData()
             self.handleDataBeingLoaded()
@@ -85,7 +86,6 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
                         summaries.append(summary)
                         remaining -= count
                     }
-
                 }
             }
         }
