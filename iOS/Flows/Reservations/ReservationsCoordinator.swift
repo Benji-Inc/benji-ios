@@ -31,6 +31,7 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     func startPeopleFlow() {
         self.removeChild()
         let coordinator = PeopleCoordinator(includeConnections: false,
+                                            conversationId: "", 
                                             router: self.router,
                                             deepLink: self.deepLink)
         self.addChildAndStart(coordinator) { result in

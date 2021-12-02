@@ -44,6 +44,8 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     override func initializeViews() {
         super.initializeViews()
 
+        self.modalPresentationStyle = .overCurrentContext
+
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
 
         self.dataSource.headerTitle = self.getHeaderTitle()
