@@ -23,7 +23,7 @@ class ConversationListViewController: FullScreenViewController,
     lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
     /// Denotes where a message should be dragged and dropped to send.
-    let sendMessageOverlay = MessageDropZoneView()
+    let sendMessageDropZone = MessageDropZoneView()
 
     lazy var headerVC = ConversationHeaderViewController()
 
@@ -332,27 +332,27 @@ class ConversationListViewController: FullScreenViewController,
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
         if isEnabled {
-            guard self.sendMessageOverlay.superview.isNil else { return }
+            guard self.sendMessageDropZone.superview.isNil else { return }
             // Animate in the send overlay
-            self.contentContainer.addSubview(self.sendMessageOverlay)
-            self.sendMessageOverlay.alpha = 0
-            self.sendMessageOverlay.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
+            self.contentContainer.addSubview(self.sendMessageDropZone)
+            self.sendMessageDropZone.alpha = 0
+            self.sendMessageDropZone.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
             UIView.animate(withDuration: Theme.animationDurationStandard) {
-                self.sendMessageOverlay.alpha = 1
+                self.sendMessageDropZone.alpha = 1
             }
 
             // Show the send message overlay so the user can see where to drag the message
             let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
-            self.sendMessageOverlay.frame = overlayFrame
+            self.sendMessageDropZone.frame = overlayFrame
 
-            view.dropZoneFrame = view.convert(self.sendMessageOverlay.bounds, from: self.sendMessageOverlay)
+            view.dropZoneFrame = view.convert(self.sendMessageDropZone.bounds, from: self.sendMessageDropZone)
 
-            self.sendMessageOverlay.centerOnX()
+            self.sendMessageDropZone.centerOnX()
         } else {
             UIView.animate(withDuration: Theme.animationDurationStandard) {
-                self.sendMessageOverlay.alpha = 0
+                self.sendMessageDropZone.alpha = 0
             } completion: { didFinish in
-                self.sendMessageOverlay.removeFromSuperview()
+                self.sendMessageDropZone.removeFromSuperview()
             }
         }
     }
@@ -362,6 +362,10 @@ class ConversationListViewController: FullScreenViewController,
         self.currentSendMode = nil
 
         self.collectionView.isUserInteractionEnabled = false
+
+        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
+            currentCell.prepareForNewMessage()
+        }
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -381,7 +385,8 @@ class ConversationListViewController: FullScreenViewController,
     private func prepareForSend(with position: SendMode) {
         switch position {
         case .message:
-            self.sendMessageOverlay.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
+            self.sendMessageDropZone.setState(.newMessage,
+                                             messageColor: self.collectionView.getDropZoneColor())
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
@@ -389,7 +394,7 @@ class ConversationListViewController: FullScreenViewController,
             let newXOffset
             = -self.collectionView.width + self.collectionView.conversationLayout.minimumLineSpacing
 
-            self.sendMessageOverlay.setState(.newConversation, messageColor: nil)
+            self.sendMessageDropZone.setState(.newConversation, messageColor: nil)
             self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
         }
     }
@@ -432,8 +437,14 @@ class ConversationListViewController: FullScreenViewController,
         return true
     }
 
-    func swipeableInputAccessoryDidFinishSwipe(_ view: SwipeableInputAccessoryView) {
+    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
+                                 didFinishSwipeSendingSendable didSend: Bool) {
+        
         self.collectionView.isUserInteractionEnabled = true
+
+        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
+            currentCell.unprepareForNewMessage(reloadMessages: !didSend)
+        }
     }
 
     /// Gets the send position for the given preview view frame.

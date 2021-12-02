@@ -33,11 +33,11 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
 
     private var state: ConversationUIState = .read
 
-    /// The conversation containing all the messages..
-    var conversation: MessageSequence?
+    /// If true, push the user messages back to prepare for a new message.
+    private var prepareForSend = false
 
-    /// The maximum number of messages we'll show per stack of messages.
-    private let maxMessagesPerSection = 25
+    /// The conversation containing all the messages.
+    var conversation: MessageSequence?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -70,7 +70,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         fatalError("init(coder:) has not been implemented")
     }
 
-    /// If true we need scroll to the most recent item.
+    /// If true we need scroll to the most recent item upon layout.
     private var needsOffsetReload = true
 
     override func layoutSubviews() {
@@ -81,7 +81,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         self.collectionLayout.prepare()
 
         if self.needsOffsetReload,
-            let contentOffset = self.collectionLayout.getMostRecentItemContentOffset() {
+           let contentOffset = self.collectionLayout.getMostRecentItemContentOffset() {
 
             self.collectionView.contentOffset = contentOffset
             self.collectionLayout.invalidateLayout()
@@ -90,7 +90,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         }
     }
 
-    /// Configures the cell to display the given messages.
+    /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
     func set(sequence: MessageSequence) {
         self.conversation = sequence
 
@@ -103,18 +103,21 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
             return !message.isFromCurrentUser
         }
 
-        // Only shows a limited number of messages in each stack.
-        // The for the user's messages, the newest message is at the bottom, so reverse the order.
-        let currentUserMessages = userMessages.prefix(self.maxMessagesPerSection).reversed().map { message in
+        let channelID = try! ChannelId(cid: sequence.conversationId)
+        // The newest message is at the bottom, so reverse the order.
+        var userMessageItems = userMessages.reversed().map { message in
+            return ConversationMessageItem(channelID: channelID, messageID: message.id)
+        }
+        if self.prepareForSend {
+            userMessageItems.append(ConversationMessageItem(channelID: channelID,
+                                                            messageID: "placeholderMessage"))
+        }
+
+        let otherMessageItems = otherMessages.reversed().map { message in
             return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
 
-        // Other messages have the newest message on top, so there's no need to reverse the messages.
-        let messages = otherMessages.prefix(self.maxMessagesPerSection).reversed().map { message in
-            return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
-                                           messageID: message.id)
-        }
         var snapshot = self.dataSource.snapshot()
 
         var animateDifference = true
@@ -126,8 +129,8 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         snapshot.deleteSections(ConversationMessageSection.allCases)
         snapshot.appendSections(ConversationMessageSection.allCases)
 
-        snapshot.appendItems(messages, toSection: .otherMessages)
-        snapshot.appendItems(currentUserMessages, toSection: .currentUserMessages)
+        snapshot.appendItems(otherMessageItems, toSection: .otherMessages)
+        snapshot.appendItems(userMessageItems, toSection: .currentUserMessages)
 
         if animateDifference {
             self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
@@ -163,6 +166,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
 
     override func didMoveToWindow() {
         super.didMoveToWindow()
+        self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
     }
 
     func handle(isCentered: Bool) {
@@ -177,6 +181,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         super.prepareForReuse()
 
         self.needsOffsetReload = true
+        self.prepareForSend = false
 
         // Remove all the items so the next message has a blank slate to work with.
         var snapshot = self.dataSource.snapshot()
@@ -195,6 +200,20 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     func getDropZoneColor() -> Color? {
         return self.collectionLayout.getDropZoneColor()
     }
+
+    func prepareForNewMessage() {
+        self.prepareForSend = true
+
+        guard let conversation = self.conversation else { return }
+        self.set(sequence: conversation)
+    }
+
+    func unprepareForNewMessage(reloadMessages: Bool) {
+        self.prepareForSend = false
+
+        guard reloadMessages, let conversation = self.conversation else { return }
+        self.set(sequence: conversation)
+    }
 }
 
 extension ConversationMessagesCell: UICollectionViewDelegate {
@@ -202,7 +221,9 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let item = self.dataSource.itemIdentifier(for: indexPath), let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
+        guard let item = self.dataSource.itemIdentifier(for: indexPath),
+                let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
+        
         self.handleTappedMessage?(item, cell.content)
     }
 }

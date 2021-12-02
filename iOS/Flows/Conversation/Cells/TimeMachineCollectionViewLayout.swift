@@ -12,7 +12,7 @@ import StreamChat
 protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
     func getConversation(forItemAt indexPath: IndexPath) -> Conversation?
     func getMessage(forItemAt indexPath: IndexPath) -> Messageable?
-    func frontMostItemWasUpdated(for indexPath: IndexPath)
+    func frontmostItemWasUpdated(for indexPath: IndexPath)
 }
 
 class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
@@ -107,7 +107,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             guard let collectionView = collectionView else { return .zero }
 
             let itemCount = CGFloat(self.numberOfItems(inSection: 0) + self.numberOfItems(inSection: 1))
-            var height = (itemCount - 1) * self.itemHeight
+            var height = clamp((itemCount - 1), min: 0) * self.itemHeight
 
             // Plus 1 ensures that we will still receive the pan gesture, regardless of content size
             height += collectionView.bounds.height + 1
@@ -177,9 +177,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             sortedItemIndexPaths.append(indexPath)
         }
         sortedItemIndexPaths.sort { indexPath1, indexPath2 in
-            let message1 = dataSource.getMessage(forItemAt: indexPath1)!
-            let message2 = dataSource.getMessage(forItemAt: indexPath2)!
-            return message1.createdAt < message2.createdAt
+            let createdAt1 = dataSource.getMessage(forItemAt: indexPath1)?.createdAt ?? Date.distantFuture
+            let createdAt2 = dataSource.getMessage(forItemAt: indexPath2)?.createdAt ?? Date.distantFuture
+            return createdAt1 < createdAt2
         }
 
         // Calculate the z range for each item.
@@ -219,9 +219,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        // Return all items whose frames intersect with the given rect and aren't invisible.
-        let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
-            return attributes.alpha > 0 && rect.intersects(attributes.frame)
+        // Return all items whose frames intersect with the given rect.
+        var itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
+            return rect.intersects(attributes.frame)
         }
 
         return itemAttributes
@@ -257,18 +257,20 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         if 0 < vectorToCurrentZ {
             // The item's z range is behind the current zPosition.
             // Start scaling it down to simulate it moving away from the user.
-            let normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
+            var normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
+            normalized = clamp(normalized, 0, 1)
             scale = lerp(normalized, keyPoints: self.scalingKeyPoints)
             yOffset = lerp(normalized, keyPoints: self.spacingKeyPoints)
             alpha = lerp(normalized, keyPoints: self.alphaKeyPoints)
-            backgroundBrightness = lerpClamped(normalized,
-                                               start: self.frontmostBrightness,
-                                               end: self.backmostBrightness)
+            backgroundBrightness = lerp(normalized,
+                                        start: self.frontmostBrightness,
+                                        end: self.backmostBrightness)
         } else if vectorToCurrentZ < 0 {
             // The item's z range is in front of the current zPosition.
             // Scale it up to simulate it moving closer to the user.
-            let normalized = (-vectorToCurrentZ)/self.itemHeight
-            scale = clamp(normalized, max: 1) + 1
+            var normalized = (-vectorToCurrentZ)/self.itemHeight
+            normalized = clamp(normalized, 0, 1)
+            scale = normalized + 1
             yOffset = normalized * -self.itemHeight * 1
             alpha = 1 - normalized
             backgroundBrightness = self.frontmostBrightness
@@ -289,6 +291,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
                                                 end: 0)
         }
 
+        // If there is no message to display for this index path, don't show the cell.
+        if self.dataSource?.getMessage(forItemAt: indexPath) == nil {
+            alpha = 0
+        }
+
         let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
         // Make sure items in the front are drawn over items in the back.
         attributes.zIndex = indexPath.item
@@ -307,7 +314,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
 
         if yOffset == vectorToCurrentZ, indexPath != self.lastFrontMostIndexPath[indexPath.section] {
-            self.dataSource?.frontMostItemWasUpdated(for: indexPath)
+            self.dataSource?.frontmostItemWasUpdated(for: indexPath)
             self.lastFrontMostIndexPath[indexPath.section] = indexPath
         }
 
@@ -425,7 +432,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return frame
     }
 
-    // MARK: - Content Offset Handling
+    // MARK: - Content Offset Handling/Custom Animations
 
     /// If true, scroll to the most recent item after performing collection view updates.
     private var shouldScrollToEnd = false
@@ -470,6 +477,22 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         newOffset.y = round(newOffset.y, toNearest: self.itemHeight)
         newOffset.y = max(newOffset.y, 0)
         return newOffset
+    }
+
+    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
+    -> UICollectionViewLayoutAttributes? {
+
+        var attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+        if itemIndexPath.section == 0 {
+            // HACK: Items are incorrectly both disappearing and appearing. The disappearing animation
+            // sometimes makes it appear that an item is duplicated and moving in two different directions.
+            // To get around this, make the disappearing item move to the exact same place as
+            // the appearing version.
+            attributes = self.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+            return attributes
+        }
+
+        return attributes
     }
 }
 
