@@ -73,15 +73,18 @@ extension PeopleCoordinator {
             async let matchingUser = User.getFirstObject(where: "phoneNumber", contains: phone)
             // Ensure that the reservation metadata is prepared before we show the reservation
             try await reservation.prepareMetadata(andUpdate: [])
-
+            reservation.conversationId = self.conversationId
+            try await reservation.saveLocalThenServer()
             try await self.showReservationAlert(for: matchingUser)
         } catch {
             if reservation.contactId == contact.identifier {
                 self.sendText(with: reservation.reminderMessage, phone: phone)
+                reservation.conversationId = self.conversationId
             } else {
                 reservation.contactId = contact.identifier
                 _ = try? await reservation.saveLocalThenServer()
                 self.sendText(with: reservation.message, phone: phone)
+                reservation.conversationId = self.conversationId
             }
         }
     }

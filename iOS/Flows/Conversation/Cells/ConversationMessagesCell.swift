@@ -164,11 +164,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         self.dataSource.apply(snapshot, animatingDifferences: false)
     }
 
-    override func didMoveToWindow() {
-        super.didMoveToWindow()
-        self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
-    }
-
     func handle(isCentered: Bool) {
         guard self.collectionLayout.showMessageStatus != isCentered else { return }
 

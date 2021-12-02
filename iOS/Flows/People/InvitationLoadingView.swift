@@ -35,10 +35,10 @@ class InvitationLoadingView: View {
 
         await UIView.animateKeyframes(withDuration: 1.0, delay: 0.1, options: []) {
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                self.blurView.effect = UIBlurEffect(style: .dark)
+                self.blurView.effect = Theme.blurEffect
             }
 
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
+            UIView.addKeyframe(withRelativeStartTime: 0.5, relativeDuration: 0.5) {
                 self.avatarView.alpha = 1.0
                 self.avatarView.transform = .identity
                 self.label.alpha = 1.0
@@ -66,9 +66,7 @@ class InvitationLoadingView: View {
 
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
                 self.avatarView.alpha = 1.0
-                self.avatarView.transform = .identity
                 self.label.alpha = 1.0
-                self.label.transform = .identity
                 self.progressView.alpha = 1.0
             }
         }
@@ -82,12 +80,9 @@ class InvitationLoadingView: View {
 
     func hideAllViews() async {
         await UIView.animateKeyframes(withDuration: 1.0, delay: 0.1, options: []) {
+            self.blurView.effect = nil
             UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
                 self.resetAnimation()
-            }
-
-            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.5) {
-                self.blurView.effect = nil
             }
         }
     }
@@ -107,9 +102,7 @@ class InvitationLoadingView: View {
 
     private func resetAnimation() {
         self.avatarView.alpha = 0
-        self.avatarView.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
         self.label.alpha = 0
-        self.label.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
         self.progressView.alpha = 0
         self.progressView.progress = 0.0
     }

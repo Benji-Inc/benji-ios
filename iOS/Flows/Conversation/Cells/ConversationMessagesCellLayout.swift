@@ -89,7 +89,7 @@ class ConversationMessagesCellLayout: UICollectionViewFlowLayout {
         }
 
         // Each section should have a tail only on its frontmost item.
-        attributes.shouldShowTail = zIndex == 0
+        attributes.shouldShowTail = zIndex == 0 && indexPath.section == 0 
 
         if indexPath.section == 0 {
             attributes.bubbleTailOrientation = .up
