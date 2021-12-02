@@ -269,19 +269,21 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         if 0 < vectorToCurrentZ {
             // The item's z range is behind the current zPosition.
             // Start scaling it down to simulate it moving away from the user.
-            let normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
-            scale = lerpClamped(normalized, keyPoints: self.scalingKeyPoints)
-            yOffset = lerpClamped(normalized, keyPoints: self.spacingKeyPoints)
+            var normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
+            normalized = clamp(normalized, 0, 1)
+            scale = lerp(normalized, keyPoints: self.scalingKeyPoints)
+            yOffset = lerp(normalized, keyPoints: self.spacingKeyPoints)
             alpha = lerp(normalized, keyPoints: self.alphaKeyPoints)
-            backgroundBrightness = lerpClamped(normalized,
-                                               start: self.frontmostBrightness,
-                                               end: self.backmostBrightness)
+            backgroundBrightness = lerp(normalized,
+                                        start: self.frontmostBrightness,
+                                        end: self.backmostBrightness)
         } else if vectorToCurrentZ < 0 {
             // The item's z range is in front of the current zPosition.
             // Scale it up to simulate it moving closer to the user.
-            let normalized = (-vectorToCurrentZ)/self.itemHeight
-            scale = clamp(normalized, max: 1) + 1
-            yOffset = clamp(normalized, max: 1) * -self.itemHeight * 1
+            var normalized = (-vectorToCurrentZ)/self.itemHeight
+            normalized = clamp(normalized, 0, 1)
+            scale = normalized + 1
+            yOffset = normalized * -self.itemHeight * 1
             alpha = 1 - normalized
             backgroundBrightness = self.frontmostBrightness
         } else {
