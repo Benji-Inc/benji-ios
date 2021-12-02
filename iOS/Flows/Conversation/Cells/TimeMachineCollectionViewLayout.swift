@@ -47,7 +47,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Layout Configuration
 
     /// The height of the cells.
-    var itemHeight: CGFloat = 60 + MessageContentView.bubbleTailLength {
+    var itemHeight: CGFloat = 60 + MessageDetailView.height + Theme.ContentOffset.short.value {
         didSet { self.invalidateLayout() }
     }
     /// Keypoints used to gradually shrink down items as they move away.
@@ -80,8 +80,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
-    /// A cache of layout attributes for decoration views.
-    private var decorationLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
     private var itemFocusPositions: [IndexPath : CGFloat] = [:]
     /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
@@ -143,7 +141,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         // Clear the layout attributes caches.
         self.cellLayoutAttributes.removeAll()
-        self.decorationLayoutAttributes.removeAll()
 
         guard let customContext = context as? TimeMachineCollectionViewLayoutInvalidationContext else {
             return
@@ -164,9 +161,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         // Calculate and cache the layout attributes for all the items.
         self.forEachIndexPath { indexPath in
             self.cellLayoutAttributes[indexPath] = self.layoutAttributesForItem(at: indexPath)
-            self.decorationLayoutAttributes[indexPath]
-            = self.layoutAttributesForDecorationView(ofKind: MessageDetailView.objectIdentifier,
-                                                     at: indexPath)
         }
     }
 
@@ -226,11 +220,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         // Return all items whose frames intersect with the given rect and aren't invisible.
-        var itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
+        let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
             return attributes.alpha > 0 && rect.intersects(attributes.frame)
         }
-
-        itemAttributes.append(contentsOf: self.decorationLayoutAttributes.values)
 
         return itemAttributes
     }
@@ -318,6 +310,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             self.dataSource?.frontMostItemWasUpdated(for: indexPath)
             self.lastFrontMostIndexPath[indexPath.section] = indexPath
         }
+
+        let detailAlpha = 1 - abs(vectorToCurrentZ) / (self.itemHeight * 0.2)
+        attributes.detailAlpha = detailAlpha
 
         return attributes
     }

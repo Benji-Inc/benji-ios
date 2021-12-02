@@ -12,6 +12,8 @@ import Combine
 
 class MessageDetailView: View {
 
+    static let height: CGFloat = 20 
+
     private lazy var collectionView = ReactionsCollectionView()
     private lazy var manager = ReactionsManager(with: self.collectionView)
 

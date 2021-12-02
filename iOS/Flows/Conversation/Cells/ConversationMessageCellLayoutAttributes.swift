@@ -20,6 +20,8 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
     var shouldShowTail: Bool = false
     /// The direction the speech bubble tail should be pointed.
     var bubbleTailOrientation: SpeechBubbleView.TailOrientation = .down
+    /// The alpha of the detial view.
+    var detailAlpha: CGFloat = 0
 
     override func copy(with zone: NSZone? = nil) -> Any {
         let copy = super.copy(with: zone) as! ConversationMessageCellLayoutAttributes
@@ -28,6 +30,7 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
         copy.brightness = self.brightness
         copy.shouldShowTail = self.shouldShowTail
         copy.bubbleTailOrientation = self.bubbleTailOrientation
+        copy.detailAlpha = self.detailAlpha
         return copy
     }
 
@@ -39,6 +42,7 @@ class ConversationMessageCellLayoutAttributes: UICollectionViewLayoutAttributes 
             && layoutAttributes.brightness == self.brightness
             && layoutAttributes.shouldShowTail == self.shouldShowTail
             && layoutAttributes.bubbleTailOrientation == self.bubbleTailOrientation
+            && layoutAttributes.detailAlpha == self.detailAlpha
         }
 
         return false
