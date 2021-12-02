@@ -42,7 +42,7 @@ class MessageStatusView: View {
     @MainActor
     func configure(for message: Messageable) {
         self.messageController = ChatClient.shared.messageController(for: message)
-        if let msg = message as? Message {
+        if let msg = self.messageController?.message {
             self.replyView.setReplies(for: msg)
             self.readView.configure(for: msg)
         }
@@ -160,6 +160,8 @@ private class MessageReadView: MessageStatusContainer {
             self.label.setText("Error")
         }
 
+        logDebug("\(message.text): \(self.label.text)")
+
         self.layoutNow()
     }
 
@@ -171,20 +173,16 @@ private class MessageReadView: MessageStatusContainer {
         let wordDuration: TimeInterval = Double(message.text.wordCount) * 0.2
         let duration: TimeInterval = clamp(wordDuration, 2.0, CGFloat.greatestFiniteMagnitude)
         Task {
-            await Task.snooze(seconds: 0.1)
-            await UIView.awaitAnimation(with: .custom(duration)) { [unowned self] in
+            await UIView.awaitAnimation(with: .custom(duration), delay: 0.1) { [unowned self] in
                 guard !Task.isCancelled else { return }
                 self.progressView.alpha = 0.5
                 self.progressView.width = self.width
+                self.setNeedsLayout()
             }
 
             guard !Task.isCancelled else { return }
             do {
                 try await message.setToConsumed()
-
-                await UIView.awaitAnimation(with: .fast) { [unowned self] in
-                    self.progressView.alpha = 0.0
-                }
             }
             catch {
                 logDebug(error)

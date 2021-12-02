@@ -49,7 +49,8 @@ class MessageSubcell: UICollectionViewCell {
     func configure(with message: Messageable) {
         self.content.configure(with: message)
         self.detailView.configure(with: message)
-        self.setNeedsLayout()
+        logDebug("CONFIGURED: \(message.kind.text)")
+        self.layoutNow()
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -68,6 +69,7 @@ class MessageSubcell: UICollectionViewCell {
 
         self.detailView.height = MessageDetailView.height
         self.detailView.alpha = messageLayoutAttributes.detailAlpha
+
         self.detailView.updateReadStatus(shouldRead: messageLayoutAttributes.detailAlpha == 1.0)
     }
 }
