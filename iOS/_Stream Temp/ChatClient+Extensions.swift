@@ -116,6 +116,11 @@ extension ChatClient {
         })
     }
 
+    func messageController(for messageable: Messageable) -> MessageController? {
+        guard let msg = messageable as? Message else { return nil }
+        return self.messageController(cid: msg.cid!, messageId: msg.id)
+    }
+
     func message(cid: ConversationID, id: MessageId) -> Message {
         return self.messageController(cid: cid, messageId: id).message!
     }

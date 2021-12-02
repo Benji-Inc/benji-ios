@@ -322,53 +322,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return attributes
     }
 
-    override func layoutAttributesForDecorationView(ofKind elementKind: String,
-                                                    at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-
-        // If the attributes are cached already, just return those.
-        if let attributes = self.decorationLayoutAttributes[indexPath] {
-            return attributes
-        }
-
-        guard let itemAttributes = self.layoutAttributesForItem(at: indexPath) as? ConversationMessageCellLayoutAttributes else {
-                  return nil
-              }
-
-        guard let conversation = self.dataSource?.getConversation(forItemAt: indexPath),
-              let messageable = self.dataSource?.getMessage(forItemAt: indexPath) else {
-                  return nil
-              }
-
-        let message = ChatClient.shared.message(cid: conversation.cid, id: messageable.id)
-
-        let attributes
-        = MessageDetailViewLayoutAttributes(forDecorationViewOfKind: MessageDetailView.objectIdentifier,
-                                            with: indexPath)
-
-        if indexPath.section == 0 {
-            // Position the decoration above the frontmost item in the first section
-            attributes.frame = CGRect(x: itemAttributes.frame.left,
-                                      y: itemAttributes.frame.top - 20 + 8,
-                                      width: itemAttributes.frame.width,
-                                      height: 20)
-        } else {
-            // Position the decoration below the frontmost item in the second section
-            attributes.frame = CGRect(x: itemAttributes.frame.left,
-                                      y: itemAttributes.frame.bottom - 8,
-                                      width: itemAttributes.frame.width,
-                                      height: 20)
-        }
-
-        attributes.message = message
-
-        let itemZRange = self.itemZRanges[indexPath]
-        let zVector = itemZRange?.vector(to: self.zPosition) ?? 0
-        let zAlpha: CGFloat = 1 - abs(zVector) / (self.itemHeight * 0.2)
-        attributes.alpha = self.showMessageStatus ? zAlpha : 0
-
-        return attributes
-    }
-
     // MARK: - Attribute Helpers
 
     /// Gets the index path of the frontmost item in the given section.

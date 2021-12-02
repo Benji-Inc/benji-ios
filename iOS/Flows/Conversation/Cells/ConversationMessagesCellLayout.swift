@@ -41,24 +41,13 @@ class ConversationMessagesCellLayout: UICollectionViewFlowLayout {
     }
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        guard var attributesInRect = super.layoutAttributesForElements(in: rect) else { return nil }
+        guard let attributesInRect = super.layoutAttributesForElements(in: rect) else { return nil }
 
         for attributes in attributesInRect {
             guard let messageAttributes = attributes as? ConversationMessageCellLayoutAttributes else {
                 continue
             }
             self.update(attributes: messageAttributes)
-        }
-
-        let sectionCount = self.collectionView?.numberOfSections ?? 0
-        for sectionIndex in 0..<sectionCount {
-            let decorationAttributes
-            = self.layoutAttributesForDecorationView(ofKind: MessageDetailView.objectIdentifier,
-                                                     at: IndexPath(item: 0,
-                                                                   section: sectionIndex))
-            if let decorationAttributes = decorationAttributes {
-                attributesInRect.append(decorationAttributes)
-            }
         }
 
         return attributesInRect
@@ -70,45 +59,6 @@ class ConversationMessagesCellLayout: UICollectionViewFlowLayout {
         if let messageAttributes = attributes as? ConversationMessageCellLayoutAttributes {
             self.update(attributes: messageAttributes)
         }
-
-        return attributes
-    }
-
-    override func layoutAttributesForDecorationView(ofKind elementKind: String,
-                                                    at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-
-        guard let frontmostItemIndex = self.getFrontmostItemIndexPath(inSection: indexPath.section),
-              let frontmostAttributes = self.layoutAttributesForItem(at: frontmostItemIndex) else {
-                  return nil
-              }
-
-        let attributes
-        = MessageDetailViewLayoutAttributes(forDecorationViewOfKind: MessageDetailView.objectIdentifier,
-                                            with: indexPath)
-
-        if indexPath.section == 0 {
-            // Position the decoration above the frontmost item in the first section
-            attributes.frame = CGRect(x: frontmostAttributes.frame.left,
-                                      y: frontmostAttributes.frame.top - 20 + 8,
-                                      width: frontmostAttributes.frame.width,
-                                      height: 20)
-        } else {
-            // Position the decoration below the frontmost item in the second section
-            attributes.frame = CGRect(x: frontmostAttributes.frame.left,
-                                      y: frontmostAttributes.frame.bottom - 8,
-                                      width: frontmostAttributes.frame.width,
-                                      height: 20)
-        }
-
-        guard let conversation = self.conversationDelegate.conversation else { return nil }
-
-        let cid = try! ChannelId(cid: conversation.conversationId)
-        let conversationController = ChatClient.shared.channelController(for: cid)
-        let mostRecentMessage
-        = conversationController.getMostRecentMessage(fromCurrentUser: indexPath.section == 1)
-
-        attributes.message = mostRecentMessage
-        attributes.alpha = self.showMessageStatus ? 1 : 0
 
         return attributes
     }

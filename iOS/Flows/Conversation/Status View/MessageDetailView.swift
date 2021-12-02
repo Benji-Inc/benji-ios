@@ -10,28 +10,7 @@ import Foundation
 import StreamChat
 import Combine
 
-/// Layout attributes that can be used to configure a TimeSentView.
-class MessageDetailViewLayoutAttributes: UICollectionViewLayoutAttributes {
-
-    var message: Message?
-
-    override func copy(with zone: NSZone? = nil) -> Any {
-        let copy = super.copy(with: zone) as! MessageDetailViewLayoutAttributes
-        copy.message = self.message
-        return copy
-    }
-
-    override func isEqual(_ object: Any?) -> Bool {
-        if let layoutAttributes = object as? MessageDetailViewLayoutAttributes {
-            return super.isEqual(object)
-            && layoutAttributes.message == self.message
-        }
-
-        return false
-    }
-}
-
-class MessageDetailView: UICollectionReusableView {
+class MessageDetailView: View {
 
     private lazy var collectionView = ReactionsCollectionView()
     private lazy var manager = ReactionsManager(with: self.collectionView)
@@ -40,26 +19,25 @@ class MessageDetailView: UICollectionReusableView {
 
     private var hasLoadedMessage: Message?
 
-    private var cancellables = Set<AnyCancellable>()
+    override func initializeSubviews() {
+        super.initializeSubviews()
 
-    override init(frame: CGRect) {
-        super.init(frame: .zero)
-        self.initializeSubviews()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    deinit {
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
-        }
-    }
-
-    private func initializeSubviews() {
         self.addSubview(self.collectionView)
         self.addSubview(self.statusView)
+    }
+
+    func configure(with message: Messageable) {
+        self.manager.loadReactions(for: message)
+        self.statusView.configure(for: message)
+        self.layoutNow()
+    }
+
+    func updateReadStatus(shouldRead: Bool) {
+        if shouldRead {
+            self.statusView.handleConsumption()
+        } else {
+            self.statusView.resetConsumption()
+        }
     }
 
     override func layoutSubviews() {
@@ -72,39 +50,5 @@ class MessageDetailView: UICollectionReusableView {
         self.statusView.width = self.halfWidth
         self.statusView.pin(.right, offset: .standard)
         self.statusView.expandToSuperviewHeight()
-    }
-
-    override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
-        super.apply(layoutAttributes)
-
-        if let attributes = layoutAttributes as? MessageDetailViewLayoutAttributes {
-            guard let msg = attributes.message else { return }
-
-            if self.hasLoadedMessage.isNil {
-                if attributes.alpha == 1.0 {
-                    self.manager.loadReactions(for: msg)
-                    self.hasLoadedMessage = msg
-                }
-            } else if msg != self.hasLoadedMessage, attributes.alpha == 1.0 {
-                self.manager.loadReactions(for: msg)
-                self.hasLoadedMessage = msg
-            }
-
-            self.statusView.configure(for: msg)
-
-            if attributes.alpha == 1.0 {
-                self.statusView.handleConsumption()
-            } else {
-                self.statusView.resetConsumption()
-            }
-        }
-
-        self.layoutNow()
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-
-        self.hasLoadedMessage = nil
     }
 }

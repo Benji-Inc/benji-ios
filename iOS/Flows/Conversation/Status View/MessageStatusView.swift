@@ -40,50 +40,19 @@ class MessageStatusView: View {
     }
 
     @MainActor
-    func configure(for message: Message?) {
-        guard let message = message else {
-            self.readView.reset()
-            self.replyView.reset()
-            self.layoutNow()
-            return
+    func configure(for message: Messageable) {
+        self.messageController = ChatClient.shared.messageController(for: message)
+        if let msg = message as? Message {
+            self.replyView.setReplies(for: msg)
+            self.readView.configure(for: msg)
         }
-
-        if let old = self.messageController?.message,
-           old.id == message.id,
-           old.updatedAt < message.updatedAt {
-            self.update(for: message)
-        } else if self.messageController.isNil {
-            self.update(for: message)
-        }
-    }
-
-    private func update(for message: Message) {
-        self.messageController = ChatClient.shared.messageController(cid: message.cid!, messageId: message.id)
-        self.replyView.setReplies(for: message)
-        self.readView.configure(for: message)
-        self.subscribeToUpdates(for: message)
         self.layoutNow()
     }
 
-    private func subscribeToUpdates(for message: Message) {
-
-        self.messageController?.messageChangePublisher.mainSink { [unowned self] output in
-            switch output {
-            case .create(_):
-                break
-            case .update(let new):
-                Task {
-                    self.configure(for: new)
-                }.add(to: self.taskPool)
-            case .remove(_):
-                break
-            }
-        }.store(in: &self.cancellables)
-    }
-
     func handleConsumption() {
-        guard let message = self.messageController?.message else { return }
-        if !message.isFromCurrentUser, !message.isConsumedByMe {
+        if let message = self.messageController?.message,
+           !message.isFromCurrentUser,
+           !message.isConsumedByMe {
             self.readView.beginConsumption(for: message)
         }
     }
@@ -98,7 +67,8 @@ class MessageStatusView: View {
 
     func reset() {
         self.readView.reset()
-        self.replyView.reset() 
+        self.replyView.reset()
+        self.layoutNow()
     }
 }
 
@@ -161,20 +131,7 @@ private class MessageReadView: MessageStatusContainer {
     @MainActor
     func configure(for message: Message) {
 
-        if let state = message.localState {
-            switch state {
-            case .pendingSync, .syncing:
-                self.label.setText("Synching")
-            case .syncingFailed, .sendingFailed:
-                self.label.setText("Error")
-            case .pendingSend, .sending:
-                self.label.setText("Sending")
-            case .deleting:
-                break
-            case .deletingFailed:
-                break
-            }
-        } else if message.isConsumed {
+        if message.isConsumed {
             if !message.isFromCurrentUser {
                 self.label.setText("Read")
                 self.imageView.image = UIImage(named: "checkmark-double")
@@ -182,9 +139,25 @@ private class MessageReadView: MessageStatusContainer {
                 self.label.setText("Read")
                 self.imageView.image = UIImage(named: "checkmark-double")
             }
-        } else {
+        } else if !message.isConsumed, message.localState.isNil {
             self.label.setText("Delivered")
             self.imageView.image = UIImage(named: "checkmark")
+        } else if let state = message.localState {
+            switch state {
+            case .pendingSync, .syncing:
+                self.label.setText("Synching")
+            case .syncingFailed, .sendingFailed:
+                self.label.setText("Error")
+            case .pendingSend, .sending:
+                self.label.setText("Sending")
+                self.imageView.image = UIImage(named: "checkmark")
+            case .deleting:
+                break
+            case .deletingFailed:
+                break
+            }
+        } else {
+            self.label.setText("Error")
         }
 
         self.layoutNow()
@@ -208,6 +181,10 @@ private class MessageReadView: MessageStatusContainer {
             guard !Task.isCancelled else { return }
             do {
                 try await message.setToConsumed()
+
+                await UIView.awaitAnimation(with: .fast) { [unowned self] in
+                    self.progressView.alpha = 0.0
+                }
             }
             catch {
                 logDebug(error)

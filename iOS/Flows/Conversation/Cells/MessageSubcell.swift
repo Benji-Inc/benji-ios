@@ -12,6 +12,7 @@ import Foundation
 class MessageSubcell: UICollectionViewCell {
 
     let content = MessageContentView()
+    let detailView = MessageDetailView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,6 +26,7 @@ class MessageSubcell: UICollectionViewCell {
 
     private func initializeViews() {
         self.contentView.addSubview(self.content)
+        self.contentView.addSubview(self.detailView)
     }
 
     override func layoutSubviews() {
@@ -35,6 +37,7 @@ class MessageSubcell: UICollectionViewCell {
 
     func configure(with message: Messageable) {
         self.content.configure(with: message)
+        self.detailView.configure(with: message)
         self.setNeedsLayout()
     }
 
