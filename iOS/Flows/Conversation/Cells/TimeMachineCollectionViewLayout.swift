@@ -270,8 +270,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             // The item's z range is behind the current zPosition.
             // Start scaling it down to simulate it moving away from the user.
             let normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
-            scale = lerp(normalized, keyPoints: self.scalingKeyPoints)
-            yOffset = lerp(normalized, keyPoints: self.spacingKeyPoints)
+            scale = lerpClamped(normalized, keyPoints: self.scalingKeyPoints)
+            yOffset = lerpClamped(normalized, keyPoints: self.spacingKeyPoints)
             alpha = lerp(normalized, keyPoints: self.alphaKeyPoints)
             backgroundBrightness = lerpClamped(normalized,
                                                start: self.frontmostBrightness,
@@ -281,7 +281,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             // Scale it up to simulate it moving closer to the user.
             let normalized = (-vectorToCurrentZ)/self.itemHeight
             scale = clamp(normalized, max: 1) + 1
-            yOffset = normalized * -self.itemHeight * 1
+            yOffset = clamp(normalized, max: 1) * -self.itemHeight * 1
             alpha = 1 - normalized
             backgroundBrightness = self.frontmostBrightness
         } else {
@@ -533,6 +533,33 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         newOffset.y = round(newOffset.y, toNearest: self.itemHeight)
         newOffset.y = max(newOffset.y, 0)
         return newOffset
+    }
+
+    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
+    -> UICollectionViewLayoutAttributes? {
+
+        let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+        if itemIndexPath.section == 0 {
+            guard let attributes = attributes as? ConversationMessageCellLayoutAttributes else {
+                return attributes
+            }
+
+            return attributes
+        }
+
+        return attributes
+    }
+
+    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
+    -> UICollectionViewLayoutAttributes? {
+
+        var attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+        if itemIndexPath.section == 0 {
+            attributes = self.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+            return attributes
+        }
+
+        return attributes
     }
 }
 
