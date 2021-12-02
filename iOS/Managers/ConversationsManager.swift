@@ -35,9 +35,7 @@ class ConversationsManager: EventsControllerDelegate {
 
     @Published var activeConversation: Conversation?
 
-    @Published var reactionUpdatedEvent: ReactionUpdatedEvent?
-    @Published var reactionDeletedEvent: ReactionDeletedEvent?
-    @Published var reactionNewEvent: ReactionNewEvent?
+    @Published var reactionEvent: Event?
 
     init() {
         self.initialize()
@@ -61,12 +59,11 @@ class ConversationsManager: EventsControllerDelegate {
                 }
             }
         case let event as ReactionNewEvent:
-            logDebug("NEW REACTION \(event.message.text)")
-            self.reactionNewEvent = event
+            self.reactionEvent = event
         case let event as ReactionDeletedEvent:
-            self.reactionDeletedEvent = event
+            self.reactionEvent = event
         case let event as ReactionUpdatedEvent:
-            self.reactionUpdatedEvent = event
+            self.reactionEvent = event
         default:
             break
         }

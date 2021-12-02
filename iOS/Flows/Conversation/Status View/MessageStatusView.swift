@@ -94,6 +94,7 @@ private class MessageReadView: MessageStatusContainer {
     let imageView = UIImageView()
     let label = Label(font: .small)
     let progressView = View()
+    private(set) var animator: UIViewPropertyAnimator?
 
     override func initializeSubviews() {
         super.initializeSubviews()
@@ -112,14 +113,14 @@ private class MessageReadView: MessageStatusContainer {
         super.layoutSubviews()
 
         self.imageView.squaredSize = 18
-        self.imageView.pin(.right, offset: .short)
-        self.imageView.centerOnY()
 
         let maxWidth = self.maxWidth - Theme.ContentOffset.short.value.doubled - self.imageView.width
         self.label.setSize(withWidth: maxWidth)
-        let offset = self.imageView.width + Theme.ContentOffset.short.value.doubled
-        self.label.pin(.right, offset: .custom(offset))
+        self.label.pin(.left, offset: .short)
         self.label.centerOnY()
+
+        self.imageView.match(.left, to: .right, of: self.label, offset: .short)
+        self.imageView.centerOnY()
 
         let width = (Theme.ContentOffset.short.value * 3) + self.imageView.width + self.label.width
         self.width = clamp(width, self.minWidth, self.maxWidth)
@@ -160,8 +161,6 @@ private class MessageReadView: MessageStatusContainer {
             self.label.setText("Error")
         }
 
-        logDebug("\(message.text): \(self.label.text)")
-
         self.layoutNow()
     }
 
@@ -172,22 +171,30 @@ private class MessageReadView: MessageStatusContainer {
 
         let wordDuration: TimeInterval = Double(message.text.wordCount) * 0.2
         let duration: TimeInterval = clamp(wordDuration, 2.0, CGFloat.greatestFiniteMagnitude)
-        Task {
-            await UIView.awaitAnimation(with: .custom(duration), delay: 0.1) { [unowned self] in
-                guard !Task.isCancelled else { return }
-                self.progressView.alpha = 0.5
-                self.progressView.width = self.width
-                self.setNeedsLayout()
-            }
 
-            guard !Task.isCancelled else { return }
+        self.animator = UIViewPropertyAnimator.init(duration: duration,
+                                                    curve: .linear,
+                                                    animations: {
+            self.progressView.alpha = 0.5
+            self.progressView.width = self.width
+            self.layoutNow()
+        })
+
+        self.animator?.isInterruptible = true
+        self.animator?.startAnimation()
+
+        Task {
+            await Task.snooze(seconds: duration)
+            await UIView.awaitAnimation(with: .fast, animations: {
+                self.progressView.alpha = 0
+            })
             do {
+                guard !Task.isCancelled else { return }
                 try await message.setToConsumed()
             }
             catch {
                 logDebug(error)
             }
-
         }.add(to: self.taskPool)
     }
 

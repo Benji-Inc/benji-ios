@@ -191,28 +191,9 @@ class ConversationListViewController: FullScreenViewController,
         if let currentConversation = self.activeConversation {
             self.conversationController = ChatClient.shared.channelController(for: currentConversation.cid)
 
-            ConversationsManager.shared.$reactionNewEvent.mainSink { [unowned self] event in
+            ConversationsManager.shared.$reactionEvent.mainSink { event in
                 guard let event = event else { return }
-                if let activeConversation = self.conversationController?.conversation,
-                   event.cid == activeConversation.cid {
-                    cell.set(sequence: activeConversation)
-                }
-            }.store(in: &self.cancellables)
-
-            ConversationsManager.shared.$reactionDeletedEvent.mainSink { [unowned self] event in
-                guard let event = event else { return }
-                if let activeConversation = self.conversationController?.conversation,
-                   event.cid == activeConversation.cid {
-                    cell.set(sequence: activeConversation)
-                }
-            }.store(in: &self.cancellables)
-
-            ConversationsManager.shared.$reactionUpdatedEvent.mainSink { [unowned self] event in
-                guard let event = event else { return }
-                if let activeConversation = self.conversationController?.conversation,
-                   event.cid == activeConversation.cid {
-                    cell.set(sequence: activeConversation)
-                }
+                cell.updateMessages(with: event)
             }.store(in: &self.cancellables)
 
             self.conversationController?.messagesChangesPublisher.mainSink(receiveValue: { [unowned self] changes in

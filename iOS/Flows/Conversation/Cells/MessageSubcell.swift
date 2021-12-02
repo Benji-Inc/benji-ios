@@ -49,7 +49,6 @@ class MessageSubcell: UICollectionViewCell {
     func configure(with message: Messageable) {
         self.content.configure(with: message)
         self.detailView.configure(with: message)
-        logDebug("CONFIGURED: \(message.kind.text)")
         self.layoutNow()
     }
 
