@@ -269,18 +269,20 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         if 0 < vectorToCurrentZ {
             // The item's z range is behind the current zPosition.
             // Start scaling it down to simulate it moving away from the user.
-            let normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
+            var normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
+            normalized = clamp(normalized, 0, 1)
             scale = lerp(normalized, keyPoints: self.scalingKeyPoints)
             yOffset = lerp(normalized, keyPoints: self.spacingKeyPoints)
             alpha = lerp(normalized, keyPoints: self.alphaKeyPoints)
-            backgroundBrightness = lerpClamped(normalized,
-                                               start: self.frontmostBrightness,
-                                               end: self.backmostBrightness)
+            backgroundBrightness = lerp(normalized,
+                                        start: self.frontmostBrightness,
+                                        end: self.backmostBrightness)
         } else if vectorToCurrentZ < 0 {
             // The item's z range is in front of the current zPosition.
             // Scale it up to simulate it moving closer to the user.
-            let normalized = (-vectorToCurrentZ)/self.itemHeight
-            scale = clamp(normalized, max: 1) + 1
+            var normalized = (-vectorToCurrentZ)/self.itemHeight
+            normalized = clamp(normalized, 0, 1)
+            scale = normalized + 1
             yOffset = normalized * -self.itemHeight * 1
             alpha = 1 - normalized
             backgroundBrightness = self.frontmostBrightness
@@ -533,6 +535,22 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         newOffset.y = round(newOffset.y, toNearest: self.itemHeight)
         newOffset.y = max(newOffset.y, 0)
         return newOffset
+    }
+
+    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
+    -> UICollectionViewLayoutAttributes? {
+
+        var attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+        if itemIndexPath.section == 0 {
+            // HACK: Items are incorrectly both disappearing and appearing. The disappearing animation
+            // sometimes makes it appear that an item is duplicated and moving in two different directions.
+            // To get around this, make the disappearing item move to the exact same place as
+            // the appearing version.
+            attributes = self.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+            return attributes
+        }
+
+        return attributes
     }
 }
 
