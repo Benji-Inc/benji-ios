@@ -41,7 +41,7 @@ extension UIView {
                                options: AnimationOptions = .curveLinear,
                                animations: @MainActor @escaping () -> Void) async {
         return await withCheckedContinuation { continuation in
-            UIView.animate(withDuration: duration.rawValue,
+            UIView.animate(withDuration: duration.value,
                            delay: delay,
                            options: options) {
                 animations()
@@ -60,7 +60,7 @@ extension UIView {
                                      animations: @MainActor @escaping () -> Void) async {
         
         return await withCheckedContinuation { continuation in
-            UIView.animate(withDuration: duration.rawValue,
+            UIView.animate(withDuration: duration.value,
                            delay: delay,
                            usingSpringWithDamping: damping,
                            initialSpringVelocity: velocity,

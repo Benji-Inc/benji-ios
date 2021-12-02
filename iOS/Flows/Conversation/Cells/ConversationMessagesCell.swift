@@ -132,6 +132,40 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         snapshot.appendItems(otherMessageItems, toSection: .otherMessages)
         snapshot.appendItems(userMessageItems, toSection: .currentUserMessages)
 
+        if animateDifference {
+            self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
+        } else {
+            self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
+        }
+    }
+
+    func updateMessages(with event: Event) {
+        var snapshot = self.dataSource.snapshot()
+        switch event {
+        case let event as ReactionNewEvent:
+            let item = ConversationMessageItem(channelID: event.cid, messageID: event.message.id)
+            if snapshot.itemIdentifiers.contains(item) {
+                snapshot.reconfigureItems([item])
+            }
+        case let event as ReactionDeletedEvent:
+            let item = ConversationMessageItem(channelID: event.cid, messageID: event.message.id)
+            if snapshot.itemIdentifiers.contains(item) {
+                snapshot.deleteItems([item])
+            }
+        case let event as ReactionUpdatedEvent:
+            let item = ConversationMessageItem(channelID: event.cid, messageID: event.message.id)
+            if snapshot.itemIdentifiers.contains(item) {
+                snapshot.reconfigureItems([item])
+            }
+        default:
+            logDebug("event not handled")
+        }
+
+        self.dataSource.apply(snapshot, animatingDifferences: false)
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
         self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
     }
 

@@ -179,6 +179,7 @@ class ConversationListViewController: FullScreenViewController,
 
         guard let ip = self.collectionView.centerIndexPath(), let conversation = self.conversationListController.conversations[safe: ip.item] else { return }
 
+        /// Sets the active conversation
         ConversationsManager.shared.activeConversation = conversation
 
         let members = conversation.lastActiveMembers.filter { member in
@@ -189,6 +190,17 @@ class ConversationListViewController: FullScreenViewController,
         // If there's a centered cell, update the layout
         if let currentConversation = self.activeConversation {
             self.conversationController = ChatClient.shared.channelController(for: currentConversation.cid)
+
+            ConversationsManager.shared.$reactionEvent.mainSink { event in
+                guard let event = event else { return }
+                cell.updateMessages(with: event)
+            }.store(in: &self.cancellables)
+
+            self.conversationController?.messagesChangesPublisher.mainSink(receiveValue: { [unowned self] changes in
+                if let activeConversation = self.conversationController?.conversation {
+                    cell.set(sequence: activeConversation)
+                }
+            }).store(in: &self.cancellables)
 
             self.typingSubscriber = self.conversationController?
                 .typingUsersPublisher

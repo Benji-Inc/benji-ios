@@ -16,7 +16,6 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
 
     private var cancellables = Set<AnyCancellable>()
     private var messageController: ChatMessageController?
-    private var updatedAt: Date?
 
     override func initializeCollectionView() {
         super.initializeCollectionView()
@@ -25,47 +24,12 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
         self.collectionView.isScrollEnabled = false
     }
 
-    func loadReactions(for message: Message) {
-        self.messageController = ChatClient.shared.messageController(cid: message.cid!, messageId: message.id)
-        self.subscribeToUpdates(for: message)
+    func loadReactions(for message: Messageable) {
+        self.messageController = ChatClient.shared.messageController(for: message)
         Task {
-            await self.reloadReactions()
+            await self.loadData()
+            self.handleDataBeingLoaded()
         }.add(to: self.taskPool)
-    }
-
-    @MainActor
-    private func reloadReactions() async {
-        /// Checks to make sure we have already tried to update
-        if self.updatedAt.isNil {
-            await self.loadData()
-            self.handleDataBeingLoaded()
-        } else if let newUpdate = self.messageController?.message?.updatedAt,
-            let oldUpdate = self.updatedAt,
-        newUpdate > oldUpdate {
-            await self.loadData()
-            self.handleDataBeingLoaded()
-        }
-    }
-
-    private func subscribeToUpdates(for message: Message) {
-
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
-        }
-
-        self.messageController?.messageChangePublisher.mainSink { [unowned self] output in
-            switch output {
-            case .create(_):
-                break
-            case .update(_):
-                Task {
-                    try? await self.messageController?.synchronize()
-                    await self.reloadReactions()
-                }.add(to: self.taskPool)
-            case .remove(_):
-                break
-            }
-        }.store(in: &self.cancellables)
     }
 
     // MARK: Overrides
@@ -90,7 +54,6 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
             }
         }
 
-        self.updatedAt = message.updatedAt
         self.dataSource.remainingCount = remaining
         self.dataSource.message = message
 

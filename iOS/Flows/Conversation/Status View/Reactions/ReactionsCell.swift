@@ -22,9 +22,9 @@ class ReactionsCell: CollectionViewManagerCell, ManageableCell {
 
         self.contentView.addSubview(self.container)
         self.container.addSubview(self.emojiLabel)
-        self.container.backgroundColor = Color.white.color.withAlphaComponent(0.1)
-        self.container.layer.cornerRadius = 5
-        self.container.layer.borderColor = Color.darkGray.color.withAlphaComponent(0.3).cgColor
+        self.container.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        self.container.layer.cornerRadius = Theme.innerCornerRadius
+        self.container.layer.borderColor = Color.border.color.cgColor
         self.container.layer.borderWidth = 0.25
     }
 

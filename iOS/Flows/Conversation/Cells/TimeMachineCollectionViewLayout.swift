@@ -47,7 +47,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Layout Configuration
 
     /// The height of the cells.
-    var itemHeight: CGFloat = 60 + MessageContentView.bubbleTailLength {
+    var itemHeight: CGFloat = 60 + MessageDetailView.height + Theme.ContentOffset.short.value {
         didSet { self.invalidateLayout() }
     }
     /// Keypoints used to gradually shrink down items as they move away.
@@ -80,8 +80,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
-    /// A cache of layout attributes for decoration views.
-    private var decorationLayoutAttributes: [SectionIndex : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
     private var itemFocusPositions: [IndexPath : CGFloat] = [:]
     /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
@@ -99,7 +97,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     private func initialize() {
-        self.register(MessageStatusView.self, forDecorationViewOfKind: MessageStatusView.objectIdentifier)
+        self.register(MessageDetailView.self, forDecorationViewOfKind: MessageDetailView.objectIdentifier)
     }
 
     // MARK: - UICollectionViewLayout Overrides
@@ -143,7 +141,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         // Clear the layout attributes caches.
         self.cellLayoutAttributes.removeAll()
-        self.decorationLayoutAttributes.removeAll()
 
         guard let customContext = context as? TimeMachineCollectionViewLayoutInvalidationContext else {
             return
@@ -164,13 +161,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         // Calculate and cache the layout attributes for all the items.
         self.forEachIndexPath { indexPath in
             self.cellLayoutAttributes[indexPath] = self.layoutAttributesForItem(at: indexPath)
-        }
-
-        // Calculate and cache the layout attributes for all of the decoration views.
-        for section in 0..<self.sectionCount {
-            self.decorationLayoutAttributes[section]
-            = self.layoutAttributesForDecorationView(ofKind: MessageStatusView.objectIdentifier,
-                                                     at: IndexPath(item: 0, section: section))
         }
     }
 
@@ -233,8 +223,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         var itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
             return rect.intersects(attributes.frame)
         }
-
-        itemAttributes.append(contentsOf: self.decorationLayoutAttributes.values)
 
         return itemAttributes
     }
@@ -330,54 +318,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             self.lastFrontMostIndexPath[indexPath.section] = indexPath
         }
 
-        return attributes
-    }
-
-    override func layoutAttributesForDecorationView(ofKind elementKind: String,
-                                                    at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-
-        // If the attributes are cached already, just return those.
-        if let attributes = self.decorationLayoutAttributes[indexPath.section] {
-            return attributes
-        }
-
-        guard let frontmostItemIndexPath = self.getFrontmostIndexPath(in: indexPath.section),
-              let frontmostAttributes = self.layoutAttributesForItem(at: frontmostItemIndexPath) else {
-                  return nil
-              }
-
-        guard let conversation = self.dataSource?.getConversation(forItemAt: frontmostItemIndexPath),
-              let messageable = self.dataSource?.getMessage(forItemAt: frontmostItemIndexPath) else {
-                  return nil
-              }
-
-        let message = ChatClient.shared.message(cid: conversation.cid, id: messageable.id)
-
-        let attributes
-        = MessageStatusViewLayoutAttributes(forDecorationViewOfKind: MessageStatusView.objectIdentifier,
-                                            with: indexPath)
-
-        if indexPath.section == 0 {
-            // Position the decoration above the frontmost item in the first section
-            attributes.frame = CGRect(x: frontmostAttributes.frame.left,
-                                      y: frontmostAttributes.frame.top - Theme.contentOffset + 7,
-                                      width: frontmostAttributes.frame.width,
-                                      height: Theme.contentOffset)
-        } else {
-            // Position the decoration below the frontmost item in the second section
-            attributes.frame = CGRect(x: frontmostAttributes.frame.left,
-                                      y: frontmostAttributes.frame.bottom - 7,
-                                      width: frontmostAttributes.frame.width,
-                                      height: Theme.contentOffset)
-        }
-
-        if let read = conversation.reads.first(where: { read in
-            return read.user.id == message.authorID
-        }) {
-            attributes.status = ChatMessageStatus(read: read, message: message)
-        }
-
-        attributes.alpha = self.showMessageStatus ? 1 : 0
+        let detailAlpha = 1 - abs(vectorToCurrentZ) / (self.itemHeight * 0.2)
+        attributes.detailAlpha = detailAlpha
 
         return attributes
     }

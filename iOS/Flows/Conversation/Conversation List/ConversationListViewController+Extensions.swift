@@ -56,8 +56,16 @@ extension ConversationListViewController {
         self.conversationListController
             .channelsChangesPublisher
             .mainSink { [unowned self] changes in
+                let nonUpdateChanges = changes.filter { change in
+                    switch change {
+                    case .update(_, _):
+                        return false
+                    default:
+                        return true
+                    }
+                }
                 Task {
-                    await self.dataSource.update(with: changes,
+                    await self.dataSource.update(with: nonUpdateChanges,
                                                  conversationController: self.conversationListController,
                                                  collectionView: self.collectionView)
                 }.add(to: self.taskPool)
@@ -85,7 +93,7 @@ extension ConversationListViewController {
         }.store(in: &self.cancellables)
 
         self.$didCenterOnCell
-            .mainSink { cell in
+            .mainSink { [unowned self] cell in
                 guard let messageCell = cell else { return }
                 messageCell.handle(isCentered: true)
                 self.collectionView.visibleCells.forEach { cell in

@@ -12,6 +12,7 @@ import Foundation
 class MessageSubcell: UICollectionViewCell {
 
     let content = MessageContentView()
+    let detailView = MessageDetailView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,17 +26,30 @@ class MessageSubcell: UICollectionViewCell {
 
     private func initializeViews() {
         self.contentView.addSubview(self.content)
+        self.contentView.addSubview(self.detailView)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.content.expandToSuperviewSize()
+        self.detailView.expandToSuperviewWidth()
+        self.content.expandToSuperviewWidth()
+
+        self.content.height = self.bounds.height - (self.detailView.height - (self.content.bubbleView.tailLength - Theme.ContentOffset.short.value))
+
+        if self.content.bubbleView.orientation == .down {
+            self.content.pin(.top)
+            self.detailView.pin(.bottom)
+        } else if self.content.bubbleView.orientation == .up {
+            self.detailView.pin(.top)
+            self.content.pin(.bottom)
+        }
     }
 
     func configure(with message: Messageable) {
         self.content.configure(with: message)
-        self.setNeedsLayout()
+        self.detailView.configure(with: message)
+        self.layoutNow()
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {
@@ -43,7 +57,6 @@ class MessageSubcell: UICollectionViewCell {
 
         guard let messageLayoutAttributes
                 = layoutAttributes as? ConversationMessageCellLayoutAttributes else {
-
             return
         }
 
@@ -52,5 +65,10 @@ class MessageSubcell: UICollectionViewCell {
                                          brightness: messageLayoutAttributes.brightness,
                                          showBubbleTail: messageLayoutAttributes.shouldShowTail,
                                          tailOrientation: messageLayoutAttributes.bubbleTailOrientation)
+
+        self.detailView.height = MessageDetailView.height
+        self.detailView.alpha = messageLayoutAttributes.detailAlpha
+
+        self.detailView.updateReadStatus(shouldRead: messageLayoutAttributes.detailAlpha == 1.0)
     }
 }

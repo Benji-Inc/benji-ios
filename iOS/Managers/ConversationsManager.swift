@@ -19,6 +19,14 @@ extension ActiveConversationable {
     }
 }
 
+struct ReactionEvent {
+    enum EventType {
+        case updated(Conversation)
+        case new(Conversation)
+        case deleted(Conversation)
+    }
+}
+
 class ConversationsManager: EventsControllerDelegate {
 
     static let shared = ConversationsManager()
@@ -26,6 +34,8 @@ class ConversationsManager: EventsControllerDelegate {
     private let controller = ChatClient.shared.eventsController()
 
     @Published var activeConversation: Conversation?
+
+    @Published var reactionEvent: Event?
 
     init() {
         self.initialize()
@@ -49,11 +59,11 @@ class ConversationsManager: EventsControllerDelegate {
                 }
             }
         case let event as ReactionNewEvent:
-
-            guard let last = self.activeConversation, event.cid != last.cid else { return }
-            Task {
-                await ToastScheduler.shared.schedule(toastType: .newMessage(event.message))
-            }
+            self.reactionEvent = event
+        case let event as ReactionDeletedEvent:
+            self.reactionEvent = event
+        case let event as ReactionUpdatedEvent:
+            self.reactionEvent = event
         default:
             break
         }
