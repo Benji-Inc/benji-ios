@@ -537,26 +537,15 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return newOffset
     }
 
-    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
-    -> UICollectionViewLayoutAttributes? {
-
-        let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
-        if itemIndexPath.section == 0 {
-            guard let attributes = attributes as? ConversationMessageCellLayoutAttributes else {
-                return attributes
-            }
-
-            return attributes
-        }
-
-        return attributes
-    }
-
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
     -> UICollectionViewLayoutAttributes? {
 
         var attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
         if itemIndexPath.section == 0 {
+            // HACK: Items are incorrectly both disappearing and appearing. The disappearing animation
+            // sometimes makes it appear that an item is duplicated and moving in two different directions.
+            // To get around this, make the disappearing item move to the exact same place as
+            // the appearing version.
             attributes = self.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
             return attributes
         }
