@@ -36,14 +36,15 @@ extension TransitionRouter {
             snapshot.bubbleView.bubbleColor = fromView.bubbleView.bubbleColor
             snapshot.bubbleView.tailLength = 0
             snapshot.bubbleView.orientation = fromView.bubbleView.orientation
+            snapshot.state = fromView.state
+            snapshot.size = fromView.bubbleView.bubbleFrame.size
 
             toView.configure(with: message)
             toView.bubbleView.bubbleColor = Color.white.color
             toView.bubbleView.tailLength = 0
             toView.bubbleView.orientation = fromView.bubbleView.orientation
             toView.state = .expanded
-            toView.size = fromView.size
-            toView.size.height += MessageContentView.bubbleTailLength
+            toView.size = fromView.bubbleView.bubbleFrame.size
             toView.layoutNow()
         }
 
@@ -71,15 +72,23 @@ extension TransitionRouter {
         toView.alpha = 0
 
         Task {
-            await UIView.awaitSpringAnimation(with: .slow, animations: {
+            async let first: () = UIView.awaitSpringAnimation(with: .slow, animations: {
                 snapshot.frame = finalFrame
-                snapshot.state = .expanded
                 snapshot.bubbleView.bubbleColor = Color.white.color
-
                 threadVC.blurView.showBlur(true)
                 self.toVC.view.alpha = 1
             })
-            toView.alpha = 1
+
+            async let second: ()  = UIView.awaitAnimation(with: .fast, animations: {
+                snapshot.textView.alpha = 0.0
+            })
+
+            async let third: () = UIView.awaitAnimation(with: .fast, delay: 0.25, animations: {
+                toView.alpha = 1
+            })
+
+            let _: [()] = await [first, second, third]
+
             snapshot.removeFromSuperview()
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }.add(to: self.taskPool)

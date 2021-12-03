@@ -13,6 +13,15 @@ import Combine
 enum ConversationUIState {
     case read // Keyboard is NOT shown
     case write // Keyboard IS shown
+
+    var headerHeight: CGFloat {
+        switch self {
+        case .read:
+            return 96
+        case .write:
+            return 60
+        }
+    }
 }
 
 class ConversationListViewController: FullScreenViewController,
@@ -95,27 +104,25 @@ class ConversationListViewController: FullScreenViewController,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        switch self.state {
-        case .read:
-            self.headerVC.view.height = 96
-        case .write:
-            self.headerVC.view.height = 60
-        }
 
         self.headerVC.view.pinToSafeAreaTop()
         self.headerVC.view.expandToSuperviewWidth()
+
+        self.headerVC.view.height = self.state.headerHeight
 
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.match(.top,
                                   to: .bottom,
                                   of: self.headerVC.view,
                                   offset: .negative(.long))
-        self.collectionView.height = self.contentContainer.height - 96
+        self.collectionView.height = self.contentContainer.height - ConversationUIState.write.headerHeight
 
         // If we're in the write mode, adjust the position of the collectionview to
         // accomodate the text input, if necessary.
         if self.state == .write {
             self.collectionView.top += self.getCollectionViewYOffset()
+            let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
+            self.sendMessageDropZone.frame = overlayFrame
         }
     }
 
@@ -126,7 +133,7 @@ class ConversationListViewController: FullScreenViewController,
         let textView: InputTextView = self.messageInputAccessoryView.textView
         let textViewFrame = textView.convert(textView.bounds, to: self.contentContainer)
 
-        let overlapAmount = dropZoneFrame.bottom + Theme.contentOffset - textViewFrame.top
+        let overlapAmount = dropZoneFrame.bottom + MessageDetailView.height + (Theme.ContentOffset.short.value * 3) - textViewFrame.top
         return -clamp(overlapAmount, min: 0)
     }
 

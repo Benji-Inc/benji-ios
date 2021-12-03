@@ -22,9 +22,10 @@ class MessageContentView: View {
 
     /// Sizing
 
-    static let bubbleHeight: CGFloat = 60
-    static var standardHeight: CGFloat { return MessageContentView.bubbleHeight + MessageContentView.bubbleTailLength }
-    static var verticalPadding: CGFloat { return Theme.ContentOffset.standard.value * 2 }
+    static let bubbleHeight: CGFloat = 82
+    static var standardHeight: CGFloat { return MessageContentView.bubbleHeight - MessageContentView.textViewPadding }
+    static let padding = Theme.ContentOffset.long
+    static var textViewPadding: CGFloat { return MessageContentView.padding.value * 2 }
 
     static let bubbleTailLength: CGFloat = 12
 
@@ -115,41 +116,54 @@ class MessageContentView: View {
 
         self.bubbleView.expandToSuperviewSize()
 
-        let authorHeight: CGFloat = self.state == .collapsed ? .zero : MessageContentView.standardHeight - MessageContentView.verticalPadding
-        self.authorView.setSize(for: authorHeight)
-        self.authorView.pin(.top, offset: .standard)
-        self.authorView.pin(.left, offset: .standard)
+        self.authorView.size = MessageContentView.getAuthorSize(for: self.state)
+        self.authorView.pin(.top, offset: MessageContentView.padding)
+        self.authorView.pin(.left, offset: MessageContentView.padding)
 
         self.textView.size = self.textView.getSize(with: self.state, width: self.bubbleView.bubbleFrame.width)
 
-        if self.textView.numberOfLines > 1 {
+        if self.state == .expanded {
             self.textView.textAlignment = .left
-            if self.state == .expanded {
-                self.textView.match(.left, to: .right, of: self.authorView, offset: .long)
-            } else {
-                self.textView.pin(.left, offset: .long)
+            self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
+
+            if self.textView.top < MessageContentView.padding.value {
+                self.textView.pin(.top, offset: MessageContentView.padding)
             }
+            
+        } else if self.textView.numberOfLines > 1 {
+            self.textView.textAlignment = .left
+            self.textView.pin(.left, offset: MessageContentView.padding)
             self.textView.center.y = self.bubbleView.center.y
+
+            if self.textView.top < MessageContentView.padding.value {
+                self.textView.pin(.top, offset: MessageContentView.padding)
+            }
+
         } else {
             self.textView.textAlignment = .center
             self.textView.center = self.bubbleView.center
         }
 
-        switch self.bubbleView.orientation {
-        case .up:
-            self.textView.center.y += self.bubbleView.tailLength.half
-        case .down:
-            self.textView.center.y -= self.bubbleView.tailLength.half
-        default:
-            break
+        if self.state == .collapsed, self.bubbleView.tailLength > 0 {
+            switch self.bubbleView.orientation {
+            case .up:
+                self.textView.center.y += self.bubbleView.tailLength.half
+            default:
+                break
+            }
         }
     }
 
-    func getSize(with width: CGFloat) -> CGSize {
-        let horizontalPadding = ((self.authorView.width * 2) + Theme.contentOffset)
-        var textSize = self.textView.getSize(with: self.state, width: width - horizontalPadding)
-        textSize.height += MessageContentView.verticalPadding
-        return textSize
+    static func getAuthorSize(for state: State) -> CGSize {
+        let authorHeight: CGFloat = MessageContentView.standardHeight
+        return AvatarView().getSize(for: authorHeight)
+    }
+
+    func getSize(for state: State, with width: CGFloat) -> CGSize {
+        var width = self.textView.getSize(with: state, width: width).width
+        width += MessageContentView.textViewPadding
+        let height = MessageContentView.standardHeight
+        return CGSize(width: width, height: height)
     }
 }
 
@@ -157,18 +171,16 @@ extension MessageTextView {
 
     func getSize(with state: MessageContentView.State, width: CGFloat) -> CGSize {
         let maxTextWidth: CGFloat
-        let maxTextHeight: CGFloat = MessageContentView.standardHeight - MessageContentView.verticalPadding
+        let maxTextHeight: CGFloat = MessageContentView.standardHeight
 
         switch state {
         case .expanded:
-            let authorHeight: CGFloat = MessageContentView.standardHeight - MessageContentView.verticalPadding
-            let size = AvatarView().getSize(for: authorHeight)
-            maxTextWidth = width - (size.width + (Theme.ContentOffset.short.value * 3))
+            let size = MessageContentView.getAuthorSize(for: state)
+            maxTextWidth = width - (size.width + (MessageContentView.textViewPadding + MessageContentView.textViewPadding.half))
         case .collapsed:
-            maxTextWidth = width - Theme.ContentOffset.long.value.doubled
+            maxTextWidth = width - MessageContentView.textViewPadding
         }
 
-        let size = self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)
-        return size
+        return self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)
     }
 }
