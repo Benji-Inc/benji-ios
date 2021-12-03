@@ -506,11 +506,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
 
+        // A new message dropped in the user's message stack should appear immediately.
         guard itemIndexPath.section == 1 else {
             return attributes
         }
 
-        // A new message dropped in the user's message stack should appear immediately.
         if self.insertedIndexPaths.contains(itemIndexPath)
             && self.dataSource?.getMessage(forItemAt: itemIndexPath) != nil {
             attributes?.alpha = 1
