@@ -17,9 +17,9 @@ enum ConversationUIState {
     var headerHeight: CGFloat {
         switch self {
         case .read:
-            return 96
-        case .write:
             return 60
+        case .write:
+            return 44
         }
     }
 }
@@ -92,28 +92,19 @@ class ConversationListViewController: FullScreenViewController,
     override func initializeViews() {
         super.initializeViews()
 
-        self.addChild(viewController: self.headerVC, toView: self.contentContainer)
-
         self.contentContainer.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.delegate = self
 
+        self.addChild(viewController: self.headerVC, toView: self.contentContainer)
         self.subscribeToKeyboardUpdates()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.headerVC.view.pinToSafeAreaTop()
-        self.headerVC.view.expandToSuperviewWidth()
-
-        self.headerVC.view.height = self.state.headerHeight
-
         self.collectionView.expandToSuperviewWidth()
-        self.collectionView.match(.top,
-                                  to: .bottom,
-                                  of: self.headerVC.view,
-                                  offset: .negative(.long))
+        self.collectionView.top = self.view.safeAreaInsets.top + self.headerVC.view.height
         self.collectionView.height = self.contentContainer.height - ConversationUIState.write.headerHeight
 
         // If we're in the write mode, adjust the position of the collectionview to
@@ -123,6 +114,10 @@ class ConversationListViewController: FullScreenViewController,
             let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
             self.sendMessageDropZone.frame = overlayFrame
         }
+
+        self.headerVC.view.expandToSuperviewWidth()
+        self.headerVC.view.height = self.state.headerHeight
+        self.headerVC.view.match(.bottom, to: .top, of: self.collectionView, offset: .short)
     }
 
     /// Returns how much the collection view y position should  be adjusted to ensure that the text message input
@@ -132,7 +127,7 @@ class ConversationListViewController: FullScreenViewController,
         let textView: InputTextView = self.messageInputAccessoryView.textView
         let textViewFrame = textView.convert(textView.bounds, to: self.contentContainer)
 
-        let overlapAmount = dropZoneFrame.bottom + MessageDetailView.height + (Theme.ContentOffset.short.value * 3) - textViewFrame.top
+        let overlapAmount = dropZoneFrame.bottom + ConversationUIState.write.headerHeight + self.view.safeAreaInsets.top - textViewFrame.top 
         return -clamp(overlapAmount, min: 0)
     }
 

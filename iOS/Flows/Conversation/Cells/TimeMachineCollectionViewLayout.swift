@@ -64,7 +64,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     var frontmostBrightness: CGFloat = 0.89
     /// How bright the background of the backmost item is. This is based off of the frontmost item brightness.
     var backmostBrightness: CGFloat {
-        return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.1
+        return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.05
     }
     /// If true, the message status decoration views should be displayed.
     var showMessageStatus: Bool = false {
@@ -402,7 +402,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             centerPoint.y += yOffset
             centerPoint.y += self.itemHeight.half * (1-scale)
         } else {
-            centerPoint.y += self.itemHeight.doubled + self.itemHeight.half
+            centerPoint.y += self.itemHeight.doubled - Theme.ContentOffset.short.value
             centerPoint.y -= yOffset
             centerPoint.y -= self.itemHeight.half * (1-scale)
         }
