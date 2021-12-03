@@ -18,7 +18,6 @@ class MessageContentView: View {
     #if IOS
     var handleTappedMessage: ((ConversationMessageItem) -> Void)?
     var handleEditMessage: ((ConversationMessageItem) -> Void)?
-    var messageController: ChatMessageController?
     #endif
 
     /// Sizing
@@ -92,11 +91,6 @@ class MessageContentView: View {
         self.configureConsumption(for: message)
 
         self.authorView.set(avatar: message.avatar)
-        #if IOS
-        if let msg = message as? Message {
-            self.subscribeToUpdates(for: msg)
-        }
-        #endif
 
         self.setNeedsLayout()
     }
@@ -153,17 +147,15 @@ extension MessageTextView {
 
     func getSize(with state: MessageContentView.State, width: CGFloat) -> CGSize {
         let maxTextWidth: CGFloat
-        let maxTextHeight: CGFloat
+        let maxTextHeight: CGFloat = MessageContentView.standardHeight - MessageContentView.verticalPadding
 
         switch state {
         case .expanded:
             let authorHeight: CGFloat = MessageContentView.standardHeight - MessageContentView.verticalPadding
             let size = AvatarView().getSize(for: authorHeight)
-            maxTextWidth = width - ((size.width * 2) + Theme.contentOffset)
-            maxTextHeight = CGFloat.greatestFiniteMagnitude
+            maxTextWidth = width - ((size.width) + Theme.ContentOffset.short.value * 3)
         case .collapsed:
-            maxTextWidth = width 
-            maxTextHeight = MessageContentView.standardHeight - MessageContentView.verticalPadding
+            maxTextWidth = width - Theme.ContentOffset.standard.value
         }
 
         let size = self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)
