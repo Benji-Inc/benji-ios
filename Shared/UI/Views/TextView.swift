@@ -20,6 +20,11 @@ class TextView: UITextView {
 
     var cancellables = Set<AnyCancellable>()
 
+    var numberOfLines: Int {
+        guard let lineHeight = self.font?.lineHeight else { return 0 }
+        return Int(self.contentSize.height / lineHeight)
+    }
+
     override var text: String! {
         get { return super.text }
         set {
