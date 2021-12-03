@@ -66,7 +66,7 @@ class MessageDropZoneView: View {
             self.borderLayer.fillColor = Color.clear.color.cgColor
             return
         }
-        
+
         if color != .white {
             self.borderLayer.strokeColor = color.color.cgColor
             self.sendTypeLabel.setTextColor(color)

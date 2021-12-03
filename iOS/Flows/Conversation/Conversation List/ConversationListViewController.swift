@@ -104,7 +104,6 @@ class ConversationListViewController: FullScreenViewController,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-
         self.headerVC.view.pinToSafeAreaTop()
         self.headerVC.view.expandToSuperviewWidth()
 

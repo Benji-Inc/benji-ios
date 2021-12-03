@@ -17,8 +17,6 @@ class TransitionRouter: NSObject, UIViewControllerAnimatedTransitioning {
     private(set) var toVC: TransitionableViewController
     private let operation: UINavigationController.Operation
 
-    var animator: UIViewPropertyAnimator? 
-
     var taskPool = TaskPool()
 
     init(fromVC: TransitionableViewController,
