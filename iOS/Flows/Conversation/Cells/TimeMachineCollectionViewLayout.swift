@@ -511,6 +511,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             return attributes
         }
 
+        // Ensure this is actually a new message and not just a placeholder message.
         if self.insertedIndexPaths.contains(itemIndexPath)
             && self.dataSource?.getMessage(forItemAt: itemIndexPath) != nil {
             attributes?.alpha = 1
