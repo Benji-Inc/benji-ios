@@ -12,7 +12,7 @@ import GestureRecognizerClosures
 
 class ToastBannerView: ToastView {
 
-    private let vibrancyView = VibrancyView()
+    private let blurView = BlurView()
     private let titleLabel = Label(font: .regularBold)
     private let descriptionLabel = Label(font: .smallBold)
     private let imageView = AvatarView()
@@ -44,10 +44,10 @@ class ToastBannerView: ToastView {
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.addSubview(self.vibrancyView)
+        self.addSubview(self.blurView)
         self.addSubview(self.imageView)
         self.addSubview(self.descriptionLabel)
-        self.vibrancyView.effectView.contentView.addSubview(self.titleLabel)
+        self.addSubview(self.titleLabel)
 
         self.imageView.imageView.tintColor = Color.white.color
 
@@ -151,8 +151,8 @@ class ToastBannerView: ToastView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.vibrancyView.expandToSuperviewSize()
-        self.vibrancyView.roundCorners()
+        self.blurView.expandToSuperviewSize()
+        self.blurView.roundCorners()
 
         self.imageView.size = CGSize(width: 60 * 0.74, height: 60)
         self.imageView.left = Theme.contentOffset.half

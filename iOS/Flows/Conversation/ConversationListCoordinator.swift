@@ -106,13 +106,18 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
     }
 
     func presentPeoplePicker() {
+        guard let conversation = self.activeConversation else { return }
+
         self.removeChild()
-        let coordinator = PeopleCoordinator(router: self.router, deepLink: self.deepLink)
+        let coordinator = PeopleCoordinator(conversationId: conversation.conversationId,
+                                            router: self.router,
+                                            deepLink: self.deepLink)
 
         self.addChildAndStart(coordinator) { [unowned self] connections in
-            self.router.dismiss(source: self.conversationListVC)
+            self.router.dismiss(source: coordinator.toPresentable(), animated: false) {
+                self.conversationListVC.becomeFirstResponder()
+            }
 
-            guard let conversation = self.activeConversation else { return }
             self.add(connections: connections, to: conversation)
         }
         self.router.present(coordinator, source: self.conversationListVC)

@@ -105,6 +105,7 @@ class AvatarView: DisplayableImageView {
 
         guard avatar.image == nil, avatar.userObjectID == nil else { return }
         self.initials = avatar.initials
+        self.blurView.effect = nil 
         self.layoutNow()
     }
 

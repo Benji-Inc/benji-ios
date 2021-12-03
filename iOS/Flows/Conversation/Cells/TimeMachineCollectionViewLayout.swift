@@ -220,7 +220,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         // Return all items whose frames intersect with the given rect.
-        var itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
+        let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
             return rect.intersects(attributes.frame)
         }
 
@@ -310,7 +310,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         attributes.backgroundColor = .white
         attributes.brightness = backgroundBrightness
-        attributes.shouldShowTail = true
+        attributes.shouldShowTail = indexPath.section == 0
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
 
         if yOffset == vectorToCurrentZ, indexPath != self.lastFrontMostIndexPath[indexPath.section] {

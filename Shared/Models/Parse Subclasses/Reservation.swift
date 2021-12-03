@@ -128,7 +128,7 @@ extension Reservation: UIActivityItemSource {
             let _: Void = try await withCheckedThrowingContinuation { continuation in
                 let metadataProvider = LPMetadataProvider()
 
-                let domainURL = "https://ourown.chat"
+                let domainURL = "https://joinjibber.com"
                 if let objectId = self.objectId {
                     self.link = domainURL + "/reservation?reservationId=\(objectId)"
                 }
