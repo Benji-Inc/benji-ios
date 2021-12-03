@@ -64,8 +64,6 @@
 		80FD04A126FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FD049E26FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift */; };
 		876DD7048C07730CF091087A /* Pods_AppClip.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B92BA452D2C2DB45DD711F86 /* Pods_AppClip.framework */; };
 		C03D8861C3D82A5BDDC5CF8C /* Pods_Intents_ExtensionUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8CA3F2BE81C5508E6841EE02 /* Pods_Intents_ExtensionUI.framework */; };
-		D6030DB527514AFC00F5CBC7 /* MessageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615534D2745C1C900B08459 /* MessageContentView.swift */; };
-		D6030DB627514AFC00F5CBC7 /* MessageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615534D2745C1C900B08459 /* MessageContentView.swift */; };
 		D605C30626F683E400C86DAD /* ConversationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605C30226F683E400C86DAD /* ConversationCell.swift */; };
 		D605C30826F683E400C86DAD /* ConversationPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605C30426F683E400C86DAD /* ConversationPreviewViewController.swift */; };
 		D605C30926F683E400C86DAD /* ConversationContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D605C30526F683E400C86DAD /* ConversationContentView.swift */; };
@@ -753,8 +751,6 @@
 		D6E974362752C47F00D95F08 /* ReactionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974352752C47F00D95F08 /* ReactionType.swift */; };
 		D6E97438275486F700D95F08 /* MessageContentView+Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E97437275486F700D95F08 /* MessageContentView+Menu.swift */; };
 		D6E9743C2755568D00D95F08 /* MessageContentView+Read.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */; };
-		D6E9743D275562F000D95F08 /* MessageContentView+Read.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */; };
-		D6E9743E275562F100D95F08 /* MessageContentView+Read.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9743B2755568D00D95F08 /* MessageContentView+Read.swift */; };
 		D6E9744F2756ADB100D95F08 /* ReactionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9744E2756ADB100D95F08 /* ReactionsManager.swift */; };
 		D6E974512756ADC900D95F08 /* ReactionsCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974502756ADC900D95F08 /* ReactionsCollectionViewDataSource.swift */; };
 		D6E974532756ADEA00D95F08 /* ReactionsCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974522756ADEA00D95F08 /* ReactionsCollectionViewLayout.swift */; };
@@ -763,19 +759,19 @@
 		D6E974592756AE3300D95F08 /* ReactionsCountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E974582756AE3300D95F08 /* ReactionsCountView.swift */; };
 		D6E9745B2756AED200D95F08 /* DiffableCollectionViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9745A2756AED200D95F08 /* DiffableCollectionViewManager.swift */; };
 		D6E9745E2756DAFA00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
-		D6E9745F2756DAFB00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
 		D6E974602756DAFB00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
 		D6E974612756DAFC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
 		D6E974622756DAFC00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
 		D6E974632756DAFD00D95F08 /* SF-Pro-Text-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745D2756DAE300D95F08 /* SF-Pro-Text-Regular.otf */; };
 		D6E974642756DAFF00D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
-		D6E974652756DB0000D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
 		D6E974662756DB0000D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
 		D6E974672756DB0100D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
 		D6E974682756DB0100D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
 		D6E974692756DB0200D95F08 /* SF-Pro-Text-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D6E9745C2756DAE000D95F08 /* SF-Pro-Text-Bold.otf */; };
 		D6E9746B2756FC3600D95F08 /* ReactionsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9746A2756FC3600D95F08 /* ReactionsCollectionView.swift */; };
 		D6E9746E2757356C00D95F08 /* MessageStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E9746D2757356C00D95F08 /* MessageStatusView.swift */; };
+		D6EA3FA62759AF62002BDD0E /* MessageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615534D2745C1C900B08459 /* MessageContentView.swift */; };
+		D6EA3FA72759AF7C002BDD0E /* MessageContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D615534D2745C1C900B08459 /* MessageContentView.swift */; };
 		D6EAC95523D145350028DAA2 /* Sizeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EAC95423D145350028DAA2 /* Sizeable.swift */; };
 		D6EB4DF023540E48005BF3B4 /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EB4DEF23540E48005BF3B4 /* FaceDetectionViewController.swift */; };
 		D6EE715923B84BC0000ED221 /* CollectionViewManagerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6EE715823B84BC0000ED221 /* CollectionViewManagerCell.swift */; };
@@ -2538,8 +2534,6 @@
 				D63D71BA25F025E8004C26F7 /* FaceDetection.storyboard in Resources */,
 				D640329725AF3CA500139396 /* checkbox.json in Resources */,
 				D650C1F225B741EB0037C59A /* plusToX.json in Resources */,
-				D6E9745F2756DAFB00D95F08 /* SF-Pro-Text-Regular.otf in Resources */,
-				D6E974652756DB0000D95F08 /* SF-Pro-Text-Bold.otf in Resources */,
 				D65518F125890E3D00B901E4 /* Assets.xcassets in Resources */,
 				D6D39282265AAFB900E49F1E /* lock.json in Resources */,
 				D64A1F13258D598B0097817C /* LaunchScreen.storyboard in Resources */,
@@ -3097,6 +3091,7 @@
 				D63DB25E25E9995E00F6B323 /* Connection.swift in Sources */,
 				D621A21A271F54EF00BAD7C2 /* PassThroughView.swift in Sources */,
 				D6617CF726743DFE00439C06 /* Notice.swift in Sources */,
+				D6EA3FA72759AF7C002BDD0E /* MessageContentView.swift in Sources */,
 				D63D71C325F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
 				D68C08262729D9280033C8AE /* PermissionsCoordinator.swift in Sources */,
 				D63DB29725E999B200F6B323 /* ConfettiView.swift in Sources */,
@@ -3136,7 +3131,6 @@
 				D6B95AF1272324AE00FBE66A /* ConnectionStore.swift in Sources */,
 				D63DB26625E9997200F6B323 /* StringCasing.swift in Sources */,
 				D63DB25F25E9995E00F6B323 /* QuePositions.swift in Sources */,
-				D6030DB627514AFC00F5CBC7 /* MessageContentView.swift in Sources */,
 				D63DB24325E9993F00F6B323 /* NameViewController.swift in Sources */,
 				D63DB29925E999B200F6B323 /* Label.swift in Sources */,
 				80FD04A126FA4C4400E69088 /* NSDiffableDataSourceSnapshot+Extensions.swift in Sources */,
@@ -3216,7 +3210,6 @@
 				D63DB25C25E9995E00F6B323 /* Reservation.swift in Sources */,
 				D63DB28E25E999AB00F6B323 /* NavigationController.swift in Sources */,
 				D63D5C99265811B000543200 /* URL+Extensions.swift in Sources */,
-				D6E9743E275562F100D95F08 /* MessageContentView+Read.swift in Sources */,
 				D63DB28D25E999AB00F6B323 /* NavigationBarViewController.swift in Sources */,
 				D63DB29125E999B200F6B323 /* Button.swift in Sources */,
 				D6617CEC26741C4500439C06 /* UITextField+Extensions.swift in Sources */,
@@ -3268,7 +3261,6 @@
 				D65519622589127A00B901E4 /* PushPayload.swift in Sources */,
 				D6551A4125895E9500B901E4 /* TextInputViewController.swift in Sources */,
 				D655195D2589126800B901E4 /* User.swift in Sources */,
-				D6E9743D275562F000D95F08 /* MessageContentView+Read.swift in Sources */,
 				D667C08E25E559D500BED8B7 /* KeyboardManager.swift in Sources */,
 				D68C08212729D3DE0033C8AE /* Lorem.swift in Sources */,
 				D6551A3B25895E7E00B901E4 /* NavigationBarViewController.swift in Sources */,
@@ -3283,7 +3275,6 @@
 				D65519772589129B00B901E4 /* AnyHashableDisplayable.swift in Sources */,
 				D63D71C225F0419D004C26F7 /* ConnectionPreference.swift in Sources */,
 				807A7BCA26C5C8100023A71E /* Task+TaskPool.swift in Sources */,
-				D6030DB527514AFC00F5CBC7 /* MessageContentView.swift in Sources */,
 				D63DB1F225E95CEC00F6B323 /* Connection+Cloud.swift in Sources */,
 				D6F37D6C25B5EC350034C9C5 /* AvatarProfileViewController.swift in Sources */,
 				D65519762589129B00B901E4 /* Deeplinkable.swift in Sources */,
@@ -3374,6 +3365,7 @@
 				D65519052589110A00B901E4 /* DeeplinkTarget.swift in Sources */,
 				D6966518263D96D70009114B /* PFFileObject+Extensions.swift in Sources */,
 				D65519442589123200B901E4 /* Completeable.swift in Sources */,
+				D6EA3FA62759AF62002BDD0E /* MessageContentView.swift in Sources */,
 				D646955927370A7B00BF47CE /* ToastView.swift in Sources */,
 				D65519152589120C00B901E4 /* Error+Extensions.swift in Sources */,
 				D67CAFDB27402993004FED29 /* InitialConversation.swift in Sources */,
@@ -3699,7 +3691,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
@@ -3727,7 +3719,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
@@ -3755,7 +3747,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.NotificationContent";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3782,7 +3774,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.NotificationContent";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3810,7 +3802,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.AppClip";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
@@ -3838,7 +3830,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.AppClip";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
@@ -3871,7 +3863,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.NotificationService";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3903,7 +3895,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.NotificationService";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3936,7 +3928,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3968,7 +3960,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4001,7 +3993,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4034,7 +4026,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.1;
+				MARKETING_VERSION = 1.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;

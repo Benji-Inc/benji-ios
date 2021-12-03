@@ -25,6 +25,9 @@ enum FontType {
     case reactionEmoji
 
     var font: UIFont {
+    #if APPCLIP
+        return UIFont.systemFont(ofSize: self.size)
+    #else
         switch self {
         case .display, .medium, .regular, .small, .xtraSmall:
             return UIFont(name: regularFontName, size: self.size)!
@@ -33,6 +36,7 @@ enum FontType {
         case .reactionEmoji:
             return UIFont.systemFont(ofSize: self.size)
         }
+    #endif
     }
 
     var size: CGFloat {

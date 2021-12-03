@@ -8,6 +8,7 @@
 
 import Foundation
 
+#if IOS
 extension MessageContentView {
 
     func configureConsumption(for message: Messageable) {
@@ -32,3 +33,4 @@ extension MessageContentView {
         }
     }
 }
+#endif

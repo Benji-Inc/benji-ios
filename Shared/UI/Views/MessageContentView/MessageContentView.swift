@@ -8,8 +8,8 @@
 
 import Foundation
 import Combine
-import SwiftUI
 #if IOS
+import SwiftUI
 import StreamChat
 #endif
 
@@ -89,8 +89,10 @@ class MessageContentView: View {
             self.textView.setText(with: message)
         }
 
+        #if IOS
         self.configureConsumption(for: message)
-
+        #endif
+        
         self.authorView.set(avatar: message.avatar)
 
         self.setNeedsLayout()
