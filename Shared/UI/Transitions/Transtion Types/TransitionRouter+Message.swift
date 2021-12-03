@@ -43,6 +43,7 @@ extension TransitionRouter {
             toView.bubbleView.orientation = fromView.bubbleView.orientation
             toView.state = .expanded
             toView.size = fromView.size
+            toView.size.height += MessageContentView.bubbleTailLength
             toView.layoutNow()
         }
 

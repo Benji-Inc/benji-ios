@@ -97,7 +97,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     private func initialize() {
-        self.register(MessageDetailView.self, forDecorationViewOfKind: MessageDetailView.objectIdentifier)
+
     }
 
     // MARK: - UICollectionViewLayout Overrides
@@ -189,7 +189,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             let currentSectionIndex = indexPath.section
             let currentItemIndex = indexPath.item
 
-            var startZ: CGFloat = CGFloat(sortedItemsIndex) * self.itemHeight
+            //TODO
+            var startZ: CGFloat = 0//CGFloat(sortedItemsIndex) * self.itemHeight
 
             // Each item's z range starts after the end of the previous item's range within its section.
             if let previousRangeInSection = self.itemZRanges[IndexPath(item: currentItemIndex - 1,
