@@ -24,6 +24,8 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     override func initializeViews() {
         super.initializeViews()
 
+        self.collectionView.animationView.isHidden = true 
+
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { conversation in

@@ -11,22 +11,17 @@ import Foundation
 // Base class for all full screen view controllers pushed onto a UINavigationController stack.
 class FullScreenViewController: ViewController {
 
-    let blurView = BlurView()
-
     // A view to insert content. Takes up the space below the custom nav bar
     let contentContainer = View()
 
     override func initializeViews() {
         super.initializeViews()
 
-        self.view.addSubview(self.blurView)
         self.view.addSubview(self.contentContainer)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
-        self.blurView.expandToSuperviewSize()
 
         self.contentContainer.top = self.view.safeAreaInsets.top
         self.contentContainer.width = self.view.width
