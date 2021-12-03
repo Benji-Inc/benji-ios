@@ -52,4 +52,11 @@ class ConversationListCollectionView: CollectionView {
 
         return centerCell.getDropZoneColor()
     }
+
+    func getBottomFrontMostCell() -> MessageSubcell? {
+        guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
+            return nil
+        }
+        return centerCell.getBottomFrontMostCell()
+    }
 }

@@ -411,22 +411,24 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     func getDropZoneColor() -> Color? {
-        guard let ip = self.getFocusedItemIndexPath(),
+        guard let ip = self.getFrontmostIndexPath(in: 1),
                 let attributes = self.layoutAttributesForItem(at: ip) as? ConversationMessageCellLayoutAttributes else {
                     return nil
                 }
 
-        if ip.section == 1 {
-            return attributes.backgroundColor
-        } else {
-            return .lightGray
+        return attributes.backgroundColor == .white ? .darkGray : .white
+    }
+
+    func getBottomFrontMostCell() -> MessageSubcell? {
+        guard let ip = self.getFrontmostIndexPath(in: 1), let cell = self.collectionView?.cellForItem(at: ip) as? MessageSubcell else { return nil
         }
+        return cell 
     }
 
     func getDropZoneFrame() -> CGRect {
         let center = self.getCenterPoint(for: 1, withYOffset: 0, scale: 1)
         let padding = Theme.ContentOffset.short.value.doubled
-        var frame = CGRect(x: Theme.contentOffset.half,
+        var frame = CGRect(x: padding.half,
                            y: 0,
                            width: self.collectionView!.width - padding,
                            height: MessageContentView.bubbleHeight - padding)

@@ -125,10 +125,9 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
             })
             .mainSink { willShow in
 
-            UIView.animate(withDuration: 0.2) {
-                self.inputTypeHeightConstraint.constant = willShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 1
-                self.inputManager.collectionView.alpha = willShow ? 1 : 0
-            }
+                let shouldShow = willShow && self.textView.numberOfLines == 2
+                self.showInputTypes(shouldShow: shouldShow)
+
         }.store(in: &self.cancellables)
 
         KeyboardManager.shared.$currentEvent
@@ -144,6 +143,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
 
         self.textView.$inputText.mainSink { [unowned self] text in
             self.handleTextChange(text)
+            // numberOfLines has an initial value of 2 for some reason
+            self.showInputTypes(shouldShow: self.textView.numberOfLines == 2)
         }.store(in: &self.cancellables)
 
         self.overlayButton.didSelect { [unowned self] in
@@ -161,6 +162,13 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
             .mainSink { [unowned self] bounds in
                 self.delegate?.swipeableInputAccessory(self, updatedFrameOf: self.textView)
             }.store(in: &self.cancellables)
+    }
+
+    func showInputTypes(shouldShow: Bool) {
+        UIView.animate(withDuration: 0.2) {
+            self.inputTypeHeightConstraint.constant = shouldShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 1
+            self.inputManager.collectionView.alpha = shouldShow ? 1 : 0
+        }
     }
 
     // MARK: OVERRIDES

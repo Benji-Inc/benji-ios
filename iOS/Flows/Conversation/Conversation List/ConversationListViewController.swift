@@ -332,28 +332,40 @@ class ConversationListViewController: FullScreenViewController,
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
         if isEnabled {
-            guard self.sendMessageDropZone.superview.isNil else { return }
-            // Animate in the send overlay
-            self.contentContainer.addSubview(self.sendMessageDropZone)
-            self.sendMessageDropZone.alpha = 0
-            self.sendMessageDropZone.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
-            UIView.animate(withDuration: Theme.animationDurationStandard) {
-                self.sendMessageDropZone.alpha = 1
-            }
-
-            // Show the send message overlay so the user can see where to drag the message
-            let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
-            self.sendMessageDropZone.frame = overlayFrame
-
-            view.dropZoneFrame = view.convert(self.sendMessageDropZone.bounds, from: self.sendMessageDropZone)
-
-            self.sendMessageDropZone.centerOnX()
+            self.showDropZone(for: view)
         } else {
-            UIView.animate(withDuration: Theme.animationDurationStandard) {
-                self.sendMessageDropZone.alpha = 0
-            } completion: { didFinish in
-                self.sendMessageDropZone.removeFromSuperview()
-            }
+            self.hideDropZone()
+        }
+    }
+
+    func showDropZone(for view: SwipeableInputAccessoryView) {
+        guard self.sendMessageDropZone.superview.isNil else { return }
+        // Animate in the send overlay
+        self.contentContainer.addSubview(self.sendMessageDropZone)
+        self.sendMessageDropZone.alpha = 0
+        self.sendMessageDropZone.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
+
+        let cell = self.collectionView.getBottomFrontMostCell()
+
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            self.sendMessageDropZone.alpha = 1
+            cell?.content.textView.alpha = 0
+        }
+
+        // Show the send message overlay so the user can see where to drag the message
+        let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
+        self.sendMessageDropZone.frame = overlayFrame
+
+        view.dropZoneFrame = view.convert(self.sendMessageDropZone.bounds, from: self.sendMessageDropZone)
+    }
+
+    func hideDropZone() {
+        let cell = self.collectionView.getBottomFrontMostCell()
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            self.sendMessageDropZone.alpha = 0
+            cell?.content.textView.alpha = 1.0
+        } completion: { didFinish in
+            self.sendMessageDropZone.removeFromSuperview()
         }
     }
 

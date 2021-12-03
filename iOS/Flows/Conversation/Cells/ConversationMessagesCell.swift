@@ -196,6 +196,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         return self.collectionLayout.getDropZoneColor()
     }
 
+    func getBottomFrontMostCell() -> MessageSubcell? {
+        return self.collectionLayout.getBottomFrontMostCell()
+    }
+
     func prepareForNewMessage() {
         self.prepareForSend = true
 

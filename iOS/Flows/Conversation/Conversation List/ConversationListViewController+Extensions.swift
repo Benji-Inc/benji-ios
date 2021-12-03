@@ -72,12 +72,14 @@ extension ConversationListViewController {
         }.store(in: &self.cancellables)
 
         self.collectionView.publisher(for: \.contentOffset).mainSink { [unowned self] _ in
+
             guard self.collectionView.isTracking else { return }
             self.collectionView.visibleCells.forEach { cell in
                 if let messageCell = cell as? ConversationMessagesCell {
                     messageCell.handle(isCentered: false)
                 }
             }
+            
         }.store(in: &self.cancellables)
 
         self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] text in

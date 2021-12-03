@@ -15,7 +15,7 @@ import UIKit
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
     lazy var membersVC = MembersViewController()
-    let label = Label(font: .medium, textColor: .white)
+    let label = Label(font: .regular, textColor: .textColor)
     let button = Button()
 
     private var state: ConversationUIState = .read
