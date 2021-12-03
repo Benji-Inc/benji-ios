@@ -72,7 +72,7 @@ extension ConversationMessageCellDataSource {
                 return
             }
 
-            cell.configure(with: message)
+            cell.configure(with: message, showAuthor: false)
 
             var zIndex = 0
             if let layout = item.collectionView.collectionViewLayout as? ConversationMessagesCellLayout {

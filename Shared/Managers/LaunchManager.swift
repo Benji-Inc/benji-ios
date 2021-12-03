@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import SDWebImageLinkPlugin
 
 enum LaunchActivity {
     case onboarding(phoneNumber: String)
@@ -56,9 +55,6 @@ class LaunchManager {
             }
         }
 #endif
-
-        SDImageLoadersManager.shared.addLoader(SDImageLinkLoader.shared)
-        SDWebImageManager.defaultImageLoader = SDImageLoadersManager.shared
 
         let launchStatus = await self.initializeUserData(with: nil)
         return launchStatus
