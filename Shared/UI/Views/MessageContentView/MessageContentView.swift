@@ -161,7 +161,6 @@ extension MessageTextView {
             let authorHeight: CGFloat = MessageContentView.standardHeight - MessageContentView.verticalPadding
             let size = AvatarView().getSize(for: authorHeight)
             maxTextWidth = width - (size.width + (Theme.ContentOffset.short.value * 3))
-            logDebug("\(width) maxText: \(maxTextWidth)")
         case .collapsed:
             maxTextWidth = width - Theme.ContentOffset.long.value.doubled
         }
