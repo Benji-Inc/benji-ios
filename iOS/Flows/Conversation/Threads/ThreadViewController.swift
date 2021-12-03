@@ -268,6 +268,34 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
     }
 }
 
+// MARK: - Messaging
+
+extension ThreadViewController {
+
+    func handle(attachment: Attachment, body: String) {
+        Task {
+            do {
+                let kind = try await AttachmentsManager.shared.getMessageKind(for: attachment, body: body)
+                let object = SendableObject(kind: kind, context: .passive)
+                await self.send(object: object)
+            } catch {
+                logDebug(error)
+            }
+        }.add(to: self.taskPool)
+    }
+
+    @MainActor
+    func send(object: Sendable) async {
+        do {
+            try await self.messageController.createNewReply(with: object)
+        } catch {
+            logDebug(error)
+        }
+    }
+}
+
+// MARK: - TransitionableViewController
+
 extension ThreadViewController: TransitionableViewController {
     
     var receivingPresentationType: TransitionType {
@@ -335,6 +363,6 @@ extension ThreadViewController: TimeMachineCollectionViewLayoutDataSource {
     }
 
     func frontmostItemWasUpdated(for indexPath: IndexPath) {
-        logDebug("\(indexPath.description)")
+        // TODO: Do something in response to this.
     }
 }

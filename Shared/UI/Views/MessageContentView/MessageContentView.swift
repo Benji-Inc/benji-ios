@@ -82,6 +82,7 @@ class MessageContentView: View {
 
     func configure(with message: Messageable) {
         self.message = message
+
         if message.isDeleted {
             self.textView.text = "DELETED"
         } else {

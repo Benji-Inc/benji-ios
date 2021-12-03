@@ -437,6 +437,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     /// If true, scroll to the most recent item after performing collection view updates.
     private var shouldScrollToEnd = false
+    private var deletedIndexPaths: Set<IndexPath> = []
+    private var insertedIndexPaths: Set<IndexPath> = []
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
@@ -445,13 +447,24 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let mostRecentOffset = self.getMostRecentItemContentOffset() else { return }
 
         for update in updateItems {
-            if let indexPath = update.indexPathAfterUpdate, update.updateAction == .insert {
+            switch update.updateAction {
+            case .insert:
+                guard let indexPath = update.indexPathAfterUpdate else { break }
+                self.insertedIndexPaths.insert(indexPath)
+
+                let isScrolledToMostRecent = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
                 // Always scroll to the end for new user messages, or if we're currently scrolled to the
                 // most recent message.
-                if indexPath.section == 1
-                    || (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight {
+                if indexPath.section == 1 || isScrolledToMostRecent {
                     self.shouldScrollToEnd = true
                 }
+            case .delete:
+                guard let indexPath = update.indexPathBeforeUpdate else { break }
+                self.deletedIndexPaths.insert(indexPath)
+            case .reload, .move, .none:
+                break
+            @unknown default:
+                break
             }
         }
     }
@@ -460,6 +473,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         super.finalizeCollectionViewUpdates()
 
         self.shouldScrollToEnd = false
+        self.deletedIndexPaths.removeAll()
+        self.insertedIndexPaths.removeAll()
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
@@ -482,15 +497,25 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
     -> UICollectionViewLayoutAttributes? {
+        guard deletedIndexPaths.contains(itemIndexPath) else { return nil }
 
-        var attributes = super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
-        if itemIndexPath.section == 0 {
-            // HACK: Items are incorrectly both disappearing and appearing. The disappearing animation
-            // sometimes makes it appear that an item is duplicated and moving in two different directions.
-            // To get around this, make the disappearing item move to the exact same place as
-            // the appearing version.
-            attributes = self.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+        return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
+    }
+
+    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
+    -> UICollectionViewLayoutAttributes? {
+
+        let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
+
+        // A new message dropped in the user's message stack should appear immediately.
+        guard itemIndexPath.section == 1 else {
             return attributes
+        }
+
+        // Ensure this is actually a new message and not just a placeholder message.
+        if self.insertedIndexPaths.contains(itemIndexPath)
+            && self.dataSource?.getMessage(forItemAt: itemIndexPath) != nil {
+            attributes?.alpha = 1
         }
 
         return attributes
