@@ -47,7 +47,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Layout Configuration
 
     /// The height of the cells.
-    var itemHeight: CGFloat = 60 + MessageDetailView.height + Theme.ContentOffset.short.value {
+    var itemHeight: CGFloat = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value {
         didSet { self.invalidateLayout() }
     }
     /// Keypoints used to gradually shrink down items as they move away.
@@ -425,11 +425,12 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     func getDropZoneFrame() -> CGRect {
         let center = self.getCenterPoint(for: 1, withYOffset: 0, scale: 1)
+        let padding = Theme.ContentOffset.short.value.doubled
         var frame = CGRect(x: Theme.contentOffset.half,
                            y: 0,
-                           width: self.collectionView!.width - (Theme.ContentOffset.short.value * 2),
-                           height: self.itemHeight - MessageContentView.bubbleTailLength - (Theme.ContentOffset.short.value * 2))
-        frame.centerY = center.y - MessageContentView.bubbleTailLength.half
+                           width: self.collectionView!.width - padding,
+                           height: MessageContentView.bubbleHeight - padding)
+        frame.centerY = center.y - padding - Theme.ContentOffset.short.value
         return frame
     }
 

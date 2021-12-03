@@ -22,7 +22,8 @@ class MessageContentView: View {
 
     /// Sizing
 
-    static var standardHeight: CGFloat { return 60 + MessageContentView.bubbleTailLength }
+    static let bubbleHeight: CGFloat = 60
+    static var standardHeight: CGFloat { return MessageContentView.bubbleHeight + MessageContentView.bubbleTailLength }
     static var verticalPadding: CGFloat { return Theme.ContentOffset.standard.value * 2 }
 
     static let bubbleTailLength: CGFloat = 12
@@ -92,7 +93,7 @@ class MessageContentView: View {
         #if IOS
         self.configureConsumption(for: message)
         #endif
-        
+
         self.authorView.set(avatar: message.avatar)
 
         self.setNeedsLayout()
