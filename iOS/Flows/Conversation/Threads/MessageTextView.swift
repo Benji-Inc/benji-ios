@@ -18,8 +18,8 @@ class MessageTextView: TextView {
         self.isScrollEnabled = false
         self.isSelectable = true
 
-        self.textContainerInset.left = Theme.contentOffset
-        self.textContainerInset.right = Theme.contentOffset
+        self.textContainerInset.left = 0
+        self.textContainerInset.right = 0
         self.textContainerInset.top = 0
         self.textContainerInset.bottom = 0
     }

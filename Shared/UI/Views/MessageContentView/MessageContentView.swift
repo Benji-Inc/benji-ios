@@ -18,20 +18,19 @@ class MessageContentView: View {
     #if IOS
     var handleTappedMessage: ((ConversationMessageItem) -> Void)?
     var handleEditMessage: ((ConversationMessageItem) -> Void)?
-    var messageController: ChatMessageController?
     #endif
 
     /// Sizing
 
     static var standardHeight: CGFloat { return 60 + MessageContentView.bubbleTailLength }
-    static var verticalPadding: CGFloat { return MessageContentView.bubbleTailLength + Theme.ContentOffset.xtraLong.value }
+    static var verticalPadding: CGFloat { return Theme.ContentOffset.standard.value * 2 }
 
     static let bubbleTailLength: CGFloat = 12
 
     /// A speech bubble background view for the message.
     let bubbleView = SpeechBubbleView(orientation: .down)
     /// Text view for displaying the text of the message.
-    let textView = MessageTextView(font: .regularBold, textColor: .textColor)
+    let textView = MessageTextView(font: .regular, textColor: .textColor)
     private (set) var message: Messageable?
 
     let authorView = AvatarView()
@@ -93,11 +92,6 @@ class MessageContentView: View {
         self.configureConsumption(for: message)
 
         self.authorView.set(avatar: message.avatar)
-        #if IOS
-        if let msg = message as? Message {
-            self.subscribeToUpdates(for: msg)
-        }
-        #endif
 
         self.setNeedsLayout()
     }
@@ -120,17 +114,23 @@ class MessageContentView: View {
 
         let authorHeight: CGFloat = self.state == .collapsed ? .zero : MessageContentView.standardHeight - MessageContentView.verticalPadding
         self.authorView.setSize(for: authorHeight)
-        let padding = Theme.ContentOffset.standard.value - self.bubbleView.tailLength.half
-        let topPadding = self.bubbleView.orientation == .down ? padding : padding + self.bubbleView.tailLength
-        self.authorView.pin(.top, offset: .custom(topPadding))
-        self.authorView.pin(.left, offset: .custom(padding))
+        self.authorView.pin(.top, offset: .standard)
+        self.authorView.pin(.left, offset: .standard)
 
-        let maxWidth
-        = self.bubbleView.bubbleFrame.width - ((self.authorView.width * 2) + Theme.contentOffset)
+        self.textView.size = self.textView.getSize(with: self.state, width: self.bubbleView.bubbleFrame.width)
 
-        self.textView.size = self.textView.getSize(with: self.state, width: maxWidth)
-
-        self.textView.center = self.bubbleView.center
+        if self.textView.numberOfLines > 1 {
+            self.textView.textAlignment = .left
+            if self.state == .expanded {
+                self.textView.match(.left, to: .right, of: self.authorView, offset: .long)
+            } else {
+                self.textView.pin(.left, offset: .long)
+            }
+            self.textView.center.y = self.bubbleView.center.y
+        } else {
+            self.textView.textAlignment = .center
+            self.textView.center = self.bubbleView.center
+        }
 
         switch self.bubbleView.orientation {
         case .up:
@@ -154,17 +154,16 @@ extension MessageTextView {
 
     func getSize(with state: MessageContentView.State, width: CGFloat) -> CGSize {
         let maxTextWidth: CGFloat
-        let maxTextHeight: CGFloat
+        let maxTextHeight: CGFloat = MessageContentView.standardHeight - MessageContentView.verticalPadding
 
         switch state {
         case .expanded:
             let authorHeight: CGFloat = MessageContentView.standardHeight - MessageContentView.verticalPadding
             let size = AvatarView().getSize(for: authorHeight)
-            maxTextWidth = width - ((size.width * 2) + Theme.contentOffset)
-            maxTextHeight = CGFloat.greatestFiniteMagnitude
+            maxTextWidth = width - (size.width + (Theme.ContentOffset.short.value * 3))
+            logDebug("\(width) maxText: \(maxTextWidth)")
         case .collapsed:
-            maxTextWidth = width 
-            maxTextHeight = MessageContentView.standardHeight - MessageContentView.verticalPadding
+            maxTextWidth = width - Theme.ContentOffset.long.value.doubled
         }
 
         let size = self.getSize(withMaxWidth: maxTextWidth, maxHeight: maxTextHeight)

@@ -20,6 +20,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
     let blurView = BlurView()
     let parentMessageView = MessageContentView()
+    let detailView = MessageDetailView()
     /// A view that shows where a message should be dragged and dropped to send.
     private let sendMessageOverlay = MessageDropZoneView()
     private let threadCollectionView = ThreadCollectionView()
@@ -84,7 +85,13 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
         self.view.addSubview(self.parentMessageView)
+        self.view.addSubview(self.detailView)
+        self.detailView.alpha = 0
         self.parentMessageView.setContextMenu()
+
+        if let msg = self.messageController.message {
+            self.detailView.configure(with: msg)
+        }
 
         self.collectionView.clipsToBounds = false
 
@@ -103,6 +110,11 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.parentMessageView.pinToSafeAreaTop()
         self.parentMessageView.centerOnX()
 
+        self.detailView.width = self.parentMessageView.width - Theme.ContentOffset.standard.value
+        self.detailView.height = MessageDetailView.height
+        self.detailView.match(.top, to: .bottom, of: self.parentMessageView, offset: .short)
+        self.detailView.centerOnX()
+
         self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.pinToSafeArea(.top, offset: .noOffset)
         self.collectionView.width = self.view.width * 0.8
@@ -112,8 +124,17 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        self.detailView.alpha = 1.0
         KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
         self.becomeFirstResponder()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        if self.collectionView.isTracking {
+            self.detailView.alpha = 0.0
+        }
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -308,7 +329,10 @@ extension ThreadViewController {
         }.store(in: &self.cancellables)
 
         self.messageController.messageChangePublisher.mainSink { [unowned self] changes in
-            // TODO
+            if let msg = self.messageController.message {
+                self.parentMessageView.configure(with: msg)
+                self.detailView.configure(with: msg)
+            }
         }.store(in: &self.cancellables)
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
