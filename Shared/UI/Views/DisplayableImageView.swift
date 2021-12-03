@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import SDWebImageLinkPlugin
 import UIKit
 import Combine
 import Lottie
@@ -112,10 +111,6 @@ class DisplayableImageView: View {
     func updateImageView(with displayable: ImageDisplayable) {
         if let photo = displayable.image {
             self.showResult(for: photo)
-        } else if let url = displayable.url {
-            Task {
-                await self.downloadAndSetImage(url: url)
-            }.add(to: self.taskPool)
         } else if let objectID = displayable.userObjectID {
             Task {
                 await self.findUser(with: objectID)
@@ -128,7 +123,6 @@ class DisplayableImageView: View {
     }
 
     private func downloadAndSetImage(for user: User) {
-
         Task {
             if user.focusStatus == .focused, let file = user.focusImage {
                 await self.downloadAndSet(file: file)
@@ -156,29 +150,7 @@ class DisplayableImageView: View {
     }
 
     @MainActor
-    private func downloadAndSetImage(url: URL) async {
-        self.state = .loading
-        let downloadedImage: UIImage?
-        = try? await self.imageView.setImageWithURL(url, progressHandler: { received, expected, url in
-            if self.animationView.microAnimation == .pie {
-                let progress: Float
-                if received > 0 {
-                    progress = (Float(expected) - Float(received)) / Float(expected) * 100
-                } else {
-                    progress = 0
-                }
-                self.animationView.currentProgress = AnimationProgressTime(progress)
-            }
-        })
-
-        guard !Task.isCancelled else { return }
-
-        self.showResult(for: downloadedImage)
-    }
-
-    @MainActor
     private func downloadAndSet(file: PFFileObject) async {
-
         do {
             if !file.isDataAvailable {
                 self.state = .loading
@@ -221,25 +193,5 @@ class DisplayableImageView: View {
     func showResult(for image: UIImage?) {
         self.state = image.isNil ? .error : .success
         self.imageView.image = image
-    }
-}
-
-fileprivate extension UIImageView {
-
-    func setImageWithURL(_ url: URL,
-                         progressHandler: @escaping SDImageLoaderProgressBlock) async throws -> UIImage? {
-
-        let image: UIImage? = try await withCheckedThrowingContinuation { continuation in
-            self.sd_setImage(with: url, placeholderImage: nil, progress: progressHandler)
-            { (image, error, cacheType, url) in
-                if let error = error {
-                    continuation.resume(throwing: error)
-                } else {
-                    continuation.resume(returning: image)
-                }
-            }
-        }
-
-        return image
     }
 }
