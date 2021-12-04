@@ -70,6 +70,7 @@ class MessageContentView: View {
         self.authorView.isVisible = false
 
         self.$state.mainSink { [unowned self] state in
+            self.authorView.isVisible = state == .expanded
             self.layoutNow()
         }.store(in: &self.cancellables)
     }

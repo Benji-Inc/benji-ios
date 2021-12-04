@@ -192,6 +192,10 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         return self.collectionView.convert(dropZoneFrame, to: targetView)
     }
 
+    func setDropZone(isShowing: Bool) {
+        self.collectionLayout.isShowingDropZone = isShowing
+    }
+
     func getDropZoneColor() -> Color? {
         return self.collectionLayout.getDropZoneColor()
     }

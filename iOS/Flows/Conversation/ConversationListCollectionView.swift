@@ -59,4 +59,11 @@ class ConversationListCollectionView: CollectionView {
         }
         return centerCell.getBottomFrontMostCell()
     }
+
+    func setDropZone(isShowing: Bool) {
+        guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
+            return
+        }
+        centerCell.setDropZone(isShowing: isShowing)
+    }
 }
