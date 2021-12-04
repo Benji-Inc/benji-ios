@@ -67,9 +67,9 @@ class MessageContentView: View {
         self.textView.textContainer.lineBreakMode = .byTruncatingTail
 
         self.bubbleView.addSubview(self.authorView)
+        self.authorView.isVisible = false
 
         self.$state.mainSink { [unowned self] state in
-            self.authorView.isVisible = state == .expanded
             self.layoutNow()
         }.store(in: &self.cancellables)
     }

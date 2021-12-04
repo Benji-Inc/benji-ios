@@ -124,7 +124,6 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
                 return KeyboardManager.shared.inputAccessoryView === self
             })
             .mainSink { willShow in
-
                 let shouldShow = willShow && self.textView.numberOfLines == 2
                 self.showInputTypes(shouldShow: shouldShow)
 

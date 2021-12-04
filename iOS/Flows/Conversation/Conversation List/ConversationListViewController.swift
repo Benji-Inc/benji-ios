@@ -127,7 +127,7 @@ class ConversationListViewController: FullScreenViewController,
         let textView: InputTextView = self.messageInputAccessoryView.textView
         let textViewFrame = textView.convert(textView.bounds, to: self.contentContainer)
 
-        let overlapAmount = dropZoneFrame.bottom + ConversationUIState.write.headerHeight + self.view.safeAreaInsets.top - textViewFrame.top 
+        let overlapAmount = dropZoneFrame.bottom + ConversationUIState.write.headerHeight + self.view.safeAreaInsets.top - textViewFrame.top
         return -clamp(overlapAmount, min: 0)
     }
 
@@ -399,7 +399,7 @@ class ConversationListViewController: FullScreenViewController,
         switch position {
         case .message:
             self.sendMessageDropZone.setState(.newMessage,
-                                             messageColor: self.collectionView.getDropZoneColor())
+                                              messageColor: .white)
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
@@ -425,6 +425,13 @@ class ConversationListViewController: FullScreenViewController,
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
+
+            let cell = self.collectionView.getBottomFrontMostCell()
+            UIView.animate(withDuration: Theme.animationDurationStandard) {
+                self.sendMessageDropZone.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
+                cell?.content.textView.alpha = 1
+            }
+
             return false
         }
 
@@ -439,6 +446,15 @@ class ConversationListViewController: FullScreenViewController,
                       self.createNewConversation(sendable)
                       return true
                   }
+            
+            if let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
+                cell.collectionView.visibleCells.forEach { cell in
+                    if let c = cell as? MessageSubcell {
+                        c.content.textView.alpha = 1.0
+                    }
+                }
+            }
+            self.sendMessageDropZone.alpha = 0
 
             self.reply(to: cid, sendable: sendable)
         case .newConversation:
@@ -457,6 +473,11 @@ class ConversationListViewController: FullScreenViewController,
 
         if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
             currentCell.unprepareForNewMessage(reloadMessages: !didSend)
+        }
+
+        let cell = self.collectionView.getBottomFrontMostCell()
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            cell?.content.textView.alpha = 1
         }
     }
 
