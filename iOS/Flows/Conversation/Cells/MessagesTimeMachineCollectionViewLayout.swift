@@ -46,7 +46,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             backgroundBrightness = self.frontmostBrightness
         }
 
-        let detailAlpha =  1 - abs(normalizedZOffset)/(self.itemHeight * 0.2)
+        let detailAlpha =  1 - abs(normalizedZOffset)/0.2
 
         // The most recent visible item should be white.
         if let itemFocusPosition = self.itemFocusPositions[indexPath] {
@@ -58,7 +58,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         }
 
         // If there is no message to display for this index path, don't show the cell.
-        if self.delegate?.getMessage(forItemAt: indexPath) == nil {
+        if self.dataSource?.getMessage(forItemAt: indexPath) == nil {
             attributes.alpha = 0
         }
 
@@ -148,16 +148,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         return offset
     }
 
-    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
-                                      withScrollingVelocity velocity: CGPoint) -> CGPoint {
-
-        // When finished scrolling, always settle on a cell in a centered position.
-        var newOffset = proposedContentOffset
-        newOffset.y = round(newOffset.y, toNearest: self.itemHeight)
-        newOffset.y = max(newOffset.y, 0)
-        return newOffset
-    }
-
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
     -> UICollectionViewLayoutAttributes? {
         guard deletedIndexPaths.contains(itemIndexPath) else { return nil }
@@ -177,7 +167,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
         // Ensure this is actually a new message and not just a placeholder message.
         if self.insertedIndexPaths.contains(itemIndexPath)
-            && self.delegate?.getMessage(forItemAt: itemIndexPath) != nil {
+            && self.dataSource?.getMessage(forItemAt: itemIndexPath) != nil {
             attributes?.alpha = 1
         }
 

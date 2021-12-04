@@ -70,7 +70,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
                                                                              messageOrdering: .topToBottom)
         super.init(with: self.threadCollectionView)
 
-        self.threadCollectionView.threadLayout?.delegate = self
+        self.threadCollectionView.threadLayout?.dataSource = self
         self.messageController.listOrdering = .bottomToTop
     }
 
@@ -352,7 +352,7 @@ extension ThreadViewController {
 
 // MARK: - TimelineCollectionViewLayoutDataSource
 
-extension ThreadViewController: TimeMachineCollectionViewLayoutDelegate {
+extension ThreadViewController: TimeMachineCollectionViewLayoutDataSource {
 
     func getConversation(forItemAt indexPath: IndexPath) -> Conversation? {
         return self.conversationController?.conversation

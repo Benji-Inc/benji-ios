@@ -92,7 +92,7 @@ extension ConversationMessageCellDataSource {
 
 // MARK: - TimelineCollectionViewLayoutDataSource
 
-extension ConversationMessageCellDataSource: TimeMachineCollectionViewLayoutDelegate {
+extension ConversationMessageCellDataSource: TimeMachineCollectionViewLayoutDataSource {
 
     func getMessage(forItemAt indexPath: IndexPath) -> Messageable? {
         guard let item = self.itemIdentifier(for: indexPath) else { return nil }

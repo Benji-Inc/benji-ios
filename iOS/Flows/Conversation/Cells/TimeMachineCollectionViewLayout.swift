@@ -9,12 +9,11 @@ import Foundation
 import UIKit
 import StreamChat
 
-protocol TimeMachineCollectionViewLayoutDelegate: AnyObject {
+protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
     func getMessage(forItemAt indexPath: IndexPath) -> Messageable?
-    func frontmostItemWasUpdated(for indexPath: IndexPath)
 }
 
-class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
+private class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
     /// If true, the z ranges for all the items should be recalculated.
     var shouldRecalculateZRanges = true
 }
@@ -34,9 +33,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return ConversationMessageCellLayoutAttributes.self
     }
 
-    // MARK: - Data Source/Delegate
-    private var lastFrontMostIndexPath: [SectionIndex: IndexPath] = [:]
-    weak var delegate: TimeMachineCollectionViewLayoutDelegate?
+    // MARK: - Data Source
+    weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
     var sectionCount: Int {
         return self.collectionView?.numberOfSections ?? 0
     }
@@ -143,7 +141,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     /// Updates the z ranges dictionary for all items.
     private func prepareZPositionsAndRanges() {
-        guard let dataSource = self.delegate else {
+        guard let dataSource = self.dataSource else {
             logDebug("Warning: Data source not initialized in \(self)")
             return
         }
@@ -279,12 +277,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
         attributes.alpha = alpha
 
-        // TODO: Restore this
-//        if yOffset == vectorToCurrentZ, indexPath != self.lastFrontMostIndexPath[indexPath.section] {
-//            self.delegate?.frontmostItemWasUpdated(for: indexPath)
-//            self.lastFrontMostIndexPath[indexPath.section] = indexPath
-//        }
-
         return attributes
     }
 
@@ -372,12 +364,24 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         return centerPoint
     }
+
+    // MARK: - Content Offset Handling
+
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
+                                      withScrollingVelocity velocity: CGPoint) -> CGPoint {
+
+        // When finished scrolling, always settle on a cell in a centered position.
+        var newOffset = proposedContentOffset
+        newOffset.y = round(newOffset.y, toNearest: self.itemHeight)
+        newOffset.y = max(newOffset.y, 0)
+        return newOffset
+    }
 }
 
 extension TimeMachineCollectionViewLayout {
 
     /// Runs the passed in closure on every valid index path in the collection view.
-    func forEachIndexPath(_ apply: (IndexPath) -> Void) {
+    private func forEachIndexPath(_ apply: (IndexPath) -> Void) {
         let sectionCount = self.sectionCount
         for section in 0..<sectionCount {
             let itemCount = self.numberOfItems(inSection: section)
