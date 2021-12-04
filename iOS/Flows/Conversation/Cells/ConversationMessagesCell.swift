@@ -22,7 +22,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
-    private lazy var collectionLayout = TimeMachineCollectionViewLayout()
+    private lazy var collectionLayout = MessagesTimeMachineCollectionViewLayout()
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
@@ -42,7 +42,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.collectionLayout.dataSource = self.dataSource
+        self.collectionLayout.delegate = self.dataSource
 
         self.collectionView.decelerationRate = .fast
         self.collectionView.delegate = self
@@ -162,14 +162,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         }
 
         self.dataSource.apply(snapshot, animatingDifferences: false)
-    }
-
-    func handle(isCentered: Bool) {
-        guard self.collectionLayout.showMessageStatus != isCentered else { return }
-
-        UIView.animate(withDuration: 0.2) {
-            self.collectionLayout.showMessageStatus = isCentered
-        }
     }
   
     override func prepareForReuse() {

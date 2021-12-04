@@ -34,8 +34,6 @@ class ConversationListViewController: FullScreenViewController,
     // Input handlers
     var onSelectedMessage: ((ChannelId, MessageId) -> Void)?
 
-    @Published var didCenterOnCell: ConversationMessagesCell? = nil
-
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
         let inputView: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
@@ -175,7 +173,6 @@ class ConversationListViewController: FullScreenViewController,
         guard let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
             return
         }
-        self.didCenterOnCell = cell
 
         guard let ip = self.collectionView.centerIndexPath(), let conversation = self.conversationListController.conversations[safe: ip.item] else { return }
 

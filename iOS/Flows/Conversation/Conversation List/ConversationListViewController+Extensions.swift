@@ -71,15 +71,6 @@ extension ConversationListViewController {
                 }.add(to: self.taskPool)
         }.store(in: &self.cancellables)
 
-        self.collectionView.publisher(for: \.contentOffset).mainSink { [unowned self] _ in
-            guard self.collectionView.isTracking else { return }
-            self.collectionView.visibleCells.forEach { cell in
-                if let messageCell = cell as? ConversationMessagesCell {
-                    messageCell.handle(isCentered: false)
-                }
-            }
-        }.store(in: &self.cancellables)
-
         self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] text in
             guard let conversationController = self.conversationController else { return }
 
@@ -91,16 +82,5 @@ extension ConversationListViewController {
                 conversationController.sendKeystrokeEvent()
             }
         }.store(in: &self.cancellables)
-
-        self.$didCenterOnCell
-            .mainSink { [unowned self] cell in
-                guard let messageCell = cell else { return }
-                messageCell.handle(isCentered: true)
-                self.collectionView.visibleCells.forEach { cell in
-                    if let offsetCell = cell as? ConversationMessagesCell, offsetCell != messageCell {
-                        offsetCell.handle(isCentered: false)
-                    }
-                }
-            }.store(in: &self.cancellables)
     }
 }

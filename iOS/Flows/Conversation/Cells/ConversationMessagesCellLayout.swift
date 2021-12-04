@@ -17,10 +17,6 @@ protocol ConversationMessageCellLayoutDelegate: AnyObject {
 /// MessageSubcell cells laid out in two separate stacks along the z-axis.
 class ConversationMessagesCellLayout: UICollectionViewFlowLayout {
 
-    /// If true, the time sent decoration views should be displayed.
-    var showMessageStatus: Bool = false {
-        didSet { self.invalidateLayout() }
-    }
     unowned let conversationDelegate: ConversationMessageCellLayoutDelegate
 
     override class var layoutAttributesClass: AnyClass {

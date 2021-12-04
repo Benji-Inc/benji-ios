@@ -9,8 +9,7 @@ import Foundation
 import UIKit
 import StreamChat
 
-protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
-    func getConversation(forItemAt indexPath: IndexPath) -> Conversation?
+protocol TimeMachineCollectionViewLayoutDelegate: AnyObject {
     func getMessage(forItemAt indexPath: IndexPath) -> Messageable?
     func frontmostItemWasUpdated(for indexPath: IndexPath)
 }
@@ -25,17 +24,19 @@ class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayout
 /// As the collection view scrolls up and down, the messages move away and toward the user respectively.
 class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
-    private typealias SectionIndex = Int
+    typealias SectionIndex = Int
 
     override class var invalidationContextClass: AnyClass {
         return TimeMachineCollectionViewLayoutInvalidationContext.self
     }
 
-    // MARK: - Data Source
+    override class var layoutAttributesClass: AnyClass {
+        return ConversationMessageCellLayoutAttributes.self
+    }
+
+    // MARK: - Data Source/Delegate
     private var lastFrontMostIndexPath: [SectionIndex: IndexPath] = [:]
-
-    weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
-
+    weak var delegate: TimeMachineCollectionViewLayoutDelegate?
     var sectionCount: Int {
         return self.collectionView?.numberOfSections ?? 0
     }
@@ -60,45 +61,21 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     var stackDepth: Int = 3 {
         didSet { self.invalidateLayout() }
     }
-    /// How bright the background of the frontmost item is. 0 is black, 1 is full brightness.
-    var frontmostBrightness: CGFloat = 0.89
-    /// How bright the background of the backmost item is. This is based off of the frontmost item brightness.
-    var backmostBrightness: CGFloat {
-        return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.1
-    }
-    /// If true, the message status decoration views should be displayed.
-    var showMessageStatus: Bool = false {
-        didSet { self.invalidateLayout() }
-    }
 
     // MARK: - Layout State
 
     /// The current position along the Z axis. This is based off of the collectionview's Y content offset.
     /// The z position ranges from 0 to itemCount*itemHeight
-    private var zPosition: CGFloat {
+    var zPosition: CGFloat {
         return self.collectionView?.contentOffset.y ?? 0
     }
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
-    private var itemFocusPositions: [IndexPath : CGFloat] = [:]
+    private(set) var itemFocusPositions: [IndexPath : CGFloat] = [:]
     /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
     /// and its scale and position will be unaltered.
-    private var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
-
-    override init() {
-        super.init()
-        self.initialize()
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        self.initialize()
-    }
-
-    private func initialize() {
-
-    }
+    private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
 
     // MARK: - UICollectionViewLayout Overrides
 
@@ -127,8 +104,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
         guard let customInvalidationContext
                 = invalidationContext as? TimeMachineCollectionViewLayoutInvalidationContext else {
-            return invalidationContext
-        }
+                    return invalidationContext
+                }
 
         // Changing the bounds doesn't affect item z ranges.
         customInvalidationContext.shouldRecalculateZRanges = false
@@ -166,7 +143,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     /// Updates the z ranges dictionary for all items.
     private func prepareZPositionsAndRanges() {
-        guard let dataSource = self.dataSource else {
+        guard let dataSource = self.delegate else {
             logDebug("Warning: Data source not initialized in \(self)")
             return
         }
@@ -189,12 +166,12 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             let currentSectionIndex = indexPath.section
             let currentItemIndex = indexPath.item
 
-            //TODO
+            // TODO
             var startZ: CGFloat = 0//CGFloat(sortedItemsIndex) * self.itemHeight
 
             // Each item's z range starts after the end of the previous item's range within its section.
             if let previousRangeInSection = self.itemZRanges[IndexPath(item: currentItemIndex - 1,
-                                                                      section: currentSectionIndex)] {
+                                                                       section: currentSectionIndex)] {
 
                 startZ = previousRangeInSection.upperBound + self.itemHeight
             }
@@ -229,8 +206,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
-        guard let collectionView = self.collectionView else { return nil }
-
         // If the attributes are cached already, just return those.
         if let attributes = self.cellLayoutAttributes[indexPath]  {
             return attributes
@@ -250,51 +225,46 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let frontmostVectorToCurrentZ = self.getFrontmostItemZVector(in: indexPath.section)
         let vectorToCurrentZ = frontmostVectorToCurrentZ+offsetFromFrontmost
 
-        var scale: CGFloat
-        var yOffset: CGFloat
-        var alpha: CGFloat
-        var backgroundBrightness: CGFloat
+        let normalizedZOffset: CGFloat
 
         if 0 < vectorToCurrentZ {
             // The item's z range is behind the current zPosition.
-            // Start scaling it down to simulate it moving away from the user.
-            var normalized = vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
-            normalized = clamp(normalized, 0, 1)
-            scale = lerp(normalized, keyPoints: self.scalingKeyPoints)
-            yOffset = lerp(normalized, keyPoints: self.spacingKeyPoints)
-            alpha = lerp(normalized, keyPoints: self.alphaKeyPoints)
-            backgroundBrightness = lerp(normalized,
-                                        start: self.frontmostBrightness,
-                                        end: self.backmostBrightness)
+            normalizedZOffset = -vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
         } else if vectorToCurrentZ < 0 {
             // The item's z range is in front of the current zPosition.
-            // Scale it up to simulate it moving closer to the user.
-            var normalized = (-vectorToCurrentZ)/self.itemHeight
-            normalized = clamp(normalized, 0, 1)
-            scale = normalized + 1
-            yOffset = normalized * -self.itemHeight * 1
-            alpha = 1 - normalized
-            backgroundBrightness = self.frontmostBrightness
+            normalizedZOffset = (-vectorToCurrentZ)/self.itemHeight
+        } else {
+            // The item's range contains the current zPosition
+            normalizedZOffset = 0
+        }
+
+        return self.layoutAttributesForItemAt(indexPath: indexPath, withNormalizedZOffset: normalizedZOffset)
+    }
+
+    func layoutAttributesForItemAt(indexPath: IndexPath,
+                             withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
+
+        guard let collectionView = self.collectionView else { return nil }
+
+        var scale: CGFloat
+        var yOffset: CGFloat
+        var alpha: CGFloat
+
+        if normalizedZOffset < 0 {
+            // Scaling the item down to simulate it moving away from the user.
+            scale = lerp(abs(normalizedZOffset), keyPoints: self.scalingKeyPoints)
+            yOffset = lerp(abs(normalizedZOffset), keyPoints: self.spacingKeyPoints)
+            alpha = lerp(abs(normalizedZOffset), keyPoints: self.alphaKeyPoints)
+        } else if normalizedZOffset > 0 {
+            // Scale the item up to simulate it moving closer to the user.
+            scale = normalizedZOffset + 1
+            yOffset = normalizedZOffset * -self.itemHeight * 1
+            alpha = 1 - normalizedZOffset
         } else {
             // If current z position is within the item's z range, don't adjust its scale or position.
             scale = 1
             yOffset = 0
             alpha = 1
-            backgroundBrightness = self.frontmostBrightness
-        }
-
-        // The most recent visible item should be white.
-        if let itemFocusPosition = self.itemFocusPositions[indexPath] {
-            let normalizedFocusDistance = abs(itemFocusPosition - self.zPosition)/self.itemHeight.half
-
-            backgroundBrightness += lerpClamped(normalizedFocusDistance,
-                                                start: 1-self.frontmostBrightness,
-                                                end: 0)
-        }
-
-        // If there is no message to display for this index path, don't show the cell.
-        if self.dataSource?.getMessage(forItemAt: indexPath) == nil {
-            alpha = 0
         }
 
         let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
@@ -309,18 +279,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         attributes.transform = CGAffineTransform(scaleX: scale, y: scale)
         attributes.alpha = alpha
 
-        attributes.backgroundColor = .white
-        attributes.brightness = backgroundBrightness
-        attributes.shouldShowTail = indexPath.section == 0
-        attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
-
-        if yOffset == vectorToCurrentZ, indexPath != self.lastFrontMostIndexPath[indexPath.section] {
-            self.dataSource?.frontmostItemWasUpdated(for: indexPath)
-            self.lastFrontMostIndexPath[indexPath.section] = indexPath
-        }
-
-        let detailAlpha = 1 - abs(vectorToCurrentZ) / (self.itemHeight * 0.2)
-        attributes.detailAlpha = detailAlpha
+        // TODO: Restore this
+//        if yOffset == vectorToCurrentZ, indexPath != self.lastFrontMostIndexPath[indexPath.section] {
+//            self.delegate?.frontmostItemWasUpdated(for: indexPath)
+//            self.lastFrontMostIndexPath[indexPath.section] = indexPath
+//        }
 
         return attributes
     }
@@ -357,7 +320,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return frontmostRange.vector(to: self.zPosition)
     }
 
-    private func getFocusedItemIndexPath() -> IndexPath? {
+    func getFocusedItemIndexPath() -> IndexPath? {
         let sectionCount = self.sectionCount
 
         var frontmostIndexes: [IndexPath] = []
@@ -386,9 +349,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return CGPoint(x: 0, y: upperBound)
     }
 
-    private func getCenterPoint(for section: SectionIndex,
-                                withYOffset yOffset: CGFloat,
-                                scale: CGFloat) -> CGPoint {
+    func getCenterPoint(for section: SectionIndex,
+                        withYOffset yOffset: CGFloat,
+                        scale: CGFloat) -> CGPoint {
 
         guard let collectionView = self.collectionView else { return .zero }
         let contentRect = CGRect(x: collectionView.contentOffset.x,
@@ -408,117 +371,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         return centerPoint
-    }
-
-    func getDropZoneColor() -> Color? {
-        guard let ip = self.getFocusedItemIndexPath(),
-                let attributes = self.layoutAttributesForItem(at: ip) as? ConversationMessageCellLayoutAttributes else {
-                    return nil
-                }
-
-        if ip.section == 1 {
-            return attributes.backgroundColor
-        } else {
-            return .lightGray
-        }
-    }
-
-    func getDropZoneFrame() -> CGRect {
-        let center = self.getCenterPoint(for: 1, withYOffset: 0, scale: 1)
-        var frame = CGRect(x: Theme.contentOffset.half,
-                           y: 0,
-                           width: self.collectionView!.width - (Theme.ContentOffset.short.value * 2),
-                           height: self.itemHeight - MessageContentView.bubbleTailLength - (Theme.ContentOffset.short.value * 2))
-        frame.centerY = center.y - MessageContentView.bubbleTailLength.half
-        return frame
-    }
-
-    // MARK: - Content Offset Handling/Custom Animations
-
-    /// If true, scroll to the most recent item after performing collection view updates.
-    private var shouldScrollToEnd = false
-    private var deletedIndexPaths: Set<IndexPath> = []
-    private var insertedIndexPaths: Set<IndexPath> = []
-
-    override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
-        super.prepare(forCollectionViewUpdates: updateItems)
-
-        guard let collectionView = self.collectionView,
-        let mostRecentOffset = self.getMostRecentItemContentOffset() else { return }
-
-        for update in updateItems {
-            switch update.updateAction {
-            case .insert:
-                guard let indexPath = update.indexPathAfterUpdate else { break }
-                self.insertedIndexPaths.insert(indexPath)
-
-                let isScrolledToMostRecent = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
-                // Always scroll to the end for new user messages, or if we're currently scrolled to the
-                // most recent message.
-                if indexPath.section == 1 || isScrolledToMostRecent {
-                    self.shouldScrollToEnd = true
-                }
-            case .delete:
-                guard let indexPath = update.indexPathBeforeUpdate else { break }
-                self.deletedIndexPaths.insert(indexPath)
-            case .reload, .move, .none:
-                break
-            @unknown default:
-                break
-            }
-        }
-    }
-
-    override func finalizeCollectionViewUpdates() {
-        super.finalizeCollectionViewUpdates()
-
-        self.shouldScrollToEnd = false
-        self.deletedIndexPaths.removeAll()
-        self.insertedIndexPaths.removeAll()
-    }
-
-    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        guard self.shouldScrollToEnd, let offset = self.getMostRecentItemContentOffset() else {
-            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
-        }
-
-        return offset
-    }
-
-    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
-                                      withScrollingVelocity velocity: CGPoint) -> CGPoint {
-
-        // When finished scrolling, always settle on a cell in a centered position.
-        var newOffset = proposedContentOffset
-        newOffset.y = round(newOffset.y, toNearest: self.itemHeight)
-        newOffset.y = max(newOffset.y, 0)
-        return newOffset
-    }
-
-    override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
-    -> UICollectionViewLayoutAttributes? {
-        guard deletedIndexPaths.contains(itemIndexPath) else { return nil }
-
-        return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
-    }
-
-    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
-    -> UICollectionViewLayoutAttributes? {
-
-        let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
-
-        // A new message dropped in the user's message stack should appear immediately.
-        guard itemIndexPath.section == 1 else {
-            return attributes
-        }
-
-        // Ensure this is actually a new message and not just a placeholder message.
-        if self.insertedIndexPaths.contains(itemIndexPath)
-            && self.dataSource?.getMessage(forItemAt: itemIndexPath) != nil {
-            attributes?.alpha = 1
-        }
-
-        return attributes
     }
 }
 
