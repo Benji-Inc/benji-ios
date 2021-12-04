@@ -103,24 +103,28 @@ class ConversationListViewController: FullScreenViewController,
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        self.collectionView.expandToSuperviewWidth()
-        self.collectionView.top = self.view.safeAreaInsets.top + self.headerVC.view.height
-        self.collectionView.height = self.contentContainer.height - ConversationUIState.write.headerHeight
-
-        // If we're in the write mode, adjust the position of the collectionview to
-        // accomodate the text input, if necessary.
-        if self.state == .write {
-            self.setCollectionViewYOffset()
-        }
-
         self.headerVC.view.expandToSuperviewWidth()
         self.headerVC.view.height = self.state.headerHeight
-        self.headerVC.view.match(.bottom, to: .top, of: self.collectionView, offset: .short)
+
+        let headerOffset: Theme.ContentOffset = self.state == .read ? .xtraLong : .standard
+        self.headerVC.view.pin(.top, offset: headerOffset)
+
+        self.collectionView.expandToSuperviewWidth()
+        self.collectionView.top = self.headerVC.view.bottom
+        self.collectionView.height = self.contentContainer.height - ConversationUIState.write.headerHeight
+
+        // If we're in the write mode, adjust the position of the subviews to
+        // accomodate the text input, if necessary.
+        if self.state == .write {
+            self.setYOffsets()
+        }
+
+        //match(.bottom, to: .top, of: self.collectionView, offset: .short)
     }
 
     /// Returns how much the collection view y position should  be adjusted to ensure that the text message input
     /// and message drop zone don't overlap.
-    private func setCollectionViewYOffset() {
+    private func setYOffsets() {
 
         let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
         self.sendMessageDropZone.frame = dropZoneFrame
@@ -133,6 +137,9 @@ class ConversationListViewController: FullScreenViewController,
         let diff = cellFrame.bottom - accessoryFrame.top
         self.collectionView.top += -clamp(diff, min: 0)
         self.sendMessageDropZone.top += -clamp(diff, min: 0)
+
+        //TODO fix this magic number. 
+        self.headerVC.view.alpha = self.collectionView.top < 25 ? 0 : 1.0
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -247,9 +254,9 @@ class ConversationListViewController: FullScreenViewController,
             startingIndexPath = snapshot.indexPathOfItem(.messages(startingConversationID.description))
         }
 
-        let animationCycle = AnimationCycle(inFromPosition: .right,
-                                            outToPosition: .left,
-                                            shouldConcatenate: true,
+        let animationCycle = AnimationCycle(inFromPosition: .inward,
+                                            outToPosition: .inward,
+                                            shouldConcatenate: false,
                                             scrollToIndexPath: startingIndexPath)
 
         await self.dataSource.apply(snapshot,
