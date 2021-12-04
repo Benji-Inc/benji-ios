@@ -130,11 +130,9 @@ class ConversationListViewController: FullScreenViewController,
         let cellFrame = self.contentContainer.convert(cell.bounds, from: cell)
         let accessoryFrame = self.contentContainer.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)
 
-        var diff = (cellFrame.bottom ) - accessoryFrame.top
-//        if diff < 0 {
-//            diff *= -1
-//        }
+        let diff = cellFrame.bottom - accessoryFrame.top
         self.collectionView.top += -clamp(diff, min: 0)
+        self.sendMessageDropZone.top += -clamp(diff, min: 0)
     }
 
     override func viewWillAppear(_ animated: Bool) {
