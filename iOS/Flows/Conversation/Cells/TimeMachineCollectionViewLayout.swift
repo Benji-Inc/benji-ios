@@ -33,10 +33,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return TimeMachineCollectionViewLayoutInvalidationContext.self
     }
 
-    override class var layoutAttributesClass: AnyClass {
-        return ConversationMessageCellLayoutAttributes.self
-    }
-
     // MARK: - Data Source
     weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
     var sectionCount: Int {
@@ -245,7 +241,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     func layoutAttributesForItemAt(indexPath: IndexPath,
                              withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
-
         guard let collectionView = self.collectionView else { return nil }
 
         var scale: CGFloat
@@ -269,10 +264,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             alpha = 1
         }
 
-        let layoutClass: AnyClass = type(of: self).layoutAttributesClass
-        guard let attributes = layoutClass.init(forCellWith: indexPath) as? UICollectionViewLayoutAttributes else {
-            return nil
-        }
+        let layoutClass = type(of: self).layoutAttributesClass as? UICollectionViewLayoutAttributes.Type
+        guard let attributes = layoutClass?.init(forCellWith: indexPath) else { return nil }
 
         // Make sure items in the front are drawn over items in the back.
         attributes.zIndex = indexPath.item

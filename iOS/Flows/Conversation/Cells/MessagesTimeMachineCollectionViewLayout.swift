@@ -15,6 +15,10 @@ import StreamChat
 /// as the items move along the z axis.
 class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
+    override class var layoutAttributesClass: AnyClass {
+        return ConversationMessageCellLayoutAttributes.self
+    }
+
     // MARK: - Layout Configuration
 
     /// How bright the background of the frontmost item is. 0 is black, 1 is full brightness.
