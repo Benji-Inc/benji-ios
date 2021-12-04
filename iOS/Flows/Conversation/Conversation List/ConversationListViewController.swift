@@ -391,7 +391,6 @@ class ConversationListViewController: FullScreenViewController,
         guard newSendType != self.currentSendMode else { return }
 
         self.prepareForSend(with: newSendType)
-
         self.currentSendMode = newSendType
     }
 
