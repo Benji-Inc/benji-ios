@@ -94,15 +94,18 @@ extension ConversationMessageCellDataSource {
 
 extension ConversationMessageCellDataSource: TimeMachineCollectionViewLayoutDataSource {
 
-    func getMessage(forItemAt indexPath: IndexPath) -> Messageable? {
+    func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItem? {
         guard let item = self.itemIdentifier(for: indexPath) else { return nil }
         let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                     messageId: item.messageID)
 
         return messageController.message
     }
+}
 
-    func frontmostItemWasUpdated(for indexPath: IndexPath) {
-        // TODO: 
+extension Message: TimeMachineLayoutItem {
+
+    var sortValue: Double {
+        return self.createdAt.timeIntervalSinceReferenceDate
     }
 }

@@ -5,12 +5,16 @@
 //  Created by Martin Young on 11/16/21.
 //
 
-import Foundation
 import UIKit
-import StreamChat
+
+protocol TimeMachineLayoutItem {
+    /// Used to determine the order of the time machine items.
+    /// A lower value means the item is older and should appear closer to the back.
+    var sortValue: Double { get }
+}
 
 protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
-    func getMessage(forItemAt indexPath: IndexPath) -> Messageable?
+    func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItem?
 }
 
 private class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
@@ -18,9 +22,9 @@ private class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionVi
     var shouldRecalculateZRanges = true
 }
 
-/// A custom layout for conversation messages. Up to two message cell sections are each displayed as a stack along the z axis.
-/// The stacks appear similar to Apple's Time Machine interface, with the newest message in front and older messages going out into the distance.
-/// As the collection view scrolls up and down, the messages move away and toward the user respectively.
+/// A custom layout for data sorted by time. Up to two cell sections are each displayed as a stack along the z axis.
+/// The stacks appear similar to Apple's Time Machine interface, with the newest item in front and older items going out into the distance.
+/// As the collection view scrolls up and down, the items move away and toward the user respectively.
 class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     typealias SectionIndex = Int
@@ -152,9 +156,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             sortedItemIndexPaths.append(indexPath)
         }
         sortedItemIndexPaths.sort { indexPath1, indexPath2 in
-            let createdAt1 = dataSource.getMessage(forItemAt: indexPath1)?.createdAt ?? Date.distantFuture
-            let createdAt2 = dataSource.getMessage(forItemAt: indexPath2)?.createdAt ?? Date.distantFuture
-            return createdAt1 < createdAt2
+            let sortValue1 = dataSource.getTimeMachineItem(forItemAt: indexPath1)?.sortValue ?? Double.greatestFiniteMagnitude
+            let sortValue2 = dataSource.getTimeMachineItem(forItemAt: indexPath2)?.sortValue ?? Double.greatestFiniteMagnitude
+            return sortValue1 < sortValue2
         }
 
         // Calculate the z range for each item.
@@ -230,7 +234,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             normalizedZOffset = -vectorToCurrentZ/(self.itemHeight*CGFloat(self.stackDepth))
         } else if vectorToCurrentZ < 0 {
             // The item's z range is in front of the current zPosition.
-            normalizedZOffset = (-vectorToCurrentZ)/self.itemHeight
+            normalizedZOffset = -vectorToCurrentZ/self.itemHeight
         } else {
             // The item's range contains the current zPosition
             normalizedZOffset = 0
@@ -265,7 +269,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             alpha = 1
         }
 
-        let attributes = ConversationMessageCellLayoutAttributes(forCellWith: indexPath)
+        let layoutClass: AnyClass = type(of: self).layoutAttributesClass
+        guard let attributes = layoutClass.init(forCellWith: indexPath) as? UICollectionViewLayoutAttributes else {
+            return nil
+        }
+
         // Make sure items in the front are drawn over items in the back.
         attributes.zIndex = indexPath.item
         attributes.bounds.size = CGSize(width: collectionView.width, height: self.itemHeight)

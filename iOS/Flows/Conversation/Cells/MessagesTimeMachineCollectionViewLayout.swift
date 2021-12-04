@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 import StreamChat
 
-/// A custom layout for conversation messages. Up to two message cell sections are each displayed as a stack along the z axis.
-/// The stacks appear similar to Apple's Time Machine interface, with the newest message in front and older messages going out into the distance.
-/// As the collection view scrolls up and down, the messages move away and toward the user respectively.
+/// A subclass of the TimeMachineLayout used to display conversation messages.
+/// In addition to normal time machine functionality, this class also adjusts the color, brightness and other message specific attributes
+/// as the items move along the z axis.
 class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     // MARK: - Layout Configuration
@@ -58,7 +58,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         }
 
         // If there is no message to display for this index path, don't show the cell.
-        if self.dataSource?.getMessage(forItemAt: indexPath) == nil {
+        if self.dataSource?.getTimeMachineItem(forItemAt: indexPath) == nil {
             attributes.alpha = 0
         }
 
@@ -167,7 +167,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
         // Ensure this is actually a new message and not just a placeholder message.
         if self.insertedIndexPaths.contains(itemIndexPath)
-            && self.dataSource?.getMessage(forItemAt: itemIndexPath) != nil {
+            && self.dataSource?.getTimeMachineItem(forItemAt: itemIndexPath) != nil {
             attributes?.alpha = 1
         }
 
