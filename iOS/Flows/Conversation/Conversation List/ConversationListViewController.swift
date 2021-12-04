@@ -110,9 +110,7 @@ class ConversationListViewController: FullScreenViewController,
         // If we're in the write mode, adjust the position of the collectionview to
         // accomodate the text input, if necessary.
         if self.state == .write {
-            self.collectionView.top += self.getCollectionViewYOffset()
-            let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
-            self.sendMessageDropZone.frame = overlayFrame
+            self.setCollectionViewYOffset()
         }
 
         self.headerVC.view.expandToSuperviewWidth()
@@ -122,13 +120,21 @@ class ConversationListViewController: FullScreenViewController,
 
     /// Returns how much the collection view y position should  be adjusted to ensure that the text message input
     /// and message drop zone don't overlap.
-    private func getCollectionViewYOffset() -> CGFloat {
-        let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
-        let textView: InputTextView = self.messageInputAccessoryView.textView
-        let textViewFrame = textView.convert(textView.bounds, to: self.contentContainer)
+    private func setCollectionViewYOffset() {
 
-        let overlapAmount = dropZoneFrame.bottom + ConversationUIState.write.headerHeight + self.view.safeAreaInsets.top + MessageDetailView.height - textViewFrame.top 
-        return -clamp(overlapAmount, min: 0)
+        let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
+        self.sendMessageDropZone.frame = dropZoneFrame
+
+        guard let cell = self.collectionView.getBottomFrontMostCell() else { return }
+
+        let cellFrame = self.contentContainer.convert(cell.bounds, from: cell)
+        let accessoryFrame = self.contentContainer.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)
+
+        var diff = (cellFrame.bottom ) - accessoryFrame.top
+//        if diff < 0 {
+//            diff *= -1
+//        }
+        self.collectionView.top += -clamp(diff, min: 0)
     }
 
     override func viewWillAppear(_ animated: Bool) {

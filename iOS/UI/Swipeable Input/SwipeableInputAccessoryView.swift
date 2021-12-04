@@ -29,8 +29,6 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     /// The accessory view finished its swipe interaction.
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didFinishSwipeSendingSendable didSend: Bool)
-    /// The accessory view's text view has updated its frame.
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, updatedFrameOf textView: InputTextView)
 }
 
 class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConversationable {
@@ -47,7 +45,6 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
 
     // MARK:  - Views
 
-    @IBOutlet var activityBar: InputActivityBar!
     @IBOutlet var inputContainerView: SpeechBubbleView!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
@@ -156,12 +153,6 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
         self.textView.confirmationView.button.didSelect { [unowned self] in
             self.didPressAlertCancel()
         }
-
-        // Listen for changes to the textview bounds and update the delegate as needed.
-        self.textView.publisher(for: \.bounds, options: [.new])
-            .mainSink { [unowned self] bounds in
-                self.delegate?.swipeableInputAccessory(self, updatedFrameOf: self.textView)
-            }.store(in: &self.cancellables)
     }
 
     func showInputTypes(shouldShow: Bool) {
