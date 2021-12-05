@@ -139,9 +139,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
 
         self.textView.$inputText.mainSink { [unowned self] text in
             self.handleTextChange(text)
-            // numberOfLines has an initial value of 2 for some reason
-            logDebug(self.textView.numberOfLines.description)
-            let shouldShow = self.textView.numberOfLines == 1 && KeyboardManager.shared.isKeyboardShowing && KeyboardManager.shared.inputAccessoryView === self 
+            let shouldShow = self.textView.numberOfLines == 1 && KeyboardManager.shared.isKeyboardShowing && KeyboardManager.shared.inputAccessoryView === self
             self.showInputTypes(shouldShow: shouldShow)
         }.store(in: &self.cancellables)
 

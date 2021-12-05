@@ -118,8 +118,6 @@ class ConversationListViewController: FullScreenViewController,
         if self.state == .write {
             self.setYOffsets()
         }
-
-        //match(.bottom, to: .top, of: self.collectionView, offset: .short)
     }
 
     /// Returns how much the collection view y position should  be adjusted to ensure that the text message input
@@ -138,7 +136,7 @@ class ConversationListViewController: FullScreenViewController,
         self.collectionView.top += -clamp(diff, min: 0)
         self.sendMessageDropZone.top += -clamp(diff, min: 0)
 
-        //TODO fix this magic number. 
+        //TODO fix this magic number.
         self.headerVC.view.alpha = self.collectionView.top < 25 ? 0 : 1.0
     }
 
@@ -362,6 +360,7 @@ class ConversationListViewController: FullScreenViewController,
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.sendMessageDropZone.alpha = 1
             cell?.content.textView.alpha = 0
+            cell?.content.authorView.alpha = 0
         }
 
         // Show the send message overlay so the user can see where to drag the message
@@ -376,6 +375,7 @@ class ConversationListViewController: FullScreenViewController,
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.sendMessageDropZone.alpha = 0
             cell?.content.textView.alpha = 1.0
+            cell?.content.authorView.alpha = 1.0
         } completion: { didFinish in
             self.collectionView.setDropZone(isShowing: false)
             self.sendMessageDropZone.removeFromSuperview()

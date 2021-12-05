@@ -36,9 +36,17 @@ class ThreadCollectionView: CollectionView {
 
     func getDropZoneColor() -> Color? {
         if self.visibleCells.count > 0 {
-            return .white
+            return .darkGray
         }
 
-        return nil 
+        return .white
+    }
+
+    func getBottomFrontMostCell() -> MessageSubcell? {
+        return self.threadLayout?.getBottomFrontMostCell()
+    }
+
+    func setDropZone(isShowing: Bool) {
+        self.threadLayout?.isShowingDropZone = isShowing
     }
 }

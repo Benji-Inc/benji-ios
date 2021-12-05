@@ -326,7 +326,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         let detailAlpha = 1 - abs(vectorToCurrentZ) / (self.itemHeight * 0.2)
         let textViewAlpha = 1 - abs(vectorToCurrentZ) / (self.itemHeight * 0.8)
         attributes.detailAlpha = detailAlpha
-        attributes.textViewAlpha = self.isShowingDropZone && indexPath.section == 1 ? 0.0 : textViewAlpha
+        attributes.messageContentAlpha = self.isShowingDropZone && indexPath.section == 1 ? 0.0 : textViewAlpha
 
         return attributes
     }
