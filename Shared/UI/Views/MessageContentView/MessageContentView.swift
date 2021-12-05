@@ -70,15 +70,12 @@ class MessageContentView: View {
             self.authorView.isVisible = state == .expanded
             self.layoutNow()
         }.store(in: &self.cancellables)
-    }
 
-    #if IOS
-    func setContextMenu() {
-        self.bubbleView.interactions.removeAll()
+#if IOS
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
         self.bubbleView.addInteraction(contextMenuInteraction)
+#endif
     }
-    #endif
 
     func configure(with message: Messageable) {
         self.message = message

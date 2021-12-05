@@ -70,6 +70,8 @@ class MessageSubcell: UICollectionViewCell {
         self.detailView.height = MessageDetailView.height
         self.detailView.alpha = messageLayoutAttributes.detailAlpha
 
+        self.content.isUserInteractionEnabled = messageLayoutAttributes.detailAlpha == 1
+
         self.detailView.updateReadStatus(shouldRead: messageLayoutAttributes.detailAlpha == 1.0)
     }
 }

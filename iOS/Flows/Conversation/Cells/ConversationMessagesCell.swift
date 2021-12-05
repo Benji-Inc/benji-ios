@@ -13,7 +13,7 @@ import UIKit
 /// A cell to display a high-level view of a conversation's message. Displays a limited number of recent messages in a conversation.
 /// The user's messages and other messages are put in two stacks (along the z-axis),
 /// with the most recent message at the front (visually obscuring the others).
-class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLayoutDelegate {
+class ConversationMessagesCell: UICollectionViewCell {
 
     // Interaction handling
     var handleTappedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?

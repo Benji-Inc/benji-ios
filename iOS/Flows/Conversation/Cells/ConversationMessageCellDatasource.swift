@@ -73,19 +73,6 @@ extension ConversationMessageCellDataSource {
             }
 
             cell.configure(with: message, showAuthor: false)
-
-            var zIndex = 0
-            if let layout = item.collectionView.collectionViewLayout as? ConversationMessagesCellLayout {
-                zIndex = layout.getZIndex(forIndexPath: indexPath)
-            }
-
-            // The menu interaction should only be on the front most cell.
-            cell.content.bubbleView.interactions.removeAll()
-            if zIndex == 0 {
-                cell.content.setContextMenu()
-            } else {
-                cell.content.bubbleView.interactions.removeAll()
-            }
         }
     }
 }

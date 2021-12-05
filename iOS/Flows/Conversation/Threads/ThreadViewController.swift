@@ -87,7 +87,6 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.view.addSubview(self.parentMessageView)
         self.view.addSubview(self.detailView)
         self.detailView.alpha = 0
-        self.parentMessageView.setContextMenu()
 
         if let msg = self.messageController.message {
             self.detailView.configure(with: msg)
