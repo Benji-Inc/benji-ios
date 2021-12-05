@@ -243,8 +243,13 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return self.layoutAttributesForItemAt(indexPath: indexPath, withNormalizedZOffset: normalizedZOffset)
     }
 
+    /// Returns the UICollectionViewLayoutAttributes for the item at the given indexPath configured with the specified normalized Z Offset.
+    /// The normalized Z Offset is a value bewteen -1 and 1.
+    /// -1 means the item is scaled down and moved away as much as possible before it disappears.
+    /// 0 means the item is in focus. It's the frontmost of its stack and not scaled at all.
+    /// 1 means the item is scaled up and moved forward as much as possible before it disappears.
     func layoutAttributesForItemAt(indexPath: IndexPath,
-                             withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
+                                   withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
         guard let collectionView = self.collectionView else { return nil }
 
         var scale: CGFloat
