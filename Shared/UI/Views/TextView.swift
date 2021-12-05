@@ -22,7 +22,8 @@ class TextView: UITextView {
 
     var numberOfLines: Int {
         guard let lineHeight = self.font?.lineHeight else { return 0 }
-        return Int(self.contentSize.height / lineHeight)
+        let height = self.contentSize.height - self.textContainerInset.top - self.textContainerInset.bottom
+        return Int(height / lineHeight)
     }
 
     override var text: String! {

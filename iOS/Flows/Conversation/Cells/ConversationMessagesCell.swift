@@ -23,7 +23,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
     private lazy var collectionLayout = MessagesTimeMachineCollectionViewLayout()
-    private lazy var collectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
         cv.showsVerticalScrollIndicator = false 
@@ -184,8 +184,16 @@ class ConversationMessagesCell: UICollectionViewCell {
         return self.collectionView.convert(dropZoneFrame, to: targetView)
     }
 
+    func setDropZone(isShowing: Bool) {
+        self.collectionLayout.isShowingDropZone = isShowing
+    }
+
     func getDropZoneColor() -> Color? {
         return self.collectionLayout.getDropZoneColor()
+    }
+
+    func getBottomFrontMostCell() -> MessageSubcell? {
+        return self.collectionLayout.getBottomFrontMostCell()
     }
 
     func prepareForNewMessage() {

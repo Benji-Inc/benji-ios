@@ -25,7 +25,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     var frontmostBrightness: CGFloat = 0.89
     /// How bright the background of the backmost item is. This is based off of the frontmost item brightness.
     var backmostBrightness: CGFloat {
-        return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.1
+        return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.05
     }
 
     override func layoutAttributesForItemAt(indexPath: IndexPath,
@@ -50,7 +50,8 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             backgroundBrightness = self.frontmostBrightness
         }
 
-        let detailAlpha =  1 - abs(normalizedZOffset)/0.2
+        let detailAlpha = 1 - abs(normalizedZOffset) / 0.2
+        let textViewAlpha = 1 - abs(normalizedZOffset) / 0.8
 
         // The most recent visible item should be white.
         if let itemFocusPosition = self.itemFocusPositions[indexPath] {
@@ -71,6 +72,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         attributes.shouldShowTail = indexPath.section == 0
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
         attributes.detailAlpha = detailAlpha
+        attributes.messageContentAlpha = self.isShowingDropZone && indexPath.section == 1 ? 0.0 : textViewAlpha
 
         return attributes
     }
@@ -78,25 +80,28 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     // MARK: - Attribute Helpers
 
     func getDropZoneColor() -> Color? {
-        guard let ip = self.getFocusedItemIndexPath(),
+        guard let ip = self.getFrontmostIndexPath(in: 1),
                 let attributes = self.layoutAttributesForItem(at: ip) as? ConversationMessageCellLayoutAttributes else {
                     return nil
                 }
 
-        if ip.section == 1 {
-            return attributes.backgroundColor
-        } else {
-            return .lightGray
+        return attributes.backgroundColor == .white ? .darkGray : .white
+    }
+
+    func getBottomFrontMostCell() -> MessageSubcell? {
+        guard let ip = self.getFrontmostIndexPath(in: 1), let cell = self.collectionView?.cellForItem(at: ip) as? MessageSubcell else { return nil
         }
+        return cell
     }
 
     func getDropZoneFrame() -> CGRect {
         let center = self.getCenterPoint(for: 1, withYOffset: 0, scale: 1)
-        var frame = CGRect(x: Theme.contentOffset.half,
+        let padding = Theme.ContentOffset.short.value.doubled
+        var frame = CGRect(x: padding.half,
                            y: 0,
-                           width: self.collectionView!.width - (Theme.ContentOffset.short.value * 2),
-                           height: self.itemHeight - MessageContentView.bubbleTailLength - (Theme.ContentOffset.short.value * 2))
-        frame.centerY = center.y - MessageContentView.bubbleTailLength.half
+                           width: self.collectionView!.width - padding,
+                           height: MessageContentView.bubbleHeight - padding)
+        frame.centerY = center.y - padding - Theme.ContentOffset.short.value
         return frame
     }
 

@@ -36,6 +36,7 @@ class ConversationsManager: EventsControllerDelegate {
     @Published var activeConversation: Conversation?
 
     @Published var reactionEvent: Event?
+    @Published var localMessageStateEvent: Event?
 
     init() {
         self.initialize()
@@ -64,6 +65,8 @@ class ConversationsManager: EventsControllerDelegate {
             self.reactionEvent = event
         case let event as ReactionUpdatedEvent:
             self.reactionEvent = event
+        case let event as MessageNewEvent:
+            self.localMessageStateEvent = event
         default:
             break
         }

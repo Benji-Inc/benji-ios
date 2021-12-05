@@ -43,6 +43,10 @@ extension ConversationListViewController {
             .mainSink { [unowned self] willShow in
                 self.state = willShow ? .write : .read
             }.store(in: &self.cancellables)
+
+        KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [unowned self] frame in
+            self.view.layoutNow()
+        }.store(in: &self.cancellables)
     }
 
     func subscribeToUpdates() {

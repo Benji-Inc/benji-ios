@@ -46,7 +46,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Layout Configuration
 
     /// The height of the cells.
-    var itemHeight: CGFloat = 60 + MessageDetailView.height + Theme.ContentOffset.short.value {
+    var itemHeight: CGFloat = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value {
         didSet { self.invalidateLayout() }
     }
     /// Keypoints used to gradually shrink down items as they move away.
@@ -57,6 +57,10 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     var alphaKeyPoints: [CGFloat] = [1, 1, 1, 0]
     /// The maximum number of messages to show in each section's stack.
     var stackDepth: Int = 3 {
+        didSet { self.invalidateLayout() }
+    }
+
+    var isShowingDropZone: Bool = false {
         didSet { self.invalidateLayout() }
     }
 
@@ -284,7 +288,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Attribute Helpers
 
     /// Gets the index path of the frontmost item in the given section.
-    private func getFrontmostIndexPath(in section: SectionIndex) -> IndexPath? {
+    func getFrontmostIndexPath(in section: SectionIndex) -> IndexPath? {
         var indexPathCandidate: IndexPath?
 
         for i in (0..<self.numberOfItems(inSection: section)).reversed() {
@@ -358,7 +362,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             centerPoint.y += yOffset
             centerPoint.y += self.itemHeight.half * (1-scale)
         } else {
-            centerPoint.y += self.itemHeight.doubled + self.itemHeight.half
+            centerPoint.y += self.itemHeight.doubled - Theme.ContentOffset.short.value
             centerPoint.y -= yOffset
             centerPoint.y -= self.itemHeight.half * (1-scale)
         }

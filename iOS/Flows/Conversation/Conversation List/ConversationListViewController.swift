@@ -13,6 +13,15 @@ import Combine
 enum ConversationUIState {
     case read // Keyboard is NOT shown
     case write // Keyboard IS shown
+
+    var headerHeight: CGFloat {
+        switch self {
+        case .read:
+            return 60
+        case .write:
+            return 44
+        }
+    }
 }
 
 class ConversationListViewController: FullScreenViewController,
@@ -81,51 +90,52 @@ class ConversationListViewController: FullScreenViewController,
     override func initializeViews() {
         super.initializeViews()
 
-        self.addChild(viewController: self.headerVC, toView: self.contentContainer)
-
         self.contentContainer.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.delegate = self
 
+        self.addChild(viewController: self.headerVC, toView: self.contentContainer)
         self.subscribeToKeyboardUpdates()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        switch self.state {
-        case .read:
-            self.headerVC.view.height = 96
-        case .write:
-            self.headerVC.view.height = 60
-        }
-
-        self.headerVC.view.pinToSafeAreaTop()
         self.headerVC.view.expandToSuperviewWidth()
+        self.headerVC.view.height = self.state.headerHeight
+
+        let headerOffset: Theme.ContentOffset = self.state == .read ? .xtraLong : .standard
+        self.headerVC.view.pin(.top, offset: headerOffset)
 
         self.collectionView.expandToSuperviewWidth()
-        self.collectionView.match(.top,
-                                  to: .bottom,
-                                  of: self.headerVC.view,
-                                  offset: .negative(.long))
-        self.collectionView.height = self.contentContainer.height - 96
+        self.collectionView.top = self.headerVC.view.bottom
+        self.collectionView.height = self.contentContainer.height - ConversationUIState.write.headerHeight
 
-        // If we're in the write mode, adjust the position of the collectionview to
+        // If we're in the write mode, adjust the position of the subviews to
         // accomodate the text input, if necessary.
         if self.state == .write {
-            self.collectionView.top += self.getCollectionViewYOffset()
+            self.setYOffsets()
         }
     }
 
     /// Returns how much the collection view y position should  be adjusted to ensure that the text message input
     /// and message drop zone don't overlap.
-    private func getCollectionViewYOffset() -> CGFloat {
-        let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
-        let textView: InputTextView = self.messageInputAccessoryView.textView
-        let textViewFrame = textView.convert(textView.bounds, to: self.contentContainer)
+    private func setYOffsets() {
 
-        let overlapAmount = dropZoneFrame.bottom + Theme.contentOffset - textViewFrame.top
-        return -clamp(overlapAmount, min: 0)
+        let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
+        self.sendMessageDropZone.frame = dropZoneFrame
+
+        guard let cell = self.collectionView.getBottomFrontMostCell() else { return }
+
+        let cellFrame = self.contentContainer.convert(cell.bounds, from: cell)
+        let accessoryFrame = self.contentContainer.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)
+
+        let diff = cellFrame.bottom - accessoryFrame.top
+        self.collectionView.top += -clamp(diff, min: 0)
+        self.sendMessageDropZone.top += -clamp(diff, min: 0)
+
+        //TODO fix this magic number.
+        self.headerVC.view.alpha = self.collectionView.top < 25 ? 0 : 1.0
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -239,9 +249,9 @@ class ConversationListViewController: FullScreenViewController,
             startingIndexPath = snapshot.indexPathOfItem(.messages(startingConversationID.description))
         }
 
-        let animationCycle = AnimationCycle(inFromPosition: .right,
-                                            outToPosition: .left,
-                                            shouldConcatenate: true,
+        let animationCycle = AnimationCycle(inFromPosition: .inward,
+                                            outToPosition: .inward,
+                                            shouldConcatenate: false,
                                             scrollToIndexPath: startingIndexPath)
 
         await self.dataSource.apply(snapshot,
@@ -329,28 +339,43 @@ class ConversationListViewController: FullScreenViewController,
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
         if isEnabled {
-            guard self.sendMessageDropZone.superview.isNil else { return }
-            // Animate in the send overlay
-            self.contentContainer.addSubview(self.sendMessageDropZone)
-            self.sendMessageDropZone.alpha = 0
-            self.sendMessageDropZone.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
-            UIView.animate(withDuration: Theme.animationDurationStandard) {
-                self.sendMessageDropZone.alpha = 1
-            }
-
-            // Show the send message overlay so the user can see where to drag the message
-            let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
-            self.sendMessageDropZone.frame = overlayFrame
-
-            view.dropZoneFrame = view.convert(self.sendMessageDropZone.bounds, from: self.sendMessageDropZone)
-
-            self.sendMessageDropZone.centerOnX()
+            self.showDropZone(for: view)
         } else {
-            UIView.animate(withDuration: Theme.animationDurationStandard) {
-                self.sendMessageDropZone.alpha = 0
-            } completion: { didFinish in
-                self.sendMessageDropZone.removeFromSuperview()
-            }
+            self.hideDropZone()
+        }
+    }
+
+    func showDropZone(for view: SwipeableInputAccessoryView) {
+        guard self.sendMessageDropZone.superview.isNil else { return }
+        // Animate in the send overlay
+        self.contentContainer.addSubview(self.sendMessageDropZone)
+        self.sendMessageDropZone.alpha = 0
+        self.sendMessageDropZone.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
+
+        let cell = self.collectionView.getBottomFrontMostCell()
+        self.collectionView.setDropZone(isShowing: true)
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            self.sendMessageDropZone.alpha = 1
+            cell?.content.textView.alpha = 0
+            cell?.content.authorView.alpha = 0
+        }
+
+        // Show the send message overlay so the user can see where to drag the message
+        let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
+        self.sendMessageDropZone.frame = overlayFrame
+
+        view.dropZoneFrame = view.convert(self.sendMessageDropZone.bounds, from: self.sendMessageDropZone)
+    }
+
+    func hideDropZone() {
+        let cell = self.collectionView.getBottomFrontMostCell()
+        UIView.animate(withDuration: Theme.animationDurationStandard) {
+            self.sendMessageDropZone.alpha = 0
+            cell?.content.textView.alpha = 1.0
+            cell?.content.authorView.alpha = 1.0
+        } completion: { didFinish in
+            self.collectionView.setDropZone(isShowing: false)
+            self.sendMessageDropZone.removeFromSuperview()
         }
     }
 
@@ -375,7 +400,6 @@ class ConversationListViewController: FullScreenViewController,
         guard newSendType != self.currentSendMode else { return }
 
         self.prepareForSend(with: newSendType)
-
         self.currentSendMode = newSendType
     }
 
@@ -383,7 +407,7 @@ class ConversationListViewController: FullScreenViewController,
         switch position {
         case .message:
             self.sendMessageDropZone.setState(.newMessage,
-                                             messageColor: self.collectionView.getDropZoneColor())
+                                              messageColor: .white)
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
@@ -409,6 +433,11 @@ class ConversationListViewController: FullScreenViewController,
             if let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
+
+            UIView.animate(withDuration: Theme.animationDurationStandard) {
+                self.sendMessageDropZone.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
+            }
+
             return false
         }
 
@@ -423,6 +452,7 @@ class ConversationListViewController: FullScreenViewController,
                       self.createNewConversation(sendable)
                       return true
                   }
+            self.sendMessageDropZone.alpha = 0
 
             self.reply(to: cid, sendable: sendable)
         case .newConversation:
