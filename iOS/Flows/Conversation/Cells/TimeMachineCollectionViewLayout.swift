@@ -47,7 +47,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     // MARK: - Layout Configuration
 
     /// The height of the cells.
-    var itemHeight: CGFloat = 60 + MessageDetailView.height + Theme.ContentOffset.short.value {
+    var itemHeight: CGFloat = MessageContentView.bubbleHeight + MessageDetailView.height + Theme.ContentOffset.short.value {
         didSet { self.invalidateLayout() }
     }
     /// Keypoints used to gradually shrink down items as they move away.
@@ -64,10 +64,14 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     var frontmostBrightness: CGFloat = 0.89
     /// How bright the background of the backmost item is. This is based off of the frontmost item brightness.
     var backmostBrightness: CGFloat {
-        return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.1
+        return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.05
     }
     /// If true, the message status decoration views should be displayed.
     var showMessageStatus: Bool = false {
+        didSet { self.invalidateLayout() }
+    }
+
+    var isShowingDropZone: Bool = false {
         didSet { self.invalidateLayout() }
     }
 
@@ -320,7 +324,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         let detailAlpha = 1 - abs(vectorToCurrentZ) / (self.itemHeight * 0.2)
+        let textViewAlpha = 1 - abs(vectorToCurrentZ) / (self.itemHeight * 0.8)
         attributes.detailAlpha = detailAlpha
+        attributes.messageContentAlpha = self.isShowingDropZone && indexPath.section == 1 ? 0.0 : textViewAlpha
 
         return attributes
     }
@@ -402,7 +408,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             centerPoint.y += yOffset
             centerPoint.y += self.itemHeight.half * (1-scale)
         } else {
-            centerPoint.y += self.itemHeight.doubled + self.itemHeight.half
+            centerPoint.y += self.itemHeight.doubled - Theme.ContentOffset.short.value
             centerPoint.y -= yOffset
             centerPoint.y -= self.itemHeight.half * (1-scale)
         }
@@ -411,25 +417,28 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     }
 
     func getDropZoneColor() -> Color? {
-        guard let ip = self.getFocusedItemIndexPath(),
+        guard let ip = self.getFrontmostIndexPath(in: 1),
                 let attributes = self.layoutAttributesForItem(at: ip) as? ConversationMessageCellLayoutAttributes else {
                     return nil
                 }
 
-        if ip.section == 1 {
-            return attributes.backgroundColor
-        } else {
-            return .lightGray
+        return attributes.backgroundColor == .white ? .darkGray : .white
+    }
+
+    func getBottomFrontMostCell() -> MessageSubcell? {
+        guard let ip = self.getFrontmostIndexPath(in: 1), let cell = self.collectionView?.cellForItem(at: ip) as? MessageSubcell else { return nil
         }
+        return cell 
     }
 
     func getDropZoneFrame() -> CGRect {
         let center = self.getCenterPoint(for: 1, withYOffset: 0, scale: 1)
-        var frame = CGRect(x: Theme.contentOffset.half,
+        let padding = Theme.ContentOffset.short.value.doubled
+        var frame = CGRect(x: padding.half,
                            y: 0,
-                           width: self.collectionView!.width - (Theme.ContentOffset.short.value * 2),
-                           height: self.itemHeight - MessageContentView.bubbleTailLength - (Theme.ContentOffset.short.value * 2))
-        frame.centerY = center.y - MessageContentView.bubbleTailLength.half
+                           width: self.collectionView!.width - padding,
+                           height: MessageContentView.bubbleHeight - padding)
+        frame.centerY = center.y - padding - Theme.ContentOffset.short.value
         return frame
     }
 

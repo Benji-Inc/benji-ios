@@ -152,6 +152,13 @@ private class MessageReadView: MessageStatusContainer {
             case .pendingSend, .sending:
                 self.label.setText("Sending")
                 self.imageView.image = UIImage(named: "checkmark")
+                Task {
+                    await Task.snooze(seconds: 0.1)
+                    guard !Task.isCancelled else { return }
+                    if let message = ChatClient.shared.messageController(for: message)?.message {
+                        self.configure(for: message)
+                    }
+                }.add(to: self.taskPool)
             case .deleting:
                 break
             case .deletingFailed:

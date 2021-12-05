@@ -14,8 +14,9 @@ import UIKit
 
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
+
     lazy var membersVC = MembersViewController()
-    let label = Label(font: .medium, textColor: .white)
+    let label = Label(font: .regular, textColor: .textColor)
     let button = Button()
 
     private var state: ConversationUIState = .read
@@ -68,20 +69,14 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        let maxWidth = self.view.width - Theme.contentOffset.doubled
-        self.label.setSize(withWidth: maxWidth)
-        self.label.pin(.top)
-        self.label.centerOnX()
-
         self.membersVC.view.height = 43
         self.membersVC.view.expandToSuperviewWidth()
+        self.membersVC.view.pin(.bottom)
 
-        switch self.state {
-        case .read:
-            self.membersVC.view.match(.top, to: .bottom, of: self.label, offset: .standard)
-        case .write:
-            self.membersVC.view.pin(.top)
-        }
+        let maxWidth = Theme.getPaddedWidth(with: self.view.width)
+        self.label.setSize(withWidth: maxWidth)
+        self.label.match(.bottom, to: .top, of: self.membersVC.view, offset: .negative(.standard))
+        self.label.centerOnX()
 
         self.button.frame = self.label.frame
     }

@@ -29,8 +29,6 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     /// The accessory view finished its swipe interaction.
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
                                  didFinishSwipeSendingSendable didSend: Bool)
-    /// The accessory view's text view has updated its frame.
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, updatedFrameOf textView: InputTextView)
 }
 
 class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConversationable {
@@ -47,7 +45,6 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
 
     // MARK:  - Views
 
-    @IBOutlet var activityBar: InputActivityBar!
     @IBOutlet var inputContainerView: SpeechBubbleView!
     /// Text view for users to input their message.
     @IBOutlet var textView: InputTextView!
@@ -124,11 +121,9 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
                 return KeyboardManager.shared.inputAccessoryView === self
             })
             .mainSink { willShow in
+                let shouldShow = willShow && self.textView.numberOfLines == 1
+                self.showInputTypes(shouldShow: shouldShow)
 
-            UIView.animate(withDuration: 0.2) {
-                self.inputTypeHeightConstraint.constant = willShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 1
-                self.inputManager.collectionView.alpha = willShow ? 1 : 0
-            }
         }.store(in: &self.cancellables)
 
         KeyboardManager.shared.$currentEvent
@@ -144,6 +139,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
 
         self.textView.$inputText.mainSink { [unowned self] text in
             self.handleTextChange(text)
+            let shouldShow = self.textView.numberOfLines == 1 && KeyboardManager.shared.isKeyboardShowing && KeyboardManager.shared.inputAccessoryView === self
+            self.showInputTypes(shouldShow: shouldShow)
         }.store(in: &self.cancellables)
 
         self.overlayButton.didSelect { [unowned self] in
@@ -155,12 +152,13 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
         self.textView.confirmationView.button.didSelect { [unowned self] in
             self.didPressAlertCancel()
         }
+    }
 
-        // Listen for changes to the textview bounds and update the delegate as needed.
-        self.textView.publisher(for: \.bounds, options: [.new])
-            .mainSink { [unowned self] bounds in
-                self.delegate?.swipeableInputAccessory(self, updatedFrameOf: self.textView)
-            }.store(in: &self.cancellables)
+    func showInputTypes(shouldShow: Bool) {
+        UIView.animate(withDuration: 0.2) {
+            self.inputTypeHeightConstraint.constant = shouldShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 1
+            self.inputManager.collectionView.alpha = shouldShow ? 1 : 0
+        }
     }
 
     // MARK: OVERRIDES
