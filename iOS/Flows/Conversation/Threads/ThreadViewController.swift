@@ -117,7 +117,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.collectionView.collectionViewLayout.invalidateLayout()
         self.collectionView.pinToSafeArea(.top, offset: .noOffset)
-        self.collectionView.width = self.view.width * 0.8
+        self.collectionView.width = Theme.getPaddedWidth(with: self.view.width)
         self.collectionView.centerOnX()
     }
 
@@ -261,11 +261,6 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
         self.collectionView.isUserInteractionEnabled = true
     }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 updatedFrameOf textView: InputTextView) {
-        // Do nothing.
-    }
 }
 
 // MARK: - Messaging
@@ -346,7 +341,12 @@ extension ThreadViewController {
         let members = self.messageController.message?.threadParticipants.filter { member in
             return member.id != ChatClient.shared.currentUserId
         } ?? []
+
         self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: true)
+
+        KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [unowned self] frame in
+            self.view.layoutNow()
+        }.store(in: &self.cancellables)
     }
 }
 
