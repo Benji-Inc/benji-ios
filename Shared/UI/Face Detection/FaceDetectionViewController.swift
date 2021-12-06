@@ -26,6 +26,8 @@ class FaceDetectionViewController: ImageCaptureViewController {
     var metalDevice: MTLDevice!
     var metalCommandQueue: MTLCommandQueue!
 
+    var currentColor: CIColor = .yellow
+
     // The Core Image pipeline.
     var ciContext: CIContext!
     var currentCIImage: CIImage? {
@@ -83,16 +85,15 @@ class FaceDetectionViewController: ImageCaptureViewController {
         guard let connection = output.connection(with: .video) else { return }
         connection.automaticallyAdjustsVideoMirroring = true
 
-        guard error == nil,
-              let imageData = photo.fileDataRepresentation(),
-              let image = UIImage.init(data: imageData , scale: 1.0) else { return }
+        guard let ciImage = self.currentCIImage else { return }
+
+        let image = UIImage(ciImage: ciImage, scale: 1.0, orientation: .up)
 
         let imageOptions =  NSMutableDictionary(object: NSNumber(value: 5) as NSNumber, forKey: CIDetectorImageOrientation as NSString)
         imageOptions[CIDetectorEyeBlink] = true
-        let personciImage = CIImage(cgImage: image.cgImage!)
         let accuracy = [CIDetectorAccuracy: CIDetectorAccuracyHigh]
         let faceDetector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: accuracy)
-        let faces = faceDetector?.features(in: personciImage, options: imageOptions as? [String : AnyObject])
+        let faces = faceDetector?.features(in: ciImage, options: imageOptions as? [String : AnyObject])
 
         if let face = faces?.first as? CIFaceFeature {
             self.eyesAreClosed = face.leftEyeClosed && face.rightEyeClosed
@@ -101,6 +102,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
             self.eyesAreClosed = false
             self.isSmiling = false 
         }
+
 
         self.didCapturePhoto?(image)
     }

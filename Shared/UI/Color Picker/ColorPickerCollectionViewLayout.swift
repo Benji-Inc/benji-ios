@@ -1,24 +1,24 @@
 //
-//  MembersCollectionViewLayout.swift
+//  ColorPickerCollectionViewLayout.swift
 //  Jibber
 //
-//  Created by Benji Dodgson on 11/23/21.
+//  Created by Benji Dodgson on 12/6/21.
 //  Copyright © 2021 Benjamin Dodgson. All rights reserved.
 //
 
 import Foundation
 
-class MembersCollectionViewLayout: UICollectionViewCompositionalLayout {
+class ColorPickerCollectionViewLayout: UICollectionViewCompositionalLayout {
 
     init() {
         let config = UICollectionViewCompositionalLayoutConfiguration()
         config.scrollDirection = .horizontal
 
         super.init(sectionProvider: { sectionIndex, environment in
-            guard let sectionType = MembersCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
+            guard let sectionType = ColorPickerCollectionViewDataSource.SectionType(rawValue: sectionIndex) else { return nil }
 
             switch sectionType {
-            case .members:
+            case .colors:
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
