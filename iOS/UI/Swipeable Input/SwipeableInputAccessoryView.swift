@@ -124,7 +124,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
                 let shouldShow = willShow && self.textView.numberOfLines == 1
                 self.showInputTypes(shouldShow: shouldShow)
 
-        }.store(in: &self.cancellables)
+            }.store(in: &self.cancellables)
 
         KeyboardManager.shared.$currentEvent
             .mainSink { [weak self] event in
@@ -341,7 +341,12 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
     private func resetPreviewAndInputViews(didSend: Bool) {
         if didSend {
             self.impactFeedback.impactOccurred()
-            self.previewView?.removeFromSuperview()
+            UIView.animate(withDuration: Theme.animationDurationStandard) {
+                self.previewView?.alpha = 0
+            } completion: { completed in
+                self.previewView?.removeFromSuperview()
+            }
+
             self.resetInputViews()
         } else {
             // If the user didn't swipe far enough to send a message, animate the preview view back

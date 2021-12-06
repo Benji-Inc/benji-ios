@@ -120,7 +120,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     /// If true, scroll to the most recent item after performing collection view updates.
     private var shouldScrollToEnd = false
     private var deletedIndexPaths: Set<IndexPath> = []
-    private var insertedIndexPaths: Set<IndexPath> = []
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
@@ -132,7 +131,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             switch update.updateAction {
             case .insert:
                 guard let indexPath = update.indexPathAfterUpdate else { break }
-                self.insertedIndexPaths.insert(indexPath)
 
                 let isScrolledToMostRecent = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
                 // Always scroll to the end for new user messages, or if we're currently scrolled to the
@@ -156,7 +154,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
         self.shouldScrollToEnd = false
         self.deletedIndexPaths.removeAll()
-        self.insertedIndexPaths.removeAll()
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
@@ -169,27 +166,11 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
     -> UICollectionViewLayoutAttributes? {
+        // Items that are just moving are marked as "deleted" by the collection view.
+        // Only animate changes to items that are actually being deleted otherwise weird animation issues
+        // will arise.
         guard self.deletedIndexPaths.contains(itemIndexPath) else { return nil }
 
         return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
-    }
-
-    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
-    -> UICollectionViewLayoutAttributes? {
-
-        let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
-
-        // A new message dropped in the user's message stack should appear immediately.
-        guard itemIndexPath.section == 1 else {
-            return attributes
-        }
-
-        // Ensure this is actually a new message and not just a placeholder message.
-        if self.insertedIndexPaths.contains(itemIndexPath)
-            && self.dataSource?.getTimeMachineItem(forItemAt: itemIndexPath) != nil {
-            attributes?.alpha = 1
-        }
-
-        return attributes
     }
 }
