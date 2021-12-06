@@ -346,6 +346,7 @@ class ConversationListViewController: FullScreenViewController,
 
     func showDropZone(for view: SwipeableInputAccessoryView) {
         guard self.sendMessageDropZone.superview.isNil else { return }
+        
         // Animate in the send overlay
         self.contentContainer.addSubview(self.sendMessageDropZone)
         self.sendMessageDropZone.alpha = 0

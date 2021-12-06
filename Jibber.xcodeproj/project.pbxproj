@@ -50,6 +50,7 @@
 		809EDC6C273ECEF000597473 /* ConversationListViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */; };
 		80B3A12627024F860049EFE1 /* LoadMoreMessagesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */; };
 		80C5C8B1271F5F0E0056AFB3 /* ConversationControllerType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */; };
+		80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */; };
 		80D044B526FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */; };
 		80D7721B26F93B17009F0344 /* ConversationCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */; };
 		80DACF9726D6D1B50048722A /* CollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */; };
@@ -908,6 +909,7 @@
 		809EDC6B273ECEF000597473 /* ConversationListViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationListViewController+Extensions.swift"; sourceTree = "<group>"; };
 		80B3A12527024F860049EFE1 /* LoadMoreMessagesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadMoreMessagesCell.swift; sourceTree = "<group>"; };
 		80C5C8B0271F5F0E0056AFB3 /* ConversationControllerType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationControllerType.swift; sourceTree = "<group>"; };
+		80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableInputAccessoryMessageSender.swift; sourceTree = "<group>"; };
 		80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ConversationViewControllerDataSource+CellRegistration.swift"; sourceTree = "<group>"; };
 		80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationCollectionViewLayout.swift; sourceTree = "<group>"; };
 		80DACF9626D6D1B50048722A /* CollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewDataSource.swift; sourceTree = "<group>"; };
@@ -1699,19 +1701,20 @@
 		D6432BF122D8282E0016001A /* Conversation */ = {
 			isa = PBXGroup;
 			children = (
-				D6E9746C2757353800D95F08 /* Status View */,
-				D605C30126F683E400C86DAD /* Conversation */,
 				D635F0A927136C2600A02D17 /* Cells */,
-				8028C9EA273ECB1900520465 /* Conversation List */,
-				8098CC60270F8A2300636484 /* ConversationListCollectionView.swift */,
-				80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */,
+				D605C30126F683E400C86DAD /* Conversation */,
 				D6766C44274D50360046B449 /* Conversation Header */,
-				D67896CB2304524C0059BA75 /* ConversationListCoordinator.swift */,
+				8028C9EA273ECB1900520465 /* Conversation List */,
+				80D7721A26F93B17009F0344 /* ConversationCollectionViewLayout.swift */,
+				8098CC60270F8A2300636484 /* ConversationListCollectionView.swift */,
 				8024B95026F278C8008ABF7F /* ConversationListCollectionViewDataSource.swift */,
+				D67896CB2304524C0059BA75 /* ConversationListCoordinator.swift */,
 				80D044B426FB9F9B00387320 /* ConversationViewControllerDataSource+CellRegistration.swift */,
 				D6B2603622E6AA3800143CF0 /* Input */,
 				D6B2601722E4208900143CF0 /* MessageDateLabel.swift */,
 				8070E74F271747DE004873D9 /* MessageDropZoneView.swift */,
+				D6E9746C2757353800D95F08 /* Status View */,
+				80C72A94275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift */,
 				D66A580325DD68F9001B3F64 /* Threads */,
 			);
 			path = Conversation;
@@ -2888,6 +2891,7 @@
 				D6CD4F3D23F3A618004818B6 /* Connection+Cloud.swift in Sources */,
 				D61EC0F121D313F500204BEE /* ScreenSize.swift in Sources */,
 				D611D97426FD184700E51ABC /* LaunchManager+Extensions.swift in Sources */,
+				80C72A95275EBE4B006A69EC /* SwipeableInputAccessoryMessageSender.swift in Sources */,
 				D67896CC2304524C0059BA75 /* ConversationListCoordinator.swift in Sources */,
 				D6B95AEF272324AE00FBE66A /* ConnectionStore.swift in Sources */,
 				D61EC0E821D3107A00204BEE /* Date+Extensions.swift in Sources */,

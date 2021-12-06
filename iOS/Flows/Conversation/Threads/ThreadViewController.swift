@@ -174,8 +174,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
     // MARK: - SwipeableInputAccessoryViewDelegate
 
-    var prepareForSend = false
-
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
         if isEnabled {
             self.showDropZone(for: view)
@@ -186,7 +184,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
         self.collectionView.isUserInteractionEnabled = false
-
 
         self.dataSource.prepareForSend = true
 
@@ -320,7 +317,7 @@ extension ThreadViewController {
             }
         }
 
-        self.messageInputAccessoryView.textView.$inputText.mainSink { _ in
+        self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] _ in
             guard let enabled = self.conversationController?.areTypingEventsEnabled, enabled else { return }
             self.conversationController?.sendKeystrokeEvent(completion: nil)
         }.store(in: &self.cancellables)
