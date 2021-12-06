@@ -49,11 +49,6 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.collectionView.clipsToBounds = false
         self.contentView.addSubview(self.collectionView)
 
-        self.collectionView.contentInset = UIEdgeInsets(top: Theme.contentOffset,
-                                                        left: 0,
-                                                        bottom: 0,
-                                                        right: 0)
-
         self.dataSource.handleTappedMessage = { [unowned self] item, content in
             self.handleTappedMessage?(item, content)
         }
@@ -67,24 +62,10 @@ class ConversationMessagesCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    /// If true we need scroll to the most recent item upon layout.
-    private var needsOffsetReload = true
-
     override func layoutSubviews() {
         super.layoutSubviews()
 
         self.collectionView.expandToSuperviewSize()
-        self.collectionLayout.invalidateLayout()
-        self.collectionLayout.prepare()
-
-        if self.needsOffsetReload,
-           let contentOffset = self.collectionLayout.getMostRecentItemContentOffset() {
-
-            self.collectionView.contentOffset = contentOffset
-            self.collectionLayout.invalidateLayout()
-
-            self.needsOffsetReload = false
-        }
     }
 
     /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
@@ -122,7 +103,6 @@ class ConversationMessagesCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        self.needsOffsetReload = true
         self.dataSource.prepareForSend = false
 
         // Remove all the items so the next message has a blank slate to work with.

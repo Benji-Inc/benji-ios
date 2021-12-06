@@ -28,6 +28,16 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.05
     }
 
+    override func prepare() {
+        // Scroll to the last message when the data is first loaded.
+        once(caller: self, token: "scrollToLastMessage") {
+            let itemCount = CGFloat(self.numberOfItems(inSection: 0) + self.numberOfItems(inSection: 1))
+            self.collectionView?.contentOffset.y = clamp((itemCount - 1), min: 0) * self.itemHeight
+        }
+
+        super.prepare()
+    }
+
     override func layoutAttributesForItemAt(indexPath: IndexPath,
                                             withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
 
