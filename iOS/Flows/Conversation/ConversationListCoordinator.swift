@@ -61,7 +61,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         }
 
         delay(1.0) {
-            self.router.present(PhotoViewController(), source: self.conversationListVC)
+//            self.router.present(PhotoViewController(), source: self.conversationListVC)
         }
     }
 

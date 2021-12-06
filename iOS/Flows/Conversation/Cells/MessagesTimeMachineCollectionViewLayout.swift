@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import StreamChat
 
-/// A subclass of the TimeMachineLayout used to display conversation messages.
+/// A subclass of the TimeMachineLayout used to display messages.
 /// In addition to normal time machine functionality, this class also adjusts the color, brightness and other message specific attributes
 /// as the items move along the z axis.
 class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
@@ -26,6 +26,16 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     /// How bright the background of the backmost item is. This is based off of the frontmost item brightness.
     var backmostBrightness: CGFloat {
         return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.05
+    }
+
+    override func prepare() {
+        // Scroll to the last message when the data is first loaded.
+        once(caller: self, token: "scrollToLastMessage") {
+            let itemCount = CGFloat(self.numberOfItems(inSection: 0) + self.numberOfItems(inSection: 1))
+            self.collectionView?.contentOffset.y = clamp((itemCount - 1), min: 0) * self.itemHeight
+        }
+
+        super.prepare()
     }
 
     override func layoutAttributesForItemAt(indexPath: IndexPath,
