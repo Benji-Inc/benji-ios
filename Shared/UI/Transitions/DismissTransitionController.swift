@@ -60,6 +60,7 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
 
         containerView.addSubview(threadVC.view)
 
+        //fromView.frame = fromView.convert(fromView.bounds, to: containerView)
         let finalFrame = toView.convert(toView.bounds, to: containerView)
 
         let animator = UIViewPropertyAnimator(duration: self.transitionDuration(using: transitionContext),
@@ -68,7 +69,10 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
         animator.addAnimations {
 
             UIView.animateKeyframes(withDuration: 0.0, delay: 0.0, animations: {
-                fromView.center = finalFrame.center
+
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
+                    fromView.center = finalFrame.center
+                }
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
                     threadVC.collectionView.alpha = 0
