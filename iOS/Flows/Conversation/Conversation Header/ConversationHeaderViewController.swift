@@ -47,11 +47,31 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
              self.didTapUpdateTopic?()
         }
 
+        let neverMind = UIAction(title: "Never Mind", image: UIImage(systemName: "nosign")) { action in }
+
+        let confirmDelete = UIAction(title: "Confirm",
+                                     image: UIImage(systemName: "trash"),
+                                     attributes: .destructive) { [unowned self] action in
+            Task {
+                let controller = ChatClient.shared.channelController(for: self.activeConversation!.cid)
+                do {
+                    try await controller.deleteChannel()
+                } catch {
+                    logDebug(error)
+                }
+            }.add(to: self.taskPool)
+        }
+
+        let deleteMenu = UIMenu(title: "Delete Conversation",
+                                image: UIImage(systemName: "trash"),
+                                options: .destructive,
+                                children: [confirmDelete, neverMind])
+
         let menu = UIMenu(title: "Menu",
                           image: UIImage(systemName: "ellipsis.circle"),
                           identifier: nil,
                           options: [],
-                          children: [topic, add])
+                          children: [topic, add, deleteMenu])
 
         self.button.showsMenuAsPrimaryAction = true
         self.button.menu = menu
