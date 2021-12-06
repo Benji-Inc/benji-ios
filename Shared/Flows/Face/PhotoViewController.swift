@@ -208,7 +208,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animateError(with: "Jibber can't detect your face.", show: !isDetected)
 
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
-            self.cameraVC.previewLayer.opacity = isDetected ? 1.0 : 0.25
+            self.cameraVC.cameraView.alpha = isDetected ? 1.0 : 0.25
         } completion: { completed in
 
         }
@@ -218,10 +218,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animateError(with: "Jibber doesn't see you smiling.", show: true)
 
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
-            self.cameraVC.previewLayer.opacity = 0.5
+            self.cameraVC.cameraView.alpha = 0.5
         } completion: { completed in
             UIView.animate(withDuration: 0.2, delay: 0.0, options: []) {
-                self.cameraVC.previewLayer.opacity = 1.0
+                self.cameraVC.cameraView.alpha = 1.0
             } completion: { _ in
                 Task {
                     await Task.sleep(seconds: 2.0)
@@ -236,10 +236,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animateError(with: "Please close your eyes", show: true)
 
         UIView.animate(withDuration: 0.2, delay: 0.1, options: []) {
-            self.cameraVC.previewLayer.opacity = 0.5
+            self.cameraVC.cameraView.alpha = 0.5
         } completion: { completed in
             UIView.animate(withDuration: 0.2, delay: 0.0, options: []) {
-                self.cameraVC.previewLayer.opacity = 1.0
+                self.cameraVC.cameraView.alpha = 1.0
             } completion: { _ in
                 Task {
                     await Task.sleep(seconds: 2.0)

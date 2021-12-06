@@ -15,7 +15,7 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
     var cancellables = Set<AnyCancellable>()
 
     let session = AVCaptureSession()
-    var previewLayer: AVCaptureVideoPreviewLayer!
+    //var previewLayer: AVCaptureVideoPreviewLayer!
     var capturePhotoOutput: AVCapturePhotoOutput!
 
     let dataOutputQueue = DispatchQueue(label: "video data queue",
@@ -115,11 +115,11 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         self.session.addOutput(self.capturePhotoOutput)
 
         // Configure the preview layer
-        self.previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
-        self.previewLayer.videoGravity = .resizeAspectFill
-        self.previewLayer.frame = self.view.bounds
-
-        self.view.layer.insertSublayer(self.previewLayer, at: 0)
+//        self.previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
+//        self.previewLayer.videoGravity = .resizeAspectFill
+//        self.previewLayer.frame = self.view.bounds
+//
+//        self.view.layer.insertSublayer(self.previewLayer, at: 0)
     }
 
     func capturePhoto() {
@@ -158,8 +158,8 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
-        if let layer = self.previewLayer {
-            layer.frame = self.view.bounds
-        }
+//        if let layer = self.previewLayer {
+//            layer.frame = self.view.bounds
+//        }
     }
 }

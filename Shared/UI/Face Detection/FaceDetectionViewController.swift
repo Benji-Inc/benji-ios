@@ -10,13 +10,37 @@ import Foundation
 import AVFoundation
 import Vision
 import UIKit
+import MetalKit
+import CoreImage.CIFilterBuiltins
 
 class FaceDetectionViewController: ImageCaptureViewController {
+
+    var segmentationRequest = VNGeneratePersonSegmentationRequest()
     var sequenceHandler = VNSequenceRequestHandler()
 
     @Published var faceDetected = false
     @Published var eyesAreClosed = false
     @Published var isSmiling = false
+
+    // The Metal pipeline.
+    var metalDevice: MTLDevice!
+    var metalCommandQueue: MTLCommandQueue!
+
+    // The Core Image pipeline.
+    var ciContext: CIContext!
+    var currentCIImage: CIImage? {
+        didSet {
+            self.cameraView.draw()
+        }
+    }
+
+    @IBOutlet weak var cameraView: MTKView! {
+        didSet {
+            guard self.metalDevice.isNil else { return }
+            self.setupMetal()
+            self.setupCoreImage()
+        }
+    }
 
     override func captureOutput(_ output: AVCaptureOutput,
                                 didOutput sampleBuffer: CMSampleBuffer,
@@ -28,9 +52,16 @@ class FaceDetectionViewController: ImageCaptureViewController {
         let detectFaceRequest = VNDetectFaceLandmarksRequest(completionHandler: self.detectedFace)
 
         do {
-            try self.sequenceHandler.perform([detectFaceRequest],
+            try self.sequenceHandler.perform([detectFaceRequest, self.segmentationRequest],
                                              on: imageBuffer,
                                              orientation: .leftMirrored)
+
+            // Get the pixel buffer that contains the mask image.
+            guard let maskPixelBuffer =
+                    segmentationRequest.results?.first?.pixelBuffer else { return }
+            // Process the images.
+            self.blend(original: imageBuffer, mask: maskPixelBuffer)
+
         } catch {
 
         }
