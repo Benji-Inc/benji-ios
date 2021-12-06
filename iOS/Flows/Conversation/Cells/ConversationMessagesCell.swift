@@ -91,9 +91,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     func set(sequence: MessageSequence) {
         self.conversation = sequence
 
-        Task {
-            await self.dataSource.update(messageSequence: sequence)
-        }
+        self.dataSource.update(messageSequence: sequence)
     }
 
     func updateMessages(with event: Event) {
