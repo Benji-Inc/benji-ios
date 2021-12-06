@@ -16,9 +16,11 @@ class ColorPickerCollectionViewDataSource: CollectionViewDataSource<ColorPickerC
 
     enum ItemType: Hashable {
         case color(CIColor)
+        case wheel(CIColor?)
     }
 
     private let config = ManageableCellRegistration<ColorCell>().provider
+    private let configWheel = ManageableCellRegistration<ColorWheelCell>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -29,6 +31,10 @@ class ColorPickerCollectionViewDataSource: CollectionViewDataSource<ColorPickerC
         switch item {
         case .color(let color):
             return collectionView.dequeueConfiguredReusableCell(using: self.config,
+                                                                for: indexPath,
+                                                                item: color)
+        case .wheel(let color):
+            return collectionView.dequeueConfiguredReusableCell(using: self.configWheel,
                                                                 for: indexPath,
                                                                 item: color)
         }
