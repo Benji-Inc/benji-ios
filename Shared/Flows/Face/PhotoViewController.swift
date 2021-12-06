@@ -279,7 +279,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func handleCaptureState() {
-      //  self.cameraVC.capturePhoto()
+        self.cameraVC.capturePhoto()
     }
 
     private func animateError(with message: String?, show: Bool) {
