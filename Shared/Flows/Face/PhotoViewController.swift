@@ -78,7 +78,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animationView.alpha = 0
         self.addChild(viewController: self.cameraVC)
 
-        self.tapView.addSubview(self.errorView)
+        self.view.addSubview(self.errorView)
         self.view.addSubview(self.tapView)
 
         self.tapView.didSelect { [unowned self] in
@@ -168,6 +168,12 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.tapView.height = self.cameraVC.colorPickerVC.view.top
         self.tapView.pin(.top)
         self.tapView.expandToSuperviewWidth()
+
+        if self.currentState == .scanEyesOpen {
+            self.cameraVC.colorPickerVC.view.pinToSafeAreaBottom()
+        } else {
+            self.cameraVC.colorPickerVC.view.top = self.cameraVC.view.height
+        }
         #endif
     }
 
@@ -266,6 +272,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         UIView.animate(withDuration: 0.2, animations: {
             self.animationView.alpha = 0
+            self.view.layoutNow()
         }) { (completed) in
 
         }
@@ -281,7 +288,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.errorView.label.layoutNow()
         }
 
-        self.errorOffset = show ? 100 : -100
+        self.errorOffset = show ? 120 : -100
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.view.layoutNow()
         }

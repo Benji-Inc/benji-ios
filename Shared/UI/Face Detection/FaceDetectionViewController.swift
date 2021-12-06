@@ -62,7 +62,6 @@ class FaceDetectionViewController: ImageCaptureViewController {
 
         self.colorPickerVC.view.height = 50
         self.colorPickerVC.view.expandToSuperviewWidth()
-        self.colorPickerVC.view.pinToSafeAreaBottom()
     }
     #endif
 

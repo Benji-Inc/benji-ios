@@ -90,7 +90,7 @@ class ColorPickerViewController: DiffableCollectionViewController<ColorPickerCol
 extension ColorPickerViewController: UIColorPickerViewControllerDelegate {
 
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-        self.dismiss(animated: true, completion: nil)
+        viewController.dismiss(animated: true, completion: nil)
     }
 
     func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
