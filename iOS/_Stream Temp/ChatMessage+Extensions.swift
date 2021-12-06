@@ -90,3 +90,11 @@ extension Message: Messageable {
         }
     }
 }
+
+extension Message: MessageSequence {
+
+    var messages: [Messageable] {
+        let messageArray = Array(ChatClient.shared.messageController(for: self)?.replies ?? [])
+        return messageArray
+    }
+}

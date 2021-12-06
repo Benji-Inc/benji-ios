@@ -16,8 +16,8 @@ import UIKit
 class ConversationMessagesCell: UICollectionViewCell {
 
     // Interaction handling
-    var handleTappedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
-    var handleEditMessage: ((ConversationMessageItem) -> Void)?
+    var handleTappedMessage: ((ConversationMessagesItem, MessageContentView) -> Void)?
+    var handleEditMessage: ((ConversationMessagesItem) -> Void)?
 
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
@@ -29,7 +29,7 @@ class ConversationMessagesCell: UICollectionViewCell {
         cv.showsVerticalScrollIndicator = false 
         return cv
     }()
-    private lazy var dataSource = ConversationMessageCellDataSource(collectionView: self.collectionView)
+    private lazy var dataSource = ConversationMessagesCellDataSource(collectionView: self.collectionView)
 
     private var state: ConversationUIState = .read
 
@@ -106,15 +106,15 @@ class ConversationMessagesCell: UICollectionViewCell {
         let channelID = try! ChannelId(cid: sequence.conversationId)
         // The newest message is at the bottom, so reverse the order.
         var userMessageItems = userMessages.reversed().map { message in
-            return ConversationMessageItem(channelID: channelID, messageID: message.id)
+            return ConversationMessagesItem(channelID: channelID, messageID: message.id)
         }
         if self.prepareForSend {
-            userMessageItems.append(ConversationMessageItem(channelID: channelID,
+            userMessageItems.append(ConversationMessagesItem(channelID: channelID,
                                                             messageID: "placeholderMessage"))
         }
 
         let otherMessageItems = otherMessages.reversed().map { message in
-            return ConversationMessageItem(channelID: try! ChannelId(cid: message.conversationId),
+            return ConversationMessagesItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
 
@@ -126,11 +126,11 @@ class ConversationMessagesCell: UICollectionViewCell {
         }
 
         // Clear out the sections to make way for a fresh set of messages.
-        snapshot.deleteSections(ConversationMessageSection.allCases)
-        snapshot.appendSections(ConversationMessageSection.allCases)
+        snapshot.deleteSections(ConversationMessagesSection.allCases)
+        snapshot.appendSections(ConversationMessagesSection.allCases)
 
-        snapshot.appendItems(otherMessageItems, toSection: .otherMessages)
-        snapshot.appendItems(userMessageItems, toSection: .currentUserMessages)
+        snapshot.appendItems(otherMessageItems, toSection: .topMessages)
+        snapshot.appendItems(userMessageItems, toSection: .bottomMessages)
 
         if animateDifference {
             self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
@@ -143,17 +143,17 @@ class ConversationMessagesCell: UICollectionViewCell {
         var snapshot = self.dataSource.snapshot()
         switch event {
         case let event as ReactionNewEvent:
-            let item = ConversationMessageItem(channelID: event.cid, messageID: event.message.id)
+            let item = ConversationMessagesItem(channelID: event.cid, messageID: event.message.id)
             if snapshot.itemIdentifiers.contains(item) {
                 snapshot.reconfigureItems([item])
             }
         case let event as ReactionDeletedEvent:
-            let item = ConversationMessageItem(channelID: event.cid, messageID: event.message.id)
+            let item = ConversationMessagesItem(channelID: event.cid, messageID: event.message.id)
             if snapshot.itemIdentifiers.contains(item) {
                 snapshot.deleteItems([item])
             }
         case let event as ReactionUpdatedEvent:
-            let item = ConversationMessageItem(channelID: event.cid, messageID: event.message.id)
+            let item = ConversationMessagesItem(channelID: event.cid, messageID: event.message.id)
             if snapshot.itemIdentifiers.contains(item) {
                 snapshot.reconfigureItems([item])
             }

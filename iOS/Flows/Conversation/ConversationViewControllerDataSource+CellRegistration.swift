@@ -9,30 +9,16 @@
 import Foundation
 import StreamChat
 
-extension ConversationCollectionViewDataSource {
-
-    typealias MessageCellRegistration
-    = UICollectionView.CellRegistration<MessageSubcell,
-                                        (channelID: ChannelId,
-                                         messageID: MessageId,
-                                         dataSource: ConversationCollectionViewDataSource)>
+extension ConversationListCollectionViewDataSource {
 
     typealias ConversationCellRegistration
     = UICollectionView.CellRegistration<ConversationMessagesCell,
                                         (channelID: ChannelId,
-                                         dataSource: ConversationCollectionViewDataSource)>
+                                         dataSource: ConversationListCollectionViewDataSource)>
     
     typealias LoadMoreMessagesCellRegistration
     = UICollectionView.CellRegistration<LoadMoreMessagesCell, String>
 
-    static func createMessageCellRegistration() -> MessageCellRegistration {
-        return MessageCellRegistration { cell, indexPath, item in
-            let messageController = ChatClient.shared.messageController(cid: item.channelID,
-                                                                        messageId: item.messageID)
-            guard let message = messageController.message else { return }
-            cell.configure(with: message, showAuthor: true)
-        }
-    }
 
     static func createConversationCellRegistration() -> ConversationCellRegistration {
         return ConversationCellRegistration { cell, indexPath, item in

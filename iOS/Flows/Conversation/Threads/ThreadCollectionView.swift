@@ -10,12 +10,10 @@ import Foundation
 
 class ThreadCollectionView: CollectionView {
 
-    var threadLayout: ThreadCollectionViewLayout? {
-        return self.collectionViewLayout as? ThreadCollectionViewLayout
-    }
+    let threadLayout = ThreadCollectionViewLayout()
 
     init() {
-        super.init(layout: ThreadCollectionViewLayout())
+        super.init(layout: self.threadLayout)
 
         self.showsVerticalScrollIndicator = false
         self.keyboardDismissMode = .interactive
@@ -29,7 +27,7 @@ class ThreadCollectionView: CollectionView {
     /// Returns the frame that a message drop zone should have, based on this cell's contents.
     /// The frame is in the coordinate space of the passed in view.
     func getMessageDropZoneFrame(convertedTo targetView: UIView) -> CGRect {
-        guard let dropZoneFrame = self.threadLayout?.getDropZoneFrame() else { return .zero }
+        let dropZoneFrame = self.threadLayout.getDropZoneFrame()
 
         return self.convert(dropZoneFrame, to: targetView)
     }
@@ -43,10 +41,10 @@ class ThreadCollectionView: CollectionView {
     }
 
     func getBottomFrontMostCell() -> MessageSubcell? {
-        return self.threadLayout?.getBottomFrontMostCell()
+        return self.threadLayout.getBottomFrontMostCell()
     }
 
     func setDropZone(isShowing: Bool) {
-        self.threadLayout?.isShowingDropZone = isShowing
+        self.threadLayout.isShowingDropZone = isShowing
     }
 }
