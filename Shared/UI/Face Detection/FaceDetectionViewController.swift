@@ -26,7 +26,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
     var metalDevice: MTLDevice!
     var metalCommandQueue: MTLCommandQueue!
 
-    var currentColor: CIColor = .yellow
+    var currentColor: CIColor? 
 
     // The Core Image pipeline.
     var ciContext: CIContext!
@@ -57,7 +57,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
 
             switch first {
             case .color(let color):
-                self.currentColor = color 
+                self.currentColor = color
             }
 
         }.store(in: &self.cancellables)

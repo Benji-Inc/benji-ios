@@ -26,6 +26,10 @@ class ColorPickerViewController: DiffableCollectionViewController<ColorPickerCol
         self.collectionView.isUserInteractionEnabled = true
         self.collectionView.allowsMultipleSelection = false
         self.collectionView.animationView.isHidden = true
+
+        self.dataSource.didSelectColorWheel = { [unowned self] in
+            logDebug("color wheel")
+        }
     }
 
     override func getAnimationCycle() -> AnimationCycle? {
@@ -33,6 +37,12 @@ class ColorPickerViewController: DiffableCollectionViewController<ColorPickerCol
                               outToPosition: .inward,
                               shouldConcatenate: true,
                               scrollToIndexPath: IndexPath(row: 0, section: 0))
+    }
+
+    override func handleDataBeingLoaded() {
+        super.handleDataBeingLoaded()
+
+        self.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .left)
     }
 
     // MARK: Data Loading

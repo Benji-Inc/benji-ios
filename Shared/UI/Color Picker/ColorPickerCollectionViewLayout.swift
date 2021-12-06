@@ -29,7 +29,16 @@ class ColorPickerCollectionViewLayout: UICollectionViewCompositionalLayout {
 
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: environment.container.contentSize.width.half, bottom: 0, trailing: environment.container.contentSize.width.half)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: Theme.ContentOffset.screenPadding.value, bottom: 0, trailing: Theme.ContentOffset.screenPadding.value)
+
+                let size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2),
+                                                              heightDimension: .fractionalHeight(1.0))
+
+                let footer = NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: size,
+                    elementKind: UICollectionView.elementKindSectionFooter,
+                    alignment: .trailing)
+                section.boundarySupplementaryItems = [footer]
 
                 return section
             }
