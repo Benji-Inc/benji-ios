@@ -31,7 +31,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     let viewController: MessageSendingViewController
 
     /// Denotes where a message should be dragged and dropped to send.
-    private let sendMessageDropZone = MessageDropZoneView()
+    let sendMessageDropZone = MessageDropZoneView()
     private var dataSource: ConversationListCollectionViewDataSource {
         return self.viewController.dataSource
     }

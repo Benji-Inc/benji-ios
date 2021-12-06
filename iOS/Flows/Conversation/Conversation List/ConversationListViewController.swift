@@ -122,22 +122,20 @@ class ConversationListViewController: FullScreenViewController,
     /// Returns how much the collection view y position should  be adjusted to ensure that the text message input
     /// and message drop zone don't overlap.
     private func setYOffsets() {
+        let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
+        self.swipeInputDelegate.sendMessageDropZone.frame = dropZoneFrame
 
-        #warning("Restore this")
-//        let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
-//        self.sendMessageDropZone.frame = dropZoneFrame
-//
-//        guard let cell = self.collectionView.getBottomFrontMostCell() else { return }
-//
-//        let cellFrame = self.contentContainer.convert(cell.bounds, from: cell)
-//        let accessoryFrame = self.contentContainer.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)
-//
-//        let diff = cellFrame.bottom - accessoryFrame.top
-//        self.collectionView.top += -clamp(diff, min: 0)
-//        self.sendMessageDropZone.top += -clamp(diff, min: 0)
-//
-//        //TODO fix this magic number.
-//        self.headerVC.view.alpha = self.collectionView.top < 25 ? 0 : 1.0
+        guard let cell = self.collectionView.getBottomFrontMostCell() else { return }
+
+        let cellFrame = self.contentContainer.convert(cell.bounds, from: cell)
+        let accessoryFrame = self.contentContainer.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)
+
+        let diff = cellFrame.bottom - accessoryFrame.top
+        self.collectionView.top += -clamp(diff, min: 0)
+        self.swipeInputDelegate.sendMessageDropZone.top += -clamp(diff, min: 0)
+
+        //TODO fix this magic number.
+        self.headerVC.view.alpha = self.collectionView.top < 25 ? 0 : 1.0
     }
 
     override func viewWillAppear(_ animated: Bool) {
