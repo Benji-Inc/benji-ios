@@ -27,12 +27,13 @@ enum ConversationUIState {
 class ConversationListViewController: FullScreenViewController,
                                       UICollectionViewDelegate,
                                       UICollectionViewDelegateFlowLayout,
-                                      SwipeableInputAccessoryViewDelegate, ActiveConversationable {
+                                      MessageSendingViewController,
+                                      ActiveConversationable {
 
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
-    /// Denotes where a message should be dragged and dropped to send.
-    let sendMessageDropZone = MessageDropZoneView()
+
+    lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self)
 
     lazy var headerVC = ConversationHeaderViewController()
 
@@ -46,7 +47,7 @@ class ConversationListViewController: FullScreenViewController,
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
         let inputView: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
-        inputView.delegate = self
+        inputView.delegate = self.swipeInputDelegate
         inputView.textView.restorationIdentifier = "list"
         return inputView
     }()
@@ -122,20 +123,21 @@ class ConversationListViewController: FullScreenViewController,
     /// and message drop zone don't overlap.
     private func setYOffsets() {
 
-        let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
-        self.sendMessageDropZone.frame = dropZoneFrame
-
-        guard let cell = self.collectionView.getBottomFrontMostCell() else { return }
-
-        let cellFrame = self.contentContainer.convert(cell.bounds, from: cell)
-        let accessoryFrame = self.contentContainer.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)
-
-        let diff = cellFrame.bottom - accessoryFrame.top
-        self.collectionView.top += -clamp(diff, min: 0)
-        self.sendMessageDropZone.top += -clamp(diff, min: 0)
-
-        //TODO fix this magic number.
-        self.headerVC.view.alpha = self.collectionView.top < 25 ? 0 : 1.0
+        #warning("Restore this")
+//        let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
+//        self.sendMessageDropZone.frame = dropZoneFrame
+//
+//        guard let cell = self.collectionView.getBottomFrontMostCell() else { return }
+//
+//        let cellFrame = self.contentContainer.convert(cell.bounds, from: cell)
+//        let accessoryFrame = self.contentContainer.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)
+//
+//        let diff = cellFrame.bottom - accessoryFrame.top
+//        self.collectionView.top += -clamp(diff, min: 0)
+//        self.sendMessageDropZone.top += -clamp(diff, min: 0)
+//
+//        //TODO fix this magic number.
+//        self.headerVC.view.alpha = self.collectionView.top < 25 ? 0 : 1.0
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -321,190 +323,9 @@ class ConversationListViewController: FullScreenViewController,
         self.updateCenterMostCell()
     }
 
-    // MARK: - SwipeableInputAccessoryViewDelegate
-
-    /// The type of message send method that the conversation VC is prepped for.
-    private enum SendMode {
-        /// The message will be sent to currently centered message.
-        case message
-        /// The message will the first in a new conversation.
-        case newConversation
-    }
-
-    /// The collection view's content offset at the first call to prepare for a swipe. Used to reset the the content offset after a swipe is cancelled.
-    private var initialContentOffset: CGPoint?
-    /// The last swipe position type that was registersed, if any.
-    private var currentSendMode: SendMode?
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
-        if isEnabled {
-            self.showDropZone(for: view)
-        } else {
-            self.hideDropZone()
-        }
-    }
-
-    func showDropZone(for view: SwipeableInputAccessoryView) {
-        guard self.sendMessageDropZone.superview.isNil else { return }
-        
-        // Animate in the send overlay
-        self.contentContainer.addSubview(self.sendMessageDropZone)
-        self.sendMessageDropZone.alpha = 0
-        self.sendMessageDropZone.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
-
-        let cell = self.collectionView.getBottomFrontMostCell()
-        self.collectionView.setDropZone(isShowing: true)
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageDropZone.alpha = 1
-            cell?.content.textView.alpha = 0
-            cell?.content.authorView.alpha = 0
-        }
-
-        // Show the send message overlay so the user can see where to drag the message
-        let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
-        self.sendMessageDropZone.frame = overlayFrame
-
-        view.dropZoneFrame = view.convert(self.sendMessageDropZone.bounds, from: self.sendMessageDropZone)
-    }
-
-    func hideDropZone() {
-        let cell = self.collectionView.getBottomFrontMostCell()
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageDropZone.alpha = 0
-            cell?.content.textView.alpha = 1.0
-            cell?.content.authorView.alpha = 1.0
-        } completion: { didFinish in
-            self.collectionView.setDropZone(isShowing: false)
-            self.sendMessageDropZone.removeFromSuperview()
-        }
-    }
-
-    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
-        self.initialContentOffset = self.collectionView.contentOffset
-        self.currentSendMode = nil
-
-        self.collectionView.isUserInteractionEnabled = false
-
-        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
-            currentCell.prepareForNewMessage()
-        }
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didUpdate sendable: Sendable,
-                                 withPreviewFrame frame: CGRect) {
-
-        let newSendType = self.getSendMode(forPreviewFrame: frame)
-
-        // Don't do redundant send preparations.
-        guard newSendType != self.currentSendMode else { return }
-
-        self.prepareForSend(with: newSendType)
-        self.currentSendMode = newSendType
-    }
-
-    private func prepareForSend(with position: SendMode) {
-        switch position {
-        case .message:
-            self.sendMessageDropZone.setState(.newMessage,
-                                              messageColor: .white)
-            if let initialContentOffset = self.initialContentOffset {
-                self.collectionView.setContentOffset(initialContentOffset, animated: true)
-            }
-        case .newConversation:
-            let newXOffset
-            = -self.collectionView.width + self.collectionView.conversationLayout.minimumLineSpacing
-
-            self.sendMessageDropZone.setState(.newConversation, messageColor: nil)
-            self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
-        }
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 triggeredSendFor sendable: Sendable,
-                                 withPreviewFrame frame: CGRect) -> Bool {
-
-        // Ensure that the preview has been dragged far up enough to send.
-        let dropZoneFrame = view.dropZoneFrame
-        let shouldSend = dropZoneFrame.bottom > frame.centerY
-
-        guard shouldSend else {
-            // Reset the collectionview content offset back to where we started.
-            if let initialContentOffset = self.initialContentOffset {
-                self.collectionView.setContentOffset(initialContentOffset, animated: true)
-            }
-
-            UIView.animate(withDuration: Theme.animationDurationStandard) {
-                self.sendMessageDropZone.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
-            }
-
-            return false
-        }
-
-        switch self.currentSendMode {
-        case .message:
-            guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
-                  let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath),
-                  case let .conversation(cid) = currentItem else {
-
-                      // If there is no current message to reply to, assume we're sending a new message
-                      self.createNewConversation(sendable)
-                      return true
-                  }
-            self.sendMessageDropZone.alpha = 0
-
-            self.reply(to: cid, sendable: sendable)
-        case .newConversation:
-            self.createNewConversation(sendable)
-        case .none:
-            return false
-        }
-
-        return true
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didFinishSwipeSendingSendable didSend: Bool) {
-        
-        self.collectionView.isUserInteractionEnabled = true
-
-        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
-            currentCell.unprepareForNewMessage(reloadMessages: !didSend)
-        }
-    }
-
-    /// Gets the send position for the given preview view frame.
-    private func getSendMode(forPreviewFrame frame: CGRect) -> SendMode {
-        switch self.currentSendMode {
-        case .message, .none:
-            // If we're in the message mode, switch to newConversation when the user
-            // has dragged far enough to the right.
-            if frame.right > self.view.width - 10 {
-                return .newConversation
-            } else {
-                return .message
-            }
-        case .newConversation:
-            // If we're in newConversation mode, switch to newMessage mode if the user drags far enough to the left.
-            if frame.left < 10 {
-                return .message
-            } else {
-                return .newConversation
-            }
-        }
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 updatedFrameOf textView: InputTextView) {
-
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.view.layoutNow()
-        }
-    }
-
     // MARK: - Send Message Functions
 
-    private func createNewConversation(_ sendable: Sendable) {
+    func createNewConversation(_ sendable: Sendable) {
         Task {
             let username = User.current()?.initials ?? ""
             let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
@@ -529,7 +350,7 @@ class ConversationListViewController: FullScreenViewController,
         }.add(to: self.taskPool)
     }
 
-    private func reply(to cid: ConversationID, sendable: Sendable) {
+    func reply(to cid: ConversationID, sendable: Sendable) {
         let conversationController = ChatClient.shared.channelController(for: cid)
         Task {
             do {
