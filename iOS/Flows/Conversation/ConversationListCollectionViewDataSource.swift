@@ -25,8 +25,8 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         case loadMore
     }
 
-    var handleSelectedMessage: ((ConversationMessagesItem, MessageContentView) -> Void)?
-    var handleEditMessage: ((ConversationMessagesItem) -> Void)?
+    var handleSelectedMessage: ((MessageSequenceItem, MessageContentView) -> Void)?
+    var handleEditMessage: ((MessageSequenceItem) -> Void)?
     
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read

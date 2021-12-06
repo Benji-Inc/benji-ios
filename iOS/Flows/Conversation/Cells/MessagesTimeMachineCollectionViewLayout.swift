@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import StreamChat
 
-/// A subclass of the TimeMachineLayout used to display conversation messages.
+/// A subclass of the TimeMachineLayout used to display messages.
 /// In addition to normal time machine functionality, this class also adjusts the color, brightness and other message specific attributes
 /// as the items move along the z axis.
 class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {

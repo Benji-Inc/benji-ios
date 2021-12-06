@@ -11,9 +11,9 @@ import Parse
 import Combine
 import StreamChat
 
-class ThreadViewController: DiffableCollectionViewController<ConversationMessagesSection,
-                            ConversationMessagesItem,
-                            ConversationMessagesCellDataSource>,
+class ThreadViewController: DiffableCollectionViewController<MessageSequenceSection,
+                            MessageSequenceItem,
+                            MessageSequenceCollectionViewDataSource>,
                             CollectionViewInputHandler,
                             DismissInteractableController,
                             SwipeableInputAccessoryViewDelegate {
@@ -145,12 +145,12 @@ class ThreadViewController: DiffableCollectionViewController<ConversationMessage
 
     // MARK: Data Loading
 
-    override func getAllSections() -> [ConversationMessagesSection] {
+    override func getAllSections() -> [MessageSequenceSection] {
         return [.topMessages, .bottomMessages]
     }
 
-    override func retrieveDataForSnapshot() async -> [ConversationMessagesSection : [ConversationMessagesItem]] {
-        var data: [ConversationMessagesSection: [ConversationMessagesItem]] = [:]
+    override func retrieveDataForSnapshot() async -> [MessageSequenceSection : [MessageSequenceItem]] {
+        var data: [MessageSequenceSection: [MessageSequenceItem]] = [:]
 
         do {
             try await self.messageController.loadPreviousReplies()
@@ -158,7 +158,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationMessage
             guard let cid = self.parentMessage.cid else { return [:] }
 
             let messages = self.messageController.replies.map { message in
-                return ConversationMessagesItem(channelID: cid, messageID: message.id)
+                return MessageSequenceItem(channelID: cid, messageID: message.id)
             }
             data[.bottomMessages] = Array(messages)
         } catch {

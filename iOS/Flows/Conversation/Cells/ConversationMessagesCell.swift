@@ -10,14 +10,14 @@ import Foundation
 import StreamChat
 import UIKit
 
-/// A cell to display a high-level view of a conversation's message. Displays a limited number of recent messages in a conversation.
+/// A cell to display the messages of a conversation.
 /// The user's messages and other messages are put in two stacks (along the z-axis),
-/// with the most recent message at the front (visually obscuring the others).
+/// with the most recent messages at the front.
 class ConversationMessagesCell: UICollectionViewCell {
 
     // Interaction handling
-    var handleTappedMessage: ((ConversationMessagesItem, MessageContentView) -> Void)?
-    var handleEditMessage: ((ConversationMessagesItem) -> Void)?
+    var handleTappedMessage: ((MessageSequenceItem, MessageContentView) -> Void)?
+    var handleEditMessage: ((MessageSequenceItem) -> Void)?
 
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
@@ -29,12 +29,9 @@ class ConversationMessagesCell: UICollectionViewCell {
         cv.showsVerticalScrollIndicator = false 
         return cv
     }()
-    private lazy var dataSource = ConversationMessagesCellDataSource(collectionView: self.collectionView)
+    private lazy var dataSource = MessageSequenceCollectionViewDataSource(collectionView: self.collectionView)
 
     private var state: ConversationUIState = .read
-
-    /// If true, push the user messages back to prepare for a new message.
-    private var prepareForSend = false
 
     /// The conversation containing all the messages.
     var conversation: MessageSequence?
@@ -94,48 +91,8 @@ class ConversationMessagesCell: UICollectionViewCell {
     func set(sequence: MessageSequence) {
         self.conversation = sequence
 
-        // Separate the user messages from other message.
-        let userMessages = sequence.messages.filter { message in
-            return message.isFromCurrentUser
-        }
-
-        let otherMessages = sequence.messages.filter { message in
-            return !message.isFromCurrentUser
-        }
-
-        let channelID = try! ChannelId(cid: sequence.conversationId)
-        // The newest message is at the bottom, so reverse the order.
-        var userMessageItems = userMessages.reversed().map { message in
-            return ConversationMessagesItem(channelID: channelID, messageID: message.id)
-        }
-        if self.prepareForSend {
-            userMessageItems.append(ConversationMessagesItem(channelID: channelID,
-                                                            messageID: "placeholderMessage"))
-        }
-
-        let otherMessageItems = otherMessages.reversed().map { message in
-            return ConversationMessagesItem(channelID: try! ChannelId(cid: message.conversationId),
-                                           messageID: message.id)
-        }
-
-        var snapshot = self.dataSource.snapshot()
-
-        var animateDifference = true
-        if snapshot.numberOfItems == 0 {
-            animateDifference = false
-        }
-
-        // Clear out the sections to make way for a fresh set of messages.
-        snapshot.deleteSections(ConversationMessagesSection.allCases)
-        snapshot.appendSections(ConversationMessagesSection.allCases)
-
-        snapshot.appendItems(otherMessageItems, toSection: .topMessages)
-        snapshot.appendItems(userMessageItems, toSection: .bottomMessages)
-
-        if animateDifference {
-            self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
-        } else {
-            self.dataSource.apply(snapshot, animatingDifferences: animateDifference)
+        Task {
+            await self.dataSource.update(messageSequence: sequence)
         }
     }
 
@@ -143,17 +100,17 @@ class ConversationMessagesCell: UICollectionViewCell {
         var snapshot = self.dataSource.snapshot()
         switch event {
         case let event as ReactionNewEvent:
-            let item = ConversationMessagesItem(channelID: event.cid, messageID: event.message.id)
+            let item = MessageSequenceItem(channelID: event.cid, messageID: event.message.id)
             if snapshot.itemIdentifiers.contains(item) {
                 snapshot.reconfigureItems([item])
             }
         case let event as ReactionDeletedEvent:
-            let item = ConversationMessagesItem(channelID: event.cid, messageID: event.message.id)
+            let item = MessageSequenceItem(channelID: event.cid, messageID: event.message.id)
             if snapshot.itemIdentifiers.contains(item) {
                 snapshot.deleteItems([item])
             }
         case let event as ReactionUpdatedEvent:
-            let item = ConversationMessagesItem(channelID: event.cid, messageID: event.message.id)
+            let item = MessageSequenceItem(channelID: event.cid, messageID: event.message.id)
             if snapshot.itemIdentifiers.contains(item) {
                 snapshot.reconfigureItems([item])
             }
@@ -168,7 +125,7 @@ class ConversationMessagesCell: UICollectionViewCell {
         super.prepareForReuse()
 
         self.needsOffsetReload = true
-        self.prepareForSend = false
+        self.dataSource.prepareForSend = false
 
         // Remove all the items so the next message has a blank slate to work with.
         var snapshot = self.dataSource.snapshot()
@@ -197,14 +154,14 @@ class ConversationMessagesCell: UICollectionViewCell {
     }
 
     func prepareForNewMessage() {
-        self.prepareForSend = true
+        self.dataSource.prepareForSend = true
 
         guard let conversation = self.conversation else { return }
         self.set(sequence: conversation)
     }
 
     func unprepareForNewMessage(reloadMessages: Bool) {
-        self.prepareForSend = false
+        self.dataSource.prepareForSend = false
 
         guard reloadMessages, let conversation = self.conversation else { return }
         self.set(sequence: conversation)

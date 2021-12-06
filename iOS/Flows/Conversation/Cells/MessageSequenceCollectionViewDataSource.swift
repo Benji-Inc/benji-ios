@@ -9,11 +9,11 @@
 import Foundation
 import StreamChat
 
-typealias ConversationMessagesSection = ConversationMessagesCellDataSource.SectionType
-typealias ConversationMessagesItem = ConversationMessagesCellDataSource.ItemType
+typealias MessageSequenceSection = MessageSequenceCollectionViewDataSource.SectionType
+typealias MessageSequenceItem = MessageSequenceCollectionViewDataSource.ItemType
 
-class ConversationMessagesCellDataSource: CollectionViewDataSource<ConversationMessagesSection,
-                                          ConversationMessagesItem> {
+class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageSequenceSection,
+                                          MessageSequenceItem> {
 
     enum SectionType: Int, Hashable, CaseIterable {
         case topMessages = 0
@@ -25,12 +25,15 @@ class ConversationMessagesCellDataSource: CollectionViewDataSource<ConversationM
         let messageID: MessageId
     }
 
-    var handleTappedMessage: ((ConversationMessagesItem, MessageContentView) -> Void)?
-    var handleEditMessage: ((ConversationMessagesItem) -> Void)?
+    var handleTappedMessage: ((MessageSequenceItem, MessageContentView) -> Void)?
+    var handleEditMessage: ((MessageSequenceItem) -> Void)?
+
+    /// If true, push the bottom messages back to prepare for a new message.
+    var prepareForSend = false
 
     // Cell registration
     private let messageSubcellRegistration
-    = ConversationMessagesCellDataSource.createMessageSubcellRegistration()
+    = MessageSequenceCollectionViewDataSource.createMessageSubcellRegistration()
 
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
@@ -53,6 +56,8 @@ class ConversationMessagesCellDataSource: CollectionViewDataSource<ConversationM
         return messageCell
     }
 
+    /// Updates the datasource to display the given message sequence.
+    /// The message sequence should be ordered newest to oldest.
     func update(messageSequence: MessageSequence) async {
         // Separate the user messages from other message.
         let userMessages = messageSequence.messages.filter { message in
@@ -63,18 +68,17 @@ class ConversationMessagesCellDataSource: CollectionViewDataSource<ConversationM
             return !message.isFromCurrentUser
         }
 
-        let channelID = try! ChannelId(cid: messageSequence.conversationId)
+        let cid = try! ChannelId(cid: messageSequence.conversationId)
         // The newest message is at the bottom, so reverse the order.
         var userMessageItems = userMessages.reversed().map { message in
-            return ConversationMessagesItem(channelID: channelID, messageID: message.id)
+            return MessageSequenceItem(channelID: cid, messageID: message.id)
         }
-//        if self.prepareForSend {
-//            userMessageItems.append(ConversationMessagesItem(channelID: channelID,
-//                                                            messageID: "placeholderMessage"))
-//        }
+        if self.prepareForSend {
+            userMessageItems.append(MessageSequenceItem(channelID: cid, messageID: "placeholderMessage"))
+        }
 
         let otherMessageItems = otherMessages.reversed().map { message in
-            return ConversationMessagesItem(channelID: try! ChannelId(cid: message.conversationId),
+            return MessageSequenceItem(channelID: try! ChannelId(cid: message.conversationId),
                                            messageID: message.id)
         }
 
@@ -86,8 +90,8 @@ class ConversationMessagesCellDataSource: CollectionViewDataSource<ConversationM
         }
 
         // Clear out the sections to make way for a fresh set of messages.
-        snapshot.deleteSections(ConversationMessagesSection.allCases)
-        snapshot.appendSections(ConversationMessagesSection.allCases)
+        snapshot.deleteSections(MessageSequenceSection.allCases)
+        snapshot.appendSections(MessageSequenceSection.allCases)
 
         snapshot.appendItems(otherMessageItems, toSection: .topMessages)
         snapshot.appendItems(userMessageItems, toSection: .bottomMessages)
@@ -98,7 +102,7 @@ class ConversationMessagesCellDataSource: CollectionViewDataSource<ConversationM
 
 // MARK: - Cell registration
 
-extension ConversationMessagesCellDataSource {
+extension MessageSequenceCollectionViewDataSource {
 
     typealias MessageSubcellRegistration
     = UICollectionView.CellRegistration<MessageSubcell,
@@ -121,7 +125,7 @@ extension ConversationMessagesCellDataSource {
 
 // MARK: - TimelineCollectionViewLayoutDataSource
 
-extension ConversationMessagesCellDataSource: TimeMachineCollectionViewLayoutDataSource {
+extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayoutDataSource {
 
     func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItem? {
         guard let item = self.itemIdentifier(for: indexPath) else { return nil }
