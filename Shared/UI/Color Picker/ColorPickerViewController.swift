@@ -10,9 +10,27 @@ import Foundation
 
 class ColorPickerViewController: DiffableCollectionViewController<ColorPickerCollectionViewDataSource.SectionType, ColorPickerCollectionViewDataSource.ItemType, ColorPickerCollectionViewDataSource> {
 
+    private lazy var colorWheelVC: ColorWheelViewController = {
+        let vc = ColorWheelViewController()
+        vc.delegate = self
+        return vc
+    }()
+
+    lazy var colors: [ColorPickerCollectionViewDataSource.ItemType] = {
+        let color1 = CIColor(hex: "#75D7D1")!
+        let color2 = CIColor(hex: "#CBE430")!
+        let color3 = CIColor(hex: "#B256C1")!
+        let color4 = CIColor(hex: "#E79494")!
+        let color5 = CIColor(hex: "#EFB661")!
+        let color6 = CIColor.clear
+        return [.color(color1), .color(color2), .color(color3), .color(color4), .color(color5), .wheel(color6)]
+    }()
+
+    @Published var selectedColor: CIColor? = nil
+
     init() {
         let cv = CollectionView(layout: ColorPickerCollectionViewLayout())
-        cv.showsHorizontalScrollIndicator = false 
+        cv.showsHorizontalScrollIndicator = false
         super.init(with: cv)
     }
 
@@ -27,9 +45,16 @@ class ColorPickerViewController: DiffableCollectionViewController<ColorPickerCol
         self.collectionView.allowsMultipleSelection = false
         self.collectionView.animationView.isHidden = true
 
-        self.dataSource.didSelectColorWheel = { [unowned self] in
-            logDebug("color wheel")
-        }
+        self.$selectedItems.mainSink { [unowned self] items in
+            guard let first = items.first else { return }
+            switch first {
+            case .color(let color):
+                self.dataSource.reconfigureItem(atIndex: 5, in: .colors)
+                self.selectedColor = color
+            case .wheel(_):
+                self.present(self.colorWheelVC, animated: true, completion: nil)
+            }
+        }.store(in: &self.cancellables)
     }
 
     override func getAnimationCycle() -> AnimationCycle? {
@@ -42,7 +67,9 @@ class ColorPickerViewController: DiffableCollectionViewController<ColorPickerCol
     override func handleDataBeingLoaded() {
         super.handleDataBeingLoaded()
 
-        self.collectionView.selectItem(at: IndexPath(item: 0, section: 0), animated: false, scrollPosition: .left)
+        let ip = IndexPath(item: 0, section: 0)
+        self.collectionView.selectItem(at: ip, animated: true, scrollPosition: .left)
+        self.collectionView.delegate?.collectionView?(self.collectionView, didSelectItemAt: ip)
     }
 
     // MARK: Data Loading
@@ -55,14 +82,40 @@ class ColorPickerViewController: DiffableCollectionViewController<ColorPickerCol
 
         var data: [ColorPickerCollectionViewDataSource.SectionType: [ColorPickerCollectionViewDataSource.ItemType]] = [:]
 
-        let color1 = CIColor(hex: "#ECCA45")!
-        let color2 = CIColor(hex: "#75D7D1")!
-        let color3 = CIColor(hex: "#CBE430")!
-        let color4 = CIColor(hex: "#B256C1")!
-        let color5 = CIColor(hex: "#E79494")!
-
-        data[.colors] = [.color(color1), .color(color2), .color(color3), .color(color4), .color(color5)]
-
+        data[.colors] = self.colors
         return data
+    }
+}
+
+extension ColorPickerViewController: UIColorPickerViewControllerDelegate {
+
+    func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
+        self.dismiss(animated: true, completion: nil)
+    }
+
+    func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
+
+        let color = CIColor(color: viewController.selectedColor)
+        self.selectedColor = color
+    }
+
+    func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
+
+    }
+}
+
+private class ColorWheelViewController: UIColorPickerViewController {
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.supportsAlpha = false
+
+        self.modalPresentationStyle = .popover
+        if let pop = self.popoverPresentationController {
+            let sheet = pop.adaptiveSheetPresentationController
+            sheet.detents = [.medium()]
+            sheet.prefersGrabberVisible = true
+        }
     }
 }

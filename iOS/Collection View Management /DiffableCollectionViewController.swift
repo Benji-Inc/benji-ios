@@ -17,6 +17,8 @@ class DiffableCollectionViewController<SectionType: Hashable,
 
     @Published var selectedItems: [ItemType] = []
 
+    private var selectionImapact = UIImpactFeedbackGenerator.init(style: .light)
+
     private var __selectedItems: [ItemType] {
         return self.collectionView.indexPathsForSelectedItems?.compactMap({ ip in
             return self.dataSource.itemIdentifier(for: ip)
@@ -138,7 +140,8 @@ class DiffableCollectionViewController<SectionType: Hashable,
         if let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewManagerCell {
             cell.update(isSelected: false)
         }
-        
+
+        self.selectionImapact.impactOccurred()
         self.selectedItems = __selectedItems
     }
 

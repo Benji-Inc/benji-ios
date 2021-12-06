@@ -16,12 +16,11 @@ class ColorPickerCollectionViewDataSource: CollectionViewDataSource<ColorPickerC
 
     enum ItemType: Hashable {
         case color(CIColor)
+        case wheel(CIColor?)
     }
 
-    var didSelectColorWheel: CompletionOptional = nil
-
     private let config = ManageableCellRegistration<ColorCell>().provider
-    private let footerConfig = ManageableFooterRegistration<ColorWheelView>().provider
+    private let configWheel = ManageableCellRegistration<ColorWheelCell>().provider
 
     // MARK: - Cell Dequeueing
 
@@ -34,27 +33,11 @@ class ColorPickerCollectionViewDataSource: CollectionViewDataSource<ColorPickerC
             return collectionView.dequeueConfiguredReusableCell(using: self.config,
                                                                 for: indexPath,
                                                                 item: color)
+        case .wheel(let color):
+            return collectionView.dequeueConfiguredReusableCell(using: self.configWheel,
+                                                                for: indexPath,
+                                                                item: color)
         }
     }
-
-    override func dequeueSupplementaryView(with collectionView: UICollectionView, kind: String, section: SectionType, indexPath: IndexPath) -> UICollectionReusableView? {
-
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            return nil
-        case UICollectionView.elementKindSectionFooter:
-            let footer = collectionView.dequeueConfiguredReusableSupplementary(using: self.footerConfig, for: indexPath)
-
-            footer.didSelect { [unowned self] in
-                self.didSelectColorWheel?()
-            }
-            return footer
-        default:
-            break
-        }
-
-        return nil
-    }
-
 }
 

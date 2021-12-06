@@ -52,14 +52,8 @@ class FaceDetectionViewController: ImageCaptureViewController {
 
         self.addChild(viewController: self.colorPickerVC)
 
-        self.colorPickerVC.$selectedItems.mainSink { [unowned self] items in
-            guard let first = items.first else { return }
-
-            switch first {
-            case .color(let color):
-                self.currentColor = color
-            }
-
+        self.colorPickerVC.$selectedColor.mainSink { [unowned self] color in
+            self.currentColor = color
         }.store(in: &self.cancellables)
     }
 

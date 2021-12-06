@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class ColorCell: CollectionViewManagerCell, ManageableCell {
 
@@ -21,11 +22,12 @@ class ColorCell: CollectionViewManagerCell, ManageableCell {
 
         self.contentView.addSubview(self.colorView)
         self.colorView.layer.cornerRadius = 5
+        self.colorView.layer.borderColor = Color.white.color.withAlphaComponent(0.0).cgColor
+        self.colorView.layer.borderWidth = 3 
     }
 
     func configure(with item: CIColor) {
         self.colorView.backgroundColor = UIColor(ciColor: item)
-        self.colorView.alpha = 0.5
     }
 
     override func layoutSubviews() {
@@ -36,6 +38,8 @@ class ColorCell: CollectionViewManagerCell, ManageableCell {
     }
 
     override func update(isSelected: Bool) {
-        self.colorView.alpha = isSelected ? 1.0 : 0.5
+        UIView.animate(withDuration: Theme.AnimationDuration.fast.value) {
+            self.colorView.layer.borderColor = isSelected ? Color.white.color.withAlphaComponent(1.0).cgColor : Color.white.color.withAlphaComponent(0.0).cgColor
+        }
     }
 }
