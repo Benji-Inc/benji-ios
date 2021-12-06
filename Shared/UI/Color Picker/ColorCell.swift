@@ -14,13 +14,28 @@ class ColorCell: CollectionViewManagerCell, ManageableCell {
 
     var currentItem: CIColor?
 
+    let colorView = View()
+
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.contentView.layer.cornerRadius = 5
+        self.contentView.addSubview(self.colorView)
+        self.colorView.layer.cornerRadius = 5
     }
 
     func configure(with item: CIColor) {
-        self.contentView.backgroundColor = UIColor(ciColor: item)
+        self.colorView.backgroundColor = UIColor(ciColor: item)
+        self.colorView.alpha = 0.5
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.colorView.squaredSize = self.contentView.height
+        self.colorView.centerOnXAndY()
+    }
+
+    override func update(isSelected: Bool) {
+        self.colorView.alpha = isSelected ? 1.0 : 0.5
     }
 }

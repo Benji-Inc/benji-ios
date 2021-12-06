@@ -44,6 +44,34 @@ class FaceDetectionViewController: ImageCaptureViewController {
         }
     }
 
+    #if IOS
+    lazy var colorPickerVC = ColorPickerViewController()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        self.addChild(viewController: self.colorPickerVC)
+
+        self.colorPickerVC.$selectedItems.mainSink { [unowned self] items in
+            guard let first = items.first else { return }
+
+            switch first {
+            case .color(let color):
+                self.currentColor = color 
+            }
+
+        }.store(in: &self.cancellables)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        self.colorPickerVC.view.height = 50
+        self.colorPickerVC.view.expandToSuperviewWidth()
+        self.colorPickerVC.view.pinToSafeAreaBottom()
+    }
+    #endif
+
     override func captureOutput(_ output: AVCaptureOutput,
                                 didOutput sampleBuffer: CMSampleBuffer,
                                 from connection: AVCaptureConnection) {

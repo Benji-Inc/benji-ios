@@ -62,6 +62,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         return vc
     }()
 
+    private var tapView = View()
+
     private let animationView = AnimationView.with(animation: .faceScan)
     private var previousScanState: PhotoState = .scanEyesOpen
 
@@ -76,9 +78,10 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.animationView.alpha = 0
         self.addChild(viewController: self.cameraVC)
 
-        self.view.addSubview(self.errorView)
+        self.tapView.addSubview(self.errorView)
+        self.view.addSubview(self.tapView)
 
-        self.view.didSelect { [unowned self] in
+        self.tapView.didSelect { [unowned self] in
 
             switch self.currentState {
             case .initial:
@@ -96,7 +99,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             case .finish:
                 break
             case .error:
-                break 
+                break
             }
         }
 
@@ -160,6 +163,12 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.cameraVC.view.expandToSuperviewSize()
 
         self.errorView.bottom = self.view.height - self.errorOffset
+
+        #if IOS
+        self.tapView.height = self.cameraVC.colorPickerVC.view.top
+        self.tapView.pin(.top)
+        self.tapView.expandToSuperviewWidth()
+        #endif
     }
 
     private func handle(state: PhotoState) {
@@ -263,7 +272,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 
     private func handleCaptureState() {
-        self.cameraVC.capturePhoto()
+      //  self.cameraVC.capturePhoto()
     }
 
     private func animateError(with message: String?, show: Bool) {
