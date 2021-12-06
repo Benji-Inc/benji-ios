@@ -68,7 +68,6 @@ class ConversationCollectionViewDataSource: CollectionViewDataSource<Conversatio
                 = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                                for: indexPath,
                                                                item: (cid, itemID, self))
-                threadCell.content.setContextMenu()
                 threadCell.content.handleEditMessage = { [unowned self] item in
                     self.handleEditMessage?(item)
                 }

@@ -73,19 +73,6 @@ extension ConversationMessageCellDataSource {
             }
 
             cell.configure(with: message, showAuthor: false)
-
-            var zIndex = 0
-            if let layout = item.collectionView.collectionViewLayout as? ConversationMessagesCellLayout {
-                zIndex = layout.getZIndex(forIndexPath: indexPath)
-            }
-
-            // The menu interaction should only be on the front most cell.
-            cell.content.bubbleView.interactions.removeAll()
-            if zIndex == 0 {
-                cell.content.setContextMenu()
-            } else {
-                cell.content.bubbleView.interactions.removeAll()
-            }
         }
     }
 }
@@ -94,21 +81,18 @@ extension ConversationMessageCellDataSource {
 
 extension ConversationMessageCellDataSource: TimeMachineCollectionViewLayoutDataSource {
 
-    func getConversation(forItemAt indexPath: IndexPath) -> Conversation? {
-        guard let item = self.itemIdentifier(for: indexPath) else { return nil }
-
-        return ChatClient.shared.channelController(for: item.channelID).conversation
-    }
-
-    func getMessage(forItemAt indexPath: IndexPath) -> Messageable? {
+    func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItem? {
         guard let item = self.itemIdentifier(for: indexPath) else { return nil }
         let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                     messageId: item.messageID)
 
         return messageController.message
     }
+}
 
-    func frontmostItemWasUpdated(for indexPath: IndexPath) {
-        // TODO: 
+extension Message: TimeMachineLayoutItem {
+
+    var sortValue: Double {
+        return self.createdAt.timeIntervalSinceReferenceDate
     }
 }

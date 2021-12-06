@@ -11,7 +11,7 @@ import StreamChat
 
 typealias Message = ChatMessage
 
-extension ChatMessage: Messageable {
+extension Message: Messageable {
 
     var conversationId: String {
         return self.cid?.description ?? String()

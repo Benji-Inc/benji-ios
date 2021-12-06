@@ -87,7 +87,6 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.view.addSubview(self.parentMessageView)
         self.view.addSubview(self.detailView)
         self.detailView.alpha = 0
-        self.parentMessageView.setContextMenu()
 
         if let msg = self.messageController.message {
             self.detailView.configure(with: msg)
@@ -319,7 +318,6 @@ extension ThreadViewController: TransitionableViewController {
 extension ThreadViewController {
 
     func subscribeToUpdates() {
-
         self.dataSource.handleEditMessage = { [unowned self] item in
             // TODO
         }
@@ -366,15 +364,7 @@ extension ThreadViewController {
 
 extension ThreadViewController: TimeMachineCollectionViewLayoutDataSource {
 
-    func getConversation(forItemAt indexPath: IndexPath) -> Conversation? {
-        return self.conversationController?.conversation
-    }
-
-    func getMessage(forItemAt indexPath: IndexPath) -> Messageable? {
+    func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItem? {
         return self.messageController.replies[indexPath.item]
-    }
-
-    func frontmostItemWasUpdated(for indexPath: IndexPath) {
-        // TODO: Do something in response to this.
     }
 }

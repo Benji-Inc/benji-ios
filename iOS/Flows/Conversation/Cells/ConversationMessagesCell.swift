@@ -13,7 +13,7 @@ import UIKit
 /// A cell to display a high-level view of a conversation's message. Displays a limited number of recent messages in a conversation.
 /// The user's messages and other messages are put in two stacks (along the z-axis),
 /// with the most recent message at the front (visually obscuring the others).
-class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLayoutDelegate {
+class ConversationMessagesCell: UICollectionViewCell {
 
     // Interaction handling
     var handleTappedMessage: ((ConversationMessageItem, MessageContentView) -> Void)?
@@ -22,7 +22,7 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
-    private lazy var collectionLayout = TimeMachineCollectionViewLayout()
+    private lazy var collectionLayout = MessagesTimeMachineCollectionViewLayout()
     lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
@@ -162,14 +162,6 @@ class ConversationMessagesCell: UICollectionViewCell, ConversationMessageCellLay
         }
 
         self.dataSource.apply(snapshot, animatingDifferences: false)
-    }
-
-    func handle(isCentered: Bool) {
-        guard self.collectionLayout.showMessageStatus != isCentered else { return }
-
-        UIView.animate(withDuration: 0.2) {
-            self.collectionLayout.showMessageStatus = isCentered
-        }
     }
   
     override func prepareForReuse() {
