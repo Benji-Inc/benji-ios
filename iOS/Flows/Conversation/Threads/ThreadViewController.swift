@@ -169,16 +169,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     }
 
     override func getAnimationCycle() -> AnimationCycle? {
-        var cycle = super.getAnimationCycle()
-        cycle?.shouldConcatenate = false
-        // Scroll to the lastest reply.
-        if let threadLayout = self.collectionView.collectionViewLayout as? ThreadCollectionViewLayout {
-            let lastReplyIndex = clamp(self.messageController.replies.count - 1, min: 0)
-            let yOffset = CGFloat(lastReplyIndex) * threadLayout.itemHeight
-            cycle?.scrollToOffset = CGPoint(x: 0, y: yOffset)
-        }
-
-        return cycle
+        return nil
     }
 
     // MARK: - SwipeableInputAccessoryViewDelegate
@@ -196,9 +187,11 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
         self.collectionView.isUserInteractionEnabled = false
 
-        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
-            currentCell.prepareForNewMessage()
-        }
+
+        self.dataSource.prepareForSend = true
+
+        guard let message = self.messageController.message else { return }
+        self.dataSource.set(messageSequence: message)
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -264,6 +257,12 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                                  didFinishSwipeSendingSendable didSend: Bool) {
 
         self.collectionView.isUserInteractionEnabled = true
+
+        self.dataSource.prepareForSend = false
+
+        if !didSend, let message = self.messageController.message {
+            self.dataSource.set(messageSequence: message)
+        }
     }
 }
 
@@ -335,9 +334,8 @@ extension ThreadViewController {
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
             guard let message = self.messageController.message else { return }
-            Task {
-                await self.dataSource.update(messageSequence: message)
-            }
+
+            self.dataSource.set(messageSequence: message)
         }.store(in: &self.cancellables)
 
         let members = self.messageController.message?.threadParticipants.filter { member in

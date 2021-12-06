@@ -13,7 +13,7 @@ typealias MessageSequenceSection = MessageSequenceCollectionViewDataSource.Secti
 typealias MessageSequenceItem = MessageSequenceCollectionViewDataSource.ItemType
 
 class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageSequenceSection,
-                                          MessageSequenceItem> {
+                                               MessageSequenceItem> {
 
     enum SectionType: Int, Hashable, CaseIterable {
         case topMessages = 0
@@ -58,7 +58,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
 
     /// Updates the datasource to display the given message sequence.
     /// The message sequence should be ordered newest to oldest.
-    func update(messageSequence: MessageSequence) {
+    func set(messageSequence: MessageSequence) {
         // Separate the user messages from other message.
         let userMessages = messageSequence.messages.filter { message in
             return message.isFromCurrentUser
@@ -79,7 +79,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
 
         let otherMessageItems = otherMessages.reversed().map { message in
             return MessageSequenceItem(channelID: try! ChannelId(cid: message.conversationId),
-                                           messageID: message.id)
+                                       messageID: message.id)
         }
 
         var snapshot = self.snapshot()

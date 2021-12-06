@@ -169,7 +169,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
     -> UICollectionViewLayoutAttributes? {
-        guard deletedIndexPaths.contains(itemIndexPath) else { return nil }
+        guard self.deletedIndexPaths.contains(itemIndexPath) else { return nil }
 
         return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
     }

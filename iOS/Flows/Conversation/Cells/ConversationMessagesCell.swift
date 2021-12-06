@@ -72,7 +72,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     func set(sequence: MessageSequence) {
         self.conversation = sequence
 
-        self.dataSource.update(messageSequence: sequence)
+        self.dataSource.set(messageSequence: sequence)
     }
 
     func updateMessages(with event: Event) {

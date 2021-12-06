@@ -10,7 +10,7 @@ import Foundation
 
 class ThreadCollectionView: CollectionView {
 
-    let threadLayout = ThreadCollectionViewLayout()
+    let threadLayout = MessagesTimeMachineCollectionViewLayout()
 
     init() {
         super.init(layout: self.threadLayout)
