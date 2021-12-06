@@ -11,7 +11,7 @@ import StreamChat
 
 typealias Message = ChatMessage
 
-extension ChatMessage: Messageable {
+extension Message: Messageable {
 
     var conversationId: String {
         return self.cid?.description ?? String()
@@ -88,5 +88,13 @@ extension ChatMessage: Messageable {
         }) {
             try await controller.removeReaction(with: readReaction.type)
         }
+    }
+}
+
+extension Message: MessageSequence {
+
+    var messages: [Messageable] {
+        let messageArray = Array(ChatClient.shared.messageController(for: self)?.replies ?? [])
+        return messageArray
     }
 }

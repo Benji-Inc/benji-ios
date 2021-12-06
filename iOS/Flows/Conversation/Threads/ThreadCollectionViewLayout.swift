@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ThreadCollectionViewLayout: TimeMachineCollectionViewLayout {
+class ThreadCollectionViewLayout: MessagesTimeMachineCollectionViewLayout {
     
     private var insertingIndexPaths: [IndexPath] = []
 

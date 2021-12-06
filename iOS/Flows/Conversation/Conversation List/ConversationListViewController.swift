@@ -29,7 +29,7 @@ class ConversationListViewController: FullScreenViewController,
                                       UICollectionViewDelegateFlowLayout,
                                       SwipeableInputAccessoryViewDelegate, ActiveConversationable {
 
-    lazy var dataSource = ConversationCollectionViewDataSource(collectionView: self.collectionView)
+    lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
     /// Denotes where a message should be dragged and dropped to send.
     let sendMessageDropZone = MessageDropZoneView()
@@ -42,8 +42,6 @@ class ConversationListViewController: FullScreenViewController,
 
     // Input handlers
     var onSelectedMessage: ((ChannelId, MessageId) -> Void)?
-
-    @Published var didCenterOnCell: ConversationMessagesCell? = nil
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
@@ -185,7 +183,6 @@ class ConversationListViewController: FullScreenViewController,
         guard let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
             return
         }
-        self.didCenterOnCell = cell
 
         guard let ip = self.collectionView.centerIndexPath(), let conversation = self.conversationListController.conversations[safe: ip.item] else { return }
 
@@ -238,8 +235,7 @@ class ConversationListViewController: FullScreenViewController,
 
         var snapshot = self.dataSource.snapshot()
 
-        let section = ConversationSection(sectionID: "channelList",
-                                          conversationsController: self.conversationListController)
+        let section = ConversationListSection(conversationsController: self.conversationListController)
         snapshot.appendSections([section])
         snapshot.appendItems(conversations.asConversationCollectionItems)
 
@@ -249,7 +245,7 @@ class ConversationListViewController: FullScreenViewController,
 
         var startingIndexPath: IndexPath? = nil
         if let startingConversationID = self.startingConversationID {
-            startingIndexPath = snapshot.indexPathOfItem(.messages(startingConversationID.description))
+            startingIndexPath = snapshot.indexPathOfItem(.conversation(startingConversationID))
         }
 
         let animationCycle = AnimationCycle(inFromPosition: .inward,
@@ -448,8 +444,7 @@ class ConversationListViewController: FullScreenViewController,
         case .message:
             guard let currentIndexPath = self.collectionView.getCentermostVisibleIndex(),
                   let currentItem = self.dataSource.itemIdentifier(for: currentIndexPath),
-                  case let .messages(conversationID) = currentItem,
-                  let cid = try? ConversationID(cid: conversationID) else {
+                  case let .conversation(cid) = currentItem else {
 
                       // If there is no current message to reply to, assume we're sending a new message
                       self.createNewConversation(sendable)

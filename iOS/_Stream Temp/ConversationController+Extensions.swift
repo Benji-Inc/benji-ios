@@ -12,7 +12,7 @@ import Intents
 
 typealias ConversationController = ChatChannelController
 
-extension ChatChannelController {
+extension ConversationController {
 
     var conversation: Conversation {
         return self.channel!

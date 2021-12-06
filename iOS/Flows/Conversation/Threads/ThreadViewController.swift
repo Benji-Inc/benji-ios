@@ -11,13 +11,13 @@ import Parse
 import Combine
 import StreamChat
 
-class ThreadViewController: DiffableCollectionViewController<ConversationSection,
-                            ConversationItem,
-                            ConversationCollectionViewDataSource>,
+class ThreadViewController: DiffableCollectionViewController<MessageSequenceSection,
+                            MessageSequenceItem,
+                            MessageSequenceCollectionViewDataSource>,
                             CollectionViewInputHandler,
                             DismissInteractableController,
                             SwipeableInputAccessoryViewDelegate {
-
+    
     let blurView = BlurView()
     let parentMessageView = MessageContentView()
     let detailView = MessageDetailView()
@@ -70,7 +70,7 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
                                                                              messageOrdering: .topToBottom)
         super.init(with: self.threadCollectionView)
 
-        self.threadCollectionView.threadLayout?.dataSource = self
+        self.threadCollectionView.threadLayout.dataSource = self.dataSource
         self.messageController.listOrdering = .bottomToTop
     }
 
@@ -87,7 +87,6 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
         self.view.addSubview(self.parentMessageView)
         self.view.addSubview(self.detailView)
         self.detailView.alpha = 0
-        self.parentMessageView.setContextMenu()
 
         if let msg = self.messageController.message {
             self.detailView.configure(with: msg)
@@ -146,35 +145,22 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
     // MARK: Data Loading
 
-    override func getAllSections() -> [ConversationSection] {
-        if let channelId = self.parentMessage.cid {
-            let placeholderSection = ConversationSection(sectionID: channelId.description,
-                                                        parentMessageID: "placeholderSection")
-            return [placeholderSection,
-                    ConversationSection(sectionID: channelId.description,
-                                        parentMessageID: self.parentMessage.id)]
-        }
-
-        return []
+    override func getAllSections() -> [MessageSequenceSection] {
+        return [.topMessages, .bottomMessages]
     }
 
-    override func retrieveDataForSnapshot() async -> [ConversationSection : [ConversationItem]] {
-        var data: [ConversationSection: [ConversationItem]] = [:]
+    override func retrieveDataForSnapshot() async -> [MessageSequenceSection : [MessageSequenceItem]] {
+        var data: [MessageSequenceSection: [MessageSequenceItem]] = [:]
 
         do {
             try await self.messageController.loadPreviousReplies()
 
-            guard let channelId = self.parentMessage.cid else { return [:] }
+            guard let cid = self.parentMessage.cid else { return [:] }
 
-            let section = ConversationSection(sectionID: channelId.description,
-                                              parentMessageID: self.parentMessage.id)
-
-            let messages = Array(self.messageController.replies.asConversationCollectionItems)
-            data[section] = messages
-
-            if !self.messageController.hasLoadedAllPreviousReplies {
-                data[section]?.append(contentsOf: [.loadMore])
+            let messages = self.messageController.replies.map { message in
+                return MessageSequenceItem(channelID: cid, messageID: message.id)
             }
+            data[.bottomMessages] = Array(messages)
         } catch {
             logDebug(error)
         }
@@ -197,6 +183,8 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
     // MARK: - SwipeableInputAccessoryViewDelegate
 
+    var prepareForSend = false
+
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
         if isEnabled {
             self.showDropZone(for: view)
@@ -207,6 +195,10 @@ class ThreadViewController: DiffableCollectionViewController<ConversationSection
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
         self.collectionView.isUserInteractionEnabled = false
+
+        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
+            currentCell.prepareForNewMessage()
+        }
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -319,7 +311,6 @@ extension ThreadViewController: TransitionableViewController {
 extension ThreadViewController {
 
     func subscribeToUpdates() {
-
         self.dataSource.handleEditMessage = { [unowned self] item in
             // TODO
         }
@@ -343,11 +334,10 @@ extension ThreadViewController {
         }.store(in: &self.cancellables)
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
+            guard let message = self.messageController.message else { return }
             Task {
-                await self.dataSource.update(with: changes,
-                                             conversationController: self.messageController,
-                                             collectionView: self.collectionView)
-            }.add(to: self.taskPool)
+                await self.dataSource.update(messageSequence: message)
+            }
         }.store(in: &self.cancellables)
 
         let members = self.messageController.message?.threadParticipants.filter { member in
@@ -359,22 +349,5 @@ extension ThreadViewController {
         KeyboardManager.shared.$cachedKeyboardEndFrame.mainSink { [unowned self] frame in
             self.view.layoutNow()
         }.store(in: &self.cancellables)
-    }
-}
-
-// MARK: - TimelineCollectionViewLayoutDataSource
-
-extension ThreadViewController: TimeMachineCollectionViewLayoutDataSource {
-
-    func getConversation(forItemAt indexPath: IndexPath) -> Conversation? {
-        return self.conversationController?.conversation
-    }
-
-    func getMessage(forItemAt indexPath: IndexPath) -> Messageable? {
-        return self.messageController.replies[indexPath.item]
-    }
-
-    func frontmostItemWasUpdated(for indexPath: IndexPath) {
-        // TODO: Do something in response to this.
     }
 }

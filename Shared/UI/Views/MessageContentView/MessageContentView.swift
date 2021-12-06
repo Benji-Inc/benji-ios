@@ -16,8 +16,8 @@ import StreamChat
 class MessageContentView: View {
 
     #if IOS
-    var handleTappedMessage: ((ConversationMessageItem) -> Void)?
-    var handleEditMessage: ((ConversationMessageItem) -> Void)?
+    var handleTappedMessage: ((MessageSequenceItem) -> Void)?
+    var handleEditMessage: ((MessageSequenceItem) -> Void)?
     #endif
 
     /// Sizing
@@ -73,15 +73,12 @@ class MessageContentView: View {
             self.authorView.isVisible = state == .expanded
             self.layoutNow()
         }.store(in: &self.cancellables)
-    }
 
-    #if IOS
-    func setContextMenu() {
-        self.bubbleView.interactions.removeAll()
+#if IOS
         let contextMenuInteraction = UIContextMenuInteraction(delegate: self)
         self.bubbleView.addInteraction(contextMenuInteraction)
+#endif
     }
-    #endif
 
     func configure(with message: Messageable) {
         self.message = message
