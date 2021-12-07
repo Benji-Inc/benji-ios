@@ -18,4 +18,5 @@ enum MicroAnimation: String {
     case loading = "loading"
     case plusToX = "plusToX"
     case lock = "lock"
+    case typing = "typing"
 }

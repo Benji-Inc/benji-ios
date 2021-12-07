@@ -11,6 +11,8 @@ import StreamChat
 
 class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType, MembersCollectionViewDataSource.ItemType, MembersCollectionViewDataSource>, ActiveConversationable {
 
+    var conversationController: ConversationController?
+
     init() {
         let cv = CollectionView(layout: MembersCollectionViewLayout())
         cv.isScrollEnabled = false
@@ -24,6 +26,9 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     override func initializeViews() {
         super.initializeViews()
 
+        self.view.clipsToBounds = false
+        self.collectionView.clipsToBounds = false 
+
         self.collectionView.animationView.isHidden = true 
 
         ConversationsManager.shared.$activeConversation
@@ -31,8 +36,37 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             .mainSink { conversation in
             Task {
                 await self.loadData()
+                self.subscribeToUpdates(for: conversation)
             }.add(to: self.taskPool)
         }.store(in: &self.cancellables)
+    }
+
+    func subscribeToUpdates(for conversation: Conversation?) {
+        guard let cid = conversation?.cid else { return }
+        
+        self.conversationController = ChatClient.shared.channelController(for: cid)
+
+        self.conversationController?
+            .typingUsersPublisher
+            .mainSink(receiveValue: { [unowned self] typingUsers in
+
+                let nonMeUsers = typingUsers.filter { user in
+                    return user.userObjectID != User.current()?.objectId
+                }.compactMap { user in
+                    return Member(displayable: AnyHashableDisplayable.init(user), isTyping: true)
+                }
+
+                let identifiers = self.dataSource.itemIdentifiers(in: .members).filter { item in
+                    switch item {
+                    case .member(let member):
+                        return nonMeUsers.contains(member)
+                    }
+                }
+
+                self.dataSource.reconfigureItems(identifiers)
+                logDebug("typing: \(typingUsers.count > 0)")
+
+            }).store(in: &self.cancellables)
     }
 
     // MARK: Data Loading
@@ -59,11 +93,14 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         }
 
         if !members.isEmpty {
-            data[.members] = members.compactMap({ member in
-                return .member(AnyHashableDisplayable.init(member))
+            data[.members] = members.compactMap({ user in
+                let member = Member(displayable: AnyHashableDisplayable.init(user),
+                                       isTyping: false)
+                return .member(member)
             })
         } else {
-            data[.members] = [.member(AnyHashableDisplayable.init(User.current()!))]
+            let member = Member(displayable: AnyHashableDisplayable.init(User.current()!), isTyping: false)
+            data[.members] = [.member(member)]
         }
 
         return data

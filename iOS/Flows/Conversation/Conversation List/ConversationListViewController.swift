@@ -176,7 +176,6 @@ class ConversationListViewController: FullScreenViewController,
         }
     }
 
-    private var typingSubscriber: AnyCancellable?
     var conversationController: ConversationController?
 
     func updateCenterMostCell() {
@@ -208,15 +207,6 @@ class ConversationListViewController: FullScreenViewController,
                     cell.set(sequence: activeConversation)
                 }
             }).store(in: &self.cancellables)
-
-            self.typingSubscriber = self.conversationController?
-                .typingUsersPublisher
-                .mainSink(receiveValue: { [unowned self] typingUsers in
-                    let nonMeUsers = typingUsers.filter { user in
-                        return user.userObjectID != User.current()?.objectId
-                    }
-                    // TODO: Update the typing indicator.
-                })
 
             UIView.animate(withDuration: Theme.animationDurationFast) {
                 self.view.layoutNow()
