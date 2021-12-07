@@ -158,10 +158,10 @@ class MessageContentView: View {
     }
 
     func getSize(for state: State, with width: CGFloat) -> CGSize {
-        var width = self.textView.getSize(with: state, width: width).width
-        width += MessageContentView.textViewPadding
-        let height = MessageContentView.standardHeight
-        return CGSize(width: width, height: height)
+        var size = self.textView.getSize(with: state, width: width)
+        size.width += MessageContentView.textViewPadding
+        size.height += MessageContentView.bubbleTailLength + MessageContentView.textViewPadding
+        return size 
     }
 }
 

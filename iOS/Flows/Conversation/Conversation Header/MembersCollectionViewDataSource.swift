@@ -15,7 +15,7 @@ class MembersCollectionViewDataSource: CollectionViewDataSource<MembersCollectio
     }
 
     enum ItemType: Hashable {
-        case member(AnyHashableDisplayable)
+        case member(Member)
     }
 
     private let memberConfig = ManageableCellRegistration<MemberCell>().provider
@@ -27,10 +27,10 @@ class MembersCollectionViewDataSource: CollectionViewDataSource<MembersCollectio
                               section: SectionType,
                               item: ItemType) -> UICollectionViewCell? {
         switch item {
-        case .member(let user):
+        case .member(let member):
             return collectionView.dequeueConfiguredReusableCell(using: self.memberConfig,
                                                                 for: indexPath,
-                                                                item: user)
+                                                                item: member)
         }
     }
 }

@@ -68,7 +68,10 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
         animator.addAnimations {
 
             UIView.animateKeyframes(withDuration: 0.0, delay: 0.0, animations: {
-                fromView.center = finalFrame.center
+
+                UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 1.0) {
+                    fromView.center = finalFrame.center
+                }
 
                 UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.25) {
                     threadVC.collectionView.alpha = 0

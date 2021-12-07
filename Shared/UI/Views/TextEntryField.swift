@@ -56,8 +56,9 @@ class TextEntryField: View, Sizeable {
 
     func getHeight(for width: CGFloat) -> CGFloat {
 
-        self.textField.size = CGSize(width: Theme.getPaddedWidth(with: width), height: 40)
-        self.textField.pinToSafeAreaLeft()
+        let maxWidth = width - Theme.ContentOffset.long.value.doubled
+        self.textField.size = CGSize(width: maxWidth, height: 40)
+        self.textField.pin(.left, offset: .long)
         self.textField.pin(.top, offset: .standard)
 
         return self.textField.bottom + Theme.ContentOffset.standard.value
