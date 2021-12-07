@@ -21,7 +21,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     // MARK: - Layout Configuration
 
-    var isShowingDropZone: Bool = false
+    var layoutForDropZone: Bool = false
     /// How bright the background of the frontmost item is. 0 is black, 1 is full brightness.
     var frontmostBrightness: CGFloat = 0.89
     /// How bright the background of the backmost item is. This is based off of the frontmost item brightness.
@@ -83,7 +83,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         attributes.shouldShowTail = indexPath.section == 0
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
         attributes.detailAlpha = detailAlpha
-        attributes.messageContentAlpha = self.isShowingDropZone && indexPath.section == 1 ? 0.0 : textViewAlpha
+        attributes.messageContentAlpha = self.layoutForDropZone && indexPath.section == 1 ? 0.0 : textViewAlpha
 
         return attributes
     }

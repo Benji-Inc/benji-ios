@@ -49,7 +49,6 @@ class ConversationListViewController: FullScreenViewController,
         return inputView
     }()
     lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
-                                                                       dataSource: self.dataSource,
                                                                        collectionView: self.collectionView)
 
     override var inputAccessoryView: UIView? {
@@ -320,13 +319,15 @@ class ConversationListViewController: FullScreenViewController,
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         self.updateCenterMostCell()
     }
-
-
 }
 
 // MARK: - MessageSendingViewControllerType
 
 extension ConversationListViewController: MessageSendingViewControllerType {
+
+    func set(shouldLayoutForDropZone: Bool) {
+        self.dataSource.layoutForDropZone = shouldLayoutForDropZone
+    }
 
     func getCurrentMessageSequence() -> MessageSequence? {
         guard let centeredCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell,
@@ -335,6 +336,11 @@ extension ConversationListViewController: MessageSendingViewControllerType {
               }
 
         return ChatClient.shared.channelController(for: cid).conversation
+    }
+
+    func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool) {
+        self.dataSource.set(conversationPreparingToSend: messageSequencePreparingToSend?.streamCID,
+                            reloadData: reloadData)
     }
 
     func createNewConversation(_ sendable: Sendable) {

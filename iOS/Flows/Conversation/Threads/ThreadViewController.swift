@@ -53,7 +53,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         return view
     }()
     lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
-                                                                       dataSource: self.dataSource,
                                                                        collectionView: self.threadCollectionView)
 
     override var inputAccessoryView: UIView? {
@@ -179,12 +178,20 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
 extension ThreadViewController: MessageSendingViewControllerType {
 
+    func set(shouldLayoutForDropZone: Bool) {
+        self.threadCollectionView.threadLayout.layoutForDropZone = shouldLayoutForDropZone
+        self.threadCollectionView.threadLayout.invalidateLayout()
+    }
+
     func getCurrentMessageSequence() -> MessageSequence? {
         return self.parentMessage
     }
 
-    func createNewConversation(_ sendable: Sendable) {
-        // Do nothing. New conversations can't be created from a thread view controller.
+    func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool) {
+        self.dataSource.shouldPrepareToSend = messageSequencePreparingToSend.exists
+        if reloadData {
+            self.dataSource.set(messageSequence: self.parentMessage)
+        }
     }
 
     func sendMessage(_ message: Sendable) {
@@ -197,16 +204,8 @@ extension ThreadViewController: MessageSendingViewControllerType {
         }
     }
 
-    func handle(attachment: Attachment, body: String) {
-        Task {
-            do {
-                let kind = try await AttachmentsManager.shared.getMessageKind(for: attachment, body: body)
-                let object = SendableObject(kind: kind, context: .passive)
-                self.sendMessage(object)
-            } catch {
-                logDebug(error)
-            }
-        }.add(to: self.taskPool)
+    func createNewConversation(_ sendable: Sendable) {
+        // Do nothing. New conversations can't be created from a thread view controller.
     }
 }
 

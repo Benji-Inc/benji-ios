@@ -75,12 +75,12 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.dataSource.set(messageSequence: sequence)
     }
 
-    func set(isShowingDropZone: Bool) {
-        self.collectionLayout.isShowingDropZone = isShowingDropZone
+    func set(layoutForDropZone: Bool) {
+        self.collectionLayout.layoutForDropZone = layoutForDropZone
     }
 
     func set(isPreparedToSend: Bool) {
-        self.dataSource.isPreparedToSend = isPreparedToSend
+        self.dataSource.shouldPrepareToSend = isPreparedToSend
     }
 
     func updateMessages(with event: Event) {
@@ -111,7 +111,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        self.dataSource.isPreparedToSend = false
+        self.dataSource.shouldPrepareToSend = false
 
         // Remove all the items so the next message has a blank slate to work with.
         var snapshot = self.dataSource.snapshot()
@@ -128,7 +128,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     }
 
     func setDropZone(isShowing: Bool) {
-        self.collectionLayout.isShowingDropZone = isShowing
+        self.collectionLayout.layoutForDropZone = isShowing
     }
 
     func getDropZoneColor() -> Color? {

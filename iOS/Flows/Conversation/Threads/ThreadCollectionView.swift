@@ -24,6 +24,13 @@ class ThreadCollectionView: CollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    func getBottomFrontMostCell() -> MessageSubcell? {
+        return self.threadLayout.getBottomFrontMostCell()
+    }
+}
+
+extension ThreadCollectionView: MessageSendingCollectionViewType {
+
     /// Returns the frame that a message drop zone should have, based on this cell's contents.
     /// The frame is in the coordinate space of the passed in view.
     func getMessageDropZoneFrame(convertedTo targetView: UIView) -> CGRect {
@@ -38,29 +45,6 @@ class ThreadCollectionView: CollectionView {
         }
 
         return .white
-    }
-
-    func getBottomFrontMostCell() -> MessageSubcell? {
-        return self.threadLayout.getBottomFrontMostCell()
-    }
-
-    func setDropZone(isShowing: Bool) {
-        self.threadLayout.isShowingDropZone = isShowing
-    }
-}
-
-extension ThreadCollectionView: MessageSendingCollectionViewType {
-
-    func getCurrentMessageSequence() -> MessageSequence? {
-        #warning("Implement this")
-        return nil
-        //        guard let centeredCell = self.getCentermostVisibleCell() as? MessageSubcell,
-        //              let cid = centeredCell.conversation?.conversationId else {
-        //                  return nil
-        //              }
-        //
-        //        return try? ConversationID(cid: cid)
-
     }
 
     func getNewConversationContentOffset() -> CGPoint {

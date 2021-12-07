@@ -13,8 +13,7 @@ typealias ConversationListSection = ConversationListCollectionViewDataSource.Sec
 typealias ConversationListItem = ConversationListCollectionViewDataSource.ItemType
 
 class ConversationListCollectionViewDataSource: CollectionViewDataSource<ConversationListSection,
-                                                ConversationListItem>,
-                                                MessageSendingDataSourceType {
+                                                ConversationListItem> {
 
     /// Model for the main section of the conversation list collection.
     struct SectionType: Hashable {
@@ -32,7 +31,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
 
-    var isShowingDropZone = false {
+    var layoutForDropZone = false {
         didSet {
             #warning("Don't use a hard coded section index")
             guard let section = self.sectionIdentifier(for: 0) else { return }
@@ -154,7 +153,6 @@ extension ConversationListCollectionViewDataSource {
     typealias LoadMoreMessagesCellRegistration
     = UICollectionView.CellRegistration<LoadMoreMessagesCell, String>
 
-
     static func createConversationCellRegistration() -> ConversationCellRegistration {
         return ConversationCellRegistration { cell, indexPath, item in
             let conversationController = ChatClient.shared.channelController(for: item.channelID)
@@ -165,7 +163,7 @@ extension ConversationListCollectionViewDataSource {
                 cell.set(isPreparedToSend: false)
             }
 
-            cell.set(isShowingDropZone: item.dataSource.isShowingDropZone)
+            cell.set(layoutForDropZone: item.dataSource.layoutForDropZone)
             cell.set(sequence: conversationController.conversation)
         }
     }

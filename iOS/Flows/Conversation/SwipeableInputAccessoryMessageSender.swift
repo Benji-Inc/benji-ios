@@ -9,7 +9,9 @@
 import Foundation
 
 protocol MessageSendingViewControllerType: UIViewController {
+    func set(shouldLayoutForDropZone: Bool)
     func getCurrentMessageSequence() -> MessageSequence?
+    func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool)
     func sendMessage(_ message: Sendable)
     func createNewConversation(_ sendable: Sendable)
 }
@@ -18,11 +20,6 @@ protocol MessageSendingCollectionViewType: CollectionView {
     func getMessageDropZoneFrame(convertedTo view: UIView) -> CGRect
     func getDropZoneColor() -> Color?
     func getNewConversationContentOffset() -> CGPoint
-}
-
-protocol MessageSendingDataSourceType: AnyObject {
-    var isShowingDropZone: Bool { get set }
-    func set(conversationPreparingToSend: ConversationID?, reloadData: Bool)
 }
 
 class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate {
@@ -36,7 +33,6 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     }
 
     let viewController: MessageSendingViewControllerType
-    let dataSource: MessageSendingDataSourceType
     let collectionView: MessageSendingCollectionViewType
 
     /// Shows where a message should be dragged and dropped to send.
@@ -47,11 +43,9 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     }
 
     init(viewController: MessageSendingViewControllerType,
-         dataSource: MessageSendingDataSourceType,
          collectionView: MessageSendingCollectionViewType) {
 
         self.viewController = viewController
-        self.dataSource = dataSource
         self.collectionView = collectionView
     }
 
@@ -90,7 +84,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
         view.dropZoneFrame = view.convert(self.sendMessageDropZone.bounds, from: self.sendMessageDropZone)
 
-        self.dataSource.isShowingDropZone = true
+        self.viewController.set(shouldLayoutForDropZone: true)
     }
 
     func hideDropZone() {
@@ -100,7 +94,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
             self.sendMessageDropZone.removeFromSuperview()
         }
 
-        self.dataSource.isShowingDropZone = false
+        self.viewController.set(shouldLayoutForDropZone: false)
     }
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
@@ -109,8 +103,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
         self.initialContentOffset = self.collectionView.contentOffset
         self.currentSendMode = nil
 
-        if let cid = self.viewController.getCurrentMessageSequence()?.streamCID {
-            self.dataSource.set(conversationPreparingToSend: cid, reloadData: true)
+        if let currentMessageSequence = self.viewController.getCurrentMessageSequence() {
+            self.viewController.set(messageSequencePreparingToSend: currentMessageSequence, reloadData: true)
         }
     }
 
@@ -183,7 +177,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
         self.collectionView.isUserInteractionEnabled = true
 
-        self.dataSource.set(conversationPreparingToSend: nil, reloadData: !didSend)
+        self.viewController.set(messageSequencePreparingToSend: nil, reloadData: !didSend)
     }
 
     /// Gets the send position for the given preview view frame.
