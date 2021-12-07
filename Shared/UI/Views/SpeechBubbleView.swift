@@ -79,7 +79,7 @@ class SpeechBubbleView: View {
     }
 
     /// The layer for drawing the speech bubble background.
-    private let bubbleLayer = CAShapeLayer()
+    let bubbleLayer = CAShapeLayer()
 
     init(orientation: TailOrientation, bubbleColor: UIColor? = nil, borderColor: UIColor? = nil) {
         self.orientation = orientation

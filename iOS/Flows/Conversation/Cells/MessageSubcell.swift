@@ -48,7 +48,7 @@ class MessageSubcell: UICollectionViewCell {
 
     func configure(with message: Messageable, showAuthor: Bool) {
         self.content.configure(with: message)
-        self.content.state = showAuthor ? .expanded : .collapsed
+        self.content.state = showAuthor ? .thread : .collapsed
         self.detailView.configure(with: message)
         self.layoutNow()
     }

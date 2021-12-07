@@ -16,8 +16,10 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction,
                                 configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
 
-        return UIContextMenuConfiguration(identifier: nil,
-                                          previewProvider: nil) { elements in
+        return UIContextMenuConfiguration(identifier: nil) { () -> UIViewController? in
+            guard let message = self.message else { return nil }
+            return MessagePreviewViewController(with: message)
+        } actionProvider: { (suggestions) -> UIMenu? in
             return self.makeContextMenu()
         }
     }
@@ -118,6 +120,10 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
         let params = UIPreviewParameters()
         params.backgroundColor = Color.clear.color
+        params.shadowPath = UIBezierPath.init(rect: .zero)
+        if let bubble = interaction.view as? SpeechBubbleView, let path = bubble.bubbleLayer.path {
+            params.visiblePath = UIBezierPath.init(cgPath: path)
+        }
         let preview = UITargetedPreview(view: interaction.view!, parameters: params)
         return preview
     }
