@@ -8,19 +8,19 @@
 
 import Foundation
 
-protocol MessageSendingViewController: UIViewController {
+protocol MessageSendingViewControllerType: UIViewController {
     func createNewConversation(_ sendable: Sendable)
     func reply(to cid: ConversationID, sendable: Sendable)
 }
 
-protocol MessageSendingCollectionView: CollectionView {
+protocol MessageSendingCollectionViewType: CollectionView {
     func getMessageDropZoneFrame(convertedTo view: UIView) -> CGRect
     func getDropZoneColor() -> Color?
     func getCurrentConversationID() -> ConversationID?
     func getNewConversationContentOffset() -> CGPoint
 }
 
-protocol MessageSendingDataSource: AnyObject {
+protocol MessageSendingDataSourceType: AnyObject {
     var isShowingDropZone: Bool { get set }
     func set(conversationPreparingToSend: ConversationID?, reloadData: Bool)
 }
@@ -35,9 +35,9 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
         case newConversation
     }
 
-    let viewController: MessageSendingViewController
-    let dataSource: MessageSendingDataSource
-    let collectionView: MessageSendingCollectionView
+    let viewController: MessageSendingViewControllerType
+    let dataSource: MessageSendingDataSourceType
+    let collectionView: MessageSendingCollectionViewType
 
     /// Shows where a message should be dragged and dropped to send.
     let sendMessageDropZone = MessageDropZoneView()
@@ -46,9 +46,9 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
         return self.collectionView.superview
     }
 
-    init(viewController: MessageSendingViewController,
-         dataSource: MessageSendingDataSource,
-         collectionView: MessageSendingCollectionView) {
+    init(viewController: MessageSendingViewControllerType,
+         dataSource: MessageSendingDataSourceType,
+         collectionView: MessageSendingCollectionViewType) {
 
         self.viewController = viewController
         self.dataSource = dataSource
@@ -59,6 +59,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     private var initialContentOffset: CGPoint?
     /// The last swipe position type that was registersed, if any.
     private var currentSendMode: SendMode?
+
+    // MARK: - SwipeableInputAccessoryViewDelegate
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
         if isEnabled {
@@ -102,15 +104,12 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     }
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
+        self.collectionView.isUserInteractionEnabled = false
+
         self.initialContentOffset = self.collectionView.contentOffset
         self.currentSendMode = nil
 
-        self.collectionView.isUserInteractionEnabled = false
-
-        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell,
-           let cidString = currentCell.conversation?.conversationId,
-           let cid = try? ConversationID(cid: cidString) {
-
+        if let cid = self.collectionView.getCurrentConversationID() {
             self.dataSource.set(conversationPreparingToSend: cid, reloadData: true)
         }
     }

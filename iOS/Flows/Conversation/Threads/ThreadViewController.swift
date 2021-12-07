@@ -15,8 +15,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                             MessageSequenceItem,
                             MessageSequenceCollectionViewDataSource>,
                             CollectionViewInputHandler,
-                            DismissInteractableController,
-                            SwipeableInputAccessoryViewDelegate {
+                            DismissInteractableController {
     
     let blurView = BlurView()
     let parentMessageView = MessageContentView()
@@ -49,10 +48,13 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
         let view: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
-        view.delegate = self
+        view.delegate = self.swipeInputDelegate
         view.textView.restorationIdentifier = "thread"
         return view
     }()
+    lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
+                                                                       dataSource: self.dataSource,
+                                                                       collectionView: self.threadCollectionView)
 
     override var inputAccessoryView: UIView? {
         return self.messageInputAccessoryView
@@ -171,101 +173,19 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     override func getAnimationCycle() -> AnimationCycle? {
         return nil
     }
-
-    // MARK: - SwipeableInputAccessoryViewDelegate
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
-        if isEnabled {
-            self.showDropZone(for: view)
-        } else {
-            self.hideDropZone()
-        }
-    }
-
-    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
-        self.collectionView.isUserInteractionEnabled = false
-
-        self.dataSource.isPreparedToSend = true
-
-        guard let message = self.messageController.message else { return }
-        self.dataSource.set(messageSequence: message)
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didUpdate sendable: Sendable,
-                                 withPreviewFrame frame: CGRect) {
-        // Do nothing.
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 triggeredSendFor sendable: Sendable,
-                                 withPreviewFrame frame: CGRect) -> Bool {
-
-        // Ensure that the preview has been dragged far up enough to send.
-        let dropZoneFrame = view.dropZoneFrame
-        let shouldSend = dropZoneFrame.bottom > frame.centerY
-
-        guard shouldSend else {
-            return false
-        }
-
-        Task {
-            await self.send(object: sendable)
-        }.add(to: self.taskPool)
-
-        return true
-    }
-
-    func showDropZone(for view: SwipeableInputAccessoryView) {
-        guard self.sendMessageDropZone.superview.isNil else { return }
-        // Animate in the send overlay
-        self.view.addSubview(self.sendMessageDropZone)
-        self.sendMessageDropZone.alpha = 0
-        self.sendMessageDropZone.setState(.newMessage, messageColor: self.threadCollectionView.getDropZoneColor())
-
-        let cell = self.threadCollectionView.getBottomFrontMostCell()
-        self.threadCollectionView.setDropZone(isShowing: true)
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageDropZone.alpha = 1
-            cell?.content.textView.alpha = 0
-            cell?.content.authorView.alpha = 0
-        }
-
-        // Show the send message overlay so the user can see where to drag the message
-        let overlayFrame = self.threadCollectionView.getMessageDropZoneFrame(convertedTo: self.view)
-        self.sendMessageDropZone.frame = overlayFrame
-
-        view.dropZoneFrame = view.convert(self.sendMessageDropZone.bounds, from: self.sendMessageDropZone)
-    }
-
-    func hideDropZone() {
-        let cell = self.threadCollectionView.getBottomFrontMostCell()
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageDropZone.alpha = 0
-            cell?.content.textView.alpha = 1.0
-            cell?.content.authorView.alpha = 1.0
-        } completion: { didFinish in
-            self.threadCollectionView.setDropZone(isShowing: false)
-            self.sendMessageDropZone.removeFromSuperview()
-        }
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didFinishSwipeSendingSendable didSend: Bool) {
-
-        self.collectionView.isUserInteractionEnabled = true
-
-        self.dataSource.isPreparedToSend = false
-
-        if !didSend, let message = self.messageController.message {
-            self.dataSource.set(messageSequence: message)
-        }
-    }
 }
 
 // MARK: - Messaging
 
-extension ThreadViewController {
+extension ThreadViewController: MessageSendingViewControllerType {
+
+    func createNewConversation(_ sendable: Sendable) {
+        #warning("Implement or replace")
+    }
+
+    func reply(to cid: ConversationID, sendable: Sendable) {
+        #warning("Implement or replace")
+    }
 
     func handle(attachment: Attachment, body: String) {
         Task {

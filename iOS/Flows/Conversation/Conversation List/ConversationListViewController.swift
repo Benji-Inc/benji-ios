@@ -27,15 +27,11 @@ enum ConversationUIState {
 class ConversationListViewController: FullScreenViewController,
                                       UICollectionViewDelegate,
                                       UICollectionViewDelegateFlowLayout,
-                                      MessageSendingViewController,
+                                      MessageSendingViewControllerType,
                                       ActiveConversationable {
 
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
-
-    lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
-                                                                       dataSource: self.dataSource,
-                                                                       collectionView: self.collectionView)
 
     lazy var headerVC = ConversationHeaderViewController()
 
@@ -53,6 +49,9 @@ class ConversationListViewController: FullScreenViewController,
         inputView.textView.restorationIdentifier = "list"
         return inputView
     }()
+    lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
+                                                                       dataSource: self.dataSource,
+                                                                       collectionView: self.collectionView)
 
     override var inputAccessoryView: UIView? {
         return self.presentedViewController.isNil ? self.messageInputAccessoryView : nil

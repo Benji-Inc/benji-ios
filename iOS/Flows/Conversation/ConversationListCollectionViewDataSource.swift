@@ -14,7 +14,7 @@ typealias ConversationListItem = ConversationListCollectionViewDataSource.ItemTy
 
 class ConversationListCollectionViewDataSource: CollectionViewDataSource<ConversationListSection,
                                                 ConversationListItem>,
-                                                MessageSendingDataSource {
+                                                MessageSendingDataSourceType {
 
     /// Model for the main section of the conversation list collection.
     struct SectionType: Hashable {
@@ -34,6 +34,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
 
     var isShowingDropZone = false {
         didSet {
+            #warning("Don't use a hard coded section index")
             guard let section = self.sectionIdentifier(for: 0) else { return }
             let items = self.itemIdentifiers(in: section)
             self.reconfigureItems(items)
@@ -46,7 +47,6 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     // Cell registration
     private let conversationCellRegistration
     = ConversationListCollectionViewDataSource.createConversationCellRegistration()
-
     private let loadMoreMessagesCellRegistration
     = ConversationListCollectionViewDataSource.createLoadMoreCellRegistration()
 
@@ -134,6 +134,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         self.conversationPreparingToSend = conversationPreparingToSend
 
         if reloadData {
+            #warning("Don't use a hard coded value.")
             guard let section = self.sectionIdentifier(for: 0) else { return }
             let items = self.itemIdentifiers(in: section)
             self.reconfigureItems(items)

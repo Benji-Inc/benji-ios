@@ -13,7 +13,8 @@ typealias MessageSequenceSection = MessageSequenceCollectionViewDataSource.Secti
 typealias MessageSequenceItem = MessageSequenceCollectionViewDataSource.ItemType
 
 class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageSequenceSection,
-                                               MessageSequenceItem> {
+                                               MessageSequenceItem>,
+                                               MessageSendingDataSourceType {
 
     enum SectionType: Int, Hashable, CaseIterable {
         case topMessages = 0
@@ -30,6 +31,21 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
 
     /// If true, push the bottom messages back to prepare for a new message.
     var isPreparedToSend = false
+    /// If true, set up the messages to accomodate a drop zone being shown.
+    var isShowingDropZone: Bool = false
+    /// The conversation ID of the conversation that is preparing to send, if any.
+    private var conversationPreparingToSend: ConversationID?
+
+    func set(conversationPreparingToSend: ConversationID?, reloadData: Bool) {
+        self.conversationPreparingToSend = conversationPreparingToSend
+
+        if reloadData {
+            #warning("Don't use a hard coded value")
+            guard let section = self.sectionIdentifier(for: 0) else { return }
+            let items = self.itemIdentifiers(in: section)
+            self.reconfigureItems(items)
+        }
+    }
 
     // Cell registration
     private let messageSubcellRegistration

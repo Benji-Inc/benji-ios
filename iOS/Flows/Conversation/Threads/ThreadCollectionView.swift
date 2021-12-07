@@ -48,3 +48,21 @@ class ThreadCollectionView: CollectionView {
         self.threadLayout.isShowingDropZone = isShowing
     }
 }
+
+extension ThreadCollectionView: MessageSendingCollectionViewType {
+
+    func getCurrentConversationID() -> ConversationID? {
+        #warning("Implement this")
+        return nil
+//        guard let centeredCell = self.getCentermostVisibleCell() as? MessageSubcell,
+//              let cid = centeredCell.conversation?.conversationId else {
+//                  return nil
+//              }
+//
+//        return try? ConversationID(cid: cid)
+    }
+
+    func getNewConversationContentOffset() -> CGPoint {
+        return .zero
+    }
+}
