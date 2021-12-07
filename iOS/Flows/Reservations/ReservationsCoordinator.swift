@@ -31,11 +31,11 @@ class ReservationsCoordinator: PresentableCoordinator<Void> {
     func startPeopleFlow() {
         self.removeChild()
         let coordinator = PeopleCoordinator(includeConnections: false,
-                                            conversationId: "", 
+                                            conversationID: nil,
                                             router: self.router,
                                             deepLink: self.deepLink)
-        self.addChildAndStart(coordinator) { result in
-            coordinator.toPresentable().dismiss(animated: true)
+        self.addChildAndStart(coordinator) { [unowned self] result in
+            self.router.dismiss(source: self.reservationsVC)
         }
         self.router.present(coordinator, source: self.reservationsVC)
     }

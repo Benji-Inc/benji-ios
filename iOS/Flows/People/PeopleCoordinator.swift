@@ -21,17 +21,17 @@ class PeopleCoordinator: PresentableCoordinator<[Connection]> {
     var reservations: [Reservation] = []
     var contactsToInvite: [Contact] = []
     var inviteIndex: Int = 0
-    let conversationId: String
+    let conversationID: ConversationID?
 
     private let includeConnections: Bool
     var selectedConnections: [Connection] = []
 
     init(includeConnections: Bool = true,
-         conversationId: String,
+         conversationID: ConversationID?,
          router: Router,
          deepLink: DeepLinkable?) {
 
-        self.conversationId = conversationId
+        self.conversationID = conversationID
         self.includeConnections = includeConnections
         super.init(router: router, deepLink: deepLink)
     }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import StreamChat
 
 /// A collection view for displaying conversations.
 /// Conversations are ordered right to left. So the first conversation in the data source is on the far right.
@@ -62,13 +63,13 @@ class ConversationListCollectionView: CollectionView, MessageSendingCollectionVi
         return centerCell.getBottomFrontMostCell()
     }
 
-    func getCurrentConversationID() -> ConversationID? {
+    func getCurrentMessageSequence() -> MessageSequence? {
         guard let centeredCell = self.getCentermostVisibleCell() as? ConversationMessagesCell,
-              let cid = centeredCell.conversation?.conversationId else {
+              let cid = centeredCell.conversation?.streamCID else {
                   return nil
               }
 
-        return try? ConversationID(cid: cid)
+        return ChatClient.shared.channelController(for: cid).conversation
     }
 
     func getNewConversationContentOffset() -> CGPoint {

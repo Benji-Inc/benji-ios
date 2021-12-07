@@ -51,15 +51,16 @@ class ThreadCollectionView: CollectionView {
 
 extension ThreadCollectionView: MessageSendingCollectionViewType {
 
-    func getCurrentConversationID() -> ConversationID? {
+    func getCurrentMessageSequence() -> MessageSequence? {
         #warning("Implement this")
         return nil
-//        guard let centeredCell = self.getCentermostVisibleCell() as? MessageSubcell,
-//              let cid = centeredCell.conversation?.conversationId else {
-//                  return nil
-//              }
-//
-//        return try? ConversationID(cid: cid)
+        //        guard let centeredCell = self.getCentermostVisibleCell() as? MessageSubcell,
+        //              let cid = centeredCell.conversation?.conversationId else {
+        //                  return nil
+        //              }
+        //
+        //        return try? ConversationID(cid: cid)
+
     }
 
     func getNewConversationContentOffset() -> CGPoint {

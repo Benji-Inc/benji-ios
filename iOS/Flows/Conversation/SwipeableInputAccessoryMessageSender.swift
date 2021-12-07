@@ -16,7 +16,7 @@ protocol MessageSendingViewControllerType: UIViewController {
 protocol MessageSendingCollectionViewType: CollectionView {
     func getMessageDropZoneFrame(convertedTo view: UIView) -> CGRect
     func getDropZoneColor() -> Color?
-    func getCurrentConversationID() -> ConversationID?
+    func getCurrentMessageSequence() -> MessageSequence?
     func getNewConversationContentOffset() -> CGPoint
 }
 
@@ -109,7 +109,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
         self.initialContentOffset = self.collectionView.contentOffset
         self.currentSendMode = nil
 
-        if let cid = self.collectionView.getCurrentConversationID() {
+        if let cid = self.collectionView.getCurrentMessageSequence()?.streamCID {
             self.dataSource.set(conversationPreparingToSend: cid, reloadData: true)
         }
     }
@@ -166,7 +166,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
         switch self.currentSendMode {
         case .message:
-            guard let cid = self.collectionView.getCurrentConversationID() else {
+            guard let cid = self.collectionView.getCurrentMessageSequence()?.streamCID else {
                 // If there is no current message to reply to, assume we're sending a new message
                 self.viewController.createNewConversation(sendable)
                 return true

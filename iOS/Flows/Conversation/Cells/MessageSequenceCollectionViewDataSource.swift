@@ -84,7 +84,11 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
             return !message.isFromCurrentUser
         }
 
-        let cid = try! ChannelId(cid: messageSequence.conversationId)
+        guard let cid = messageSequence.streamCID else {
+            self.deleteAllItems()
+            return
+        }
+
         // The newest message is at the bottom, so reverse the order.
         var userMessageItems = userMessages.reversed().map { message in
             return MessageSequenceItem(channelID: cid, messageID: message.id)
