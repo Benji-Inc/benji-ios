@@ -335,9 +335,7 @@ extension ThreadViewController {
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
             guard let message = self.messageController.message else { return }
-            Task {
-                await self.dataSource.update(messageSequence: message)
-            }
+            self.dataSource.update(messageSequence: message)
         }.store(in: &self.cancellables)
 
         let members = self.messageController.message?.threadParticipants.filter { member in

@@ -32,6 +32,14 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
         }.add(to: self.taskPool)
     }
 
+    func updateReactions(for message: Messageable) {
+        self.messageController = ChatClient.shared.messageController(for: message)
+        Task {
+            await self.loadData()
+            self.handleDataBeingLoaded()
+        }.add(to: self.taskPool)
+    }
+
     // MARK: Overrides
 
     override func retrieveDataForSnapshot() async -> [ReactionsCollectionViewDataSource.SectionType: [ReactionSummary]] {
