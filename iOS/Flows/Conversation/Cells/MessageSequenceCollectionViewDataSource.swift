@@ -13,7 +13,7 @@ typealias MessageSequenceSection = MessageSequenceCollectionViewDataSource.Secti
 typealias MessageSequenceItem = MessageSequenceCollectionViewDataSource.ItemType
 
 class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageSequenceSection,
-                                          MessageSequenceItem> {
+                                               MessageSequenceItem> {
 
     enum SectionType: Int, Hashable, CaseIterable {
         case topMessages = 0
@@ -29,7 +29,9 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     var handleEditMessage: ((MessageSequenceItem) -> Void)?
 
     /// If true, push the bottom messages back to prepare for a new message.
-    var prepareForSend = false
+    var shouldPrepareToSend = false
+    /// If true, set up the messages to accomodate a drop zone being shown.
+    var layoutForDropZone: Bool = false
 
     // Cell registration
     private let messageSubcellRegistration
@@ -58,7 +60,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
 
     /// Updates the datasource to display the given message sequence.
     /// The message sequence should be ordered newest to oldest.
-    func update(messageSequence: MessageSequence) {
+    func set(messageSequence: MessageSequence) {
         // Separate the user messages from other message.
         let userMessages = messageSequence.messages.filter { message in
             return message.isFromCurrentUser
@@ -68,18 +70,22 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
             return !message.isFromCurrentUser
         }
 
-        let cid = try! ChannelId(cid: messageSequence.conversationId)
+        guard let cid = messageSequence.streamCID else {
+            self.deleteAllItems()
+            return
+        }
+
         // The newest message is at the bottom, so reverse the order.
         var userMessageItems = userMessages.reversed().map { message in
             return MessageSequenceItem(channelID: cid, messageID: message.id)
         }
-        if self.prepareForSend {
+        if self.shouldPrepareToSend {
             userMessageItems.append(MessageSequenceItem(channelID: cid, messageID: "placeholderMessage"))
         }
 
         let otherMessageItems = otherMessages.reversed().map { message in
-            return MessageSequenceItem(channelID: try! ChannelId(cid: message.conversationId),
-                                           messageID: message.id)
+            return MessageSequenceItem(channelID: try! ChannelId(cid: message.conversationID),
+                                       messageID: message.id)
         }
 
         var snapshot = self.snapshot()

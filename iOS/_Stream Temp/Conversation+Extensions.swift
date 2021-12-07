@@ -103,10 +103,6 @@ extension Conversation {
 extension Conversation: MessageSequence {
 
     var id: String {
-        return self.conversationId
-    }
-
-    var conversationId: String {
         return self.cid.description
     }
 
@@ -129,5 +125,9 @@ extension Conversation: MessageSequence {
     var messages: [Messageable] {
         let messageArray = Array(ChatClient.shared.channelController(for: self.cid).messages)
         return messageArray
+    }
+
+    var streamCID: ConversationID? {
+        return self.cid
     }
 }

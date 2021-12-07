@@ -10,7 +10,7 @@ import Foundation
 
 /// A custom layout class for conversation collection views. It lays out its contents in a single horizontal row.
 /// If the conversation collectionview's semantic content attribute is rightToLeft, the first cell will be on the far right.
-class ConversationCollectionViewLayout: UICollectionViewFlowLayout {
+class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
 
     override init() {
         super.init()
@@ -30,17 +30,17 @@ class ConversationCollectionViewLayout: UICollectionViewFlowLayout {
     override func prepare() {
         guard let collectionView = self.collectionView else { return }
 
-        collectionView.contentInset = UIEdgeInsets(top: 0,
-                                                   left: collectionView.width * 0.1,
-                                                   bottom: 0,
-                                                   right: collectionView.width * 0.1)
-
         let itemHeight: CGFloat = collectionView.height
+        let itemWidth: CGFloat = Theme.getPaddedWidth(with: collectionView.width)
+        self.itemSize = CGSize(width: itemWidth, height: itemHeight)
 
-        self.itemSize = CGSize(width: Theme.getPaddedWidth(with: collectionView.width), height: itemHeight)
+        collectionView.contentInset = UIEdgeInsets(top: 0,
+                                                   left: (collectionView.width - itemWidth).half,
+                                                   bottom: 0,
+                                                   right: (collectionView.width - itemWidth).half)
 
         // NOTE: Subtracting 1 to ensure there's enough vertical space for the cells.
-        let verticalSpacing = (collectionView.height - itemHeight - 1)
+        let verticalSpacing = collectionView.height - itemHeight - 1
         self.sectionInset = UIEdgeInsets(top: 0,
                                          left: 0,
                                          bottom: verticalSpacing,

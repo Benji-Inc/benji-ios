@@ -13,7 +13,7 @@ typealias Message = ChatMessage
 
 extension Message: Messageable {
 
-    var conversationId: String {
+    var conversationID: String {
         return self.cid?.description ?? String()
     }
 
@@ -92,6 +92,10 @@ extension Message: Messageable {
 }
 
 extension Message: MessageSequence {
+
+    var streamCID: ConversationID? {
+        return self.cid
+    }
 
     var messages: [Messageable] {
         let messageArray = Array(ChatClient.shared.messageController(for: self)?.replies ?? [])

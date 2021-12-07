@@ -109,7 +109,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         guard let conversation = self.activeConversation else { return }
 
         self.removeChild()
-        let coordinator = PeopleCoordinator(conversationId: conversation.conversationId,
+        let coordinator = PeopleCoordinator(conversationID: conversation.cid,
                                             router: self.router,
                                             deepLink: self.deepLink)
 

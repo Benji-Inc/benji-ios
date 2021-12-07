@@ -11,19 +11,20 @@ import Foundation
 protocol MessageSequence {
 
     var id: String { get }
-    var conversationId: String { get }
     var createdAt: Date { get }
     var updatedAt: Date { get }
     var isCreatedByCurrentUser: Bool { get }
     var authorID: String { get }
     var attributes: [String: Any]? { get }
     var messages: [Messageable] { get }
+
+    // Stream variables
+    var streamCID: ConversationID? { get }
 }
 
 func ==(lhs: MessageSequence, rhs: MessageSequence) -> Bool {
     guard type(of: lhs) == type(of: rhs) else { return false }
     return lhs.id == rhs.id
-        && lhs.conversationId == rhs.conversationId
         && lhs.createdAt == rhs.createdAt
         && lhs.updatedAt == rhs.updatedAt
         && lhs.authorID == rhs.authorID

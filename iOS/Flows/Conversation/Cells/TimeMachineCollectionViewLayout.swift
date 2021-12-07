@@ -60,10 +60,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         didSet { self.invalidateLayout() }
     }
 
-    var isShowingDropZone: Bool = false {
-        didSet { self.invalidateLayout() }
-    }
-
     // MARK: - Layout State
 
     /// The current position along the Z axis. This is based off of the collectionview's Y content offset.
