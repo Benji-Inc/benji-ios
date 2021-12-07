@@ -701,7 +701,7 @@
 		D6C6BDA3275E758B00DF4EA4 /* ColorPickerCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C6BDA2275E758B00DF4EA4 /* ColorPickerCollectionViewLayout.swift */; };
 		D6C6BDA5275E75A200DF4EA4 /* ColorPickerCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C6BDA4275E75A200DF4EA4 /* ColorPickerCollectionViewDataSource.swift */; };
 		D6C6BDA7275E75C200DF4EA4 /* ColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C6BDA6275E75C200DF4EA4 /* ColorPickerViewController.swift */; };
-		D6C6BDA9275E75DA00DF4EA4 /* ColorPickerWheelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C6BDA8275E75DA00DF4EA4 /* ColorPickerWheelView.swift */; };
+		D6C6BDA9275E75DA00DF4EA4 /* ColorWheelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C6BDA8275E75DA00DF4EA4 /* ColorWheelCell.swift */; };
 		D6C9EF4525BF6CF000A14DE5 /* Indexable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */; };
 		D6CAB394246D9B6000BD72CF /* GetChatToken+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */; };
 		D6CD4F3723F3A56D004818B6 /* Onboarding+Cloud.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */; };
@@ -1177,7 +1177,7 @@
 		D6C6BDA2275E758B00DF4EA4 /* ColorPickerCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCollectionViewLayout.swift; sourceTree = "<group>"; };
 		D6C6BDA4275E75A200DF4EA4 /* ColorPickerCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D6C6BDA6275E75C200DF4EA4 /* ColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerViewController.swift; sourceTree = "<group>"; };
-		D6C6BDA8275E75DA00DF4EA4 /* ColorPickerWheelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerWheelView.swift; sourceTree = "<group>"; };
+		D6C6BDA8275E75DA00DF4EA4 /* ColorWheelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorWheelCell.swift; sourceTree = "<group>"; };
 		D6C9EF4425BF6CF000A14DE5 /* Indexable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Indexable.swift; sourceTree = "<group>"; };
 		D6CAB393246D9B6000BD72CF /* GetChatToken+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GetChatToken+Cloud.swift"; sourceTree = "<group>"; };
 		D6CD4F3623F3A56D004818B6 /* Onboarding+Cloud.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Onboarding+Cloud.swift"; sourceTree = "<group>"; };
@@ -2195,7 +2195,7 @@
 				D6C6BDA2275E758B00DF4EA4 /* ColorPickerCollectionViewLayout.swift */,
 				D6C6BDA4275E75A200DF4EA4 /* ColorPickerCollectionViewDataSource.swift */,
 				D6C6BDA6275E75C200DF4EA4 /* ColorPickerViewController.swift */,
-				D6C6BDA8275E75DA00DF4EA4 /* ColorPickerWheelView.swift */,
+				D6C6BDA8275E75DA00DF4EA4 /* ColorWheelCell.swift */,
 			);
 			path = "Color Picker";
 			sourceTree = "<group>";
@@ -2958,7 +2958,7 @@
 				D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */,
 				D61553522746D4BB00B08459 /* ModalTransitionController.swift in Sources */,
 				D6D1501221D5EA0400CD8CE4 /* ImageDisplayable.swift in Sources */,
-				D6C6BDA9275E75DA00DF4EA4 /* ColorPickerWheelView.swift in Sources */,
+				D6C6BDA9275E75DA00DF4EA4 /* ColorWheelCell.swift in Sources */,
 				D6617CF526743DFE00439C06 /* Notice.swift in Sources */,
 				D6766C46274D50680046B449 /* MemberCell.swift in Sources */,
 				80395ACC275A8A47004BE466 /* MessagesTimeMachineCollectionViewLayout.swift in Sources */,

@@ -113,13 +113,6 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
         self.capturePhotoOutput?.isHighResolutionCaptureEnabled = true
         // Set the output on the capture session
         self.session.addOutput(self.capturePhotoOutput)
-
-        // Configure the preview layer
-//        self.previewLayer = AVCaptureVideoPreviewLayer(session: self.session)
-//        self.previewLayer.videoGravity = .resizeAspectFill
-//        self.previewLayer.frame = self.view.bounds
-//
-//        self.view.layer.insertSublayer(self.previewLayer, at: 0)
     }
 
     func capturePhoto() {

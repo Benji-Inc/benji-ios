@@ -62,6 +62,8 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         return vc
     }()
 
+    private var tapView = View()
+
     private let animationView = AnimationView.with(animation: .faceScan)
     private var previousScanState: PhotoState = .scanEyesOpen
 
@@ -77,8 +79,9 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.addChild(viewController: self.cameraVC)
 
         self.view.addSubview(self.errorView)
+        self.view.addSubview(self.tapView)
 
-        self.view.didSelect { [unowned self] in
+        self.tapView.didSelect { [unowned self] in
 
             switch self.currentState {
             case .initial:
@@ -96,7 +99,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             case .finish:
                 break
             case .error:
-                break 
+                break
             }
         }
 
@@ -160,6 +163,18 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.cameraVC.view.expandToSuperviewSize()
 
         self.errorView.bottom = self.view.height - self.errorOffset
+
+        #if IOS
+        self.tapView.height = self.cameraVC.colorPickerVC.view.top
+        self.tapView.pin(.top)
+        self.tapView.expandToSuperviewWidth()
+
+        if self.currentState == .scanEyesOpen {
+            self.cameraVC.colorPickerVC.view.pinToSafeAreaBottom()
+        } else {
+            self.cameraVC.colorPickerVC.view.top = self.cameraVC.view.height
+        }
+        #endif
     }
 
     private func handle(state: PhotoState) {
@@ -257,6 +272,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
 
         UIView.animate(withDuration: 0.2, animations: {
             self.animationView.alpha = 0
+            self.view.layoutNow()
         }) { (completed) in
 
         }
@@ -272,7 +288,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
             self.errorView.label.layoutNow()
         }
 
-        self.errorOffset = show ? 100 : -100
+        self.errorOffset = show ? 120 : -100
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.view.layoutNow()
         }
