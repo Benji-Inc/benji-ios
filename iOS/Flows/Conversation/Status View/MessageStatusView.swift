@@ -146,7 +146,7 @@ private class MessageReadView: MessageStatusContainer {
         } else if let state = message.localState {
             switch state {
             case .pendingSync, .syncing:
-                self.label.setText("Synching")
+                self.label.setText("Syncing")
             case .syncingFailed, .sendingFailed:
                 self.label.setText("Error")
             case .pendingSend, .sending:
