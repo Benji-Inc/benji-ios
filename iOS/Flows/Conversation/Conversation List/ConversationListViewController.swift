@@ -27,7 +27,6 @@ enum ConversationUIState {
 class ConversationListViewController: FullScreenViewController,
                                       UICollectionViewDelegate,
                                       UICollectionViewDelegateFlowLayout,
-                                      MessageSendingViewControllerType,
                                       ActiveConversationable {
 
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
@@ -322,7 +321,21 @@ class ConversationListViewController: FullScreenViewController,
         self.updateCenterMostCell()
     }
 
-    // MARK: - Send Message Functions
+
+}
+
+// MARK: - MessageSendingViewControllerType
+
+extension ConversationListViewController: MessageSendingViewControllerType {
+
+    func getCurrentMessageSequence() -> MessageSequence? {
+        guard let centeredCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell,
+              let cid = centeredCell.conversation?.streamCID else {
+                  return nil
+              }
+
+        return ChatClient.shared.channelController(for: cid).conversation
+    }
 
     func createNewConversation(_ sendable: Sendable) {
         Task {
@@ -349,11 +362,12 @@ class ConversationListViewController: FullScreenViewController,
         }.add(to: self.taskPool)
     }
 
-    func reply(to cid: ConversationID, sendable: Sendable) {
+    func sendMessage(_ message: Sendable) {
+        guard let cid = self.getCurrentMessageSequence()?.streamCID else { return }
         let conversationController = ChatClient.shared.channelController(for: cid)
         Task {
             do {
-                try await conversationController.createNewMessage(with: sendable)
+                try await conversationController.createNewMessage(with: message)
             } catch {
                 logDebug(error)
             }

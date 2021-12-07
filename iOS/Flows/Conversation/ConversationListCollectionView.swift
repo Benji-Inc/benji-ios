@@ -12,7 +12,7 @@ import StreamChat
 /// A collection view for displaying conversations.
 /// Conversations are ordered right to left. So the first conversation in the data source is on the far right.
 /// It automatically creates its own custom layout object.
-class ConversationListCollectionView: CollectionView, MessageSendingCollectionViewType {
+class ConversationListCollectionView: CollectionView {
 
     let conversationLayout: ConversationListCollectionViewLayout
 
@@ -45,6 +45,9 @@ class ConversationListCollectionView: CollectionView, MessageSendingCollectionVi
 
         return centerCell.getMessageDropZoneFrame(convertedTo: view)
     }
+}
+
+extension ConversationListCollectionView: MessageSendingCollectionViewType {
 
     // MARK: - MessageSendingCollectionView
 
@@ -61,15 +64,6 @@ class ConversationListCollectionView: CollectionView, MessageSendingCollectionVi
             return nil
         }
         return centerCell.getBottomFrontMostCell()
-    }
-
-    func getCurrentMessageSequence() -> MessageSequence? {
-        guard let centeredCell = self.getCentermostVisibleCell() as? ConversationMessagesCell,
-              let cid = centeredCell.conversation?.streamCID else {
-                  return nil
-              }
-
-        return ChatClient.shared.channelController(for: cid).conversation
     }
 
     func getNewConversationContentOffset() -> CGPoint {

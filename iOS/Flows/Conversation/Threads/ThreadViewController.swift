@@ -179,12 +179,22 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
 extension ThreadViewController: MessageSendingViewControllerType {
 
-    func createNewConversation(_ sendable: Sendable) {
-        #warning("Implement or replace")
+    func getCurrentMessageSequence() -> MessageSequence? {
+        return self.parentMessage
     }
 
-    func reply(to cid: ConversationID, sendable: Sendable) {
-        #warning("Implement or replace")
+    func createNewConversation(_ sendable: Sendable) {
+        // Do nothing. New conversations can't be created from a thread view controller.
+    }
+
+    func sendMessage(_ message: Sendable) {
+        Task {
+            do {
+                try await self.messageController.createNewReply(with: message)
+            } catch {
+                logDebug(error)
+            }
+        }
     }
 
     func handle(attachment: Attachment, body: String) {
@@ -192,20 +202,11 @@ extension ThreadViewController: MessageSendingViewControllerType {
             do {
                 let kind = try await AttachmentsManager.shared.getMessageKind(for: attachment, body: body)
                 let object = SendableObject(kind: kind, context: .passive)
-                await self.send(object: object)
+                self.sendMessage(object)
             } catch {
                 logDebug(error)
             }
         }.add(to: self.taskPool)
-    }
-
-    @MainActor
-    func send(object: Sendable) async {
-        do {
-            try await self.messageController.createNewReply(with: object)
-        } catch {
-            logDebug(error)
-        }
     }
 }
 
