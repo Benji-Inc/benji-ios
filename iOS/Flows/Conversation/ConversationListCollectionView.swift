@@ -13,10 +13,10 @@ import Foundation
 /// It automatically creates its own custom layout object.
 class ConversationListCollectionView: CollectionView {
 
-    let conversationLayout: ConversationCollectionViewLayout
+    let conversationLayout: ConversationListCollectionViewLayout
 
     init() {
-        self.conversationLayout = ConversationCollectionViewLayout()
+        self.conversationLayout = ConversationListCollectionViewLayout()
 
         super.init(layout: self.conversationLayout)
 
@@ -53,17 +53,10 @@ class ConversationListCollectionView: CollectionView {
         return centerCell.getDropZoneColor()
     }
 
-    func getBottomFrontMostCell() -> MessageSubcell? {
+    func getBottomFrontmostCell() -> MessageSubcell? {
         guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
             return nil
         }
         return centerCell.getBottomFrontMostCell()
-    }
-
-    func setDropZone(isShowing: Bool) {
-        guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
-            return
-        }
-        centerCell.setDropZone(isShowing: isShowing)
     }
 }

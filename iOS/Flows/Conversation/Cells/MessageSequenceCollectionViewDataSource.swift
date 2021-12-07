@@ -29,7 +29,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     var handleEditMessage: ((MessageSequenceItem) -> Void)?
 
     /// If true, push the bottom messages back to prepare for a new message.
-    var prepareForSend = false
+    var isPreparedToSend = false
 
     // Cell registration
     private let messageSubcellRegistration
@@ -73,7 +73,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         var userMessageItems = userMessages.reversed().map { message in
             return MessageSequenceItem(channelID: cid, messageID: message.id)
         }
-        if self.prepareForSend {
+        if self.isPreparedToSend {
             userMessageItems.append(MessageSequenceItem(channelID: cid, messageID: "placeholderMessage"))
         }
 

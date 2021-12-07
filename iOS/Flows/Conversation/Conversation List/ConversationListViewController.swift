@@ -125,7 +125,7 @@ class ConversationListViewController: FullScreenViewController,
         let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
         self.swipeInputDelegate.sendMessageDropZone.frame = dropZoneFrame
 
-        guard let cell = self.collectionView.getBottomFrontMostCell() else { return }
+        guard let cell = self.collectionView.getBottomFrontmostCell() else { return }
 
         let cellFrame = self.contentContainer.convert(cell.bounds, from: cell)
         let accessoryFrame = self.contentContainer.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)

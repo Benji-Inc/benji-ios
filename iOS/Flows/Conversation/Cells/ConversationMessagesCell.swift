@@ -75,6 +75,14 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.dataSource.set(messageSequence: sequence)
     }
 
+    func set(isShowingDropZone: Bool) {
+        self.collectionLayout.isShowingDropZone = isShowingDropZone
+    }
+
+    func set(isPreparedToSend: Bool) {
+        self.dataSource.isPreparedToSend = isPreparedToSend
+    }
+
     func updateMessages(with event: Event) {
         var snapshot = self.dataSource.snapshot()
         switch event {
@@ -103,7 +111,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        self.dataSource.prepareForSend = false
+        self.dataSource.isPreparedToSend = false
 
         // Remove all the items so the next message has a blank slate to work with.
         var snapshot = self.dataSource.snapshot()
@@ -129,20 +137,6 @@ class ConversationMessagesCell: UICollectionViewCell {
 
     func getBottomFrontMostCell() -> MessageSubcell? {
         return self.collectionLayout.getBottomFrontMostCell()
-    }
-
-    func prepareForNewMessage() {
-        self.dataSource.prepareForSend = true
-
-        guard let conversation = self.conversation else { return }
-        self.set(sequence: conversation)
-    }
-
-    func unprepareForNewMessage(reloadMessages: Bool) {
-        self.dataSource.prepareForSend = false
-
-        guard reloadMessages, let conversation = self.conversation else { return }
-        self.set(sequence: conversation)
     }
 }
 

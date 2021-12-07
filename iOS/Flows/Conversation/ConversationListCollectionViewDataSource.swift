@@ -31,6 +31,17 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
 
+    var isShowingDropZone = false {
+        didSet {
+            guard let section = self.sectionIdentifier(for: 0) else { return }
+            let items = self.itemIdentifiers(in: section)
+            self.reconfigureItems(items)
+        }
+    }
+
+    /// The conversation ID of the conversation that is preparing to send, if any.
+    private var conversationPreparingToSend: ConversationID?
+
     // Cell registration
     private let conversationCellRegistration
     = ConversationListCollectionViewDataSource.createConversationCellRegistration()
@@ -73,7 +84,6 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     func update(with changes: [ListChange<Conversation>],
                 conversationController: ConversationListController,
                 collectionView: UICollectionView) async {
-
 
         var snapshot = self.snapshot()
 
@@ -118,7 +128,53 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             self.apply(snapshot)
         }
     }
+
+    func set(conversationPreparingToSend: ConversationID?, reloadData: Bool) {
+        self.conversationPreparingToSend = conversationPreparingToSend
+
+        if reloadData {
+            guard let section = self.sectionIdentifier(for: 0) else { return }
+            let items = self.itemIdentifiers(in: section)
+            self.reconfigureItems(items)
+        }
+    }
 }
+
+// MARK: - Cell Registration
+
+extension ConversationListCollectionViewDataSource {
+
+    typealias ConversationCellRegistration
+    = UICollectionView.CellRegistration<ConversationMessagesCell,
+                                        (channelID: ChannelId,
+                                         dataSource: ConversationListCollectionViewDataSource)>
+
+    typealias LoadMoreMessagesCellRegistration
+    = UICollectionView.CellRegistration<LoadMoreMessagesCell, String>
+
+
+    static func createConversationCellRegistration() -> ConversationCellRegistration {
+        return ConversationCellRegistration { cell, indexPath, item in
+            let conversationController = ChatClient.shared.channelController(for: item.channelID)
+
+            if conversationController.cid == item.dataSource.conversationPreparingToSend {
+                cell.set(isPreparedToSend: true)
+            } else {
+                cell.set(isPreparedToSend: false)
+            }
+
+            cell.set(isShowingDropZone: item.dataSource.isShowingDropZone)
+            cell.set(sequence: conversationController.conversation)
+        }
+    }
+
+    static func createLoadMoreCellRegistration() -> LoadMoreMessagesCellRegistration {
+        return LoadMoreMessagesCellRegistration { cell, indexPath, itemIdentifier in
+
+        }
+    }
+}
+
 
 // MARK: - Collection Convenience Functions
 

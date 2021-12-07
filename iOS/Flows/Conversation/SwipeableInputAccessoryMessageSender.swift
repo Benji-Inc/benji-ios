@@ -11,7 +11,6 @@ import Foundation
 protocol MessageSendingViewController: UIViewController {
 
     var dataSource: ConversationListCollectionViewDataSource { get }
-    var contentContainer: View { get }
     var collectionView: ConversationListCollectionView { get }
 
     func createNewConversation(_ sendable: Sendable)
@@ -35,8 +34,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     private var dataSource: ConversationListCollectionViewDataSource {
         return self.viewController.dataSource
     }
-    private var contentContainer: View {
-        return self.viewController.contentContainer
+    private var contentContainer: UIView? {
+        return self.viewController.collectionView.superview
     }
     private var collectionView: ConversationListCollectionView {
         return self.viewController.collectionView
@@ -60,38 +59,36 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     }
 
     func showDropZone(for view: SwipeableInputAccessoryView) {
-        guard self.sendMessageDropZone.superview.isNil else { return }
+        guard self.sendMessageDropZone.superview.isNil, let contentContainer = self.contentContainer else {
+            return
+        }
 
         // Animate in the send overlay
-        self.contentContainer.addSubview(self.sendMessageDropZone)
+        contentContainer.addSubview(self.sendMessageDropZone)
         self.sendMessageDropZone.alpha = 0
         self.sendMessageDropZone.setState(.newMessage, messageColor: self.collectionView.getDropZoneColor())
 
-        let cell = self.collectionView.getBottomFrontMostCell()
-        self.collectionView.setDropZone(isShowing: true)
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.sendMessageDropZone.alpha = 1
-            cell?.content.textView.alpha = 0
-            cell?.content.authorView.alpha = 0
         }
 
         // Show the send message overlay so the user can see where to drag the message
-        let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
+        let overlayFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: contentContainer)
         self.sendMessageDropZone.frame = overlayFrame
 
         view.dropZoneFrame = view.convert(self.sendMessageDropZone.bounds, from: self.sendMessageDropZone)
+
+        self.dataSource.isShowingDropZone = true
     }
 
     func hideDropZone() {
-        let cell = self.collectionView.getBottomFrontMostCell()
         UIView.animate(withDuration: Theme.animationDurationStandard) {
             self.sendMessageDropZone.alpha = 0
-            cell?.content.textView.alpha = 1.0
-            cell?.content.authorView.alpha = 1.0
         } completion: { didFinish in
-            self.collectionView.setDropZone(isShowing: false)
             self.sendMessageDropZone.removeFromSuperview()
         }
+
+        self.dataSource.isShowingDropZone = false
     }
 
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
@@ -100,8 +97,11 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
         self.collectionView.isUserInteractionEnabled = false
 
-        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
-            currentCell.prepareForNewMessage()
+        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell,
+           let cidString = currentCell.conversation?.conversationId,
+           let cid = try? ConversationID(cid: cidString) {
+
+            self.dataSource.set(conversationPreparingToSend: cid, reloadData: true)
         }
     }
 
@@ -183,18 +183,20 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
         self.collectionView.isUserInteractionEnabled = true
 
-        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
-            currentCell.unprepareForNewMessage(reloadMessages: !didSend)
-        }
+        self.dataSource.set(conversationPreparingToSend: nil, reloadData: !didSend)
     }
 
     /// Gets the send position for the given preview view frame.
     private func getSendMode(forPreviewFrame frame: CGRect) -> SendMode {
+        guard let contentContainer = self.contentContainer else {
+            return .message
+        }
+
         switch self.currentSendMode {
         case .message, .none:
             // If we're in the message mode, switch to newConversation when the user
             // has dragged far enough to the right.
-            if frame.right > self.contentContainer.width - 10 {
+            if frame.right > contentContainer.width - 10 {
                 return .newConversation
             } else {
                 return .message

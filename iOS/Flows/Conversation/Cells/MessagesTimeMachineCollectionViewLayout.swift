@@ -21,6 +21,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     // MARK: - Layout Configuration
 
+    var isShowingDropZone: Bool = false
     /// How bright the background of the frontmost item is. 0 is black, 1 is full brightness.
     var frontmostBrightness: CGFloat = 0.89
     /// How bright the background of the backmost item is. This is based off of the frontmost item brightness.

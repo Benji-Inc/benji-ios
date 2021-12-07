@@ -50,6 +50,7 @@ class MessageSubcell: UICollectionViewCell {
         self.content.configure(with: message)
         self.content.state = showAuthor ? .expanded : .collapsed
         self.detailView.configure(with: message)
+
         self.layoutNow()
     }
 
@@ -62,6 +63,7 @@ class MessageSubcell: UICollectionViewCell {
         }
 
         self.content.textView.isVisible = messageLayoutAttributes.shouldShowText
+        
         self.content.configureBackground(color: messageLayoutAttributes.backgroundColor,
                                          brightness: messageLayoutAttributes.brightness,
                                          showBubbleTail: messageLayoutAttributes.shouldShowTail,

@@ -185,7 +185,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
         self.collectionView.isUserInteractionEnabled = false
 
-        self.dataSource.prepareForSend = true
+        self.dataSource.isPreparedToSend = true
 
         guard let message = self.messageController.message else { return }
         self.dataSource.set(messageSequence: message)
@@ -255,7 +255,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
         self.collectionView.isUserInteractionEnabled = true
 
-        self.dataSource.prepareForSend = false
+        self.dataSource.isPreparedToSend = false
 
         if !didSend, let message = self.messageController.message {
             self.dataSource.set(messageSequence: message)
