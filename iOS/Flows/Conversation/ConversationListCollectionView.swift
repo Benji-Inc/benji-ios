@@ -45,6 +45,8 @@ class ConversationListCollectionView: CollectionView, MessageSendingCollectionVi
         return centerCell.getMessageDropZoneFrame(convertedTo: view)
     }
 
+    // MARK: - MessageSendingCollectionView
+
     func getDropZoneColor() -> Color? {
         guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
             return nil
@@ -67,5 +69,10 @@ class ConversationListCollectionView: CollectionView, MessageSendingCollectionVi
               }
 
         return try? ConversationID(cid: cid)
+    }
+
+    func getNewConversationContentOffset() -> CGPoint {
+        let xOffset = -self.width + self.conversationLayout.minimumLineSpacing
+        return CGPoint(x: xOffset, y: 0)
     }
 }

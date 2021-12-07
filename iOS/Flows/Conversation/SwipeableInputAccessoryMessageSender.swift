@@ -17,6 +17,7 @@ protocol MessageSendingCollectionView: CollectionView {
     func getMessageDropZoneFrame(convertedTo view: UIView) -> CGRect
     func getDropZoneColor() -> Color?
     func getCurrentConversationID() -> ConversationID?
+    func getNewConversationContentOffset() -> CGPoint
 }
 
 protocol MessageSendingDataSource: AnyObject {
@@ -136,13 +137,9 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
         case .newConversation:
-            break
-            #warning("restore this!")
-//            let newXOffset
-//            = -self.collectionView.width + self.collectionView.conversationLayout.minimumLineSpacing
-//
-//            self.sendMessageDropZone.setState(.newConversation, messageColor: nil)
-//            self.collectionView.setContentOffset(CGPoint(x: newXOffset, y: 0), animated: true)
+            let offset = self.collectionView.getNewConversationContentOffset()
+            self.collectionView.setContentOffset(offset, animated: true)
+            self.sendMessageDropZone.setState(.newConversation, messageColor: nil)
         }
     }
 
