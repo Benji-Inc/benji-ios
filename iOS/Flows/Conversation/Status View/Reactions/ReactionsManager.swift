@@ -35,8 +35,9 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
     func updateReactions(for message: Messageable) {
         self.messageController = ChatClient.shared.messageController(for: message)
         Task {
-            await self.loadData()
-            self.handleDataBeingLoaded()
+            let dict = await self.retrieveDataForSnapshot()
+            let new = self.getInitialSnapshot(with: dict)
+            await self.dataSource.apply(new)
         }.add(to: self.taskPool)
     }
 
@@ -61,6 +62,8 @@ class ReactionsManager: DiffableCollectionViewManager<ReactionsCollectionViewDat
                 }
             }
         }
+
+        summaries.sort()
 
         self.dataSource.remainingCount = remaining
         self.dataSource.message = message

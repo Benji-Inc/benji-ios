@@ -9,9 +9,14 @@
 import Foundation
 import StreamChat
 
-struct ReactionSummary: Hashable {
+struct ReactionSummary: Hashable, Comparable {
+
     let type: ReactionType
-    let count: Int 
+    let count: Int
+
+    static func < (lhs: ReactionSummary, rhs: ReactionSummary) -> Bool {
+        return lhs.type.priority > rhs.type.priority
+    }
 }
 
 enum ReactionType: String, CaseIterable {
@@ -20,6 +25,19 @@ enum ReactionType: String, CaseIterable {
     case love
     case dislike
     case read
+
+    var priority: Int {
+        switch self {
+        case .like:
+            return 0
+        case .love:
+            return 1
+        case .dislike:
+            return 2
+        case .read:
+            return 3
+        }
+    }
 
     var reaction: MessageReactionType {
         return MessageReactionType.init(stringLiteral: self.rawValue)

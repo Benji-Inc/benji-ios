@@ -35,6 +35,7 @@ class MessageDetailView: View {
     }
 
     func update(with message: Messageable) {
+        self.manager.updateReactions(for: message)
         self.statusView.configure(for: message)
         self.layoutNow()
     }
