@@ -50,21 +50,30 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             .typingUsersPublisher
             .mainSink(receiveValue: { [unowned self] typingUsers in
 
-                let nonMeUsers = typingUsers.filter { user in
+                let typingMembers = typingUsers.filter { user in
                     return user.userObjectID != User.current()?.objectId
                 }.compactMap { user in
                     return Member(displayable: AnyHashableDisplayable.init(user), isTyping: true)
                 }
 
-                let identifiers = self.dataSource.itemIdentifiers(in: .members).filter { item in
+                var newIdentifiers: [MembersCollectionViewDataSource.ItemType] = []
+
+                self.dataSource.itemIdentifiers(in: .members).forEach { item in
                     switch item {
                     case .member(let member):
-                        return nonMeUsers.contains(member)
+                        let typingMember = typingMembers.first { typingMember in
+                            return typingMember == member
+                        }
+
+                        if let m = typingMember {
+                            newIdentifiers.append(.member(m))
+                        } else {
+                            newIdentifiers.append(.member(member))
+                        }
                     }
                 }
 
-                self.dataSource.reconfigureItems(identifiers)
-                logDebug("typing: \(typingUsers.count > 0)")
+                self.dataSource.reconfigureItems(newIdentifiers)
 
             }).store(in: &self.cancellables)
     }

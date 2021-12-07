@@ -60,7 +60,6 @@ class DismissTransitionController: NSObject, UIViewControllerAnimatedTransitioni
 
         containerView.addSubview(threadVC.view)
 
-        //fromView.frame = fromView.convert(fromView.bounds, to: containerView)
         let finalFrame = toView.convert(toView.bounds, to: containerView)
 
         let animator = UIViewPropertyAnimator(duration: self.transitionDuration(using: transitionContext),
