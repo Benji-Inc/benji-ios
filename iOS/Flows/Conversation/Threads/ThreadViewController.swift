@@ -15,8 +15,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
                             MessageSequenceItem,
                             MessageSequenceCollectionViewDataSource>,
                             CollectionViewInputHandler,
-                            DismissInteractableController,
-                            SwipeableInputAccessoryViewDelegate {
+                            DismissInteractableController {
     
     let blurView = BlurView()
     let parentMessageView = MessageContentView()
@@ -49,10 +48,13 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
         let view: ConversationInputAccessoryView = ConversationInputAccessoryView.fromNib()
-        view.delegate = self
+        view.delegate = self.swipeInputDelegate
         view.textView.restorationIdentifier = "thread"
         return view
     }()
+    lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
+                                                                       collectionView: self.threadCollectionView,
+                                                                       isConversationList: false)
 
     override var inputAccessoryView: UIView? {
         return self.messageInputAccessoryView
@@ -169,127 +171,44 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     }
 
     override func getAnimationCycle() -> AnimationCycle? {
-        var cycle = super.getAnimationCycle()
-        cycle?.shouldConcatenate = false
-        // Scroll to the lastest reply.
-        if let threadLayout = self.collectionView.collectionViewLayout as? ThreadCollectionViewLayout {
-            let lastReplyIndex = clamp(self.messageController.replies.count - 1, min: 0)
-            let yOffset = CGFloat(lastReplyIndex) * threadLayout.itemHeight
-            cycle?.scrollToOffset = CGPoint(x: 0, y: yOffset)
-        }
-
-        return cycle
-    }
-
-    // MARK: - SwipeableInputAccessoryViewDelegate
-
-    var prepareForSend = false
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView, swipeIsEnabled isEnabled: Bool) {
-        if isEnabled {
-            self.showDropZone(for: view)
-        } else {
-            self.hideDropZone()
-        }
-    }
-
-    func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView) {
-        self.collectionView.isUserInteractionEnabled = false
-
-        if let currentCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
-            currentCell.prepareForNewMessage()
-        }
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didUpdate sendable: Sendable,
-                                 withPreviewFrame frame: CGRect) {
-        // Do nothing.
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 triggeredSendFor sendable: Sendable,
-                                 withPreviewFrame frame: CGRect) -> Bool {
-
-        // Ensure that the preview has been dragged far up enough to send.
-        let dropZoneFrame = view.dropZoneFrame
-        let shouldSend = dropZoneFrame.bottom > frame.centerY
-
-        guard shouldSend else {
-            return false
-        }
-
-        Task {
-            await self.send(object: sendable)
-        }.add(to: self.taskPool)
-
-        return true
-    }
-
-    func showDropZone(for view: SwipeableInputAccessoryView) {
-        guard self.sendMessageDropZone.superview.isNil else { return }
-        // Animate in the send overlay
-        self.view.addSubview(self.sendMessageDropZone)
-        self.sendMessageDropZone.alpha = 0
-        self.sendMessageDropZone.setState(.newMessage, messageColor: self.threadCollectionView.getDropZoneColor())
-
-        let cell = self.threadCollectionView.getBottomFrontMostCell()
-        self.threadCollectionView.setDropZone(isShowing: true)
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageDropZone.alpha = 1
-            cell?.content.textView.alpha = 0
-            cell?.content.authorView.alpha = 0
-        }
-
-        // Show the send message overlay so the user can see where to drag the message
-        let overlayFrame = self.threadCollectionView.getMessageDropZoneFrame(convertedTo: self.view)
-        self.sendMessageDropZone.frame = overlayFrame
-
-        view.dropZoneFrame = view.convert(self.sendMessageDropZone.bounds, from: self.sendMessageDropZone)
-    }
-
-    func hideDropZone() {
-        let cell = self.threadCollectionView.getBottomFrontMostCell()
-        UIView.animate(withDuration: Theme.animationDurationStandard) {
-            self.sendMessageDropZone.alpha = 0
-            cell?.content.textView.alpha = 1.0
-            cell?.content.authorView.alpha = 1.0
-        } completion: { didFinish in
-            self.threadCollectionView.setDropZone(isShowing: false)
-            self.sendMessageDropZone.removeFromSuperview()
-        }
-    }
-
-    func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didFinishSwipeSendingSendable didSend: Bool) {
-
-        self.collectionView.isUserInteractionEnabled = true
+        return nil
     }
 }
 
 // MARK: - Messaging
 
-extension ThreadViewController {
+extension ThreadViewController: MessageSendingViewControllerType {
 
-    func handle(attachment: Attachment, body: String) {
+    func set(shouldLayoutForDropZone: Bool) {
+        self.threadCollectionView.threadLayout.layoutForDropZone = shouldLayoutForDropZone
+        self.threadCollectionView.threadLayout.invalidateLayout()
+    }
+
+    func getCurrentMessageSequence() -> MessageSequence? {
+        return self.parentMessage
+    }
+
+    func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool) {
+        self.dataSource.shouldPrepareToSend = messageSequencePreparingToSend.exists
+
+        if reloadData {
+            guard let message = self.messageController.message else { return }
+            self.dataSource.set(messageSequence: message)
+        }
+    }
+
+    func sendMessage(_ message: Sendable) {
         Task {
             do {
-                let kind = try await AttachmentsManager.shared.getMessageKind(for: attachment, body: body)
-                let object = SendableObject(kind: kind, context: .passive)
-                await self.send(object: object)
+                try await self.messageController.createNewReply(with: message)
             } catch {
                 logDebug(error)
             }
-        }.add(to: self.taskPool)
+        }
     }
 
-    @MainActor
-    func send(object: Sendable) async {
-        do {
-            try await self.messageController.createNewReply(with: object)
-        } catch {
-            logDebug(error)
-        }
+    func createNewConversation(_ sendable: Sendable) {
+        // Do nothing. New conversations can't be created from a thread view controller.
     }
 }
 
@@ -321,7 +240,7 @@ extension ThreadViewController {
             }
         }
 
-        self.messageInputAccessoryView.textView.$inputText.mainSink { _ in
+        self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] _ in
             guard let enabled = self.conversationController?.areTypingEventsEnabled, enabled else { return }
             self.conversationController?.sendKeystrokeEvent(completion: nil)
         }.store(in: &self.cancellables)
@@ -335,9 +254,8 @@ extension ThreadViewController {
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
             guard let message = self.messageController.message else { return }
-            Task {
-                await self.dataSource.update(messageSequence: message)
-            }
+
+            self.dataSource.set(messageSequence: message)
         }.store(in: &self.cancellables)
 
         let members = self.messageController.message?.threadParticipants.filter { member in

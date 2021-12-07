@@ -19,7 +19,7 @@ enum MessageStatus: String {
 protocol Messageable {
 
     var id: String { get }
-    var conversationId: String { get }
+    var conversationID: String { get }
     var createdAt: Date { get }
     var isFromCurrentUser: Bool { get }
     var authorID: String { get }
@@ -48,7 +48,7 @@ func ==(lhs: Messageable, rhs: Messageable) -> Bool {
         && lhs.kind == rhs.kind
         && lhs.authorID == rhs.authorID
         && lhs.id == rhs.id
-        && lhs.conversationId == rhs.conversationId
+        && lhs.conversationID == rhs.conversationID
 }
 
 extension Messageable {

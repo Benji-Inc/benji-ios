@@ -21,6 +21,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     // MARK: - Layout Configuration
 
+    var layoutForDropZone: Bool = false
     /// How bright the background of the frontmost item is. 0 is black, 1 is full brightness.
     var frontmostBrightness: CGFloat = 0.89
     /// How bright the background of the backmost item is. This is based off of the frontmost item brightness.
@@ -82,7 +83,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         attributes.shouldShowTail = indexPath.section == 0
         attributes.bubbleTailOrientation = indexPath.section == 0 ? .up : .down
         attributes.detailAlpha = detailAlpha
-        attributes.messageContentAlpha = self.isShowingDropZone && indexPath.section == 1 ? 0.0 : textViewAlpha
+        attributes.messageContentAlpha = self.layoutForDropZone && indexPath.section == 1 ? 0.0 : textViewAlpha
 
         return attributes
     }
@@ -120,7 +121,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     /// If true, scroll to the most recent item after performing collection view updates.
     private var shouldScrollToEnd = false
     private var deletedIndexPaths: Set<IndexPath> = []
-    private var insertedIndexPaths: Set<IndexPath> = []
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
@@ -132,7 +132,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             switch update.updateAction {
             case .insert:
                 guard let indexPath = update.indexPathAfterUpdate else { break }
-                self.insertedIndexPaths.insert(indexPath)
 
                 let isScrolledToMostRecent = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
                 // Always scroll to the end for new user messages, or if we're currently scrolled to the
@@ -156,7 +155,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
         self.shouldScrollToEnd = false
         self.deletedIndexPaths.removeAll()
-        self.insertedIndexPaths.removeAll()
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
@@ -169,27 +167,11 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
     -> UICollectionViewLayoutAttributes? {
-        guard deletedIndexPaths.contains(itemIndexPath) else { return nil }
+        // Items that are just moving are marked as "deleted" by the collection view.
+        // Only animate changes to items that are actually being deleted otherwise weird animation issues
+        // will arise.
+        guard self.deletedIndexPaths.contains(itemIndexPath) else { return nil }
 
         return super.finalLayoutAttributesForDisappearingItem(at: itemIndexPath)
-    }
-
-    override func initialLayoutAttributesForAppearingItem(at itemIndexPath: IndexPath)
-    -> UICollectionViewLayoutAttributes? {
-
-        let attributes = super.initialLayoutAttributesForAppearingItem(at: itemIndexPath)
-
-        // A new message dropped in the user's message stack should appear immediately.
-        guard itemIndexPath.section == 1 else {
-            return attributes
-        }
-
-        // Ensure this is actually a new message and not just a placeholder message.
-        if self.insertedIndexPaths.contains(itemIndexPath)
-            && self.dataSource?.getTimeMachineItem(forItemAt: itemIndexPath) != nil {
-            attributes?.alpha = 1
-        }
-
-        return attributes
     }
 }

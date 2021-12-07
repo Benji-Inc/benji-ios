@@ -179,6 +179,13 @@ extension CollectionViewDataSource {
         }
     }
 
+    func reconfigureAllItems() {
+        self.applyChanges{ snapshot in
+            let allItems = snapshot.itemIdentifiers
+            snapshot.reconfigureItems(allItems)
+        }
+    }
+
     func reconfigureItem(atIndex index: Int, in section: SectionType) {
         self.applyChanges { snapshot in
             snapshot.reconfigureItem(atIndex: index, in: section)
@@ -227,7 +234,7 @@ extension CollectionViewDataSource {
         }
     }
 
-    // Asynchronous Functions
+    // MARK: -  Asynchronous Functions
 
     func applyChanges(_ changes: (inout SnapshotType) -> Void) async {
         var snapshot = self.snapshot()
@@ -292,6 +299,13 @@ extension CollectionViewDataSource {
     func reconfigureItems(_ identifiers: [ItemType]) async {
         await self.applyChanges { snapshot in
             snapshot.reconfigureItems(identifiers)
+        }
+    }
+
+    func reconfigureAllItems() async {
+        await self.applyChanges{ snapshot in
+            let allItems = snapshot.itemIdentifiers
+            snapshot.reconfigureItems(allItems)
         }
     }
 
