@@ -98,7 +98,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         }
 
         let otherMessageItems = otherMessages.reversed().map { message in
-            return MessageSequenceItem(channelID: try! ChannelId(cid: message.conversationId),
+            return MessageSequenceItem(channelID: try! ChannelId(cid: message.conversationID),
                                        messageID: message.id)
         }
 

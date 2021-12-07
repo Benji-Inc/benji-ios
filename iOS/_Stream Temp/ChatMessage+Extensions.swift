@@ -13,7 +13,7 @@ typealias Message = ChatMessage
 
 extension Message: Messageable {
 
-    var conversationId: String {
+    var conversationID: String {
         return self.cid?.description ?? String()
     }
 
