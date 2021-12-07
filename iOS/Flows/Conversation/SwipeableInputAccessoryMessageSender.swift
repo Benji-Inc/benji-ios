@@ -34,6 +34,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
     let viewController: MessageSendingViewControllerType
     let collectionView: MessageSendingCollectionViewType
+    let isConversationList: Bool
 
     /// Shows where a message should be dragged and dropped to send.
     let sendMessageDropZone = MessageDropZoneView()
@@ -43,10 +44,12 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     }
 
     init(viewController: MessageSendingViewControllerType,
-         collectionView: MessageSendingCollectionViewType) {
+         collectionView: MessageSendingCollectionViewType,
+         isConversationList: Bool) {
 
         self.viewController = viewController
         self.collectionView = collectionView
+        self.isConversationList = isConversationList
     }
 
     /// The collection view's content offset at the first call to prepare for a swipe. Used to reset the the content offset after a swipe is cancelled.
@@ -103,9 +106,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
         self.initialContentOffset = self.collectionView.contentOffset
         self.currentSendMode = nil
 
-        if let currentMessageSequence = self.viewController.getCurrentMessageSequence() {
-            self.viewController.set(messageSequencePreparingToSend: currentMessageSequence, reloadData: true)
-        }
+        guard let currentMessageSequence = self.viewController.getCurrentMessageSequence() else { return }
+        self.viewController.set(messageSequencePreparingToSend: currentMessageSequence, reloadData: true)
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -126,7 +128,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
         case .message:
             self.sendMessageDropZone.setState(.newMessage,
                                               messageColor: .white)
-            if let initialContentOffset = self.initialContentOffset {
+            if self.isConversationList, let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
         case .newConversation:
@@ -146,7 +148,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
         guard shouldSend else {
             // Reset the collectionview content offset back to where we started.
-            if let initialContentOffset = self.initialContentOffset {
+            if self.isConversationList, let initialContentOffset = self.initialContentOffset {
                 self.collectionView.setContentOffset(initialContentOffset, animated: true)
             }
 
@@ -182,6 +184,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
     /// Gets the send position for the given preview view frame.
     private func getSendMode(forPreviewFrame frame: CGRect) -> SendMode {
+        guard self.isConversationList else { return .message}
+
         guard let contentContainer = self.contentContainer else {
             return .message
         }

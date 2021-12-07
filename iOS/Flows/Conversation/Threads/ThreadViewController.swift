@@ -53,7 +53,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         return view
     }()
     lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
-                                                                       collectionView: self.threadCollectionView)
+                                                                       collectionView: self.threadCollectionView,
+                                                                       isConversationList: false)
 
     override var inputAccessoryView: UIView? {
         return self.messageInputAccessoryView
@@ -189,8 +190,10 @@ extension ThreadViewController: MessageSendingViewControllerType {
 
     func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool) {
         self.dataSource.shouldPrepareToSend = messageSequencePreparingToSend.exists
+
         if reloadData {
-            self.dataSource.set(messageSequence: self.parentMessage)
+            guard let message = self.messageController.message else { return }
+            self.dataSource.set(messageSequence: message)
         }
     }
 

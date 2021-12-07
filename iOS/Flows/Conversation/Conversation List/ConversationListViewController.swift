@@ -49,7 +49,8 @@ class ConversationListViewController: FullScreenViewController,
         return inputView
     }()
     lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
-                                                                       collectionView: self.collectionView)
+                                                                       collectionView: self.collectionView,
+                                                                       isConversationList: true)
 
     override var inputAccessoryView: UIView? {
         return self.presentedViewController.isNil ? self.messageInputAccessoryView : nil
