@@ -33,10 +33,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
 
     var layoutForDropZone = false {
         didSet {
-            #warning("Don't use a hard coded section index")
-            guard let section = self.sectionIdentifier(for: 0) else { return }
-            let items = self.itemIdentifiers(in: section)
-            self.reconfigureItems(items)
+            self.reconfigureAllItems()
         }
     }
 
@@ -133,10 +130,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         self.conversationPreparingToSend = conversationPreparingToSend
 
         if reloadData {
-            #warning("Don't use a hard coded value.")
-            guard let section = self.sectionIdentifier(for: 0) else { return }
-            let items = self.itemIdentifiers(in: section)
-            self.reconfigureItems(items)
+            self.reconfigureAllItems()
         }
     }
 }
