@@ -248,13 +248,12 @@ extension ThreadViewController {
         self.messageController.messageChangePublisher.mainSink { [unowned self] changes in
             if let msg = self.messageController.message {
                 self.parentMessageView.configure(with: msg)
-                self.detailView.configure(with: msg)
+                self.detailView.update(with: msg)
             }
         }.store(in: &self.cancellables)
 
         self.messageController.repliesChangesPublisher.mainSink { [unowned self] changes in
             guard let message = self.messageController.message else { return }
-
             self.dataSource.set(messageSequence: message)
         }.store(in: &self.cancellables)
 

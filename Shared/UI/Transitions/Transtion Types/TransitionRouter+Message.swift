@@ -44,7 +44,7 @@ extension TransitionRouter {
             toView.bubbleView.bubbleColor = Color.white.color
             toView.bubbleView.tailLength = 0
             toView.bubbleView.orientation = fromView.bubbleView.orientation
-            toView.state = .expanded
+            toView.state = .thread
             toView.size = fromView.bubbleView.bubbleFrame.size
             toView.layoutNow()
         }

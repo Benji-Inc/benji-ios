@@ -41,6 +41,7 @@ class MessageContentView: View {
     var publisherCancellables = Set<AnyCancellable>()
 
     enum State {
+        case thread
         case expanded
         case collapsed
     }
@@ -70,7 +71,7 @@ class MessageContentView: View {
         self.authorView.isVisible = false
 
         self.$state.mainSink { [unowned self] state in
-            self.authorView.isVisible = state == .expanded
+            self.authorView.isVisible = state == .thread
             self.layoutNow()
         }.store(in: &self.cancellables)
 
@@ -120,7 +121,7 @@ class MessageContentView: View {
 
         self.textView.size = self.textView.getSize(with: self.state, width: self.bubbleView.bubbleFrame.width)
 
-        if self.state == .expanded {
+        if self.state == .thread {
             self.textView.textAlignment = .left
             self.textView.match(.left, to: .right, of: self.authorView, offset: MessageContentView.padding)
 
@@ -128,6 +129,19 @@ class MessageContentView: View {
                 self.textView.pin(.top, offset: MessageContentView.padding)
             }
             
+        } else if state == .expanded {
+            if self.textView.numberOfLines > 1 {
+                self.textView.textAlignment = .left
+                self.textView.pin(.left, offset: MessageContentView.padding)
+                let top = MessageContentView.padding.value + MessageContentView.bubbleTailLength
+                self.textView.pin(.top, offset: .custom(top))
+            } else {
+                self.textView.textAlignment = .center
+                self.textView.centerOnX()
+                self.textView.center = self.bubbleView.center
+                self.textView.center.y += self.bubbleView.tailLength.half
+            }
+
         } else if self.textView.numberOfLines > 1 {
             self.textView.textAlignment = .left
             self.textView.pin(.left, offset: MessageContentView.padding)
@@ -169,10 +183,13 @@ extension MessageTextView {
 
     func getSize(with state: MessageContentView.State, width: CGFloat) -> CGSize {
         let maxTextWidth: CGFloat
-        let maxTextHeight: CGFloat = MessageContentView.standardHeight
+        var maxTextHeight: CGFloat = MessageContentView.standardHeight
 
         switch state {
         case .expanded:
+            maxTextWidth = width - MessageContentView.textViewPadding
+            maxTextHeight = CGFloat.greatestFiniteMagnitude
+        case .thread:
             let size = MessageContentView.getAuthorSize(for: state)
             maxTextWidth = width - (size.width + (MessageContentView.textViewPadding + MessageContentView.textViewPadding.half))
         case .collapsed:
