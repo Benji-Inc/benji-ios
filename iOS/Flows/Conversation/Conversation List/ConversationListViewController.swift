@@ -33,7 +33,9 @@ class ConversationListViewController: FullScreenViewController,
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
 
-    lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self)
+    lazy var swipeInputDelegate = SwipeableInputAccessoryMessageSender(viewController: self,
+                                                                       dataSource: self.dataSource,
+                                                                       collectionView: self.collectionView)
 
     lazy var headerVC = ConversationHeaderViewController()
 

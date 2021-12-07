@@ -11,7 +11,7 @@ import Foundation
 /// A collection view for displaying conversations.
 /// Conversations are ordered right to left. So the first conversation in the data source is on the far right.
 /// It automatically creates its own custom layout object.
-class ConversationListCollectionView: CollectionView {
+class ConversationListCollectionView: CollectionView, MessageSendingCollectionView {
 
     let conversationLayout: ConversationListCollectionViewLayout
 
@@ -58,5 +58,14 @@ class ConversationListCollectionView: CollectionView {
             return nil
         }
         return centerCell.getBottomFrontMostCell()
+    }
+
+    func getCurrentConversationID() -> ConversationID? {
+        guard let centeredCell = self.getCentermostVisibleCell() as? ConversationMessagesCell,
+              let cid = centeredCell.conversation?.conversationId else {
+                  return nil
+              }
+
+        return try? ConversationID(cid: cid)
     }
 }

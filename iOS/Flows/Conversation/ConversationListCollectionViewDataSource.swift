@@ -13,7 +13,8 @@ typealias ConversationListSection = ConversationListCollectionViewDataSource.Sec
 typealias ConversationListItem = ConversationListCollectionViewDataSource.ItemType
 
 class ConversationListCollectionViewDataSource: CollectionViewDataSource<ConversationListSection,
-                                                ConversationListItem> {
+                                                ConversationListItem>,
+                                                MessageSendingDataSource {
 
     /// Model for the main section of the conversation list collection.
     struct SectionType: Hashable {
