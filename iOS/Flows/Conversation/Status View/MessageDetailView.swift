@@ -34,6 +34,12 @@ class MessageDetailView: View {
         self.layoutNow()
     }
 
+    func update(with message: Messageable) {
+        self.manager.updateReactions(for: message)
+        self.statusView.configure(for: message)
+        self.layoutNow()
+    }
+
     func updateReadStatus(shouldRead: Bool) {
         if shouldRead {
             self.statusView.handleConsumption()
