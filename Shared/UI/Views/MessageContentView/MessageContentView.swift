@@ -133,7 +133,7 @@ class MessageContentView: View {
             if self.textView.numberOfLines > 1 {
                 self.textView.textAlignment = .left
                 self.textView.pin(.left, offset: MessageContentView.padding)
-                let top = MessageContentView.padding.value + MessageContentView.bubbleTailLength
+                let top = MessageContentView.padding.value + self.bubbleView.tailLength
                 self.textView.pin(.top, offset: .custom(top))
             } else {
                 self.textView.textAlignment = .center
@@ -174,7 +174,7 @@ class MessageContentView: View {
     func getSize(for state: State, with width: CGFloat) -> CGSize {
         var size = self.textView.getSize(with: state, width: width)
         size.width += MessageContentView.textViewPadding
-        size.height += MessageContentView.bubbleTailLength + MessageContentView.textViewPadding
+        size.height += self.bubbleView.tailLength + MessageContentView.textViewPadding
         return size 
     }
 }

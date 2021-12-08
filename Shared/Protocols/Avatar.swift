@@ -20,6 +20,9 @@ protocol Avatar: ImageDisplayable {
 extension Avatar {
     
     var fullName: String {
+        if self.givenName.isEmpty && self.familyName.isEmpty {
+            return "Unkown"
+        }
         return self.givenName + " " + self.familyName
     }
 
