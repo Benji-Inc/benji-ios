@@ -16,7 +16,9 @@ class AddReactionView: UICollectionReusableView {
     var taskPool = TaskPool()
     var message: Message? {
         didSet {
-            self.button.menu = self.configureMenu()
+            if self.button.menu.isNil {
+                self.button.menu = self.configureMenu()
+            }
         }
     }
 
@@ -51,6 +53,8 @@ class AddReactionView: UICollectionReusableView {
     override func prepareForReuse() {
         super.prepareForReuse()
 
+        self.button.menu = nil
+
         Task {
             await self.taskPool.cancelAndRemoveAll()
         }
@@ -58,8 +62,6 @@ class AddReactionView: UICollectionReusableView {
 
     private func configureMenu() -> UIMenu {
         guard let msg = self.message, let cid = msg.cid else { return UIMenu() }
-
-        var menuElements: [UIMenuElement] = []
         
         let children: [UIAction] = ReactionType.allCases.filter({ type in
             return type != .read
@@ -81,12 +83,10 @@ class AddReactionView: UICollectionReusableView {
             }
         }
 
-        let reactionsMenu = UIMenu(title: "Add Reaction",
-                                image: UIImage(systemName: "face.smile"),
-                                children: children)
-
-        menuElements.append(reactionsMenu)
-
-        return UIMenu(children: menuElements)
+        return UIMenu(title: "Add Reaction",
+                      image: UIImage(systemName: "face.smiling"),
+                      identifier: nil,
+                      options: [],
+                      children: children)
     }
 }
