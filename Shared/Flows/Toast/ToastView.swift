@@ -79,7 +79,7 @@ class ToastView: View, ToastViewable {
             await Task.snooze(seconds: 0.1)
             self.update(for: self.state)
             self.didPrepareForPresentation()
-        }
+        }.add(to: self.taskPool)
 
         #if !NOTIFICATION
         guard let superview = UIWindow.topWindow() else { return }

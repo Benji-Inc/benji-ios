@@ -13,8 +13,8 @@ import GestureRecognizerClosures
 class ToastBannerView: ToastView {
 
     private let blurView = BlurView()
-    private let titleLabel = Label(font: .regularBold)
-    private let descriptionLabel = Label(font: .smallBold)
+    private let titleLabel = Label(font: .regularBold, textColor: .white)
+    private let descriptionLabel = Label(font: .smallBold, textColor: .white)
     private let imageView = AvatarView()
 
     let leftAnimator = UIViewPropertyAnimator(duration: 0.35,
@@ -176,7 +176,7 @@ class ToastBannerView: ToastView {
         }
 
         self.titleLabel.setSize(withWidth: maxTitleWidth)
-        self.titleLabel.match(.left, to: .right, of: self.imageView, offset: .short)
+        self.titleLabel.match(.left, to: .right, of: self.imageView, offset: .standard)
         self.titleLabel.match(.top, to: .top, of: self.imageView)
 
         self.descriptionLabel.setSize(withWidth: maxTitleWidth)
