@@ -132,6 +132,8 @@ private class MessageReadView: MessageStatusContainer {
     @MainActor
     func configure(for message: Message) {
 
+        self.reset()
+
         if message.isConsumed {
             if !message.isFromCurrentUser {
                 self.label.setText("Read")
@@ -172,6 +174,8 @@ private class MessageReadView: MessageStatusContainer {
     }
 
     func beginConsumption(for message: Message) {
+
+        guard message.canBeConsumed else { return }
 
         self.progressView.alpha = 0
         self.progressView.width = 0
