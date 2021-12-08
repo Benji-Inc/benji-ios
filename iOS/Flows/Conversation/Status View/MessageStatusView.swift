@@ -210,7 +210,8 @@ private class MessageReadView: MessageStatusContainer {
 
     func reset() {
         if let animator = self.animator, animator.isRunning {
-            self.animator?.finishAnimation(at: .start)
+            animator.stopAnimation(true)
+            animator.finishAnimation(at: .start)
         }
 
         self.label.text = nil
