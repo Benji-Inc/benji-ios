@@ -53,8 +53,9 @@ class ConnectionStore {
     private func subscibeToUpdates() {
         self.isReady = true
 
-        self.queries.forEach { query in
+        Client.shared.shouldPrintWebSocketLog = false
 
+        self.queries.forEach { query in
             let subscription = Client.shared.subscribe(query)
 
             subscription.handleEvent { query, event in
