@@ -15,7 +15,6 @@ import UIKit
 class ConversationHeaderViewController: ViewController, ActiveConversationable {
 
     lazy var membersVC = MembersViewController()
-    let label = Label(font: .regular, textColor: .textColor)
     let button = Button()
 
     private var state: ConversationUIState = .read
@@ -27,10 +26,6 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         super.initializeViews()
 
         self.addChild(viewController: self.membersVC)
-
-        self.view.addSubview(self.label)
-        self.label.textAlignment = .left
-        self.label.lineBreakMode = .byTruncatingTail
 
         if !isRelease {
             self.view.addSubview(self.button)
@@ -72,6 +67,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
                           options: [],
                           children: [topic, add, deleteMenu])
 
+        self.button.set(style: .noborder(image: UIImage(systemName: "ellipsis")!, color: .white))
         self.button.showsMenuAsPrimaryAction = true
         self.button.menu = menu
 
@@ -79,8 +75,7 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
             .removeDuplicates()
             .mainSink { conversation in
             guard let convo = conversation else { return }
-            self.label.setText(convo.title)
-            self.button.isEnabled = convo.isOwnedByMe
+            self.button.isVisible = convo.isOwnedByMe
             self.view.layoutNow()
         }.store(in: &self.cancellables)
     }
@@ -92,25 +87,16 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.membersVC.view.expandToSuperviewWidth()
         self.membersVC.view.pin(.bottom)
 
-        let maxWidth = Theme.getPaddedWidth(with: self.view.width)
-        self.label.setSize(withWidth: maxWidth)
-        self.label.match(.bottom, to: .top, of: self.membersVC.view, offset: .negative(.standard))
-        self.label.centerOnX()
-
-        self.button.frame = self.label.frame
+        self.button.height = self.view.height - self.membersVC.view.height
+        self.button.width = 44
+        self.button.pin(.right, offset: .xtraLong)
+        self.button.pin(.top)
     }
 
     func update(for state: ConversationUIState) {
         self.state = state
 
         UIView.animate(withDuration: Theme.animationDurationStandard) {
-            switch state {
-            case .read:
-                self.label.alpha = 1.0
-            case .write:
-                self.label.alpha = 0.0
-            }
-
             self.view.layoutNow()
         } completion: { completed in
 

@@ -38,7 +38,7 @@ class ExpandingTextView: TextView {
 
         self.textContainerInset.left = Theme.ContentOffset.long.value
         self.textContainerInset.right = Theme.ContentOffset.long.value
-        self.textContainerInset.top = Theme.ContentOffset.long.value + 2
+        self.textContainerInset.top = Theme.ContentOffset.long.value
         self.textContainerInset.bottom = Theme.ContentOffset.long.value
     }
 
