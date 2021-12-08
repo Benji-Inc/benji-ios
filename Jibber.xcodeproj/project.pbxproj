@@ -470,7 +470,6 @@
 		D667C08C25E0738A00BED8B7 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */; };
 		D667C08E25E559D500BED8B7 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */; };
 		D669CB55275FDDDA003C9793 /* MessagePreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */; };
-		D669CB5727600110003C9793 /* typing.json in Resources */ = {isa = PBXBuildFile; fileRef = D669CB5627600110003C9793 /* typing.json */; };
 		D66A0B942351821200A0FFEA /* Completeable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A0B932351821200A0FFEA /* Completeable.swift */; };
 		D66A580025DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
 		D66A580125DC5346001B3F64 /* CGFloat+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */; };
@@ -1066,7 +1065,6 @@
 		D66656BC23D13C9A009E4BDF /* Switchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switchable.swift; sourceTree = "<group>"; };
 		D667C08B25E0738A00BED8B7 /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
 		D669CB54275FDDDA003C9793 /* MessagePreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagePreviewViewController.swift; sourceTree = "<group>"; };
-		D669CB5627600110003C9793 /* typing.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = typing.json; path = ../../../../Desktop/typing.json; sourceTree = "<group>"; };
 		D66A0B932351821200A0FFEA /* Completeable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Completeable.swift; sourceTree = "<group>"; };
 		D66A57FF25DC5346001B3F64 /* CGFloat+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extensions.swift"; sourceTree = "<group>"; };
 		D66A580425DD68F9001B3F64 /* PeopleCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeopleCoordinator.swift; sourceTree = "<group>"; };
@@ -3729,7 +3727,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
@@ -3757,7 +3755,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
@@ -3785,7 +3783,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.NotificationContent";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3812,7 +3810,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.NotificationContent";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3840,7 +3838,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.AppClip";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = DEBUG;
@@ -3868,7 +3866,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.AppClip";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RELEASE_TYPE = RELEASE;
@@ -3901,7 +3899,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.NotificationService";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3933,7 +3931,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.NotificationService";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3966,7 +3964,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -3998,7 +3996,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.Intents-ExtensionUI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4031,7 +4029,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -4064,7 +4062,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.1.3;
+				MARKETING_VERSION = 1.1.4;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Jibber-Inc.Jibber.Intents-Extension";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
