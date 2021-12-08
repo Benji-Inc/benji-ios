@@ -115,7 +115,7 @@ class MessageContentView: View {
 
         self.bubbleView.expandToSuperviewSize()
 
-        self.authorView.size = MessageContentView.getAuthorSize(for: self.state)
+        self.authorView.size = self.getAuthorSize(for: self.state)
         self.authorView.pin(.top, offset: MessageContentView.padding)
         self.authorView.pin(.left, offset: MessageContentView.padding)
 
@@ -166,9 +166,9 @@ class MessageContentView: View {
         }
     }
 
-    static func getAuthorSize(for state: State) -> CGSize {
+    func getAuthorSize(for state: State) -> CGSize {
         let authorHeight: CGFloat = MessageContentView.standardHeight
-        return AvatarView().getSize(for: authorHeight)
+        return self.authorView.getSize(for: authorHeight)
     }
 
     func getSize(for state: State, with width: CGFloat) -> CGSize {
@@ -190,7 +190,7 @@ extension MessageTextView {
             maxTextWidth = width - MessageContentView.textViewPadding
             maxTextHeight = CGFloat.greatestFiniteMagnitude
         case .thread:
-            let size = MessageContentView.getAuthorSize(for: state)
+            let size = MessageContentView().getAuthorSize(for: state)
             maxTextWidth = width - (size.width + (MessageContentView.textViewPadding + MessageContentView.textViewPadding.half))
         case .collapsed:
             maxTextWidth = width - MessageContentView.textViewPadding

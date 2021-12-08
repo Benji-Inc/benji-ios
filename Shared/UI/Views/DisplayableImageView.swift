@@ -59,7 +59,9 @@ class DisplayableImageView: View {
         self.addSubview(self.blurView)
         self.blurView.contentView.addSubview(self.animationView)
 
-        self.$state.mainSink { state in
+        self.$state.mainSink { [weak self] state in
+            guard let `self` = self else { return }
+
             switch state {
             case .initial:
                 self.animationView.reset()
@@ -72,9 +74,6 @@ class DisplayableImageView: View {
                 if self.animationView.isAnimationPlaying {
                     self.animationView.stop()
                 }
-//                self.animationView.loopMode = .loop
-//                self.animationView.load(animation: .loading)
-//                self.animationView.play()
             case .error:
                 if self.animationView.isAnimationPlaying {
                     self.animationView.stop()
@@ -155,7 +154,8 @@ class DisplayableImageView: View {
             if !file.isDataAvailable {
                 self.state = .loading
             }
-            let data = try await file.retrieveDataInBackground { progress in
+            let data = try await file.retrieveDataInBackground { [weak self] progress in
+                guard let `self` = self else { return }
                 if self.animationView.microAnimation == .pie {
                     let time = AnimationProgressTime(progress)
                     self.animationView.currentProgress = time
@@ -181,9 +181,10 @@ class DisplayableImageView: View {
             cancellable.cancel()
         }
 
-        Task {
-            await self.taskPool.cancelAndRemoveAll()
-        }
+        //TODO: Figure out why this crashes when presenting thread
+//        Task {
+//            await self.taskPool.cancelAndRemoveAll()
+//        }
 
         self.displayable = nil
         self.animationView.stop()
