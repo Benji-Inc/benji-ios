@@ -210,6 +210,11 @@ private class MessageReadView: MessageStatusContainer {
     }
 
     func reset() {
+
+        if let animator = self.animator, animator.isRunning {
+            self.animator?.finishAnimation(at: .start)
+        }
+
         self.label.text = nil
         self.imageView.image = nil
 
@@ -234,7 +239,6 @@ private class MessageReplyView: MessageStatusContainer {
         super.layoutSubviews()
 
         self.countLabel.setSize(withWidth: self.maxWidth)
-        self.countLabel.pin(.right, offset: .short)
         self.countLabel.centerOnY()
 
         if self.countLabel.text.isNil {
@@ -242,11 +246,14 @@ private class MessageReplyView: MessageStatusContainer {
         } else {
             self.label.setSize(withWidth: self.maxWidth - (Theme.ContentOffset.short.value * 3))
             let offset = (Theme.ContentOffset.short.value * 2) + self.countLabel.width
-            self.label.pin(.right, offset: .custom(offset))
             self.label.centerOnY()
 
             let width = (Theme.ContentOffset.short.value * 3) + self.countLabel.width + self.label.width
             self.width = clamp(width, self.minWidth, self.maxWidth)
+
+            /// Must set the pin after the width has been set due to it being right aligned
+            self.label.pin(.right, offset: .custom(offset))
+            self.countLabel.pin(.right, offset: .short)
         }
     }
 
@@ -257,7 +264,9 @@ private class MessageReplyView: MessageStatusContainer {
         } else {
             self.countLabel.text = nil
         }
-        self.layoutNow()
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.layoutNow()
+        }
     }
 
     private func getReplies(for message: Message) -> Localized? {
