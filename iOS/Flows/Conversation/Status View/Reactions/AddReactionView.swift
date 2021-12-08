@@ -62,7 +62,7 @@ class AddReactionView: UICollectionReusableView {
 
     private func configureMenu() -> UIMenu {
         guard let msg = self.message, let cid = msg.cid else { return UIMenu() }
-        
+
         let children: [UIAction] = ReactionType.allCases.filter({ type in
             return type != .read
         }).compactMap { type in
