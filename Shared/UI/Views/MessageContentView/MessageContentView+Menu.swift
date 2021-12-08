@@ -10,6 +10,7 @@ import Foundation
 
 #if IOS
 import StreamChat
+import UIKit
 
 extension MessageContentView: UIContextMenuInteractionDelegate {
 
@@ -114,7 +115,8 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
             menuElements.append(viewReplies)
         }
 
-        return UIMenu(children: menuElements)
+        return UIMenu.init(title: "This is a title", image: UIImage(named: "add_reaction"), identifier: nil, options: [], children: menuElements)
+        //return UIMenu(children: menuElements)
     }
 
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {

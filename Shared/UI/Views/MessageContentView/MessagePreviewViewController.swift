@@ -29,7 +29,7 @@ class MessagePreviewViewController: ViewController {
 
         guard let window = UIWindow.topWindow() else { return }
 
-        self.view.set(backgroundColor: .clear)
+        self.view.set(backgroundColor: .white)
         self.view.addSubview(self.content)
         self.view.addSubview(self.authorView)
 
@@ -65,6 +65,6 @@ class MessagePreviewViewController: ViewController {
 
         self.authorView.squaredSize = 50
         self.authorView.centerOnX()
-        self.authorView.pin(.top)
+        self.authorView.pin(.top, offset: .standard)
     }
 }
