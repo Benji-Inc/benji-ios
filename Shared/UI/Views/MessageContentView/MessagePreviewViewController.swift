@@ -12,7 +12,6 @@ class MessagePreviewViewController: ViewController {
 
     let message: Messageable
 
-    private let authorView = AvatarView()
     private let content = MessageContentView()
 
     init(with message: Messageable) {
@@ -29,14 +28,11 @@ class MessagePreviewViewController: ViewController {
 
         guard let window = UIWindow.topWindow() else { return }
 
-        self.view.set(backgroundColor: .white)
+        self.view.set(backgroundColor: .red)
         self.view.addSubview(self.content)
-        self.view.addSubview(self.authorView)
-
-        self.authorView.set(avatar: message.avatar)
 
         self.content.state = .expanded
-        self.content.configureBackground(color: .white, brightness: 1.0, showBubbleTail: true, tailOrientation: .up)
+        self.content.configureBackground(color: .white, brightness: 1.0, showBubbleTail: false, tailOrientation: .up)
         self.content.configure(with: self.message)
 
         let maxWidth = Theme.getPaddedWidth(with: window.width)
@@ -52,8 +48,6 @@ class MessagePreviewViewController: ViewController {
 
         self.content.size = size
 
-        size.height += 50 + Theme.ContentOffset.standard.value
-
         self.preferredContentSize = size 
     }
 
@@ -62,9 +56,5 @@ class MessagePreviewViewController: ViewController {
 
         self.content.centerOnX()
         self.content.pin(.bottom)
-
-        self.authorView.squaredSize = 50
-        self.authorView.centerOnX()
-        self.authorView.pin(.top, offset: .standard)
     }
 }

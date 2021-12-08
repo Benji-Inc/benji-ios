@@ -115,8 +115,11 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
             menuElements.append(viewReplies)
         }
 
-        return UIMenu.init(title: "This is a title", image: UIImage(named: "add_reaction"), identifier: nil, options: [], children: menuElements)
-        //return UIMenu(children: menuElements)
+        return UIMenu.init(title: "From: \(message.avatar.fullName)",
+                           image: nil,
+                           identifier: nil,
+                           options: [],
+                           children: menuElements)
     }
 
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
