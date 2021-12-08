@@ -32,9 +32,7 @@ class ViewController: UIViewController, Dismissable {
         self.initializeViews()
     }
 
-    func initializeViews() {
-        self.view.translatesAutoresizingMaskIntoConstraints = true
-    }
+    func initializeViews() { }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)

@@ -131,7 +131,6 @@ private class MessageReadView: MessageStatusContainer {
 
     @MainActor
     func configure(for message: Message) {
-
         self.reset()
 
         if message.isConsumed {
@@ -210,7 +209,6 @@ private class MessageReadView: MessageStatusContainer {
     }
 
     func reset() {
-
         if let animator = self.animator, animator.isRunning {
             self.animator?.finishAnimation(at: .start)
         }
