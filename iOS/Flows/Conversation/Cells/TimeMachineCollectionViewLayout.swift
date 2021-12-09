@@ -67,6 +67,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     var zPosition: CGFloat {
         return self.collectionView?.contentOffset.y ?? 0
     }
+    var maxZPosition: CGFloat {
+        return self.itemFocusPositions.values.max() ?? 0
+    }
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
@@ -227,6 +230,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             normalizedZOffset = 0
         }
 
+        // OPTIMIZATION: Don't generates attributes for items that can't possibly be seen.
+        if !(-1...1).contains(normalizedZOffset) {
+            return nil
+        }
+
         return self.layoutAttributesForItemAt(indexPath: indexPath, withNormalizedZOffset: normalizedZOffset)
     }
 
@@ -237,6 +245,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// 1 means the item is scaled up and moved forward as much as possible before it disappears.
     func layoutAttributesForItemAt(indexPath: IndexPath,
                                    withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
+
         guard let collectionView = self.collectionView else { return nil }
 
         var scale: CGFloat
