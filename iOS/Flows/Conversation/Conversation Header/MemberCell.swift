@@ -12,16 +12,14 @@ import Lottie
 
 struct Member: Hashable, Equatable {
     var displayable: AnyHashableDisplayable
-    var isTyping: Bool
+    var conversationController: ConversationController
 
     static func ==(lhs: Member, rhs: Member) -> Bool {
         return lhs.displayable.value.userObjectID == rhs.displayable.value.userObjectID
-        && lhs.isTyping == rhs.isTyping
     }
 
     func hash(into hasher: inout Hasher) {
         self.displayable.value.userObjectID.hash(into: &hasher)
-        self.isTyping.hash(into: &hasher)
     }
 }
 
@@ -46,7 +44,10 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: Member) {
         self.avatarView.set(avatar: item.displayable.value)
 
-        if item.isTyping {
+        let typingUsers = item.conversationController.conversation.currentlyTypingUsers
+        if typingUsers.contains(where: { typingUser in
+            typingUser.userObjectID == item.displayable.value.userObjectID
+        }) {
             self.beginTyping()
         } else {
             self.endTyping()

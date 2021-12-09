@@ -9,10 +9,7 @@
 import Foundation
 import StreamChat
 
-class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType,
-                             MembersCollectionViewDataSource.ItemType,
-                             MembersCollectionViewDataSource>,
-                             ActiveConversationable {
+class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType, MembersCollectionViewDataSource.ItemType, MembersCollectionViewDataSource>, ActiveConversationable {
 
     var conversationController: ConversationController?
 
@@ -38,30 +35,21 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             .removeDuplicates()
             .mainSink { conversation in
             Task {
+                guard let cid = conversation?.cid else { return }
+                self.conversationController = ChatClient.shared.channelController(for: cid)
+
                 await self.loadData()
+            
                 self.subscribeToUpdates(for: conversation)
             }.add(to: self.taskPool)
         }.store(in: &self.cancellables)
     }
 
     func subscribeToUpdates(for conversation: Conversation?) {
-        guard let cid = conversation?.cid else { return }
-        
-        self.conversationController = ChatClient.shared.channelController(for: cid)
-
         self.conversationController?
             .typingUsersPublisher
             .mainSink(receiveValue: { [unowned self] typingUsers in
-                Task {
-                    let memberItems = self.getMemberItems(withTypingUsers: typingUsers)
-
-                    var snapshot = self.dataSource.snapshot()
-
-                    let currentMemberItems = snapshot.itemIdentifiers(inSection: .members)
-                    snapshot.deleteItems(currentMemberItems)
-                    snapshot.appendItems(memberItems, toSection: .members)
-                    await self.dataSource.apply(snapshot)
-                }
+                self.dataSource.reconfigureAllItems()
             }).store(in: &self.cancellables)
     }
 
@@ -78,34 +66,23 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         return MembersCollectionViewDataSource.SectionType.allCases
     }
 
-    override func retrieveDataForSnapshot() async
-    -> [MembersCollectionViewDataSource.SectionType: [MembersCollectionViewDataSource.ItemType]] {
+    override func retrieveDataForSnapshot() async -> [MembersCollectionViewDataSource.SectionType: [MembersCollectionViewDataSource.ItemType]] {
 
         var data: [MembersCollectionViewDataSource.SectionType: [MembersCollectionViewDataSource.ItemType]] = [:]
 
-        data[.members] = self.getMemberItems(withTypingUsers: [])
+        guard let conversation = self.activeConversation else { return data }
 
-        return data
-    }
-
-    private func getMemberItems(withTypingUsers typingUsers: Set<ChatUser>)
-    -> [MembersCollectionViewDataSource.ItemType] {
-
-        guard let conversation = self.activeConversation else { return [] }
-
-        // Don't show the current user in the member array.
-        let members = Array(conversation.lastActiveMembers.filter { member in
+        let members = conversation.lastActiveMembers.filter { member in
             return member.id != ChatClient.shared.currentUserId
-        })
+        }
 
-        let memberItems: [MembersCollectionViewDataSource.ItemType] = members.map({ user in
-            let isTyping = typingUsers.contains { typingUser in
-                typingUser.userObjectID == user.userObjectID
-            }
-            let member = Member(displayable: AnyHashableDisplayable(user), isTyping: isTyping)
+        data[.members] = members.compactMap({ user in
+            guard let conversationController = self.conversationController else { return nil }
+            let member = Member(displayable: AnyHashableDisplayable.init(user),
+                                conversationController: conversationController)
             return .member(member)
         })
 
-        return memberItems
+        return data
     }
 }
