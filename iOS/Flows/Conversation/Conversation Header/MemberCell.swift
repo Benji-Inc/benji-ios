@@ -16,10 +16,17 @@ struct Member: Hashable, Equatable {
 
     static func ==(lhs: Member, rhs: Member) -> Bool {
         return lhs.displayable.value.userObjectID == rhs.displayable.value.userObjectID
+        && lhs.isTyping == rhs.isTyping
+    }
+
+    func hash(into hasher: inout Hasher) {
+        self.displayable.value.userObjectID.hash(into: &hasher)
+        self.isTyping.hash(into: &hasher)
     }
 }
 
 class MemberCell: CollectionViewManagerCell, ManageableCell {
+
     typealias ItemType = Member
 
     var currentItem: Member?

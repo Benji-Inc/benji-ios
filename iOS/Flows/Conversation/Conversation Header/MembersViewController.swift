@@ -9,7 +9,10 @@
 import Foundation
 import StreamChat
 
-class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType, MembersCollectionViewDataSource.ItemType, MembersCollectionViewDataSource>, ActiveConversationable {
+class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType,
+                             MembersCollectionViewDataSource.ItemType,
+                             MembersCollectionViewDataSource>,
+                             ActiveConversationable {
 
     var conversationController: ConversationController?
 
@@ -49,32 +52,16 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         self.conversationController?
             .typingUsersPublisher
             .mainSink(receiveValue: { [unowned self] typingUsers in
+                Task {
+                    let memberItems = self.getMemberItems(withTypingUsers: typingUsers)
 
-                let typingMembers = typingUsers.filter { user in
-                    return user.userObjectID != User.current()?.objectId
-                }.compactMap { user in
-                    return Member(displayable: AnyHashableDisplayable.init(user), isTyping: true)
+                    var snapshot = self.dataSource.snapshot()
+
+                    let currentMemberItems = snapshot.itemIdentifiers(inSection: .members)
+                    snapshot.deleteItems(currentMemberItems)
+                    snapshot.appendItems(memberItems, toSection: .members)
+                    await self.dataSource.apply(snapshot)
                 }
-
-                var newIdentifiers: [MembersCollectionViewDataSource.ItemType] = []
-
-                self.dataSource.itemIdentifiers(in: .members).forEach { item in
-                    switch item {
-                    case .member(let member):
-                        let typingMember = typingMembers.first { typingMember in
-                            return typingMember == member
-                        }
-
-                        if let m = typingMember {
-                            newIdentifiers.append(.member(m))
-                        } else {
-                            newIdentifiers.append(.member(member))
-                        }
-                    }
-                }
-
-                self.dataSource.reconfigureItems(newIdentifiers)
-
             }).store(in: &self.cancellables)
     }
 
@@ -91,27 +78,34 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         return MembersCollectionViewDataSource.SectionType.allCases
     }
 
-    override func retrieveDataForSnapshot() async -> [MembersCollectionViewDataSource.SectionType: [MembersCollectionViewDataSource.ItemType]] {
+    override func retrieveDataForSnapshot() async
+    -> [MembersCollectionViewDataSource.SectionType: [MembersCollectionViewDataSource.ItemType]] {
 
         var data: [MembersCollectionViewDataSource.SectionType: [MembersCollectionViewDataSource.ItemType]] = [:]
 
-        guard let conversation = self.activeConversation else { return data }
-
-        let members = conversation.lastActiveMembers.filter { member in
-            return member.id != ChatClient.shared.currentUserId
-        }
-
-        if !members.isEmpty {
-            data[.members] = members.compactMap({ user in
-                let member = Member(displayable: AnyHashableDisplayable.init(user),
-                                       isTyping: false)
-                return .member(member)
-            })
-        } else {
-            let member = Member(displayable: AnyHashableDisplayable.init(User.current()!), isTyping: false)
-            data[.members] = [.member(member)]
-        }
+        data[.members] = self.getMemberItems(withTypingUsers: [])
 
         return data
+    }
+
+    private func getMemberItems(withTypingUsers typingUsers: Set<ChatUser>)
+    -> [MembersCollectionViewDataSource.ItemType] {
+
+        guard let conversation = self.activeConversation else { return [] }
+
+        // Don't show the current user in the member array.
+        let members = Array(conversation.lastActiveMembers.filter { member in
+            return member.id != ChatClient.shared.currentUserId
+        })
+
+        let memberItems: [MembersCollectionViewDataSource.ItemType] = members.map({ user in
+            let isTyping = typingUsers.contains { typingUser in
+                typingUser.userObjectID == user.userObjectID
+            }
+            let member = Member(displayable: AnyHashableDisplayable(user), isTyping: isTyping)
+            return .member(member)
+        })
+
+        return memberItems
     }
 }

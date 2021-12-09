@@ -72,7 +72,7 @@ class DiffableCollectionViewController<SectionType: Hashable,
             return
         }
 
-        let dataDictionary =  await self.retrieveDataForSnapshot()
+        let dataDictionary = await self.retrieveDataForSnapshot()
 
         let snapshot = self.getInitialSnapshot(with: dataDictionary)
 
