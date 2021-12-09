@@ -14,13 +14,7 @@ class AddReactionView: UICollectionReusableView {
     let imageView = DisplayableImageView()
     let button = Button()
     var taskPool = TaskPool()
-    var message: Message? {
-        didSet {
-            if self.button.menu.isNil {
-                self.button.menu = self.configureMenu()
-            }
-        }
-    }
+    var message: Message?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -39,6 +33,7 @@ class AddReactionView: UICollectionReusableView {
 
         self.addSubview(self.button)
         self.button.showsMenuAsPrimaryAction = true
+        self.button.menu = self.configureMenu()
     }
 
     override func layoutSubviews() {
@@ -53,16 +48,12 @@ class AddReactionView: UICollectionReusableView {
     override func prepareForReuse() {
         super.prepareForReuse()
 
-        self.button.menu = nil
-
         Task {
             await self.taskPool.cancelAndRemoveAll()
         }
     }
 
     private func configureMenu() -> UIMenu {
-        guard let msg = self.message, let cid = msg.cid else { return UIMenu() }
-
         let children: [UIAction] = ReactionType.allCases.filter({ type in
             return type != .read
         }).compactMap { type in
@@ -72,14 +63,8 @@ class AddReactionView: UICollectionReusableView {
                                  identifier: nil,
                                  discoverabilityTitle: nil,
                                  attributes: []) { [unowned self] _ in
-                Task {
-                    let controller = ChatClient.shared.messageController(cid: cid, messageId: msg.id)
-                    do {
-                        try await controller.addReaction(with: type)
-                    } catch {
-                        logDebug(error)
-                    }
-                }.add(to: self.taskPool)
+
+                self.addReaction(type)
             }
         }
 
@@ -88,5 +73,18 @@ class AddReactionView: UICollectionReusableView {
                       identifier: nil,
                       options: [],
                       children: children)
+    }
+
+    private func addReaction(_ reaction: ReactionType) {
+        guard let message = self.message, let cid = message.cid else { return }
+
+        Task {
+            let controller = ChatClient.shared.messageController(cid: cid, messageId: message.id)
+            do {
+                try await controller.addReaction(with: reaction)
+            } catch {
+                logDebug(error)
+            }
+        }.add(to: self.taskPool)
     }
 }
