@@ -10,16 +10,21 @@ import Foundation
 import StreamChat
 import Lottie
 
-struct Member: Hashable, Equatable {
+struct Member: Hashable {
     var displayable: AnyHashableDisplayable
-    var isTyping: Bool
+    var conversationController: ConversationController
 
     static func ==(lhs: Member, rhs: Member) -> Bool {
         return lhs.displayable.value.userObjectID == rhs.displayable.value.userObjectID
     }
+
+    func hash(into hasher: inout Hasher) {
+        self.displayable.value.userObjectID.hash(into: &hasher)
+    }
 }
 
 class MemberCell: CollectionViewManagerCell, ManageableCell {
+
     typealias ItemType = Member
 
     var currentItem: Member?
@@ -39,7 +44,10 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     func configure(with item: Member) {
         self.avatarView.set(avatar: item.displayable.value)
 
-        if item.isTyping {
+        let typingUsers = item.conversationController.conversation.currentlyTypingUsers
+        if typingUsers.contains(where: { typingUser in
+            typingUser.userObjectID == item.displayable.value.userObjectID
+        }) {
             self.beginTyping()
         } else {
             self.endTyping()

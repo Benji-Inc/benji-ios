@@ -128,7 +128,6 @@ class MessageContentView: View {
             if self.textView.top < MessageContentView.padding.value {
                 self.textView.pin(.top, offset: MessageContentView.padding)
             }
-            
         } else if state == .expanded {
             if self.textView.numberOfLines > 1 {
                 self.textView.textAlignment = .left
@@ -167,6 +166,9 @@ class MessageContentView: View {
     }
 
     func getAuthorSize(for state: State) -> CGSize {
+        // Don't show the author for the collapsed state.
+        guard state != .collapsed else { return .zero }
+
         let authorHeight: CGFloat = MessageContentView.standardHeight
         return self.authorView.getSize(for: authorHeight)
     }

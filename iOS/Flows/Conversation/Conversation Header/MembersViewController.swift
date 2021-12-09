@@ -35,46 +35,21 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             .removeDuplicates()
             .mainSink { conversation in
             Task {
+                guard let cid = conversation?.cid else { return }
+                self.conversationController = ChatClient.shared.channelController(for: cid)
+
                 await self.loadData()
+            
                 self.subscribeToUpdates(for: conversation)
             }.add(to: self.taskPool)
         }.store(in: &self.cancellables)
     }
 
     func subscribeToUpdates(for conversation: Conversation?) {
-        guard let cid = conversation?.cid else { return }
-        
-        self.conversationController = ChatClient.shared.channelController(for: cid)
-
         self.conversationController?
             .typingUsersPublisher
             .mainSink(receiveValue: { [unowned self] typingUsers in
-
-                let typingMembers = typingUsers.filter { user in
-                    return user.userObjectID != User.current()?.objectId
-                }.compactMap { user in
-                    return Member(displayable: AnyHashableDisplayable.init(user), isTyping: true)
-                }
-
-                var newIdentifiers: [MembersCollectionViewDataSource.ItemType] = []
-
-                self.dataSource.itemIdentifiers(in: .members).forEach { item in
-                    switch item {
-                    case .member(let member):
-                        let typingMember = typingMembers.first { typingMember in
-                            return typingMember == member
-                        }
-
-                        if let m = typingMember {
-                            newIdentifiers.append(.member(m))
-                        } else {
-                            newIdentifiers.append(.member(member))
-                        }
-                    }
-                }
-
-                self.dataSource.reconfigureItems(newIdentifiers)
-
+                self.dataSource.reconfigureAllItems()
             }).store(in: &self.cancellables)
     }
 
@@ -101,16 +76,12 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             return member.id != ChatClient.shared.currentUserId
         }
 
-        if !members.isEmpty {
-            data[.members] = members.compactMap({ user in
-                let member = Member(displayable: AnyHashableDisplayable.init(user),
-                                       isTyping: false)
-                return .member(member)
-            })
-        } else {
-            let member = Member(displayable: AnyHashableDisplayable.init(User.current()!), isTyping: false)
-            data[.members] = [.member(member)]
-        }
+        data[.members] = members.compactMap({ user in
+            guard let conversationController = self.conversationController else { return nil }
+            let member = Member(displayable: AnyHashableDisplayable.init(user),
+                                conversationController: conversationController)
+            return .member(member)
+        })
 
         return data
     }

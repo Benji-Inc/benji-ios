@@ -74,9 +74,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         ConversationsManager.shared.$activeConversation
             .removeDuplicates()
             .mainSink { conversation in
+
             guard let convo = conversation else { return }
             self.button.isVisible = convo.isOwnedByMe
-            self.view.layoutNow()
+            self.view.setNeedsLayout()
         }.store(in: &self.cancellables)
     }
 

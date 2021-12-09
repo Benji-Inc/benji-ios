@@ -121,18 +121,7 @@ class DisplayableImageView: View {
         }
     }
 
-    private func downloadAndSetImage(for user: User) {
-        Task {
-            if user.focusStatus == .focused, let file = user.focusImage {
-                await self.downloadAndSet(file: file)
-            } else if let file = user.smallImage {
-                await self.downloadAndSet(file: file)
-            }
-        }.add(to: self.taskPool)
-    }
-
     private func findUser(with objectID: String) async {
-
         var foundUser: User? = nil
 
         if let user = UserStore.shared.users.first(where: { user in
@@ -148,12 +137,23 @@ class DisplayableImageView: View {
         }
     }
 
+    private func downloadAndSetImage(for user: User) {
+        Task {
+            if user.focusStatus == .focused, let file = user.focusImage {
+                await self.downloadAndSet(file: file)
+            } else if let file = user.smallImage {
+                await self.downloadAndSet(file: file)
+            }
+        }.add(to: self.taskPool)
+    }
+
     @MainActor
     private func downloadAndSet(file: PFFileObject) async {
         do {
             if !file.isDataAvailable {
                 self.state = .loading
             }
+
             let data = try await file.retrieveDataInBackground { [weak self] progress in
                 guard let `self` = self else { return }
                 if self.animationView.microAnimation == .pie {
@@ -164,10 +164,9 @@ class DisplayableImageView: View {
 
             guard !Task.isCancelled else { return }
 
-            guard let image = UIImage(data: data) else {
-                self.showResult(for: nil)
-                return
-            }
+            let image = await UIImage(data: data)?.byPreparingForDisplay()
+
+            guard !Task.isCancelled else { return }
 
             self.showResult(for: image)
         } catch {
