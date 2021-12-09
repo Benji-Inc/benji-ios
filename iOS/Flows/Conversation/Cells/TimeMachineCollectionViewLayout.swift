@@ -210,18 +210,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         // All items are positioned relative to the frontmost item in their section.
-        guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
+        guard let itemZRange = self.itemZRanges[indexPath] else { return nil }
 
-        // OPTIMIZATION: Don't calculate attributes for items that definitely won't be visible.
-        guard (-1..<self.stackDepth+1).contains(frontmostIndexPath.item - indexPath.item) else {
-            return nil
-        }
-
-        let indexOffsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)
-        let offsetFromFrontmost = indexOffsetFromFrontmost*self.itemHeight
-
-        let frontmostVectorToCurrentZ = self.getFrontmostItemZVector(in: indexPath.section)
-        let vectorToCurrentZ = frontmostVectorToCurrentZ+offsetFromFrontmost
+        let vectorToCurrentZ = itemZRange.vector(to: self.zPosition)
 
         let normalizedZOffset: CGFloat
 
