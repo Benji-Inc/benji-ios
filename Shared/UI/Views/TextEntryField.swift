@@ -43,7 +43,7 @@ class TextEntryField: View, Sizeable {
                                               fontType: .medium,
                                               color: .lightGray)
             self.textField.setPlaceholder(attributed: attributed)
-            self.textField.setDefaultAttributes(style: StringStyle(font: .medium, color: .darkGray),
+            self.textField.setDefaultAttributes(style: StringStyle(font: .medium, color: .textColor),
                                                 alignment: .center)
         }
 

@@ -14,24 +14,27 @@ enum Environment: String {
     case production = "production"
 
     var url: String {
-        switch self {
-        case .staging: return "https://jibber-development-backend.herokuapp.com/parse"
-        case .production: return "https://jibber-backend.herokuapp.com"
-        }
+        return "https://jibber-development-backend.herokuapp.com/parse"
+//        switch self {
+//        case .staging: return "https://jibber-development-backend.herokuapp.com/parse"
+//        case .production: return "https://jibber-backend.herokuapp.com"
+//        }
     }
 
     var appID: String {
-        switch self {
-        case .staging: return "jibber-development"
-        case .production: return "bd263ac3-c8d9-4145-be8a-7d8eedbd5fcf"
-        }
+        return "jibber-development"
+//        switch self {
+//        case .staging: return "jibber-development"
+//        case .production: return "bd263ac3-c8d9-4145-be8a-7d8eedbd5fcf"
+//        }
     }
 
     var displayName: String {
-        switch self {
-        case .staging: return "stag"
-        case .production: return "prod"
-        }
+        return "stag"
+//        switch self {
+//        case .staging: return "stag"
+//        case .production: return "prod"
+//        }
     }
 
     var groupId: String {
@@ -39,10 +42,11 @@ enum Environment: String {
     }
 
     var chatAPIKey: String {
-        switch self {
-        case .staging: return "hvmd2mhxcres"
-        case .production: return "ybdsdqhd2nhg"
-        }
+        return "hvmd2mhxcres"
+//        switch self {
+//        case .staging: return "hvmd2mhxcres"
+//        case .production: return "ybdsdqhd2nhg"
+//        }
     }
 }
 
