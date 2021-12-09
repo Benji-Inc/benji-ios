@@ -10,7 +10,7 @@ import Foundation
 import StreamChat
 import Lottie
 
-struct Member: Hashable, Equatable {
+struct Member: Hashable {
     var displayable: AnyHashableDisplayable
     var conversationController: ConversationController
 
