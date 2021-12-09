@@ -20,9 +20,9 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         case bottomMessages = 1
     }
 
-    struct ItemType: Hashable {
-        let channelID: ChannelId
-        let messageID: MessageId
+    enum ItemType: Hashable {
+        case message(channelID: ChannelId, messageID: MessageId)
+        case loadMore
     }
 
     var handleTappedMessage: ((MessageSequenceItem, MessageContentView) -> Void)?
@@ -42,20 +42,23 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
                               section: SectionType,
                               item: ItemType) -> UICollectionViewCell? {
 
-        let messageCell
-        = collectionView.dequeueConfiguredReusableCell(using: self.messageSubcellRegistration,
-                                                       for: indexPath,
-                                                       item: (item.channelID,
-                                                              item.messageID,
-                                                              collectionView))
-        messageCell.content.handleEditMessage = { [unowned self] item in
-            self.handleEditMessage?(item)
-        }
+        switch item {
+        case .message(channelID: let channelID, messageID: let messageID):
+            let messageCell
+            = collectionView.dequeueConfiguredReusableCell(using: self.messageSubcellRegistration,
+                                                           for: indexPath,
+                                                           item: (channelID, messageID, collectionView))
+            messageCell.content.handleEditMessage = { [unowned self] item in
+                self.handleEditMessage?(item)
+            }
 
-        messageCell.content.handleTappedMessage = { [unowned self] item in
-            self.handleTappedMessage?(item, messageCell.content)
+            messageCell.content.handleTappedMessage = { [unowned self] item in
+                self.handleTappedMessage?(item, messageCell.content)
+            }
+            return messageCell
+        case .loadMore:
+            return nil
         }
-        return messageCell
     }
 
     /// Updates the datasource to display the given message sequence.
@@ -77,15 +80,14 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
 
         // The newest message is at the bottom, so reverse the order.
         var userMessageItems = userMessages.reversed().map { message in
-            return MessageSequenceItem(channelID: cid, messageID: message.id)
+            return ItemType.message(channelID: cid, messageID: message.id)
         }
         if self.shouldPrepareToSend {
-            userMessageItems.append(MessageSequenceItem(channelID: cid, messageID: "placeholderMessage"))
+            userMessageItems.append(ItemType.message(channelID: cid, messageID: "placeholderMessage"))
         }
 
         let otherMessageItems = otherMessages.reversed().map { message in
-            return MessageSequenceItem(channelID: try! ChannelId(cid: message.conversationID),
-                                       messageID: message.id)
+            return ItemType.message(channelID: cid, messageID: message.id)
         }
 
         var snapshot = self.snapshot()
@@ -134,11 +136,13 @@ extension MessageSequenceCollectionViewDataSource {
 extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayoutDataSource {
 
     func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItem? {
-        guard let item = self.itemIdentifier(for: indexPath) else { return nil }
-        let messageController = ChatClient.shared.messageController(cid: item.channelID,
-                                                                    messageId: item.messageID)
-
-        return messageController.message
+        switch self.itemIdentifier(for: indexPath) {
+        case .message(let channelID, let messageID):
+            let messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
+            return messageController.message
+        case .loadMore, .none:
+            return nil
+        }
     }
 }
 

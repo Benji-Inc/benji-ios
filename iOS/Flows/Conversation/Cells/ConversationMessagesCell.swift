@@ -104,17 +104,17 @@ class ConversationMessagesCell: UICollectionViewCell {
         var snapshot = self.dataSource.snapshot()
         switch event {
         case let event as ReactionNewEvent:
-            let item = MessageSequenceItem(channelID: event.cid, messageID: event.message.id)
+            let item: MessageSequenceItem = .message(channelID: event.cid, messageID: event.message.id)
             if snapshot.itemIdentifiers.contains(item) {
                 snapshot.reconfigureItems([item])
             }
         case let event as ReactionDeletedEvent:
-            let item = MessageSequenceItem(channelID: event.cid, messageID: event.message.id)
+            let item: MessageSequenceItem = .message(channelID: event.cid, messageID: event.message.id)
             if snapshot.itemIdentifiers.contains(item) {
                 snapshot.deleteItems([item])
             }
         case let event as ReactionUpdatedEvent:
-            let item = MessageSequenceItem(channelID: event.cid, messageID: event.message.id)
+            let item: MessageSequenceItem = .message(channelID: event.cid, messageID: event.message.id)
             if snapshot.itemIdentifiers.contains(item) {
                 snapshot.reconfigureItems([item])
             }
