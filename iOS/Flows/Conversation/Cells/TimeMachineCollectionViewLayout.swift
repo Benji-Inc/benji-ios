@@ -300,35 +300,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         return indexPathCandidate
     }
 
-    /// Gets the z vector from current frontmost item's z range to the current z position.
-    private func getFrontmostItemZVector(in section: SectionIndex) -> CGFloat {
-        guard let frontmostIndexPath = self.getFrontmostIndexPath(in: section) else { return 0 }
-
-        guard let frontmostRange = self.itemZRanges[frontmostIndexPath] else { return 0 }
-
-        return frontmostRange.vector(to: self.zPosition)
-    }
-
-    func getFocusedItemIndexPath() -> IndexPath? {
-        let sectionCount = self.sectionCount
-
-        var frontmostIndexes: [IndexPath] = []
-        for i in 0..<sectionCount {
-            guard let frontmostIndex = self.getFrontmostIndexPath(in: i) else { continue }
-            guard let range = self.itemZRanges[frontmostIndex] else { continue }
-
-            if range.vector(to: self.zPosition) > -self.itemHeight {
-                frontmostIndexes.append(frontmostIndex)
-            }
-        }
-
-        return frontmostIndexes.max { indexPath1, indexPath2 in
-            guard let lowerBound1 = self.itemZRanges[indexPath1]?.lowerBound else { return true }
-            guard let lowerBound2 = self.itemZRanges[indexPath2]?.lowerBound else { return false }
-            return lowerBound1 < lowerBound2
-        }
-    }
-
     func getMostRecentItemContentOffset() -> CGPoint? {
         guard let mostRecentIndex = self.itemZRanges.max(by: { kvp1, kvp2 in
             return kvp1.value.lowerBound < kvp2.value.lowerBound
