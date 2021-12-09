@@ -51,6 +51,28 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             .mainSink(receiveValue: { [unowned self] typingUsers in
                 self.dataSource.reconfigureAllItems()
             }).store(in: &self.cancellables)
+
+        self.conversationController?.memberEventPublisher.mainSink(receiveValue: { [unowned self] event in
+            switch event as MemberEvent {
+            case let event as MemberAddedEvent:
+                guard let conversationController = self.conversationController else { return }
+                let member = Member(displayable: AnyHashableDisplayable.init(event.member),
+                                    conversationController: conversationController)
+                self.dataSource.appendItems([.member(member)], toSection: .members)
+            case let event as MemberRemovedEvent:
+                guard let conversationController = self.conversationController else { return }
+                let member = Member(displayable: AnyHashableDisplayable.init(event.user),
+                                    conversationController: conversationController)
+                self.dataSource.deleteItems([.member(member)])
+            case let event as MemberUpdatedEvent:
+                guard let conversationController = self.conversationController else { return }
+                let member = Member(displayable: AnyHashableDisplayable.init(event.member),
+                                    conversationController: conversationController)
+                self.dataSource.reconfigureItems([.member(member)])
+            default:
+                break
+            }
+        }).store(in: &self.cancellables)
     }
 
     // MARK: Data Loading
