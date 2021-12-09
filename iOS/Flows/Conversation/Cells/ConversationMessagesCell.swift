@@ -31,6 +31,9 @@ class ConversationMessagesCell: UICollectionViewCell {
     }()
     private lazy var dataSource = MessageSequenceCollectionViewDataSource(collectionView: self.collectionView)
 
+    /// If true we should scroll to the last item in the collection in layout subviews.
+    private var scrollToLastItemOnLayout: Bool = false
+
     private var state: ConversationUIState = .read
 
     /// The conversation containing all the messages.
@@ -66,12 +69,26 @@ class ConversationMessagesCell: UICollectionViewCell {
         super.layoutSubviews()
 
         self.collectionView.expandToSuperviewSize()
+
+        if self.scrollToLastItemOnLayout {
+            self.scrollToLastItemOnLayout = false
+
+            self.collectionLayout.prepare()
+            let maxOffset = self.collectionLayout.maxZPosition
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: maxOffset), animated: false)
+            self.collectionLayout.invalidateLayout()
+        }
     }
 
     /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
     func set(sequence: MessageSequence) {
         self.conversation = sequence
 
+        // Scroll to the last item when a new conversation is loaded.
+        if self.dataSource.snapshot().itemIdentifiers.isEmpty {
+            self.scrollToLastItemOnLayout = true
+            self.setNeedsLayout()
+        }
         self.dataSource.set(messageSequence: sequence)
     }
 

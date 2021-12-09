@@ -67,6 +67,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     var zPosition: CGFloat {
         return self.collectionView?.contentOffset.y ?? 0
     }
+    var maxZPosition: CGFloat {
+        return self.itemFocusPositions.values.max() ?? 0
+    }
     /// A cache of item layout attributes so they don't have to be recalculated.
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
@@ -210,18 +213,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         // All items are positioned relative to the frontmost item in their section.
-        guard let frontmostIndexPath = self.getFrontmostIndexPath(in: indexPath.section) else { return nil }
+        guard let itemZRange = self.itemZRanges[indexPath] else { return nil }
 
-        // OPTIMIZATION: Don't calculate attributes for items that definitely won't be visible.
-        guard (-1..<self.stackDepth+1).contains(frontmostIndexPath.item - indexPath.item) else {
-            return nil
-        }
-
-        let indexOffsetFromFrontmost = CGFloat(frontmostIndexPath.item - indexPath.item)
-        let offsetFromFrontmost = indexOffsetFromFrontmost*self.itemHeight
-
-        let frontmostVectorToCurrentZ = self.getFrontmostItemZVector(in: indexPath.section)
-        let vectorToCurrentZ = frontmostVectorToCurrentZ+offsetFromFrontmost
+        let vectorToCurrentZ = itemZRange.vector(to: self.zPosition)
 
         let normalizedZOffset: CGFloat
 
@@ -236,6 +230,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             normalizedZOffset = 0
         }
 
+        // OPTIMIZATION: Don't generates attributes for items that can't possibly be seen.
+        if !(-1...1).contains(normalizedZOffset) {
+            return nil
+        }
+
         return self.layoutAttributesForItemAt(indexPath: indexPath, withNormalizedZOffset: normalizedZOffset)
     }
 
@@ -246,6 +245,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     /// 1 means the item is scaled up and moved forward as much as possible before it disappears.
     func layoutAttributesForItemAt(indexPath: IndexPath,
                                    withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
+
         guard let collectionView = self.collectionView else { return nil }
 
         var scale: CGFloat
@@ -307,35 +307,6 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         return indexPathCandidate
-    }
-
-    /// Gets the z vector from current frontmost item's z range to the current z position.
-    private func getFrontmostItemZVector(in section: SectionIndex) -> CGFloat {
-        guard let frontmostIndexPath = self.getFrontmostIndexPath(in: section) else { return 0 }
-
-        guard let frontmostRange = self.itemZRanges[frontmostIndexPath] else { return 0 }
-
-        return frontmostRange.vector(to: self.zPosition)
-    }
-
-    func getFocusedItemIndexPath() -> IndexPath? {
-        let sectionCount = self.sectionCount
-
-        var frontmostIndexes: [IndexPath] = []
-        for i in 0..<sectionCount {
-            guard let frontmostIndex = self.getFrontmostIndexPath(in: i) else { continue }
-            guard let range = self.itemZRanges[frontmostIndex] else { continue }
-
-            if range.vector(to: self.zPosition) > -self.itemHeight {
-                frontmostIndexes.append(frontmostIndex)
-            }
-        }
-
-        return frontmostIndexes.max { indexPath1, indexPath2 in
-            guard let lowerBound1 = self.itemZRanges[indexPath1]?.lowerBound else { return true }
-            guard let lowerBound2 = self.itemZRanges[indexPath2]?.lowerBound else { return false }
-            return lowerBound1 < lowerBound2
-        }
     }
 
     func getMostRecentItemContentOffset() -> CGPoint? {
