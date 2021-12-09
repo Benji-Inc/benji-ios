@@ -197,7 +197,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         // Return all items whose frames intersect with the given rect.
         let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
-            return attributes.alpha > 0 && rect.intersects(attributes.frame)
+            return rect.intersects(attributes.frame)
         }
 
         return itemAttributes
