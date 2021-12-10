@@ -68,7 +68,7 @@ class ConversationMessagesCell: UICollectionViewCell {
 
         self.dataSource.handleLoadMoreMessages = { [unowned self] cid in
             Task {
-                self.conversationController?.loadPreviousMessages(before: nil, limit: 2)
+                self.conversationController?.loadPreviousMessages()
             }
         }
     }
@@ -106,7 +106,8 @@ class ConversationMessagesCell: UICollectionViewCell {
             self.setNeedsLayout()
         }
 
-        self.dataSource.set(messageSequence: conversation)
+        let showLoadMore = !(self.conversationController?.hasLoadedAllPreviousMessages ?? false)
+        self.dataSource.set(messageSequence: conversation, showLoadMore: showLoadMore)
     }
 
     func set(layoutForDropZone: Bool) {

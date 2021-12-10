@@ -73,10 +73,9 @@ class ConversationListViewController: FullScreenViewController,
         let filter: Filter<ChannelListFilterScope>
         = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
 
-        #warning("Change back the page size")
         let query = ChannelListQuery(filter: filter,
                                      sort: [Sorting(key: .createdAt, isAscending: false)],
-                                     pageSize: 5,
+                                     pageSize: .channelsPageSize,
                                      messagesLimit: .messagesPageSize)
         self.conversationListController
         = ChatClient.shared.channelListController(query: query)
@@ -198,7 +197,7 @@ class ConversationListViewController: FullScreenViewController,
     @MainActor
     func initializeDataSource() async {
         try? await self.conversationListController.synchronize()
-        try? await self.conversationListController.loadNextConversations(limit: 5)
+        try? await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
 
         let conversations = self.conversationListController.conversations
 
