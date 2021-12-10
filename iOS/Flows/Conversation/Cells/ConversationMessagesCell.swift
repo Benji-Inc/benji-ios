@@ -59,6 +59,10 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.dataSource.handleEditMessage = { [unowned self] item in
             self.handleEditMessage?(item)
         }
+
+        self.dataSource.handleLoadMoreMessages = { [unowned self] cid in
+            logDebug("handle load more messages")
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -104,17 +108,17 @@ class ConversationMessagesCell: UICollectionViewCell {
         var snapshot = self.dataSource.snapshot()
         switch event {
         case let event as ReactionNewEvent:
-            let item: MessageSequenceItem = .message(channelID: event.cid, messageID: event.message.id)
+            let item = MessageSequenceItem.message(cid: event.cid, messageID: event.message.id)
             if snapshot.itemIdentifiers.contains(item) {
                 snapshot.reconfigureItems([item])
             }
         case let event as ReactionDeletedEvent:
-            let item: MessageSequenceItem = .message(channelID: event.cid, messageID: event.message.id)
+            let item = MessageSequenceItem.message(cid: event.cid, messageID: event.message.id)
             if snapshot.itemIdentifiers.contains(item) {
                 snapshot.deleteItems([item])
             }
         case let event as ReactionUpdatedEvent:
-            let item: MessageSequenceItem = .message(channelID: event.cid, messageID: event.message.id)
+            let item = MessageSequenceItem.message(cid: event.cid, messageID: event.message.id)
             if snapshot.itemIdentifiers.contains(item) {
                 snapshot.reconfigureItems([item])
             }

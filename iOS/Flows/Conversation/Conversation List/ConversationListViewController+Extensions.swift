@@ -20,7 +20,7 @@ extension ConversationListViewController {
 
         self.dataSource.handleSelectedMessage = { [unowned self] (item, view) in
             switch item {
-            case .message(channelID: let channelID, messageID: let messageID):
+            case .message(cid: let channelID, messageID: let messageID):
                 self.selectedMessageView = view
                 self.onSelectedMessage?(channelID, messageID)
             case .loadMore:

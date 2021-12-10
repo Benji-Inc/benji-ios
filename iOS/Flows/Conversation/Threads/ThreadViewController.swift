@@ -160,7 +160,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             guard let cid = self.parentMessage.cid else { return [:] }
 
             let messages = self.messageController.replies.map { message in
-                return MessageSequenceItem.message(channelID: cid, messageID: message.id)
+                return MessageSequenceItem.message(cid: cid, messageID: message.id)
             }
             data[.bottomMessages] = Array(messages)
         } catch {
