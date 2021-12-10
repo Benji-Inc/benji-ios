@@ -74,7 +74,7 @@ class MessageStatusView: View {
 
 private class MessageStatusContainer: View {
 
-    let maxWidth: CGFloat = 100
+    let maxWidth: CGFloat = 200
     let minWidth: CGFloat = 20
 
     override func initializeSubviews() {
@@ -122,7 +122,12 @@ private class MessageReadView: MessageStatusContainer {
         self.imageView.match(.left, to: .right, of: self.label, offset: .short)
         self.imageView.centerOnY()
 
-        let width = (Theme.ContentOffset.short.value * 3) + self.imageView.width + self.label.width
+        let width: CGFloat
+        if self.imageView.image.isNil {
+            width = (Theme.ContentOffset.short.value * 2) + self.label.width
+        } else {
+            width = (Theme.ContentOffset.short.value * 3) + self.imageView.width + self.label.width
+        }
         self.width = clamp(width, self.minWidth, self.maxWidth)
 
         self.progressView.expandToSuperviewHeight()
@@ -142,7 +147,7 @@ private class MessageReadView: MessageStatusContainer {
                 self.imageView.image = UIImage(named: "checkmark-double")
             }
         } else if !message.isConsumed, message.localState.isNil {
-            self.label.setText("Delivered")
+            self.label.setText("Delivered \(message.context.displayName)")
             self.imageView.image = UIImage(named: "checkmark")
         } else if let state = message.localState {
             switch state {
@@ -152,7 +157,6 @@ private class MessageReadView: MessageStatusContainer {
                 self.label.setText("Error")
             case .pendingSend, .sending:
                 self.label.setText("Sending")
-                self.imageView.image = UIImage(named: "checkmark")
                 Task {
                     await Task.snooze(seconds: 0.1)
                     guard !Task.isCancelled else { return }

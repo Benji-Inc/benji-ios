@@ -36,4 +36,15 @@ enum MessageContext: String, CaseIterable {
             return .passive
         }
     }
+
+    var displayName: String {
+        switch self {
+        case .timeSensitive:
+            return "Urgently"
+        case .passive:
+            return "Quietly"
+        case .status:
+            return ""
+        }
+    }
 }
