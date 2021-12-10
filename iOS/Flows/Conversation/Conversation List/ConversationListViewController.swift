@@ -26,8 +26,7 @@ enum ConversationUIState {
 
 class ConversationListViewController: FullScreenViewController,
                                       UICollectionViewDelegate,
-                                      UICollectionViewDelegateFlowLayout,
-                                      ActiveConversationable {
+                                      UICollectionViewDelegateFlowLayout {
 
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
@@ -74,9 +73,10 @@ class ConversationListViewController: FullScreenViewController,
         let filter: Filter<ChannelListFilterScope>
         = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
 
+        #warning("Change back the page size")
         let query = ChannelListQuery(filter: filter,
                                      sort: [Sorting(key: .createdAt, isAscending: false)],
-                                     pageSize: .channelsPageSize,
+                                     pageSize: 5,
                                      messagesLimit: .messagesPageSize)
         self.conversationListController
         = ChatClient.shared.channelListController(query: query)
@@ -176,14 +176,9 @@ class ConversationListViewController: FullScreenViewController,
         }
     }
 
-    var conversationController: ConversationController?
-
     func updateCenterMostCell() {
-        guard let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
-            return
-        }
-
-        guard let ip = self.collectionView.centerIndexPath(), let conversation = self.conversationListController.conversations[safe: ip.item] else { return }
+        guard let ip = self.collectionView.centerIndexPath(),
+              let conversation = self.conversationListController.conversations[safe: ip.item] else { return }
 
         /// Sets the active conversation
         ConversationsManager.shared.activeConversation = conversation
@@ -193,24 +188,8 @@ class ConversationListViewController: FullScreenViewController,
         }
         self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: false)
 
-        // If there's a centered cell, update the layout
-        if let currentConversation = self.activeConversation {
-            self.conversationController = ChatClient.shared.channelController(for: currentConversation.cid)
-
-            ConversationsManager.shared.$reactionEvent.mainSink { event in
-                guard let event = event else { return }
-                cell.updateMessages(with: event)
-            }.store(in: &self.cancellables)
-
-            self.conversationController?.messagesChangesPublisher.mainSink(receiveValue: { [unowned self] changes in
-                if let activeConversation = self.conversationController?.conversation {
-                    cell.set(sequence: activeConversation)
-                }
-            }).store(in: &self.cancellables)
-
-            UIView.animate(withDuration: Theme.animationDurationFast) {
-                self.view.layoutNow()
-            }
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.view.layoutNow()
         }
     }
 
@@ -219,7 +198,7 @@ class ConversationListViewController: FullScreenViewController,
     @MainActor
     func initializeDataSource() async {
         try? await self.conversationListController.synchronize()
-        try? await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
+        try? await self.conversationListController.loadNextConversations(limit: 5)
 
         let conversations = self.conversationListController.conversations
 

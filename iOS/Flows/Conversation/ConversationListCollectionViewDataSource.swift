@@ -158,14 +158,12 @@ extension ConversationListCollectionViewDataSource {
             }
 
             cell.set(layoutForDropZone: item.dataSource.layoutForDropZone)
-            cell.set(sequence: conversationController.conversation)
+            cell.set(conversation: conversationController.conversation)
         }
     }
 
     static func createLoadMoreCellRegistration() -> LoadMoreMessagesCellRegistration {
-        return LoadMoreMessagesCellRegistration { cell, indexPath, itemIdentifier in
-
-        }
+        return LoadMoreMessagesCellRegistration { cell, indexPath, itemIdentifier in }
     }
 }
 

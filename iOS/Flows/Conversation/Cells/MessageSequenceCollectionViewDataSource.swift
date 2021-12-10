@@ -72,7 +72,9 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
 
     /// Updates the datasource to display the given message sequence.
     /// The message sequence should be ordered newest to oldest.
-    func set(messageSequence: MessageSequence) {
+    func set(messageSequence: MessageSequence,
+             itemsToReconfigure: [ItemType] = [],
+             showLoadMore: Bool = false) {
         // Separate the user messages from other message.
         let userMessages = messageSequence.messages.filter { message in
             return message.isFromCurrentUser
@@ -115,6 +117,8 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
 
         snapshot.appendItems(otherMessageItems, toSection: .topMessages)
         snapshot.appendItems(userMessageItems, toSection: .bottomMessages)
+
+        snapshot.reconfigureItems(itemsToReconfigure)
 
         self.apply(snapshot, animatingDifferences: animateDifference)
     }

@@ -9,6 +9,7 @@
 import Foundation
 import StreamChat
 import UIKit
+import Combine
 
 /// A cell to display the messages of a conversation.
 /// The user's messages and other messages are put in two stacks (along the z-axis),
@@ -37,15 +38,20 @@ class ConversationMessagesCell: UICollectionViewCell {
     private var state: ConversationUIState = .read
 
     /// The conversation containing all the messages.
-    var conversation: MessageSequence?
+    var conversation: Conversation? {
+        return self.conversationController?.conversation
+    }
+    private(set) var conversationController: ConversationController?
+    /// A set of the current event subscriptions. Should be cleared out when the cell is reused.
+    private var subscriptions = Set<AnyCancellable>()
 
+    // MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         self.collectionLayout.dataSource = self.dataSource
 
         self.collectionView.decelerationRate = .fast
-        self.collectionView.delegate = self
         self.collectionView.set(backgroundColor: .clear)
 
         // Allow message subcells to scale in size without getting clipped.
@@ -61,7 +67,9 @@ class ConversationMessagesCell: UICollectionViewCell {
         }
 
         self.dataSource.handleLoadMoreMessages = { [unowned self] cid in
-            logDebug("handle load more messages")
+            Task {
+                self.conversationController?.loadPreviousMessages(before: nil, limit: 2)
+            }
         }
     }
 
@@ -85,15 +93,20 @@ class ConversationMessagesCell: UICollectionViewCell {
     }
 
     /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
-    func set(sequence: MessageSequence) {
-        self.conversation = sequence
+    func set(conversation: Conversation) {
+        // Create a new conversation controller if this is a different conversation than before.
+        if conversation.cid != self.conversation?.cid {
+            self.conversationController = ChatClient.shared.channelController(for: conversation.cid)
+            self.subscribeToUpdates()
+        }
 
         // Scroll to the last item when a new conversation is loaded.
         if self.dataSource.snapshot().itemIdentifiers.isEmpty {
             self.scrollToLastItemOnLayout = true
             self.setNeedsLayout()
         }
-        self.dataSource.set(messageSequence: sequence)
+
+        self.dataSource.set(messageSequence: conversation)
     }
 
     func set(layoutForDropZone: Bool) {
@@ -134,11 +147,40 @@ class ConversationMessagesCell: UICollectionViewCell {
 
         self.dataSource.shouldPrepareToSend = false
 
+        self.subscriptions.removeAll()
+
         // Remove all the items so the next message has a blank slate to work with.
         var snapshot = self.dataSource.snapshot()
         snapshot.deleteAllItems()
         self.dataSource.apply(snapshot, animatingDifferences: false)
     }
+
+    // MARK: - Update Subscriptions
+
+    func subscribeToUpdates() {
+        self.conversationController?
+            .messagesChangesPublisher
+            .mainSink { [unowned self] changes in
+                guard let conversationController = self.conversationController,
+                      let cid = conversationController.cid else { return }
+
+                var itemsToReconfigure: [MessageSequenceItem] = []
+                for change in changes {
+                    switch change {
+                    case .update(let message, _):
+                        itemsToReconfigure.append(.message(cid: cid, messageID: message.id))
+                    default:
+                        break
+                    }
+                }
+                let conversation = conversationController.conversation
+                self.dataSource.set(messageSequence: conversation,
+                                    itemsToReconfigure: itemsToReconfigure,
+                                    showLoadMore: !conversationController.hasLoadedAllPreviousMessages)
+        }.store(in: &self.subscriptions)
+    }
+
+    // MARK: - Drop Zone Helpers
 
     /// Returns the frame that a message drop zone should have, based on this cell's contents.
     /// The frame is in the coordinate space of the passed in view.
@@ -158,17 +200,5 @@ class ConversationMessagesCell: UICollectionViewCell {
 
     func getBottomFrontMostCell() -> MessageSubcell? {
         return self.collectionLayout.getBottomFrontMostCell()
-    }
-}
-
-extension ConversationMessagesCell: UICollectionViewDelegate {
-
-    // MARK: - UICollectionViewDelegate
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let item = self.dataSource.itemIdentifier(for: indexPath),
-                let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
-        
-        self.handleTappedMessage?(item, cell.content)
     }
 }

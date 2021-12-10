@@ -55,7 +55,6 @@ extension ConversationListViewController {
     }
 
     func subscribeToUpdates() {
-
         self.$state
             .removeDuplicates()
             .mainSink { [unowned self] state in
@@ -81,7 +80,8 @@ extension ConversationListViewController {
         }.store(in: &self.cancellables)
 
         self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] text in
-            guard let conversationController = self.conversationController else { return }
+            guard let cid = self.getCurrentMessageSequence()?.streamCID else { return }
+            let conversationController = ChatClient.shared.channelController(for: cid)
 
             guard conversationController.areTypingEventsEnabled else { return }
 
