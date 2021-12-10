@@ -88,10 +88,10 @@ class ConversationHeaderViewController: ViewController, ActiveConversationable {
         self.membersVC.view.expandToSuperviewWidth()
         self.membersVC.view.pin(.bottom)
 
-        self.button.height = self.view.height - self.membersVC.view.height
+        self.button.height = 44
         self.button.width = 44
         self.button.pin(.right, offset: .xtraLong)
-        self.button.pin(.top)
+        self.button.pin(.top, offset: .negative(.custom(22)))
     }
 
     func update(for state: ConversationUIState) {
