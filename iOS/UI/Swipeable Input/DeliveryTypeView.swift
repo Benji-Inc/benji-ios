@@ -65,7 +65,7 @@ class DeliveryTypeView: View {
             self.configure(for: .passive)
         }
 
-        let urgentState: UIMenuElement.State = context == .passive ? .on : .off
+        let urgentState: UIMenuElement.State = context == .timeSensitive ? .on : .off
 
         let urgent = UIAction(title: "Urgently",
                                image: UIImage(systemName: "bell.badge"),
