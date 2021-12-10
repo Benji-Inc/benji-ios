@@ -51,6 +51,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
     /// A button to handle taps and pan gestures.
     @IBOutlet var overlayButton: UIButton!
 
+    @IBOutlet var deliveryTypeContainer: UIView!
     @IBOutlet var inputTypeContainer: UIView!
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
 
@@ -65,6 +66,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
     var editableMessage: Messageable?
     var currentMessageKind: MessageKind = .text(String())
     private var sendable: SendableObject?
+    private let deliveryTypeView = DeliveryTypeView()
 
     var cancellables = Set<AnyCancellable>()
 
@@ -93,8 +95,20 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
         let trailingConstraint = self.inputManager.collectionView.trailingAnchor.constraint(equalTo: self.inputTypeContainer.trailingAnchor)
         self.inputTypeContainer.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
 
+        self.deliveryTypeContainer.addSubview(self.deliveryTypeView)
+        self.deliveryTypeView.configure(for: self.currentContext)
+        self.deliveryTypeView.didSelectContext = { [unowned self] context in
+            self.currentContext = context
+        }
+
         self.setupGestures()
         self.setupHandlers()
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        self.deliveryTypeView.pin(.right)
     }
 
     // MARK: PRIVATE

@@ -147,7 +147,11 @@ private class MessageReadView: MessageStatusContainer {
                 self.imageView.image = UIImage(named: "checkmark-double")
             }
         } else if !message.isConsumed, message.localState.isNil {
-            self.label.setText("Delivered \(message.context.displayName)")
+            if message.isFromCurrentUser {
+                self.label.setText("Delivered \(message.context.displayName)")
+            } else {
+                self.label.setText("Reading")
+            }
             self.imageView.image = UIImage(named: "checkmark")
         } else if let state = message.localState {
             switch state {
