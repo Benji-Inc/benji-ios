@@ -29,6 +29,21 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.05
     }
 
+    /// The sort value of the focused right before the most recent invalidation.
+    private var sortValueOfFocusedItemBeforeInvalidation: Double?
+
+    override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
+        // Find the the current focused item
+        if let focusedIndexPath = self.itemFocusPositions.min(by: { kvp1, kvp2 in
+            return abs(kvp1.value - self.zPosition) < abs(kvp2.value - self.zPosition)
+        })?.key {
+            self.sortValueOfFocusedItemBeforeInvalidation = self.itemSortValues[focusedIndexPath]
+        } else {
+            self.sortValueOfFocusedItemBeforeInvalidation = nil
+        }
+
+        super.invalidateLayout(with: context)
+    }
     override func layoutAttributesForItemAt(indexPath: IndexPath,
                                             withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
 
@@ -117,25 +132,41 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         super.prepare(forCollectionViewUpdates: updateItems)
 
         guard let collectionView = self.collectionView,
-        let mostRecentOffset = self.getMostRecentItemContentOffset() else { return }
+              let mostRecentOffset = self.getMostRecentItemContentOffset() else { return }
 
         for update in updateItems {
             switch update.updateAction {
             case .insert:
                 guard let indexPath = update.indexPathAfterUpdate else { break }
 
-                self.scrollOffset += self.itemHeight
+                if let timeMachineItem = self.dataSource?.getTimeMachineItem(forItemAt: indexPath),
+                   let previousSortValue = self.sortValueOfFocusedItemBeforeInvalidation {
+
+                    logDebug(timeMachineItem.sortValue.description)
+                    if timeMachineItem.sortValue < previousSortValue.sortValue {
+                        self.scrollOffset += self.itemHeight
+                    }
+                }
+
                 let isScrolledToMostRecent
                 = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
+
+                let isMostRecentInBottomSection = indexPath.item == self.numberOfItems(inSection: 1) - 1
+
                 // Always scroll to the end for new user messages, or if we're currently scrolled to the
                 // most recent message.
-                if indexPath.section == 1 || isScrolledToMostRecent {
+                if isMostRecentInBottomSection || isScrolledToMostRecent {
                     self.shouldScrollToEnd = true
                 }
             case .delete:
                 guard let indexPath = update.indexPathBeforeUpdate else { break }
                 self.deletedIndexPaths.insert(indexPath)
-                self.scrollOffset -= self.itemHeight
+                let isScrolledToMostRecent
+                = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
+
+                if !isScrolledToMostRecent {
+                    self.scrollOffset -= self.itemHeight
+                }
             case .reload, .move, .none:
                 break
             @unknown default:
@@ -153,12 +184,18 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+        if self.shouldScrollToEnd, let mostRecentOffset = self.getMostRecentItemContentOffset() {
+            return mostRecentOffset
+        }
+
+
+        if let sortValueOfLastFocusedItem = self.sortValueOfFocusedItemBeforeInvalidation,
+           !self.itemSortValues.values.contains(sortValueOfLastFocusedItem) {
+            self.scrollOffset -= self.itemHeight
+        }
+
         return CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffset)
-//        guard self.shouldScrollToEnd, let offset = self.getMostRecentItemContentOffset() else {
-//            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
-//        }
-//
-//        return offset
+
     }
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)

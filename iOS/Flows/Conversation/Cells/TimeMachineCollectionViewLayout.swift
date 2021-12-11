@@ -17,6 +17,11 @@ protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
     func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItem?
 }
 
+protocol TimeMachineCollectionViewLayoutDelegate: AnyObject {
+    func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout,
+                                         updatedFrontmostItemAt indexPath: IndexPath)
+}
+
 private class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
     /// If true, the z ranges for all the items should be recalculated.
     var shouldRecalculateZRanges = true
@@ -35,6 +40,9 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
 
     // MARK: - Data Source
     weak var dataSource: TimeMachineCollectionViewLayoutDataSource?
+    weak var delegate: TimeMachineCollectionViewLayoutDelegate?
+    private var lastFrontmostIndexPath: [SectionIndex: IndexPath] = [:]
+
     var sectionCount: Int {
         return self.collectionView?.numberOfSections ?? 0
     }
@@ -75,6 +83,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     private var cellLayoutAttributes: [IndexPath : UICollectionViewLayoutAttributes] = [:]
     /// A dictionary of z positions where each item is considered in focus. This means the item is frontmost, most recent, and unscaled.
     private(set) var itemFocusPositions: [IndexPath : CGFloat] = [:]
+    /// A cache of all the sort values for each item.
+    private(set) var itemSortValues: [IndexPath : Double] = [:]
     /// A dictionary of z ranges for all the items. A z range represents the range that each item will be frontmost in its section
     /// and its scale and position will be unaltered.
     private(set) var itemZRanges: [IndexPath : Range<CGFloat>] = [:]
@@ -126,6 +136,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         }
 
         if customContext.shouldRecalculateZRanges {
+            self.itemSortValues.removeAll()
             self.itemFocusPositions.removeAll()
             self.itemZRanges.removeAll()
         }
@@ -150,14 +161,20 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             return
         }
 
+        // Initialize all of the sort values
+        self.forEachIndexPath { indexPath in
+            let timeMachineItem = dataSource.getTimeMachineItem(forItemAt: indexPath)
+            self.itemSortValues[indexPath] = timeMachineItem?.sortValue
+        }
+
         // Get all of the items and sort them by value. This combines all the sections into a flat list.
         var sortedItemIndexPaths: [IndexPath] = []
         self.forEachIndexPath { indexPath in
             sortedItemIndexPaths.append(indexPath)
         }
         sortedItemIndexPaths.sort { indexPath1, indexPath2 in
-            let sortValue1 = dataSource.getTimeMachineItem(forItemAt: indexPath1)?.sortValue ?? Double.greatestFiniteMagnitude
-            let sortValue2 = dataSource.getTimeMachineItem(forItemAt: indexPath2)?.sortValue ?? Double.greatestFiniteMagnitude
+            let sortValue1 = self.itemSortValues[indexPath1] ?? Double.greatestFiniteMagnitude
+            let sortValue2 = self.itemSortValues[indexPath2] ?? Double.greatestFiniteMagnitude
             return sortValue1 < sortValue2
         }
 
@@ -200,7 +217,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         // Return all items whose frames intersect with the given rect.
         let itemAttributes = self.cellLayoutAttributes.values.filter { attributes in
-            return rect.intersects(attributes.frame)
+            return rect.intersects(attributes.frame) && attributes.alpha > 0
         }
 
         return itemAttributes
@@ -230,12 +247,13 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             normalizedZOffset = 0
         }
 
-        // OPTIMIZATION: Don't generates attributes for items that can't possibly be seen.
-        if !(-1...1).contains(normalizedZOffset) {
-            return nil
+        if normalizedZOffset == 0, indexPath != self.lastFrontmostIndexPath[indexPath.section] {
+            self.lastFrontmostIndexPath[indexPath.section] = indexPath
+            self.delegate?.timeMachineCollectionViewLayout(self, updatedFrontmostItemAt: indexPath)
         }
 
-        return self.layoutAttributesForItemAt(indexPath: indexPath, withNormalizedZOffset: normalizedZOffset)
+        return self.layoutAttributesForItemAt(indexPath: indexPath,
+                                              withNormalizedZOffset: clamp(normalizedZOffset, -1, 1))
     }
 
     /// Returns the UICollectionViewLayoutAttributes for the item at the given indexPath configured with the specified normalized Z Offset.

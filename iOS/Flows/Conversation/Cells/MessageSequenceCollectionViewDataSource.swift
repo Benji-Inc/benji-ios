@@ -163,14 +163,34 @@ extension MessageSequenceCollectionViewDataSource {
 extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayoutDataSource {
 
     func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItem? {
-        switch self.itemIdentifier(for: indexPath) {
+        guard let item = self.itemIdentifier(for: indexPath) else { return nil }
+
+        return self.getTimeMachineItem(forItem: item)
+    }
+
+    private func getTimeMachineItem(forItem item: ItemType) -> TimeMachineLayoutItem? {
+        switch item {
         case .message(let channelID, let messageID):
             let messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
             return messageController.message
         case .loadMore:
-            return -Double.infinity
-        case .none:
-            return nil
+            let timeMachineItems: [TimeMachineLayoutItem]
+            = self.snapshot().itemIdentifiers.compactMap { itemIdentifier in
+                switch itemIdentifier {
+                case .message:
+                    return self.getTimeMachineItem(forItem: itemIdentifier)
+                case .loadMore:
+                    return nil
+                }
+            }
+
+            guard let oldestItem = timeMachineItems.min(by: { (timeMachineItem1, timeMachineItem2) in
+                return timeMachineItem1.sortValue < timeMachineItem2.sortValue
+            }) else {
+                return -Double.infinity
+            }
+
+            return oldestItem.sortValue - Double.leastNonzeroMagnitude
         }
     }
 }
