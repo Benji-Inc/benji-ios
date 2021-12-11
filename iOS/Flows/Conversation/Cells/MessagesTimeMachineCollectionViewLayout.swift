@@ -162,7 +162,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
                 if let deleteSortValue = self.sortValuesBeforeInvalidation[indexPath],
                    let previousFocusedSortValue = self.sortValueOfFocusedItemBeforeInvalidation,
-                    deleteSortValue <= previousFocusedSortValue {
+                    deleteSortValue < previousFocusedSortValue {
                     self.scrollOffset -= self.itemHeight
                 }
             case .reload, .move, .none:

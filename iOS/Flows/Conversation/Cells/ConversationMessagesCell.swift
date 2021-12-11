@@ -42,6 +42,16 @@ class ConversationMessagesCell: UICollectionViewCell {
         return self.conversationController?.conversation
     }
     private(set) var conversationController: ConversationController?
+    private var shouldShowLoadMore: Bool {
+        guard let conversationController = self.conversationController else {
+            return false
+        }
+
+        if conversationController.messages.count < .messagesPageSize {
+            return false
+        }
+        return !conversationController.hasLoadedAllPreviousMessages
+    }
     /// A set of the current event subscriptions. Should be cleared out when the cell is reused.
     private var subscriptions = Set<AnyCancellable>()
 
@@ -100,21 +110,13 @@ class ConversationMessagesCell: UICollectionViewCell {
             self.subscribeToUpdates()
         }
 
-        guard let conversationController = self.conversationController else {
-            return
-        }
-
         // Scroll to the last item when a new conversation is loaded.
         if self.dataSource.snapshot().itemIdentifiers.isEmpty {
             self.scrollToLastItemOnLayout = true
             self.setNeedsLayout()
         }
 
-        var showLoadMore = !conversationController.hasLoadedAllPreviousMessages
-        if conversationController.messages.count < .messagesPageSize {
-            showLoadMore = false
-        }
-        self.dataSource.set(messageSequence: conversation, showLoadMore: showLoadMore)
+        self.dataSource.set(messageSequence: conversation, showLoadMore: self.shouldShowLoadMore)
     }
 
     func set(layoutForDropZone: Bool) {
@@ -184,7 +186,7 @@ class ConversationMessagesCell: UICollectionViewCell {
                 let conversation = conversationController.conversation
                 self.dataSource.set(messageSequence: conversation,
                                     itemsToReconfigure: itemsToReconfigure,
-                                    showLoadMore: !conversationController.hasLoadedAllPreviousMessages)
+                                    showLoadMore: self.shouldShowLoadMore)
         }.store(in: &self.subscriptions)
     }
 
