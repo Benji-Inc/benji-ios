@@ -111,7 +111,7 @@ class ConversationMessagesCell: UICollectionViewCell {
         }
 
         var showLoadMore = !conversationController.hasLoadedAllPreviousMessages
-        if conversationController.messages.count <= .messagesPageSize {
+        if conversationController.messages.count < .messagesPageSize {
             showLoadMore = false
         }
         self.dataSource.set(messageSequence: conversation, showLoadMore: showLoadMore)
