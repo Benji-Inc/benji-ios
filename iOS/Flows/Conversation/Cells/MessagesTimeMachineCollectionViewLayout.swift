@@ -30,6 +30,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
 
     /// The sort value of the focused right before the most recent invalidation.
+    /// This can be used to keep the focused item in place when items are inserted before it.
     private var sortValueOfFocusedItemBeforeInvalidation: Double?
 
     override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
@@ -78,11 +79,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
                                                 end: 0)
         }
 
-        // If there is no message to display for this index path, don't show the cell.
-        if self.dataSource?.getTimeMachineItem(forItemAt: indexPath) == nil {
-            attributes.alpha = 0
-        }
-
         attributes.backgroundColor = .white
         attributes.brightness = backgroundBrightness
         attributes.shouldShowTail = indexPath.section == 0
@@ -126,7 +122,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     /// If true, scroll to the most recent item after performing collection view updates.
     private var shouldScrollToEnd = false
     private var deletedIndexPaths: Set<IndexPath> = []
-    private var scrollOffset: CGFloat = 0
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
@@ -138,15 +133,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             switch update.updateAction {
             case .insert:
                 guard let indexPath = update.indexPathAfterUpdate else { break }
-
-                if let timeMachineItem = self.dataSource?.getTimeMachineItem(forItemAt: indexPath),
-                   let previousSortValue = self.sortValueOfFocusedItemBeforeInvalidation {
-
-                    logDebug(timeMachineItem.sortValue.description)
-                    if timeMachineItem.sortValue < previousSortValue.sortValue {
-                        self.scrollOffset += self.itemHeight
-                    }
-                }
 
                 let isScrolledToMostRecent
                 = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
@@ -161,12 +147,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             case .delete:
                 guard let indexPath = update.indexPathBeforeUpdate else { break }
                 self.deletedIndexPaths.insert(indexPath)
-                let isScrolledToMostRecent
-                = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
-
-                if !isScrolledToMostRecent {
-                    self.scrollOffset -= self.itemHeight
-                }
             case .reload, .move, .none:
                 break
             @unknown default:
@@ -180,7 +160,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
         self.shouldScrollToEnd = false
         self.deletedIndexPaths.removeAll()
-        self.scrollOffset = 0
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
@@ -188,14 +167,26 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             return mostRecentOffset
         }
 
-
-        if let sortValueOfLastFocusedItem = self.sortValueOfFocusedItemBeforeInvalidation,
-           !self.itemSortValues.values.contains(sortValueOfLastFocusedItem) {
-            self.scrollOffset -= self.itemHeight
+        guard let sortValueOfLastFocusedItem = self.sortValueOfFocusedItemBeforeInvalidation else {
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
         }
 
-        return CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffset)
+        // Find the index path with the closest sort value to the previous focused sort value, excluding
+        // any items that have a greater sort value.
+        let possibleIndexPaths = self.itemSortValues.filter({ kvp in
+            return kvp.value <= sortValueOfLastFocusedItem
+        })
+        guard let focusedIndexPath = possibleIndexPaths.max(by: { kvp1, kvp2 in
+            return kvp1.value < kvp2.value
+        })?.key else {
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
+        }
 
+        guard let yOffset = self.itemFocusPositions[focusedIndexPath] else {
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
+        }
+
+        return CGPoint(x: proposedContentOffset.x, y: yOffset)
     }
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)

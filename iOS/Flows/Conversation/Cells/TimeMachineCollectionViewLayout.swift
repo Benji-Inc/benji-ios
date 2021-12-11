@@ -7,14 +7,15 @@
 
 import UIKit
 
-protocol TimeMachineLayoutItem {
+protocol TimeMachineLayoutItemType {
     /// Used to determine the order of the time machine items.
     /// A lower value means the item is older and should appear closer to the back.
     var sortValue: Double { get }
+    var shouldShow: Bool { get }
 }
 
 protocol TimeMachineCollectionViewLayoutDataSource: AnyObject {
-    func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItem?
+    func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItemType
 }
 
 protocol TimeMachineCollectionViewLayoutDelegate: AnyObject {
@@ -164,7 +165,7 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         // Initialize all of the sort values
         self.forEachIndexPath { indexPath in
             let timeMachineItem = dataSource.getTimeMachineItem(forItemAt: indexPath)
-            self.itemSortValues[indexPath] = timeMachineItem?.sortValue
+            self.itemSortValues[indexPath] = timeMachineItem.sortValue
         }
 
         // Get all of the items and sort them by value. This combines all the sections into a flat list.
@@ -173,8 +174,8 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             sortedItemIndexPaths.append(indexPath)
         }
         sortedItemIndexPaths.sort { indexPath1, indexPath2 in
-            let sortValue1 = self.itemSortValues[indexPath1] ?? Double.greatestFiniteMagnitude
-            let sortValue2 = self.itemSortValues[indexPath2] ?? Double.greatestFiniteMagnitude
+            let sortValue1 = self.itemSortValues[indexPath1] ?? 0
+            let sortValue2 = self.itemSortValues[indexPath2] ?? 0
             return sortValue1 < sortValue2
         }
 
@@ -285,6 +286,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             scale = 1
             yOffset = 0
             alpha = 1
+        }
+
+        // If there is no message to display for this index path, don't show the cell.
+        if self.dataSource?.getTimeMachineItem(forItemAt: indexPath).shouldShow == false {
+            alpha = 0
         }
 
         let layoutClass = type(of: self).layoutAttributesClass as? UICollectionViewLayoutAttributes.Type
