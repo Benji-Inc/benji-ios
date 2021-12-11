@@ -16,14 +16,7 @@ enum MessageContext: String, CaseIterable {
     case status
 
     var color: Color {
-        switch self {
-        case .timeSensitive:
-            return .red
-        case .passive:
-            return .white
-        case .status:
-            return .white
-        }
+        return .white 
     }
 
     var interruptionLevel: UNNotificationInterruptionLevel {
@@ -34,6 +27,17 @@ enum MessageContext: String, CaseIterable {
             return .passive
         case .status:
             return .passive
+        }
+    }
+
+    var displayName: String {
+        switch self {
+        case .timeSensitive:
+            return "Urgently"
+        case .passive:
+            return "Quietly"
+        case .status:
+            return ""
         }
     }
 }
