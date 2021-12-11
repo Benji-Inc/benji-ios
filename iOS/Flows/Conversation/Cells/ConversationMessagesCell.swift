@@ -100,13 +100,20 @@ class ConversationMessagesCell: UICollectionViewCell {
             self.subscribeToUpdates()
         }
 
+        guard let conversationController = self.conversationController else {
+            return
+        }
+
         // Scroll to the last item when a new conversation is loaded.
         if self.dataSource.snapshot().itemIdentifiers.isEmpty {
             self.scrollToLastItemOnLayout = true
             self.setNeedsLayout()
         }
 
-        let showLoadMore = !(self.conversationController?.hasLoadedAllPreviousMessages ?? false)
+        var showLoadMore = !conversationController.hasLoadedAllPreviousMessages
+        if conversationController.messages.count <= .messagesPageSize {
+            showLoadMore = false
+        }
         self.dataSource.set(messageSequence: conversation, showLoadMore: showLoadMore)
     }
 
