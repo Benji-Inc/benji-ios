@@ -25,8 +25,8 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         case loadMore(cid: ConversationID)
     }
 
-    var handleTappedMessage: ((MessageSequenceItem, MessageContentView) -> Void)?
-    var handleEditMessage: ((MessageSequenceItem) -> Void)?
+    var handleTappedMessage: ((ConversationID, MessageId, MessageContentView) -> Void)?
+    var handleEditMessage: ((ConversationID, MessageId) -> Void)?
     var handleLoadMoreMessages: ((ConversationID) -> Void)?
 
     /// If true, push the bottom messages back to prepare for a new message.
@@ -51,12 +51,12 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
             = collectionView.dequeueConfiguredReusableCell(using: self.messageSubcellRegistration,
                                                            for: indexPath,
                                                            item: (cid, messageID, collectionView))
-            messageCell.content.handleEditMessage = { [unowned self] item in
-                self.handleEditMessage?(item)
+            messageCell.content.handleEditMessage = { [unowned self] cid, messageID in
+                self.handleEditMessage?(cid, messageID)
             }
 
-            messageCell.content.handleTappedMessage = { [unowned self] item in
-                self.handleTappedMessage?(item, messageCell.content)
+            messageCell.content.handleTappedMessage = { [unowned self] cid, messageID in
+                self.handleTappedMessage?(cid, messageID, messageCell.content)
             }
             return messageCell
         case .loadMore(cid: let conversationID):
@@ -198,7 +198,7 @@ extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayo
                                              shouldShow: true)
             }
 
-            // Put the load more right before the oldest message item.
+            // Put the load more item right before the oldest message item.
             return TimeMachineLayoutItem(sortValue: oldestItem.sortValue.nextDown, shouldShow: true)
         }
     }
@@ -208,7 +208,6 @@ private struct TimeMachineLayoutItem: TimeMachineLayoutItemType {
     var sortValue: Double
     var shouldShow: Bool
 }
-
 
 extension Message: TimeMachineLayoutItemType {
     var sortValue: Double {

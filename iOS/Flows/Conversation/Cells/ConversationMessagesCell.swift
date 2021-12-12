@@ -17,8 +17,8 @@ import Combine
 class ConversationMessagesCell: UICollectionViewCell {
 
     // Interaction handling
-    var handleTappedMessage: ((MessageSequenceItem, MessageContentView) -> Void)?
-    var handleEditMessage: ((MessageSequenceItem) -> Void)?
+    var handleTappedMessage: ((ConversationID, MessageId, MessageContentView) -> Void)?
+    var handleEditMessage: ((ConversationID, MessageId) -> Void)?
 
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
@@ -68,12 +68,12 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.collectionView.clipsToBounds = false
         self.contentView.addSubview(self.collectionView)
 
-        self.dataSource.handleTappedMessage = { [unowned self] item, content in
-            self.handleTappedMessage?(item, content)
+        self.dataSource.handleTappedMessage = { [unowned self] cid, messageID, content in
+            self.handleTappedMessage?(cid, messageID, content)
         }
 
-        self.dataSource.handleEditMessage = { [unowned self] item in
-            self.handleEditMessage?(item)
+        self.dataSource.handleEditMessage = { [unowned self] cid, messageID in
+            self.handleEditMessage?(cid, messageID)
         }
 
         self.dataSource.handleLoadMoreMessages = { [unowned self] cid in

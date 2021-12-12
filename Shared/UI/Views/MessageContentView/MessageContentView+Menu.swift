@@ -49,14 +49,12 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
                                 children: [confirmDelete, neverMind])
 
         let viewReplies = UIAction(title: "View Replies") { [unowned self] action in
-            let item: MessageSequenceItem = .message(cid: cid, messageID: message.id)
-            self.handleTappedMessage?(item)
+            self.handleTappedMessage?(cid, message.id)
         }
 
         let edit = UIAction(title: "Edit",
                             image: UIImage(systemName: "pencil.circle")) { [unowned self] action in
-            let item: MessageSequenceItem = .message(cid: cid, messageID: message.id)
-            self.handleEditMessage?(item)
+            self.handleEditMessage?(cid, message.id)
         }
 
         let read = UIAction(title: "Set to read",
