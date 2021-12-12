@@ -63,7 +63,7 @@ class ConversationMessagesCell: UICollectionViewCell {
 
         self.collectionView.decelerationRate = .fast
         self.collectionView.set(backgroundColor: .clear)
-
+        self.collectionView.delegate = self
         // Allow message subcells to scale in size without getting clipped.
         self.collectionView.clipsToBounds = false
         self.contentView.addSubview(self.collectionView)
@@ -212,3 +212,20 @@ class ConversationMessagesCell: UICollectionViewCell {
         return self.collectionLayout.getBottomFrontMostCell()
     }
 }
+
+extension ConversationMessagesCell: UICollectionViewDelegate {
+
+     // MARK: - UICollectionViewDelegate
+
+     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+         guard let item = self.dataSource.itemIdentifier(for: indexPath),
+                 let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
+
+         switch item {
+         case .message(cid: let cid, messageID: let messageID):
+             self.handleTappedMessage?(cid, messageID, cell.content)
+         case .loadMore:
+             break
+         }
+     }
+ }
