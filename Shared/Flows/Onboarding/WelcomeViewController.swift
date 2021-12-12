@@ -66,11 +66,11 @@ class WelcomeViewController: TextInputViewController<Void> {
             self.animate(for: state)
         }.store(in: &self.cancellables)
 
-//        self.view.onDoubleTap { [unowned self] _ in
-//            if self.textField.isFirstResponder {
-//                self.textField.resignFirstResponder()
-//            }
-//        }
+        self.view.onDoubleTap { [unowned self] in
+            if self.textField.isFirstResponder {
+                self.textField.resignFirstResponder()
+            }
+        }
     }
 
     override func viewDidLayoutSubviews() {

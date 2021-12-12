@@ -234,11 +234,11 @@ extension ThreadViewController {
             // TODO
         }
 
-//        self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
-//            if self.messageInputAccessoryView.textView.isFirstResponder {
-//                self.messageInputAccessoryView.textView.resignFirstResponder()
-//            }
-//        }
+        self.collectionView.onDoubleTap { [unowned self] in
+            if self.messageInputAccessoryView.textView.isFirstResponder {
+                self.messageInputAccessoryView.textView.resignFirstResponder()
+            }
+        }
 
         self.messageInputAccessoryView.textView.$inputText.mainSink { [unowned self] _ in
             guard let enabled = self.conversationController?.areTypingEventsEnabled, enabled else { return }

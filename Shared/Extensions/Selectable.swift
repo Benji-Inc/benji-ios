@@ -65,6 +65,15 @@ extension Selectable where Self: UIView {
             self.setAssociatedObject(key: &tapHandlerKey, value: newValue)
         }
     }
+    
+    private(set) var doubleTapRecognizer: UITapGestureRecognizer? {
+        get {
+            return self.getAssociatedObject(&tapHandlerKey)
+        }
+        set {
+            self.setAssociatedObject(key: &tapHandlerKey, value: newValue)
+        }
+    }
 
     private(set) var selectionImpact: UIImpactFeedbackGenerator? {
         get {
@@ -82,12 +91,57 @@ extension Selectable where Self: UIView {
         if let tapRecognizer = self.tapRecognizer {
             self.removeGestureRecognizer(tapRecognizer)
         }
+        
+        let tapRecognizer = TapGestureRecognizer(taps: 1) { [unowned self] in
+            self.selectionImpact?.impactOccurred()
+            completion?()
+        }
+        self.addGestureRecognizer(tapRecognizer)
+        self.tapRecognizer = tapRecognizer
+    }
+    
+    func onDoubleTap(_ completion: CompletionOptional) {
+        self.selectionImpact = UIImpactFeedbackGenerator()
 
-//        let tapRecognizer = UITapGestureRecognizer(taps: 1) { [unowned self] (_) in
-//            self.selectionImpact?.impactOccurred()
-//            completion?()
-//        }
-//        self.addGestureRecognizer(tapRecognizer)
-//        self.tapRecognizer = tapRecognizer
+        // Remove the previous tap gesture recognizer so we don't call did select twice.
+        if let tapRecognizer = self.doubleTapRecognizer {
+            self.removeGestureRecognizer(tapRecognizer)
+        }
+        
+        let tapRecognizer = TapGestureRecognizer(taps: 2) { [unowned self] in
+            self.selectionImpact?.impactOccurred()
+            completion?()
+        }
+        self.addGestureRecognizer(tapRecognizer)
+        self.doubleTapRecognizer = tapRecognizer
+    }
+}
+
+private class TapGestureRecognizer: UITapGestureRecognizer {
+    private var action: () -> Void
+
+    init(taps: Int = 1, action: @escaping () -> Void) {
+        self.action = action
+        super.init(target: nil, action: nil)
+        self.numberOfTapsRequired = taps
+        self.addTarget(self, action: #selector(execute))
+    }
+
+    @objc private func execute() {
+        self.action()
+    }
+}
+
+class PanGestureRecognizer: UIPanGestureRecognizer {
+    private var action: (UIPanGestureRecognizer) -> Void
+
+    init(taps: Int = 1, action: @escaping (UIPanGestureRecognizer) -> Void) {
+        self.action = action
+        super.init(target: nil, action: nil)
+        self.addTarget(self, action: #selector(execute))
+    }
+
+    @objc private func execute() {
+        self.action(self)
     }
 }
