@@ -62,8 +62,9 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.collectionLayout.dataSource = self.dataSource
 
         self.collectionView.decelerationRate = .fast
-        self.collectionView.set(backgroundColor: .clear)
         self.collectionView.delegate = self
+        self.collectionView.set(backgroundColor: .clear)
+
         // Allow message subcells to scale in size without getting clipped.
         self.collectionView.clipsToBounds = false
         self.contentView.addSubview(self.collectionView)
