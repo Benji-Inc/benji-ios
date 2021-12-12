@@ -27,7 +27,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
-        cv.showsVerticalScrollIndicator = false 
+        cv.showsVerticalScrollIndicator = false
         return cv
     }()
     private lazy var dataSource = MessageSequenceCollectionViewDataSource(collectionView: self.collectionView)
@@ -127,7 +127,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     func set(isPreparedToSend: Bool) {
         self.dataSource.shouldPrepareToSend = isPreparedToSend
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
 
@@ -163,7 +163,7 @@ class ConversationMessagesCell: UICollectionViewCell {
                 self.dataSource.set(messageSequence: conversation,
                                     itemsToReconfigure: itemsToReconfigure,
                                     showLoadMore: self.shouldShowLoadMore)
-        }.store(in: &self.subscriptions)
+            }.store(in: &self.subscriptions)
     }
 
     // MARK: - Drop Zone Helpers
@@ -190,18 +190,18 @@ class ConversationMessagesCell: UICollectionViewCell {
 }
 
 extension ConversationMessagesCell: UICollectionViewDelegate {
+    
+    // MARK: - UICollectionViewDelegate
 
-     // MARK: - UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = self.dataSource.itemIdentifier(for: indexPath),
+              let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
 
-     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-         guard let item = self.dataSource.itemIdentifier(for: indexPath),
-                 let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
-
-         switch item {
-         case .message(cid: let cid, messageID: let messageID):
-             self.handleTappedMessage?(cid, messageID, cell.content)
-         case .loadMore:
-             break
-         }
-     }
- }
+        switch item {
+        case .message(cid: let cid, messageID: let messageID):
+            self.handleTappedMessage?(cid, messageID, cell.content)
+        case .loadMore:
+            break
+        }
+    }
+}
