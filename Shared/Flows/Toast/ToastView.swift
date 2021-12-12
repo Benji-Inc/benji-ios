@@ -167,10 +167,10 @@ class ToastView: View, ToastViewable {
     }
 
     private func addPan() {
-        let panRecognizer = UIPanGestureRecognizer { [unowned self] panRecognizer in
-            self.handle(panRecognizer: panRecognizer)
-        }
-        self.addGestureRecognizer(panRecognizer)
+//        let panRecognizer = UIPanGestureRecognizer { [unowned self] panRecognizer in
+//            self.handle(panRecognizer: panRecognizer)
+//        }
+//        self.addGestureRecognizer(panRecognizer)
     }
 
     private func handle(panRecognizer: UIPanGestureRecognizer) {

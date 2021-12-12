@@ -177,11 +177,11 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
     // MARK: OVERRIDES
 
     func setupGestures() {
-        let panRecognizer = UIPanGestureRecognizer { [unowned self] (recognizer) in
-            self.handle(pan: recognizer)
-        }
-        panRecognizer.delegate = self
-        self.overlayButton.addGestureRecognizer(panRecognizer)
+//        let panRecognizer = UIPanGestureRecognizer { [unowned self] (recognizer) in
+//            self.handle(pan: recognizer)
+//        }
+//        panRecognizer.delegate = self
+//        self.overlayButton.addGestureRecognizer(panRecognizer)
     }
 
     func didPressAlertCancel() {}

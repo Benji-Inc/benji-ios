@@ -1,7 +1,6 @@
 PODS:
   - Bolts-Swift (1.5.0)
   - Bolts/Tasks (1.9.1)
-  - GestureRecognizerClosures (5.0.0)
   - Parse (1.19.2):
     - Parse/Core (= 1.19.2)
   - Parse/Core (1.19.2):
@@ -13,14 +12,12 @@ PODS:
   - Starscream (4.0.4)
 
 DEPENDENCIES:
-  - GestureRecognizerClosures
   - ParseLiveQuery
 
 SPEC REPOS:
   trunk:
     - Bolts
     - Bolts-Swift
-    - GestureRecognizerClosures
     - Parse
     - ParseLiveQuery
     - Starscream
@@ -28,11 +25,10 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Bolts: 8c1e8aab2f603387b8b9924f57d1d64f43d3ffdc
   Bolts-Swift: afbbaf8c8186e7f769be4afa656949c14087ba44
-  GestureRecognizerClosures: 0dcafb45e669e7a775c840383e54b3d16983037b
   Parse: 081fb8755c3000fd11df817eec235def233d0af3
   ParseLiveQuery: 7bc437c3b986880ffe5f241a9921e37f45df0677
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
 
-PODFILE CHECKSUM: eccbeef655c82b75dfd9a3c2a048a5d1936da592
+PODFILE CHECKSUM: 100f0e24f34f50e735dcc87c9b730aee9848ecdb
 
 COCOAPODS: 1.11.2

@@ -30,7 +30,7 @@ class LoadMoreMessagesCell: UICollectionViewCell {
         self.label.textAlignment = .center
         self.label.setText("LOAD MORE")
 
-        self.onTap { [unowned self] tapRecognizer in
+        self.didSelect { [unowned self] in
             self.handleLoadMoreMessages?()
         }
     }
