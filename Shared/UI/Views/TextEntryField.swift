@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import TMROLocalization
-
+import Localization
+ 
 class TextEntryField: View, Sizeable {
 
     private(set) var textField: UITextField

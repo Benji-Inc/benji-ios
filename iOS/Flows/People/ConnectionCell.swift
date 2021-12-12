@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import TMROLocalization
 import Lottie
 
 class ConnectionCell: CollectionViewManagerCell, ManageableCell {

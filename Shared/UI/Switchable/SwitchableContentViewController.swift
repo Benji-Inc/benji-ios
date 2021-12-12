@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import TMROLocalization
 import Combine
 
 class SwitchableContentViewController<ContentType: Switchable>: UserOnboardingViewController {

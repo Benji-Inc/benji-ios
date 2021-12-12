@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import TMROLocalization
-
+import Localization
+ 
 class TextFieldToolBar: UIToolbar {
 
     init(button: UIBarButtonItem) {

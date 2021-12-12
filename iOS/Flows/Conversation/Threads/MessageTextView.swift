@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import TMROLocalization
-
+import Localization
+ 
 class MessageTextView: TextView {
 
     override func initializeViews() {

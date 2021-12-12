@@ -6,7 +6,6 @@ def shared_pods
   pod 'ParseLiveQuery'
 
   pod 'TMROCoordinator'
-  pod 'TMROLocalization'
 end
 
 target 'Jibber' do

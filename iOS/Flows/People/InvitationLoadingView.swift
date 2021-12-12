@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import TMROLocalization
+import Localization
 
 class InvitationLoadingView: View {
 

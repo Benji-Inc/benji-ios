@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import TMROLocalization
 
 enum MessageStatus: String {
     case sent //Message was sent as a system message

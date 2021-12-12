@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import TMROLocalization
 import Combine
+import Localization
 
 class WelcomeViewController: TextInputViewController<Void> {
 

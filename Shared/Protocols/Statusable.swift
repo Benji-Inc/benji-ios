@@ -8,8 +8,8 @@
 
 import Foundation
 import Lottie
-import TMROLocalization
 import Combine
+import Localization
 
 protocol Statusable: AnyObject {
     func handleEvent(status: EventStatus) async

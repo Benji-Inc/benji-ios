@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import TMROLocalization
+import Localization
 
 struct Toast: Equatable {
 

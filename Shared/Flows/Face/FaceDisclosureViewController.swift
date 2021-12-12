@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import TMROLocalization
 import Parse
+import Localization
 
 class FaceDisclosureViewController: DisclosureModalViewController {
 
