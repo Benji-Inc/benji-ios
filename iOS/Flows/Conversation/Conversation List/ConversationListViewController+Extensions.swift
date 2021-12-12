@@ -12,11 +12,12 @@ import StreamChat
 extension ConversationListViewController {
 
     func setupInputHandlers() {
-        self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
-            if self.messageInputAccessoryView.textView.isFirstResponder {
-                self.messageInputAccessoryView.textView.resignFirstResponder()
-            }
-        }
+        
+//        self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
+//            if self.messageInputAccessoryView.textView.isFirstResponder {
+//                self.messageInputAccessoryView.textView.resignFirstResponder()
+//            }
+//        }
 
         self.dataSource.handleSelectedMessage = { [unowned self] (item, view) in
             self.selectedMessageView = view 

@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import GestureRecognizerClosures
 
 protocol Selectable {
     func didSelect(_ completion: CompletionOptional)
@@ -84,11 +83,11 @@ extension Selectable where Self: UIView {
             self.removeGestureRecognizer(tapRecognizer)
         }
 
-        let tapRecognizer = UITapGestureRecognizer(taps: 1) { [unowned self] (_) in
-            self.selectionImpact?.impactOccurred()
-            completion?()
-        }
-        self.addGestureRecognizer(tapRecognizer)
-        self.tapRecognizer = tapRecognizer
+//        let tapRecognizer = UITapGestureRecognizer(taps: 1) { [unowned self] (_) in
+//            self.selectionImpact?.impactOccurred()
+//            completion?()
+//        }
+//        self.addGestureRecognizer(tapRecognizer)
+//        self.tapRecognizer = tapRecognizer
     }
 }
