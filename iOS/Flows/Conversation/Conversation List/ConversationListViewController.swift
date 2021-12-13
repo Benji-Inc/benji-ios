@@ -72,7 +72,7 @@ class ConversationListViewController: FullScreenViewController,
         self.startingConversationID = startingConversationID
 
         let filter: Filter<ChannelListFilterScope>
-        = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
+        = members.isEmpty ? .containMembers(userIds: [User.current!.objectId!]) : .containOnlyMembers(members)
 
         let query = ChannelListQuery(filter: filter,
                                      sort: [Sorting(key: .createdAt, isAscending: false)],
@@ -336,7 +336,7 @@ extension ConversationListViewController: MessageSendingViewControllerType {
 
     func createNewConversation(_ sendable: Sendable) {
         Task {
-            let username = User.current()?.initials ?? ""
+            let username = User.current?.initials ?? ""
             let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
             let userIDs = Set(self.members.userIDs)
 

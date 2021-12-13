@@ -8,9 +8,9 @@
 
 import Foundation
 import PhoneNumberKit
-import Parse
 import Combine
 import Localization
+import ParseSwift
 
 @MainActor
 class CodeViewController: TextInputViewController<String?> {
@@ -46,20 +46,20 @@ class CodeViewController: TextInputViewController<String?> {
         await self.button.handleEvent(status: .loading)
 
         do {
-            let installation = try await PFInstallation.getCurrent()
-            let dict = try await VerifyCode(code: code,
-                                            phoneNumber: phoneNumber,
-                                            installationId: installation.installationId,
-                                            reservationId: String(optional: self.reservationId),
-                                            passId: String(optional: self.passId))
-                .makeRequest()
-
-            self.textField.resignFirstResponder()
-            guard let token = dict["sessionToken"] else { return }
-            
-            try await User.become(withSessionToken: token)
+//            let installation = try await ParseInstallation.getCurrent()
+//            let dict = try await VerifyCode(code: code,
+//                                            phoneNumber: phoneNumber,
+//                                            installationId: installation.installationId,
+//                                            reservationId: String(optional: self.reservationId),
+//                                            passId: String(optional: self.passId))
+//                .makeRequest()
+//
+//            self.textField.resignFirstResponder()
+//            guard let token = dict["sessionToken"] else { return }
+//            
+//            try await User.become(withSessionToken: token)
             await self.button.handleEvent(status: .complete)
-            self.complete(with: .success((dict["channelId"])))
+            //self.complete(with: .success((dict["channelId"])))
         } catch {
             await self.button.handleEvent(status: .error(error.localizedDescription))
             self.complete(with: .failure(ClientError.message(detail: "Verification failed.")))

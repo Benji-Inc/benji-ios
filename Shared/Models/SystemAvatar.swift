@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Parse
 
 struct SystemAvatar: Avatar, Hashable {
     var userObjectID: String?

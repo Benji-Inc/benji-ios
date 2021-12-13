@@ -8,8 +8,7 @@
 
 import Foundation
 import PhoneNumberKit
-import Parse
-import Combine
+import ParseSwift
 
 class PhoneViewController: TextInputViewController<PhoneNumber> {
     
@@ -75,12 +74,12 @@ class PhoneViewController: TextInputViewController<PhoneNumber> {
         self.isSendingCode = true
 
         do {
-            let installation = try await PFInstallation.getCurrent()
-
-            let _ = try await SendCode(phoneNumber: phone,
-                                       region: region,
-                                       installationId: installation.installationId)
-                .makeRequest()
+//            let installation = try await ParseInstallation.getCurrent()
+//
+//            let _ = try await SendCode(phoneNumber: phone,
+//                                       region: region,
+//                                       installationId: installation.installationId)
+//                .makeRequest()
             await self.button.handleEvent(status: .complete)
             self.complete(with: .success(phone))
         } catch {

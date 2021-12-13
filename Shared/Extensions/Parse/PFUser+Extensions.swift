@@ -7,22 +7,21 @@
 //
 
 import Foundation
-import Parse
 
-extension PFUser {
+extension User {
 
     @discardableResult
-    static func become(withSessionToken sessionToken: String) async throws -> PFUser {
-        let user: PFUser = try await withCheckedThrowingContinuation { continuation in
-            User.become(inBackground: sessionToken) { (user, error) in
-                if let user = user {
-                    return continuation.resume(returning: user)
-                } else if let error = error {
-                    return continuation.resume(throwing: error)
-                } else {
-                    return continuation.resume(throwing: ClientError.apiError(detail: "Failed to become user."))
-                }
-            }
+    static func become(withSessionToken sessionToken: String) async throws -> User {
+        let user: User = try await withCheckedThrowingContinuation { continuation in
+//            User.become(inBackground: sessionToken) { (user, error) in
+//                if let user = user {
+//                    return continuation.resume(returning: user)
+//                } else if let error = error {
+//                    return continuation.resume(throwing: error)
+//                } else {
+//                    return continuation.resume(throwing: ClientError.apiError(detail: "Failed to become user."))
+//                }
+//            }
         }
 
 #if !NOTIFICATION

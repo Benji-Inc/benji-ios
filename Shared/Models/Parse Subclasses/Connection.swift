@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Parse
+import ParseSwift
 
 enum ConnectionKey: String {
     case status
@@ -17,11 +17,7 @@ enum ConnectionKey: String {
     case initialConversations
 }
 
-final class Connection: PFObject, PFSubclassing {
-
-    static func parseClassName() -> String {
-        return String(describing: self)
-    }
+struct Connection: ParseObject, ParseObjectMutable {
 
     enum Status: String {
         case created 
@@ -30,46 +26,28 @@ final class Connection: PFObject, PFSubclassing {
         case accepted
         case declined
     }
+    
+    //: These are required by `ParseObject`.
+    var objectId: String?
+    var createdAt: Date?
+    var updatedAt: Date?
+    var ACL: ParseACL?
 
-    var status: Status? {
-        guard let string: String = self.getObject(for: .status) else { return nil }
-        return Status(rawValue: string)
-    }
+//    var status: Status? {
+//        guard let string: String = self.getObject(for: .status) else { return nil }
+//        return Status(rawValue: string)
+//    }
 
-    var to: User? {
-        return self.getObject(for: .to)
-    }
+    var to: User?
+    var from: User?
 
-    var from: User? {
-        return self.getObject(for: .from)
-    }
-
-    var initialConversations: [String] {
-        get { return self.getObject(for: .initialConversations) ?? [] }
-        set { self.setObject(for: .initialConversations, with: newValue) }
-    }
+    var initialConversations: [String] = []
 
     var nonMeUser: User? {
-        if self.to?.objectId == User.current()?.objectId {
+        if self.to?.objectId == User.current?.objectId {
             return self.from
         } else {
             return self.to
         }
-    }
-}
-
-extension Connection: Objectable {
-    typealias KeyType = ConnectionKey
-
-    func getObject<Type>(for key: ConnectionKey) -> Type? {
-        return self.object(forKey: key.rawValue) as? Type
-    }
-
-    func setObject<Type>(for key: ConnectionKey, with newValue: Type) {
-        self.setObject(newValue, forKey: key.rawValue)
-    }
-
-    func getRelationalObject<PFRelation>(for key: ConnectionKey) -> PFRelation? {
-        return self.relation(forKey: key.rawValue) as? PFRelation
     }
 }

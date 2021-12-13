@@ -18,9 +18,9 @@ extension MainCoordinator {
         case .success(let object):
             self.deepLink = object
 
-            if User.current().isNil {
+            if User.current.isNil {
                 self.runOnboardingFlow()
-            } else if let user = User.current(), !user.isOnboarded {
+            } else if let user = User.current, !user.isOnboarded {
                 self.runOnboardingFlow()
             } else {
                 Task {
@@ -57,7 +57,7 @@ extension MainCoordinator {
                 await self.checkForPermissions()
             }
         } else {
-            try? await ChatClient.initialize(for: User.current()!)
+            try? await ChatClient.initialize(for: User.current!)
             await self.runConversationListFlow()
         }
     }

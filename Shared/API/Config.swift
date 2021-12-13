@@ -7,14 +7,15 @@
 //
 
 import Foundation
+import ParseSwift
 
 enum Environment: String {
 
     case staging = "staging"
     case production = "production"
 
-    var url: String {
-        return "https://jibber-development-backend.herokuapp.com/parse"
+    var url: URL {
+        return URL(string: "https://jibber-development-backend.herokuapp.com/parse")!
 //        switch self {
 //        case .staging: return "https://jibber-development-backend.herokuapp.com/parse"
 //        case .production: return "https://jibber-backend.herokuapp.com"
@@ -48,6 +49,8 @@ enum Environment: String {
 //        case .production: return "ybdsdqhd2nhg"
 //        }
     }
+    
+
 }
 
 enum BuildType: String, CaseIterable {
@@ -62,6 +65,21 @@ var isRelease: Bool {
 class Config: NSObject {
 
     static let shared = Config.init()
+    
+    var parseConfiguration: ParseConfiguration {
+//        configuration.applicationGroupIdentifier = Config.shared.environment.groupId
+//        configuration.containingApplicationBundleIdentifier = "com.Jibber-Inc.Jibber"
+//        configuration.server = Config.shared.environment.url
+//        configuration.applicationId = Config.shared.environment.appID
+//        configuration.isLocalDatastoreEnabled = true
+        return  ParseConfiguration(applicationId: self.environment.appID,
+                                   serverURL: self.environment.url)
+        
+    }
+    
+    func initializeParse() {
+        ParseSwift.initialize(configuration: self.parseConfiguration)
+    }
 
     let environment: Environment = {
         var environmentToReturn = Environment.production

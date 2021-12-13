@@ -33,7 +33,7 @@ func ==(lhs: MessageSequence, rhs: MessageSequence) -> Bool {
 extension MessageSequence {
 
     var isCreatedByCurrentUser: Bool {
-        guard let user = User.current() else { return false }
+        guard let user = User.current else { return false }
         return user.objectId == self.authorID
     }
 }

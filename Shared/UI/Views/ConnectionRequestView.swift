@@ -69,17 +69,17 @@ class ConnectionRequestView: View {
         guard let user = item.from else { return }
 
         do {
-            let userWithData = try await user.retrieveDataIfNeeded()
-            if let status = item.status, status == .invited {
-                let text = LocalizedString(id: "", arguments: [userWithData.fullName], default: "[@(name)](\(user.objectId!)) has invited you to connect.")
-
-                self.textView.linkTextAttributes = [.foregroundColor: Color.lightGray.color, .underlineStyle: 0]
-                self.textView.text = localized(text)
-                self.avatarView.set(avatar: userWithData)
-                self.layoutNow()
-            } else {
-                self.showSuccess(for: item, user: userWithData)
-            }
+//            let userWithData = try await user.retrieveDataIfNeeded()
+//            if let status = item.status, status == .invited {
+//                let text = LocalizedString(id: "", arguments: [userWithData.fullName], default: "[@(name)](\(user.objectId!)) has invited you to connect.")
+//
+//                self.textView.linkTextAttributes = [.foregroundColor: Color.lightGray.color, .underlineStyle: 0]
+//                self.textView.text = localized(text)
+//                self.avatarView.set(avatar: userWithData)
+//                self.layoutNow()
+//            } else {
+//                self.showSuccess(for: item, user: userWithData)
+//            }
         } catch {
             logDebug(error)
         }

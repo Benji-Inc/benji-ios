@@ -31,7 +31,7 @@ class AlertConfirmationView: View {
     func setAlertMessage(for avatars: [Avatar]) {
         var arguments: String = String()
         for (index, avatar) in avatars.enumerated() {
-            if avatar.userObjectID != User.current()?.objectId {
+            if avatar.userObjectID != User.current?.objectId {
                 if avatars.count == 1 {
                     arguments += avatar.givenName + " "
                 } else if index + 1 == avatars.count, arguments.count > 1 {

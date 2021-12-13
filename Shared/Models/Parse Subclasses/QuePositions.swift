@@ -7,8 +7,7 @@
 //
 
 import Foundation
-import Parse
-import ParseLiveQuery
+import ParseSwift
 
 enum QuePositionsKey: String {
     case max = "maxQuePostions"
@@ -16,37 +15,15 @@ enum QuePositionsKey: String {
     case claimed = "claimedPosition"
 }
 
-final class QuePositions: PFObject, PFSubclassing {
+struct QuePositions: ParseObject, ParseObjectMutable {
 
-    static func parseClassName() -> String {
-        return String(describing: self)
-    }
+    //: These are required by `ParseObject`.
+    var objectId: String?
+    var createdAt: Date?
+    var updatedAt: Date?
+    var ACL: ParseACL?
 
-    var max: Int {
-        return self.getObject(for: .max) ?? 0
-    }
-
-    var unclaimed: Int {
-        return self.getObject(for: .unclaimed) ?? 0
-    }
-
-    var claimed: Int {
-        return self.getObject(for: .claimed) ?? 0 
-    }
-}
-
-extension QuePositions: Objectable {
-    typealias KeyType = QuePositionsKey
-
-    func getObject<Type>(for key: QuePositionsKey) -> Type? {
-        self.object(forKey: key.rawValue) as? Type
-    }
-
-    func setObject<Type>(for key: QuePositionsKey, with newValue: Type) {
-        self.setObject(newValue, forKey: key.rawValue)
-    }
-
-    func getRelationalObject<PFRelation>(for key: QuePositionsKey) -> PFRelation? {
-        return self.relation(forKey: key.rawValue) as? PFRelation
-    }
+    var max: Int?
+    var unclaimed: Int?
+    var claimed: Int?
 }

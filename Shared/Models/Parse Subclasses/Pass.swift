@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Parse
+import ParseSwift
 
 enum PassKey: String {
     case owner
@@ -16,42 +16,17 @@ enum PassKey: String {
     case link
 }
 
-final class Pass: PFObject, PFSubclassing {
-
-    static func parseClassName() -> String {
-        return String(describing: self)
-    }
-
-    var owner: User? {
-        return self.getObject(for: .owner)
-    }
-
-    var attributes: [String: Any]? {
-        return self.getObject(for: .attributes)
-    }
-
-    var connections: PFRelation<Connection>? {
-        return self.getRelationalObject(for: .connections)
-    }
-
-    var link: String? {
-        return self.getObject(for: .link)
-    }
-}
-
-extension Pass: Objectable {
-    typealias KeyType = PassKey
-
-    func getObject<Type>(for key: PassKey) -> Type? {
-        return self.object(forKey: key.rawValue) as? Type
-    }
-
-    func setObject<Type>(for key: PassKey, with newValue: Type) {
-        self.setObject(newValue, forKey: key.rawValue)
-    }
-
-    func getRelationalObject<PFRelation>(for key: PassKey) -> PFRelation? {
-        return self.relation(forKey: key.rawValue) as? PFRelation
-    }
+struct Pass: ParseObject, ParseObjectMutable {
+    
+    //: These are required by `ParseObject`.
+    var objectId: String?
+    var createdAt: Date?
+    var updatedAt: Date?
+    var ACL: ParseACL?
+    
+    var owner: User?
+    //var attributes: [String: Any]?
+    //var connections: ParseRelation<Connection>?
+    var link: String?
 }
 

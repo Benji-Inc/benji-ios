@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import Parse
 
 class MainCoordinator: Coordinator<Void> {
 
@@ -85,7 +84,7 @@ class MainCoordinator: Coordinator<Void> {
               let target = DeepLinkTarget(rawValue: string)  else { return }
         switch target {
         case .home, .conversation, .archive:
-            guard let user = User.current(), user.isAuthenticated else { return }
+            //guard let user = User.current, user.isLinked(with: "") else { return }
             #if IOS
             Task {
                 await self.runConversationListFlow()
@@ -94,7 +93,7 @@ class MainCoordinator: Coordinator<Void> {
         case .login:
             break
         case .reservation:
-            if let user = User.current(), user.isAuthenticated {
+            if let user = User.current, user.isOnboarded {
             #if IOS
                 Task {
                     await self.runConversationListFlow()
@@ -127,7 +126,7 @@ class MainCoordinator: Coordinator<Void> {
         #if IOS
         self.logOutChat()
         #endif
-        User.logOut()
+        //User.logOut()
         self.deepLink = nil
         self.removeChild()
         self.runOnboardingFlow()

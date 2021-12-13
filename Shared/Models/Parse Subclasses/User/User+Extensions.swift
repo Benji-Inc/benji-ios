@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import Parse
-import Combine
+import ParseSwift
+import UIKit
 
 extension User: Avatar {
 
@@ -34,7 +34,7 @@ extension User: Avatar {
     }
 
     var isCurrentUser: Bool {
-        return self.objectId == User.current()?.objectId
+        return self.objectId == User.current?.objectId
     }
 }
 
@@ -45,10 +45,10 @@ extension User {
             return !component.isEmpty
         }
         if let first = components.first {
-            self.givenName = first
+           // self.mutable.givenName = first
         }
         if let last = components.last {
-            self.familyName = last
+           // self.mutable.familyName = last
         }
     }
 }

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Parse
 import Lottie
 import Intents
 import Localization
@@ -107,22 +106,22 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                     try await self.saveInitialConversation(with: conversationId)
                 }
 
-                guard let current = User.current() else { return }
-                if current.isOnboarded, current.status == .active {
-                    #if APPCLIP
-                    self.current = .waitlist(self.waitlistVC)
-                    #else
-                    self.showLoading(user: current)
-                    #endif
-                } else if current.status == .inactive, current.isOnboarded {
-                    #if APPCLIP
-                    self.current = .waitlist(self.waitlistVC)
-                    #else
-                    self.showLoading(user: current)
-                    #endif
-                } else {
-                    self.current = .name(self.nameVC)
-                }
+//                guard let current = User.current else { return }
+//                if current.isOnboarded, current.status == .active {
+//                    #if APPCLIP
+//                    self.current = .waitlist(self.waitlistVC)
+//                    #else
+//                    self.showLoading(user: current)
+//                    #endif
+//                } else if current.status == .inactive, current.isOnboarded {
+//                    #if APPCLIP
+//                    self.current = .waitlist(self.waitlistVC)
+//                    #else
+//                    self.showLoading(user: current)
+//                    #endif
+//                } else {
+//                    self.current = .name(self.nameVC)
+//                }
             case .failure(_):
                 break
             }
@@ -153,8 +152,8 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
                     guard let fullName = UserDefaultsManager.getString(for: .fullName) else { return }
                     try await ActivateUser(fullName: fullName).makeRequest(andUpdate: [], viewsToIgnore: [self.view])
                     await self.hideLoading()
-                    guard let user = User.current(), user.status == .active else { return }
-                    self.delegate.onboardingView(self, didVerify: user)
+//                    guard let user = User.current, user.status == .active else { return }
+//                    self.delegate.onboardingView(self, didVerify: user)
                 }
             case .failure(_):
                 break
@@ -167,10 +166,10 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     }
 
     private func saveInitialConversation(with conversationId: String?) async throws {
-        guard let id = conversationId else { return }
-        let object = InitialConveration()
-        object.conversationId = id
-        try await object.saveLocally()
+//        guard let id = conversationId else { return }
+//        let object = InitialConveration()
+//        object.conversationId = id
+//        try await object.saveLocally()
     }
 
     override func viewDidLayoutSubviews() {
@@ -238,40 +237,41 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
 
     @MainActor
     func updateInvitor(with userId: String) async throws {
-        let user = try await User.localThenNetworkQuery(for: userId)
-        self.invitor = user
-        self.avatarView.set(avatar: user)
-        self.nameLabel.setText(user.givenName.capitalized)
-        self.avatarView.isHidden = false
-        self.updateUI()
-        self.view.layoutNow()
+//        let user = try await User.localThenNetworkQuery(for: userId)
+//        self.invitor = user
+//        self.avatarView.set(avatar: user)
+//        self.nameLabel.setText(user.givenName.capitalized)
+//        self.avatarView.isHidden = false
+//        self.updateUI()
+//        self.view.layoutNow()
     }
 
     override func getInitialContent() -> OnboardingContent {
-        guard let current = User.current(), let status = current.status else { return .welcome(self.welcomeVC) }
-
-        switch status {
-        case .active, .waitlist:
-            #if APPCLIP
-            return .waitlist(self.waitlistVC)
-            #else
-            fatalError()
-            #endif
-        case .inactive:
-            #if APPCLIP
-            return .waitlist(self.waitlistVC)
-            #else
-            if current.fullName.isEmpty {
-                return .name(self.nameVC)
-            } else if current.smallImage.isNil || current.focusImage.isNil {
-                return .photo(self.photoVC)
-            } else {
-                return .name(self.nameVC)
-            }
-            #endif
-        case .needsVerification:
-            return .welcome(self.welcomeVC)
-        }
+        return .welcome(self.welcomeVC)
+//        guard let current = User.current, let status = current.status else { return .welcome(self.welcomeVC) }
+//
+//        switch status {
+//        case .active, .waitlist:
+//            #if APPCLIP
+//            return .waitlist(self.waitlistVC)
+//            #else
+//            fatalError()
+//            #endif
+//        case .inactive:
+//            #if APPCLIP
+//            return .waitlist(self.waitlistVC)
+//            #else
+//            if current.fullName.isEmpty {
+//                return .name(self.nameVC)
+//            } else if current.smallImage.isNil || current.focusImage.isNil {
+//                return .photo(self.photoVC)
+//            } else {
+//                return .name(self.nameVC)
+//            }
+//            #endif
+//        case .needsVerification:
+//            return .welcome(self.welcomeVC)
+//        }
     }
 
     override func willUpdateContent() {
@@ -341,23 +341,23 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     private func handleNameSuccess(for name: String) {
         UserDefaultsManager.update(key: .fullName, with: name)
         // User has been allowed to continue
-        if User.current()?.status == .inactive {
-            #if APPCLIP
-            Task {
-                User.current()?.formatName(from: name)
-                try await User.current()?.saveLocalThenServer()
-                self.current = .waitlist(self.waitlistVC)
-            }
-            #else
-            if let current = User.current(), current.isOnboarded {
-                self.delegate.onboardingView(self, didVerify: User.current()!)
-            } else {
-                self.current = .photo(self.photoVC)
-            }
-            #endif
-        } else {
-            // User is on the waitlist
-            self.current = .waitlist(self.waitlistVC)
-        }
+//        if User.current?.status == .inactive {
+//            #if APPCLIP
+//            Task {
+////                User.current?.formatName(from: name)
+////                try await User.current?.saveLocalThenServer()
+////                self.current = .waitlist(self.waitlistVC)
+//            }
+//            #else
+//            if let current = User.current, current.isOnboarded {
+//                self.delegate.onboardingView(self, didVerify: current)
+//            } else {
+//                self.current = .photo(self.photoVC)
+//            }
+//            #endif
+//        } else {
+//            // User is on the waitlist
+//            self.current = .waitlist(self.waitlistVC)
+//        }
     }
 }

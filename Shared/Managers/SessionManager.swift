@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Parse
+import ParseSwift
 
 class SessionManager {
     static let shared = SessionManager()

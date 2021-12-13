@@ -67,26 +67,26 @@ extension PeopleCoordinator {
 
     func findUser(with contact: CNContact, for reservation: Reservation) async {
         // Search for user with phone number
-        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
-
-        do {
-            async let matchingUser = User.getFirstObject(where: "phoneNumber", contains: phone)
-            // Ensure that the reservation metadata is prepared before we show the reservation
-            try await reservation.prepareMetadata(andUpdate: [])
-            reservation.conversationId = self.conversationID?.description ?? String()
-            try await reservation.saveLocalThenServer()
-            try await self.showReservationAlert(for: matchingUser)
-        } catch {
-            if reservation.contactId == contact.identifier {
-                self.sendText(with: reservation.reminderMessage, phone: phone)
-                reservation.conversationId = self.conversationID?.description ?? String()
-            } else {
-                reservation.contactId = contact.identifier
-                _ = try? await reservation.saveLocalThenServer()
-                self.sendText(with: reservation.message, phone: phone)
-                reservation.conversationId = self.conversationID?.description ?? String()
-            }
-        }
+//        guard let phone = contact.findBestPhoneNumber().phone?.stringValue.removeAllNonNumbers() else { return }
+//
+//        do {
+//            async let matchingUser = User.getFirstObject(where: "phoneNumber", contains: phone)
+//            // Ensure that the reservation metadata is prepared before we show the reservation
+//            try await reservation.prepareMetadata(andUpdate: [])
+//            reservation.conversationId = self.conversationID?.description ?? String()
+//            try await reservation.saveLocalThenServer()
+//            try await self.showReservationAlert(for: matchingUser)
+//        } catch {
+//            if reservation.contactId == contact.identifier {
+//                self.sendText(with: reservation.reminderMessage, phone: phone)
+//                reservation.conversationId = self.conversationID?.description ?? String()
+//            } else {
+//                reservation.contactId = contact.identifier
+//                _ = try? await reservation.saveLocalThenServer()
+//                self.sendText(with: reservation.message, phone: phone)
+//                reservation.conversationId = self.conversationID?.description ?? String()
+//            }
+//        }
     }
 
     func showReservationAlert(for user: User) {

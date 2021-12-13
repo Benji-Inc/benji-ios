@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Parse
 import Localization
 
 class FaceDisclosureViewController: DisclosureModalViewController {
@@ -37,9 +36,9 @@ class FaceDisclosureViewController: DisclosureModalViewController {
         var displayable: ImageDisplayable? {
             switch self {
             case .smiling:
-                return User.current()?.smallImage
+                return User.current?.smallImage
             case .eyesClosed:
-                return User.current()?.focusImage
+                return User.current?.focusImage
             }
         }
     }
@@ -87,19 +86,21 @@ class FaceDisclosureViewController: DisclosureModalViewController {
     }
 
     func updateUser(with data: Data) async throws {
-        guard let currentUser = User.current() else { return }
+        guard let currentUser = User.current else { return }
 
         switch self.captureType {
         case .smiling:
-            let file = PFFileObject(name:"small_image.jpeg", data: data)
-            currentUser.smallImage = file
+            break
+//            let file = PFFileObject(name:"small_image.jpeg", data: data)
+//            currentUser.smallImage = file
         case .eyesClosed:
-            let file = PFFileObject(name:"focus_image.jpeg", data: data)
-            currentUser.focusImage = file
+            break
+//            let file = PFFileObject(name:"focus_image.jpeg", data: data)
+//            currentUser.focusImage = file
         }
 
         do {
-            try await currentUser.saveToServer()
+            //try await currentUser.saveToServer()
             Task.onMainActor {
                 self.updateUI(data: data)
             }

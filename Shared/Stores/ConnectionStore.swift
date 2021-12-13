@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import Parse
-import ParseLiveQuery
 import Combine
 
 class ConnectionStore {
@@ -20,16 +18,16 @@ class ConnectionStore {
 
     private(set) var connections: [Connection] = []
 
-    private var queries: [PFQuery<PFObject>] {
-        return self.connections.compactMap { connection in
-            if let query = Connection.query(), let objectId = connection.objectId {
-                query.whereKey("objectId", equalTo: objectId)
-                return query
-            }
-
-            return nil
-        }
-    }
+//    private var queries: [PFQuery<PFObject>] {
+//        return self.connections.compactMap { connection in
+//            if let query = Connection.query(), let objectId = connection.objectId {
+//                query.whereKey("objectId", equalTo: objectId)
+//                return query
+//            }
+//
+//            return nil
+//        }
+//    }
 
     init() {
         Task {
@@ -53,27 +51,27 @@ class ConnectionStore {
     private func subscibeToUpdates() {
         self.isReady = true
 
-        Client.shared.shouldPrintWebSocketLog = false
-
-        self.queries.forEach { query in
-            let subscription = Client.shared.subscribe(query)
-
-            subscription.handleEvent { query, event in
-                switch event {
-                case .deleted(_):
-                    break
-                case .entered(_):
-                    break
-                case .left(_):
-                    break
-                case .created(_):
-                    break
-                case .updated(let object):
-                    if let connection = object as? Connection {
-                        self.connectionUpdated = connection
-                    }
-                }
-            }
-        }
+//        Client.shared.shouldPrintWebSocketLog = false
+//
+//        self.queries.forEach { query in
+//            let subscription = Client.shared.subscribe(query)
+//
+//            subscription.handleEvent { query, event in
+//                switch event {
+//                case .deleted(_):
+//                    break
+//                case .entered(_):
+//                    break
+//                case .left(_):
+//                    break
+//                case .created(_):
+//                    break
+//                case .updated(let object):
+//                    if let connection = object as? Connection {
+//                        self.connectionUpdated = connection
+//                    }
+//                }
+//            }
+//        }
     }
 }

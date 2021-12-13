@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Parse
+import ParseSwift
 import PhoneNumberKit
 
 struct SendCode: CloudFunction {

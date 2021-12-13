@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import ParseLiveQuery
 
 extension MainCoordinator: LaunchManagerDelegate {
 

@@ -39,15 +39,15 @@ struct SystemNotice: Noticeable, Comparable {
         self.body = body
     }
 
-    init(with notice: Notice) {
-
-        self.init(createdAt: notice.createdAt,
-                  notice: notice,
-                  type: notice.type!,
-                  priority: notice.priority!,
-                  body: notice.body,
-                  attributes: notice.attributes)
-    }
+//    init(with notice: Notice) {
+//
+////        self.init(createdAt: notice.createdAt,
+////                  notice: notice,
+////                  type: notice.type!,
+////                  priority: notice.priority!,
+////                  body: notice.body,
+////                  attributes: notice.attributes)
+//    }
 
     init(withConneciton connection: Connection) {
         self.init(createdAt: connection.createdAt,

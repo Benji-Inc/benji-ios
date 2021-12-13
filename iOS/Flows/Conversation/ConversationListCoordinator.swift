@@ -124,32 +124,32 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
     }
 
     func add(connections: [Connection], to conversation: Conversation) {
-        let controller = ChatClient.shared.channelController(for: conversation.cid)
-
-        let acceptedConnections = connections.filter { connection in
-            return connection.status == .accepted
-        }
-
-        let pendingConnections = connections.filter { connection in
-            return connection.status == .invited || connection.status == .pending
-        }
-
-        for connection in pendingConnections {
-            let conversationID = controller.conversation.cid.id
-            connection.initialConversations.append(conversationID)
-            connection.saveEventually()
-        }
-
-        if !acceptedConnections.isEmpty {
-            let members = acceptedConnections.compactMap { connection in
-                return connection.nonMeUser?.objectId
-            }
-            controller.addMembers(userIds: Set(members)) { error in
-                if error.isNil {
-                    self.showPeopleAddedToast(for: acceptedConnections)
-                }
-            }
-        }
+//        let controller = ChatClient.shared.channelController(for: conversation.cid)
+//
+//        let acceptedConnections = connections.filter { connection in
+//            return connection.status == .accepted
+//        }
+//
+//        let pendingConnections = connections.filter { connection in
+//            return connection.status == .invited || connection.status == .pending
+//        }
+//
+//        for connection in pendingConnections {
+//            let conversationID = controller.conversation.cid.id
+//            connection.initialConversations.append(conversationID)
+//            connection.saveEventually()
+//        }
+//
+//        if !acceptedConnections.isEmpty {
+//            let members = acceptedConnections.compactMap { connection in
+//                return connection.nonMeUser?.objectId
+//            }
+//            controller.addMembers(userIds: Set(members)) { error in
+//                if error.isNil {
+//                    self.showPeopleAddedToast(for: acceptedConnections)
+//                }
+//            }
+//        }
     }
 
     private func showPeopleAddedToast(for connections: [Connection]) {
@@ -159,7 +159,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                 await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: first, title: "\(first.givenName.capitalized) Added", description: text, deepLink: nil))
             } else {
                 let text = LocalizedString(id: "", arguments: [String(connections.count)], default: " @(count) people have been added to the conversation.")
-                await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: User.current()!, title: "\(String(connections.count)) Added", description: text, deepLink: nil))
+                await ToastScheduler.shared.schedule(toastType: .basic(identifier: Lorem.randomString(), displayable: User.current!, title: "\(String(connections.count)) Added", description: text, deepLink: nil))
             }
         }
     }

@@ -8,8 +8,7 @@
 
 import Foundation
 import Combine
-import ParseLiveQuery
-import Parse
+import ParseSwift
 
 class UserStore {
 
@@ -21,16 +20,16 @@ class UserStore {
 
     private(set) var users: [User] = []
 
-    private var queries: [PFQuery<PFObject>] {
-        return self.users.compactMap { user in
-            if let query = User.query(), let objectId = user.objectId {
-                query.whereKey("objectId", equalTo: objectId)
-                return query
-            }
-
-            return nil
-        }
-    }
+//    private var queries: [PFQuery<PFObject>] {
+//        return self.users.compactMap { user in
+//            if let query = User.query(), let objectId = user.objectId {
+//                query.whereKey("objectId", equalTo: objectId)
+//                return query
+//            }
+//
+//            return nil
+//        }
+//    }
 
     init() {
         self.initialize()
@@ -54,41 +53,41 @@ class UserStore {
             return connection.nonMeUser?.objectId
         }
 
-        if let current = User.current()?.objectId {
+        if let current = User.current?.objectId {
             unfetchedUserIds.append(current)
         }
 
-        if let users = try? await User.fetchAndUpdateLocalContainer(where: unfetchedUserIds,
-                                                                         container: .users) {
-            self.users = users
-        }
-
-        self.users.forEach { user in
-            self.userUpdated = user 
-        }
-
-        self.queries.forEach { query in
-
-            let subscription = Client.shared.subscribe(query)
-
-            subscription.handleEvent { query, event in
-                switch event {
-                case .deleted(let object):
-                    if let user = object as? User {
-                        self.userDeleted = user
-                    }
-                case .entered(_):
-                    break
-                case .left(_):
-                    break
-                case .created(_):
-                    break
-                case .updated(let object):
-                    if let user = object as? User {
-                        self.userUpdated = user
-                    }
-                }
-            }
-        }
+//        if let users = try? await User.fetchAndUpdateLocalContainer(where: unfetchedUserIds,
+//                                                                         container: .users) {
+//            self.users = users
+//        }
+//
+//        self.users.forEach { user in
+//            self.userUpdated = user 
+//        }
+//
+//        self.queries.forEach { query in
+//
+//            let subscription = Client.shared.subscribe(query)
+//
+//            subscription.handleEvent { query, event in
+//                switch event {
+//                case .deleted(let object):
+//                    if let user = object as? User {
+//                        self.userDeleted = user
+//                    }
+//                case .entered(_):
+//                    break
+//                case .left(_):
+//                    break
+//                case .created(_):
+//                    break
+//                case .updated(let object):
+//                    if let user = object as? User {
+//                        self.userUpdated = user
+//                    }
+//                }
+//            }
+//        }
     }
 }

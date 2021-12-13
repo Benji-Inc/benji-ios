@@ -51,11 +51,11 @@ extension ChatClient {
 
     private func connectUser(with token: Token) async throws {
 
-        let userId = User.current()?.userObjectID ?? String() as UserId
+        let userId = User.current?.userObjectID ?? String() as UserId
         var userInfo = UserInfo(id: userId, name: nil, imageURL: nil, extraData: [:])
         userInfo = UserInfo(id: userId,
-                            name: User.current()?.fullName,
-                            imageURL: User.current()?.smallImage?.url,
+                            name: User.current?.fullName,
+                            imageURL: User.current?.smallImage?.url,
                             extraData: [:])
 
         /// connect to chat

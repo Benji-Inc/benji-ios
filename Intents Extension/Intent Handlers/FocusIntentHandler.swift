@@ -8,7 +8,7 @@
 
 import Foundation
 import Intents
-import Parse
+import ParseSwift
 import Combine
 
 class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
@@ -21,36 +21,26 @@ class FocusIntentHandler: NSObject, INShareFocusStatusIntentHandling {
     }
 
     private func initializeParse() {
-        if Parse.currentConfiguration == nil  {
-            let config = ParseClientConfiguration { configuration in
-                configuration.applicationGroupIdentifier = Config.shared.environment.groupId
-                configuration.containingApplicationBundleIdentifier = "com.Jibber-Inc.Jibber"
-                configuration.server = Config.shared.environment.url
-                configuration.applicationId = Config.shared.environment.appID
-                configuration.isLocalDatastoreEnabled = true
-            }
-            
-            Parse.initialize(with: config)
-        }
+        ParseSwift.initialize(configuration: Config.shared.parseConfiguration)
     }
 
     func handle(intent: INShareFocusStatusIntent, completion: @escaping (INShareFocusStatusIntentResponse) -> Void) {
-        guard let isFocused = intent.focusStatus?.isFocused, let currentUser = User.current() else { return }
+        guard let isFocused = intent.focusStatus?.isFocused, let currentUser = User.current else { return }
 
         let newStatus: FocusStatus = isFocused ? .focused : .available
 
         Task {
             do {
-                if currentUser.focusStatus != newStatus, !isFocused {
-                    if isFocused {
-                        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: ["focusTimeAvailable"])
-                    } else {
-                        try? await UNUserNotificationCenter.current().add(self.createIsAvailableRequest(for: currentUser))
-                    }
-                }
+//                if currentUser.focusStatus != newStatus, !isFocused {
+//                    if isFocused {
+//                        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: ["focusTimeAvailable"])
+//                    } else {
+//                        try? await UNUserNotificationCenter.current().add(self.createIsAvailableRequest(for: currentUser))
+//                    }
+//                }
 
-                currentUser.focusStatus = newStatus
-                try await currentUser.saveLocalThenServer()
+//                currentUser.focusStatus = newStatus
+//                try await currentUser.saveLocalThenServer()
 
                 let response = INShareFocusStatusIntentResponse(code: .success, userActivity: nil)
                 completion(response)

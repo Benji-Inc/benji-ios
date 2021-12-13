@@ -20,16 +20,16 @@ extension LaunchManager {
 
         do {
             try await ChatClient.initialize(for: user)
-            if let user = User.current(), user.isAuthenticated {
-                await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
-            }
+//            if let user = User.current, user.isAuthenticated {
+//                await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
+//            }
 
             var link = deepLink
             /// Used to load the initial conversation when a user has downloaded the full app from an app clip
-            if let initial = try? await InitialConveration.retrieve() {
-                link?.conversationId = initial.conversationId
-                link?.deepLinkTarget = .conversation
-            }
+//            if let initial = try? await InitialConveration.retrieve() {
+//                link?.conversationId = initial.conversationId
+//                link?.deepLinkTarget = .conversation
+//            }
 
             self.finishedInitialFetch = true
             return .success(object: link)

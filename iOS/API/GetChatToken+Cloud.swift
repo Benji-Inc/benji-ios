@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Parse
 import Combine
 
 struct GetChatToken: CloudFunction {

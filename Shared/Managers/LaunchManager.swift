@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Parse
+import ParseSwift
 
 enum LaunchActivity {
     case onboarding(phoneNumber: String)
@@ -38,18 +38,11 @@ class LaunchManager {
 
     func launchApp(with options: [UIApplication.LaunchOptionsKey: Any]?) async -> LaunchStatus {
         // Initialize Parse if necessary
-        if Parse.currentConfiguration.isNil  {
-            Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) in
-                configuration.applicationGroupIdentifier = Config.shared.environment.groupId
-                configuration.server = Config.shared.environment.url
-                configuration.applicationId = Config.shared.environment.appID
-                configuration.isLocalDatastoreEnabled = true
-            }))
-        }
+        Config.shared.initializeParse()
 
 #if !NOTIFICATION
         // Silently register for notifications every launch.
-        if let user = User.current(), user.isAuthenticated {
+        if let user = User.current, user.isOnboarded {
             Task {
                 await UserNotificationManager.shared.silentRegister(withApplication: UIApplication.shared)
             }
@@ -61,7 +54,7 @@ class LaunchManager {
     }
 
     private func initializeUserData(with deeplink: DeepLinkable?) async -> LaunchStatus {
-        guard let user = User.current() else {
+        guard let user = User.current else {
             return .success(object: deeplink)
         }
 

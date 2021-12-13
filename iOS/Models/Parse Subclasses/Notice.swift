@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Parse
+import ParseSwift
 
 enum NoticeKey: String {
     case type
@@ -16,8 +16,8 @@ enum NoticeKey: String {
     case body
 }
 
-final class Notice: PFObject, PFSubclassing {
-
+struct Notice: ParseObject, ParseObjectMutable {
+    
     enum NoticeType: String {
         case alert = "ALERT_MESSAGE"
         case connectionRequest = "CONNECTION_REQUEST"
@@ -26,43 +26,21 @@ final class Notice: PFObject, PFSubclassing {
         case system
         case rsvps
     }
-
-    static func parseClassName() -> String {
-        return String(describing: self)
-    }
-
-    var type: NoticeType? {
-        get {
-            guard let value: String = self.getObject(for: .type), let t = NoticeType(rawValue: value) else { return nil }
-            return t
-        }
-    }
-
-    var attributes: [String: AnyHashable]? {
-        get { self.getObject(for: .attributes) }
-    }
-
-    var priority: Int? {
-        get { self.getObject(for: .priority) }
-    }
-
-    var body: String? {
-        get { self.getObject(for: .body) }
-    }
-}
-
-extension Notice: Objectable {
-    typealias KeyType = NoticeKey
-
-    func getObject<Type>(for key: NoticeKey) -> Type? {
-        return self.object(forKey: key.rawValue) as? Type
-    }
-
-    func setObject<Type>(for key: NoticeKey, with newValue: Type) {
-        self.setObject(newValue, forKey: key.rawValue)
-    }
-
-    func getRelationalObject<PFRelation>(for key: NoticeKey) -> PFRelation? {
-        return self.relation(forKey: key.rawValue) as? PFRelation
-    }
+    
+    //: These are required by `ParseObject`.
+    var objectId: String?
+    var createdAt: Date?
+    var updatedAt: Date?
+    var ACL: ParseACL?
+    
+    //    var type: NoticeType? {
+    //        get {
+    //            guard let value: String = self.getObject(for: .type), let t = NoticeType(rawValue: value) else { return nil }
+    //            return t
+    //        }
+    //    }
+    
+    //var attributes: [String: AnyHashable]?
+    var priority: Int?
+    var body: String?
 }

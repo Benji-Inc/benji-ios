@@ -9,12 +9,10 @@
 import UserNotifications
 import Intents
 import StreamChat
-import Parse
-import Combine
+import ParseSwift
 
 class NotificationService: UNNotificationServiceExtension {
 
-    private var cancellables = Set<AnyCancellable>()
     var contentHandler: ((UNNotificationContent) -> Void)?
     var request: UNNotificationRequest?
 
@@ -33,7 +31,7 @@ class NotificationService: UNNotificationServiceExtension {
         self.request = request
 
         Task {
-            await self.initializeParse()
+            Config.shared.initializeParse()
             if let client = self.getChatClient() {
                 await self.updateContent(with: request,
                                          client: client,
@@ -52,26 +50,8 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
 
-    private func initializeParse() async {
-        return await withCheckedContinuation { continuation in
-            if Parse.currentConfiguration.isNil  {
-                let config = ParseClientConfiguration { configuration in
-                    configuration.applicationGroupIdentifier = Config.shared.environment.groupId
-                    configuration.containingApplicationBundleIdentifier = "com.Jibber-Inc.Jibber"
-                    configuration.server = Config.shared.environment.url
-                    configuration.applicationId = Config.shared.environment.appID
-                    configuration.isLocalDatastoreEnabled = true
-                }
-
-                Parse.initialize(with: config)
-            }
-
-            continuation.resume(returning: ())
-        }
-    }
-
     private func getChatClient() -> ChatClient? {
-        guard let user = User.current() else { return nil }
+        guard let user = User.current else { return nil }
 
         var config = ChatClientConfig(apiKey: .init("hvmd2mhxcres"))
         config.isLocalStorageEnabled = true
@@ -140,11 +120,11 @@ class NotificationService: UNNotificationServiceExtension {
         } ?? []
 
         /// Map members to recipients
-        if let recipients = try? await User.fetchAndUpdateLocalContainer(where: memberIds, container: .users).compactMap({ user in
-            return user.iNPerson
-        }) {
-            self.recipients = recipients
-        }
+//        if let recipients = try? await User.fetchAndUpdateLocalContainer(where: memberIds, container: .users).compactMap({ user in
+//            return user.iNPerson
+//        }) {
+//            self.recipients = recipients
+//        }
 
         /// Update the interruption level
         if let value = self.message?.extraData["context"],

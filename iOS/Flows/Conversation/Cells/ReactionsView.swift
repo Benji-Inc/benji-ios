@@ -46,7 +46,7 @@ class ReactionsView: View {
         }
 
         let reaction = nonReadReactions.first { reaction in
-            return reaction.author.id == User.current()!.objectId
+            return reaction.author.id == User.current!.objectId
         }
 
         guard let r = reaction, let type = ReactionType(rawValue: r.type.rawValue) else {

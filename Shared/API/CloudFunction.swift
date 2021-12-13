@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Parse
+import ParseSwift
 
 protocol CloudFunction {
 
@@ -43,17 +43,17 @@ extension CloudFunction {
 
         do {
             let result = try await withCheckedThrowingContinuation({ (continuation: CheckedContinuation<Any, Error>) in
-                PFCloud.callFunction(inBackground: callName,
-                                     withParameters: params) { (object, error) in
-
-                    if let error = error {
-                        continuation.resume(throwing: error)
-                    } else if let value = object {
-                        continuation.resume(returning: value)
-                    } else {
-                        continuation.resume(throwing: ClientError.apiError(detail: "Request failed"))
-                    }
-                }
+//                PFCloud.callFunction(inBackground: callName,
+//                                     withParameters: params) { (object, error) in
+//
+//                    if let error = error {
+//                        continuation.resume(throwing: error)
+//                    } else if let value = object {
+//                        continuation.resume(returning: value)
+//                    } else {
+//                        continuation.resume(throwing: ClientError.apiError(detail: "Request failed"))
+//                    }
+//                }
             })
 
             try Task.checkCancellation()

@@ -79,15 +79,15 @@ extension Message: Messageable {
     }
 
     func setToUnconsumed() async throws {
-        let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
-        if let readReaction = self.latestReactions.first(where: { reaction in
-            if let type = ReactionType(rawValue: reaction.type.rawValue), type == .read, reaction.author.userObjectID == User.current()?.objectId {
-                return true
-            }
-            return false
-        }) {
-            try await controller.removeReaction(with: readReaction.type)
-        }
+//        let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
+//        if let readReaction = self.latestReactions.first(where: { reaction in
+//            if let type = ReactionType(rawValue: reaction.type.rawValue), type == .read, reaction.author.userObjectID == User.current?.objectId {
+//                return true
+//            }
+//            return false
+//        }) {
+//            try await controller.removeReaction(with: readReaction.type)
+//        }
     }
 }
 

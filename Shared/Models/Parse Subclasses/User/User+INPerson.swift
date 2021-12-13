@@ -19,17 +19,18 @@ extension User {
                         image: self.inImage,
                         contactIdentifier: nil,
                         customIdentifier: self.objectId,
-                        isMe: User.current()?.objectId == self.objectId,
+                        isMe: User.current?.objectId == self.objectId,
                         suggestionType: .instantMessageAddress)
     }
 
     private var inImage: INImage? {
         do {
-            if let data = try? self.smallImage?.getData() {
-                return INImage(imageData: data)
-            } else {
-                return nil
-            }
+            return nil 
+//            if let data = try? self.smallImage?.getData() {
+//                return INImage(imageData: data)
+//            } else {
+//                return nil
+//            }
         }
     }
 

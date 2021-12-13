@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Parse
+import ParseSwift
 import UIKit
 import Combine
 import Lottie
@@ -114,7 +114,7 @@ class DisplayableImageView: View {
             Task {
                 await self.findUser(with: objectID)
             }.add(to: self.taskPool)
-        } else if let file = displayable as? PFFileObject {
+        } else if let file = displayable as? ParseFile {
             Task {
                 await self.downloadAndSet(file: file)
             }.add(to: self.taskPool)
@@ -138,29 +138,30 @@ class DisplayableImageView: View {
     }
 
     private func downloadAndSetImage(for user: User) {
-        Task {
-            if user.focusStatus == .focused, let file = user.focusImage {
-                await self.downloadAndSet(file: file)
-            } else if let file = user.smallImage {
-                await self.downloadAndSet(file: file)
-            }
-        }.add(to: self.taskPool)
+//        Task {
+//            if user.focusStatus == .focused, let file = user.focusImage {
+//                await self.downloadAndSet(file: file)
+//            } else if let file = user.smallImage {
+//                await self.downloadAndSet(file: file)
+//            }
+//        }.add(to: self.taskPool)
     }
 
     @MainActor
-    private func downloadAndSet(file: PFFileObject) async {
+    private func downloadAndSet(file: ParseFile) async {
         do {
-            if !file.isDataAvailable {
-                self.state = .loading
-            }
+//            if !file.isDataAvailable {
+//                self.state = .loading
+//            }
 
-            let data = try await file.retrieveDataInBackground { [weak self] progress in
-                guard let `self` = self else { return }
-                if self.animationView.microAnimation == .pie {
-                    let time = AnimationProgressTime(progress)
-                    self.animationView.currentProgress = time
-                }
-            }
+//            let data = try await file.retrieveDataInBackground { [weak self] progress in
+//                guard let `self` = self else { return }
+//                if self.animationView.microAnimation == .pie {
+//                    let time = AnimationProgressTime(progress)
+//                    self.animationView.currentProgress = time
+//                }
+//            }
+            let data = Data()
 
             guard !Task.isCancelled else { return }
 

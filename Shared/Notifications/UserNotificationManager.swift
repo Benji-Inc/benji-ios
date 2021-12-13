@@ -8,7 +8,7 @@
 
 import Foundation
 import UserNotifications
-import Parse
+import ParseSwift
 import Combine
 #if IOS
 import StreamChat
@@ -129,20 +129,20 @@ class UserNotificationManager: NSObject {
     func registerPush(from deviceToken: Data) async {
 
         do {
-            let installation = try await PFInstallation.getCurrent()
-            installation.badge = 0
-            installation.setDeviceTokenFrom(deviceToken)
-            if installation["userId"].isNil {
-                installation["userId"] = User.current()?.objectId
-            }
-            
-            try await installation.saveInBackground()
+//            let installation = try await PFInstallation.getCurrent()
+//            installation.badge = 0
+//            installation.setDeviceTokenFrom(deviceToken)
+//            if installation["userId"].isNil {
+//                installation["userId"] = User.current()?.objectId
+//            }
+//            
+//            try await installation.saveInBackground()
         } catch {
             print(error)
         }
 
         #if IOS
-        if !ChatClient.isConnected, let user = User.current() {
+        if !ChatClient.isConnected, let user = User.current {
             try? await ChatClient.initialize(for: user)
         }
 

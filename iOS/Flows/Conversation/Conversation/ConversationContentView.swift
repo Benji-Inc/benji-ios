@@ -56,7 +56,7 @@ class ConversationContentView: View {
             if !members.isEmpty {
                 self.stackedAvatarView.set(items: members)
             } else {
-                self.stackedAvatarView.set(items: [User.current()!])
+                self.stackedAvatarView.set(items: [User.current!])
             }
 
             self.stackedAvatarView.layoutNow()

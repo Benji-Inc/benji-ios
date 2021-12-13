@@ -141,7 +141,7 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
             data[.connections] = []
         }
 
-        self.reservations = await Reservation.getAllUnclaimed()
+       // self.reservations = await Reservation.getAllUnclaimed()
 
         data[.contacts] = await ContactsManger.shared.fetchContacts().map({ contact in
             let reservation = self.reservations.first { reservation in

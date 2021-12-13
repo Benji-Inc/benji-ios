@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Parse
+import UIKit
 
 extension UIImage {
 

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Parse
+import UIKit
 
 protocol ImageDisplayable {
     var userObjectID: String? { get }

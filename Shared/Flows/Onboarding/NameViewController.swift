@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Parse
 import Localization
 
 class NameViewController: TextInputViewController<String> {
