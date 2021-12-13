@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import GestureRecognizerClosures
 import Localization
 
 class ToastBannerView: ToastView {

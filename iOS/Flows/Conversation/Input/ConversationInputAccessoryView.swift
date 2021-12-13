@@ -9,7 +9,6 @@
 import Foundation
 import Lottie
 import Combine
-import GestureRecognizerClosures
 import StreamChat
 
 class ConversationInputAccessoryView: SwipeableInputAccessoryView {
