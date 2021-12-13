@@ -160,7 +160,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             guard let cid = self.parentMessage.cid else { return [:] }
 
             let messages = self.messageController.replies.map { message in
-                return MessageSequenceItem(channelID: cid, messageID: message.id)
+                return MessageSequenceItem.message(cid: cid, messageID: message.id)
             }
             data[.bottomMessages] = Array(messages)
         } catch {
@@ -230,7 +230,7 @@ extension ThreadViewController: TransitionableViewController {
 extension ThreadViewController {
 
     func subscribeToUpdates() {
-        self.dataSource.handleEditMessage = { [unowned self] item in
+        self.dataSource.handleEditMessage = { [unowned self] cid, messageID in
             // TODO
         }
 

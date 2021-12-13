@@ -26,8 +26,7 @@ enum ConversationUIState {
 
 class ConversationListViewController: FullScreenViewController,
                                       UICollectionViewDelegate,
-                                      UICollectionViewDelegateFlowLayout,
-                                      ActiveConversationable {
+                                      UICollectionViewDelegateFlowLayout {
 
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
@@ -176,14 +175,9 @@ class ConversationListViewController: FullScreenViewController,
         }
     }
 
-    var conversationController: ConversationController?
-
     func updateCenterMostCell() {
-        guard let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
-            return
-        }
-
-        guard let ip = self.collectionView.centerIndexPath(), let conversation = self.conversationListController.conversations[safe: ip.item] else { return }
+        guard let ip = self.collectionView.centerIndexPath(),
+              let conversation = self.conversationListController.conversations[safe: ip.item] else { return }
 
         /// Sets the active conversation
         ConversationsManager.shared.activeConversation = conversation
@@ -193,24 +187,8 @@ class ConversationListViewController: FullScreenViewController,
         }
         self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: false)
 
-        // If there's a centered cell, update the layout
-        if let currentConversation = self.activeConversation {
-            self.conversationController = ChatClient.shared.channelController(for: currentConversation.cid)
-
-            ConversationsManager.shared.$reactionEvent.mainSink { event in
-                guard let event = event else { return }
-                cell.updateMessages(with: event)
-            }.store(in: &self.cancellables)
-
-            self.conversationController?.messagesChangesPublisher.mainSink(receiveValue: { [unowned self] changes in
-                if let activeConversation = self.conversationController?.conversation {
-                    cell.set(sequence: activeConversation)
-                }
-            }).store(in: &self.cancellables)
-
-            UIView.animate(withDuration: Theme.animationDurationFast) {
-                self.view.layoutNow()
-            }
+        UIView.animate(withDuration: Theme.animationDurationFast) {
+            self.view.layoutNow()
         }
     }
 

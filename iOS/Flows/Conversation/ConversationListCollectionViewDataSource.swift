@@ -25,8 +25,8 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         case loadMore
     }
 
-    var handleSelectedMessage: ((MessageSequenceItem, MessageContentView) -> Void)?
-    var handleEditMessage: ((MessageSequenceItem) -> Void)?
+    var handleSelectedMessage: ((ConversationID, MessageId, MessageContentView) -> Void)?
+    var handleEditMessage: ((ConversationID, MessageId) -> Void)?
     
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
@@ -57,11 +57,11 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             = collectionView.dequeueConfiguredReusableCell(using: self.conversationCellRegistration,
                                                            for: indexPath,
                                                            item: (cid, self))
-            conversationCell.handleTappedMessage = { [unowned self] item, content in
-                self.handleSelectedMessage?(item, content)
+            conversationCell.handleTappedMessage = { [unowned self] cid, messageID, content in
+                self.handleSelectedMessage?(cid, messageID, content)
             }
-            conversationCell.handleEditMessage = { [unowned self] item in
-                self.handleEditMessage?(item)
+            conversationCell.handleEditMessage = { [unowned self] cid, messageID in
+                self.handleEditMessage?(cid, messageID)
             }
 
             return conversationCell
@@ -158,14 +158,12 @@ extension ConversationListCollectionViewDataSource {
             }
 
             cell.set(layoutForDropZone: item.dataSource.layoutForDropZone)
-            cell.set(sequence: conversationController.conversation)
+            cell.set(conversation: conversationController.conversation)
         }
     }
 
     static func createLoadMoreCellRegistration() -> LoadMoreMessagesCellRegistration {
-        return LoadMoreMessagesCellRegistration { cell, indexPath, itemIdentifier in
-
-        }
+        return LoadMoreMessagesCellRegistration { cell, indexPath, itemIdentifier in }
     }
 }
 
