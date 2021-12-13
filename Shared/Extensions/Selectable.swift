@@ -135,7 +135,7 @@ private class TapGestureRecognizer: UITapGestureRecognizer {
 class PanGestureRecognizer: UIPanGestureRecognizer {
     private var action: (UIPanGestureRecognizer) -> Void
 
-    init(taps: Int = 1, action: @escaping (UIPanGestureRecognizer) -> Void) {
+    init(action: @escaping (UIPanGestureRecognizer) -> Void) {
         self.action = action
         super.init(target: nil, action: nil)
         self.addTarget(self, action: #selector(execute))
