@@ -29,10 +29,4 @@ class ThreadCoordinator: PresentableCoordinator<Void> {
     override func toPresentable() -> PresentableCoordinator<Void>.DismissableVC {
         return self.threadVC
     }
-
-    override func start() {
-        self.threadVC.collectionView.onDoubleTap { [unowned self] _ in
-            self.finishFlow(with: ())
-        }
-    }
 }

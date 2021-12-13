@@ -7,11 +7,11 @@
 //
 
 import Foundation
-import TMROLocalization
 import Photos
 import PhotosUI
 import Combine
 import StreamChat
+import Localization
 
 class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversationable {
 

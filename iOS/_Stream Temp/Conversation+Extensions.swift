@@ -8,7 +8,7 @@
 
 import Foundation
 import StreamChat
-import TMROLocalization
+import Localization
 
 extension Conversation {
 

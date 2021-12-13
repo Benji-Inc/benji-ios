@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import TMROLocalization
+import Localization
 
 class ContactsViewController: PeopleViewController {
 

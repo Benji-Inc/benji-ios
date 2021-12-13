@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import TMROLocalization
+import Localization
 
 enum OnboardingContent: Switchable {
 

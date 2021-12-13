@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import TMROLocalization
 import Lottie
 import Combine
+import Localization
 
 enum ButtonStyle {
     case noborder(image: UIImage, color: Color)

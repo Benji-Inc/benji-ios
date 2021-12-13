@@ -10,7 +10,7 @@ import Foundation
 import Combine
 import ParseLiveQuery
 import Parse
-import TMROLocalization
+import Localization
 
 class NoticeSupplier {
 

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import TMROLocalization
 import Lottie
 import Contacts
 import PhoneNumberKit

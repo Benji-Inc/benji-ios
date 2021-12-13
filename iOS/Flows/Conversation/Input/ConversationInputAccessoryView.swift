@@ -8,9 +8,7 @@
 
 import Foundation
 import Lottie
-import TMROLocalization
 import Combine
-import GestureRecognizerClosures
 import StreamChat
 
 class ConversationInputAccessoryView: SwipeableInputAccessoryView {

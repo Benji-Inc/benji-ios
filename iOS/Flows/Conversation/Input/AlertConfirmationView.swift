@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import TMROLocalization
-
+import Localization
+ 
 class AlertConfirmationView: View {
 
     private let label = Label(font: .regular)

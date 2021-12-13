@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import TMROLocalization
 import Combine
+import Localization
 
 enum ToastType {
     case newMessage(Messageable)

@@ -7,8 +7,7 @@
 //
 
 import Foundation
-import TMROLocalization
-import GestureRecognizerClosures
+import Localization
 
 class ToastBannerView: ToastView {
 

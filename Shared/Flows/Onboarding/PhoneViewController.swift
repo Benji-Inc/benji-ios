@@ -9,7 +9,6 @@
 import Foundation
 import PhoneNumberKit
 import Parse
-import TMROLocalization
 import Combine
 
 class PhoneViewController: TextInputViewController<PhoneNumber> {

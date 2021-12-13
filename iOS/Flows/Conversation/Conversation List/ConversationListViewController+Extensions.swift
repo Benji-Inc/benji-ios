@@ -12,7 +12,8 @@ import StreamChat
 extension ConversationListViewController {
 
     func setupInputHandlers() {
-        self.collectionView.onDoubleTap { [unowned self] (doubleTap) in
+        
+        self.collectionView.onDoubleTap { [unowned self] in
             if self.messageInputAccessoryView.textView.isFirstResponder {
                 self.messageInputAccessoryView.textView.resignFirstResponder()
             }

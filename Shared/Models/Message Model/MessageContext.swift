@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import TMROLocalization
+import UserNotifications
 
 enum MessageContext: String, CaseIterable {
 
