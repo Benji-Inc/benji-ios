@@ -1,0 +1,96 @@
+//
+//  EmotionView.swift
+//  Jibber
+//
+//  Created by Benji Dodgson on 12/13/21.
+//  Copyright © 2021 Benjamin Dodgson. All rights reserved.
+//
+
+import Foundation
+import UIKit
+
+class EmotionView: View {
+    
+    let emojiContainer = View()
+    let emojiLabel = Label(font: .small)
+    
+    let label = Label(font: .small)
+    let button = Button()
+    
+    var didSelectEmotion: ((Emotion) -> Void)?
+    
+    override func initializeSubviews() {
+        super.initializeSubviews()
+        
+        self.addSubview(self.emojiContainer)
+        self.emojiContainer.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        self.emojiContainer.layer.cornerRadius = Theme.innerCornerRadius
+        self.emojiContainer.layer.borderColor = Color.border.color.cgColor
+        self.emojiContainer.layer.borderWidth = 0.25
+        self.emojiContainer.addSubview(self.emojiLabel)
+        
+        self.addSubview(self.label)
+        self.addSubview(self.button)
+        
+        self.clipsToBounds = true
+        
+        self.button.showsMenuAsPrimaryAction = true
+    }
+    
+    func configure(for emotion: Emotion) {
+        self.emojiLabel.text = emotion.emoji
+        self.label.setText(emotion.rawValue)
+        self.button.menu = self.createMenu(for: emotion)
+        self.layoutNow()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        self.label.setSize(withWidth: 200)
+        
+        self.emojiContainer.squaredSize = 20
+        
+        
+        self.emojiLabel.sizeToFit()
+        self.emojiLabel.centerOnXAndY()
+        
+        self.height = 20
+        self.width = self.emojiContainer.width + Theme.ContentOffset.short.value + self.label.width + Theme.ContentOffset.short.value.doubled
+        
+        self.pin(.left)
+        
+        self.emojiContainer.pin(.left)
+        self.emojiContainer.pin(.top)
+        
+        self.label.centerOnY()
+        self.label.match(.left, to: .right, of: self.emojiContainer, offset: .short)
+        
+        self.button.expandToSuperviewSize()
+    }
+    
+    private func createMenu(for emotion: Emotion) -> UIMenu {
+        
+        var children: [UIMenuElement] = []
+        Emotion.allCases.forEach { e in
+            let state: UIMenuElement.State = e == emotion ? .on : .off
+            let title = "\(e.emoji) \(e.rawValue.capitalized)"
+            let action = UIAction(title: title,
+                                  image: nil,
+                                  identifier: nil,
+                                  discoverabilityTitle: nil,
+                                  attributes: [],
+                                  state: state) { [unowned self] _ in
+                self.didSelectEmotion?(e)
+                self.configure(for: e)
+            }
+            children.append(action)
+        }
+        
+        return UIMenu(title: "Select an emotion",
+                      image: nil,
+                      identifier: nil,
+                      options: [.singleSelection],
+                      children: children)
+    }
+}
