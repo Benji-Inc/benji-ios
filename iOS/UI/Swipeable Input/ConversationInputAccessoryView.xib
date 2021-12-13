@@ -23,10 +23,10 @@
                     <rect key="frame" x="0.0" y="0.0" width="337" height="134"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VuQ-5S-h7F" customClass="SpeechBubbleView" customModule="Jibber" customModuleProvider="target">
-                            <rect key="frame" x="32" y="79" width="273" height="58"/>
+                            <rect key="frame" x="32" y="8" width="273" height="129"/>
                             <subviews>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="This is some example message text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ads-9e-WJh" customClass="InputTextView" customModule="Jibber" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="273" height="48"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="273" height="119"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="48" id="ibA-Ih-0yt"/>
@@ -36,7 +36,7 @@
                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 </textView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-ok-H5y">
-                                    <rect key="frame" x="0.0" y="0.0" width="273" height="58"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="273" height="129"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title=""/>
                                 </button>
@@ -67,6 +67,7 @@
                         <constraint firstAttribute="trailing" secondItem="VuQ-5S-h7F" secondAttribute="trailing" constant="32" id="Tgi-A5-L3c"/>
                         <constraint firstAttribute="bottom" secondItem="vaX-xP-i7k" secondAttribute="bottom" id="W0X-I8-0SE"/>
                         <constraint firstItem="VuQ-5S-h7F" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="32" id="Zve-FB-6La"/>
+                        <constraint firstItem="VuQ-5S-h7F" firstAttribute="top" secondItem="CP8-gi-eym" secondAttribute="top" constant="8" id="byR-VP-Ldn"/>
                         <constraint firstItem="vaX-xP-i7k" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="bottom" constant="-4" id="khc-UU-tVU"/>
                         <constraint firstAttribute="trailing" secondItem="vaX-xP-i7k" secondAttribute="trailing" constant="36" id="y13-oz-083"/>
                     </constraints>
