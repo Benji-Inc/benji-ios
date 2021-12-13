@@ -147,12 +147,4 @@ class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSamp
                        from connection: AVCaptureConnection) {
 
     }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-//        if let layer = self.previewLayer {
-//            layer.frame = self.view.bounds
-//        }
-    }
 }

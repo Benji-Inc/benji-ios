@@ -95,7 +95,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
 //        self.inputTypeContainer.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
 
         self.inputTypeContainer.addSubview(self.emotionView)
-        self.emotionView.configure(for: .amusement)
+        self.emotionView.configure(for: .calm)
         self.emotionView.didSelectEmotion = { [unowned self] emotion in
             //self.currentContext = context
         }

@@ -59,82 +59,82 @@ enum ReactionType: String, CaseIterable {
 
 enum Emotion: String, CaseIterable {
     case appreciation
-    case amusement
-    case anger
-    case anxiety
+    case amused
+    case angry
+    case anxious
     case awe
-    case awkwardness
-    case boredom
-    case calmness
-    case confusion
+    case awkward
+    case bored
+    case calm
+    case confused
     case craving
-    case disgust
-    case empathy
-    case entrancement
-    case excitement
-    case fear
-    case horror
-    case interest
-    case joy
-    case nostalgia
-    case relief
-    case romance
-    case sadness
-    case satisfaction
-    case desire
-    case suprise
+    case disgusted
+    case empathetic
+    case entrance
+    case excited
+    case fearful
+    case horrorified
+    case interested
+    case joyful
+    case nostalgic
+    case relieved
+    case romantic
+    case sad
+    case satisfied
+    case desired
+    case suprised
     
     var emoji: String {
         switch self {
         case .appreciation:
             return "☺️"
-        case .amusement:
+        case .amused:
             return "😂"
-        case .anger:
+        case .angry:
             return "😡"
-        case .anxiety:
+        case .anxious:
             return "😓"
         case .awe:
             return "😳"
-        case .awkwardness:
+        case .awkward:
             return "🥴"
-        case .boredom:
+        case .bored:
             return "🥱"
-        case .calmness:
+        case .calm:
             return "😌"
-        case .confusion:
+        case .confused:
             return "🤔"
         case .craving:
             return "😋"
-        case .disgust:
+        case .disgusted:
             return "😖"
-        case .empathy:
+        case .empathetic:
             return "😔"
-        case .entrancement:
+        case .entrance:
             return "🤪"
-        case .excitement:
+        case .excited:
             return "🤩"
-        case .fear:
+        case .fearful:
             return "😰"
-        case .horror:
+        case .horrorified:
             return "😱"
-        case .interest:
+        case .interested:
             return "🧐"
-        case .joy:
+        case .joyful:
             return "🥳"
-        case .nostalgia:
+        case .nostalgic:
             return "🤠"
-        case .relief:
+        case .relieved:
             return "😅"
-        case .romance:
+        case .romantic:
             return "😍"
-        case .sadness:
+        case .sad:
             return "😥"
-        case .satisfaction:
+        case .satisfied:
             return "🥰"
-        case .desire:
+        case .desired:
             return "😈"
-        case .suprise:
+        case .suprised:
             return "😮"
         }
     }

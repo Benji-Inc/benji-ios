@@ -49,10 +49,10 @@ class EmotionView: View {
         
         self.label.setSize(withWidth: 200)
         
-        self.emojiContainer.squaredSize = 20
-        
+        self.emojiContainer.height = 20
         
         self.emojiLabel.sizeToFit()
+        self.emojiContainer.width = self.emojiLabel.width + Theme.ContentOffset.short.value.doubled
         self.emojiLabel.centerOnXAndY()
         
         self.height = 20
@@ -87,7 +87,7 @@ class EmotionView: View {
             children.append(action)
         }
         
-        return UIMenu(title: "Select an emotion",
+        return UIMenu(title: "I'm feeling...",
                       image: nil,
                       identifier: nil,
                       options: [.singleSelection],
