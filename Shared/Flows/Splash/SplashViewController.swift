@@ -8,8 +8,8 @@
 
 import Foundation
 import Lottie
-import TMROLocalization
 import StoreKit
+import Localization
 
 class SplashViewController: FullScreenViewController, TransitionableViewController {
 

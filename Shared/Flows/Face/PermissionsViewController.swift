@@ -8,8 +8,8 @@
 
 import Foundation
 import Intents
-import TMROLocalization
 import Combine
+import Localization
 
 class PermissionsViewController: DisclosureModalViewController {
 

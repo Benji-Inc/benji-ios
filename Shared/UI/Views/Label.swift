@@ -8,8 +8,8 @@
 
 import Foundation
 import UIKit
-import TMROLocalization
-
+import Localization
+ 
 /// A custom label that automatically applies font, color and kerning attributes to text set through the standard text member variable.
 class Label: UILabel {
 

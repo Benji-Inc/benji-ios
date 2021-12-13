@@ -8,7 +8,7 @@
 
 import Foundation
 import Contacts
-import TMROLocalization
+import Localization
 
 class PeopleCollectionViewDataSource: CollectionViewDataSource<PeopleCollectionViewDataSource.SectionType,
                                        PeopleCollectionViewDataSource.ItemType> {

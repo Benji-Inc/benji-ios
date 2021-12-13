@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import TMROLocalization
 import Combine
+import Localization
 
 class WelcomeViewController: TextInputViewController<Void> {
 
@@ -66,7 +66,7 @@ class WelcomeViewController: TextInputViewController<Void> {
             self.animate(for: state)
         }.store(in: &self.cancellables)
 
-        self.view.onDoubleTap { [unowned self] _ in
+        self.view.onDoubleTap { [unowned self] in
             if self.textField.isFirstResponder {
                 self.textField.resignFirstResponder()
             }

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import TMROLocalization
 
 protocol Switchable: Equatable {
     var viewController: UIViewController & Sizeable { get }

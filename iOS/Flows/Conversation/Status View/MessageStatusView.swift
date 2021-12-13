@@ -7,9 +7,9 @@
 //
 
 import Foundation
-import TMROLocalization
 import StreamChat
 import Combine
+import Localization
 
 class MessageStatusView: View {
 

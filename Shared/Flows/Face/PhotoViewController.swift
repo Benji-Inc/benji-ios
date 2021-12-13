@@ -8,7 +8,6 @@
 
 import Foundation
 import Parse
-import TMROLocalization
 import Lottie
 import UIKit
 import Combine

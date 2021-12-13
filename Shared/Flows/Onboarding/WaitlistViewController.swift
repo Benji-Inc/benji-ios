@@ -8,10 +8,10 @@
 
 import Foundation
 import Parse
-import TMROLocalization
 import StoreKit
 import ParseLiveQuery
 import Combine
+import Localization
 
 class WaitlistViewController: ViewController, Sizeable {
 

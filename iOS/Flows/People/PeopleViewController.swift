@@ -9,8 +9,8 @@
 import Foundation
 import StreamChat
 import Contacts
-import TMROLocalization
 import UIKit
+import Localization
 
 protocol PeopleViewControllerDelegate: AnyObject {
     func peopleView(_ controller: PeopleViewController, didSelect items: [PeopleCollectionViewDataSource.ItemType])

@@ -8,7 +8,6 @@
 
 import Foundation
 import UserNotifications
-import TMROLocalization
 import Parse
 import Combine
 #if IOS
