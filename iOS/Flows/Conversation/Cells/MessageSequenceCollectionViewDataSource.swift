@@ -20,13 +20,14 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         case bottomMessages = 1
     }
 
-    struct ItemType: Hashable {
-        let channelID: ChannelId
-        let messageID: MessageId
+    enum ItemType: Hashable {
+        case message(cid: ConversationID, messageID: MessageId)
+        case loadMore(cid: ConversationID)
     }
 
-    var handleTappedMessage: ((MessageSequenceItem, MessageContentView) -> Void)?
-    var handleEditMessage: ((MessageSequenceItem) -> Void)?
+    var handleTappedMessage: ((ConversationID, MessageId, MessageContentView) -> Void)?
+    var handleEditMessage: ((ConversationID, MessageId) -> Void)?
+    var handleLoadMoreMessages: ((ConversationID) -> Void)?
 
     /// If true, push the bottom messages back to prepare for a new message.
     var shouldPrepareToSend = false
@@ -36,31 +37,44 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     // Cell registration
     private let messageSubcellRegistration
     = MessageSequenceCollectionViewDataSource.createMessageSubcellRegistration()
+    private let loadMoreRegistration
+    = MessageSequenceCollectionViewDataSource.createLoadMoreCellRegistration()
 
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
                               section: SectionType,
                               item: ItemType) -> UICollectionViewCell? {
 
-        let messageCell
-        = collectionView.dequeueConfiguredReusableCell(using: self.messageSubcellRegistration,
-                                                       for: indexPath,
-                                                       item: (item.channelID,
-                                                              item.messageID,
-                                                              collectionView))
-        messageCell.content.handleEditMessage = { [unowned self] item in
-            self.handleEditMessage?(item)
-        }
+        switch item {
+        case .message(cid: let cid, messageID: let messageID):
+            let messageCell
+            = collectionView.dequeueConfiguredReusableCell(using: self.messageSubcellRegistration,
+                                                           for: indexPath,
+                                                           item: (cid, messageID, collectionView))
+            messageCell.content.handleEditMessage = { [unowned self] cid, messageID in
+                self.handleEditMessage?(cid, messageID)
+            }
 
-        messageCell.content.handleTappedMessage = { [unowned self] item in
-            self.handleTappedMessage?(item, messageCell.content)
+            messageCell.content.handleTappedMessage = { [unowned self] cid, messageID in
+                self.handleTappedMessage?(cid, messageID, messageCell.content)
+            }
+            return messageCell
+        case .loadMore(cid: let conversationID):
+            let loadMoreCell = collectionView.dequeueConfiguredReusableCell(using: self.loadMoreRegistration,
+                                                                            for: indexPath,
+                                                                            item: collectionView)
+            loadMoreCell.handleLoadMoreMessages = { [unowned self] in
+                self.handleLoadMoreMessages?(conversationID)
+            }
+            return loadMoreCell
         }
-        return messageCell
     }
 
     /// Updates the datasource to display the given message sequence.
     /// The message sequence should be ordered newest to oldest.
-    func set(messageSequence: MessageSequence) {
+    func set(messageSequence: MessageSequence,
+             itemsToReconfigure: [ItemType] = [],
+             showLoadMore: Bool = false) {
         // Separate the user messages from other message.
         let userMessages = messageSequence.messages.filter { message in
             return message.isFromCurrentUser
@@ -76,16 +90,22 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         }
 
         // The newest message is at the bottom, so reverse the order.
-        var userMessageItems = userMessages.reversed().map { message in
-            return MessageSequenceItem(channelID: cid, messageID: message.id)
+        var userMessageItems = userMessages.map { message in
+            return ItemType.message(cid: cid, messageID: message.id)
         }
+
+        if showLoadMore {
+            userMessageItems.append(.loadMore(cid: cid))
+        }
+
+
+        userMessageItems = userMessageItems.reversed()
         if self.shouldPrepareToSend {
-            userMessageItems.append(MessageSequenceItem(channelID: cid, messageID: "placeholderMessage"))
+            userMessageItems.append(ItemType.message(cid: cid, messageID: "placeholderMessage"))
         }
 
         let otherMessageItems = otherMessages.reversed().map { message in
-            return MessageSequenceItem(channelID: try! ChannelId(cid: message.conversationID),
-                                       messageID: message.id)
+            return ItemType.message(cid: cid, messageID: message.id)
         }
 
         var snapshot = self.snapshot()
@@ -102,6 +122,8 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         snapshot.appendItems(otherMessageItems, toSection: .topMessages)
         snapshot.appendItems(userMessageItems, toSection: .bottomMessages)
 
+        snapshot.reconfigureItems(itemsToReconfigure)
+
         self.apply(snapshot, animatingDifferences: animateDifference)
     }
 }
@@ -116,6 +138,9 @@ extension MessageSequenceCollectionViewDataSource {
                                          messageID: MessageId,
                                          collectionView: UICollectionView)>
 
+    typealias LoadMoreCellRegistration
+    = UICollectionView.CellRegistration<LoadMoreMessagesCell, UICollectionView?>
+
     static func createMessageSubcellRegistration() -> MessageSubcellRegistration {
         return MessageSubcellRegistration { cell, indexPath, item in
             let messageController = ChatClient.shared.messageController(cid: item.channelID,
@@ -127,24 +152,69 @@ extension MessageSequenceCollectionViewDataSource {
             cell.configure(with: message, showAuthor: false)
         }
     }
+
+    static func createLoadMoreCellRegistration() -> LoadMoreCellRegistration {
+        return LoadMoreCellRegistration { cell, indexPath, item in }
+    }
 }
 
 // MARK: - TimelineCollectionViewLayoutDataSource
 
 extension MessageSequenceCollectionViewDataSource: TimeMachineCollectionViewLayoutDataSource {
 
-    func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItem? {
-        guard let item = self.itemIdentifier(for: indexPath) else { return nil }
-        let messageController = ChatClient.shared.messageController(cid: item.channelID,
-                                                                    messageId: item.messageID)
+    func getTimeMachineItem(forItemAt indexPath: IndexPath) -> TimeMachineLayoutItemType {
+        guard let item = self.itemIdentifier(for: indexPath) else {
+            return TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude, shouldShow: false)
+        }
 
-        return messageController.message
+        return self.getTimeMachineItem(forItem: item)
+    }
+
+    private func getTimeMachineItem(forItem item: ItemType) -> TimeMachineLayoutItemType {
+        switch item {
+        case .message(let channelID, let messageID):
+            let messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
+            // If the item doesn't correspond to an actual message, then assume it's a placeholder and
+            // put it at the front.
+            return messageController.message ?? TimeMachineLayoutItem(sortValue: .greatestFiniteMagnitude,
+                                                                      shouldShow: false)
+        case .loadMore:
+            // Get all of the message items.
+            let timeMachineItems: [TimeMachineLayoutItemType]
+            = self.snapshot().itemIdentifiers.compactMap { itemIdentifier in
+                switch itemIdentifier {
+                case .message:
+                    return self.getTimeMachineItem(forItem: itemIdentifier)
+                case .loadMore:
+                    return nil
+                }
+            }
+
+            // Find the oldest message item.
+            guard let oldestItem = timeMachineItems.min(by: { (timeMachineItem1, timeMachineItem2) in
+                return timeMachineItem1.sortValue < timeMachineItem2.sortValue
+            }) else {
+                return TimeMachineLayoutItem(sortValue: -.greatestFiniteMagnitude,
+                                             shouldShow: true)
+            }
+
+            // Put the load more item right before the oldest message item.
+            return TimeMachineLayoutItem(sortValue: oldestItem.sortValue.nextDown, shouldShow: true)
+        }
     }
 }
 
-extension Message: TimeMachineLayoutItem {
+private struct TimeMachineLayoutItem: TimeMachineLayoutItemType {
+    var sortValue: Double
+    var shouldShow: Bool
+}
 
+extension Message: TimeMachineLayoutItemType {
     var sortValue: Double {
         return self.createdAt.timeIntervalSinceReferenceDate
+    }
+
+    var shouldShow: Bool {
+        return true
     }
 }

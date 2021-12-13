@@ -29,6 +29,26 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         return self.frontmostBrightness - CGFloat(self.stackDepth+1)*0.05
     }
 
+    /// The sort value of the focused right before the most recent invalidation.
+    /// This can be used to keep the focused item in place when items are inserted before it.
+    private var sortValueOfFocusedItemBeforeInvalidation: Double?
+    private var sortValuesBeforeInvalidation: [IndexPath : Double] = [:]
+
+    override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
+        // Find the the current focused item
+        if let focusedIndexPath = self.itemFocusPositions.min(by: { kvp1, kvp2 in
+            return abs(kvp1.value - self.zPosition) < abs(kvp2.value - self.zPosition)
+        })?.key {
+            self.sortValueOfFocusedItemBeforeInvalidation = self.itemSortValues[focusedIndexPath]
+        } else {
+            self.sortValueOfFocusedItemBeforeInvalidation = nil
+        }
+
+        self.sortValuesBeforeInvalidation = self.itemSortValues
+
+        super.invalidateLayout(with: context)
+    }
+
     override func layoutAttributesForItemAt(indexPath: IndexPath,
                                             withNormalizedZOffset normalizedZOffset: CGFloat) -> UICollectionViewLayoutAttributes? {
 
@@ -61,11 +81,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
             backgroundBrightness += lerpClamped(normalizedFocusDistance,
                                                 start: 1-self.frontmostBrightness,
                                                 end: 0)
-        }
-
-        // If there is no message to display for this index path, don't show the cell.
-        if self.dataSource?.getTimeMachineItem(forItemAt: indexPath) == nil {
-            attributes.alpha = 0
         }
 
         attributes.backgroundColor = .white
@@ -111,27 +126,45 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     /// If true, scroll to the most recent item after performing collection view updates.
     private var shouldScrollToEnd = false
     private var deletedIndexPaths: Set<IndexPath> = []
+    /// How much to adjust the proposed scroll offset.
+    private var scrollOffset: CGFloat = 0
 
     override func prepare(forCollectionViewUpdates updateItems: [UICollectionViewUpdateItem]) {
         super.prepare(forCollectionViewUpdates: updateItems)
 
         guard let collectionView = self.collectionView,
-        let mostRecentOffset = self.getMostRecentItemContentOffset() else { return }
+              let mostRecentOffset = self.getMostRecentItemContentOffset() else { return }
 
         for update in updateItems {
             switch update.updateAction {
             case .insert:
                 guard let indexPath = update.indexPathAfterUpdate else { break }
 
-                let isScrolledToMostRecent = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
+                if let insertSortValue = self.itemSortValues[indexPath],
+                   let previousFocusedSortValue = self.sortValueOfFocusedItemBeforeInvalidation,
+                   insertSortValue < previousFocusedSortValue {
+                    self.scrollOffset += self.itemHeight
+                }
+
+                let isScrolledToMostRecent
+                = (mostRecentOffset.y - collectionView.contentOffset.y) <= self.itemHeight
+
+                let isMostRecentInBottomSection = indexPath.item == self.numberOfItems(inSection: 1) - 1
+
                 // Always scroll to the end for new user messages, or if we're currently scrolled to the
                 // most recent message.
-                if indexPath.section == 1 || isScrolledToMostRecent {
+                if isMostRecentInBottomSection || isScrolledToMostRecent {
                     self.shouldScrollToEnd = true
                 }
             case .delete:
                 guard let indexPath = update.indexPathBeforeUpdate else { break }
                 self.deletedIndexPaths.insert(indexPath)
+
+                if let deleteSortValue = self.sortValuesBeforeInvalidation[indexPath],
+                   let previousFocusedSortValue = self.sortValueOfFocusedItemBeforeInvalidation,
+                    deleteSortValue < previousFocusedSortValue {
+                    self.scrollOffset -= self.itemHeight
+                }
             case .reload, .move, .none:
                 break
             @unknown default:
@@ -145,14 +178,15 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
         self.shouldScrollToEnd = false
         self.deletedIndexPaths.removeAll()
+        self.scrollOffset = 0
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
-        guard self.shouldScrollToEnd, let offset = self.getMostRecentItemContentOffset() else {
-            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset)
+        if self.shouldScrollToEnd, let mostRecentOffset = self.getMostRecentItemContentOffset() {
+            return mostRecentOffset
         }
 
-        return offset
+        return CGPoint(x: proposedContentOffset.x, y: proposedContentOffset.y + self.scrollOffset)
     }
 
     override func finalLayoutAttributesForDisappearingItem(at itemIndexPath: IndexPath)
