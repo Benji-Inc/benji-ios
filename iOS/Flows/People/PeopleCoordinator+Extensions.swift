@@ -9,7 +9,7 @@
 import Foundation
 import ContactsUI
 import MessageUI
-import TMROLocalization
+import Localization
 
 extension PeopleCoordinator {
     

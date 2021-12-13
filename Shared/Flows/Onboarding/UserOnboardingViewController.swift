@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import TMROLocalization
 import Lottie
+import Localization
 
 class UserOnboardingViewController: ViewController {
 

@@ -8,9 +8,9 @@
 
 import Foundation
 import Parse
-import TMROLocalization
 import Lottie
 import Intents
+import Localization
 
 protocol OnboardingViewControllerDelegate: AnyObject {
     func onboardingView(_ controller: OnboardingViewController,

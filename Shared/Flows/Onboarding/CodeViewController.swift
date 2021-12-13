@@ -9,8 +9,8 @@
 import Foundation
 import PhoneNumberKit
 import Parse
-import TMROLocalization
 import Combine
+import Localization
 
 @MainActor
 class CodeViewController: TextInputViewController<String?> {

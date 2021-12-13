@@ -440,6 +440,12 @@
 		D6551A5C25895F0900B901E4 /* NameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67896BC23025FEC0059BA75 /* NameViewController.swift */; };
 		D6551A5F25895F1300B901E4 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6D1503D21DAF98500CD8CE4 /* TextField.swift */; };
 		D6551A7025895FFB00B901E4 /* FaceDetectionViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63C67DF23D416B800EA373A /* FaceDetectionViewController+Extensions.swift */; };
+		D656EF442765A11900FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF432765A11900FF6E2C /* Localization */; };
+		D656EF462765A12100FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF452765A12100FF6E2C /* Localization */; };
+		D656EF482765A12A00FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF472765A12A00FF6E2C /* Localization */; };
+		D656EF4A2765A13100FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF492765A13100FF6E2C /* Localization */; };
+		D656EF4C2765A13600FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF4B2765A13600FF6E2C /* Localization */; };
+		D656EF4E2765A13B00FF6E2C /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D656EF4D2765A13B00FF6E2C /* Localization */; };
 		D660544726320C06002F74F8 /* scroll_down.json in Resources */ = {isa = PBXBuildFile; fileRef = D660544626320C06002F74F8 /* scroll_down.json */; };
 		D66121EC274C1D5C00DD9B95 /* ReactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66121EB274C1D5C00DD9B95 /* ReactionsView.swift */; };
 		D6617CEA26741C4500439C06 /* UITextField+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6617CE926741C4500439C06 /* UITextField+Extensions.swift */; };
@@ -1262,6 +1268,7 @@
 				D6AE0F64267CF8A400C6B048 /* PhoneNumberKit in Frameworks */,
 				D6166C93273302110013E803 /* ParseSwift in Frameworks */,
 				E09AAFB2C502C558A3890EC4 /* Pods_Jibber.framework in Frameworks */,
+				D656EF442765A11900FF6E2C /* Localization in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1274,6 +1281,7 @@
 				D6166C9B273303290013E803 /* ParseSwift in Frameworks */,
 				D6AE0F68267CF8D900C6B048 /* PhoneNumberKit in Frameworks */,
 				D6C3893A27287491004D29D5 /* StreamChat in Frameworks */,
+				D656EF482765A12A00FF6E2C /* Localization in Frameworks */,
 				D63DB1F925E968C300F6B323 /* UserNotifications.framework in Frameworks */,
 				2C9DC2F4715948651C293215 /* Pods_Notification_Content.framework in Frameworks */,
 			);
@@ -1284,6 +1292,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6AE0F66267CF8B600C6B048 /* PhoneNumberKit in Frameworks */,
+				D656EF462765A12100FF6E2C /* Localization in Frameworks */,
 				D6AE0F5F267CF82200C6B048 /* Lottie in Frameworks */,
 				D6166C9D273303360013E803 /* ParseSwift in Frameworks */,
 				876DD7048C07730CF091087A /* Pods_AppClip.framework in Frameworks */,
@@ -1295,6 +1304,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6C3893C2728749C004D29D5 /* StreamChat in Frameworks */,
+				D656EF4A2765A13100FF6E2C /* Localization in Frameworks */,
 				D6166C992733031C0013E803 /* ParseSwift in Frameworks */,
 				6FBC3C8F68FC243D6E1A42F6 /* Pods_Notification_Service.framework in Frameworks */,
 			);
@@ -1305,6 +1315,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6AE0F7E267CFA6C00C6B048 /* Intents.framework in Frameworks */,
+				D656EF4C2765A13600FF6E2C /* Localization in Frameworks */,
 				D6166C972733030E0013E803 /* ParseSwift in Frameworks */,
 				7F227B8576E160C9469E08D1 /* Pods_Intents_Extension.framework in Frameworks */,
 			);
@@ -1315,6 +1326,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6AE0F89267CFA6D00C6B048 /* IntentsUI.framework in Frameworks */,
+				D656EF4E2765A13B00FF6E2C /* Localization in Frameworks */,
 				D6166C95273302FB0013E803 /* ParseSwift in Frameworks */,
 				C03D8861C3D82A5BDDC5CF8C /* Pods_Intents_ExtensionUI.framework in Frameworks */,
 			);
@@ -2330,6 +2342,7 @@
 				D6AE0F63267CF8A400C6B048 /* PhoneNumberKit */,
 				D6C3893527287307004D29D5 /* StreamChat */,
 				D6166C92273302110013E803 /* ParseSwift */,
+				D656EF432765A11900FF6E2C /* Localization */,
 			);
 			productName = Benji;
 			productReference = D61EC0BC21D3071400204BEE /* Jibber.app */;
@@ -2354,6 +2367,7 @@
 				D6AE0F67267CF8D900C6B048 /* PhoneNumberKit */,
 				D6C3893927287491004D29D5 /* StreamChat */,
 				D6166C9A273303290013E803 /* ParseSwift */,
+				D656EF472765A12A00FF6E2C /* Localization */,
 			);
 			productName = OursNotificationContent;
 			productReference = D63DB1F725E968C300F6B323 /* Notification Content.appex */;
@@ -2378,6 +2392,7 @@
 				D6AE0F5E267CF82200C6B048 /* Lottie */,
 				D6AE0F65267CF8B600C6B048 /* PhoneNumberKit */,
 				D6166C9C273303360013E803 /* ParseSwift */,
+				D656EF452765A12100FF6E2C /* Localization */,
 			);
 			productName = BenjiAppClip;
 			productReference = D6884B0E2587D25C00DA380E /* AppClip.app */;
@@ -2400,6 +2415,7 @@
 			packageProductDependencies = (
 				D6C3893B2728749C004D29D5 /* StreamChat */,
 				D6166C982733031C0013E803 /* ParseSwift */,
+				D656EF492765A13100FF6E2C /* Localization */,
 			);
 			productName = NotificationService;
 			productReference = D6AE0F6D267CF9CA00C6B048 /* Notification Service.appex */;
@@ -2421,6 +2437,7 @@
 			name = "Intents Extension";
 			packageProductDependencies = (
 				D6166C962733030E0013E803 /* ParseSwift */,
+				D656EF4B2765A13600FF6E2C /* Localization */,
 			);
 			productName = "Intents Extension";
 			productReference = D6AE0F7C267CFA6C00C6B048 /* Intents Extension.appex */;
@@ -2442,6 +2459,7 @@
 			name = "Intents ExtensionUI";
 			packageProductDependencies = (
 				D6166C94273302FB0013E803 /* ParseSwift */,
+				D656EF4D2765A13B00FF6E2C /* Localization */,
 			);
 			productName = "Intents ExtensionUI";
 			productReference = D6AE0F87267CFA6D00C6B048 /* Intents ExtensionUI.appex */;
@@ -4210,6 +4228,30 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D6166C91273302110013E803 /* XCRemoteSwiftPackageReference "Parse-Swift" */;
 			productName = ParseSwift;
+		};
+		D656EF432765A11900FF6E2C /* Localization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Localization;
+		};
+		D656EF452765A12100FF6E2C /* Localization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Localization;
+		};
+		D656EF472765A12A00FF6E2C /* Localization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Localization;
+		};
+		D656EF492765A13100FF6E2C /* Localization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Localization;
+		};
+		D656EF4B2765A13600FF6E2C /* Localization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Localization;
+		};
+		D656EF4D2765A13B00FF6E2C /* Localization */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Localization;
 		};
 		D6AE0F5C267CF80C00C6B048 /* Lottie */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -7,9 +7,8 @@
 //
 
 import Foundation
-import SwiftUI
-import TMROLocalization
-
+import Localization
+ 
 struct HightlightedPhrase {
     var text: Localized
     var highlightedWords: [Localized]

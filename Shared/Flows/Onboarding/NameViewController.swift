@@ -8,7 +8,7 @@
 
 import Foundation
 import Parse
-import TMROLocalization
+import Localization
 
 class NameViewController: TextInputViewController<String> {
 
