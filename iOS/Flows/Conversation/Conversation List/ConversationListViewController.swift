@@ -190,6 +190,10 @@ class ConversationListViewController: FullScreenViewController,
         UIView.animate(withDuration: Theme.animationDurationFast) {
             self.view.layoutNow()
         }
+        
+        if let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
+            self.handleTopMessageUpdates(for: conversation, cell: cell)
+        }
     }
 
     // MARK: - Message Loading and Updates
