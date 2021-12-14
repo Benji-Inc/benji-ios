@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -22,18 +22,11 @@
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CP8-gi-eym" userLabel="Safe Area Container">
                     <rect key="frame" x="0.0" y="0.0" width="337" height="134"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o9p-S7-boz">
-                            <rect key="frame" x="36" y="8" width="265" height="20"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="20" id="KST-tW-SCY"/>
-                            </constraints>
-                        </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VuQ-5S-h7F" customClass="SpeechBubbleView" customModule="Jibber" customModuleProvider="target">
-                            <rect key="frame" x="32" y="32" width="273" height="93"/>
+                            <rect key="frame" x="32" y="8" width="273" height="121"/>
                             <subviews>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="This is some example message text" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Ads-9e-WJh" customClass="InputTextView" customModule="Jibber" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="273" height="83"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="273" height="111"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="48" id="ibA-Ih-0yt"/>
@@ -43,7 +36,7 @@
                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 </textView>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-ok-H5y">
-                                    <rect key="frame" x="0.0" y="0.0" width="273" height="93"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="273" height="121"/>
                                     <state key="normal" title="Button"/>
                                     <buttonConfiguration key="configuration" style="plain" title=""/>
                                 </button>
@@ -61,7 +54,7 @@
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vaX-xP-i7k">
-                            <rect key="frame" x="0.0" y="133" width="337" height="1"/>
+                            <rect key="frame" x="36" y="125" width="265" height="1"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="W3f-8z-1Rm"/>
@@ -70,16 +63,13 @@
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="o9p-S7-boz" secondAttribute="trailing" constant="36" id="5Wf-Eu-hTP"/>
-                        <constraint firstItem="vaX-xP-i7k" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" id="7ML-EV-mbN"/>
-                        <constraint firstItem="o9p-S7-boz" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="36" id="PZg-BO-1Gh"/>
-                        <constraint firstItem="VuQ-5S-h7F" firstAttribute="top" secondItem="o9p-S7-boz" secondAttribute="bottom" constant="4" id="SLP-TX-csI"/>
+                        <constraint firstItem="vaX-xP-i7k" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="36" id="7ML-EV-mbN"/>
                         <constraint firstAttribute="trailing" secondItem="VuQ-5S-h7F" secondAttribute="trailing" constant="32" id="Tgi-A5-L3c"/>
-                        <constraint firstAttribute="bottom" secondItem="vaX-xP-i7k" secondAttribute="bottom" id="W0X-I8-0SE"/>
-                        <constraint firstItem="o9p-S7-boz" firstAttribute="top" secondItem="CP8-gi-eym" secondAttribute="top" constant="8" id="ZCn-Ik-Oiq"/>
+                        <constraint firstAttribute="bottom" secondItem="vaX-xP-i7k" secondAttribute="bottom" constant="8" id="W0X-I8-0SE"/>
                         <constraint firstItem="VuQ-5S-h7F" firstAttribute="leading" secondItem="CP8-gi-eym" secondAttribute="leading" constant="32" id="Zve-FB-6La"/>
-                        <constraint firstItem="vaX-xP-i7k" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="bottom" constant="8" id="khc-UU-tVU"/>
-                        <constraint firstAttribute="trailing" secondItem="vaX-xP-i7k" secondAttribute="trailing" id="y13-oz-083"/>
+                        <constraint firstItem="VuQ-5S-h7F" firstAttribute="top" secondItem="CP8-gi-eym" secondAttribute="top" constant="8" id="byR-VP-Ldn"/>
+                        <constraint firstItem="vaX-xP-i7k" firstAttribute="top" secondItem="VuQ-5S-h7F" secondAttribute="bottom" constant="-4" id="khc-UU-tVU"/>
+                        <constraint firstAttribute="trailing" secondItem="vaX-xP-i7k" secondAttribute="trailing" constant="36" id="y13-oz-083"/>
                     </constraints>
                 </view>
             </subviews>
@@ -93,7 +83,6 @@
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="deliveryTypeContainer" destination="o9p-S7-boz" id="ITT-gu-QoL"/>
                 <outlet property="inputContainerView" destination="VuQ-5S-h7F" id="o5I-Cx-4HN"/>
                 <outlet property="inputTypeContainer" destination="vaX-xP-i7k" id="iQV-ts-qMa"/>
                 <outlet property="inputTypeHeightConstraint" destination="W3f-8z-1Rm" id="ISn-9g-1kH"/>

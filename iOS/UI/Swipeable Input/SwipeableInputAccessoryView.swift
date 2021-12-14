@@ -50,22 +50,23 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
     /// A button to handle taps and pan gestures.
     @IBOutlet var overlayButton: UIButton!
 
-    @IBOutlet var deliveryTypeContainer: UIView!
     @IBOutlet var inputTypeContainer: UIView!
     @IBOutlet var inputTypeHeightConstraint: NSLayoutConstraint!
 
     lazy var inputManager = InputTypeManager.init(with: CollectionView(layout: InputTypeCollectionViewLayout()))
 
-    static var inputTypeMaxHeight: CGFloat = 40
+    static var inputTypeMaxHeight: CGFloat = 20
 
     // MARK: - Message State
 
     var currentContext: MessageContext = .passive
+    var currentEmotion: Emotion = .calm
 
     var editableMessage: Messageable?
     var currentMessageKind: MessageKind = .text(String())
     private var sendable: SendableObject?
     private let deliveryTypeView = DeliveryTypeView()
+    private let emotionView = EmotionView()
 
     var cancellables = Set<AnyCancellable>()
 
@@ -85,16 +86,13 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
 
         self.inputContainerView.showShadow(withOffset: 8)
 
-        self.inputTypeContainer.addSubview(self.inputManager.collectionView)
-
-        self.inputManager.collectionView.translatesAutoresizingMaskIntoConstraints = false
-        let topConstraint = self.inputManager.collectionView.topAnchor.constraint(equalTo: self.inputTypeContainer.topAnchor)
-        let bottomConstraint = self.inputManager.collectionView.bottomAnchor.constraint(equalTo: self.inputTypeContainer.bottomAnchor)
-        let leadingConstraint = self.inputManager.collectionView.leadingAnchor.constraint(equalTo: self.inputTypeContainer.leadingAnchor)
-        let trailingConstraint = self.inputManager.collectionView.trailingAnchor.constraint(equalTo: self.inputTypeContainer.trailingAnchor)
-        self.inputTypeContainer.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
-
-        self.deliveryTypeContainer.addSubview(self.deliveryTypeView)
+        self.inputTypeContainer.addSubview(self.emotionView)
+        self.emotionView.configure(for: self.currentEmotion)
+        self.emotionView.didSelectEmotion = { [unowned self] emotion in
+            self.currentEmotion = emotion
+        }
+        
+        self.inputTypeContainer.addSubview(self.deliveryTypeView)
         self.deliveryTypeView.configure(for: self.currentContext)
         self.deliveryTypeView.didSelectContext = { [unowned self] context in
             self.currentContext = context
@@ -107,24 +105,26 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
     override func layoutSubviews() {
         super.layoutSubviews()
 
+        self.emotionView.pin(.left)
         self.deliveryTypeView.pin(.right)
     }
 
     // MARK: PRIVATE
 
     private func setupHandlers() {
+        self.updateInputType(with: .keyboard)
 
-        self.inputManager
-            .$selectedItems
-            .removeDuplicates()
-            .mainSink { items in
-                guard let first = items.first else { return }
-                if let ip = self.inputManager.dataSource.indexPath(for: first) {
-                    self.inputManager.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
-                }
-
-                self.updateInputType(with: first)
-            }.store(in: &self.cancellables)
+//        self.inputManager
+//            .$selectedItems
+//            .removeDuplicates()
+//            .mainSink { items in
+//                guard let first = items.first else { return }
+//                if let ip = self.inputManager.dataSource.indexPath(for: first) {
+//                    self.inputManager.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
+//                }
+//
+//                self.updateInputType(with: first)
+//            }.store(in: &self.cancellables)
 
         KeyboardManager.shared.$willKeyboardShow
             .filter({ willShow in
@@ -168,10 +168,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
     }
 
     func showInputTypes(shouldShow: Bool) {
-        UIView.animate(withDuration: 0.2) {
-            self.inputTypeHeightConstraint.constant = shouldShow ? SwipeableInputAccessoryView.inputTypeMaxHeight : 1
-            self.inputManager.collectionView.alpha = shouldShow ? 1 : 0
-        }
+        self.inputTypeHeightConstraint.constant = SwipeableInputAccessoryView.inputTypeMaxHeight
     }
 
     // MARK: OVERRIDES
@@ -277,6 +274,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
         // Only handle pans if the user has input a sendable message.
         let object = SendableObject(kind: self.currentMessageKind,
                                     context: self.currentContext,
+                                    emotion: self.currentEmotion,
                                     previousMessage: self.editableMessage)
 
         return object.isSendable
@@ -285,6 +283,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
     private func handlePanBegan() {
         let object = SendableObject(kind: self.currentMessageKind,
                                     context: self.currentContext,
+                                    emotion: self.currentEmotion,
                                     previousMessage: self.editableMessage)
         self.sendable = object
 

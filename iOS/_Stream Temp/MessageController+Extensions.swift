@@ -53,6 +53,21 @@ extension MessageController {
             }
         }
     }
+    
+    func addEmotion(with type: Emotion, extraData: [String: RawJSON] = [:]) async throws {
+        return try await withCheckedThrowingContinuation({ continuation in
+            self.addReaction(type.reaction,
+                             score: 0,
+                             enforceUnique: false,
+                             extraData: extraData) { error in
+                if let e = error {
+                    continuation.resume(throwing: e)
+                } else {
+                    continuation.resume(returning: ())
+                }
+            }
+        })
+    }
 
     func addReaction(with type: ReactionType, extraData: [String: RawJSON] = [:]) async throws {
         return try await withCheckedThrowingContinuation({ continuation in
