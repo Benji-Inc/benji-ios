@@ -162,18 +162,6 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         self.cameraVC.view.expandToSuperviewSize()
 
         self.errorView.bottom = self.view.height - self.errorOffset
-
-        #if IOS
-        self.tapView.height = self.cameraVC.colorPickerVC.view.top
-        self.tapView.pin(.top)
-        self.tapView.expandToSuperviewWidth()
-
-        if self.currentState == .scanEyesOpen {
-            self.cameraVC.colorPickerVC.view.pinToSafeAreaBottom()
-        } else {
-            self.cameraVC.colorPickerVC.view.top = self.cameraVC.view.height
-        }
-        #endif
     }
 
     private func handle(state: PhotoState) {
