@@ -64,11 +64,16 @@ class ConversationListViewController: FullScreenViewController,
     /// A list of conversation members used to filter conversations. We'll only show conversations with this exact set of members.
     private let members: [ConversationMember]
     /// The id of the conversation we should land on when this VC appears.
-    private var startingConversationID: ConversationID?
+    private let startingConversationID: ConversationID?
+    private let startingMessageID: MessageId?
 
-    init(members: [ConversationMember], startingConversationID: ConversationID?) {
+    init(members: [ConversationMember],
+         startingConversationID: ConversationID?,
+         startingMessageID: MessageId?) {
+
         self.members = members
         self.startingConversationID = startingConversationID
+        self.startingMessageID = startingMessageID
 
         let filter: Filter<ChannelListFilterScope>
         = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
@@ -155,8 +160,6 @@ class ConversationListViewController: FullScreenViewController,
         super.viewDidAppear(animated)
 
         once(caller: self, token: "initializeCollectionView") {
-            self.startingConversationID = ConversationID(type: .messaging, id: "TA-4939B651-DF9A-47D1-A9A1-F7CD809C61FC")
-
             Task {
                 self.setupInputHandlers()
 
@@ -230,13 +233,26 @@ class ConversationListViewController: FullScreenViewController,
 
         self.updateCenterMostCell()
 
-        guard let centeredCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
-            return
-        }
+        guard let startingConversationID = startingConversationID else { return }
 
-        centeredCell.scrollToMessage()
+        self.scrollToConversation(with: startingConversationID, messageID: self.startingMessageID)
     }
 
+    func scrollToConversation(with cid: ConversationID, messageID: MessageId?) {
+        guard let conversationIndexPath = self.dataSource.indexPath(for: .conversation(cid)) else { return }
+        self.collectionView.scrollToItem(at: conversationIndexPath,
+                                         at: .centeredHorizontally,
+                                         animated: true)
+
+
+        guard let messageID = messageID,
+              let cell = self.collectionView.cellForItem(at: conversationIndexPath),
+              let messagesCell = cell as? ConversationMessagesCell else {
+                  return
+              }
+
+        messagesCell.scrollToMessage(with: messageID)
+    }
 
     // MARK: - UICollection Input Handlers
 

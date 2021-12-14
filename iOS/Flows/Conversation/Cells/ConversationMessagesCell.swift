@@ -173,26 +173,20 @@ class ConversationMessagesCell: UICollectionViewCell {
     }
 
 
-    func scrollToMessage() {
-        guard let conversationController = self.conversationController else {
-            return
-        }
+    func scrollToMessage(with messageID: MessageId) {
+        guard let conversationController = self.conversationController,
+              let cid = conversationController.cid else { return }
 
         Task {
-            try? await conversationController.loadNextMessages(including: "FE71D3B2-ABBD-4EA4-BC3C-6065BB2746FC")
+            try? await conversationController.loadNextMessages(including: messageID)
 
-            guard let messageIndexPath = self.dataSource.indexPath(for: .message(cid: conversationController.cid,
-                                                                                 messageID: "FE71D3B2-ABBD-4EA4-BC3C-6065BB2746FC")) else {
-                logDebug("failed to get message")
-                return
-            }
+            let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageID)
 
-            guard let offset = self.collectionLayout.itemFocusPositions[messageIndexPath] else {
-                logDebug("couldn't get focus position")
-                return
-            }
+            guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
 
-            self.collectionView.setContentOffset(CGPoint(x: 0, y: offset), animated: true)
+            guard let yOffset = self.collectionLayout.itemFocusPositions[messageIndexPath] else { return }
+
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: true)
         }
     }
 

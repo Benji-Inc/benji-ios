@@ -253,8 +253,10 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
             self.delegate?.timeMachineCollectionViewLayout(self, updatedFrontmostItemAt: indexPath)
         }
 
+        guard (-1...1).contains(normalizedZOffset) else { return nil }
+        
         return self.layoutAttributesForItemAt(indexPath: indexPath,
-                                              withNormalizedZOffset: clamp(normalizedZOffset, -1, 1))
+                                              withNormalizedZOffset: normalizedZOffset)
     }
 
     /// Returns the UICollectionViewLayoutAttributes for the item at the given indexPath configured with the specified normalized Z Offset.

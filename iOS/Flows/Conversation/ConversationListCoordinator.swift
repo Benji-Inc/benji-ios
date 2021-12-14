@@ -17,10 +17,12 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
     lazy var conversationListVC
     = ConversationListViewController(members: self.conversationMembers,
-                                     startingConversationID: self.startingConversationID)
+                                     startingConversationID: self.startingConversationID,
+                                     startingMessageID: self.startMessageID)
 
     private let conversationMembers: [ConversationMember]
     private let startingConversationID: ConversationID?
+    private let startMessageID: MessageId?
 
     override func toPresentable() -> DismissableVC {
         return self.conversationListVC
@@ -29,10 +31,12 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
     init(router: Router,
          deepLink: DeepLinkable?,
          conversationMembers: [ConversationMember],
-         startingConversationID: ConversationID?) {
+         startingConversationID: ConversationID?,
+         startingMessageID: MessageId?) {
 
         self.conversationMembers = conversationMembers
         self.startingConversationID = startingConversationID
+        self.startMessageID = startingMessageID
 
         super.init(router: router, deepLink: deepLink)
     }
@@ -68,27 +72,23 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
         switch target {
         case .conversation:
-            var conversation: Conversation?
-            var startingMessageID: MessageId?
+            var cid: ConversationID?
+            var messageID: MessageId?
     
             if let identifier = deeplink.customMetadata["conversationId"] as? String {
-                guard let conversationId = try? ChannelId(cid: identifier) else { break }
-
-                conversation = ChatClient.shared.channelController(for: conversationId).conversation
-                startingMessageID = deeplink.customMetadata["messageId"] as? String
+                cid = try? ChannelId(cid: identifier)
+                messageID = deeplink.customMetadata["messageId"] as? String
 
             } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
                 guard let connection = ConnectionStore.shared.connections.first(where: { connection in
                     return connection.objectId == connectionId
-                }), let identifier = connection.initialConversations.first,
-                       let conversationId = try? ChannelId.init(cid: identifier)  else {
-                           return
-                       }
-                conversation = ChatClient.shared.channelController(for: conversationId).conversation
+                }), let identifier = connection.initialConversations.first else { break }
 
+                cid = try? ChannelId.init(cid: identifier)
             }
 
-            guard let conversation = conversation else { break }
+            guard let cid = cid else { break }
+            self.conversationListVC.scrollToConversation(with: cid, messageID: messageID)
 
         default:
             break

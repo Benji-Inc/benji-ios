@@ -81,15 +81,18 @@ class MainCoordinator: Coordinator<Void> {
 
 
     func handle(deeplink: DeepLinkable) {
-        guard let string = deeplink.customMetadata["target"] as? String,
-              let target = DeepLinkTarget(rawValue: string)  else { return }
+        guard let target = deeplink.deepLinkTarget else { return }
+
+        self.deepLink = deeplink
+
         switch target {
         case .home, .conversation, .archive:
             guard let user = User.current(), user.isAuthenticated else { return }
             #if IOS
+
             Task {
                 await self.runConversationListFlow()
-            }.add(to: self.taskPool)
+            }
             #endif
         case .login:
             break

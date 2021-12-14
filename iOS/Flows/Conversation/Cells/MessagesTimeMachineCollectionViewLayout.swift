@@ -52,6 +52,7 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         if let messagesInvalidationContext
             = invalidationContext as? MessagesTimeMachineCollectionViewLayoutInvalidationContext {
 
+            // There's no need to recalculate the sort values if the data is not changing.
             messagesInvalidationContext.shouldRecalculateSortValues = false
         }
 
@@ -59,7 +60,6 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     }
 
     override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
-
         if let invalidationContext = context as? MessagesTimeMachineCollectionViewLayoutInvalidationContext,
            invalidationContext.shouldRecalculateSortValues {
 
@@ -126,16 +126,18 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
 
     func getDropZoneColor() -> Color? {
         guard let ip = self.getFrontmostIndexPath(in: 1),
-                let attributes = self.layoutAttributesForItem(at: ip) as? ConversationMessageCellLayoutAttributes else {
-                    return nil
-                }
+              let attributes = self.layoutAttributesForItem(at: ip) as? ConversationMessageCellLayoutAttributes else {
+                  return nil
+              }
 
         return attributes.backgroundColor == .white ? .darkGray : .white
     }
 
     func getBottomFrontMostCell() -> MessageSubcell? {
-        guard let ip = self.getFrontmostIndexPath(in: 1), let cell = self.collectionView?.cellForItem(at: ip) as? MessageSubcell else { return nil
-        }
+        guard let ip = self.getFrontmostIndexPath(in: 1),
+              let cell = self.collectionView?.cellForItem(at: ip) as? MessageSubcell else {
+                  return nil
+              }
         return cell
     }
 
