@@ -62,7 +62,7 @@ extension ConversationListViewController {
             .mainSink { [unowned self] changes in
                 let nonUpdateChanges = changes.filter { change in
                     switch change {
-                    case .update(_, _):
+                    case .update:
                         return false
                     default:
                         return true

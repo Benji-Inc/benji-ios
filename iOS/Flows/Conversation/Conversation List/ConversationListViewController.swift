@@ -64,7 +64,7 @@ class ConversationListViewController: FullScreenViewController,
     /// A list of conversation members used to filter conversations. We'll only show conversations with this exact set of members.
     private let members: [ConversationMember]
     /// The id of the conversation we should land on when this VC appears.
-    private let startingConversationID: ConversationID?
+    private var startingConversationID: ConversationID?
 
     init(members: [ConversationMember], startingConversationID: ConversationID?) {
         self.members = members
@@ -134,7 +134,7 @@ class ConversationListViewController: FullScreenViewController,
         self.swipeInputDelegate.sendMessageDropZone.top += -clamp(diff, min: 0)
 
         //TODO fix this magic number.
-        self.headerVC.view.alpha = self.collectionView.top < 25 ? 0 : 1.0
+        self.headerVC.view.alpha = self.collectionView.top < 25 ? 0 : 1
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -155,8 +155,11 @@ class ConversationListViewController: FullScreenViewController,
         super.viewDidAppear(animated)
 
         once(caller: self, token: "initializeCollectionView") {
+            self.startingConversationID = ConversationID(type: .messaging, id: "TA-4939B651-DF9A-47D1-A9A1-F7CD809C61FC")
+
             Task {
                 self.setupInputHandlers()
+
                 // Initialize the datasource before listening for updates to ensure that the sections
                 // are set up.
                 await self.initializeDataSource()
@@ -226,6 +229,12 @@ class ConversationListViewController: FullScreenViewController,
                                     animationCycle: animationCycle)
 
         self.updateCenterMostCell()
+
+        guard let centeredCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
+            return
+        }
+
+        centeredCell.scrollToMessage()
     }
 
 
@@ -299,12 +308,11 @@ extension ConversationListViewController: MessageSendingViewControllerType {
     }
 
     func getCurrentMessageSequence() -> MessageSequence? {
-        guard let centeredCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell,
-              let cid = centeredCell.conversation?.streamCID else {
-                  return nil
-              }
+        guard let centeredCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
+            return nil
+        }
 
-        return ChatClient.shared.channelController(for: cid).conversation
+        return centeredCell.conversation
     }
 
     func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool) {
