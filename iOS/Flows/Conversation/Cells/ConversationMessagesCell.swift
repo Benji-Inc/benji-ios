@@ -105,10 +105,14 @@ class ConversationMessagesCell: UICollectionViewCell {
 
     /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
     func set(conversation: Conversation) {
-        // Create a new conversation controller if this is a different conversation than before.
-        if conversation.cid != self.conversation?.cid {
-            self.conversationController = ChatClient.shared.channelController(for: conversation.cid)
-            self.subscribeToUpdates()
+        defer {
+            // Create a new conversation controller if this is a different conversation than before.
+            if conversation.cid != self.conversation?.cid {
+                let conversationController = ChatClient.shared.channelController(for: conversation.cid)
+                self.conversationController = conversationController
+                self.subscribeToUpdates()
+                conversationController.synchronize()
+            }
         }
 
         // Scroll to the last item when a new conversation is loaded.
