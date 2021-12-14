@@ -80,7 +80,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     override func handleDataBeingLoaded() {
         super.handleDataBeingLoaded()
         
-        logDebug(self.initialTopMostAuthor?.givenName ?? "")
+        /// This is needed because sometimes the author get set before the datasource
         if let user = self.initialTopMostAuthor,
            let ip = self.getIndexPath(for: user) {
             self.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
@@ -122,6 +122,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
     
     func updateAuthor(for conversation: Conversation, user: ChatUser) {
         guard let conversationController = self.conversationController, conversation == conversationController.conversation else {
+            /// If the conversation hasn't been set yet, store the user it should scroll too once it does. 
             self.initialTopMostAuthor = user
             return
         }

@@ -94,7 +94,6 @@ extension ConversationListViewController {
             .removeDuplicates()
             .mainSink { message in
                 guard let author = message?.author else { return }
-                
                 self.headerVC.membersVC.updateAuthor(for: conversation, user: author)
             }.store(in: &self.cancellables)
     }
