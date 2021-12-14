@@ -230,7 +230,7 @@ extension ThreadViewController: TransitionableViewController {
 extension ThreadViewController {
 
     func subscribeToUpdates() {
-        self.dataSource.handleEditMessage = { [unowned self] cid, messageID in
+        self.dataSource.handleEditMessage = { cid, messageID in
             // TODO
         }
 
