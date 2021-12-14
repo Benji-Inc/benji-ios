@@ -12,30 +12,29 @@ import Combine
 
 class MessageDetailView: View {
 
-    static let height: CGFloat = 20 
-
-    private lazy var collectionView = ReactionsCollectionView()
-    private lazy var manager = ReactionsManager(with: self.collectionView)
+    static let height: CGFloat = 20
 
     let statusView = MessageStatusView()
+    let emotionView = EmotionView()
 
     private var hasLoadedMessage: Message?
 
     override func initializeSubviews() {
         super.initializeSubviews()
 
-        self.addSubview(self.collectionView)
+        self.addSubview(self.emotionView)
+        self.emotionView.button.isEnabled = false 
         self.addSubview(self.statusView)
     }
 
     func configure(with message: Messageable) {
-        self.manager.loadReactions(for: message)
+        self.emotionView.configure(for: message)
         self.statusView.configure(for: message)
         self.layoutNow()
     }
 
     func update(with message: Messageable) {
-        self.manager.updateReactions(for: message)
+        self.emotionView.configure(for: message)
         self.statusView.configure(for: message)
         self.layoutNow()
     }
@@ -51,9 +50,8 @@ class MessageDetailView: View {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.collectionView.expandToSuperviewHeight()
-        self.collectionView.pin(.left, offset: .standard)
-        self.collectionView.width = self.halfWidth
+        self.emotionView.expandToSuperviewHeight()
+        self.emotionView.pin(.left, offset: .standard)
 
         self.statusView.width = self.halfWidth
         self.statusView.pin(.right, offset: .standard)

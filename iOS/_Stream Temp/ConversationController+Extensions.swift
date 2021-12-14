@@ -117,7 +117,11 @@ extension ConversationController {
     func createNewMessage(with sendable: Sendable) async throws -> MessageId {
         switch sendable.kind {
         case .text(let text):
-            return try await self.createNewMessage(sendable: sendable, text: text)
+            let messageId = try await self.createNewMessage(sendable: sendable, text: text)
+            let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: messageId)
+            try await controller.synchronize()
+            try await controller.addEmotion(with: sendable.emotion)
+            return messageId
         case .attributedText:
             break
         case .photo:

@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import StreamChat
 
 class EmotionView: View {
     
@@ -35,6 +36,19 @@ class EmotionView: View {
         self.clipsToBounds = true
         
         self.button.showsMenuAsPrimaryAction = true
+    }
+    
+    @MainActor
+    func configure(for message: Messageable) {
+        let controller = ChatClient.shared.messageController(for: message)
+        if let msg = controller?.message, let reaction = msg.latestReactions.first(where: { reaction in
+            return reaction.author.userObjectID == msg.authorID
+        }), let emotion = Emotion(rawValue: reaction.type.rawValue) {
+            self.isVisible = true
+            self.configure(for: emotion)
+        } else {
+            self.isVisible = false
+        }
     }
     
     func configure(for emotion: Emotion) {

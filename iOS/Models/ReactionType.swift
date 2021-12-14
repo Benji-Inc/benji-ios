@@ -138,4 +138,8 @@ enum Emotion: String, CaseIterable {
             return "😮"
         }
     }
+    
+    var reaction: MessageReactionType {
+        return MessageReactionType.init(stringLiteral: self.rawValue)
+    }
 }

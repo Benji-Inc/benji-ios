@@ -60,6 +60,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
     // MARK: - Message State
 
     var currentContext: MessageContext = .passive
+    var currentEmotion: Emotion = .calm
 
     var editableMessage: Messageable?
     var currentMessageKind: MessageKind = .text(String())
@@ -85,19 +86,10 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
 
         self.inputContainerView.showShadow(withOffset: 8)
 
-//        self.inputTypeContainer.addSubview(self.inputManager.collectionView)
-//
-//        self.inputManager.collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        let topConstraint = self.inputManager.collectionView.topAnchor.constraint(equalTo: self.inputTypeContainer.topAnchor)
-//        let bottomConstraint = self.inputManager.collectionView.bottomAnchor.constraint(equalTo: self.inputTypeContainer.bottomAnchor)
-//        let leadingConstraint = self.inputManager.collectionView.leadingAnchor.constraint(equalTo: self.inputTypeContainer.leadingAnchor)
-//        let trailingConstraint = self.inputManager.collectionView.trailingAnchor.constraint(equalTo: self.inputTypeContainer.trailingAnchor)
-//        self.inputTypeContainer.addConstraints([topConstraint, bottomConstraint, leadingConstraint, trailingConstraint])
-
         self.inputTypeContainer.addSubview(self.emotionView)
-        self.emotionView.configure(for: .calm)
+        self.emotionView.configure(for: self.currentEmotion)
         self.emotionView.didSelectEmotion = { [unowned self] emotion in
-            //self.currentContext = context
+            self.currentEmotion = emotion
         }
         
         self.inputTypeContainer.addSubview(self.deliveryTypeView)
@@ -282,6 +274,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
         // Only handle pans if the user has input a sendable message.
         let object = SendableObject(kind: self.currentMessageKind,
                                     context: self.currentContext,
+                                    emotion: self.currentEmotion,
                                     previousMessage: self.editableMessage)
 
         return object.isSendable
@@ -290,6 +283,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
     private func handlePanBegan() {
         let object = SendableObject(kind: self.currentMessageKind,
                                     context: self.currentContext,
+                                    emotion: self.currentEmotion,
                                     previousMessage: self.editableMessage)
         self.sendable = object
 
