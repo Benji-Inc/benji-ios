@@ -179,14 +179,20 @@ class ConversationMessagesCell: UICollectionViewCell {
         }
 
         Task {
-            try? await conversationController.loadNextMessages(after: "FE71D3B2-ABBD-4EA4-BC3C-6065BB2746FC")
+            try? await conversationController.loadNextMessages(including: "FE71D3B2-ABBD-4EA4-BC3C-6065BB2746FC")
 
             guard let messageIndexPath = self.dataSource.indexPath(for: .message(cid: conversationController.cid,
                                                                                  messageID: "FE71D3B2-ABBD-4EA4-BC3C-6065BB2746FC")) else {
                 logDebug("failed to get message")
                 return
             }
-            logDebug(messageIndexPath.description)
+
+            guard let offset = self.collectionLayout.itemFocusPositions[messageIndexPath] else {
+                logDebug("couldn't get focus position")
+                return
+            }
+
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: offset), animated: true)
         }
     }
 

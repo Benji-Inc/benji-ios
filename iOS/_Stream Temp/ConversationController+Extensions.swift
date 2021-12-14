@@ -52,6 +52,23 @@ extension ConversationController {
         }
     }
 
+    /// Loads next messages from backend including the one specified.
+    ///
+    /// - Parameters:
+    ///   - messageId: ID of the message we want to load. You will also get messages `newer` than the provided ID.
+    ///   - limit: Limit for page size.
+    func loadNextMessages(including messageId: MessageId, limit: Int = 25) async throws {
+        try await self.loadNextMessages(after: messageId, limit: limit)
+        try await self.synchronize()
+
+        // If we haven't loaded the specified message, then it's the next message in the list so load one more.
+        guard !self.messages.contains(where: { message in
+            message.id == messageId
+        }) else { return }
+
+        try await self.loadPreviousMessages(limit: 1)
+    }
+
     /// Loads next messages from backend.
     ///
     /// - Parameters:

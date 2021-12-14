@@ -10,10 +10,20 @@ import Foundation
 import UIKit
 import StreamChat
 
+class MessagesTimeMachineCollectionViewLayoutInvalidationContext:
+    TimeMachineCollectionViewLayoutInvalidationContext {
+
+    var shouldRecalculateSortValues = true
+}
+
 /// A subclass of the TimeMachineLayout used to display messages.
 /// In addition to normal time machine functionality, this class also adjusts the color, brightness and other message specific attributes
 /// as the items move along the z axis.
 class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
+
+    override class var invalidationContextClass: AnyClass {
+        return MessagesTimeMachineCollectionViewLayoutInvalidationContext.self
+    }
 
     override class var layoutAttributesClass: AnyClass {
         return ConversationMessageCellLayoutAttributes.self
@@ -34,17 +44,36 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
     private var sortValueOfFocusedItemBeforeInvalidation: Double?
     private var sortValuesBeforeInvalidation: [IndexPath : Double] = [:]
 
-    override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
-        // Find the the current focused item
-        if let focusedIndexPath = self.itemFocusPositions.min(by: { kvp1, kvp2 in
-            return abs(kvp1.value - self.zPosition) < abs(kvp2.value - self.zPosition)
-        })?.key {
-            self.sortValueOfFocusedItemBeforeInvalidation = self.itemSortValues[focusedIndexPath]
-        } else {
-            self.sortValueOfFocusedItemBeforeInvalidation = nil
+    override func invalidationContext(forBoundsChange newBounds: CGRect)
+    -> UICollectionViewLayoutInvalidationContext {
+
+        let invalidationContext = super.invalidationContext(forBoundsChange: newBounds)
+
+        if let messagesInvalidationContext
+            = invalidationContext as? MessagesTimeMachineCollectionViewLayoutInvalidationContext {
+
+            messagesInvalidationContext.shouldRecalculateSortValues = false
         }
 
-        self.sortValuesBeforeInvalidation = self.itemSortValues
+        return invalidationContext
+    }
+
+    override func invalidateLayout(with context: UICollectionViewLayoutInvalidationContext) {
+
+        if let invalidationContext = context as? MessagesTimeMachineCollectionViewLayoutInvalidationContext,
+           invalidationContext.shouldRecalculateSortValues {
+
+            // Find the the current focused item
+            if let focusedIndexPath = self.itemFocusPositions.min(by: { kvp1, kvp2 in
+                return abs(kvp1.value - self.zPosition) < abs(kvp2.value - self.zPosition)
+            })?.key {
+                self.sortValueOfFocusedItemBeforeInvalidation = self.itemSortValues[focusedIndexPath]
+            } else {
+                self.sortValueOfFocusedItemBeforeInvalidation = nil
+            }
+
+            self.sortValuesBeforeInvalidation = self.itemSortValues
+        }
 
         super.invalidateLayout(with: context)
     }

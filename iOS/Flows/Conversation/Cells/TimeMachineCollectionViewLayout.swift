@@ -23,7 +23,7 @@ protocol TimeMachineCollectionViewLayoutDelegate: AnyObject {
                                          updatedFrontmostItemAt indexPath: IndexPath)
 }
 
-private class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
+class TimeMachineCollectionViewLayoutInvalidationContext: UICollectionViewLayoutInvalidationContext {
     /// If true, the z ranges for all the items should be recalculated.
     var shouldRecalculateZRanges = true
 }
