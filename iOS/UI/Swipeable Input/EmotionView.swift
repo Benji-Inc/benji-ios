@@ -38,7 +38,6 @@ class EmotionView: View {
         self.button.showsMenuAsPrimaryAction = true
     }
     
-    @MainActor
     func configure(for message: Messageable) {
         let controller = ChatClient.shared.messageController(for: message)
         if let msg = controller?.message, let reaction = msg.latestReactions.first(where: { reaction in
@@ -53,7 +52,7 @@ class EmotionView: View {
     
     func configure(for emotion: Emotion) {
         self.emojiLabel.text = emotion.emoji
-        self.label.setText(emotion.rawValue)
+        self.label.setText(emotion.rawValue.firstCapitalized)
         self.button.menu = self.createMenu(for: emotion)
         self.layoutNow()
     }

@@ -98,7 +98,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                                             router: self.router,
                                             deepLink: self.deepLink)
 
-        self.addChildAndStart(coordinator) { _ in
+        self.addChildAndStart(coordinator) { [unowned self] _ in
             self.router.dismiss(source: coordinator.toPresentable())
         }
 
