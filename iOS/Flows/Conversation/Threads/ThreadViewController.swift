@@ -90,10 +90,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.view.addSubview(self.detailView)
         self.detailView.alpha = 0
 
-        if let msg = self.messageController.message {
-            self.detailView.configure(with: msg)
-        }
-
         self.collectionView.clipsToBounds = false
 
         self.dismissInteractionController.initialize(collectionView: self.collectionView)
@@ -101,6 +97,11 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
     override func handleDataBeingLoaded() {
         self.subscribeToUpdates()
+        
+        /// Setting this here fixes issue with recursion during presentation.
+        if let msg = self.messageController.message {
+            self.detailView.configure(with: msg)
+        }
     }
 
     override func viewDidLayoutSubviews() {
