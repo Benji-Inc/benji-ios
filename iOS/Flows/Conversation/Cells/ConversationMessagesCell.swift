@@ -140,6 +140,9 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.dataSource.shouldPrepareToSend = false
 
         self.subscriptions.removeAll()
+        Task {
+            await self.taskPool.cancelAndRemoveAll()
+        }
 
         // Remove all the items so the next message has a blank slate to work with.
         var snapshot = self.dataSource.snapshot()
@@ -172,13 +175,14 @@ class ConversationMessagesCell: UICollectionViewCell {
             }.store(in: &self.subscriptions)
     }
 
-
     func scrollToMessage(with messageID: MessageId) {
         guard let conversationController = self.conversationController,
               let cid = conversationController.cid else { return }
 
         Task {
             try? await conversationController.loadNextMessages(including: messageID)
+
+            guard !Task.isCancelled else { return }
 
             let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageID)
 
@@ -187,7 +191,7 @@ class ConversationMessagesCell: UICollectionViewCell {
             guard let yOffset = self.collectionLayout.itemFocusPositions[messageIndexPath] else { return }
 
             self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: true)
-        }
+        }.add(to: self.taskPool)
     }
 
     // MARK: - Drop Zone Helpers
