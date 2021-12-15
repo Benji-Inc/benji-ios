@@ -17,7 +17,8 @@ class ThreadCollectionView: CollectionView {
 
         self.showsVerticalScrollIndicator = false
         self.keyboardDismissMode = .interactive
-        self.automaticallyAdjustsScrollIndicatorInsets = true 
+        self.automaticallyAdjustsScrollIndicatorInsets = true
+        self.decelerationRate = .fast
     }
 
     required init?(coder aDecoder: NSCoder) {

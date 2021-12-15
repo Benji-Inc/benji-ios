@@ -149,13 +149,6 @@ class ConversationListViewController: FullScreenViewController,
         self.becomeFirstResponder()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        KeyboardManager.shared.reset()
-        self.resignFirstResponder()
-    }
-
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
@@ -169,6 +162,13 @@ class ConversationListViewController: FullScreenViewController,
                 self.subscribeToUpdates()
             }
         }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        KeyboardManager.shared.reset()
+        self.resignFirstResponder()
     }
 
     func updateUI(for state: ConversationUIState) {
