@@ -44,15 +44,8 @@ extension MainCoordinator {
             } else {
                 self.removeChild()
 
-                var startingCID: ConversationID?
-                var startingMessageID: MessageId?
-
-                if let deepLink = self.deepLink,
-                   let identifier = deepLink.customMetadata["conversationId"] as? String {
-
-                    startingCID = try? ChannelId(cid: identifier)
-                    startingMessageID = deepLink.customMetadata["messageId"] as? String
-                }
+                let startingCID = self.deepLink?.conversationId
+                let startingMessageID = self.deepLink?.messageId
 
                 let coordinator = ConversationListCoordinator(router: self.router,
                                                               deepLink: self.deepLink,

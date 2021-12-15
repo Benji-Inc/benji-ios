@@ -75,9 +75,9 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             var cid: ConversationID?
             var messageID: MessageId?
     
-            if let identifier = deeplink.customMetadata["conversationId"] as? String {
-                cid = try? ChannelId(cid: identifier)
-                messageID = deeplink.customMetadata["messageId"] as? String
+            if deeplink.conversationId.exists {
+                cid = deeplink.conversationId
+                messageID = deeplink.messageId
 
             } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
                 guard let connection = ConnectionStore.shared.connections.first(where: { connection in

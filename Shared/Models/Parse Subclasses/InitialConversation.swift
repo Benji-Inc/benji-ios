@@ -10,20 +10,28 @@ import Foundation
 import Parse
 
 enum InitialConversationKey: String {
-    case conversationId
+    case conversationId = "conversationId"
 }
 
-/// Used to store a conversation that was created by coming in off a Pass or Reservation. Only to be stored locally in shared container that can accessed by the AppClip and the App
+/// Used to store a conversation that was created by coming in off a Pass or Reservation.
+/// Only to be stored locally in shared container that can accessed by the AppClip and the App
 final class InitialConveration: PFObject, PFSubclassing {
 
     static func parseClassName() -> String {
         return String(describing: self)
     }
 
-    var conversationId: String? {
+    var conversationIDString: String? {
         get { return self.getObject(for: .conversationId) }
         set { return self.setObject(for: .conversationId, with: newValue)}
     }
+
+#if IOS
+    var cid: ConversationID? {
+        guard let conversationIDString = self.conversationIDString else { return nil }
+        return try? ConversationID(cid: conversationIDString)
+    }
+#endif
 
     func saveLocally() async throws {
         return try await withCheckedThrowingContinuation { continuation in
