@@ -102,7 +102,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.dismissInteractionController.initialize(collectionView: self.collectionView)
     }
 
-    private var shouldScrollToLastItem = false
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
