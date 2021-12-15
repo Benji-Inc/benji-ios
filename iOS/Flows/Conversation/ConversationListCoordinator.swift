@@ -116,13 +116,17 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         let coordinator = PeopleCoordinator(conversationID: conversation.cid,
                                             router: self.router,
                                             deepLink: self.deepLink)
+        
+        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
+            self.conversationListVC.view.layoutNow()
+            self.conversationListVC.becomeFirstResponder()
+        }
 
         self.addChildAndStart(coordinator) { [unowned self] connections in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 self.conversationListVC.becomeFirstResponder()
+                self.add(connections: connections, to: conversation)
             }
-
-            self.add(connections: connections, to: conversation)
         }
         self.router.present(coordinator, source: self.conversationListVC)
     }

@@ -50,12 +50,17 @@ extension PeopleCoordinator {
             self.invite(contact: contact, with: rsvp)
         } else {
             Task {
-                await self.peopleVC.finishInviting()
-                self.finishFlow(with: self.selectedConnections)
+                await self.finish()
             }
         }
 
         self.inviteIndex += 1
+    }
+    
+    @MainActor
+    func finish() async {
+        await self.peopleVC.finishInviting()
+        self.finishFlow(with: self.selectedConnections)
     }
 
     func invite(contact: Contact, with reservation: Reservation) {

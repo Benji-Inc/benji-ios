@@ -24,7 +24,7 @@ enum ConversationUIState {
     }
 }
 
-class ConversationListViewController: FullScreenViewController,
+class ConversationListViewController: ViewController,
                                       UICollectionViewDelegate,
                                       UICollectionViewDelegateFlowLayout {
 
@@ -95,11 +95,11 @@ class ConversationListViewController: FullScreenViewController,
     override func initializeViews() {
         super.initializeViews()
 
-        self.contentContainer.addSubview(self.collectionView)
+        self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
         self.collectionView.delegate = self
 
-        self.addChild(viewController: self.headerVC, toView: self.contentContainer)
+        self.addChild(viewController: self.headerVC, toView: self.view)
         self.subscribeToKeyboardUpdates()
     }
 
@@ -109,12 +109,11 @@ class ConversationListViewController: FullScreenViewController,
         self.headerVC.view.expandToSuperviewWidth()
         self.headerVC.view.height = self.state.headerHeight
 
-        let headerOffset: Theme.ContentOffset = self.state == .read ? .xtraLong : .standard
-        self.headerVC.view.pin(.top, offset: headerOffset)
+        self.headerVC.view.pin(.top, offset: .custom(60))
 
         self.collectionView.expandToSuperviewWidth()
         self.collectionView.top = self.headerVC.view.bottom
-        self.collectionView.height = self.contentContainer.height - ConversationUIState.write.headerHeight
+        self.collectionView.height = self.view.height - ConversationUIState.write.headerHeight
 
         // If we're in the write mode, adjust the position of the subviews to
         // accomodate the text input, if necessary.
@@ -126,20 +125,19 @@ class ConversationListViewController: FullScreenViewController,
     /// Returns how much the collection view y position should  be adjusted to ensure that the text message input
     /// and message drop zone don't overlap.
     private func setYOffsets() {
-        let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.contentContainer)
+        let dropZoneFrame = self.collectionView.getMessageDropZoneFrame(convertedTo: self.view)
         self.swipeInputDelegate.sendMessageDropZone.frame = dropZoneFrame
 
         guard let cell = self.collectionView.getBottomFrontmostCell() else { return }
 
-        let cellFrame = self.contentContainer.convert(cell.bounds, from: cell)
-        let accessoryFrame = self.contentContainer.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)
+        let cellFrame = self.view.convert(cell.bounds, from: cell)
+        let accessoryFrame = self.view.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)
 
         let diff = cellFrame.bottom - accessoryFrame.top
-        self.collectionView.top += -clamp(diff, min: 0)
+        self.collectionView.top += -clamp(diff, 0, 70)
         self.swipeInputDelegate.sendMessageDropZone.top += -clamp(diff, min: 0)
-
-        //TODO fix this magic number.
-        self.headerVC.view.alpha = self.collectionView.top < 25 ? 0 : 1
+        
+        self.headerVC.view.alpha = self.collectionView.top < self.headerVC.view.bottom ? 0 : 1
     }
 
     override func viewWillAppear(_ animated: Bool) {
