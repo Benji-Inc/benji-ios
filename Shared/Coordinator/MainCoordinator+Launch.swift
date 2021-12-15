@@ -44,15 +44,17 @@ extension MainCoordinator {
             } else {
                 self.removeChild()
 
+                let startingCID = self.deepLink?.conversationId
+                let startingMessageID = self.deepLink?.messageId
+
                 let coordinator = ConversationListCoordinator(router: self.router,
                                                               deepLink: self.deepLink,
                                                               conversationMembers: [],
-                                                              startingConversationID: nil)
-                self.addChildAndStart(coordinator, finishedHandler: { (_) in
+                                                              startingConversationID: startingCID,
+                                                              startingMessageID: startingMessageID)
+                self.addChildAndStart(coordinator, finishedHandler: { (_) in })
 
-                })
-                self.router.push(coordinator, cancelHandler: {
-                }, animated: true)
+                self.router.setRootModule(coordinator)
 
                 await self.checkForPermissions()
             }

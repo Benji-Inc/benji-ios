@@ -32,7 +32,7 @@ extension Task where Success == Never, Failure == Never {
     /// Suspends the current task for _at least_ the given duration
     /// in seconds.
     static func sleep(seconds: TimeInterval) async {
-        await Task.sleep(UInt64(seconds * 1_000_000_000))
+        try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
     }
 
     /// Temporarily suspends the current task for at least the specified number of seconds.
