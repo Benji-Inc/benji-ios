@@ -63,7 +63,7 @@ extension ConversationListCollectionView: MessageSendingCollectionViewType {
         guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
             return nil
         }
-        return centerCell.getBottomFrontMostCell()
+        return centerCell.getBottomFrontmostCell()
     }
 
     func getNewConversationContentOffset() -> CGPoint {

@@ -44,8 +44,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
     override func start() {
         super.start()
 
-        self.conversationListVC.onSelectedMessage = { [unowned self] (channelId, messageId) in
-            self.presentThread(for: channelId, messageId: messageId)
+        self.conversationListVC.onSelectedMessage = { [unowned self] (channelId, messageId, replyId) in
+            self.presentThread(for: channelId,
+                                  messageId: messageId,
+                                  startingReplyId: replyId)
         }
 
         self.conversationListVC.headerVC.didTapAddPeople = { [unowned self] in
@@ -73,11 +75,10 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         switch target {
         case .conversation:
             var cid: ConversationId?
-            var messageID: MessageId?
+            let messageID = deeplink.messageId
     
             if deeplink.conversationId.exists {
                 cid = deeplink.conversationId
-                messageID = deeplink.messageId
 
             } else if let connectionId = deeplink.customMetadata["connectionId"] as? String {
                 guard let connection = ConnectionStore.shared.connections.first(where: { connection in
@@ -88,19 +89,24 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
             }
 
             guard let cid = cid else { break }
-            self.conversationListVC.scrollToConversation(with: cid, messageID: messageID)
+            Task {
+                await self.conversationListVC.scrollToConversation(with: cid, messageID: messageID)
+            }
 
         default:
             break
         }
     }
 
-    func presentThread(for channelId: ChannelId, messageId: MessageId) {
+    func presentThread(for channelId: ChannelId,
+                       messageId: MessageId,
+                       startingReplyId: MessageId?) {
+
         self.removeChild()
         
         let coordinator = ThreadCoordinator(with: channelId,
                                             messageId: messageId,
-                                            startingReplyId: nil,
+                                            startingReplyId: startingReplyId,
                                             router: self.router,
                                             deepLink: self.deepLink)
 

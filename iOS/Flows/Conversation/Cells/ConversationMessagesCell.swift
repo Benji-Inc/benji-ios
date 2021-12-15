@@ -179,11 +179,11 @@ class ConversationMessagesCell: UICollectionViewCell {
             }.store(in: &self.subscriptions)
     }
 
-    func scrollToMessage(with messageId: MessageId) {
-        guard let conversationController = self.conversationController,
-              let cid = conversationController.cid else { return }
+    func scrollToMessage(with messageId: MessageId) async {
+        let task = Task {
+            guard let conversationController = self.conversationController,
+                  let cid = conversationController.cid else { return }
 
-        Task {
             try? await conversationController.loadNextMessages(including: messageId)
 
             guard !Task.isCancelled else { return }
@@ -195,7 +195,12 @@ class ConversationMessagesCell: UICollectionViewCell {
             guard let yOffset = self.collectionLayout.itemFocusPositions[messageIndexPath] else { return }
 
             self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: true)
-        }.add(to: self.taskPool)
+
+            await Task.sleep(seconds: Theme.animationDurationStandard)
+        }
+        task.add(to: self.taskPool)
+
+        await task.value
     }
 
     // MARK: - Drop Zone Helpers
@@ -216,8 +221,8 @@ class ConversationMessagesCell: UICollectionViewCell {
         return self.collectionLayout.getDropZoneColor()
     }
 
-    func getBottomFrontMostCell() -> MessageSubcell? {
-        return self.collectionLayout.getBottomFrontMostCell()
+    func getBottomFrontmostCell() -> MessageSubcell? {
+        return self.collectionLayout.getBottomFrontmostCell()
     }
 }
 

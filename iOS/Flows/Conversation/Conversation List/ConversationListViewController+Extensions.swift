@@ -21,7 +21,7 @@ extension ConversationListViewController {
 
         self.dataSource.handleSelectedMessage = { [unowned self] (cid, messageID, view) in
             self.selectedMessageView = view
-            self.onSelectedMessage?(cid, messageID)
+            self.onSelectedMessage?(cid, messageID, nil)
         }
 
         self.dataSource.handleEditMessage = { cid, messagerID in

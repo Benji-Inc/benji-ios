@@ -38,7 +38,7 @@ class ConversationListViewController: FullScreenViewController,
     var selectedMessageView: MessageContentView?
 
     // Input handlers
-    var onSelectedMessage: ((ChannelId, MessageId) -> Void)?
+    var onSelectedMessage: ((_ cid: ChannelId, _ messageId: MessageId, _ replyId: MessageId?) -> Void)?
 
     // Custom Input Accessory View
     lazy var messageInputAccessoryView: ConversationInputAccessoryView = {
@@ -239,23 +239,38 @@ class ConversationListViewController: FullScreenViewController,
 
         guard let startingConversationID = startingConversationID else { return }
 
-        self.scrollToConversation(with: startingConversationID, messageID: self.startingMessageID)
+        Task {
+            await self.scrollToConversation(with: startingConversationID, messageID: self.startingMessageID)
+        }
     }
 
-    func scrollToConversation(with cid: ConversationId, messageID: MessageId?) {
+    @MainActor
+    func scrollToConversation(with cid: ConversationId, messageID: MessageId?) async {
         guard let conversationIndexPath = self.dataSource.indexPath(for: .conversation(cid)) else { return }
         self.collectionView.scrollToItem(at: conversationIndexPath,
                                          at: .centeredHorizontally,
                                          animated: true)
 
+        guard let messageID = messageID else { return }
 
-        guard let messageID = messageID,
-              let cell = self.collectionView.cellForItem(at: conversationIndexPath),
+        guard let cell = self.collectionView.cellForItem(at: conversationIndexPath),
               let messagesCell = cell as? ConversationMessagesCell else {
                   return
               }
 
-        messagesCell.scrollToMessage(with: messageID)
+        let messageController = ChatClient.shared.messageController(cid: cid, messageId: messageID)
+
+        try? await messageController.synchronize()
+
+        guard let message = messageController.message else { return }
+
+        if let parentMessageId = message.parentMessageId {
+            await messagesCell.scrollToMessage(with: parentMessageId)
+            self.selectedMessageView = messagesCell.getBottomFrontmostCell()?.content
+            self.onSelectedMessage?(cid, parentMessageId, messageID)
+        } else {
+            await messagesCell.scrollToMessage(with: messageID)
+        }
     }
 
     // MARK: - UICollection Input Handlers
