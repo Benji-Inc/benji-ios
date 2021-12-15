@@ -10,7 +10,7 @@ import Foundation
 
 extension NSTextCheckingResult: ImageDisplayable {
     
-    var userObjectID: String? {
+    var userObjectId: String? {
         return nil
     }
 

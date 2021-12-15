@@ -11,7 +11,7 @@ import Intents
 import StreamChat
 
 typealias Conversation = ChatChannel
-typealias ConversationID = ChannelId
+typealias ConversationId = ChannelId
 
 extension Conversation {
     

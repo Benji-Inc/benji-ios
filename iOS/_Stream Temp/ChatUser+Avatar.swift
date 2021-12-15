@@ -13,7 +13,7 @@ extension ChatUser: Avatar {
 
     var parseUser: User? {
         return UserStore.shared.users.first { user in
-            return user.objectId == self.userObjectID
+            return user.objectId == self.userObjectId
         }
     }
 
@@ -29,7 +29,7 @@ extension ChatUser: Avatar {
         return self.parseUser?.handle ?? String()
     }
 
-    var userObjectID: String? {
+    var userObjectId: String? {
         return self.id
     }
 

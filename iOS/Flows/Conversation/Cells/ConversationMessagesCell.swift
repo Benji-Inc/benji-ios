@@ -17,8 +17,8 @@ import Combine
 class ConversationMessagesCell: UICollectionViewCell {
 
     // Interaction handling
-    var handleTappedMessage: ((ConversationID, MessageId, MessageContentView) -> Void)?
-    var handleEditMessage: ((ConversationID, MessageId) -> Void)?
+    var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
+    var handleEditMessage: ((ConversationId, MessageId) -> Void)?
 
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?

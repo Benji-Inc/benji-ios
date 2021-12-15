@@ -21,15 +21,15 @@ final class InitialConveration: PFObject, PFSubclassing {
         return String(describing: self)
     }
 
-    var conversationIDString: String? {
+    var conversationIdString: String? {
         get { return self.getObject(for: .conversationId) }
         set { return self.setObject(for: .conversationId, with: newValue)}
     }
 
 #if IOS
-    var cid: ConversationID? {
-        guard let conversationIDString = self.conversationIDString else { return nil }
-        return try? ConversationID(cid: conversationIDString)
+    var cid: ConversationId? {
+        guard let conversationIdString = self.conversationIdString else { return nil }
+        return try? ConversationId(cid: conversationIdString)
     }
 #endif
 

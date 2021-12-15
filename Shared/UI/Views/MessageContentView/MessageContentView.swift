@@ -16,8 +16,8 @@ import StreamChat
 class MessageContentView: View {
 
     #if IOS
-    var handleTappedMessage: ((ConversationID, MessageId) -> Void)?
-    var handleEditMessage: ((ConversationID, MessageId) -> Void)?
+    var handleTappedMessage: ((ConversationId, MessageId) -> Void)?
+    var handleEditMessage: ((ConversationId, MessageId) -> Void)?
     #endif
 
     /// Sizing

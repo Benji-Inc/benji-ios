@@ -21,7 +21,7 @@ enum Environment: String {
 //        }
     }
 
-    var appID: String {
+    var appId: String {
         return "jibber-development"
 //        switch self {
 //        case .staging: return "jibber-development"

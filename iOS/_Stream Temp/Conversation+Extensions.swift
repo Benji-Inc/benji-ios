@@ -110,7 +110,7 @@ extension Conversation: MessageSequence {
         return self.isOwnedByMe
     }
 
-    var authorID: String {
+    var authorId: String {
         return self.createdBy!.id
     }
 
@@ -127,7 +127,7 @@ extension Conversation: MessageSequence {
         return messageArray
     }
 
-    var streamCID: ConversationID? {
+    var streamCID: ConversationId? {
         return self.cid
     }
 }

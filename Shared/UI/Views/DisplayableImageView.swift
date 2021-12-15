@@ -110,7 +110,7 @@ class DisplayableImageView: View {
     func updateImageView(with displayable: ImageDisplayable) {
         if let photo = displayable.image {
             self.showResult(for: photo)
-        } else if let objectID = displayable.userObjectID {
+        } else if let objectID = displayable.userObjectId {
             Task {
                 await self.findUser(with: objectID)
             }.add(to: self.taskPool)

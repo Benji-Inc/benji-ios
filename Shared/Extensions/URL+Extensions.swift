@@ -10,7 +10,7 @@ import Foundation
 
 extension URL: ImageDisplayable {
     
-    var userObjectID: String? {
+    var userObjectId: String? {
         nil
     }
 

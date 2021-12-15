@@ -21,12 +21,12 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     }
 
     enum ItemType: Hashable {
-        case conversation(ConversationID)
+        case conversation(ConversationId)
         case loadMore
     }
 
-    var handleSelectedMessage: ((ConversationID, MessageId, MessageContentView) -> Void)?
-    var handleEditMessage: ((ConversationID, MessageId) -> Void)?
+    var handleSelectedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
+    var handleEditMessage: ((ConversationId, MessageId) -> Void)?
     
     var handleLoadMoreMessages: CompletionOptional = nil
     @Published var conversationUIState: ConversationUIState = .read
@@ -38,7 +38,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     }
 
     /// The conversation ID of the conversation that is preparing to send, if any.
-    private var conversationPreparingToSend: ConversationID?
+    private var conversationPreparingToSend: ConversationId?
 
     // Cell registration
     private let conversationCellRegistration
@@ -126,7 +126,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
         }
     }
 
-    func set(conversationPreparingToSend: ConversationID?, reloadData: Bool) {
+    func set(conversationPreparingToSend: ConversationId?, reloadData: Bool) {
         self.conversationPreparingToSend = conversationPreparingToSend
 
         if reloadData {

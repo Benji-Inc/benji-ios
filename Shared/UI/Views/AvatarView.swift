@@ -90,7 +90,7 @@ class AvatarView: DisplayableImageView {
     func set(avatar: Avatar) {
         if avatar is User {
             UserStore.shared.$userUpdated.filter { user in
-                user?.objectId == avatar.userObjectID
+                user?.objectId == avatar.userObjectId
             }.mainSink { user in
                 self.displayable = user
             }.store(in: &self.cancellables)
@@ -102,7 +102,7 @@ class AvatarView: DisplayableImageView {
         let interaction = UIContextMenuInteraction(delegate: self)
         self.addInteraction(interaction)
 
-        guard avatar.image == nil, avatar.userObjectID == nil else { return }
+        guard avatar.image == nil, avatar.userObjectId == nil else { return }
         self.initials = avatar.initials
         self.blurView.effect = nil 
         self.layoutNow()

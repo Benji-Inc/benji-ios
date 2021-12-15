@@ -10,7 +10,7 @@ import Foundation
 import Parse
 
 struct SystemAvatar: Avatar, Hashable {
-    var userObjectID: String?
+    var userObjectId: String?
     var givenName: String
     var familyName: String
     var image: UIImage?

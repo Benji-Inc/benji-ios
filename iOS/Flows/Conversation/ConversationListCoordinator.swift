@@ -21,7 +21,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                                      startingMessageID: self.startMessageID)
 
     private let conversationMembers: [ConversationMember]
-    private let startingConversationID: ConversationID?
+    private let startingConversationID: ConversationId?
     private let startMessageID: MessageId?
 
     override func toPresentable() -> DismissableVC {
@@ -31,12 +31,12 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
     init(router: Router,
          deepLink: DeepLinkable?,
          conversationMembers: [ConversationMember],
-         startingConversationID: ConversationID?,
-         startingMessageID: MessageId?) {
+         startingConversationId: ConversationId?,
+         startingMessageId: MessageId?) {
 
         self.conversationMembers = conversationMembers
-        self.startingConversationID = startingConversationID
-        self.startMessageID = startingMessageID
+        self.startingConversationID = startingConversationId
+        self.startMessageID = startingMessageId
 
         super.init(router: router, deepLink: deepLink)
     }
@@ -72,7 +72,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
         switch target {
         case .conversation:
-            var cid: ConversationID?
+            var cid: ConversationId?
             var messageID: MessageId?
     
             if deeplink.conversationId.exists {
