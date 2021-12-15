@@ -28,7 +28,7 @@ extension ConversationControllerType {
         return self.rootMessage.exists
     }
 
-    var cid: ConversationID {
+    var cid: ConversationId {
         return self.conversation.cid
     }
 

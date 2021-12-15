@@ -169,7 +169,7 @@ class OnboardingViewController: SwitchableContentViewController<OnboardingConten
     private func saveInitialConversation(with conversationId: String?) async throws {
         guard let id = conversationId else { return }
         let object = InitialConveration()
-        object.conversationIDString = id
+        object.conversationIdString = id
         try await object.saveLocally()
     }
 

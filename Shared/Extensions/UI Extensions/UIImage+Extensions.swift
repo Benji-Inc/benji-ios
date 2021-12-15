@@ -71,7 +71,7 @@ extension UIImage: Avatar {
         return self
     }
 
-    var userObjectID: String? {
+    var userObjectId: String? {
         return nil
     }
 }

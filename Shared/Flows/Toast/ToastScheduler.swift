@@ -114,7 +114,7 @@ class ToastScheduler {
         guard case MessageKind.text(let text) = message.kind,
               !text.isEmpty,
               let author = UserStore.shared.users.first(where: { user in
-                  return user.userObjectID == message.authorID
+                  return user.userObjectId == message.authorId
               }) else { return nil }
 
         let toast = Toast(id: message.id,
@@ -129,7 +129,7 @@ class ToastScheduler {
                           didTap: { [unowned self] in
 
             let deeplink = DeepLinkObject(target: .conversation)
-            deeplink.customMetadata["conversationId"] = message.conversationID
+            deeplink.customMetadata["conversationId"] = message.conversationId
             deeplink.customMetadata["messageId"] = message.id
             self.delegate?.didInteractWith(type: .newMessage(message), deeplink: deeplink)
         })

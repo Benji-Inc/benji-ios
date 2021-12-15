@@ -12,7 +12,7 @@ import Combine
 
 extension User: Avatar {
 
-    var userObjectID: String? {
+    var userObjectId: String? {
         self.objectId
     }
 

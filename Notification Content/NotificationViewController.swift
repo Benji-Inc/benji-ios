@@ -32,7 +32,7 @@ class NotificationViewController: UIViewController, UNNotificationContentExtensi
                 configuration.applicationGroupIdentifier = Config.shared.environment.groupId
                 configuration.containingApplicationBundleIdentifier = "com.Jibber-Inc.Jibber"
                 configuration.server = Config.shared.environment.url
-                configuration.applicationId = Config.shared.environment.appID
+                configuration.applicationId = Config.shared.environment.appId
                 configuration.isLocalDatastoreEnabled = true
             }))
         }

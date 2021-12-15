@@ -18,10 +18,10 @@ enum MessageStatus: String {
 protocol Messageable {
 
     var id: String { get }
-    var conversationID: String { get }
+    var conversationId: String { get }
     var createdAt: Date { get }
     var isFromCurrentUser: Bool { get }
-    var authorID: String { get }
+    var authorId: String { get }
     var attributes: [String: Any]? { get }
     var avatar: Avatar { get }
     var status: MessageStatus { get }
@@ -45,9 +45,9 @@ func ==(lhs: Messageable, rhs: Messageable) -> Bool {
     guard type(of: lhs) == type(of: rhs) else { return false }
     return lhs.createdAt == rhs.createdAt
         && lhs.kind == rhs.kind
-        && lhs.authorID == rhs.authorID
+        && lhs.authorId == rhs.authorId
         && lhs.id == rhs.id
-        && lhs.conversationID == rhs.conversationID
+        && lhs.conversationId == rhs.conversationId
 }
 
 extension Messageable {
@@ -62,7 +62,7 @@ extension Messageable {
 
     var isConsumedByMe: Bool {
         return self.hasBeenConsumedBy.contains { avatar in
-            return avatar.userObjectID == User.current()?.objectId
+            return avatar.userObjectId == User.current()?.objectId
         }
     }
 

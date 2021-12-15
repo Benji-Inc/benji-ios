@@ -42,7 +42,7 @@ class LaunchManager {
             Parse.initialize(with: ParseClientConfiguration(block: { (configuration: ParseMutableClientConfiguration) in
                 configuration.applicationGroupIdentifier = Config.shared.environment.groupId
                 configuration.server = Config.shared.environment.url
-                configuration.applicationId = Config.shared.environment.appID
+                configuration.applicationId = Config.shared.environment.appId
                 configuration.isLocalDatastoreEnabled = true
             }))
         }
@@ -90,8 +90,8 @@ class LaunchManager {
                 }
             case "/pass":
                 if let item = components.queryItems?.first,
-                   let passID = item.value {
-                    self.delegate?.launchManager(self, didReceive: .pass(passId: passID))
+                   let passId = item.value {
+                    self.delegate?.launchManager(self, didReceive: .pass(passId: passId))
                 }
             default:
                 break

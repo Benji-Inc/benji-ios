@@ -41,7 +41,7 @@ class EmotionView: View {
     func configure(for message: Messageable) {
         let controller = ChatClient.shared.messageController(for: message)
         if let msg = controller?.message, let reaction = msg.latestReactions.first(where: { reaction in
-            return reaction.author.userObjectID == msg.authorID
+            return reaction.author.userObjectId == msg.authorId
         }), let emotion = Emotion(rawValue: reaction.type.rawValue) {
             self.isVisible = true
             self.configure(for: emotion)

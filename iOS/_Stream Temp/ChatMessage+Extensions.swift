@@ -13,7 +13,7 @@ typealias Message = ChatMessage
 
 extension Message: Messageable {
 
-    var conversationID: String {
+    var conversationId: String {
         return self.cid?.description ?? String()
     }
 
@@ -21,7 +21,7 @@ extension Message: Messageable {
         return self.isSentByCurrentUser
     }
 
-    var authorID: String {
+    var authorId: String {
         return self.author.id
     }
 
@@ -81,7 +81,8 @@ extension Message: Messageable {
     func setToUnconsumed() async throws {
         let controller = ChatClient.shared.messageController(cid: self.cid!, messageId: self.id)
         if let readReaction = self.latestReactions.first(where: { reaction in
-            if let type = ReactionType(rawValue: reaction.type.rawValue), type == .read, reaction.author.userObjectID == User.current()?.objectId {
+            if let type = ReactionType(rawValue: reaction.type.rawValue), type == .read,
+                reaction.author.userObjectId == User.current()?.objectId {
                 return true
             }
             return false
@@ -93,7 +94,7 @@ extension Message: Messageable {
 
 extension Message: MessageSequence {
 
-    var streamCID: ConversationID? {
+    var streamCID: ConversationId? {
         return self.cid
     }
 

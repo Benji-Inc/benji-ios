@@ -24,8 +24,8 @@ struct Contact: Avatar, Hashable {
         return self.cnContact.handle
     }
 
-    var userObjectID: String? {
-        return self.cnContact.userObjectID
+    var userObjectId: String? {
+        return self.cnContact.userObjectId
     }
 
     var image: UIImage? {

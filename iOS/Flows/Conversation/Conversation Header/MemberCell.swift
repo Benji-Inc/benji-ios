@@ -15,11 +15,11 @@ struct Member: Hashable {
     var conversationController: ConversationController
 
     static func ==(lhs: Member, rhs: Member) -> Bool {
-        return lhs.displayable.value.userObjectID == rhs.displayable.value.userObjectID
+        return lhs.displayable.value.userObjectId == rhs.displayable.value.userObjectId
     }
 
     func hash(into hasher: inout Hasher) {
-        self.displayable.value.userObjectID.hash(into: &hasher)
+        self.displayable.value.userObjectId.hash(into: &hasher)
     }
 }
 
@@ -54,7 +54,7 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
         let typingUsers = item.conversationController.conversation.currentlyTypingUsers
         if typingUsers.contains(where: { typingUser in
-            typingUser.userObjectID == item.displayable.value.userObjectID
+            typingUser.userObjectId == item.displayable.value.userObjectId
         }) {
             self.beginTyping()
         } else {

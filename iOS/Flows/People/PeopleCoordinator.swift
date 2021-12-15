@@ -21,13 +21,13 @@ class PeopleCoordinator: PresentableCoordinator<[Connection]> {
     var reservations: [Reservation] = []
     var contactsToInvite: [Contact] = []
     var inviteIndex: Int = 0
-    let conversationID: ConversationID?
+    let conversationID: ConversationId?
 
     private let includeConnections: Bool
     var selectedConnections: [Connection] = []
 
     init(includeConnections: Bool = true,
-         conversationID: ConversationID?,
+         conversationID: ConversationId?,
          router: Router,
          deepLink: DeepLinkable?) {
 

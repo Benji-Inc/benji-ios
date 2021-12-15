@@ -10,7 +10,7 @@ import Foundation
 import Parse
 
 protocol ImageDisplayable {
-    var userObjectID: String? { get }
+    var userObjectId: String? { get }
     var image: UIImage? { get }
     var textResult: NSTextCheckingResult? { get }
 }
