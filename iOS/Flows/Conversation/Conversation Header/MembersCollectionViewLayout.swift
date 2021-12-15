@@ -36,12 +36,15 @@ class MembersCollectionViewLayout: UICollectionViewCompositionalLayout {
                 section.visibleItemsInvalidationHandler = { (items, offset, environment) in
                     items.forEach { item in
                         let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
-                        let minScale: CGFloat = 0.7
+                        let minScale: CGFloat = 0.75
                         let maxScale: CGFloat = 1.0
                         let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
-                        var transfrom = CGAffineTransform(scaleX: scale, y: scale)
-                        transfrom = transfrom.translatedBy(x: 1.0, y: scale * -1)
+                        let transfrom = CGAffineTransform(scaleX: scale, y: scale)
                         item.transform = transfrom
+                        
+                        let centerY: CGFloat = (item.bounds.height * scale).half
+                        item.center = CGPoint(x: item.center.x, y: centerY)
+                        
                     }
                 }
 
