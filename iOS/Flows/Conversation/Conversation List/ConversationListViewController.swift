@@ -134,7 +134,8 @@ class ConversationListViewController: ViewController,
         let accessoryFrame = self.view.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)
 
         let diff = cellFrame.bottom - accessoryFrame.top
-        self.collectionView.top += -clamp(diff, 0, 70)
+        let value = -clamp(diff, 0, 70)
+        self.collectionView.top += value
         self.swipeInputDelegate.sendMessageDropZone.top += -clamp(diff, min: 0)
         
         self.headerVC.view.alpha = self.collectionView.top < self.headerVC.view.bottom ? 0 : 1
@@ -146,7 +147,7 @@ class ConversationListViewController: ViewController,
         KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
         self.becomeFirstResponder()
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
 

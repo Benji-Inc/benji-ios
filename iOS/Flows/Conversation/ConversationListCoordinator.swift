@@ -118,16 +118,20 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                                             deepLink: self.deepLink)
         
         coordinator.toPresentable().dismissHandlers.append { [unowned self] in
-            self.conversationListVC.view.layoutNow()
+            KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
             self.conversationListVC.becomeFirstResponder()
         }
 
         self.addChildAndStart(coordinator) { [unowned self] connections in
             self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+                KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
                 self.conversationListVC.becomeFirstResponder()
                 self.add(connections: connections, to: conversation)
             }
         }
+        
+        KeyboardManager.shared.reset()
+        self.conversationListVC.resignFirstResponder()
         self.router.present(coordinator, source: self.conversationListVC)
     }
 
