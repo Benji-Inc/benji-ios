@@ -118,7 +118,7 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
                                             deepLink: self.deepLink)
 
         self.addChildAndStart(coordinator) { [unowned self] connections in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: false) {
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
                 self.conversationListVC.becomeFirstResponder()
             }
 

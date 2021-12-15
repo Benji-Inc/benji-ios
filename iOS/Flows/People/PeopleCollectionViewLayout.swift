@@ -22,6 +22,11 @@ class PeopleCollectionViewLayout: UICollectionViewCompositionalLayout {
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.33), heightDimension: .absolute(160))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                let inset = Theme.ContentOffset.standard.value
+                item.contentInsets = NSDirectionalEdgeInsets(top: inset,
+                                                             leading: inset,
+                                                             bottom: inset,
+                                                             trailing: inset)
 
                 // Group
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(160))

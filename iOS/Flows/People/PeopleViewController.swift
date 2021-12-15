@@ -25,8 +25,13 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
     let blurView = BlurView()
 
+    let gradientView = GradientView(with: [Color.textColor.color.withAlphaComponent(1.0).cgColor,
+                                           Color.textColor.color.withAlphaComponent(0.0).cgColor],
+                                    startPoint: .bottomCenter,
+                                    endPoint: .topCenter)
     let button = Button()
     private let loadingView = InvitationLoadingView()
+    private var showButton: Bool = false
 
     init(includeConnections: Bool = true) {
         self.includeConnections = includeConnections
@@ -44,13 +49,19 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     override func initializeViews() {
         super.initializeViews()
 
-        self.modalPresentationStyle = .overCurrentContext
+        self.modalPresentationStyle = .popover
+        if let pop = self.popoverPresentationController {
+            let sheet = pop.adaptiveSheetPresentationController
+            sheet.detents = [.medium(), .large()]
+            sheet.prefersGrabberVisible = true
+        }
 
         self.view.insertSubview(self.blurView, belowSubview: self.collectionView)
 
         self.dataSource.headerTitle = self.getHeaderTitle()
         self.dataSource.headerDescription = self.getHeaderDescription()
 
+        self.view.addSubview(self.gradientView)
         self.view.addSubview(self.button)
 
         self.button.didSelect { [unowned self] in
@@ -70,6 +81,16 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
 
         self.button.setSize(with: self.view.width)
         self.button.centerOnX()
+        
+        if self.showButton {
+            self.button.pinToSafeAreaBottom()
+        } else {
+            self.button.top = self.view.height
+        }
+        
+        self.gradientView.expandToSuperviewWidth()
+        self.gradientView.height = (self.view.height - self.button.top) + Theme.ContentOffset.xtraLong.value
+        self.gradientView.pin(.bottom)
     }
 
     func showLoading(for contact: Contact) async {
@@ -90,17 +111,9 @@ class PeopleViewController: DiffableCollectionViewController<PeopleCollectionVie
     }
 
     func updateButton() {
-
-        self.button.set(style: .normal(color: .darkGray, text: self.getButtonTitle()))
-
+        self.button.set(style: .normal(color: .white, text: self.getButtonTitle()))
         UIView.animate(withDuration: Theme.animationDurationStandard) {
-
-            if self.selectedItems.count == 0 {
-                self.button.top = self.view.height
-            } else {
-                self.button.pinToSafeAreaBottom()
-            }
-
+            self.showButton = self.selectedItems.count > 0
             self.view.layoutNow()
         }
     }

@@ -27,7 +27,7 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
         super.initializeSubviews()
 
         self.contentView.addSubview(self.content)
-        self.content.set(backgroundColor: .lightGray)
+        self.content.set(backgroundColor: .darkGray)
 
         self.content.addSubview(self.avatarView)
         self.content.addSubview(self.titleLabel)
