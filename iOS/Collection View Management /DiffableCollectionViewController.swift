@@ -53,7 +53,7 @@ class DiffableCollectionViewController<SectionType: Hashable,
         }.add(to: self.taskPool)
     }
 
-    func dataWasLoaded() {}
+    func collectionViewDataWasLoaded() {}
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -84,7 +84,7 @@ class DiffableCollectionViewController<SectionType: Hashable,
         }
 
         self.collectionView.animationView.stop()
-        self.dataWasLoaded()
+        self.collectionViewDataWasLoaded()
     }
 
     func getInitialSnapshot(with dictionary: [SectionType : [ItemType]])

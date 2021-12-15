@@ -77,8 +77,8 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         }).store(in: &self.cancellables)
     }
     
-    override func dataWasLoaded() {
-        super.dataWasLoaded()
+    override func collectionViewDataWasLoaded() {
+        super.collectionViewDataWasLoaded()
         
         /// This is needed because sometimes the author get set before the datasource
         if let user = self.initialTopMostAuthor,

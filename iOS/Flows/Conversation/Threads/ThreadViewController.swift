@@ -170,8 +170,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         return data
     }
 
-    override func dataWasLoaded() {
-        super.dataWasLoaded()
+    override func collectionViewDataWasLoaded() {
+        super.collectionViewDataWasLoaded()
 
         self.subscribeToUpdates()
 
