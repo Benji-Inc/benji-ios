@@ -26,7 +26,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
     /// A controller for the message that all the replies in this thread are responding to.
     let messageController: ChatMessageController
-    var parentMessage: Message! {
+    var parentMessage: Message? {
         return self.messageController.message
     }
 
@@ -158,7 +158,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         do {
             try await self.messageController.loadPreviousReplies()
 
-            guard let cid = self.parentMessage.cid else { return [:] }
+            guard let cid = self.parentMessage?.cid else { return [:] }
 
             let messages = self.messageController.replies.map { message in
                 return MessageSequenceItem.message(cid: cid, messageID: message.id)
@@ -174,8 +174,24 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     override func getAnimationCycle() -> AnimationCycle? {
         return nil
     }
-}
 
+    func scrollToMessage(with messageId: MessageId) {
+        Task {
+            let cid = self.messageController.cid
+
+            try? await self.messageController.loadNextReplies(including: messageId)
+
+            let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageId)
+
+            guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
+
+            let threadLayout = self.threadCollectionView.threadLayout
+            guard let yOffset = threadLayout.itemFocusPositions[messageIndexPath] else { return }
+
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: true)
+        }
+    }
+}
 // MARK: - Messaging
 
 extension ThreadViewController: MessageSendingViewControllerType {

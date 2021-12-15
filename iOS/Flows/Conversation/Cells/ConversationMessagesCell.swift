@@ -179,16 +179,16 @@ class ConversationMessagesCell: UICollectionViewCell {
             }.store(in: &self.subscriptions)
     }
 
-    func scrollToMessage(with messageID: MessageId) {
+    func scrollToMessage(with messageId: MessageId) {
         guard let conversationController = self.conversationController,
               let cid = conversationController.cid else { return }
 
         Task {
-            try? await conversationController.loadNextMessages(including: messageID)
+            try? await conversationController.loadNextMessages(including: messageId)
 
             guard !Task.isCancelled else { return }
 
-            let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageID)
+            let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageId)
 
             guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
 
