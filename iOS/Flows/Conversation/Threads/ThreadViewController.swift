@@ -157,7 +157,11 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         do {
             try await self.messageController.loadPreviousReplies()
 
-            guard let cid = self.parentMessage?.cid else { return [:] }
+            if let startingReplyId = self.startingReplyId {
+                try await self.messageController.loadNextReplies(including: startingReplyId)
+            }
+
+            let cid = self.messageController.cid
 
             let messages = self.messageController.replies.map { message in
                 return MessageSequenceItem.message(cid: cid, messageID: message.id)
