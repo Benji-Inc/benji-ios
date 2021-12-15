@@ -95,15 +95,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.dismissInteractionController.initialize(collectionView: self.collectionView)
     }
 
-    override func handleDataBeingLoaded() {
-        self.subscribeToUpdates()
-        
-        /// Setting this here fixes issue with recursion during presentation.
-        if let msg = self.messageController.message {
-            self.detailView.configure(with: msg)
-        }
-    }
-
+    private var shouldScrollToLastItem = false
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
@@ -171,8 +163,27 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         return data
     }
 
-    override func getAnimationCycle() -> AnimationCycle? {
-        return nil
+    override func dataWasLoaded() {
+        super.dataWasLoaded()
+
+        self.subscribeToUpdates()
+
+        /// Setting this here fixes issue with recursion during presentation.
+        if let msg = self.messageController.message {
+            self.detailView.configure(with: msg)
+        }
+    }
+
+    override func getAnimationCycle(withData data: [MessageSequenceSection : [MessageSequenceItem]])
+    -> AnimationCycle? {
+
+        let layout = self.threadCollectionView.threadLayout
+        let itemCount = data[.bottomMessages]?.count ?? 0
+        let scrollToOffset = CGPoint(x: 0, y: layout.itemHeight * CGFloat(itemCount - 1))
+        return AnimationCycle(inFromPosition: .inward,
+                              outToPosition: .inward,
+                              shouldConcatenate: false,
+                              scrollToOffset: scrollToOffset)
     }
 
     func scrollToMessage(with messageId: MessageId) {

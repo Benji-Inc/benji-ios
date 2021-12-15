@@ -53,7 +53,7 @@ class DiffableCollectionViewController<SectionType: Hashable,
         }.add(to: self.taskPool)
     }
 
-    func handleDataBeingLoaded() {}
+    func dataWasLoaded() {}
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -75,7 +75,7 @@ class DiffableCollectionViewController<SectionType: Hashable,
 
         let snapshot = self.getInitialSnapshot(with: dataDictionary)
 
-        if let animationCycle = self.getAnimationCycle() {
+        if let animationCycle = self.getAnimationCycle(withData: dataDictionary) {
             await self.dataSource.apply(snapshot,
                                         collectionView: self.collectionView,
                                         animationCycle: animationCycle)
@@ -84,10 +84,10 @@ class DiffableCollectionViewController<SectionType: Hashable,
         }
 
         self.collectionView.animationView.stop()
-        self.handleDataBeingLoaded()
+        self.dataWasLoaded()
     }
 
-    func getInitialSnapshot(with dictionary: [SectionType: [ItemType]])
+    func getInitialSnapshot(with dictionary: [SectionType : [ItemType]])
     -> NSDiffableDataSourceSnapshot<SectionType, ItemType> {
         
         var snapshot = self.dataSource.snapshot()
@@ -119,7 +119,7 @@ class DiffableCollectionViewController<SectionType: Hashable,
         fatalError("getAllSections NOT IMPLEMENTED")
     }
 
-    func getAnimationCycle() -> AnimationCycle? {
+    func getAnimationCycle(withData data: [SectionType : [ItemType]]) -> AnimationCycle? {
         return AnimationCycle(inFromPosition: .inward,
                               outToPosition: .inward,
                               shouldConcatenate: true,
