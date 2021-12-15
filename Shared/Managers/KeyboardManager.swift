@@ -37,17 +37,14 @@ class KeyboardManager {
         case none // No event has happened
     }
 
-    deinit {
-        self.cancellables.forEach { cancellable in
-            cancellable.cancel()
-        }
-    }
-
     func reset() {
         self.cachedKeyboardEndFrame = .zero
         self.inputAccessoryView = nil
         self.willKeyboardShow = false
         self.isKeyboardShowing = false
+        self.cancellables.forEach { cancellable in
+            cancellable.cancel()
+        }
     }
 
     func addKeyboardObservers(with inputAccessoryView: UIView? = nil) {

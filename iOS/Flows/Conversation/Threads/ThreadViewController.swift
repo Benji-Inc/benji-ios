@@ -137,10 +137,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         if self.collectionView.isTracking {
             self.detailView.alpha = 0.0
         }
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
 
         KeyboardManager.shared.reset()
         self.resignFirstResponder()
