@@ -10,12 +10,9 @@ import Foundation
 import AVFoundation
 import Combine
 
-class ImageCaptureViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
-
-    var cancellables = Set<AnyCancellable>()
+class ImageCaptureViewController: ViewController, AVCaptureVideoDataOutputSampleBufferDelegate, AVCapturePhotoCaptureDelegate {
 
     let session = AVCaptureSession()
-    //var previewLayer: AVCaptureVideoPreviewLayer!
     var capturePhotoOutput: AVCapturePhotoOutput!
 
     let dataOutputQueue = DispatchQueue(label: "video data queue",

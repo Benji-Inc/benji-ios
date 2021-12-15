@@ -26,7 +26,7 @@ class FaceDetectionViewController: ImageCaptureViewController {
     var metalDevice: MTLDevice!
     var metalCommandQueue: MTLCommandQueue!
 
-    var currentColor: CIColor? = Color.textColor.color.ciColor
+    //var currentColor = UIColor.red.ciColor
 
     // The Core Image pipeline.
     var ciContext: CIContext!
@@ -36,12 +36,20 @@ class FaceDetectionViewController: ImageCaptureViewController {
         }
     }
 
-    @IBOutlet weak var cameraView: MTKView! {
-        didSet {
-            guard self.metalDevice.isNil else { return }
-            self.setupMetal()
-            self.setupCoreImage()
-        }
+    lazy var cameraView = MTKView()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        guard self.metalDevice.isNil else { return }
+        self.setupMetal()
+        self.setupCoreImage()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.cameraView.expandToSuperviewSize()
     }
 
     override func captureOutput(_ output: AVCaptureOutput,
