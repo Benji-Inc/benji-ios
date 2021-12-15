@@ -14,12 +14,12 @@ protocol MessageSequence {
     var createdAt: Date { get }
     var updatedAt: Date { get }
     var isCreatedByCurrentUser: Bool { get }
-    var authorID: String { get }
+    var authorId: String { get }
     var attributes: [String: Any]? { get }
     var messages: [Messageable] { get }
 
     // Stream variables
-    var streamCID: ConversationID? { get }
+    var streamCID: ConversationId? { get }
 }
 
 func ==(lhs: MessageSequence, rhs: MessageSequence) -> Bool {
@@ -27,13 +27,13 @@ func ==(lhs: MessageSequence, rhs: MessageSequence) -> Bool {
     return lhs.id == rhs.id
         && lhs.createdAt == rhs.createdAt
         && lhs.updatedAt == rhs.updatedAt
-        && lhs.authorID == rhs.authorID
+        && lhs.authorId == rhs.authorId
 }
 
 extension MessageSequence {
 
     var isCreatedByCurrentUser: Bool {
         guard let user = User.current() else { return false }
-        return user.objectId == self.authorID
+        return user.objectId == self.authorId
     }
 }

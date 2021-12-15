@@ -51,7 +51,7 @@ extension ChatClient {
 
     private func connectUser(with token: Token) async throws {
 
-        let userId = User.current()?.userObjectID ?? String() as UserId
+        let userId = User.current()?.userObjectId ?? String() as UserId
         var userInfo = UserInfo(id: userId, name: nil, imageURL: nil, extraData: [:])
         userInfo = UserInfo(id: userId,
                             name: User.current()?.fullName,
@@ -121,7 +121,7 @@ extension ChatClient {
         return self.messageController(cid: msg.cid!, messageId: msg.id)
     }
 
-    func message(cid: ConversationID, id: MessageId) -> Message {
+    func message(cid: ConversationId, id: MessageId) -> Message {
         return self.messageController(cid: cid, messageId: id).message!
     }
 }

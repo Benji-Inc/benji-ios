@@ -64,11 +64,11 @@ class ConversationListViewController: ViewController,
     /// A list of conversation members used to filter conversations. We'll only show conversations with this exact set of members.
     private let members: [ConversationMember]
     /// The id of the conversation we should land on when this VC appears.
-    private let startingConversationID: ConversationID?
+    private let startingConversationID: ConversationId?
     private let startingMessageID: MessageId?
 
     init(members: [ConversationMember],
-         startingConversationID: ConversationID?,
+         startingConversationID: ConversationId?,
          startingMessageID: MessageId?) {
 
         self.members = members
@@ -147,13 +147,6 @@ class ConversationListViewController: ViewController,
         KeyboardManager.shared.addKeyboardObservers(with: self.inputAccessoryView)
         self.becomeFirstResponder()
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        KeyboardManager.shared.reset()
-        self.resignFirstResponder()
-    }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -168,6 +161,13 @@ class ConversationListViewController: ViewController,
                 self.subscribeToUpdates()
             }
         }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        KeyboardManager.shared.reset()
+        self.resignFirstResponder()
     }
 
     func updateUI(for state: ConversationUIState) {
@@ -241,7 +241,7 @@ class ConversationListViewController: ViewController,
         self.scrollToConversation(with: startingConversationID, messageID: self.startingMessageID)
     }
 
-    func scrollToConversation(with cid: ConversationID, messageID: MessageId?) {
+    func scrollToConversation(with cid: ConversationId, messageID: MessageId?) {
         guard let conversationIndexPath = self.dataSource.indexPath(for: .conversation(cid)) else { return }
         self.collectionView.scrollToItem(at: conversationIndexPath,
                                          at: .centeredHorizontally,

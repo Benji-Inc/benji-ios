@@ -12,7 +12,7 @@ import Combine
 
 extension PFFileObject: ImageDisplayable {
 
-    var userObjectID: String? {
+    var userObjectId: String? {
         return nil
     }
 

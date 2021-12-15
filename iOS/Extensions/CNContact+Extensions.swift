@@ -75,11 +75,12 @@ extension CNContact {
 }
 
 extension CNContact: Avatar {
+
     var handle: String {
         return ""
     }
 
-    var userObjectID: String? {
+    var userObjectId: String? {
         return nil
     }
 

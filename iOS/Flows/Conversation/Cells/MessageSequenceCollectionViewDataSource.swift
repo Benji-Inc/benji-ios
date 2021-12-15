@@ -21,13 +21,13 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     }
 
     enum ItemType: Hashable {
-        case message(cid: ConversationID, messageID: MessageId)
-        case loadMore(cid: ConversationID)
+        case message(cid: ConversationId, messageID: MessageId)
+        case loadMore(cid: ConversationId)
     }
 
-    var handleTappedMessage: ((ConversationID, MessageId, MessageContentView) -> Void)?
-    var handleEditMessage: ((ConversationID, MessageId) -> Void)?
-    var handleLoadMoreMessages: ((ConversationID) -> Void)?
+    var handleTappedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
+    var handleEditMessage: ((ConversationId, MessageId) -> Void)?
+    var handleLoadMoreMessages: ((ConversationId) -> Void)?
 
     /// If true, push the bottom messages back to prepare for a new message.
     var shouldPrepareToSend = false

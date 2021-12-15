@@ -15,7 +15,7 @@ extension Array where Element == ConversationMember {
 
     var userIDs: [UserId] {
         return self.compactMap { member in
-            return member.userObjectID
+            return member.userObjectId
         }
     }
 }
