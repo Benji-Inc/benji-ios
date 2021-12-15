@@ -26,8 +26,6 @@ class FaceDetectionViewController: ImageCaptureViewController {
     var metalDevice: MTLDevice!
     var metalCommandQueue: MTLCommandQueue!
 
-    //var currentColor = UIColor.red.ciColor
-
     // The Core Image pipeline.
     var ciContext: CIContext!
     var currentCIImage: CIImage? {
