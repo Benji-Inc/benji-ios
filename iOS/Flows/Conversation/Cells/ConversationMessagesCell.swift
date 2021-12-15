@@ -23,7 +23,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
-    private lazy var collectionLayout = MessagesTimeMachineCollectionViewLayout()
+    private(set) lazy var collectionLayout = MessagesTimeMachineCollectionViewLayout()
     lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
         cv.keyboardDismissMode = .interactive
@@ -54,6 +54,8 @@ class ConversationMessagesCell: UICollectionViewCell {
     }
     /// A set of the current event subscriptions. Should be cleared out when the cell is reused.
     private var subscriptions = Set<AnyCancellable>()
+    
+    @Published var incomingTopMostMessage: ChatMessage?
     private var taskPool = TaskPool()
 
     // MARK: - Lifecycle
@@ -83,6 +85,8 @@ class ConversationMessagesCell: UICollectionViewCell {
                 self.conversationController?.loadPreviousMessages()
             }
         }
+        
+        self.collectionLayout.delegate = self
     }
 
     required init?(coder: NSCoder) {
@@ -229,6 +233,18 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
         case .message(cid: let cid, messageID: let messageID):
             self.handleTappedMessage?(cid, messageID, cell.content)
         case .loadMore:
+            break
+        }
+    }
+}
+
+extension ConversationMessagesCell: TimeMachineCollectionViewLayoutDelegate {
+    func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout, updatedFrontmostItemAt indexPath: IndexPath) {
+        guard indexPath.section == 0, let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
+        switch item {
+        case .message(cid: let cid, messageID: let messageID):
+            self.incomingTopMostMessage = ChatClient.shared.message(cid: cid, id: messageID)
+        case .loadMore(_):
             break
         }
     }

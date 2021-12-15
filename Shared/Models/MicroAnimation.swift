@@ -9,14 +9,8 @@
 import Foundation
 
 enum MicroAnimation: String {
-    case pie = "pie_loader"
-    case scrollDown = "scroll_down"
-    case arrow = "arrow"
     case checkbox = "checkbox"
     case error = "error"
     case faceScan = "face_scan"
     case loading = "loading"
-    case plusToX = "plusToX"
-    case lock = "lock"
-    case typing = "typing"
 }

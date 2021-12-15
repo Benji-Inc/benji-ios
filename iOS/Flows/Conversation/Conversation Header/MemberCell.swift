@@ -30,15 +30,23 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
     var currentItem: Member?
 
     let avatarView = AvatarView()
-    private var animationView = AnimationView.with(animation: .typing)
+    
+    lazy var pulseLayer: CAShapeLayer = {
+        let shape = CAShapeLayer()
+        shape.lineWidth = 3
+        shape.lineCap = .round
+        shape.fillColor = UIColor.clear.cgColor
+        shape.cornerRadius = Theme.cornerRadius
+        return shape
+    }()
+    
     override func initializeSubviews() {
         super.initializeSubviews()
 
         self.contentView.clipsToBounds = false
         self.contentView.addSubview(self.avatarView)
-        self.contentView.addSubview(self.animationView)
-
-        self.animationView.loopMode = .loop
+        
+        self.layer.addSublayer(self.pulseLayer)
     }
 
     func configure(with item: Member) {
@@ -59,30 +67,36 @@ class MemberCell: CollectionViewManagerCell, ManageableCell {
 
         self.avatarView.setSize(for: self.contentView.height)
         self.avatarView.centerOnXAndY()
-
-        self.animationView.width = 12
-        self.animationView.height = 6
-        self.animationView.centerOnX()
-        self.animationView.centerY = self.height
-        self.animationView.layer.cornerRadius = 3
-        self.animationView.layer.masksToBounds = true
+        
+        self.pulseLayer.frame = self.avatarView.bounds
+        self.pulseLayer.path = UIBezierPath(roundedRect: self.avatarView.bounds, cornerRadius: Theme.innerCornerRadius).cgPath
+        self.pulseLayer.position = self.avatarView.center
     }
 
     private func beginTyping() {
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.animationView.transform = .identity
-            self.animationView.alpha = 1.0
-        } completion: { _ in
-            self.animationView.play()
-        }
+        self.pulseLayer.removeAllAnimations()
+        self.pulseLayer.strokeColor = Color.white.color.cgColor
+        
+        let scale = CABasicAnimation(keyPath: "transform.scale")
+        scale.toValue = 1.25
+        scale.fromValue = 1.15
+        
+        let fade = CABasicAnimation(keyPath: "opacity")
+        fade.toValue = 1.0
+        fade.fromValue = 0.35
+        
+        let group = CAAnimationGroup()
+        group.animations = [scale, fade]
+        group.duration = 1
+        group.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        group.autoreverses = true
+        group.repeatCount = .infinity
+        
+        self.pulseLayer.add(group, forKey: "pulsing")
     }
 
     private func endTyping() {
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.animationView.transform = CGAffineTransform(scaleX: 0.5, y: 0.5)
-            self.animationView.alpha = 0.0
-        } completion: { _ in
-            self.animationView.stop()
-        }
+        self.pulseLayer.strokeColor = Color.clear.color.cgColor
+        self.pulseLayer.removeAllAnimations()
     }
 }

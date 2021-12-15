@@ -19,17 +19,31 @@ class MembersCollectionViewLayout: UICollectionViewCompositionalLayout {
 
             switch sectionType {
             case .members:
+                
                 // Item
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
+                
+                
                 // Group
-                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.2), heightDimension: .fractionalHeight(1))
+                let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.14), heightDimension: .fractionalHeight(1))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-
+                
                 // Section
                 let section = NSCollectionLayoutSection(group: group)
                 section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: environment.container.contentSize.width.half, bottom: 0, trailing: environment.container.contentSize.width.half)
+                
+                section.visibleItemsInvalidationHandler = { (items, offset, environment) in
+                    items.forEach { item in
+                        let distanceFromCenter = abs((item.frame.midX - offset.x) - environment.container.contentSize.width / 2.0)
+                        let minScale: CGFloat = 0.7
+                        let maxScale: CGFloat = 1.0
+                        let scale = max(maxScale - (distanceFromCenter / environment.container.contentSize.width), minScale)
+                        var transfrom = CGAffineTransform(scaleX: scale, y: scale)
+                        transfrom = transfrom.translatedBy(x: 1.0, y: scale * -1)
+                        item.transform = transfrom
+                    }
+                }
 
                 return section
             }
