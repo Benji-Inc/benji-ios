@@ -154,13 +154,7 @@ class DisplayableImageView: View {
                 self.state = .loading
             }
 
-            let data = try await file.retrieveDataInBackground { [weak self] progress in
-                guard let `self` = self else { return }
-                if self.animationView.microAnimation == .pie {
-                    let time = AnimationProgressTime(progress)
-                    self.animationView.currentProgress = time
-                }
-            }
+            let data = try await file.retrieveDataInBackground { _ in }
 
             guard !Task.isCancelled else { return }
 

@@ -13,7 +13,6 @@ import Localization
 class NavigationBarViewController: ViewController {
 
     private(set) var blurView = BlurView()
-    private(set) var animationView = AnimationView.with(animation: .arrow)
     private(set) var backButton = Button()
     private(set) var titleLabel = Label(font: .display)
     private(set) var descriptionLabel = Label(font: .medium)
@@ -28,9 +27,7 @@ class NavigationBarViewController: ViewController {
         super.initializeViews()
 
         self.view.addSubview(self.blurView)
-        self.animationView.transform = CGAffineTransform(rotationAngle: halfPi * -1)
         self.view.addSubview(self.backButton)
-        self.backButton.set(style: .animation(view: self.animationView))
         self.backButton.didSelect { [unowned self] in
             self.didSelectBackButton()
         }
@@ -47,14 +44,6 @@ class NavigationBarViewController: ViewController {
         self.titleLabel.setText(self.getTitle())
         self.titleLabel.stringCasing = .uppercase
         self.descriptionLabel.setText(self.getDescription())
-
-        self.animationView.alpha = self.shouldShowBackButton() ? 1.0 : 0.0
-
-        if animateBackButton {
-            delay(1.5) {
-                self.animationView.play(fromFrame: 0, toFrame: 160, loopMode: nil, completion: nil)
-            }
-        }
 
         self.view.layoutNow()
     }
