@@ -89,7 +89,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
     // MARK: Data Loading
 
-    override func getAnimationCycle(withData data: [MembersCollectionViewDataSource.SectionType : [MembersCollectionViewDataSource.ItemType]])
+    override func getAnimationCycle(withData data: [MembersSectionType : [MembersItemType]])
     -> AnimationCycle? {
 
         return AnimationCycle(inFromPosition: .inward,

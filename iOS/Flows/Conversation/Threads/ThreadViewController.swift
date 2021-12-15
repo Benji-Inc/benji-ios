@@ -29,6 +29,8 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     var parentMessage: Message? {
         return self.messageController.message
     }
+    /// The reply to show when this view controller initially loads its data.
+    private let startingReplyId: MessageId?
 
     private(set) var conversationController: ConversationController?
 
@@ -66,10 +68,15 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
-    init(channelID: ChannelId, messageID: MessageId) {
+    init(channelID: ChannelId,
+         messageID: MessageId,
+         startingReplyId: MessageId?) {
+
         self.messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
         self.conversationController = ChatClient.shared.channelController(for: channelID,
                                                                              messageOrdering: .topToBottom)
+        self.startingReplyId = startingReplyId
+
         super.init(with: self.threadCollectionView)
 
         self.threadCollectionView.threadLayout.dataSource = self.dataSource
@@ -177,9 +184,16 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
     override func getAnimationCycle(withData data: [MessageSequenceSection : [MessageSequenceItem]])
     -> AnimationCycle? {
 
+        var startMessageIndex =
+        guard let startingReplyId = self.startingReplyId else { return nil }
+        let cid = self.messageController.cid
+
+        let bottomMessages = data[.bottomMessages] ?? []
+        let startMessageIndex
+        = bottomMessages.firstIndex(of: .message(cid: cid, messageID: startingReplyId)) ?? 0
+
         let layout = self.threadCollectionView.threadLayout
-        let itemCount = data[.bottomMessages]?.count ?? 0
-        let scrollToOffset = CGPoint(x: 0, y: layout.itemHeight * CGFloat(itemCount - 1))
+        let scrollToOffset = CGPoint(x: 0, y: layout.itemHeight * CGFloat(startMessageIndex))
         return AnimationCycle(inFromPosition: .inward,
                               outToPosition: .inward,
                               shouldConcatenate: false,
