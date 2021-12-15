@@ -56,6 +56,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     private var subscriptions = Set<AnyCancellable>()
     
     @Published var incomingTopMostMessage: ChatMessage?
+    private var taskPool = TaskPool()
 
     // MARK: - Lifecycle
     override init(frame: CGRect) {
@@ -109,12 +110,13 @@ class ConversationMessagesCell: UICollectionViewCell {
 
     /// Configures the cell to display the given messages. The message sequence should be ordered newest to oldest.
     func set(conversation: Conversation) {
-        defer {
-            // Create a new conversation controller if this is a different conversation than before.
-            if conversation.cid != self.conversation?.cid {
-                let conversationController = ChatClient.shared.channelController(for: conversation.cid)
-                self.conversationController = conversationController
-                self.subscribeToUpdates()
+        // Create a new conversation controller if this is a different conversation than before.
+        if conversation.cid != self.conversation?.cid {
+            let conversationController = ChatClient.shared.channelController(for: conversation.cid)
+            self.conversationController = conversationController
+            self.subscribeToUpdates()
+
+            if conversationController.messages.isEmpty {
                 conversationController.synchronize()
             }
         }
@@ -142,6 +144,9 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.dataSource.shouldPrepareToSend = false
 
         self.subscriptions.removeAll()
+        Task {
+            await self.taskPool.cancelAndRemoveAll()
+        }
 
         // Remove all the items so the next message has a blank slate to work with.
         var snapshot = self.dataSource.snapshot()
@@ -172,6 +177,25 @@ class ConversationMessagesCell: UICollectionViewCell {
                                     itemsToReconfigure: itemsToReconfigure,
                                     showLoadMore: self.shouldShowLoadMore)
             }.store(in: &self.subscriptions)
+    }
+
+    func scrollToMessage(with messageID: MessageId) {
+        guard let conversationController = self.conversationController,
+              let cid = conversationController.cid else { return }
+
+        Task {
+            try? await conversationController.loadNextMessages(including: messageID)
+
+            guard !Task.isCancelled else { return }
+
+            let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageID)
+
+            guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
+
+            guard let yOffset = self.collectionLayout.itemFocusPositions[messageIndexPath] else { return }
+
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: true)
+        }.add(to: self.taskPool)
     }
 
     // MARK: - Drop Zone Helpers

@@ -65,10 +65,15 @@ class ConversationListViewController: FullScreenViewController,
     private let members: [ConversationMember]
     /// The id of the conversation we should land on when this VC appears.
     private let startingConversationID: ConversationID?
+    private let startingMessageID: MessageId?
 
-    init(members: [ConversationMember], startingConversationID: ConversationID?) {
+    init(members: [ConversationMember],
+         startingConversationID: ConversationID?,
+         startingMessageID: MessageId?) {
+
         self.members = members
         self.startingConversationID = startingConversationID
+        self.startingMessageID = startingMessageID
 
         let filter: Filter<ChannelListFilterScope>
         = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
@@ -134,7 +139,7 @@ class ConversationListViewController: FullScreenViewController,
         self.swipeInputDelegate.sendMessageDropZone.top += -clamp(diff, min: 0)
 
         //TODO fix this magic number.
-        self.headerVC.view.alpha = self.collectionView.top < 25 ? 0 : 1.0
+        self.headerVC.view.alpha = self.collectionView.top < 25 ? 0 : 1
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -157,6 +162,7 @@ class ConversationListViewController: FullScreenViewController,
         once(caller: self, token: "initializeCollectionView") {
             Task {
                 self.setupInputHandlers()
+
                 // Initialize the datasource before listening for updates to ensure that the sections
                 // are set up.
                 await self.initializeDataSource()
@@ -230,8 +236,27 @@ class ConversationListViewController: FullScreenViewController,
                                     animationCycle: animationCycle)
 
         self.updateCenterMostCell()
+
+        guard let startingConversationID = startingConversationID else { return }
+
+        self.scrollToConversation(with: startingConversationID, messageID: self.startingMessageID)
     }
 
+    func scrollToConversation(with cid: ConversationID, messageID: MessageId?) {
+        guard let conversationIndexPath = self.dataSource.indexPath(for: .conversation(cid)) else { return }
+        self.collectionView.scrollToItem(at: conversationIndexPath,
+                                         at: .centeredHorizontally,
+                                         animated: true)
+
+
+        guard let messageID = messageID,
+              let cell = self.collectionView.cellForItem(at: conversationIndexPath),
+              let messagesCell = cell as? ConversationMessagesCell else {
+                  return
+              }
+
+        messagesCell.scrollToMessage(with: messageID)
+    }
 
     // MARK: - UICollection Input Handlers
 
@@ -303,12 +328,11 @@ extension ConversationListViewController: MessageSendingViewControllerType {
     }
 
     func getCurrentMessageSequence() -> MessageSequence? {
-        guard let centeredCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell,
-              let cid = centeredCell.conversation?.streamCID else {
-                  return nil
-              }
+        guard let centeredCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
+            return nil
+        }
 
-        return ChatClient.shared.channelController(for: cid).conversation
+        return centeredCell.conversation
     }
 
     func set(messageSequencePreparingToSend: MessageSequence?, reloadData: Bool) {

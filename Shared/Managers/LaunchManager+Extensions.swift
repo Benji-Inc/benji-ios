@@ -27,7 +27,10 @@ extension LaunchManager {
             var link = deepLink
             /// Used to load the initial conversation when a user has downloaded the full app from an app clip
             if let initial = try? await InitialConveration.retrieve() {
-                link?.conversationId = initial.conversationId
+                if let cidString = initial.conversationIDString {
+                    link?.conversationId = try? ConversationID(cid: cidString)
+                }
+
                 link?.deepLinkTarget = .conversation
             }
 
