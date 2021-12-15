@@ -7,7 +7,9 @@
 //
 
 import Foundation
+#if IOS
 import StreamChat
+#endif
 
 protocol DeepLinkable {
     var customMetadata: NSMutableDictionary { get set }
@@ -22,7 +24,7 @@ extension DeepLinkable {
         get {
             return self.customMetadata[key]
         }
-
+        
         set (newValue) {
             self.customMetadata[key] = newValue
         }
@@ -30,7 +32,7 @@ extension DeepLinkable {
 }
 
 extension DeepLinkable {
-
+    
 #if IOS
     var conversationId: ConversationID? {
         get {
@@ -44,7 +46,7 @@ extension DeepLinkable {
             self.customMetadata.setValue(stringCID, forKey: "conversationId")
         }
     }
-
+    
     var messageId: MessageId? {
         get {
             return self.customMetadata.value(forKey: "messageId") as? String
@@ -54,7 +56,7 @@ extension DeepLinkable {
         }
     }
 #endif
-
+    
     var reservationId: String? {
         get {
             return self.customMetadata.value(forKey: "reservationId") as? String
@@ -63,7 +65,7 @@ extension DeepLinkable {
             self.customMetadata.setValue(newValue, forKey: "reservationId")
         }
     }
-
+    
     var reservationCreatorId: String? {
         get {
             return self.customMetadata.value(forKey: ReservationKey.createdBy.rawValue) as? String
@@ -72,7 +74,7 @@ extension DeepLinkable {
             self.customMetadata.setValue(newValue, forKey: ReservationKey.createdBy.rawValue)
         }
     }
-
+    
     var passId: String? {
         get {
             return self.customMetadata.value(forKey: "passId") as? String
