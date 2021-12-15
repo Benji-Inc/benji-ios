@@ -45,6 +45,7 @@ class KeyboardManager {
         self.cancellables.forEach { cancellable in
             cancellable.cancel()
         }
+        self.cancellables.removeAll()
     }
 
     func addKeyboardObservers(with inputAccessoryView: UIView? = nil) {
