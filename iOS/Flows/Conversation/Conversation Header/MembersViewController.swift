@@ -12,6 +12,8 @@ import StreamChat
 class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType, MembersCollectionViewDataSource.ItemType, MembersCollectionViewDataSource>, ActiveConversationable {
 
     var conversationController: ConversationController?
+    
+    private var initialTopMostAuthor: ChatUser?
 
     init() {
         let cv = CollectionView(layout: MembersCollectionViewLayout())
@@ -74,6 +76,16 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
             }
         }).store(in: &self.cancellables)
     }
+    
+    override func handleDataBeingLoaded() {
+        super.handleDataBeingLoaded()
+        
+        /// This is needed because sometimes the author get set before the datasource
+        if let user = self.initialTopMostAuthor,
+           let ip = self.getIndexPath(for: user) {
+            self.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
+        }
+    }
 
     // MARK: Data Loading
 
@@ -106,5 +118,26 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         })
 
         return data
+    }
+    
+    func updateAuthor(for conversation: Conversation, user: ChatUser) {
+        guard let conversationController = self.conversationController, conversation == conversationController.conversation else {
+            /// If the conversation hasn't been set yet, store the user it should scroll too once it does. 
+            self.initialTopMostAuthor = user
+            return
+        }
+        
+        self.initialTopMostAuthor = nil
+        
+        if let ip = self.getIndexPath(for: user) {
+            self.collectionView.scrollToItem(at: ip, at: .centeredHorizontally, animated: true)
+        }
+    }
+    
+    private func getIndexPath(for user: ChatUser) -> IndexPath? {
+        guard let conversationController = self.conversationController else { return nil }
+        let member = Member(displayable: AnyHashableDisplayable.init(user),
+                            conversationController: conversationController)
+        return self.dataSource.indexPath(for: .member(member))
     }
 }

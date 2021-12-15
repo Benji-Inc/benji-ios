@@ -50,7 +50,6 @@ class DiffableCollectionViewController<SectionType: Hashable,
 
         Task {
             await self.loadData()
-            self.handleDataBeingLoaded()
         }.add(to: self.taskPool)
     }
 
@@ -85,6 +84,7 @@ class DiffableCollectionViewController<SectionType: Hashable,
         }
 
         self.collectionView.animationView.stop()
+        self.handleDataBeingLoaded()
     }
 
     func getInitialSnapshot(with dictionary: [SectionType: [ItemType]])

@@ -56,7 +56,7 @@ extension ConversationListViewController {
             .mainSink { [unowned self] state in
                 self.updateUI(for: state)
             }.store(in: &self.cancellables)
-
+        
         self.conversationListController
             .channelsChangesPublisher
             .mainSink { [unowned self] changes in
@@ -87,5 +87,14 @@ extension ConversationListViewController {
                 conversationController.sendKeystrokeEvent()
             }
         }.store(in: &self.cancellables)
+    }
+    
+    func handleTopMessageUpdates(for conversation: Conversation, cell: ConversationMessagesCell) {
+        cell.$incomingTopMostMessage
+            .removeDuplicates()
+            .mainSink { message in
+                guard let author = message?.author else { return }
+                self.headerVC.membersVC.updateAuthor(for: conversation, user: author)
+            }.store(in: &self.cancellables)
     }
 }
