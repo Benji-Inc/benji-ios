@@ -264,6 +264,8 @@ class ConversationListViewController: FullScreenViewController,
 
         guard let message = messageController.message else { return }
 
+        // Determine if this is a reply message or regular message. If it's a reply, select the parent
+        // message so we can open the thread experience.
         if let parentMessageId = message.parentMessageId {
             await messagesCell.scrollToMessage(with: parentMessageId)
             self.selectedMessageView = messagesCell.getBottomFrontmostCell()?.content
