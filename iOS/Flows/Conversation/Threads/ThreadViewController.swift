@@ -181,16 +181,18 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         }
     }
 
-    override func getAnimationCycle(withData data: [MessageSequenceSection : [MessageSequenceItem]])
-    -> AnimationCycle? {
+    override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection,
+                                    MessageSequenceItem>) -> AnimationCycle? {
 
-        var startMessageIndex =
-        guard let startingReplyId = self.startingReplyId else { return nil }
         let cid = self.messageController.cid
 
-        let bottomMessages = data[.bottomMessages] ?? []
-        let startMessageIndex
-        = bottomMessages.firstIndex(of: .message(cid: cid, messageID: startingReplyId)) ?? 0
+        let startMessageIndex: Int
+        if let startingReplyId = self.startingReplyId {
+            startMessageIndex
+            = snapshot.indexOfItem(.message(cid: cid, messageID: startingReplyId)) ?? 0
+        } else {
+            startMessageIndex = self.messageController.replies.count - 1
+        }
 
         let layout = self.threadCollectionView.threadLayout
         let scrollToOffset = CGPoint(x: 0, y: layout.itemHeight * CGFloat(startMessageIndex))

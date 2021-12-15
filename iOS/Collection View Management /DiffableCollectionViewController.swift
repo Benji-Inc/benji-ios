@@ -75,7 +75,7 @@ class DiffableCollectionViewController<SectionType: Hashable,
 
         let snapshot = self.getInitialSnapshot(with: dataDictionary)
 
-        if let animationCycle = self.getAnimationCycle(withData: dataDictionary) {
+        if let animationCycle = self.getAnimationCycle(with: snapshot) {
             await self.dataSource.apply(snapshot,
                                         collectionView: self.collectionView,
                                         animationCycle: animationCycle)
@@ -119,7 +119,9 @@ class DiffableCollectionViewController<SectionType: Hashable,
         fatalError("getAllSections NOT IMPLEMENTED")
     }
 
-    func getAnimationCycle(withData data: [SectionType : [ItemType]]) -> AnimationCycle? {
+    func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<SectionType, ItemType>)
+    -> AnimationCycle? {
+
         return AnimationCycle(inFromPosition: .inward,
                               outToPosition: .inward,
                               shouldConcatenate: true,

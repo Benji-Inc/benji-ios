@@ -97,13 +97,15 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
 
     func presentThread(for channelId: ChannelId, messageId: MessageId) {
         self.removeChild()
+        
         let coordinator = ThreadCoordinator(with: channelId,
                                             messageId: messageId,
+                                            startingReplyId: nil,
                                             router: self.router,
                                             deepLink: self.deepLink)
 
         self.addChildAndStart(coordinator) { [unowned self] _ in
-            self.router.dismiss(source: coordinator.toPresentable())
+            self.router.dismiss(source: self.conversationListVC)
         }
 
         self.router.present(coordinator, source: self.conversationListVC)

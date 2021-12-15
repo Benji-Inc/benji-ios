@@ -13,17 +13,20 @@ class ThreadCoordinator: PresentableCoordinator<Void> {
 
     lazy var threadVC = ThreadViewController(channelID: self.channelId,
                                              messageID: self.messageId,
-                                             startingReplyId: nil)// "B26BE61F-E5EA-40A4-973E-51D7B54D62FA")
+                                             startingReplyId: self.startingReplyId)
     let messageId: MessageId
     let channelId: ChannelId
+    let startingReplyId: MessageId?
 
     init(with channelId: ChannelId,
          messageId: MessageId,
+         startingReplyId: MessageId?,
          router: Router,
          deepLink: DeepLinkable?) {
 
         self.channelId = channelId
         self.messageId = messageId
+        self.startingReplyId = startingReplyId
 
         super.init(router: router, deepLink: deepLink)
     }
