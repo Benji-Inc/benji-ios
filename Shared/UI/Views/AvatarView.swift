@@ -79,7 +79,7 @@ class AvatarView: DisplayableImageView {
         self.imageView.contentMode = .scaleAspectFill
         self.layer.masksToBounds = true
         self.clipsToBounds = true
-        self.setCorner(radius: 5)
+        self.setCorner(radius: Theme.innerCornerRadius)
         self.layer.borderColor = self.borderColor.color.cgColor
         self.layer.borderWidth = 2
         self.set(backgroundColor: .white)
