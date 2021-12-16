@@ -116,14 +116,24 @@ class ConversationListCoordinator: PresentableCoordinator<Void>, ActiveConversat
         let coordinator = PeopleCoordinator(conversationID: conversation.cid,
                                             router: self.router,
                                             deepLink: self.deepLink)
+        
+        /// Because of how the People are presented, we need to properly reset the KeyboardManager.
+        coordinator.toPresentable().dismissHandlers.append { [unowned self] in
+            KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
+            self.conversationListVC.becomeFirstResponder()
+        }
 
         self.addChildAndStart(coordinator) { [unowned self] connections in
-            self.router.dismiss(source: coordinator.toPresentable(), animated: false) {
+            self.router.dismiss(source: coordinator.toPresentable(), animated: true) {
+                KeyboardManager.shared.addKeyboardObservers(with: self.conversationListVC.inputAccessoryView)
                 self.conversationListVC.becomeFirstResponder()
+                self.add(connections: connections, to: conversation)
             }
-
-            self.add(connections: connections, to: conversation)
         }
+        
+        /// We don't get a will disappear call on the list, so we have to call it here.
+        KeyboardManager.shared.reset()
+        self.conversationListVC.resignFirstResponder()
         self.router.present(coordinator, source: self.conversationListVC)
     }
 

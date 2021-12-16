@@ -46,7 +46,7 @@ class ConnectionCell: CollectionViewManagerCell, ManageableCell {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.avatarView.setSize(for: self.contentView.height)
+        self.avatarView.setSize(for: self.contentView.width)
         self.avatarView.pin(.top)
         self.avatarView.centerOnX()
 

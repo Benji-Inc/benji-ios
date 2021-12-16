@@ -33,11 +33,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     private let errorView = ErrorView()
     private var errorOffset: CGFloat = -100
 
-    private lazy var cameraVC: FaceDetectionViewController = {
-        let vc: FaceDetectionViewController = UIStoryboard(name: "FaceDetection", bundle: nil).instantiateViewController(withIdentifier: "FaceDetection") as! FaceDetectionViewController
-
-        return vc
-    }()
+    private lazy var cameraVC = FaceDetectionViewController()
 
     private lazy var smilingDisclosureVC: FaceDisclosureViewController = {
         let vc = FaceDisclosureViewController(with: .smiling)
