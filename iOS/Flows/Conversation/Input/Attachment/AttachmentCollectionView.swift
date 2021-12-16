@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class EmptyAttachmentView: View {
+class EmptyAttachmentView: BaseView {
     let button = Button()
 
     override func initializeSubviews() {

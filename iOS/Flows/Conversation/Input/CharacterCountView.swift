@@ -8,7 +8,7 @@
 
 import Foundation
 
-class CharacterCountView: View {
+class CharacterCountView: BaseView {
 
     let label = Label(font: .small)
 

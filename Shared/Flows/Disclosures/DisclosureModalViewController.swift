@@ -19,7 +19,7 @@ class DisclosureModalViewController: ViewController {
     private let blurView = BlurView()
     let titleLabel = Label(font: .display)
     let descriptionLabel = Label(font: .regular)
-    let contentView = View()
+    let contentView = BaseView()
 
     override func initializeViews() {
         super.initializeViews()

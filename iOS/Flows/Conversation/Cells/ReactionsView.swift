@@ -11,7 +11,7 @@ import Foundation
 import StreamChat
 #endif
 
-class ReactionsView: View {
+class ReactionsView: BaseView {
 
     let label = Label(font: .small)
     let imageView = DisplayableImageView()

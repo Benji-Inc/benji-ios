@@ -11,7 +11,7 @@ import Combine
 import StreamChat
 
 @MainActor
-class ConversationContentView: View {
+class ConversationContentView: BaseView {
 
     let stackedAvatarView = StackedAvatarView()
     let label = Label(font: .medium, textColor: .textColor)

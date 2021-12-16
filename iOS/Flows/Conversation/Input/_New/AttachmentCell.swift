@@ -13,7 +13,7 @@ class AttachmentCell: CollectionViewManagerCell, ManageableCell {
     typealias ItemType = Attachment
 
     private let imageView = DisplayableImageView()
-    private let selectedView = View()
+    private let selectedView = BaseView()
     var currentItem: Attachment?
 
     override func initializeSubviews() {

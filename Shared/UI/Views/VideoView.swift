@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 
-class VideoView: View {
+class VideoView: BaseView {
 
     enum Repeat {
         case once

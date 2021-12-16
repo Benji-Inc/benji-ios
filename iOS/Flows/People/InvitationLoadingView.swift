@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Localization
 
-class InvitationLoadingView: View {
+class InvitationLoadingView: BaseView {
 
     let blurView = BlurView()
     let avatarView = AvatarView()

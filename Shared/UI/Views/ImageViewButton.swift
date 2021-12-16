@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ImageViewButton: View {
+class ImageViewButton: BaseView {
 
     let imageView = UIImageView()
 
