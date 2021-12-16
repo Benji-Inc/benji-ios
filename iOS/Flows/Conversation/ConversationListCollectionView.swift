@@ -65,7 +65,10 @@ extension ConversationListCollectionView: MessageSendingCollectionViewType {
     }
 
     func getNewConversationContentOffset() -> CGPoint {
-        let xOffset = -self.width + self.conversationLayout.minimumLineSpacing
-        return CGPoint(x: xOffset, y: 0)
+        let proposedXOffset = self.conversationLayout.collectionViewContentSize.width - self.width
+        let proposedOffset = CGPoint(x: proposedXOffset, y: 0)
+
+        return self.conversationLayout.targetContentOffset(forProposedContentOffset: proposedOffset,
+                                                           withScrollingVelocity: .zero)
     }
 }
