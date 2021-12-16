@@ -10,9 +10,9 @@ import Foundation
 import Combine
 import Localization
 
-class ConnectionRequestView: View {
+class ConnectionRequestView: BaseView {
 
-    private let containerView = View()
+    private let containerView = BaseView()
 
     private let avatarView = AvatarView()
     private let textView = TextView()

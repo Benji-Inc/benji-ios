@@ -9,7 +9,7 @@
 import Foundation
 
 /// A view used by the conversation VC to designate where to drag and drop new messages.
-class MessageDropZoneView: View {
+class MessageDropZoneView: BaseView {
 
     enum State {
         case reply

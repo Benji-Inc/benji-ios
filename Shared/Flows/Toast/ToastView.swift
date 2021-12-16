@@ -23,7 +23,7 @@ protocol ToastViewable {
     init(with toast: Toast)
 }
 
-class ToastView: View, ToastViewable {
+class ToastView: BaseView, ToastViewable {
 
     var toast: Toast
     var didPrepareForPresentation: () -> Void = {}

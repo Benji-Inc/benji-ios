@@ -12,7 +12,7 @@ import Foundation
 class FullScreenViewController: ViewController {
 
     // A view to insert content. Takes up the space below the custom nav bar
-    let contentContainer = View()
+    let contentContainer = BaseView()
 
     override func initializeViews() {
         super.initializeViews()

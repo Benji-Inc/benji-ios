@@ -22,7 +22,7 @@ extension TransitionRouter {
             let viewCenter = presentedView.center
             let viewSize = presentedView.size
 
-            let circle = View()
+            let circle = BaseView()
             circle.frame = self.frameForCircle(withViewCenter: viewCenter, size: viewSize, startPoint: startingPoint)
 
             circle.layer.cornerRadius = circle.halfHeight

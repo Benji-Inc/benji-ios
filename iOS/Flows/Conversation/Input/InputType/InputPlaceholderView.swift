@@ -8,7 +8,7 @@
 
 import Foundation
 
-class InputPlaceholderView: View {
+class InputPlaceholderView: BaseView {
 
     let label = Label(font: .mediumBold)
 

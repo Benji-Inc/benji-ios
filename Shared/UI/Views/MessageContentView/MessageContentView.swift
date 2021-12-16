@@ -13,7 +13,7 @@ import SwiftUI
 import StreamChat
 #endif
 
-class MessageContentView: View {
+class MessageContentView: BaseView {
 
     #if IOS
     var handleTappedMessage: ((ConversationId, MessageId) -> Void)?

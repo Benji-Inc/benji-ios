@@ -12,7 +12,7 @@ import UIKit
 import Combine
 import Lottie
 
-class DisplayableImageView: View {
+class DisplayableImageView: BaseView {
 
     private(set) var imageView = UIImageView()
     var cancellables = Set<AnyCancellable>()

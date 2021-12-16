@@ -8,9 +8,9 @@
 
 import Foundation
 
-class AnimatingTapView: View {
+class AnimatingTapView: BaseView {
 
-    private let circleView = View()
+    private let circleView = BaseView()
     var startingPoint: CGPoint = .zero
 
     override func initializeSubviews() {

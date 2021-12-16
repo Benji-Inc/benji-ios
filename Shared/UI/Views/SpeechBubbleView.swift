@@ -11,7 +11,7 @@ import UIKit
 
 /// A view that has a rounded rectangular "speech bubble" background.
 /// The bubble has two parts: The bubble itself, and a triangular "tail" positioned on one of four sides.
-class SpeechBubbleView: View {
+class SpeechBubbleView: BaseView {
 
     enum TailOrientation {
         case up

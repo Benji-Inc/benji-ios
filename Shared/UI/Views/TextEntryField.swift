@@ -9,7 +9,7 @@
 import Foundation
 import Localization
  
-class TextEntryField: View, Sizeable {
+class TextEntryField: BaseView, Sizeable {
 
     private(set) var textField: UITextField
     private let placeholder: Localized?

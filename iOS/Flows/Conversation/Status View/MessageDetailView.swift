@@ -10,7 +10,7 @@ import Foundation
 import StreamChat
 import Combine
 
-class MessageDetailView: View {
+class MessageDetailView: BaseView {
 
     static let height: CGFloat = 20
 

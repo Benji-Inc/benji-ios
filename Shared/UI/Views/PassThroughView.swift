@@ -8,7 +8,7 @@
 
 import Foundation
 
-class PassThroughView: View {
+class PassThroughView: BaseView {
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         return false
     }

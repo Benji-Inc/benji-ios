@@ -57,7 +57,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
         return vc
     }()
 
-    private var tapView = View()
+    private var tapView = BaseView()
 
     private let animationView = AnimationView.with(animation: .faceScan)
     private var previousScanState: PhotoState = .scanEyesOpen
@@ -329,7 +329,7 @@ class PhotoViewController: ViewController, Sizeable, Completable {
     }
 }
 
-private class ErrorView: View {
+private class ErrorView: BaseView {
 
     let label = Label(font: .smallBold, textColor: .red)
     private let blurView = BlurView()

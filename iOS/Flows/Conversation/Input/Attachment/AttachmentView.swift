@@ -9,7 +9,7 @@
 import Foundation
 import Combine
 
-class AttachmentView: View {
+class AttachmentView: BaseView {
 
     private let imageView = DisplayableImageView()
     private var cancellables = Set<AnyCancellable>()

@@ -13,7 +13,7 @@ class PeopleHeaderView: UICollectionReusableView {
     let titleLabel = Label(font: .regularBold)
     let descriptionLabel = Label(font: .small)
     /// Place all views under the lineView
-    let lineView = View()
+    let lineView = BaseView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)

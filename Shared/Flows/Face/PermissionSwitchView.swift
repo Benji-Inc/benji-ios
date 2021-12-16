@@ -10,7 +10,7 @@ import Foundation
 import Combine
 import Localization
 
-class PermissionSwitchView: View {
+class PermissionSwitchView: BaseView {
 
     private var cancellables = Set<AnyCancellable>()
 
