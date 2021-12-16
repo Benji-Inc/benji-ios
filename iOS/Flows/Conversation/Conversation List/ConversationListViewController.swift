@@ -227,14 +227,14 @@ class ConversationListViewController: ViewController {
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
 
-        if let item = self.dataSource.itemIdentifier(for: startingIndexPath) {
-            switch item {
-            case .conversation(let cid):
-                self.update(withCenteredConversation: cid)
-            case .loadMore, .newConversation:
-                self.update(withCenteredConversation: nil)
-            }
-        }
+//        if let item = self.dataSource.itemIdentifier(for: startingIndexPath) {
+//            switch item {
+//            case .conversation(let cid):
+//                self.update(withCenteredConversation: cid)
+//            case .loadMore, .newConversation:
+//                self.update(withCenteredConversation: nil)
+//            }
+//        }
 
         guard let startingConversationID = self.startingConversationID else { return }
 
