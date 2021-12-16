@@ -18,8 +18,8 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
     func swipeableInputAccessoryDidBeginSwipe(_ view: SwipeableInputAccessoryView)
     /// The accessory view updated the position of the sendable's preview view's position.
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didUpdate sendable: Sendable,
-                                 withPreviewFrame frame: CGRect)
+                                 didUpdatePreviewFrame frame: CGRect,
+                                 for sendable: Sendable)
     /// The accessory view wants to send the sendable with the preview with the specified frame.
     /// The delegate should return true if the sendable was sent.
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
@@ -310,8 +310,8 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
         guard let sendable = self.sendable, let previewView = self.previewView else { return }
 
         self.delegate?.swipeableInputAccessory(self,
-                                               didUpdate: sendable,
-                                               withPreviewFrame: previewView.frame)
+                                               didUpdatePreviewFrame: previewView.frame,
+                                               for: sendable)
     }
 
     private func handlePanEnded(withOffset panOffset: CGPoint) {

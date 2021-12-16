@@ -111,8 +111,8 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
     }
 
     func swipeableInputAccessory(_ view: SwipeableInputAccessoryView,
-                                 didUpdate sendable: Sendable,
-                                 withPreviewFrame frame: CGRect) {
+                                 didUpdatePreviewFrame frame: CGRect,
+                                 for sendable: Sendable) {
 
         let newSendType = self.getSendMode(forPreviewFrame: frame)
 
@@ -184,7 +184,7 @@ class SwipeableInputAccessoryMessageSender: SwipeableInputAccessoryViewDelegate 
 
     /// Gets the send position for the given preview view frame.
     private func getSendMode(forPreviewFrame frame: CGRect) -> SendMode {
-        guard self.isConversationList else { return .message}
+        guard self.isConversationList else { return .message }
 
         guard let contentContainer = self.contentContainer else {
             return .message

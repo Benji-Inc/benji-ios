@@ -299,7 +299,8 @@ extension ConversationListViewController: MessageSendingViewControllerType {
     }
 
     func getCurrentMessageSequence() -> MessageSequence? {
-        guard let centeredCell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
+        guard let centeredCell
+                = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell else {
             return nil
         }
 
@@ -329,6 +330,9 @@ extension ConversationListViewController: MessageSendingViewControllerType {
                                                                          extraData: [:])
 
                 try await controller.synchronize()
+
+                ConversationsManager.shared.activeConversation = controller.conversation
+
                 try await controller.createNewMessage(with: sendable)
             } catch {
                 logDebug(error)
@@ -337,7 +341,11 @@ extension ConversationListViewController: MessageSendingViewControllerType {
     }
 
     func sendMessage(_ message: Sendable) {
-        guard let cid = self.getCurrentMessageSequence()?.streamCID else { return }
+        guard let cid = self.getCurrentMessageSequence()?.streamCID else {
+            self.createNewConversation(message)
+            return
+        }
+        
         let conversationController = ChatClient.shared.channelController(for: cid)
         Task {
             do {
@@ -348,6 +356,8 @@ extension ConversationListViewController: MessageSendingViewControllerType {
         }.add(to: self.taskPool)
     }
 }
+
+// MARK: - TransitionableViewController
 
 extension ConversationListViewController: TransitionableViewController {
 
