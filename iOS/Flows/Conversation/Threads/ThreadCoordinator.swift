@@ -11,17 +11,22 @@ import StreamChat
 
 class ThreadCoordinator: PresentableCoordinator<Void> {
 
-    lazy var threadVC = ThreadViewController(channelID: self.channelId, messageID: self.messageId)
+    lazy var threadVC = ThreadViewController(channelID: self.channelId,
+                                             messageID: self.messageId,
+                                             startingReplyId: self.startingReplyId)
     let messageId: MessageId
     let channelId: ChannelId
+    let startingReplyId: MessageId?
 
     init(with channelId: ChannelId,
          messageId: MessageId,
+         startingReplyId: MessageId?,
          router: Router,
          deepLink: DeepLinkable?) {
 
         self.channelId = channelId
         self.messageId = messageId
+        self.startingReplyId = startingReplyId
 
         super.init(router: router, deepLink: deepLink)
     }

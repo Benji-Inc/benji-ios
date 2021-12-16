@@ -191,6 +191,24 @@ extension MessageController {
         }
     }
 
+
+    /// Loads new messages from backend after and including the one specified..
+    ///
+    /// - Parameters:
+    ///   - messageId: ID of the message we want to load. You will get also messages `newer` than the provided ID.
+    ///   - limit: Limit for page size.
+    func loadNextReplies(including messageId: MessageId, limit: Int = 25) async throws {
+        try await self.loadNextReplies(after: messageId, limit: limit)
+
+        // If we haven't loaded the specified message,
+        // then it's the next message in the list so load one more.
+        guard !self.replies.contains(where: { message in
+            message.id == messageId
+        }) else { return }
+
+        try await self.loadPreviousReplies(limit: 1)
+    }
+
     /// Loads new messages from backend.
     ///
     /// - Parameters:

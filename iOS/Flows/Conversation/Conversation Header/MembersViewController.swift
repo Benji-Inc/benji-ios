@@ -77,8 +77,8 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
         }).store(in: &self.cancellables)
     }
     
-    override func handleDataBeingLoaded() {
-        super.handleDataBeingLoaded()
+    override func collectionViewDataWasLoaded() {
+        super.collectionViewDataWasLoaded()
         
         /// This is needed because sometimes the author get set before the datasource
         if let user = self.initialTopMostAuthor,
@@ -89,7 +89,9 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
     // MARK: Data Loading
 
-    override func getAnimationCycle() -> AnimationCycle? {
+    override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MembersSectionType, MembersItemType>)
+    -> AnimationCycle? {
+        
         return AnimationCycle(inFromPosition: .inward,
                               outToPosition: .inward,
                               shouldConcatenate: true,

@@ -98,7 +98,6 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
             userMessageItems.append(.loadMore(cid: cid))
         }
 
-
         userMessageItems = userMessageItems.reversed()
         if self.shouldPrepareToSend {
             userMessageItems.append(ItemType.message(cid: cid, messageID: "placeholderMessage"))

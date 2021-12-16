@@ -8,6 +8,9 @@
 
 import Foundation
 
+typealias MembersSectionType = MembersCollectionViewDataSource.SectionType
+typealias MembersItemType = MembersCollectionViewDataSource.ItemType
+
 class MembersCollectionViewDataSource: CollectionViewDataSource<MembersCollectionViewDataSource.SectionType, MembersCollectionViewDataSource.ItemType> {
 
     enum SectionType: Int, CaseIterable {

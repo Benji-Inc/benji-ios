@@ -26,7 +26,7 @@ class ThreadCollectionView: CollectionView {
     }
 
     func getBottomFrontMostCell() -> MessageSubcell? {
-        return self.threadLayout.getBottomFrontMostCell()
+        return self.threadLayout.getBottomFrontmostCell()
     }
 }
 

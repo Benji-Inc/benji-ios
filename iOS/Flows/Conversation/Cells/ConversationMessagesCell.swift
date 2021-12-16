@@ -179,23 +179,28 @@ class ConversationMessagesCell: UICollectionViewCell {
             }.store(in: &self.subscriptions)
     }
 
-    func scrollToMessage(with messageID: MessageId) {
-        guard let conversationController = self.conversationController,
-              let cid = conversationController.cid else { return }
+    func scrollToMessage(with messageId: MessageId) async {
+        let task = Task {
+            guard let conversationController = self.conversationController,
+                  let cid = conversationController.cid else { return }
 
-        Task {
-            try? await conversationController.loadNextMessages(including: messageID)
+            try? await conversationController.loadNextMessages(including: messageId)
 
             guard !Task.isCancelled else { return }
 
-            let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageID)
+            let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageId)
 
             guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
 
             guard let yOffset = self.collectionLayout.itemFocusPositions[messageIndexPath] else { return }
 
             self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: true)
-        }.add(to: self.taskPool)
+
+            await Task.sleep(seconds: Theme.animationDurationStandard)
+        }
+        task.add(to: self.taskPool)
+
+        await task.value
     }
 
     // MARK: - Drop Zone Helpers
@@ -216,8 +221,8 @@ class ConversationMessagesCell: UICollectionViewCell {
         return self.collectionLayout.getDropZoneColor()
     }
 
-    func getBottomFrontMostCell() -> MessageSubcell? {
-        return self.collectionLayout.getBottomFrontMostCell()
+    func getBottomFrontmostCell() -> MessageSubcell? {
+        return self.collectionLayout.getBottomFrontmostCell()
     }
 }
 

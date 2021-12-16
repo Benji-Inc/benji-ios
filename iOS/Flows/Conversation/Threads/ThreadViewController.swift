@@ -26,9 +26,11 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
     /// A controller for the message that all the replies in this thread are responding to.
     let messageController: ChatMessageController
-    var parentMessage: Message! {
+    var parentMessage: Message? {
         return self.messageController.message
     }
+    /// The reply to show when this view controller initially loads its data.
+    private let startingReplyId: MessageId?
 
     private(set) var conversationController: ConversationController?
 
@@ -66,10 +68,15 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
 
     lazy var dismissInteractionController = PanDismissInteractionController(viewController: self)
 
-    init(channelID: ChannelId, messageID: MessageId) {
+    init(channelID: ChannelId,
+         messageID: MessageId,
+         startingReplyId: MessageId?) {
+
         self.messageController = ChatClient.shared.messageController(cid: channelID, messageId: messageID)
         self.conversationController = ChatClient.shared.channelController(for: channelID,
                                                                              messageOrdering: .topToBottom)
+        self.startingReplyId = startingReplyId
+
         super.init(with: self.threadCollectionView)
 
         self.threadCollectionView.threadLayout.dataSource = self.dataSource
@@ -93,15 +100,6 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         self.collectionView.clipsToBounds = false
 
         self.dismissInteractionController.initialize(collectionView: self.collectionView)
-    }
-
-    override func handleDataBeingLoaded() {
-        self.subscribeToUpdates()
-        
-        /// Setting this here fixes issue with recursion during presentation.
-        if let msg = self.messageController.message {
-            self.detailView.configure(with: msg)
-        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -154,7 +152,11 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         do {
             try await self.messageController.loadPreviousReplies()
 
-            guard let cid = self.parentMessage.cid else { return [:] }
+            if let startingReplyId = self.startingReplyId {
+                try await self.messageController.loadNextReplies(including: startingReplyId)
+            }
+
+            let cid = self.messageController.cid
 
             let messages = self.messageController.replies.map { message in
                 return MessageSequenceItem.message(cid: cid, messageID: message.id)
@@ -167,11 +169,55 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
         return data
     }
 
-    override func getAnimationCycle() -> AnimationCycle? {
-        return nil
+    override func collectionViewDataWasLoaded() {
+        super.collectionViewDataWasLoaded()
+
+        self.subscribeToUpdates()
+
+        /// Setting this here fixes issue with recursion during presentation.
+        if let msg = self.messageController.message {
+            self.detailView.configure(with: msg)
+        }
+    }
+
+    override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MessageSequenceSection,
+                                    MessageSequenceItem>) -> AnimationCycle? {
+
+        let cid = self.messageController.cid
+
+        let startMessageIndex: Int
+        if let startingReplyId = self.startingReplyId {
+            startMessageIndex
+            = snapshot.indexOfItem(.message(cid: cid, messageID: startingReplyId)) ?? 0
+        } else {
+            startMessageIndex = self.messageController.replies.count - 1
+        }
+
+        let layout = self.threadCollectionView.threadLayout
+        let scrollToOffset = CGPoint(x: 0, y: layout.itemHeight * CGFloat(startMessageIndex))
+        return AnimationCycle(inFromPosition: .inward,
+                              outToPosition: .inward,
+                              shouldConcatenate: false,
+                              scrollToOffset: scrollToOffset)
+    }
+
+    func scrollToMessage(with messageId: MessageId) {
+        Task {
+            let cid = self.messageController.cid
+
+            try? await self.messageController.loadNextReplies(including: messageId)
+
+            let messageItem = MessageSequenceItem.message(cid: cid, messageID: messageId)
+
+            guard let messageIndexPath = self.dataSource.indexPath(for: messageItem) else { return }
+
+            let threadLayout = self.threadCollectionView.threadLayout
+            guard let yOffset = threadLayout.itemFocusPositions[messageIndexPath] else { return }
+
+            self.collectionView.setContentOffset(CGPoint(x: 0, y: yOffset), animated: true)
+        }
     }
 }
-
 // MARK: - Messaging
 
 extension ThreadViewController: MessageSendingViewControllerType {

@@ -60,7 +60,8 @@ extension ConversationController {
     func loadNextMessages(including messageId: MessageId, limit: Int = 25) async throws {
         try await self.loadNextMessages(after: messageId, limit: limit)
 
-        // If we haven't loaded the specified message, then it's the next message in the list so load one more.
+        // If we haven't loaded the specified message,
+        // then it's the next message in the list so load one more.
         guard !self.messages.contains(where: { message in
             message.id == messageId
         }) else { return }
