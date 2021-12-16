@@ -96,7 +96,7 @@ class ConversationListViewController: ViewController {
 
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
-        self.collectionView.delegate = self
+        self.collectionView.conversationLayout.delegate = self
 
         self.addChild(viewController: self.headerVC, toView: self.view)
         self.subscribeToKeyboardUpdates()
@@ -180,12 +180,7 @@ class ConversationListViewController: ViewController {
         }
     }
 
-    private var previousCenteredCID: ConversationId?
     func update(withCenteredConversation cid: ConversationId?) {
-        guard self.previousCenteredCID != cid else { return }
-
-        self.previousCenteredCID = cid
-
         if let cid = cid {
             let conversation = ChatClient.shared.channelController(for: cid).conversation
             /// Sets the active conversation
@@ -303,26 +298,24 @@ class ConversationListViewController: ViewController {
 
 // MARK: - ConversationListCollectionViewLayoutDelegate
 
-extension ConversationListViewController: UICollectionViewDelegate {
+extension ConversationListViewController: ConversationListCollectionViewLayoutDelegate {
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let contentOffset = scrollView.contentOffset
-        let centeredItem
-        = self.collectionView.conversationLayout.getCenteredItem(forContentOffset: contentOffset)
+    func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
+                                              cidFor indexPath: IndexPath) -> ConversationId? {
 
-        guard let indexPath = centeredItem?.indexPath else {
-            self.update(withCenteredConversation: nil)
-            return
+        let item = self.dataSource.itemIdentifier(for: indexPath)
+        switch item {
+        case .conversation(let cid):
+            return cid
+        case .loadMore, .newConversation, .none:
+            return nil
         }
+    }
 
-        if let item = self.dataSource.itemIdentifier(for: indexPath) {
-            switch item {
-            case .conversation(let cid):
-                self.update(withCenteredConversation: cid)
-            case .loadMore, .newConversation:
-                self.update(withCenteredConversation: nil)
-            }
-        }
+    func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
+                                              didUpdateCentered cid: ConversationId?) {
+
+        self.update(withCenteredConversation: cid)
     }
 }
 
@@ -353,7 +346,6 @@ extension ConversationListViewController: MessageSendingViewControllerType {
             let username = User.current()?.initials ?? ""
             let channelId = ChannelId(type: .messaging, id: username+"-"+UUID().uuidString)
             let userIDs = Set(self.members.userIDs)
-
             do {
                 let controller = try ChatClient.shared.channelController(createChannelWithId: channelId,
                                                                          name: nil,

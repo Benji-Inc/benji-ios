@@ -8,8 +8,18 @@
 
 import Foundation
 
+protocol ConversationListCollectionViewLayoutDelegate: AnyObject {
+    func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
+                                              cidFor indexPath: IndexPath) -> ConversationId?
+    func conversationListCollectionViewLayout(_ layout: ConversationListCollectionViewLayout,
+                                              didUpdateCentered cid: ConversationId?)
+}
+
 /// A custom layout class for conversation collection views. It lays out its contents in a single horizontal row.
 class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
+
+    weak var delegate: ConversationListCollectionViewLayoutDelegate?
+    private var previousCenteredCID: ConversationId?
 
     override init() {
         super.init()
@@ -19,6 +29,12 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.scrollDirection = .horizontal
+    }
+
+    override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
+        self.sendCenterUpdateEventIfNeeded(withContentOffset: newBounds.origin)
+
+        return super.shouldInvalidateLayout(forBoundsChange: newBounds)
     }
 
     override func prepare() {
@@ -42,6 +58,18 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
         self.minimumLineSpacing = Theme.ContentOffset.standard.value
     }
 
+    private func sendCenterUpdateEventIfNeeded(withContentOffset contentOffset: CGPoint) {
+        var cid: ConversationId?
+        if let centeredItem = self.getCenteredItem(forContentOffset: contentOffset) {
+            cid = self.delegate?.conversationListCollectionViewLayout(self,
+                                                                      cidFor: centeredItem.indexPath)
+        }
+        if self.previousCenteredCID != cid {
+            self.previousCenteredCID = cid
+            self.delegate?.conversationListCollectionViewLayout(self, didUpdateCentered: cid)
+        }
+    }
+
     // MARK: - Scrolling Behavior
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
@@ -61,6 +89,8 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
     }
 
     override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint) -> CGPoint {
+        self.sendCenterUpdateEventIfNeeded(withContentOffset: proposedContentOffset)
+
         return self.targetContentOffset(forProposedContentOffset: proposedContentOffset,
                                         withScrollingVelocity: .zero)
     }
