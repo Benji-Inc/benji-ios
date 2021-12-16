@@ -8,9 +8,14 @@
 
 import Foundation
 
+protocol ConversationListCollectionViewLayoutDelegate: AnyObject {
+    func conversationListCollectionViewLayoutDidUpdateCenterCell(_ layout: ConversationListCollectionViewLayout)
+}
+
 /// A custom layout class for conversation collection views. It lays out its contents in a single horizontal row.
-/// If the conversation collectionview's semantic content attribute is rightToLeft, the first cell will be on the far right.
 class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
+
+    weak var delegate: ConversationListCollectionViewLayoutDelegate?
 
     override init() {
         super.init()
@@ -20,11 +25,6 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    // IMPORTANT: Returning true allows us to layout the cells right to left.
-    override var flipsHorizontallyInOppositeLayoutDirection: Bool {
-        return true
     }
     
     override func prepare() {
@@ -46,5 +46,37 @@ class ConversationListCollectionViewLayout: UICollectionViewFlowLayout {
                                          bottom: verticalSpacing,
                                          right: 0)
         self.minimumLineSpacing = Theme.ContentOffset.standard.value
+    }
+
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint,
+                                      withScrollingVelocity velocity: CGPoint) -> CGPoint {
+
+        guard let collectionView = self.collectionView else {
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset,
+                                             withScrollingVelocity: velocity)
+        }
+
+        // Always scroll so that a cell is centered when we stop scrolling.
+        var newXOffset = CGFloat.greatestFiniteMagnitude
+        let targetRect = CGRect(x: proposedContentOffset.x,
+                                y: proposedContentOffset.y,
+                                width: collectionView.width,
+                                height: collectionView.height)
+
+        guard let layoutAttributes = self.layoutAttributesForElements(in: targetRect) else {
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset,
+                                             withScrollingVelocity: velocity)
+        }
+
+        // Find the item whose center is closest to the proposed offset and set that as the new scroll target
+        for elementAttributes in layoutAttributes {
+            let possibleNewOffset = elementAttributes.frame.centerX - collectionView.halfWidth
+            if abs(possibleNewOffset - proposedContentOffset.x) < abs(newXOffset - proposedContentOffset.x) {
+                newXOffset = possibleNewOffset
+            }
+        }
+
+        self.delegate?.conversationListCollectionViewLayoutDidUpdateCenterCell(self)
+        return CGPoint(x: newXOffset, y: proposedContentOffset.y)
     }
 }

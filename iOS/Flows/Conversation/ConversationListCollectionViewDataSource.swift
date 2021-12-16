@@ -78,52 +78,19 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     }
 
     /// Updates the datasource with the passed in array of conversation changes.
-    func update(with changes: [ListChange<Conversation>],
-                conversationController: ConversationListController,
-                collectionView: UICollectionView) async {
-
+    func update(with conversationListController: ConversationListController) async {
         var snapshot = self.snapshot()
 
-        let sectionID = ConversationListSection(conversationsController: conversationController)
+        let sectionID = ConversationListSection(conversationsController: conversationListController)
 
-        // If there's more than one change, reload all of the data.
-        guard changes.count == 1 else {
-            snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
-            snapshot.appendItems(conversationController.conversations.asConversationCollectionItems,
-                                 toSection: sectionID)
-            if !conversationController.hasLoadedAllPreviousChannels {
-                snapshot.appendItems([.loadMore], toSection: sectionID)
-            }
-            await self.apply(snapshot)
-            return
-        }
+        snapshot.setItems(conversationListController.conversations.asConversationCollectionItems,
+                          in: sectionID)
 
-        for change in changes {
-            switch change {
-            case .insert(let conversation, let index):
-                snapshot.insertItems([.conversation(conversation.cid)],
-                                     in: sectionID,
-                                     atIndex: index.item)
-            case .move:
-                snapshot.deleteItems(snapshot.itemIdentifiers(inSection: sectionID))
-                snapshot.appendItems(conversationController.conversations.asConversationCollectionItems,
-                                     toSection: sectionID)
-            case .update(let message, _):
-                snapshot.reconfigureItems([message.asConversationCollectionItem])
-            case .remove(let message, _):
-                snapshot.deleteItems([message.asConversationCollectionItem])
-            }
-        }
-
-        // Only show the load more cell if there are previous messages to load.
-        snapshot.deleteItems([.loadMore])
-        if !conversationController.hasLoadedAllPreviousChannels {
+        if !conversationListController.hasLoadedAllPreviousChannels {
             snapshot.appendItems([.loadMore], toSection: sectionID)
         }
 
-        await Task.onMainActorAsync { [snapshot = snapshot] in
-            self.apply(snapshot)
-        }
+        await self.apply(snapshot)
     }
 
     func set(conversationPreparingToSend: ConversationId?, reloadData: Bool) {

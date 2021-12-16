@@ -24,9 +24,7 @@ enum ConversationUIState {
     }
 }
 
-class ConversationListViewController: ViewController,
-                                      UICollectionViewDelegate,
-                                      UICollectionViewDelegateFlowLayout {
+class ConversationListViewController: ViewController {
 
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
@@ -79,7 +77,7 @@ class ConversationListViewController: ViewController,
         = members.isEmpty ? .containMembers(userIds: [User.current()!.objectId!]) : .containOnlyMembers(members)
 
         let query = ChannelListQuery(filter: filter,
-                                     sort: [Sorting(key: .createdAt, isAscending: false)],
+                                     sort: [Sorting(key: .createdAt, isAscending: true)],
                                      pageSize: .channelsPageSize,
                                      messagesLimit: .messagesPageSize)
         self.conversationListController
@@ -97,7 +95,6 @@ class ConversationListViewController: ViewController,
 
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
-        self.collectionView.delegate = self
 
         self.addChild(viewController: self.headerVC, toView: self.view)
         self.subscribeToKeyboardUpdates()
@@ -131,7 +128,8 @@ class ConversationListViewController: ViewController,
         guard let cell = self.collectionView.getBottomFrontmostCell() else { return }
 
         let cellFrame = self.view.convert(cell.bounds, from: cell)
-        let accessoryFrame = self.view.convert(self.messageInputAccessoryView.bounds, from: self.messageInputAccessoryView)
+        let accessoryFrame = self.view.convert(self.messageInputAccessoryView.bounds,
+                                               from: self.messageInputAccessoryView)
 
         let diff = cellFrame.bottom - accessoryFrame.top
         let value = -clamp(diff, 0, 70)
@@ -220,9 +218,13 @@ class ConversationListViewController: ViewController,
             snapshot.appendItems([.loadMore], toSection: section)
         }
 
-        var startingIndexPath: IndexPath? = nil
+        // Automatically scroll to the latest conversation.
+        var startingIndexPath: IndexPath?
         if let startingConversationID = self.startingConversationID {
             startingIndexPath = snapshot.indexPathOfItem(.conversation(startingConversationID))
+        }
+        if startingIndexPath.isNil {
+            startingIndexPath = IndexPath(item: conversations.count - 1, section: 0)
         }
 
         let animationCycle = AnimationCycle(inFromPosition: .inward,
@@ -293,45 +295,6 @@ class ConversationListViewController: ViewController,
             }
             self.isLoadingConversations = false
         }.add(to: self.taskPool)
-    }
-
-    // MARK: - UIScrollViewDelegate
-
-    func scrollViewWillEndDragging(_ scrollView: UIScrollView,
-                                   withVelocity velocity: CGPoint,
-                                   targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-
-        // Always scroll so that a cell is centered when we stop scrolling.
-        var newXOffset = CGFloat.greatestFiniteMagnitude
-        let targetOffset = targetContentOffset.pointee
-
-        let targetRect = CGRect(x: targetOffset.x,
-                                y: targetOffset.y,
-                                width: scrollView.width,
-                                height: scrollView.height)
-
-        let layout = self.collectionView.conversationLayout
-        guard let layoutAttributes = layout.layoutAttributesForElements(in: targetRect) else { return }
-
-        // Find the item whose center is closest to the proposed offset and set that as the new scroll target
-        for elementAttributes in layoutAttributes {
-            let possibleNewOffset = elementAttributes.frame.centerX - collectionView.halfWidth
-            if abs(possibleNewOffset - targetOffset.x) < abs(newXOffset - targetOffset.x) {
-                newXOffset = possibleNewOffset
-            }
-        }
-
-        targetContentOffset.pointee = CGPoint(x: newXOffset, y: targetOffset.y)
-
-        self.updateCenterMostCell()
-    }
-
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        self.updateCenterMostCell()
-    }
-
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        self.updateCenterMostCell()
     }
 }
 
