@@ -21,7 +21,7 @@ class ReactionsView: BaseView {
 
         self.addSubview(self.imageView)
         self.imageView.displayable = UIImage(systemName: "face.smiling")
-        self.imageView.imageView.tintColor = Color.gray.color
+        self.imageView.imageView.tintColor = ThemeColor.gray.color
         self.imageView.imageView.contentMode = .scaleAspectFit
         self.imageView.isVisible = false
 

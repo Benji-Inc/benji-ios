@@ -39,7 +39,7 @@ class MessageDropZoneView: BaseView {
         self.borderLayer.path = UIBezierPath(roundedRect: self.bounds, cornerRadius: 5).cgPath
     }
 
-    func setState(_ state: State?, messageColor: Color?) {
+    func setState(_ state: State?, messageColor: ThemeColor?) {
         switch state {
         case .reply:
             self.sendTypeLabel.setText("Drop new reply here")
@@ -59,11 +59,11 @@ class MessageDropZoneView: BaseView {
         self.layoutNow()
     }
 
-    func setColors(for messageColor: Color?) {
+    func setColors(for messageColor: ThemeColor?) {
         guard let color = messageColor else {
-            self.borderLayer.strokeColor = Color.white.color.cgColor
+            self.borderLayer.strokeColor = ThemeColor.white.color.cgColor
             self.sendTypeLabel.setTextColor(.white)
-            self.borderLayer.fillColor = Color.clear.color.cgColor
+            self.borderLayer.fillColor = ThemeColor.clear.color.cgColor
             return
         }
 
@@ -71,10 +71,10 @@ class MessageDropZoneView: BaseView {
             self.borderLayer.strokeColor = color.color.cgColor
             self.sendTypeLabel.setTextColor(color)
         } else {
-            self.borderLayer.strokeColor = Color.white.color.cgColor
+            self.borderLayer.strokeColor = ThemeColor.white.color.cgColor
             self.sendTypeLabel.setTextColor(.white)
         }
 
-        self.borderLayer.fillColor = Color.clear.color.cgColor
+        self.borderLayer.fillColor = ThemeColor.clear.color.cgColor
     }
 }

@@ -8,16 +8,23 @@
 
 import SwiftUI
 
-extension Text {
-    func fontType(_ type: FontType) -> some View {
-        self.font(Font(type.font as CTFont))
+struct EmojiContainer: View {
+    var body: some View {
+        ZStack {
+            Text("😋")
+                .foregroundColor(.red)
+        }
     }
 }
 
 struct newEmotionView: View {
     var body: some View {
-        Text("Hello, World youd!")
-            .fontType(.display)
+        HStack {
+            EmojiContainer()
+            Spacer.length(.short)
+            Text("Hello, World youd!")
+                .fontType(.small)
+        }
     }
 }
 

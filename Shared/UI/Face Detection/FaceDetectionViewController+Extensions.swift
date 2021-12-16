@@ -35,7 +35,7 @@ extension FaceDetectionViewController {
     func blend(original framePixelBuffer: CVPixelBuffer,
                        mask maskPixelBuffer: CVPixelBuffer) {
 
-        let color = Color.textColor.color.ciColor
+        let color = ThemeColor.textColor.color.ciColor
         
         // Create CIImage objects for the video frame and the segmentation mask.
         let originalImage = CIImage(cvPixelBuffer: framePixelBuffer).oriented(.leftMirrored)

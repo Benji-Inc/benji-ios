@@ -18,7 +18,7 @@ class ToastErrorView: ToastView {
 
         self.addSubview(self.blurView)
         self.addSubview(self.label)
-        self.backgroundColor = Color.red.color.withAlphaComponent(0.2)
+        self.backgroundColor = ThemeColor.red.color.withAlphaComponent(0.2)
 
         self.label.setText(toast.description)
     }

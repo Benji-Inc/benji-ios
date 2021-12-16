@@ -41,7 +41,7 @@ extension TransitionRouter {
             snapshot.authorView.alpha = 0 
 
             toView.configure(with: message)
-            toView.bubbleView.bubbleColor = Color.white.color
+            toView.bubbleView.bubbleColor = ThemeColor.white.color
             toView.bubbleView.tailLength = 0
             toView.bubbleView.orientation = fromView.bubbleView.orientation
             toView.state = .thread
@@ -75,7 +75,7 @@ extension TransitionRouter {
         Task {
             async let first: () = UIView.awaitSpringAnimation(with: .slow, animations: {
                 snapshot.frame = finalFrame
-                snapshot.bubbleView.bubbleColor = Color.white.color
+                snapshot.bubbleView.bubbleColor = ThemeColor.white.color
                 threadVC.blurView.showBlur(true)
                 self.toVC.view.alpha = 1
             })

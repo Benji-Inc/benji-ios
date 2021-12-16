@@ -82,7 +82,7 @@ private class MessageStatusContainer: BaseView {
 
         self.backgroundColor = UIColor.white.withAlphaComponent(0.1)
         self.layer.cornerRadius = Theme.innerCornerRadius
-        self.layer.borderColor = Color.border.color.cgColor
+        self.layer.borderColor = ThemeColor.border.color.cgColor
         self.layer.borderWidth = 0.25
 
         self.clipsToBounds = true 

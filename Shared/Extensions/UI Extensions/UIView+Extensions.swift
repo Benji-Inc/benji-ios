@@ -100,7 +100,7 @@ extension UIView: Selectable {
         return nil
     }
 
-    func set(backgroundColor: Color) {
+    func set(backgroundColor: ThemeColor) {
         self.backgroundColor = backgroundColor.color
     }
 

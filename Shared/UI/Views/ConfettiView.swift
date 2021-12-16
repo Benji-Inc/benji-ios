@@ -12,10 +12,10 @@ class ConfettiView: BaseView {
 
     var emitter = CAEmitterLayer()
 
-    var colors: [Color] = [
-        Color.darkGray,
-        Color.lightGray,
-        Color.gray]
+    var colors: [ThemeColor] = [
+        ThemeColor.darkGray,
+        ThemeColor.lightGray,
+        ThemeColor.gray]
 
     var velocities:[Int] = [
         100,

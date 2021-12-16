@@ -1,5 +1,5 @@
 //
-//  Color.swift
+//  ThemeColor.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 12/25/18.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-enum Color: String, CaseIterable {
+enum ThemeColor: String, CaseIterable {
 
     case border
     case background

@@ -15,7 +15,7 @@ enum MessageContext: String, CaseIterable {
     case passive = "active"
     case status
 
-    var color: Color {
+    var color: ThemeColor {
         return .white 
     }
 

@@ -19,7 +19,7 @@ class InputTypeCell: CollectionViewManagerCell, ManageableCell {
         super.initializeSubviews()
 
         self.contentView.addSubview(self.imageView)
-        self.imageView.tintColor = Color.lightGray.color
+        self.imageView.tintColor = ThemeColor.lightGray.color
         self.imageView.contentMode = .scaleAspectFit
     }
 

@@ -96,7 +96,7 @@ class OnboardingMessageTextView: TextView {
         self.textAlignment = .center
         self.textContainer.lineBreakMode = .byWordWrapping
         self.isEditable = false
-        self.linkTextAttributes = [.foregroundColor: Color.lightGray.color, .underlineStyle: 0]
+        self.linkTextAttributes = [.foregroundColor: ThemeColor.lightGray.color, .underlineStyle: 0]
         self.lineSpacing = 2
     }
 }

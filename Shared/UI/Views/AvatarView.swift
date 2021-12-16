@@ -13,7 +13,7 @@ class AvatarView: DisplayableImageView {
 
     // MARK: - Properties
 
-    var borderColor: Color = .clear {
+    var borderColor: ThemeColor = .clear {
         didSet {
             self.setBorder(color: self.borderColor)
         }
@@ -119,7 +119,7 @@ class AvatarView: DisplayableImageView {
         self.layer.cornerRadius = radius
     }
 
-    func setBorder(color: Color) {
+    func setBorder(color: ThemeColor) {
         self.layer.borderColor = color.color.cgColor
         self.layer.borderWidth = 2
     }

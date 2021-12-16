@@ -12,11 +12,11 @@ import Combine
 import Localization
 
 enum ButtonStyle {
-    case noborder(image: UIImage, color: Color)
-    case rounded(color: Color, text: Localized)
-    case normal(color: Color, text: Localized)
-    case icon(image: UIImage, color: Color)
-    case shadow(image: UIImage, color: Color)
+    case noborder(image: UIImage, color: ThemeColor)
+    case rounded(color: ThemeColor, text: Localized)
+    case normal(color: ThemeColor, text: Localized)
+    case icon(image: UIImage, color: ThemeColor)
+    case shadow(image: UIImage, color: ThemeColor)
     case animation(view: AnimationView, inset: CGFloat = 8)
 }
 
@@ -31,7 +31,7 @@ class Button: UIButton, Statusable {
                                                  animations: nil)
 
     /// Used to store the initial color of the button to return to from error state
-    var defaultColor: Color?
+    var defaultColor: ThemeColor?
 
     let animationView = AnimationView.with(animation: .loading)
 
@@ -84,13 +84,13 @@ class Button: UIButton, Statusable {
             highlightedString.addAttribute(.font, value: FontType.regularBold.font)
             highlightedString.addAttribute(.kern, value: CGFloat(2))
 
-            normalString.addAttribute(.foregroundColor, value: Color.white.color)
-            highlightedString.addAttribute(.foregroundColor, value: Color.white.color)
+            normalString.addAttribute(.foregroundColor, value: ThemeColor.white.color)
+            highlightedString.addAttribute(.foregroundColor, value: ThemeColor.white.color)
             if color != .clear {
                 self.setBackground(color: color.color.withAlphaComponent(alpha), forUIControlState: .normal)
             }
 
-            self.setBackground(color: Color.clear.color, forUIControlState: .highlighted)
+            self.setBackground(color: ThemeColor.clear.color, forUIControlState: .highlighted)
 
             // Emojis wont show correctly with attributes
             if localizedString.getEmojiRanges().count > 0 {
@@ -111,7 +111,7 @@ class Button: UIButton, Statusable {
             self.setImage(image, for: .normal)
             self.tintColor = color.color
             self.setBackground(color: color.color.withAlphaComponent(alpha), forUIControlState: .normal)
-            self.setBackground(color: Color.clear.color, forUIControlState: .highlighted)
+            self.setBackground(color: ThemeColor.clear.color, forUIControlState: .highlighted)
             self.layer.borderColor = color.color.cgColor
             self.layer.borderWidth = 2
             self.setAttributedTitle(NSMutableAttributedString(string: ""), for: .normal)

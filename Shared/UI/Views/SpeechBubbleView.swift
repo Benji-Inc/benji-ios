@@ -90,7 +90,7 @@ class SpeechBubbleView: BaseView {
         self.borderColor = borderColor
     }
 
-    convenience init(orientation: TailOrientation, bubbleColor: Color, borderColor: Color) {
+    convenience init(orientation: TailOrientation, bubbleColor: ThemeColor, borderColor: ThemeColor) {
         self.init(orientation: orientation, bubbleColor: bubbleColor.color, borderColor: borderColor.color)
     }
 
@@ -99,8 +99,8 @@ class SpeechBubbleView: BaseView {
 
         super.init(coder: aDecoder)
 
-        self.bubbleColor = Color.white.color
-        self.borderColor = Color.white.color
+        self.bubbleColor = ThemeColor.white.color
+        self.borderColor = ThemeColor.white.color
     }
 
     override func initializeSubviews() {

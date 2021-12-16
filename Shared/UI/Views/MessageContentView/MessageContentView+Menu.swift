@@ -122,7 +122,7 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
 
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
         let params = UIPreviewParameters()
-        params.backgroundColor = Color.clear.color
+        params.backgroundColor = ThemeColor.clear.color
         params.shadowPath = UIBezierPath.init(rect: .zero)
         if let bubble = interaction.view as? SpeechBubbleView, let path = bubble.bubbleLayer.path {
             params.visiblePath = UIBezierPath.init(cgPath: path)

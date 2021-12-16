@@ -339,7 +339,7 @@ private class ErrorView: BaseView {
 
         self.addSubview(self.blurView)
         self.addSubview(self.label)
-        self.backgroundColor = Color.red.color.withAlphaComponent(0.8)
+        self.backgroundColor = ThemeColor.red.color.withAlphaComponent(0.8)
     }
 
     override func layoutSubviews() {

@@ -51,7 +51,7 @@ extension ConversationListCollectionView: MessageSendingCollectionViewType {
 
     // MARK: - MessageSendingCollectionView
 
-    func getDropZoneColor() -> Color? {
+    func getDropZoneColor() -> ThemeColor? {
         guard let centerCell = self.getCentermostVisibleCell() as? ConversationMessagesCell else {
             return nil
         }

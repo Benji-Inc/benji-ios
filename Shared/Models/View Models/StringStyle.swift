@@ -10,10 +10,10 @@ import Foundation
 
 struct StringStyle {
     var fontType: FontType
-    var color: Color
+    var color: ThemeColor
 
     init(font: FontType = .regular,
-         color: Color) {
+         color: ThemeColor) {
 
         self.fontType = font
         self.color = color
