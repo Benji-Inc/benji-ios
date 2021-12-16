@@ -23,6 +23,7 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     enum ItemType: Hashable {
         case conversation(ConversationId)
         case loadMore
+        case newConversation
     }
 
     var handleSelectedMessage: ((ConversationId, MessageId, MessageContentView) -> Void)?
@@ -45,6 +46,8 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
     = ConversationListCollectionViewDataSource.createConversationCellRegistration()
     private let loadMoreMessagesCellRegistration
     = ConversationListCollectionViewDataSource.createLoadMoreCellRegistration()
+    private let newConversationCellRegistration
+    = ConversationListCollectionViewDataSource.createNewConversationCellRegistration()
 
     override func dequeueCell(with collectionView: UICollectionView,
                               indexPath: IndexPath,
@@ -69,28 +72,46 @@ class ConversationListCollectionViewDataSource: CollectionViewDataSource<Convers
             let loadMoreCell
             = collectionView.dequeueConfiguredReusableCell(using: self.loadMoreMessagesCellRegistration,
                                                            for: indexPath,
-                                                           item: String())
+                                                           item: self)
             loadMoreCell.handleLoadMoreMessages = { [unowned self] in
                 self.handleLoadMoreMessages?()
             }
             return loadMoreCell
+        case .newConversation:
+            let newConversationCell
+            = collectionView.dequeueConfiguredReusableCell(using: self.newConversationCellRegistration,
+                                                           for: indexPath,
+                                                           item: self)
+            return newConversationCell
         }
     }
 
     /// Updates the datasource with the passed in array of conversation changes.
     func update(with conversationListController: ConversationListController) async {
+        let updatedSnapshot = self.updatedSnapshot(with: conversationListController)
+        await self.apply(updatedSnapshot)
+    }
+
+    func updatedSnapshot(with conversationListController: ConversationListController)
+    -> NSDiffableDataSourceSnapshot<ConversationListSection, ConversationListItem> {
+
         var snapshot = self.snapshot()
 
         let sectionID = ConversationListSection(conversationsController: conversationListController)
 
-        snapshot.setItems(conversationListController.conversations.asConversationCollectionItems,
-                          in: sectionID)
+        var updatedItems: [ConversationListItem] = []
 
-        if !conversationListController.hasLoadedAllPreviousChannels {
-            snapshot.appendItems([.loadMore], toSection: sectionID)
+        if !conversationListController.hasLoadedAllPreviousChannels
+            && conversationListController.conversations.count > 0 {
+
+            updatedItems.append(.loadMore)
         }
+        updatedItems.append(contentsOf: conversationListController.conversations.asConversationCollectionItems)
+        updatedItems.append(.newConversation)
 
-        await self.apply(snapshot)
+        snapshot.setItems(updatedItems, in: sectionID)
+
+        return snapshot
     }
 
     func set(conversationPreparingToSend: ConversationId?, reloadData: Bool) {
@@ -112,7 +133,10 @@ extension ConversationListCollectionViewDataSource {
                                          dataSource: ConversationListCollectionViewDataSource)>
 
     typealias LoadMoreMessagesCellRegistration
-    = UICollectionView.CellRegistration<LoadMoreMessagesCell, String>
+    = UICollectionView.CellRegistration<LoadMoreMessagesCell, ConversationListCollectionViewDataSource>
+
+    typealias NewConversationCellRegistration
+    = UICollectionView.CellRegistration<NewMessageCell, ConversationListCollectionViewDataSource>
 
     static func createConversationCellRegistration() -> ConversationCellRegistration {
         return ConversationCellRegistration { cell, indexPath, item in
@@ -131,6 +155,10 @@ extension ConversationListCollectionViewDataSource {
 
     static func createLoadMoreCellRegistration() -> LoadMoreMessagesCellRegistration {
         return LoadMoreMessagesCellRegistration { cell, indexPath, itemIdentifier in }
+    }
+
+    static func createNewConversationCellRegistration() -> NewConversationCellRegistration {
+        return NewConversationCellRegistration { cell, indexPath, itemIdentifier in }
     }
 }
 

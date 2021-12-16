@@ -208,15 +208,7 @@ class ConversationListViewController: ViewController {
 
         let conversations = self.conversationListController.conversations
 
-        var snapshot = self.dataSource.snapshot()
-
-        let section = ConversationListSection(conversationsController: self.conversationListController)
-        snapshot.appendSections([section])
-        snapshot.appendItems(conversations.asConversationCollectionItems)
-
-        if !self.conversationListController.hasLoadedAllPreviousChannels && conversations.count > 0 {
-            snapshot.appendItems([.loadMore], toSection: section)
-        }
+        let snapshot = self.dataSource.updatedSnapshot(with: self.conversationListController)
 
         // Automatically scroll to the latest conversation.
         var startingIndexPath: IndexPath?
@@ -238,7 +230,7 @@ class ConversationListViewController: ViewController {
 
         self.updateCenterMostCell()
 
-        guard let startingConversationID = startingConversationID else { return }
+        guard let startingConversationID = self.startingConversationID else { return }
 
         Task {
             await self.scrollToConversation(with: startingConversationID, messageID: self.startingMessageID)
