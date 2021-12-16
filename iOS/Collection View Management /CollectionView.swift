@@ -24,7 +24,7 @@ class CollectionView: UICollectionView {
     }
 
     func initializeViews() {
-        let backView = View()
+        let backView = BaseView()
         backView.set(backgroundColor: .clear)
         self.backgroundView = backView
         backView.addSubview(self.animationView)

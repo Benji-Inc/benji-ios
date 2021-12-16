@@ -8,7 +8,7 @@
 
 import Foundation
 
-class ConfettiView: View {
+class ConfettiView: BaseView {
 
     var emitter = CAEmitterLayer()
 

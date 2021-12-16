@@ -10,9 +10,9 @@ import Foundation
 import UIKit
 import StreamChat
 
-class EmotionView: View {
+class EmotionView: BaseView {
     
-    let emojiContainer = View()
+    let emojiContainer = BaseView()
     let emojiLabel = Label(font: .small)
     
     let label = Label(font: .small)

@@ -1,5 +1,5 @@
 //
-//  View.swift
+//  BaseView.swift
 //  Benji
 //
 //  Created by Benji Dodgson on 12/25/18.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class View: UIView {
+class BaseView: UIView {
 
     private var _taskPool: TaskPool? = nil
     /// A collection of tasks that this view might run. Tasks added to the pool will automatically be cancelled if this view is removed from a window.

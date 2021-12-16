@@ -30,7 +30,7 @@ protocol SwipeableInputAccessoryViewDelegate: AnyObject {
                                  didFinishSwipeSendingSendable didSend: Bool)
 }
 
-class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConversationable {
+class SwipeableInputAccessoryView: BaseView, UIGestureRecognizerDelegate, ActiveConversationable {
 
     weak var delegate: SwipeableInputAccessoryViewDelegate?
 
@@ -70,7 +70,7 @@ class SwipeableInputAccessoryView: View, UIGestureRecognizerDelegate, ActiveConv
 
     var cancellables = Set<AnyCancellable>()
 
-    // MARK: View Setup and Layout
+    // MARK: BaseView Setup and Layout
 
     // Override intrinsic content size so that height is adjusted for safe areas and text input.
     // https://stackoverflow.com/questions/46282987/iphone-x-how-to-handle-view-controller-inputaccessoryview

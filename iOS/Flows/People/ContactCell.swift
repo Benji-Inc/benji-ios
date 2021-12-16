@@ -18,7 +18,7 @@ class ContactCell: CollectionViewManagerCell, ManageableCell {
     private let titleLabel = Label(font: .regularBold, textColor: .textColor)
     private let subTitleLabel = Label(font: .small, textColor: .textColor)
     private let animationView = AnimationView.with(animation: .checkbox)
-    private let content = View()
+    private let content = BaseView()
 
     var didTapButton: CompletionOptional = nil
     var currentItem: Contact?

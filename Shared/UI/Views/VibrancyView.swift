@@ -8,7 +8,7 @@
 
 import Foundation
 
-class VibrancyView: View {
+class VibrancyView: BaseView {
 
     let blurView = BlurView()
     let effectView = VisualEffectView()

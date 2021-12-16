@@ -8,7 +8,7 @@
 
 import Foundation
 
-class StackedAvatarView: View {
+class StackedAvatarView: BaseView {
 
     private var imageViews: [AvatarView] = []
     private let maxItems: Int = 3

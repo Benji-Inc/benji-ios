@@ -9,7 +9,7 @@
 import Foundation
 import Localization
  
-class AlertConfirmationView: View {
+class AlertConfirmationView: BaseView {
 
     private let label = Label(font: .regular)
     let button = Button()

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class DeliveryTypeView: View {
+class DeliveryTypeView: BaseView {
 
     let label = Label(font: .small)
     let button = Button()

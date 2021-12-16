@@ -11,7 +11,7 @@ import StreamChat
 import Combine
 import Localization
 
-class MessageStatusView: View {
+class MessageStatusView: BaseView {
 
     private let readView = MessageReadView()
     private let replyView = MessageReplyView()
@@ -72,7 +72,7 @@ class MessageStatusView: View {
     }
 }
 
-private class MessageStatusContainer: View {
+private class MessageStatusContainer: BaseView {
 
     let maxWidth: CGFloat = 200
     let minWidth: CGFloat = 20
@@ -93,7 +93,7 @@ private class MessageReadView: MessageStatusContainer {
 
     let imageView = UIImageView()
     let label = Label(font: .small)
-    let progressView = View()
+    let progressView = BaseView()
     private(set) var animator: UIViewPropertyAnimator?
 
     override func initializeSubviews() {
