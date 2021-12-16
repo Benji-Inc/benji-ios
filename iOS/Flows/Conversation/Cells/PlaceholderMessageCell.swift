@@ -8,7 +8,7 @@
 
 import Foundation
 
-class NewMessageCell: UICollectionViewCell {
+class PlaceholderMessageCell: UICollectionViewCell {
 
     let dropZoneView = MessageDropZoneView()
 

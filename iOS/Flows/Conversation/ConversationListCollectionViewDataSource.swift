@@ -136,7 +136,7 @@ extension ConversationListCollectionViewDataSource {
     = UICollectionView.CellRegistration<LoadMoreMessagesCell, ConversationListCollectionViewDataSource>
 
     typealias NewConversationCellRegistration
-    = UICollectionView.CellRegistration<NewMessageCell, ConversationListCollectionViewDataSource>
+    = UICollectionView.CellRegistration<PlaceholderMessageCell, ConversationListCollectionViewDataSource>
 
     static func createConversationCellRegistration() -> ConversationCellRegistration {
         return ConversationCellRegistration { cell, indexPath, item in
