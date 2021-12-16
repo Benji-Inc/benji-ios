@@ -80,7 +80,7 @@ class AttachmentViewController: ViewController {
                     await self.loadInitialAttachmentData()
                 }
             } catch {
-                logDebug(error)
+                logError(error)
             }
         }
     }

@@ -163,7 +163,7 @@ class ThreadViewController: DiffableCollectionViewController<MessageSequenceSect
             }
             data[.bottomMessages] = Array(messages)
         } catch {
-            logDebug(error)
+            logError(error)
         }
         
         return data
@@ -245,7 +245,7 @@ extension ThreadViewController: MessageSendingViewControllerType {
             do {
                 try await self.messageController.createNewReply(with: message)
             } catch {
-                logDebug(error)
+                logError(error)
             }
         }
     }

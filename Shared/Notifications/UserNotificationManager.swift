@@ -86,7 +86,7 @@ class UserNotificationManager: NSObject {
 
             return granted
         } catch {
-            logDebug(error)
+            logError(error)
             return false
         }
     }

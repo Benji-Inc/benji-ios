@@ -195,7 +195,7 @@ extension Reservation: UIActivityItemSource {
                 return []
             }
         } catch {
-            logDebug(error)
+            logError(error)
             return []
         }
     }

@@ -23,7 +23,7 @@ class ConversationMessagesCell: UICollectionViewCell {
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
-    @Published var incomingTopMostMessage: ChatMessage?
+    @Published var incomingTopmostMessage: ChatMessage?
 
     // CollectionView
     private(set) lazy var collectionLayout = MessagesTimeMachineCollectionViewLayout()
@@ -246,11 +246,14 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
 }
 
 extension ConversationMessagesCell: TimeMachineCollectionViewLayoutDelegate {
-    func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout, updatedFrontmostItemAt indexPath: IndexPath) {
+
+    func timeMachineCollectionViewLayout(_ layout: TimeMachineCollectionViewLayout,
+                                         updatedFrontmostItemAt indexPath: IndexPath) {
+        
         guard indexPath.section == 0, let item = self.dataSource.itemIdentifier(for: indexPath) else { return }
         switch item {
         case .message(cid: let cid, messageID: let messageID):
-            self.incomingTopMostMessage = ChatClient.shared.message(cid: cid, id: messageID)
+            self.incomingTopmostMessage = ChatClient.shared.message(cid: cid, id: messageID)
         case .loadMore(_):
             break
         }

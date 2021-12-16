@@ -13,6 +13,6 @@ func logDebug(_ message: String) {
     Logger().log(level: .debug, "🟡 === \(message)")
 }
 
-func logDebug(_ error: Error) {
+func logError(_ error: Error) {
     Logger().log(level: .debug, "🔴 === \(error.localizedDescription)")
 }

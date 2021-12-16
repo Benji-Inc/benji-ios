@@ -211,7 +211,7 @@ private class MessageReadView: MessageStatusContainer {
                 try await message.setToConsumed()
             }
             catch {
-                logDebug(error)
+                logError(error)
             }
         }.add(to: self.taskPool)
     }

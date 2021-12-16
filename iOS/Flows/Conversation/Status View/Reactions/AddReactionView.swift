@@ -83,7 +83,7 @@ class AddReactionView: UICollectionReusableView {
             do {
                 try await controller.addReaction(with: reaction)
             } catch {
-                logDebug(error)
+                logError(error)
             }
         }.add(to: self.taskPool)
     }

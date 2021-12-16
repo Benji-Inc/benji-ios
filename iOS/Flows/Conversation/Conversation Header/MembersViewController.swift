@@ -9,7 +9,10 @@
 import Foundation
 import StreamChat
 
-class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType, MembersCollectionViewDataSource.ItemType, MembersCollectionViewDataSource>, ActiveConversationable {
+class MembersViewController: DiffableCollectionViewController<MembersCollectionViewDataSource.SectionType,
+                             MembersCollectionViewDataSource.ItemType,
+                             MembersCollectionViewDataSource>,
+                             ActiveConversationable {
 
     var conversationController: ConversationController?
     
@@ -91,7 +94,7 @@ class MembersViewController: DiffableCollectionViewController<MembersCollectionV
 
     override func getAnimationCycle(with snapshot: NSDiffableDataSourceSnapshot<MembersSectionType, MembersItemType>)
     -> AnimationCycle? {
-        
+
         return AnimationCycle(inFromPosition: .inward,
                               outToPosition: .inward,
                               shouldConcatenate: true,

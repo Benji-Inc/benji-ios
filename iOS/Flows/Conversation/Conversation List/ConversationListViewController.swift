@@ -26,6 +26,7 @@ enum ConversationUIState {
 
 class ConversationListViewController: ViewController {
 
+    // Collection View
     lazy var dataSource = ConversationListCollectionViewDataSource(collectionView: self.collectionView)
     lazy var collectionView = ConversationListCollectionView()
 
@@ -95,6 +96,7 @@ class ConversationListViewController: ViewController {
 
         self.view.addSubview(self.collectionView)
         self.collectionView.showsVerticalScrollIndicator = false
+        self.collectionView.delegate = self
 
         self.addChild(viewController: self.headerVC, toView: self.view)
         self.subscribeToKeyboardUpdates()
@@ -178,24 +180,26 @@ class ConversationListViewController: ViewController {
         }
     }
 
-    func updateCenterMostCell() {
-        guard let ip = self.collectionView.centerIndexPath(),
-              let conversation = self.conversationListController.conversations[safe: ip.item] else { return }
+    private var previousCenteredCID: ConversationId?
+    func update(withCenteredConversation cid: ConversationId?) {
+        guard self.previousCenteredCID != cid else { return }
 
-        /// Sets the active conversation
-        ConversationsManager.shared.activeConversation = conversation
+        self.previousCenteredCID = cid
 
-        let members = conversation.lastActiveMembers.filter { member in
-            return member.id != ChatClient.shared.currentUserId
-        }
-        self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: false)
+        if let cid = cid {
+            let conversation = ChatClient.shared.channelController(for: cid).conversation
+            /// Sets the active conversation
+            ConversationsManager.shared.activeConversation = conversation
+            let members = conversation.lastActiveMembers.filter { member in
+                return member.id != ChatClient.shared.currentUserId
+            }
+            self.messageInputAccessoryView.textView.setPlaceholder(for: members, isReply: false)
 
-        UIView.animate(withDuration: Theme.animationDurationFast) {
-            self.view.layoutNow()
-        }
-        
-        if let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
-            self.handleTopMessageUpdates(for: conversation, cell: cell)
+            if let cell = self.collectionView.getCentermostVisibleCell() as? ConversationMessagesCell {
+                self.handleTopMessageUpdates(for: conversation, cell: cell)
+            }
+        } else {
+            ConversationsManager.shared.activeConversation = nil
         }
     }
 
@@ -211,12 +215,12 @@ class ConversationListViewController: ViewController {
         let snapshot = self.dataSource.updatedSnapshot(with: self.conversationListController)
 
         // Automatically scroll to the latest conversation.
-        var startingIndexPath: IndexPath?
-        if let startingConversationID = self.startingConversationID {
-            startingIndexPath = snapshot.indexPathOfItem(.conversation(startingConversationID))
-        }
-        if startingIndexPath.isNil {
-            startingIndexPath = IndexPath(item: conversations.count - 1, section: 0)
+        let startingIndexPath: IndexPath
+        if let startingConversationID = self.startingConversationID,
+           let conversationIndexPath = snapshot.indexPathOfItem(.conversation(startingConversationID)) {
+            startingIndexPath = conversationIndexPath
+        } else {
+            startingIndexPath = IndexPath(item: clamp(conversations.count - 1, min: 0) , section: 0)
         }
 
         let animationCycle = AnimationCycle(inFromPosition: .inward,
@@ -228,7 +232,14 @@ class ConversationListViewController: ViewController {
                                     collectionView: self.collectionView,
                                     animationCycle: animationCycle)
 
-        self.updateCenterMostCell()
+        if let item = self.dataSource.itemIdentifier(for: startingIndexPath) {
+            switch item {
+            case .conversation(let cid):
+                self.update(withCenteredConversation: cid)
+            case .loadMore, .newConversation:
+                self.update(withCenteredConversation: nil)
+            }
+        }
 
         guard let startingConversationID = self.startingConversationID else { return }
 
@@ -283,10 +294,35 @@ class ConversationListViewController: ViewController {
             do {
                 try await self.conversationListController.loadNextConversations(limit: .channelsPageSize)
             } catch {
-                logDebug(error)
+                logError(error)
             }
             self.isLoadingConversations = false
         }.add(to: self.taskPool)
+    }
+}
+
+// MARK: - ConversationListCollectionViewLayoutDelegate
+
+extension ConversationListViewController: UICollectionViewDelegate {
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentOffset = scrollView.contentOffset
+        let centeredItem
+        = self.collectionView.conversationLayout.getCenteredItem(forContentOffset: contentOffset)
+
+        guard let indexPath = centeredItem?.indexPath else {
+            self.update(withCenteredConversation: nil)
+            return
+        }
+
+        if let item = self.dataSource.itemIdentifier(for: indexPath) {
+            switch item {
+            case .conversation(let cid):
+                self.update(withCenteredConversation: cid)
+            case .loadMore, .newConversation:
+                self.update(withCenteredConversation: nil)
+            }
+        }
     }
 }
 
@@ -335,7 +371,7 @@ extension ConversationListViewController: MessageSendingViewControllerType {
 
                 try await controller.createNewMessage(with: sendable)
             } catch {
-                logDebug(error)
+                logError(error)
             }
         }.add(to: self.taskPool)
     }
@@ -351,7 +387,7 @@ extension ConversationListViewController: MessageSendingViewControllerType {
             do {
                 try await conversationController.createNewMessage(with: message)
             } catch {
-                logDebug(error)
+                logError(error)
             }
         }.add(to: self.taskPool)
     }

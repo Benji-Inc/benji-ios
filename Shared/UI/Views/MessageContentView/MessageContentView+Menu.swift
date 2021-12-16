@@ -38,7 +38,7 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
                 do {
                     try await controller.deleteMessage()
                 } catch {
-                    logDebug(error)
+                    logError(error)
                 }
             }.add(to: self.taskPool)
         }
@@ -97,7 +97,7 @@ extension MessageContentView: UIContextMenuInteractionDelegate {
                     do {
                         try await controller.addReaction(with: type)
                     } catch {
-                        logDebug(error)
+                        logError(error)
                     }
                 }.add(to: self.taskPool)
             }
