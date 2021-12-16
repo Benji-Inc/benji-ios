@@ -51,7 +51,7 @@ class MessageSubcell: UICollectionViewCell {
         self.content.state = showAuthor ? .thread : .collapsed
         self.detailView.configure(with: message)
 
-        self.layoutNow()
+        self.setNeedsLayout()
     }
 
     override func apply(_ layoutAttributes: UICollectionViewLayoutAttributes) {

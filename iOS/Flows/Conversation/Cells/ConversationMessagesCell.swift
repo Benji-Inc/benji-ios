@@ -23,6 +23,9 @@ class ConversationMessagesCell: UICollectionViewCell {
     var handleTappedConversation: ((MessageSequence) -> Void)?
     var handleDeleteConversation: ((MessageSequence) -> Void)?
 
+    @Published var incomingTopMostMessage: ChatMessage?
+
+    // CollectionView
     private(set) lazy var collectionLayout = MessagesTimeMachineCollectionViewLayout()
     lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: self.collectionLayout)
@@ -54,11 +57,10 @@ class ConversationMessagesCell: UICollectionViewCell {
     }
     /// A set of the current event subscriptions. Should be cleared out when the cell is reused.
     private var subscriptions = Set<AnyCancellable>()
-    
-    @Published var incomingTopMostMessage: ChatMessage?
     private var taskPool = TaskPool()
 
     // MARK: - Lifecycle
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 

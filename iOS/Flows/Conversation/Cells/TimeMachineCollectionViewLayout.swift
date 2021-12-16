@@ -173,11 +173,11 @@ class TimeMachineCollectionViewLayout: UICollectionViewLayout {
         self.forEachIndexPath { indexPath in
             sortedItemIndexPaths.append(indexPath)
         }
-        sortedItemIndexPaths.sort { indexPath1, indexPath2 in
+        sortedItemIndexPaths = sortedItemIndexPaths.sorted(by: { indexPath1, indexPath2 in
             let sortValue1 = self.itemSortValues[indexPath1] ?? 0
             let sortValue2 = self.itemSortValues[indexPath2] ?? 0
             return sortValue1 < sortValue2
-        }
+        })
 
         // Calculate the z range for each item.
         for (sortedItemsIndex, indexPath) in sortedItemIndexPaths.enumerated() {
