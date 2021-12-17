@@ -35,8 +35,8 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
     var layoutForDropZone: Bool = false
 
     // Cell registration
-    private let messageSubcellRegistration
-    = MessageSequenceCollectionViewDataSource.createMessageSubcellRegistration()
+    private let messageCellRegistration
+    = MessageSequenceCollectionViewDataSource.createMessageCellRegistration()
     private let loadMoreRegistration
     = MessageSequenceCollectionViewDataSource.createLoadMoreCellRegistration()
 
@@ -48,7 +48,7 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
         switch item {
         case .message(cid: let cid, messageID: let messageID):
             let messageCell
-            = collectionView.dequeueConfiguredReusableCell(using: self.messageSubcellRegistration,
+            = collectionView.dequeueConfiguredReusableCell(using: self.messageCellRegistration,
                                                            for: indexPath,
                                                            item: (cid, messageID, collectionView))
             messageCell.content.handleEditMessage = { [unowned self] cid, messageID in
@@ -131,8 +131,8 @@ class MessageSequenceCollectionViewDataSource: CollectionViewDataSource<MessageS
 
 extension MessageSequenceCollectionViewDataSource {
 
-    typealias MessageSubcellRegistration
-    = UICollectionView.CellRegistration<MessageSubcell,
+    typealias MessageCellRegistration
+    = UICollectionView.CellRegistration<MessageCell,
                                         (channelID: ChannelId,
                                          messageID: MessageId,
                                          collectionView: UICollectionView)>
@@ -140,8 +140,8 @@ extension MessageSequenceCollectionViewDataSource {
     typealias LoadMoreCellRegistration
     = UICollectionView.CellRegistration<LoadMoreMessagesCell, UICollectionView?>
 
-    static func createMessageSubcellRegistration() -> MessageSubcellRegistration {
-        return MessageSubcellRegistration { cell, indexPath, item in
+    static func createMessageCellRegistration() -> MessageCellRegistration {
+        return MessageCellRegistration { cell, indexPath, item in
             let messageController = ChatClient.shared.messageController(cid: item.channelID,
                                                                         messageId: item.messageID)
             guard let message = messageController.message else {

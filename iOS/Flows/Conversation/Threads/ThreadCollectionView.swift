@@ -25,7 +25,7 @@ class ThreadCollectionView: CollectionView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func getBottomFrontMostCell() -> MessageSubcell? {
+    func getBottomFrontMostCell() -> MessageCell? {
         return self.threadLayout.getBottomFrontmostCell()
     }
 }

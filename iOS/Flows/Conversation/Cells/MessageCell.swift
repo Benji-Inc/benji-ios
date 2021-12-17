@@ -1,5 +1,5 @@
 //
-//  MessageSubcell.swift
+//  MessageCell.swift
 //  Jibber
 //
 //  Created by Martin Young on 11/1/21.
@@ -9,7 +9,7 @@
 import Foundation
 
 /// A cell for displaying individual messages, author and reactions.
-class MessageSubcell: UICollectionViewCell {
+class MessageCell: UICollectionViewCell {
 
     let content = MessageContentView()
     let detailView = MessageDetailView()

@@ -133,9 +133,9 @@ class MessagesTimeMachineCollectionViewLayout: TimeMachineCollectionViewLayout {
         return attributes.backgroundColor == .white ? .darkGray : .white
     }
 
-    func getBottomFrontmostCell() -> MessageSubcell? {
+    func getBottomFrontmostCell() -> MessageCell? {
         guard let ip = self.getFrontmostIndexPath(in: 1),
-              let cell = self.collectionView?.cellForItem(at: ip) as? MessageSubcell else {
+              let cell = self.collectionView?.cellForItem(at: ip) as? MessageCell else {
                   return nil
               }
         return cell

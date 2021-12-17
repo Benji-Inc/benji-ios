@@ -70,7 +70,7 @@ class ConversationMessagesCell: UICollectionViewCell {
         self.collectionView.delegate = self
         self.collectionView.set(backgroundColor: .clear)
 
-        // Allow message subcells to scale in size without getting clipped.
+        // Allow message cells to scale in size without getting clipped.
         self.collectionView.clipsToBounds = false
         self.contentView.addSubview(self.collectionView)
 
@@ -223,7 +223,7 @@ class ConversationMessagesCell: UICollectionViewCell {
         return self.collectionLayout.getDropZoneColor()
     }
 
-    func getBottomFrontmostCell() -> MessageSubcell? {
+    func getBottomFrontmostCell() -> MessageCell? {
         return self.collectionLayout.getBottomFrontmostCell()
     }
 }
@@ -234,7 +234,7 @@ extension ConversationMessagesCell: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = self.dataSource.itemIdentifier(for: indexPath),
-              let cell = collectionView.cellForItem(at: indexPath) as? MessageSubcell else { return }
+              let cell = collectionView.cellForItem(at: indexPath) as? MessageCell else { return }
 
         switch item {
         case .message(cid: let cid, messageID: let messageID):
